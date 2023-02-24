@@ -1,18 +1,20 @@
 package org.sagebionetworks.openchallenges.organization.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.app.config.data.OrganizationServiceConfigData;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.ComponentScan;
 
-@Slf4j
 @EnableEurekaClient
 @SpringBootApplication
 @ComponentScan(basePackages = {"org.sagebionetworks.openchallenges"})
 public class OrganizationServiceApplication implements CommandLineRunner {
+
+  private static final Logger LOG = LoggerFactory.getLogger(OrganizationServiceApplication.class);
 
   private final OrganizationServiceConfigData organizationServiceConfigData;
 
@@ -27,6 +29,6 @@ public class OrganizationServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    log.info(organizationServiceConfigData.getWelcomeMessage());
+    LOG.info(organizationServiceConfigData.getWelcomeMessage());
   }
 }

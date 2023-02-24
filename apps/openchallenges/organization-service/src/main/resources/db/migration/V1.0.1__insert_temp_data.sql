@@ -1,4 +1,4 @@
-INSERT INTO challenge_organization (
+INSERT INTO organization (
     id,
     name,
     email,

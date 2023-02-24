@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   version: 1.0.0
-  title: OpenChallenges API
+  title: OpenChallenges REST API
   license:
     name: Apache 2.0
     url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
@@ -110,12 +110,11 @@ paths:
     get:
       tags:
         - Organization
-      summary: Get all organizations
-      description: Returns the organizations
+      summary: List organizations
+      description: List organizations
       operationId: listOrganizations
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/organizationSearchQuery'
       responses:
         '200':
           content:
@@ -689,6 +688,44 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    OrganizationSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - created
+        - relevance
+    OrganizationDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    OrganizationSearchQuery:
+      type: object
+      description: An organization search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/OrganizationSort'
+        direction:
+          $ref: '#/components/schemas/OrganizationDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: data provider
     Email:
       description: An email address.
       type: string
@@ -940,6 +977,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengePlatformName'
+    organizationSearchQuery:
+      name: organizationSearchQuery
+      description: The search query used to find organizations.
+      in: query
+      schema:
+        $ref: '#/components/schemas/OrganizationSearchQuery'
     org:
       name: org
       in: path

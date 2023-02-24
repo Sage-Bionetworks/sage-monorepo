@@ -1,0 +1,61 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+  $figma: map.get($config, 'figma');
+
+  #breadcrumbs a {
+    color: black;
+  }
+  .search-field > i {
+    color: map.get($figma, dl-color-default-primary2);
+  }
+  #top {
+    background-color: #f8f8f8;
+  }
+  .facets {
+    border-color: map.get($figma, dl-color-default-primary2);
+    background-color: rgba(255, 255, 255, 1);
+  }
+  .p-panel .p-panel-header {
+    background: transparent !important;
+  }
+  .mat-mdc-snack-bar-container {
+    --mat-mdc-snack-bar-button-color: #ff4081;
+    --mdc-snackbar-container-color: #333333;
+    --mdc-snackbar-supporting-text-color: hotpink;
+  }
+}
+
+@mixin typography($theme) {
+  #breadcrumbs a {
+    text-decoration: none;
+  }
+  #breadcrumbs span {
+    font-weight: bolder;
+  }
+  .mat-checkbox,
+  .mat-select {
+    font-family: 'Lato', sans-serif;
+  }
+  .sort-title {
+    font-weight: 700;
+    font-size: 1.1em;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

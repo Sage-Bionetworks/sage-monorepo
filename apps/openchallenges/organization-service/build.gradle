@@ -21,6 +21,8 @@ repositories {
 }
 
 dependencies {
+  implementation "org.hibernate.search:hibernate-search-mapper-orm:${hibernateSearchVersion}"
+  implementation "org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernateSearchVersion}"
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation 'com.google.code.findbugs:jsr305:3.0.2'

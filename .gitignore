@@ -19,7 +19,7 @@ sitemap.xml
 
 # compiled output
 /**/bin
-/dist
+/**/dist
 /tmp
 /out-tsc
 

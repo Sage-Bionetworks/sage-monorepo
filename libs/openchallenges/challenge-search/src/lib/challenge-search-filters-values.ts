@@ -88,6 +88,10 @@ export const challengeSubmissionTypesFilterValues: FilterValue[] = [
     label: 'Prediction File',
   },
   {
+    value: 'notebook',
+    label: 'Notebook',
+  },
+  {
     value: 'other',
     label: 'Other',
   },

@@ -9,6 +9,8 @@ services:
       - openchallenges
     ports:
       - '4200:80'
+    env_file:
+      - ../../../apps/openchallenges/app/.env
     # deploy:
     #   resources:
     #     limits:

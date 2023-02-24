@@ -12,18 +12,18 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
-/**
- * The User information saved to DB.
- *
- * <p>The following properties are saved in Keycloak: email, password (hash).
- */
 @Entity
-@Table(name = "challenge_organization")
+@Table(name = "organization")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed(index = "openchallenges-organization")
 public class OrganizationEntity {
 
   @Id
@@ -32,6 +32,7 @@ public class OrganizationEntity {
   private Long id;
 
   @Column(nullable = false)
+  @FullTextField()
   private String name;
 
   @Column(nullable = false)
@@ -48,9 +49,11 @@ public class OrganizationEntity {
   private String websiteUrl;
 
   @Column(nullable = true)
+  @FullTextField()
   private String description;
 
   @Column(name = "created_at")
+  @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
   @Column(name = "updated_at")
