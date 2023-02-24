@@ -31,6 +31,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  skip,
   takeUntil,
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
@@ -38,6 +39,7 @@ import { DatePipe } from '@angular/common';
 import { assign } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -94,6 +96,8 @@ export class ChallengeSearchComponent
   sortedBy!: string;
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
@@ -167,17 +171,28 @@ export class ChallengeSearchComponent
       minStartDate: this.selectedYear?.start || undefined,
       maxStartDate: this.selectedYear?.end || undefined,
     } as ChallengeSearchQuery;
-    this.query.next(defaultQuery);
+
+    this.activatedRoute.queryParams.subscribe((params) => {
+      // only support querying by searchTerm from query url for now
+      if (params['searchTerms']) {
+        this.searchTermValue = params['searchTerms'];
+        defaultQuery['searchTerms'] = params['searchTerms'];
+      }
+      this.query.next(defaultQuery);
+    });
   }
 
   ngAfterContentInit(): void {
     this.searchTerms
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
-      .subscribe((search) => {
-        const newQuery = assign(this.query.getValue(), {
-          searchTerms: search,
-        });
-        this.query.next(newQuery);
+      .pipe(
+        skip(1),
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy)
+      )
+      .subscribe((searchTerms) => {
+        // update query string in url
+        this.router.navigate([], { queryParams: { searchTerms } });
       });
 
     this.query
