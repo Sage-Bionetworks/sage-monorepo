@@ -37,6 +37,7 @@
   ],
 
   "forwardPorts": [
+    3000,
     3306,
     4200,
     4211,
@@ -66,6 +67,10 @@
   ],
 
   "portsAttributes": {
+    "3000": {
+      "label": "openchallenges-grafana",
+      "onAutoForward": "silent"
+    },
     "3306": {
       "label": "openchallenges-mariadb",
       "onAutoForward": "silent"

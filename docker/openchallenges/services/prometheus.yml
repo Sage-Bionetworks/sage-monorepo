@@ -13,7 +13,7 @@ services:
       - '9090:9090'
     volumes:
       - ../../../apps/openchallenges/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - ../../../apps/openchallenges/prometheus/data:/prometheus
+      # - ../../../apps/openchallenges/prometheus/data/prometheus:/prometheus
     depends_on:
       openchallenges-organization-service:
         condition: service_healthy

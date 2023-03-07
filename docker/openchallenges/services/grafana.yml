@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  openchallenges-grafana:
+    image: sagebionetworks/openchallenges-grafana:latest
+    container_name: openchallenges-grafana
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/grafana/.env
+    networks:
+      - openchallenges
+    ports:
+      - '3000:3000'
+    # volumes:
+    # - ../../../apps/openchallenges/grafana/data/grafana:/var/lib/grafana
+    depends_on:
+      openchallenges-prometheus:
+        condition: service_started
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
