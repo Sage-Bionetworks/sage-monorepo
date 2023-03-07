@@ -61,6 +61,7 @@
     8888,
     9200,
     9411,
+    9090,
     27017
   ],
 
@@ -159,6 +160,10 @@
     },
     "9411": {
       "label": "openchallenges-zipkin",
+      "onAutoForward": "silent"
+    },
+    "9090": {
+      "label": "openchallenges-prometheus",
       "onAutoForward": "silent"
     },
     "27017": {

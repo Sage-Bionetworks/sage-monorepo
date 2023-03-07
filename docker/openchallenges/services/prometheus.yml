@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  openchallenges-prometheus:
+    image: sagebionetworks/openchallenges-prometheus:latest
+    container_name: openchallenges-prometheus
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/prometheus/.env
+    networks:
+      - openchallenges
+    ports:
+      - '9090:9090'
+    volumes:
+      - ../../../apps/openchallenges/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../../../apps/openchallenges/prometheus/data:/prometheus
+    depends_on:
+      openchallenges-organization-service:
+        condition: service_healthy
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G

@@ -10,6 +10,7 @@ args=(
   --file docker/openchallenges/services/kafka.yml
   --file docker/openchallenges/services/mariadb.yml
   --file docker/openchallenges/services/organization-service.yml
+  --file docker/openchallenges/services/prometheus.yml
   --file docker/openchallenges/services/service-registry.yml
   --file docker/openchallenges/services/vault.yml
   --file docker/openchallenges/services/zipkin.yml
