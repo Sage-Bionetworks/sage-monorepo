@@ -17,6 +17,7 @@ args=(
   --file docker/openchallenges/services/zipkin.yml
 
   --file docker/openchallenges/networks.yml
+  --file docker/openchallenges/volumes.yml
 
   up $1 --detach
 )
