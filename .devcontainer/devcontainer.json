@@ -37,6 +37,7 @@
   ],
 
   "forwardPorts": [
+    3000,
     3306,
     4200,
     4211,
@@ -61,10 +62,15 @@
     8888,
     9200,
     9411,
+    9090,
     27017
   ],
 
   "portsAttributes": {
+    "3000": {
+      "label": "openchallenges-grafana",
+      "onAutoForward": "silent"
+    },
     "3306": {
       "label": "openchallenges-mariadb",
       "onAutoForward": "silent"
@@ -159,6 +165,10 @@
     },
     "9411": {
       "label": "openchallenges-zipkin",
+      "onAutoForward": "silent"
+    },
+    "9090": {
+      "label": "openchallenges-prometheus",
       "onAutoForward": "silent"
     },
     "27017": {

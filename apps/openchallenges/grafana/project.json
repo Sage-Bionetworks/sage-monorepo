@@ -1,0 +1,32 @@
+{
+  "name": "openchallenges-grafana",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges-grafana/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/grafana"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-grafana"
+      },
+      "dependsOn": []
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/grafana",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-grafana:latest"]
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
+}
