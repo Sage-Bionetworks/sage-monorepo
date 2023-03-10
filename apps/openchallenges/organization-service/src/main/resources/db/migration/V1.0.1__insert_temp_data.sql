@@ -5,8 +5,8 @@ INSERT INTO organization (
     login,
     avatar_url,
     website_url,
-    challenge_count,
-    description
+    description,
+    challenge_count
   )
 VALUES (
     '1',
@@ -15,8 +15,8 @@ VALUES (
     'dream',
     'https://via.placeholder.com/300.png',
     'https://dreamchallenges.org',
-    '2',
-    'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.'
+    'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
+    2
   ),
   (
     '2',
@@ -25,8 +25,8 @@ VALUES (
     'biocreative',
     'https://via.placeholder.com/300.png',
     'https://biocreative.bioinformatics.udel.edu/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '3',
@@ -35,8 +35,8 @@ VALUES (
     'cafa',
     'https://via.placeholder.com/300.png',
     'https://www.biofunctionprediction.org/cafa/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '4',
@@ -45,8 +45,8 @@ VALUES (
     'cagi',
     'https://via.placeholder.com/300.png',
     'https://genomeinterpretation.org/challenges.html',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '5',
@@ -55,8 +55,8 @@ VALUES (
     'camda',
     'https://via.placeholder.com/300.png',
     'http://www.camda.info/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '6',
@@ -65,8 +65,8 @@ VALUES (
     'cameo',
     'https://via.placeholder.com/300.png',
     'https://www.cameo3d.org/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '7',
@@ -75,8 +75,8 @@ VALUES (
     'cami',
     'https://via.placeholder.com/300.png',
     'https://data.cami-challenge.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '8',
@@ -85,8 +85,8 @@ VALUES (
     'capri',
     'https://via.placeholder.com/300.png',
     'https://www.ebi.ac.uk/msd-srv/capri/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '9',
@@ -95,8 +95,8 @@ VALUES (
     'casp',
     'https://via.placeholder.com/300.png',
     'https://predictioncenter.org/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '10',
@@ -105,8 +105,8 @@ VALUES (
     'gaw',
     'https://via.placeholder.com/300.png',
     'https://www.gaworkshop.org/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '11',
@@ -115,8 +115,8 @@ VALUES (
     'idash',
     'https://via.placeholder.com/300.png',
     'http://www.humangenomeprivacy.org/2022/competition-tasks.html',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '12',
@@ -125,8 +125,8 @@ VALUES (
     'miccai',
     'https://via.placeholder.com/300.png',
     'http://www.miccai.org/special-interest-groups/challenges/miccai-registered-challenges/',
-    '5',
-    ''
+    '',
+    5
   ),
   (
     '13',
@@ -135,8 +135,8 @@ VALUES (
     'pfda',
     'https://via.placeholder.com/300.png',
     'https://precision.fda.gov/challenges',
-    '10',
-    ''
+    '',
+    10
   ),
   (
     '14',
@@ -145,8 +145,8 @@ VALUES (
     'sbv-improver',
     'https://via.placeholder.com/300.png',
     'https://www.intervals.science/resources/sbv-improver',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '15',
@@ -155,8 +155,8 @@ VALUES (
     'nih',
     'https://via.placeholder.com/300.png',
     'https://www.nih.gov/',
-    '7',
-    ''
+    '',
+    7
   ),
   (
     '16',
@@ -165,8 +165,8 @@ VALUES (
     'allen-institute',
     'https://via.placeholder.com/300.png',
     'https://alleninstitute.org/ ',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '17',
@@ -175,8 +175,8 @@ VALUES (
     'ata',
     'https://via.placeholder.com/300.png',
     'https://alstherapyalliance.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '18',
@@ -185,8 +185,8 @@ VALUES (
     'adni',
     'https://via.placeholder.com/300.png',
     'http://adni.loni.usc.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '19',
@@ -195,8 +195,8 @@ VALUES (
     'alzheimers-research-uk',
     'https://via.placeholder.com/300.png',
     'https://www.alzheimersresearchuk.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '20',
@@ -205,8 +205,8 @@ VALUES (
     'aws',
     'https://via.placeholder.com/300.png',
     'https://aws.amazon.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '21',
@@ -215,8 +215,8 @@ VALUES (
     'ajcc',
     'https://via.placeholder.com/300.png',
     'https://www.facs.org/quality-programs/cancer/ajcc',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '22',
@@ -225,8 +225,8 @@ VALUES (
     'apollo',
     'https://via.placeholder.com/300.png',
     'https://proteomics.cancer.gov/programs/apollo-network',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '23',
@@ -235,8 +235,8 @@ VALUES (
     'apple-health',
     'https://via.placeholder.com/300.png',
     'https://www.hca.wa.gov/health-care-services-supports/apple-health-medicaid-coverage',
-    '14',
-    ''
+    '',
+    14
   ),
   (
     '24',
@@ -245,8 +245,8 @@ VALUES (
     'arthritis-foundation',
     'https://via.placeholder.com/300.png',
     'https://www.arthritis.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '25',
@@ -255,8 +255,8 @@ VALUES (
     'arthritis-internet-registry',
     'https://via.placeholder.com/300.png',
     'https://www.arthritis-research.org/join-research/arthritis-internet-registry',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '26',
@@ -265,8 +265,8 @@ VALUES (
     'astrazeneca',
     'https://via.placeholder.com/300.png',
     'https://www.astrazeneca.com/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '27',
@@ -275,8 +275,8 @@ VALUES (
     'autodesk',
     'https://via.placeholder.com/300.png',
     'https://www.autodesk.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '28',
@@ -285,8 +285,8 @@ VALUES (
     'bccrc',
     'https://via.placeholder.com/300.png',
     'https://www.bccrc.ca/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '29',
@@ -295,8 +295,8 @@ VALUES (
     'idibell',
     'https://via.placeholder.com/300.png',
     'https://www.ub.edu/web/ub/en/recerca_innovacio/recerca_a_la_UB/instituts/institutsparticipats/idibell.html',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '30',
@@ -305,8 +305,8 @@ VALUES (
     'bih',
     'https://via.placeholder.com/300.png',
     'https://www.bihealth.org/en/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '31',
@@ -315,8 +315,8 @@ VALUES (
     'bill-and-melinda-gates-foundation',
     'https://via.placeholder.com/300.png',
     'https://www.gatesfoundation.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '32',
@@ -325,8 +325,8 @@ VALUES (
     'biogen',
     'https://via.placeholder.com/300.png',
     'https://www.biogen.com/en_us/home.html',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '33',
@@ -335,8 +335,8 @@ VALUES (
     'biomarin',
     'https://via.placeholder.com/300.png',
     'https://www.biomarin.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '34',
@@ -345,8 +345,8 @@ VALUES (
     'booz-allen',
     'https://via.placeholder.com/300.png',
     'https://www.boozallen.com/',
-    '10',
-    'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Bo...'
+    'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Bo...',
+    10
   ),
   (
     '35',
@@ -355,8 +355,8 @@ VALUES (
     'bana',
     'https://via.placeholder.com/300.png',
     'http://www.brailleauthority.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '36',
@@ -365,8 +365,8 @@ VALUES (
     'bcsc',
     'https://via.placeholder.com/300.png',
     'https://www.bcsc-research.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '37',
@@ -375,8 +375,8 @@ VALUES (
     'bwh',
     'https://via.placeholder.com/300.png',
     'https://www.brighamandwomens.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '38',
@@ -385,8 +385,8 @@ VALUES (
     'byu',
     'https://via.placeholder.com/300.png',
     'https://www.byu.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '39',
@@ -395,8 +395,8 @@ VALUES (
     'brightfocus-foundation',
     'https://via.placeholder.com/300.png',
     'https://www.brightfocus.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '40',
@@ -405,8 +405,8 @@ VALUES (
     'bms',
     'https://via.placeholder.com/300.png',
     'https://www.bms.com/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '41',
@@ -415,8 +415,8 @@ VALUES (
     'broad',
     'https://via.placeholder.com/300.png',
     'https://www.broadinstitute.org/',
-    '4',
-    ''
+    '',
+    4
   ),
   (
     '42',
@@ -425,8 +425,8 @@ VALUES (
     'brown',
     'https://via.placeholder.com/300.png',
     'https://www.brown.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '43',
@@ -435,8 +435,8 @@ VALUES (
     'caltech',
     'https://via.placeholder.com/300.png',
     'https://www.caltech.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '44',
@@ -445,8 +445,8 @@ VALUES (
     'tcia',
     'https://via.placeholder.com/300.png',
     'https://www.cancerimagingarchive.net/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '45',
@@ -455,8 +455,8 @@ VALUES (
     'cancer-research-uk',
     'https://via.placeholder.com/300.png',
     'https://www.cancerresearchuk.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '46',
@@ -465,8 +465,8 @@ VALUES (
     'cdt2',
     'https://via.placeholder.com/300.png',
     'https://ocg.cancer.gov/programs/ctd2',
-    '4',
-    ''
+    '',
+    4
   ),
   (
     '47',
@@ -475,8 +475,8 @@ VALUES (
     'celgene',
     'https://via.placeholder.com/300.png',
     'https://www.celgene.com',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '48',
@@ -485,8 +485,8 @@ VALUES (
     'center-for-research-computing',
     'https://via.placeholder.com/300.png',
     'https://crc.nd.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '49',
@@ -495,8 +495,8 @@ VALUES (
     'cchmc',
     'https://via.placeholder.com/300.png',
     'https://www.cincinnatichildrens.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '50',
@@ -505,8 +505,8 @@ VALUES (
     'c4kc',
     'https://via.placeholder.com/300.png',
     'https://climb4kc.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '51',
@@ -515,8 +515,8 @@ VALUES (
     'cptac',
     'https://via.placeholder.com/300.png',
     'https://proteomics.cancer.gov/programs/cptac',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '52',
@@ -525,8 +525,8 @@ VALUES (
     'columbia',
     'https://via.placeholder.com/300.png',
     'https://www.columbia.edu/',
-    '4',
-    ''
+    '',
+    4
   ),
   (
     '53',
@@ -535,8 +535,8 @@ VALUES (
     'conceptant',
     'https://via.placeholder.com/300.png',
     'https://www.conceptant.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '54',
@@ -545,8 +545,8 @@ VALUES (
     'csic',
     'https://via.placeholder.com/300.png',
     'https://www.csic.es/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '55',
@@ -555,8 +555,8 @@ VALUES (
     'corevitas',
     'https://via.placeholder.com/300.png',
     'https://www.corevitas.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '56',
@@ -565,8 +565,8 @@ VALUES (
     'corrona',
     'https://via.placeholder.com/300.png',
     'https://www.corrona.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '57',
@@ -575,8 +575,8 @@ VALUES (
     'covert-lab',
     'https://via.placeholder.com/300.png',
     'https://www.covert.stanford.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '58',
@@ -585,8 +585,8 @@ VALUES (
     'dfci',
     'https://via.placeholder.com/300.png',
     'https://www.dana-farber.org/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '59',
@@ -595,8 +595,8 @@ VALUES (
     'darpa',
     'https://via.placeholder.com/300.png',
     'https://www.darpa.mil/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '60',
@@ -605,8 +605,8 @@ VALUES (
     'doe',
     'https://via.placeholder.com/300.png',
     'https://www.energy.gov/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '61',
@@ -615,8 +615,8 @@ VALUES (
     'dasa',
     'https://via.placeholder.com/300.png',
     'https://dasa.com.br/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '62',
@@ -625,8 +625,8 @@ VALUES (
     'dnanexus',
     'https://via.placeholder.com/300.png',
     'https://www.dnanexus.com/',
-    '9',
-    ''
+    '',
+    9
   ),
   (
     '63',
@@ -635,8 +635,8 @@ VALUES (
     'dockstore',
     'https://via.placeholder.com/300.png',
     'https://dockstore.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '64',
@@ -645,8 +645,8 @@ VALUES (
     'duke',
     'https://via.placeholder.com/300.png',
     'https://duke.edu/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '65',
@@ -655,8 +655,8 @@ VALUES (
     'early-signal',
     'https://via.placeholder.com/300.png',
     'http://www.earlysignal.org',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '66',
@@ -665,8 +665,8 @@ VALUES (
     'eck-institute-for-global-health',
     'https://via.placeholder.com/300.png',
     'https://globalhealth.nd.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '67',
@@ -675,8 +675,8 @@ VALUES (
     'lilly',
     'https://via.placeholder.com/300.png',
     'https://www.lilly.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '68',
@@ -685,8 +685,8 @@ VALUES (
     'elixir',
     'https://via.placeholder.com/300.png',
     'https://www.elixirsolutions.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '69',
@@ -695,8 +695,8 @@ VALUES (
     'encode',
     'https://via.placeholder.com/300.png',
     'https://www.encodeproject.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '70',
@@ -705,8 +705,8 @@ VALUES (
     'enigma',
     'https://via.placeholder.com/300.png',
     'http://enigma.ini.usc.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '71',
@@ -715,8 +715,8 @@ VALUES (
     'eth',
     'https://via.placeholder.com/300.png',
     'https://ethz.ch/en.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '72',
@@ -725,8 +725,8 @@ VALUES (
     'nichd',
     'https://via.placeholder.com/300.png',
     'https://www.nichd.nih.gov/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '73',
@@ -735,8 +735,8 @@ VALUES (
     'embl-ebi',
     'https://via.placeholder.com/300.png',
     'https://www.ebi.ac.uk/',
-    '8',
-    ''
+    '',
+    8
   ),
   (
     '74',
@@ -745,8 +745,8 @@ VALUES (
     'european-medicines-agency',
     'https://via.placeholder.com/300.png',
     'https://www.ema.europa.eu/en',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '75',
@@ -755,8 +755,8 @@ VALUES (
     'eu',
     'https://via.placeholder.com/300.png',
     'https://europa.eu/european-union/index_en',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '76',
@@ -765,8 +765,8 @@ VALUES (
     'evidation',
     'https://via.placeholder.com/300.png',
     'https://evidation.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '77',
@@ -775,8 +775,8 @@ VALUES (
     'fehling-instruments',
     'https://via.placeholder.com/300.png',
     'https://www.fehling-instruments.de/en/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '78',
@@ -785,8 +785,8 @@ VALUES (
     'feinstein-institute',
     'https://via.placeholder.com/300.png',
     'https://feinstein.northwell.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '79',
@@ -795,8 +795,8 @@ VALUES (
     'francis-crick-institute',
     'https://via.placeholder.com/300.png',
     'https://www.crick.ac.uk/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '80',
@@ -805,8 +805,8 @@ VALUES (
     'fred-hutchinson-cancer-research-center',
     'https://via.placeholder.com/300.png',
     'https://www.fredhutch.org/en/about/education-outreach/coding-for-cancer.html',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '81',
@@ -815,8 +815,8 @@ VALUES (
     'genome-canada',
     'https://via.placeholder.com/300.png',
     'https://www.genomecanada.ca/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '82',
@@ -825,8 +825,8 @@ VALUES (
     'gwu',
     'https://via.placeholder.com/300.png',
     'https://www.gwu.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '83',
@@ -835,8 +835,8 @@ VALUES (
     'georgetown-university',
     'https://via.placeholder.com/300.png',
     'https://www.georgetown.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '84',
@@ -845,8 +845,8 @@ VALUES (
     'dkfz',
     'https://via.placeholder.com/300.png',
     'https://www.dkfz.de/en/index.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '85',
@@ -855,8 +855,8 @@ VALUES (
     'ga4gh',
     'https://via.placeholder.com/300.png',
     'https://www.ga4gh.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '86',
@@ -865,8 +865,8 @@ VALUES (
     'moffitt',
     'https://via.placeholder.com/300.png',
     'https://moffitt.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '87',
@@ -875,8 +875,8 @@ VALUES (
     'h3abionet',
     'https://via.placeholder.com/300.png',
     'https://h3abionet.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '88',
@@ -885,8 +885,8 @@ VALUES (
     'harvard',
     'https://via.placeholder.com/300.png',
     'https://www.harvard.edu/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '89',
@@ -895,8 +895,8 @@ VALUES (
     'heidelberg-university',
     'https://via.placeholder.com/300.png',
     'https://www.heidelberg.edu/',
-    '10',
-    ''
+    '',
+    10
   ),
   (
     '90',
@@ -905,8 +905,8 @@ VALUES (
     'histosonics-inc.',
     'https://via.placeholder.com/300.png',
     'https://histosonics.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '91',
@@ -915,8 +915,8 @@ VALUES (
     'sickkids',
     'https://via.placeholder.com/300.png',
     'https://www.sickkids.ca/Research/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '92',
@@ -925,8 +925,8 @@ VALUES (
     'hpa',
     'https://via.placeholder.com/300.png',
     'www.proteinatlas.org',
-    '0',
-    'The Human Protein Atlas is a Swedish-based program initiated in 2003 with the aim to map the expression and spatial distribution of all human proteins in cells and tissues using an integration of various omics technologies, including antibody-based imaging, mass spectrometry...'
+    'The Human Protein Atlas is a Swedish-based program initiated in 2003 with the aim to map the expression and spatial distribution of all human proteins in cells and tissues using an integration of various omics technologies, including antibody-based imaging, mass spectrometry...',
+    0
   ),
   (
     '93',
@@ -935,8 +935,8 @@ VALUES (
     'ibm',
     'https://via.placeholder.com/300.png',
     'https://www.research.ibm.com/',
-    '27',
-    ''
+    '',
+    27
   ),
   (
     '94',
@@ -945,8 +945,8 @@ VALUES (
     'imi',
     'https://via.placeholder.com/300.png',
     'http://www.imi.europa.eu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '95',
@@ -955,8 +955,8 @@ VALUES (
     'institut-curie',
     'https://via.placeholder.com/300.png',
     'https://institut-curie.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '96',
@@ -965,8 +965,8 @@ VALUES (
     'fimm',
     'https://via.placeholder.com/300.png',
     'https://www.fimm.fi/en/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '97',
@@ -975,8 +975,8 @@ VALUES (
     'iths',
     'https://via.placeholder.com/300.png',
     'https://www.iths.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '98',
@@ -985,8 +985,8 @@ VALUES (
     'intel',
     'https://via.placeholder.com/300.png',
     'https://www.intel.com/content/www/us/en/homepage.html',
-    '1',
-    'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking application...'
+    'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking application...',
+    1
   ),
   (
     '99',
@@ -995,8 +995,8 @@ VALUES (
     'icgc',
     'https://via.placeholder.com/300.png',
     'https://dcc.icgc.org/',
-    '5',
-    ''
+    '',
+    5
   ),
   (
     '100',
@@ -1005,8 +1005,8 @@ VALUES (
     'iff',
     'https://via.placeholder.com/300.png',
     'https://www.iff.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '101',
@@ -1015,8 +1015,8 @@ VALUES (
     'igsr',
     'https://via.placeholder.com/300.png',
     'https://www.internationalgenome.org/home',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '102',
@@ -1025,8 +1025,8 @@ VALUES (
     'cosi',
     'https://via.placeholder.com/300.png',
     'https://www.iscb.org/cms_addon/conferences/ismbeccb2021/tracks/function',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '103',
@@ -1035,8 +1035,8 @@ VALUES (
     'intuitive',
     'https://via.placeholder.com/300.png',
     'https://www.intuitive.com/en-us',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '104',
@@ -1045,8 +1045,8 @@ VALUES (
     'iowa-state-university',
     'https://via.placeholder.com/300.png',
     'https://www.iastate.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '105',
@@ -1055,8 +1055,8 @@ VALUES (
     'kaggle',
     'https://via.placeholder.com/300.png',
     'https://www.kaggle.com/',
-    '0',
-    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...'
+    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...',
+    0
   ),
   (
     '106',
@@ -1065,8 +1065,8 @@ VALUES (
     'kaiser',
     'https://via.placeholder.com/300.png',
     'https://www.kpwashingtonresearch.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '107',
@@ -1075,8 +1075,8 @@ VALUES (
     'kcl',
     'https://via.placeholder.com/300.png',
     'https://www.kcl.ac.uk/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '108',
@@ -1085,8 +1085,8 @@ VALUES (
     'knoweng',
     'https://via.placeholder.com/300.png',
     'https://knoweng.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '109',
@@ -1095,8 +1095,8 @@ VALUES (
     'koch-institute',
     'https://via.placeholder.com/300.png',
     'https://ki.mit.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '110',
@@ -1105,8 +1105,8 @@ VALUES (
     'arnold-ventures',
     'https://via.placeholder.com/300.png',
     'https://www.arnoldventures.org/people/laura-arnold-john-arnold/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '111',
@@ -1115,8 +1115,8 @@ VALUES (
     'chuv',
     'https://via.placeholder.com/300.png',
     'https://www.lausanneuniversityhospital.com/home',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '112',
@@ -1125,8 +1125,8 @@ VALUES (
     'lls',
     'https://via.placeholder.com/300.png',
     'https://www.lls.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '113',
@@ -1135,8 +1135,8 @@ VALUES (
     'lingue-cancer',
     'https://via.placeholder.com/300.png',
     'https://www.ligue-cancer.net/ ',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '114',
@@ -1145,8 +1145,8 @@ VALUES (
     'ucl',
     'https://via.placeholder.com/300.png',
     'https://www.ucl.ac.uk/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '115',
@@ -1155,8 +1155,8 @@ VALUES (
     'lmu-munich',
     'https://via.placeholder.com/300.png',
     'https://www.en.uni-muenchen.de/index.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '116',
@@ -1165,8 +1165,8 @@ VALUES (
     'moru',
     'https://via.placeholder.com/300.png',
     'https://www.tropmedres.ac/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '117',
@@ -1175,8 +1175,8 @@ VALUES (
     'march-of-dimes',
     'https://via.placeholder.com/300.png',
     'https://www.marchofdimes.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '118',
@@ -1185,8 +1185,8 @@ VALUES (
     'mgh',
     'https://via.placeholder.com/300.png',
     'https://www.massgeneral.org/',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '119',
@@ -1195,8 +1195,8 @@ VALUES (
     'mit',
     'https://via.placeholder.com/300.png',
     'https://www.mit.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '120',
@@ -1205,8 +1205,8 @@ VALUES (
     'mathworks',
     'https://via.placeholder.com/300.png',
     'https://www.mathworks.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '121',
@@ -1215,8 +1215,8 @@ VALUES (
     'mdc',
     'https://via.placeholder.com/300.png',
     'https://www.mdc-berlin.de/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '122',
@@ -1225,8 +1225,8 @@ VALUES (
     'md-anderson-cancer-center',
     'https://via.placeholder.com/300.png',
     'https://www.mdanderson.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '123',
@@ -1235,8 +1235,8 @@ VALUES (
     'mrc',
     'https://via.placeholder.com/300.png',
     'https://mrc.ukri.org/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '124',
@@ -1245,8 +1245,8 @@ VALUES (
     'msk',
     'https://via.placeholder.com/300.png',
     'https://www.mskcc.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '125',
@@ -1255,8 +1255,8 @@ VALUES (
     'merck',
     'https://via.placeholder.com/300.png',
     'https://www.merck.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '126',
@@ -1265,8 +1265,8 @@ VALUES (
     'michael-j.-fox-foundation',
     'https://via.placeholder.com/300.png',
     'https://www.michaeljfox.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '127',
@@ -1275,8 +1275,8 @@ VALUES (
     'mines-paristech',
     'https://via.placeholder.com/300.png',
     'http://www.mines-paristech.eu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '128',
@@ -1285,8 +1285,8 @@ VALUES (
     'mt.-sinai',
     'https://via.placeholder.com/300.png',
     'https://www.mountsinai.org/',
-    '28',
-    ''
+    '',
+    28
   ),
   (
     '129',
@@ -1295,8 +1295,8 @@ VALUES (
     'mmrf',
     'https://via.placeholder.com/300.png',
     'https://themmrf.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '130',
@@ -1305,8 +1305,8 @@ VALUES (
     'nki',
     'https://via.placeholder.com/300.png',
     'https://www.nki.rfmh.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '131',
@@ -1315,8 +1315,8 @@ VALUES (
     'nci',
     'https://via.placeholder.com/300.png',
     'https://www.cancer.gov/',
-    '11',
-    ''
+    '',
+    11
   ),
   (
     '132',
@@ -1325,8 +1325,8 @@ VALUES (
     'ncats',
     'https://via.placeholder.com/300.png',
     'https://ncats.nih.gov/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '133',
@@ -1335,8 +1335,8 @@ VALUES (
     'cd2h',
     'https://via.placeholder.com/300.png',
     'https://cd2h.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '134',
@@ -1345,8 +1345,8 @@ VALUES (
     'niehs',
     'https://via.placeholder.com/300.png',
     'https://www.niehs.nih.gov/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '135',
@@ -1355,8 +1355,8 @@ VALUES (
     'nigms',
     'https://via.placeholder.com/300.png',
     'https://www.nigms.nih.gov/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '136',
@@ -1365,8 +1365,8 @@ VALUES (
     'nist',
     'https://via.placeholder.com/300.png',
     'https://www.nist.gov/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '137',
@@ -1375,8 +1375,8 @@ VALUES (
     'nsf',
     'https://via.placeholder.com/300.png',
     'https://www.nsf.gov/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '138',
@@ -1385,8 +1385,8 @@ VALUES (
     'nserc',
     'https://via.placeholder.com/300.png',
     'https://www.nserc-crsng.gc.ca/index_eng.asp',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '139',
@@ -1395,8 +1395,8 @@ VALUES (
     'neosoma-inc.',
     'https://via.placeholder.com/300.png',
     'https://neosomainc.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '140',
@@ -1405,8 +1405,8 @@ VALUES (
     'ncri',
     'https://via.placeholder.com/300.png',
     'https://www.massgeneral.org/ncri',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '141',
@@ -1415,8 +1415,8 @@ VALUES (
     'nyc',
     'https://via.placeholder.com/300.png',
     'https://www.nyu.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '142',
@@ -1425,8 +1425,8 @@ VALUES (
     'neals',
     'https://via.placeholder.com/300.png',
     'https://www.neals.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '143',
@@ -1435,8 +1435,8 @@ VALUES (
     'neu',
     'https://via.placeholder.com/300.png',
     'https://www.northeastern.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '144',
@@ -1445,8 +1445,8 @@ VALUES (
     'nu',
     'https://via.placeholder.com/300.png',
     'https://www.northwestern.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '145',
@@ -1455,8 +1455,8 @@ VALUES (
     'novo-nordisk',
     'https://via.placeholder.com/300.png',
     'https://www.novonordisk-us.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '146',
@@ -1465,8 +1465,8 @@ VALUES (
     'numerate',
     'https://via.placeholder.com/300.png',
     'http://www.numerate.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '147',
@@ -1475,8 +1475,8 @@ VALUES (
     'nvidia',
     'https://via.placeholder.com/300.png',
     'https://www.nvidia.com/en-us/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '148',
@@ -1485,8 +1485,8 @@ VALUES (
     'osu',
     'https://via.placeholder.com/300.png',
     'https://www.osu.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '149',
@@ -1495,8 +1495,8 @@ VALUES (
     'oicr',
     'https://via.placeholder.com/300.png',
     'https://oicr.on.ca/',
-    '6',
-    ''
+    '',
+    6
   ),
   (
     '150',
@@ -1505,8 +1505,8 @@ VALUES (
     'ohsu',
     'https://via.placeholder.com/300.png',
     'https://www.ohsu.edu/',
-    '11',
-    ''
+    '',
+    11
   ),
   (
     '151',
@@ -1515,8 +1515,8 @@ VALUES (
     'oslo-university-hospital',
     'https://via.placeholder.com/300.png',
     'https://oslo-universitetssykehus.no/oslo-university-hospital',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '152',
@@ -1525,8 +1525,8 @@ VALUES (
     'pnnl',
     'https://via.placeholder.com/300.png',
     'https://www.pnnl.gov/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '153',
@@ -1535,8 +1535,8 @@ VALUES (
     'pfizer',
     'https://via.placeholder.com/300.png',
     'https://www.pfizer.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '154',
@@ -1545,8 +1545,8 @@ VALUES (
     'prize4life',
     'https://via.placeholder.com/300.png',
     'https://en.wikipedia.org/wiki/Prize4Life',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '155',
@@ -1555,8 +1555,8 @@ VALUES (
     'project-data-sphere',
     'https://via.placeholder.com/300.png',
     'https://www.projectdatasphere.org/ ',
-    '1',
-    'At Project Data Sphere®, we believe in breaking down barriers to cancer clinical trial data sharing — barriers that historically have kept valuable trial data from ultimately benefitting the patients who so selflessly participate in them. By aggregating trial data from bioph...'
+    'At Project Data Sphere®, we believe in breaking down barriers to cancer clinical trial data sharing — barriers that historically have kept valuable trial data from ultimately benefitting the patients who so selflessly participate in them. By aggregating trial data from bioph...',
+    1
   ),
   (
     '156',
@@ -1565,8 +1565,8 @@ VALUES (
     'prostate-cancer-canada',
     'https://via.placeholder.com/300.png',
     'https://cancer.ca/en/about-us/prostate-cancer',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '157',
@@ -1575,8 +1575,8 @@ VALUES (
     'pcf',
     'https://via.placeholder.com/300.png',
     'https://www.pcf.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '158',
@@ -1585,8 +1585,8 @@ VALUES (
     'providence',
     'https://via.placeholder.com/300.png',
     'https://www.providence.org/en',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '159',
@@ -1595,8 +1595,8 @@ VALUES (
     'qimr-berghofer',
     'https://via.placeholder.com/300.png',
     'https://www.qimrberghofer.edu.au/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '160',
@@ -1605,8 +1605,8 @@ VALUES (
     'queens',
     'https://via.placeholder.com/300.png',
     'https://www.queensu.ca/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '161',
@@ -1615,8 +1615,8 @@ VALUES (
     'radboudumc',
     'https://via.placeholder.com/300.png',
     'https://www.radboudumc.nl/en/research',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '162',
@@ -1625,8 +1625,8 @@ VALUES (
     'rsna',
     'https://via.placeholder.com/300.png',
     'https://www.rsna.org/',
-    '1',
-    'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world’s premier radiology forum, drawing appr...'
+    'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world’s premier radiology forum, drawing appr...',
+    1
   ),
   (
     '163',
@@ -1635,8 +1635,8 @@ VALUES (
     'radish-medical-solutions',
     'https://via.placeholder.com/300.png',
     '',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '164',
@@ -1645,8 +1645,8 @@ VALUES (
     'ray-and-dagmar-dolby-family-fund',
     'https://via.placeholder.com/300.png',
     'http://www.dolbyventures.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '165',
@@ -1655,8 +1655,8 @@ VALUES (
     'rice',
     'https://via.placeholder.com/300.png',
     'https://www.rice.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '166',
@@ -1665,8 +1665,8 @@ VALUES (
     'rwjf',
     'https://via.placeholder.com/300.png',
     'https://www.rwjf.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '167',
@@ -1675,8 +1675,8 @@ VALUES (
     'rockefeller',
     'https://via.placeholder.com/300.png',
     'https://www.rockefeller.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '168',
@@ -1685,8 +1685,8 @@ VALUES (
     'rosenberg-alzheimers-project',
     'https://via.placeholder.com/300.png',
     'https://en.wikipedia.org/wiki/Douglas_Rosenberg',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '169',
@@ -1695,8 +1695,8 @@ VALUES (
     'rush',
     'https://via.placeholder.com/300.png',
     'https://www.rush.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '170',
@@ -1705,8 +1705,8 @@ VALUES (
     'rwth-aachen',
     'https://via.placeholder.com/300.png',
     'https://www.rwth-aachen.de/go/id/a/?lidx=1',
-    '8',
-    ''
+    '',
+    8
   ),
   (
     '171',
@@ -1715,8 +1715,8 @@ VALUES (
     'sage',
     'https://via.placeholder.com/300.png',
     'https://sagebionetworks.org/',
-    '41',
-    ''
+    '',
+    41
   ),
   (
     '172',
@@ -1725,8 +1725,8 @@ VALUES (
     'sanofi',
     'https://via.placeholder.com/300.png',
     'https://www.sanofi.com/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '173',
@@ -1735,8 +1735,8 @@ VALUES (
     'bologna',
     'https://via.placeholder.com/300.png',
     'https://www.uniroma1.it/en/pagina-strutturale/home',
-    '3',
-    ''
+    '',
+    3
   ),
   (
     '174',
@@ -1745,8 +1745,8 @@ VALUES (
     'sartorius',
     'https://via.placeholder.com/300.png',
     'https://www.sartorius.com/en',
-    '0',
-    'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.'
+    'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.',
+    0
   ),
   (
     '175',
@@ -1755,8 +1755,8 @@ VALUES (
     'scca',
     'https://via.placeholder.com/300.png',
     'https://www.seattlecca.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '176',
@@ -1765,8 +1765,8 @@ VALUES (
     'semmelweis-university',
     'https://via.placeholder.com/300.png',
     'https://semmelweis.hu/english/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '177',
@@ -1775,8 +1775,8 @@ VALUES (
     'sentieon',
     'https://via.placeholder.com/300.png',
     'https://www.sentieon.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '178',
@@ -1785,8 +1785,8 @@ VALUES (
     'siemens-healthineers',
     'https://via.placeholder.com/300.png',
     'https://www.siemens-healthineers.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '180',
@@ -1795,8 +1795,8 @@ VALUES (
     'stanford',
     'https://via.placeholder.com/300.png',
     'https://www.stanford.edu/',
-    '6',
-    ''
+    '',
+    6
   ),
   (
     '181',
@@ -1805,8 +1805,8 @@ VALUES (
     'systemsx',
     'https://via.placeholder.com/300.png',
     'http://www.systemsx.ch/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '182',
@@ -1815,8 +1815,8 @@ VALUES (
     'takeda',
     'https://via.placeholder.com/300.png',
     'https://www.takeda.com/en-us/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '183',
@@ -1825,8 +1825,8 @@ VALUES (
     'texas-biomedical-research-institute',
     'https://via.placeholder.com/300.png',
     'https://www.txbiomed.org/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '184',
@@ -1835,8 +1835,8 @@ VALUES (
     'uc-davis',
     'https://via.placeholder.com/300.png',
     'https://www.ucdavis.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '185',
@@ -1845,8 +1845,8 @@ VALUES (
     'ut',
     'https://via.placeholder.com/300.png',
     'https://www.utexas.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '186',
@@ -1855,8 +1855,8 @@ VALUES (
     'thomas-jefferson-university-hospital',
     'https://via.placeholder.com/300.png',
     'https://hospitals.jefferson.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '187',
@@ -1865,8 +1865,8 @@ VALUES (
     'tracinnovations',
     'https://via.placeholder.com/300.png',
     'https://tracinnovations.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '188',
@@ -1875,8 +1875,8 @@ VALUES (
     'tcd---neuroscience',
     'https://via.placeholder.com/300.png',
     'https://www.tcd.ie/Neuroscience/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '189',
@@ -1885,8 +1885,8 @@ VALUES (
     'tulane',
     'https://via.placeholder.com/300.png',
     'https://tulane.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '190',
@@ -1895,8 +1895,8 @@ VALUES (
     'fda',
     'https://via.placeholder.com/300.png',
     'https://www.fda.gov/home',
-    '12',
-    ''
+    '',
+    12
   ),
   (
     '191',
@@ -1905,8 +1905,8 @@ VALUES (
     'unc-eshelman-school-of-pharmacy',
     'https://via.placeholder.com/300.png',
     'https://pharmacy.unc.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '192',
@@ -1915,8 +1915,8 @@ VALUES (
     'ua',
     'https://via.placeholder.com/300.png',
     'https://www.ua.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '193',
@@ -1925,8 +1925,8 @@ VALUES (
     'uab',
     'https://via.placeholder.com/300.png',
     'https://www.uab.edu/home/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '194',
@@ -1935,8 +1935,8 @@ VALUES (
     'uams',
     'https://via.placeholder.com/300.png',
     'https://www.uams.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '195',
@@ -1945,8 +1945,8 @@ VALUES (
     'university-of-basel',
     'https://via.placeholder.com/300.png',
     'https://www.unibas.ch/en.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '196',
@@ -1955,8 +1955,8 @@ VALUES (
     'ucsd',
     'https://via.placeholder.com/300.png',
     'https://ucsd.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '197',
@@ -1965,8 +1965,8 @@ VALUES (
     'ucsf',
     'https://via.placeholder.com/300.png',
     'https://www.ucsf.edu/',
-    '5',
-    ''
+    '',
+    5
   ),
   (
     '198',
@@ -1975,8 +1975,8 @@ VALUES (
     'ucsc',
     'https://via.placeholder.com/300.png',
     'https://www.ucsc.edu/',
-    '5',
-    ''
+    '',
+    5
   ),
   (
     '199',
@@ -1985,8 +1985,8 @@ VALUES (
     'uc',
     'https://via.placeholder.com/300.png',
     'https://www.uc.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '200',
@@ -1995,8 +1995,8 @@ VALUES (
     'cu-anschutz',
     'https://via.placeholder.com/300.png',
     'https://www.cuanschutz.edu/',
-    '4',
-    ''
+    '',
+    4
   ),
   (
     '201',
@@ -2005,8 +2005,8 @@ VALUES (
     'uconn',
     'https://via.placeholder.com/300.png',
     'https://uconn.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '202',
@@ -2015,8 +2015,8 @@ VALUES (
     'uh',
     'https://via.placeholder.com/300.png',
     'https://www.uh.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '203',
@@ -2025,8 +2025,8 @@ VALUES (
     'uiuc',
     'https://via.placeholder.com/300.png',
     'https://illinois.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '204',
@@ -2035,8 +2035,8 @@ VALUES (
     'university-of-kent',
     'https://via.placeholder.com/300.png',
     'https://www.kent.ac.uk/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '205',
@@ -2045,8 +2045,8 @@ VALUES (
     'uky',
     'https://via.placeholder.com/300.png',
     'http://www.uky.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '206',
@@ -2055,8 +2055,8 @@ VALUES (
     'unil',
     'https://via.placeholder.com/300.png',
     'https://www.unil.ch/central/en/home.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '207',
@@ -2065,8 +2065,8 @@ VALUES (
     'u-lisbon',
     'https://via.placeholder.com/300.png',
     'https://www.ulisboa.pt/en',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '208',
@@ -2075,8 +2075,8 @@ VALUES (
     'uol',
     'https://via.placeholder.com/300.png',
     'https://london.ac.uk/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '209',
@@ -2085,8 +2085,8 @@ VALUES (
     'university-of-luxembourg',
     'https://via.placeholder.com/300.png',
     'https://wwwen.uni.lu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '210',
@@ -2095,8 +2095,8 @@ VALUES (
     'umd',
     'https://via.placeholder.com/300.png',
     'https://www.umd.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '211',
@@ -2105,8 +2105,8 @@ VALUES (
     'umich',
     'https://via.placeholder.com/300.png',
     'https://umich.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '212',
@@ -2115,8 +2115,8 @@ VALUES (
     'unc',
     'https://via.placeholder.com/300.png',
     'https://www.unc.edu/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '213',
@@ -2125,8 +2125,8 @@ VALUES (
     'notre-dame',
     'https://via.placeholder.com/300.png',
     'https://www.nd.edu/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '214',
@@ -2135,8 +2135,8 @@ VALUES (
     'university-of-padova',
     'https://via.placeholder.com/300.png',
     'https://www.unipd.it/en/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '215',
@@ -2145,8 +2145,8 @@ VALUES (
     'university-of-padua',
     'https://via.placeholder.com/300.png',
     'https://www.unipd.it/en/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '216',
@@ -2155,8 +2155,8 @@ VALUES (
     'upenn',
     'https://via.placeholder.com/300.png',
     'https://www.upenn.edu/',
-    '4',
-    ''
+    '',
+    4
   ),
   (
     '217',
@@ -2165,8 +2165,8 @@ VALUES (
     'university-of-rochester',
     'https://via.placeholder.com/300.png',
     'https://www.urmedicine.org/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '218',
@@ -2175,8 +2175,8 @@ VALUES (
     'usf',
     'https://via.placeholder.com/300.png',
     'https://www.usf.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '219',
@@ -2185,8 +2185,8 @@ VALUES (
     'university-of-southampton',
     'https://via.placeholder.com/300.png',
     'https://www.southampton.ac.uk/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '220',
@@ -2195,8 +2195,8 @@ VALUES (
     'utsw',
     'https://via.placeholder.com/300.png',
     'https://www.utsouthwestern.edu/ ',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '221',
@@ -2205,8 +2205,8 @@ VALUES (
     'uoft',
     'https://via.placeholder.com/300.png',
     'https://www.utoronto.ca/',
-    '5',
-    ''
+    '',
+    5
   ),
   (
     '222',
@@ -2215,8 +2215,8 @@ VALUES (
     'uvm',
     'https://via.placeholder.com/300.png',
     'https://www.uvm.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '223',
@@ -2225,8 +2225,8 @@ VALUES (
     'university-of-verona',
     'https://via.placeholder.com/300.png',
     'https://www.univr.it/en/international',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '224',
@@ -2235,8 +2235,8 @@ VALUES (
     'uva',
     'https://via.placeholder.com/300.png',
     'https://www.virginia.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '225',
@@ -2245,8 +2245,8 @@ VALUES (
     'uw',
     'https://via.placeholder.com/300.png',
     'https://www.washington.edu/',
-    '7',
-    ''
+    '',
+    7
   ),
   (
     '226',
@@ -2255,8 +2255,8 @@ VALUES (
     'uw-madison',
     'https://via.placeholder.com/300.png',
     'https://www.wisc.edu/',
-    '0',
-    ''
+    '',
+    0
   ),
   (
     '227',
@@ -2265,8 +2265,8 @@ VALUES (
     'uzh',
     'https://via.placeholder.com/300.png',
     'https://www.uzh.ch/en.html',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '228',
@@ -2275,8 +2275,8 @@ VALUES (
     'uge',
     'https://via.placeholder.com/300.png',
     'https://www.ugei.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '229',
@@ -2285,8 +2285,8 @@ VALUES (
     'usamriid',
     'https://via.placeholder.com/300.png',
     'https://www.usamriid.army.mil/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '230',
@@ -2295,8 +2295,8 @@ VALUES (
     'va-durham-health-care',
     'https://via.placeholder.com/300.png',
     'https://www.durham.va.gov/ ',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '231',
@@ -2305,8 +2305,8 @@ VALUES (
     'verily',
     'https://via.placeholder.com/300.png',
     'https://verily.com/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '232',
@@ -2315,8 +2315,8 @@ VALUES (
     'vha-ie',
     'https://via.placeholder.com/300.png',
     'https://www.va.gov/innovationecosystem/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '233',
@@ -2325,8 +2325,8 @@ VALUES (
     'wustl',
     'https://via.placeholder.com/300.png',
     'https://wustl.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '234',
@@ -2335,8 +2335,8 @@ VALUES (
     'wayne-state-university',
     'https://via.placeholder.com/300.png',
     'https://wayne.edu/',
-    '1',
-    ''
+    '',
+    1
   ),
   (
     '235',
@@ -2345,8 +2345,8 @@ VALUES (
     'weizmann-institute-of-science',
     'https://via.placeholder.com/300.png',
     'https://www.weizmann.ac.il/pages/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '236',
@@ -2355,8 +2355,8 @@ VALUES (
     'sanger',
     'https://via.placeholder.com/300.png',
     'https://www.sanger.ac.uk/',
-    '2',
-    ''
+    '',
+    2
   ),
   (
     '237',
@@ -2365,6 +2365,6 @@ VALUES (
     'ostp',
     'https://via.placeholder.com/300.png',
     'https://www.whitehouse.gov/ostp/',
-    '1',
-    ''
+    '',
+    1
   );
