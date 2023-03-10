@@ -117,11 +117,12 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, OrganizationSearchQueryDto query) {
-    SortOrder orderWithDefaultAsc =
-        query.getDirection() == OrganizationDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
+    // SortOrder orderWithDefaultAsc =
+    //     query.getDirection() == OrganizationDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
     SortOrder orderWithDefaultDesc =
         query.getDirection() == OrganizationDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
+    SearchSort challengeCountSort = sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =
@@ -130,6 +131,9 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
             : scoreSort;
 
     switch (query.getSort()) {
+      case CHALLENGE_COUNT -> {
+        return challengeCountSort;
+      }
       case CREATED -> {
         return createdSort;
       }
@@ -145,7 +149,6 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
 
   private SearchPredicate getSearchSortPredicate(
       SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
-    LocalDate now = LocalDate.now();
     switch (query.getSort()) {
       default -> {
         return null;

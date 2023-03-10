@@ -48,6 +48,9 @@ public class OrganizationEntity {
   @Column(name = "website_url", nullable = true)
   private String websiteUrl;
 
+  @Column(name = "challenge_count", nullable = false)
+  private Integer challengeCount;
+
   @Column(nullable = true)
   @FullTextField()
   private String description;
