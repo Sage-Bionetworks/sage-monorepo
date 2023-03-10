@@ -49,6 +49,7 @@ public class OrganizationEntity {
   private String websiteUrl;
 
   @Column(name = "challenge_count", nullable = false)
+  @GenericField(name = "challenge_count", sortable = Sortable.YES)
   private Integer challengeCount;
 
   @Column(nullable = true)

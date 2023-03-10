@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.organization.service.model.repository;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -122,7 +121,8 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     SortOrder orderWithDefaultDesc =
         query.getDirection() == OrganizationDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
-    SearchSort challengeCountSort = sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
+    SearchSort challengeCountSort =
+        sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =

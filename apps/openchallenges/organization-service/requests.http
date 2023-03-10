@@ -20,6 +20,10 @@ GET {{basePath}}/organizations?searchTerms=dream
 
 GET {{basePath}}/organizations?sort=created&direction=desc
 
+### Sort the orgs by the number of challenges they contributed to.
+
+GET {{basePath}}/organizations?sort=challenge_count
+
 ### Get an organization by ID
 
 GET {{basePath}}/organizations/dream
