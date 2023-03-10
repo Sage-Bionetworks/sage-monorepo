@@ -1,1 +1,357 @@
-[{"id":1,"name":"publication","challenge_id":1},{"id":2,"name":"publication","challenge_id":2},{"id":3,"name":"speaking_engagement","challenge_id":2},{"id":4,"name":"monetary","challenge_id":3},{"id":5,"name":"publication","challenge_id":5},{"id":6,"name":"speaking_engagement","challenge_id":5},{"id":7,"name":"publication","challenge_id":6},{"id":8,"name":"speaking_engagement","challenge_id":6},{"id":9,"name":"monetary","challenge_id":7},{"id":10,"name":"publication","challenge_id":7},{"id":11,"name":"publication","challenge_id":8},{"id":12,"name":"speaking_engagement","challenge_id":8},{"id":13,"name":"publication","challenge_id":9},{"id":14,"name":"publication","challenge_id":10},{"id":15,"name":"speaking_engagement","challenge_id":10},{"id":16,"name":"publication","challenge_id":11},{"id":17,"name":"speaking_engagement","challenge_id":11},{"id":18,"name":"publication","challenge_id":12},{"id":19,"name":"speaking_engagement","challenge_id":12},{"id":20,"name":"monetary","challenge_id":14},{"id":21,"name":"publication","challenge_id":14},{"id":22,"name":"speaking_engagement","challenge_id":14},{"id":23,"name":"monetary","challenge_id":15},{"id":24,"name":"publication","challenge_id":15},{"id":25,"name":"speaking_engagement","challenge_id":15},{"id":26,"name":"publication","challenge_id":16},{"id":27,"name":"speaking_engagement","challenge_id":16},{"id":28,"name":"publication","challenge_id":17},{"id":29,"name":"speaking_engagement","challenge_id":17},{"id":30,"name":"monetary","challenge_id":24},{"id":31,"name":"publication","challenge_id":24},{"id":32,"name":"speaking_engagement","challenge_id":24},{"id":33,"name":"monetary","challenge_id":25},{"id":34,"name":"publication","challenge_id":25},{"id":35,"name":"speaking_engagement","challenge_id":25},{"id":36,"name":"publication","challenge_id":26},{"id":37,"name":"monetary","challenge_id":27},{"id":38,"name":"publication","challenge_id":27},{"id":39,"name":"publication","challenge_id":28},{"id":40,"name":"publication","challenge_id":29},{"id":41,"name":"publication","challenge_id":30},{"id":42,"name":"publication","challenge_id":31},{"id":43,"name":"speaking_engagement","challenge_id":31},{"id":44,"name":"publication","challenge_id":34},{"id":45,"name":"speaking_engagement","challenge_id":34},{"id":46,"name":"publication","challenge_id":37},{"id":47,"name":"speaking_engagement","challenge_id":37},{"id":48,"name":"publication","challenge_id":38},{"id":49,"name":"speaking_engagement","challenge_id":38},{"id":50,"name":"monetary","challenge_id":111},{"id":51,"name":"monetary","challenge_id":113},{"id":52,"name":"monetary","challenge_id":114},{"id":53,"name":"monetary","challenge_id":118},{"id":54,"name":"monetary","challenge_id":123},{"id":55,"name":"monetary","challenge_id":124},{"id":56,"name":"monetary","challenge_id":129},{"id":57,"name":"monetary","challenge_id":131},{"id":58,"name":"monetary","challenge_id":145},{"id":59,"name":"monetary","challenge_id":146},{"id":60,"name":"monetary","challenge_id":147},{"id":61,"name":"monetary","challenge_id":148},{"id":62,"name":"monetary","challenge_id":149},{"id":63,"name":"monetary","challenge_id":156},{"id":64,"name":"publication","challenge_id":157},{"id":65,"name":"other","challenge_id":157},{"id":66,"name":"publication","challenge_id":158},{"id":67,"name":"speaking_engagement","challenge_id":158},{"id":68,"name":"publication","challenge_id":159},{"id":69,"name":"speaking_engagement","challenge_id":159},{"id":70,"name":"publication","challenge_id":160},{"id":71,"name":"speaking_engagement","challenge_id":160}]
+[
+  {
+    "id": 1,
+    "name": "publication",
+    "challenge_id": 1
+  },
+  {
+    "id": 2,
+    "name": "publication",
+    "challenge_id": 2
+  },
+  {
+    "id": 3,
+    "name": "speaking_engagement",
+    "challenge_id": 2
+  },
+  {
+    "id": 4,
+    "name": "monetary",
+    "challenge_id": 3
+  },
+  {
+    "id": 5,
+    "name": "publication",
+    "challenge_id": 5
+  },
+  {
+    "id": 6,
+    "name": "speaking_engagement",
+    "challenge_id": 5
+  },
+  {
+    "id": 7,
+    "name": "publication",
+    "challenge_id": 6
+  },
+  {
+    "id": 8,
+    "name": "speaking_engagement",
+    "challenge_id": 6
+  },
+  {
+    "id": 9,
+    "name": "monetary",
+    "challenge_id": 7
+  },
+  {
+    "id": 10,
+    "name": "publication",
+    "challenge_id": 7
+  },
+  {
+    "id": 11,
+    "name": "publication",
+    "challenge_id": 8
+  },
+  {
+    "id": 12,
+    "name": "speaking_engagement",
+    "challenge_id": 8
+  },
+  {
+    "id": 13,
+    "name": "publication",
+    "challenge_id": 9
+  },
+  {
+    "id": 14,
+    "name": "publication",
+    "challenge_id": 10
+  },
+  {
+    "id": 15,
+    "name": "speaking_engagement",
+    "challenge_id": 10
+  },
+  {
+    "id": 16,
+    "name": "publication",
+    "challenge_id": 11
+  },
+  {
+    "id": 17,
+    "name": "speaking_engagement",
+    "challenge_id": 11
+  },
+  {
+    "id": 18,
+    "name": "publication",
+    "challenge_id": 12
+  },
+  {
+    "id": 19,
+    "name": "speaking_engagement",
+    "challenge_id": 12
+  },
+  {
+    "id": 20,
+    "name": "monetary",
+    "challenge_id": 14
+  },
+  {
+    "id": 21,
+    "name": "publication",
+    "challenge_id": 14
+  },
+  {
+    "id": 22,
+    "name": "speaking_engagement",
+    "challenge_id": 14
+  },
+  {
+    "id": 23,
+    "name": "monetary",
+    "challenge_id": 15
+  },
+  {
+    "id": 24,
+    "name": "publication",
+    "challenge_id": 15
+  },
+  {
+    "id": 25,
+    "name": "speaking_engagement",
+    "challenge_id": 15
+  },
+  {
+    "id": 26,
+    "name": "publication",
+    "challenge_id": 16
+  },
+  {
+    "id": 27,
+    "name": "speaking_engagement",
+    "challenge_id": 16
+  },
+  {
+    "id": 28,
+    "name": "publication",
+    "challenge_id": 17
+  },
+  {
+    "id": 29,
+    "name": "speaking_engagement",
+    "challenge_id": 17
+  },
+  {
+    "id": 30,
+    "name": "monetary",
+    "challenge_id": 24
+  },
+  {
+    "id": 31,
+    "name": "publication",
+    "challenge_id": 24
+  },
+  {
+    "id": 32,
+    "name": "speaking_engagement",
+    "challenge_id": 24
+  },
+  {
+    "id": 33,
+    "name": "monetary",
+    "challenge_id": 25
+  },
+  {
+    "id": 34,
+    "name": "publication",
+    "challenge_id": 25
+  },
+  {
+    "id": 35,
+    "name": "speaking_engagement",
+    "challenge_id": 25
+  },
+  {
+    "id": 36,
+    "name": "publication",
+    "challenge_id": 26
+  },
+  {
+    "id": 37,
+    "name": "monetary",
+    "challenge_id": 27
+  },
+  {
+    "id": 38,
+    "name": "publication",
+    "challenge_id": 27
+  },
+  {
+    "id": 39,
+    "name": "publication",
+    "challenge_id": 28
+  },
+  {
+    "id": 40,
+    "name": "publication",
+    "challenge_id": 29
+  },
+  {
+    "id": 41,
+    "name": "publication",
+    "challenge_id": 30
+  },
+  {
+    "id": 42,
+    "name": "publication",
+    "challenge_id": 31
+  },
+  {
+    "id": 43,
+    "name": "speaking_engagement",
+    "challenge_id": 31
+  },
+  {
+    "id": 44,
+    "name": "publication",
+    "challenge_id": 34
+  },
+  {
+    "id": 45,
+    "name": "speaking_engagement",
+    "challenge_id": 34
+  },
+  {
+    "id": 46,
+    "name": "publication",
+    "challenge_id": 37
+  },
+  {
+    "id": 47,
+    "name": "speaking_engagement",
+    "challenge_id": 37
+  },
+  {
+    "id": 48,
+    "name": "publication",
+    "challenge_id": 38
+  },
+  {
+    "id": 49,
+    "name": "speaking_engagement",
+    "challenge_id": 38
+  },
+  {
+    "id": 50,
+    "name": "monetary",
+    "challenge_id": 111
+  },
+  {
+    "id": 51,
+    "name": "monetary",
+    "challenge_id": 113
+  },
+  {
+    "id": 52,
+    "name": "monetary",
+    "challenge_id": 114
+  },
+  {
+    "id": 53,
+    "name": "monetary",
+    "challenge_id": 118
+  },
+  {
+    "id": 54,
+    "name": "monetary",
+    "challenge_id": 123
+  },
+  {
+    "id": 55,
+    "name": "monetary",
+    "challenge_id": 124
+  },
+  {
+    "id": 56,
+    "name": "monetary",
+    "challenge_id": 129
+  },
+  {
+    "id": 57,
+    "name": "monetary",
+    "challenge_id": 131
+  },
+  {
+    "id": 58,
+    "name": "monetary",
+    "challenge_id": 145
+  },
+  {
+    "id": 59,
+    "name": "monetary",
+    "challenge_id": 146
+  },
+  {
+    "id": 60,
+    "name": "monetary",
+    "challenge_id": 147
+  },
+  {
+    "id": 61,
+    "name": "monetary",
+    "challenge_id": 148
+  },
+  {
+    "id": 62,
+    "name": "monetary",
+    "challenge_id": 149
+  },
+  {
+    "id": 63,
+    "name": "monetary",
+    "challenge_id": 156
+  },
+  {
+    "id": 64,
+    "name": "publication",
+    "challenge_id": 157
+  },
+  {
+    "id": 65,
+    "name": "other",
+    "challenge_id": 157
+  },
+  {
+    "id": 66,
+    "name": "publication",
+    "challenge_id": 158
+  },
+  {
+    "id": 67,
+    "name": "speaking_engagement",
+    "challenge_id": 158
+  },
+  {
+    "id": 68,
+    "name": "publication",
+    "challenge_id": 159
+  },
+  {
+    "id": 69,
+    "name": "speaking_engagement",
+    "challenge_id": 159
+  },
+  {
+    "id": 70,
+    "name": "publication",
+    "challenge_id": 160
+  },
+  {
+    "id": 71,
+    "name": "speaking_engagement",
+    "challenge_id": 160
+  }
+]
