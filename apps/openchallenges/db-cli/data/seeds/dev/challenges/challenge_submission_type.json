@@ -823,5 +823,40 @@
     "id": 165,
     "name": "other",
     "challenge_id": 160
+  },
+  {
+    "id": 166,
+    "name": "prediction_file",
+    "challenge_id": 161
+  },
+  {
+    "id": 167,
+    "name": "prediction_file",
+    "challenge_id": 162
+  },
+  {
+    "id": 168,
+    "name": "other",
+    "challenge_id": 162
+  },
+  {
+    "id": 169,
+    "name": "prediction_file",
+    "challenge_id": 163
+  },
+  {
+    "id": 170,
+    "name": "other",
+    "challenge_id": 163
+  },
+  {
+    "id": 171,
+    "name": "prediction_file",
+    "challenge_id": 164
+  },
+  {
+    "id": 172,
+    "name": "prediction_file",
+    "challenge_id": 165
   }
 ]
