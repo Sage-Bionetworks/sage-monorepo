@@ -136,7 +136,7 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://precision.fda.gov/challenges',
     '',
-    10
+    15
   ),
   (
     '14',
@@ -2316,7 +2316,7 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://www.va.gov/innovationecosystem/',
     '',
-    1
+    2
   ),
   (
     '233',
@@ -2367,4 +2367,24 @@ VALUES (
     'https://www.whitehouse.gov/ostp/',
     '',
     1
+  ),
+  (
+    '238',
+    'InChI Trust',
+    '',
+    'inchi',
+    'https://via.placeholder.com/300.png',
+    'https://www.inchi-trust.org/',
+    '',
+    1
+  ),
+  (
+    '239',
+    'National Center for Toxicological Research',
+    '',
+    'nctr',
+    'https://via.placeholder.com/300.png',
+    'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
+    '',
+    2
   );
