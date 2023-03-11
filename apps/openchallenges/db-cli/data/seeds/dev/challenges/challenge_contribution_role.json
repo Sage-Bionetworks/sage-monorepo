@@ -1,1 +1,3566 @@
-[{"id":1,"challenge_id":1,"organization_id":75,"role":"sponsor"},{"id":2,"challenge_id":2,"organization_id":28,"role":"data_contributor"},{"id":3,"challenge_id":2,"organization_id":45,"role":"data_contributor"},{"id":4,"challenge_id":2,"organization_id":151,"role":"data_contributor"},{"id":5,"challenge_id":2,"organization_id":52,"role":"sponsor"},{"id":6,"challenge_id":3,"organization_id":154,"role":"data_contributor"},{"id":7,"challenge_id":3,"organization_id":118,"role":"data_contributor"},{"id":8,"challenge_id":3,"organization_id":17,"role":"data_contributor"},{"id":9,"challenge_id":3,"organization_id":142,"role":"data_contributor"},{"id":10,"challenge_id":4,"organization_id":150,"role":"data_contributor"},{"id":11,"challenge_id":4,"organization_id":52,"role":"data_contributor"},{"id":12,"challenge_id":4,"organization_id":131,"role":"sponsor"},{"id":13,"challenge_id":5,"organization_id":101,"role":"data_contributor"},{"id":14,"challenge_id":6,"organization_id":54,"role":"challenge_organizer"},{"id":15,"challenge_id":6,"organization_id":146,"role":"challenge_organizer"},{"id":16,"challenge_id":6,"organization_id":171,"role":"challenge_organizer"},{"id":17,"challenge_id":6,"organization_id":228,"role":"challenge_organizer"},{"id":18,"challenge_id":6,"organization_id":27,"role":"challenge_organizer"},{"id":19,"challenge_id":6,"organization_id":128,"role":"challenge_organizer"},{"id":20,"challenge_id":6,"organization_id":93,"role":"challenge_organizer"},{"id":21,"challenge_id":6,"organization_id":180,"role":"challenge_organizer"},{"id":22,"challenge_id":6,"organization_id":89,"role":"challenge_organizer"},{"id":23,"challenge_id":6,"organization_id":73,"role":"challenge_organizer"},{"id":24,"challenge_id":6,"organization_id":170,"role":"challenge_organizer"},{"id":25,"challenge_id":6,"organization_id":119,"role":"challenge_organizer"},{"id":26,"challenge_id":6,"organization_id":171,"role":"sponsor"},{"id":27,"challenge_id":6,"organization_id":93,"role":"sponsor"},{"id":28,"challenge_id":6,"organization_id":57,"role":"sponsor"},{"id":29,"challenge_id":6,"organization_id":146,"role":"sponsor"},{"id":30,"challenge_id":6,"organization_id":120,"role":"sponsor"},{"id":31,"challenge_id":7,"organization_id":171,"role":"challenge_organizer"},{"id":32,"challenge_id":7,"organization_id":128,"role":"challenge_organizer"},{"id":33,"challenge_id":7,"organization_id":93,"role":"challenge_organizer"},{"id":34,"challenge_id":7,"organization_id":71,"role":"challenge_organizer"},{"id":35,"challenge_id":7,"organization_id":89,"role":"challenge_organizer"},{"id":36,"challenge_id":7,"organization_id":73,"role":"challenge_organizer"},{"id":37,"challenge_id":7,"organization_id":170,"role":"challenge_organizer"},{"id":38,"challenge_id":7,"organization_id":150,"role":"challenge_organizer"},{"id":39,"challenge_id":7,"organization_id":130,"role":"challenge_organizer"},{"id":40,"challenge_id":8,"organization_id":171,"role":"challenge_organizer"},{"id":41,"challenge_id":8,"organization_id":207,"role":"challenge_organizer"},{"id":42,"challenge_id":8,"organization_id":128,"role":"challenge_organizer"},{"id":43,"challenge_id":8,"organization_id":93,"role":"challenge_organizer"},{"id":44,"challenge_id":8,"organization_id":56,"role":"challenge_organizer"},{"id":45,"challenge_id":8,"organization_id":37,"role":"challenge_organizer"},{"id":46,"challenge_id":8,"organization_id":25,"role":"challenge_organizer"},{"id":47,"challenge_id":8,"organization_id":78,"role":"challenge_organizer"},{"id":48,"challenge_id":8,"organization_id":125,"role":"challenge_organizer"},{"id":49,"challenge_id":8,"organization_id":23,"role":"challenge_organizer"},{"id":50,"challenge_id":8,"organization_id":55,"role":"data_contributor"},{"id":51,"challenge_id":8,"organization_id":24,"role":"sponsor"},{"id":52,"challenge_id":8,"organization_id":125,"role":"sponsor"},{"id":53,"challenge_id":8,"organization_id":145,"role":"sponsor"},{"id":54,"challenge_id":8,"organization_id":182,"role":"sponsor"},{"id":55,"challenge_id":8,"organization_id":93,"role":"sponsor"},{"id":56,"challenge_id":9,"organization_id":171,"role":"challenge_organizer"},{"id":57,"challenge_id":9,"organization_id":150,"role":"challenge_organizer"},{"id":58,"challenge_id":9,"organization_id":128,"role":"challenge_organizer"},{"id":59,"challenge_id":9,"organization_id":93,"role":"challenge_organizer"},{"id":60,"challenge_id":9,"organization_id":198,"role":"challenge_organizer"},{"id":61,"challenge_id":9,"organization_id":149,"role":"challenge_organizer"},{"id":62,"challenge_id":9,"organization_id":23,"role":"challenge_organizer"},{"id":63,"challenge_id":9,"organization_id":99,"role":"data_contributor"},{"id":64,"challenge_id":10,"organization_id":165,"role":"challenge_organizer"},{"id":65,"challenge_id":10,"organization_id":171,"role":"challenge_organizer"},{"id":66,"challenge_id":10,"organization_id":128,"role":"challenge_organizer"},{"id":67,"challenge_id":10,"organization_id":93,"role":"challenge_organizer"},{"id":68,"challenge_id":10,"organization_id":23,"role":"challenge_organizer"},{"id":69,"challenge_id":10,"organization_id":122,"role":"challenge_organizer"},{"id":70,"challenge_id":10,"organization_id":122,"role":"data_contributor"},{"id":71,"challenge_id":10,"organization_id":122,"role":"sponsor"},{"id":72,"challenge_id":10,"organization_id":93,"role":"sponsor"},{"id":73,"challenge_id":10,"organization_id":171,"role":"sponsor"},{"id":74,"challenge_id":10,"organization_id":165,"role":"sponsor"},{"id":75,"challenge_id":11,"organization_id":171,"role":"challenge_organizer"},{"id":76,"challenge_id":11,"organization_id":150,"role":"challenge_organizer"},{"id":77,"challenge_id":11,"organization_id":128,"role":"challenge_organizer"},{"id":78,"challenge_id":11,"organization_id":41,"role":"challenge_organizer"},{"id":79,"challenge_id":11,"organization_id":58,"role":"challenge_organizer"},{"id":80,"challenge_id":11,"organization_id":206,"role":"challenge_organizer"},{"id":81,"challenge_id":11,"organization_id":93,"role":"challenge_organizer"},{"id":82,"challenge_id":11,"organization_id":23,"role":"challenge_organizer"},{"id":83,"challenge_id":11,"organization_id":41,"role":"data_contributor"},{"id":84,"challenge_id":11,"organization_id":58,"role":"data_contributor"},{"id":85,"challenge_id":11,"organization_id":46,"role":"sponsor"},{"id":86,"challenge_id":11,"organization_id":109,"role":"sponsor"},{"id":87,"challenge_id":12,"organization_id":107,"role":"challenge_organizer"},{"id":88,"challenge_id":12,"organization_id":171,"role":"challenge_organizer"},{"id":89,"challenge_id":12,"organization_id":205,"role":"challenge_organizer"},{"id":90,"challenge_id":12,"organization_id":128,"role":"challenge_organizer"},{"id":91,"challenge_id":12,"organization_id":93,"role":"challenge_organizer"},{"id":92,"challenge_id":12,"organization_id":38,"role":"challenge_organizer"},{"id":93,"challenge_id":12,"organization_id":224,"role":"challenge_organizer"},{"id":94,"challenge_id":12,"organization_id":119,"role":"challenge_organizer"},{"id":95,"challenge_id":12,"organization_id":23,"role":"challenge_organizer"},{"id":96,"challenge_id":12,"organization_id":82,"role":"challenge_organizer"},{"id":97,"challenge_id":12,"organization_id":169,"role":"data_contributor"},{"id":98,"challenge_id":12,"organization_id":18,"role":"data_contributor"},{"id":99,"challenge_id":12,"organization_id":94,"role":"data_contributor"},{"id":100,"challenge_id":12,"organization_id":19,"role":"sponsor"},{"id":101,"challenge_id":12,"organization_id":39,"role":"sponsor"},{"id":102,"challenge_id":12,"organization_id":74,"role":"sponsor"},{"id":103,"challenge_id":12,"organization_id":153,"role":"sponsor"},{"id":104,"challenge_id":12,"organization_id":164,"role":"sponsor"},{"id":105,"challenge_id":12,"organization_id":168,"role":"sponsor"},{"id":106,"challenge_id":12,"organization_id":172,"role":"sponsor"},{"id":107,"challenge_id":12,"organization_id":182,"role":"sponsor"},{"id":108,"challenge_id":13,"organization_id":207,"role":"challenge_organizer"},{"id":109,"challenge_id":13,"organization_id":167,"role":"challenge_organizer"},{"id":110,"challenge_id":13,"organization_id":171,"role":"challenge_organizer"},{"id":111,"challenge_id":13,"organization_id":93,"role":"challenge_organizer"},{"id":112,"challenge_id":13,"organization_id":128,"role":"challenge_organizer"},{"id":113,"challenge_id":13,"organization_id":23,"role":"challenge_organizer"},{"id":114,"challenge_id":13,"organization_id":167,"role":"data_contributor"},{"id":115,"challenge_id":13,"organization_id":100,"role":"sponsor"},{"id":116,"challenge_id":13,"organization_id":93,"role":"sponsor"},{"id":117,"challenge_id":13,"organization_id":171,"role":"sponsor"},{"id":118,"challenge_id":13,"organization_id":1,"role":"sponsor"},{"id":119,"challenge_id":14,"organization_id":58,"role":"challenge_organizer"},{"id":120,"challenge_id":14,"organization_id":93,"role":"challenge_organizer"},{"id":121,"challenge_id":14,"organization_id":124,"role":"challenge_organizer"},{"id":122,"challenge_id":14,"organization_id":155,"role":"challenge_organizer"},{"id":123,"challenge_id":14,"organization_id":157,"role":"challenge_organizer"},{"id":124,"challenge_id":14,"organization_id":171,"role":"challenge_organizer"},{"id":125,"challenge_id":14,"organization_id":189,"role":"challenge_organizer"},{"id":126,"challenge_id":14,"organization_id":197,"role":"challenge_organizer"},{"id":127,"challenge_id":14,"organization_id":200,"role":"challenge_organizer"},{"id":128,"challenge_id":14,"organization_id":220,"role":"challenge_organizer"},{"id":129,"challenge_id":14,"organization_id":26,"role":"data_contributor"},{"id":130,"challenge_id":14,"organization_id":47,"role":"data_contributor"},{"id":131,"challenge_id":14,"organization_id":172,"role":"data_contributor"},{"id":132,"challenge_id":14,"organization_id":124,"role":"data_contributor"},{"id":133,"challenge_id":14,"organization_id":157,"role":"sponsor"},{"id":134,"challenge_id":14,"organization_id":131,"role":"sponsor"},{"id":135,"challenge_id":14,"organization_id":21,"role":"sponsor"},{"id":136,"challenge_id":15,"organization_id":128,"role":"challenge_organizer"},{"id":137,"challenge_id":15,"organization_id":93,"role":"challenge_organizer"},{"id":138,"challenge_id":15,"organization_id":171,"role":"challenge_organizer"},{"id":139,"challenge_id":15,"organization_id":118,"role":"challenge_organizer"},{"id":140,"challenge_id":15,"organization_id":154,"role":"challenge_organizer"},{"id":141,"challenge_id":15,"organization_id":188,"role":"challenge_organizer"},{"id":142,"challenge_id":15,"organization_id":115,"role":"challenge_organizer"},{"id":143,"challenge_id":15,"organization_id":23,"role":"challenge_organizer"},{"id":144,"challenge_id":15,"organization_id":154,"role":"data_contributor"},{"id":145,"challenge_id":15,"organization_id":140,"role":"data_contributor"},{"id":146,"challenge_id":15,"organization_id":142,"role":"data_contributor"},{"id":147,"challenge_id":15,"organization_id":154,"role":"sponsor"},{"id":148,"challenge_id":15,"organization_id":93,"role":"sponsor"},{"id":149,"challenge_id":15,"organization_id":171,"role":"sponsor"},{"id":150,"challenge_id":15,"organization_id":1,"role":"sponsor"},{"id":151,"challenge_id":15,"organization_id":32,"role":"sponsor"},{"id":152,"challenge_id":15,"organization_id":67,"role":"sponsor"},{"id":153,"challenge_id":16,"organization_id":128,"role":"challenge_organizer"},{"id":154,"challenge_id":16,"organization_id":93,"role":"challenge_organizer"},{"id":155,"challenge_id":16,"organization_id":26,"role":"challenge_organizer"},{"id":156,"challenge_id":16,"organization_id":89,"role":"challenge_organizer"},{"id":157,"challenge_id":16,"organization_id":73,"role":"challenge_organizer"},{"id":158,"challenge_id":16,"organization_id":170,"role":"challenge_organizer"},{"id":159,"challenge_id":16,"organization_id":171,"role":"challenge_organizer"},{"id":160,"challenge_id":16,"organization_id":23,"role":"challenge_organizer"},{"id":161,"challenge_id":16,"organization_id":26,"role":"data_contributor"},{"id":162,"challenge_id":16,"organization_id":236,"role":"data_contributor"},{"id":163,"challenge_id":16,"organization_id":29,"role":"data_contributor"},{"id":164,"challenge_id":16,"organization_id":26,"role":"sponsor"},{"id":165,"challenge_id":17,"organization_id":128,"role":"challenge_organizer"},{"id":166,"challenge_id":17,"organization_id":93,"role":"challenge_organizer"},{"id":167,"challenge_id":17,"organization_id":198,"role":"challenge_organizer"},{"id":168,"challenge_id":17,"organization_id":149,"role":"challenge_organizer"},{"id":169,"challenge_id":17,"organization_id":171,"role":"challenge_organizer"},{"id":170,"challenge_id":17,"organization_id":23,"role":"challenge_organizer"},{"id":171,"challenge_id":17,"organization_id":99,"role":"data_contributor"},{"id":172,"challenge_id":17,"organization_id":149,"role":"sponsor"},{"id":173,"challenge_id":17,"organization_id":81,"role":"sponsor"},{"id":174,"challenge_id":17,"organization_id":138,"role":"sponsor"},{"id":175,"challenge_id":17,"organization_id":171,"role":"sponsor"},{"id":176,"challenge_id":17,"organization_id":198,"role":"sponsor"},{"id":177,"challenge_id":17,"organization_id":150,"role":"sponsor"},{"id":178,"challenge_id":18,"organization_id":236,"role":"challenge_organizer"},{"id":179,"challenge_id":18,"organization_id":128,"role":"challenge_organizer"},{"id":180,"challenge_id":18,"organization_id":93,"role":"challenge_organizer"},{"id":181,"challenge_id":18,"organization_id":198,"role":"challenge_organizer"},{"id":182,"challenge_id":18,"organization_id":150,"role":"challenge_organizer"},{"id":183,"challenge_id":18,"organization_id":149,"role":"challenge_organizer"},{"id":184,"challenge_id":18,"organization_id":79,"role":"challenge_organizer"},{"id":185,"challenge_id":18,"organization_id":221,"role":"challenge_organizer"},{"id":186,"challenge_id":18,"organization_id":171,"role":"challenge_organizer"},{"id":187,"challenge_id":18,"organization_id":23,"role":"challenge_organizer"},{"id":188,"challenge_id":18,"organization_id":149,"role":"data_contributor"},{"id":189,"challenge_id":18,"organization_id":99,"role":"data_contributor"},{"id":190,"challenge_id":18,"organization_id":149,"role":"data_contributor"},{"id":191,"challenge_id":18,"organization_id":156,"role":"sponsor"},{"id":192,"challenge_id":18,"organization_id":81,"role":"sponsor"},{"id":193,"challenge_id":18,"organization_id":138,"role":"sponsor"},{"id":194,"challenge_id":19,"organization_id":171,"role":"challenge_organizer"},{"id":195,"challenge_id":19,"organization_id":64,"role":"challenge_organizer"},{"id":196,"challenge_id":19,"organization_id":230,"role":"challenge_organizer"},{"id":197,"challenge_id":19,"organization_id":59,"role":"challenge_organizer"},{"id":198,"challenge_id":19,"organization_id":59,"role":"sponsor"},{"id":199,"challenge_id":20,"organization_id":171,"role":"challenge_organizer"},{"id":200,"challenge_id":20,"organization_id":206,"role":"challenge_organizer"},{"id":201,"challenge_id":20,"organization_id":128,"role":"challenge_organizer"},{"id":202,"challenge_id":20,"organization_id":93,"role":"challenge_organizer"},{"id":203,"challenge_id":20,"organization_id":89,"role":"challenge_organizer"},{"id":204,"challenge_id":20,"organization_id":73,"role":"challenge_organizer"},{"id":205,"challenge_id":20,"organization_id":170,"role":"challenge_organizer"},{"id":206,"challenge_id":20,"organization_id":118,"role":"challenge_organizer"},{"id":207,"challenge_id":20,"organization_id":23,"role":"challenge_organizer"},{"id":208,"challenge_id":20,"organization_id":111,"role":"challenge_organizer"},{"id":209,"challenge_id":20,"organization_id":206,"role":"data_contributor"},{"id":210,"challenge_id":20,"organization_id":181,"role":"sponsor"},{"id":211,"challenge_id":21,"organization_id":180,"role":"challenge_organizer"},{"id":212,"challenge_id":21,"organization_id":171,"role":"challenge_organizer"},{"id":213,"challenge_id":21,"organization_id":128,"role":"challenge_organizer"},{"id":214,"challenge_id":21,"organization_id":93,"role":"challenge_organizer"},{"id":215,"challenge_id":21,"organization_id":200,"role":"challenge_organizer"},{"id":216,"challenge_id":21,"organization_id":150,"role":"challenge_organizer"},{"id":217,"challenge_id":21,"organization_id":115,"role":"challenge_organizer"},{"id":218,"challenge_id":21,"organization_id":23,"role":"challenge_organizer"},{"id":219,"challenge_id":21,"organization_id":69,"role":"data_contributor"},{"id":220,"challenge_id":22,"organization_id":221,"role":"challenge_organizer"},{"id":221,"challenge_id":22,"organization_id":91,"role":"challenge_organizer"},{"id":222,"challenge_id":22,"organization_id":127,"role":"challenge_organizer"},{"id":223,"challenge_id":22,"organization_id":95,"role":"challenge_organizer"},{"id":224,"challenge_id":22,"organization_id":128,"role":"challenge_organizer"},{"id":225,"challenge_id":22,"organization_id":93,"role":"challenge_organizer"},{"id":226,"challenge_id":22,"organization_id":171,"role":"challenge_organizer"},{"id":227,"challenge_id":22,"organization_id":23,"role":"challenge_organizer"},{"id":228,"challenge_id":22,"organization_id":64,"role":"data_contributor"},{"id":229,"challenge_id":22,"organization_id":230,"role":"data_contributor"},{"id":230,"challenge_id":23,"organization_id":233,"role":"challenge_organizer"},{"id":231,"challenge_id":23,"organization_id":128,"role":"challenge_organizer"},{"id":232,"challenge_id":23,"organization_id":93,"role":"challenge_organizer"},{"id":233,"challenge_id":23,"organization_id":198,"role":"challenge_organizer"},{"id":234,"challenge_id":23,"organization_id":150,"role":"challenge_organizer"},{"id":235,"challenge_id":23,"organization_id":149,"role":"challenge_organizer"},{"id":236,"challenge_id":23,"organization_id":171,"role":"challenge_organizer"},{"id":237,"challenge_id":23,"organization_id":23,"role":"challenge_organizer"},{"id":238,"challenge_id":23,"organization_id":99,"role":"data_contributor"},{"id":239,"challenge_id":23,"organization_id":131,"role":"data_contributor"},{"id":240,"challenge_id":23,"organization_id":149,"role":"data_contributor"},{"id":241,"challenge_id":23,"organization_id":138,"role":"sponsor"},{"id":242,"challenge_id":23,"organization_id":81,"role":"sponsor"},{"id":243,"challenge_id":23,"organization_id":156,"role":"sponsor"},{"id":244,"challenge_id":23,"organization_id":131,"role":"sponsor"},{"id":245,"challenge_id":24,"organization_id":171,"role":"challenge_organizer"},{"id":246,"challenge_id":24,"organization_id":93,"role":"challenge_organizer"},{"id":247,"challenge_id":24,"organization_id":106,"role":"challenge_organizer"},{"id":248,"challenge_id":24,"organization_id":128,"role":"challenge_organizer"},{"id":249,"challenge_id":24,"organization_id":175,"role":"challenge_organizer"},{"id":250,"challenge_id":24,"organization_id":190,"role":"challenge_organizer"},{"id":251,"challenge_id":24,"organization_id":36,"role":"data_contributor"},{"id":252,"challenge_id":24,"organization_id":128,"role":"data_contributor"},{"id":253,"challenge_id":24,"organization_id":110,"role":"sponsor"},{"id":254,"challenge_id":24,"organization_id":80,"role":"sponsor"},{"id":255,"challenge_id":24,"organization_id":237,"role":"sponsor"},{"id":256,"challenge_id":24,"organization_id":93,"role":"sponsor"},{"id":257,"challenge_id":24,"organization_id":20,"role":"sponsor"},{"id":258,"challenge_id":25,"organization_id":47,"role":"challenge_organizer"},{"id":259,"challenge_id":25,"organization_id":129,"role":"challenge_organizer"},{"id":260,"challenge_id":25,"organization_id":171,"role":"challenge_organizer"},{"id":261,"challenge_id":25,"organization_id":194,"role":"data_contributor"},{"id":262,"challenge_id":25,"organization_id":58,"role":"data_contributor"},{"id":263,"challenge_id":25,"organization_id":86,"role":"data_contributor"},{"id":264,"challenge_id":25,"organization_id":89,"role":"data_contributor"},{"id":265,"challenge_id":25,"organization_id":129,"role":"data_contributor"},{"id":266,"challenge_id":25,"organization_id":47,"role":"sponsor"},{"id":267,"challenge_id":26,"organization_id":85,"role":"challenge_organizer"},{"id":268,"challenge_id":26,"organization_id":198,"role":"challenge_organizer"},{"id":269,"challenge_id":26,"organization_id":63,"role":"challenge_organizer"},{"id":270,"challenge_id":26,"organization_id":149,"role":"challenge_organizer"},{"id":271,"challenge_id":26,"organization_id":171,"role":"challenge_organizer"},{"id":272,"challenge_id":26,"organization_id":131,"role":"data_contributor"},{"id":273,"challenge_id":26,"organization_id":88,"role":"data_contributor"},{"id":274,"challenge_id":26,"organization_id":180,"role":"data_contributor"},{"id":275,"challenge_id":26,"organization_id":49,"role":"data_contributor"},{"id":276,"challenge_id":26,"organization_id":108,"role":"data_contributor"},{"id":277,"challenge_id":26,"organization_id":203,"role":"data_contributor"},{"id":278,"challenge_id":26,"organization_id":198,"role":"data_contributor"},{"id":279,"challenge_id":26,"organization_id":149,"role":"data_contributor"},{"id":280,"challenge_id":26,"organization_id":99,"role":"data_contributor"},{"id":281,"challenge_id":26,"organization_id":41,"role":"data_contributor"},{"id":282,"challenge_id":27,"organization_id":126,"role":"challenge_organizer"},{"id":283,"challenge_id":27,"organization_id":65,"role":"challenge_organizer"},{"id":284,"challenge_id":27,"organization_id":231,"role":"challenge_organizer"},{"id":285,"challenge_id":27,"organization_id":88,"role":"challenge_organizer"},{"id":286,"challenge_id":27,"organization_id":171,"role":"challenge_organizer"},{"id":287,"challenge_id":27,"organization_id":225,"role":"challenge_organizer"},{"id":288,"challenge_id":27,"organization_id":209,"role":"challenge_organizer"},{"id":289,"challenge_id":27,"organization_id":217,"role":"challenge_organizer"},{"id":290,"challenge_id":27,"organization_id":126,"role":"data_contributor"},{"id":291,"challenge_id":27,"organization_id":171,"role":"data_contributor"},{"id":292,"challenge_id":27,"organization_id":126,"role":"sponsor"},{"id":293,"challenge_id":27,"organization_id":166,"role":"sponsor"},{"id":294,"challenge_id":28,"organization_id":141,"role":"challenge_organizer"},{"id":295,"challenge_id":28,"organization_id":128,"role":"challenge_organizer"},{"id":296,"challenge_id":28,"organization_id":93,"role":"challenge_organizer"},{"id":297,"challenge_id":28,"organization_id":131,"role":"challenge_organizer"},{"id":298,"challenge_id":28,"organization_id":89,"role":"challenge_organizer"},{"id":299,"challenge_id":28,"organization_id":73,"role":"challenge_organizer"},{"id":300,"challenge_id":28,"organization_id":170,"role":"challenge_organizer"},{"id":301,"challenge_id":28,"organization_id":149,"role":"challenge_organizer"},{"id":302,"challenge_id":28,"organization_id":59,"role":"challenge_organizer"},{"id":303,"challenge_id":28,"organization_id":152,"role":"challenge_organizer"},{"id":304,"challenge_id":28,"organization_id":171,"role":"challenge_organizer"},{"id":305,"challenge_id":28,"organization_id":51,"role":"data_contributor"},{"id":306,"challenge_id":28,"organization_id":51,"role":"sponsor"},{"id":307,"challenge_id":28,"organization_id":59,"role":"sponsor"},{"id":308,"challenge_id":28,"organization_id":147,"role":"sponsor"},{"id":309,"challenge_id":29,"organization_id":212,"role":"challenge_organizer"},{"id":310,"challenge_id":29,"organization_id":128,"role":"challenge_organizer"},{"id":311,"challenge_id":29,"organization_id":211,"role":"challenge_organizer"},{"id":312,"challenge_id":29,"organization_id":171,"role":"challenge_organizer"},{"id":313,"challenge_id":29,"organization_id":196,"role":"challenge_organizer"},{"id":314,"challenge_id":29,"organization_id":128,"role":"data_contributor"},{"id":315,"challenge_id":29,"organization_id":128,"role":"sponsor"},{"id":316,"challenge_id":30,"organization_id":89,"role":"challenge_organizer"},{"id":317,"challenge_id":30,"organization_id":128,"role":"challenge_organizer"},{"id":318,"challenge_id":30,"organization_id":93,"role":"challenge_organizer"},{"id":319,"challenge_id":30,"organization_id":73,"role":"challenge_organizer"},{"id":320,"challenge_id":30,"organization_id":170,"role":"challenge_organizer"},{"id":321,"challenge_id":30,"organization_id":121,"role":"challenge_organizer"},{"id":322,"challenge_id":30,"organization_id":171,"role":"challenge_organizer"},{"id":323,"challenge_id":30,"organization_id":121,"role":"data_contributor"},{"id":324,"challenge_id":31,"organization_id":171,"role":"challenge_organizer"},{"id":325,"challenge_id":31,"organization_id":96,"role":"challenge_organizer"},{"id":326,"challenge_id":31,"organization_id":128,"role":"challenge_organizer"},{"id":327,"challenge_id":31,"organization_id":93,"role":"challenge_organizer"},{"id":328,"challenge_id":31,"organization_id":191,"role":"data_contributor"},{"id":329,"challenge_id":31,"organization_id":15,"role":"sponsor"},{"id":330,"challenge_id":32,"organization_id":87,"role":"challenge_organizer"},{"id":331,"challenge_id":32,"organization_id":48,"role":"challenge_organizer"},{"id":332,"challenge_id":32,"organization_id":66,"role":"challenge_organizer"},{"id":333,"challenge_id":32,"organization_id":128,"role":"challenge_organizer"},{"id":334,"challenge_id":32,"organization_id":93,"role":"challenge_organizer"},{"id":335,"challenge_id":32,"organization_id":171,"role":"challenge_organizer"},{"id":336,"challenge_id":32,"organization_id":183,"role":"data_contributor"},{"id":337,"challenge_id":32,"organization_id":116,"role":"data_contributor"},{"id":338,"challenge_id":32,"organization_id":15,"role":"data_contributor"},{"id":339,"challenge_id":32,"organization_id":31,"role":"sponsor"},{"id":340,"challenge_id":33,"organization_id":234,"role":"challenge_organizer"},{"id":341,"challenge_id":33,"organization_id":197,"role":"challenge_organizer"},{"id":342,"challenge_id":33,"organization_id":128,"role":"challenge_organizer"},{"id":343,"challenge_id":33,"organization_id":93,"role":"challenge_organizer"},{"id":344,"challenge_id":33,"organization_id":200,"role":"challenge_organizer"},{"id":345,"challenge_id":33,"organization_id":180,"role":"challenge_organizer"},{"id":346,"challenge_id":33,"organization_id":72,"role":"challenge_organizer"},{"id":347,"challenge_id":33,"organization_id":72,"role":"data_contributor"},{"id":348,"challenge_id":33,"organization_id":234,"role":"data_contributor"},{"id":349,"challenge_id":33,"organization_id":117,"role":"data_contributor"},{"id":350,"challenge_id":34,"organization_id":89,"role":"challenge_organizer"},{"id":351,"challenge_id":34,"organization_id":227,"role":"challenge_organizer"},{"id":352,"challenge_id":34,"organization_id":171,"role":"challenge_organizer"},{"id":353,"challenge_id":34,"organization_id":73,"role":"challenge_organizer"},{"id":354,"challenge_id":34,"organization_id":170,"role":"challenge_organizer"},{"id":355,"challenge_id":34,"organization_id":71,"role":"challenge_organizer"},{"id":356,"challenge_id":34,"organization_id":227,"role":"data_contributor"},{"id":357,"challenge_id":34,"organization_id":71,"role":"data_contributor"},{"id":358,"challenge_id":35,"organization_id":171,"role":"challenge_organizer"},{"id":359,"challenge_id":35,"organization_id":225,"role":"challenge_organizer"},{"id":360,"challenge_id":35,"organization_id":225,"role":"data_contributor"},{"id":361,"challenge_id":35,"organization_id":133,"role":"sponsor"},{"id":362,"challenge_id":35,"organization_id":97,"role":"sponsor"},{"id":363,"challenge_id":35,"organization_id":225,"role":"sponsor"},{"id":364,"challenge_id":36,"organization_id":43,"role":"challenge_organizer"},{"id":365,"challenge_id":36,"organization_id":171,"role":"challenge_organizer"},{"id":366,"challenge_id":36,"organization_id":235,"role":"challenge_organizer"},{"id":367,"challenge_id":36,"organization_id":114,"role":"challenge_organizer"},{"id":368,"challenge_id":36,"organization_id":225,"role":"challenge_organizer"},{"id":369,"challenge_id":36,"organization_id":16,"role":"challenge_organizer"},{"id":370,"challenge_id":36,"organization_id":93,"role":"challenge_organizer"},{"id":371,"challenge_id":36,"organization_id":43,"role":"data_contributor"},{"id":372,"challenge_id":36,"organization_id":114,"role":"data_contributor"},{"id":373,"challenge_id":36,"organization_id":235,"role":"data_contributor"},{"id":374,"challenge_id":37,"organization_id":95,"role":"challenge_organizer"},{"id":375,"challenge_id":37,"organization_id":113,"role":"challenge_organizer"},{"id":376,"challenge_id":37,"organization_id":150,"role":"challenge_organizer"},{"id":377,"challenge_id":37,"organization_id":171,"role":"challenge_organizer"},{"id":378,"challenge_id":37,"organization_id":180,"role":"challenge_organizer"},{"id":379,"challenge_id":37,"organization_id":16,"role":"data_contributor"},{"id":380,"challenge_id":37,"organization_id":235,"role":"data_contributor"},{"id":381,"challenge_id":37,"organization_id":114,"role":"data_contributor"},{"id":382,"challenge_id":37,"organization_id":43,"role":"data_contributor"},{"id":383,"challenge_id":37,"organization_id":171,"role":"data_contributor"},{"id":384,"challenge_id":37,"organization_id":131,"role":"sponsor"},{"id":385,"challenge_id":38,"organization_id":171,"role":"challenge_organizer"},{"id":386,"challenge_id":38,"organization_id":52,"role":"challenge_organizer"},{"id":387,"challenge_id":38,"organization_id":176,"role":"challenge_organizer"},{"id":388,"challenge_id":38,"organization_id":15,"role":"challenge_organizer"},{"id":389,"challenge_id":38,"organization_id":131,"role":"challenge_organizer"},{"id":390,"challenge_id":38,"organization_id":46,"role":"challenge_organizer"},{"id":391,"challenge_id":38,"organization_id":128,"role":"challenge_organizer"},{"id":392,"challenge_id":38,"organization_id":93,"role":"challenge_organizer"},{"id":393,"challenge_id":38,"organization_id":89,"role":"challenge_organizer"},{"id":394,"challenge_id":38,"organization_id":73,"role":"challenge_organizer"},{"id":395,"challenge_id":38,"organization_id":170,"role":"challenge_organizer"},{"id":396,"challenge_id":38,"organization_id":52,"role":"data_contributor"},{"id":397,"challenge_id":39,"organization_id":171,"role":"challenge_organizer"},{"id":398,"challenge_id":39,"organization_id":150,"role":"challenge_organizer"},{"id":399,"challenge_id":39,"organization_id":128,"role":"challenge_organizer"},{"id":400,"challenge_id":39,"organization_id":15,"role":"challenge_organizer"},{"id":401,"challenge_id":39,"organization_id":131,"role":"challenge_organizer"},{"id":402,"challenge_id":39,"organization_id":46,"role":"challenge_organizer"},{"id":403,"challenge_id":39,"organization_id":112,"role":"data_contributor"},{"id":404,"challenge_id":39,"organization_id":150,"role":"data_contributor"},{"id":405,"challenge_id":40,"organization_id":131,"role":"challenge_organizer"},{"id":406,"challenge_id":40,"organization_id":171,"role":"challenge_organizer"},{"id":407,"challenge_id":40,"organization_id":150,"role":"challenge_organizer"},{"id":408,"challenge_id":40,"organization_id":22,"role":"data_contributor"},{"id":409,"challenge_id":40,"organization_id":44,"role":"data_contributor"},{"id":410,"challenge_id":40,"organization_id":131,"role":"sponsor"},{"id":411,"challenge_id":41,"organization_id":193,"role":"challenge_organizer"},{"id":412,"challenge_id":41,"organization_id":128,"role":"challenge_organizer"},{"id":413,"challenge_id":41,"organization_id":93,"role":"challenge_organizer"},{"id":414,"challenge_id":41,"organization_id":200,"role":"challenge_organizer"},{"id":415,"challenge_id":41,"organization_id":171,"role":"challenge_organizer"},{"id":416,"challenge_id":41,"organization_id":193,"role":"data_contributor"},{"id":417,"challenge_id":41,"organization_id":133,"role":"sponsor"},{"id":418,"challenge_id":41,"organization_id":40,"role":"sponsor"},{"id":419,"challenge_id":42,"organization_id":171,"role":"challenge_organizer"},{"id":420,"challenge_id":42,"organization_id":144,"role":"challenge_organizer"},{"id":421,"challenge_id":42,"organization_id":126,"role":"challenge_organizer"},{"id":422,"challenge_id":42,"organization_id":76,"role":"challenge_organizer"},{"id":423,"challenge_id":42,"organization_id":126,"role":"data_contributor"},{"id":424,"challenge_id":42,"organization_id":144,"role":"data_contributor"},{"id":425,"challenge_id":42,"organization_id":217,"role":"data_contributor"},{"id":426,"challenge_id":42,"organization_id":192,"role":"data_contributor"},{"id":427,"challenge_id":42,"organization_id":199,"role":"data_contributor"},{"id":428,"challenge_id":42,"organization_id":161,"role":"data_contributor"},{"id":429,"challenge_id":43,"organization_id":171,"role":"challenge_organizer"},{"id":430,"challenge_id":43,"organization_id":52,"role":"challenge_organizer"},{"id":431,"challenge_id":43,"organization_id":176,"role":"challenge_organizer"},{"id":432,"challenge_id":43,"organization_id":15,"role":"challenge_organizer"},{"id":433,"challenge_id":43,"organization_id":46,"role":"challenge_organizer"},{"id":434,"challenge_id":43,"organization_id":128,"role":"challenge_organizer"},{"id":435,"challenge_id":43,"organization_id":89,"role":"challenge_organizer"},{"id":436,"challenge_id":43,"organization_id":52,"role":"data_contributor"},{"id":437,"challenge_id":43,"organization_id":46,"role":"sponsor"},{"id":438,"challenge_id":44,"organization_id":171,"role":"challenge_organizer"},{"id":439,"challenge_id":44,"organization_id":225,"role":"challenge_organizer"},{"id":440,"challenge_id":44,"organization_id":225,"role":"data_contributor"},{"id":441,"challenge_id":45,"organization_id":212,"role":"challenge_organizer"},{"id":442,"challenge_id":45,"organization_id":40,"role":"challenge_organizer"},{"id":443,"challenge_id":45,"organization_id":148,"role":"challenge_organizer"},{"id":444,"challenge_id":45,"organization_id":171,"role":"challenge_organizer"},{"id":445,"challenge_id":45,"organization_id":40,"role":"data_contributor"},{"id":446,"challenge_id":46,"organization_id":216,"role":"challenge_organizer"},{"id":447,"challenge_id":46,"organization_id":131,"role":"challenge_organizer"},{"id":448,"challenge_id":46,"organization_id":197,"role":"data_contributor"},{"id":449,"challenge_id":46,"organization_id":221,"role":"data_contributor"},{"id":450,"challenge_id":46,"organization_id":171,"role":"challenge_organizer"},{"id":451,"challenge_id":46,"organization_id":186,"role":"data_contributor"},{"id":452,"challenge_id":46,"organization_id":61,"role":"data_contributor"},{"id":453,"challenge_id":46,"organization_id":227,"role":"challenge_organizer"},{"id":454,"challenge_id":46,"organization_id":148,"role":"data_contributor"},{"id":455,"challenge_id":47,"organization_id":47,"role":"challenge_organizer"},{"id":456,"challenge_id":47,"organization_id":171,"role":"challenge_organizer"},{"id":457,"challenge_id":47,"organization_id":47,"role":"sponsor"},{"id":458,"challenge_id":59,"organization_id":30,"role":"data_contributor"},{"id":459,"challenge_id":59,"organization_id":225,"role":"data_contributor"},{"id":460,"challenge_id":59,"organization_id":197,"role":"data_contributor"},{"id":461,"challenge_id":61,"organization_id":64,"role":"data_contributor"},{"id":462,"challenge_id":62,"organization_id":173,"role":"data_contributor"},{"id":463,"challenge_id":63,"organization_id":225,"role":"data_contributor"},{"id":464,"challenge_id":64,"organization_id":185,"role":"data_contributor"},{"id":465,"challenge_id":65,"organization_id":33,"role":"data_contributor"},{"id":466,"challenge_id":66,"organization_id":197,"role":"data_contributor"},{"id":467,"challenge_id":67,"organization_id":159,"role":"data_contributor"},{"id":468,"challenge_id":67,"organization_id":70,"role":"data_contributor"},{"id":469,"challenge_id":68,"organization_id":42,"role":"data_contributor"},{"id":470,"challenge_id":69,"organization_id":201,"role":"data_contributor"},{"id":471,"challenge_id":70,"organization_id":91,"role":"data_contributor"},{"id":472,"challenge_id":71,"organization_id":215,"role":"data_contributor"},{"id":473,"challenge_id":72,"organization_id":180,"role":"data_contributor"},{"id":474,"challenge_id":73,"organization_id":41,"role":"data_contributor"},{"id":475,"challenge_id":74,"organization_id":214,"role":"data_contributor"},{"id":476,"challenge_id":75,"organization_id":91,"role":"data_contributor"},{"id":477,"challenge_id":76,"organization_id":88,"role":"data_contributor"},{"id":478,"challenge_id":77,"organization_id":221,"role":"data_contributor"},{"id":479,"challenge_id":78,"organization_id":223,"role":"data_contributor"},{"id":480,"challenge_id":79,"organization_id":218,"role":"data_contributor"},{"id":481,"challenge_id":80,"organization_id":222,"role":"data_contributor"},{"id":482,"challenge_id":81,"organization_id":173,"role":"data_contributor"},{"id":483,"challenge_id":82,"organization_id":173,"role":"data_contributor"},{"id":484,"challenge_id":83,"organization_id":221,"role":"data_contributor"},{"id":485,"challenge_id":84,"organization_id":219,"role":"data_contributor"},{"id":486,"challenge_id":85,"organization_id":41,"role":"data_contributor"},{"id":487,"challenge_id":90,"organization_id":104,"role":"challenge_organizer"},{"id":488,"challenge_id":90,"organization_id":3,"role":"challenge_organizer"},{"id":489,"challenge_id":90,"organization_id":102,"role":"challenge_organizer"},{"id":490,"challenge_id":90,"organization_id":216,"role":"challenge_organizer"},{"id":491,"challenge_id":90,"organization_id":143,"role":"challenge_organizer"},{"id":492,"challenge_id":90,"organization_id":225,"role":"challenge_organizer"},{"id":493,"challenge_id":90,"organization_id":204,"role":"challenge_organizer"},{"id":494,"challenge_id":90,"organization_id":220,"role":"challenge_organizer"},{"id":495,"challenge_id":90,"organization_id":137,"role":"sponsor"},{"id":496,"challenge_id":90,"organization_id":15,"role":"sponsor"},{"id":497,"challenge_id":90,"organization_id":60,"role":"sponsor"},{"id":498,"challenge_id":90,"organization_id":68,"role":"sponsor"},{"id":499,"challenge_id":91,"organization_id":210,"role":"challenge_organizer"},{"id":500,"challenge_id":91,"organization_id":184,"role":"challenge_organizer"},{"id":501,"challenge_id":91,"organization_id":195,"role":"challenge_organizer"},{"id":502,"challenge_id":91,"organization_id":208,"role":"challenge_organizer"},{"id":503,"challenge_id":91,"organization_id":135,"role":"sponsor"},{"id":504,"challenge_id":92,"organization_id":210,"role":"challenge_organizer"},{"id":505,"challenge_id":92,"organization_id":184,"role":"challenge_organizer"},{"id":506,"challenge_id":92,"organization_id":195,"role":"challenge_organizer"},{"id":507,"challenge_id":92,"organization_id":208,"role":"challenge_organizer"},{"id":508,"challenge_id":92,"organization_id":135,"role":"sponsor"},{"id":509,"challenge_id":93,"organization_id":190,"role":"sponsor"},{"id":510,"challenge_id":94,"organization_id":13,"role":"challenge_organizer"},{"id":511,"challenge_id":94,"organization_id":190,"role":"challenge_organizer"},{"id":512,"challenge_id":94,"organization_id":34,"role":"challenge_organizer"},{"id":513,"challenge_id":94,"organization_id":62,"role":"challenge_organizer"},{"id":514,"challenge_id":94,"organization_id":229,"role":"challenge_organizer"},{"id":515,"challenge_id":94,"organization_id":136,"role":"challenge_organizer"},{"id":516,"challenge_id":94,"organization_id":190,"role":"sponsor"},{"id":517,"challenge_id":95,"organization_id":13,"role":"challenge_organizer"},{"id":518,"challenge_id":95,"organization_id":190,"role":"challenge_organizer"},{"id":519,"challenge_id":95,"organization_id":152,"role":"challenge_organizer"},{"id":520,"challenge_id":95,"organization_id":202,"role":"challenge_organizer"},{"id":521,"challenge_id":95,"organization_id":128,"role":"challenge_organizer"},{"id":522,"challenge_id":95,"organization_id":93,"role":"challenge_organizer"},{"id":523,"challenge_id":95,"organization_id":62,"role":"challenge_organizer"},{"id":524,"challenge_id":95,"organization_id":34,"role":"challenge_organizer"},{"id":525,"challenge_id":95,"organization_id":190,"role":"sponsor"},{"id":526,"challenge_id":96,"organization_id":13,"role":"challenge_organizer"},{"id":527,"challenge_id":96,"organization_id":190,"role":"challenge_organizer"},{"id":528,"challenge_id":96,"organization_id":82,"role":"challenge_organizer"},{"id":529,"challenge_id":96,"organization_id":62,"role":"challenge_organizer"},{"id":530,"challenge_id":96,"organization_id":34,"role":"challenge_organizer"},{"id":531,"challenge_id":96,"organization_id":190,"role":"sponsor"},{"id":532,"challenge_id":97,"organization_id":13,"role":"challenge_organizer"},{"id":533,"challenge_id":97,"organization_id":190,"role":"challenge_organizer"},{"id":534,"challenge_id":97,"organization_id":83,"role":"challenge_organizer"},{"id":535,"challenge_id":97,"organization_id":34,"role":"challenge_organizer"},{"id":536,"challenge_id":97,"organization_id":190,"role":"sponsor"},{"id":537,"challenge_id":98,"organization_id":13,"role":"challenge_organizer"},{"id":538,"challenge_id":98,"organization_id":190,"role":"challenge_organizer"},{"id":539,"challenge_id":98,"organization_id":62,"role":"challenge_organizer"},{"id":540,"challenge_id":98,"organization_id":53,"role":"challenge_organizer"},{"id":541,"challenge_id":98,"organization_id":34,"role":"challenge_organizer"},{"id":542,"challenge_id":98,"organization_id":190,"role":"sponsor"},{"id":543,"challenge_id":99,"organization_id":136,"role":"challenge_organizer"},{"id":544,"challenge_id":99,"organization_id":13,"role":"challenge_organizer"},{"id":545,"challenge_id":99,"organization_id":190,"role":"challenge_organizer"},{"id":546,"challenge_id":99,"organization_id":62,"role":"challenge_organizer"},{"id":547,"challenge_id":99,"organization_id":34,"role":"challenge_organizer"},{"id":548,"challenge_id":99,"organization_id":190,"role":"sponsor"},{"id":549,"challenge_id":100,"organization_id":13,"role":"challenge_organizer"},{"id":550,"challenge_id":100,"organization_id":190,"role":"challenge_organizer"},{"id":551,"challenge_id":100,"organization_id":232,"role":"challenge_organizer"},{"id":552,"challenge_id":100,"organization_id":34,"role":"challenge_organizer"},{"id":553,"challenge_id":100,"organization_id":62,"role":"challenge_organizer"},{"id":554,"challenge_id":100,"organization_id":190,"role":"sponsor"},{"id":555,"challenge_id":101,"organization_id":13,"role":"challenge_organizer"},{"id":556,"challenge_id":101,"organization_id":190,"role":"challenge_organizer"},{"id":557,"challenge_id":101,"organization_id":34,"role":"challenge_organizer"},{"id":558,"challenge_id":101,"organization_id":62,"role":"challenge_organizer"},{"id":559,"challenge_id":101,"organization_id":190,"role":"sponsor"},{"id":560,"challenge_id":102,"organization_id":13,"role":"challenge_organizer"},{"id":561,"challenge_id":102,"organization_id":190,"role":"challenge_organizer"},{"id":562,"challenge_id":102,"organization_id":34,"role":"challenge_organizer"},{"id":563,"challenge_id":102,"organization_id":62,"role":"challenge_organizer"},{"id":564,"challenge_id":102,"organization_id":190,"role":"sponsor"},{"id":565,"challenge_id":103,"organization_id":13,"role":"challenge_organizer"},{"id":566,"challenge_id":103,"organization_id":190,"role":"challenge_organizer"},{"id":567,"challenge_id":103,"organization_id":34,"role":"challenge_organizer"},{"id":568,"challenge_id":103,"organization_id":62,"role":"challenge_organizer"},{"id":569,"challenge_id":103,"organization_id":131,"role":"challenge_organizer"},{"id":570,"challenge_id":103,"organization_id":177,"role":"challenge_organizer"},{"id":571,"challenge_id":103,"organization_id":190,"role":"sponsor"},{"id":572,"challenge_id":104,"organization_id":12,"role":"challenge_organizer"},{"id":573,"challenge_id":104,"organization_id":216,"role":"challenge_organizer"},{"id":574,"challenge_id":104,"organization_id":84,"role":"challenge_organizer"},{"id":575,"challenge_id":104,"organization_id":7,"role":"challenge_organizer"},{"id":576,"challenge_id":104,"organization_id":15,"role":"sponsor"},{"id":577,"challenge_id":104,"organization_id":90,"role":"sponsor"},{"id":578,"challenge_id":104,"organization_id":103,"role":"sponsor"},{"id":579,"challenge_id":104,"organization_id":50,"role":"sponsor"},{"id":580,"challenge_id":105,"organization_id":12,"role":"challenge_organizer"},{"id":581,"challenge_id":105,"organization_id":147,"role":"sponsor"},{"id":582,"challenge_id":105,"organization_id":35,"role":"sponsor"},{"id":583,"challenge_id":106,"organization_id":12,"role":"challenge_organizer"},{"id":584,"challenge_id":106,"organization_id":187,"role":"sponsor"},{"id":585,"challenge_id":106,"organization_id":178,"role":"sponsor"},{"id":586,"challenge_id":107,"organization_id":12,"role":"challenge_organizer"},{"id":587,"challenge_id":107,"organization_id":77,"role":"sponsor"},{"id":588,"challenge_id":124,"organization_id":12,"role":"challenge_organizer"},{"id":589,"challenge_id":124,"organization_id":216,"role":"challenge_organizer"},{"id":590,"challenge_id":124,"organization_id":84,"role":"challenge_organizer"},{"id":591,"challenge_id":124,"organization_id":7,"role":"challenge_organizer"},{"id":592,"challenge_id":124,"organization_id":98,"role":"sponsor"},{"id":593,"challenge_id":124,"organization_id":139,"role":"sponsor"},{"id":594,"challenge_id":124,"organization_id":162,"role":"sponsor"}]
+[
+  {
+    "id": 1,
+    "challenge_id": 1,
+    "organization_id": 75,
+    "role": "sponsor"
+  },
+  {
+    "id": 2,
+    "challenge_id": 2,
+    "organization_id": 28,
+    "role": "data_contributor"
+  },
+  {
+    "id": 3,
+    "challenge_id": 2,
+    "organization_id": 45,
+    "role": "data_contributor"
+  },
+  {
+    "id": 4,
+    "challenge_id": 2,
+    "organization_id": 151,
+    "role": "data_contributor"
+  },
+  {
+    "id": 5,
+    "challenge_id": 2,
+    "organization_id": 52,
+    "role": "sponsor"
+  },
+  {
+    "id": 6,
+    "challenge_id": 3,
+    "organization_id": 154,
+    "role": "data_contributor"
+  },
+  {
+    "id": 7,
+    "challenge_id": 3,
+    "organization_id": 118,
+    "role": "data_contributor"
+  },
+  {
+    "id": 8,
+    "challenge_id": 3,
+    "organization_id": 17,
+    "role": "data_contributor"
+  },
+  {
+    "id": 9,
+    "challenge_id": 3,
+    "organization_id": 142,
+    "role": "data_contributor"
+  },
+  {
+    "id": 10,
+    "challenge_id": 4,
+    "organization_id": 150,
+    "role": "data_contributor"
+  },
+  {
+    "id": 11,
+    "challenge_id": 4,
+    "organization_id": 52,
+    "role": "data_contributor"
+  },
+  {
+    "id": 12,
+    "challenge_id": 4,
+    "organization_id": 131,
+    "role": "sponsor"
+  },
+  {
+    "id": 13,
+    "challenge_id": 5,
+    "organization_id": 101,
+    "role": "data_contributor"
+  },
+  {
+    "id": 14,
+    "challenge_id": 6,
+    "organization_id": 54,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 15,
+    "challenge_id": 6,
+    "organization_id": 146,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 16,
+    "challenge_id": 6,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 17,
+    "challenge_id": 6,
+    "organization_id": 228,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 18,
+    "challenge_id": 6,
+    "organization_id": 27,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 19,
+    "challenge_id": 6,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 20,
+    "challenge_id": 6,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 21,
+    "challenge_id": 6,
+    "organization_id": 180,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 22,
+    "challenge_id": 6,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 23,
+    "challenge_id": 6,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 24,
+    "challenge_id": 6,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 25,
+    "challenge_id": 6,
+    "organization_id": 119,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 26,
+    "challenge_id": 6,
+    "organization_id": 171,
+    "role": "sponsor"
+  },
+  {
+    "id": 27,
+    "challenge_id": 6,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 28,
+    "challenge_id": 6,
+    "organization_id": 57,
+    "role": "sponsor"
+  },
+  {
+    "id": 29,
+    "challenge_id": 6,
+    "organization_id": 146,
+    "role": "sponsor"
+  },
+  {
+    "id": 30,
+    "challenge_id": 6,
+    "organization_id": 120,
+    "role": "sponsor"
+  },
+  {
+    "id": 31,
+    "challenge_id": 7,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 32,
+    "challenge_id": 7,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 33,
+    "challenge_id": 7,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 34,
+    "challenge_id": 7,
+    "organization_id": 71,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 35,
+    "challenge_id": 7,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 36,
+    "challenge_id": 7,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 37,
+    "challenge_id": 7,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 38,
+    "challenge_id": 7,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 39,
+    "challenge_id": 7,
+    "organization_id": 130,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 40,
+    "challenge_id": 8,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 41,
+    "challenge_id": 8,
+    "organization_id": 207,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 42,
+    "challenge_id": 8,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 43,
+    "challenge_id": 8,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 44,
+    "challenge_id": 8,
+    "organization_id": 56,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 45,
+    "challenge_id": 8,
+    "organization_id": 37,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 46,
+    "challenge_id": 8,
+    "organization_id": 25,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 47,
+    "challenge_id": 8,
+    "organization_id": 78,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 48,
+    "challenge_id": 8,
+    "organization_id": 125,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 49,
+    "challenge_id": 8,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 50,
+    "challenge_id": 8,
+    "organization_id": 55,
+    "role": "data_contributor"
+  },
+  {
+    "id": 51,
+    "challenge_id": 8,
+    "organization_id": 24,
+    "role": "sponsor"
+  },
+  {
+    "id": 52,
+    "challenge_id": 8,
+    "organization_id": 125,
+    "role": "sponsor"
+  },
+  {
+    "id": 53,
+    "challenge_id": 8,
+    "organization_id": 145,
+    "role": "sponsor"
+  },
+  {
+    "id": 54,
+    "challenge_id": 8,
+    "organization_id": 182,
+    "role": "sponsor"
+  },
+  {
+    "id": 55,
+    "challenge_id": 8,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 56,
+    "challenge_id": 9,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 57,
+    "challenge_id": 9,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 58,
+    "challenge_id": 9,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 59,
+    "challenge_id": 9,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 60,
+    "challenge_id": 9,
+    "organization_id": 198,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 61,
+    "challenge_id": 9,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 62,
+    "challenge_id": 9,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 63,
+    "challenge_id": 9,
+    "organization_id": 99,
+    "role": "data_contributor"
+  },
+  {
+    "id": 64,
+    "challenge_id": 10,
+    "organization_id": 165,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 65,
+    "challenge_id": 10,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 66,
+    "challenge_id": 10,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 67,
+    "challenge_id": 10,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 68,
+    "challenge_id": 10,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 69,
+    "challenge_id": 10,
+    "organization_id": 122,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 70,
+    "challenge_id": 10,
+    "organization_id": 122,
+    "role": "data_contributor"
+  },
+  {
+    "id": 71,
+    "challenge_id": 10,
+    "organization_id": 122,
+    "role": "sponsor"
+  },
+  {
+    "id": 72,
+    "challenge_id": 10,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 73,
+    "challenge_id": 10,
+    "organization_id": 171,
+    "role": "sponsor"
+  },
+  {
+    "id": 74,
+    "challenge_id": 10,
+    "organization_id": 165,
+    "role": "sponsor"
+  },
+  {
+    "id": 75,
+    "challenge_id": 11,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 76,
+    "challenge_id": 11,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 77,
+    "challenge_id": 11,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 78,
+    "challenge_id": 11,
+    "organization_id": 41,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 79,
+    "challenge_id": 11,
+    "organization_id": 58,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 80,
+    "challenge_id": 11,
+    "organization_id": 206,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 81,
+    "challenge_id": 11,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 82,
+    "challenge_id": 11,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 83,
+    "challenge_id": 11,
+    "organization_id": 41,
+    "role": "data_contributor"
+  },
+  {
+    "id": 84,
+    "challenge_id": 11,
+    "organization_id": 58,
+    "role": "data_contributor"
+  },
+  {
+    "id": 85,
+    "challenge_id": 11,
+    "organization_id": 46,
+    "role": "sponsor"
+  },
+  {
+    "id": 86,
+    "challenge_id": 11,
+    "organization_id": 109,
+    "role": "sponsor"
+  },
+  {
+    "id": 87,
+    "challenge_id": 12,
+    "organization_id": 107,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 88,
+    "challenge_id": 12,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 89,
+    "challenge_id": 12,
+    "organization_id": 205,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 90,
+    "challenge_id": 12,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 91,
+    "challenge_id": 12,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 92,
+    "challenge_id": 12,
+    "organization_id": 38,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 93,
+    "challenge_id": 12,
+    "organization_id": 224,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 94,
+    "challenge_id": 12,
+    "organization_id": 119,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 95,
+    "challenge_id": 12,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 96,
+    "challenge_id": 12,
+    "organization_id": 82,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 97,
+    "challenge_id": 12,
+    "organization_id": 169,
+    "role": "data_contributor"
+  },
+  {
+    "id": 98,
+    "challenge_id": 12,
+    "organization_id": 18,
+    "role": "data_contributor"
+  },
+  {
+    "id": 99,
+    "challenge_id": 12,
+    "organization_id": 94,
+    "role": "data_contributor"
+  },
+  {
+    "id": 100,
+    "challenge_id": 12,
+    "organization_id": 19,
+    "role": "sponsor"
+  },
+  {
+    "id": 101,
+    "challenge_id": 12,
+    "organization_id": 39,
+    "role": "sponsor"
+  },
+  {
+    "id": 102,
+    "challenge_id": 12,
+    "organization_id": 74,
+    "role": "sponsor"
+  },
+  {
+    "id": 103,
+    "challenge_id": 12,
+    "organization_id": 153,
+    "role": "sponsor"
+  },
+  {
+    "id": 104,
+    "challenge_id": 12,
+    "organization_id": 164,
+    "role": "sponsor"
+  },
+  {
+    "id": 105,
+    "challenge_id": 12,
+    "organization_id": 168,
+    "role": "sponsor"
+  },
+  {
+    "id": 106,
+    "challenge_id": 12,
+    "organization_id": 172,
+    "role": "sponsor"
+  },
+  {
+    "id": 107,
+    "challenge_id": 12,
+    "organization_id": 182,
+    "role": "sponsor"
+  },
+  {
+    "id": 108,
+    "challenge_id": 13,
+    "organization_id": 207,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 109,
+    "challenge_id": 13,
+    "organization_id": 167,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 110,
+    "challenge_id": 13,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 111,
+    "challenge_id": 13,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 112,
+    "challenge_id": 13,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 113,
+    "challenge_id": 13,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 114,
+    "challenge_id": 13,
+    "organization_id": 167,
+    "role": "data_contributor"
+  },
+  {
+    "id": 115,
+    "challenge_id": 13,
+    "organization_id": 100,
+    "role": "sponsor"
+  },
+  {
+    "id": 116,
+    "challenge_id": 13,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 117,
+    "challenge_id": 13,
+    "organization_id": 171,
+    "role": "sponsor"
+  },
+  {
+    "id": 118,
+    "challenge_id": 13,
+    "organization_id": 1,
+    "role": "sponsor"
+  },
+  {
+    "id": 119,
+    "challenge_id": 14,
+    "organization_id": 58,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 120,
+    "challenge_id": 14,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 121,
+    "challenge_id": 14,
+    "organization_id": 124,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 122,
+    "challenge_id": 14,
+    "organization_id": 155,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 123,
+    "challenge_id": 14,
+    "organization_id": 157,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 124,
+    "challenge_id": 14,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 125,
+    "challenge_id": 14,
+    "organization_id": 189,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 126,
+    "challenge_id": 14,
+    "organization_id": 197,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 127,
+    "challenge_id": 14,
+    "organization_id": 200,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 128,
+    "challenge_id": 14,
+    "organization_id": 220,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 129,
+    "challenge_id": 14,
+    "organization_id": 26,
+    "role": "data_contributor"
+  },
+  {
+    "id": 130,
+    "challenge_id": 14,
+    "organization_id": 47,
+    "role": "data_contributor"
+  },
+  {
+    "id": 131,
+    "challenge_id": 14,
+    "organization_id": 172,
+    "role": "data_contributor"
+  },
+  {
+    "id": 132,
+    "challenge_id": 14,
+    "organization_id": 124,
+    "role": "data_contributor"
+  },
+  {
+    "id": 133,
+    "challenge_id": 14,
+    "organization_id": 157,
+    "role": "sponsor"
+  },
+  {
+    "id": 134,
+    "challenge_id": 14,
+    "organization_id": 131,
+    "role": "sponsor"
+  },
+  {
+    "id": 135,
+    "challenge_id": 14,
+    "organization_id": 21,
+    "role": "sponsor"
+  },
+  {
+    "id": 136,
+    "challenge_id": 15,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 137,
+    "challenge_id": 15,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 138,
+    "challenge_id": 15,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 139,
+    "challenge_id": 15,
+    "organization_id": 118,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 140,
+    "challenge_id": 15,
+    "organization_id": 154,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 141,
+    "challenge_id": 15,
+    "organization_id": 188,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 142,
+    "challenge_id": 15,
+    "organization_id": 115,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 143,
+    "challenge_id": 15,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 144,
+    "challenge_id": 15,
+    "organization_id": 154,
+    "role": "data_contributor"
+  },
+  {
+    "id": 145,
+    "challenge_id": 15,
+    "organization_id": 140,
+    "role": "data_contributor"
+  },
+  {
+    "id": 146,
+    "challenge_id": 15,
+    "organization_id": 142,
+    "role": "data_contributor"
+  },
+  {
+    "id": 147,
+    "challenge_id": 15,
+    "organization_id": 154,
+    "role": "sponsor"
+  },
+  {
+    "id": 148,
+    "challenge_id": 15,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 149,
+    "challenge_id": 15,
+    "organization_id": 171,
+    "role": "sponsor"
+  },
+  {
+    "id": 150,
+    "challenge_id": 15,
+    "organization_id": 1,
+    "role": "sponsor"
+  },
+  {
+    "id": 151,
+    "challenge_id": 15,
+    "organization_id": 32,
+    "role": "sponsor"
+  },
+  {
+    "id": 152,
+    "challenge_id": 15,
+    "organization_id": 67,
+    "role": "sponsor"
+  },
+  {
+    "id": 153,
+    "challenge_id": 16,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 154,
+    "challenge_id": 16,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 155,
+    "challenge_id": 16,
+    "organization_id": 26,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 156,
+    "challenge_id": 16,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 157,
+    "challenge_id": 16,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 158,
+    "challenge_id": 16,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 159,
+    "challenge_id": 16,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 160,
+    "challenge_id": 16,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 161,
+    "challenge_id": 16,
+    "organization_id": 26,
+    "role": "data_contributor"
+  },
+  {
+    "id": 162,
+    "challenge_id": 16,
+    "organization_id": 236,
+    "role": "data_contributor"
+  },
+  {
+    "id": 163,
+    "challenge_id": 16,
+    "organization_id": 29,
+    "role": "data_contributor"
+  },
+  {
+    "id": 164,
+    "challenge_id": 16,
+    "organization_id": 26,
+    "role": "sponsor"
+  },
+  {
+    "id": 165,
+    "challenge_id": 17,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 166,
+    "challenge_id": 17,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 167,
+    "challenge_id": 17,
+    "organization_id": 198,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 168,
+    "challenge_id": 17,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 169,
+    "challenge_id": 17,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 170,
+    "challenge_id": 17,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 171,
+    "challenge_id": 17,
+    "organization_id": 99,
+    "role": "data_contributor"
+  },
+  {
+    "id": 172,
+    "challenge_id": 17,
+    "organization_id": 149,
+    "role": "sponsor"
+  },
+  {
+    "id": 173,
+    "challenge_id": 17,
+    "organization_id": 81,
+    "role": "sponsor"
+  },
+  {
+    "id": 174,
+    "challenge_id": 17,
+    "organization_id": 138,
+    "role": "sponsor"
+  },
+  {
+    "id": 175,
+    "challenge_id": 17,
+    "organization_id": 171,
+    "role": "sponsor"
+  },
+  {
+    "id": 176,
+    "challenge_id": 17,
+    "organization_id": 198,
+    "role": "sponsor"
+  },
+  {
+    "id": 177,
+    "challenge_id": 17,
+    "organization_id": 150,
+    "role": "sponsor"
+  },
+  {
+    "id": 178,
+    "challenge_id": 18,
+    "organization_id": 236,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 179,
+    "challenge_id": 18,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 180,
+    "challenge_id": 18,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 181,
+    "challenge_id": 18,
+    "organization_id": 198,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 182,
+    "challenge_id": 18,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 183,
+    "challenge_id": 18,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 184,
+    "challenge_id": 18,
+    "organization_id": 79,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 185,
+    "challenge_id": 18,
+    "organization_id": 221,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 186,
+    "challenge_id": 18,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 187,
+    "challenge_id": 18,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 188,
+    "challenge_id": 18,
+    "organization_id": 149,
+    "role": "data_contributor"
+  },
+  {
+    "id": 189,
+    "challenge_id": 18,
+    "organization_id": 99,
+    "role": "data_contributor"
+  },
+  {
+    "id": 190,
+    "challenge_id": 18,
+    "organization_id": 149,
+    "role": "data_contributor"
+  },
+  {
+    "id": 191,
+    "challenge_id": 18,
+    "organization_id": 156,
+    "role": "sponsor"
+  },
+  {
+    "id": 192,
+    "challenge_id": 18,
+    "organization_id": 81,
+    "role": "sponsor"
+  },
+  {
+    "id": 193,
+    "challenge_id": 18,
+    "organization_id": 138,
+    "role": "sponsor"
+  },
+  {
+    "id": 194,
+    "challenge_id": 19,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 195,
+    "challenge_id": 19,
+    "organization_id": 64,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 196,
+    "challenge_id": 19,
+    "organization_id": 230,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 197,
+    "challenge_id": 19,
+    "organization_id": 59,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 198,
+    "challenge_id": 19,
+    "organization_id": 59,
+    "role": "sponsor"
+  },
+  {
+    "id": 199,
+    "challenge_id": 20,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 200,
+    "challenge_id": 20,
+    "organization_id": 206,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 201,
+    "challenge_id": 20,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 202,
+    "challenge_id": 20,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 203,
+    "challenge_id": 20,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 204,
+    "challenge_id": 20,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 205,
+    "challenge_id": 20,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 206,
+    "challenge_id": 20,
+    "organization_id": 118,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 207,
+    "challenge_id": 20,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 208,
+    "challenge_id": 20,
+    "organization_id": 111,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 209,
+    "challenge_id": 20,
+    "organization_id": 206,
+    "role": "data_contributor"
+  },
+  {
+    "id": 210,
+    "challenge_id": 20,
+    "organization_id": 181,
+    "role": "sponsor"
+  },
+  {
+    "id": 211,
+    "challenge_id": 21,
+    "organization_id": 180,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 212,
+    "challenge_id": 21,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 213,
+    "challenge_id": 21,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 214,
+    "challenge_id": 21,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 215,
+    "challenge_id": 21,
+    "organization_id": 200,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 216,
+    "challenge_id": 21,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 217,
+    "challenge_id": 21,
+    "organization_id": 115,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 218,
+    "challenge_id": 21,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 219,
+    "challenge_id": 21,
+    "organization_id": 69,
+    "role": "data_contributor"
+  },
+  {
+    "id": 220,
+    "challenge_id": 22,
+    "organization_id": 221,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 221,
+    "challenge_id": 22,
+    "organization_id": 91,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 222,
+    "challenge_id": 22,
+    "organization_id": 127,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 223,
+    "challenge_id": 22,
+    "organization_id": 95,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 224,
+    "challenge_id": 22,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 225,
+    "challenge_id": 22,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 226,
+    "challenge_id": 22,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 227,
+    "challenge_id": 22,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 228,
+    "challenge_id": 22,
+    "organization_id": 64,
+    "role": "data_contributor"
+  },
+  {
+    "id": 229,
+    "challenge_id": 22,
+    "organization_id": 230,
+    "role": "data_contributor"
+  },
+  {
+    "id": 230,
+    "challenge_id": 23,
+    "organization_id": 233,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 231,
+    "challenge_id": 23,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 232,
+    "challenge_id": 23,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 233,
+    "challenge_id": 23,
+    "organization_id": 198,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 234,
+    "challenge_id": 23,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 235,
+    "challenge_id": 23,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 236,
+    "challenge_id": 23,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 237,
+    "challenge_id": 23,
+    "organization_id": 23,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 238,
+    "challenge_id": 23,
+    "organization_id": 99,
+    "role": "data_contributor"
+  },
+  {
+    "id": 239,
+    "challenge_id": 23,
+    "organization_id": 131,
+    "role": "data_contributor"
+  },
+  {
+    "id": 240,
+    "challenge_id": 23,
+    "organization_id": 149,
+    "role": "data_contributor"
+  },
+  {
+    "id": 241,
+    "challenge_id": 23,
+    "organization_id": 138,
+    "role": "sponsor"
+  },
+  {
+    "id": 242,
+    "challenge_id": 23,
+    "organization_id": 81,
+    "role": "sponsor"
+  },
+  {
+    "id": 243,
+    "challenge_id": 23,
+    "organization_id": 156,
+    "role": "sponsor"
+  },
+  {
+    "id": 244,
+    "challenge_id": 23,
+    "organization_id": 131,
+    "role": "sponsor"
+  },
+  {
+    "id": 245,
+    "challenge_id": 24,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 246,
+    "challenge_id": 24,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 247,
+    "challenge_id": 24,
+    "organization_id": 106,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 248,
+    "challenge_id": 24,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 249,
+    "challenge_id": 24,
+    "organization_id": 175,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 250,
+    "challenge_id": 24,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 251,
+    "challenge_id": 24,
+    "organization_id": 36,
+    "role": "data_contributor"
+  },
+  {
+    "id": 252,
+    "challenge_id": 24,
+    "organization_id": 128,
+    "role": "data_contributor"
+  },
+  {
+    "id": 253,
+    "challenge_id": 24,
+    "organization_id": 110,
+    "role": "sponsor"
+  },
+  {
+    "id": 254,
+    "challenge_id": 24,
+    "organization_id": 80,
+    "role": "sponsor"
+  },
+  {
+    "id": 255,
+    "challenge_id": 24,
+    "organization_id": 237,
+    "role": "sponsor"
+  },
+  {
+    "id": 256,
+    "challenge_id": 24,
+    "organization_id": 93,
+    "role": "sponsor"
+  },
+  {
+    "id": 257,
+    "challenge_id": 24,
+    "organization_id": 20,
+    "role": "sponsor"
+  },
+  {
+    "id": 258,
+    "challenge_id": 25,
+    "organization_id": 47,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 259,
+    "challenge_id": 25,
+    "organization_id": 129,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 260,
+    "challenge_id": 25,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 261,
+    "challenge_id": 25,
+    "organization_id": 194,
+    "role": "data_contributor"
+  },
+  {
+    "id": 262,
+    "challenge_id": 25,
+    "organization_id": 58,
+    "role": "data_contributor"
+  },
+  {
+    "id": 263,
+    "challenge_id": 25,
+    "organization_id": 86,
+    "role": "data_contributor"
+  },
+  {
+    "id": 264,
+    "challenge_id": 25,
+    "organization_id": 89,
+    "role": "data_contributor"
+  },
+  {
+    "id": 265,
+    "challenge_id": 25,
+    "organization_id": 129,
+    "role": "data_contributor"
+  },
+  {
+    "id": 266,
+    "challenge_id": 25,
+    "organization_id": 47,
+    "role": "sponsor"
+  },
+  {
+    "id": 267,
+    "challenge_id": 26,
+    "organization_id": 85,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 268,
+    "challenge_id": 26,
+    "organization_id": 198,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 269,
+    "challenge_id": 26,
+    "organization_id": 63,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 270,
+    "challenge_id": 26,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 271,
+    "challenge_id": 26,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 272,
+    "challenge_id": 26,
+    "organization_id": 131,
+    "role": "data_contributor"
+  },
+  {
+    "id": 273,
+    "challenge_id": 26,
+    "organization_id": 88,
+    "role": "data_contributor"
+  },
+  {
+    "id": 274,
+    "challenge_id": 26,
+    "organization_id": 180,
+    "role": "data_contributor"
+  },
+  {
+    "id": 275,
+    "challenge_id": 26,
+    "organization_id": 49,
+    "role": "data_contributor"
+  },
+  {
+    "id": 276,
+    "challenge_id": 26,
+    "organization_id": 108,
+    "role": "data_contributor"
+  },
+  {
+    "id": 277,
+    "challenge_id": 26,
+    "organization_id": 203,
+    "role": "data_contributor"
+  },
+  {
+    "id": 278,
+    "challenge_id": 26,
+    "organization_id": 198,
+    "role": "data_contributor"
+  },
+  {
+    "id": 279,
+    "challenge_id": 26,
+    "organization_id": 149,
+    "role": "data_contributor"
+  },
+  {
+    "id": 280,
+    "challenge_id": 26,
+    "organization_id": 99,
+    "role": "data_contributor"
+  },
+  {
+    "id": 281,
+    "challenge_id": 26,
+    "organization_id": 41,
+    "role": "data_contributor"
+  },
+  {
+    "id": 282,
+    "challenge_id": 27,
+    "organization_id": 126,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 283,
+    "challenge_id": 27,
+    "organization_id": 65,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 284,
+    "challenge_id": 27,
+    "organization_id": 231,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 285,
+    "challenge_id": 27,
+    "organization_id": 88,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 286,
+    "challenge_id": 27,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 287,
+    "challenge_id": 27,
+    "organization_id": 225,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 288,
+    "challenge_id": 27,
+    "organization_id": 209,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 289,
+    "challenge_id": 27,
+    "organization_id": 217,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 290,
+    "challenge_id": 27,
+    "organization_id": 126,
+    "role": "data_contributor"
+  },
+  {
+    "id": 291,
+    "challenge_id": 27,
+    "organization_id": 171,
+    "role": "data_contributor"
+  },
+  {
+    "id": 292,
+    "challenge_id": 27,
+    "organization_id": 126,
+    "role": "sponsor"
+  },
+  {
+    "id": 293,
+    "challenge_id": 27,
+    "organization_id": 166,
+    "role": "sponsor"
+  },
+  {
+    "id": 294,
+    "challenge_id": 28,
+    "organization_id": 141,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 295,
+    "challenge_id": 28,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 296,
+    "challenge_id": 28,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 297,
+    "challenge_id": 28,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 298,
+    "challenge_id": 28,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 299,
+    "challenge_id": 28,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 300,
+    "challenge_id": 28,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 301,
+    "challenge_id": 28,
+    "organization_id": 149,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 302,
+    "challenge_id": 28,
+    "organization_id": 59,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 303,
+    "challenge_id": 28,
+    "organization_id": 152,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 304,
+    "challenge_id": 28,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 305,
+    "challenge_id": 28,
+    "organization_id": 51,
+    "role": "data_contributor"
+  },
+  {
+    "id": 306,
+    "challenge_id": 28,
+    "organization_id": 51,
+    "role": "sponsor"
+  },
+  {
+    "id": 307,
+    "challenge_id": 28,
+    "organization_id": 59,
+    "role": "sponsor"
+  },
+  {
+    "id": 308,
+    "challenge_id": 28,
+    "organization_id": 147,
+    "role": "sponsor"
+  },
+  {
+    "id": 309,
+    "challenge_id": 29,
+    "organization_id": 212,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 310,
+    "challenge_id": 29,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 311,
+    "challenge_id": 29,
+    "organization_id": 211,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 312,
+    "challenge_id": 29,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 313,
+    "challenge_id": 29,
+    "organization_id": 196,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 314,
+    "challenge_id": 29,
+    "organization_id": 128,
+    "role": "data_contributor"
+  },
+  {
+    "id": 315,
+    "challenge_id": 29,
+    "organization_id": 128,
+    "role": "sponsor"
+  },
+  {
+    "id": 316,
+    "challenge_id": 30,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 317,
+    "challenge_id": 30,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 318,
+    "challenge_id": 30,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 319,
+    "challenge_id": 30,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 320,
+    "challenge_id": 30,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 321,
+    "challenge_id": 30,
+    "organization_id": 121,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 322,
+    "challenge_id": 30,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 323,
+    "challenge_id": 30,
+    "organization_id": 121,
+    "role": "data_contributor"
+  },
+  {
+    "id": 324,
+    "challenge_id": 31,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 325,
+    "challenge_id": 31,
+    "organization_id": 96,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 326,
+    "challenge_id": 31,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 327,
+    "challenge_id": 31,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 328,
+    "challenge_id": 31,
+    "organization_id": 191,
+    "role": "data_contributor"
+  },
+  {
+    "id": 329,
+    "challenge_id": 31,
+    "organization_id": 15,
+    "role": "sponsor"
+  },
+  {
+    "id": 330,
+    "challenge_id": 32,
+    "organization_id": 87,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 331,
+    "challenge_id": 32,
+    "organization_id": 48,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 332,
+    "challenge_id": 32,
+    "organization_id": 66,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 333,
+    "challenge_id": 32,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 334,
+    "challenge_id": 32,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 335,
+    "challenge_id": 32,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 336,
+    "challenge_id": 32,
+    "organization_id": 183,
+    "role": "data_contributor"
+  },
+  {
+    "id": 337,
+    "challenge_id": 32,
+    "organization_id": 116,
+    "role": "data_contributor"
+  },
+  {
+    "id": 338,
+    "challenge_id": 32,
+    "organization_id": 15,
+    "role": "data_contributor"
+  },
+  {
+    "id": 339,
+    "challenge_id": 32,
+    "organization_id": 31,
+    "role": "sponsor"
+  },
+  {
+    "id": 340,
+    "challenge_id": 33,
+    "organization_id": 234,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 341,
+    "challenge_id": 33,
+    "organization_id": 197,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 342,
+    "challenge_id": 33,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 343,
+    "challenge_id": 33,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 344,
+    "challenge_id": 33,
+    "organization_id": 200,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 345,
+    "challenge_id": 33,
+    "organization_id": 180,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 346,
+    "challenge_id": 33,
+    "organization_id": 72,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 347,
+    "challenge_id": 33,
+    "organization_id": 72,
+    "role": "data_contributor"
+  },
+  {
+    "id": 348,
+    "challenge_id": 33,
+    "organization_id": 234,
+    "role": "data_contributor"
+  },
+  {
+    "id": 349,
+    "challenge_id": 33,
+    "organization_id": 117,
+    "role": "data_contributor"
+  },
+  {
+    "id": 350,
+    "challenge_id": 34,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 351,
+    "challenge_id": 34,
+    "organization_id": 227,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 352,
+    "challenge_id": 34,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 353,
+    "challenge_id": 34,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 354,
+    "challenge_id": 34,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 355,
+    "challenge_id": 34,
+    "organization_id": 71,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 356,
+    "challenge_id": 34,
+    "organization_id": 227,
+    "role": "data_contributor"
+  },
+  {
+    "id": 357,
+    "challenge_id": 34,
+    "organization_id": 71,
+    "role": "data_contributor"
+  },
+  {
+    "id": 358,
+    "challenge_id": 35,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 359,
+    "challenge_id": 35,
+    "organization_id": 225,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 360,
+    "challenge_id": 35,
+    "organization_id": 225,
+    "role": "data_contributor"
+  },
+  {
+    "id": 361,
+    "challenge_id": 35,
+    "organization_id": 133,
+    "role": "sponsor"
+  },
+  {
+    "id": 362,
+    "challenge_id": 35,
+    "organization_id": 97,
+    "role": "sponsor"
+  },
+  {
+    "id": 363,
+    "challenge_id": 35,
+    "organization_id": 225,
+    "role": "sponsor"
+  },
+  {
+    "id": 364,
+    "challenge_id": 36,
+    "organization_id": 43,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 365,
+    "challenge_id": 36,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 366,
+    "challenge_id": 36,
+    "organization_id": 235,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 367,
+    "challenge_id": 36,
+    "organization_id": 114,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 368,
+    "challenge_id": 36,
+    "organization_id": 225,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 369,
+    "challenge_id": 36,
+    "organization_id": 16,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 370,
+    "challenge_id": 36,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 371,
+    "challenge_id": 36,
+    "organization_id": 43,
+    "role": "data_contributor"
+  },
+  {
+    "id": 372,
+    "challenge_id": 36,
+    "organization_id": 114,
+    "role": "data_contributor"
+  },
+  {
+    "id": 373,
+    "challenge_id": 36,
+    "organization_id": 235,
+    "role": "data_contributor"
+  },
+  {
+    "id": 374,
+    "challenge_id": 37,
+    "organization_id": 95,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 375,
+    "challenge_id": 37,
+    "organization_id": 113,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 376,
+    "challenge_id": 37,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 377,
+    "challenge_id": 37,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 378,
+    "challenge_id": 37,
+    "organization_id": 180,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 379,
+    "challenge_id": 37,
+    "organization_id": 16,
+    "role": "data_contributor"
+  },
+  {
+    "id": 380,
+    "challenge_id": 37,
+    "organization_id": 235,
+    "role": "data_contributor"
+  },
+  {
+    "id": 381,
+    "challenge_id": 37,
+    "organization_id": 114,
+    "role": "data_contributor"
+  },
+  {
+    "id": 382,
+    "challenge_id": 37,
+    "organization_id": 43,
+    "role": "data_contributor"
+  },
+  {
+    "id": 383,
+    "challenge_id": 37,
+    "organization_id": 171,
+    "role": "data_contributor"
+  },
+  {
+    "id": 384,
+    "challenge_id": 37,
+    "organization_id": 131,
+    "role": "sponsor"
+  },
+  {
+    "id": 385,
+    "challenge_id": 38,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 386,
+    "challenge_id": 38,
+    "organization_id": 52,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 387,
+    "challenge_id": 38,
+    "organization_id": 176,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 388,
+    "challenge_id": 38,
+    "organization_id": 15,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 389,
+    "challenge_id": 38,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 390,
+    "challenge_id": 38,
+    "organization_id": 46,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 391,
+    "challenge_id": 38,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 392,
+    "challenge_id": 38,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 393,
+    "challenge_id": 38,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 394,
+    "challenge_id": 38,
+    "organization_id": 73,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 395,
+    "challenge_id": 38,
+    "organization_id": 170,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 396,
+    "challenge_id": 38,
+    "organization_id": 52,
+    "role": "data_contributor"
+  },
+  {
+    "id": 397,
+    "challenge_id": 39,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 398,
+    "challenge_id": 39,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 399,
+    "challenge_id": 39,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 400,
+    "challenge_id": 39,
+    "organization_id": 15,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 401,
+    "challenge_id": 39,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 402,
+    "challenge_id": 39,
+    "organization_id": 46,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 403,
+    "challenge_id": 39,
+    "organization_id": 112,
+    "role": "data_contributor"
+  },
+  {
+    "id": 404,
+    "challenge_id": 39,
+    "organization_id": 150,
+    "role": "data_contributor"
+  },
+  {
+    "id": 405,
+    "challenge_id": 40,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 406,
+    "challenge_id": 40,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 407,
+    "challenge_id": 40,
+    "organization_id": 150,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 408,
+    "challenge_id": 40,
+    "organization_id": 22,
+    "role": "data_contributor"
+  },
+  {
+    "id": 409,
+    "challenge_id": 40,
+    "organization_id": 44,
+    "role": "data_contributor"
+  },
+  {
+    "id": 410,
+    "challenge_id": 40,
+    "organization_id": 131,
+    "role": "sponsor"
+  },
+  {
+    "id": 411,
+    "challenge_id": 41,
+    "organization_id": 193,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 412,
+    "challenge_id": 41,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 413,
+    "challenge_id": 41,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 414,
+    "challenge_id": 41,
+    "organization_id": 200,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 415,
+    "challenge_id": 41,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 416,
+    "challenge_id": 41,
+    "organization_id": 193,
+    "role": "data_contributor"
+  },
+  {
+    "id": 417,
+    "challenge_id": 41,
+    "organization_id": 133,
+    "role": "sponsor"
+  },
+  {
+    "id": 418,
+    "challenge_id": 41,
+    "organization_id": 40,
+    "role": "sponsor"
+  },
+  {
+    "id": 419,
+    "challenge_id": 42,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 420,
+    "challenge_id": 42,
+    "organization_id": 144,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 421,
+    "challenge_id": 42,
+    "organization_id": 126,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 422,
+    "challenge_id": 42,
+    "organization_id": 76,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 423,
+    "challenge_id": 42,
+    "organization_id": 126,
+    "role": "data_contributor"
+  },
+  {
+    "id": 424,
+    "challenge_id": 42,
+    "organization_id": 144,
+    "role": "data_contributor"
+  },
+  {
+    "id": 425,
+    "challenge_id": 42,
+    "organization_id": 217,
+    "role": "data_contributor"
+  },
+  {
+    "id": 426,
+    "challenge_id": 42,
+    "organization_id": 192,
+    "role": "data_contributor"
+  },
+  {
+    "id": 427,
+    "challenge_id": 42,
+    "organization_id": 199,
+    "role": "data_contributor"
+  },
+  {
+    "id": 428,
+    "challenge_id": 42,
+    "organization_id": 161,
+    "role": "data_contributor"
+  },
+  {
+    "id": 429,
+    "challenge_id": 43,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 430,
+    "challenge_id": 43,
+    "organization_id": 52,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 431,
+    "challenge_id": 43,
+    "organization_id": 176,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 432,
+    "challenge_id": 43,
+    "organization_id": 15,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 433,
+    "challenge_id": 43,
+    "organization_id": 46,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 434,
+    "challenge_id": 43,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 435,
+    "challenge_id": 43,
+    "organization_id": 89,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 436,
+    "challenge_id": 43,
+    "organization_id": 52,
+    "role": "data_contributor"
+  },
+  {
+    "id": 437,
+    "challenge_id": 43,
+    "organization_id": 46,
+    "role": "sponsor"
+  },
+  {
+    "id": 438,
+    "challenge_id": 44,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 439,
+    "challenge_id": 44,
+    "organization_id": 225,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 440,
+    "challenge_id": 44,
+    "organization_id": 225,
+    "role": "data_contributor"
+  },
+  {
+    "id": 441,
+    "challenge_id": 45,
+    "organization_id": 212,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 442,
+    "challenge_id": 45,
+    "organization_id": 40,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 443,
+    "challenge_id": 45,
+    "organization_id": 148,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 444,
+    "challenge_id": 45,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 445,
+    "challenge_id": 45,
+    "organization_id": 40,
+    "role": "data_contributor"
+  },
+  {
+    "id": 446,
+    "challenge_id": 46,
+    "organization_id": 216,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 447,
+    "challenge_id": 46,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 448,
+    "challenge_id": 46,
+    "organization_id": 197,
+    "role": "data_contributor"
+  },
+  {
+    "id": 449,
+    "challenge_id": 46,
+    "organization_id": 221,
+    "role": "data_contributor"
+  },
+  {
+    "id": 450,
+    "challenge_id": 46,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 451,
+    "challenge_id": 46,
+    "organization_id": 186,
+    "role": "data_contributor"
+  },
+  {
+    "id": 452,
+    "challenge_id": 46,
+    "organization_id": 61,
+    "role": "data_contributor"
+  },
+  {
+    "id": 453,
+    "challenge_id": 46,
+    "organization_id": 227,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 454,
+    "challenge_id": 46,
+    "organization_id": 148,
+    "role": "data_contributor"
+  },
+  {
+    "id": 455,
+    "challenge_id": 47,
+    "organization_id": 47,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 456,
+    "challenge_id": 47,
+    "organization_id": 171,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 457,
+    "challenge_id": 47,
+    "organization_id": 47,
+    "role": "sponsor"
+  },
+  {
+    "id": 458,
+    "challenge_id": 59,
+    "organization_id": 30,
+    "role": "data_contributor"
+  },
+  {
+    "id": 459,
+    "challenge_id": 59,
+    "organization_id": 225,
+    "role": "data_contributor"
+  },
+  {
+    "id": 460,
+    "challenge_id": 59,
+    "organization_id": 197,
+    "role": "data_contributor"
+  },
+  {
+    "id": 461,
+    "challenge_id": 61,
+    "organization_id": 64,
+    "role": "data_contributor"
+  },
+  {
+    "id": 462,
+    "challenge_id": 62,
+    "organization_id": 173,
+    "role": "data_contributor"
+  },
+  {
+    "id": 463,
+    "challenge_id": 63,
+    "organization_id": 225,
+    "role": "data_contributor"
+  },
+  {
+    "id": 464,
+    "challenge_id": 64,
+    "organization_id": 185,
+    "role": "data_contributor"
+  },
+  {
+    "id": 465,
+    "challenge_id": 65,
+    "organization_id": 33,
+    "role": "data_contributor"
+  },
+  {
+    "id": 466,
+    "challenge_id": 66,
+    "organization_id": 197,
+    "role": "data_contributor"
+  },
+  {
+    "id": 467,
+    "challenge_id": 67,
+    "organization_id": 159,
+    "role": "data_contributor"
+  },
+  {
+    "id": 468,
+    "challenge_id": 67,
+    "organization_id": 70,
+    "role": "data_contributor"
+  },
+  {
+    "id": 469,
+    "challenge_id": 68,
+    "organization_id": 42,
+    "role": "data_contributor"
+  },
+  {
+    "id": 470,
+    "challenge_id": 69,
+    "organization_id": 201,
+    "role": "data_contributor"
+  },
+  {
+    "id": 471,
+    "challenge_id": 70,
+    "organization_id": 91,
+    "role": "data_contributor"
+  },
+  {
+    "id": 472,
+    "challenge_id": 71,
+    "organization_id": 215,
+    "role": "data_contributor"
+  },
+  {
+    "id": 473,
+    "challenge_id": 72,
+    "organization_id": 180,
+    "role": "data_contributor"
+  },
+  {
+    "id": 474,
+    "challenge_id": 73,
+    "organization_id": 41,
+    "role": "data_contributor"
+  },
+  {
+    "id": 475,
+    "challenge_id": 74,
+    "organization_id": 214,
+    "role": "data_contributor"
+  },
+  {
+    "id": 476,
+    "challenge_id": 75,
+    "organization_id": 91,
+    "role": "data_contributor"
+  },
+  {
+    "id": 477,
+    "challenge_id": 76,
+    "organization_id": 88,
+    "role": "data_contributor"
+  },
+  {
+    "id": 478,
+    "challenge_id": 77,
+    "organization_id": 221,
+    "role": "data_contributor"
+  },
+  {
+    "id": 479,
+    "challenge_id": 78,
+    "organization_id": 223,
+    "role": "data_contributor"
+  },
+  {
+    "id": 480,
+    "challenge_id": 79,
+    "organization_id": 218,
+    "role": "data_contributor"
+  },
+  {
+    "id": 481,
+    "challenge_id": 80,
+    "organization_id": 222,
+    "role": "data_contributor"
+  },
+  {
+    "id": 482,
+    "challenge_id": 81,
+    "organization_id": 173,
+    "role": "data_contributor"
+  },
+  {
+    "id": 483,
+    "challenge_id": 82,
+    "organization_id": 173,
+    "role": "data_contributor"
+  },
+  {
+    "id": 484,
+    "challenge_id": 83,
+    "organization_id": 221,
+    "role": "data_contributor"
+  },
+  {
+    "id": 485,
+    "challenge_id": 84,
+    "organization_id": 219,
+    "role": "data_contributor"
+  },
+  {
+    "id": 486,
+    "challenge_id": 85,
+    "organization_id": 41,
+    "role": "data_contributor"
+  },
+  {
+    "id": 487,
+    "challenge_id": 90,
+    "organization_id": 104,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 488,
+    "challenge_id": 90,
+    "organization_id": 3,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 489,
+    "challenge_id": 90,
+    "organization_id": 102,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 490,
+    "challenge_id": 90,
+    "organization_id": 216,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 491,
+    "challenge_id": 90,
+    "organization_id": 143,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 492,
+    "challenge_id": 90,
+    "organization_id": 225,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 493,
+    "challenge_id": 90,
+    "organization_id": 204,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 494,
+    "challenge_id": 90,
+    "organization_id": 220,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 495,
+    "challenge_id": 90,
+    "organization_id": 137,
+    "role": "sponsor"
+  },
+  {
+    "id": 496,
+    "challenge_id": 90,
+    "organization_id": 15,
+    "role": "sponsor"
+  },
+  {
+    "id": 497,
+    "challenge_id": 90,
+    "organization_id": 60,
+    "role": "sponsor"
+  },
+  {
+    "id": 498,
+    "challenge_id": 90,
+    "organization_id": 68,
+    "role": "sponsor"
+  },
+  {
+    "id": 499,
+    "challenge_id": 91,
+    "organization_id": 210,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 500,
+    "challenge_id": 91,
+    "organization_id": 184,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 501,
+    "challenge_id": 91,
+    "organization_id": 195,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 502,
+    "challenge_id": 91,
+    "organization_id": 208,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 503,
+    "challenge_id": 91,
+    "organization_id": 135,
+    "role": "sponsor"
+  },
+  {
+    "id": 504,
+    "challenge_id": 92,
+    "organization_id": 210,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 505,
+    "challenge_id": 92,
+    "organization_id": 184,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 506,
+    "challenge_id": 92,
+    "organization_id": 195,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 507,
+    "challenge_id": 92,
+    "organization_id": 208,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 508,
+    "challenge_id": 92,
+    "organization_id": 135,
+    "role": "sponsor"
+  },
+  {
+    "id": 509,
+    "challenge_id": 93,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 510,
+    "challenge_id": 94,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 511,
+    "challenge_id": 94,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 512,
+    "challenge_id": 94,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 513,
+    "challenge_id": 94,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 514,
+    "challenge_id": 94,
+    "organization_id": 229,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 515,
+    "challenge_id": 94,
+    "organization_id": 136,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 516,
+    "challenge_id": 94,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 517,
+    "challenge_id": 95,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 518,
+    "challenge_id": 95,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 519,
+    "challenge_id": 95,
+    "organization_id": 152,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 520,
+    "challenge_id": 95,
+    "organization_id": 202,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 521,
+    "challenge_id": 95,
+    "organization_id": 128,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 522,
+    "challenge_id": 95,
+    "organization_id": 93,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 523,
+    "challenge_id": 95,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 524,
+    "challenge_id": 95,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 525,
+    "challenge_id": 95,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 526,
+    "challenge_id": 96,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 527,
+    "challenge_id": 96,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 528,
+    "challenge_id": 96,
+    "organization_id": 82,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 529,
+    "challenge_id": 96,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 530,
+    "challenge_id": 96,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 531,
+    "challenge_id": 96,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 532,
+    "challenge_id": 97,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 533,
+    "challenge_id": 97,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 534,
+    "challenge_id": 97,
+    "organization_id": 83,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 535,
+    "challenge_id": 97,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 536,
+    "challenge_id": 97,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 537,
+    "challenge_id": 98,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 538,
+    "challenge_id": 98,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 539,
+    "challenge_id": 98,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 540,
+    "challenge_id": 98,
+    "organization_id": 53,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 541,
+    "challenge_id": 98,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 542,
+    "challenge_id": 98,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 543,
+    "challenge_id": 99,
+    "organization_id": 136,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 544,
+    "challenge_id": 99,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 545,
+    "challenge_id": 99,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 546,
+    "challenge_id": 99,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 547,
+    "challenge_id": 99,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 548,
+    "challenge_id": 99,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 549,
+    "challenge_id": 100,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 550,
+    "challenge_id": 100,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 551,
+    "challenge_id": 100,
+    "organization_id": 232,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 552,
+    "challenge_id": 100,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 553,
+    "challenge_id": 100,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 554,
+    "challenge_id": 100,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 555,
+    "challenge_id": 101,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 556,
+    "challenge_id": 101,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 557,
+    "challenge_id": 101,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 558,
+    "challenge_id": 101,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 559,
+    "challenge_id": 101,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 560,
+    "challenge_id": 102,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 561,
+    "challenge_id": 102,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 562,
+    "challenge_id": 102,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 563,
+    "challenge_id": 102,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 564,
+    "challenge_id": 102,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 565,
+    "challenge_id": 103,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 566,
+    "challenge_id": 103,
+    "organization_id": 190,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 567,
+    "challenge_id": 103,
+    "organization_id": 34,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 568,
+    "challenge_id": 103,
+    "organization_id": 62,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 569,
+    "challenge_id": 103,
+    "organization_id": 131,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 570,
+    "challenge_id": 103,
+    "organization_id": 177,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 571,
+    "challenge_id": 103,
+    "organization_id": 190,
+    "role": "sponsor"
+  },
+  {
+    "id": 572,
+    "challenge_id": 104,
+    "organization_id": 12,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 573,
+    "challenge_id": 104,
+    "organization_id": 216,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 574,
+    "challenge_id": 104,
+    "organization_id": 84,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 575,
+    "challenge_id": 104,
+    "organization_id": 7,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 576,
+    "challenge_id": 104,
+    "organization_id": 15,
+    "role": "sponsor"
+  },
+  {
+    "id": 577,
+    "challenge_id": 104,
+    "organization_id": 90,
+    "role": "sponsor"
+  },
+  {
+    "id": 578,
+    "challenge_id": 104,
+    "organization_id": 103,
+    "role": "sponsor"
+  },
+  {
+    "id": 579,
+    "challenge_id": 104,
+    "organization_id": 50,
+    "role": "sponsor"
+  },
+  {
+    "id": 580,
+    "challenge_id": 105,
+    "organization_id": 12,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 581,
+    "challenge_id": 105,
+    "organization_id": 147,
+    "role": "sponsor"
+  },
+  {
+    "id": 582,
+    "challenge_id": 105,
+    "organization_id": 35,
+    "role": "sponsor"
+  },
+  {
+    "id": 583,
+    "challenge_id": 106,
+    "organization_id": 12,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 584,
+    "challenge_id": 106,
+    "organization_id": 187,
+    "role": "sponsor"
+  },
+  {
+    "id": 585,
+    "challenge_id": 106,
+    "organization_id": 178,
+    "role": "sponsor"
+  },
+  {
+    "id": 586,
+    "challenge_id": 107,
+    "organization_id": 12,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 587,
+    "challenge_id": 107,
+    "organization_id": 77,
+    "role": "sponsor"
+  },
+  {
+    "id": 588,
+    "challenge_id": 124,
+    "organization_id": 12,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 589,
+    "challenge_id": 124,
+    "organization_id": 216,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 590,
+    "challenge_id": 124,
+    "organization_id": 84,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 591,
+    "challenge_id": 124,
+    "organization_id": 7,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 592,
+    "challenge_id": 124,
+    "organization_id": 98,
+    "role": "sponsor"
+  },
+  {
+    "id": 593,
+    "challenge_id": 124,
+    "organization_id": 139,
+    "role": "sponsor"
+  },
+  {
+    "id": 594,
+    "challenge_id": 124,
+    "organization_id": 162,
+    "role": "sponsor"
+  }
+]
