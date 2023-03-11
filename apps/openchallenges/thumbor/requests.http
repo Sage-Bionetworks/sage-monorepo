@@ -1,0 +1,9 @@
+@thumborHost = http://openchallenges-thumbor:8889
+
+### Select the base path
+
+@basePath = {{thumborHost}}
+
+### Check that the service is up and running
+
+GET {{basePath}}/healthcheck
