@@ -22,7 +22,7 @@ GET {{basePath}}/organizations?sort=created&direction=desc
 
 ### Sort the orgs by the number of challenges they contributed to.
 
-GET {{basePath}}/organizations?sort=challenge_count
+GET {{basePath}}/organizations?sort=challenge_count&pageSize=5
 
 ### Get an organization by ID
 
