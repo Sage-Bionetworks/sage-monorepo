@@ -25,7 +25,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'organization',
+    path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
         (m) => m.OrgSearchModule
@@ -58,7 +58,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'organization/:organizationId',
+    path: 'org/:organizationId',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-profile').then(
         (m) => m.OrgProfileModule
