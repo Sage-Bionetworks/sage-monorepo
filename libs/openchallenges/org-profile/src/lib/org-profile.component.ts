@@ -4,7 +4,6 @@ import { Account } from '@sagebionetworks/openchallenges/api-client-angular-depr
 import {
   catchError,
   map,
-  tap,
   Observable,
   Subscription,
   switchMap,
@@ -48,7 +47,6 @@ export class OrgProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.organization$ = this.activatedRoute.params.pipe(
-      tap((params) => console.log(params)),
       switchMap((params) =>
         this.organizationService.getOrganization(params['organizationId'])
       ),
