@@ -3,9 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { ChallengeComponent } from './challenge.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', component: ChallengeComponent },
   {
-    path: ':slug',
+    path: ':challengeSlug',
     component: ChallengeComponent,
     children: [{ path: '**', component: ChallengeComponent }],
   },

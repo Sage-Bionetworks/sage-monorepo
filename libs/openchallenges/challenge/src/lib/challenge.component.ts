@@ -66,7 +66,9 @@ export class ChallengeComponent implements OnInit {
     // TODO: get chalenge using below chunk once
     // the `slug` property and `getChallenge` service are added
     // this.challenge$ = this.activatedRoute.params.pipe(
-    //   switchMap((params) => this.challengeService.getChallenge(params['slug'])),
+    //   // TODO: need backend to support get org by id
+    //   switchMap((params) => this.challengeService.getChallenge(params['challengeId'])),
+    //   // TODO: add challenge slug to url
     //   catchError((err) => {
     //     const error = err.error as ApiClientBasicError;
     //     if (isApiClientError(error) && error.status === 404) {
