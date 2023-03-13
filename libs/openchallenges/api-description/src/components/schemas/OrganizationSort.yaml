@@ -2,5 +2,6 @@ description: What to sort results by.
 type: string
 default: relevance
 enum:
+  - challenge_count
   - created
   - relevance

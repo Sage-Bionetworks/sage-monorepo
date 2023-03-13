@@ -36,6 +36,9 @@ public class OrganizationDto {
   @JsonProperty("websiteUrl")
   private String websiteUrl;
 
+  @JsonProperty("challengeCount")
+  private Integer challengeCount;
+
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -175,6 +178,26 @@ public class OrganizationDto {
     this.websiteUrl = websiteUrl;
   }
 
+  public OrganizationDto challengeCount(Integer challengeCount) {
+    this.challengeCount = challengeCount;
+    return this;
+  }
+
+  /**
+   * Get challengeCount minimum: 0
+   *
+   * @return challengeCount
+   */
+  @Min(0)
+  @Schema(name = "challengeCount", example = "10", required = false)
+  public Integer getChallengeCount() {
+    return challengeCount;
+  }
+
+  public void setChallengeCount(Integer challengeCount) {
+    this.challengeCount = challengeCount;
+  }
+
   public OrganizationDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -232,6 +255,7 @@ public class OrganizationDto {
         && Objects.equals(this.description, organization.description)
         && Objects.equals(this.avatarUrl, organization.avatarUrl)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
+        && Objects.equals(this.challengeCount, organization.challengeCount)
         && Objects.equals(this.createdAt, organization.createdAt)
         && Objects.equals(this.updatedAt, organization.updatedAt);
   }
@@ -239,7 +263,15 @@ public class OrganizationDto {
   @Override
   public int hashCode() {
     return Objects.hash(
-        name, email, login, description, avatarUrl, websiteUrl, createdAt, updatedAt);
+        name,
+        email,
+        login,
+        description,
+        avatarUrl,
+        websiteUrl,
+        challengeCount,
+        createdAt,
+        updatedAt);
   }
 
   @Override
@@ -252,6 +284,7 @@ public class OrganizationDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
+    sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

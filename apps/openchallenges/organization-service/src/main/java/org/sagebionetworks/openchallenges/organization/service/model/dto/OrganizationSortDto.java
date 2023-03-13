@@ -9,6 +9,8 @@ import javax.validation.constraints.*;
 /** What to sort results by. */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public enum OrganizationSortDto {
+  CHALLENGE_COUNT("challenge_count"),
+
   CREATED("created"),
 
   RELEVANCE("relevance");
