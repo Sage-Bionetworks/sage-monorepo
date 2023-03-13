@@ -17,7 +17,7 @@ CREATE TABLE `organization` (
 
 -- contributor_roles definition
 
-CREATE TABLE `contributor_roles`
+CREATE TABLE `challenge_contributor_role`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
     `challenge_id`          bigint(20) NOT NULL,
