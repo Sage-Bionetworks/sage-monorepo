@@ -12,6 +12,10 @@
 
 GET {{basePath}}/challenges
 
+### List the top 5 challenges
+
+GET {{basePath}}/challenges?pageSize=5
+
 ### List the challenges that are active and upcoming.
 
 GET {{basePath}}/challenges?status=active,upcoming

@@ -3,6 +3,8 @@ description: A challenge
 properties:
   id:
     $ref: ChallengeId.yaml
+  slug:
+    $ref: ChallengeSlug.yaml
   name:
     $ref: ChallengeName.yaml
   headline:
@@ -69,6 +71,7 @@ properties:
     example: '2022-07-04T22:19:11Z'
 required:
   - id
+  - slug
   - name
   - description
   - status

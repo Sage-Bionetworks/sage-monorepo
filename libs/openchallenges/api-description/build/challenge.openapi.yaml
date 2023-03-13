@@ -277,17 +277,22 @@ components:
         - hasNext
         - hasPrevious
     ChallengeId:
-      description: The unique identifier of a challenge.
+      description: The unique identifier of the challenge.
       type: integer
       format: int64
       example: 1
-    ChallengeName:
-      description: The name of the a challenge
+    ChallengeSlug:
+      description: The slug of the challenge.
       type: string
       minLength: 3
       maxLength: 60
       pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: awesome-challenge
+    ChallengeName:
+      description: The name of the challenge.
+      type: string
+      minLength: 3
+      maxLength: 60
     ChallengeHeadline:
       description: The headline of the challenge.
       type: string
@@ -371,6 +376,8 @@ components:
       properties:
         id:
           $ref: '#/components/schemas/ChallengeId'
+        slug:
+          $ref: '#/components/schemas/ChallengeSlug'
         name:
           $ref: '#/components/schemas/ChallengeName'
         headline:
@@ -419,6 +426,7 @@ components:
           example: '2022-07-04T22:19:11Z'
       required:
         - id
+        - slug
         - name
         - description
         - status

@@ -47,6 +47,9 @@ public class ChallengeEntity {
   private Long id;
 
   @Column(nullable = false)
+  private String slug;
+
+  @Column(nullable = false)
   @FullTextField()
   private String name;
 
