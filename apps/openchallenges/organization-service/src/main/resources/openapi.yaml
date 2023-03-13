@@ -138,6 +138,7 @@ components:
       default: relevance
       description: What to sort results by.
       enum:
+      - challenge_count
       - created
       - relevance
       type: string
@@ -231,6 +232,7 @@ components:
         websiteUrl: https://example.com
         name: Example organization
         description: A description of the organization.
+        challengeCount: 10
         login: example-org
         email: john.smith@example.com
         updatedAt: 2022-07-04T22:19:11Z
@@ -262,6 +264,11 @@ components:
           example: https://example.com
           format: url
           type: string
+        challengeCount:
+          example: 10
+          format: int32
+          minimum: 0
+          type: integer
         createdAt:
           example: 2022-07-04T22:19:11Z
           format: date-time

@@ -63,6 +63,7 @@ components:
       type: string
       default: relevance
       enum:
+        - challenge_count
         - created
         - relevance
     OrganizationDirection:
@@ -170,6 +171,11 @@ components:
           type: string
           format: url
           example: https://example.com
+        challengeCount:
+          type: integer
+          format: int32
+          minimum: 0
+          example: 10
         createdAt:
           type: string
           format: date-time
