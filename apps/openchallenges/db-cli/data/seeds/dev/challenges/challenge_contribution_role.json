@@ -3562,5 +3562,59 @@
     "challenge_id": 124,
     "organization_id": 162,
     "role": "sponsor"
+  },
+  {
+    "id": 595,
+    "challenge_id": 161,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 596,
+    "challenge_id": 161,
+    "organization_id": 238,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 597,
+    "challenge_id": 162,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 598,
+    "challenge_id": 162,
+    "organization_id": 239,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 599,
+    "challenge_id": 163,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 600,
+    "challenge_id": 163,
+    "organization_id": 239,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 601,
+    "challenge_id": 164,
+    "organization_id": 13,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 602,
+    "challenge_id": 164,
+    "organization_id": 232,
+    "role": "challenge_organizer"
+  },
+  {
+    "id": 603,
+    "challenge_id": 165,
+    "organization_id": 13,
+    "role": "challenge_organizer"
   }
 ]

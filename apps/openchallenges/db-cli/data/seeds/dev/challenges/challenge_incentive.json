@@ -246,112 +246,167 @@
   },
   {
     "id": 50,
-    "name": "monetary",
-    "challenge_id": 111
+    "name": "publication",
+    "challenge_id": 100
   },
   {
     "id": 51,
-    "name": "monetary",
-    "challenge_id": 113
+    "name": "speaking_engagement",
+    "challenge_id": 100
   },
   {
     "id": 52,
-    "name": "monetary",
-    "challenge_id": 114
+    "name": "publication",
+    "challenge_id": 101
   },
   {
     "id": 53,
-    "name": "monetary",
-    "challenge_id": 118
+    "name": "speaking_engagement",
+    "challenge_id": 101
   },
   {
     "id": 54,
     "name": "monetary",
-    "challenge_id": 123
+    "challenge_id": 111
   },
   {
     "id": 55,
     "name": "monetary",
-    "challenge_id": 124
+    "challenge_id": 113
   },
   {
     "id": 56,
     "name": "monetary",
-    "challenge_id": 129
+    "challenge_id": 114
   },
   {
     "id": 57,
     "name": "monetary",
-    "challenge_id": 131
+    "challenge_id": 118
   },
   {
     "id": 58,
     "name": "monetary",
-    "challenge_id": 145
+    "challenge_id": 123
   },
   {
     "id": 59,
     "name": "monetary",
-    "challenge_id": 146
+    "challenge_id": 124
   },
   {
     "id": 60,
     "name": "monetary",
-    "challenge_id": 147
+    "challenge_id": 129
   },
   {
     "id": 61,
     "name": "monetary",
-    "challenge_id": 148
+    "challenge_id": 131
   },
   {
     "id": 62,
     "name": "monetary",
-    "challenge_id": 149
+    "challenge_id": 145
   },
   {
     "id": 63,
     "name": "monetary",
-    "challenge_id": 156
+    "challenge_id": 146
   },
   {
     "id": 64,
-    "name": "publication",
-    "challenge_id": 157
+    "name": "monetary",
+    "challenge_id": 147
   },
   {
     "id": 65,
-    "name": "other",
-    "challenge_id": 157
+    "name": "monetary",
+    "challenge_id": 148
   },
   {
     "id": 66,
-    "name": "publication",
-    "challenge_id": 158
+    "name": "monetary",
+    "challenge_id": 149
   },
   {
     "id": 67,
-    "name": "speaking_engagement",
-    "challenge_id": 158
+    "name": "monetary",
+    "challenge_id": 156
   },
   {
     "id": 68,
     "name": "publication",
-    "challenge_id": 159
+    "challenge_id": 157
   },
   {
     "id": 69,
-    "name": "speaking_engagement",
-    "challenge_id": 159
+    "name": "other",
+    "challenge_id": 157
   },
   {
     "id": 70,
     "name": "publication",
-    "challenge_id": 160
+    "challenge_id": 158
   },
   {
     "id": 71,
     "name": "speaking_engagement",
+    "challenge_id": 158
+  },
+  {
+    "id": 72,
+    "name": "publication",
+    "challenge_id": 159
+  },
+  {
+    "id": 73,
+    "name": "speaking_engagement",
+    "challenge_id": 159
+  },
+  {
+    "id": 74,
+    "name": "publication",
     "challenge_id": 160
+  },
+  {
+    "id": 75,
+    "name": "speaking_engagement",
+    "challenge_id": 160
+  },
+  {
+    "id": 76,
+    "name": "publication",
+    "challenge_id": 161
+  },
+  {
+    "id": 77,
+    "name": "other",
+    "challenge_id": 161
+  },
+  {
+    "id": 78,
+    "name": "publication",
+    "challenge_id": 162
+  },
+  {
+    "id": 79,
+    "name": "speaking_engagement",
+    "challenge_id": 162
+  },
+  {
+    "id": 80,
+    "name": "publication",
+    "challenge_id": 163
+  },
+  {
+    "id": 81,
+    "name": "speaking_engagement",
+    "challenge_id": 163
+  },
+  {
+    "id": 82,
+    "name": "publication",
+    "challenge_id": 165
   }
 ]
