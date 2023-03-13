@@ -50,7 +50,8 @@ export class OrgProfileComponent implements OnInit {
     this.organization$ = this.activatedRoute.params.pipe(
       tap((params) => console.log(params)),
       switchMap((params) =>
-        this.organizationService.getOrganization(params['slug'])
+        // TODO: need backend to support get org by id
+        this.organizationService.getOrganization(params['organizationId'])
       ),
       catchError((err) => {
         const error = err.error as ApiClientBasicError;

@@ -65,7 +65,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'challenge/:challengeId/:challengeSlug',
+    path: 'challenge/:challengeId',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge').then(
         (m) => m.ChallengeModule
