@@ -60,7 +60,7 @@ export class OrgProfileComponent implements OnInit {
           return throwError(() => new Error(error.detail));
         } else {
           // redirect to org search for invalid url
-          this.router.navigate(['/orgs']);
+          this.router.navigate(['/org']);
           return throwError(() => new Error(err.message));
         }
       })

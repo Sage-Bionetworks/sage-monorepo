@@ -18,14 +18,14 @@ export const routes: Routes = [
     data: {},
   },
   {
-    path: 'challenges',
+    path: 'challenge',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge-search').then(
         (m) => m.ChallengeSearchModule
       ),
   },
   {
-    path: 'orgs',
+    path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
         (m) => m.OrgSearchModule
