@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrgProfileComponent } from './org-profile.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/org', pathMatch: 'full' },
   {
     path: '',
     component: OrgProfileComponent,
