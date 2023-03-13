@@ -75,7 +75,7 @@ export class ChallengeComponent implements OnInit {
     //       return throwError(() => new Error(error.detail));
     //     } else {
     //       // redirect to org search for invalid url
-    //       this.router.navigate(['/challenges']);
+    //       this.router.navigate(['/challenge']);
     //       return throwError(() => new Error(err.message));
     //     }
     //   })

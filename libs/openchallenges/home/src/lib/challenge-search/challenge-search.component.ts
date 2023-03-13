@@ -19,6 +19,6 @@ export class ChallengeSearchComponent {
   }
 
   onSearch(): void {
-    this.router.navigateByUrl('/challenges?searchTerms=' + this.searchTerms);
+    this.router.navigateByUrl('/challenge?searchTerms=' + this.searchTerms);
   }
 }
