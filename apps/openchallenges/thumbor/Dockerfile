@@ -1,0 +1,1 @@
+FROM beeyev/thumbor-s3:7.4-alpine

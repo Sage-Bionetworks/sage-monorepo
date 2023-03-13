@@ -60,6 +60,7 @@
     8092,
     8200,
     8888,
+    8889,
     9200,
     9411,
     9090,
@@ -157,6 +158,10 @@
     },
     "8888": {
       "label": "openchallenges-notebook",
+      "onAutoForward": "silent"
+    },
+    "8889": {
+      "label": "openchallenges-thumbor",
       "onAutoForward": "silent"
     },
     "9200": {
