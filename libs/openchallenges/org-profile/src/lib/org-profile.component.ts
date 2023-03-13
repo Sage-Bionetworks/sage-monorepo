@@ -4,7 +4,6 @@ import { Account } from '@sagebionetworks/openchallenges/api-client-angular-depr
 import {
   catchError,
   map,
-  tap,
   Observable,
   Subscription,
   switchMap,
@@ -48,9 +47,7 @@ export class OrgProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.organization$ = this.activatedRoute.params.pipe(
-      tap((params) => console.log(params)),
       switchMap((params) =>
-        // TODO: need backend to support get org by id
         this.organizationService.getOrganization(params['organizationId'])
       ),
       catchError((err) => {
@@ -60,8 +57,8 @@ export class OrgProfileComponent implements OnInit {
           this.router.navigate(['/not-found']);
           return throwError(() => new Error(error.detail));
         } else {
-          // redirect to org search for invalid url
-          this.router.navigate(['/organization']);
+          // redirect to org search for other reasons for now
+          this.router.navigate(['/org']);
           return throwError(() => new Error(err.message));
         }
       })
