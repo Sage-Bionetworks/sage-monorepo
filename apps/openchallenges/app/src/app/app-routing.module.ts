@@ -25,7 +25,7 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'org',
+    path: 'organization',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
         (m) => m.OrgSearchModule
