@@ -3,6 +3,8 @@ description: A challenge
 properties:
   id:
     $ref: ChallengeId.yaml
+  slug:
+    $ref: ChallengeSlug.yaml
   name:
     $ref: ChallengeName.yaml
   headline:
