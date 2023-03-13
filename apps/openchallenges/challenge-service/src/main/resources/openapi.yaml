@@ -6,7 +6,7 @@ info:
   license:
     name: Apache 2.0
     url: https://github.com/Sage-Bionetworks/sage-monorepo
-  title: Challenge API
+  title: OpenChallenges Challenge REST API
   version: 1.0.0
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
@@ -443,16 +443,21 @@ components:
       - totalPages
       type: object
     ChallengeId:
-      description: The unique identifier of a challenge.
+      description: The unique identifier of the challenge.
       example: 1
       format: int64
       type: integer
-    ChallengeName:
-      description: The name of the a challenge
+    ChallengeSlug:
+      description: The slug of the challenge.
       example: awesome-challenge
       maxLength: 60
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    ChallengeName:
+      description: The name of the challenge.
+      maxLength: 60
+      minLength: 3
       type: string
     ChallengeHeadline:
       description: The headline of the challenge.
@@ -558,16 +563,21 @@ components:
       description: A challenge
       properties:
         id:
-          description: The unique identifier of a challenge.
+          description: The unique identifier of the challenge.
           example: 1
           format: int64
           type: integer
-        name:
-          description: The name of the a challenge
+        slug:
+          description: The slug of the challenge.
           example: awesome-challenge
           maxLength: 60
           minLength: 3
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          type: string
+        name:
+          description: The name of the challenge.
+          maxLength: 60
+          minLength: 3
           type: string
         headline:
           description: The headline of the challenge.
@@ -637,6 +647,7 @@ components:
       - incentives
       - name
       - platform
+      - slug
       - starredCount
       - status
       - submissionTypes

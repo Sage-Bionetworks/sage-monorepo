@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
-@RequestMapping("${openapi.challenge.base-path:/v1}")
+@RequestMapping("${openapi.openChallengesChallengeREST.base-path:/v1}")
 public class ChallengeInputDataTypeApiController implements ChallengeInputDataTypeApi {
 
   private final ChallengeInputDataTypeApiDelegate delegate;

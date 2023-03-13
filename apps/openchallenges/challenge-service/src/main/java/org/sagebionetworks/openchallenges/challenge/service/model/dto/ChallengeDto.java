@@ -24,6 +24,9 @@ public class ChallengeDto {
   @JsonProperty("id")
   private Long id;
 
+  @JsonProperty("slug")
+  private String slug;
+
   @JsonProperty("name")
   private String name;
 
@@ -85,7 +88,7 @@ public class ChallengeDto {
   }
 
   /**
-   * The unique identifier of a challenge.
+   * The unique identifier of the challenge.
    *
    * @return id
    */
@@ -93,7 +96,7 @@ public class ChallengeDto {
   @Schema(
       name = "id",
       example = "1",
-      description = "The unique identifier of a challenge.",
+      description = "The unique identifier of the challenge.",
       required = true)
   public Long getId() {
     return id;
@@ -103,24 +106,45 @@ public class ChallengeDto {
     this.id = id;
   }
 
+  public ChallengeDto slug(String slug) {
+    this.slug = slug;
+    return this;
+  }
+
+  /**
+   * The slug of the challenge.
+   *
+   * @return slug
+   */
+  @NotNull
+  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
+  @Size(min = 3, max = 60)
+  @Schema(
+      name = "slug",
+      example = "awesome-challenge",
+      description = "The slug of the challenge.",
+      required = true)
+  public String getSlug() {
+    return slug;
+  }
+
+  public void setSlug(String slug) {
+    this.slug = slug;
+  }
+
   public ChallengeDto name(String name) {
     this.name = name;
     return this;
   }
 
   /**
-   * The name of the a challenge
+   * The name of the challenge.
    *
    * @return name
    */
   @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 60)
-  @Schema(
-      name = "name",
-      example = "awesome-challenge",
-      description = "The name of the a challenge",
-      required = true)
+  @Schema(name = "name", description = "The name of the challenge.", required = true)
   public String getName() {
     return name;
   }
@@ -488,6 +512,7 @@ public class ChallengeDto {
     }
     ChallengeDto challenge = (ChallengeDto) o;
     return Objects.equals(this.id, challenge.id)
+        && Objects.equals(this.slug, challenge.slug)
         && Objects.equals(this.name, challenge.name)
         && Objects.equals(this.headline, challenge.headline)
         && Objects.equals(this.description, challenge.description)
@@ -510,6 +535,7 @@ public class ChallengeDto {
   public int hashCode() {
     return Objects.hash(
         id,
+        slug,
         name,
         headline,
         description,
@@ -533,6 +559,7 @@ public class ChallengeDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
