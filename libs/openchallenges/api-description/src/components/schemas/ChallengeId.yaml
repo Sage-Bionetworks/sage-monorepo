@@ -1,4 +1,4 @@
-description: The unique identifier of a challenge.
+description: The unique identifier of the challenge.
 type: integer
 format: int64
 example: 1

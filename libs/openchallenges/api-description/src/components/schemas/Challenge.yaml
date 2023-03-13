@@ -71,6 +71,7 @@ properties:
     example: '2022-07-04T22:19:11Z'
 required:
   - id
+  - slug
   - name
   - description
   - status
