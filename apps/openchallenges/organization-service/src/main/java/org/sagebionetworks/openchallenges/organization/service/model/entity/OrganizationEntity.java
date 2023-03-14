@@ -1,11 +1,14 @@
 package org.sagebionetworks.openchallenges.organization.service.model.entity;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +19,7 @@ import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 @Entity
 @Table(name = "organization")
@@ -51,6 +55,10 @@ public class OrganizationEntity {
   @Column(name = "challenge_count", nullable = false)
   @GenericField(name = "challenge_count", sortable = Sortable.YES)
   private Integer challengeCount;
+
+  @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
+  @IndexedEmbedded(includePaths = {"role"})
+  private List<ChallengeContributionEntity> challengeContributions;
 
   @Column(nullable = true)
   @FullTextField()
