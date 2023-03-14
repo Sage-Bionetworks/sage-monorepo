@@ -9,9 +9,8 @@ export const routes: Routes = [
   //   component: UserProfileComponent,
   //   resolve: { userProfile: UserProfileResolver },
   // },
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
   {
-    path: ':slug',
+    path: '',
     component: UserProfileComponent,
     children: [{ path: '**', component: UserProfileComponent }],
   },
