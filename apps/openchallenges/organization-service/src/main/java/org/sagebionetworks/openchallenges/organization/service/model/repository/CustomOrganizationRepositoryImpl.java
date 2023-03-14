@@ -16,6 +16,7 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.organization.service.exception.BadRequestException;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributorRoleDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDirectionDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
@@ -54,6 +55,10 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
+    if (query.getChallengeContributorRoles() != null
+        && !query.getChallengeContributorRoles().isEmpty()) {
+      predicates.add(getChallengeContributorRolesPredicate(pf, query));
+    }
 
     SearchSort sort = getSearchSort(sf, query);
     SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
@@ -86,6 +91,25 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
         .fields(fields)
         .matching(query.getSearchTerms())
         .defaultOperator(BooleanOperator.AND)
+        .toPredicate();
+  }
+  /**
+   * Matches the organization whose at least one of their contributor roles is in the list of
+   * contributor roles specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getChallengeContributorRolesPredicate(
+      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (ChallengeContributorRoleDto role : query.getChallengeContributorRoles()) {
+                b.should(
+                    pf.match().field("challenge_contributions.role").matching(role.toString()));
+              }
+            })
         .toPredicate();
   }
 

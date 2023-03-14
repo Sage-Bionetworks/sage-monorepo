@@ -57,7 +57,9 @@ public class OrganizationEntity {
   private Integer challengeCount;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(includePaths = {"role"})
+  @IndexedEmbedded(
+      name = "challenge_contributions",
+      includePaths = {"role"})
   private List<ChallengeContributionEntity> challengeContributions;
 
   @Column(nullable = true)
