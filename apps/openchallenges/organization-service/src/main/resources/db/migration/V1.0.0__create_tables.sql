@@ -5,7 +5,6 @@ CREATE TABLE `organization` (
   `login` varchar(255) NOT NULL UNIQUE,
   `avatar_url` varchar(255) DEFAULT NULL,
   `website_url` varchar(255) DEFAULT NULL,
-  `challenge_count` int,
   `description` varchar(280) DEFAULT NULL,
   `challenge_count` int,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
