@@ -14,6 +14,7 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,66 @@ public interface ChallengeApi {
 
   default ChallengeApiDelegate getDelegate() {
     return new ChallengeApiDelegate() {};
+  }
+
+  /**
+   * GET /challenges/{challengeId} : Get a challenge Returns the challenge specified
+   *
+   * @param challengeId The unique identifier of the challenge. (required)
+   * @return A challenge (status code 200) or The specified resource was not found (status code 404)
+   *     or The request cannot be fulfilled due to an unexpected server error (status code 500)
+   */
+  @Operation(
+      operationId = "getChallenge",
+      summary = "Get a challenge",
+      tags = {"Challenge"},
+      responses = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "A challenge",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = ChallengeDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = ChallengeDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "404",
+            description = "The specified resource was not found",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
+            }),
+        @ApiResponse(
+            responseCode = "500",
+            description = "The request cannot be fulfilled due to an unexpected server error",
+            content = {
+              @Content(
+                  mediaType = "application/json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/problem+json",
+                  schema = @Schema(implementation = BasicErrorDto.class))
+            })
+      })
+  @RequestMapping(
+      method = RequestMethod.GET,
+      value = "/challenges/{challengeId}",
+      produces = {"application/json", "application/problem+json"})
+  default ResponseEntity<ChallengeDto> getChallenge(
+      @Parameter(
+              name = "challengeId",
+              description = "The unique identifier of the challenge.",
+              required = true)
+          @PathVariable("challengeId")
+          Long challengeId) {
+    return getDelegate().getChallenge(challengeId);
   }
 
   /**
