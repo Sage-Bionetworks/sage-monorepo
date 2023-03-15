@@ -696,6 +696,14 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributorRole:
+      description: The role of a challenge contributor.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -727,6 +735,11 @@ components:
           format: int32
           default: 100
           minimum: 1
+        challengeContributorRoles:
+          description: An array of challenge contributor roles used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeContributorRole'
         sort:
           $ref: '#/components/schemas/OrganizationSort'
         direction:

@@ -16,6 +16,10 @@ GET {{basePath}}/organizations
 
 GET {{basePath}}/organizations?searchTerms=dream
 
+### List the organizations that contributed as either sponsor and/or data_contributor.
+
+GET {{basePath}}/organizations?challengeContributorRoles=sponsor,data_contributor
+
 ### Sort the orgs by their creation time in desc oder.
 
 GET {{basePath}}/organizations?sort=created&direction=desc
