@@ -11,7 +11,6 @@ services:
       - openchallenges
     ports:
       - '8090:8090'
-    command: start-dev
     deploy:
       resources:
         limits:
