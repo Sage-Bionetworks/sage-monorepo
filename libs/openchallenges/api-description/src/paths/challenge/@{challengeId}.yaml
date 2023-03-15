@@ -1,0 +1,19 @@
+parameters:
+  - $ref: ../../components/parameters/path/challengeId.yaml
+get:
+  tags:
+    - Challenge
+  summary: Get a challenge
+  description: Returns the challenge specified
+  operationId: getChallenge
+  responses:
+    '200':
+      description: A challenge
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Challenge.yaml
+    '404':
+      $ref: ../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

@@ -22,8 +22,8 @@ tags:
 paths:
   /challenges:
     $ref: paths/challenges.yaml
-  # /organizations/{organizationLogin}:
-  #   $ref: paths/organizations/@{organizationLogin}.yaml
+  /challenges/{challengeId}:
+    $ref: paths/challenges/@{challengeId}.yaml
   /challengeInputDataTypes:
     $ref: paths/challengeInputDataTypes.yaml
   /challengePlatforms:
