@@ -11,9 +11,10 @@ services:
       - openchallenges
     ports:
       - '9000:9000'
+      - '9001:9001'
     volumes:
       - openchallenges-minio-data:/data
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 200M
+    deploy:
+      resources:
+        limits:
+          memory: 200M
