@@ -61,9 +61,11 @@
     8200,
     8888,
     8889,
+    9000,
+    9001,
+    9090,
     9200,
     9411,
-    9090,
     27017
   ],
 
@@ -164,16 +166,24 @@
       "label": "openchallenges-thumbor",
       "onAutoForward": "silent"
     },
+    "9000": {
+      "label": "openchallenges-minio",
+      "onAutoForward": "silent"
+    },
+    "9001": {
+      "label": "openchallenges-minio (console)",
+      "onAutoForward": "silent"
+    },
+    "9090": {
+      "label": "openchallenges-prometheus",
+      "onAutoForward": "silent"
+    },
     "9200": {
       "label": "openchallenges-elasticsearch",
       "onAutoForward": "silent"
     },
     "9411": {
       "label": "openchallenges-zipkin",
-      "onAutoForward": "silent"
-    },
-    "9090": {
-      "label": "openchallenges-prometheus",
       "onAutoForward": "silent"
     },
     "27017": {

@@ -3,7 +3,12 @@ version: '3.8'
 volumes:
   openchallenges-prometheus-data:
     name: openchallenges-prometheus-data
+
   openchallenges-grafana-data:
     name: openchallenges-grafana-data
+
+  openchallenges-minio-data:
+    name: openchallenges-minio-data
+
   openchallenges-thumbor-data:
     name: openchallenges-thumbor-data

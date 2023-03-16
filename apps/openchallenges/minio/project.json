@@ -1,0 +1,32 @@
+{
+  "name": "openchallenges-minio",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges-minio/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/minio"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-minio"
+      },
+      "dependsOn": []
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/minio",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-minio:latest"]
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": []
+}

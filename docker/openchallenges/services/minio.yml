@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  openchallenges-minio:
+    image: sagebionetworks/openchallenges-minio:latest
+    container_name: openchallenges-minio
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/minio/.env
+    networks:
+      - openchallenges
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - openchallenges-minio-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 200M
