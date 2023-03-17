@@ -20,9 +20,13 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
-  .card-icon {
+  .star-icon {
     border-color: transparent;
     color: map.get($figma, dl-color-default-accent2);
+  }
+  .card-icon {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-primary1);
   }
   .status-tag {
     border-color: map.get($figma, dl-color-default-primary2);
