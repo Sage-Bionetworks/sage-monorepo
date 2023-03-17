@@ -212,8 +212,7 @@ export class ChallengeSearchComponent
       .subscribe((page) => {
         // update challenges and total number of results
         this.searchResultsCount = page.totalElements;
-        // this.searchResultsCount = 2;
-        this.challenges = page.challenges.slice(0, 2);
+        this.challenges = page.challenges;
       });
   }
 
