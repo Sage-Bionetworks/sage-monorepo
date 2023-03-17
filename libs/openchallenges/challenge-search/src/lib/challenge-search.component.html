@@ -109,6 +109,7 @@
       <openchallenges-paginator
         [pageNumber]="pageNumber"
         [pageSize]="pageSize"
+        [totalPageResults]="searchResultsCount"
         [totalRecords]="totalChallengesCount"
         [itemsPerPage]="[20, 50, 100]"
         (pageChange)="onPageChange($event)"
