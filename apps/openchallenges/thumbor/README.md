@@ -31,11 +31,60 @@ Open this ling when the API Gateway is running:
 
 - http://localhost:8082/img/unsafe/triforce.png
 
+## S3 IAM Policy
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "OpenChallengesReadOnlyS3BucketPolicy",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::openchallenges-asset",
+                "arn:aws:s3:::openchallenges-asset/*"
+            ]
+        }
+    ]
+}
+```
+
+OpenChallengesAssetS3BucketReadWriteAccess:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListObjectsInBucket",
+            "Effect": "Allow",
+            "Action": ["s3:ListBucket"],
+            "Resource": ["arn:aws:s3:::openchallenges-asset"]
+        },
+        {
+            "Sid": "AllObjectActions",
+            "Effect": "Allow",
+            "Action": "s3:*Object",
+            "Resource": ["arn:aws:s3:::openchallenges-asset/*"]
+        }
+    ]
+}
+```
+
+--conf=/usr/local/etc/thumbor.conf
+
+By default, Thumbor starts as many processes as the number of cores available.
+
 ## References
 
 - https://github.com/thumbor/thumbor
-- https://github.com/thumbor/awesome-thumbor
+- https://github.com/thumbor/thumbor-aws
 - https://github.com/beeyev/thumbor-s3-docker
+- https://github.com/thumbor/awesome-thumbor
 
 <!-- Links -->
 
