@@ -13,9 +13,9 @@ services:
       - '8889:8888'
     volumes:
       - openchallenges-thumbor-data:/data
-    # depends_on:
-    #   openchallenges-organization-service:
-    #     condition: service_healthy
+    depends_on:
+      openchallenges-minio:
+        condition: service_started
     # deploy:
     #   resources:
     #     limits:
