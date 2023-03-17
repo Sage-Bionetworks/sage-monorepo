@@ -7,8 +7,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 })
 export class PaginatorComponent {
   @Input() pageNumber = 0;
+  @Input() pageLinkSize = 5;
   @Input() pageSize = 0;
-  @Input() totalPageLinks = 5;
   @Input() totalRecords = 0;
   @Input() itemsPerPage!: number[];
   @Output() pageChange = new EventEmitter();
