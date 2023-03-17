@@ -16,4 +16,8 @@ export const organizationSortFilterValues: FilterValue[] = [
     value: 'relevance',
     label: 'Relevance',
   },
+  {
+    value: 'challenge_count',
+    label: 'Challenge Count',
+  },
 ];
