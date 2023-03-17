@@ -1,27 +1,21 @@
 @use 'libs/openchallenges/styles/src/lib/_constants' as constants;
 
 .organization-card {
+  width: 340px;
+  min-height: 360px;
+  padding: 12px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 240px;
-  min-height: 160px;
-}
-.organization-card-banner {
-  box-shadow: 1px 5px 18px 0px #d4d4d4;
-  border-radius: constants.$dl-radius-radius-round;
-}
-.organization-card-text {
-  display: flex;
+  position: relative;
   align-items: center;
   flex-direction: column;
+  border-radius: constants.$dl-radius-radius-radius16;
+  cursor: pointer;
 }
-.organization-card-title {
-  margin: 14px 0 8px;
-  text-align: center;
-  text-decoration: none;
-}
-.organization-card-tag {
-  text-align: center;
+
+// FOOTER
+.support-tag {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  height: 24px;
 }

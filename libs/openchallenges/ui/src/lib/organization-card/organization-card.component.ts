@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
-import * as internal from 'stream';
+// import * as internal from 'stream';
 import { Avatar } from '../avatar/avatar';
 
 @Component({
