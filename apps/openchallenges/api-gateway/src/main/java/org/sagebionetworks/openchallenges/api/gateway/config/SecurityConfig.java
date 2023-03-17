@@ -14,11 +14,12 @@ public class SecurityConfig {
     http.authorizeExchange()
         // ALLOWING REGISTER API FOR DIRECT ACCESS
         .pathMatchers("/api/v1/users/register").permitAll().pathMatchers("/api/v1/auth/login")
-        .permitAll().pathMatchers("/api/v1/organizations/**")
-        .permitAll().pathMatchers("/api/v1/challenges/**")
-        .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
-        .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
         .permitAll().pathMatchers("/actuator/health/readiness")
+        .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
+        .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
+        .permitAll().pathMatchers("/api/v1/challenges/**")
+        .permitAll().pathMatchers("/api/v1/organizations/**")
+        .permitAll().pathMatchers("/img/**")
         .permitAll()
         // ALL OTHER APIS ARE AUTHENTICATED
         .anyExchange().authenticated().and().csrf().disable().oauth2Login().and()

@@ -23,9 +23,13 @@ nx serve-detach openchallenges-thumbor
 
 ### Access the image with Thumbor
 
-Open the following link and you should see the resized image:
+Open this link and you should see the resized image:
 
 - http://localhost:8889/unsafe/600x600/triforce.png
+
+Open this ling when the API Gateway is running:
+
+- http://localhost:8082/img/unsafe/triforce.png
 
 ## References
 
