@@ -1055,7 +1055,7 @@ VALUES (
     'kaggle',
     'https://via.placeholder.com/300.png',
     'https://www.kaggle.com/',
-    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...',
+    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. To get involved, you can [enter a machine learning competition](https://www.kag...',
     0
   ),
   (
