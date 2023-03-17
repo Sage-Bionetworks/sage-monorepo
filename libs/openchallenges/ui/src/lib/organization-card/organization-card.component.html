@@ -15,7 +15,9 @@
           [avatar]="member"
         >
         </openchallenges-avatar>
-        + {{ otherMembers }} other members
+        <p class="card-subtitle" *ngIf="otherMembers">
+          + {{ otherMembers }} other members
+        </p>
       </ng-container>
     </div>
     <div class="card-footer">

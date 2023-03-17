@@ -60,7 +60,8 @@ export class OrganizationCardComponent implements OnInit {
         size: this.personAvatarSize,
       },
     ];
-    this.otherMembers = this.mockMembers.length - 4;
+    this.otherMembers =
+      this.mockMembers.length > 4 ? this.mockMembers.length - 4 : 0;
     this.mockChallengesSupported = 3;
   }
 }
