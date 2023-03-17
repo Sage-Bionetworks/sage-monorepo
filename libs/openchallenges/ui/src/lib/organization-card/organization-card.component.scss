@@ -1,7 +1,7 @@
 @use 'libs/openchallenges/styles/src/lib/_constants' as constants;
 
 .organization-card {
-  width: 340px;
+  width: 300px;
   min-height: 360px;
   padding: 12px;
   display: flex;
@@ -10,6 +10,16 @@
   flex-direction: column;
   border-radius: constants.$dl-radius-radius-radius16;
   cursor: pointer;
+}
+
+.organization-members {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+}
+
+.member {
+  margin: 3px;
 }
 
 // FOOTER

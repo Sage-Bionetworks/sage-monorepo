@@ -8,17 +8,17 @@
     </div>
     <div class="card-body">
       <p class="card-title">{{ organization.name }}</p>
-      <ng-container *ngIf="mockMembers" class="organization-members">
+      <div *ngIf="mockMembers" class="organization-members">
         <openchallenges-avatar
           *ngFor="let member of mockMembers | slice: 0:4"
-          class="person-card-pic"
+          class="member"
           [avatar]="member"
         >
         </openchallenges-avatar>
-        <p class="card-subtitle" *ngIf="otherMembers">
-          + {{ otherMembers }} other members
-        </p>
-      </ng-container>
+      </div>
+      <p class="card-subtitle" *ngIf="otherMembers">
+        + {{ otherMembers }} other members
+      </p>
     </div>
     <div class="card-footer">
       <div class="support-tag mat-small">
