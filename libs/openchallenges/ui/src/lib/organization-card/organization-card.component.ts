@@ -27,6 +27,7 @@ export class OrganizationCardComponent implements OnInit {
         size: 140,
       };
     }
+    // TODO: replace mock items with organization properties
     this.mockStars = 2;
     this.mockMembers = [
       {
@@ -60,8 +61,9 @@ export class OrganizationCardComponent implements OnInit {
         size: this.personAvatarSize,
       },
     ];
+    this.mockChallengesSupported = 3;
+
     this.otherMembers =
       this.mockMembers.length > 4 ? this.mockMembers.length - 4 : 0;
-    this.mockChallengesSupported = 3;
   }
 }
