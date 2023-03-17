@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AvatarModule } from '../avatar/avatar.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatIconModule } from '@angular/material/icon';
 import { OrganizationCardComponent } from './organization-card.component';
 import { MOCK_ORGANIZATIONS } from './mock-organizations';
 import { HttpClientModule } from '@angular/common/http';
@@ -18,6 +19,7 @@ describe('OrganizationCardComponent', () => {
         AvatarModule,
         MatCardModule,
         MatDividerModule,
+        MatIconModule,
       ],
     }).compileComponents();
   });
@@ -37,7 +39,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].name,
       src: MOCK_ORGANIZATIONS[0].avatarUrl,
-      size: 120,
+      size: 140,
     });
   });
 
@@ -47,7 +49,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].name,
       src: '',
-      size: 120,
+      size: 140,
     });
   });
 
@@ -57,7 +59,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
       src: '',
-      size: 120,
+      size: 140,
     });
   });
 });
