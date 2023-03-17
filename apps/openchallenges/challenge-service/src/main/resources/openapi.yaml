@@ -59,6 +59,45 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Challenge
+  /challenges/{challengeId}:
+    get:
+      description: Returns the challenge specified
+      operationId: getChallenge
+      parameters:
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+          description: A challenge
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get a challenge
+      tags:
+      - Challenge
+      x-accepts: application/json
+      x-tags:
+      - tag: Challenge
   /challengeInputDataTypes:
     get:
       description: List challenge input data types
@@ -215,6 +254,15 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeSearchQuery'
       style: form
+    challengeId:
+      description: The unique identifier of the challenge.
+      explode: false
+      in: path
+      name: challengeId
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
+      style: simple
     pageNumber:
       description: The page number.
       explode: true
@@ -483,6 +531,10 @@ components:
       type: string
     SimpleChallengePlatform:
       description: A simple challenge platform.
+      example:
+        name: name
+        id: 1
+        slug: example-challenge-platform
       properties:
         id:
           description: The unique identifier of a challenge platform.
@@ -519,6 +571,10 @@ components:
       type: string
     SimpleChallengeInputDataType:
       description: A simple challenge input data type.
+      example:
+        name: gene expression
+        id: 1
+        slug: gene-expression
       properties:
         id:
           description: The unique identifier of a challenge input data type.
@@ -561,6 +617,38 @@ components:
       type: string
     Challenge:
       description: A challenge
+      example:
+        avatarUrl: http://example.com/aeiou
+        endDate: 2017-07-21T00:00:00.000+00:00
+        description: This is an example description of the challenge.
+        platform:
+          name: name
+          id: 1
+          slug: example-challenge-platform
+        starredCount: 0
+        difficulty: intermediate
+        createdAt: 2022-07-04T22:19:11Z
+        incentives:
+        - publication
+        - publication
+        submissionTypes:
+        - container_image
+        - container_image
+        websiteUrl: http://example.com/aeiou
+        name: name
+        id: 1
+        headline: Example challenge headline
+        slug: awesome-challenge
+        startDate: 2017-07-21T00:00:00.000+00:00
+        status: active
+        inputDataTypes:
+        - name: gene expression
+          id: 1
+          slug: gene-expression
+        - name: gene expression
+          id: 1
+          slug: gene-expression
+        updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
           description: The unique identifier of the challenge.

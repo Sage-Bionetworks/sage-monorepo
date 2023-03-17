@@ -79,3 +79,7 @@ GET {{basePath}}/challengePlatforms/synapse
 ### List the challenge input data types.
 
 GET {{basePath}}/challengeInputDataTypes
+
+### Get the challenge with ID 1.
+
+GET {{basePath}}/challenges/1

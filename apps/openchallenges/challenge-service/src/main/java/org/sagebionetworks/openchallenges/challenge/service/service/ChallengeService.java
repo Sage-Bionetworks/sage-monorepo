@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
@@ -59,17 +60,16 @@ public class ChallengeService {
         .build();
   }
 
-  // @Transactional(readOnly = true)
-  // public ChallengeDto getChallenge(String challengeLogin) {
-  //   ChallengeEntity challengeEntity =
-  //       challengeRepository
-  //           .findByLogin(challengeLogin)
-  //           .orElseThrow(
-  //               () ->
-  //                   new ChallengeNotFoundException(
-  //                       String.format(
-  //                           "The challenge with ID %s does not exist.", challengeLogin)));
-  //   ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
-  //   return challenge;
-  // }
+  @Transactional(readOnly = true)
+  public ChallengeDto getChallenge(Long challengeId) {
+    ChallengeEntity challengeEntity =
+        challengeRepository
+            .findById(challengeId)
+            .orElseThrow(
+                () ->
+                    new ChallengeNotFoundException(
+                        String.format("The challenge with ID %d does not exist.", challengeId)));
+    ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
+    return challenge;
+  }
 }

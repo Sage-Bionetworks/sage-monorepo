@@ -44,6 +44,26 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - Challenge
+      summary: Get a challenge
+      description: Returns the challenge specified
+      operationId: getChallenge
+      responses:
+        '200':
+          description: A challenge
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
     get:
       tags:
@@ -966,6 +986,13 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengeSearchQuery'
+    challengeId:
+      name: challengeId
+      in: path
+      description: The unique identifier of the challenge.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengeId'
     pageNumber:
       name: pageNumber
       description: The page number.
