@@ -50,10 +50,7 @@ $screen-lg: 641px;
   padding: 58px 24px;
   box-shadow: 0 8px 12px rgba(17, 16, 62, 0.12);
 }
-.card-title {
-  margin: 16px 0;
-  line-height: 24px;
-}
+
 @media (min-width: $screen-lg) {
   .cards-wrap {
     padding-top: 24px;
