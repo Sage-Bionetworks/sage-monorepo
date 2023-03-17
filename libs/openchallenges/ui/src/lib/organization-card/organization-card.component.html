@@ -2,11 +2,27 @@
   <div class="organization-card">
     <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
     </openchallenges-avatar>
-    <div class="organization-card-text">
-      <p class="organization-card-title">{{ organization.name }}</p>
-      <a class="organization-card-subtitle" [routerLink]="['/org', organization.login]"
-        >@{{ organization.login }}</a
-      >
+    <div class="star-btn">
+      <mat-icon aria-hidden="true" class="card-icon">star_outline</mat-icon>
+      {{ mockStars }}
+    </div>
+    <div class="card-body">
+      <p class="card-title">{{ organization.name }}</p>
+      <ng-container *ngIf="mockMembers" class="organization-members">
+        <openchallenges-avatar
+          *ngFor="let member of mockMembers | slice: 0:4"
+          class="person-card-pic"
+          [avatar]="member"
+        >
+        </openchallenges-avatar>
+        + {{ otherMembers }} other members
+      </ng-container>
+    </div>
+    <div class="card-footer">
+      <div class="mat-small">
+        <mat-icon aria-hidden="true" class="card-icon">volunteer_activism</mat-icon>
+        {{ mockChallengesSupported }} challenges supported
+      </div>
     </div>
   </div>
 </div>
