@@ -22,11 +22,15 @@ import { ChallengeSubmissionType } from './challengeSubmissionType';
  */
 export interface Challenge { 
     /**
-     * The unique identifier of a challenge.
+     * The unique identifier of the challenge.
      */
     id: number;
     /**
-     * The name of the a challenge
+     * The slug of the challenge.
+     */
+    slug: string;
+    /**
+     * The name of the challenge.
      */
     name: string;
     /**

@@ -11,6 +11,7 @@
  */
 import { OrganizationSort } from './organizationSort';
 import { OrganizationDirection } from './organizationDirection';
+import { ChallengeContributorRole } from './challengeContributorRole';
 
 
 /**
@@ -25,6 +26,10 @@ export interface OrganizationSearchQuery {
      * The number of items in a single page.
      */
     pageSize?: number;
+    /**
+     * An array of challenge contributor roles used to filter the results.
+     */
+    challengeContributorRoles?: Array<ChallengeContributorRole>;
     sort?: OrganizationSort;
     direction?: OrganizationDirection | null;
     /**
