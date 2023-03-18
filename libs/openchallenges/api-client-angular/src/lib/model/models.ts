@@ -1,5 +1,6 @@
 export * from './basicError';
 export * from './challenge';
+export * from './challengeContributorRole';
 export * from './challengeDifficulty';
 export * from './challengeDirection';
 export * from './challengeIncentive';

@@ -27,6 +27,7 @@ export interface Organization {
     description: string;
     avatarUrl: string | null;
     websiteUrl: string;
+    challengeCount?: number;
     createdAt: string;
     updatedAt: string;
 }

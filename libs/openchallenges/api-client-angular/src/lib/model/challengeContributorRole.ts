@@ -12,13 +12,13 @@
 
 
 /**
- * What to sort results by.
+ * The role of a challenge contributor.
  */
-export type OrganizationSort = 'challenge_count' | 'created' | 'relevance';
+export type ChallengeContributorRole = 'challenge_organizer' | 'data_contributor' | 'sponsor';
 
-export const OrganizationSort = {
-    ChallengeCount: 'challenge_count' as OrganizationSort,
-    Created: 'created' as OrganizationSort,
-    Relevance: 'relevance' as OrganizationSort
+export const ChallengeContributorRole = {
+    ChallengeOrganizer: 'challenge_organizer' as ChallengeContributorRole,
+    DataContributor: 'data_contributor' as ChallengeContributorRole,
+    Sponsor: 'sponsor' as ChallengeContributorRole
 };
 
