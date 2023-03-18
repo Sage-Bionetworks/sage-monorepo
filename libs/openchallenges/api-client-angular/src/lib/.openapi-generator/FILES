@@ -13,6 +13,7 @@ git_push.sh
 index.ts
 model/basicError.ts
 model/challenge.ts
+model/challengeContributorRole.ts
 model/challengeDifficulty.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts

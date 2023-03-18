@@ -134,6 +134,14 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
+    ChallengeContributorRole:
+      description: The role of a challenge contributor.
+      enum:
+      - challenge_organizer
+      - data_contributor
+      - sponsor
+      example: challenge_organizer
+      type: string
     OrganizationSort:
       default: relevance
       description: What to sort results by.
@@ -164,6 +172,12 @@ components:
           format: int32
           minimum: 1
           type: integer
+        challengeContributorRoles:
+          description: An array of challenge contributor roles used to filter the
+            results.
+          items:
+            $ref: '#/components/schemas/ChallengeContributorRole'
+          type: array
         sort:
           $ref: '#/components/schemas/OrganizationSort'
         direction:

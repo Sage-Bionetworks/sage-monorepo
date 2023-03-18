@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -21,6 +23,10 @@ public class OrganizationSearchQueryDto {
 
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
+
+  @JsonProperty("challengeContributorRoles")
+  @Valid
+  private List<ChallengeContributorRoleDto> challengeContributorRoles = null;
 
   @JsonProperty("sort")
   private OrganizationSortDto sort = OrganizationSortDto.RELEVANCE;
@@ -72,6 +78,40 @@ public class OrganizationSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public OrganizationSearchQueryDto challengeContributorRoles(
+      List<ChallengeContributorRoleDto> challengeContributorRoles) {
+    this.challengeContributorRoles = challengeContributorRoles;
+    return this;
+  }
+
+  public OrganizationSearchQueryDto addChallengeContributorRolesItem(
+      ChallengeContributorRoleDto challengeContributorRolesItem) {
+    if (this.challengeContributorRoles == null) {
+      this.challengeContributorRoles = new ArrayList<>();
+    }
+    this.challengeContributorRoles.add(challengeContributorRolesItem);
+    return this;
+  }
+
+  /**
+   * An array of challenge contributor roles used to filter the results.
+   *
+   * @return challengeContributorRoles
+   */
+  @Valid
+  @Schema(
+      name = "challengeContributorRoles",
+      description = "An array of challenge contributor roles used to filter the results.",
+      required = false)
+  public List<ChallengeContributorRoleDto> getChallengeContributorRoles() {
+    return challengeContributorRoles;
+  }
+
+  public void setChallengeContributorRoles(
+      List<ChallengeContributorRoleDto> challengeContributorRoles) {
+    this.challengeContributorRoles = challengeContributorRoles;
   }
 
   public OrganizationSearchQueryDto sort(OrganizationSortDto sort) {
@@ -148,6 +188,8 @@ public class OrganizationSearchQueryDto {
     OrganizationSearchQueryDto organizationSearchQuery = (OrganizationSearchQueryDto) o;
     return Objects.equals(this.pageNumber, organizationSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, organizationSearchQuery.pageSize)
+        && Objects.equals(
+            this.challengeContributorRoles, organizationSearchQuery.challengeContributorRoles)
         && Objects.equals(this.sort, organizationSearchQuery.sort)
         && Objects.equals(this.direction, organizationSearchQuery.direction)
         && Objects.equals(this.searchTerms, organizationSearchQuery.searchTerms);
@@ -155,7 +197,8 @@ public class OrganizationSearchQueryDto {
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms);
+    return Objects.hash(
+        pageNumber, pageSize, challengeContributorRoles, sort, direction, searchTerms);
   }
 
   @Override
@@ -164,6 +207,9 @@ public class OrganizationSearchQueryDto {
     sb.append("class OrganizationSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    challengeContributorRoles: ")
+        .append(toIndentedString(challengeContributorRoles))
+        .append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");

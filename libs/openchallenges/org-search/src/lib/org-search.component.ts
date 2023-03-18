@@ -6,7 +6,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
-import { contributionRolesFilter } from './org-search-filters';
+import { contributorRolesFilter } from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
 import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
@@ -45,7 +45,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   searchResultsCount = 0;
 
   // define filters
-  checkboxFilters: Filter[] = [contributionRolesFilter];
+  checkboxFilters: Filter[] = [contributorRolesFilter];
   sortFilters: FilterValue[] = organizationSortFilterValues;
   sortedBy!: string;
 
