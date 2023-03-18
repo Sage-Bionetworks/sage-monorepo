@@ -156,12 +156,7 @@
       "configurations": {
         "production": {
           "outputHashing": "media",
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.ts",
-              "with": "src/environments/environment.prod.ts"
-            }
-          ]
+          "fileReplacements": []
         },
         "development": {
           "optimization": false,
@@ -172,12 +167,7 @@
       "defaultConfiguration": "production",
       "production": {
         "outputHashing": "media",
-        "fileReplacements": [
-          {
-            "replace": "src/environments/environment.ts",
-            "with": "src/environments/environment.prod.ts"
-          }
-        ]
+        "fileReplacements": []
       },
       "development": {
         "optimization": false,
