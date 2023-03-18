@@ -12,7 +12,10 @@ import { AppServerModule } from './main.server';
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/apps/openchallenges/browser');
+  const distFolder = join(
+    process.cwd(),
+    'apps/openchallenges/app/dist/apps/openchallenges/app/browser'
+  );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index';

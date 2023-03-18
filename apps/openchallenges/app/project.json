@@ -149,7 +149,7 @@
     "server": {
       "executor": "@angular-devkit/build-angular:server",
       "options": {
-        "outputPath": "dist/apps/openchallenges/app/server",
+        "outputPath": "apps/openchallenges/app/dist/apps/openchallenges/app/server",
         "main": "apps/openchallenges/app/src/ssr.server.ts",
         "tsConfig": "apps/openchallenges/app/tsconfig.server.json"
       },
