@@ -75,6 +75,34 @@ OpenChallengesAssetS3BucketReadWriteAccess:
 }
 ```
 
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:GetObject*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::openchallenges-img",
+                "arn:aws:s3:::openchallenges-img/*",
+                "arn:aws:s3:::openchallenges-img-cache",
+                "arn:aws:s3:::openchallenges-img-cache/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "s3:*Object",
+            "Resource": [
+                "arn:aws:s3:::openchallenges-img-cache/*"
+            ]
+        }
+    ]
+}
+```
+
 --conf=/usr/local/etc/thumbor.conf
 
 By default, Thumbor starts as many processes as the number of cores available.
