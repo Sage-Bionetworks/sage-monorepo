@@ -18,6 +18,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 // TODO Add x-java-class-annotations
 public class OrganizationDto {
 
+  @JsonProperty("id")
+  private Long id;
+
   @JsonProperty("name")
   private String name;
 
@@ -46,6 +49,30 @@ public class OrganizationDto {
   @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  public OrganizationDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of an organization
+   *
+   * @return id
+   */
+  @NotNull
+  @Schema(
+      name = "id",
+      example = "1",
+      description = "The unique identifier of an organization",
+      required = true)
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public OrganizationDto name(String name) {
     this.name = name;
@@ -249,7 +276,8 @@ public class OrganizationDto {
       return false;
     }
     OrganizationDto organization = (OrganizationDto) o;
-    return Objects.equals(this.name, organization.name)
+    return Objects.equals(this.id, organization.id)
+        && Objects.equals(this.name, organization.name)
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
@@ -263,6 +291,7 @@ public class OrganizationDto {
   @Override
   public int hashCode() {
     return Objects.hash(
+        id,
         name,
         email,
         login,
@@ -278,6 +307,7 @@ public class OrganizationDto {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class OrganizationDto {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
