@@ -359,6 +359,13 @@ components:
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
+    OrganizationLogin:
+      description: The login of an organization
+      example: example-org
+      maxLength: 25
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       example: gene-expression
@@ -429,6 +436,11 @@ components:
           description: An array of challenge platform ids used to filter the results.
           items:
             $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        organizations:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationLogin'
           type: array
         inputDataTypes:
           description: An array of challenge input data type ids used to filter the
