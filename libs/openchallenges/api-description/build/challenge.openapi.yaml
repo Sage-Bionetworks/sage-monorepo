@@ -167,13 +167,11 @@ components:
       maxLength: 30
       pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-challenge-platform
-    OrganizationLogin:
-      description: The login of an organization
-      type: string
-      minLength: 3
-      maxLength: 25
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: example-org
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       type: string
@@ -249,7 +247,7 @@ components:
           description: An array of organization ids used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/OrganizationLogin'
+            $ref: '#/components/schemas/OrganizationId'
         inputDataTypes:
           description: An array of challenge input data type ids used to filter the results.
           type: array

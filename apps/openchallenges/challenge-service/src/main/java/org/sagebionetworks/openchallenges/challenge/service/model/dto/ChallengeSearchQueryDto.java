@@ -54,7 +54,7 @@ public class ChallengeSearchQueryDto {
 
   @JsonProperty("organizations")
   @Valid
-  private List<String> organizations = null;
+  private List<Long> organizations = null;
 
   @JsonProperty("inputDataTypes")
   @Valid
@@ -294,12 +294,12 @@ public class ChallengeSearchQueryDto {
     this.platforms = platforms;
   }
 
-  public ChallengeSearchQueryDto organizations(List<String> organizations) {
+  public ChallengeSearchQueryDto organizations(List<Long> organizations) {
     this.organizations = organizations;
     return this;
   }
 
-  public ChallengeSearchQueryDto addOrganizationsItem(String organizationsItem) {
+  public ChallengeSearchQueryDto addOrganizationsItem(Long organizationsItem) {
     if (this.organizations == null) {
       this.organizations = new ArrayList<>();
     }
@@ -316,11 +316,11 @@ public class ChallengeSearchQueryDto {
       name = "organizations",
       description = "An array of organization ids used to filter the results.",
       required = false)
-  public List<String> getOrganizations() {
+  public List<Long> getOrganizations() {
     return organizations;
   }
 
-  public void setOrganizations(List<String> organizations) {
+  public void setOrganizations(List<Long> organizations) {
     this.organizations = organizations;
   }
 

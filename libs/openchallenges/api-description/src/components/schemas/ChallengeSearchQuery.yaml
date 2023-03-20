@@ -48,7 +48,7 @@ properties:
     description: An array of organization ids used to filter the results.
     type: array
     items:
-      $ref: OrganizationLogin.yaml
+      $ref: OrganizationId.yaml
   inputDataTypes:
     description: An array of challenge input data type ids used to filter the results.
     type: array
