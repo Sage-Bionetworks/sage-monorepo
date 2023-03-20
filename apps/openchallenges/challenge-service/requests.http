@@ -34,7 +34,7 @@ GET {{basePath}}/challenges?submissionTypes=container_image
 
 ### List the challenges that include DREAM (id=1) as a contributor.
 
-GET {{basePath}}/challenges?submissionTypes=container_image
+GET {{basePath}}/challenges?organizations=1
 
 ### List the challenges with a monetary or publication incentive.
 
