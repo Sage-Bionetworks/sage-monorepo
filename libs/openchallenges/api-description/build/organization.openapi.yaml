@@ -149,6 +149,11 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     Email:
       description: An email address.
       type: string
@@ -165,6 +170,8 @@ components:
       type: object
       description: An organization
       properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
         name:
           type: string
           example: Example organization
@@ -198,6 +205,7 @@ components:
           format: date-time
           example: '2022-07-04T22:19:11Z'
       required:
+        - id
         - name
         - email
         - login

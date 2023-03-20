@@ -359,6 +359,11 @@ components:
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       example: gene-expression
@@ -429,6 +434,11 @@ components:
           description: An array of challenge platform ids used to filter the results.
           items:
             $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        organizations:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationId'
           type: array
         inputDataTypes:
           description: An array of challenge input data type ids used to filter the

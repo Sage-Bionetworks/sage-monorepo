@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -28,7 +27,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
-@Slf4j
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
 
@@ -71,6 +69,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     }
     if (query.getInputDataTypes() != null && !query.getInputDataTypes().isEmpty()) {
       predicates.add(getChallengeInputDataTypesPredicate(pf, query));
+    }
+    if (query.getOrganizations() != null && !query.getOrganizations().isEmpty()) {
+      predicates.add(getOrganizationsPredicate(pf, query));
     }
 
     SearchSort sort = getSearchSort(sf, query);
@@ -176,6 +177,26 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
                 b.should(
                     pf.match().field("submission_types.name").matching(submissionType.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the challenges whose at least one of their contributors is in the list of
+   * contributors/organizations specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getOrganizationsPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (Long organizationId : query.getOrganizations()) {
+                b.should(
+                    pf.match().field("contributions.organization_id").matching(organizationId));
               }
             })
         .toPredicate();

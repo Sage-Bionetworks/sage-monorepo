@@ -83,6 +83,13 @@ public class ChallengeEntity {
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(
+      name = "contributions",
+      includePaths = {"role", "organization_id"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
+  private List<ChallengeContributionEntity> contributions;
+
+  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(
       name = "submission_types",
       includePaths = {"name"})
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
