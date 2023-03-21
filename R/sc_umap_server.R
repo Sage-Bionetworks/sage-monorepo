@@ -15,20 +15,38 @@ sc_umap_server <- function(
         shiny::selectInput(
           ns("color"),
           label = "Color by",
-          choices = c("cell_type", "cell_type_broad", "tissue", "subtype"),
+          choices = c("cell_type", "cell_type_broad", "tissue", "subtype", "gene"),
           selected = "cell_type",
           multiple = FALSE
         )
       })
 
+      color_criteria <- reactive({
+        if (input$color %in% c("cell_type", "cell_type_broad", "tissue", "subtype")) return(umap_df()[[input$color]])
+        else{
+          gene_df <- shiny::reactive(read.delim("inst/tsv/sc_msk_genes.tsv", sep = "\t"))
+          output$select_gene <- shiny::renderUI({
+            shiny::req(gene_df())
+            shiny::selectInput(
+              ns("gene"),
+              label = "Select gene",
+              choices = colnames(gene_df()),
+              multiple = FALSE
+            )
+          })
+
+          return(gene_df()[[input$gene]])
+        }
+      })
+
 
       output$umap_plot <- plotly::renderPlotly({
-        shiny::req(umap_df(), input$color)
+        shiny::req(umap_df(), color_criteria())
 
         umap_df() %>%
           plotly::plot_ly(
             x = ~ umap_1, y = ~ umap_2,
-            type = "scatter", color = ~umap_df()[[input$color]], mode = "markers"
+            type = "scatter", color = ~color_criteria(), mode = "markers"
           )
       })
 
