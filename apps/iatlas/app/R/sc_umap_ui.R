@@ -12,7 +12,11 @@ sc_umap_ui <- function(id){
         width = 3,
         iatlas.modules::optionsBox(
           width=24,
-          shiny::uiOutput(ns("select_color_criteria"))
+          shiny::uiOutput(ns("select_color_criteria")),
+          shiny::conditionalPanel(
+            condition = "input.color == 'gene",
+            shiny::uiOutput(ns("select_gene"))
+          )
         )
       ),
       shiny::column(
