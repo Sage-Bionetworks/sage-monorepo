@@ -14,9 +14,9 @@ build_distribution_io_df <- function(
   )
 
   df %>%
-    tidyr::drop_na() %>%
+    tidyr::drop_na(feature) %>%
     dplyr::mutate(y = scale_function(.[[feature]])) %>%
-    tidyr::drop_na() %>%
+    tidyr::drop_na(feature) %>%
     dplyr::filter(!is.infinite(y))
 }
 
