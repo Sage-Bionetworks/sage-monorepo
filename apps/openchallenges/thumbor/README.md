@@ -41,7 +41,7 @@ Thumbor (result images).
 - `openchallenges-img`
 - `openchallenges-img-cache`
 
-### Add sample image
+### Add the sample image
 
 In the bucket `openchallenges-img`, create the folder `img` and add the [Triforce image] to it.
 
@@ -80,6 +80,11 @@ images.
   ]
 }
 ```
+
+### Update Thumbor config
+
+Replace the file `.env` with a copy of `.env.example.aws`. Replace the access key properties with
+the values stored in LastPass.
 
 ## Notes
 
