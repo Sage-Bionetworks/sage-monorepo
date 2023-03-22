@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.2.1",
+    "generators": {
+      "openchallenges-imaging-service": {
+        "config": "templates/config.yaml",
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/openchallenges/api-description/build/imaging.openapi.yaml",
+        "output": "#{cwd}",
+        "templateDir": "templates",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.openchallenges.imaging.service.api",
+          "basePackage": "org.sagebionetworks.openchallenges.imaging.service",
+          "configPackage": "org.sagebionetworks.openchallenges.imaging.service.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.openchallenges.imaging.service.model.dto",
+          "useTags": true,
+          "openApiNullable": false
+        }
+      }
+    }
+  }
+}

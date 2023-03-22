@@ -1,0 +1,100 @@
+{
+  "name": "openchallenges-imaging-service",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/imaging-service/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/imaging-service"
+      }
+    },
+    "prepare-java": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["./gradlew --version 1> /dev/null"],
+        "cwd": "apps/openchallenges/imaging-service"
+      }
+    },
+    "build": {
+      "executor": "@nxrocks/nx-spring-boot:build",
+      "options": {
+        "root": "apps/openchallenges/imaging-service"
+      },
+      "outputs": ["apps/openchallenges/imaging-service"],
+      "dependsOn": ["^install"]
+    },
+    "clean": {
+      "executor": "@nxrocks/nx-spring-boot:clean",
+      "options": {
+        "root": "apps/openchallenges/imaging-service"
+      }
+    },
+    "format": {
+      "executor": "@nxrocks/nx-spring-boot:format",
+      "options": {
+        "root": "apps/openchallenges/imaging-service"
+      }
+    },
+    "format-check": {
+      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "options": {
+        "root": "apps/openchallenges/imaging-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
+        "cwd": "apps/openchallenges/imaging-service",
+        "parallel": true
+      },
+      "dependsOn": ["^install"]
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-imaging-service"
+      },
+      "dependsOn": []
+    },
+    "build-image-base": {
+      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "options": {
+        "root": "apps/openchallenges/imaging-service"
+      },
+      "dependsOn": ["^install"]
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/imaging-service",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-imaging-service:latest"]
+      },
+      "dependsOn": ["build-image-base"]
+    },
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate",
+          "./gradlew spotlessApply"
+        ],
+        "cwd": "apps/openchallenges/imaging-service",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": [
+    "openchallenges-app-config-data",
+    "shared-java-util"
+  ]
+}
