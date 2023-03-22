@@ -3,6 +3,7 @@ inputs:
   - inputFile: build/base.openapi.yaml
   # list files in alphanumeric order
   - inputFile: build/challenge.openapi.yaml
+  - inputFile: build/imaging.openapi.yaml
   - inputFile: build/organization.openapi.yaml
   - inputFile: build/user.openapi.yaml
 output: build/openapi.yaml
