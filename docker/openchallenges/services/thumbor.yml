@@ -13,10 +13,10 @@ services:
       - '8889:8888'
     volumes:
       - openchallenges-thumbor-data:/data
-    depends_on:
-      openchallenges-minio:
-        condition: service_started
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 200M
+    # depends_on:
+    #   openchallenges-minio:
+    #     condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 200M
