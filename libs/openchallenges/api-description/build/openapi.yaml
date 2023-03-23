@@ -751,6 +751,8 @@ components:
           example: 'http://example.com/an-image.png'
       required:
         - url
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ChallengeContributorRole:
       description: The role of a challenge contributor.
       type: string
