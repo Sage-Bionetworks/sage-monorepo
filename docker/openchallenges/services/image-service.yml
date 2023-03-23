@@ -10,7 +10,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - '8084:8084'
+      - '8086:8086'
     depends_on:
       openchallenges-config-server:
         condition: service_healthy
