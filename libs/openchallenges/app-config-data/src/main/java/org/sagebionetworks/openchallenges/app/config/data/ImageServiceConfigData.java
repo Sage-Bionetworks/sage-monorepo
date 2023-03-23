@@ -10,4 +10,6 @@ import org.springframework.context.annotation.Configuration;
 public class ImageServiceConfigData {
 
   private String welcomeMessage;
+  private String thumborHost;
+  private String thumborSecurityKey;
 }

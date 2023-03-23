@@ -42,6 +42,7 @@ dependencies {
   implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
 
   implementation 'io.micrometer:micrometer-registry-prometheus:1.10.4'
+  implementation 'com.squareup:pollexor:3.0.0'
 }
 
 group = 'org.sagebionetworks.openchallenges'
