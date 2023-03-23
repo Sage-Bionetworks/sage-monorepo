@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 @Schema(name = "Image", description = "An image")
 @JsonTypeName("Image")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class ImageDto {
 
   @JsonProperty("url")

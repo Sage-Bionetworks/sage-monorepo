@@ -1,4 +1,4 @@
-@imageServiceHost = http://openchallenges-image-service:8084
+@imageServiceHost = http://openchallenges-image-service:8086
 @apiGatewayHost = http://openchallenges-api-gateway:8082
 
 ### Select the base path
@@ -8,4 +8,6 @@
 # Send the requests to the API gateway
 # @basePath = {{apiGatewayHost}}/api/v1
 
-### Get the image with the key logo/sagebionetworks.org
+### Get the image with the key triforce.png
+
+GET {{basePath}}/images/triforce.png
