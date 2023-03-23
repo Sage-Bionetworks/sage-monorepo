@@ -11,7 +11,7 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-core-service"
   "127.0.0.1 openchallenges-elasticsearch"
   "127.0.0.1 openchallenges-grafana"
-  "127.0.0.1 openchallenges-imaging-service"
+  "127.0.0.1 openchallenges-image-service"
   "127.0.0.1 openchallenges-keycloak"
   "127.0.0.1 openchallenges-mariadb"
   "127.0.0.1 openchallenges-minio"

@@ -144,7 +144,7 @@
       "onAutoForward": "silent"
     },
     "8086": {
-      "label": "openchallenges-imaging-service",
+      "label": "openchallenges-image-service",
       "onAutoForward": "silent"
     },
     "8090": {
