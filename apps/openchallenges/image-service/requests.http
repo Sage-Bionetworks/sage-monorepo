@@ -1,0 +1,11 @@
+@imageServiceHost = http://openchallenges-image-service:8084
+@apiGatewayHost = http://openchallenges-api-gateway:8082
+
+### Select the base path
+
+# Send the requests directly to the service
+@basePath = {{imageServiceHost}}/v1
+# Send the requests to the API gateway
+# @basePath = {{apiGatewayHost}}/api/v1
+
+### Get the image with the key logo/sagebionetworks.org
