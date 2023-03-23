@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties(prefix = "openchallenges-imaging-service")
-public class ImagingServiceConfigData {
+@ConfigurationProperties(prefix = "openchallenges-image-service")
+public class ImageServiceConfigData {
 
   private String welcomeMessage;
 }
