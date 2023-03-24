@@ -437,8 +437,8 @@ VALUES (
   ),
   (
     '26',
-    'ga4gh/dream-workflow-execution',
-    'GA4GH/DREAM Workflow Execution',
+    'ga4gh-dream-workflow-execution',
+    'GA4GH-DREAM Workflow Execution',
     '',
     'The highly distributed and disparate nature of genomic and clinical data generated around the world presents an enormous challenge for those scientists who wish to integrate and analyze these data. The sheer volume of data often exceeds the capacity for storage at any one si...',
     'https://www.synapse.org/#!Synapse:syn8507133',
@@ -451,9 +451,9 @@ VALUES (
   (
     '27',
     'parkinsons-disease-digital-biomarker',
-    'Parkinsons Disease Digital Biomarker',
+    'Parkinson''s Disease Digital Biomarker',
     '',
-    'The Parkinson’s Disease Digital Biomarker DREAM Challenge is a first of it''s kind challenge, designed to benchmark methods for the processing of sensor data for development of digital signatures reflective of Parkinson''s Disease. Participants will be provided with raw sens...',
+    'The Parkinson''s Disease Digital Biomarker DREAM Challenge is a first of it''s kind challenge, designed to benchmark methods for the processing of sensor data for development of digital signatures reflective of Parkinson''s Disease. Participants will be provided with raw sens...',
     'https://www.synapse.org/#!Synapse:syn8717496',
     'completed',
     'intermediate',
@@ -528,8 +528,8 @@ VALUES (
   ),
   (
     '33',
-    'preterm-birth-prediction-challenge-transcriptomics',
-    'Preterm Birth Prediction Challenge: Transcriptomics',
+    'preterm-birth-prediction-transcriptomics',
+    'Preterm Birth Prediction - Transcriptomics',
     '',
     'A basic need in pregnancy care is to establish gestational age, and inaccurate estimates may lead to unnecessary interventions and sub-optimal patient management. Current approaches to establish gestational age rely on patient’s recollection of her last menstrual period and/...',
     'https://www.synapse.org/#!Synapse:syn18380862',
@@ -542,7 +542,7 @@ VALUES (
   (
     '34',
     'single-cell-signaling-in-breast-cancer',
-    'Single Cell Signaling in Breast Cancer',
+    'Single-Cell Signaling in Breast Cancer',
     '',
     'Signaling underlines nearly every cellular event. Individual cells, even if genetically identical, respond to perturbation in different ways. This underscores the relevance of cellular heterogeneity, in particular in how cells respond to drugs. This is of high relevance sinc...',
     'https://www.synapse.org/#!Synapse:syn20366914',
@@ -815,7 +815,7 @@ VALUES (
   (
     '55',
     'cough-diagnostic-algorithm-for-tuberculosis',
-    'Cough Diagnostic Algorithm for Tuberculosis',
+    'COugh Diagnostic Algorithm for Tuberculosis',
     '',
     'Tuberculosis (TB), a communicable disease caused by Mycobacterium tuberculosis, is a major cause of ill health and one of the leading causes of death worldwide. Until the COVID-19 pandemic, TB was the leading cause of death from a single infectious agent, ranking even above ...',
     'https://www.synapse.org/#!Synapse:syn31472953/wiki/617828',
