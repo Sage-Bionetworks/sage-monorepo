@@ -15,6 +15,10 @@
  * An organization
  */
 export interface Organization { 
+    /**
+     * The unique identifier of an organization
+     */
+    id: number;
     name: string;
     /**
      * An email address.
