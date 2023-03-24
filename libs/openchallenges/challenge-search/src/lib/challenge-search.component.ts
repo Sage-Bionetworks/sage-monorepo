@@ -11,6 +11,7 @@ import {
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
+  OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -101,6 +102,7 @@ export class ChallengeSearchComponent
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
+    private organizationService: OrganizationService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -117,41 +119,43 @@ export class ChallengeSearchComponent
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
-    // update input data types filter values
+    // update input data type filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
-          (datatype) => ({
+        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes
+          .map((datatype) => ({
             value: datatype.slug,
             label: datatype.name,
             active: false,
-          })
-        ))
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label)))
     );
 
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.checkboxFilters[4].values = page.challengePlatforms.map(
-          (platform) => ({
+        (challengePlatformFilter.values = page.challengePlatforms
+          .map((platform) => ({
             value: platform.slug,
             label: platform.name,
             active: false,
-          })
-        ))
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label)))
     );
 
-    // // mock up service to query all unique organizations
-    // this.listOrganizations().subscribe(
-    //   (organizations) =>
-    //     // update input data types filter values
-    //     (this.dropdownFilters[0].values = organizations.map((org) => ({
-    //       value: org.login,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })))
-    // );
+    // update organization filter values
+    this.organizationService.listOrganizations().subscribe(
+      (page) =>
+        (challengeOrganizationFilter.values = page.organizations
+          .map((org) => ({
+            value: org.id,
+            label: org.name,
+            avatarUrl: org.avatarUrl,
+            active: false,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label)))
+    );
+
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
@@ -274,10 +278,6 @@ export class ChallengeSearchComponent
     });
     this.query.next(newQuery);
   }
-
-  // private listOrganizations(): Observable<Organization[]> {
-  //   return of(MOCK_ORGANIZATIONS);
-  // }
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
