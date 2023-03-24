@@ -25,7 +25,6 @@ export class SearchDropdownFilterComponent implements OnInit {
   }
 
   onSearch(searched: any): void {
-    console.log(searched);
     this.searchChange.emit(searched.filter);
   }
 
