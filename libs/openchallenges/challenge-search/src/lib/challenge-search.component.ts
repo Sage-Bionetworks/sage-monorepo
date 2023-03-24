@@ -28,7 +28,7 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
