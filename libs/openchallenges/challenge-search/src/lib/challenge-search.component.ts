@@ -12,6 +12,7 @@ import {
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
   OrganizationService,
+  OrganizationSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -27,7 +28,7 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -60,6 +61,9 @@ export class ChallengeSearchComponent
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
   );
+
+  private dropdownSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
   searchTermValue = '';
@@ -144,17 +148,16 @@ export class ChallengeSearchComponent
     );
 
     // update organization filter values
-    this.organizationService.listOrganizations().subscribe(
-      (page) =>
-        (challengeOrganizationFilter.values = page.organizations
-          .map((org) => ({
-            value: org.id,
-            label: org.name,
-            avatarUrl: org.avatarUrl,
-            active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
-    );
+    this.organizationService.listOrganizations().subscribe((page) => {
+      challengeOrganizationFilter.values = page.organizations
+        .map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
 
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
@@ -184,6 +187,31 @@ export class ChallengeSearchComponent
       }
       this.query.next(defaultQuery);
     });
+
+    this.dropdownSearchTerms
+      .pipe(
+        skip(1),
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        tap((s) => console.log(s)),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        console.log(page);
+        challengeOrganizationFilter.values = page.organizations
+          .map((org) => ({
+            value: org.id,
+            label: org.name,
+            avatarUrl: org.avatarUrl,
+            active: false,
+          }))
+          .sort((a, b) => a.label.localeCompare(b.label));
+      });
   }
 
   ngAfterContentInit(): void {
@@ -258,18 +286,22 @@ export class ChallengeSearchComponent
     }
   }
 
-  onCheckboxChange(selected: string[], queryName: string): void {
+  onCheckboxSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
   }
 
-  onDropdownChange(selected: string[], queryName: string): void {
+  onDropdownSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
+  }
+
+  onDropdownSearchChange(searched: string): void {
+    this.dropdownSearchTerms.next(searched);
   }
 
   onSortChange(): void {

@@ -12,7 +12,8 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input() selectedValues!: string[];
   @Input() placeholder = 'Search items';
   @Input() showAvatar!: boolean | undefined;
-  @Output() dropdownChange = new EventEmitter<string[]>();
+  @Output() selectionChange = new EventEmitter<string[]>();
+  @Output() searchChange = new EventEmitter<string>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -23,8 +24,12 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
   }
 
+  onSearch(searched: any): void {
+    this.searchChange.emit(searched.filter);
+  }
+
   onChange(selected: string[]): void {
-    this.dropdownChange.emit(selected);
+    this.selectionChange.emit(selected);
   }
 
   getAvatar(value: FilterValue): Avatar {
