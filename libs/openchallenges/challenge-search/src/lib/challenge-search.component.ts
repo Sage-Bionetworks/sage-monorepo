@@ -11,6 +11,7 @@ import {
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
+  OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -101,6 +102,7 @@ export class ChallengeSearchComponent
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
+    private organizationService: OrganizationService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -141,17 +143,18 @@ export class ChallengeSearchComponent
         ))
     );
 
-    // // mock up service to query all unique organizations
-    // this.listOrganizations().subscribe(
-    //   (organizations) =>
-    //     // update input data types filter values
-    //     (this.dropdownFilters[0].values = organizations.map((org) => ({
-    //       value: org.login,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })))
-    // );
+    // mock up service to query all unique organizations
+    this.organizationService.listOrganizations().subscribe(
+      (page) =>
+        // update input data types filter values
+        (this.dropdownFilters[1].values = page.organizations.map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        })))
+    );
+
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
