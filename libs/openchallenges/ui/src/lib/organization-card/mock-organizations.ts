@@ -2,6 +2,7 @@ import { Organization } from '@sagebionetworks/openchallenges/api-client-angular
 
 export const MOCK_ORGANIZATIONS: Organization[] = [
   {
+    id: 1,
     name: 'Awesome Org',
     description: 'This is an awesome organization',
     email: 'contact@example.org',
@@ -12,6 +13,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     updatedAt: '',
   },
   {
+    id: 2,
     name: 'DREAM',
     description: 'This is an awesome organization',
     email: 'contact@example.org',
@@ -23,6 +25,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     updatedAt: '',
   },
   {
+    id: 3,
     name: 'Synapse',
     description: 'This is an awesome organization',
     email: 'contact@example.org',

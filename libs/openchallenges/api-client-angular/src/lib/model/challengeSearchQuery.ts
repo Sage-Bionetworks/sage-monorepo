@@ -52,6 +52,10 @@ export interface ChallengeSearchQuery {
      */
     platforms?: Array<string>;
     /**
+     * An array of organization ids used to filter the results.
+     */
+    organizations?: Array<number>;
+    /**
      * An array of challenge input data type ids used to filter the results.
      */
     inputDataTypes?: Array<string>;

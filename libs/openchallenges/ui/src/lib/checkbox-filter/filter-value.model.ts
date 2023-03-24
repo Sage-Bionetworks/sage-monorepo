@@ -2,7 +2,7 @@ import { DateRange } from '@sagebionetworks/openchallenges/api-client-angular-de
 
 export interface FilterValue {
   /* The value of the filter. */
-  value: DateRange | string | string[] | undefined;
+  value: DateRange | string | string[] | number | undefined;
   /* The display name of the filter value. */
   label: string | undefined;
   /* The avatar url of the filter value. */
