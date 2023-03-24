@@ -1,0 +1,10 @@
+type: object
+description: An image
+properties:
+  url:
+    type: string
+    example: http://example.com/an-image.png
+required:
+  - url
+x-java-class-annotations:
+  - '@lombok.Builder'

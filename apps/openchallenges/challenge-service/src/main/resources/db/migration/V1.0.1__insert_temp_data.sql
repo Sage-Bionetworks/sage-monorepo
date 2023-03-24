@@ -437,8 +437,8 @@ VALUES (
   ),
   (
     '26',
-    'ga4gh/dream-workflow-execution',
-    'GA4GH/DREAM Workflow Execution',
+    'ga4gh-dream-workflow-execution',
+    'GA4GH-DREAM Workflow Execution',
     '',
     'The highly distributed and disparate nature of genomic and clinical data generated around the world presents an enormous challenge for those scientists who wish to integrate and analyze these data. The sheer volume of data often exceeds the capacity for storage at any one si...',
     'https://www.synapse.org/#!Synapse:syn8507133',
@@ -451,9 +451,9 @@ VALUES (
   (
     '27',
     'parkinsons-disease-digital-biomarker',
-    'Parkinsons Disease Digital Biomarker',
+    'Parkinson''s Disease Digital Biomarker',
     '',
-    'The Parkinson’s Disease Digital Biomarker DREAM Challenge is a first of it''s kind challenge, designed to benchmark methods for the processing of sensor data for development of digital signatures reflective of Parkinson''s Disease. Participants will be provided with raw sens...',
+    'The Parkinson''s Disease Digital Biomarker DREAM Challenge is a first of it''s kind challenge, designed to benchmark methods for the processing of sensor data for development of digital signatures reflective of Parkinson''s Disease. Participants will be provided with raw sens...',
     'https://www.synapse.org/#!Synapse:syn8717496',
     'completed',
     'intermediate',
@@ -528,8 +528,8 @@ VALUES (
   ),
   (
     '33',
-    'preterm-birth-prediction-challenge-transcriptomics',
-    'Preterm Birth Prediction Challenge: Transcriptomics',
+    'preterm-birth-prediction-transcriptomics',
+    'Preterm Birth Prediction - Transcriptomics',
     '',
     'A basic need in pregnancy care is to establish gestational age, and inaccurate estimates may lead to unnecessary interventions and sub-optimal patient management. Current approaches to establish gestational age rely on patient’s recollection of her last menstrual period and/...',
     'https://www.synapse.org/#!Synapse:syn18380862',
@@ -542,7 +542,7 @@ VALUES (
   (
     '34',
     'single-cell-signaling-in-breast-cancer',
-    'Single Cell Signaling in Breast Cancer',
+    'Single-Cell Signaling in Breast Cancer',
     '',
     'Signaling underlines nearly every cellular event. Individual cells, even if genetically identical, respond to perturbation in different ways. This underscores the relevance of cellular heterogeneity, in particular in how cells respond to drugs. This is of high relevance sinc...',
     'https://www.synapse.org/#!Synapse:syn20366914',
@@ -815,7 +815,7 @@ VALUES (
   (
     '55',
     'cough-diagnostic-algorithm-for-tuberculosis',
-    'Cough Diagnostic Algorithm for Tuberculosis',
+    'COugh Diagnostic Algorithm for Tuberculosis',
     '',
     'Tuberculosis (TB), a communicable disease caused by Mycobacterium tuberculosis, is a major cause of ill health and one of the leading causes of death worldwide. Until the COVID-19 pandemic, TB was the leading cause of death from a single infectious agent, ranking even above ...',
     'https://www.synapse.org/#!Synapse:syn31472953/wiki/617828',
@@ -2258,6 +2258,19 @@ VALUES (
     '6',
     '2021-07-19',
     '2021-09-12'
+  ),
+  (
+    '166',
+    'predicting-gene-expression-using-millions-of-random-promoter-sequences',
+    'Predicting Gene Expression Using Millions of Random Promoter Sequences',
+    '',
+    'Decoding how gene expression is regulated is critical to understanding disease. Regulatory DNA is decoded by the cell in a process termed “cis-regulatory logic”, where proteins called Transcription Factors (TFs) bind to specific DNA sequences within the genome and work toget...',
+    'https://www.synapse.org/#!Synapse:syn28469146/wiki/617075',
+    'completed',
+    'intermediate',
+    '1',
+    '2022-06-15',
+    '2022-08-07'
   );
 
   -- challenge_organization_role data
@@ -2865,7 +2878,55 @@ VALUES ('1', 1, 75, 'sponsor'),
   ('600', 163, 238, 'challenge_organizer'),
   ('601', 164, 13, 'challenge_organizer'),
   ('602', 164, 231, 'challenge_organizer'),
-  ('603', 165, 13, 'challenge_organizer');
+  ('603', 165, 13, 'sponsor'),
+  ('604', 55, 1, 'sponsor'),
+  ('605', 53, 1, 'sponsor'),
+  ('606', 52, 1, 'sponsor'),
+  ('607', 54, 1, 'sponsor'),
+  ('608', 166, 1, 'sponsor'),
+  ('609', 45, 1, 'sponsor'),
+  ('610', 44, 1, 'sponsor'),
+  ('611', 43, 1, 'sponsor'),
+  ('612', 40, 1, 'sponsor'),
+  ('613', 42, 1, 'sponsor'),
+  ('614', 39, 1, 'sponsor'),
+  ('615', 41, 1, 'sponsor'),
+  ('616', 35, 1, 'sponsor'),
+  ('617', 36, 1, 'sponsor'),
+  ('618', 34, 1, 'sponsor'),
+  ('619', 37, 1, 'sponsor'),
+  ('620', 33, 1, 'sponsor'),
+  ('621', 32, 1, 'sponsor'),
+  ('622', 31, 1, 'sponsor'),
+  ('623', 30, 1, 'sponsor'),
+  ('624', 29, 1, 'sponsor'),
+  ('625', 21, 1, 'sponsor'),
+  ('626', 27, 1, 'sponsor'),
+  ('627', 26, 1, 'sponsor'),
+  ('628', 28, 1, 'sponsor'),
+  ('629', 24, 1, 'sponsor'),
+  ('630', 25, 1, 'sponsor'),
+  ('631', 23, 1, 'sponsor'),
+  ('632', 20, 1, 'sponsor'),
+  ('633', 19, 1, 'sponsor'),
+  ('634', 18, 1, 'sponsor'),
+  ('635', 17, 1, 'sponsor'),
+  ('636', 16, 1, 'sponsor'),
+  ('637', 15, 1, 'sponsor'),
+  ('638', 14, 1, 'sponsor'),
+  ('639', 8, 1, 'sponsor'),
+  ('640', 13, 1, 'sponsor'),
+  ('641', 7, 1, 'sponsor'),
+  ('642', 11, 1, 'sponsor'),
+  ('643', 12, 1, 'sponsor'),
+  ('644', 10, 1, 'sponsor'),
+  ('645', 9, 1, 'sponsor'),
+  ('646', 6, 1, 'sponsor'),
+  ('647', 7, 1, 'sponsor'),
+  ('648', 5, 1, 'sponsor'),
+  ('649', 4, 1, 'sponsor'),
+  ('650', 1, 1, 'sponsor'),
+  ('651', 3, 1, 'sponsor');
 
 -- challenge_incentive data
 
@@ -2951,7 +3012,9 @@ VALUES ('1', 'publication', 1),
   ('79', 'speaking_engagement', 162),
   ('80', 'publication', 163),
   ('81', 'speaking_engagement', 163),
-  ('82', 'publication', 165);
+  ('82', 'publication', 165),
+  ('83', 'speaking_engagement', 166),
+  ('84', 'other', 166);
 
 -- challenge_submission_type data
 
@@ -3127,7 +3190,9 @@ VALUES ('1', 'prediction_file', 1),
   ('169', 'prediction_file', 163),
   ('170', 'other', 163),
   ('171', 'prediction_file', 164),
-  ('172', 'prediction_file', 165);
+  ('172', 'prediction_file', 165),
+  ('173', 'prediction_file', 166),
+  ('174', 'other', 166);
 
 -- challenge_star data
 

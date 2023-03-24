@@ -19,6 +19,8 @@ tags:
     description: Operations about challenge platforms.
   - name: ChallengeInputDataType
     description: Operations about challenge input data types.
+  - name: Image
+    description: Operations about images
   - name: Organization
     description: Operations about organizations
   - name: User
@@ -122,6 +124,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ChallengePlatform'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/images/{image}':
+    parameters:
+      - $ref: '#/components/parameters/image'
+    get:
+      tags:
+        - Image
+      summary: Get an image
+      description: Returns the image specified
+      operationId: getImage
+      responses:
+        '200':
+          description: An image
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Image'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -726,6 +748,21 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ImageKey:
+      description: The unique identifier of the image.
+      type: string
+      example: logo/openchallenges.png
+    Image:
+      type: object
+      description: An image
+      properties:
+        url:
+          type: string
+          example: 'http://example.com/an-image.png'
+      required:
+        - url
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ChallengeContributorRole:
       description: The role of a challenge contributor.
       type: string
@@ -1044,6 +1081,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengePlatformName'
+    image:
+      name: image
+      in: path
+      description: The unique identifier of the image.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ImageKey'
     organizationSearchQuery:
       name: organizationSearchQuery
       description: The search query used to find organizations.

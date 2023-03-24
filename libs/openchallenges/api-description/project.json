@@ -10,8 +10,9 @@
         "commands": [
           "openapi bundle --output build/base.openapi.yaml src/base.openapi.yaml",
           "openapi bundle --output build/challenge.openapi.yaml src/challenge.openapi.yaml",
-          "openapi bundle --output build/user.openapi.yaml src/user.openapi.yaml",
-          "openapi bundle --output build/organization.openapi.yaml src/organization.openapi.yaml"
+          "openapi bundle --output build/image.openapi.yaml src/image.openapi.yaml",
+          "openapi bundle --output build/organization.openapi.yaml src/organization.openapi.yaml",
+          "openapi bundle --output build/user.openapi.yaml src/user.openapi.yaml"
         ],
         "parallel": true,
         "cwd": "libs/openchallenges/api-description"
@@ -35,7 +36,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml",
+        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml build/image.openapi.yaml",
         "cwd": "libs/openchallenges/api-description"
       }
     },

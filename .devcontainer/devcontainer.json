@@ -55,6 +55,7 @@
     8083,
     8084,
     8085,
+    8086,
     8090,
     8091,
     8092,
@@ -140,6 +141,10 @@
     },
     "8085": {
       "label": "openchallenges-challenge-service",
+      "onAutoForward": "silent"
+    },
+    "8086": {
+      "label": "openchallenges-image-service",
       "onAutoForward": "silent"
     },
     "8090": {
