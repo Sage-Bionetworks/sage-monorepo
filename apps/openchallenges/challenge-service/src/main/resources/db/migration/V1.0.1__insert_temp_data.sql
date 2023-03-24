@@ -2258,6 +2258,19 @@ VALUES (
     '6',
     '2021-07-19',
     '2021-09-12'
+  ),
+  (
+    '166',
+    'predicting-gene-expression-using-millions-of-random-promoter-sequences',
+    'Predicting Gene Expression Using Millions of Random Promoter Sequences',
+    '',
+    'Decoding how gene expression is regulated is critical to understanding disease. Regulatory DNA is decoded by the cell in a process termed “cis-regulatory logic”, where proteins called Transcription Factors (TFs) bind to specific DNA sequences within the genome and work toget...',
+    'https://www.synapse.org/#!Synapse:syn28469146/wiki/617075',
+    'completed',
+    'intermediate',
+    '1',
+    '2022-06-15',
+    '2022-08-07'
   );
 
   -- challenge_organization_role data
@@ -2999,7 +3012,9 @@ VALUES ('1', 'publication', 1),
   ('79', 'speaking_engagement', 162),
   ('80', 'publication', 163),
   ('81', 'speaking_engagement', 163),
-  ('82', 'publication', 165);
+  ('82', 'publication', 165),
+  ('83', 'speaking_engagement', 166),
+  ('84', 'other', 166);
 
 -- challenge_submission_type data
 
@@ -3175,7 +3190,9 @@ VALUES ('1', 'prediction_file', 1),
   ('169', 'prediction_file', 163),
   ('170', 'other', 163),
   ('171', 'prediction_file', 164),
-  ('172', 'prediction_file', 165);
+  ('172', 'prediction_file', 165),
+  ('173', 'prediction_file', 166),
+  ('174', 'other', 166);
 
 -- challenge_star data
 
