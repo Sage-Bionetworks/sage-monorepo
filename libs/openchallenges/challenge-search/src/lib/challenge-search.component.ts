@@ -119,10 +119,10 @@ export class ChallengeSearchComponent
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
-    // update input data types filter values
+    // update input data type filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes.map(
           (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
@@ -134,7 +134,7 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.checkboxFilters[4].values = page.challengePlatforms.map(
+        (challengePlatformFilter.values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -143,11 +143,10 @@ export class ChallengeSearchComponent
         ))
     );
 
-    // mock up service to query all unique organizations
+    // update organization filter values
     this.organizationService.listOrganizations().subscribe(
       (page) =>
-        // update input data types filter values
-        (this.dropdownFilters[1].values = page.organizations.map((org) => ({
+        (challengeOrganizationFilter.values = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
@@ -277,10 +276,6 @@ export class ChallengeSearchComponent
     });
     this.query.next(newQuery);
   }
-
-  // private listOrganizations(): Observable<Organization[]> {
-  //   return of(MOCK_ORGANIZATIONS);
-  // }
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
