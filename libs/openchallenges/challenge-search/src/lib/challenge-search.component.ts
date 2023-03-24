@@ -28,7 +28,7 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, of, Subject, switchMap, tap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -149,17 +149,16 @@ export class ChallengeSearchComponent
     );
 
     // update organization filter values
-    this.organizationService.listOrganizations().subscribe(
-      (page) =>
-        (challengeOrganizationFilter.values = page.organizations
-          .map((org) => ({
-            value: org.id,
-            label: org.name,
-            avatarUrl: org.avatarUrl,
-            active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
-    );
+    this.organizationService.listOrganizations().subscribe((page) => {
+      challengeOrganizationFilter.values = page.organizations
+        .map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
 
     // update organization filter values
     // this.organizationService.listOrganizations().subscribe((page) => {
