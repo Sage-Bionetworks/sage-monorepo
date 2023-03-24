@@ -6,6 +6,7 @@
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
+  (onFilter)="onSearch($event)"
 >
   <!-- custom list items -->
   <ng-template let-value pTemplate="values">
