@@ -116,7 +116,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchTerms.next(this.searchTermValue);
   }
 
-  onCheckboxChange(selected: string[], queryName: string): void {
+  onCheckboxSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
