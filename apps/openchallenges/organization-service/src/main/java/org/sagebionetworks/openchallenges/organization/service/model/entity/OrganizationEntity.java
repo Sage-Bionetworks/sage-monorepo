@@ -20,6 +20,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 @Entity
 @Table(name = "organization")
@@ -37,6 +38,7 @@ public class OrganizationEntity {
 
   @Column(nullable = false)
   @FullTextField()
+  @KeywordField(name = "name_sort", normalizer = "standard", sortable = Sortable.YES)
   private String name;
 
   @Column(nullable = false)
