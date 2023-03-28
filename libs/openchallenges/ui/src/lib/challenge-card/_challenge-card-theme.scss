@@ -53,10 +53,7 @@
 @mixin typography($theme) { 
   .card-title {
     font-size: 18px;
-    font-weight: bold;
-  }
-  .card-subtitle {
-    font-style: italic;
+    font-weight: 700;
   }
 }
 
