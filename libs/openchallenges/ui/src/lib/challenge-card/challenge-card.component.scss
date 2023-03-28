@@ -12,54 +12,7 @@
   cursor: pointer;
 }
 
-// BANNER
-.card-banner {
-  width: 100%;
-  height: 130px;
-  display: flex;
-  align-items: flex-start;
-}
-.star-btn {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  height: 32px;
-  padding: 0 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: constants.$dl-radius-radius-radius16;
-  cursor: pointer;
-}
-.card-icon {
-  margin: 0 2px;
-}
-
-// BODY
-.card-body {
-  width: 100%;
-  margin: 8px;
-  display: flex;
-  flex: 1;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex-start;
-
-  & > p {
-    text-align: center;
-  }
-}
-
 // FOOTER
-.card-footer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  border-top: 1px solid #c4c4c4;
-  align-items: center;
-  height: 50px;
-}
 .difficulty-tag {
   display: flex;
   align-items: center;

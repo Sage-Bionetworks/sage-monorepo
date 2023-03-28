@@ -22,10 +22,8 @@
 
 @mixin typography($theme) {
   $config: mat.get-typography-config($theme);
-  $poppins: map.get($config, 'poppins');
 
   footer {
-    font-family: mat.font-family($poppins);
     font-weight: 500;
     line-height: normal;
   }

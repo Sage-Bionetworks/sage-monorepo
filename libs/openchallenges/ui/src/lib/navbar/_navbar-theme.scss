@@ -1,8 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500&family=Poppins:wght@500&display=swap');
-
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
@@ -23,13 +21,12 @@
   $typography-config: mat.get-typography-config($theme);
 
   nav .sage-button {
-    font-family: 'Fira Sans', sans-serif;
-    font-weight: 300;
+    font-weight: 400;
   }
 
   .home-btn {
     font-family: mat.font-family($typography-config);
-    font-weight: 500;
+    font-weight: 400;
     line-height: normal;
   }
 }
