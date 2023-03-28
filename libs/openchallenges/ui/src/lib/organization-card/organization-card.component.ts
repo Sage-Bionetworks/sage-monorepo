@@ -30,36 +30,36 @@ export class OrganizationCardComponent implements OnInit {
     // TODO: replace mock items with organization properties
     this.mockStars = 2;
     this.mockMembers = [
-      {
-        name: 'Awesome User',
-        src: '',
-        size: this.personAvatarSize,
-      },
-      {
-        name: 'Jane Doe',
-        src: '',
-        size: this.personAvatarSize,
-      },
-      {
-        name: 'John Smith',
-        src: '',
-        size: this.personAvatarSize,
-      },
-      {
-        name: 'Ash Ketchum',
-        src: '',
-        size: this.personAvatarSize,
-      },
-      {
-        name: 'Misty',
-        src: '',
-        size: this.personAvatarSize,
-      },
-      {
-        name: 'Brock',
-        src: '',
-        size: this.personAvatarSize,
-      },
+      // {
+      //   name: 'Awesome User',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
+      // {
+      //   name: 'Jane Doe',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
+      // {
+      //   name: 'John Smith',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
+      // {
+      //   name: 'Ash Ketchum',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
+      // {
+      //   name: 'Misty',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
+      // {
+      //   name: 'Brock',
+      //   src: '',
+      //   size: this.personAvatarSize,
+      // },
     ];
     this.mockChallengesSupported = 3;
 
