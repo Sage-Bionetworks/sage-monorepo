@@ -4,7 +4,7 @@
 @use 'libs/openchallenges/themes/src/palettes' as palettes;
 @use 'libs/openchallenges/themes/src/index' as openchallenges;
 
-@include mat.legacy-typography-hierarchy(fonts.$fira);
+@include mat.legacy-typography-hierarchy(fonts.$lato);
 @include mat.legacy-core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
@@ -17,8 +17,7 @@ $theme: mat.define-light-theme(
       accent: $accent,
     ),
     typography: (
-      fira: fonts.$fira,
-      poppins: fonts.$poppins,
+      lato: fonts.$lato,
     ),
   )
 );
@@ -40,7 +39,7 @@ $theme: map.deep-merge(
 // Emit styles for MatButton based on `$theme`.
 @include mat.legacy-button-theme($theme);
 @include mat.legacy-progress-spinner-theme($theme);
-@include mat.legacy-button-typography(fonts.$fira);
+@include mat.legacy-button-typography(fonts.$lato);
 
 // Include the theme mixins for other components you use here.
 @include openchallenges.theme($theme);
