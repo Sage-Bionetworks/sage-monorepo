@@ -22,7 +22,7 @@
   }
   .star-icon {
     border-color: transparent;
-    color: map.get($figma, dl-color-default-accent2);
+    color: map.get($figma, dl-color-default-primary1);
   }
   .card-icon {
     border-color: transparent;
@@ -53,10 +53,7 @@
 @mixin typography($theme) { 
   .card-title {
     font-size: 18px;
-    font-style: normal;
-    font-weight: 700px;
-    line-height: normal;
-    font-stretch: normal;
+    font-weight: bold;
   }
   .card-subtitle {
     font-style: italic;
