@@ -1,11 +1,2 @@
 openchallenges-organization-service:
   welcome-message: 'Welcome to the organization service (local config).'
-
-spring:
-  jpa:
-    properties:
-      hibernate:
-        search:
-          backend:
-            analysis:
-              configurer: class:org.sagebionetworks.openchallenges.organization.service.model.search.CustomElasticsearchAnalysisConfigurer
