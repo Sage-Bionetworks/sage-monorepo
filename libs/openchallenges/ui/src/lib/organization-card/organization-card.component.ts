@@ -10,7 +10,7 @@ import { Avatar } from '../avatar/avatar';
 })
 export class OrganizationCardComponent implements OnInit {
   @Input() organization!: Organization;
-  @Input() personAvatarSize = 36;
+  // @Input() personAvatarSize = 36;
   organizationAvatar!: Avatar;
   avatar!: Avatar;
   mockStars!: number;
