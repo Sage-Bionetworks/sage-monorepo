@@ -22,7 +22,7 @@ main {
 
 h2,
 h3,
-h4 {
+.welcome-msg {
   text-align: center;
 }
 
@@ -45,10 +45,6 @@ h4 {
       margin: 8px 0;
     }
   }
-}
-
-.welcome-msg {
-  margin: 40px 0 0;
 }
 
 .goals {

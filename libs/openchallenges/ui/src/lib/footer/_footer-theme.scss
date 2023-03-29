@@ -23,10 +23,6 @@
 @mixin typography($theme) {
   $config: mat.get-typography-config($theme);
 
-  footer {
-    font-weight: 500;
-    line-height: normal;
-  }
   .app-info {
     font-size: 14px;
     line-height: 18px;
