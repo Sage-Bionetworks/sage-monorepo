@@ -8,33 +8,28 @@ sc_umap_server <- function(
 
       ns <- session$ns
 
-      umap_df <- shiny::reactive(read.delim("inst/tsv/sc_msk_umap.tsv", sep = "\t"))
+      umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_umap.feather"))
+      gene_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_genes.feather"))
 
-      output$select_color_criteria <- shiny::renderUI({
-        shiny::req(umap_df())
+      observeEvent(input$color, {
+        if(input$color == "gene") updateTabsetPanel(inputId = "params", selected = "gene")
+        if(input$color %in% c("cell_type", "cell_type_broad", "tissue", "subtype")) updateTabsetPanel(inputId = "params", selected = "normal")
+      })
+
+      output$select_gene <- shiny::renderUI({
         shiny::selectInput(
-          ns("color"),
-          label = "Color by",
-          choices = c("cell_type", "cell_type_broad", "tissue", "subtype", "gene"),
-          selected = "cell_type",
+          ns("gene"),
+          label = "Select gene",
+          choices = colnames(gene_df()),
           multiple = FALSE
         )
       })
 
-      color_criteria <- reactive({
+      color_criteria <- shiny::reactive({
+        shiny::req(umap_df(), input$color)
         if (input$color %in% c("cell_type", "cell_type_broad", "tissue", "subtype")) return(umap_df()[[input$color]])
         else{
-          gene_df <- shiny::reactive(read.delim("inst/tsv/sc_msk_genes.tsv", sep = "\t"))
-          output$select_gene <- shiny::renderUI({
-            shiny::req(gene_df())
-            shiny::selectInput(
-              ns("gene"),
-              label = "Select gene",
-              choices = colnames(gene_df()),
-              multiple = FALSE
-            )
-          })
-
+          shiny::req(input$gene)
           return(gene_df()[[input$gene]])
         }
       })

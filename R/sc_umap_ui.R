@@ -12,10 +12,22 @@ sc_umap_ui <- function(id){
         width = 3,
         iatlas.modules::optionsBox(
           width=24,
-          shiny::uiOutput(ns("select_color_criteria")),
-          shiny::conditionalPanel(
-            condition = "input.color == 'gene",
-            shiny::uiOutput(ns("select_gene"))
+          shiny::selectInput(
+            ns("color"),
+            label = "Color by",
+            choices = c("cell_type", "cell_type_broad", "tissue", "subtype", "gene"),
+            selected = "cell_type_broad",
+            multiple = FALSE
+          ),
+          parameter_tabs <- tabsetPanel(
+            id = ns("params"),
+            type = "hidden",
+            tabPanel("normal",
+                     shiny::p("")
+            ),
+            tabPanel("gene",
+                     shiny::uiOutput(ns("select_gene"))
+            )
           )
         )
       ),
