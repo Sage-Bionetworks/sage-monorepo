@@ -11,35 +11,13 @@ main {
 .container {
   max-width: 1366px;
   margin: 0 auto;
-  padding: 16px;
-}
-
-.section-inner {
-  position: relative;
-  padding-top: 48px;
-  padding-bottom: 48px;
+  padding: 48px 16px;
 }
 
 h2,
 h3,
 .welcome-msg {
   text-align: center;
-}
-
-.title {
-  background: url('/openchallenges-assets/images/about-banner.svg');
-  background-size: cover;
-  background-position: bottom;
-  padding-top: 108px;
-
-  .section-outer {
-    text-align: center;
-    margin-bottom: 40px;
-
-    h2 {
-      margin: 8px 0;
-    }
-  }
 }
 
 .goals {
