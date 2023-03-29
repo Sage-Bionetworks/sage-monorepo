@@ -8,7 +8,7 @@ sc_bubbleplot_server <- function(
 
       ns <- session$ns
 
-      bubble_df <- shiny::reactive(read.csv("inst/tsv/bubble_plot_df.csv"))
+      bubble_df <- shiny::reactive(read.delim("inst/tsv/bubble_plot_df.tsv"))
 
       output$select_cells <- shiny::renderUI({
         shiny::req(bubble_df())
@@ -21,14 +21,14 @@ sc_bubbleplot_server <- function(
         )
       })
 
-      output$select_genes <- shiny::renderUI({
-        shiny::req(bubble_df())
-        shiny::selectizeInput(
-          ns("genes"),
-          label = "Select genes",
+      shiny::observe({
+        #shiny::req(bubble_df())
+        shiny::updateSelectizeInput(
+          session,
+          "genes",
           choices = unique(bubble_df()$gene),
           selected = c("CTLA4", "PDCD1", "LAG3"),
-          multiple = TRUE
+          server = TRUE
         )
       })
 
