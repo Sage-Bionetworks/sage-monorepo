@@ -1,7 +1,7 @@
 <main class="base mat-typography">
   <div class="register-container">
     <div class="title">
-      <img src="assets/images/registry_b.png" alt="OpenChallenges" />
+      <img class="logo-icon" src="assets/images/openchallenges-icon.svg" alt="OpenChallenges Icon" />
       <h3>Join Us on OpenChallenges!</h3>
     </div>
     <form class="form-container" [formGroup]="newUserForm" novalidate>
@@ -19,7 +19,7 @@
       </mat-form-field>
       <mat-error *ngIf="errors.other">{{ errors.other }}</mat-error>
       <div class="disclaimer">
-        <p>
+        <p class="mat-caption">
           By creating an account, you agree to the <a href="#">Terms of Service</a> of
           OpenChallenges. Our Privacy Statement can be read <a href="#">here</a>.
         </p>
