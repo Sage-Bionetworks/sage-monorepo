@@ -6,5 +6,5 @@ docker run \
   --env-file tools/grafana-backup-tool/.env \
   --network openchallenges \
   -e RESTORE="true" \
-  -e ARCHIVE_FILE="202303290018.tar.gz" \
+  -e ARCHIVE_FILE="202303292349.tar.gz" \
   ysde/docker-grafana-backup-tool:1.2.6-slim
