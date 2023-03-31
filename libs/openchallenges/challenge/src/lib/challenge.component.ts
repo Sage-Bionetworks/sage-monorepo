@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-// import {
-//   Challenge,
-// ChallengeService,
-// BasicError as ApiClientBasicError,
-// } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   Challenge,
 <<<<<<< HEAD
