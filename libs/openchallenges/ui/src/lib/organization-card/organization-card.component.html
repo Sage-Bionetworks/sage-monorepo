@@ -1,5 +1,5 @@
 <div *ngIf="organization">
-  <div class="organization-card">
+  <div class="organization-card" [routerLink]="['/org', organization.login]">
     <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
     </openchallenges-avatar>
     <div class="star-btn">
@@ -16,9 +16,7 @@
         >
         </openchallenges-avatar>
       </div>
-      <p class="card-subtitle" *ngIf="otherMembers">
-        + {{ otherMembers }} other members
-      </p>
+      <p class="card-subtitle" *ngIf="otherMembers">+ {{ otherMembers }} other members</p>
     </div>
     <div class="card-footer">
       <div class="support-tag mat-small">
