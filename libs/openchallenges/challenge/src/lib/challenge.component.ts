@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Challenge,
-<<<<<<< HEAD
   ChallengeService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -18,29 +17,10 @@ import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
 import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { isApiClientError } from '@sagebionetworks/openchallenges/util';
-=======
-  // ChallengeService,
-  // BasicError as ApiClientBasicError,
-} from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
-  // catchError,
-  map,
-  Observable,
-  of,
-  Subscription,
-  // switchMap,
-  // throwError,
-} from 'rxjs';
-import { Tab } from './tab.model';
-import { CHALLENGE_TABS } from './challenge-tabs';
-import {
-  Avatar,
-  DEPRECATED_MOCK_CHALLENGES,
-} from '@sagebionetworks/openchallenges/ui';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
-// import { isApiClientError } from '@sagebionetworks/openchallenges/util';
->>>>>>> 93bc819 (add codes to fix routes in challenge-profile)
+  HttpStatusRedirect,
+  handleHttpError,
+} from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge',
@@ -62,18 +42,13 @@ export class ChallengeComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-<<<<<<< HEAD
     private challengeService: ChallengeService,
-=======
-    // private challengeService: ChallengeService,
->>>>>>> 93bc819 (add codes to fix routes in challenge-profile)
     private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
-<<<<<<< HEAD
     this.challenge$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
         this.challengeService.getChallenge(params['challengeId'])
@@ -83,48 +58,13 @@ export class ChallengeComponent implements OnInit {
         return of(challenge);
       }),
       catchError((err) => {
-        const error = err.error;
-        console.log(isApiClientError(error) && error.status === 404);
-        if (isApiClientError(error) && error.status === 404) {
-          // redirect to not-found for 404
-          this.router.navigate(['/not-found']);
-          return throwError(() => new Error(error.detail));
-        } else {
-          // redirect to challenge search for invalid url
-          this.router.navigate(['/challenge']);
-          return throwError(() => new Error(err.message));
-        }
+        const errorMsg = handleHttpError(err, this.router, {
+          404: '/not-found',
+          400: '/challenge',
+        } as HttpStatusRedirect);
+        return throwError(() => errorMsg);
       })
     );
-=======
-    this.activatedRoute.params.subscribe((param) => {
-      const challenge = DEPRECATED_MOCK_CHALLENGES.find(
-        (c) => c.name === param['slug']
-      );
-      if (challenge) {
-        this.challenge$ = of(challenge);
-      }
-    });
-    // TODO: get chalenge using below chunk once
-    // the `slug` property and `getChallenge` service are added
-    // this.challenge$ = this.activatedRoute.params.pipe(
-    //   // TODO: need backend to support get org by id
-    //   switchMap((params) => this.challengeService.getChallenge(params['challengeId'])),
-    //   // TODO: add challenge slug to url
-    //   catchError((err) => {
-    //     const error = err.error as ApiClientBasicError;
-    //     if (isApiClientError(error) && error.status === 404) {
-    //       // redirect to not-found for 404
-    //       this.router.navigate(['/not-found']);
-    //       return throwError(() => new Error(error.detail));
-    //     } else {
-    //       // redirect to org search for invalid url
-    //       this.router.navigate(['/challenge']);
-    //       return throwError(() => new Error(err.message));
-    //     }
-    //   })
-    // );
->>>>>>> 93bc819 (add codes to fix routes in challenge-profile)
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
