@@ -16,6 +16,7 @@ export * from './challengeStatus';
 export * from './challengeSubmissionType';
 export * from './challengesPage';
 export * from './challengesPageAllOf';
+export * from './image';
 export * from './organization';
 export * from './organizationDirection';
 export * from './organizationSearchQuery';
