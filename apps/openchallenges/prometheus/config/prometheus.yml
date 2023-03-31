@@ -18,6 +18,12 @@ scrape_configs:
     metrics_path: '/actuator/metrics'
     static_configs:
       - targets: ['openchallenges-challenge-service:8085']
+  - job_name: 'openchallenges-mysql-exporter'
+    scrape_interval: 45s
+    scrape_timeout: 30s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['openchallenges-mysql-exporter:9104']
 
   # - job_name: 'gateway-service'
   #   scrape_interval: 1m
