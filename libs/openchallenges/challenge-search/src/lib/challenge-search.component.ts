@@ -139,26 +139,14 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms
-          .map((platform) => ({
+        (challengePlatformFilter.values = page.challengePlatforms.map(
+          (platform) => ({
             value: platform.slug,
             label: platform.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
+          })
+        ))
     );
-
-    // update organization filter values
-    this.organizationService.listOrganizations().subscribe((page) => {
-      challengeOrganizationFilter.values = page.organizations
-        .map((org) => ({
-          value: org.id,
-          label: org.name,
-          avatarUrl: org.avatarUrl,
-          active: false,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
 
     // update organization filter values
     // this.organizationService.listOrganizations().subscribe((page) => {
