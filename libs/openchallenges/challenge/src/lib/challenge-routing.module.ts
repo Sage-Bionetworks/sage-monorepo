@@ -3,9 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ChallengeComponent } from './challenge.component';
 
 export const routes: Routes = [
-  { path: '', component: ChallengeComponent },
   {
-    path: ':challengeSlug',
+    path: '',
     component: ChallengeComponent,
     children: [{ path: '**', component: ChallengeComponent }],
   },
