@@ -48,7 +48,7 @@ export class OrgProfileComponent implements OnInit {
   ngOnInit(): void {
     this.organization$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.organizationService.getOrganization(params['organizationId'])
+        this.organizationService.getOrganization(params['orgLogin'])
       ),
       catchError((err) => {
         const error = err.error as ApiClientBasicError;
