@@ -46,18 +46,7 @@ export class ChallengeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.activatedRoute.params.subscribe((param) => {
-    //   const challenge = DEPRECATED_MOCK_CHALLENGES.find(
-    //     (c) => c.name === param['slug']
-    //   );
-    //   if (challenge) {
-    //     this.challenge$ = of(challenge);
-    //   }
-    // });
-    // TODO: get chalenge using below chunk once
-    // the `slug` property and `getChallenge` service are added
     this.challenge$ = this.activatedRoute.params.pipe(
-      // TODO: need backend to support get org by id
       switchMap((params) =>
         this.challengeService.getChallenge(params['challengeId'])
       ),
