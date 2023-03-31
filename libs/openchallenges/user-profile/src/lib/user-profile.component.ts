@@ -1,27 +1,21 @@
-import {
-  Component,
-  OnInit,
-  // Renderer2
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  ParamMap,
-  // Router
-} from '@angular/router';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import {
   Account,
-  // AccountService,
+  AccountService,
+  // BasicError as ApiClientError,
   User,
-  // UserService,
+  UserService,
 } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-// import { AuthService } from '@sagebionetworks/openchallenges/auth';
+import { AuthService } from '@sagebionetworks/openchallenges/auth';
+// import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 import {
   // catchError,
   // filter,
   map,
   Observable,
   of,
-  // pluck,
+  pluck,
   Subscription,
   // switchMap,
   // throwError,
@@ -29,10 +23,11 @@ import {
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
 import { MOCK_USER, Avatar } from '@sagebionetworks/openchallenges/ui';
+// import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-// import { UserProfile } from './user-profile';
-// import { SeoService } from '@sagebionetworks/shared/util';
-// import { getUserProfileSeoData } from './user-profile-seo';
+import { UserProfile } from './user-profile';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getUserProfileSeoData } from './user-profile-seo';
 
 @Component({
   selector: 'openchallenges-user',
@@ -53,21 +48,21 @@ export class UserProfileComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    // private router: Router,
-    // private accountService: AccountService,
-    // private userService: UserService,
-    // private authService: AuthService,
-    // private seoService: SeoService,
-    // private renderer2: Renderer2
-    private readonly configService: ConfigService
+    private router: Router,
+    private accountService: AccountService,
+    private userService: UserService,
+    private authService: AuthService,
+    private readonly configService: ConfigService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
 
   ngOnInit(): void {
-    // const userProfile$: Observable<UserProfile> = this.activatedRoute.data.pipe(
-    //   pluck('userProfile')
-    // );
+    const userProfile$: Observable<UserProfile> = this.activatedRoute.data.pipe(
+      pluck('userProfile')
+    );
 
     // this.router.events
     //   .pipe(
@@ -92,13 +87,13 @@ export class UserProfileComponent implements OnInit {
     //     }
     //   });
 
-    // userProfile$.subscribe((userProfile) => {
-    //   console.log('userProfile available to UserProfileComponent', userProfile);
-    //   this.seoService.setData(
-    //     getUserProfileSeoData(userProfile),
-    //     this.renderer2
-    //   );
-    // });
+    userProfile$.subscribe((userProfile) => {
+      console.log('userProfile available to UserProfileComponent', userProfile);
+      this.seoService.setData(
+        getUserProfileSeoData(userProfile),
+        this.renderer2
+      );
+    });
 
     // this.account$ = this.route.params.pipe(
     //   switchMap((params) => this.accountService.getAccount(params['login'])),
@@ -134,27 +129,35 @@ export class UserProfileComponent implements OnInit {
     //   map((page) => page.organizations)
     // );
 
-    // const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
+    const activeTab$ = this.activatedRoute.queryParamMap.pipe(
+      map((params: ParamMap) => params.get('tab')),
+      map((key) => (key === null ? 'overview' : key))
+    );
 
     this.user$.subscribe(
       (user) =>
         (this.userAvatar = {
-          name: user.name || user.login.replace(/-/g, ' '),
-          src: user.avatarUrl || '',
+          name: user.name
+            ? (user.name as string)
+            : user.login.replace(/-/g, ' '),
+          src: user.avatarUrl ? user.avatarUrl : '',
           size: 250,
         })
     );
 
+    // const orgsSub = orgs$.subscribe((orgs) => (this.organizations = orgs));
+
+    const activeTabSub = activeTab$.subscribe((key) => {
+      if (!this.tabKeys.includes(key)) {
+        this.router.navigate([]);
+      } else {
+        this.activeTab = this.tabs[key];
+      }
+    });
+
     // this.authService
     //   .isLoggedIn()
     //   .subscribe((loggedIn) => (this.loggedIn = loggedIn));
-
-    const activeTabSub = this.activatedRoute.queryParamMap
-      .pipe(
-        map((params: ParamMap) => params.get('tab')),
-        map((key) => (key === null ? 'overview' : key))
-      )
-      .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     // this.subscriptions.push(orgsSub);
     this.subscriptions.push(activeTabSub);
