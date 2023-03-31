@@ -62,8 +62,9 @@ export class ChallengeSearchComponent
     ''
   );
 
-  private dropdownSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  private orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ''
+  );
 
   private destroy = new Subject<void>();
   searchTermValue = '';
@@ -138,26 +139,25 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms
-          .map((platform) => ({
+        (challengePlatformFilter.values = page.challengePlatforms.map(
+          (platform) => ({
             value: platform.slug,
             label: platform.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
+          })
+        ))
     );
 
     // update organization filter values
-    this.organizationService.listOrganizations().subscribe((page) => {
-      challengeOrganizationFilter.values = page.organizations
-        .map((org) => ({
-          value: org.id,
-          label: org.name,
-          avatarUrl: org.avatarUrl,
-          active: false,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
+    // this.organizationService.listOrganizations().subscribe((page) => {
+    //   challengeOrganizationFilter.values = page.organizations
+    //     .map((org) => ({
+    //       value: org.id,
+    //       label: org.name,
+    //       avatarUrl: org.avatarUrl,
+    //       active: false,
+    //     })));
+    // });
 
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
@@ -188,9 +188,8 @@ export class ChallengeSearchComponent
       this.query.next(defaultQuery);
     });
 
-    this.dropdownSearchTerms
+    this.orgSearchTerms
       .pipe(
-        skip(1),
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
@@ -203,14 +202,12 @@ export class ChallengeSearchComponent
       )
       .subscribe((page) => {
         console.log(page);
-        challengeOrganizationFilter.values = page.organizations
-          .map((org) => ({
-            value: org.id,
-            label: org.name,
-            avatarUrl: org.avatarUrl,
-            active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label));
+        challengeOrganizationFilter.values = page.organizations.map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        }));
       });
   }
 
@@ -301,7 +298,7 @@ export class ChallengeSearchComponent
   }
 
   onDropdownSearchChange(searched: string): void {
-    this.dropdownSearchTerms.next(searched);
+    this.orgSearchTerms.next(searched);
   }
 
   onSortChange(): void {
