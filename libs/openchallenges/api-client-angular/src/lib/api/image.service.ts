@@ -21,11 +21,7 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
-import { Challenge } from '../model/challenge';
-// @ts-ignore
-import { ChallengeSearchQuery } from '../model/challengeSearchQuery';
-// @ts-ignore
-import { ChallengesPage } from '../model/challengesPage';
+import { Image } from '../model/image';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -36,7 +32,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class ChallengeService {
+export class ImageService {
 
     protected basePath = 'http://localhost/v1';
     public defaultHeaders = new HttpHeaders();
@@ -98,18 +94,18 @@ export class ChallengeService {
     }
 
     /**
-     * Get a challenge
-     * Returns the challenge specified
-     * @param challengeId The unique identifier of the challenge.
+     * Get an image
+     * Returns the image specified
+     * @param image The unique identifier of the image.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Challenge>;
-    public getChallenge(challengeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Challenge>>;
-    public getChallenge(challengeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Challenge>>;
-    public getChallenge(challengeId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
-        if (challengeId === null || challengeId === undefined) {
-            throw new Error('Required parameter challengeId was null or undefined when calling getChallenge.');
+    public getImage(image: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Image>;
+    public getImage(image: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Image>>;
+    public getImage(image: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Image>>;
+    public getImage(image: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+        if (image === null || image === undefined) {
+            throw new Error('Required parameter image was null or undefined when calling getImage.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -144,74 +140,10 @@ export class ChallengeService {
             }
         }
 
-        let localVarPath = `/challenges/${this.configuration.encodeParam({name: "challengeId", value: challengeId, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64"})}`;
-        return this.httpClient.get<Challenge>(`${this.configuration.basePath}${localVarPath}`,
+        let localVarPath = `/images/${this.configuration.encodeParam({name: "image", value: image, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        return this.httpClient.get<Image>(`${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
-     * List challenges
-     * List challenges
-     * @param challengeSearchQuery The search query used to find challenges.
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public listChallenges(challengeSearchQuery?: ChallengeSearchQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengesPage>;
-    public listChallenges(challengeSearchQuery?: ChallengeSearchQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengesPage>>;
-    public listChallenges(challengeSearchQuery?: ChallengeSearchQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengesPage>>;
-    public listChallenges(challengeSearchQuery?: ChallengeSearchQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (challengeSearchQuery !== undefined && challengeSearchQuery !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>challengeSearchQuery, 'challengeSearchQuery');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json',
-                'application/problem+json'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/challenges`;
-        return this.httpClient.get<ChallengesPage>(`${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
