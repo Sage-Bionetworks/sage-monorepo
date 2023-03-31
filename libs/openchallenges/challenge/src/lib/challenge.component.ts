@@ -4,12 +4,12 @@ import {
   Challenge,
 <<<<<<< HEAD
   ChallengeService,
-  BasicError as ApiClientBasicError,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   catchError,
   map,
   Observable,
+  of,
   Subscription,
   switchMap,
   throwError,
@@ -78,15 +78,19 @@ export class ChallengeComponent implements OnInit {
       switchMap((params) =>
         this.challengeService.getChallenge(params['challengeId'])
       ),
-      // TODO: add challenge slug to url
+      switchMap((challenge) => {
+        this.router.navigate(['/challenge', challenge.id, challenge.slug]);
+        return of(challenge);
+      }),
       catchError((err) => {
-        const error = err.error as ApiClientBasicError;
+        const error = err.error;
+        console.log(isApiClientError(error) && error.status === 404);
         if (isApiClientError(error) && error.status === 404) {
           // redirect to not-found for 404
           this.router.navigate(['/not-found']);
           return throwError(() => new Error(error.detail));
         } else {
-          // redirect to org search for invalid url
+          // redirect to challenge search for invalid url
           this.router.navigate(['/challenge']);
           return throwError(() => new Error(err.message));
         }
