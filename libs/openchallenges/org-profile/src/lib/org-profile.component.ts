@@ -16,9 +16,11 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   Organization,
   OrganizationService,
-  BasicError as ApiClientBasicError,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { isApiClientError } from '@sagebionetworks/openchallenges/util';
+import {
+  HttpStatusRedirect,
+  handleHttpError,
+} from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -46,20 +48,17 @@ export class OrgProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // add more status codes if found
     this.organization$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
         this.organizationService.getOrganization(params['orgLogin'])
       ),
       catchError((err) => {
-        const error = err.error as ApiClientBasicError;
-        if (isApiClientError(error) && error.status === 404) {
-          // redirect to not-found for 404
-          this.router.navigate(['/not-found']);
-          return throwError(() => new Error(error.detail));
-        } else {
-          this.router.navigate(['/org']);
-          return throwError(() => new Error(err.message));
-        }
+        const errorMsg = handleHttpError(err, this.router, {
+          404: '/not-found',
+          400: '/org',
+        } as HttpStatusRedirect);
+        return throwError(() => errorMsg);
       })
     );
 
