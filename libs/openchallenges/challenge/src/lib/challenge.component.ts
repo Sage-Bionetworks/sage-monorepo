@@ -125,7 +125,7 @@ export class ChallengeComponent implements OnInit {
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
         name: challenge.name,
-        src: 'https://via.placeholder.com/300.png', // TODO: Replace with avatarUrl once implemented in Challenge Object
+        src: challenge.avatarUrl || '',
         size: 250,
       };
 
