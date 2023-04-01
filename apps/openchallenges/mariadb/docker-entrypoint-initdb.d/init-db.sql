@@ -32,8 +32,6 @@ grant role_admin to user_service;
 set default role role_admin for user_service;
 
 -- Create the user for prometheus
-create user 'mysql-exporter' identified by 'changeme';
-grant process, replication client on *.* to 'mysql-exporter';
+create user 'mysql-exporter' identified by 'changeme' with max_user_connections 3;;
+grant process, slave monitor on *.* to 'mysql-exporter';
 grant select on performance_schema.* to 'mysql-exporter';
--- create user 'mysqld-exporter' identified by 'changeme' with max_user_connections 3;
--- grant process, replication client, replication slave, select on *.* to 'mysqld-exporter';
