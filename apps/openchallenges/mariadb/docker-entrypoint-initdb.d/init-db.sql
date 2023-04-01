@@ -31,7 +31,7 @@ create user user_service identified by 'changeme';
 grant role_admin to user_service;
 set default role role_admin for user_service;
 
--- Create the user for prometheus
+-- Create the user for openchallenges-mysql-exporter
 create user 'mysql-exporter' identified by 'changeme' with max_user_connections 3;;
 grant process, slave monitor on *.* to 'mysql-exporter';
 grant select on performance_schema.* to 'mysql-exporter';
