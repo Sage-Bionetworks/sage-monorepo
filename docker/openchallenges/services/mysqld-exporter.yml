@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  openchallenges-mysqld-exporter:
+    image: sagebionetworks/openchallenges-mysqld-exporter:latest
+    container_name: openchallenges-mysqld-exporter
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/mysqld-exporter/.env
+    networks:
+      - openchallenges
+    ports:
+      - '9104:9104'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M

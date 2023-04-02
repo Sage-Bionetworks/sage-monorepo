@@ -185,7 +185,7 @@
       "onAutoForward": "silent"
     },
     "9104": {
-      "label": "openchallenges-mysql-exporter",
+      "label": "openchallenges-mysqld-exporter",
       "onAutoForward": "silent"
     },
     "9200": {
