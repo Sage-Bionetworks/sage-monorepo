@@ -13,6 +13,11 @@ scrape_configs:
     metrics_path: '/actuator/metrics'
     static_configs:
       - targets: ['openchallenges-organization-service:8084']
+  - job_name: 'openchallenges-challenge-service'
+    scrape_interval: 1m
+    metrics_path: '/actuator/metrics'
+    static_configs:
+      - targets: ['openchallenges-challenge-service:8085']
 
   # - job_name: 'gateway-service'
   #   scrape_interval: 1m
