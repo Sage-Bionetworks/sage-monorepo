@@ -14,9 +14,9 @@ services:
     volumes:
       - ../../../apps/openchallenges/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - openchallenges-prometheus-data:/prometheus
-    # depends_on:
-    #   openchallenges-organization-service:
-    #     condition: service_healthy
+    depends_on:
+      openchallenges-mysqld-exporter:
+        condition: service_started
     deploy:
       resources:
         limits:

@@ -30,3 +30,8 @@ set default role role_admin for organization_service;
 create user user_service identified by 'changeme';
 grant role_admin to user_service;
 set default role role_admin for user_service;
+
+-- Create the user for openchallenges-mysqld-exporter
+create user 'mysqld-exporter' identified by 'changeme' with max_user_connections 3;;
+grant process, slave monitor on *.* to 'mysqld-exporter';
+grant select on performance_schema.* to 'mysqld-exporter';
