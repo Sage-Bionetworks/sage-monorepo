@@ -12,14 +12,9 @@
 
 
 /**
- * What to sort results by.
+ * An image
  */
-export type OrganizationSort = 'challenge_count' | 'created' | 'name' | 'relevance';
-
-export const OrganizationSort = {
-    ChallengeCount: 'challenge_count' as OrganizationSort,
-    Created: 'created' as OrganizationSort,
-    Name: 'name' as OrganizationSort,
-    Relevance: 'relevance' as OrganizationSort
-};
+export interface Image { 
+    url: string;
+}
 

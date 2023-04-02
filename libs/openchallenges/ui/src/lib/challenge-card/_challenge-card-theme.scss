@@ -20,9 +20,13 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
+  .star-icon {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-primary1);
+  }
   .card-icon {
     border-color: transparent;
-    color: map.get($figma, dl-color-default-accent2);
+    color: map.get($figma, dl-color-default-primary1);
   }
   .status-tag {
     border-color: map.get($figma, dl-color-default-primary2);
@@ -49,14 +53,7 @@
 @mixin typography($theme) { 
   .card-title {
     font-size: 18px;
-    font-style: normal;
-    font-family: Fira Sans;
-    font-weight: 600px;
-    line-height: normal;
-    font-stretch: normal;
-  }
-  .card-subtitle {
-    font-style: italic;
+    font-weight: 700;
   }
 }
 

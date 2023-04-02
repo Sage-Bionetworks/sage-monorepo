@@ -768,6 +768,7 @@ components:
       enum:
         - challenge_count
         - created
+        - name
         - relevance
     OrganizationDirection:
       description: The direction to sort the results by.
