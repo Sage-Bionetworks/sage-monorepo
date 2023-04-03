@@ -4,13 +4,14 @@ create_scatterplot <- function(
     y_col = "y",
     key_col = NA,
     color_col = NA,
+    size_col = NA,
     label_col = NA,
     xlab = "",
     ylab = "",
     title = "",
     identity_line = FALSE,
     source_name = NULL,
-    fill_colors = NULL,
+    #fill_colors = NULL,
     horizontal_line = FALSE,
     horizontal_line_y = NULL) {
 
@@ -25,13 +26,15 @@ create_scatterplot <- function(
                 Y = y_col,
                 KEY = key_col,
                 COLOR = color_col,
+                SIZE = size_col,
                 LABEL = label_col),
             plotly::plot_ly(
                 df,
                 x = ~X,
                 y = ~Y,
-                # color = ~COLOR,
-                # colors = fill_colors,
+                color = ~COLOR,
+                #colors = fill_colors,
+                size = ~SIZE,
                 text = ~LABEL,
                 key = ~KEY,
                 source = source_name) %>%
