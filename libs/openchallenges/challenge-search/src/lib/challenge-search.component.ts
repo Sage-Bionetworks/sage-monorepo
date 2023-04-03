@@ -33,7 +33,6 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
-  map,
   skip,
   takeUntil,
 } from 'rxjs/operators';
@@ -99,7 +98,7 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
-  values$!: Observable<FilterValue[]>;
+  // values$!: Observable<FilterValue[]>;
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -213,64 +212,25 @@ export class ChallengeSearchComponent
       this.query.next(defaultQuery);
     });
 
-    // this.orgSearchTerms
-    // .pipe(
-    //   debounceTime(400),
-    //   distinctUntilChanged(),
-    //   takeUntil(this.destroy),
-    //   tap((s) => console.log('Searched by', s)),
-    //   switchMap((searchTerm) =>
-    //     this.organizationService.listOrganizations({
-    //       searchTerms: searchTerm,
-    //     } as OrganizationSearchQuery)
-    //   )
-    // )
-    // .subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
-    //     value: org.id,
-    //     label: org.name,
-    //     avatarUrl: org.avatarUrl,
-    //     active: false,
-    //   }));
-    //   console.log(
-    //     'List orgs',
-    //     challengeOrganizationFilter.values.map((o) => o.label)
-    //   );
-    // });
-
-    // testing
-    this.values$ = this.orgSearchTerms.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      takeUntil(this.destroy),
-      tap((s) => console.log('Searched by', s)),
-      switchMap((searchTerm) =>
-        this.organizationService.listOrganizations({
-          searchTerms: searchTerm,
-        } as OrganizationSearchQuery)
-      ),
-      map((page) => {
-        console.log('List orgs', page.organizations);
-        return page.organizations.map((org) => ({
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        challengeOrganizationFilter.values = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
         }));
-      })
-    );
-    // .subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
-    //     value: org.id,
-    //     label: org.name,
-    //     avatarUrl: org.avatarUrl,
-    //     active: false,
-    //   }));
-    //   console.log(
-    //     'List orgs',
-    //     challengeOrganizationFilter.values.map((o) => o.label)
-    //   );
-    // });
+      });
   }
 
   ngAfterContentInit(): void {

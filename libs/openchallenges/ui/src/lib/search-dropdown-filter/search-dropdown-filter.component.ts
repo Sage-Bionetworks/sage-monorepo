@@ -20,6 +20,8 @@ export class SearchDropdownFilterComponent implements OnInit {
     hideTransitionOptions: '0ms',
   };
 
+  searchTerm = '';
+
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
   }
