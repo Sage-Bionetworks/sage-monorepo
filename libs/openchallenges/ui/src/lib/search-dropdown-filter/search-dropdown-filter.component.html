@@ -6,10 +6,11 @@
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
-  [filter]="false"
+  [filter]="filter"
+  (onFilter)="onSearch($event)"
 >
-  <!-- custom search bar-->
-  <ng-template let-selectedOptions="selectedOptions" pTemplate="header">
+  <!-- custom search bar -->
+  <ng-template *ngIf="filterByApiClient" pTemplate="header">
     <div class="custom-filter-container p-multiselect-filter-container">
       <input
         type="text"
@@ -17,11 +18,12 @@
         class="custom-filter p-multiselect-filter p-inputtext p-component"
         autocomplete="on"
         [(ngModel)]="searchTerm"
-        (input)="onSearch()"
+        (input)="onCustomSearch()"
       />
       <span class="p-multiselect-filter-icon pi pi-search"></span>
     </div>
   </ng-template>
+  <!-- custom list items -->
   <ng-template let-value pTemplate="values">
     <div class="item-container">
       <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(value)"></openchallenges-avatar>
