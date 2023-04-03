@@ -67,7 +67,7 @@ export class AppComponent implements OnInit, OnDestroy {
     if (menuItem.name === 'Log out') {
       this.kauthService.logout();
     } else if (menuItem.name === 'Profile') {
-      this.router.navigate([this.user?.login]);
+      this.router.navigate(['/user', this.user?.login]);
     }
     // TODO: redirect to all tabs of profile when the rest of tabs components are created
   }

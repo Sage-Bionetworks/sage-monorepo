@@ -5,11 +5,11 @@ export const APP_SECTIONS: { [key: string]: NavbarSection } = {
     name: 'About',
     summary: 'About OpenChallenges',
   },
-  challenges: {
+  challenge: {
     name: 'Challenges',
     summary: 'Explore challenges',
   },
-  orgs: {
+  org: {
     name: 'Organizations',
     summary: 'Explore organizations',
   },

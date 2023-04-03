@@ -18,14 +18,14 @@ export const routes: Routes = [
     data: {},
   },
   {
-    path: 'challenges',
+    path: 'challenge',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge-search').then(
         (m) => m.ChallengeSearchModule
       ),
   },
   {
-    path: 'orgs',
+    path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
         (m) => m.OrgSearchModule
@@ -50,20 +50,6 @@ export const routes: Routes = [
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/team').then((m) => m.TeamModule),
   },
-  // {
-  //   path: 'org/:login/:challenge',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/challenge').then(
-  //       (m) => m.ChallengeModule
-  //     ),
-  // },
-  // {
-  //   path: 'org/:login',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/org-profile').then(
-  //       (m) => m.OrgProfileModule
-  //     ),
-  // },
   {
     path: 'not-found',
     loadChildren: () =>
@@ -72,21 +58,21 @@ export const routes: Routes = [
       ),
   },
   {
-    path: 'org',
+    path: 'org/:orgLogin',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-profile').then(
         (m) => m.OrgProfileModule
       ),
   },
   {
-    path: 'challenge',
+    path: 'challenge/:challengeId',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge').then(
         (m) => m.ChallengeModule
       ),
   },
   {
-    path: ':login',
+    path: 'user/:userLogin',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/user-profile').then(
         (m) => m.UserProfileModule

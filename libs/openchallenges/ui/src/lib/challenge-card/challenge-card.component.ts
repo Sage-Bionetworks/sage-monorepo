@@ -33,9 +33,4 @@ export class ChallengeCardComponent implements OnInit {
       this.platform = this.challenge.platform;
     }
   }
-
-  // TODO: remove once the property to redirect to challenge page is determined
-  snakeCase(value: string): string {
-    return value.replace(/ /g, '-').toLowerCase();
-  }
 }
