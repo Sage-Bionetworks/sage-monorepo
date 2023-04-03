@@ -28,19 +28,11 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  switchMap,
-  tap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
   distinctUntilChanged,
-  map,
   skip,
   takeUntil,
 } from 'rxjs/operators';
@@ -106,7 +98,7 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
-  values$!: Observable<FilterValue[]>;
+  // values$!: Observable<FilterValue[]>;
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -157,17 +149,6 @@ export class ChallengeSearchComponent
         ))
     );
 
-    // update organization filter values
-    // this.organizationService.listOrganizations().subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations
-    //     .map((org) => ({
-    //       value: org.id,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })));
-    // });
-
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
@@ -197,64 +178,25 @@ export class ChallengeSearchComponent
       this.query.next(defaultQuery);
     });
 
-    // this.orgSearchTerms
-    // .pipe(
-    //   debounceTime(400),
-    //   distinctUntilChanged(),
-    //   takeUntil(this.destroy),
-    //   tap((s) => console.log('Searched by', s)),
-    //   switchMap((searchTerm) =>
-    //     this.organizationService.listOrganizations({
-    //       searchTerms: searchTerm,
-    //     } as OrganizationSearchQuery)
-    //   )
-    // )
-    // .subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
-    //     value: org.id,
-    //     label: org.name,
-    //     avatarUrl: org.avatarUrl,
-    //     active: false,
-    //   }));
-    //   console.log(
-    //     'List orgs',
-    //     challengeOrganizationFilter.values.map((o) => o.label)
-    //   );
-    // });
-
-    // testing
-    this.values$ = this.orgSearchTerms.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      takeUntil(this.destroy),
-      tap((s) => console.log('Searched by', s)),
-      switchMap((searchTerm) =>
-        this.organizationService.listOrganizations({
-          searchTerms: searchTerm,
-        } as OrganizationSearchQuery)
-      ),
-      map((page) => {
-        console.log('List orgs', page.organizations);
-        return page.organizations.map((org) => ({
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        challengeOrganizationFilter.values = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
         }));
-      })
-    );
-    // .subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
-    //     value: org.id,
-    //     label: org.name,
-    //     avatarUrl: org.avatarUrl,
-    //     active: false,
-    //   }));
-    //   console.log(
-    //     'List orgs',
-    //     challengeOrganizationFilter.values.map((o) => o.label)
-    //   );
-    // });
+      });
   }
 
   ngAfterContentInit(): void {

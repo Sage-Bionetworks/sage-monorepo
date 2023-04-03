@@ -6,9 +6,22 @@
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
-  (onFilter)="onSearch($event)"
+  [filter]="false"
 >
-  <!-- custom list items -->
+  <!-- custom search bar-->
+  <ng-template let-selectedOptions="selectedOptions" pTemplate="header">
+    <div class="custom-filter-container p-multiselect-filter-container">
+      <input
+        type="text"
+        role="textbox"
+        class="custom-filter p-multiselect-filter p-inputtext p-component"
+        autocomplete="on"
+        [(ngModel)]="searchTerm"
+        (input)="onSearch()"
+      />
+      <span class="p-multiselect-filter-icon pi pi-search"></span>
+    </div>
+  </ng-template>
   <ng-template let-value pTemplate="values">
     <div class="item-container">
       <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(value)"></openchallenges-avatar>
