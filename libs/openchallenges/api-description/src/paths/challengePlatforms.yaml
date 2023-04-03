@@ -37,8 +37,7 @@ get:
   description: List challenge platforms
   operationId: listChallengePlatforms
   parameters:
-    - $ref: ../components/parameters/query/pageNumber.yaml
-    - $ref: ../components/parameters/query/pageSize.yaml
+    - $ref: ../components/parameters/query/challengePlatformSearchQuery.yaml
   responses:
     '200':
       content:
