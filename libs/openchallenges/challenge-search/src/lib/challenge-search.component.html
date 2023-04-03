@@ -88,7 +88,7 @@
         </p-panel>
         <p-divider></p-divider>
       </ng-container>
-      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
+      <!-- <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <openchallenges-search-dropdown-filter
             [values]="dropdown.values"
@@ -99,7 +99,15 @@
           ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
+      </ng-container> -->
+      <!-- testing starts -->
+      <ng-container *ngIf="values$ | async as values">
+        <openchallenges-search-dropdown-filter
+          [values]="values"
+          (searchChange)="onDropdownSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
       </ng-container>
+      <!-- testing ends -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

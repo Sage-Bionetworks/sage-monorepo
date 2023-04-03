@@ -33,6 +33,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  map,
   skip,
   takeUntil,
 } from 'rxjs/operators';
@@ -98,6 +99,7 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
+  values$!: Observable<FilterValue[]>;
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -211,27 +213,64 @@ export class ChallengeSearchComponent
       this.query.next(defaultQuery);
     });
 
-    this.orgSearchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-        tap((s) => console.log(s)),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
-            searchTerms: searchTerm,
-          } as OrganizationSearchQuery)
-        )
-      )
-      .subscribe((page) => {
-        console.log(page);
-        challengeOrganizationFilter.values = page.organizations.map((org) => ({
+    // this.orgSearchTerms
+    // .pipe(
+    //   debounceTime(400),
+    //   distinctUntilChanged(),
+    //   takeUntil(this.destroy),
+    //   tap((s) => console.log('Searched by', s)),
+    //   switchMap((searchTerm) =>
+    //     this.organizationService.listOrganizations({
+    //       searchTerms: searchTerm,
+    //     } as OrganizationSearchQuery)
+    //   )
+    // )
+    // .subscribe((page) => {
+    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
+    //     value: org.id,
+    //     label: org.name,
+    //     avatarUrl: org.avatarUrl,
+    //     active: false,
+    //   }));
+    //   console.log(
+    //     'List orgs',
+    //     challengeOrganizationFilter.values.map((o) => o.label)
+    //   );
+    // });
+
+    // testing
+    this.values$ = this.orgSearchTerms.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      takeUntil(this.destroy),
+      tap((s) => console.log('Searched by', s)),
+      switchMap((searchTerm) =>
+        this.organizationService.listOrganizations({
+          searchTerms: searchTerm,
+        } as OrganizationSearchQuery)
+      ),
+      map((page) => {
+        console.log('List orgs', page.organizations);
+        return page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
         }));
-      });
+      })
+    );
+    // .subscribe((page) => {
+    //   challengeOrganizationFilter.values = page.organizations.map((org) => ({
+    //     value: org.id,
+    //     label: org.name,
+    //     avatarUrl: org.avatarUrl,
+    //     active: false,
+    //   }));
+    //   console.log(
+    //     'List orgs',
+    //     challengeOrganizationFilter.values.map((o) => o.label)
+    //   );
+    // });
   }
 
   ngAfterContentInit(): void {
@@ -249,9 +288,9 @@ export class ChallengeSearchComponent
 
     this.query
       .pipe(
-        tap((query) => console.log('List challenges', query)),
+        // tap((query) => console.log('List challenges', query)),
         switchMap((query) => this.challengeService.listChallenges(query)),
-        tap((page) => console.log('List of challenges: ', page.challenges)),
+        // tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
