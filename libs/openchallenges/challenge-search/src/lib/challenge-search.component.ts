@@ -42,6 +42,7 @@ import { assign } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -56,6 +57,10 @@ export class ChallengeSearchComponent
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
+
+  private inputDataTypeQuery: BehaviorSubject<any> = new BehaviorSubject<any>(
+    {}
+  );
 
   // set a default behaviorSubject to trigger searchTearm's changes
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
@@ -126,16 +131,32 @@ export class ChallengeSearchComponent
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update input data type filter values
-    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
-      (page) =>
-        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes.map(
-          (datatype) => ({
-            value: datatype.slug,
-            label: datatype.name,
-            active: false,
-          })
-        ))
-    );
+    // this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
+    //   (page) =>
+    //     (challengeInputDataTypeFilter.values = page.challengeInputDataTypes.map(
+    //       (datatype) => ({
+    //         value: datatype.slug,
+    //         label: datatype.name,
+    //         active: false,
+    //       })
+    //     ))
+    // );
+
+    this.inputDataTypeQuery
+      .pipe(
+        switchMap((query) =>
+          this.challengeInputDataTypeService.listChallengeInputDataTypes(query)
+        )
+      )
+      .subscribe(
+        (page) =>
+          (challengeInputDataTypeFilter.values =
+            page.challengeInputDataTypes.map((datatype) => ({
+              value: datatype.slug,
+              label: datatype.name,
+              active: false,
+            })))
+      );
 
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
@@ -301,6 +322,18 @@ export class ChallengeSearchComponent
 
   onDropdownSearchChange(searched: string): void {
     this.orgSearchTerms.next(searched);
+  }
+
+  onDropdownLazyLoadChange(event: LazyLoadEvent): void {
+    if (event && event.first && event.last) {
+      const s = event.last - event.first + 1;
+      const n = Math.floor(event.first / s);
+      const newQuery = assign(this.inputDataTypeQuery.getValue(), {
+        pageNumber: n,
+        pageSize: s,
+      });
+      this.inputDataTypeQuery.next(newQuery);
+    }
   }
 
   onSortChange(): void {
