@@ -12,6 +12,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input() selectedValues!: string[];
   @Input() placeholder = 'Search items';
   @Input() showAvatar!: boolean | undefined;
+  @Input() filterByApiClient!: boolean | undefined;
   @Output() selectionChange = new EventEmitter<string[]>();
   @Output() searchChange = new EventEmitter<string>();
 
@@ -21,12 +22,18 @@ export class SearchDropdownFilterComponent implements OnInit {
   };
 
   searchTerm = '';
+  filter = true;
 
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
+    this.filter = this.filterByApiClient ? !this.filterByApiClient : false;
   }
 
-  onSearch(): void {
+  onSearch(event: any): void {
+    this.searchChange.emit(event.filter);
+  }
+
+  onCustomSearch(): void {
     this.searchChange.emit(this.searchTerm);
   }
 

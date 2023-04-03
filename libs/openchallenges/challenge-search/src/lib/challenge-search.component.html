@@ -94,6 +94,7 @@
             [values]="dropdown.values"
             placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
             [showAvatar]="dropdown.showAvatar"
+            [filterByApiClient]="true"
             (selectionChange)="onDropdownSelectionChange($event, dropdown.query)"
             (searchChange)="onDropdownSearchChange($event)"
           ></openchallenges-search-dropdown-filter>

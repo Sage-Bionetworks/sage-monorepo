@@ -128,13 +128,13 @@ export class ChallengeSearchComponent
     // update input data type filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
-        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes
-          .map((datatype) => ({
+        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes.map(
+          (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
+          })
+        ))
     );
 
     // update platform filter values
@@ -148,6 +148,26 @@ export class ChallengeSearchComponent
           })
         ))
     );
+
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        challengeOrganizationFilter.values = page.organizations.map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        }));
+      });
 
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
@@ -177,26 +197,6 @@ export class ChallengeSearchComponent
       }
       this.query.next(defaultQuery);
     });
-
-    this.orgSearchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
-            searchTerms: searchTerm,
-          } as OrganizationSearchQuery)
-        )
-      )
-      .subscribe((page) => {
-        challengeOrganizationFilter.values = page.organizations.map((org) => ({
-          value: org.id,
-          label: org.name,
-          avatarUrl: org.avatarUrl,
-          active: false,
-        }));
-      });
   }
 
   ngAfterContentInit(): void {
