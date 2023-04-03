@@ -9,7 +9,7 @@ import javax.validation.constraints.*;
 /** What to sort results by. */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public enum ChallengeInputDataTypeSortDto {
-  CREATED("created"),
+  NAME("name"),
 
   RELEVANCE("relevance");
 

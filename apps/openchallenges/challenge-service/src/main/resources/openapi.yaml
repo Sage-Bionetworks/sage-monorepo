@@ -770,7 +770,7 @@ components:
       default: relevance
       description: What to sort results by.
       enum:
-      - created
+      - name
       - relevance
       type: string
     ChallengeInputDataTypeDirection:
