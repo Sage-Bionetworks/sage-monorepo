@@ -58,11 +58,11 @@ export class ChallengeComponent implements OnInit {
         return of(challenge);
       }),
       catchError((err) => {
-        const errorMsg = handleHttpError(err, this.router, {
+        const error = handleHttpError(err, this.router, {
           404: '/not-found',
           400: '/challenge',
         } as HttpStatusRedirect);
-        return throwError(() => errorMsg);
+        return throwError(() => error);
       })
     );
 
