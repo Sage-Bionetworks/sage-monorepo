@@ -8,9 +8,9 @@ export function handleHttpError(
   httpStatusRedirect: HttpStatusRedirect,
   defaultRedirectUrl = '/'
 ): Error {
-  const err = error?.error;
-  const status = error?.status as number;
-  const message = isApiClientError(err) ? err.detail : err.message;
+  const err = error.error;
+  const status = error.status as number;
+  const message = isApiClientError(err) ? err.detail : error.message;
   // redirect to corresponding url based on http status code
   // if no url is specified for the status code, redirect to default url
   router.navigate([httpStatusRedirect[status] || defaultRedirectUrl]);
