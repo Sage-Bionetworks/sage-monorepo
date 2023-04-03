@@ -97,18 +97,11 @@
             [filterByApiClient]="true"
             (selectionChange)="onDropdownSelectionChange($event, dropdown.query)"
             (searchChange)="onDropdownSearchChange($event)"
+            (lazyLoad)="onDropdownLazyLoadChange($event)"
           ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
       </ng-container>
-      <!-- testing starts -->
-      <!-- <ng-container *ngIf="values$ | async as values">
-        <openchallenges-search-dropdown-filter
-          [values]="values"
-          (searchChange)="onDropdownSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
-      </ng-container> -->
-      <!-- testing ends -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

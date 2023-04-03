@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterValue } from '../checkbox-filter/filter-value.model';
 import { Avatar } from '../avatar/avatar';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -15,6 +16,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input() filterByApiClient!: boolean | undefined;
   @Output() selectionChange = new EventEmitter<string[]>();
   @Output() searchChange = new EventEmitter<string>();
+  @Output() lazyLoad = new EventEmitter<LazyLoadEvent>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -39,6 +41,13 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   onChange(selected: string[]): void {
     this.selectionChange.emit(selected);
+  }
+
+  onLazyLoad(event: LazyLoadEvent): void {
+    // setTimeout(() => {
+    console.log(event);
+    this.lazyLoad.emit(event);
+    // }, 1000);
   }
 
   getAvatar(value: FilterValue): Avatar {
