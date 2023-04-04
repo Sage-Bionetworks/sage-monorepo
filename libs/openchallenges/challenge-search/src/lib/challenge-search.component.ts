@@ -149,6 +149,7 @@ export class ChallengeSearchComponent
         ))
     );
 
+    // update organization filter values
     this.orgSearchTerms
       .pipe(
         debounceTime(400),
@@ -168,7 +169,7 @@ export class ChallengeSearchComponent
           active: false,
         }));
       });
-
+      
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
