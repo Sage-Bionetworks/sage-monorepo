@@ -98,7 +98,6 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
-  // values$!: Observable<FilterValue[]>;
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 

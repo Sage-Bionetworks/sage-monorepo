@@ -26,7 +26,9 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
-    this.filter = this.filterByApiClient ? !this.filterByApiClient : false;
+    if (this.filterByApiClient) {
+      this.filter = !this.filterByApiClient;
+    }
   }
 
   onSearch(event: any): void {
