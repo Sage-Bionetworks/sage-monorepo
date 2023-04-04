@@ -28,7 +28,7 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, of, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -140,48 +140,34 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms
-          .map((platform) => ({
+        (challengePlatformFilter.values = page.challengePlatforms.map(
+          (platform) => ({
             value: platform.slug,
             label: platform.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
+          })
+        ))
     );
 
-    // update organization filter values
-    this.organizationService.listOrganizations().subscribe((page) => {
-      challengeOrganizationFilter.values = page.organizations
-        .map((org) => ({
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        challengeOrganizationFilter.values = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
-
-    // update organization filter values
-    // this.organizationService.listOrganizations().subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations
-    //     .map((org) => ({
-    //       value: org.id,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })));
-    // });
-
-    // update organization filter values
-    // this.organizationService.listOrganizations().subscribe((page) => {
-    //   challengeOrganizationFilter.values = page.organizations
-    //     .map((org) => ({
-    //       value: org.id,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })));
-    // });
+        }));
+      });
 
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(

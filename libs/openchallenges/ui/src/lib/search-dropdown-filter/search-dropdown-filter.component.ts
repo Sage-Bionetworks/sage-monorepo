@@ -29,9 +29,12 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.filter = this.filterByApiClient ? !this.filterByApiClient : false;
   }
 
-  onSearch(searched: any): void {
-    console.log(searched);
-    this.searchChange.emit(searched.filter);
+  onSearch(event: any): void {
+    this.searchChange.emit(event.filter);
+  }
+
+  onCustomSearch(): void {
+    this.searchChange.emit(this.searchTerm);
   }
 
   onChange(selected: string[]): void {
