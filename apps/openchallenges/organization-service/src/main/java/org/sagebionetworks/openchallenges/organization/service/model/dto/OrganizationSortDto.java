@@ -13,6 +13,8 @@ public enum OrganizationSortDto {
 
   CREATED("created"),
 
+  NAME("name"),
+
   RELEVANCE("relevance");
 
   private String value;

@@ -4,7 +4,7 @@
       <div class="link" class="row">
         <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
         <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
-        <a routerLink="/challenges">challenges</a>
+        <a routerLink="/challenge">challenges</a>
         <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
         <span>{{ challenge.name }}</span>
       </div>
@@ -22,7 +22,7 @@
       <div id="details" class="col">
         <div class="details-top row">
           <h2>
-            {{ challenge.displayName }}
+            {{ challenge.name }}
           </h2>
           <div class="featured">
             <mat-icon aria-hidden="true">military_tech</mat-icon>

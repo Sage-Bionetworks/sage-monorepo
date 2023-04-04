@@ -7,7 +7,10 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
+        "commands": [
+          "shx cp -n .env.example .env",
+          "shx cp -n tools/grafana-backup-tool/.env.example tools/grafana-backup-tool/.env"
+        ],
         "cwd": "apps/openchallenges/grafana"
       }
     },
@@ -24,6 +27,27 @@
         "context": "apps/openchallenges/grafana",
         "push": false,
         "tags": ["sagebionetworks/openchallenges-grafana:latest"]
+      }
+    },
+    "create-api-key": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./tools/create-api-key.sh",
+        "cwd": "apps/openchallenges/grafana"
+      }
+    },
+    "save-data": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./tools/backup-to-s3.sh",
+        "cwd": "apps/openchallenges/grafana"
+      }
+    },
+    "restore-data": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./tools/restore-from-s3.sh",
+        "cwd": "apps/openchallenges/grafana"
       }
     }
   },

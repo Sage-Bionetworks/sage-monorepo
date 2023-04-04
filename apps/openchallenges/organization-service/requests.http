@@ -20,9 +20,13 @@ GET {{basePath}}/organizations?searchTerms=dream
 
 GET {{basePath}}/organizations?challengeContributorRoles=sponsor,data_contributor
 
-### Sort the orgs by their creation time in desc oder.
+### Sort the orgs by their creation time in desc order.
 
 GET {{basePath}}/organizations?sort=created&direction=desc
+
+### Sort the orgs by their name.
+
+GET {{basePath}}/organizations?sort=name
 
 ### Sort the orgs by the number of challenges they contributed to.
 

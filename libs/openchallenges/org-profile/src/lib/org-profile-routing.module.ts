@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { OrgProfileComponent } from './org-profile.component';
-import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 
 const routes: Routes = [
   {
-    path: ':orgLogin',
+    path: '',
     component: OrgProfileComponent,
-    children: [{ path: ':orgLogin', component: OrgProfileOverviewComponent }],
+    children: [{ path: '**', component: OrgProfileComponent }],
   },
 ];
 

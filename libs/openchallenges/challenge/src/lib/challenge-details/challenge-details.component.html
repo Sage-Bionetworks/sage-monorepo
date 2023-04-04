@@ -16,15 +16,16 @@
       </tr>
       <tr>
         <td class="detail-name">PLATFORM</td>
-        <td>{{ platform }}</td>
+        <td>{{ challenge.platform.name }}</td>
       </tr>
       <tr>
         <td class="detail-name">WEBSITE URL</td>
         <td>{{ challenge.websiteUrl }}</td>
       </tr>
       <tr>
+        <!-- TODO: replace with doi from challenge object -->
         <td class="detail-name">DOI</td>
-        <td>{{ challenge.doi }}</td>
+        <td>{{ mockDoi }}</td>
       </tr>
       <tr>
         <td class="detail-name">SUBMISSION TYPE</td>
@@ -45,7 +46,7 @@
       <tr>
         <td class="detail-name">INCENTIVE(S)</td>
         <td>
-          <span nowrap *ngFor="let incentive of challenge.incentiveTypes; let isLast = last">
+          <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
             {{ printCamel(incentive) }}{{ isLast ? '' : ', ' }}</span
           >
         </td>
@@ -53,7 +54,8 @@
       <tr>
         <td class="detail-name">TOPIC(S)</td>
         <td>
-          <span nowrap *ngFor="let topic of challenge.topics; let isLast = last">
+          <!-- TODO: replace with topics from challenge object -->
+          <span nowrap *ngFor="let topic of mockTopics; let isLast = last">
             {{ printCamel(topic) }}{{ isLast ? '' : ', ' }}
           </span>
         </td>

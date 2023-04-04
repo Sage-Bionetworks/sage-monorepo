@@ -148,6 +148,7 @@ components:
       enum:
       - challenge_count
       - created
+      - name
       - relevance
       type: string
     OrganizationDirection:

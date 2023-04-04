@@ -140,14 +140,15 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, OrganizationSearchQueryDto query) {
-    // SortOrder orderWithDefaultAsc =
-    //     query.getDirection() == OrganizationDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
+    SortOrder orderWithDefaultAsc =
+        query.getDirection() == OrganizationDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
     SortOrder orderWithDefaultDesc =
         query.getDirection() == OrganizationDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
 
     SearchSort challengeCountSort =
         sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
+    SearchSort nameSort = sf.field("name_sort").order(orderWithDefaultAsc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =
         (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
@@ -160,6 +161,9 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
       }
       case CREATED -> {
         return createdSort;
+      }
+      case NAME -> {
+        return nameSort;
       }
       case RELEVANCE -> {
         return relevanceSort;
