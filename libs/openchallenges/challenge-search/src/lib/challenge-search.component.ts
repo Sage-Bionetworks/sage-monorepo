@@ -169,7 +169,7 @@ export class ChallengeSearchComponent
           active: false,
         }));
       });
-      
+
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
