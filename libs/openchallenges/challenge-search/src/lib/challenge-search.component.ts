@@ -157,6 +157,7 @@ export class ChallengeSearchComponent
         switchMap((searchTerm) =>
           this.organizationService.listOrganizations({
             searchTerms: searchTerm,
+            sort: 'name',
           } as OrganizationSearchQuery)
         )
       )
