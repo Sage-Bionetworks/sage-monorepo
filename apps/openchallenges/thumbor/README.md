@@ -4,17 +4,29 @@
 
 ### Prepare the service
 
+Run this command to prepare this project, including creating the config file `.env`.
+
 ```console
 nx prepare openchallenges-thumbor
 ```
 
-### Start Thumbor and MinIO
+> **Note** The task `prepare` does not overwrites the config file `.env` if it already exists.
+
+### Start Thumbor
+
+Start Thumbor and its dependencies:
 
 ```console
 nx serve-detach openchallenges-thumbor
 ```
 
-### Upload an image to MinIO
+### Update an image to AWS S3 bucket
+
+Add images to the AWS S3 bucket `openchallenges-img`.
+
+See below for information on how to create and configure the AWS S3 buckets.
+
+### Upload an image to MinIO (deprecated)
 
 1. Open MinIO web console http://localhost:9001/.
 2. Login into MinIO (see MinIO project folder for the default credentials).
