@@ -2064,12 +2064,8 @@ VALUES (
     '151',
     'deep-health-3',
     'Deep Health - Diabetes 2',
-    'This competition is for those attending the Deep Health Hackathon.
- 
- Predict th',
-    'This competition is for those attending the Deep Health Hackathon.
- 
- Predict the next occurrence of diabetes',
+    'This competition is for those attending the Deep Health Hackathon.  Predict the ',
+    'This competition is for those attending the Deep Health Hackathon.  Predict the next occurrence of diabetes',
     'https://www.kaggle.com/competitions/deep-health-3',
     'completed',
     'intermediate',
