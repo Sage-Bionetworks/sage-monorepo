@@ -67,6 +67,9 @@ export class ChallengeSearchComponent
     ''
   );
 
+  private inputDataTypeSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+
   private destroy = new Subject<void>();
   searchTermValue = '';
 
@@ -100,6 +103,8 @@ export class ChallengeSearchComponent
   ];
 
   selectedOrgs: FilterValue[] = [];
+  selectedInputDataTypes: FilterValue[] = [];
+
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -126,18 +131,6 @@ export class ChallengeSearchComponent
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
-    // update input data type filter values
-    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
-      (page) =>
-        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes.map(
-          (datatype) => ({
-            value: datatype.slug,
-            label: datatype.name,
-            active: false,
-          })
-        ))
-    );
-
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
@@ -149,6 +142,39 @@ export class ChallengeSearchComponent
           })
         ))
     );
+
+    // update input data type filter values
+    this.inputDataTypeSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        // TODO: comment out below snippet for pr #1451
+        switchMap(() =>
+          this.challengeInputDataTypeService.listChallengeInputDataTypes()
+        )
+        // TODO: uncomment out below snippet for pr #1451
+        // switchMap((searchTerm) =>
+        //   this.challengeInputDataTypeService.listChallengeInputDataTypes({
+        //     searchTerms: searchTerm,
+        //     sort: 'name',
+        //   } as ChallengeInputDataTypeSearchQuery)
+        // )
+      )
+      .subscribe((page) => {
+        const searchedInputDataTypes = page.challengeInputDataTypes.map(
+          (dataType) => ({
+            value: dataType.slug,
+            label: dataType.name,
+            active: false,
+          })
+        ) as FilterValue[];
+
+        challengeInputDataTypeFilter.values = union(
+          searchedInputDataTypes,
+          this.selectedInputDataTypes
+        );
+      });
 
     // update organization filter values
     this.orgSearchTerms
@@ -290,6 +316,12 @@ export class ChallengeSearchComponent
     selected: string[] | number[],
     queryName: string
   ): void {
+    if (queryName === 'inputDataTypes') {
+      this.selectedOrgs = challengeInputDataTypeFilter.values.filter((value) =>
+        (selected as string[]).includes(value.value as string)
+      );
+    }
+
     if (queryName === 'organizations') {
       this.selectedOrgs = challengeOrganizationFilter.values.filter((value) =>
         (selected as number[]).includes(value.value as number)
