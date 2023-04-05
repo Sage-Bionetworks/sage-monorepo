@@ -39,8 +39,8 @@ nx serve-detach openchallenges-image-service
 
 ### Start the service in development mode
 
-The approach is to first start the service and its dependencies as a container with `serve-detach`
-(see above), then stop and remove the container before starting the service with `serve`.
+The approach is to first start the service and its dependencies as a container with `serve-detach`,
+then stop and remove the container before starting the service with `serve`.
 
 ```console
 nx serve-detach openchallenges-image-service
