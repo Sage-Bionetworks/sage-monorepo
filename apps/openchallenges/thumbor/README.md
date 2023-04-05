@@ -12,6 +12,12 @@ nx prepare openchallenges-thumbor
 
 > **Note** The task `prepare` does not overwrites the config file `.env` if it already exists.
 
+### Build the Docker image
+
+```console
+nx build-image openchallenges-thumbor
+```
+
 ### Start Thumbor
 
 Start Thumbor and its dependencies:
