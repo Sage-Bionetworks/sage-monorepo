@@ -58,6 +58,9 @@ export class ChallengeSearchComponent
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
 
+  private orgQuery: BehaviorSubject<OrganizationSearchQuery> =
+    new BehaviorSubject<OrganizationSearchQuery>({});
+
   // set a default behaviorSubject to trigger searchTearm's changes
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
@@ -155,13 +158,39 @@ export class ChallengeSearchComponent
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
-        takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
-            searchTerms: searchTerm,
-            sort: 'name',
-          } as OrganizationSearchQuery)
-        )
+        takeUntil(this.destroy)
+        //   switchMap((searchTerm) =>
+        //     this.organizationService.listOrganizations({
+        //       searchTerms: searchTerm,
+        //       sort: 'name',
+        //     } as OrganizationSearchQuery)
+        //   )
+      )
+      .subscribe((searchTerm) => {
+        // const searchedOrgs = page.organizations.map((org) => ({
+        //   value: org.id,
+        //   label: org.name,
+        //   avatarUrl: org.avatarUrl,
+        //   active: false,
+        // })) as FilterValue[];
+
+        // challengeOrganizationFilter.values = union(
+        //   searchedOrgs,
+        //   this.selectedOrgs
+        // );
+
+        const newQuery = assign(this.query.getValue(), {
+          searchTerms: searchTerm,
+          sort: 'name',
+        }) as OrganizationSearchQuery;
+        this.orgQuery.next(newQuery);
+      });
+
+    this.orgQuery
+      .pipe(
+        tap((query) => console.log('List orgs', query)),
+        switchMap((query) => this.organizationService.listOrganizations(query)),
+        tap((page) => console.log('List of orgs: ', page.organizations))
       )
       .subscribe((page) => {
         const searchedOrgs = page.organizations.map((org) => ({
@@ -323,6 +352,15 @@ export class ChallengeSearchComponent
       pageSize: event.rows,
     });
     this.query.next(newQuery);
+  }
+
+  onLazyLoad(page: any) {
+    const newQuery = assign(this.query.getValue(), {
+      pageNumber: page.pageNumber,
+      pageSize: page.pageSize,
+    }) as OrganizationSearchQuery;
+    console.log(newQuery);
+    this.orgQuery.next(newQuery);
   }
 
   openSnackBar(message: string) {

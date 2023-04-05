@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterValue } from '../checkbox-filter/filter-value.model';
 import { Avatar } from '../avatar/avatar';
+import { LazyLoadEvent } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -15,11 +16,16 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input() filterByApiClient!: boolean | undefined;
   @Output() selectionChange = new EventEmitter<string[]>();
   @Output() searchChange = new EventEmitter<string>();
+  @Output() lazyLoad = new EventEmitter<any>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
     hideTransitionOptions: '0ms',
   };
+
+  // virtual scroll works as expected
+  // when scroll item size (height) is specified
+  scrollItemHeight = 40;
 
   searchTerm = '';
   filter = true;
@@ -32,6 +38,11 @@ export class SearchDropdownFilterComponent implements OnInit {
       // disable default filter and use custom search bar
       this.filter = !this.filterByApiClient;
     }
+
+    if (this.showAvatar) {
+      // if avatar displayed, increase item size height
+      this.scrollItemHeight = 100;
+    }
   }
 
   onSearch(event: any): void {
@@ -40,6 +51,15 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   onCustomSearch(): void {
     this.searchChange.emit(this.searchTerm);
+  }
+
+  onLazyLoad(event: LazyLoadEvent): void {
+    if (event && event.last && event.first) {
+      const currentSize = event.last - event.first + 1;
+      const currentNumber = Math.floor(event.first / currentSize);
+
+      this.lazyLoad.emit({ pageNumber: currentNumber, pageSize: currentSize });
+    }
   }
 
   onChange(selected: string[]): void {
