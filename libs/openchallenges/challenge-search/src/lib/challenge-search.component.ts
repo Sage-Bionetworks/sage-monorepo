@@ -11,6 +11,7 @@ import {
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
+  ChallengeInputDataTypeSearchQuery,
   OrganizationService,
   OrganizationSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
@@ -149,19 +150,15 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        // TODO: comment out below snippet for pr #1451
-        switchMap(() =>
-          this.challengeInputDataTypeService.listChallengeInputDataTypes()
+        switchMap((searchTerm) =>
+          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as ChallengeInputDataTypeSearchQuery)
         )
-        // TODO: uncomment out below snippet for pr #1451
-        // switchMap((searchTerm) =>
-        //   this.challengeInputDataTypeService.listChallengeInputDataTypes({
-        //     searchTerms: searchTerm,
-        //     sort: 'name',
-        //   } as ChallengeInputDataTypeSearchQuery)
-        // )
       )
       .subscribe((page) => {
+        console.log(page.challengeInputDataTypes);
         const searchedInputDataTypes = page.challengeInputDataTypes.map(
           (dataType) => ({
             value: dataType.slug,
