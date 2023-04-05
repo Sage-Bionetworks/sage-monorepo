@@ -9,7 +9,7 @@
   [filter]="filter"
   (onFilter)="onSearch($event)"
 >
-  <!-- custom search bar -->
+  <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="header">
     <div class="custom-filter-container p-multiselect-filter-container">
       <input

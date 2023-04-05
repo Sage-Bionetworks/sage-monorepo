@@ -26,7 +26,10 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
+
     if (this.filterByApiClient) {
+      // if search field will be updated with query results
+      // disable default filter and use custom search bar
       this.filter = !this.filterByApiClient;
     }
   }
