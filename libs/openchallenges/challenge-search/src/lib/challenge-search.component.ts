@@ -35,10 +35,11 @@ import {
   distinctUntilChanged,
   skip,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-import { assign } from 'lodash';
+import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -98,6 +99,7 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
+  selectedOrgs: FilterValue[] = [];
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -162,12 +164,17 @@ export class ChallengeSearchComponent
         )
       )
       .subscribe((page) => {
-        challengeOrganizationFilter.values = page.organizations.map((org) => ({
+        const searchedOrgs = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
           avatarUrl: org.avatarUrl,
           active: false,
-        }));
+        })) as FilterValue[];
+
+        challengeOrganizationFilter.values = union(
+          searchedOrgs,
+          this.selectedOrgs
+        );
       });
 
     // // mock up service to query all unique organizers
@@ -215,9 +222,9 @@ export class ChallengeSearchComponent
 
     this.query
       .pipe(
-        // tap((query) => console.log('List challenges', query)),
+        tap((query) => console.log('List challenges', query)),
         switchMap((query) => this.challengeService.listChallenges(query)),
-        // tap((page) => console.log('List of challenges: ', page.challenges)),
+        tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
@@ -279,7 +286,16 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  onDropdownSelectionChange(selected: string[], queryName: string): void {
+  onDropdownSelectionChange(
+    selected: string[] | number[],
+    queryName: string
+  ): void {
+    if (queryName === 'organizations') {
+      this.selectedOrgs = challengeOrganizationFilter.values.filter((value) =>
+        (selected as number[]).includes(value.value as number)
+      );
+    }
+
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
