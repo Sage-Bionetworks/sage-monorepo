@@ -1,0 +1,6 @@
+description: The direction to sort the results by.
+type: string
+nullable: true
+enum:
+  - asc
+  - desc

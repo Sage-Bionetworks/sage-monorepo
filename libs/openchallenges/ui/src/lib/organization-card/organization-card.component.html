@@ -19,8 +19,8 @@
       <p class="card-subtitle" *ngIf="otherMembers">+ {{ otherMembers }} other members</p>
     </div>
     <div class="card-footer">
-      <div class="support-tag mat-small">
-        Contributed to {{ mockChallengesSupported }} challenges
+      <div *ngIf="challengesSupported" class="support-tag mat-small">
+        Contributed to {{ challengesSupported }} challenges
       </div>
     </div>
   </div>

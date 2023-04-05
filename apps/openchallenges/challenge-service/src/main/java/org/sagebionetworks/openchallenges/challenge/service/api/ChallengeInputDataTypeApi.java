@@ -14,6 +14,7 @@ import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypesPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -31,8 +32,8 @@ public interface ChallengeInputDataTypeApi {
   /**
    * GET /challengeInputDataTypes : List challenge input data types List challenge input data types
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param challengeInputDataTypeSearchQuery The search query used to find challenge input data
+   *     types. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -80,16 +81,11 @@ public interface ChallengeInputDataTypeApi {
       value = "/challengeInputDataTypes",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengeInputDataTypesPageDto> listChallengeInputDataTypes(
-      @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number.")
+      @Parameter(
+              name = "challengeInputDataTypeSearchQuery",
+              description = "The search query used to find challenge input data types.")
           @Valid
-          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
-          Integer pageNumber,
-      @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page.")
-          @Valid
-          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize) {
-    return getDelegate().listChallengeInputDataTypes(pageNumber, pageSize);
+          ChallengeInputDataTypeSearchQueryDto challengeInputDataTypeSearchQuery) {
+    return getDelegate().listChallengeInputDataTypes(challengeInputDataTypeSearchQuery);
   }
 }
