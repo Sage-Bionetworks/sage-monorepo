@@ -8,30 +8,9 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  .organization-card-container1 {
-    border-color: transparent;
-  }
-  .org-card-banner {
-    border-color: transparent;
-    background-color: map.get($figma, dl-color-default-hover2);
-  }
-  .organization-card > .avatar-content {
-    background-color: transparent !important;
-    color: map.get($figma, dl-color-default-primary2) !important;
-  }
-  .organization-card-card-title {
-    border-color: transparent;
-  }
-  .organization-card-text1 {
-    color: rgba(0, 0, 0, 1);
-  }
-  .organization-card-text2 {
-    color: map.get($figma, dl-color-default-primary1);
-  }
-  @media (max-width: 479px) {
-    .org-card-banner {
-      background-color: map.get($figma, dl-color-default-hover2);
-    }
+  .organization-card {
+    background-color: map.get($figma, dl-color-gray-white);
+    box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
   }
 }
 

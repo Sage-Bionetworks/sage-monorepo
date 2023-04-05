@@ -1,12 +1,27 @@
 <div *ngIf="organization">
-  <div class="organization-card">
+  <div class="organization-card" [routerLink]="['/org', organization.login]">
     <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
     </openchallenges-avatar>
-    <div class="organization-card-text">
-      <p class="organization-card-title">{{ organization.name }}</p>
-      <a class="organization-card-subtitle" [routerLink]="['/org', organization.login]"
-        >@{{ organization.login }}</a
-      >
+    <div class="star-btn">
+      <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
+      {{ mockStars }}
+    </div>
+    <div class="card-body">
+      <p class="card-title">{{ organization.name }}</p>
+      <div *ngIf="mockMembers" class="organization-members">
+        <openchallenges-avatar
+          *ngFor="let member of mockMembers | slice: 0:4"
+          class="member"
+          [avatar]="member"
+        >
+        </openchallenges-avatar>
+      </div>
+      <p class="card-subtitle" *ngIf="otherMembers">+ {{ otherMembers }} other members</p>
+    </div>
+    <div class="card-footer">
+      <div *ngIf="challengesSupported" class="support-tag mat-small">
+        Contributed to {{ challengesSupported }} challenges
+      </div>
     </div>
   </div>
 </div>

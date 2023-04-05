@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+import {
+  Challenge,
+  Organization,
+} from '@sagebionetworks/openchallenges/api-client-angular';
 import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
@@ -11,4 +13,5 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 export class ChallengeOverviewComponent {
   @Input() challenge!: Challenge;
   organizations: Organization[] = MOCK_ORGANIZATIONS;
+  mockTopics = ['breast', 'cancer'];
 }

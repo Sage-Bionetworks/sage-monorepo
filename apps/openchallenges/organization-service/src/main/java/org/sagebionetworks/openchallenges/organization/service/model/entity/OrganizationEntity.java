@@ -16,10 +16,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
+import org.sagebionetworks.openchallenges.organization.service.model.search.OrganizationNameValueBridge;
 
 @Entity
 @Table(name = "organization")
@@ -37,6 +39,10 @@ public class OrganizationEntity {
 
   @Column(nullable = false)
   @FullTextField()
+  @GenericField(
+      name = "name_sort",
+      valueBridge = @ValueBridgeRef(type = OrganizationNameValueBridge.class),
+      sortable = Sortable.YES)
   private String name;
 
   @Column(nullable = false)

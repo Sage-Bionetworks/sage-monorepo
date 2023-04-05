@@ -20,6 +20,8 @@ services:
         condition: service_healthy
       openchallenges-challenge-service:
         condition: service_started
+      openchallenges-image-service:
+        condition: service_healthy
       # openchallenges-keycloak:
       #   condition: service_started
       openchallenges-organization-service:

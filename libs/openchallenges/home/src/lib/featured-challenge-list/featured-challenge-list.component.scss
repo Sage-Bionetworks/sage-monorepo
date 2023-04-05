@@ -45,15 +45,7 @@ $screen-lg: 641px;
   padding: 48px 24px 64px;
   box-shadow: 0 8px 12px rgba(17, 16, 62, 0.12);
 }
-.card-title {
-  margin: 16px 0;
-  line-height: 24px;
-}
-.card-footer {
-  align-self: flex-end;
-  font-weight: 500;
-  margin-bottom: 12px;
-}
+
 @media (min-width: $screen-lg) {
   .cards .section-paragraph {
     padding-left: 72px;
