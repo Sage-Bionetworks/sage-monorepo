@@ -16,7 +16,7 @@ export class OrganizationCardComponent implements OnInit {
   mockStars!: number;
   mockMembers!: Avatar[];
   otherMembers!: number;
-  challengesSupported!: number | undefined;
+  challengesSupported: number | undefined;
 
   ngOnInit(): void {
     if (this.organization) {
