@@ -11,6 +11,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Table(name = "challenge_input_data_type")
@@ -18,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed(index = "openchallenges-challenge-input-data-type")
 public class ChallengeInputDataTypeEntity {
 
   @Id
@@ -29,6 +32,7 @@ public class ChallengeInputDataTypeEntity {
   private String slug;
 
   @Column(nullable = false)
+  @FullTextField()
   private String name;
 
   @Column(name = "created_at")
