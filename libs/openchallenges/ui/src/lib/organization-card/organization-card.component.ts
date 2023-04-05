@@ -16,7 +16,7 @@ export class OrganizationCardComponent implements OnInit {
   mockStars!: number;
   mockMembers!: Avatar[];
   otherMembers!: number;
-  mockChallengesSupported!: number;
+  challengesSupported: number | undefined;
 
   ngOnInit(): void {
     if (this.organization) {
@@ -27,6 +27,14 @@ export class OrganizationCardComponent implements OnInit {
         size: 140,
       };
     }
+
+    if (this.organization.challengeCount) {
+      this.challengesSupported =
+        this.organization.challengeCount > 0
+          ? this.organization.challengeCount
+          : undefined;
+    }
+
     // TODO: replace mock items with organization properties
     this.mockStars = 2;
     this.mockMembers = [
@@ -61,7 +69,6 @@ export class OrganizationCardComponent implements OnInit {
       //   size: this.personAvatarSize,
       // },
     ];
-    this.mockChallengesSupported = 3;
 
     this.otherMembers =
       this.mockMembers.length > 4 ? this.mockMembers.length - 4 : 0;
