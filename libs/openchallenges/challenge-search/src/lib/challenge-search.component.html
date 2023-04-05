@@ -97,7 +97,6 @@
             [filterByApiClient]="true"
             (selectionChange)="onDropdownSelectionChange($event, dropdown.query)"
             (searchChange)="onDropdownSearchChange($event)"
-            (lazyLoad)="onLazyLoad($event)"
           ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
