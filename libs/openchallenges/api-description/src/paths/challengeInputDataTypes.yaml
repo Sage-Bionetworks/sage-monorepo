@@ -5,8 +5,7 @@ get:
   description: List challenge input data types
   operationId: listChallengeInputDataTypes
   parameters:
-    - $ref: ../components/parameters/query/pageNumber.yaml
-    - $ref: ../components/parameters/query/pageSize.yaml
+    - $ref: ../components/parameters/query/challengeInputDataTypeSearchQuery.yaml
   responses:
     '200':
       content:

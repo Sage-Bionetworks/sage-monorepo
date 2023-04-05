@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.service;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeInputDataTypeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeInputDataTypeMapper;
@@ -25,8 +26,12 @@ public class ChallengeInputDataTypeService {
 
   @Transactional(readOnly = true)
   public ChallengeInputDataTypesPageDto listChallengeInputDataTypes(
-      Integer pageNumber, Integer pageSize) {
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
+      ChallengeInputDataTypeSearchQueryDto query) {
+
+    log.info("query {}", query);
+
+    Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+
     Page<ChallengeInputDataTypeEntity> entitiesPage =
         challengeInputDataTypeRepository.findAll(pageable);
 

@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypesPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,14 +23,14 @@ public interface ChallengeInputDataTypeApiDelegate {
   /**
    * GET /challengeInputDataTypes : List challenge input data types List challenge input data types
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param challengeInputDataTypeSearchQuery The search query used to find challenge input data
+   *     types. (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeInputDataTypeApi#listChallengeInputDataTypes
    */
   default ResponseEntity<ChallengeInputDataTypesPageDto> listChallengeInputDataTypes(
-      Integer pageNumber, Integer pageSize) {
+      ChallengeInputDataTypeSearchQueryDto challengeInputDataTypeSearchQuery) {
     getRequest()
         .ifPresent(
             request -> {
