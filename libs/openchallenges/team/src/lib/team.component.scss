@@ -14,7 +14,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
 }
 .member-card {
   width: 300px;
@@ -23,8 +23,7 @@
   align-items: center;
 }
 .member-pic {
-  width: 240px;
-  height: 240px;
+  max-height: 240px;
   padding: 12px 0 22px;
   -moz-border-radius: 50%;
   -webkit-border-radius: 505;
