@@ -18,14 +18,14 @@
   }
   .verified {
     border-color: transparent;
-    color: map.get($figma, dl-color-default-darkaccent3);
+    color: map.get($figma, dl-color-default-darkaccent1);
   }
   .username {
     color: map.get($figma, dl-color-default-secondary1);
   }
   .user-tag {
     border-color: map.get($figma, dl-color-default-secondary2);
-    background-color: map.get($figma, dl-color-default-accent4);
+    background-color: map.get($figma, dl-color-default-accent2);
   }
   .base-profile-pic {
     border-color: transparent;
