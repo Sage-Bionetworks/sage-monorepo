@@ -50,12 +50,7 @@
   }
 }
 
-@mixin typography($theme) { 
-  .card-title {
-    font-size: 18px;
-    font-weight: 700;
-  }
-}
+@mixin typography($theme) { }
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
