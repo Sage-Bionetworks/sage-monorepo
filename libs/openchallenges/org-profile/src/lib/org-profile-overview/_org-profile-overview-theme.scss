@@ -7,10 +7,6 @@
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
-
-  .link-text {
-    color: map.get($figma, dl-color-default-secondary2);
-  }
 }
 
 @mixin typography($theme) {
