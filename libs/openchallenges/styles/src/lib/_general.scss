@@ -37,6 +37,30 @@ body {
 .text-left {
   text-align: left;
 }
+.text-center {
+  text-align: center;
+}
+
+// LOGO & DESIGN
+.logo-icon {
+  width: 140px;
+  height: 140px;
+}
+.top-design {
+  background: url('/openchallenges-assets/images/about-banner.svg');
+  background-size: cover;
+  background-position: bottom;
+  padding-top: 108px;
+  text-align: center;
+
+  .section-inner {
+    margin-bottom: 40px;
+
+    h2 {
+      margin: 8px 0;
+    }
+  }
+}
 
 // BUTTONS
 .btn {
