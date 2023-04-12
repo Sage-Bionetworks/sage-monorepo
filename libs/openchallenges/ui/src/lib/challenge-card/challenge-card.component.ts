@@ -5,7 +5,7 @@ import {
   SimpleChallengePlatform,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Challenge as DeprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { startCase } from 'lodash';
+// import { startCase } from 'lodash';
 
 @Component({
   selector: 'openchallenges-challenge-card',
@@ -19,7 +19,7 @@ export class ChallengeCardComponent implements OnInit {
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
   statusClass!: string;
-  difficulty!: string | undefined;
+  // difficulty!: string | undefined;
 
   constructor(private challengePlatformService: ChallengePlatformService) {}
 
@@ -27,9 +27,9 @@ export class ChallengeCardComponent implements OnInit {
     if (this.challenge) {
       this.status = this.challenge.status ? this.challenge.status : 'No Status';
       this.statusClass = this.challenge.status || '';
-      this.difficulty = this.challenge.difficulty
-        ? startCase(this.challenge.difficulty.replace('-', ''))
-        : undefined;
+      // this.difficulty = this.challenge.difficulty
+      //   ? startCase(this.challenge.difficulty.replace('-', ''))
+      //   : undefined;
       this.platform = this.challenge.platform;
     }
   }
