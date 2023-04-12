@@ -1,6 +1,6 @@
 @use 'libs/openchallenges/styles/src/lib/constants';
 
-.sage-navbar-header {
+.sage-navbar {
   height: constants.$navbar-height;
   display: flex;
   flex-wrap: wrap;
@@ -22,4 +22,20 @@
 .logo {
   height: 36px;
   vertical-align: middle;
+}
+
+@media only screen and (max-width: 855px) {
+  .navbar-item {
+    width: 100%;
+    align-self: center;
+  }
+  .sage-navbar {
+    height: 300px;
+  }
+  .flex-spacer {
+    flex-grow: 0;
+  }
+  .test {
+    width: 100%;
+  }
 }

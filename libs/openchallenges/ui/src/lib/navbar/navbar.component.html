@@ -1,12 +1,12 @@
 <!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
-<nav class="sage-navbar-header" aria-label="Top Toolbar">
+<nav class="sage-navbar" aria-label="Top Toolbar">
   <a mat-button routerLink="/" aria-label="Home">
     <img class="logo" src="assets/images/openchallenges-white.svg" alt="OpenChallenges" />
   </a>
 
   <a
     mat-button
-    class="sage-navbar-hide-small sage-button"
+    class="navbar-item"
     *ngFor="let key of sectionsKeys"
     [routerLink]="key"
     >{{ sections[key].name }}
@@ -14,12 +14,13 @@
 
   <div class="flex-spacer"></div>
 
-  <a mat-button class="sage-button" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In"
-    >Log In</a
-  >
+  <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
+    Log In
+  </a>
 
   <!-- *ngIf="isLoggedIn" -->
   <openchallenges-user-button
+    class="test"
     [avatar]="userAvatar"
     [menuItems]="userMenuItems"
     (menuItemSelected)="selectUserMenuItem($event)"
