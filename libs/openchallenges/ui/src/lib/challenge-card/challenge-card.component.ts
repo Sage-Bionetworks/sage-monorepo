@@ -18,6 +18,7 @@ export class ChallengeCardComponent implements OnInit {
   @Input() deprecatedChallenge!: DeprecatedChallenge;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
+  incentives!: string;
   statusClass!: string;
   // difficulty!: string | undefined;
 
@@ -31,6 +32,17 @@ export class ChallengeCardComponent implements OnInit {
       //   ? startCase(this.challenge.difficulty.replace('-', ''))
       //   : undefined;
       this.platform = this.challenge.platform;
+      this.incentives =
+        this.challenge.incentives.length === 0
+          ? 'No incentives listed'
+          : this.challenge.incentives
+              .map(function (s) {
+                return (
+                  s[0].toUpperCase() +
+                  s.substring(1).replace('_', ' ').toLowerCase()
+                );
+              })
+              .join(', ');
     }
   }
 }
