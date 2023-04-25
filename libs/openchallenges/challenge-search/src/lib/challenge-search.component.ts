@@ -11,7 +11,9 @@ import {
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
+  ChallengeInputDataTypeSearchQuery,
   OrganizationService,
+  OrganizationSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -27,17 +29,18 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
   distinctUntilChanged,
   skip,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-import { assign } from 'lodash';
+import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -60,6 +63,13 @@ export class ChallengeSearchComponent
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
   );
+
+  private orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ''
+  );
+
+  private inputDataTypeSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
   searchTermValue = '';
@@ -93,6 +103,9 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
+  selectedOrgs: FilterValue[] = [];
+  selectedInputDataTypes: FilterValue[] = [];
+
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -119,42 +132,73 @@ export class ChallengeSearchComponent
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
-    // update input data type filter values
-    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
-      (page) =>
-        (challengeInputDataTypeFilter.values = page.challengeInputDataTypes
-          .map((datatype) => ({
-            value: datatype.slug,
-            label: datatype.name,
-            active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
-    );
-
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms
-          .map((platform) => ({
+        (challengePlatformFilter.values = page.challengePlatforms.map(
+          (platform) => ({
             value: platform.slug,
             label: platform.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
+          })
+        ))
     );
 
-    // update organization filter values
-    this.organizationService.listOrganizations().subscribe(
-      (page) =>
-        (challengeOrganizationFilter.values = page.organizations
-          .map((org) => ({
-            value: org.id,
-            label: org.name,
-            avatarUrl: org.avatarUrl,
+    // update input data type filter values
+    this.inputDataTypeSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as ChallengeInputDataTypeSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        console.log(page.challengeInputDataTypes);
+        const searchedInputDataTypes = page.challengeInputDataTypes.map(
+          (dataType) => ({
+            value: dataType.slug,
+            label: dataType.name,
             active: false,
-          }))
-          .sort((a, b) => a.label.localeCompare(b.label)))
-    );
+          })
+        ) as FilterValue[];
+
+        challengeInputDataTypeFilter.values = union(
+          searchedInputDataTypes,
+          this.selectedInputDataTypes
+        );
+      });
+
+    // update organization filter values
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as OrganizationSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        const searchedOrgs = page.organizations.map((org) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: org.avatarUrl,
+          active: false,
+        })) as FilterValue[];
+
+        challengeOrganizationFilter.values = union(
+          searchedOrgs,
+          this.selectedOrgs
+        );
+      });
 
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
@@ -258,18 +302,37 @@ export class ChallengeSearchComponent
     }
   }
 
-  onCheckboxChange(selected: string[], queryName: string): void {
+  onCheckboxSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
   }
 
-  onDropdownChange(selected: string[], queryName: string): void {
+  onDropdownSelectionChange(
+    selected: string[] | number[],
+    queryName: string
+  ): void {
+    if (queryName === 'inputDataTypes') {
+      this.selectedOrgs = challengeInputDataTypeFilter.values.filter((value) =>
+        (selected as string[]).includes(value.value as string)
+      );
+    }
+
+    if (queryName === 'organizations') {
+      this.selectedOrgs = challengeOrganizationFilter.values.filter((value) =>
+        (selected as number[]).includes(value.value as number)
+      );
+    }
+
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
+  }
+
+  onDropdownSearchChange(searched: string): void {
+    this.orgSearchTerms.next(searched);
   }
 
   onSortChange(): void {

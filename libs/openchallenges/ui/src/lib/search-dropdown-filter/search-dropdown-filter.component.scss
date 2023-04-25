@@ -22,3 +22,18 @@
     }
   }
 }
+
+:host ::ng-deep .p-multiselect-header {
+  .p-checkbox {
+    order: 1;
+  }
+
+  .custom-filter-container {
+    order: 2;
+    margin-left: 8px;
+  }
+
+  .p-multiselect-close {
+    order: 3;
+  }
+}
