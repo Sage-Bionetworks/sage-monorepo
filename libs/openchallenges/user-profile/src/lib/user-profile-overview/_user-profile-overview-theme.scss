@@ -11,10 +11,8 @@
 }
 
 @mixin typography($theme) {
-  .section-title {
-    font-weight: 400;
-    font-size: 21px;
-    text-transform: uppercase;
+  .tab-item {
+    font-family: 'Lato';
   }
 }
 

@@ -14,7 +14,7 @@
   }
   .card-banner {
     border-color: transparent;
-    background-color: map.get($figma, dl-color-default-accent1);
+    background-color: map.get($figma, dl-color-default-accent2);
   }
   .star-btn {
     border-color: transparent;
@@ -50,12 +50,7 @@
   }
 }
 
-@mixin typography($theme) { 
-  .card-title {
-    font-size: 18px;
-    font-weight: 700;
-  }
-}
+@mixin typography($theme) { }
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);

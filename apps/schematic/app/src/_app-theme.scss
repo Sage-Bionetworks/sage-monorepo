@@ -8,7 +8,7 @@
 @include mat.legacy-core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
-$accent: mat.define-palette(palettes.$accent-pink-palette, 400);
+$accent: mat.define-palette(palettes.$accent-purple-palette, 400);
 
 $theme: mat.define-light-theme(
   (

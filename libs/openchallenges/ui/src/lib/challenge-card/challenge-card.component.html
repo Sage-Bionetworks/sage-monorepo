@@ -12,12 +12,12 @@
       <p class="card-subtitle" *ngIf="platform">
         {{ platform.name }}
       </p>
-      <p class="card-desc">{{ challenge.headline }}</p>
+      <p class="mat-caption">{{ challenge.headline }}</p>
     </div>
     <div class="card-footer">
       <div class="difficulty-tag mat-small">
-        <mat-icon aria-hidden="true" class="card-icon">timeline</mat-icon>
-        {{ difficulty }}
+        <mat-icon aria-hidden="true" class="card-icon">auto_awesome</mat-icon>
+        {{ incentives }}
       </div>
       <div class="status-tag mat-small" [ngClass]="statusClass">
         {{ status }}
