@@ -1,0 +1,5 @@
+name: challengePlatformSearchQuery
+description: The search query used to find challenge platforms.
+in: query
+schema:
+  $ref: ../../schemas/ChallengePlatformSearchQuery.yaml
