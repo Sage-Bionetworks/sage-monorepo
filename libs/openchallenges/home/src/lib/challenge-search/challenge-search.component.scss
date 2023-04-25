@@ -94,10 +94,6 @@ a:active {
   padding: 210px 64px 72px;
   background-color: #F8F8F8;
 }
-.about-rocc {
-  margin-bottom: 40px;
-  max-width: 100%;
-}
 #landing {
   .search {
   max-width: 360px;
@@ -105,12 +101,6 @@ a:active {
   }
 }
 @media (min-width: $screen-sm) {
-  .about-rocc {
-    font-size: 18px;
-    line-height: 32px;
-    letter-spacing: -0.1px;
-    max-width: 90%;
-  }
   #landing {
     height: 100%;
     

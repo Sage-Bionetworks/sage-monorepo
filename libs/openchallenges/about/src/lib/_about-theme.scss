@@ -5,13 +5,6 @@
   $config: mat.get-color-config($theme);
   $primary: map.get($config, primary);
   $accent: map.get($config, accent);
-  $warn: map.get($config, warn);
-  $background: map.get($config, background);
-  $foreground: map.get($config, foreground);
-
-  .welcome-msg > span {
-    color: mat.get-color-from-palette($primary, default);
-  }
 }
 
 @mixin typography($theme) {

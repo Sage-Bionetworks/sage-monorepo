@@ -32,14 +32,6 @@
 #activity {
   max-width: 320px;
 }
-.user-tag {
-  width: 100%;
-  max-width: 118px;
-  margin: 8px 0;
-  padding: 5px;
-  border-radius: 32px;
-  text-align: center;
-}
 .activity-card {
   text-align: right;
 }
@@ -73,7 +65,7 @@
   .activity-card {
     text-align: center;
   }
-  .user-tag {
+  .profile-type {
     align-self: center;
   }
 }

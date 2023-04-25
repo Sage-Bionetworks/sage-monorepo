@@ -2,7 +2,7 @@ import { Filter } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilterValues,
   challengeStatusFilterValues,
-  challengeDifficultyFilterValues,
+  // challengeDifficultyFilterValues,
   challengeInputDataTypeFilterValues,
   challengeSubmissionTypesFilterValues,
   challengeIncentiveTypesFilterValues,
@@ -26,12 +26,12 @@ export const challengeStatusFilter: Filter = {
   collapsed: false,
 };
 
-export const challengeDifficultyFilter: Filter = {
-  query: 'difficulties',
-  label: 'Difficulty',
-  values: challengeDifficultyFilterValues,
-  collapsed: true,
-};
+// export const challengeDifficultyFilter: Filter = {
+//   query: 'difficulties',
+//   label: 'Difficulty',
+//   values: challengeDifficultyFilterValues,
+//   collapsed: true,
+// };
 
 export const challengeSubmissionTypesFilter: Filter = {
   query: 'submissionTypes',

@@ -10,25 +10,17 @@
   openchallenges-navbar {
     color: mat.get-color-from-palette($primary, default-contrast);
 
-    .sage-navbar,
-    .sage-navbar-header {
+    .sage-navbar {
       background: mat.get-color-from-palette($primary, 600);
+    }
+    .navbar-item:hover {
+      background-color: mat.get-color-from-palette($primary, 700);
     }
   }
 }
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
-
-  nav .sage-button {
-    font-weight: 400;
-  }
-
-  .home-btn {
-    font-family: mat.font-family($typography-config);
-    font-weight: 400;
-    line-height: normal;
-  }
 }
 
 @mixin theme($theme) {
