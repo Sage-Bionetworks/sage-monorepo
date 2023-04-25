@@ -7,17 +7,12 @@
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
-
-  .link-text {
-    color: map.get($figma, dl-color-default-secondary2);
-  }
 }
 
 @mixin typography($theme) {
   .section-title {
     font-weight: 400;
     font-size: 21px;
-    text-transform: uppercase;
   }
 }
 

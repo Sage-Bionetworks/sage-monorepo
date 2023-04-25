@@ -37,6 +37,44 @@ body {
 .text-left {
   text-align: left;
 }
+.text-center {
+  text-align: center;
+}
+
+// LOGO & DESIGN
+.logo-icon {
+  width: 140px;
+  height: 140px;
+}
+.top-design {
+  background: url('/openchallenges-assets/images/about-banner.svg');
+  background-size: cover;
+  background-position: bottom;
+  padding-top: 108px;
+  text-align: center;
+
+  .section-inner {
+    margin-bottom: 40px;
+
+    h2 {
+      margin: 8px 0;
+    }
+  }
+}
+.profile-type {
+  width: 100%;
+  max-width: 148px;
+  margin: 8px 0;
+  padding: 5px;
+  border-radius: 32px;
+  text-align: center;
+}
+
+// BREADCRUMBS
+#breadcrumbs {
+  font-size: 15px;
+  line-height: 20px;
+}
 
 // BUTTONS
 .btn {
@@ -80,7 +118,8 @@ body {
   margin: 0 3px;
 }
 .card-title {
-  margin: 16px 0 !important;
+  margin: 15px 0 !important;
+  font-weight: 700 !important;
   line-height: 24px;
 }
 .card-body {

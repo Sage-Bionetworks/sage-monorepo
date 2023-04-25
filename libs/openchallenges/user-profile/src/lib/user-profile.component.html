@@ -1,8 +1,8 @@
 <div class="base mat-typography" *ngIf="user$ | async as user">
   <section id="profile-top" class="row">
-    <div class="link" class="row">
-      <mat-icon aria-hidden="true" class="link-home">home</mat-icon>
-      <mat-icon aria-hidden="true" class="link-home">chevron_right</mat-icon>
+    <div id="breadcrumbs" class="row">
+      <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
+      <mat-icon aria-hidden="true">chevron_right</mat-icon>
       <span>{{ user.name }}</span>
     </div>
     <openchallenges-avatar class="profile-pic" [avatar]="userAvatar"></openchallenges-avatar>
@@ -11,7 +11,7 @@
         Awesome User <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
       </h2>
       <p class="username">@awesome-user</p>
-      <div class="user-tag">User</div>
+      <div class="profile-type">User</div>
     </div>
     <div id="activity" class="col-4">
       <div class="activity-card">
