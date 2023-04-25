@@ -678,24 +678,6 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
-    pageNumber:
-      name: pageNumber
-      description: The page number.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
     challengePlatformSearchQuery:
       name: challengePlatformSearchQuery
       description: The search query used to find challenge platforms.
