@@ -126,15 +126,15 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/images/{image}':
-    parameters:
-      - $ref: '#/components/parameters/image'
+  /images:
     get:
       tags:
         - Image
       summary: Get an image
-      description: Returns the image specified
+      description: Returns the image specified.
       operationId: getImage
+      parameters:
+        - $ref: '#/components/parameters/imageQuery'
       responses:
         '200':
           description: An image
@@ -812,10 +812,14 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
-    ImageKey:
-      description: The unique identifier of the image.
-      type: string
-      example: logo/openchallenges.png
+    ImageQuery:
+      type: object
+      description: An image query.
+      properties:
+        objectKey:
+          description: The object key of the image.
+          type: string
+          example: logo/dream.png
     Image:
       type: object
       description: An image
@@ -1137,13 +1141,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengePlatformName'
-    image:
-      name: image
-      in: path
-      description: The unique identifier of the image.
-      required: true
+    imageQuery:
+      name: imageQuery
+      description: The query used to get an image.
+      in: query
       schema:
-        $ref: '#/components/schemas/ImageKey'
+        $ref: '#/components/schemas/ImageQuery'
     organizationSearchQuery:
       name: organizationSearchQuery
       description: The search query used to find organizations.
