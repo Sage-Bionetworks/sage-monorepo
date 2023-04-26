@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.image.service.api;
 
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.sagebionetworks.openchallenges.image.service.service.ImageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
