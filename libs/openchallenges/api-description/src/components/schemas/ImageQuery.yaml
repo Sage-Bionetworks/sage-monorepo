@@ -5,3 +5,5 @@ properties:
     description: The object key of the image.
     type: string
     example: logo/dream.png
+required:
+  - objectKey
