@@ -15,7 +15,7 @@ public class ImageApiDelegateImpl implements ImageApiDelegate {
   }
 
   @Override
-  public ResponseEntity<ImageDto> getImage(String image) {
-    return ResponseEntity.ok(imageService.getImage(image));
+  public ResponseEntity<ImageDto> getImage(ImageQueryDto query) {
+    return ResponseEntity.ok(imageService.getImage(query));
   }
 }
