@@ -51,16 +51,14 @@ public class OrganizationService {
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
 
-    // ImageQueryDto imageQuery = new ImageQueryDto();
-    // imageQuery.setObjectKey("a");
-    // ImageResponse image = imageServiceRestClient.getImage("triforce.png");
-    // LOG.info("Image {}", image.getUrl());
     // Convert the image object key to URLs
     organizations.stream()
         .parallel()
         .forEach(
             org -> {
-              ImageResponse image = imageServiceRestClient.getImage("triforce.png");
+              // The avatar url in the org data model is actually an object key.
+              // TODO Handle errors
+              ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
               org.setAvatarUrl(image.getUrl());
             });
 
