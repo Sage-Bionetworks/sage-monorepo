@@ -1,3 +1,2 @@
 openchallenges-organization-service:
   welcome-message: 'Welcome to the organization service (local config).'
-# feign.autoconfiguration.jackson.enabled: true
