@@ -7,27 +7,24 @@ import static org.mockito.Mockito.when;
 
 import com.squareup.pollexor.Thumbor;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-@ExtendWith(MockitoExtension.class)
 public class ImageServiceTest {
 
   @Autowired private ImageService imageService;
 
-  @Mock private Logger LOG;
+  @MockBean private Logger LOG;
 
-  @Mock private Thumbor thumbor;
+  @MockBean private Thumbor thumbor;
 
-  @Mock private ImageServiceConfigData imageServiceConfigData;
+  @MockBean private ImageServiceConfigData imageServiceConfigData;
 
   @Value("${example.expectedURL}")
   private String expectedURL =
