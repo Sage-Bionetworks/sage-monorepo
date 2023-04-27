@@ -9,6 +9,8 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
+import org.sagebionetworks.openchallenges.organization.service.model.rest.response.ImageResponse;
+import org.sagebionetworks.openchallenges.organization.service.service.rest.ImageServiceRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,17 @@ public class OrganizationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(OrganizationService.class);
 
+  private final ImageServiceRestClient imageServiceRestClient;
+
   @Autowired private OrganizationRepository organizationRepository;
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "description");
+
+  public OrganizationService(ImageServiceRestClient imageServiceRestClient) {
+    this.imageServiceRestClient = imageServiceRestClient;
+  }
 
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {
@@ -42,6 +50,21 @@ public class OrganizationService {
 
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
+
+    // ImageQueryDto imageQuery = new ImageQueryDto();
+    // imageQuery.setObjectKey("a");
+    // ImageResponse image = imageServiceRestClient.getImage("triforce.png");
+    // LOG.info("Image {}", image.getUrl());
+    // Convert the image object key to URLs
+    organizations.stream()
+        .parallel()
+        .forEach(
+            org -> {
+              ImageResponse image = imageServiceRestClient.getImage("triforce.png");
+              org.setAvatarUrl(image.getUrl());
+            });
+
+    LOG.info("Final orgs {}", organizations);
 
     return OrganizationsPageDto.builder()
         .organizations(organizations)
