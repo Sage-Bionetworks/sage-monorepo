@@ -5,7 +5,8 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengeInputDataTypeRepository
-    extends JpaRepository<ChallengeInputDataTypeEntity, Long> {
+    extends JpaRepository<ChallengeInputDataTypeEntity, Long>,
+        CustomChallengeInputDataTypeRepository {
 
   Optional<ChallengeInputDataTypeEntity> findByName(String name);
 }
