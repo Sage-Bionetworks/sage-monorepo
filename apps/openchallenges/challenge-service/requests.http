@@ -84,6 +84,14 @@ GET {{basePath}}/challengePlatforms/synapse
 
 GET {{basePath}}/challengeInputDataTypes
 
+### List the challenge input data types sorted by name.
+
+GET {{basePath}}/challengeInputDataTypes?sort=name
+
+### List the challenge input data types for the search terms "genomic".
+
+GET {{basePath}}/challengeInputDataTypes?searchTerms=genomic
+
 ### Get the challenge with ID 1.
 
 GET {{basePath}}/challenges/1
