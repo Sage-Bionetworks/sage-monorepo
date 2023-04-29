@@ -72,6 +72,10 @@ GET {{basePath}}/challenges?sort=recently_ended
 
 GET {{basePath}}/challengePlatforms
 
+### List the challenge platforms sorted by name.
+
+GET {{basePath}}/challengePlatforms?sort=name
+
 ### List the challenges platforms for the search terms 'synapse'.
 
 GET {{basePath}}/challengePlatforms?searchTerms=synapse

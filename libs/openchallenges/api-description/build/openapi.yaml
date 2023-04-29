@@ -729,7 +729,7 @@ components:
       type: string
       default: relevance
       enum:
-        - created
+        - name
         - relevance
     ChallengePlatformDirection:
       description: The direction to sort the results by.

@@ -8,8 +8,13 @@ import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
+import org.hibernate.search.engine.search.sort.SearchSort;
+import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
+import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.sagebionetworks.openchallenges.challenge.service.exception.BadRequestException;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.springframework.data.domain.Page;
@@ -33,10 +38,17 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
       Pageable pageable, ChallengePlatformSearchQueryDto query, String[] fields) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengePlatformEntity.class).predicate();
+    SearchSortFactory sf = searchSession.scope(ChallengePlatformEntity.class).sort();
     List<SearchPredicate> predicates = new ArrayList<>();
 
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
+    }
+
+    SearchSort sort = getSearchSort(sf, query);
+    SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
+    if (sortPredicate != null) {
+      predicates.add(sortPredicate);
     }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
@@ -45,18 +57,11 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
         searchSession
             .search(ChallengePlatformEntity.class)
             .where(topLevelPredicate)
+            .sort(sort)
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
 
-  /**
-   * Searches the challenge platforms using the search terms specified.
-   *
-   * @param pf
-   * @param query
-   * @param fields
-   * @return
-   */
   private SearchPredicate getSearchTermsPredicate(
       SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query, String[] fields) {
     return pf.simpleQueryString()
@@ -66,13 +71,6 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
         .toPredicate();
   }
 
-  /**
-   * Combines the search predicates.
-   *
-   * @param pf
-   * @param predicates
-   * @return
-   */
   private SearchPredicate buildTopLevelPredicate(
       SearchPredicateFactory pf, List<SearchPredicate> predicates) {
     return pf.bool(
@@ -83,5 +81,39 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
               }
             })
         .toPredicate();
+  }
+
+  private SearchSort getSearchSort(SearchSortFactory sf, ChallengePlatformSearchQueryDto query) {
+    SortOrder orderWithDefaultAsc =
+        query.getDirection() == ChallengePlatformDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc =
+        query.getDirection() == ChallengePlatformDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
+
+    SearchSort nameSort = sf.field("name_sort").order(orderWithDefaultAsc).toSort();
+    SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
+    SearchSort relevanceSort =
+        (query.getSearchTerms() == null || query.getSearchTerms().isBlank()) ? nameSort : scoreSort;
+
+    switch (query.getSort()) {
+      case NAME -> {
+        return nameSort;
+      }
+      case RELEVANCE -> {
+        return relevanceSort;
+      }
+      default -> {
+        throw new BadRequestException(
+            String.format("Unhandled sorting strategy '%s'", query.getSort()));
+      }
+    }
+  }
+
+  private SearchPredicate getSearchSortPredicate(
+      SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query) {
+    switch (query.getSort()) {
+      default -> {
+        return null;
+      }
+    }
   }
 }
