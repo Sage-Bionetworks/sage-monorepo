@@ -2,5 +2,5 @@ description: What to sort results by.
 type: string
 default: relevance
 enum:
-  - created
+  - name
   - relevance
