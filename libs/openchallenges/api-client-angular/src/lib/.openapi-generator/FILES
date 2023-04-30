@@ -19,9 +19,15 @@ model/challengeDifficulty.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
 model/challengeInputDataType.ts
+model/challengeInputDataTypeDirection.ts
+model/challengeInputDataTypeSearchQuery.ts
+model/challengeInputDataTypeSort.ts
 model/challengeInputDataTypesPage.ts
 model/challengeInputDataTypesPageAllOf.ts
 model/challengePlatform.ts
+model/challengePlatformDirection.ts
+model/challengePlatformSearchQuery.ts
+model/challengePlatformSort.ts
 model/challengePlatformsPage.ts
 model/challengePlatformsPageAllOf.ts
 model/challengeSearchQuery.ts
