@@ -6,7 +6,6 @@ buildscript {
 
 plugins {
   id 'java'
-  id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
 }
@@ -14,32 +13,6 @@ plugins {
 repositories {
   mavenCentral()
   mavenLocal()
-}
-
-testing {
-  suites {
-    test {
-      useJUnitJupiter()
-    }
-
-    integrationTest(JvmTestSuite) {
-      dependencies {
-        implementation project
-      }
-      sources {
-        java {
-          srcDirs = ['src/integrationTest/java']
-        }
-      }
-      targets {
-        all {
-          testTask.configure {
-            shouldRunAfter(test)
-          }
-        }
-      }
-    }
-  }
 }
 
 dependencies {
@@ -51,36 +24,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
-  integrationTestImplementation 'org.assertj:assertj-core:3.23.1'
-  integrationTestImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
-  testImplementation 'org.assertj:assertj-core:3.23.1'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
-}
-
-configurations {
-  integrationTestImplementation.extendsFrom implementation
-  integrationTestRuntimeOnly.extendsFrom runtimeOnly
-}
-
-// configure the integrationTest to run as part of a regular build
-// tasks.named('check') {
-//   dependsOn(testing.suites.integrationTest)
-// }
-
-test {
-	useJUnitPlatform()
-
-  testLogging.showStandardStreams = true
-
-  beforeTest { descriptor ->
-     logger.lifecycle("Running test: " + descriptor)
-  }
-
-  failFast = true
-
-  testLogging {
-    events("passed", "skipped", "failed")
-  }
 }
 
 group = 'org.sagebionetworks.challenge'
