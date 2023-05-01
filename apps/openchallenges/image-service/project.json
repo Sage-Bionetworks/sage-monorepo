@@ -30,7 +30,8 @@
       "executor": "@nxrocks/nx-spring-boot:test",
       "options": {
         "root": "apps/openchallenges/image-service"
-      }
+      },
+      "dependsOn": ["^install"]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
