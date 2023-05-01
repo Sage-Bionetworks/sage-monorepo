@@ -4,5 +4,5 @@
 yarn nx affected --uncommitted --target=format
 yarn nx affected --uncommitted --target=lint
 
-# Re-index the staged files
+# Re-index the staged files after they have been formatted
 git diff --name-only --cached | xargs -l git add
