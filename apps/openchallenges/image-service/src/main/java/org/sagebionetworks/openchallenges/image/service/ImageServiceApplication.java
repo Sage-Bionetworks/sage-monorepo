@@ -22,9 +22,9 @@ public class ImageServiceApplication implements CommandLineRunner {
     this.imageServiceConfigData = imageServiceConfigData;
   }
 
-  public static void main(String[] args) {
-    SpringApplication.run(ImageServiceApplication.class, args);
-  }
+      public static void main(String[] args) {
+        SpringApplication.run(ImageServiceApplication.class, args);
+      }
 
   @Override
   public void run(String... args) throws Exception {
