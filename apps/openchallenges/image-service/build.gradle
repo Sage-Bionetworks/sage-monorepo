@@ -90,6 +90,22 @@ bootBuildImage {
   imageName = "sagebionetworks/${project.name}-base:latest"
 }
 
+test {
+	useJUnitPlatform()
+
+  testLogging.showStandardStreams = true
+
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+
+  failFast = true
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
+}
+
 spotless {
   // format 'misc', {
   //   target '*.gradle', '*.md', '.gitignore'

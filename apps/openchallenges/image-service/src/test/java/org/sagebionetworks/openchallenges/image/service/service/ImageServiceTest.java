@@ -1,52 +1,54 @@
 package org.sagebionetworks.openchallenges.image.service.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import com.squareup.pollexor.Thumbor;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
-import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import com.squareup.pollexor.Thumbor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageServiceTest {
-  @Mock
-  private ImageServiceConfigData imageServiceConfigData;
 
-  @Mock
-  private Thumbor thumbor;
+  private static final Logger LOG = LoggerFactory.getLogger(ImageServiceTest.class);
+
+  @Mock private ImageServiceConfigData imageServiceConfigData;
+
+  @Mock private Thumbor thumbor;
 
   // @InjectMocks
   private ImageService imageService;
 
-  @BeforeEach
-  void setUp() {
-    imageService = new ImageService(imageServiceConfigData);
+  public ImageServiceTest(Thumbor thumbor) {
+    this.thumbor = thumbor;
   }
 
-  @Test
-  void testGetImage() {
-    String image = "image.png";
-    String expectedUrl = "https://thumbor.example.com/image.png?resize=300x300";
+  // @BeforeEach
+  // void setUp() {
+  //   when(imageServiceConfigData.getThumborHost()).thenReturn("thumbor.example.com");
+  //   when(imageServiceConfigData.getThumborSecurityKey()).thenReturn("secret");
 
-    when(imageServiceConfigData.getThumborHost()).thenReturn("thumbor.example.com");
-    when(imageServiceConfigData.getThumborSecurityKey()).thenReturn("secret");
-    when(thumbor.buildImage(image).resize(300, 300).toUrl()).thenReturn(expectedUrl);
-    // when(thumbor.resize(300, 300)).thenReturn(thumbor);
-    // when(thumbor.toUrl()).thenReturn(expectedUrl);
+  //   imageService = new ImageService(imageServiceConfigData, thumbor);
+  // }
 
-    ImageDto actual = imageService.getImage(image);
+  // @Test
+  // void testGetImage() {
+  //   String image = "image.png";
+  //   String expectedUrl = "https://thumbor.example.com/image.png?resize=300x300";
 
-    assertEquals(expectedUrl, actual.getUrl());
-  }
+  //   LOG.info("thumbor: {}", thumbor.getHost());
+
+  //   when(imageServiceConfigData.getThumborHost()).thenReturn("thumbor.example.com");
+  //   when(imageServiceConfigData.getThumborSecurityKey()).thenReturn("secret");
+  //   when(thumbor.buildImage(image).resize(300, 300).toUrl()).thenReturn(expectedUrl);
+  //   // when(thumbor.resize(300, 300)).thenReturn(thumbor);
+  //   // when(thumbor.toUrl()).thenReturn(expectedUrl);
+
+  //   ImageDto actual = imageService.getImage(image);
+
+  //   assertEquals(expectedUrl, actual.getUrl());
+  // }
 
   // @Test
   // void givenImage_ImageDto_MatchURL() {

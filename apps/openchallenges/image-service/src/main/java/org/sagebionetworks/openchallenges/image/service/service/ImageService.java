@@ -16,14 +16,12 @@ public class ImageService {
 
   private final Thumbor thumbor;
 
-  public ImageService(ImageServiceConfigData imageServiceConfigData) {
+  public ImageService(ImageServiceConfigData imageServiceConfigData, Thumbor thumbor) {
     this.imageServiceConfigData = imageServiceConfigData;
+    this.thumbor = thumbor;
 
-    LOG.info("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
-    this.thumbor =
-        Thumbor.create(
-            this.imageServiceConfigData.getThumborHost(),
-            this.imageServiceConfigData.getThumborSecurityKey());
+    LOG.info("Thumbor host from config: {}", this.imageServiceConfigData.getThumborHost());
+    LOG.info("Thumbor host from thumbor: {}", this.thumbor.getHost());
   }
 
   public ImageDto getImage(String image) {
