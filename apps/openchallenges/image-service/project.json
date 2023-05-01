@@ -22,7 +22,6 @@
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
         "root": "apps/openchallenges/image-service"
-        // "args": ["--exclude-task spotlessCheck"]
       },
       "outputs": ["apps/openchallenges/image-service"],
       "dependsOn": ["^install"]
