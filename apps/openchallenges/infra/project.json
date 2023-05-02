@@ -4,15 +4,15 @@
   "sourceRoot": "apps/openchallenges/infra/src",
   "projectType": "application",
   "targets": {
-    "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/apps/openchallenges/infra",
-        "main": "apps/openchallenges/infra/src/main.ts",
-        "tsConfig": "apps/openchallenges/infra/tsconfig.app.json"
-      }
-    },
+    // "build": {
+    //   "executor": "@nrwl/js:tsc",
+    //   "outputs": ["{options.outputPath}"],
+    //   "options": {
+    //     "outputPath": "dist/apps/openchallenges/infra",
+    //     "main": "apps/openchallenges/infra/src/main.ts",
+    //     "tsConfig": "apps/openchallenges/infra/tsconfig.app.json"
+    //   }
+    // },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
@@ -34,6 +34,20 @@
       "options": {
         "jestConfig": "apps/openchallenges/infra/jest.config.ts",
         "passWithNoTests": true
+      }
+    },
+    "synth": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdktf synth",
+        "cwd": "apps/openchallenges/infra"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cdktf deploy",
+        "cwd": "apps/openchallenges/infra"
       }
     }
   },
