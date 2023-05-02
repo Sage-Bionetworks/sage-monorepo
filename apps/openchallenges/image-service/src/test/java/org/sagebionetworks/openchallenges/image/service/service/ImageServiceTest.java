@@ -23,11 +23,11 @@ public class ImageServiceTest {
   @InjectMocks private ImageService imageService;
 
   @Test
-  void test() {
+  void getImage_ShouldReturnImage_WhenObjectKeyIsPassed() {
     String expectedUrl =
-      "http://localhost:8082/img/ucBCtKeFXF3rPUsmUGmxcTRnoj0=/300x300/triforce.png";
+        "http://localhost:8082/img/ucBCtKeFXF3rPUsmUGmxcTRnoj0=/300x300/triforce.png";
 
-    // given an image object key
+    // given
     String image = "image.png";
 
     // when an image is requested from the image service
