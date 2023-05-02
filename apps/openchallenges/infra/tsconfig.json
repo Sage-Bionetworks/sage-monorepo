@@ -13,10 +13,6 @@
   },
   "files": [],
   "include": [],
-  // "exclude": [
-  //   "node_modules",
-  //   "cdktf.out"
-  // ],
   "references": [
     {
       "path": "./tsconfig.app.json"
