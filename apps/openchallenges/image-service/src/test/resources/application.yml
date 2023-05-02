@@ -11,3 +11,5 @@ spring:
   cloud:
     config:
       enabled: false
+    discovery:
+      enabled: false
