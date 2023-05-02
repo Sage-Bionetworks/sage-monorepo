@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 
 @ExtendWith(MockitoExtension.class)
 public class ImageServiceTest {
@@ -28,11 +29,12 @@ public class ImageServiceTest {
         "http://localhost:8082/img/ucBCtKeFXF3rPUsmUGmxcTRnoj0=/300x300/triforce.png";
 
     // given
-    String image = "image.png";
+    ImageQueryDto query = new ImageQueryDto();
+    query.setObjectKey("image.png");
 
     // when an image is requested from the image service
-    when(thumbor.buildImage(image).resize(300, 300).toUrl()).thenReturn(expectedUrl);
-    ImageDto actual = imageService.getImage(image);
+    when(thumbor.buildImage(query.getObjectKey()).resize(300, 300).toUrl()).thenReturn(expectedUrl);
+    ImageDto actual = imageService.getImage(query);
 
     // then
     assertThat(actual.getUrl()).isEqualTo(expectedUrl);
