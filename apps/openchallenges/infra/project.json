@@ -35,21 +35,21 @@
         "jestConfig": "apps/openchallenges/infra/jest.config.ts",
         "passWithNoTests": true
       }
-    },
-    "synth": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "cdktf synth",
-        "cwd": "apps/openchallenges/infra"
-      }
-    },
-    "deploy": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "cdktf deploy",
-        "cwd": "apps/openchallenges/infra"
-      }
     }
+    // "synth": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "commands": ["cdktf synth"],
+    //     "cwd": "apps/openchallenges/infra"
+    //   }
+    // },
+    // "deploy": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "commands": ["cdktf deploy"],
+    //     "cwd": "apps/openchallenges/infra"
+    //   }
+    // }
   },
   "tags": ["type:app", "scope:admin"],
   "implicitDependencies": []
