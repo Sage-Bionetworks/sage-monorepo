@@ -15,5 +15,5 @@ logger.info('Welcome to OpenChallenges infra project');
 
 const app = new App();
 // eslint-disable-next-line no-new
-new MyStack(app, 'infra');
+new MyStack(app, 'openchallenges-infra');
 app.synth();

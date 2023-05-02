@@ -2,7 +2,7 @@
   "//": {
     "metadata": {
       "backend": "local",
-      "stackName": "infra",
+      "stackName": "openchallenges-infra",
       "version": "0.16.1"
     },
     "outputs": {
@@ -11,7 +11,7 @@
   "terraform": {
     "backend": {
       "local": {
-        "path": "/workspaces/sage-monorepo/terraform.infra.tfstate"
+        "path": "/workspaces/sage-monorepo/terraform.openchallenges-infra.tfstate"
       }
     }
   }

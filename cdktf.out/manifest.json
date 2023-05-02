@@ -1,11 +1,11 @@
 {
   "version": "0.16.1",
   "stacks": {
-    "infra": {
-      "name": "infra",
-      "constructPath": "infra",
-      "workingDirectory": "stacks/infra",
-      "synthesizedStackPath": "stacks/infra/cdk.tf.json",
+    "openchallenges-infra": {
+      "name": "openchallenges-infra",
+      "constructPath": "openchallenges-infra",
+      "workingDirectory": "stacks/openchallenges-infra",
+      "synthesizedStackPath": "stacks/openchallenges-infra/cdk.tf.json",
       "annotations": [],
       "dependencies": []
     }
