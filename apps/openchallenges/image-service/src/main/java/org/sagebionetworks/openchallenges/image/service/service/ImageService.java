@@ -20,7 +20,7 @@ public class ImageService {
     this.imageServiceConfigData = imageServiceConfigData;
     this.thumbor = thumbor;
 
-    LOG.debug("Thumbor host from config: {}", this.imageServiceConfigData.getThumborHost());
+    LOG.debug("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
   }
 
   public ImageDto getImage(String image) {
