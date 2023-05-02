@@ -39,8 +39,14 @@
     font-weight: bolder;
   }
   .mat-checkbox,
-  .mat-select {
-    font-family: 'Lato', sans-serif;
+  .mat-select,
+  .p-component {
+    font-family: 'Lato', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 20px !important;
+  }
+  .p-panel .p-panel-header .p-panel-title {
+    font-size: 16px;
   }
   .sort-title {
     font-weight: 700;

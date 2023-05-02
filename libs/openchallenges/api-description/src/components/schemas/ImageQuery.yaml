@@ -1,0 +1,9 @@
+type: object
+description: An image query.
+properties:
+  objectKey:
+    description: The object key of the image.
+    type: string
+    example: logo/dream.png
+required:
+  - objectKey

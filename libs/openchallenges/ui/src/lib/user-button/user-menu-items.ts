@@ -9,14 +9,14 @@ export const USER_MENU_ITEMS: MenuItem[] = [
   },
   {
     name: 'Profile',
-    icon: 'account_circle',
+    // icon: 'account_circle',
   },
   {
     name: 'Settings',
-    icon: 'settings',
+    // icon: 'settings',
   },
   {
     name: 'Log out',
-    icon: 'exit_to_app',
+    // icon: 'exit_to_app',
   },
 ];

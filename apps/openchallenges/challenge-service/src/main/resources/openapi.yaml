@@ -142,27 +142,13 @@ paths:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-      - description: The page number.
+      - description: The search query used to find challenge platforms.
         explode: true
         in: query
-        name: pageNumber
+        name: challengePlatformSearchQuery
         required: false
         schema:
-          default: 0
-          format: int32
-          minimum: 0
-          type: integer
-        style: form
-      - description: The number of items in a single page.
-        explode: true
-        in: query
-        name: pageSize
-        required: false
-        schema:
-          default: 100
-          format: int32
-          minimum: 1
-          type: integer
+          $ref: '#/components/schemas/ChallengePlatformSearchQuery'
         style: form
       responses:
         "200":
@@ -258,29 +244,14 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
       style: form
-    pageNumber:
-      description: The page number.
+    challengePlatformSearchQuery:
+      description: The search query used to find challenge platforms.
       explode: true
       in: query
-      name: pageNumber
+      name: challengePlatformSearchQuery
       required: false
       schema:
-        default: 0
-        format: int32
-        minimum: 0
-        type: integer
-      style: form
-    pageSize:
-      description: The number of items in a single page.
-      explode: true
-      in: query
-      name: pageSize
-      required: false
-      schema:
-        default: 100
-        format: int32
-        minimum: 1
-        type: integer
+        $ref: '#/components/schemas/ChallengePlatformSearchQuery'
       style: form
     challengePlatformName:
       description: The unique identifier of the challenge platform.
@@ -848,6 +819,44 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    ChallengePlatformSort:
+      default: relevance
+      description: What to sort results by.
+      enum:
+      - name
+      - relevance
+      type: string
+    ChallengePlatformDirection:
+      description: The direction to sort the results by.
+      enum:
+      - asc
+      - desc
+      nullable: true
+      type: string
+    ChallengePlatformSearchQuery:
+      description: A challenge platform search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        sort:
+          $ref: '#/components/schemas/ChallengePlatformSort'
+        direction:
+          $ref: '#/components/schemas/ChallengePlatformDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: synapse
+          type: string
+      type: object
     ChallengePlatform:
       description: A challenge platform
       example:

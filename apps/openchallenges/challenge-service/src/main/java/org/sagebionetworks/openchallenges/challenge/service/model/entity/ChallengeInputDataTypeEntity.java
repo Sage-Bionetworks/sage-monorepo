@@ -11,8 +11,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.sagebionetworks.openchallenges.challenge.service.model.search.ChallengeInputDataTypeNameValueBridge;
 
 @Entity
 @Table(name = "challenge_input_data_type")
@@ -33,6 +37,10 @@ public class ChallengeInputDataTypeEntity {
 
   @Column(nullable = false)
   @FullTextField()
+  @GenericField(
+      name = "name_sort",
+      valueBridge = @ValueBridgeRef(type = ChallengeInputDataTypeNameValueBridge.class),
+      sortable = Sortable.YES)
   private String name;
 
   @Column(name = "created_at")

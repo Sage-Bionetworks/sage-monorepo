@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.image.service.service;
 import com.squareup.pollexor.Thumbor;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,8 @@ public class ImageService {
     LOG.debug("Thumbor host: {}", this.imageServiceConfigData.getThumborHost());
   }
 
-  public ImageDto getImage(String image) {
-    String imageUrl = thumbor.buildImage(image).resize(300, 300).toUrl();
+  public ImageDto getImage(ImageQueryDto query) {
+    String imageUrl = thumbor.buildImage(query.getObjectKey()).resize(300, 300).toUrl();
     return ImageDto.builder().url(imageUrl).build();
   }
 }

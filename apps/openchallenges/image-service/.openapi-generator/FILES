@@ -8,4 +8,5 @@ src/main/java/org/sagebionetworks/openchallenges/image/service/configuration/Hom
 src/main/java/org/sagebionetworks/openchallenges/image/service/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/BasicErrorDto.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageDto.java
+src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageQueryDto.java
 src/main/resources/openapi.yaml

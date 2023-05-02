@@ -16,5 +16,5 @@ tags:
   - name: Image
     description: Operations about images
 paths:
-  /images/{image}:
-    $ref: paths/images/@{image}.yaml
+  /images:
+    $ref: paths/images.yaml

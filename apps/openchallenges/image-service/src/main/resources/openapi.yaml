@@ -16,19 +16,19 @@ tags:
 - description: Operations about images
   name: Image
 paths:
-  /images/{image}:
+  /images:
     get:
-      description: Returns the image specified
+      description: Returns the image specified.
       operationId: getImage
       parameters:
-      - description: The unique identifier of the image.
-        explode: false
-        in: path
-        name: image
-        required: true
+      - description: The query used to get an image.
+        explode: true
+        in: query
+        name: imageQuery
+        required: false
         schema:
-          $ref: '#/components/schemas/ImageKey'
-        style: simple
+          $ref: '#/components/schemas/ImageQuery'
+        style: form
       responses:
         "200":
           content:
@@ -57,15 +57,15 @@ paths:
       - tag: Image
 components:
   parameters:
-    image:
-      description: The unique identifier of the image.
-      explode: false
-      in: path
-      name: image
-      required: true
+    imageQuery:
+      description: The query used to get an image.
+      explode: true
+      in: query
+      name: imageQuery
+      required: false
       schema:
-        $ref: '#/components/schemas/ImageKey'
-      style: simple
+        $ref: '#/components/schemas/ImageQuery'
+      style: form
   responses:
     NotFound:
       content:
@@ -80,10 +80,16 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
-    ImageKey:
-      description: The unique identifier of the image.
-      example: logo/openchallenges.png
-      type: string
+    ImageQuery:
+      description: An image query.
+      properties:
+        objectKey:
+          description: The object key of the image.
+          example: logo/dream.png
+          type: string
+      required:
+      - objectKey
+      type: object
     Image:
       description: An image
       example:

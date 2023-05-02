@@ -88,8 +88,7 @@ paths:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
         '200':
           content:
@@ -571,6 +570,44 @@ components:
             - challengeInputDataTypes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - name
+        - relevance
+    ChallengePlatformDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    ChallengePlatformSearchQuery:
+      type: object
+      description: A challenge platform search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/ChallengePlatformSort'
+        direction:
+          $ref: '#/components/schemas/ChallengePlatformDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: synapse
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -641,24 +678,12 @@ components:
       in: query
       schema:
         $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
-    pageNumber:
-      name: pageNumber
-      description: The page number.
+    challengePlatformSearchQuery:
+      name: challengePlatformSearchQuery
+      description: The search query used to find challenge platforms.
       in: query
       schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
-      in: query
-      schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
+        $ref: '#/components/schemas/ChallengePlatformSearchQuery'
     challengePlatformName:
       name: challengePlatformName
       in: path
