@@ -1,0 +1,18 @@
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "infra",
+      "version": "0.16.1"
+    },
+    "outputs": {
+    }
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/workspaces/sage-monorepo/terraform.infra.tfstate"
+      }
+    }
+  }
+}

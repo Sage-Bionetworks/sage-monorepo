@@ -1,0 +1,13 @@
+{
+  "version": "0.16.1",
+  "stacks": {
+    "infra": {
+      "name": "infra",
+      "constructPath": "infra",
+      "workingDirectory": "stacks/infra",
+      "synthesizedStackPath": "stacks/infra/cdk.tf.json",
+      "annotations": [],
+      "dependencies": []
+    }
+  }
+}

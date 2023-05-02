@@ -13,6 +13,9 @@
   },
   "files": [],
   "include": [],
+  "exclude": [
+    "cdktf.out"
+  ]
   "references": [
     {
       "path": "./tsconfig.app.json"
