@@ -1,5 +1,5 @@
-import { Construct } from "constructs";
-import { App, TerraformStack } from "cdktf";
+import { Construct } from 'constructs';
+import { App, TerraformStack } from 'cdktf';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -10,5 +10,6 @@ class MyStack extends TerraformStack {
 }
 
 const app = new App();
-new MyStack(app, "infra");
+// eslint-disable-next-line no-new
+new MyStack(app, 'infra');
 app.synth();

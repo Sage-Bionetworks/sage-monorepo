@@ -2503,6 +2503,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cdktf/provider-aws@npm:14.0.2":
+  version: 14.0.2
+  resolution: "@cdktf/provider-aws@npm:14.0.2"
+  peerDependencies:
+    cdktf: ^0.16.0
+    constructs: ^10.0.0
+  checksum: 1bf7e6fc757ca32fae3fd4198b9336f09c0ea4b6de968035f20db8d292e318da505674b7a1587cc1bf8491ad367e5a5b7649fb8c8ec08b1ed7b8aa497f3ae38d
+  languageName: node
+  linkType: hard
+
 "@cdktf/provider-generator@npm:0.16.1":
   version: 0.16.1
   resolution: "@cdktf/provider-generator@npm:0.16.1"
@@ -12779,6 +12789,13 @@ __metadata:
   version: 1.0.0
   resolution: "constants-browserify@npm:1.0.0"
   checksum: f7ac8c6d0b6e4e0c77340a1d47a3574e25abd580bfd99ad707b26ff7618596cf1a5e5ce9caf44715e9e01d4a5d12cb3b4edaf1176f34c19adb2874815a56e64f
+  languageName: node
+  linkType: hard
+
+"constructs@npm:10.2.13":
+  version: 10.2.13
+  resolution: "constructs@npm:10.2.13"
+  checksum: b4d499ca075414996e5afc6db7ce58f5a0b9f36c8fed7067f981323fec10ffd745b85f070c8683ca379e57451d91414a045c2ab743711c014f5ff40ea0aae5f5
   languageName: node
   linkType: hard
 
@@ -27242,6 +27259,7 @@ __metadata:
     "@angular/platform-browser-dynamic": 15.0.2
     "@angular/platform-server": 15.0.2
     "@angular/router": 15.0.2
+    "@cdktf/provider-aws": 14.0.2
     "@hint/configuration-web-recommended": 8.2.16
     "@hint/formatter-codeframe": 3.1.33
     "@nguniversal/builders": 15.0.0
@@ -27279,9 +27297,11 @@ __metadata:
     "@typescript-eslint/parser": 5.46.1
     babel-jest: 29.3.1
     canvas: 2.10.2
+    cdktf: 0.16.1
     cdktf-cli: 0.16.1
     colors: 1.4.0
     commander: 9.4.1
+    constructs: 10.2.13
     core-js: 3.25.5
     coveralls: 3.1.1
     cypress: ^11.0.0

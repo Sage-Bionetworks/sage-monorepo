@@ -1,35 +1,28 @@
 {
+  "extends": "../../../tsconfig.base.json",
   "compilerOptions": {
-    "alwaysStrict": true,
-    "declaration": true,
-    "experimentalDecorators": true,
-    "inlineSourceMap": true,
-    "inlineSources": true,
-    "lib": [
-      "es2018"
-    ],
+    "esModuleInterop": true,
     "module": "CommonJS",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "resolveJsonModule": true,
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "strictNullChecks": true,
-    "strictPropertyInitialization": true,
-    "stripInternal": true,
-    "target": "ES2018",
-    "incremental": true,
-    "skipLibCheck": true
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
   },
-  "include": [
-    "**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "cdktf.out"
+  "files": [],
+  "include": [],
+  // "exclude": [
+  //   "node_modules",
+  //   "cdktf.out"
+  // ],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
   ]
 }
