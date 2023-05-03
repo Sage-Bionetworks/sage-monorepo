@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
 import { Construct } from 'constructs';
 import { App, TerraformStack } from 'cdktf';
 import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
+import { Instance } from '@cdktf/provider-aws/lib/instance';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -12,10 +14,11 @@ class MyStack extends TerraformStack {
       region: 'us-east-1',
     });
 
-    // const ec2Instance = new Instance(this, 'compute', {
-    //   ami: 'ami-01456a894f71116f2',
-    //   instanceType: 't2.micro',
-    // });
+    // eslint-disable-next-line
+    const ec2Instance = new Instance(this, 'compute', {
+      ami: 'ami-01456a894f71116f2',
+      instanceType: 't2.micro',
+    });
   }
 }
 
