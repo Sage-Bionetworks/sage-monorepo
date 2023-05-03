@@ -21,6 +21,8 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { BasicError } from '../model/basicError';
 // @ts-ignore
+import { ChallengeInputDataTypeSearchQuery } from '../model/challengeInputDataTypeSearchQuery';
+// @ts-ignore
 import { ChallengeInputDataTypesPage } from '../model/challengeInputDataTypesPage';
 
 // @ts-ignore
@@ -96,24 +98,19 @@ export class ChallengeInputDataTypeService {
     /**
      * List challenge input data types
      * List challenge input data types
-     * @param pageNumber The page number.
-     * @param pageSize The number of items in a single page.
+     * @param challengeInputDataTypeSearchQuery The search query used to find challenge input data types.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listChallengeInputDataTypes(pageNumber?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengeInputDataTypesPage>;
-    public listChallengeInputDataTypes(pageNumber?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengeInputDataTypesPage>>;
-    public listChallengeInputDataTypes(pageNumber?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengeInputDataTypesPage>>;
-    public listChallengeInputDataTypes(pageNumber?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+    public listChallengeInputDataTypes(challengeInputDataTypeSearchQuery?: ChallengeInputDataTypeSearchQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengeInputDataTypesPage>;
+    public listChallengeInputDataTypes(challengeInputDataTypeSearchQuery?: ChallengeInputDataTypeSearchQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengeInputDataTypesPage>>;
+    public listChallengeInputDataTypes(challengeInputDataTypeSearchQuery?: ChallengeInputDataTypeSearchQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengeInputDataTypesPage>>;
+    public listChallengeInputDataTypes(challengeInputDataTypeSearchQuery?: ChallengeInputDataTypeSearchQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (pageNumber !== undefined && pageNumber !== null) {
+        if (challengeInputDataTypeSearchQuery !== undefined && challengeInputDataTypeSearchQuery !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>pageNumber, 'pageNumber');
-        }
-        if (pageSize !== undefined && pageSize !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>pageSize, 'pageSize');
+            <any>challengeInputDataTypeSearchQuery, 'challengeInputDataTypeSearchQuery');
         }
 
         let localVarHeaders = this.defaultHeaders;

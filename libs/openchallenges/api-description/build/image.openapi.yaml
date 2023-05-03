@@ -16,15 +16,15 @@ tags:
   - name: Image
     description: Operations about images
 paths:
-  /images/{image}:
-    parameters:
-      - $ref: '#/components/parameters/image'
+  /images:
     get:
       tags:
         - Image
       summary: Get an image
-      description: Returns the image specified
+      description: Returns the image specified.
       operationId: getImage
+      parameters:
+        - $ref: '#/components/parameters/imageQuery'
       responses:
         '200':
           description: An image
@@ -38,10 +38,16 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    ImageKey:
-      description: The unique identifier of the image.
-      type: string
-      example: logo/openchallenges.png
+    ImageQuery:
+      type: object
+      description: An image query.
+      properties:
+        objectKey:
+          description: The object key of the image.
+          type: string
+          example: logo/dream.png
+      required:
+        - objectKey
     Image:
       type: object
       description: An image
@@ -75,13 +81,12 @@ components:
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
-    image:
-      name: image
-      in: path
-      description: The unique identifier of the image.
-      required: true
+    imageQuery:
+      name: imageQuery
+      description: The query used to get an image.
+      in: query
       schema:
-        $ref: '#/components/schemas/ImageKey'
+        $ref: '#/components/schemas/ImageQuery'
   responses:
     NotFound:
       description: The specified resource was not found
