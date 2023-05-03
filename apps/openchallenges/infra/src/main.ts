@@ -1,12 +1,21 @@
 import { Construct } from 'constructs';
 import { App, TerraformStack } from 'cdktf';
 import { logger, Level } from './logger';
+import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 
 class MyStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    // define resources here
+    // eslint-disable-next-line no-new
+    new AwsProvider(this, 'AWS', {
+      region: 'us-east-1',
+    });
+
+    // const ec2Instance = new Instance(this, 'compute', {
+    //   ami: 'ami-01456a894f71116f2',
+    //   instanceType: 't2.micro',
+    // });
   }
 }
 
