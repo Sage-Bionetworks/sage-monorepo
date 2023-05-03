@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.image.service.api;
 
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.sagebionetworks.openchallenges.image.service.service.ImageService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ public class ImageApiDelegateImpl implements ImageApiDelegate {
   }
 
   @Override
-  public ResponseEntity<ImageDto> getImage(String image) {
-    return ResponseEntity.ok(imageService.getImage(image));
+  public ResponseEntity<ImageDto> getImage(ImageQueryDto query) {
+    return ResponseEntity.ok(imageService.getImage(query));
   }
 }

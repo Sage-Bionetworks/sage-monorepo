@@ -66,6 +66,7 @@ Checkout the folder [docs](./docs) to learn more about this monorepo.
 - [Thomas Schaffter](https://github.com/tschaffter)
 - [Verena Chung](https://github.com/vpchung)
 - [Rongrong Chai](https://github.com/rrchai)
+- [Maria Diaz](https://github.com/mdsage1)
 
 <!-- <a href="https://github.com/Sage-Bionetworks/sage-monorepo/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/sage-monorepo" width="20%"/>

@@ -37,6 +37,7 @@ model/challengeSubmissionType.ts
 model/challengesPage.ts
 model/challengesPageAllOf.ts
 model/image.ts
+model/imageQuery.ts
 model/models.ts
 model/organization.ts
 model/organizationDirection.ts
