@@ -27,8 +27,7 @@ public class OrganizationService {
 
   private final ImageServiceRestClient imageServiceRestClient;
 
-  @Autowired
-  private OrganizationRepository organizationRepository;
+  @Autowired private OrganizationRepository organizationRepository;
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
@@ -45,11 +44,12 @@ public class OrganizationService {
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<OrganizationEntity> organizationEntitiesPage = organizationRepository.findAll(pageable, query,
-        fieldsToSearchBy.toArray(new String[0]));
+    Page<OrganizationEntity> organizationEntitiesPage =
+        organizationRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
     LOG.info("organizationEntitiesPage {}", organizationEntitiesPage);
 
-    List<OrganizationDto> organizations = organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
+    List<OrganizationDto> organizations =
+        organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
 
     // Convert the image object keys to URLs
     organizations.stream()
@@ -77,12 +77,14 @@ public class OrganizationService {
 
   @Transactional(readOnly = true)
   public OrganizationDto getOrganization(String organizationLogin) {
-    OrganizationEntity orgEntity = organizationRepository
-        .findBySimpleNaturalId(organizationLogin)
-        .orElseThrow(
-            () -> new OrganizationNotFoundException(
-                String.format(
-                    "The organization with ID %s does not exist.", organizationLogin)));
+    OrganizationEntity orgEntity =
+        organizationRepository
+            .findBySimpleNaturalId(organizationLogin)
+            .orElseThrow(
+                () ->
+                    new OrganizationNotFoundException(
+                        String.format(
+                            "The organization with ID %s does not exist.", organizationLogin)));
 
     OrganizationDto org = organizationMapper.convertToDto(orgEntity);
 
