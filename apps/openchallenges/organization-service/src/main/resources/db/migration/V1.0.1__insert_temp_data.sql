@@ -40,16 +40,16 @@ VALUES (
     'CAFA is an ongoing community challenge for assessing protein function prediction methods.',
     1
   ),
-  (
-    '4',
-    'CAGI',
-    'cagi@genomeinterpretation.org',
-    'cagi',
-    'logo/cagi.png',
-    'https://genomeinterpretation.org/challenges.html',
-    'CAGI experiment participants are provided genetic variants and make predictions about resulting phenotypes. Independent assessors evaluate the predictions against experimentally characterized phenotypes.  The experiment culminates in the CAGI Conference with publications in ...',
-    0
-  ),
+  -- (
+  --   '4',
+  --   'CAGI',
+  --   'cagi@genomeinterpretation.org',
+  --   'cagi',
+  --   'logo/cagi.png',
+  --   'https://genomeinterpretation.org/challenges.html',
+  --   'CAGI experiment participants are provided genetic variants and make predictions about resulting phenotypes. Independent assessors evaluate the predictions against experimentally characterized phenotypes.  The experiment culminates in the CAGI Conference with publications in ...',
+  --   0
+  -- ),
   (
     '5',
     'CAMDA',
@@ -90,16 +90,16 @@ VALUES (
     'CAPRI: community-wide experiment on the comparative evaluation of protein-protein docking for structure prediction',
     0
   ),
-  (
-    '9',
-    'CASP',
-    'casp@predictioncenter.org',
-    'casp',
-    'logo/casp.png',
-    'https://predictioncenter.org/',
-    'Our goal is to help advance the methods of identifying protein structure from sequence. The Center has been organized to provide the means of objective testing of these methods via the process of blind prediction. The Critical Assessment of protein Structure Prediction (CASP...',
-    0
-  ),
+  -- (
+  --   '9',
+  --   'CASP',
+  --   'casp@predictioncenter.org',
+  --   'casp',
+  --   'logo/casp.png',
+  --   'https://predictioncenter.org/',
+  --   'Our goal is to help advance the methods of identifying protein structure from sequence. The Center has been organized to provide the means of objective testing of these methods via the process of blind prediction. The Critical Assessment of protein Structure Prediction (CASP...',
+  --   0
+  -- ),
   (
     '10',
     'GAW',
@@ -1050,16 +1050,16 @@ VALUES (
     'Iowa State is a large university with a small feel. Forge lifelong friendships and earn a degree that will take you anywhere.',
     1
   ),
-  (
-    '105',
-    'Kaggle',
-    '',
-    'kaggle',
-    'logo/kaggle.png',
-    'https://www.kaggle.com/',
-    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...',
-    0
-  ),
+  -- (
+  --   '105',
+  --   'Kaggle',
+  --   '',
+  --   'kaggle',
+  --   'logo/kaggle.png',
+  --   'https://www.kaggle.com/',
+  --   'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...',
+  --   0
+  -- ),
   (
     '106',
     'Kaiser Permanente Washington Health Research Institute',
