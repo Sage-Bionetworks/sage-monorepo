@@ -1,4 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Image,
+  ImageService,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { Observable } from 'rxjs';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
@@ -17,6 +23,7 @@ export class NavbarComponent {
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
   @Output() logInClicked = new EventEmitter<boolean>();
 
+  public logo$: Observable<Image> | undefined;
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
 
@@ -32,5 +39,16 @@ export class NavbarComponent {
 
   selectUserMenuItem(menuItem: MenuItem) {
     this.userMenuItemSelected.emit(menuItem);
+  }
+
+  constructor(
+    private readonly configService: ConfigService,
+    private imageService: ImageService
+  ) {}
+
+  ngOnInit() {
+    this.logo$ = this.imageService.getImage({
+      objectKey: 'openchallenges-white.svg',
+    });
   }
 }
