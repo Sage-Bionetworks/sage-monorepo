@@ -68,25 +68,6 @@ a:active {
   outline: none;
   border-color: $primary-color;
 }
-.field-grouped > .control:not(:last-child) {
-  margin-bottom: 8px;
-}
-@media (min-width: $screen-lg) {
-  .field-grouped {
-    display: flex;
-  }
-  .field-grouped > .control {
-    flex-shrink: 0;
-  }
-  .field-grouped > .control.control-expanded {
-    flex-grow: 1;
-    flex-shrink: 1;
-  }
-  .field-grouped > .control:not(:last-child) {
-    margin-bottom: 0;
-    margin-right: 8px;
-  }
-}
 
 // SECTION: landing
 #landing {
@@ -94,19 +75,17 @@ a:active {
   padding: 210px 64px 72px;
   background-color: #F8F8F8;
 }
-#landing {
-  .search {
+.search {
   max-width: 360px;
   margin: 0 auto;
-  }
 }
+
 @media (min-width: $screen-sm) {
   #landing {
     height: 100%;
-    
-    .search {
-      max-width: 540px;
-      margin: 0;
-    }
+  }
+  .search {
+    max-width: 540px;
+    margin: 0;
   }
 }
