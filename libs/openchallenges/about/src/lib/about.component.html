@@ -60,7 +60,9 @@
         <div class="cards-container">
           <div class="card">
             <div class="card-header">
-              <img src="https://via.placeholder.com/100x100.png" />
+              <div class="goal-icon">
+                <img class="icon" [src]="(bars$ | async)?.url" alt="Discoverable challenges" />
+              </div>
               <h4 class="card-title text-center">Make challenges more discoverable</h4>
             </div>
             <div class="card-content">
@@ -72,7 +74,9 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <img src="https://via.placeholder.com/100x100.png" />
+              <div class="goal-icon">
+                <img class="icon" [src]="(fingerprint$ | async)?.url" alt="Empower identity" />
+              </div>
               <h4 class="card-title text-center">Empower professional identity</h4>
             </div>
             <div class="card-content">
@@ -84,7 +88,9 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <img src="https://via.placeholder.com/100x100.png" />
+              <div class="goal-icon">
+                <img class="icon" [src]="(chart$ | async)?.url" alt="Increase intelligence" />
+              </div>
               <h4 class="card-title text-center">Increase challenge intelligence</h4>
             </div>
             <div class="card-content">
@@ -96,7 +102,9 @@
           </div>
           <div class="card">
             <div class="card-header">
-              <img src="https://via.placeholder.com/100x100.png" />
+              <div class="goal-icon">
+                <img class="icon" [src]="(graph$ | async)?.url" alt="Promote FAIR" />
+              </div>
               <h4 class="card-title text-center">Promote discoverability and resusability</h4>
             </div>
             <div class="card-content"></div>

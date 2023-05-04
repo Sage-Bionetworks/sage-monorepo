@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   Image,
-  ImageQuery,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -19,6 +18,10 @@ import { Observable } from 'rxjs';
 export class AboutComponent implements OnInit {
   public appVersion: string;
   public logo$: Observable<Image> | undefined;
+  public bars$: Observable<Image> | undefined;
+  public fingerprint$: Observable<Image> | undefined;
+  public chart$: Observable<Image> | undefined;
+  public graph$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -30,6 +33,18 @@ export class AboutComponent implements OnInit {
   ngOnInit() {
     this.logo$ = this.imageService.getImage({
       objectKey: 'openchallenges-icon.svg',
+    });
+    this.bars$ = this.imageService.getImage({
+      objectKey: 'about-bars.svg',
+    });
+    this.fingerprint$ = this.imageService.getImage({
+      objectKey: 'about-fingerprints.svg',
+    });
+    this.chart$ = this.imageService.getImage({
+      objectKey: 'about-chart.svg',
+    });
+    this.graph$ = this.imageService.getImage({
+      objectKey: 'about-graph.svg',
     });
   }
 }

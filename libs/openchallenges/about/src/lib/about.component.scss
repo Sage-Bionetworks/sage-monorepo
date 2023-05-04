@@ -70,9 +70,6 @@ h3,
       align-items: center;
       text-align: center;
 
-      img {
-        border-radius: 50%;
-      }
     }
 
     li {
@@ -83,4 +80,15 @@ h3,
       }
     }
   }
+}
+.goal-icon {
+  height: 140px;
+  width: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.icon {
+  height: 80px;
 }
