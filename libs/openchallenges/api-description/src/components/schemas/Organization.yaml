@@ -45,4 +45,3 @@ required:
   - websiteUrl
   - createdAt
   - updatedAt
-  - acronym
