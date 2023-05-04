@@ -8,7 +8,7 @@ INSERT INTO organization (
     avatar_url,
     website_url,
     description,
-    challenge_count.
+    challenge_count,
     acronym
   )
 VALUES (
