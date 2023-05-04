@@ -26,19 +26,18 @@
   </div>
 </section>
 <section id="search-oc" class="mat-typography">
-  <div class="container">
+  <div class="container row">
     <h3>Let us help find the perfect challenge for you!</h3>
-    <div class="search field field-grouped">
-      <div class="control control-expanded">
-        <input
-          class="input"
-          type="search"
-          name="search"
-          (keydown.enter)="onSearch()"
-          placeholder="I am interested in..."
-          [(ngModel)]="searchTerms"
-        />
-      </div>
+  </div>
+  <div class="container row">
+    <div class="search-field">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerms"
+        (keydown.enter)="onSearch()"
+        placeholder="I'm looking for..."
+      />
     </div>
   </div>
 </section>

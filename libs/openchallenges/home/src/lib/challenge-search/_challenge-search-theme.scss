@@ -1,19 +1,21 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
-  
 
-  .card-inner {
-    background: #fff;
+  #search-oc {
+    background-color: mat.get-color-from-palette($primary, 900);
+
+    h3 {
+      color: white;
+    }
   }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) { }
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
