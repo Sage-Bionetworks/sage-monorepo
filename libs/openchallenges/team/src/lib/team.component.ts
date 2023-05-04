@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   Image,
   ImageService,
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
-export class TeamComponent {
+export class TeamComponent implements OnInit {
   public appVersion: string;
   public logo$: Observable<Image> | undefined;
   public thomas$: Observable<Image> | undefined;

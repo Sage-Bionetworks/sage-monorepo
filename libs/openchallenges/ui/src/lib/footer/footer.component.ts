@@ -1,10 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -14,15 +13,12 @@ import { Observable } from 'rxjs';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   @Input() version = 'x.y.z';
 
   public logo$: Observable<Image> | undefined;
 
-  constructor(
-    private readonly configService: ConfigService,
-    private imageService: ImageService
-  ) {}
+  constructor(private imageService: ImageService) {}
 
   ngOnInit() {
     this.logo$ = this.imageService.getImage({
