@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 })
 export class AboutComponent implements OnInit {
   public appVersion: string;
-  public triforceImg$: Observable<Image> | undefined;
+  public logo$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -28,9 +28,8 @@ export class AboutComponent implements OnInit {
   }
 
   ngOnInit() {
-    const imageQuery: ImageQuery = {
-      objectKey: 'logo/dream.png',
-    };
-    this.triforceImg$ = this.imageService.getImage(imageQuery);
+    this.logo$ = this.imageService.getImage({
+      objectKey: 'openchallenges-icon.svg',
+    });
   }
 }

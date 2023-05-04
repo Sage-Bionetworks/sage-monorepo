@@ -2,12 +2,7 @@
   <section class="title">
     <div class="container">
       <div class="section-outer">
-        <img
-          class="logo-icon"
-          src="assets/images/openchallenges-icon.svg"
-          alt="OpenChallenges Icon"
-        />
-        <img class="logo" [src]="(triforceImg$ | async)?.url" alt="OpenChallenges Icon" />
+        <img class="logo-icon" [src]="(logo$ | async)?.url" alt="OpenChallenges Icon" />
         <h2>About OpenChallenges</h2>
       </div>
     </div>
