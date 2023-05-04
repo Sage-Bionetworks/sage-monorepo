@@ -68,8 +68,7 @@ paths:
       description: List challenge input data types
       operationId: listChallengeInputDataTypes
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/challengeInputDataTypeSearchQuery'
       responses:
         '200':
           content:
@@ -89,8 +88,7 @@ paths:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
         '200':
           content:
@@ -494,6 +492,44 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeInputDataTypeSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - name
+        - relevance
+    ChallengeInputDataTypeDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    ChallengeInputDataTypeSearchQuery:
+      type: object
+      description: A challenge input data type search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/ChallengeInputDataTypeSort'
+        direction:
+          $ref: '#/components/schemas/ChallengeInputDataTypeDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: genomic
     ChallengeInputDataType:
       type: object
       description: A challenge input data type.
@@ -534,6 +570,44 @@ components:
             - challengeInputDataTypes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - name
+        - relevance
+    ChallengePlatformDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    ChallengePlatformSearchQuery:
+      type: object
+      description: A challenge platform search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/ChallengePlatformSort'
+        direction:
+          $ref: '#/components/schemas/ChallengePlatformDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: synapse
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -598,24 +672,18 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
-    pageNumber:
-      name: pageNumber
-      description: The page number.
+    challengeInputDataTypeSearchQuery:
+      name: challengeInputDataTypeSearchQuery
+      description: The search query used to find challenge input data types.
       in: query
       schema:
-        type: integer
-        format: int32
-        default: 0
-        minimum: 0
-    pageSize:
-      name: pageSize
-      description: The number of items in a single page.
+        $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
+    challengePlatformSearchQuery:
+      name: challengePlatformSearchQuery
+      description: The search query used to find challenge platforms.
       in: query
       schema:
-        type: integer
-        format: int32
-        default: 100
-        minimum: 1
+        $ref: '#/components/schemas/ChallengePlatformSearchQuery'
     challengePlatformName:
       name: challengePlatformName
       in: path

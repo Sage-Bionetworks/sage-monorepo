@@ -17,7 +17,7 @@ import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
-  challengeDifficultyFilter,
+  // challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
   challengeInputDataTypeFilter,
   challengeIncentiveTypesFilter,
@@ -80,7 +80,7 @@ export class ChallengeSearchComponent
 
   checkboxFilters: Filter[] = [
     challengeStatusFilter,
-    challengeDifficultyFilter,
+    // challengeDifficultyFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
     challengePlatformFilter,

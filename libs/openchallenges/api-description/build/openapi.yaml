@@ -74,8 +74,7 @@ paths:
       description: List challenge input data types
       operationId: listChallengeInputDataTypes
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/challengeInputDataTypeSearchQuery'
       responses:
         '200':
           content:
@@ -95,8 +94,7 @@ paths:
       description: List challenge platforms
       operationId: listChallengePlatforms
       parameters:
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/challengePlatformSearchQuery'
       responses:
         '200':
           content:
@@ -128,15 +126,15 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  '/images/{image}':
-    parameters:
-      - $ref: '#/components/parameters/image'
+  /images:
     get:
       tags:
         - Image
       summary: Get an image
-      description: Returns the image specified
+      description: Returns the image specified.
       operationId: getImage
+      parameters:
+        - $ref: '#/components/parameters/imageQuery'
       responses:
         '200':
           description: An image
@@ -648,6 +646,44 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeInputDataTypeSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - name
+        - relevance
+    ChallengeInputDataTypeDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    ChallengeInputDataTypeSearchQuery:
+      type: object
+      description: A challenge input data type search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/ChallengeInputDataTypeSort'
+        direction:
+          $ref: '#/components/schemas/ChallengeInputDataTypeDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: genomic
     ChallengeInputDataType:
       type: object
       description: A challenge input data type.
@@ -688,6 +724,44 @@ components:
             - challengeInputDataTypes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengePlatformSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - name
+        - relevance
+    ChallengePlatformDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
+    ChallengePlatformSearchQuery:
+      type: object
+      description: A challenge platform search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        sort:
+          $ref: '#/components/schemas/ChallengePlatformSort'
+        direction:
+          $ref: '#/components/schemas/ChallengePlatformDirection'
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: synapse
     ChallengePlatform:
       type: object
       description: A challenge platform
@@ -738,10 +812,16 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
-    ImageKey:
-      description: The unique identifier of the image.
-      type: string
-      example: logo/openchallenges.png
+    ImageQuery:
+      type: object
+      description: An image query.
+      properties:
+        objectKey:
+          description: The object key of the image.
+          type: string
+          example: logo/dream.png
+      required:
+        - objectKey
     Image:
       type: object
       description: An image
@@ -814,8 +894,8 @@ components:
     OrganizationLogin:
       description: The login of an organization
       type: string
-      minLength: 3
-      maxLength: 25
+      minLength: 2
+      maxLength: 64
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-org
     Organization:
@@ -1048,6 +1128,44 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengeId'
+    challengeInputDataTypeSearchQuery:
+      name: challengeInputDataTypeSearchQuery
+      description: The search query used to find challenge input data types.
+      in: query
+      schema:
+        $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
+    challengePlatformSearchQuery:
+      name: challengePlatformSearchQuery
+      description: The search query used to find challenge platforms.
+      in: query
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformSearchQuery'
+    challengePlatformName:
+      name: challengePlatformName
+      in: path
+      description: The unique identifier of the challenge platform.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ChallengePlatformName'
+    imageQuery:
+      name: imageQuery
+      description: The query used to get an image.
+      in: query
+      schema:
+        $ref: '#/components/schemas/ImageQuery'
+    organizationSearchQuery:
+      name: organizationSearchQuery
+      description: The search query used to find organizations.
+      in: query
+      schema:
+        $ref: '#/components/schemas/OrganizationSearchQuery'
+    org:
+      name: org
+      in: path
+      description: The unique identifier of the organization.
+      required: true
+      schema:
+        $ref: '#/components/schemas/OrganizationLogin'
     pageNumber:
       name: pageNumber
       description: The page number.
@@ -1066,33 +1184,6 @@ components:
         format: int32
         default: 100
         minimum: 1
-    challengePlatformName:
-      name: challengePlatformName
-      in: path
-      description: The unique identifier of the challenge platform.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ChallengePlatformName'
-    image:
-      name: image
-      in: path
-      description: The unique identifier of the image.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ImageKey'
-    organizationSearchQuery:
-      name: organizationSearchQuery
-      description: The search query used to find organizations.
-      in: query
-      schema:
-        $ref: '#/components/schemas/OrganizationSearchQuery'
-    org:
-      name: org
-      in: path
-      description: The unique identifier of the organization.
-      required: true
-      schema:
-        $ref: '#/components/schemas/OrganizationLogin'
     userId:
       name: userId
       in: path

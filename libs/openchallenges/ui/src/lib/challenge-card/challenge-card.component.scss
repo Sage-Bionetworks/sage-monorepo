@@ -11,6 +11,10 @@
   border-radius: constants.$dl-radius-radius-radius16;
   cursor: pointer;
 }
+.card-body {
+  min-height: 180px;
+  max-height:180px;
+}
 
 // FOOTER
 .difficulty-tag {

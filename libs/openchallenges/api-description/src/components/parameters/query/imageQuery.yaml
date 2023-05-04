@@ -1,0 +1,5 @@
+name: imageQuery
+description: The query used to get an image.
+in: query
+schema:
+  $ref: ../../schemas/ImageQuery.yaml

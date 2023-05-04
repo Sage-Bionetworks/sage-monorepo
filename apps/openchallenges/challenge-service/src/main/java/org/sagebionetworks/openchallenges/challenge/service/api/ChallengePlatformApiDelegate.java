@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,14 +55,14 @@ public interface ChallengePlatformApiDelegate {
   /**
    * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param challengePlatformSearchQuery The search query used to find challenge platforms.
+   *     (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    * @see ChallengePlatformApi#listChallengePlatforms
    */
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      Integer pageNumber, Integer pageSize) {
+      ChallengePlatformSearchQueryDto challengePlatformSearchQuery) {
     getRequest()
         .ifPresent(
             request -> {

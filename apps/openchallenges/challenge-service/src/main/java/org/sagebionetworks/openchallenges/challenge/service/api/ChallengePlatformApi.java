@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -94,8 +95,8 @@ public interface ChallengePlatformApi {
   /**
    * GET /challengePlatforms : List challenge platforms List challenge platforms
    *
-   * @param pageNumber The page number. (optional, default to 0)
-   * @param pageSize The number of items in a single page. (optional, default to 100)
+   * @param challengePlatformSearchQuery The search query used to find challenge platforms.
+   *     (optional)
    * @return Success (status code 200) or Invalid request (status code 400) or The request cannot be
    *     fulfilled due to an unexpected server error (status code 500)
    */
@@ -143,16 +144,11 @@ public interface ChallengePlatformApi {
       value = "/challengePlatforms",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number.")
+      @Parameter(
+              name = "challengePlatformSearchQuery",
+              description = "The search query used to find challenge platforms.")
           @Valid
-          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
-          Integer pageNumber,
-      @Min(1)
-          @Parameter(name = "pageSize", description = "The number of items in a single page.")
-          @Valid
-          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize) {
-    return getDelegate().listChallengePlatforms(pageNumber, pageSize);
+          ChallengePlatformSearchQueryDto challengePlatformSearchQuery) {
+    return getDelegate().listChallengePlatforms(challengePlatformSearchQuery);
   }
 }

@@ -1,6 +1,7 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
 
   @Override
   public ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      Integer pageNumber, Integer pageSize) {
-    return ResponseEntity.ok(challengePlatformService.listChallengePlatforms(pageNumber, pageSize));
+      ChallengePlatformSearchQueryDto query) {
+    return ResponseEntity.ok(challengePlatformService.listChallengePlatforms(query));
   }
 }

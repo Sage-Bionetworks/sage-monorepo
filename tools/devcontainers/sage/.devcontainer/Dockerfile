@@ -28,6 +28,8 @@ RUN groupadd docker \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
     kafkacat jq \
+    # Required by AWS CLI
+    mandoc \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
@@ -44,7 +46,9 @@ RUN groupadd docker \
   # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok vault \
+    nodejs gh ngrok \
+    terraform=1.4.6-1 \
+    vault=1.13.2-1 \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
@@ -59,6 +63,11 @@ RUN groupadd docker \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
+  # Install AWS CLI
+  && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+  && unzip awscliv2.zip \
+  && ./aws/install \
+  && rm -fr awscliv2.zip ./aws \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \

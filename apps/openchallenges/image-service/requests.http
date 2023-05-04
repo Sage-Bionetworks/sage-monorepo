@@ -11,3 +11,7 @@
 ### Get the image with the key triforce.png
 
 GET {{basePath}}/images/triforce.png
+
+### Get the logo of the DREAM organization
+
+GET {{basePath}}/images?objectKey=logo/dream.png
