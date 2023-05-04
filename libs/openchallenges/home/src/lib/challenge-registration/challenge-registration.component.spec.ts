@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ChallengeRegistrationComponent } from './challenge-registration.component';
 
@@ -8,6 +9,7 @@ describe('ChallengeRegistrationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientModule],
       declarations: [ChallengeRegistrationComponent],
     }).compileComponents();
   });
