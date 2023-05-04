@@ -14,4 +14,9 @@ export class ChallengeOverviewComponent {
   @Input() challenge!: Challenge;
   organizations: Organization[] = MOCK_ORGANIZATIONS;
   mockTopics = ['breast', 'cancer'];
+  mockDoi = '09.1937/09219137';
+
+  printCamel(camel: string | undefined) {
+    return camel ? camel.replace(/([a-z])([A-Z])/g, '$1 $2') : undefined;
+  }
 }

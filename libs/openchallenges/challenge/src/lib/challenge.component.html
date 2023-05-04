@@ -1,8 +1,8 @@
 <main class="base mat-typography">
   <div *ngIf="challenge$ | async as challenge">
     <section id="top" class="row">
-      <div class="link" class="row">
-        <mat-icon aria-hidden="true">home</mat-icon>
+      <div id="breadcrumbs" class="row">
+        <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
         <mat-icon aria-hidden="true">chevron_right</mat-icon>
         <a routerLink="/challenge">challenges</a>
         <mat-icon aria-hidden="true">chevron_right</mat-icon>
@@ -24,21 +24,21 @@
           <h2>
             {{ challenge.name }}
           </h2>
-          <div class="featured">
+          <!-- <div class="featured">
             <mat-icon aria-hidden="true">military_tech</mat-icon>
             <span>FEATURED!</span>
-          </div>
+          </div> -->
         </div>
-        <p class="username">@{{ challenge.name }}</p>
-        <div class="progress-bar">
-          <div class="progress-bar-top" *ngIf="remainDays">
-            <span>{{ this.remainDays }} days remains</span>
-          </div>
-          <p-progressBar [value]="progressValue" [showValue]="false"></p-progressBar>
-          <div class="progress-bar-bottom">
-            <span class="start-date">{{ challenge.startDate }}</span>
-            <span class="end-date">{{ challenge.endDate }}</span>
-          </div>
+        <p class="username">@{{ challenge.slug }}</p>
+      </div>
+      <div id="activity" class="col-4">
+        <div class="activity-card">
+          <p class="mat-body-strong">Start date:</p>
+          <p>{{ challenge.startDate }}</p>
+        </div>
+        <div class="activity-card">
+          <p class="mat-body-strong">End date:</p>
+          <p>{{ challenge.endDate }}</p>
         </div>
       </div>
     </section>
@@ -58,14 +58,6 @@
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
           >
             Overview
-          </a>
-          <a
-            class="nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'details' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['details'] }"
-          >
-            Challenge Details
           </a>
           <a
             class="nav-item"
