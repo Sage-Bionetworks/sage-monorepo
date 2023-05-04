@@ -83,6 +83,11 @@ function openchallenges-db-cli {
   node dist/apps/openchallenges/db-cli/src/index.js "$@"
 }
 
+function openchallenges-infra {
+  node dist/apps/openchallenges/infra/src/main.js "$@"
+}
+
+
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
