@@ -16,7 +16,6 @@ body:
     attributes:
       label: Documentation issue
       description: Select one or multiple options
-      multiple: true
       options:
         - Reporting a typo
         - Reporting a documentation bug
