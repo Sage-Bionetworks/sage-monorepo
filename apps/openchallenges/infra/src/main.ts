@@ -16,7 +16,7 @@ class MyStack extends TerraformStack {
 
     // eslint-disable-next-line
     const ec2Instance = new Instance(this, 'compute', {
-      ami: 'ami-01456a894f71116f2',
+      ami: 'ami-0044130ca185d0880', // Ubuntu 22.04 LTS
       instanceType: 't2.micro',
     });
   }
