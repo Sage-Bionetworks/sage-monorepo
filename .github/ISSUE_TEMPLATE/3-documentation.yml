@@ -17,10 +17,10 @@ body:
       label: Documentation issue
       description: Select one or multiple options
       options:
-        - Reporting a typo
-        - Reporting a documentation bug
-        - Documentation improvement
-        - Documentation feedback
+        - label: Reporting a typo
+        - label: Reporting a documentation bug
+        - label: Documentation improvement
+        - label: Documentation feedback
   - type: textarea
     attributes:
       label: Description
