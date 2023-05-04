@@ -14,6 +14,7 @@ class OpenChallengesStack extends TerraformStack {
 
     const keyPath = `${os.homedir()}/.ssh/openchallenges-ec2.pub`;
     const publicKey = fs.readFileSync(keyPath, 'utf-8');
+    const keyName = 'openchallenges-ec2-key';
 
     new AwsProvider(this, 'AWS', {
       region: 'us-east-1',
@@ -21,7 +22,7 @@ class OpenChallengesStack extends TerraformStack {
 
     const keyPair = new KeyPair(this, 'keypair', {
       publicKey,
-      keyName: 'openchallenges-ec2-key',
+      keyName,
     });
 
     const ec2Instance = new Instance(this, 'compute', {
