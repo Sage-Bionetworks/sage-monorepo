@@ -1857,7 +1857,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Thomas Jefferson University Hospital',
     '',
     'thomas-jefferson-university-hospital',
-    'https://via.placeholder.com/300.png',
+    'logo/jefferson.jpeg',
     'https://hospitals.jefferson.edu/',
     '',
     1
@@ -1937,7 +1937,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Arkansas for Medical Sciences',
     '',
     'uams',
-    'https://via.placeholder.com/300.png',
+    'logo/university-of-arkansas-for-medical-sciences.jpg',
     'https://www.uams.edu/',
     '',
     1
@@ -1977,7 +1977,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of California Santa Cruz',
     '',
     'ucsc',
-    'logo/cu_anschutz.svg',
+    'logo/uc-santa-cruz-2021.svg',
     'https://www.ucsc.edu/',
     '',
     5
@@ -1987,7 +1987,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Cincinnati',
     '',
     'uc',
-    'https://via.placeholder.com/300.png',
+    'logo/University_of_Cincinnati_Logo_PNG1.png',
     'https://www.uc.edu/',
     '',
     1
@@ -1997,7 +1997,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Colorado Anschutz Medical Campus',
     '',
     'cu-anschutz',
-    'https://via.placeholder.com/300.png',
+    'logo/cu_anschutz.svg',
     'https://www.cuanschutz.edu/',
     '',
     4
@@ -2007,7 +2007,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Connecticut',
     '',
     'uconn',
-    'https://via.placeholder.com/300.png',
+    'logo/uconn.png',
     'https://uconn.edu/',
     '',
     1
@@ -2017,7 +2017,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Houston',
     '',
     'uh',
-    'https://via.placeholder.com/300.png',
+    'logo/uh-primary.svg',
     'https://www.uh.edu/',
     '',
     1
@@ -2027,7 +2027,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Illinois Urbana-Champaign',
     '',
     'uiuc',
-    'https://via.placeholder.com/300.png',
+    'logo/wordmark_horizontal.png',
     'https://illinois.edu/',
     '',
     1
@@ -2037,7 +2037,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Kent',
     '',
     'university-of-kent',
-    'https://via.placeholder.com/300.png',
+    'logo/UKENT.jpeg',
     'https://www.kent.ac.uk/',
     '',
     1
@@ -2047,7 +2047,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Kentucky',
     '',
     'uky',
-    'https://via.placeholder.com/300.png',
+    'logo/Kentucky-Wildcats-logo.png',
     'http://www.uky.edu/',
     '',
     1
@@ -2057,7 +2057,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Lausanne',
     '',
     'unil',
-    'https://via.placeholder.com/300.png',
+    'logo/unil-logo.svg',
     'https://www.unil.ch/central/en/home.html',
     '',
     2
@@ -2067,7 +2067,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Lisbon',
     '',
     'u-lisbon',
-    'https://via.placeholder.com/300.png',
+    'logo/ulisboa.png',
     'https://www.ulisboa.pt/en',
     '',
     2
@@ -2077,7 +2077,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of London',
     '',
     'uol',
-    'https://via.placeholder.com/300.png',
+    'logo/University-of-london-logo_1.png',
     'https://london.ac.uk/',
     '',
     2
@@ -2087,7 +2087,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Luxembourg',
     '',
     'university-of-luxembourg',
-    'https://via.placeholder.com/300.png',
+    'logo/university-of-luxembourglogo.png',
     'https://wwwen.uni.lu/',
     '',
     1
@@ -2097,7 +2097,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Maryland',
     '',
     'umd',
-    'https://via.placeholder.com/300.png',
+    'logo/University-of-Maryland-Logo-PNG1.png',
     'https://www.umd.edu/',
     '',
     2
@@ -2107,7 +2107,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Michigan',
     '',
     'umich',
-    'https://via.placeholder.com/300.png',
+    'logo/block-m-maize.png',
     'https://umich.edu/',
     '',
     1
@@ -2117,7 +2117,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of North Carolina at Chapel Hill',
     '',
     'unc',
-    'https://via.placeholder.com/300.png',
+    'logo/UNIV_NC.png',
     'https://www.unc.edu/',
     '',
     2
@@ -2127,7 +2127,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Notre Dame',
     '',
     'notre-dame',
-    'https://via.placeholder.com/300.png',
+    'logo/notre_dame.png',
     'https://www.nd.edu/',
     '',
     0
@@ -2137,7 +2137,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Padova',
     '',
     'university-of-padova',
-    'https://via.placeholder.com/300.png',
+    'logo/university-of-padua-unipd1424.png',
     'https://www.unipd.it/en/',
     '',
     1
@@ -2147,7 +2147,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Padua',
     '',
     'university-of-padua',
-    'https://via.placeholder.com/300.png',
+    'logo/university-of-padua-unipd1424.png',
     'https://www.unipd.it/en/',
     '',
     1
@@ -2157,7 +2157,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Pennsylvania',
     '',
     'upenn',
-    'https://via.placeholder.com/300.png',
+    'logo/UniversityofPennsylvania_FullLogo_RGB-4_0.png',
     'https://www.upenn.edu/',
     '',
     4
@@ -2167,7 +2167,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Rochester',
     '',
     'university-of-rochester',
-    'https://via.placeholder.com/300.png',
+    'logo/fea-ur-medicine1.png',
     'https://www.urmedicine.org/',
     '',
     2
@@ -2177,7 +2177,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of South Florida',
     '',
     'usf',
-    'https://via.placeholder.com/300.png',
+    'logo/University_of_South_Florida_seal.png',
     'https://www.usf.edu/',
     '',
     1
@@ -2187,7 +2187,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Southampton',
     '',
     'university-of-southampton',
-    'https://via.placeholder.com/300.png',
+    'logo/university-of-southampton.png',
     'https://www.southampton.ac.uk/',
     '',
     1
@@ -2197,7 +2197,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Texas Southwestern Medical Center',
     '',
     'utsw',
-    'https://via.placeholder.com/300.png',
+    'logo/ut-swestern.gif',
     'https://www.utsouthwestern.edu/',
     '',
     2
@@ -2207,7 +2207,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Toronto',
     '',
     'uoft',
-    'https://via.placeholder.com/300.png',
+    'logo/utoronto.png',
     'https://www.utoronto.ca/',
     '',
     5
@@ -2217,7 +2217,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Vermont',
     '',
     'uvm',
-    'https://via.placeholder.com/300.png',
+    'logo/the-university-of-vermont.png',
     'https://www.uvm.edu/',
     '',
     1
@@ -2227,7 +2227,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Verona',
     '',
     'university-of-verona',
-    'https://via.placeholder.com/300.png',
+    'logo/UniversitàVerona.png',
     'https://www.univr.it/en/international',
     '',
     1
@@ -2237,7 +2237,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Virginia',
     '',
     'uva',
-    'https://via.placeholder.com/300.png',
+    'logo/uva_primary_logo.jpg',
     'https://www.virginia.edu/',
     '',
     1
@@ -2247,7 +2247,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Washington',
     '',
     'uw',
-    'https://via.placeholder.com/300.png',
+    'logo/University_of_Washington.svg',
     'https://www.washington.edu/',
     '',
     7
@@ -2257,7 +2257,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Wisconsin-Madison',
     '',
     'uw-madison',
-    'https://via.placeholder.com/300.png',
+    'logo/uw-logo.png',
     'https://www.wisc.edu/',
     '',
     0
@@ -2267,7 +2267,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Zurich',
     '',
     'uzh',
-    'https://via.placeholder.com/300.png',
+    'logo/Universit_Zrich_logo.png',
     'https://www.uzh.ch/en.html',
     '',
     2
@@ -2277,7 +2277,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Urban Green Energy',
     '',
     'uge',
-    'https://via.placeholder.com/300.png',
+    'logo/ugei-logo.svg',
     'https://www.ugei.com/',
     '',
     1
@@ -2287,7 +2287,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'US Army Medical Research Institute of Infectious Diseases',
     '',
     'usamriid',
-    'https://via.placeholder.com/300.png',
+    'logo/usarmy.png',
     'https://www.usamriid.army.mil/',
     '',
     1
@@ -2297,7 +2297,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'VA Durham Health Care',
     '',
     'va-durham-health-care',
-    'https://via.placeholder.com/300.png',
+    'logo/va-logo-white.png',
     'https://www.durham.va.gov/',
     '',
     2
@@ -2307,7 +2307,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Verily',
     '',
     'verily',
-    'https://via.placeholder.com/300.png',
+    'logo/verily.jpeg',
     'https://verily.com/',
     '',
     1
@@ -2317,7 +2317,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'VHA Innovation Ecosystem',
     '',
     'vha-ie',
-    'https://via.placeholder.com/300.png',
+    'logo/vaInnovation.jpeg',
     'https://www.va.gov/innovationecosystem/',
     '',
     2
@@ -2327,7 +2327,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Washington University in St. Louis',
     '',
     'wustl',
-    'https://via.placeholder.com/300.png',
+    'logo/Washington_University_Seal.png',
     'https://wustl.edu/',
     '',
     1
@@ -2337,7 +2337,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Wayne State University',
     '',
     'wayne-state-university',
-    'https://via.placeholder.com/300.png',
+    'logo/wsu_primary_stacked_color.png',
     'https://wayne.edu/',
     '',
     1
@@ -2347,7 +2347,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Weizmann Institute of Science',
     '',
     'weizmann-institute-of-science',
-    'https://via.placeholder.com/300.png',
+    'logo/WIZ11.jpeg',
     'https://www.weizmann.ac.il/pages/',
     '',
     2
@@ -2357,7 +2357,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Wellcome Sanger Institute',
     '',
     'sanger',
-    'https://via.placeholder.com/300.png',
+    'logo/Wellcome_Sanger_Logo.jpeg',
     'https://www.sanger.ac.uk/',
     '',
     2
@@ -2367,7 +2367,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'White House Office of Science and Technology Policy',
     '',
     'ostp',
-    'https://via.placeholder.com/300.png',
+    'logo/US-WhiteHouse-Logo.png',
     'https://www.whitehouse.gov/ostp/',
     '',
     1
@@ -2377,7 +2377,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'InChI Trust',
     '',
     'inchi',
-    'https://via.placeholder.com/300.png',
+    'logo/InChI-logo2.png',
     'https://www.inchi-trust.org/',
     '',
     1
@@ -2387,7 +2387,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'National Center for Toxicological Research',
     '',
     'nctr',
-    'https://via.placeholder.com/300.png',
+    'logo/No logo use FDA logo',
     'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
     '',
     2
