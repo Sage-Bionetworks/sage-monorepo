@@ -35,16 +35,16 @@ export class AboutComponent implements OnInit {
       objectKey: 'openchallenges-icon.svg',
     });
     this.bars$ = this.imageService.getImage({
-      objectKey: 'about-bars.svg',
+      objectKey: 'icon-bars.svg',
     });
     this.fingerprint$ = this.imageService.getImage({
-      objectKey: 'about-fingerprints.svg',
+      objectKey: 'icon-fingerprint.svg',
     });
     this.chart$ = this.imageService.getImage({
-      objectKey: 'about-chart.svg',
+      objectKey: 'icon-chart.svg',
     });
     this.graph$ = this.imageService.getImage({
-      objectKey: 'about-graph.svg',
+      objectKey: 'icon-graph.svg',
     });
   }
 }

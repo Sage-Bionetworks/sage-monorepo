@@ -31,6 +31,11 @@ a:active {
   flex-grow: 1 !important;
   margin: auto;
 }
+::ng-deep .search-field {
+  input {
+    width: 100%;
+  }
+}
 
 // SECTION: landing
 #landing {
