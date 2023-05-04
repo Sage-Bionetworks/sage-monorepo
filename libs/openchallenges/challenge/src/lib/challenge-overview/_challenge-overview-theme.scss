@@ -19,6 +19,10 @@
     font-weight: 400;
     font-size: 21px;
   }
+
+  .detail-name {
+    font-weight: 600;
+  }
 }
 
 @mixin theme($theme) {

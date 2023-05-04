@@ -7,23 +7,23 @@
     <h3>Challenge Details</h3>
     <table>
       <tr>
-        <td class="detail-name">START DATE</td>
+        <td class="detail-name">Start Date</td>
         <td>{{ challenge.startDate }}</td>
       </tr>
       <tr>
-        <td class="detail-name">END DATE</td>
+        <td class="detail-name">End Date</td>
         <td>{{ challenge.endDate }}</td>
       </tr>
       <tr>
-        <td class="detail-name">STATUS</td>
+        <td class="detail-name">Status</td>
         <td>{{ challenge.status }}</td>
       </tr>
       <tr>
-        <td class="detail-name">PLATFORM</td>
+        <td class="detail-name">Platform</td>
         <td>{{ challenge.platform.name }}</td>
       </tr>
       <tr>
-        <td class="detail-name">WEBSITE URL</td>
+        <td class="detail-name">Website URL</td>
         <td>{{ challenge.websiteUrl }}</td>
       </tr>
       <tr>
@@ -32,7 +32,7 @@
         <td>{{ mockDoi }}</td>
       </tr>
       <tr>
-        <td class="detail-name">SUBMISSION TYPE</td>
+        <td class="detail-name">Submission Type</td>
         <td>
           <span nowrap *ngFor="let submissionType of challenge.submissionTypes; let isLast = last">
             {{ printCamel(submissionType) }}{{ isLast ? '' : ', ' }}</span
@@ -40,7 +40,7 @@
         </td>
       </tr>
       <tr>
-        <td class="detail-name">DATA TYPE(S)</td>
+        <td class="detail-name">Data Type(s)</td>
         <td>
           <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
             {{ dataType }}{{ isLast ? '' : ', ' }}
@@ -48,7 +48,7 @@
         </td>
       </tr>
       <tr>
-        <td class="detail-name">INCENTIVE(S)</td>
+        <td class="detail-name">Incentive(s)</td>
         <td>
           <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
             {{ printCamel(incentive) }}{{ isLast ? '' : ', ' }}</span
