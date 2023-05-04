@@ -1,7 +1,7 @@
 <div *ngIf="challenge">
   <div class="challenge-card" [routerLink]="['/challenge', challenge.id]">
     <div class="card-banner">
-      <!-- update to retrieve banner path from challenge obj when API ready -->
+      <!-- <img [src]="(banner$ | async)?.url" alt="Challenge banner" /> -->
     </div>
     <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>

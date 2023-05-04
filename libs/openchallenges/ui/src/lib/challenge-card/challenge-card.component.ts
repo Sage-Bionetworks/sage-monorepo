@@ -3,9 +3,12 @@ import {
   Challenge,
   ChallengePlatformService,
   SimpleChallengePlatform,
+  Image,
+  ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Challenge as DeprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 // import { startCase } from 'lodash';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
@@ -16,13 +19,17 @@ export class ChallengeCardComponent implements OnInit {
   @Input() challenge!: Challenge;
   // TODO: remove the deprecatedChallenge when real Challenge has all required properties
   @Input() deprecatedChallenge!: DeprecatedChallenge;
+  banner$: Observable<Image> | undefined;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
   incentives!: string;
   statusClass!: string;
   // difficulty!: string | undefined;
 
-  constructor(private challengePlatformService: ChallengePlatformService) {}
+  constructor(
+    private challengePlatformService: ChallengePlatformService,
+    private imageService: ImageService
+  ) {}
 
   ngOnInit(): void {
     if (this.challenge) {
@@ -43,6 +50,13 @@ export class ChallengeCardComponent implements OnInit {
                 );
               })
               .join(', ');
+      this.banner$ = this.challenge.avatarUrl
+        ? this.imageService.getImage({
+            objectKey: this.challenge.avatarUrl,
+          })
+        : this.imageService.getImage({
+            objectKey: 'banner-default.svg',
+          });
     }
   }
 }
