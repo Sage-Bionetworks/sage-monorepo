@@ -82,7 +82,7 @@ public interface OrganizationApi {
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
       @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-          @Size(min = 3, max = 25)
+          @Size(min = 2, max = 64)
           @Parameter(
               name = "org",
               description = "The unique identifier of the organization.",

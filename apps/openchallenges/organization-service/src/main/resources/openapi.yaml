@@ -235,8 +235,8 @@ components:
     OrganizationLogin:
       description: The login of an organization
       example: example-org
-      maxLength: 25
-      minLength: 3
+      maxLength: 64
+      minLength: 2
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     Organization:
@@ -263,8 +263,8 @@ components:
         login:
           description: The login of an organization
           example: example-org
-          maxLength: 25
-          minLength: 3
+          maxLength: 64
+          minLength: 2
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         description:

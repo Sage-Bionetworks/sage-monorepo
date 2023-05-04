@@ -104,7 +104,7 @@ public class OrganizationDto {
    */
   @NotNull
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 25)
+  @Size(min = 2, max = 64)
   @Schema(
       name = "login",
       example = "example-org",
