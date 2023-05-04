@@ -7,10 +7,13 @@
     <h4>15</h4>
     <p class="mat-caption">members</p>
   </div>
-  <div class="stat-item action-btn" *ngIf="loggedIn">
+  <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
+  </div> -->
+  <div class="stat-item action-btn" *ngIf="loggedIn">
+      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon> Go to Website
   </div>
   <div class="stat-item action-btn" *ngIf="!loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon> REQUEST TO JOIN
+    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon> Request to Join
   </div>
 </div>
