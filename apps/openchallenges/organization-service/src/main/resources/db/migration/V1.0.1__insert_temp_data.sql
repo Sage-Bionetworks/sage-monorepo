@@ -2387,7 +2387,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'National Center for Toxicological Research',
     '',
     'nctr',
-    'logo/No logo use FDA logo',
+    'https://via.placeholder.com/300.png',
     'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
     '',
     2
