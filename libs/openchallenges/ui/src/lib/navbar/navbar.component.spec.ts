@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ButtonGithubComponent } from '../button-github/button-github.component';
 import { USER_MENU_ITEMS } from '../user-button/user-menu-items';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { NavbarComponent } from './navbar.component';
 
@@ -13,6 +14,7 @@ describe('NavbarComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [NavbarComponent, ButtonGithubComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      imports: [HttpClientModule],
     }).compileComponents();
   });
 

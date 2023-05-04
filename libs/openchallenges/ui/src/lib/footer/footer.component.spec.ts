@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { FooterComponent } from './footer.component';
 
@@ -7,7 +8,9 @@ describe('FooterComponent', () => {
   let fixture: ComponentFixture<FooterComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
+    await TestBed.configureTestingModule({
+      imports: [HttpClientModule],
+    }).compileComponents();
   });
 
   beforeEach(() => {
