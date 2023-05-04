@@ -85,6 +85,13 @@ public class OrganizationService {
                     new OrganizationNotFoundException(
                         String.format(
                             "The organization with ID %s does not exist.", organizationLogin)));
-    return organizationMapper.convertToDto(orgEntity);
+
+    OrganizationDto org = organizationMapper.convertToDto(orgEntity);
+
+    // Convert the image object key to URLs
+    ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
+    org.setAvatarUrl(image.getUrl());
+
+    return org;
   }
 }
