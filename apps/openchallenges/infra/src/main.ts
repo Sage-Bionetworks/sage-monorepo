@@ -8,7 +8,7 @@ import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import * as os from 'os';
 import * as fs from 'fs';
 
-class MyStack extends TerraformStack {
+class OpenChallengesStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -40,5 +40,5 @@ logger.setLevel(Level.Debug);
 logger.info('Welcome to the deployment of the OpenChallenges stack.');
 
 const app = new App();
-new MyStack(app, 'openchallenges-stack');
+new OpenChallengesStack(app, 'openchallenges-stack');
 app.synth();
