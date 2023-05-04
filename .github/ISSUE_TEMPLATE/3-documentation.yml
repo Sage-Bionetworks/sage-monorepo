@@ -1,0 +1,49 @@
+name: 📖 Documentation Issue
+description: Help improve our docs.
+title: '[Docs] <title>'
+labels: ['type: docs']
+body:
+  - type: dropdown
+    id: projects
+    attributes:
+      label: What projects is this documentation issue for?
+      multiple: true
+      options:
+        - OpenChallenges
+        - Schematic
+        - Other
+  - type: checkboxes
+    attributes:
+      label: Documentation issue
+      description: Select one or multiple options
+      multiple: true
+      options:
+        - Reporting a typo
+        - Reporting a documentation bug
+        - Documentation improvement
+        - Documentation feedback
+  - type: textarea
+    attributes:
+      label: Description
+      description: A clear description of the documentation issue.
+    validations:
+      required: false
+  - type: textarea
+    attributes:
+      label: Is there a specific documentation page you are reporting?
+      description: Enter the URL or documentation section here.
+  - type: textarea
+    attributes:
+      label: Anything else?
+      description: |
+        Links? References? Screenshot?
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: |
+        By submitting this issue, you agree to follow our [Code of
+        Conduct](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/.github/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
