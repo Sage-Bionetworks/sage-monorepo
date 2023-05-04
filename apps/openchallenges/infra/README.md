@@ -46,7 +46,8 @@ cdktf deploy
 First, check that the security group of the EC2 instance to make sure that it access inbound SSH
 traffic.
 
-Connect to the instance using the private key:
+Connect to the instance using the private key. The IP address shown below should be replaced with
+the address returned by Terraform at the end of the deployment process.
 
 ```console
 $ ssh -i ~/.ssh/openchallenges-ec2 ubuntu@44.206.227.254
