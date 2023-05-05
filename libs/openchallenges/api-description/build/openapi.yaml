@@ -812,6 +812,31 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ImageSize:
+      type: object
+      description: The size of the image.
+      properties:
+        width:
+          description: The requested width of the image.
+          type: string
+          default: original
+          enum:
+            - original
+            - 100px
+            - 250px
+            - 500px
+        height:
+          description: The requested height of the image.
+          type: string
+          default: original
+          enum:
+            - original
+            - 100px
+            - 250px
+            - 500px
+      minProperties: 1
+      maxProperties: 1
+      additionalProperties: false
     ImageQuery:
       type: object
       description: An image query.
@@ -820,6 +845,8 @@ components:
           description: The object key of the image.
           type: string
           example: logo/dream.png
+        size:
+          $ref: '#/components/schemas/ImageSize'
       required:
         - objectKey
     Image:
