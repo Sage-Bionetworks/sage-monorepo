@@ -5,7 +5,9 @@ properties:
     description: The object key of the image.
     type: string
     example: logo/dream.png
-  size:
-    $ref: ImageSize.yaml
+  height:
+    $ref: ImageHeight.yaml
+  aspectRatio:
+    $ref: ImageAspectRatio.yaml
 required:
   - objectKey

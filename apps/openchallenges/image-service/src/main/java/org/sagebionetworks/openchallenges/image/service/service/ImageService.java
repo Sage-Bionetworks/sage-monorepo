@@ -3,9 +3,11 @@ package org.sagebionetworks.openchallenges.image.service.service;
 import com.squareup.pollexor.Thumbor;
 import com.squareup.pollexor.ThumborUrlBuilder;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
+import org.sagebionetworks.openchallenges.image.service.exception.ImageHeightNotSpecifiedException;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageHeightDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
-import org.sagebionetworks.openchallenges.image.service.model.dto.ImageSizeOptionDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,25 +34,26 @@ public class ImageService {
   }
 
   private String generateImageUrl(ImageQueryDto query) {
-    ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
-    LOG.info("size: {}", query.getSize());
-    if (query.getSize() != null) {
-      // May receive width OR height
-      ImageSizeOptionDto width = query.getSize().getWidth();
-      ImageSizeOptionDto height = query.getSize().getHeight();
-      if (width != null && width != ImageSizeOptionDto.ORIGINAL) {
-        builder = builder.resize(getImageSizeOptionInPx(width), 0);
-      } else if (height != null && height != ImageSizeOptionDto.ORIGINAL) {
-        builder = builder.resize(0, getImageSizeOptionInPx(height));
-      }
+    if (query.getAspectRatio() != null && query.getHeight() == null) {
+      throw new ImageHeightNotSpecifiedException(
+          "Specifying the aspect ratio requires to specify the image height too.");
     }
+
+    ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
+    Integer height = getImageHeightInPx(query.getHeight());
+
+    if (height != null) {
+      Integer width = getImageWidthInPixel(height, query.getAspectRatio());
+      builder = builder.resize(width, height);
+    }
+
     return builder.toUrl();
   }
 
-  private int getImageSizeOptionInPx(ImageSizeOptionDto option) {
-    switch (option) {
+  private Integer getImageHeightInPx(ImageHeightDto height) {
+    switch (height) {
       case ORIGINAL:
-        return 0;
+        return null;
       case _100PX:
         return 100;
       case _250PX:
@@ -58,7 +61,24 @@ public class ImageService {
       case _500PX:
         return 500;
       default:
-        return 0;
+        return null;
+    }
+  }
+
+  private Integer getImageWidthInPixel(Integer height, ImageAspectRatioDto aspectRatio) {
+    switch (aspectRatio) {
+      case ORIGINAL:
+        return 0; // Thumbor will use the original width
+      case _16_9:
+        return Math.round(height * 16 / 9);
+      case _1_1:
+        return height;
+      case _3_2:
+        return Math.round(height * 3 / 2);
+      case _2_3:
+        return Math.round(height * 2 / 3);
+      default:
+        return 0; // Thumbor will use the original width
     }
   }
 }

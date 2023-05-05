@@ -8,8 +8,8 @@ src/main/java/org/sagebionetworks/openchallenges/image/service/configuration/Enu
 src/main/java/org/sagebionetworks/openchallenges/image/service/configuration/HomeController.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/configuration/SpringDocConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/BasicErrorDto.java
+src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageAspectRatioDto.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageDto.java
+src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageHeightDto.java
 src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageQueryDto.java
-src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageSizeDto.java
-src/main/java/org/sagebionetworks/openchallenges/image/service/model/dto/ImageSizeOptionDto.java
 src/main/resources/openapi.yaml

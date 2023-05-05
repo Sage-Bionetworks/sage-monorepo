@@ -1,6 +1,5 @@
-description: The image size option.
+description: The height of the image.
 type: string
-nullable: true
 enum:
   - original
   - 100px

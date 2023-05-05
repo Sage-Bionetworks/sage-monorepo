@@ -19,8 +19,11 @@ public class ImageQueryDto {
   @JsonProperty("objectKey")
   private String objectKey;
 
-  @JsonProperty("size")
-  private ImageSizeDto size;
+  @JsonProperty("height")
+  private ImageHeightDto height;
+
+  @JsonProperty("aspectRatio")
+  private ImageAspectRatioDto aspectRatio;
 
   public ImageQueryDto objectKey(String objectKey) {
     this.objectKey = objectKey;
@@ -46,24 +49,44 @@ public class ImageQueryDto {
     this.objectKey = objectKey;
   }
 
-  public ImageQueryDto size(ImageSizeDto size) {
-    this.size = size;
+  public ImageQueryDto height(ImageHeightDto height) {
+    this.height = height;
     return this;
   }
 
   /**
-   * Get size
+   * Get height
    *
-   * @return size
+   * @return height
    */
   @Valid
-  @Schema(name = "size", required = false)
-  public ImageSizeDto getSize() {
-    return size;
+  @Schema(name = "height", required = false)
+  public ImageHeightDto getHeight() {
+    return height;
   }
 
-  public void setSize(ImageSizeDto size) {
-    this.size = size;
+  public void setHeight(ImageHeightDto height) {
+    this.height = height;
+  }
+
+  public ImageQueryDto aspectRatio(ImageAspectRatioDto aspectRatio) {
+    this.aspectRatio = aspectRatio;
+    return this;
+  }
+
+  /**
+   * Get aspectRatio
+   *
+   * @return aspectRatio
+   */
+  @Valid
+  @Schema(name = "aspectRatio", required = false)
+  public ImageAspectRatioDto getAspectRatio() {
+    return aspectRatio;
+  }
+
+  public void setAspectRatio(ImageAspectRatioDto aspectRatio) {
+    this.aspectRatio = aspectRatio;
   }
 
   @Override
@@ -76,12 +99,13 @@ public class ImageQueryDto {
     }
     ImageQueryDto imageQuery = (ImageQueryDto) o;
     return Objects.equals(this.objectKey, imageQuery.objectKey)
-        && Objects.equals(this.size, imageQuery.size);
+        && Objects.equals(this.height, imageQuery.height)
+        && Objects.equals(this.aspectRatio, imageQuery.aspectRatio);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(objectKey, size);
+    return Objects.hash(objectKey, height, aspectRatio);
   }
 
   @Override
@@ -89,7 +113,8 @@ public class ImageQueryDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ImageQueryDto {\n");
     sb.append("    objectKey: ").append(toIndentedString(objectKey)).append("\n");
-    sb.append("    size: ").append(toIndentedString(size)).append("\n");
+    sb.append("    height: ").append(toIndentedString(height)).append("\n");
+    sb.append("    aspectRatio: ").append(toIndentedString(aspectRatio)).append("\n");
     sb.append("}");
     return sb.toString();
   }

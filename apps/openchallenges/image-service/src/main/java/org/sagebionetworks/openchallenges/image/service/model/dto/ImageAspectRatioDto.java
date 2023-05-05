@@ -6,20 +6,22 @@ import java.util.*;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** The image size option. */
+/** The aspect ratio of the image (the height of the image must be specified). */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public enum ImageSizeOptionDto {
+public enum ImageAspectRatioDto {
   ORIGINAL("original"),
 
-  _100PX("100px"),
+  _16_9("16:9"),
 
-  _250PX("250px"),
+  _1_1("1:1"),
 
-  _500PX("500px");
+  _3_2("3:2"),
+
+  _2_3("2:3");
 
   private String value;
 
-  ImageSizeOptionDto(String value) {
+  ImageAspectRatioDto(String value) {
     this.value = value;
   }
 
@@ -34,12 +36,12 @@ public enum ImageSizeOptionDto {
   }
 
   @JsonCreator
-  public static ImageSizeOptionDto fromValue(String value) {
-    for (ImageSizeOptionDto b : ImageSizeOptionDto.values()) {
+  public static ImageAspectRatioDto fromValue(String value) {
+    for (ImageAspectRatioDto b : ImageAspectRatioDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }
     }
-    return null;
+    throw new IllegalArgumentException("Unexpected value '" + value + "'");
   }
 }
