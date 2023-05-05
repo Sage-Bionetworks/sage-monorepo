@@ -1,5 +1,5 @@
-name: Report a bug
-description: Report a bug.
+name: 🐞 Bug Report
+description: This form is to report unexpected behavior in apps developed in this repository.
 title: '[Bug] <title>'
 labels: ['bug']
 body:

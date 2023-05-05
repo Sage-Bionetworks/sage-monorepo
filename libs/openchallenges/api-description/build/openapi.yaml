@@ -894,8 +894,8 @@ components:
     OrganizationLogin:
       description: The login of an organization
       type: string
-      minLength: 3
-      maxLength: 25
+      minLength: 2
+      maxLength: 64
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-org
     Organization:

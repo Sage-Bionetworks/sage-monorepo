@@ -51,7 +51,7 @@ public class OrganizationService {
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
 
-    // Convert the image object key to URLs
+    // Convert the image object keys to URLs
     organizations.stream()
         .parallel()
         .forEach(
@@ -85,6 +85,13 @@ public class OrganizationService {
                     new OrganizationNotFoundException(
                         String.format(
                             "The organization with ID %s does not exist.", organizationLogin)));
-    return organizationMapper.convertToDto(orgEntity);
+
+    OrganizationDto org = organizationMapper.convertToDto(orgEntity);
+
+    // Convert the image object key to URL
+    ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
+    org.setAvatarUrl(image.getUrl());
+
+    return org;
   }
 }
