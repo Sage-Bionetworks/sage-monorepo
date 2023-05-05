@@ -1,0 +1,8 @@
+description: The image size option.
+type: string
+nullable: true
+enum:
+  - original
+  - 100px
+  - 250px
+  - 500px

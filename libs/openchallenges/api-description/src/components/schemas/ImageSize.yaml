@@ -2,23 +2,9 @@ type: object
 description: The size of the image.
 properties:
   width:
-    description: The requested width of the image.
-    type: string
-    default: original
-    enum:
-      - original
-      - 100px
-      - 250px
-      - 500px
+    $ref: ImageSizeOption.yaml
   height:
-    description: The requested height of the image.
-    type: string
-    default: original
-    enum:
-      - original
-      - 100px
-      - 250px
-      - 500px
+    $ref: ImageSizeOption.yaml
 minProperties: 1
 maxProperties: 1
 additionalProperties: false

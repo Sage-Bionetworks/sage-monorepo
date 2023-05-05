@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** An image query. */
@@ -17,6 +18,9 @@ public class ImageQueryDto {
 
   @JsonProperty("objectKey")
   private String objectKey;
+
+  @JsonProperty("size")
+  private ImageSizeDto size;
 
   public ImageQueryDto objectKey(String objectKey) {
     this.objectKey = objectKey;
@@ -42,6 +46,26 @@ public class ImageQueryDto {
     this.objectKey = objectKey;
   }
 
+  public ImageQueryDto size(ImageSizeDto size) {
+    this.size = size;
+    return this;
+  }
+
+  /**
+   * Get size
+   *
+   * @return size
+   */
+  @Valid
+  @Schema(name = "size", required = false)
+  public ImageSizeDto getSize() {
+    return size;
+  }
+
+  public void setSize(ImageSizeDto size) {
+    this.size = size;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -51,12 +75,13 @@ public class ImageQueryDto {
       return false;
     }
     ImageQueryDto imageQuery = (ImageQueryDto) o;
-    return Objects.equals(this.objectKey, imageQuery.objectKey);
+    return Objects.equals(this.objectKey, imageQuery.objectKey)
+        && Objects.equals(this.size, imageQuery.size);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(objectKey);
+    return Objects.hash(objectKey, size);
   }
 
   @Override
@@ -64,6 +89,7 @@ public class ImageQueryDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class ImageQueryDto {\n");
     sb.append("    objectKey: ").append(toIndentedString(objectKey)).append("\n");
+    sb.append("    size: ").append(toIndentedString(size)).append("\n");
     sb.append("}");
     return sb.toString();
   }

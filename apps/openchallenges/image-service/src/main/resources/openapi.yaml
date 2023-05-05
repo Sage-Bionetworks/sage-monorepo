@@ -28,7 +28,7 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/ImageQuery'
-        style: form
+        style: deepObject
       responses:
         "200":
           content:
@@ -65,7 +65,7 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ImageQuery'
-      style: form
+      style: deepObject
   responses:
     NotFound:
       content:
@@ -80,6 +80,26 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
+    ImageSizeOption:
+      description: The image size option.
+      enum:
+      - original
+      - 100px
+      - 250px
+      - 500px
+      nullable: true
+      type: string
+    ImageSize:
+      additionalProperties: false
+      description: The size of the image.
+      maxProperties: 1
+      minProperties: 1
+      properties:
+        width:
+          $ref: '#/components/schemas/ImageSizeOption'
+        height:
+          $ref: '#/components/schemas/ImageSizeOption'
+      type: object
     ImageQuery:
       description: An image query.
       properties:
@@ -87,6 +107,8 @@ components:
           description: The object key of the image.
           example: logo/dream.png
           type: string
+        size:
+          $ref: '#/components/schemas/ImageSize'
       required:
       - objectKey
       type: object

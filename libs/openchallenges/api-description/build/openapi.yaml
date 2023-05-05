@@ -812,28 +812,23 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    ImageSizeOption:
+      description: The image size option.
+      type: string
+      nullable: true
+      enum:
+        - original
+        - 100px
+        - 250px
+        - 500px
     ImageSize:
       type: object
       description: The size of the image.
       properties:
         width:
-          description: The requested width of the image.
-          type: string
-          default: original
-          enum:
-            - original
-            - 100px
-            - 250px
-            - 500px
+          $ref: '#/components/schemas/ImageSizeOption'
         height:
-          description: The requested height of the image.
-          type: string
-          default: original
-          enum:
-            - original
-            - 100px
-            - 250px
-            - 500px
+          $ref: '#/components/schemas/ImageSizeOption'
       minProperties: 1
       maxProperties: 1
       additionalProperties: false
@@ -1173,6 +1168,8 @@ components:
     imageQuery:
       name: imageQuery
       description: The query used to get an image.
+      style: deepObject
+      explode: true
       in: query
       schema:
         $ref: '#/components/schemas/ImageQuery'

@@ -55,7 +55,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "./gradlew build --continuous --exclude-task spotlessCheck",
+          "./gradlew build --continuous --exclude-task spotlessCheck --exclude-task test",
           "./gradlew bootRun"
         ],
         "cwd": "apps/openchallenges/image-service",
