@@ -14,6 +14,16 @@ TODO: Document the roles that this user should have
 
 ### Set AWS configuration
 
+The configuration differs depending on whether the stack is deployed from the local environment or
+from a TF cloud environment.
+
+> **Note** This project is currently configured to deploy the stack using TF cloud backend.
+
+#### When using TF local backend
+
+TF reads the local AWS credentials when deploying the stack with TF local backend. Stack state files
+will be stored locally.
+
 Run this command to quickly set your credentials, Region, and output format. The following example
 shows sample credentials that should be replaced.
 
@@ -24,6 +34,28 @@ AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 Default region name [None]: us-east-1
 Default output format [None]
 ```
+
+#### When using TF cloud backend
+
+When using TF cloud backend, the deployment of the stacks will be executed from a cloud environment
+owned by TF. The AWS credentials must be available to this environment so that it can deploys the
+stack with the AWS provider.
+
+1. Create the TF Cloud workspace (currently `openchallenges-test`)
+    ```
+    cdktf plan
+    ```
+2. Login to your TF Cloud account
+3. Select the workspace
+4. Click on "Variables"
+5. Create the variable `AWS_ACCESS_KEY_ID`
+    - Click on "Add variable"
+    - Category: `Environment variable`
+    - Key: `AWS_ACCESS_KEY_ID`
+    - Value: `YOUR_ACCESS_KEY_ID`
+    - Sensitive: Yes
+    - Click on "Add variable"
+6. Repeat the same process to create the variable `AWS_SECRET_ACCESS_KEY`
 
 ### Generate an SSH key for accessing the EC2 instance
 

@@ -24,7 +24,7 @@ class OpenChallengesStack extends TerraformStack {
 
     new AwsProvider(this, 'AWS', {
       region: 'us-east-1',
-      profile: 'cdktf',
+      // profile: 'cdktf',
     });
 
     const keyPair = new KeyPair(this, 'keypair', {
