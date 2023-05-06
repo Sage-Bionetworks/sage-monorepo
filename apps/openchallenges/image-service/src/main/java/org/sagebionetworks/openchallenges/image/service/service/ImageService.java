@@ -51,34 +51,32 @@ public class ImageService {
   }
 
   private Integer getImageHeightInPx(ImageHeightDto height) {
-    switch (height) {
-      case ORIGINAL:
-        return null;
-      case _100PX:
-        return 100;
-      case _250PX:
-        return 250;
-      case _500PX:
-        return 500;
-      default:
-        return null;
+    // we can't use switch here because height may be null
+    if (height == ImageHeightDto.ORIGINAL) {
+      return null;
+    } else if (height == ImageHeightDto._100PX) {
+      return 100;
+    } else if (height == ImageHeightDto._250PX) {
+      return 250;
+    } else if (height == ImageHeightDto._500PX) {
+      return 500;
     }
+    return null;
   }
 
   private Integer getImageWidthInPixel(Integer height, ImageAspectRatioDto aspectRatio) {
-    switch (aspectRatio) {
-      case ORIGINAL:
-        return 0; // Thumbor will use the original width
-      case _16_9:
-        return Math.round(height * 16 / 9);
-      case _1_1:
-        return height;
-      case _3_2:
-        return Math.round(height * 3 / 2);
-      case _2_3:
-        return Math.round(height * 2 / 3);
-      default:
-        return 0; // Thumbor will use the original width
+    // we can't use switch here because height may be null
+    if (aspectRatio == ImageAspectRatioDto.ORIGINAL) {
+      return 0; // Thumbor will use the original width
+    } else if (aspectRatio == ImageAspectRatioDto._16_9) {
+      return Math.round(height * 16 / 9);
+    } else if (aspectRatio == ImageAspectRatioDto._1_1) {
+      return height;
+    } else if (aspectRatio == ImageAspectRatioDto._3_2) {
+      return Math.round(height * 3 / 2);
+    } else if (aspectRatio == ImageAspectRatioDto._2_3) {
+      return Math.round(height * 2 / 3);
     }
+    return 0; // Thumbor will use the original width
   }
 }
