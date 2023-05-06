@@ -44,7 +44,7 @@ public class ImageService {
 
     if (height != null) {
       Integer width = getImageWidthInPixel(height, query.getAspectRatio());
-      builder = builder.resize(width, height);
+      builder = builder.resize(width, height).fitIn();
     }
 
     return builder.toUrl();
