@@ -1,8 +1,6 @@
 <div *ngIf="challenge">
   <div class="challenge-card" [routerLink]="['/challenge', challenge.id]">
-    <div class="card-banner">
-      <!-- <img [src]="(banner$ | async)?.url" alt="Challenge banner" /> -->
-    </div>
+    <img class="card-banner" src="assets/images/banner-default.svg" alt="OpenChallenges" />
     <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
       {{ challenge.starredCount }}
