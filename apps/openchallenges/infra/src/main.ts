@@ -2,6 +2,7 @@
 import { Construct } from 'constructs';
 import {
   App,
+  Aspects,
   CloudBackend,
   NamedCloudWorkspace,
   TerraformOutput,
@@ -13,6 +14,7 @@ import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import * as os from 'os';
 import * as fs from 'fs';
+import { TagsAddingAspect } from './aspect/tags-adding-aspect';
 
 class OpenChallengesStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
@@ -41,6 +43,16 @@ class OpenChallengesStack extends TerraformStack {
     new TerraformOutput(this, 'public_ip', {
       value: ec2Instance.publicIp,
     });
+
+    // Add tags to every resource defined within this stack.
+    Aspects.of(this).add(
+      new TagsAddingAspect({
+        OwnerEmail: 'thomas.schaffter@sagebionetworks.org',
+        Department: 'CNB',
+        Project: 'challenge',
+        CostCenter: 'NIH-ITCR / 101600',
+      })
+    );
   }
 }
 
