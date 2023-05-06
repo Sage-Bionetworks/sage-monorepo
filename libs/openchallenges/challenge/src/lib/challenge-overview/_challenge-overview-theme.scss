@@ -15,12 +15,7 @@
 }
 
 @mixin typography($theme) {
-  .section-title {
-    font-weight: 400;
-    font-size: 21px;
-  }
-
-  .detail-name {
+  .text-right {
     font-weight: 600;
   }
 }

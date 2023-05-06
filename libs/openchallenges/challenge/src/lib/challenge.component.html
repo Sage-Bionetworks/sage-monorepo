@@ -1,13 +1,6 @@
 <main class="base mat-typography">
   <div *ngIf="challenge$ | async as challenge">
     <section id="profile-top" class="row">
-      <div id="breadcrumbs" class="row">
-        <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <a routerLink="/challenge">challenges</a>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <span>{{ challenge.name }}</span>
-      </div>
       <openchallenges-avatar
           class="profile-pic"
           [avatar]="challengeAvatar"

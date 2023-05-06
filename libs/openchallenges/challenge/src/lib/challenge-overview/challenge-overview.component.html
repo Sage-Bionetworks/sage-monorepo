@@ -1,38 +1,38 @@
 <main *ngIf="challenge">
   <div id="bio">
-    <h3>Overview</h3>
+    <h3 class="top-section-title">Overview</h3>
     <p>{{ challenge.description }}</p>
   </div>
   <div id="details">
-    <h3>Challenge Details</h3>
+    <h3 class="section-title">Challenge Details</h3>
     <table>
       <tr>
-        <td class="detail-name">Start Date</td>
+        <td class="text-right">Start Date</td>
         <td>{{ challenge.startDate }}</td>
       </tr>
       <tr>
-        <td class="detail-name">End Date</td>
+        <td class="text-right">End Date</td>
         <td>{{ challenge.endDate }}</td>
       </tr>
       <tr>
-        <td class="detail-name">Status</td>
+        <td class="text-right">Status</td>
         <td>{{ challenge.status }}</td>
       </tr>
       <tr>
-        <td class="detail-name">Platform</td>
+        <td class="text-right">Platform</td>
         <td>{{ challenge.platform.name }}</td>
       </tr>
       <tr>
-        <td class="detail-name">Website URL</td>
+        <td class="text-right">Website URL</td>
         <td>{{ challenge.websiteUrl }}</td>
       </tr>
       <tr>
         <!-- TODO: replace with doi from challenge object -->
-        <td class="detail-name">DOI</td>
+        <td class="text-right">DOI</td>
         <td>{{ mockDoi }}</td>
       </tr>
       <tr>
-        <td class="detail-name">Submission Type</td>
+        <td class="text-right">Submission Type</td>
         <td>
           <span nowrap *ngFor="let submissionType of challenge.submissionTypes; let isLast = last">
             {{ printCamel(submissionType) }}{{ isLast ? '' : ', ' }}</span
@@ -40,7 +40,7 @@
         </td>
       </tr>
       <tr>
-        <td class="detail-name">Data Type(s)</td>
+        <td class="text-right">Data Type(s)</td>
         <td>
           <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
             {{ dataType }}{{ isLast ? '' : ', ' }}
@@ -48,7 +48,7 @@
         </td>
       </tr>
       <tr>
-        <td class="detail-name">Incentive(s)</td>
+        <td class="text-right">Incentive(s)</td>
         <td>
           <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
             {{ printCamel(incentive) }}{{ isLast ? '' : ', ' }}</span
@@ -59,7 +59,7 @@
   </div>
   <div id="info">
     <div class="col">
-      <h3>Hosted By:</h3>
+      <h3 class="section-title">Hosted By</h3>
       <div class="card-group">
         <openchallenges-organization-card
           *ngFor="let organization of organizations"
@@ -68,7 +68,7 @@
       </div>
     </div>
   </div>
-  <span class="created-updated-dates"
+  <span class="mat-caption created-updated-dates"
     >Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }}
   </span>
 </main>

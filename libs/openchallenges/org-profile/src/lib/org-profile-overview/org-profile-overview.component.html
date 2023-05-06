@@ -1,20 +1,21 @@
 <main *ngIf="organization as org">
   <div id="bio" class="row">
     <div class="col">
-      <h3>Overview</h3>
+      <h3 class="top-section-title">Overview</h3>
       <p>{{ org.description }}</p>
     </div>
   </div>
-  <div id="contact" class="row">
-    <div class="col">
-      <p class="section-title">Website</p>
-      <a href="org.websiteUrl">
-        {{ org.websiteUrl }}
-      </a>
-    </div>
-    <div class="col">
-      <p class="section-title">Contact Email</p>
-      <a>{{ org.email }}</a>
-    </div>
+  <div id="details">
+    <h3 class="section-title">Organization Details</h3>
+    <table>
+      <tr>
+        <td class="text-right">Website</td>
+        <td>{{ org.websiteUrl }}</td>
+      </tr>
+      <tr>
+        <td class="text-right">Contact Email</td>
+        <td>{{ org.email }}</td>
+      </tr>
+    </table>
   </div>
 </main>

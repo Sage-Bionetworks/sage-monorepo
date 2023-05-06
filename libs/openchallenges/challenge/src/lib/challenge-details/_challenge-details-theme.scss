@@ -9,13 +9,13 @@
   $figma: map.get($config, 'figma');
 
   .created-updated-dates {
-    color: map.get($figma, dl-color-default-primary2);
+    color: map.get($figma, dl-color-default-navbar);
   }
 }
 
 @mixin typography($theme) {
   .created-updated-dates {
-    font-style: italic;
+    font-style: italic !important;
   }
 }
 
