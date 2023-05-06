@@ -28,9 +28,9 @@
   //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   //   "editor.formatOnSave": true
   // },
-  "java.format.enabled": true,
+  "java.format.enabled": false,
   "[java]": {
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
