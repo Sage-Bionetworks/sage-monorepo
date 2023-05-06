@@ -15,7 +15,11 @@
   }
 }
 
-@mixin typography($theme) { }
+@mixin typography($theme) {
+  #search-oc .search-field input {
+    font-size: 18px !important;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
