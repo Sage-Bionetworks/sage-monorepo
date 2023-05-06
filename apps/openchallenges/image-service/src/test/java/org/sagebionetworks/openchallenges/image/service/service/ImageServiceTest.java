@@ -23,13 +23,11 @@ public class ImageServiceTest {
 
   private static final Logger LOG = LoggerFactory.getLogger(ImageServiceTest.class);
 
-  @Mock
-  private ImageServiceConfigData imageServiceConfigData;
+  @Mock private ImageServiceConfigData imageServiceConfigData;
 
   private Thumbor thumbor = Mockito.mock(Thumbor.class, Mockito.RETURNS_DEEP_STUBS);
 
-  @InjectMocks
-  private ImageService imageService;
+  @InjectMocks private ImageService imageService;
 
   @Test
   void getImage_ShouldReturnImage_WhenObjectKeyIsPassed() {
