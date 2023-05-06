@@ -61,14 +61,6 @@ body {
     }
   }
 }
-.profile-type {
-  width: 100%;
-  max-width: 148px;
-  margin: 8px 0;
-  padding: 5px;
-  border-radius: 32px;
-  text-align: center;
-}
 
 // BREADCRUMBS
 #breadcrumbs {
@@ -98,6 +90,40 @@ body {
 .btn-group button {
   margin: 5px;
   padding: 3px 32px;
+}
+
+// SEARCH PAGES
+.search-sort-container {
+  gap: 24px;
+  justify-content: space-between;
+}
+.search-field {
+  position: relative;
+  flex-grow: 1;
+  margin: auto;
+}
+.sort-field {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.sort-title {
+  white-space: nowrap;
+}
+.facets {
+  padding: 48px 21px;
+  height: 100%;
+  min-width: 320px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 8px;
+
+  & > * {
+    width: 100%;
+  }
 }
 
 // PROFILE PAGES
@@ -154,6 +180,14 @@ body {
   flex-shrink: 1;
   text-align: left;
   text-decoration: none;
+}
+.profile-type {
+  width: 100%;
+  max-width: 148px;
+  margin: 8px 0;
+  padding: 5px;
+  border-radius: 32px;
+  text-align: center;
 }
 
 // CARDS

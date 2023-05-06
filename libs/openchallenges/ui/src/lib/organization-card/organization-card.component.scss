@@ -12,8 +12,11 @@
   cursor: pointer;
 }
 .card-body {
-  min-height: 108px;
-  max-height: 108px;
+  // TODO: use the heights below when members are added
+  // min-height: 108px;
+  // max-height: 108px;
+  min-height: 90px;
+  max-height: 90px;
 }
 
 .organization-members {
