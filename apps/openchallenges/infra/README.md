@@ -41,7 +41,7 @@ When using TF cloud backend, the deployment of the stacks will be executed from 
 owned by TF. The AWS credentials must be available to this environment so that it can deploys the
 stack with the AWS provider.
 
-1. Create the TF Cloud workspace (currently `openchallenges-test`)
+1. Create the TF Cloud workspace (currently hard-coded in `main.ts`: `openchallenges-test`)
     ```
     cdktf plan
     ```
