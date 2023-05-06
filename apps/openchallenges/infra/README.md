@@ -18,7 +18,7 @@ Run this command to quickly set your credentials, Region, and output format. The
 shows sample credentials that should be replaced.
 
 ```console
-$ aws configure
+$ aws configure --profile cdktf
 AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
 AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 Default region name [None]: us-east-1
