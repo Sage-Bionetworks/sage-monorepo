@@ -6,7 +6,6 @@ import {
   CloudBackend,
   NamedCloudWorkspace,
   TerraformOutput,
-  TerraformStack,
 } from 'cdktf';
 import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
@@ -21,8 +20,11 @@ import {
   SageCostCenter,
   AmazonRegion,
 } from './constants';
+import { SageStack } from './stack/sage-stack';
+import { S3PrefixValidationAspect } from './aspect/s3-prefix-validation-aspect';
+import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 
-class OpenChallengesStack extends TerraformStack {
+class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -57,6 +59,12 @@ class OpenChallengesStack extends TerraformStack {
         CostCenter: SageCostCenter.ITCR,
       })
     );
+
+    new S3Bucket(this, 'bucket', {
+      bucket: 'my2PrefixDemo',
+    });
+
+    Aspects.of(this).add(new S3PrefixValidationAspect('myPrefix'));
   }
 }
 
