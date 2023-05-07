@@ -1,16 +1,9 @@
 import { IAspect } from 'cdktf/lib/aspect';
 import { IConstruct } from 'constructs/lib/construct';
+import { isTaggableConstruct } from './util';
+import { logger } from '../logger';
 
-// Not all constructs are taggable, so we need to filter it
-type TaggableConstruct = IConstruct & {
-  tags?: { [key: string]: string };
-  tagsInput?: { [key: string]: string };
-};
-
-function isTaggableConstruct(x: IConstruct): x is TaggableConstruct {
-  return 'tags' in x && 'tagsInput' in x;
-}
-
+/** This aspect adds the tags specified to every Construct within the specified scope. */
 export class TagsAddingAspect implements IAspect {
   constructor(private tagsToAdd: Record<string, string>) {}
 
@@ -18,6 +11,7 @@ export class TagsAddingAspect implements IAspect {
   // etc.).
   visit(node: IConstruct) {
     if (isTaggableConstruct(node)) {
+      logger.info(`Adding tags to ${node}: ${JSON.stringify(this.tagsToAdd)}`);
       // We need to take the input value to not create a circular reference
       const currentTags = node.tagsInput || {};
       node.tags = { ...this.tagsToAdd, ...currentTags };

@@ -13,7 +13,7 @@ import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import * as os from 'os';
 import * as fs from 'fs';
-import { TagsAddingAspect } from './aspect/tags-adding-aspect';
+import { TagsAddingAspect } from './tag/tags-adding-aspect';
 import {
   Ami,
   AmazonEc2InstanceType,
@@ -60,7 +60,7 @@ class OpenChallengesStack extends SageStack {
     );
 
     new S3Bucket(this, 'bucket', {
-      bucket: 'my2PrefixDemo',
+      bucket: 'myPrefixDemo',
     });
   }
 }
