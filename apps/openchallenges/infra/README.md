@@ -47,15 +47,8 @@ stack with the AWS provider.
     ```
 2. Login to your TF Cloud account
 3. Select the workspace
-4. Click on "Variables"
-5. Create the variable `AWS_ACCESS_KEY_ID`
-    - Click on "Add variable"
-    - Category: `Environment variable`
-    - Key: `AWS_ACCESS_KEY_ID`
-    - Value: `YOUR_ACCESS_KEY_ID`
-    - Sensitive: Yes
-    - Click on "Add variable"
-6. Repeat the same process to create the variable `AWS_SECRET_ACCESS_KEY`
+4. [Add a variable] named `AWS_ACCESS_KEY_ID` (sensitive, environment variable).
+5. [Add a variable] named `AWS_SECRET_ACCESS_KEY` (sensitive, environment variable).
 
 ### Generate an SSH key for accessing the EC2 instance
 
@@ -102,3 +95,4 @@ cdktf destroy
 [Terraform CDK]: https://developer.hashicorp.com/terraform/cdktf
 
 [DK for Terraform]: https://developer.hashicorp.com/terraform/cdktf
+[Add a variable]: https://developer.hashicorp.com/terraform/cloud-docs/workspaces/variables/managing-variables#add-a-variable
