@@ -21,7 +21,6 @@ import {
   AmazonRegion,
 } from './constants';
 import { SageStack } from './stack/sage-stack';
-import { S3PrefixValidationAspect } from './aspect/s3-prefix-validation-aspect';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 
 class OpenChallengesStack extends SageStack {
@@ -63,8 +62,6 @@ class OpenChallengesStack extends SageStack {
     new S3Bucket(this, 'bucket', {
       bucket: 'my2PrefixDemo',
     });
-
-    Aspects.of(this).add(new S3PrefixValidationAspect('myPrefix'));
   }
 }
 
