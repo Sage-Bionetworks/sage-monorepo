@@ -1,9 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
-import {
-  Image,
-  ImageService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
-import { Observable } from 'rxjs';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
@@ -14,7 +9,7 @@ import { NavbarSection } from './navbar-section';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   @Input() title = 'Awesome App';
   @Input() isLoggedIn = false;
   @Input() userAvatar: Avatar = EMPTY_AVATAR;
@@ -22,7 +17,6 @@ export class NavbarComponent implements OnInit {
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
   @Output() logInClicked = new EventEmitter<boolean>();
 
-  public logo$: Observable<Image> | undefined;
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
 
@@ -38,13 +32,5 @@ export class NavbarComponent implements OnInit {
 
   selectUserMenuItem(menuItem: MenuItem) {
     this.userMenuItemSelected.emit(menuItem);
-  }
-
-  constructor(private imageService: ImageService) {}
-
-  ngOnInit() {
-    this.logo$ = this.imageService.getImage({
-      objectKey: 'openchallenges-white.svg',
-    });
   }
 }
