@@ -39,10 +39,7 @@ public class OrganizationEntity {
 
   @Column(nullable = false)
   @FullTextField()
-  @GenericField(
-      name = "name_sort",
-      valueBridge = @ValueBridgeRef(type = OrganizationNameValueBridge.class),
-      sortable = Sortable.YES)
+  @GenericField(name = "name_sort", valueBridge = @ValueBridgeRef(type = OrganizationNameValueBridge.class), sortable = Sortable.YES)
   private String name;
 
   @Column(nullable = false)
@@ -63,9 +60,7 @@ public class OrganizationEntity {
   private Integer challengeCount;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "challenge_contributions",
-      includePaths = {"role"})
+  @IndexedEmbedded(name = "challenge_contributions", includePaths = { "role" })
   private List<ChallengeContributionEntity> challengeContributions;
 
   @Column(nullable = true)
