@@ -19,7 +19,8 @@ VALUES (
     'logo/dream.png',
     'https://dreamchallenges.org',
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
-    47
+    47,
+    ''
   ),
   (
     '2',
@@ -29,7 +30,8 @@ VALUES (
     'logo/biocreative.png',
     'https://biocreative.bioinformatics.udel.edu/',
     'Critical Assessment of Information Extraction in Biology is a community-wide effort for evaluating text mining and information extraction systems applied to the biological domain. BioCreative has been an invaluable source for advancing state-of-the-art text mining methods si...',
-    0
+    0,
+    ''
   ),
   (
     '3',
@@ -39,7 +41,8 @@ VALUES (
     'logo/cafa.png',
     'https://www.biofunctionprediction.org/cafa/',
     'CAFA is an ongoing community challenge for assessing protein function prediction methods.',
-    1
+    1,
+    ''
   ),
   (
     '4',
@@ -48,18 +51,20 @@ VALUES (
     'cagi',
     'logo/cagi.png',
     'https://genomeinterpretation.org/challenges.html',
-    'CAGI experiment participants are provided genetic variants and make predictions about resulting phenotypes. Independent assessors evaluate the predictions against experimentally characterized phenotypes.  The experiment culminates in the CAGI Conference with publications in ...',
-    0
+    'CAGI experiment participants are provided genetic variants and make predictions about resulting phenotypes. Independent assessors evaluate the predictions against experimentally characterized phenotypes. The experiment culminates in the CAGI Conference with publications in ...',
+    0,
+    ''
   ),
-  (
-    '5',
+  ('
+  5',
     'CAMDA',
     '',
     'camda',
     'logo/camda.png',
     'http://www.camda.info/',
     'CAMDA focuses on the analysis of massive data in the life sciences. It introduces and evaluates new approaches and solutions to the Big Data challenge. The conference presents new techniques in the field of bioinformatics, data analysis, and statistics for the handling and p...',
-    0
+    0,
+    ''
   ),
   (
     '6',
@@ -69,7 +74,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://www.cameo3d.org/',
     'CAMEO continuously applies quality assessment criteria established by the protein structure prediction community. Since the accuracy requirements for different scientific applications vary, there is no "one fits all" score. CAMEO therefore offers a variety of scores - assess...',
-    0
+    0,
+    ''
   ),
   (
     '7',
@@ -79,7 +85,8 @@ VALUES (
     'logo/cami.png',
     'https://data.cami-challenge.org/',
     'In just over a decade, metagenomics has developed into a powerful and productive method in microbiology and microbial ecology. The ability to retrieve and organize bits and pieces of genomic DNA from any natural context has opened a window into the vast universe of uncultiva...',
-    2
+    2,
+    ''
   ),
   (
     '8',
@@ -89,7 +96,8 @@ VALUES (
     'logo/capri.jpg',
     'https://www.ebi.ac.uk/pdbe/complex-pred/capri/',
     'CAPRI: community-wide experiment on the comparative evaluation of protein-protein docking for structure prediction',
-    0
+    0,
+    ''
   ),
   (
     '9',
@@ -99,7 +107,8 @@ VALUES (
     'logo/casp.png',
     'https://predictioncenter.org/',
     'Our goal is to help advance the methods of identifying protein structure from sequence. The Center has been organized to provide the means of objective testing of these methods via the process of blind prediction. The Critical Assessment of protein Structure Prediction (CASP...',
-    0
+    0,
+    ''
   ),
   (
     '10',
@@ -109,7 +118,8 @@ VALUES (
     'logo/gaw.png',
     'https://www.gaworkshop.org/',
     '',
-    0
+    0,
+    ''
   ),
   (
     '11',
@@ -119,7 +129,8 @@ VALUES (
     'logo/idash.png',
     'http://www.humangenomeprivacy.org/2022/competition-tasks.html',
     'The growth of genome data and computational requirements overwhelm the capacity of servers. Many institutions and the NIH are considering cloud computing services as a cost-effective alternative to scale up research. Privacy and security are major concerns when deploying clo...',
-    0
+    0,
+    ''
   ),
   (
     '12',
@@ -128,8 +139,9 @@ VALUES (
     'miccai',
     'logo/miccai.png',
     'http://www.miccai.org/special-interest-groups/challenges/miccai-registered-challenges/',
-    'The MICCAI Society was formed as a non-profit corporation on July 29, 2004, pursuant to the provisions of the Minnesota Non-Profit Corporation Act, Minnesota Statute, Chapter 317A, with legally bound Articles of Incorporation and Bylaws.  The official corporate name is The M...',
-    5
+    'The MICCAI Society was formed as a non-profit corporation on July 29, 2004, pursuant to the provisions of the Minnesota Non-Profit Corporation Act, Minnesota Statute, Chapter 317A, with legally bound Articles of Incorporation and Bylaws. The official corporate name is The M...',
+    5,
+    ''
   ),
   (
     '13',
@@ -139,7 +151,8 @@ VALUES (
     'logo/precisionfda.png',
     'https://precision.fda.gov/challenges',
     'A secure, collaborative, high-performance computing platform that builds a community of experts around the analysis of biological datasets in order to advance precision medicine.',
-    15
+    15,
+    ''
   ),
   (
     '14',
@@ -149,7 +162,8 @@ VALUES (
     'logo/sbv-improver.png',
     'https://www.intervals.science/resources/sbv-improver',
     'sbv IMPROVER stands for Systems Biology Verification combined with Industrial Methodology for Process Verification in Research. This approach aims to provide a measure of quality control of industrial research and development by verifying the methods used. So far, the scope ...',
-    0
+    0,
+    ''
   ),
   (
     '15',
@@ -159,7 +173,8 @@ VALUES (
     'logo/nih.png',
     'https://www.nih.gov/',
     'The National Institutes of Health (NIH), a part of the U.S. Department of Health and Human Services, is the nation''s medical research agency — making important discoveries that improve health and save lives.',
-    7
+    7,
+    ''
   ),
   (
     '16',
@@ -169,7 +184,8 @@ VALUES (
     'logo/allen-insitute.svg',
     'https://alleninstitute.org/',
     'The Allen Institute is an independent nonprofit bioscience research institute aimed at unlocking the mysteries of human biology through foundational science that fuels the discovery of new treatments and cures.',
-    2
+    2,
+    ''
   ),
   (
     '17',
@@ -179,7 +195,8 @@ VALUES (
     'logo/als-therapy-alliance.png',
     'https://alstherapyalliance.org/',
     'For over a decade, researchers and scientists have been relying on the ALS Therapy Alliance''s expertise and funding to advance their studies of amyotrophic lateral sclerosis (ALS), or Lou Gehrig''s disease. 2015 marks the 14th year of our annual Breakthrough ALS fundraising...',
-    1
+    1,
+    'ATA'
   ),
   (
     '18',
@@ -189,7 +206,8 @@ VALUES (
     'logo/adni.jpg',
     'http://adni.loni.usc.edu/',
     'The Alzheimer''s Disease Neuroimaging Initiative (ADNI) unites researchers with study data as they work to define the progression of Alzheimer''s disease (AD). ADNI researchers collect, validate and utilize data, including MRI and PET images, genetics, cognitive tests, CSF a...',
-    1
+    1,
+    'ADNI'
   ),
   (
     '19',
@@ -198,8 +216,9 @@ VALUES (
     'alzheimers-research-uk',
     'logo/alzheimers-research-uk.jpg',
     'https://www.alzheimersresearchuk.org/',
-    'Without effective treatments, one in three children born today will die with dementia. Today, there are no dementia survivors but research can change this.  Alzheimer''s Research UK is the UK''s leading dementia research charity, dedicated to causes, diagnosis, prevention, t...',
-    1
+    'Without effective treatments, one in three children born today will die with dementia. Today, there are no dementia survivors but research can change this. Alzheimer''s Research UK is the UK''s leading dementia research charity, dedicated to causes, diagnosis, prevention, t...',
+    1,
+    ''
   ),
   (
     '20',
@@ -209,7 +228,8 @@ VALUES (
     'logo/aws.svg',
     'https://aws.amazon.com/',
     'Whether you''re looking for compute power, database storage, content delivery, or other functionality, AWS has the services to help you build sophisticated applications with increased flexibility, scalability and reliability',
-    1
+    1,
+    'AWS'
   ),
   (
     '21',
@@ -219,7 +239,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://www.facs.org/quality-programs/cancer/ajcc',
     'Validating science, improving patient care.',
-    1
+    1,
+    'AJCC'
   ),
   (
     '22',
@@ -229,7 +250,8 @@ VALUES (
     'logo/apollo.png',
     'https://proteomics.cancer.gov/programs/apollo-network',
     'The Applied Proteogenomics OrganizationaL Learning and Outcomes (APOLLO) network is a collaboration between NCI, the Department of Defense (DoD), and the Department of Veterans Affairs (VA) to incorporate proteogenomics into patient care as a way of looking beyond the genome...',
-    1
+    1,
+    'APOLLO'
   ),
   (
     '23',
@@ -239,7 +261,8 @@ VALUES (
     'logo/wa-healthcare-authority.jpg',
     'https://www.hca.wa.gov/',
     'HCA is the largest purchaser of health care in the state. We lead the effort on transforming health care through programs and initiatives that range from the administration of Apple Health (Medicaid) and behavioral health activities to developing models for value-based purch...',
-    14
+    14,
+    ''
   ),
   (
     '24',
@@ -249,7 +272,8 @@ VALUES (
     'logo/arthritis-foundation.png',
     'https://www.arthritis.org/',
     'Live your best life with the help of a compassionate and caring community. Get empowering information and make meaningful connections. Online and in person, we are all working together to promote life-changing resources and research, push for change and create community conn...',
-    1
+    1,
+    ''
   ),
   (
     '25',
@@ -259,7 +283,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     '',
     'This organization may no longer exists or has been merged under another organization.',
-    1
+    1,
+    ''
   ),
   (
     '26',
@@ -269,7 +294,8 @@ VALUES (
     'logo/astrazeneca.png',
     'https://www.astrazeneca.com/',
     'We are a global, science-led, patient-focused pharmaceutical company. We are dedicated to transforming the future of healthcare by unlocking the power of what science can do for people, society and the planet.',
-    2
+    2,
+    ''
   ),
   (
     '27',
@@ -279,7 +305,8 @@ VALUES (
     'logo/autodesk-research.png',
     'https://www.research.autodesk.com/',
     'Autodesk is changing how the world is designed and made. At Autodesk Research, we advance this mission by exploring new possibilities where others see roadblocks. With a diverse team of scientists and industry experts, we conduct industrial research that helps customers desi...',
-    1
+    1,
+    'autodesk'
   ),
   (
     '28',
@@ -289,8 +316,8 @@ VALUES (
     'logo/bccrc.jpg',
     'https://www.bccrc.ca/',
     'BC Cancer Research strives to improve the lives of patients through the integration of basic biomedical research, genomics, clinical trials, health services research, cancer surveillance, population health, and the development of innovative new technology, programs, and inte...',
-    1
-  ),
+    1,
+    'BCCRC'),
   (
     '29',
     'Bellvitge Institute for Biomedical Research',
@@ -299,7 +326,8 @@ VALUES (
     'logo/idibell.jpg',
     'https://idibell.cat/en/the-institute/',
     'The Bellvitge Biomedical Research Institute (IDIBELL) is a research center in biomedicine promoted by the Bellvitge University Hospital and the Viladecans Hospital, both from the Catalan Health Institute, the Catalan Institute of Oncology, University of Barcelona and L''Hosp...',
-    1
+    1,
+    'IDIBELL'
   ),
   (
     '30',
@@ -309,7 +337,8 @@ VALUES (
     'logo/bih.jpg',
     'https://www.bihealth.org/en/',
     'The mission of the BIH is medical translation: The BIH aims to translate findings from biomedical research into new approaches for personalised prediction, prevention and therapy and, conversely, to develop new research approaches from clinical observations.',
-    1
+    1,
+    'BIH'
   ),
   (
     '31',
@@ -319,7 +348,8 @@ VALUES (
     'logo/gates-foundation.jpg',
     'https://www.gatesfoundation.org/',
     'Our mission is to create a world where every person has the opportunity to live a healthy, productive life.',
-    1
+    1,
+    'Gates Foundation'
   ),
   (
     '32',
@@ -329,7 +359,8 @@ VALUES (
     'logo/biogen.png',
     'https://www.biogen.com/en_us/home.html',
     'Biogen is a leading global biotechnology company that pioneers science and drives innovations for complex and devastating diseases. Biogen is advancing a pipeline of potential therapies across neurology, neuropsychiatry, specialized immunology and rare disease and remains ac...',
-    1
+    1,
+    ''
   ),
   (
     '33',
@@ -339,7 +370,8 @@ VALUES (
     'logo/biomarin.jpg',
     'https://www.biomarin.com/',
     'Over two decades ago when we first opened our doors, we focused on giving much-needed attention to the underserved communities of those with rare diseases. These rare disease communities mostly affected children and were often ignored. At the time, BioMarin developed the onl...',
-    1
+    1,
+    'BioMarin'
   ),
   (
     '34',
@@ -349,7 +381,8 @@ VALUES (
     'logo/booz-allen.jpg',
     'https://www.boozallen.com/',
     'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Bo...',
-    10
+    10,
+    'Booz Allen'
   ),
   (
     '35',
@@ -359,7 +392,8 @@ VALUES (
     'logo/bana.jpeg',
     'http://www.brailleauthority.org/',
     'The purpose of BANA is to promote and to facilitate the uses, teaching, and production of braille. Pursuant to this purpose, BANA will promulgate rules, make interpretations, and render opinions pertaining to braille codes and guidelines for the provisions of literary and te...',
-    1
+    1,
+    'BANA'
   ),
   (
     '36',
@@ -369,7 +403,8 @@ VALUES (
     'logo/bcsc.jpeg',
     'https://www.bcsc-research.org/',
     'The Breast Cancer Surveillance Consortium (BCSC) is a collaborative network of six active breast imaging registries and two historic registries focused on research to assess and improve the delivery and quality of breast cancer screening and related outcomes in the United St...',
-    1
+    1,
+    'BCSC'
   ),
   (
     '37',
@@ -379,7 +414,8 @@ VALUES (
     'logo/bwh.png',
     'https://www.brighamandwomens.org/',
     'Brigham and Women''s Hospital is a world-class academic medical center based in Boston, Massachusetts. The Brigham serves patients from New England, across the United States and from 120 countries around the world. A major teaching hospital of Harvard Medical School, Brigham...',
-    1
+    1,
+    'BWH'
   ),
   (
     '38',
@@ -389,7 +425,8 @@ VALUES (
     'logo/byu.jpg',
     'https://www.byu.edu/',
     'At BYU, helping students to develop their full divine potential is central to both our teaching and our scholarship. As the flagship higher education institution of The Church of Jesus Christ of Latter-day Saints, BYU strives to emit a unique light for the benefit of the wor...',
-    1
+    1,
+    'BYU'
   ),
   (
     '39',
@@ -399,7 +436,8 @@ VALUES (
     'logo/bright-focus.jpg',
     'https://www.brightfocus.org/',
     'BrightFocus funds exceptional scientific research worldwide to defeat Alzheimer''s disease, macular degeneration, and glaucoma and provides expert information on these heartbreaking diseases.',
-    1
+    1,
+    ''
   ),
   (
     '40',
@@ -409,7 +447,8 @@ VALUES (
     'logo/bms.jpg',
     'https://www.bms.com/',
     'At Bristol Myers Squibb, we work every day to transform patients'' lives through science. We combine the agility of a biotech with the reach and resources of an established pharmaceutical company to create a global leading biopharma company powered by talented individuals wh...',
-    2
+    2,
+    'BMS'
   ),
   (
     '41',
@@ -419,7 +458,8 @@ VALUES (
     'logo/broad.jpg',
     'https://www.broadinstitute.org/',
     'We seek to better understand the roots of disease and narrow the gap between new biological insights and impact for patients.',
-    4
+    4,
+    'Broad'
   ),
   (
     '42',
@@ -428,8 +468,9 @@ VALUES (
     'brown',
     'logo/brown.jpg',
     'https://www.brown.edu/',
-    'Founded in 1764, Brown is a nonprofit leading research university, home to world-renowned faculty, and also an innovative educational institution where the curiosity, creativity and intellectual joy of students drives academic excellence.  The spirit of the undergraduate Ope...',
-    1
+    'Founded in 1764, Brown is a nonprofit leading research university, home to world-renowned faculty, and also an innovative educational institution where the curiosity, creativity and intellectual joy of students drives academic excellence. The spirit of the undergraduate Ope...',
+    1,
+    'Brown'
   ),
   (
     '43',
@@ -439,7 +480,8 @@ VALUES (
     'logo/caltech.jpg',
     'https://www.caltech.edu/',
     'Caltech is a world-renowned science and engineering institute that marshals some of the world''s brightest minds and most innovative tools to address fundamental scientific questions and pressing societal challenges.',
-    2
+    2,
+    'Caltech'
   ),
   (
     '44',
@@ -448,8 +490,9 @@ VALUES (
     'tcia',
     'logo/tcia.jpeg',
     'https://www.cancerimagingarchive.net/',
-    'The Cancer Imaging Archive (TCIA) is a service which de-identifies and hosts a large publicly available archive of medical images of cancer.  TCIA is funded by the Cancer Imaging Program (CIP), a part of the United States  National Cancer Institute (NCI), and is managed by t...',
-    1
+    'The Cancer Imaging Archive (TCIA) is a service which de-identifies and hosts a large publicly available archive of medical images of cancer. TCIA is funded by the Cancer Imaging Program (CIP), a part of the United States National Cancer Institute (NCI), and is managed by t...',
+    1,
+    'TCIA'
   ),
   (
     '45',
@@ -459,7 +502,8 @@ VALUES (
     'logo/cancer-research-uk.jpg',
     'https://www.cancerresearchuk.org/',
     'Cancer Research UK was formed 20 years ago, in 2002. However, our history goes back much further, to 1902, with the founding of the Imperial Cancer Research Fund. Thanks to supporters like you, our pioneering work into how to prevent, diagnose and treat cancer has benefitted...',
-    1
+    1,
+    ''
   ),
   (
     '46',
@@ -469,7 +513,8 @@ VALUES (
     'logo/ctd2.png',
     'https://ocg.cancer.gov/programs/ctd2',
     'The Cancer Target Discovery and Development (CTD2) Network, also known as C-T-D-Squared, is a functional genomics initiative that bridges the gap between genomics and development of effective therapeutics. The Network aims to understand tumor development, heterogeneity, drug...',
-    4
+    4,
+    'CTD2'
   ),
   (
     '47',
@@ -479,7 +524,8 @@ VALUES (
     'logo/celgene.jpg',
     'https://www.celgene.com',
     'This organization may no longer exists or has been merged under another organization.',
-    3
+    3,
+    ''
   ),
   (
     '48',
@@ -489,7 +535,8 @@ VALUES (
     'logo/crc.jpeg',
     'https://crc.nd.edu/',
     'The Center for Research Computing (CRC) at University of Notre Dame is an innovative and multidisciplinary research environment that supports collaboration to facilitate multidisciplinary discoveries through advanced computation, software engineering, artificial intelligence...',
-    1
+    1,
+    'CRC'
   ),
   (
     '49',
@@ -499,7 +546,8 @@ VALUES (
     'logo/cchmc.jpg',
     'https://www.cincinnatichildrens.org/',
     'Cincinnati Children''s, a nonprofit academic medical center established in 1883, is one of the oldest and most distinguished pediatric hospitals in the United States.',
-    1
+    1,
+    'CCHMC'
   ),
   (
     '50',
@@ -508,8 +556,9 @@ VALUES (
     'c4kc',
     'logo/c4kc.jpg',
     'https://climb4kc.org/',
-    'Climb 4 Kidney Cancer is a nonprofit organization that aims to raise money for kidney cancer research while bringing people together through climbing.  We are physicians, scientists, survivors, and loved ones who share a passion for climbing and a passion for improving the l...',
-    1
+    'Climb 4 Kidney Cancer is a nonprofit organization that aims to raise money for kidney cancer research while bringing people together through climbing. We are physicians, scientists, survivors, and loved ones who share a passion for climbing and a passion for improving the l...',
+    1,
+    'C4KC'
   ),
   (
     '51',
@@ -519,7 +568,8 @@ VALUES (
     'logo/cptac.png',
     'https://proteomics.cancer.gov/programs/cptac',
     'The National Cancer Institute''s Clinical Proteomic Tumor Analysis Consortium (CPTAC) is a national effort to accelerate the understanding of the molecular basis of cancer through the application of large-scale proteome and genome analysis, or proteogenomics.',
-    1
+    1,
+    'CPTAC'
   ),
   (
     '52',
@@ -529,7 +579,8 @@ VALUES (
     'logo/columbia.jpg',
     'https://www.columbia.edu/',
     'Columbia University is one of the world''s most important centers of research and at the same time a distinctive and distinguished learning environment for undergraduates and graduate students in many scholarly and professional fields. The University recognizes the importanc...',
-    4
+    4,
+    'Columbia'
   ),
   (
     '53',
@@ -539,7 +590,8 @@ VALUES (
     'logo/conceptant.webp',
     'https://www.conceptant.com/',
     'We want to improve humanity and the world through technology, plain and simple. Tech has so much promise to improve lives, but we felt it was constantly overshadowed by stuffy boardrooms and corporate red tape. Which is why Conceptant takes a different path, one we created. ...',
-    1
+    1,
+    ''
   ),
   (
     '54',
@@ -549,7 +601,8 @@ VALUES (
     'logo/csic.jpg',
     'https://www.csic.es/',
     'The Higher Council for Scientific Research (CSIC) is a State Agency for scientific research and technological development, with differentiated legal personality, its own assets and treasury, functional and management autonomy, full legal capacity to act and of indefinite dur...',
-    1
+    1,
+    'CSIC'
   ),
   (
     '55',
@@ -559,7 +612,8 @@ VALUES (
     'logo/corevitas.jpeg',
     'https://www.corevitas.com/',
     'CorEvitas is a science-led, data intelligence company that provides the life sciences industry with the objective data and clinical insights needed to demonstrate the real-world safety, effectiveness, and patient experience of therapeutics in the post-approval setting',
-    1
+    1,
+    ''
   ),
   (
     '56',
@@ -569,7 +623,8 @@ VALUES (
     'logo/corrona.jpeg',
     'https://www.corrona.org',
     'This organization may no longer exists or has been merged under another organization.',
-    1
+    1,
+    'Corrona'
   ),
   (
     '57',
@@ -578,8 +633,9 @@ VALUES (
     'covert-lab',
     'https://via.placeholder.com/300.png',
     'https://www.covert.stanford.edu/',
-    'We''re a scrappy bunch of scientists who like to do cutting-edge research with the latest technology (often home-made)!  Our primary biological focus is in host-pathogen interactions, most particularly in terms of the innate immune system, and our technological foci are whol...',
-    1
+    'We''re a scrappy bunch of scientists who like to do cutting-edge research with the latest technology (often home-made)! Our primary biological focus is in host-pathogen interactions, most particularly in terms of the innate immune system, and our technological foci are whol...',
+    1,
+    ''
   ),
   (
     '58',
@@ -589,7 +645,8 @@ VALUES (
     'logo/dfci.png',
     'https://www.dana-farber.org/',
     'Since its founding in 1947, Dana-Farber Cancer Institute in Boston, Massachusetts has been committed to providing adults and children with cancer with the best treatment available today while developing tomorrow''s cures through cutting-edge research. Read about our history,...',
-    3
+    3,
+    'DFCI'
   ),
   (
     '59',
@@ -598,8 +655,9 @@ VALUES (
     'darpa',
     'logo/darpa.jpg',
     'https://www.darpa.mil/',
-    'For sixty years, DARPA has held to a singular and enduring mission: to make pivotal investments in breakthrough technologies for national security.  The genesis of that mission and of DARPA itself dates to the launch of Sputnik in 1957, and a commitment by the United States ...',
-    2
+    'For sixty years, DARPA has held to a singular and enduring mission: to make pivotal investments in breakthrough technologies for national security. The genesis of that mission and of DARPA itself dates to the launch of Sputnik in 1957, and a commitment by the United States ...',
+    2,
+    'DARPA'
   ),
   (
     '60',
@@ -609,7 +667,8 @@ VALUES (
     'logo/doe.jpg',
     'https://www.energy.gov/',
     'The mission of the Energy Department is to ensure America''s security and prosperity by addressing its energy, environmental and nuclear challenges through transformative science and technology solutions.',
-    1
+    1,
+    'DOE'
   ),
   (
     '61',
@@ -619,7 +678,8 @@ VALUES (
     'logo/dasa.jpeg',
     'https://dasa.com.br/',
     'We are Dasa. A new model that expands and integrates health care throughout life. We have brought together the largest diagnostic medicine network, a robust hospital group and the best care management company, so that nothing is missing and full care is provided. We connect ...',
-    1
+    1,
+    'DASA'
   ),
   (
     '62',
@@ -629,7 +689,8 @@ VALUES (
     'logo/dnanexus.png',
     'https://www.dnanexus.com/',
     'DNAnexus(R) has built the world''s most secure cloud platform and global network for scientific collaboration and accelerated discovery. We embrace challenges and partnership to tackle the world''s most exciting opportunities in human health.',
-    9
+    '9',
+    ''
   ),
   (
     '63',
@@ -639,7 +700,8 @@ VALUES (
     'logo/dockstore.jpg',
     'https://dockstore.org/',
     'Dockstore is a free and open source platform for sharing reusable and scalable analytical tools and workflows. It''s developed by the Cancer Genome Collaboratory and used by the GA4GH.',
-    1
+    1,
+    ''
   ),
   (
     '64',
@@ -649,7 +711,8 @@ VALUES (
     'logo/duke.jpg',
     'https://duke.edu/',
     'The mission of Duke University is to provide a superior liberal education to undergraduate students, attending not only to their intellectual growth but also to their development as adults committed to high ethical standards and full participation as leaders in their communi...',
-    3
+    3,
+    'Duke'
   ),
   (
     '65',
@@ -659,7 +722,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'http://www.earlysignal.org',
     'This organization may no longer exists or has been merged under another organization.',
-    1
+    1,
+    'Early Signal'
   ),
   (
     '66',
@@ -669,7 +733,8 @@ VALUES (
     'logo/eigh.jpg',
     'https://globalhealth.nd.edu/',
     'The University of Notre Dame''s Eck Institute for Global Health (EIGH) serves as a university-wide enterprise that recognizes health as a fundamental human right and works to promote research, training, and service to advance health standards and reduce health disparities fo...',
-    1
+    1,
+    'EIGH'
   ),
   (
     '67',
@@ -679,7 +744,8 @@ VALUES (
     'logo/lilly.png',
     'https://www.lilly.com/',
     'Lilly was founded in 1876 by Colonel Eli Lilly, a man committed to creating high-quality medicines that met real needs in an era of unreliable elixirs peddled by questionable characters. His charge to the generations of employees who have followed was this: "Take what you fi...',
-    1
+    1,
+    'Lilly'
   ),
   (
     '68',
@@ -689,7 +755,8 @@ VALUES (
     'logo/elixir.jpg',
     'https://www.elixirsolutions.com/',
     'Elixir is a pharmacy benefits and services company with the scale, flexibility and expertise to help our clients achieve their unique business goals. We have been purposely built and own all the assets needed to optimize the full pharmacy care experience, including: a) An in...',
-    1
+    1,
+    ''
   ),
   (
     '69',
@@ -699,7 +766,8 @@ VALUES (
     'logo/encode.png',
     'https://www.encodeproject.org/',
     'The ENCODE Data Coordination Center (DCC)''s primary task is to curate, uniformly process and validate the data generated and submitted by ENCODE Consortium members in preparation for release to the scientific community.',
-    1
+    1,
+    'ENCODE'
   ),
   (
     '70',
@@ -709,7 +777,8 @@ VALUES (
     'logo/enigma.jpg',
     'http://enigma.ini.usc.edu/',
     'The ENIGMA Consortium brings together researchers in imaging genomics to understand brain structure, function, and disease, based on brain imaging and genetic data. We welcome brain researchers, imagers, geneticists, methods developers, and others interested in cracking the ...',
-    1
+    1,
+    'ENIGMA'
   ),
   (
     '71',
@@ -718,8 +787,9 @@ VALUES (
     'eth',
     'logo/eth.jpg',
     'https://ethz.ch/en.html',
-    'Freedom and individual responsibility, entrepreneurial spirit and open-​​mindedness: ETH Zurich stands on a bedrock of true Swiss values.  ',
-    2
+    'Freedom and individual responsibility, entrepreneurial spirit and open-mindedness: ETH Zurich stands on a bedrock of true Swiss values.',
+    2,
+    'ETH'
   ),
   (
     '72',
@@ -729,7 +799,8 @@ VALUES (
     'logo/nichd.jpg',
     'https://www.nichd.nih.gov/',
     'NICHD was founded in 1962 to investigate human development throughout the entire life process, with a focus on understanding disabilities and important events that occur during pregnancy. Since then, research conducted and funded by NICHD has helped save lives, improve wellb...',
-    1
+    1,
+    'NICHD'
   ),
   (
     '73',
@@ -739,7 +810,8 @@ VALUES (
     'logo/embl-ebi.jpg',
     'https://www.ebi.ac.uk/',
     'At EMBL''s European Bioinformatics Institute (EMBL-EBI), we help scientists realise the potential of big data in biology, exploiting complex information to make discoveries that benefit humankind.',
-    8
+    8,
+    'EMBL-EBI'
   ),
   (
     '74',
@@ -749,7 +821,8 @@ VALUES (
     'logo/ema.jpg',
     'https://www.ema.europa.eu/en',
     'The mission of the European Medicines Agency (EMA) is to foster scientific excellence in the evaluation and supervision of medicines, for the benefit of public and animal health in the European Union (EU).',
-    1
+    1,
+    'EMA'
   ),
   (
     '75',
@@ -759,7 +832,8 @@ VALUES (
     'logo/eu.png',
     'https://europa.eu/european-union/index_en',
     'The common principles and values that underlie life in the EU: freedom, democracy, equality and the rule of law, promoting peace and stability.',
-    1
+    1,
+    'EU'
   ),
   (
     '76',
@@ -769,7 +843,8 @@ VALUES (
     'logo/evidation.png',
     'https://evidation.com/',
     'We believe everyday health data is the most compelling force in medicine—because under rigorous study, it''s proving to be a new and exceptionally powerful lens on health. These novel discoveries—emanating from data generated and controlled by individuals—can be turned into ...',
-    1
+    1,
+    'Evidation'
   ),
   (
     '77',
@@ -779,7 +854,8 @@ VALUES (
     'logo/fehling-instruments.jpeg',
     'https://www.fehling-instruments.de/en/',
     'Fehling Instruments is a traditional family owned and family run company with more than thirty years of experience in the medical business. Fehling Instruments is constantly striving for excellence in function and economy of products. This objective is achieved by continuous...',
-    1
+    1,
+    ''
   ),
   (
     '78',
@@ -789,7 +865,8 @@ VALUES (
     'logo/feinstein-institute.png',
     'https://feinstein.northwell.edu/',
     'The Feinstein Institutes for Medical Research is the home of research at Northwell Health. In conjunction with our partners in government, academia, industry and philanthropy, we strive to advance knowledge and make innovative therapies a reality. Our researchers work to tra...',
-    1
+    1,
+    'Feinstein Institute'
   ),
   (
     '79',
@@ -799,7 +876,8 @@ VALUES (
     'logo/francis-crick-institute.jpeg',
     'https://www.crick.ac.uk/',
     'The Francis Crick Institute is a biomedical research institute working with organisations across academia, medicine and industry to make discoveries about how life works.',
-    1
+    1,
+    ''
   ),
   (
     '80',
@@ -809,7 +887,8 @@ VALUES (
     'logo/fred-hutch.jpg',
     'https://www.fredhutch.org/',
     'Fred Hutchinson Cancer Center unites innovative research and compassionate care to prevent and eliminate cancer and infectious disease. We''re driven by the urgency of our patients, the hope of our community and our passion for discovery to pursue scientific breakthroughs an...',
-    1
+    1,
+    'Fred Hutch'
   ),
   (
     '81',
@@ -819,7 +898,8 @@ VALUES (
     'logo/genome-canada.png',
     'https://www.genomecanada.ca/',
     'Genome Canada is an independent, federally funded not-for-profit organization and a national leader for Canada''s genomics ecosystem. Working in partnership, and across sectors, we invest in, and coordinate, genomics research, innovation, data and talent to generate solution...',
-    3
+    3,
+    ''
   ),
   (
     '82',
@@ -829,7 +909,8 @@ VALUES (
     'logo/gwu.jpg',
     'https://www.gwu.edu/',
     'Since our capital city''s first days, people have traveled here for many reasons. They come to explore the past and to chart new futures. They come to ask questions and to seek expert answers. They come to start discourse and to remember in silence. They come to demand chang...',
-    2
+    2,
+    'GWU'
   ),
   (
     '83',
@@ -839,7 +920,8 @@ VALUES (
     'logo/georgetown.png',
     'https://www.georgetown.edu/',
     'We''re a leading research university with a heart. Founded in the decade that the U.S. Constitution was signed, we''re the nation''s oldest Catholic and Jesuit university. Today we''re a forward-looking, diverse community devoted to social justice, restless inquiry and respe...',
-    1
+    1,
+    'Georgetown'
   ),
   (
     '84',
@@ -849,7 +931,8 @@ VALUES (
     'logo/dkfz.jpg',
     'https://www.dkfz.de/en/index.html',
     'More than 450,000 people are diagnosed with cancer each year in Germany. Cancer is a disease that poses enormous challenges to research, because every cancer is different and its course can vary immensely even from one patient to the next. To perform research into cancer is ...',
-    2
+    2,
+    'DKFZ'
   ),
   (
     '85',
@@ -859,7 +942,8 @@ VALUES (
     'logo/ga4gh.png',
     'https://www.ga4gh.org/',
     'The Global Alliance for Genomics and Health (GA4GH) is an international, nonprofit alliance formed in 2013 to accelerate the potential of research and medicine to advance human health. Bringing together 600+ leading organizations working in healthcare, research, patient advo...',
-    1
+    1,
+    'GA4GH'
   ),
   (
     '86',
@@ -869,7 +953,8 @@ VALUES (
     'logo/moffitt.png',
     'https://moffitt.org/',
     'At Moffitt Cancer Center, we are working tirelessly in the areas of patient care, research and education to advance one step further in fighting this disease. We are committed to the health and safety of our patients and dedicated to providing expert cancer care.',
-    1
+    1,
+    'Moffitt'
   ),
   (
     '87',
@@ -879,7 +964,8 @@ VALUES (
     'logo/h3abionet.png',
     'https://h3abionet.org/',
     'H3ABioNet is a Pan African Bioinformatics network comprising 28 Nodes distributed amongst 17 countries, 16 of which are African. H3ABioNet was developed to support H3Africa research projects through the development of bioinformatics capacity on the continent. Specifically H3...',
-    1
+    1,
+    ''
   ),
   (
     '88',
@@ -889,7 +975,8 @@ VALUES (
     'logo/harvard.jpg',
     'https://www.harvard.edu/',
     'As a research university and nonprofit institution, Harvard is focused on creating educational opportunities for people from many lived experiences.',
-    3
+    3,
+    'Harvard'
   ),
   (
     '89',
@@ -899,7 +986,8 @@ VALUES (
     'logo/heidelberg-university.jpg',
     'https://www.heidelberg.edu/',
     'A day at Heidelberg University is filled with connection. Whether it''s walking to class, receiving one-on-one instruction from excellent faculty, or perfecting new skills at practice, students are uplifted every moment. Each time a Student Prince makes their own success, th...',
-    10
+    10,
+    ''
   ),
   (
     '90',
@@ -909,7 +997,8 @@ VALUES (
     'logo/histosonics.jpg',
     'https://histosonics.com/',
     'Minimally invasive isn''t minimal enough. HistoSonics(R) is developing a non-invasive, sonic beam therapy platform capable of destroying tissue at a sub-cellular level.',
-    1
+    1,
+    'Histosonics'
   ),
   (
     '91',
@@ -919,7 +1008,8 @@ VALUES (
     'logo/sickkids.jpg',
     'https://www.sickkids.ca/Research/',
     'SickKids Research Institute (RI) is where over 2,000 researchers, trainees, and staff are working together to take on the toughest challenges in child health. As Canada''s largest, hospital-based child health research institute, we conduct and translate groundbreaking resear...',
-    3
+    3,
+    'SickKids'
   ),
   (
     '92',
@@ -929,7 +1019,8 @@ VALUES (
     'logo/hpa.png',
     'www.proteinatlas.org',
     'The Human Protein Atlas is a Swedish-based program initiated in 2003 with the aim to map the expression and spatial distribution of all human proteins in cells and tissues using an integration of various omics technologies, including antibody-based imaging, mass spectrometry...',
-    0
+    0,
+    'HPA'
   ),
   (
     '93',
@@ -939,7 +1030,8 @@ VALUES (
     'logo/ibm.svg',
     'https://www.research.ibm.com/',
     'At IBM Research we live by the scientific method. It''s at the core of everything we do. We choose impact over market cycles, vision over vanity. We deeply believe that creative freedom, excellence, and integrity are essential to any breakthrough. We operate with a backbone....',
-    27
+    27,
+    ''
   ),
   (
     '94',
@@ -949,7 +1041,8 @@ VALUES (
     'logo/imi.png',
     'http://www.imi.europa.eu/',
     'At the Innovative Medicines Initiative (IMI), we are working to improve health by speeding up the development of, and patient access to, innovative medicines, particularly in areas where there is an unmet medical or social need. We do this by facilitating collaboration betwe...',
-    1
+    1,
+    'IMI'
   ),
   (
     '95',
@@ -959,7 +1052,8 @@ VALUES (
     'logo/institut-curie.jpg',
     'https://institut-curie.org/',
     'Institut Curie is the leading cancer research and treatment centre in France and has been a recognised public utility foundation since 1921. Since its creation by Marie Curie, Institut Curie has worked on three missions: Care, Reserach, Transmission.',
-    2
+    2,
+    ''
   ),
   (
     '96',
@@ -969,7 +1063,8 @@ VALUES (
     'logo/fimm.png',
     'https://www.helsinki.fi/en/hilife-helsinki-institute-life-science/units/fimm',
     'FIMM – Institute for Molecular Medicine Finland is a translational research institute focusing on human genomics and precision medicine as part of the Helsinki Institute of Life Science HiLIFE at the University of Helsinki. FIMM has a driving mission to perform innovative re...',
-    1
+    1,
+    'FIMM'
   ),
   (
     '97',
@@ -979,7 +1074,8 @@ VALUES (
     'logo/iths.jpg',
     'https://www.iths.org/',
     'The Institute of Translational Health Sciences is dedicated to speeding science to the clinic for the benefit of patients and communities throughout Washington, Wyoming, Alaska, Montana, and Idaho.',
-    1
+    1,
+    'ITHS'
   ),
   (
     '98',
@@ -989,7 +1085,8 @@ VALUES (
     'logo/intel.svg',
     'https://www.intel.com/content/www/us/en/homepage.html',
     'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking application...',
-    1
+    1,
+    'Intel'
   ),
   (
     '99',
@@ -999,7 +1096,8 @@ VALUES (
     'logo/icgc.jpg',
     'https://dcc.icgc.org/',
     'The ICGC Data Portal provides many tools for visualizing, querying, and downloading cancer data, which is released on a quarterly schedule.',
-    5
+    5,
+    'ICGC'
   ),
   (
     '100',
@@ -1008,8 +1106,9 @@ VALUES (
     'iff',
     'logo/iff.png',
     'https://www.iff.com/',
-    'We apply science and creativity for a better world.  With the beauty of art and the precision of science, we are an international collective of thinkers who partner with customers to bring scents, tastes, experiences, ingredients and solutions for products the world craves. ...',
-    1
+    'We apply science and creativity for a better world. With the beauty of art and the precision of science, we are an international collective of thinkers who partner with customers to bring scents, tastes, experiences, ingredients and solutions for products the world craves. ...',
+    1,
+    'IFF'
   ),
   (
     '101',
@@ -1018,8 +1117,9 @@ VALUES (
     'igsr',
     'logo/igsr.jpg',
     'https://www.internationalgenome.org/home',
-    'The 1000 Genomes Project created a catalogue of common human genetic variation, using openly consented samples from people who declared themselves to be healthy. The reference data resources generated by the project remain heavily used by the biomedical science community.  T...',
-    1
+    'The 1000 Genomes Project created a catalogue of common human genetic variation, using openly consented samples from people who declared themselves to be healthy. The reference data resources generated by the project remain heavily used by the biomedical science community. T...',
+    1,
+    'IGSR'
   ),
   (
     '102',
@@ -1029,7 +1129,8 @@ VALUES (
     'logo/iscb.png',
     'https://www.iscb.org/cms_addon/conferences/ismbeccb2021/tracks/function',
     'Society membership reflects commitment toward the advancement of computational biology. The ISCB is an international non-profit organization whose members come from the global bioinformatics and computational biology communities. The ISCB serves its global membership by prov...',
-    1
+    1,
+    'ISCB'
   ),
   (
     '103',
@@ -1039,7 +1140,8 @@ VALUES (
     'logo/intuitive.jpg',
     'https://www.intuitive.com/en-us',
     'Intuitive advances minimally invasive care by innovating at the point of possibility. For nearly three decades we''ve created products and services born of inspiration and intelligence—from robotic-assisted surgical systems to data generation that unlocks the potential to be...',
-    1
+    1,
+    'Intuitive'
   ),
   (
     '104',
@@ -1049,7 +1151,8 @@ VALUES (
     'logo/iowa-state-university.png',
     'https://www.iastate.edu/',
     'Iowa State is a large university with a small feel. Forge lifelong friendships and earn a degree that will take you anywhere.',
-    1
+    1,
+    ''
   ),
   (
     '105',
@@ -1059,7 +1162,8 @@ VALUES (
     'logo/kaggle.png',
     'https://www.kaggle.com/',
     'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kag...',
-    0
+    0,
+    'Kaggle'
   ),
   (
     '106',
@@ -1069,7 +1173,8 @@ VALUES (
     'logo/kpwhri.jpg',
     'https://www.kpwashingtonresearch.org/',
     'Kaiser Permanente Washington Health Research Institute (KPWHRI) is the non-proprietary, public-interest research center within Kaiser Permanente Washington, a nonprofit health system based in Seattle. Kaiser Permanente Washington provides coverage and care for more than 710,...',
-    1
+    1,
+    'KPWHRI'
   ),
   (
     '107',
@@ -1079,7 +1184,8 @@ VALUES (
     'logo/kcl.jpg',
     'https://www.kcl.ac.uk/',
     'King''s College London is an internationally renowned university delivering exceptional education and world-leading research. We are dedicated to driving positive and sustainable change in society and realising our vision of making the world a better place. ',
-    1
+    1,
+    'KCL'
   ),
   (
     '108',
@@ -1089,7 +1195,8 @@ VALUES (
     'logo/knoweng.png',
     'https://knoweng.org/',
     'KnowEnG, The Knowledge Engine for Genomics, will transform the way biomedical researchers analyze their genome-wide data by integrating multiple analytical methods derived from the most advanced data mining and machine learning research. Embedded with the breadth of existing...',
-    1
+    1,
+    'KnowEnG'
   ),
   (
     '109',
@@ -1099,7 +1206,8 @@ VALUES (
     'logo/koch-institute.jpg',
     'https://ki.mit.edu/',
     'At the Koch Institute for Integrative Cancer Research, we take a uniquely MIT approach to solving some of the most difficult problems in cancer. Our research combines MIT''s rich traditions of interdisciplinary inquiry and technological innovation with the most advanced inve...',
-    1
+    1,
+    ''
   ),
   (
     '110',
@@ -1109,7 +1217,8 @@ VALUES (
     'logo/arnold-ventures.jpg',
     'https://www.arnoldventures.org/people/laura-arnold-john-arnold/',
     'Arnold Ventures is a philanthropy working to improve the lives of all Americans by pursuing evidence-based solutions to our nation''s most pressing problems. We fund research to better understand the root causes of broken systems that limit opportunity and create injustice. ...',
-    1
+    1,
+    'Arnold Ventures'
   ),
   (
     '111',
@@ -1119,7 +1228,8 @@ VALUES (
     'logo/chuv.jpg',
     'https://www.lausanneuniversityhospital.com/home',
     'Lausanne University Hospital is one of the five university hospitals in Switzerland, with Geneva, Bern, Basel and Zurich. With its 16 clinical and medico-technical departments and their numerous services, the CHUV is renowned for its academic achievements in health care, res...',
-    1
+    1,
+    'CHUV'
   ),
   (
     '112',
@@ -1128,8 +1238,9 @@ VALUES (
     'lls',
     'logo/lls.jpg',
     'https://www.lls.org/',
-    'The Leukemia & Lymphoma Society (LLS) is at the forefront of the fight to cure blood cancer.  We are the largest nonprofit dedicated to creating a world without blood cancers. Since 1949, we''ve invested more than $1.6 billion in groundbreaking research, pioneering many of t...',
-    1
+    'The Leukemia & Lymphoma Society (LLS) is at the forefront of the fight to cure blood cancer. We are the largest nonprofit dedicated to creating a world without blood cancers. Since 1949, we''ve invested more than $1.6 billion in groundbreaking research, pioneering many of t...',
+    1,
+    'LLS'
   ),
   (
     '113',
@@ -1139,7 +1250,8 @@ VALUES (
     'logo/ligue-cancer.jpg',
     'https://www.ligue-cancer.net/',
     'Since 1918, the League has been fighting against cancer by being the first independent funder of research',
-    1
+    1,
+    'ligue cancer'
   ),
   (
     '114',
@@ -1149,7 +1261,8 @@ VALUES (
     'logo/ucl.jpg',
     'https://www.ucl.ac.uk/',
     'Founded in 1826 in the heart of London, UCL is London''s leading multidisciplinary university, with more than 16,000 staff and 50,000 students from over 150 different countries. We are a diverse community with the freedom and courage to challenge, to question and to think di...',
-    2
+    2,
+    'UCL'
   ),
   (
     '115',
@@ -1159,7 +1272,8 @@ VALUES (
     'logo/lmu.jpg',
     'https://www.lmu.de/en/index.html',
     'Ludwig-Maximilians-Universitat Munchen is a leading research university in Europe. Since its founding in 1472 it has been committed to the highest international standards of excellence in research and teaching.',
-    2
+    2,
+    'LMU'
   ),
   (
     '116',
@@ -1169,7 +1283,8 @@ VALUES (
     'logo/moru.jpeg',
     'https://www.tropmedres.ac/',
     'The MORU Tropical Health Network, which hosts the ‘Thailand Wellcome Africa and Asia Programme'', conducts targeted clinical and public health research that aims to discover and develop appropriate, practical, affordable interventions that measurably improve the health of pe...',
-    1
+    1,
+    'MORU'
   ),
   (
     '117',
@@ -1179,7 +1294,8 @@ VALUES (
     'logo/march-of-dimes.jpg',
     'https://www.marchofdimes.org/',
     'March of Dimes is a nonprofit organization committed to ending preventable maternal health risks and death, ending preventable preterm birth and infant death and closing the health equity gap for all families.',
-    1
+    1,
+    ''
   ),
   (
     '118',
@@ -1189,7 +1305,8 @@ VALUES (
     'logo/mass-general.png',
     'https://www.massgeneral.org/',
     'In the delivery of our care, through our research and within our communities, Mass General is committed to the well-being of our patients locally and globally.',
-    3
+    3,
+    'Mass General'
   ),
   (
     '119',
@@ -1199,7 +1316,8 @@ VALUES (
     'logo/mit.jpg',
     'https://www.mit.edu/',
     'The MIT community is driven by a shared purpose: to make a better world through education, research, and innovation. We are fun and quirky, elite but not elitist, inventive and artistic, obsessed with numbers, and welcoming to talented people regardless of where they come from.',
-    2
+    2,
+    'MIT'
   ),
   (
     '120',
@@ -1209,7 +1327,8 @@ VALUES (
     'logo/mathworks.jpg',
     'https://www.mathworks.com/',
     'We at MathWorks believe in the importance of engineers and scientists. They increase human knowledge and profoundly improve our standard of living. We created MATLAB and Simulink to help them do their best work.',
-    1
+    1,
+    ''
   ),
   (
     '121',
@@ -1219,7 +1338,8 @@ VALUES (
     'logo/mdc.jpg',
     'https://www.mdc-berlin.de/',
     'The Max Delbruck Center is an internationally renowned biomedical research center in Berlin. It is named after Max Delbrück, one of the founders of modern genetics and molecular biology.',
-    1
+    1,
+    'MDC'
   ),
   (
     '122',
@@ -1229,7 +1349,8 @@ VALUES (
     'logo/md-anderson.jpg',
     'https://www.mdanderson.org/',
     'At MD Anderson, we understand how hard it can be to choose a hospital for cancer treatment. You''ve just received life-changing news, and now you have to decide how to handle it. Here are some of the reasons why MD Anderson is your best hope for cancer care.',
-    1
+    1,
+    'MD Anderson'
   ),
   (
     '123',
@@ -1239,7 +1360,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://www.ukri.org/councils/mrc/',
     'The Medical Research Council (MRC) improves the health of people in the UK – and around the world – by supporting excellent science, and training the very best scientists.',
-    0
+    0,
+    'MRC'
   ),
   (
     '124',
@@ -1249,7 +1371,8 @@ VALUES (
     'logo/msk.jpg',
     'https://www.mskcc.org/',
     'The people of Memorial Sloan Kettering Cancer Center (MSK) are united by a singular mission: ending cancer for life. Our specialized care teams provide personalized, compassionate, expert care to patients of all ages. Informed by basic research done at our Sloan Kettering In...',
-    1
+    1,
+    'MSK'
   ),
   (
     '125',
@@ -1258,8 +1381,9 @@ VALUES (
     'merck',
     'logo/merck.jpg',
     'https://www.merck.com/',
-    'Our purpose: We use the power of leading-edge science to save and improve lives around the world.  For more than 130 years, we have brought hope to humanity through the development of important medicines and vaccines. We aspire to be the premier research-intensive biopharmac...',
-    1
+    'Our purpose: We use the power of leading-edge science to save and improve lives around the world. For more than 130 years, we have brought hope to humanity through the development of important medicines and vaccines. We aspire to be the premier research-intensive biopharmac...',
+    1,
+    'Merck'
   ),
   (
     '126',
@@ -1269,7 +1393,8 @@ VALUES (
     'logo/mjff.jpg',
     'https://www.michaeljfox.org/',
     'The Michael J. Fox Foundation is dedicated to finding a cure for Parkinson''s disease through an aggressively funded research agenda and to ensuring the development of improved therapies for those living with Parkinson''s today.',
-    2
+    2,
+    'MJFF'
   ),
   (
     '127',
@@ -1279,7 +1404,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'http://www.mines-paristech.eu/',
     '250 years of history for the Graduate School. 1 500 students. 17 research centres, 230 talented research professors, 1st school for collaborative research, a unique link with companies. Values built over the years, which we are proud to display, to maintain, to share.',
-    1
+    1,
+    ''
   ),
   (
     '128',
@@ -1289,7 +1415,8 @@ VALUES (
     'logo/mt-sinai.jpg',
     'https://www.mountsinai.org/',
     'The Mount Sinai Health System is an integrated health care system providing exceptional medical care to our local and global communities. Encompassing the Icahn School of Medicine at Mount Sinai and eight hospital campuses in the New York metropolitan area, as well as a larg...',
-    28
+    '28',
+    'Mt. Sinai'
   ),
   (
     '129',
@@ -1299,7 +1426,8 @@ VALUES (
     'logo/mmrf.jpg',
     'https://themmrf.org/',
     'The MMRF is the largest nonprofit in the world focused on accelerating the cure for multiple myeloma. Our work is not done until each and every multiple myeloma patient has the answers they need. With our exceptional leadership, strategic collaboration and uniquely innovativ...',
-    1
+    1,
+    'MMRF'
   ),
   (
     '130',
@@ -1309,7 +1437,8 @@ VALUES (
     'logo/nki.png',
     'https://www.nki.rfmh.org/',
     'As one of the nation''s most respected research centers focused on mental health, investigators at the Nathan S. Kline Institute for Psychiatric Research (NKI) study the causes, treatment, prevention, and rehabilitation of severe and persistent mental illnesses. As a facilit...',
-    1
+    1,
+    'NKI'
   ),
   (
     '131',
@@ -1319,7 +1448,8 @@ VALUES (
     'logo/nci.jpg',
     'https://www.cancer.gov/',
     'The National Cancer Institute (NCI) is the federal government''s principal agency for cancer research and training. NCI leads, conducts, and supports cancer research across the nation to advance scientific knowledge and help all people live longer, healthier lives.',
-    11
+    '11',
+    'NCI'
   ),
   (
     '132',
@@ -1329,7 +1459,8 @@ VALUES (
     'logo/ncats.jpg',
     'https://ncats.nih.gov/',
     'The National Center for Advancing Translational Sciences (NCATS) — one of 27 Institutes and Centers at the National Institutes of Health (NIH) — was established to transform the translational process so that new treatments and cures for disease can be delivered to patients f...',
-    0
+    0,
+    'NCATS'
   ),
   (
     '133',
@@ -1339,7 +1470,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://cd2h.org/',
     'The National Center for Data to Health (CD2H) accelerates advancements in informatics by using findable, accessible, interoperable, and reusable (FAIR) principles to promote collaboration across the Clinical and Translational Science Awards (CTSA) Program community. CD2H too...',
-    2
+    2,
+    'CD2H'
   ),
   (
     '134',
@@ -1349,7 +1481,8 @@ VALUES (
     'logo/niehs.png',
     'https://www.niehs.nih.gov/',
     'The National Institute of Environmental Health Sciences (NIEHS) is expanding and accelerating its contributions to scientific knowledge of human health and the environment, and to the health and well-being of people everywhere.',
-    0
+    0,
+    'NIEHS'
   ),
   (
     '135',
@@ -1359,7 +1492,8 @@ VALUES (
     'logo/nigms.jpg',
     'https://www.nigms.nih.gov/',
     'The National Institute of General Medical Sciences (NIGMS) supports basic research that increases our understanding of biological processes and lays the foundation for advances in disease diagnosis, treatment, and prevention. NIGMS-funded scientists investigate how living sy...',
-    2
+    2,
+    'NIGMS'
   ),
   (
     '136',
@@ -1369,7 +1503,8 @@ VALUES (
     'logo/nist.png',
     'https://www.nist.gov/',
     'The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce. NIST is one of the nation''s oldest physical science laboratories. Congress established the agency to remove a major challenge to U.S. industrial...',
-    2
+    2,
+    'NIST'
   ),
   (
     '137',
@@ -1378,8 +1513,9 @@ VALUES (
     'nsf',
     'logo/nsf.jpg',
     'https://www.nsf.gov/',
-    'The U.S. National Science Foundation is an independent federal agency that supports science and engineering in all 50 states and U.S. territories.  NSF was established in 1950 by Congress to: a) Promote the progress of science. b) Advance the national health, prosperity and ...',
-    1
+    'The U.S. National Science Foundation is an independent federal agency that supports science and engineering in all 50 states and U.S. territories. NSF was established in 1950 by Congress to: a) Promote the progress of science. b) Advance the national health, prosperity and ...',
+    1,
+    'NSF'
   ),
   (
     '138',
@@ -1389,7 +1525,8 @@ VALUES (
     'logo/nserc.jpg',
     'https://www.nserc-crsng.gc.ca/index_eng.asp',
     'The Natural Sciences and Engineering Research Council of Canada funds visionaries, explorers and innovators who are searching for the scientific and technical breakthroughs that will benefit our country. We are Canada''s largest supporter of discovery and innovation. We work...',
-    3
+    3,
+    'NSERC'
   ),
   (
     '139',
@@ -1399,7 +1536,8 @@ VALUES (
     'logo/neosoma.jpg',
     'https://www.neosomainc.com/',
     'Every brain cancer patient is unique, and so is every brain tumor. Neuro-oncology teams need new tools and insights to advance the state of care. At Neosoma, our mission is to help clinicians improve outcomes by providing novel disease insights to physicians and clinical tri...',
-    1
+    1,
+    'Neosoma'
   ),
   (
     '140',
@@ -1409,7 +1547,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     'https://www.massgeneral.org/ncri',
     'The Neurological Clinical Research Institute (NCRI) at Mass General is an academic research organization composed of innovative researchers experienced and passionate about designing, developing, facilitating, and conducting multicenter clinical trials in neurological diseas...',
-    1
+    1,
+    'NCRI'
   ),
   (
     '141',
@@ -1418,8 +1557,9 @@ VALUES (
     'nyc',
     'logo/nyu.png',
     'https://www.nyu.edu/',
-    'Since its founding in 1831, NYU has been an innovator in higher education, reaching out to an emerging middle class, embracing an urban identity and professional focus, and promoting a global vision that informs its 20 schools and colleges.  Today, that trailblazing spirit m...',
-    1
+    'Since its founding in 1831, NYU has been an innovator in higher education, reaching out to an emerging middle class, embracing an urban identity and professional focus, and promoting a global vision that informs its 20 schools and colleges. Today, that trailblazing spirit m...',
+    1,
+    'NYC'
   ),
   (
     '142',
@@ -1429,7 +1569,8 @@ VALUES (
     'logo/neals.jpg',
     'https://www.neals.org/',
     'The mission of the Northeast Amyotrophic Lateral Sclerosis Consortium(R) (NEALS) is to rapidly translate scientific advances into clinical research and new treatments for people with Amyotrophic Lateral Sclerosis (ALS) and motor neuron disease.',
-    2
+    2,
+    'NEALS'
   ),
   (
     '143',
@@ -1439,7 +1580,8 @@ VALUES (
     'logo/neu.jpg',
     'https://www.northeastern.edu/',
     'At Northeastern, experience is our essence and ethos. It''s what you gain when you make the world your classroom, your laboratory, and your platform to create change or grow your enterprise. Throughout our university network, experience draws you into society and compels you...',
-    1
+    1,
+    'NEU'
   ),
   (
     '144',
@@ -1449,7 +1591,8 @@ VALUES (
     'logo/nu.jpg',
     'https://www.northwestern.edu/',
     'Northwestern is committed to excellent teaching, innovative research and the personal and intellectual growth of its students in a diverse academic community.',
-    1
+    1,
+    'NU'
   ),
   (
     '145',
@@ -1458,8 +1601,9 @@ VALUES (
     'novo-nordisk',
     'logo/novo-nordisk.jpg',
     'https://www.novonordisk-us.com/',
-    'For more than 100 years, we have been translating the unmet medical needs of people living with a serious chronic disease into innovative medicines and delivery systems.   Our treatments today are helping millions of people living with diabetes, obesity, rare bleeding disord...',
-    1
+    'For more than 100 years, we have been translating the unmet medical needs of people living with a serious chronic disease into innovative medicines and delivery systems.  Our treatments today are helping millions of people living with diabetes, obesity, rare bleeding disord...',
+    1,
+    ''
   ),
   (
     '146',
@@ -1469,7 +1613,8 @@ VALUES (
     'https://via.placeholder.com/300.png',
     '',
     'This organization may no longer exists or has been merged under another organization.',
-    1
+    1,
+    ''
   ),
   (
     '147',
@@ -1479,7 +1624,8 @@ VALUES (
     'logo/nvidia.png',
     'https://www.nvidia.com/en-us/',
     'NVIDIA pioneered accelerated computing to tackle challenges no one else can solve. Our work in AI and the metaverse is transforming the world''s largest industries and profoundly impacting society.',
-    2
+    2,
+    ''
   ),
   (
     '148',
@@ -1489,7 +1635,8 @@ VALUES (
     'logo/osu.png',
     'https://www.osu.edu/',
     'Discover the Ohio State difference. We create unrivaled experiences that bring together expertise, ideas and resources that improve communities locally and globally.',
-    2
+    2,
+    'OSU'
   ),
   (
     '149',
@@ -1498,8 +1645,9 @@ VALUES (
     'oicr',
     'logo/oicr.svg',
     'https://oicr.on.ca/',
-    'The Ontario Institute for Cancer Research helps close the gap between groundbreaking cancer discoveries and life-changing patient outcomes.  OICR is a research institute that collaborates with partners across Ontario and around the world to accelerate the development of new ...',
-    6
+    'The Ontario Institute for Cancer Research helps close the gap between groundbreaking cancer discoveries and life-changing patient outcomes. OICR is a research institute that collaborates with partners across Ontario and around the world to accelerate the development of new ...',
+    6,
+    'OICR'
   ),
   (
     '150',
@@ -1509,7 +1657,8 @@ VALUES (
     'logo/ohsu.jpg',
     'https://www.ohsu.edu/',
     'OHSU is Oregon''s only public academic health center. We are a system of hospitals and clinics across Oregon and southwest Washington. We are an institution of higher learning, with schools of medicine, nursing, pharmacy, dentistry and public health – and with a network of c...',
-    11
+    '11',
+    'OHSU'
   ),
   (
     '151',
@@ -1518,8 +1667,9 @@ VALUES (
     'ous',
     'logo/ous.png',
     'https://oslo-universitetssykehus.no/oslo-university-hospital',
-    '​Oslo University Hospital (OUS) ​is a highly specialised hospital in charge of extensive regional and local hospital assignments and the provision of high quality services for the citizens of Oslo. The hospital also has a nationwide responsibility for a number of national an...',
-    1
+    'Oslo University Hospital (OUS) is a highly specialised hospital in charge of extensive regional and local hospital assignments and the provision of high quality services for the citizens of Oslo. The hospital also has a nationwide responsibility for a number of national an...',
+    1,
+    'OUS'
   ),
   (
     '152',
@@ -1529,7 +1679,8 @@ VALUES (
     'logo/pnnl.png',
     'https://www.pnnl.gov/',
     'Pacific Northwest National Laboratory is a different kind of national lab. PNNL advances the frontiers of knowledge, taking on some of the world''s greatest science and technology challenges. Distinctive strengths in chemistry, Earth sciences, biology, and data science are c...',
-    2
+    2,
+    'PNNL'
   ),
   (
     '153',
@@ -1539,7 +1690,8 @@ VALUES (
     'logo/pfizer.jpg',
     'https://www.pfizer.com/',
     'We''re in relentless pursuit of breakthroughs that change patients'' lives. We innovate every day to make the world a healthier place. It was Charles Pfizer''s vision at the beginning and it holds true today.',
-    1
+    1,
+    'Pfizer'
   ),
   (
     '154',
@@ -1549,9 +1701,10 @@ VALUES (
     'logo/prize4life.jpeg',
     'http://www.prize4life.org',
     'This organization may no longer exists or has been merged under another organization.
-========
+======== 
 Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. In...',
-    2
+    2,
+    ''
   ),
   (
     '155',
@@ -1561,7 +1714,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/project-data-sphere.jpg',
     'https://www.projectdatasphere.org/',
     'At Project Data Sphere®, we believe in breaking down barriers to cancer clinical trial data sharing — barriers that historically have kept valuable trial data from ultimately benefitting the patients who so selflessly participate in them. By aggregating trial data from bioph...',
-    1
+    1,
+    ''
   ),
   (
     '156',
@@ -1571,7 +1725,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/prostate-cancer-canada.png',
     'https://cancer.ca/en/',
     'At the Canadian Cancer Society, we are committed to improving and saving lives. That''s why we are always looking for new ways to prevent cancer, find it early and treat it more successfully. It''s why we''re always ready to give people with cancer the help and support they ...',
-    2
+    2,
+    ''
   ),
   (
     '157',
@@ -1581,7 +1736,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/pcf.jpg',
     'https://www.pcf.org/',
     'The Prostate Cancer Foundation (PCF) funds the world''s most promising research to improve the prevention, detection, and treatment of prostate cancer and ultimately cure it for good.',
-    1
+    1,
+    'PCF'
   ),
   (
     '158',
@@ -1591,7 +1747,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/providence.jpg',
     'https://www.providence.org/en',
     'At Providence we see more than patients, we see the life that pulses through us all. That''s why we''re dedicated to a holistic approach to medicine that employs not only the most advanced treatments to improve outcomes, but also puts compassion and humanity at the heart of ...',
-    0
+    0,
+    'Providence'
   ),
   (
     '159',
@@ -1601,7 +1758,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/qimr-berghofer.jpg',
     'https://www.qimrberghofer.edu.au/',
     'From humble beginnings in 1945, the Queensland Institute of Medical Research, now known as QIMR Berghofer, is one of Australia''s most successful medical research institutes, translating discoveries from bench to bedside for a better future of health.',
-    1
+    1,
+    'QIMR Berghofer'
   ),
   (
     '160',
@@ -1611,7 +1769,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/queensu.jpg',
     'https://www.queensu.ca/',
     'We stand on a strong history of scholarship, discovery, and innovation. nOur education transforms Queen''s students. Our diversity enriches the community. Our research changes the world. Together, we are tackling humanity''s greatest challenges.',
-    0
+    0,
+    'QueensU'
   ),
   (
     '161',
@@ -1621,7 +1780,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/radboud-umc.jpeg',
     'https://www.radboudumc.nl/en/research',
     'Radboud university medical center specializes in patient care, scientific research, teaching and training. Our mission is to have a significant impact on health care. We aim to be pioneers in shaping the health care of the future. We do this in a person-centered and innovati...',
-    1
+    1,
+    'Radboud-umc'
   ),
   (
     '162',
@@ -1631,7 +1791,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rsna.png',
     'https://www.rsna.org/',
     'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world''s premier radiology forum, drawing app...',
-    1
+    1,
+    'RSNA'
   ),
   (
     '163',
@@ -1641,7 +1802,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://via.placeholder.com/300.png',
     '',
     'This organization may no longer exists or has been merged under another organization.',
-    0
+    0,
+    ''
   ),
   (
     '164',
@@ -1650,8 +1812,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'dolby-family-ventures',
     'logo/dolby-family-ventures.jpg',
     'http://www.dolbyventures.com/',
-    'Dolby Family Ventures is an early stage venture firm focused on building great technology companies. We partner with best-in-class innovators and strong investment syndicate partners at the seed stage of a company''s development.  The fund honors the legacy of Ray Dolby and ...',
-    1
+    'Dolby Family Ventures is an early stage venture firm focused on building great technology companies. We partner with best-in-class innovators and strong investment syndicate partners at the seed stage of a company''s development. The fund honors the legacy of Ray Dolby and ...',
+    1,
+    'Dolby Family Ventures'
   ),
   (
     '165',
@@ -1661,7 +1824,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rice.jpg',
     'https://www.rice.edu/',
     'Located in an urban environment on a 300-acre tree-lined campus, Rice University seizes its advantageous position to pursue pathbreaking research and create innovative collaboration opportunities that contribute to the betterment of our world.',
-    1
+    1,
+    'Rice'
   ),
   (
     '166',
@@ -1671,7 +1835,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rwjf.jpg',
     'https://www.rwjf.org/',
     'RWJF works in collaboration with policymakers, business leaders, community groups and many others. Together, we share a common interest in addressing the many harmful obstacles to wellbeing, including poverty, powerlessness, and discrimination, and advancing health equity fo...',
-    1
+    1,
+    'RWJF'
   ),
   (
     '167',
@@ -1681,7 +1846,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rockefeller.jpg',
     'https://www.rockefeller.edu/',
     'The world''s leading biomedical research university, Rockefeller draws top scientists and graduate students from around the world in pursuit of one mission: to conduct science for the benefit of humanity.',
-    1
+    1,
+    'Rockefeller'
   ),
   (
     '168',
@@ -1691,7 +1857,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://via.placeholder.com/300.png',
     '',
     'This organization may no longer exists or has been merged under another organization.',
-    1
+    1,
+    ''
   ),
   (
     '169',
@@ -1701,7 +1868,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rush.jpg',
     'https://www.rush.edu/',
     'Rush University System for Health is consistently recognized for our outstanding patient care, education, research and community partnerships. Learn more about our mission, history, policies and leadership.',
-    1
+    1,
+    'RUSH'
   ),
   (
     '170',
@@ -1711,7 +1879,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/rwth-aachen.png',
     'https://www.rwth-aachen.de/go/id/a/?lidx=1',
     'RWTH Aachen University is a place where the future of our industrialised world is thought out. The University is proving to be a hotspot with increasing international recognition where innovative answers to global challenges are developed.',
-    8
+    8,
+    'RWTH Aachen'
   ),
   (
     '171',
@@ -1720,8 +1889,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'sage',
     'logo/sage-bionetworks.png',
     'https://sagebionetworks.org/',
-    'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine.  We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together a...',
-    41
+    'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine. We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together a...',
+    '41',
+    'Sage'
   ),
   (
     '172',
@@ -1730,8 +1900,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'sanofi',
     'logo/sanofi.jpg',
     'https://www.sanofi.com/',
-    'We are Sanofi.  We are an innovative global healthcare company, driven by one purpose: we chase the miracles of science to improve people''s lives.  Our teams across the world strive to transform the practice of medicine, turning the impossible into the possible for patients...',
-    2
+    'We are Sanofi. We are an innovative global healthcare company, driven by one purpose: we chase the miracles of science to improve people''s lives. Our teams across the world strive to transform the practice of medicine, turning the impossible into the possible for patients...',
+    2,
+    ''
   ),
   (
     '173',
@@ -1741,7 +1912,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/sapienza.png',
     'https://www.uniroma1.it/en/pagina-strutturale/home',
     'Founded in 1303, Sapienza is the oldest university in Rome and the largest in Europe. Its mission is to contribute to the development of a knowledge society through research, excellence, quality education and international cooperation.',
-    3
+    3,
+    'Sapienza'
   ),
   (
     '174',
@@ -1751,7 +1923,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/sartorius.jpg',
     'https://www.sartorius.com/en',
     'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.',
-    0
+    0,
+    'Sartorius'
   ),
   (
     '175',
@@ -1761,7 +1934,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/fred-hutch.jpg',
     'https://www.seattlecca.org/',
     'SCCA is now Fred Hutchinson Cancer Center, an independent, nonprofit cancer care and research center that also serves as the cancer program for UW Medicine. The superior care you have come to expect will continue uninterrupted.',
-    1
+    1,
+    'SCCA'
   ),
   (
     '176',
@@ -1770,18 +1944,21 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'semmelweis-university',
     'logo/semmelweis-university.png',
     'https://semmelweis.hu/english/',
-    'Semmelweis University is a leading institution of higher education in Hungary and the Central European region within the area of medicine and health sciences. Its main commitment is based on the integrity of  education, research and healing, which make Semmelweis University ...',
-    2
+    'Semmelweis University is a leading institution of higher education in Hungary and the Central European region within the area of medicine and health sciences. Its main commitment is based on the integrity of education, research and healing, which make Semmelweis University ...',
+    2,
+    ''
   ),
   (
     '177',
     'Sentieon',
-    '​info@sentieon.com',
+    'info@sentieon.com',
     'sentieon',
     'logo/sentieon.jpg',
     'https://www.sentieon.com/',
-    'Sentieon(R), incorporated in July 2014, develops highly-optimized algorithms for bioinformatics applications, using the team''s expertise in algorithm, software, and system optimization.  Sentieon(R) is a team of professionals experienced in image processing, telecom, comput...',
-    1
+    'Sentieon(R
+  ), incorporated in July 2014, develops highly-optimized algorithms for bioinformatics applications, using the team''s expertise in algorithm, software, and system optimization. Sentieon(R) is a team of professionals experienced in image processing, telecom, comput...',
+    1,
+    ''
   ),
   (
     '178',
@@ -1791,7 +1968,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/siemens-healthineers.jpg',
     'https://www.siemens-healthineers.com/',
     'We pioneer breakthroughs in healthcare. For everyone. Everywhere.',
-    1
+    1,
+    ''
   ),
   (
     '179',
@@ -1801,7 +1979,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/stanford.jpg',
     'https://www.stanford.edu/',
     'Stanford was founded almost 150 years ago on a bedrock of societal purpose. Our mission is to contribute to the world by educating students for lives of leadership and purposeful contribution; advancing fundamental knowledge and cultivating creativity; and accelerating solut...',
-    6
+    6,
+    'Stanford'
   ),
   (
     '180',
@@ -1811,7 +1990,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/systemsx.jpg',
     'http://www.systemsx.ch/',
     'SystemsX.ch is the largest ever public research initiative in Switzerland and focuses specifically on a broad topical area of basic research. The initiative advances systems biology in our country with the claim of belonging to the best in the world in this area of research.',
-    1
+    1,
+    'SystemsX'
   ),
   (
     '181',
@@ -1821,7 +2001,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/takeda.jpg',
     'https://www.takeda.com/en-us/',
     'Takeda is a patient-focused, values-based, R&D-driven global biopharmaceutical company committed to bringing Better Health and a Brighter Future to people worldwide. Our passion and pursuit of potentially life-changing treatments for patients are deeply rooted in over 230 ye...',
-    2
+    2,
+    ''
   ),
   (
     '182',
@@ -1831,7 +2012,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/texas_biomed_2.png, tx_biomed1.png',
     'https://www.txbiomed.org/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '183',
@@ -1841,7 +2023,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uc_davis.png, uc-logo-gold.svg',
     'https://www.ucdavis.edu/',
     '',
-    2
+    2,
+    'UC Davis'
   ),
   (
     '184',
@@ -1851,7 +2034,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UT_Austin.svg',
     'https://www.utexas.edu/',
     '',
-    1
+    1,
+    'UT'
   ),
   (
     '185',
@@ -1861,7 +2045,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/jefferson.jpeg',
     'https://hospitals.jefferson.edu/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '186',
@@ -1871,7 +2056,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/tracinnovations.webp',
     'https://tracinnovations.com/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '187',
@@ -1881,7 +2067,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/tcd.png',
     'https://www.tcd.ie/Neuroscience/',
     '',
-    1
+    1,
+    'TCD - Neuroscience'
   ),
   (
     '188',
@@ -1891,7 +2078,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/tu_new_shield.svg',
     'https://tulane.edu/',
     '',
-    1
+    1,
+    'Tulane'
   ),
   (
     '189',
@@ -1901,7 +2089,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/fda.svg',
     'https://www.fda.gov/home',
     '',
-    12
+    12,
+    'FDA'
   ),
   (
     '190',
@@ -1911,7 +2100,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/unc.png',
     'https://pharmacy.unc.edu/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '191',
@@ -1921,7 +2111,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ua.png',
     'https://www.ua.edu/',
     '',
-    1
+    1,
+    'UA'
   ),
   (
     '192',
@@ -1931,7 +2122,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uab.png',
     'https://www.uab.edu/home/',
     '',
-    1
+    1,
+    'UAB'
   ),
   (
     '193',
@@ -1941,7 +2133,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/university-of-arkansas-for-medical-sciences.jpg',
     'https://www.uams.edu/',
     '',
-    1
+    1,
+    'UAMS'
   ),
   (
     '194',
@@ -1951,7 +2144,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uni_basel.svg',
     'https://www.unibas.ch/en.html',
     '',
-    2
+    2,
+    ''
   ),
   (
     '195',
@@ -1961,7 +2155,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UCSD.png',
     'https://ucsd.edu/',
     '',
-    1
+    1,
+    'UCSD'
   ),
   (
     '196',
@@ -1971,7 +2166,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ucsf.svg',
     'https://www.ucsf.edu/',
     '',
-    5
+    5,
+    'UCSF'
   ),
   (
     '197',
@@ -1981,7 +2177,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uc-santa-cruz-2021.svg',
     'https://www.ucsc.edu/',
     '',
-    5
+    5,
+    'UCSC'
   ),
   (
     '198',
@@ -1991,7 +2188,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/University_of_Cincinnati_Logo_PNG1.png',
     'https://www.uc.edu/',
     '',
-    1
+    1,
+    'UC'
   ),
   (
     '199',
@@ -2001,7 +2199,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/cu_anschutz.svg',
     'https://www.cuanschutz.edu/',
     '',
-    4
+    4,
+    'CU Anschutz'
   ),
   (
     '200',
@@ -2011,7 +2210,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uconn.png',
     'https://uconn.edu/',
     '',
-    1
+    1,
+    'UCONN'
   ),
   (
     '201',
@@ -2021,7 +2221,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uh-primary.svg',
     'https://www.uh.edu/',
     '',
-    1
+    1,
+    'UH'
   ),
   (
     '202',
@@ -2031,7 +2232,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/wordmark_horizontal.png',
     'https://illinois.edu/',
     '',
-    1
+    1,
+    'UIUC'
   ),
   (
     '203',
@@ -2041,7 +2243,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UKENT.jpeg',
     'https://www.kent.ac.uk/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '204',
@@ -2051,7 +2254,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/Kentucky-Wildcats-logo.png',
     'http://www.uky.edu/',
     '',
-    1
+    1,
+    'UKY'
   ),
   (
     '205',
@@ -2061,7 +2265,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/unil-logo.svg',
     'https://www.unil.ch/central/en/home.html',
     '',
-    2
+    2,
+    'UNIL'
   ),
   (
     '206',
@@ -2071,7 +2276,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ulisboa.png',
     'https://www.ulisboa.pt/en',
     '',
-    2
+    2,
+    'U Lisbon'
   ),
   (
     '207',
@@ -2081,7 +2287,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/University-of-london-logo_1.png',
     'https://london.ac.uk/',
     '',
-    2
+    2,
+    'UoL'
   ),
   (
     '208',
@@ -2091,7 +2298,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/university-of-luxembourglogo.png',
     'https://wwwen.uni.lu/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '209',
@@ -2101,7 +2309,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/University-of-Maryland-Logo-PNG1.png',
     'https://www.umd.edu/',
     '',
-    2
+    2,
+    'UMD'
   ),
   (
     '210',
@@ -2111,7 +2320,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/block-m-maize.png',
     'https://umich.edu/',
     '',
-    1
+    1,
+    'UMich'
   ),
   (
     '211',
@@ -2121,7 +2331,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UNIV_NC.png',
     'https://www.unc.edu/',
     '',
-    2
+    2,
+    'UNC'
   ),
   (
     '212',
@@ -2131,7 +2342,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/notre_dame.png',
     'https://www.nd.edu/',
     '',
-    0
+    0,
+    'Notre Dame'
   ),
   (
     '213',
@@ -2141,7 +2353,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/university-of-padua-unipd1424.png',
     'https://www.unipd.it/en/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '214',
@@ -2151,7 +2364,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/university-of-padua-unipd1424.png',
     'https://www.unipd.it/en/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '215',
@@ -2161,7 +2375,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UniversityofPennsylvania_FullLogo_RGB-4_0.png',
     'https://www.upenn.edu/',
     '',
-    4
+    4,
+    'UPenn'
   ),
   (
     '216',
@@ -2171,7 +2386,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/fea-ur-medicine1.png',
     'https://www.urmedicine.org/',
     '',
-    2
+    2,
+    ''
   ),
   (
     '217',
@@ -2181,7 +2397,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/University_of_South_Florida_seal.png',
     'https://www.usf.edu/',
     '',
-    1
+    1,
+    'USF'
   ),
   (
     '218',
@@ -2191,7 +2408,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/university-of-southampton.png',
     'https://www.southampton.ac.uk/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '219',
@@ -2201,7 +2419,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ut-swestern.gif',
     'https://www.utsouthwestern.edu/',
     '',
-    2
+    2,
+    'UTSW'
   ),
   (
     '220',
@@ -2211,7 +2430,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/utoronto.png',
     'https://www.utoronto.ca/',
     '',
-    5
+    5,
+    'UofT'
   ),
   (
     '221',
@@ -2221,7 +2441,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/the-university-of-vermont.png',
     'https://www.uvm.edu/',
     '',
-    1
+    1,
+    'UVM'
   ),
   (
     '222',
@@ -2231,7 +2452,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/UniversitàVerona.png',
     'https://www.univr.it/en/international',
     '',
-    1
+    1,
+    ''
   ),
   (
     '223',
@@ -2241,7 +2463,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uva_primary_logo.jpg',
     'https://www.virginia.edu/',
     '',
-    1
+    1,
+    'UVA'
   ),
   (
     '224',
@@ -2251,7 +2474,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/University_of_Washington.svg',
     'https://www.washington.edu/',
     '',
-    7
+    7,
+    'UW'
   ),
   (
     '225',
@@ -2261,7 +2485,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uw-logo.png',
     'https://www.wisc.edu/',
     '',
-    0
+    0,
+    'UW-Madison'
   ),
   (
     '226',
@@ -2271,7 +2496,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/Universit_Zrich_logo.png',
     'https://www.uzh.ch/en.html',
     '',
-    2
+    2,
+    'UZH'
   ),
   (
     '227',
@@ -2281,7 +2507,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ugei-logo.svg',
     'https://www.ugei.com/',
     '',
-    1
+    1,
+    'UGE'
   ),
   (
     '228',
@@ -2291,7 +2518,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/usarmy.png',
     'https://www.usamriid.army.mil/',
     '',
-    1
+    1,
+    'USAMRIID'
   ),
   (
     '229',
@@ -2301,7 +2529,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/va-logo-white.png',
     'https://www.durham.va.gov/',
     '',
-    2
+    2,
+    ''
   ),
   (
     '230',
@@ -2311,7 +2540,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/verily.jpeg',
     'https://verily.com/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '231',
@@ -2321,7 +2551,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/vaInnovation.jpeg',
     'https://www.va.gov/innovationecosystem/',
     '',
-    2
+    2,
+    'VHA IE'
   ),
   (
     '232',
@@ -2331,7 +2562,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/Washington_University_Seal.png',
     'https://wustl.edu/',
     '',
-    1
+    1,
+    'WUStL'
   ),
   (
     '233',
@@ -2341,7 +2573,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/wsu_primary_stacked_color.png',
     'https://wayne.edu/',
     '',
-    1
+    1,
+    ''
   ),
   (
     '234',
@@ -2351,7 +2584,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/WIZ11.jpeg',
     'https://www.weizmann.ac.il/pages/',
     '',
-    2
+    2,
+    ''
   ),
   (
     '235',
@@ -2361,7 +2595,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/Wellcome_Sanger_Logo.jpeg',
     'https://www.sanger.ac.uk/',
     '',
-    2
+    2,
+    'Sanger'
   ),
   (
     '236',
@@ -2371,7 +2606,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/US-WhiteHouse-Logo.png',
     'https://www.whitehouse.gov/ostp/',
     '',
-    1
+    1,
+    'OSTP'
   ),
   (
     '237',
@@ -2381,7 +2617,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/InChI-logo2.png',
     'https://www.inchi-trust.org/',
     '',
-    1
+    1,
+    'InChi'
   ),
   (
     '238',
@@ -2391,8 +2628,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://via.placeholder.com/300.png',
     'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
     '',
-    2
-  );
+    2,
+    'NCTR'
+    );
 
 -- contributor_roles data
 
