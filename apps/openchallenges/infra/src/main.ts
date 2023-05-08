@@ -12,6 +12,8 @@ import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
+import { Vpc } from '@cdktf/provider-aws/lib/vpc';
+// import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 import * as os from 'os';
 import * as fs from 'fs';
 import { TagsAddingAspect } from './aspect/tags-adding-aspect';
@@ -39,6 +41,34 @@ class OpenChallengesStack extends TerraformStack {
       publicKey,
       keyName,
     });
+
+    new Vpc(this, 'VPC', {
+      cidrBlock: '10.0.0.0/16',
+      tags: {
+        Name: 'OpenChallenges-VPC',
+      },
+    });
+
+    // const ports = [22, 80, 443, 5432];
+
+    // const securityGroup = new SecurityGroup(this, 'security_group', {
+    //   name: 'openchallenges-sg',
+    //   vpcId: 'openchallenges-vpc',
+    //   egress: [
+    //     {
+    //       fromPort: 0,
+    //       toPort: 0,
+    //       cidrBlocks: ['0.0.0.0/0'],
+    //       protocol: '-1',
+    //     },
+    //   ],
+    //   ingress: ports.map((port) => ({
+    //     fromPort: port,
+    //     toPort: port,
+    //     cidrBlocks: ['0.0.0.0/0'],
+    //     protocol: '-1',
+    //   })),
+    // });
 
     const ec2Instance = new Instance(this, 'compute', {
       ami: Ami.UBUNTU_22_04_LTS,
