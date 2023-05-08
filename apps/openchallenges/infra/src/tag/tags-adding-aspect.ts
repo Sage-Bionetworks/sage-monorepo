@@ -1,5 +1,5 @@
 import { IAspect } from 'cdktf/lib/aspect';
-import { IConstruct } from 'constructs/lib/construct';
+import { IConstruct } from 'constructs';
 import { isTaggableConstruct } from './util';
 import { logger } from '../logger';
 
@@ -15,6 +15,8 @@ export class TagsAddingAspect implements IAspect {
       // We need to take the input value to not create a circular reference
       const currentTags = node.tagsInput || {};
       node.tags = { ...this.tagsToAdd, ...currentTags };
+      // node.tagsInput is set here
+      // logger.info(`${node.tagsInput && 'CostCenter' in node.tagsInput}`);
     }
   }
 }
