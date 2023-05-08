@@ -1,6 +1,12 @@
 /* eslint-disable no-new */
 import { Construct } from 'constructs';
-import { App, TerraformOutput, TerraformStack } from 'cdktf';
+import {
+  App,
+  CloudBackend,
+  NamedCloudWorkspace,
+  TerraformOutput,
+  TerraformStack,
+} from 'cdktf';
 import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { Instance } from '@cdktf/provider-aws/lib/instance';
@@ -18,6 +24,7 @@ class OpenChallengesStack extends TerraformStack {
 
     new AwsProvider(this, 'AWS', {
       region: 'us-east-1',
+      // profile: 'cdktf',
     });
 
     const keyPair = new KeyPair(this, 'keypair', {
@@ -41,5 +48,12 @@ logger.setLevel(Level.Debug);
 logger.info('Welcome to the deployment of the OpenChallenges stack.');
 
 const app = new App();
-new OpenChallengesStack(app, 'openchallenges-stack');
+const stack = new OpenChallengesStack(app, 'openchallenges-stack');
+
+new CloudBackend(stack, {
+  hostname: 'app.terraform.io',
+  organization: 'sagebionetworks',
+  workspaces: new NamedCloudWorkspace('openchallenges-test'),
+});
+
 app.synth();
