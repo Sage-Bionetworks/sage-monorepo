@@ -141,7 +141,7 @@ class OpenChallengesStack extends TerraformStack {
       }
     );
 
-    new TerraformOutput(this, 'VPC id', {
+    new TerraformOutput(this, 'vpc_id', {
       value: vpc.id,
     });
 
