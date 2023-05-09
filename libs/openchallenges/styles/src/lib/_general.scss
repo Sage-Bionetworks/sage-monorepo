@@ -90,6 +90,9 @@ body {
 }
 
 // SEARCH PAGES
+#search-top {
+  padding: 0 32px 80px;
+}
 .search-sort-container {
   gap: 24px;
   justify-content: space-between;
@@ -337,6 +340,9 @@ table {
   }
   .col-12 {
     flex: 12;
+  }
+  #search-top {
+    padding: 0 132px 80px;
   }
   .profile-sidenav {
     max-width: 320px;
