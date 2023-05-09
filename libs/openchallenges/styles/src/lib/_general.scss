@@ -151,7 +151,8 @@ body {
   box-shadow: 1px 5px 18px 0px #d4d4d4;
 }
 #profile-details {
-  max-width: 760px;
+  // max-width: 760px;
+  max-width: 1060px;
 }
 #profile-activity {
   max-width: 320px;
@@ -279,12 +280,8 @@ table {
 
 // MEDIA QUERIES
 @media screen and (max-width: constants.$sm-breakpoint) {
-  #profile-details,
   .profile-activity-card {
     text-align: center;
-  }
-  .profile-type {
-    align-self: center;
   }
 }
 @media screen and (max-width: constants.$md-breakpoint) {
@@ -294,6 +291,13 @@ table {
   .card-group {
     flex-direction: column;
     align-items: center;
+  }
+  #profile-details {
+    max-width: 100%;
+    text-align: center;
+  }
+  .profile-type {
+    align-self: center;
   }
 }
 @media screen and (min-width: constants.$lg-breakpoint) {
