@@ -2,7 +2,7 @@
   <div id="bio" class="row">
     <div class="col">
       <h3 class="top-section-title">Overview</h3>
-      <p>{{ org.description }}</p>
+      <p>{{ use_default(org.description) }}</p>
     </div>
   </div>
   <div id="details">
@@ -14,7 +14,7 @@
       </tr> -->
       <tr>
         <td class="text-right">Contact Email</td>
-        <td>{{ email }}</td>
+        <td>{{ use_default(org.email) }}</td>
       </tr>
     </table>
   </div>

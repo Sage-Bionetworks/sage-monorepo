@@ -1,7 +1,7 @@
 <main *ngIf="challenge">
   <div id="bio">
     <h3 class="top-section-title">Overview</h3>
-    <p>{{ challenge.description }}</p>
+    <p>{{ use_default(challenge.description) }}</p>
   </div>
   <div id="details">
     <h3 class="section-title">Challenge Details</h3>
