@@ -72,6 +72,11 @@
   .profile-featured > .mat-icon {
     font-size: 60px;
   }
+  .profile-pic {
+    div.avatar-content {
+      font: 60px / 86px 'Lato', sans-serif !important;
+    }
+  }
   @media screen and (max-width: 641px) {
     #profile-details > h2 {
       font-size: 32px;
