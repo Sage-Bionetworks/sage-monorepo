@@ -11,7 +11,6 @@ import org.sagebionetworks.openchallenges.organization.service.model.mapper.Orga
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,11 +22,15 @@ public class OrganizationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(OrganizationService.class);
 
-  @Autowired private OrganizationRepository organizationRepository;
+  private final OrganizationRepository organizationRepository;
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "description");
+
+  public OrganizationService(OrganizationRepository organizationRepository) {
+    this.organizationRepository = organizationRepository;
+  }
 
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {

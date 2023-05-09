@@ -11,9 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class KeycloakManager {
 
-  @Autowired private KeycloakManagerProperties keycloakProperties;
+  private KeycloakManagerProperties keycloakProperties;
 
   private static Keycloak keycloakInstance = null;
+
+  public KeycloakManager(KeycloakManagerProperties keycloakProperties) {
+    this.keycloakProperties = keycloakProperties;
+  }
 
   public RealmResource getKeycloakInstanceWithRealm() {
     return getInstance().realm(keycloakProperties.getRealm());
