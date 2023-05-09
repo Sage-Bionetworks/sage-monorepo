@@ -946,7 +946,6 @@ components:
         - websiteUrl
         - createdAt
         - updatedAt
-        - acronym
     OrganizationsPage:
       type: object
       description: A page of organizations
