@@ -31,8 +31,8 @@ export class ChallengeComponent implements OnInit {
   public appVersion: string;
   challenge$!: Observable<Challenge>;
   loggedIn = false;
-  progressValue = 0;
-  remainDays!: number | undefined;
+  // progressValue = 0;
+  // remainDays!: number | undefined;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
@@ -73,18 +73,18 @@ export class ChallengeComponent implements OnInit {
         size: 250,
       };
 
-      this.progressValue =
-        challenge.startDate && challenge.endDate
-          ? this.calcProgress(
-              new Date().toUTCString(),
-              challenge.startDate,
-              challenge.endDate
-            )
-          : 0;
+      // this.progressValue =
+      //   challenge.startDate && challenge.endDate
+      //     ? this.calcProgress(
+      //         new Date().toUTCString(),
+      //         challenge.startDate,
+      //         challenge.endDate
+      //       )
+      //     : 0;
 
-      this.remainDays = challenge.endDate
-        ? this.calcDays(new Date().toUTCString(), challenge.endDate)
-        : undefined;
+      // this.remainDays = challenge.endDate
+      //   ? this.calcDays(new Date().toUTCString(), challenge.endDate)
+      //   : undefined;
     });
 
     const activeTabSub = this.activatedRoute.queryParamMap
@@ -97,15 +97,15 @@ export class ChallengeComponent implements OnInit {
     this.subscriptions.push(activeTabSub);
   }
 
-  calcDays(startDate: string, endDate: string): number {
-    const timeDiff = +new Date(endDate) - +new Date(startDate);
-    return Math.round(timeDiff / (1000 * 60 * 60 * 24));
-  }
+  // calcDays(startDate: string, endDate: string): number {
+  //   const timeDiff = +new Date(endDate) - +new Date(startDate);
+  //   return Math.round(timeDiff / (1000 * 60 * 60 * 24));
+  // }
 
-  calcProgress(today: string, startDate: string, endDate: string): number {
-    return (
-      (this.calcDays(startDate, today) / this.calcDays(startDate, endDate)) *
-      100
-    );
-  }
+  // calcProgress(today: string, startDate: string, endDate: string): number {
+  //   return (
+  //     (this.calcDays(startDate, today) / this.calcDays(startDate, endDate)) *
+  //     100
+  //   );
+  // }
 }
