@@ -16,7 +16,7 @@
       </tr>
       <tr>
         <td class="text-right">Status</td>
-        <td>{{ challenge.status }}</td>
+        <td>{{ prettify(challenge.status) }}</td>
       </tr>
       <tr>
         <td class="text-right">Platform</td>
@@ -26,16 +26,15 @@
         <td class="text-right">Website URL</td>
         <td>{{ challenge.websiteUrl }}</td>
       </tr>
-      <tr>
-        <!-- TODO: replace with doi from challenge object -->
+      <!-- <tr>
         <td class="text-right">DOI</td>
         <td>{{ mockDoi }}</td>
-      </tr>
+      </tr> -->
       <tr>
         <td class="text-right">Submission Type</td>
         <td>
           <span nowrap *ngFor="let submissionType of challenge.submissionTypes; let isLast = last">
-            {{ printCamel(submissionType) }}{{ isLast ? '' : ', ' }}</span
+            {{ prettify(submissionType) }}{{ isLast ? '' : ', ' }}</span
           >
         </td>
       </tr>
@@ -43,7 +42,7 @@
         <td class="text-right">Data Type(s)</td>
         <td>
           <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
-            {{ dataType }}{{ isLast ? '' : ', ' }}
+            {{ prettify(dataType.name) }}{{ isLast ? '' : ', ' }}
           </span>
         </td>
       </tr>
@@ -51,13 +50,13 @@
         <td class="text-right">Incentive(s)</td>
         <td>
           <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
-            {{ printCamel(incentive) }}{{ isLast ? '' : ', ' }}</span
+            {{ prettify(incentive) }}{{ isLast ? '' : ', ' }}</span
           >
         </td>
       </tr>
     </table>
   </div>
-  <div id="info">
+  <!-- <div id="info">
     <div class="col">
       <h3 class="section-title">Hosted By</h3>
       <div class="card-group">
@@ -67,7 +66,7 @@
         ></openchallenges-organization-card>
       </div>
     </div>
-  </div>
+  </div> -->
   <span class="mat-caption created-updated-dates"
     >Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }}
   </span>
