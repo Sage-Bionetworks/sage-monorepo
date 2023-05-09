@@ -1,10 +1,10 @@
 <div class="stats-group">
   <div class="stat-item">
-    <h3>1937</h3>
+    <h3>{{ shorthand(mockStargazers) }}</h3>
     <p class="mat-caption">views</p>
   </div>
   <div class="stat-item">
-    <h3>2</h3>
+    <h3>{{ shorthand(mockViews) }}</h3>
     <p class="mat-caption">stargazers</p>
   </div>
   <div class="stat-item action-btn" *ngIf="loggedIn">
