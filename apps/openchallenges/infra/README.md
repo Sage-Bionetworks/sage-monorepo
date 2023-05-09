@@ -14,6 +14,7 @@ TODO: Document the roles that this user should have
 
 ### Set AWS configuration
 
+<<<<<<< HEAD
 The configuration differs depending on whether the stack is deployed from the local environment or
 from a TF cloud environment.
 
@@ -24,17 +25,24 @@ from a TF cloud environment.
 TF reads the local AWS credentials when deploying the stack with TF local backend. Stack state files
 will be stored locally.
 
+=======
+>>>>>>> 0cf849e4 (feat(property): Allow user/data curator to specify the avatar initials for organizations (backend) (#1504))
 Run this command to quickly set your credentials, Region, and output format. The following example
 shows sample credentials that should be replaced.
 
 ```console
+<<<<<<< HEAD
 $ aws configure --profile cdktf
+=======
+$ aws configure
+>>>>>>> 0cf849e4 (feat(property): Allow user/data curator to specify the avatar initials for organizations (backend) (#1504))
 AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
 AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 Default region name [None]: us-east-1
 Default output format [None]
 ```
 
+<<<<<<< HEAD
 #### When using TF cloud backend
 
 When using TF cloud backend, the deployment of the stacks will be executed from a cloud environment
@@ -51,6 +59,8 @@ stack with the AWS provider.
 4. [Add a variable] named `AWS_ACCESS_KEY_ID` (sensitive, environment variable).
 5. [Add a variable] named `AWS_SECRET_ACCESS_KEY` (sensitive, environment variable).
 
+=======
+>>>>>>> 0cf849e4 (feat(property): Allow user/data curator to specify the avatar initials for organizations (backend) (#1504))
 ### Generate an SSH key for accessing the EC2 instance
 
 Generate the SSH key for connecting to the EC2 instance that we will create as part of the stack.
@@ -95,5 +105,9 @@ cdktf destroy
 
 [Terraform CDK]: https://developer.hashicorp.com/terraform/cdktf
 
+<<<<<<< HEAD
 [DK for Terraform]: https://developer.hashicorp.com/terraform/cdktf
 [Add a variable]: https://developer.hashicorp.com/terraform/cloud-docs/workspaces/variables/managing-variables#add-a-variable
+=======
+[DK for Terraform]: https://developer.hashicorp.com/terraform/cdktf
+>>>>>>> 0cf849e4 (feat(property): Allow user/data curator to specify the avatar initials for organizations (backend) (#1504))

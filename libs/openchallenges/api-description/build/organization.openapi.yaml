@@ -198,6 +198,9 @@ components:
           type: string
           format: date-time
           example: '2022-07-04T22:19:11Z'
+        acronym:
+          type: string
+          example: OC
       required:
         - name
         - email
@@ -207,6 +210,7 @@ components:
         - websiteUrl
         - createdAt
         - updatedAt
+        - acronym
     OrganizationsPage:
       type: object
       description: A page of organizations

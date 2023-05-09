@@ -47,6 +47,9 @@ public class OrganizationDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
+  @JsonProperty("acronym")
+  private String acronym;
+
   public OrganizationDto name(String name) {
     this.name = name;
     return this;
@@ -240,6 +243,26 @@ public class OrganizationDto {
     this.updatedAt = updatedAt;
   }
 
+  public OrganizationDto acronym(String acronym) {
+    this.acronym = acronym;
+    return this;
+  }
+
+  /**
+   * Get acronym
+   *
+   * @return acronym
+   */
+  @NotNull
+  @Schema(name = "acronym", example = "OC", required = true)
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -257,7 +280,8 @@ public class OrganizationDto {
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
         && Objects.equals(this.createdAt, organization.createdAt)
-        && Objects.equals(this.updatedAt, organization.updatedAt);
+        && Objects.equals(this.updatedAt, organization.updatedAt)
+        && Objects.equals(this.acronym, organization.acronym);
   }
 
   @Override
@@ -271,7 +295,8 @@ public class OrganizationDto {
         websiteUrl,
         challengeCount,
         createdAt,
-        updatedAt);
+        updatedAt,
+        acronym);
   }
 
   @Override
@@ -287,6 +312,7 @@ public class OrganizationDto {
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -11,6 +11,10 @@ CREATE TABLE `organization` (
   `challenge_count` int,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+<<<<<<< HEAD
+=======
+  `acronym` varchar(255) DEFAULT NULL,
+>>>>>>> 0cf849e4 (feat(property): Allow user/data curator to specify the avatar initials for organizations (backend) (#1504))
   PRIMARY KEY (`id`),
   CONSTRAINT login_check CHECK (char_length(login) >= 2)
 );
