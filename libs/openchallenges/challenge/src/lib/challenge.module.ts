@@ -3,14 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
-import { ChallengeDetailsModule } from './challenge-details/challenge-details.module';
 import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
 import { ChallengeOrganizersModule } from './challenge-organizers/challenge-organizers.module';
 import { ChallengeSponsorsModule } from './challenge-sponsors/challenge-sponsors.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
-import { ProgressBarModule } from 'primeng/progressbar';
+// import { ProgressBarModule } from 'primeng/progressbar';
 import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
 
 @NgModule({
@@ -19,14 +18,13 @@ import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
     CommonModule,
     MatTabsModule,
     MatIconModule,
-    ChallengeDetailsModule,
     ChallengeOverviewModule,
     ChallengeOrganizersModule,
     ChallengeSponsorsModule,
     ChallengeStargazersModule,
     ChallengeRoutingModule,
     ChallengeStatsModule,
-    ProgressBarModule,
+    // ProgressBarModule,
     UiModule,
     FooterComponent,
   ],

@@ -19,22 +19,25 @@
         information about relevant challenges, as well as organizers with standardized challenge
         templates and intelligence.
       </p>
-      <p class="mat-body-strong">Let us help find the perfect challenge for you!</p>
-      <div class="search field field-grouped">
-        <div class="control control-expanded">
-          <input
-            class="input"
-            type="search"
-            name="search"
-            (keydown.enter)="onSearch()"
-            placeholder="I am interested in..."
-            [(ngModel)]="searchTerms"
-          />
-        </div>
-        <div class="control">
-          <button mat-raised-button class="btn" color="primary" (click)="onSearch()">Search</button>
-        </div>
-      </div>
+    </div>
+    <div class="img">
+      <img [src]="(searchOC$ | async)?.url" alt="Search OpenChallenges">
+    </div>
+  </div>
+</section>
+<section id="search-oc" class="mat-typography">
+  <div class="container row">
+    <h3>Let us help find the perfect challenge for you!</h3>
+  </div>
+  <div class="container row">
+    <div class="search-field">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerms"
+        (keydown.enter)="onSearch()"
+        placeholder="I'm looking for..."
+      />
     </div>
   </div>
 </section>

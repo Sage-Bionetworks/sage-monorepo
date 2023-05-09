@@ -24,6 +24,7 @@
 @mixin typography($theme) {
   .action-btn {
     font-size: 21px;
+    text-decoration: none;
   }
   .stat-item > h4 {
     line-height: 0.5;

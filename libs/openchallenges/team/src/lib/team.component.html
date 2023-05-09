@@ -1,6 +1,6 @@
 <main id="team" class="base mat-typography">
   <div class="top-design section-inner">
-    <img class="logo-icon" src="assets/images/openchallenges-icon.svg" alt="OpenChallenges Icon" />
+    <img class="logo-icon" [src]="(logo$ | async)?.url" alt="OpenChallenges Icon" />
     <h2>Meet Our Team</h2>
     <p class="mat-body-strong">
       We're smart, we're hard-working, and we love a <em>good challenge</em>.
@@ -8,34 +8,34 @@
   </div>
   <div class="member-group">
     <div class="member-card">
-      <img class="member-pic" src="assets/images/thomas.png" alt="Thomas Schaffter" />
+      <img class="member-pic" [src]="(thomas$ | async)?.url" alt="Thomas Schaffter" />
       <h3 class="card-name">Thomas Schaffter</h3>
       <p class="card-roles">Project lead, Architect, Backend developer</p>
     </div>
     <div class="member-card">
-      <img class="member-pic" src="assets/images/rong.png" alt="Rong Chai" />
+      <img class="member-pic" [src]="(rong$ | async)?.url" alt="Rong Chai" />
       <h3 class="card-name">Rong Chai</h3>
       <p class="card-roles">Frontend developer</p>
     </div>
     <div class="member-card">
-      <img class="member-pic" src="assets/images/verena.png" alt="Verena Chung" />
+      <img class="member-pic" [src]="(verena$ | async)?.url" alt="Verena Chung" />
       <h3 class="card-name">Verena Chung</h3>
       <p class="card-roles">Frontend developer</p>
     </div>
     <div class="member-card">
-      <img class="member-pic" src="assets/images/maria.png" alt="Maria Diaz" />
+      <img class="member-pic" [src]="(maria$ | async)?.url" alt="Maria Diaz" />
       <h3 class="card-name">Maria Diaz</h3>
       <p class="card-roles">Backend developer</p>
     </div>
   </div>
   <div class="member-group">
     <div class="member-card">
-      <img class="member-pic" src="assets/images/jake.png" alt="Jake Albrecht" />
+      <img class="member-pic" [src]="(jake$ | async)?.url" alt="Jake Albrecht" />
       <h3 class="card-name">Jake Albrecht</h3>
       <p class="card-roles">Director</p>
     </div>
     <div class="member-card">
-      <img class="member-pic" src="assets/images/amy.png" alt="Amy Heiser" />
+      <img class="member-pic" [src]="(amy$ | async)?.url" alt="Amy Heiser" />
       <h3 class="card-name">Amy Heiser</h3>
       <p class="card-roles">Program manager</p>
     </div>
