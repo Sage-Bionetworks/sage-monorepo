@@ -1,4 +1,14 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  Challenge,
+  ChallengeService,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
+import {
+  HttpStatusRedirect,
+  handleHttpError,
+} from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge-stats',
@@ -7,12 +17,36 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ChallengeStatsComponent implements OnInit {
   @Input() loggedIn = false;
+  challenge$!: Observable<Challenge>;
   mockViews!: number;
   mockStargazers!: number;
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private challengeService: ChallengeService
+  ) {}
 
   ngOnInit(): void {
     this.mockViews = 2;
     this.mockStargazers = 9_999;
+
+    this.challenge$ = this.activatedRoute.params.pipe(
+      switchMap((params) =>
+        this.challengeService.getChallenge(params['challengeId'])
+      ),
+      switchMap((challenge) => {
+        this.router.navigate(['/challenge', challenge.id, challenge.slug]);
+        return of(challenge);
+      }),
+      catchError((err) => {
+        const error = handleHttpError(err, this.router, {
+          404: '/not-found',
+          400: '/challenge',
+        } as HttpStatusRedirect);
+        return throwError(() => error);
+      })
+    );
   }
 
   shorthand(n: number) {

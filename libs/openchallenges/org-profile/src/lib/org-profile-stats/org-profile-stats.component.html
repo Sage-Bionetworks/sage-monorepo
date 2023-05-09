@@ -1,4 +1,4 @@
-<div class="stats-group">
+<div *ngIf="organization$ | async as org" class="stats-group">
   <div class="stat-item">
     <h3>{{ shorthand(mockStargazers) }}</h3>
     <p class="mat-caption">challenges</p>
@@ -10,10 +10,12 @@
   <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
   </div> -->
-  <div class="stat-item action-btn" *ngIf="loggedIn">
-      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon> Go to Website
-  </div>
-  <div class="stat-item action-btn" *ngIf="!loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon> Request to Join
-  </div>
+  <a href="{{ org.websiteUrl }}" class="stat-item action-btn" *ngIf="loggedIn">
+      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+      Go to Website
+  </a>
+  <a href="#" class="stat-item action-btn" *ngIf="!loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
+    Request to Join
+  </a>
 </div>
