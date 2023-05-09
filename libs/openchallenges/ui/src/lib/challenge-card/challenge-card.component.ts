@@ -45,8 +45,8 @@ export class ChallengeCardComponent implements OnInit {
           : this.challenge.incentives
               .map(function (s) {
                 return (
-                  s[0].toUpperCase() +
-                  s.substring(1).replace('_', ' ').toLowerCase()
+                  s.charAt(0).toUpperCase() +
+                  s.slice(1).replace(/_/g, ' ').toLowerCase()
                 );
               })
               .join(', ');

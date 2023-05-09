@@ -22,7 +22,8 @@ export class ChallengeOverviewComponent {
 
   prettify(camel: string | undefined) {
     return camel
-      ? camel.charAt(0).toUpperCase() + camel.slice(1).replace(/_/g, ' ')
+      ? camel.charAt(0).toUpperCase() +
+          camel.slice(1).replace(/_/g, ' ').toLowerCase()
       : undefined;
   }
 }
