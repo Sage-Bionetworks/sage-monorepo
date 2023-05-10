@@ -31,12 +31,14 @@
     border-color: transparent;
     &:focus,
     &:hover {
-      background-color: map.get($figma, dl-color-default-hover2);
+      background-color: map.get($figma, dl-color-default-primary1);
+      color: white;
     }
     color: black;
   }
   .profile-nav-item.active-tab {
-    background-color: map.get($figma, dl-color-default-hover2);
+    background-color: map.get($figma, dl-color-default-navbardark);
+    color: white;
   }
 
   .status {
