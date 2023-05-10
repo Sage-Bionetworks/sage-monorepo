@@ -19,6 +19,12 @@
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
+
+  .organization-card-banner {
+    div.avatar-content {
+      font-family: 'Lato', sans-serif !important;
+    }
+  }
 }
 
 @mixin theme($theme) {

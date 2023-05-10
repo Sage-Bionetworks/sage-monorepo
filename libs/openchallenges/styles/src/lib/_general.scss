@@ -143,7 +143,8 @@ body {
   flex: 1 0 auto;
   padding: 22px;
 }
-.profile-pic {
+.profile-pic,
+.organization-card-banner {
   // width: 40px;
   // object-fit: cover;
   margin: 8px;
@@ -152,6 +153,13 @@ body {
   box-sizing: border-box;
   border-radius: constants.$dl-radius-radius-round;
   box-shadow: 1px 5px 18px 0px #d4d4d4;
+
+  div.avatar-content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 #profile-details {
   // max-width: 760px;
