@@ -28,7 +28,7 @@ export class AvatarComponent {
       } else if (avatar.name) {
         this.name = avatar.name;
       }
-      // this.src = avatar.src || '';
+      this.src = avatar.src || '';
       this.size = avatar.size;
     }
   }
