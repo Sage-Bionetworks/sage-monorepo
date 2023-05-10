@@ -58,8 +58,10 @@ public class OrganizationService {
             org -> {
               // The avatar url in the org data model is actually an object key.
               // TODO Handle errors
-              ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
-              org.setAvatarUrl(image.getUrl());
+              if (!(org.getAvatarUrl() == null || org.getAvatarUrl().isBlank())) {
+                ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
+                org.setAvatarUrl(image.getUrl());
+              }
             });
 
     LOG.info("Final orgs {}", organizations);
@@ -89,8 +91,10 @@ public class OrganizationService {
     OrganizationDto org = organizationMapper.convertToDto(orgEntity);
 
     // Convert the image object key to URL
-    ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
-    org.setAvatarUrl(image.getUrl());
+    if (!(org.getAvatarUrl() == null || org.getAvatarUrl().isBlank())) {
+      ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
+      org.setAvatarUrl(image.getUrl());
+    }
 
     return org;
   }
