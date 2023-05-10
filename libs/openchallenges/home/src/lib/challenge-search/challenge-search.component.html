@@ -1,6 +1,6 @@
 <section id="landing" class="mat-typography">
-  <div class="container">
-    <div class="landing-content">
+  <div class="container row">
+    <div class="col-8">
       <h1>
         I want to find challenges related to
         <ngx-typed-js
@@ -13,14 +13,14 @@
           <span class="typing"></span>
         </ngx-typed-js>
       </h1>
-      <p class="mat-body-strong about-rocc">
+      <p class="mat-body-strong">
         OpenChallenges strives to provide a centralized hub of biomedical challenges from various
         hosting organizations. Our goal is to empower both participants with the most up-to-date 
         information about relevant challenges, as well as organizers with standardized challenge
         templates and intelligence.
       </p>
     </div>
-    <div class="img">
+    <div class="col-4">
       <img [src]="(searchOC$ | async)?.url" alt="Search OpenChallenges">
     </div>
   </div>
