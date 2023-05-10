@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
+import { AvatarModule as NgxAvatarModule } from 'ngx-avatars';
 import { Avatar } from './avatar';
 
 @Component({
   selector: 'openchallenges-avatar',
+  standalone: true,
+  imports: [NgxAvatarModule],
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],
 })

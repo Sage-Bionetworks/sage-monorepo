@@ -11,7 +11,11 @@ import { ChallengeStargazersModule } from './challenge-stargazers/challenge-star
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
+import {
+  AvatarComponent,
+  FooterComponent,
+  UiModule,
+} from '@sagebionetworks/openchallenges/ui';
 
 @NgModule({
   declarations: [ChallengeComponent],
@@ -28,6 +32,7 @@ import { FooterComponent, UiModule } from '@sagebionetworks/openchallenges/ui';
     ChallengeStatsModule,
     ProgressBarModule,
     UiModule,
+    AvatarComponent,
     FooterComponent,
   ],
   exports: [ChallengeComponent],

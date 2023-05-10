@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AvatarModule } from '../avatar/avatar.module';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { OrganizationCardComponent } from './organization-card.component';
 import { MOCK_ORGANIZATIONS } from './mock-organizations';
 import { HttpClientModule } from '@angular/common/http';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 describe('OrganizationCardComponent', () => {
   let component: OrganizationCardComponent;
@@ -16,7 +16,7 @@ describe('OrganizationCardComponent', () => {
       declarations: [OrganizationCardComponent],
       imports: [
         HttpClientModule,
-        AvatarModule,
+        AvatarComponent,
         MatCardModule,
         MatDividerModule,
         MatIconModule,
