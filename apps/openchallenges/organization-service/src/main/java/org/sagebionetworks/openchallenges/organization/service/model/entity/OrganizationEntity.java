@@ -78,4 +78,7 @@ public class OrganizationEntity {
 
   @Column(name = "updated_at")
   private OffsetDateTime updatedAt;
+
+  @Column(name = "acronym", nullable = true)
+  private String acronym;
 }

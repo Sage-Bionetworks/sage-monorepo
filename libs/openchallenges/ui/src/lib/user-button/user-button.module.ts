@@ -6,7 +6,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatLegacyMenuModule as MatMenuModule } from '@angular/material/legacy-menu';
 import { UserButtonComponent } from './user-button.component';
-import { AvatarModule } from '../avatar/avatar.module';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @NgModule({
   declarations: [UserButtonComponent],
@@ -17,7 +17,7 @@ import { AvatarModule } from '../avatar/avatar.module';
     MatDividerModule,
     MatIconModule,
     MatMenuModule,
-    AvatarModule,
+    AvatarComponent,
   ],
   exports: [UserButtonComponent],
 })

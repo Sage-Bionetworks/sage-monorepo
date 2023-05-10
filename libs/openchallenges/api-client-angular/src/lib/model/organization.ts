@@ -30,5 +30,6 @@ export interface Organization {
     challengeCount?: number;
     createdAt: string;
     updatedAt: string;
+    acronym: string;
 }
 
