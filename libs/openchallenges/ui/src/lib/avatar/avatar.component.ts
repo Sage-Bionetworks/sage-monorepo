@@ -13,11 +13,21 @@ export class AvatarComponent {
   @Input() name = '';
   @Input() src = '';
   @Input() size = 32;
+  @Input() value = '';
+  initialsSize = 2;
 
   @Input() set avatar(avatar: Avatar) {
     if (avatar) {
-      this.name = avatar.name;
-      this.src = avatar.src;
+      // Here we change the default ngx-avatars priority from name > value to value > name
+      if (avatar.value) {
+        this.value =
+          avatar.value.length > this.initialsSize
+            ? avatar.value.substring(0, this.initialsSize)
+            : avatar.value;
+      } else if (avatar.name) {
+        this.name = avatar.name;
+      }
+      // this.src = avatar.src;
       this.size = avatar.size;
     }
   }
@@ -27,6 +37,7 @@ export class AvatarComponent {
       name: this.name,
       src: this.src,
       size: this.size,
+      value: this.value,
     };
   }
 }
