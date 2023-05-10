@@ -56,6 +56,11 @@
   .username {
     font-size: 28px;
   }
+  .profile-pic {
+    div.avatar-content {
+      font-family: 'Lato', sans-serif !important;
+    }
+  }
   @media screen and (max-width: 641px) {
     #profile-details > h2 {
       font-size: 32px;

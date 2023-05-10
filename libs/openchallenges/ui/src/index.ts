@@ -1,6 +1,7 @@
 export * from './lib/ui.module';
 
 export * from './lib/avatar/avatar';
+export * from './lib/avatar/avatar.component';
 export * from './lib/challenge-card/mock-challenges';
 export * from './lib/challenge-card/mock-platforms';
 export * from './lib/checkbox-filter/filter.model';
