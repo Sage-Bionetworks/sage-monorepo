@@ -14,6 +14,7 @@ export class AvatarComponent {
   @Input() src = '';
   @Input() size = 32;
   @Input() value = '';
+  // ngx-avatars uses this value internally when generating the initials from `name`
   initialsSize = 2;
 
   @Input() set avatar(avatar: Avatar) {
