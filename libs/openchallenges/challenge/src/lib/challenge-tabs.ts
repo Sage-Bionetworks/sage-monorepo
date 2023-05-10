@@ -5,10 +5,6 @@ export const CHALLENGE_TABS: { [key: string]: Tab } = {
     name: 'Overview',
     visible: true,
   },
-  details: {
-    name: 'Challenge Details',
-    visible: true,
-  },
   organizers: {
     name: 'Organizers',
     visible: true,

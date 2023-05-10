@@ -12,10 +12,6 @@
     background-color: map.get($figma, dl-color-gray-white);
     box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
   }
-  .card-banner {
-    border-color: transparent;
-    background-color: map.get($figma, dl-color-default-accent2);
-  }
   .star-btn {
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);

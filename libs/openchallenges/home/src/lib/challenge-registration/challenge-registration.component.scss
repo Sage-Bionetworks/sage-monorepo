@@ -1,4 +1,4 @@
-$screen-sm: 481px;
+@use 'libs/openchallenges/styles/src/lib/constants';
 
 // GENERAL CLASSES
 .container {
@@ -8,11 +8,16 @@ $screen-sm: 481px;
 #organizer-cta .row {
   padding: 18px 88px;
 }
+#organizer-cta [class^="col-"] {
+  margin: 15px;
+}
 .section-title {
   text-align: center;
   margin-bottom: 42px;
 }
-
+.side-img {
+  width: 500px;
+}
 .text-light {
   color: rgba(255, 255, 255, 0.4);
 }
@@ -29,4 +34,13 @@ $screen-sm: 481px;
   position: relative;
   background-color: #11103e;
 }
-
+@media screen and (max-width: constants.$sm-breakpoint) {
+  .side-img {
+    width: 50px;
+  }
+}
+@media screen and (max-width: constants.$md-breakpoint) {
+  .side-img {
+    width: 400px;
+  }
+}

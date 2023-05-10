@@ -8,13 +8,10 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  #breadcrumbs a {
-    color: black;
-  }
   .search-field > i {
     color: map.get($figma, dl-color-default-primary2);
   }
-  #top {
+  #search-top {
     background-color: #f8f8f8;
   }
   .facets {
@@ -32,12 +29,6 @@
 }
 
 @mixin typography($theme) {
-  #breadcrumbs a {
-    text-decoration: none;
-  }
-  #breadcrumbs span {
-    font-weight: bolder;
-  }
   .mat-checkbox,
   .mat-select,
   .p-component {

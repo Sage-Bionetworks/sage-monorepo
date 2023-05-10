@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
 import { SponsorListComponent } from './sponsor-list.component';
 
 describe('SponsorListComponent', () => {
@@ -8,6 +8,7 @@ describe('SponsorListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [HttpClientModule],
       declarations: [SponsorListComponent],
     }).compileComponents();
   });
