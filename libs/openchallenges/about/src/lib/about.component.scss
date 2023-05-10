@@ -7,25 +7,21 @@ main {
     margin-bottom: 40px;
   }
 }
-
 .container {
   max-width: 1366px;
   margin: 0 auto;
-  padding: 16px;
+  padding: 16px 60px;
 }
-
 .section-inner {
   position: relative;
   padding-top: 48px;
   padding-bottom: 48px;
 }
-
 h2,
 h3,
 .welcome-msg {
   text-align: center;
 }
-
 .title {
   background: url('/openchallenges-assets/images/about-banner.svg');
   background-size: cover;
@@ -41,18 +37,15 @@ h3,
     }
   }
 }
-
 .welcome-msg {
   margin: 40px 0 0;
 }
-
 .goals {
   .cards-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
-
   .card {
     flex: 0 1 20%;
     display: flex;
@@ -71,9 +64,8 @@ h3,
       text-align: center;
 
     }
-
     li {
-      padding: 0 8px;
+      padding: 0 4px;
 
       &:not(:last-child) {
         margin-bottom: 8px;
