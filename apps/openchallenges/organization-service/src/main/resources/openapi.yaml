@@ -273,7 +273,6 @@ components:
           type: string
         avatarKey:
           example: logo/dream.png
-          nullable: true
           type: string
         websiteUrl:
           example: https://example.com

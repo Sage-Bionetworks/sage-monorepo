@@ -31,7 +31,7 @@ public class OrganizationDto {
   private String description;
 
   @JsonProperty("avatarKey")
-  private String avatarKey = null;
+  private String avatarKey;
 
   @JsonProperty("websiteUrl")
   private String websiteUrl;

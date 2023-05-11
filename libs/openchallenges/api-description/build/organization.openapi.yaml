@@ -179,7 +179,6 @@ components:
         avatarKey:
           type: string
           example: logo/dream.png
-          nullable: true
         websiteUrl:
           type: string
           format: url
