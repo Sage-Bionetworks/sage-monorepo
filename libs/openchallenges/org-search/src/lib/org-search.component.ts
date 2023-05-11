@@ -4,6 +4,7 @@ import {
   OrganizationSearchQuery,
   ImageService,
   ImageQuery,
+  Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -22,11 +23,13 @@ import {
   map,
   of,
   combineLatest,
+  Observable,
 } from 'rxjs';
 import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  shareReplay,
   takeUntil,
 } from 'rxjs/operators';
 import { assign } from 'lodash';
@@ -52,7 +55,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   private destroy = new Subject<void>();
   searchTermValue = '';
 
-  // organizations: Organization[] = [];
   organizationCards: OrganizationCard[] = [];
   totalOrgCount = 0;
 
@@ -102,50 +104,60 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         this.query.next(newQuery);
       });
 
-    this.query
-      .pipe(
-        tap((query) => console.log('Query: ', query)),
-        switchMap((query) => {
-          const page$ = this.organizationService.listOrganizations(query);
-
-          const avatarUrls$ = page$.pipe(
-            map((page) => page.organizations),
-            switchMap((orgs) =>
-              forkJoinConcurrent(
-                orgs.map((org) => {
-                  if (org.avatarKey && org.avatarKey.length > 0) {
-                    return this.imageService.getImage({
-                      objectKey: org.avatarKey,
-                    } as ImageQuery);
-                  } else {
-                    return of(undefined);
-                  }
-                }),
-                10
-              )
-            )
+    // get the organizations
+    const orgPage$ = this.query.pipe(
+      tap((query) => console.log('Query: ', query)),
+      switchMap((query) => this.organizationService.listOrganizations(query)),
+      tap((page) => {
+        console.log('List of orgs: ', page.organizations);
+      }),
+      catchError((err) => {
+        if (err.message) {
+          this.openSnackBar(
+            'Unable to get the organizations. Please refresh the page and try again.'
           );
+        }
+        return throwError(() => new Error(err.message));
+      }),
+      shareReplay(1)
+    );
 
-          return combineLatest({ page: page$, avatarUrls: avatarUrls$ });
-        }),
-        tap(({ page, avatarUrls }) => {
-          console.log('List of orgs: ', page.organizations);
-          console.log('List of avatar URLs:', avatarUrls);
-        }),
-        catchError((err) => {
-          if (err.message) {
-            this.openSnackBar(
-              'Unable to get the organizations. Please refresh the page and try again.'
-            );
-          }
-          return throwError(() => new Error(err.message));
-        })
+    // get the organization avatar urls
+    const avatarUrls$ = orgPage$.pipe(
+      map((page) => page.organizations),
+      switchMap(
+        (orgs) =>
+          forkJoinConcurrent(
+            orgs.map((org) => {
+              if (org.avatarKey && org.avatarKey.length > 0) {
+                return this.imageService.getImage({
+                  objectKey: org.avatarKey,
+                } as ImageQuery);
+              } else {
+                return of(undefined);
+              }
+            }),
+            Infinity
+          ) as unknown as Observable<(Image | undefined)[]>
       )
-      .subscribe((page) => {
-        // update organizations and total number of results
-        // this.searchResultsCount = page.totalElements;
-        // this.organizations = page.organizations;
-      });
+    );
+
+    // compile the results
+    combineLatest({ page: orgPage$, avatarUrls: avatarUrls$ }).subscribe(
+      ({ page, avatarUrls }) => {
+        this.searchResultsCount = page.totalElements;
+        this.organizationCards = page.organizations.map(
+          (org, index) =>
+            ({
+              acronym: org.acronym,
+              avatarUrl: avatarUrls[index] ? avatarUrls[index]?.url : undefined,
+              challengeCount: org.challengeCount,
+              login: org.login,
+              name: org.name,
+            } as OrganizationCard)
+        );
+      }
+    );
   }
 
   ngOnDestroy(): void {
