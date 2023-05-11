@@ -8,6 +8,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     login: 'awesome-org',
     websiteUrl: 'https://www.awesome-organization.org',
     avatarUrl: '',
+    acronym: '',
     createdAt: '',
     updatedAt: '',
   },
@@ -19,6 +20,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     websiteUrl: '',
     avatarUrl:
       'https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/dream.png',
+    acronym: '',
     createdAt: '',
     updatedAt: '',
   },
@@ -30,6 +32,7 @@ export const MOCK_ORGANIZATIONS: Organization[] = [
     websiteUrl: '',
     avatarUrl:
       'https://github.com/Sage-Bionetworks/rocc-app/raw/main/images/logo/synapse.png',
+    acronym: '',
     createdAt: '',
     updatedAt: '',
   },

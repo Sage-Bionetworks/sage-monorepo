@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   Image,
-  ImageQuery,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -18,7 +17,11 @@ import { Observable } from 'rxjs';
 })
 export class AboutComponent implements OnInit {
   public appVersion: string;
-  public triforceImg$: Observable<Image> | undefined;
+  public logo$: Observable<Image> | undefined;
+  public bars$: Observable<Image> | undefined;
+  public fingerprint$: Observable<Image> | undefined;
+  public chart$: Observable<Image> | undefined;
+  public graph$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -28,9 +31,20 @@ export class AboutComponent implements OnInit {
   }
 
   ngOnInit() {
-    const imageQuery: ImageQuery = {
-      objectKey: 'logo/dream.png',
-    };
-    this.triforceImg$ = this.imageService.getImage(imageQuery);
+    this.logo$ = this.imageService.getImage({
+      objectKey: 'openchallenges-icon.svg',
+    });
+    this.bars$ = this.imageService.getImage({
+      objectKey: 'icon-bars.svg',
+    });
+    this.fingerprint$ = this.imageService.getImage({
+      objectKey: 'icon-fingerprint.svg',
+    });
+    this.chart$ = this.imageService.getImage({
+      objectKey: 'icon-chart.svg',
+    });
+    this.graph$ = this.imageService.getImage({
+      objectKey: 'icon-graph.svg',
+    });
   }
 }

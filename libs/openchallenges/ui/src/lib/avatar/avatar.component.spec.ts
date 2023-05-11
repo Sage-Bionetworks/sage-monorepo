@@ -10,8 +10,8 @@ describe('AvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AvatarComponent],
-      imports: [HttpClientModule, NgxAvatarModule],
+      declarations: [],
+      imports: [HttpClientModule, NgxAvatarModule, AvatarComponent],
     }).compileComponents();
   });
 

@@ -11,8 +11,8 @@
   .base {
     background-color: white;
   }
-  #top,
-  #stats {
+  #profile-top,
+  #profile-stats {
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
@@ -27,18 +27,11 @@
     border-color: map.get($figma, dl-color-default-secondary2);
     background-color: map.get($figma, dl-color-default-accent2);
   }
-  .base-profile-pic {
-    border-color: transparent;
-    background-color: transparent;
-  }
-  .base-basic-stats {
-    background-color: map.get($figma, dl-color-default-hover2);
-  }
-  .nav-group {
+  .profile-nav-group {
     border-color: map.get($figma, dl-color-default-primary2);
     background-color: rgba(255, 255, 255, 1);
   }
-  .nav-item {
+  .profile-nav-item {
     border-color: transparent;
     &:focus,
     &:hover {
@@ -46,7 +39,7 @@
     }
     color: black;
   }
-  .nav-item.active-tab {
+  .profile-nav-item.active-tab {
     background-color: map.get($figma, dl-color-default-hover2);
   }
 
@@ -61,11 +54,16 @@
   .username {
     font-size: 28px;
   }
+  .profile-pic {
+    div.avatar-content {
+      font-family: 'Lato', sans-serif !important;
+    }
+  }
   @media screen and (max-width: 641px) {
-    #details > h2 {
+    #profile-details > h2 {
       font-size: 32px;
     }
-    #details > h3 {
+    #profile-details > h3 {
       font-size: 21px;
     }
   }

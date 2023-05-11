@@ -12,7 +12,7 @@
         <img src="/openchallenges-assets/images/aws.svg" height="140px" alt="aws" />
       </div>
       <div class="col text-center sponsor-item">
-        <img src="/openchallenges-assets/images/openapi.svg" height="140px" alt="openapi" />
+        <img [src]="(sage$ | async)?.url" height="140px" alt="Sage" />
       </div>
     </div>
   </div>

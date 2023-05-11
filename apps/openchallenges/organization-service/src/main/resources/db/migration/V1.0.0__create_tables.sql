@@ -7,10 +7,11 @@ CREATE TABLE `organization` (
   `login` varchar(64) NOT NULL UNIQUE,
   `avatar_url` varchar(255) DEFAULT NULL,
   `website_url` varchar(255) DEFAULT NULL,
-  `description` varchar(280) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
   `challenge_count` int,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `acronym` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT login_check CHECK (char_length(login) >= 2)
 );

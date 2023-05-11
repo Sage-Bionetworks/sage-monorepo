@@ -57,7 +57,7 @@ export const challengeInputDataTypeFilter: Filter = {
   query: 'inputDataTypes',
   label: 'Input Data Type',
   values: challengeInputDataTypeFilterValues,
-  collapsed: false,
+  collapsed: true,
 };
 
 export const challengeOrganizationFilter: Filter = {

@@ -1,16 +1,18 @@
-<div class="stats-group">
+<div *ngIf="challenge$ | async as challenge" class="stats-group">
   <div class="stat-item">
-    <h4>1937</h4>
+    <h3>{{ shorthand(mockStargazers) }}</h3>
     <p class="mat-caption">views</p>
   </div>
   <div class="stat-item">
-    <h4>2</h4>
+    <h3>{{ shorthand(mockViews) }}</h3>
     <p class="mat-caption">stargazers</p>
   </div>
-  <div class="stat-item action-btn" *ngIf="loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit
-  </div>
-  <div class="stat-item action-btn" *ngIf="!loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon> GO TO CHALLENGE
-  </div>
+  <a href="#" class="stat-item action-btn" *ngIf="loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon>
+    Edit
+  </a>
+  <a href="{{challenge.websiteUrl}}" class="stat-item action-btn" *ngIf="!loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon> 
+    Go to Website
+  </a>
 </div>

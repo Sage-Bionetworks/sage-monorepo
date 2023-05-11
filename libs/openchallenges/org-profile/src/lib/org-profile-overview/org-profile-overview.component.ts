@@ -10,4 +10,8 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 export class OrgProfileOverviewComponent {
   @Input() organization!: Organization;
   organizations: Organization[] = MOCK_ORGANIZATIONS;
+
+  use_default(str: string) {
+    return str === '' ? 'Not available' : str;
+  }
 }
