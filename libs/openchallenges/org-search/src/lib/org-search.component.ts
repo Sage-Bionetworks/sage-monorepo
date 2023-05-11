@@ -5,6 +5,8 @@ import {
   ImageService,
   ImageQuery,
   Image,
+  ImageHeight,
+  ImageAspectRatio,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -132,6 +134,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
               if (org.avatarKey && org.avatarKey.length > 0) {
                 return this.imageService.getImage({
                   objectKey: org.avatarKey,
+                  height: ImageHeight._250px,
+                  aspectRatio: ImageAspectRatio._11, // TODO: consider improving OA-generated enum name
                 } as ImageQuery);
               } else {
                 return of(undefined);
