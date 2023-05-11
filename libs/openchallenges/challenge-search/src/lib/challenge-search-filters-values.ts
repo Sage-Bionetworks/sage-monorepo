@@ -116,7 +116,40 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengePlatformFilterValues: FilterValue[] = [];
+export const challengePlatformFilterValues: FilterValue[] = [
+  {
+    value: 'synapse',
+    label: 'Synapse',
+  },
+  {
+    value: 'cagi',
+    label: 'CAGI',
+  },
+  {
+    value: 'cami',
+    label: 'CAMI',
+  },
+  {
+    value: 'casp',
+    label: 'CASP',
+  },
+  {
+    value: 'grand-challenge',
+    label: 'Grand Challenge',
+  },
+  {
+    value: 'precision-fda',
+    label: 'precisionFDA',
+  },
+  {
+    value: 'easychair',
+    label: 'EasyChair',
+  },
+  {
+    value: 'kaggle',
+    label: 'Kaggle',
+  },
+];
 
 export const challengeInputDataTypeFilterValues: FilterValue[] = [];
 

@@ -83,10 +83,10 @@ export class ChallengeSearchComponent
     // challengeDifficultyFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
-    challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
+    challengePlatformFilter,
     challengeInputDataTypeFilter,
     challengeOrganizationFilter,
     challengeOrganizaterFilter,
@@ -120,7 +120,7 @@ export class ChallengeSearchComponent
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+        (this.dropdownFilters[1].values = page.challengeInputDataTypes.map(
           (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
