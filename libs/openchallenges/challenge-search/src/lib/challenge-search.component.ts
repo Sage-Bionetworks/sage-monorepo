@@ -132,7 +132,7 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.checkboxFilters[4].values = page.challengePlatforms.map(
+        (this.dropdownFilters[0].values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
