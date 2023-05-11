@@ -3,6 +3,7 @@ import {
   Organization,
   OrganizationService,
   OrganizationSearchQuery,
+  ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -51,6 +52,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   constructor(
     private organizationService: OrganizationService,
+    private imageService: ImageService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {

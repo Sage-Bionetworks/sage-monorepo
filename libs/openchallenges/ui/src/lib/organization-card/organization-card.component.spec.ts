@@ -40,18 +40,16 @@ describe('OrganizationCardComponent', () => {
       name: MOCK_ORGANIZATIONS[0].name,
       src: MOCK_ORGANIZATIONS[0].avatarUrl,
       size: 140,
-      value: '',
     });
   });
 
   it('src property of orgAvatar should be empty string', () => {
-    component.organization.avatarUrl = null;
+    component.organization.avatarUrl = undefined;
     fixture.detectChanges();
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATIONS[0].name,
       src: '',
       size: 140,
-      value: '',
     });
   });
 
