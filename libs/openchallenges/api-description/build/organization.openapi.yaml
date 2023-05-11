@@ -176,10 +176,9 @@ components:
         description:
           type: string
           example: A description of the organization.
-        avatarUrl:
+        avatarKey:
           type: string
-          format: url
-          example: https://via.placeholder.com/300.png
+          example: logo/dream.png
           nullable: true
         websiteUrl:
           type: string
@@ -206,7 +205,6 @@ components:
         - email
         - login
         - description
-        - avatarUrl
         - websiteUrl
         - createdAt
         - updatedAt
