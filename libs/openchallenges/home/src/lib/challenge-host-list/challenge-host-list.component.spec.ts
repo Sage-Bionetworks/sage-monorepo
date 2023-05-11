@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { ChallengeHostListComponent } from './challenge-host-list.component';
 
@@ -9,6 +10,7 @@ describe('ChallengeHostListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ChallengeHostListComponent],
+      imports: [HttpClientModule],
     }).compileComponents();
   });
 
