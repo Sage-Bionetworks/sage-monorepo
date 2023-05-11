@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Organization } from './organization';
+import { OrganizationCardData } from './organization-card-data';
 // import * as internal from 'stream';
 import { Avatar } from '../avatar/avatar';
 
@@ -9,7 +9,7 @@ import { Avatar } from '../avatar/avatar';
   styleUrls: ['./organization-card.component.scss'],
 })
 export class OrganizationCardComponent implements OnInit {
-  @Input() organization!: Organization;
+  @Input() organizationCardData!: OrganizationCardData;
   // @Input() personAvatarSize = 36;
   organizationAvatar!: Avatar;
   avatar!: Avatar;
@@ -19,19 +19,19 @@ export class OrganizationCardComponent implements OnInit {
   challengesSupported: number | undefined;
 
   ngOnInit(): void {
-    if (this.organization) {
+    if (this.organizationCardData) {
       this.organizationAvatar = {
-        value: this.organization.acronym,
-        name: this.organization.name,
-        src: this.organization.avatarUrl || '',
+        value: this.organizationCardData.acronym,
+        name: this.organizationCardData.name,
+        src: this.organizationCardData.avatarUrl || '',
         size: 140,
       };
     }
 
-    if (this.organization.challengeCount) {
+    if (this.organizationCardData.challengeCount) {
       this.challengesSupported =
-        this.organization.challengeCount > 0
-          ? this.organization.challengeCount
+        this.organizationCardData.challengeCount > 0
+          ? this.organizationCardData.challengeCount
           : undefined;
     }
 

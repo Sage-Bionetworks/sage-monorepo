@@ -1,5 +1,5 @@
-<div *ngIf="organization">
-  <div class="organization-card" [routerLink]="['/org', organization.login]">
+<div *ngIf="organizationCardData">
+  <div class="organization-card" [routerLink]="['/org', organizationCardData.login]">
     <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
     </openchallenges-avatar>
     <div class="star-btn">
@@ -7,7 +7,7 @@
       {{ mockStars }}
     </div>
     <div class="card-body">
-      <p class="card-title">{{ organization.name }}</p>
+      <p class="card-title">{{ organizationCardData.name }}</p>
       <div *ngIf="mockMembers" class="organization-members">
         <openchallenges-avatar
           *ngFor="let member of mockMembers | slice: 0:4"
