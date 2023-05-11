@@ -61,7 +61,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   totalOrgCount = 0;
 
   pageNumber = 0;
-  pageSize = 20;
+  pageSize = 24;
   searchResultsCount = 0;
 
   // define filters

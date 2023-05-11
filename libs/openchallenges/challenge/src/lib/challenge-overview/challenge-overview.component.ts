@@ -14,7 +14,7 @@ export class ChallengeOverviewComponent {
   @Input() challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
-  // mockDoi = '09.1937/09219137';
+  mockDoi = '09.1937/09219137';
 
   use_default(str: string) {
     return str === '' ? 'Not available' : str;

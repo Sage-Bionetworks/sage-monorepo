@@ -3,7 +3,7 @@
     <img class="logo-icon" [src]="(logo$ | async)?.url" alt="OpenChallenges Icon" />
     <h2>Meet Our Team</h2>
     <p class="mat-body-strong">
-      We're smart, we're hard-working, and we love a <em>good challenge</em>.
+      We're smart, we're hard-working, and we love <em>a good challenge</em>.
     </p>
   </div>
   <div class="member-group">
@@ -11,6 +11,11 @@
       <img class="member-pic" [src]="(thomas$ | async)?.url" alt="Thomas Schaffter" />
       <h3 class="card-name">Thomas Schaffter</h3>
       <p class="card-roles">Project lead, Architect, Backend developer</p>
+    </div>
+    <div class="member-card">
+      <img class="member-pic" [src]="(maria$ | async)?.url" alt="Maria Diaz" />
+      <h3 class="card-name">Maria Diaz</h3>
+      <p class="card-roles">Backend developer</p>
     </div>
     <div class="member-card">
       <img class="member-pic" [src]="(rong$ | async)?.url" alt="Rong Chai" />
@@ -21,11 +26,6 @@
       <img class="member-pic" [src]="(verena$ | async)?.url" alt="Verena Chung" />
       <h3 class="card-name">Verena Chung</h3>
       <p class="card-roles">Frontend developer</p>
-    </div>
-    <div class="member-card">
-      <img class="member-pic" [src]="(maria$ | async)?.url" alt="Maria Diaz" />
-      <h3 class="card-name">Maria Diaz</h3>
-      <p class="card-roles">Backend developer</p>
     </div>
   </div>
   <div class="member-group">

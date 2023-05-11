@@ -162,11 +162,8 @@ body {
   }
 }
 #profile-details {
-  // max-width: 760px;
-  max-width: 1060px;
-}
-#profile-activity {
-  max-width: 320px;
+  max-width: 100%;
+  text-align: center;
 }
 .profile-activity-card {
   text-align: right;
@@ -200,6 +197,7 @@ body {
   padding: 5px;
   border-radius: 32px;
   text-align: center;
+  align-self: center;
 }
 .stats-group {
   display: flex;
@@ -303,13 +301,6 @@ table {
     flex-direction: column;
     align-items: center;
   }
-  #profile-details {
-    max-width: 100%;
-    text-align: center;
-  }
-  .profile-type {
-    align-self: center;
-  }
 }
 @media screen and (min-width: constants.$lg-breakpoint) {
   .col,
@@ -351,6 +342,14 @@ table {
   }
   #search-top {
     padding: 0 132px 80px;
+  }
+  #profile-details {
+    // max-width: 760px;
+    max-width: 1060px;
+    text-align: left;
+  }
+  .profile-type {
+    align-self: auto;
   }
   .profile-sidenav {
     max-width: 320px;

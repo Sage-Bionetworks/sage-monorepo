@@ -18,8 +18,7 @@ import {
 export class OrgProfileStatsComponent implements OnInit {
   @Input() loggedIn = false;
   organization$!: Observable<Organization>;
-  mockViews!: number;
-  mockStargazers!: number;
+  mockMembers!: number;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -28,8 +27,7 @@ export class OrgProfileStatsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mockViews = 2;
-    this.mockStargazers = 9_999;
+    this.mockMembers = 3;
 
     this.organization$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
@@ -45,10 +43,14 @@ export class OrgProfileStatsComponent implements OnInit {
     );
   }
 
-  shorthand(n: number) {
-    return Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 1,
-    }).format(n);
+  shorthand(n: number | undefined) {
+    if (n) {
+      return Intl.NumberFormat('en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+      }).format(n);
+    } else {
+      return 0;
+    }
   }
 }
