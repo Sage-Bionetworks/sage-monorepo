@@ -1,4 +1,4 @@
-export interface OrganizationCardData {
+export interface OrganizationCard {
   acronym?: string;
   avatarUrl?: string;
   challengeCount: number;

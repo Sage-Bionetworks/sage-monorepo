@@ -1,6 +1,6 @@
-import { OrganizationCardData } from './organization-card-data';
+import { OrganizationCard } from './organization-card';
 
-export const MOCK_ORGANIZATION_CARD_DATA: OrganizationCardData[] = [
+export const MOCK_ORGANIZATION_CARDS: OrganizationCard[] = [
   {
     name: 'Awesome Org',
     login: 'awesome-org',
