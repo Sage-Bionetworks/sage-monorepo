@@ -24,8 +24,8 @@ import {
   throwError,
   map,
   of,
-  combineLatest,
   Observable,
+  forkJoin,
 } from 'rxjs';
 import {
   catchError,
@@ -124,12 +124,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       shareReplay(1)
     );
 
-    // get the organization avatar urls
-    const avatarUrls$ = orgPage$.pipe(
+    // build the organization cards
+    const organizationCards$ = orgPage$.pipe(
       map((page) => page.organizations),
-      switchMap(
-        (orgs) =>
-          forkJoinConcurrent(
+      switchMap((orgs) =>
+        forkJoin({
+          orgs: of(orgs),
+          avatarUrls: forkJoinConcurrent(
             orgs.map((org) => {
               if (org.avatarKey && org.avatarKey.length > 0) {
                 return this.imageService.getImage({
@@ -142,26 +143,34 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
               }
             }),
             Infinity
-          ) as unknown as Observable<(Image | undefined)[]>
+          ) as unknown as Observable<(Image | undefined)[]>,
+        })
+      ),
+      switchMap(({ orgs, avatarUrls }) =>
+        of(
+          orgs.map(
+            (org, index) =>
+              ({
+                acronym: org.acronym,
+                avatarUrl: avatarUrls[index]
+                  ? avatarUrls[index]?.url
+                  : undefined,
+                challengeCount: org.challengeCount,
+                login: org.login,
+                name: org.name,
+              } as OrganizationCard)
+          )
+        )
       )
     );
 
-    // compile the results
-    combineLatest({ page: orgPage$, avatarUrls: avatarUrls$ }).subscribe(
-      ({ page, avatarUrls }) => {
-        this.searchResultsCount = page.totalElements;
-        this.organizationCards = page.organizations.map(
-          (org, index) =>
-            ({
-              acronym: org.acronym,
-              avatarUrl: avatarUrls[index] ? avatarUrls[index]?.url : undefined,
-              challengeCount: org.challengeCount,
-              login: org.login,
-              name: org.name,
-            } as OrganizationCard)
-        );
-      }
-    );
+    orgPage$.subscribe((page) => {
+      this.searchResultsCount = page.totalElements;
+    });
+
+    organizationCards$.subscribe((organizationCards) => {
+      this.organizationCards = organizationCards;
+    });
   }
 
   ngOnDestroy(): void {
