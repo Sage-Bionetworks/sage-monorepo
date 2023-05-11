@@ -52,8 +52,8 @@ public class OrganizationEntity {
   @Column(nullable = false, unique = true)
   private String login;
 
-  @Column(name = "avatar_url", nullable = true)
-  private String avatarUrl;
+  @Column(name = "avatar_key", nullable = true)
+  private String avatarKey;
 
   @Column(name = "website_url", nullable = true)
   private String websiteUrl;

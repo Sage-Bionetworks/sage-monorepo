@@ -30,8 +30,8 @@ public class OrganizationDto {
   @JsonProperty("description")
   private String description;
 
-  @JsonProperty("avatarUrl")
-  private String avatarUrl = null;
+  @JsonProperty("avatarKey")
+  private String avatarKey = null;
 
   @JsonProperty("websiteUrl")
   private String websiteUrl;
@@ -141,24 +141,23 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto avatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public OrganizationDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
+   * Get avatarKey
    *
-   * @return avatarUrl
+   * @return avatarKey
    */
-  @NotNull
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", required = true)
-  public String getAvatarUrl() {
-    return avatarUrl;
+  @Schema(name = "avatarKey", example = "logo/dream.png", required = false)
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public OrganizationDto websiteUrl(String websiteUrl) {
@@ -253,8 +252,7 @@ public class OrganizationDto {
    *
    * @return acronym
    */
-  @NotNull
-  @Schema(name = "acronym", example = "OC", required = true)
+  @Schema(name = "acronym", example = "OC", required = false)
   public String getAcronym() {
     return acronym;
   }
@@ -276,7 +274,7 @@ public class OrganizationDto {
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.avatarUrl, organization.avatarUrl)
+        && Objects.equals(this.avatarKey, organization.avatarKey)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
         && Objects.equals(this.createdAt, organization.createdAt)
@@ -291,7 +289,7 @@ public class OrganizationDto {
         email,
         login,
         description,
-        avatarUrl,
+        avatarKey,
         websiteUrl,
         challengeCount,
         createdAt,
@@ -307,7 +305,7 @@ public class OrganizationDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
