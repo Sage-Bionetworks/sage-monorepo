@@ -1,6 +1,5 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
 $primary-color: #4950f6;
-$screen-sm: 481px;
-$screen-lg: 641px;
 
 // TAGS
 a, .typing {
@@ -20,7 +19,7 @@ a:active {
   margin: 0 auto;
   padding: 0 16px;
 }
-@media (min-width: $screen-sm) {
+@media (min-width: constants.$sm-breakpoint) {
   .container{
     padding: 0 24px;
   }
@@ -39,17 +38,25 @@ a:active {
 
 // SECTION: landing
 #landing {
-  height: 40vh;
-  padding: 210px 64px 72px;
+  height: 100%;
+  
+  padding: 140px 64px 72px;
   background-color: #F8F8F8;
+
+  img {
+    max-height: min-content;
+    padding-left: 60px;
+  }
 }
 #search-oc {
   text-align: center;
   padding: 128px 0;
 }
 
-@media (min-width: $screen-sm) {
+@media only screen and (max-width: constants.$lg-breakpoint) {
   #landing {
-    height: 100%;
+    img {
+      display: none;
+    }
   }
 }

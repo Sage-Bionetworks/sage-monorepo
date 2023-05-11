@@ -28,8 +28,8 @@ export class ChallengeStatsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mockViews = 2;
-    this.mockStargazers = 9_999;
+    this.mockViews = 5_000;
+    this.mockStargazers = 2;
 
     this.challenge$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
@@ -49,10 +49,14 @@ export class ChallengeStatsComponent implements OnInit {
     );
   }
 
-  shorthand(n: number) {
-    return Intl.NumberFormat('en-US', {
-      notation: 'compact',
-      maximumFractionDigits: 1,
-    }).format(n);
+  shorthand(n: number | undefined) {
+    if (n) {
+      return Intl.NumberFormat('en-US', {
+        notation: 'compact',
+        maximumFractionDigits: 1,
+      }).format(n);
+    } else {
+      return 0;
+    }
   }
 }

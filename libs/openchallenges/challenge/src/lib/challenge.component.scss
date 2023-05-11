@@ -1,7 +1,12 @@
 @use 'libs/openchallenges/styles/src/lib/_constants' as constants;
 
-@media screen and (min-width: 800px) {
+.main {
+  padding: 0 12px;
+}
+
+@media screen and (min-width: constants.$md-breakpoint) {
   .main {
     max-width: 1120px;
+    padding: 0 0 32px;
   }
 }
