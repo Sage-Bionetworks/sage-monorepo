@@ -66,7 +66,7 @@ export class OrgProfileComponent implements OnInit {
       (org) =>
         (this.organizationAvatar = {
           name: org.name || org.login.replace(/-/g, ' '),
-          src: org.avatarUrl || '',
+          src: '',
           size: 250,
         })
     );

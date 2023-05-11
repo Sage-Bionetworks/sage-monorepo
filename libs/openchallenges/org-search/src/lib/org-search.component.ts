@@ -1,15 +1,28 @@
 import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  Organization,
   OrganizationService,
   OrganizationSearchQuery,
   ImageService,
+  ImageQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
+import {
+  Filter,
+  FilterValue,
+  OrganizationCard,
+} from '@sagebionetworks/openchallenges/ui';
 import { contributorRolesFilter } from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Subject,
+  switchMap,
+  tap,
+  throwError,
+  map,
+  of,
+  combineLatest,
+} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -18,6 +31,7 @@ import {
 } from 'rxjs/operators';
 import { assign } from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-org-search',
@@ -38,7 +52,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   private destroy = new Subject<void>();
   searchTermValue = '';
 
-  organizations: Organization[] = [];
+  // organizations: Organization[] = [];
+  organizationCards: OrganizationCard[] = [];
   totalOrgCount = 0;
 
   pageNumber = 0;
@@ -90,8 +105,33 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.query
       .pipe(
         tap((query) => console.log('Query: ', query)),
-        switchMap((query) => this.organizationService.listOrganizations(query)),
-        tap((page) => console.log('List of orgs: ', page.organizations)),
+        switchMap((query) => {
+          const page$ = this.organizationService.listOrganizations(query);
+
+          const avatarUrls$ = page$.pipe(
+            map((page) => page.organizations),
+            switchMap((orgs) =>
+              forkJoinConcurrent(
+                orgs.map((org) => {
+                  if (org.avatarKey && org.avatarKey.length > 0) {
+                    return this.imageService.getImage({
+                      objectKey: org.avatarKey,
+                    } as ImageQuery);
+                  } else {
+                    return of(undefined);
+                  }
+                }),
+                10
+              )
+            )
+          );
+
+          return combineLatest({ page: page$, avatarUrls: avatarUrls$ });
+        }),
+        tap(({ page, avatarUrls }) => {
+          console.log('List of orgs: ', page.organizations);
+          console.log('List of avatar URLs:', avatarUrls);
+        }),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
@@ -103,8 +143,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       )
       .subscribe((page) => {
         // update organizations and total number of results
-        this.searchResultsCount = page.totalElements;
-        this.organizations = page.organizations;
+        // this.searchResultsCount = page.totalElements;
+        // this.organizations = page.organizations;
       });
   }
 

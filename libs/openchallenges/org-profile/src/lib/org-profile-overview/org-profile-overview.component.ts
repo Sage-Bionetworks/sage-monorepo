@@ -1,6 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
-import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
+import {
+  MOCK_ORGANIZATION_CARDS,
+  OrganizationCard,
+} from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-org-profile-overview',
@@ -9,7 +12,7 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 })
 export class OrgProfileOverviewComponent {
   @Input() organization!: Organization;
-  organizations: Organization[] = MOCK_ORGANIZATIONS;
+  organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 
   use_default(str: string) {
     return str === '' ? 'Not available' : str;

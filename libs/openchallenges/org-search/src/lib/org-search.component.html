@@ -47,7 +47,10 @@
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-organization-card *ngFor="let org of organizations" [organization]="org">
+        <openchallenges-organization-card
+          *ngFor="let organizationCard of organizationCards"
+          [organizationCard]="organizationCard"
+        >
         </openchallenges-organization-card>
       </div>
       <openchallenges-paginator

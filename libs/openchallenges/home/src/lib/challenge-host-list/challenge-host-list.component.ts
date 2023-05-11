@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
-import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
+import {
+  MOCK_ORGANIZATION_CARDS,
+  OrganizationCard,
+} from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
@@ -10,5 +12,5 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 export class ChallengeHostListComponent {
   // constructor() {}
   // ngOnInit(): void {}
-  organizations: Organization[] = MOCK_ORGANIZATIONS;
+  organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 }

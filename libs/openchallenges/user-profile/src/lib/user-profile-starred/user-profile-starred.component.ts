@@ -4,11 +4,13 @@ import {
   Challenge,
   ChallengeSearchQuery,
   ChallengeService,
-  Organization,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
-import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
+import {
+  MOCK_ORGANIZATION_CARDS,
+  OrganizationCard,
+} from '@sagebionetworks/openchallenges/ui';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
 
@@ -20,7 +22,7 @@ import { assign } from 'lodash';
 export class UserProfileStarredComponent implements OnInit {
   @Input() user!: User;
   @Input() loggedIn!: boolean;
-  organizations: Organization[] = MOCK_ORGANIZATIONS;
+  organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   stars: Challenge[] = [];
   starred!: boolean;
   tabs = USER_PROFILE_STARRED_TABS;
