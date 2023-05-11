@@ -1,7 +1,11 @@
+@use './lib/challenge-host-list/challenge-host-list-theme' as challenge-host-list;
+@use './lib/challenge-registration/challenge-registration-theme' as challenge-registration;
 @use './lib/featured-challenge-list/featured-challenge-list-theme' as featured-challenge-list;
 @use './lib/challenge-search/challenge-search-theme' as challenge-search;
 
 @mixin theme($theme) {
+  @include challenge-host-list.theme($theme);
+  @include challenge-registration.theme($theme);
   @include featured-challenge-list.theme($theme);
   @include challenge-search.theme($theme);
 }
