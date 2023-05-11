@@ -6,10 +6,10 @@
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
+  $figma: map.get($config, 'figma');
   
-
-  .card-inner {
-    background: #fff;
+  #featured-challenges {
+    background-color: map.get($figma, dl-color-default-hover1);
   }
 }
 
