@@ -17,7 +17,7 @@ footer {
   align-self: auto;
 }
 .footer-link-group {
-  width: 250px;
+  width: 350px;
   height: 30px;
   padding: 0;
   display: flex;
@@ -57,7 +57,7 @@ footer {
   height: 56px;
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: constants.$md-breakpoint) {
   footer {
     height: 330px;
   }
