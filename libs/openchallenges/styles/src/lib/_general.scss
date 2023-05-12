@@ -302,7 +302,7 @@ table {
     align-items: center;
   }
 }
-@media screen and (min-width: constants.$lg-breakpoint) {
+@media screen and (min-width: constants.$md-breakpoint) {
   .col,
   .col-1 {
     flex: 1;
