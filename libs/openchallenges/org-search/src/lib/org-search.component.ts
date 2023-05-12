@@ -7,6 +7,7 @@ import {
   Image,
   ImageHeight,
   ImageAspectRatio,
+  Organization,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -124,36 +125,15 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         forkJoin({
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
-            orgs.map((org) => {
-              // only fetch the image url if the avatar key is specified
-              if (org.avatarKey && org.avatarKey.length > 0) {
-                return this.imageService.getImage({
-                  objectKey: org.avatarKey,
-                  height: ImageHeight._250px,
-                  // TODO: consider improving OA-generated enum name
-                  aspectRatio: ImageAspectRatio._11,
-                } as ImageQuery);
-              } else {
-                return of(undefined);
-              }
-            }),
+            orgs.map((org) => this.getOrgAvatarUrl(org)),
             Infinity
           ) as unknown as Observable<(Image | undefined)[]>,
         })
       ),
       switchMap(({ orgs, avatarUrls }) =>
         of(
-          orgs.map(
-            (org, index) =>
-              ({
-                acronym: org.acronym,
-                avatarUrl: avatarUrls[index]
-                  ? avatarUrls[index]?.url
-                  : undefined,
-                challengeCount: org.challengeCount,
-                login: org.login,
-                name: org.name,
-              } as OrganizationCard)
+          orgs.map((org, index) =>
+            this.createOrganizationCard(org, avatarUrls[index])
           )
         )
       )
@@ -204,5 +184,30 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this._snackBar.open(message, undefined, {
       duration: 30000,
     });
+  }
+
+  private getOrgAvatarUrl(org: Organization): Observable<Image | undefined> {
+    if (org.avatarKey && org.avatarKey.length > 0) {
+      return this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._250px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery);
+    } else {
+      return of(undefined);
+    }
+  }
+
+  private createOrganizationCard(
+    org: Organization,
+    avatarUrl: Image | undefined
+  ): OrganizationCard {
+    return {
+      acronym: org.acronym,
+      avatarUrl,
+      challengeCount: org.challengeCount,
+      login: org.login,
+      name: org.name,
+    } as OrganizationCard;
   }
 }
