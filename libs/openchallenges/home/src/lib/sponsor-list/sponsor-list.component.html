@@ -4,13 +4,13 @@
     <div class="sponsors-group row">
       <div class="col text-center sponsor-item">
         <img
-          src="/openchallenges-assets/images/NCIITCR.png"
+        [src]="(itcr$ | async)?.url"
           height="140px"
           alt="Informatics Technology for Cancer Research (ITCR)"
         />
       </div>
       <div class="col text-center sponsor-item">
-        <img src="/openchallenges-assets/images/aws.svg" height="140px" alt="aws" />
+        <img [src]="(aws$ | async)?.url" height="140px" alt="aws" />
       </div>
       <div class="col text-center sponsor-item">
         <img [src]="(sage$ | async)?.url" height="140px" alt="Sage" />
