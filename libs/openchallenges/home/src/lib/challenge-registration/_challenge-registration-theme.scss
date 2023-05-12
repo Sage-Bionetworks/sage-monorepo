@@ -14,6 +14,9 @@
     .btn-block {
       background-color:  mat.get-color-from-palette($accent);
     }
+    .btn-block:hover {
+      background-color:  mat.get-color-from-palette($accent, 500);
+    }
   }
 }
 

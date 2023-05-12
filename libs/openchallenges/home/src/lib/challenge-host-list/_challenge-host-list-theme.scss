@@ -11,6 +11,10 @@
     background-color: mat.get-color-from-palette($primary, 800) !important;
     color: white !important;
   }
+  .see-more:hover {
+    background-color: mat.get-color-from-palette($primary, 900) !important;
+
+  }
 }
 
 @mixin typography($theme) {
