@@ -14,13 +14,13 @@
 /**
  * The aspect ratio of the image (the height of the image must be specified).
  */
-export type ImageAspectRatio = 'original' | '16:9' | '1:1' | '3:2' | '2:3';
+export type ImageAspectRatio = 'original' | '16_9' | '1_1' | '3_2' | '2_3';
 
 export const ImageAspectRatio = {
     Original: 'original' as ImageAspectRatio,
-    _169: '16:9' as ImageAspectRatio,
-    _11: '1:1' as ImageAspectRatio,
-    _32: '3:2' as ImageAspectRatio,
-    _23: '2:3' as ImageAspectRatio
+    _169: '16_9' as ImageAspectRatio,
+    _11: '1_1' as ImageAspectRatio,
+    _32: '3_2' as ImageAspectRatio,
+    _23: '2_3' as ImageAspectRatio
 };
 

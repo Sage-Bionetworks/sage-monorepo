@@ -20,10 +20,10 @@ public class ImageQueryDto {
   private String objectKey;
 
   @JsonProperty("height")
-  private ImageHeightDto height;
+  private ImageHeightDto height = ImageHeightDto.ORIGINAL;
 
   @JsonProperty("aspectRatio")
-  private ImageAspectRatioDto aspectRatio;
+  private ImageAspectRatioDto aspectRatio = ImageAspectRatioDto.ORIGINAL;
 
   public ImageQueryDto objectKey(String objectKey) {
     this.objectKey = objectKey;

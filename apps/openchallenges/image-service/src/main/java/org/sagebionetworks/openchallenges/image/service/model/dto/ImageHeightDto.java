@@ -13,6 +13,8 @@ public enum ImageHeightDto {
 
   _100PX("100px"),
 
+  _140PX("140px"),
+
   _250PX("250px"),
 
   _500PX("500px");

@@ -11,13 +11,13 @@ import javax.validation.constraints.*;
 public enum ImageAspectRatioDto {
   ORIGINAL("original"),
 
-  _16_9("16:9"),
+  _16_9("16_9"),
 
-  _1_1("1:1"),
+  _1_1("1_1"),
 
-  _3_2("3:2"),
+  _3_2("3_2"),
 
-  _2_3("2:3");
+  _2_3("2_3");
 
   private String value;
 

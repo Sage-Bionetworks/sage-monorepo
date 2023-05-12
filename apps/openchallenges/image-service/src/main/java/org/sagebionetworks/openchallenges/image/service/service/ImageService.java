@@ -56,6 +56,8 @@ public class ImageService {
       return null;
     } else if (height == ImageHeightDto._100PX) {
       return 100;
+    } else if (height == ImageHeightDto._140PX) {
+      return 140;
     } else if (height == ImageHeightDto._250PX) {
       return 250;
     } else if (height == ImageHeightDto._500PX) {

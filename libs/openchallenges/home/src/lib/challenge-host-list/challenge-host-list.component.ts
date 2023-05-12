@@ -69,7 +69,7 @@ export class ChallengeHostListComponent implements OnInit {
     if (org.avatarKey && org.avatarKey.length > 0) {
       return this.imageService.getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._250px,
+        height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery);
     } else {
