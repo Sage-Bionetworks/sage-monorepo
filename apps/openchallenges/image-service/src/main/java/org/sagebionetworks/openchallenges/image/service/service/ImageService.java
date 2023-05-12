@@ -36,7 +36,7 @@ public class ImageService {
   private String generateImageUrl(ImageQueryDto query) {
     if (query.getAspectRatio() != null && query.getHeight() == null) {
       throw new ImageHeightNotSpecifiedException(
-          "Specifying the aspect ratio requires to specify the image height too.");
+          "Image height must also be specified when specifying the aspect ratio.");
     }
 
     ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
