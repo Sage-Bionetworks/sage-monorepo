@@ -20,6 +20,7 @@ import { NatGateway } from '@cdktf/provider-aws/lib/nat-gateway';
 import { RouteTable } from '@cdktf/provider-aws/lib/route-table';
 import { Route } from '@cdktf/provider-aws/lib/route';
 import { RouteTableAssociation } from '@cdktf/provider-aws/lib/route-table-association';
+import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 // import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 import * as os from 'os';
 import * as fs from 'fs';
@@ -145,30 +146,33 @@ class OpenChallengesStack extends TerraformStack {
       value: vpc.id,
     });
 
-    // const ports = [22, 80, 443, 5432];
+    const ports = [22, 80, 443];
 
-    // const securityGroup = new SecurityGroup(this, 'security_group', {
-    //   name: 'openchallenges-sg',
-    //   vpcId: 'openchallenges-vpc',
-    //   egress: [
-    //     {
-    //       fromPort: 0,
-    //       toPort: 0,
-    //       cidrBlocks: ['0.0.0.0/0'],
-    //       protocol: '-1',
-    //     },
-    //   ],
-    //   ingress: ports.map((port) => ({
-    //     fromPort: port,
-    //     toPort: port,
-    //     cidrBlocks: ['0.0.0.0/0'],
-    //     protocol: '-1',
-    //   })),
-    // });
+    const securityGroup = new SecurityGroup(this, 'security_group', {
+      name: 'openchallenges-sg',
+      vpcId: vpc.id,
+      egress: [
+        {
+          fromPort: 0,
+          toPort: 0,
+          cidrBlocks: ['0.0.0.0/0'],
+          protocol: '-1',
+        },
+      ],
+      ingress: ports.map((port) => ({
+        fromPort: port,
+        toPort: port,
+        // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
+        cidrBlocks: ['0.0.0.0/0'],
+        protocol: '-1',
+      })),
+    });
 
     const ec2Instance = new Instance(this, 'compute', {
       ami: Ami.UBUNTU_22_04_LTS,
       instanceType: AmazonEc2InstanceType.T2_MICRO,
+      subnetId: publicSubnetA.id,
+      vpcSecurityGroupIds: [securityGroup.id],
       keyName: keyPair.keyName,
     });
 
