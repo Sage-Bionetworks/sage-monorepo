@@ -3,8 +3,11 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Account } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
   catchError,
+  forkJoin,
   map,
   Observable,
+  of,
+  shareReplay,
   Subscription,
   switchMap,
   throwError,
@@ -14,8 +17,13 @@ import { ORG_PROFILE_TABS } from './org-profile-tabs';
 import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
+  ImageAspectRatio,
+  ImageHeight,
+  ImageQuery,
+  ImageService,
   Organization,
   OrganizationService,
+  Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   HttpStatusRedirect,
@@ -31,8 +39,9 @@ export class OrgProfileComponent implements OnInit {
   public appVersion: string;
   account$!: Observable<Account | undefined>;
   organization$!: Observable<Organization>;
+  organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;
-  organizationAvatar!: Avatar;
+  // organizationAvatar!: Avatar;
   tabs = ORG_PROFILE_TABS;
   tabKeys: string[] = Object.keys(this.tabs);
   activeTab!: Tab;
@@ -42,7 +51,8 @@ export class OrgProfileComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private readonly configService: ConfigService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
+    private imageService: ImageService
   ) {
     this.appVersion = this.configService.config.appVersion;
   }
@@ -59,16 +69,25 @@ export class OrgProfileComponent implements OnInit {
           400: '/org',
         } as HttpStatusRedirect);
         return throwError(() => error);
-      })
+      }),
+      shareReplay(1)
     );
 
-    this.organization$.subscribe(
-      (org) =>
-        (this.organizationAvatar = {
-          name: org.name,
-          src: '',
-          size: 250,
+    this.organizationAvatar$ = this.organization$.pipe(
+      switchMap((org) =>
+        forkJoin({
+          org: of(org),
+          avatarUrl: this.getOrganizationAvatarUrl(org),
         })
+      ),
+      map(
+        ({ org, avatarUrl }) =>
+          ({
+            name: org.name,
+            src: avatarUrl?.url,
+            size: 250,
+          } as Avatar)
+      )
     );
 
     const activeTabSub = this.activatedRoute.queryParamMap
@@ -79,5 +98,19 @@ export class OrgProfileComponent implements OnInit {
       .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
+  }
+
+  private getOrganizationAvatarUrl(
+    org: Organization
+  ): Observable<Image | undefined> {
+    if (org.avatarKey && org.avatarKey.length > 0) {
+      return this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._250px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery);
+    } else {
+      return of(undefined);
+    }
   }
 }

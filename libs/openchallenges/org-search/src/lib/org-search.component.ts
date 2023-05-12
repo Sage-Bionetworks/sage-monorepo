@@ -125,7 +125,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         forkJoin({
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
-            orgs.map((org) => this.getOrgAvatarUrl(org)),
+            orgs.map((org) => this.getOrganizationAvatarUrl(org)),
             Infinity
           ) as unknown as Observable<(Image | undefined)[]>,
         })
@@ -133,7 +133,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       switchMap(({ orgs, avatarUrls }) =>
         of(
           orgs.map((org, index) =>
-            this.createOrganizationCard(org, avatarUrls[index])
+            this.getOrganizationCard(org, avatarUrls[index])
           )
         )
       )
@@ -186,7 +186,9 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  private getOrgAvatarUrl(org: Organization): Observable<Image | undefined> {
+  private getOrganizationAvatarUrl(
+    org: Organization
+  ): Observable<Image | undefined> {
     if (org.avatarKey && org.avatarKey.length > 0) {
       return this.imageService.getImage({
         objectKey: org.avatarKey,
@@ -198,7 +200,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     }
   }
 
-  private createOrganizationCard(
+  private getOrganizationCard(
     org: Organization,
     avatarUrl: Image | undefined
   ): OrganizationCard {

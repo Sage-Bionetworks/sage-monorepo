@@ -2,6 +2,7 @@
   <div *ngIf="organization$ | async as org">
     <section id="profile-top" class="row">
       <openchallenges-avatar
+        *ngIf="organizationAvatar$ | async as organizationAvatar"
         class="profile-pic"
         [avatar]="organizationAvatar"
       ></openchallenges-avatar>
