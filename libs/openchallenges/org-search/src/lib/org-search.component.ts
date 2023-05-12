@@ -20,7 +20,6 @@ import {
   BehaviorSubject,
   Subject,
   switchMap,
-  tap,
   throwError,
   map,
   of,
@@ -106,13 +105,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         this.query.next(newQuery);
       });
 
-    // get the organizations
     const orgPage$ = this.query.pipe(
-      tap((query) => console.log('Query: ', query)),
       switchMap((query) => this.organizationService.listOrganizations(query)),
-      tap((page) => {
-        console.log('List of orgs: ', page.organizations);
-      }),
       catchError((err) => {
         if (err.message) {
           this.openSnackBar(
@@ -124,7 +118,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       shareReplay(1)
     );
 
-    // build the organization cards
     const organizationCards$ = orgPage$.pipe(
       map((page) => page.organizations),
       switchMap((orgs) =>
@@ -132,11 +125,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => {
+              // only fetch the image url if the avatar key is specified
               if (org.avatarKey && org.avatarKey.length > 0) {
                 return this.imageService.getImage({
                   objectKey: org.avatarKey,
                   height: ImageHeight._250px,
-                  aspectRatio: ImageAspectRatio._11, // TODO: consider improving OA-generated enum name
+                  // TODO: consider improving OA-generated enum name
+                  aspectRatio: ImageAspectRatio._11,
                 } as ImageQuery);
               } else {
                 return of(undefined);
