@@ -204,7 +204,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   ): OrganizationCard {
     return {
       acronym: org.acronym,
-      avatarUrl,
+      avatarUrl: avatarUrl?.url,
       challengeCount: org.challengeCount,
       login: org.login,
       name: org.name,

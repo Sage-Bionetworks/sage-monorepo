@@ -65,7 +65,7 @@ export class OrgProfileComponent implements OnInit {
     this.organization$.subscribe(
       (org) =>
         (this.organizationAvatar = {
-          name: org.name || org.login.replace(/-/g, ' '),
+          name: org.name,
           src: '',
           size: 250,
         })
