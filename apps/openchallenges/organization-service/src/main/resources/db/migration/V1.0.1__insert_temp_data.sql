@@ -2208,7 +2208,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'UNC',
     '',
     'unc',
-    'logo/univ-nc.png',
+    'logo/univ-unc.png',
     'https://www.unc.edu/',
     '',
     3
