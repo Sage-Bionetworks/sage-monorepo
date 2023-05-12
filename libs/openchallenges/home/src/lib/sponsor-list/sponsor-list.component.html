@@ -1,19 +1,25 @@
 <section id="acknowledgements" class="mat-typography">
   <div class="container">
-    <p class="mat-body-strong text-center">OpenChallenges was made possible by...</p>
+    <p class="mat-body-strong text-center">OpenChallenges is made possible by...</p>
     <div class="sponsors-group row">
       <div class="col text-center sponsor-item">
         <img
-        [src]="(itcr$ | async)?.url"
+          [src]="(itcr$ | async)?.url"
           height="140px"
           alt="Informatics Technology for Cancer Research (ITCR)"
+          title="Informatics Technology for Cancer Research"
         />
       </div>
       <div class="col text-center sponsor-item">
-        <img [src]="(aws$ | async)?.url" height="140px" alt="aws" />
+        <img [src]="(aws$ | async)?.url" height="140px" alt="AWS" title="AWS" />
       </div>
       <div class="col text-center sponsor-item">
-        <img [src]="(sage$ | async)?.url" height="140px" alt="Sage" />
+        <img
+          [src]="(sage$ | async)?.url"
+          height="140px"
+          alt="Sage Bionetworks"
+          title="Sage Bionetworks"
+        />
       </div>
     </div>
   </div>
