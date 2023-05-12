@@ -2,14 +2,27 @@
   <div class="container">
     <div class="row">
       <div class="col-5">
-        <img class="side-img" [src]="(share$ | async)?.url" alt="Share a challenge" />
+        <img
+          class="side-img"
+          src="/openchallenges-assets/images/add-challenge.svg"
+          alt="Share a challenge"
+        />
       </div>
       <div class="col-7">
         <h2 class="section-title text-left">Are you a challenge organizer?</h2>
-        <p class="mat-body-strong">Add your challenges to the OpenChallenges registry and see the 
-          participant numbers roll in. </p>
-          <p class="mat-caption">(Feature coming soon!)</p>
-        <a mat-raised-button class="btn-block" color="primary" href="/add-challenge" disabled>Add a Challenge</a>
+        <p class="mat-body-strong">
+          Add your challenges to the OpenChallenges registry and see the participant numbers roll
+          in.
+        </p>
+        <p class="mat-caption">(App feature coming soon! For now, Google Sheets :-))</p>
+        <br/>
+        <a
+          mat-raised-button
+          class="btn-block"
+          href="https://docs.google.com/spreadsheets/d/1-3LO7h_JJf6rnEBvVJWjDD4FBmHCu-oiBNlxvSSnkwo/edit?usp=sharing"
+          target="_blank"
+          >Add a Challenge</a
+        >
       </div>
     </div>
   </div>

@@ -7,20 +7,20 @@
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
 
-  .see-more {
-    background-color: mat.get-color-from-palette($primary, 800) !important;
-    color: white !important;
-  }
-  .see-more:hover {
-    background-color: mat.get-color-from-palette($primary, 900) !important;
+  #organizer-cta {
+    background-color: mat.get-color-from-palette($primary, 900);
+    color: white;
+
+    .btn-block {
+      background-color:  mat.get-color-from-palette($accent);
+    }
+    .btn-block:hover {
+      background-color:  mat.get-color-from-palette($accent, 500);
+    }
   }
 }
 
-@mixin typography($theme) {
-  .see-more {
-    text-decoration: none;
-  }
-}
+@mixin typography($theme) {}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);

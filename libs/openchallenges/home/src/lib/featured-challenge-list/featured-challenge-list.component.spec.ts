@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
 
 import { FeaturedChallengeListComponent } from './featured-challenge-list.component';
 
@@ -9,6 +10,7 @@ describe('FeaturedChallengeListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [FeaturedChallengeListComponent],
+      imports: [HttpClientModule],
     }).compileComponents();
   });
 

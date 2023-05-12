@@ -69,12 +69,14 @@ body {
 .btn {
   padding: 6px 32px !important;
   text-transform: uppercase;
+  text-decoration: none;
   transition: background 0.15s ease !important;
 }
 .btn-block {
   width: 100%;
-  padding: 6px 32px !important;
+  padding: 16px 32px !important;
   text-transform: uppercase;
+  text-decoration: none;
 }
 .btn-group {
   display: flex;
