@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  ImageAspectRatio,
+  ImageHeight,
+  ImageQuery,
+  ImageService,
   Organization,
-  OrganizationService,
   OrganizationSearchQuery,
+  OrganizationService,
+  Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { OrganizationCard } from '@sagebionetworks/openchallenges/ui';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import { forkJoin, Observable, of, throwError } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
@@ -12,27 +20,74 @@ import { BehaviorSubject, switchMap } from 'rxjs';
   styleUrls: ['./challenge-host-list.component.scss'],
 })
 export class ChallengeHostListComponent implements OnInit {
-  private query: BehaviorSubject<OrganizationSearchQuery> =
-    new BehaviorSubject<OrganizationSearchQuery>({});
+  organizationCards$!: Observable<OrganizationCard[]>;
 
-  organizations: Organization[] = [];
-
-  constructor(private organizationService: OrganizationService) {}
+  constructor(
+    private organizationService: OrganizationService,
+    private imageService: ImageService
+  ) {}
 
   ngOnInit() {
-    const defaultQuery: OrganizationSearchQuery = {
+    const query: OrganizationSearchQuery = {
       pageNumber: 0,
       pageSize: 4,
       searchTerms: '',
       sort: 'challenge_count',
     } as OrganizationSearchQuery;
-    this.query.next(defaultQuery);
-    this.query
-      .pipe(
-        switchMap((query) => this.organizationService.listOrganizations(query))
+
+    const orgPage$ = this.organizationService.listOrganizations(query).pipe(
+      catchError((err) => {
+        return throwError(() => new Error(err.message));
+      })
+    );
+
+    this.organizationCards$ = orgPage$.pipe(
+      map((page) => page.organizations),
+      switchMap((orgs) =>
+        forkJoin({
+          orgs: of(orgs),
+          avatarUrls: forkJoinConcurrent(
+            orgs.map((org) => this.getOrganizationAvatarUrl(org)),
+            Infinity
+          ) as unknown as Observable<(Image | undefined)[]>,
+        })
+      ),
+      switchMap(({ orgs, avatarUrls }) =>
+        of(
+          orgs.map((org, index) =>
+            this.getOrganizationCard(org, avatarUrls[index])
+          )
+        )
       )
-      .subscribe((page) => {
-        this.organizations = page.organizations;
-      });
+    );
+  }
+
+  // TODO Avoid duplicated code (see org search component)
+  private getOrganizationAvatarUrl(
+    org: Organization
+  ): Observable<Image | undefined> {
+    if (org.avatarKey && org.avatarKey.length > 0) {
+      return this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._140px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery);
+    } else {
+      return of(undefined);
+    }
+  }
+
+  // TODO Avoid duplicated code (see org search component)
+  private getOrganizationCard(
+    org: Organization,
+    avatarUrl: Image | undefined
+  ): OrganizationCard {
+    return {
+      acronym: org.acronym,
+      avatarUrl: avatarUrl?.url,
+      challengeCount: org.challengeCount,
+      login: org.login,
+      name: org.name,
+    } as OrganizationCard;
   }
 }

@@ -23,6 +23,8 @@ export * from './challengeSubmissionType';
 export * from './challengesPage';
 export * from './challengesPageAllOf';
 export * from './image';
+export * from './imageAspectRatio';
+export * from './imageHeight';
 export * from './imageQuery';
 export * from './organization';
 export * from './organizationDirection';

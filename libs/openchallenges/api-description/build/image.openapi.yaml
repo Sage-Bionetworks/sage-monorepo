@@ -38,6 +38,26 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    ImageHeight:
+      description: The height of the image.
+      type: string
+      default: original
+      enum:
+        - original
+        - 100px
+        - 140px
+        - 250px
+        - 500px
+    ImageAspectRatio:
+      description: The aspect ratio of the image (the height of the image must be specified).
+      type: string
+      default: original
+      enum:
+        - original
+        - '16_9'
+        - '1_1'
+        - '3_2'
+        - '2_3'
     ImageQuery:
       type: object
       description: An image query.
@@ -46,6 +66,10 @@ components:
           description: The object key of the image.
           type: string
           example: logo/dream.png
+        height:
+          $ref: '#/components/schemas/ImageHeight'
+        aspectRatio:
+          $ref: '#/components/schemas/ImageAspectRatio'
       required:
         - objectKey
     Image:
@@ -84,6 +108,8 @@ components:
     imageQuery:
       name: imageQuery
       description: The query used to get an image.
+      style: deepObject
+      explode: true
       in: query
       schema:
         $ref: '#/components/schemas/ImageQuery'

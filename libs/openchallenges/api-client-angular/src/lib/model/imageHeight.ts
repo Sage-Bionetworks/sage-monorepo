@@ -9,19 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ImageHeight } from './imageHeight';
-import { ImageAspectRatio } from './imageAspectRatio';
 
 
 /**
- * An image query.
+ * The height of the image.
  */
-export interface ImageQuery { 
-    /**
-     * The object key of the image.
-     */
-    objectKey: string;
-    height?: ImageHeight;
-    aspectRatio?: ImageAspectRatio;
-}
+export type ImageHeight = 'original' | '100px' | '140px' | '250px' | '500px';
+
+export const ImageHeight = {
+    Original: 'original' as ImageHeight,
+    _100px: '100px' as ImageHeight,
+    _140px: '140px' as ImageHeight,
+    _250px: '250px' as ImageHeight,
+    _500px: '500px' as ImageHeight
+};
 

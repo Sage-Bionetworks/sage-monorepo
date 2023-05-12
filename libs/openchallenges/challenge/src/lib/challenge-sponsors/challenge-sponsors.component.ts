@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   MOCK_CHALLENGE_SPONSORS,
-  MOCK_ORGANIZATIONS,
+  MOCK_ORGANIZATION_CARDS,
 } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
@@ -13,5 +13,5 @@ import {
 export class ChallengeSponsorsComponent {
   @Input() challenge!: Challenge;
   sponsors = MOCK_CHALLENGE_SPONSORS;
-  organization = MOCK_ORGANIZATIONS[0];
+  organizationCard = MOCK_ORGANIZATION_CARDS[0];
 }
