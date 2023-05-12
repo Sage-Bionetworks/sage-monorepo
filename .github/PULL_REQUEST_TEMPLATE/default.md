@@ -22,5 +22,5 @@ Fixes #(issue)
 ## Preview
 
 <!-- Demonstrate the feature or bug fix implemented in this PR. For example, -->
-<!-- - a screencast that illustrates a new UI feature -->
+<!-- - a screencast that illustrates a new UI feature (e.g. using https://gifcap.dev) -->
 <!-- - a request example and its response from a new/updated REST API endpoint -->
