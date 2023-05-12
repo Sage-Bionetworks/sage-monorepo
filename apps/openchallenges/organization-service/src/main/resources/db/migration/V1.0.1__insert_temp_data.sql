@@ -83,7 +83,7 @@ VALUES (
     '',
     '',
     'allen-institute',
-    'logo/allen-insitute.svg',
+    'logo/allen-institute.svg',
     'https://alleninstitute.org/',
     'The Allen Institute is an independent nonprofit bioscience research institute aimed at unlocking the mysteries of human biology through foundational science that fuels the discovery of new treatments and cures.',
     2
@@ -2164,7 +2164,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'UoL',
     '',
     'uol',
-    'logo/uol.png',
+    'logo/uol.jpg',
     'https://london.ac.uk/',
     '',
     2
