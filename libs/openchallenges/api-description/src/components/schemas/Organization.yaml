@@ -11,11 +11,9 @@ properties:
   description:
     type: string
     example: A description of the organization.
-  avatarUrl:
+  avatarKey:
     type: string
-    format: url
-    example: https://via.placeholder.com/300.png
-    nullable: true
+    example: logo/dream.png
   websiteUrl:
     type: string
     format: url
@@ -41,7 +39,6 @@ required:
   - email
   - login
   - description
-  - avatarUrl
   - websiteUrl
   - createdAt
   - updatedAt

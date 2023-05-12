@@ -9,8 +9,6 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
-import org.sagebionetworks.openchallenges.organization.service.model.rest.response.ImageResponse;
-import org.sagebionetworks.openchallenges.organization.service.service.rest.ImageServiceRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +23,11 @@ public class OrganizationService {
 
   private static final Logger LOG = LoggerFactory.getLogger(OrganizationService.class);
 
-  private final ImageServiceRestClient imageServiceRestClient;
-
   @Autowired private OrganizationRepository organizationRepository;
 
   private OrganizationMapper organizationMapper = new OrganizationMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name", "description");
-
-  public OrganizationService(ImageServiceRestClient imageServiceRestClient) {
-    this.imageServiceRestClient = imageServiceRestClient;
-  }
 
   @Transactional(readOnly = true)
   public OrganizationsPageDto listOrganizations(OrganizationSearchQueryDto query) {
@@ -50,19 +42,6 @@ public class OrganizationService {
 
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
-
-    // Convert the image object keys to URLs
-    organizations.stream()
-        .parallel()
-        .forEach(
-            org -> {
-              // The avatar url in the org data model is actually an object key.
-              // TODO Handle errors
-              if (!(org.getAvatarUrl() == null || org.getAvatarUrl().isBlank())) {
-                ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
-                org.setAvatarUrl(image.getUrl());
-              }
-            });
 
     LOG.info("Final orgs {}", organizations);
 
@@ -89,12 +68,6 @@ public class OrganizationService {
                             "The organization with ID %s does not exist.", organizationLogin)));
 
     OrganizationDto org = organizationMapper.convertToDto(orgEntity);
-
-    // Convert the image object key to URL
-    if (!(org.getAvatarUrl() == null || org.getAvatarUrl().isBlank())) {
-      ImageResponse image = imageServiceRestClient.getImage(org.getAvatarUrl());
-      org.setAvatarUrl(image.getUrl());
-    }
 
     return org;
   }

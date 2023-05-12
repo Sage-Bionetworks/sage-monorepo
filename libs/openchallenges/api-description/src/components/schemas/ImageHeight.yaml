@@ -1,0 +1,9 @@
+description: The height of the image.
+type: string
+default: original
+enum:
+  - original
+  - 100px
+  - 140px
+  - 250px
+  - 500px

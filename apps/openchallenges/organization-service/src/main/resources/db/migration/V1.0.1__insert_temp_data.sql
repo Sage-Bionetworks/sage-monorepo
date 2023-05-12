@@ -6,7 +6,7 @@ INSERT INTO organization (
     acronym,
     email,
     login,
-    avatar_url,
+    avatar_key,
     website_url,
     description,
     challenge_count
