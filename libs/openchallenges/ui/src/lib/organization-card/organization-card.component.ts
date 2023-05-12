@@ -21,9 +21,8 @@ export class OrganizationCardComponent implements OnInit {
   ngOnInit(): void {
     if (this.organizationCard) {
       this.organizationAvatar = {
-        value: this.organizationCard.acronym,
         name: this.organizationCard.name,
-        src: this.organizationCard.avatarUrl || '',
+        src: this.organizationCard.avatarUrl,
         size: 140,
       };
     }
