@@ -144,6 +144,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     });
 
     organizationCards$.subscribe((organizationCards) => {
+      console.log('organizationCards', organizationCards);
       this.organizationCards = organizationCards;
     });
   }
