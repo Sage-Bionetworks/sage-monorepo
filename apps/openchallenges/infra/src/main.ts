@@ -11,7 +11,6 @@ import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
-import { Vpc } from '@cdktf/provider-aws/lib/vpc';
 import { Subnet } from '@cdktf/provider-aws/lib/subnet';
 import { InternetGateway } from '@cdktf/provider-aws/lib/internet-gateway';
 import { Eip } from '@cdktf/provider-aws/lib/eip';
@@ -32,6 +31,8 @@ import {
 } from './constants';
 import { SageStack } from './stack/sage-stack';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
+import { NetworkConfig } from './network/network-config';
+import { Network } from './network/network';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -51,16 +52,25 @@ class OpenChallengesStack extends SageStack {
       keyName,
     });
 
-    const vpc = new Vpc(this, 'VPC', {
-      cidrBlock: '10.0.0.0/16',
-      tags: {
-        Name: 'OpenChallenges-VPC',
-      },
+    const networkConfig = new NetworkConfig({
+      defaultRegion: AmazonRegion.US_EAST_1,
+      tagPrefix: 'openchallenges',
+      vpcCirdBlock: '10.0.0.0/16',
     });
+
+    // The AWS VPC
+    const network = new Network(this, 'network', networkConfig);
+
+    // const vpc = new Vpc(this, 'VPC', {
+    //   cidrBlock: '10.0.0.0/16',
+    //   tags: {
+    //     Name: 'OpenChallenges-VPC',
+    //   },
+    // });
 
     const privateSubnetA = new Subnet(this, 'Private-Subnet-A', {
       availabilityZone: 'us-east-1a',
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       mapPublicIpOnLaunch: false,
       cidrBlock: '10.0.1.0/24',
       tags: {
@@ -70,7 +80,7 @@ class OpenChallengesStack extends SageStack {
 
     const publicSubnetA = new Subnet(this, 'Public-Subnet-A', {
       availabilityZone: 'us-east-1a',
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       mapPublicIpOnLaunch: true,
       cidrBlock: '10.0.6.0/24',
       tags: {
@@ -79,7 +89,7 @@ class OpenChallengesStack extends SageStack {
     });
 
     const internetGateway = new InternetGateway(this, 'Internet-Gateway', {
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       tags: {
         Name: 'OpenChallenges-Internet-Gateway',
       },
@@ -103,7 +113,7 @@ class OpenChallengesStack extends SageStack {
 
     // Create Routing Table for communication Public network with Route and Association route
     const publicRouteTable = new RouteTable(this, 'Public-Route-Table', {
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       tags: {
         Name: 'OpenChallenges-Public-Route-Table',
       },
@@ -122,7 +132,7 @@ class OpenChallengesStack extends SageStack {
 
     // Create Routing Table for communication Private network with Route and Association route
     const privateRouteTableA = new RouteTable(this, 'Private-Route-Table-A', {
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       tags: {
         Name: 'OpenChallenges-Private-Route-Table-A',
       },
@@ -144,14 +154,14 @@ class OpenChallengesStack extends SageStack {
     );
 
     new TerraformOutput(this, 'vpc_id', {
-      value: vpc.id,
+      value: network.vpc.id,
     });
 
     const ports = [22, 80, 443];
 
     const securityGroup = new SecurityGroup(this, 'security_group', {
       name: 'openchallenges-sg',
-      vpcId: vpc.id,
+      vpcId: network.vpc.id,
       egress: [
         {
           fromPort: 0,
