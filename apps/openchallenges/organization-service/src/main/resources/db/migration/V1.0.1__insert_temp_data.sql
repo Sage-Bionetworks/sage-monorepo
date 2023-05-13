@@ -1999,7 +1999,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'UAB',
     '',
     'uab',
-    'logo/uab.png',
+    'logo/uab.jpg',
     'https://www.uab.edu/home/',
     '',
     1
@@ -2230,7 +2230,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     '',
     '',
     'university-of-padova',
-    'logo/university-of-padua.png',
+    'logo/university-of-padua.jpg',
     'https://www.unipd.it/en/',
     '',
     1
@@ -2241,7 +2241,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     '',
     '',
     'university-of-padua',
-    'logo/university-of-padua.png',
+    'logo/university-of-padua.jpg',
     'https://www.unipd.it/en/',
     '',
     1
