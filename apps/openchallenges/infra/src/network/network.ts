@@ -14,7 +14,7 @@ export class Network extends Construct {
   constructor(scope: Construct, id: string, config: NetworkConfig) {
     super(scope, id);
 
-    const nameTagPrefix = 'openchallenges';
+    const nameTagPrefix = config.tagPrefix;
 
     this.azs = ['a', 'b'].map((zone) => `${config.defaultRegion}${zone}`);
 
@@ -27,7 +27,7 @@ export class Network extends Construct {
       enableDnsSupport: true,
       // instanceTenancy: "default",
       tags: {
-        Name: `${config.tagPrefix}-vpc`,
+        Name: `${nameTagPrefix}-vpc`,
       },
     });
 
