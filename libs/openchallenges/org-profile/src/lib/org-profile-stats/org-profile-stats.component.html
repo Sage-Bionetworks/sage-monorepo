@@ -1,16 +1,27 @@
-<div class="stats-group">
+<div *ngIf="organization$ | async as org" class="stats-group">
   <div class="stat-item">
-    <h4>2</h4>
-    <p class="mat-caption">challenges</p>
+    <h3>{{ shorthand(org.challengeCount) }}</h3>
+    <p [ngPlural]="org.challengeCount || 0" class="mat-caption">
+      <ng-template ngPluralCase="=1">challenge</ng-template>
+      <ng-template ngPluralCase="other">challenges</ng-template>
+    </p>
   </div>
   <div class="stat-item">
-    <h4>15</h4>
-    <p class="mat-caption">members</p>
+    <h3>{{ shorthand(mockMembers) }}</h3>
+    <p [ngPlural]="mockMembers || 0" class="mat-caption">
+      <ng-template ngPluralCase="=1">member</ng-template>
+      <ng-template ngPluralCase="other">members</ng-template>
+    </p>
   </div>
-  <div class="stat-item action-btn" *ngIf="loggedIn">
+  <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
-  </div>
-  <div class="stat-item action-btn" *ngIf="!loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon> REQUEST TO JOIN
-  </div>
+  </div> -->
+  <a target="_blank" href="{{ org.websiteUrl }}" class="stat-item action-btn" *ngIf="loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+    Go to Website
+  </a>
+  <a href="#" class="stat-item action-btn" *ngIf="!loggedIn">
+    <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
+    Request to Join
+  </a>
 </div>

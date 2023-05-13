@@ -1,7 +1,9 @@
 import { Component, Input } from '@angular/core';
 import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
-import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
+import {
+  MOCK_ORGANIZATION_CARDS,
+  OrganizationCard,
+} from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-user-profile-overview',
@@ -10,5 +12,5 @@ import { MOCK_ORGANIZATIONS } from '@sagebionetworks/openchallenges/ui';
 })
 export class UserProfileOverviewComponent {
   @Input() user!: User;
-  organizations: Organization[] = MOCK_ORGANIZATIONS;
+  organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 }

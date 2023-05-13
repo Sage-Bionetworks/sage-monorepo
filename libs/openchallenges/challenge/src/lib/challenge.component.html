@@ -1,58 +1,43 @@
 <main class="base mat-typography">
   <div *ngIf="challenge$ | async as challenge">
-    <section id="top" class="row">
-      <div class="link" class="row">
-        <mat-icon aria-hidden="true">home</mat-icon>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <a routerLink="/challenge">challenges</a>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <span>{{ challenge.name }}</span>
-      </div>
-      <div class="profile-pic-container">
-        <openchallenges-avatar
+    <section id="profile-top" class="row">
+      <openchallenges-avatar
           class="profile-pic"
           [avatar]="challengeAvatar"
         ></openchallenges-avatar>
-        <span
+      <div id="profile-details" class="col">
+        <h2>
+          {{ challenge.name }}
+          <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+        </h2>
+        <p class="username">@{{ challenge.slug }}</p>
+        <div class="profile-type"
           *ngIf="challenge.status"
           [ngClass]="['status', challenge.status ? challenge.status : '']"
-          >{{ challenge.status }}</span
-        >
+          >{{ challenge.status }}</div>
       </div>
-      <div id="details" class="col">
-        <div class="details-top row">
-          <h2>
-            {{ challenge.name }}
-          </h2>
-          <div class="featured">
-            <mat-icon aria-hidden="true">military_tech</mat-icon>
-            <span>FEATURED!</span>
-          </div>
+      <!-- <div id="profile-activity" class="col-4">
+        <div class="profile-activity-card">
+          <p class="mat-body-strong">Start date:</p>
+          <p>{{ challenge.startDate }}</p>
         </div>
-        <p class="username">@{{ challenge.name }}</p>
-        <div class="progress-bar">
-          <div class="progress-bar-top" *ngIf="remainDays">
-            <span>{{ this.remainDays }} days remains</span>
-          </div>
-          <p-progressBar [value]="progressValue" [showValue]="false"></p-progressBar>
-          <div class="progress-bar-bottom">
-            <span class="start-date">{{ challenge.startDate }}</span>
-            <span class="end-date">{{ challenge.endDate }}</span>
-          </div>
+        <div class="profile-activity-card">
+          <p class="mat-body-strong">End date:</p>
+          <p>{{ challenge.endDate }}</p>
         </div>
-      </div>
+      </div> -->
     </section>
-    <section id="stats" class="row">
+    <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
         <openchallenges-challenge-stats [loggedIn]="loggedIn"></openchallenges-challenge-stats>
       </div>
     </section>
-    <section id="bottom" class="content">
-      <div class="sidenav col">
-        <div class="nav-group">
+    <section id="profile-bottom" class="content">
+      <div class="profile-sidenav col">
+        <div class="profile-nav-group">
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'overview' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
@@ -60,15 +45,7 @@
             Overview
           </a>
           <a
-            class="nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'details' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['details'] }"
-          >
-            Challenge Details
-          </a>
-          <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'organizers' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
@@ -76,7 +53,7 @@
             Organizers
           </a>
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'sponsors' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['sponsors'] }"
@@ -84,7 +61,7 @@
             Sponsors
           </a>
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'stargazers' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
@@ -100,8 +77,6 @@
             [challenge]="challenge"
           >
           </openchallenges-challenge-overview>
-          <openchallenges-challenge-details *ngSwitchCase="tabs['details']" [challenge]="challenge">
-          </openchallenges-challenge-details>
           <openchallenges-challenge-organizers
             *ngSwitchCase="tabs['organizers']"
             [challenge]="challenge"

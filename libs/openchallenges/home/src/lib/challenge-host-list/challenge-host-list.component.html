@@ -1,14 +1,20 @@
 <section id="organizations" class="mat-typography">
   <div class="container">
-    <h3 class="section-title">Discover Platforms and Organizations</h3>
+    <div class="text-center">
+      <h3 class="section-title">Discover Organizations</h3>
+      It takes a village to run a challenge - see who has been contributing their time and effort.
+    </div>
     <div class="row">
       <div class="card-group">
         <openchallenges-organization-card
-          *ngFor="let organization of organizations"
-          [organization]="organization"
+          *ngFor="let organizationCard of organizationCards$ | async"
+          [organizationCard]="organizationCard"
         >
         </openchallenges-organization-card>
       </div>
+    </div>
+    <div class="text-center">
+      <a mat-raised-button class="see-more" href="/org">See More</a>
     </div>
   </div>
 </section>

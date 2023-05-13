@@ -36,8 +36,8 @@
       </div>
       <div *ngSwitchCase="tabs['organizations']" class="card-group">
         <openchallenges-organization-card
-          *ngFor="let organization of organizations"
-          [organization]="organization"
+          *ngFor="let organizationCard of organizationCards"
+          [organizationCard]="organizationCard"
         >
         </openchallenges-organization-card>
       </div>

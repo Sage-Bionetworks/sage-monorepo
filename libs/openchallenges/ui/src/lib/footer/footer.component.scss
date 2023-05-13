@@ -10,14 +10,8 @@ footer {
   align-items: flex-start;
   box-sizing: border-box;
 }
-.footer-main {
-  margin: 0;
-}
-.footer-subtext {
-  align-self: auto;
-}
 .footer-link-group {
-  width: 250px;
+  width: 420px;
   height: 30px;
   padding: 0;
   display: flex;
@@ -57,9 +51,9 @@ footer {
   height: 56px;
 }
 
-@media only screen and (max-width: 650px) {
+@media only screen and (max-width: constants.$md-breakpoint) {
   footer {
-    height: 330px;
+    height: 370px;
   }
   .about-oc,
   .app-info,
@@ -67,5 +61,11 @@ footer {
     width: 100%;
     text-align: center;
     justify-content: space-around;
+  }
+  .footer-link-group li {
+    flex: 1;
+  }
+  .app-info {
+    margin-top: 45px;
   }
 }

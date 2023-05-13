@@ -1,0 +1,9 @@
+description: The aspect ratio of the image (the height of the image must be specified).
+type: string
+default: original
+enum:
+  - original
+  - '16_9'
+  - '1_1'
+  - '3_2'
+  - '2_3'

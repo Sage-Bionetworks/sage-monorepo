@@ -1,12 +1,36 @@
-import { Component } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
-import { MOCK_CHALLENGES } from '@sagebionetworks/openchallenges/ui';
+import { Component, OnInit } from '@angular/core';
+import {
+  Challenge,
+  ChallengeService,
+  ChallengeSearchQuery,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { BehaviorSubject, switchMap } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],
 })
-export class FeaturedChallengeListComponent {
-  challenges: Challenge[] = MOCK_CHALLENGES;
+export class FeaturedChallengeListComponent implements OnInit {
+  private query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
+
+  challenges: Challenge[] = [];
+
+  constructor(private challengeService: ChallengeService) {}
+
+  ngOnInit() {
+    const defaultQuery: ChallengeSearchQuery = {
+      pageNumber: 0,
+      pageSize: 3,
+      searchTerms: '',
+      sort: 'recently_started',
+    } as ChallengeSearchQuery;
+    this.query.next(defaultQuery);
+    this.query
+      .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
+      .subscribe((page) => {
+        this.challenges = page.challenges;
+      });
+  }
 }

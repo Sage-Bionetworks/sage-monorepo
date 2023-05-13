@@ -32,7 +32,7 @@ CREATE TABLE `challenge`
     `slug`                  varchar(255) NOT NULL,
     `name`                  varchar(255) DEFAULT NULL,
     `headline`              varchar(80),
-    `description`           varchar(280) NOT NULL,
+    `description`           varchar(1000) NOT NULL,
     `avatar_url`            varchar(255),
     `website_url`           varchar(255) NOT NULL,
     `status`                ENUM('upcoming', 'active', 'completed'),

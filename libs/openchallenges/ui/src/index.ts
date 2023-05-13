@@ -1,6 +1,7 @@
 export * from './lib/ui.module';
 
 export * from './lib/avatar/avatar';
+export * from './lib/avatar/avatar.component';
 export * from './lib/challenge-card/mock-challenges';
 export * from './lib/challenge-card/mock-platforms';
 export * from './lib/checkbox-filter/filter.model';
@@ -11,7 +12,8 @@ export * from './lib/person-card/mock-challenge-organizers';
 export * from './lib/person-card/mock-challenge-sponsors';
 export * from './lib/person-card/mock-persons';
 export * from './lib/navbar/navbar-section';
-export * from './lib/organization-card/mock-organizations';
+export * from './lib/organization-card/mock-organization-card';
+export * from './lib/organization-card/organization-card';
 export * from './lib/user-button/menu-item';
 export * from './lib/user-button/user-menu-items';
 export * from './lib/user-button/mock-user';

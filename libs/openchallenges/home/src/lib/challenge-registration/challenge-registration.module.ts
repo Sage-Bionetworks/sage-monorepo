@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { ChallengeRegistrationComponent } from './challenge-registration.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [ChallengeRegistrationComponent],

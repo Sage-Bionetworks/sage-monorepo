@@ -5,12 +5,13 @@ CREATE TABLE `organization` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `login` varchar(64) NOT NULL UNIQUE,
-  `avatar_url` varchar(255) DEFAULT NULL,
+  `avatar_key` varchar(255) DEFAULT NULL,
   `website_url` varchar(255) DEFAULT NULL,
   `description` varchar(1000) DEFAULT NULL,
   `challenge_count` int,
   `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `acronym` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT login_check CHECK (char_length(login) >= 2)
 );

@@ -6,27 +6,10 @@
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
-  $warn: map.get($config, 'warn');
-
-  $accent-color1: #FFD2DA;
-  $accent-color2: #FFD8CD;
-  $accent-color3: #C6FDF3;
-  $accent-color4: #E0E1FE;
-
-  .card-inner {
-    background: #fff;
-  }
-  .acc1 {
-    background:$accent-color1;
-  }
-  .acc2 {
-    background:$accent-color2;
-  }
-  .acc3 {
-    background:$accent-color3;
-  }
-  .acc4 {
-    background:$accent-color4;
+  $figma: map.get($config, 'figma');
+  
+  #featured-challenges {
+    background-color: map.get($figma, dl-color-default-hover1);
   }
 }
 

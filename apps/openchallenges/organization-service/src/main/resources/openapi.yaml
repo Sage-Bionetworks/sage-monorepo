@@ -243,8 +243,9 @@ components:
       description: An organization
       example:
         createdAt: 2022-07-04T22:19:11Z
-        avatarUrl: https://via.placeholder.com/300.png
+        avatarKey: logo/dream.png
         websiteUrl: https://example.com
+        acronym: OC
         name: Example organization
         description: A description of the organization.
         challengeCount: 10
@@ -270,10 +271,8 @@ components:
         description:
           example: A description of the organization.
           type: string
-        avatarUrl:
-          example: https://via.placeholder.com/300.png
-          format: url
-          nullable: true
+        avatarKey:
+          example: logo/dream.png
           type: string
         websiteUrl:
           example: https://example.com
@@ -292,8 +291,10 @@ components:
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
+        acronym:
+          example: OC
+          type: string
       required:
-      - avatarUrl
       - createdAt
       - description
       - email

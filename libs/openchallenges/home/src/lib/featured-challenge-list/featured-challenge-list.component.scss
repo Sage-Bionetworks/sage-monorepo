@@ -1,74 +1,16 @@
-$screen-sm: 481px;
-$screen-lg: 641px;
-
-// GENERAL CLASSES
 .container {
   max-width: 1128px;
   width: 100%;
   margin: 0 auto;
 }
 .section-title {
-  text-align: center;
   margin-bottom: 42px;
-}
-.text-sm {
-  font-size: 16px;
-  line-height: 21px;
-  letter-spacing: -0.1px;
-}
-.text-center {
-  text-align: center;
-}
-
-// CARDS
-.cards {
-  position: relative;
-}
-.cards-wrap {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.card {
-  position: relative;
-  padding: 16px;
-  width: 388px;
-  max-width: 388px;
-  flex-grow: 1;
 }
 .card-group {
   justify-content: center;
 }
-.card-inner {
-  position: relative;
-  height: 280px;
-  padding: 48px 24px 64px;
-  box-shadow: 0 8px 12px rgba(17, 16, 62, 0.12);
-}
-
-@media (min-width: $screen-lg) {
-  .cards .section-paragraph {
-    padding-left: 72px;
-    padding-right: 72px;
-  }
-  .cards-wrap {
-    padding-top: 24px;
-    margin-right: -24px;
-    margin-left: -24px;
-  }
-  .cards-wrap:first-child {
-    margin-top: -24px;
-  }
-  .cards-wrap:last-child {
-    margin-bottom: -24px;
-  }
-  .card {
-    padding: 24px;
-  }
-}
 
 // SECTION: featured
 #featured-challenges {
-  margin: 88px 0;
   padding: 64px 0;
 }

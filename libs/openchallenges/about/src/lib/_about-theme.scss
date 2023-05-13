@@ -5,6 +5,10 @@
   $config: mat.get-color-config($theme);
   $primary: map.get($config, primary);
   $accent: map.get($config, accent);
+
+  .goal-icon {
+    background-color: mat.get-color-from-palette($primary, 50);
+  }
 }
 
 @mixin typography($theme) {

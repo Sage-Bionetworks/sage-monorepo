@@ -1,18 +1,12 @@
 <main class="base mat-typography">
   <div *ngIf="organization$ | async as org">
     <section id="profile-top" class="row">
-      <div id="breadcrumbs" class="row">
-        <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <a routerLink="/org">Organizations</a>
-        <mat-icon aria-hidden="true">chevron_right</mat-icon>
-        <span>{{ org.name }}</span>
-      </div>
       <openchallenges-avatar
+        *ngIf="organizationAvatar$ | async as organizationAvatar"
         class="profile-pic"
         [avatar]="organizationAvatar"
       ></openchallenges-avatar>
-      <div id="details" class="col">
+      <div id="profile-details" class="col">
         <h2>
           {{ org.name }}
           <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
@@ -20,28 +14,28 @@
         <p class="username">@{{ org.login }}</p>
         <div class="profile-type">Organization</div>
       </div>
-      <div id="activity" class="co-4">
-        <div class="activity-card">
+      <!-- <div id="profile-activity" class="col-4">
+        <div class="profile-activity-card">
           <p class="mat-body-strong">Registered:</p>
           <p>01/01/2020</p>
         </div>
-        <div class="activity-card">
+        <div class="profile-activity-card">
           <p class="mat-body-strong">Profile last updated:</p>
           <p>03/31/2022</p>
         </div>
-      </div>
+      </div> -->
     </section>
-    <section id="stats" class="row">
+    <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
         <openchallenges-org-profile-stats [loggedIn]="loggedIn"></openchallenges-org-profile-stats>
       </div>
     </section>
     <section id="profile-bottom" class="content">
-      <div class="sidenav col">
-        <div class="nav-group">
+      <div class="profile-sidenav col">
+        <div class="profile-nav-group">
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'overview' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
@@ -49,7 +43,7 @@
             Overview
           </a>
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'challenges' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
@@ -57,7 +51,7 @@
             Challenges
           </a>
           <a
-            class="nav-item"
+            class="profile-nav-item"
             routerLink="."
             [queryParams]="{ tab: 'members' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['members'] }"

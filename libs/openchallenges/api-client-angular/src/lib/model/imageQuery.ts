@@ -9,6 +9,8 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ImageHeight } from './imageHeight';
+import { ImageAspectRatio } from './imageAspectRatio';
 
 
 /**
@@ -19,5 +21,7 @@ export interface ImageQuery {
      * The object key of the image.
      */
     objectKey: string;
+    height?: ImageHeight;
+    aspectRatio?: ImageAspectRatio;
 }
 

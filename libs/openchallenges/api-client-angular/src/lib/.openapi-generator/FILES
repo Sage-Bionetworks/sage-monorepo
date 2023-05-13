@@ -37,6 +37,8 @@ model/challengeSubmissionType.ts
 model/challengesPage.ts
 model/challengesPageAllOf.ts
 model/image.ts
+model/imageAspectRatio.ts
+model/imageHeight.ts
 model/imageQuery.ts
 model/models.ts
 model/organization.ts

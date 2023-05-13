@@ -1,5 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
+@use 'libs/openchallenges/styles/src/lib/constants';
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
@@ -29,18 +30,20 @@
   }
   .app-info {
     font-size: 14px;
-    line-height: 18px;
-  }
-  .footer-main {
-    line-height: 28px;
+    line-height: 21px;
   }
   .footer-link-group {
-    font-size: 18px;
+    font-size: 16px;
   }
   .footer-subtext,
   .footer-links,
   .footer-links a {
     font-size: 16px;
+  }
+  @media only screen and (max-width: constants.$md-breakpoint) {
+    .footer-link-group {
+      font-size: 14px !important;
+    }
   }
 }
 

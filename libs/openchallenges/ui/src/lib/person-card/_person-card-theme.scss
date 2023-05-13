@@ -13,7 +13,7 @@
   }
 
   .person-card-affiliation {
-    color: map.get($figma, dl-color-default-primary2);
+    color: map.get($figma, dl-color-default-navbardark);
   }
 
   .person-card-chip {
@@ -25,10 +25,9 @@
 @mixin typography($theme) {
   .person-card-name {
     font-weight: 600;
-    font-size: 1.4em;
   }
   .person-card-affiliation {
-    font-style: italic;
+    font-style: italic !important;
   }
 }
 

@@ -13,7 +13,9 @@
     .sage-navbar {
       background: mat.get-color-from-palette($primary, 600);
     }
-    .navbar-item:hover {
+    .navbar-item:hover,
+    .navbar-item:active,
+    .navbar-item:focus {
       background-color: mat.get-color-from-palette($primary, 700);
     }
   }

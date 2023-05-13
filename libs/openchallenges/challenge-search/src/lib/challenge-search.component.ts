@@ -72,7 +72,7 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
-  pageSize = 20;
+  pageSize = 24;
   searchResultsCount = 0;
 
   // define filters
@@ -83,10 +83,10 @@ export class ChallengeSearchComponent
     // challengeDifficultyFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
-    challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
+    challengePlatformFilter,
     challengeInputDataTypeFilter,
     challengeOrganizationFilter,
     challengeOrganizaterFilter,
@@ -120,7 +120,7 @@ export class ChallengeSearchComponent
     // update input data types filter values
     this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengeInputDataTypes.map(
+        (this.dropdownFilters[1].values = page.challengeInputDataTypes.map(
           (datatype) => ({
             value: datatype.slug,
             label: datatype.name,
@@ -132,7 +132,7 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.checkboxFilters[4].values = page.challengePlatforms.map(
+        (this.dropdownFilters[0].values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,

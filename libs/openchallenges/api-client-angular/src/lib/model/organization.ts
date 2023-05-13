@@ -25,10 +25,11 @@ export interface Organization {
      */
     login: string;
     description: string;
-    avatarUrl: string | null;
+    avatarKey?: string;
     websiteUrl: string;
     challengeCount?: number;
     createdAt: string;
     updatedAt: string;
+    acronym?: string;
 }
 
