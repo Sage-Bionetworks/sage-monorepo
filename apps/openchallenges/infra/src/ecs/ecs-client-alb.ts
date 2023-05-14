@@ -4,7 +4,7 @@ import { LbTargetGroup } from '@cdktf/provider-aws/lib/lb-target-group';
 import { Subnet } from '@cdktf/provider-aws/lib/subnet';
 import { Construct } from 'constructs';
 
-export class EcsAlbs extends Construct {
+export class EcsClientAlb extends Construct {
   lb: Alb;
   targetGroup: LbTargetGroup;
   listener: LbListener;
@@ -12,9 +12,9 @@ export class EcsAlbs extends Construct {
   constructor(
     scope: Construct,
     id: string,
-    vpcId: string,
+    subnets: Subnet[],
     securityGroupId: string,
-    subnets: Subnet[]
+    vpcId: string
   ) {
     super(scope, id);
 

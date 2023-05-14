@@ -28,7 +28,7 @@ import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-groups';
-import { EcsCluster } from './ecs-cluster';
+import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -66,6 +66,31 @@ class OpenChallengesStack extends SageStack {
 
     // The ECS Cluster
     const cluster = new EcsCluster(this, 'ecs_cluster');
+
+    // Load Balancers - Need to come first for references in Task Definitions
+    const clientAlb = new EcsClientAlb(
+      this,
+      'client_alb',
+      network.publicSubnets,
+      securityGroups.clientAlbSg.id,
+      network.vpc.id
+    );
+
+    const goldAlb = new EcsUpstreamServiceAlb(
+      this,
+      'gold_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
+      network.vpc.id
+    );
+
+    const silverAlb = new EcsUpstreamServiceAlb(
+      this,
+      'silver_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
+      network.vpc.id
+    );
 
     new TerraformOutput(this, 'vpc_id', {
       value: network.vpc.id,
