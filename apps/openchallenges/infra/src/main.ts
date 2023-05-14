@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-new */
 import { Construct } from 'constructs';
 import {
@@ -27,6 +28,7 @@ import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-group/security-groups';
+import { EcsCluster } from './ecs-cluster/ecs-cluster';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -56,12 +58,14 @@ class OpenChallengesStack extends SageStack {
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
-    // eslint-disable-next-line no-unused-vars
     const securityGroups = new SecurityGroups(
       this,
       'security_groups',
       network.vpc.id
     );
+
+    // The ECS Cluster
+    const cluster = new EcsCluster(this, 'ecs_cluster');
 
     new TerraformOutput(this, 'vpc_id', {
       value: network.vpc.id,
