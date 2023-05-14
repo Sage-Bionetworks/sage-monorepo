@@ -27,8 +27,8 @@ import { SageStack } from './stack/sage-stack';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
-import { SecurityGroups } from './security-group/security-groups';
-import { EcsCluster } from './ecs-cluster/ecs-cluster';
+import { SecurityGroups } from './security-groups';
+import { EcsCluster } from './ecs-cluster';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
