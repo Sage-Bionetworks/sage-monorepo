@@ -29,6 +29,7 @@ import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-groups';
 import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
+import { Database } from './ec2/database';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -90,6 +91,16 @@ class OpenChallengesStack extends SageStack {
       network.privateSubnets,
       securityGroups.upstreamServiceAlbSg.id,
       network.vpc.id
+    );
+
+    // The Database
+    new Database(
+      this,
+      'database',
+      // vars,
+      network.privateSubnets[0].id,
+      securityGroups.databaseSg.id,
+      network.natGateway
     );
 
     new TerraformOutput(this, 'vpc_id', {
