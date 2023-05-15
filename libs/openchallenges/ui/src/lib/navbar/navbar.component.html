@@ -1,14 +1,14 @@
 <!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
 <nav class="sage-navbar" aria-label="Top Toolbar">
   <a mat-button routerLink="/" aria-label="Home">
-    <img class="logo" src="assets/images/openchallenges-white.svg" alt="OpenChallenges" />
+    <img
+      class="logo"
+      src="/openchallenges-assets/images/openchallenges-white.svg"
+      alt="OpenChallenges"
+    />
   </a>
 
-  <a
-    mat-button
-    class="navbar-item"
-    *ngFor="let key of sectionsKeys"
-    [routerLink]="key"
+  <a mat-button class="navbar-item" *ngFor="let key of sectionsKeys" [routerLink]="key"
     >{{ sections[key].name }}
   </a>
 
