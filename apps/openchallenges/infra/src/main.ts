@@ -26,6 +26,7 @@ import { SageStack } from './stack/sage-stack';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
+import { SecurityGroups } from './security-group/security-groups';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -53,6 +54,14 @@ class OpenChallengesStack extends SageStack {
 
     // The AWS VPC
     const network = new Network(this, 'network', networkConfig);
+
+    // The security groups
+    // eslint-disable-next-line no-unused-vars
+    const securityGroups = new SecurityGroups(
+      this,
+      'security_groups',
+      network.vpc.id
+    );
 
     new TerraformOutput(this, 'vpc_id', {
       value: network.vpc.id,
