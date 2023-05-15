@@ -1,0 +1,20 @@
+#error {
+  background: url('/openchallenges-assets/images/about-banner.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.error-code {
+  font-size: 160px;
+}
+.btn-group {
+  margin-top: 48px;
+
+  a {
+    padding: 26px 40px
+  }
+}
