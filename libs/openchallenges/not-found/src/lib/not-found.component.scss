@@ -1,7 +1,8 @@
 #error {
-  background: url('/openchallenges-assets/images/banner-lg.png');
-  background-size: cover;
-  background-position: center;
+  background: url('/openchallenges-assets/images/about-banner.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: top;
   display: flex;
   flex-direction: column;
   justify-content: center;
