@@ -3,17 +3,21 @@
     <h3 class="section-title">Current Landscape</h3>
     <div class="row">
       <div class="col text-center">
-        <img class="logo-icon" [src]="(challenges$ | async)?.url" alt="Number of challenges" />
-        <h2 [countUp]="166">0</h2>
+        <img class="logo-icon" [src]="(challengeImg$ | async)?.url" alt="Number of challenges" />
+        <h2 *ngIf="challengeCount$ | async as challengeCount" [countUp]="challengeCount">0</h2>
         <p>annotated challenges</p>
       </div>
       <div class="col text-center">
-        <img class="logo-icon" [src]="(orgs$ | async)?.url" alt="Number of hosts & organizations" />
-        <h2 [countUp]="227">0</h2>
+        <img
+          class="logo-icon"
+          [src]="(orgImg$ | async)?.url"
+          alt="Number of organizations & hosting societies"
+        />
+        <h2 *ngIf="orgCount$ | async as orgCount" [countUp]="orgCount">0</h2>
         <p>organizations & hosting societies</p>
       </div>
       <div class="col text-center">
-        <img class="logo-icon" [src]="(users$ | async)?.url" alt="Number of users" />
+        <img class="logo-icon" [src]="(userImg$ | async)?.url" alt="Number of users" />
         <h2 [countUp]="3">0</h2>
         <p>registered users</p>
       </div>

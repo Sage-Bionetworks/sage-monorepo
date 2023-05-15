@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  ChallengeSearchQuery,
+  ChallengeService,
   Image,
+  ImageHeight,
   ImageService,
+  OrganizationSearchQuery,
+  OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  Registry,
-  RegistryService,
-} from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
@@ -15,27 +16,47 @@ import { Observable } from 'rxjs';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent implements OnInit {
-  public challenges$: Observable<Image> | undefined;
-  public orgs$: Observable<Image> | undefined;
-  public users$: Observable<Image> | undefined;
-  registry$!: Observable<Registry>;
+  challengeImg$: Observable<Image> | undefined;
+  orgImg$: Observable<Image> | undefined;
+  userImg$: Observable<Image> | undefined;
+
+  private imgHeight = ImageHeight._140px;
+
+  challengeCount$: Observable<number> | undefined;
+  orgCount$: Observable<number> | undefined;
 
   constructor(
-    private registryService: RegistryService,
-    private imageService: ImageService
-  ) {
-    this.registry$ = this.registryService.getRegistry();
-  }
+    private imageService: ImageService,
+    private challengeService: ChallengeService,
+    private organizationService: OrganizationService
+  ) {}
 
   ngOnInit() {
-    this.challenges$ = this.imageService.getImage({
+    this.challengeImg$ = this.imageService.getImage({
       objectKey: 'home-challenges.svg',
+      height: this.imgHeight,
     });
-    this.orgs$ = this.imageService.getImage({
+    this.orgImg$ = this.imageService.getImage({
       objectKey: 'home-hosts.svg',
+      height: this.imgHeight,
     });
-    this.users$ = this.imageService.getImage({
+    this.userImg$ = this.imageService.getImage({
       objectKey: 'home-users.svg',
+      height: this.imgHeight,
     });
+
+    this.challengeCount$ = this.challengeService
+      .listChallenges({
+        pageNumber: 1,
+        pageSize: 1,
+      } as ChallengeSearchQuery)
+      .pipe(map((page) => page.totalElements));
+
+    this.orgCount$ = this.organizationService
+      .listOrganizations({
+        pageNumber: 1,
+        pageSize: 1,
+      } as OrganizationSearchQuery)
+      .pipe(map((page) => page.totalElements));
   }
 }
