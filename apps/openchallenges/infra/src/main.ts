@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-new */
 import { Construct } from 'constructs';
 import {
@@ -26,7 +27,8 @@ import { SageStack } from './stack/sage-stack';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
-import { SecurityGroups } from './security-group/security-groups';
+import { SecurityGroups } from './security-groups';
+import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -56,10 +58,37 @@ class OpenChallengesStack extends SageStack {
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
-    // eslint-disable-next-line no-unused-vars
     const securityGroups = new SecurityGroups(
       this,
       'security_groups',
+      network.vpc.id
+    );
+
+    // The ECS Cluster
+    const cluster = new EcsCluster(this, 'ecs_cluster');
+
+    // Load Balancers - Need to come first for references in Task Definitions
+    const clientAlb = new EcsClientAlb(
+      this,
+      'client_alb',
+      network.publicSubnets,
+      securityGroups.clientAlbSg.id,
+      network.vpc.id
+    );
+
+    const goldAlb = new EcsUpstreamServiceAlb(
+      this,
+      'gold_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
+      network.vpc.id
+    );
+
+    const silverAlb = new EcsUpstreamServiceAlb(
+      this,
+      'silver_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
       network.vpc.id
     );
 
