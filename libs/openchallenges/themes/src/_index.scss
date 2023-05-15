@@ -6,6 +6,7 @@
 @use 'libs/openchallenges/home/src/lib-theme' as openchallenges-home;
 @use 'libs/openchallenges/team/src/lib-theme' as openchallenges-team;
 @use 'libs/openchallenges/challenge-search/src/lib-theme' as challenge-search;
+@use 'libs/openchallenges/not-found/src/lib-theme' as not-found;
 
 @mixin theme($theme) {
   @include openchallenges-challenge.theme($theme);
@@ -16,4 +17,5 @@
   @include openchallenges-home.theme($theme);
   @include openchallenges-team.theme($theme);
   @include challenge-search.theme($theme);
+  @include not-found.theme($theme);
 }
