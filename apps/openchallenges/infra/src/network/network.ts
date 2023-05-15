@@ -34,7 +34,7 @@ export class Network extends Construct {
 
     const nameTagPrefix = config.tagPrefix;
 
-    this.azs = ['a', 'b'].map((zone) => `${config.defaultRegion}${zone}`);
+    this.azs = ['a'].map((zone) => `${config.defaultRegion}${zone}`);
 
     logger.info('azs', this.azs);
 
