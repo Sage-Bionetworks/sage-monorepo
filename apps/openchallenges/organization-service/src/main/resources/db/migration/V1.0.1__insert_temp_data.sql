@@ -1891,7 +1891,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'texas-biomedical-research-institute',
     'logo/texas_biomed.png',
     'https://www.txbiomed.org/',
-    '',
+    'Texas Biomedical Research Institute is pioneering and sharing scientific breakthroughs to protect you, your families and our global community from the threat of infectious diseases. The Institute has an 80-year history of success that includes work on the first COVID-19 vaccine and therapies, the first Ebola treatment, the first Hepatitis-C therapy, and thousands of developmental discoveries. Texas Biomed helps create healthier communities with science that inspires new generations through STEM education programs, delivers jobs and economic impact in our community and heals through innovative research. Learn more about how you can #Stand4Science.',
     1
   ),
   (
@@ -1902,7 +1902,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uc-davis',
     'logo/uc_davis.png',
     'https://www.ucdavis.edu/',
-    '',
+    'We grow California.  UC Davis was founded in 1908 to serve the state of California. We do and we always will. And today, the seed that was planted those years ago has grown into one of the world''s top universities.',
     2
   ),
   (
@@ -1913,7 +1913,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ut',
     'logo/ut-austin.svg',
     'https://www.utexas.edu/',
-    '',
+    'Like the state it calls home, The University of Texas at Austin is a bold, ambitious leader supporting some 52,000 diverse students, 3,000 teaching faculty, and top national programs across 18 colleges and schools. As Texas'' leading research university, UT attracts more than $650 million annually for discovery. Amid the backdrop of Austin, Texas, a city recognized for its creative and entrepreneurial spirit, the university provides a place to explore countless opportunities for tomorrow''s artists, scientists, athletes, doctors, entrepreneurs and engineers.',
     1
   ),
   (
@@ -1921,32 +1921,32 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Thomas Jefferson University Hospital',
     '',
     '',
-    'thomas-jefferson-university-hospital',
+    'jefferson-health',
     'logo/jefferson.jpeg',
     'https://hospitals.jefferson.edu/',
-    '',
+    'We are Jefferson. At Jefferson Health, we are reimagining health care through our service-minded and diverse community of providers and specialists. Our mission is to improve lives. We strive to be bold and innovative, while putting your health and safety first. Each day, we are focused on you.',
     1
   ),
   (
     '186',
     'TracInnovations',
     '',
-    '',
+    'info@tracinno.dk',
     'tracinnovations',
     'logo/tracinnovations.webp',
     'https://tracinnovations.com/',
-    '',
+    'TracInnovations is a Danish company established in 2015 focusing on innovative solutions for image based diagnosis and treatment. TracInnovations has developed the Tracoline system, which is a MRI Markerless Motion Tracker and Monitor System that unnoticed records patient''s head movements during brain scans.',
     1
   ),
   (
     '187',
     'Trinity College Institute of Neuroscience',
     '',
-    '',
+    'neuroscience@tcd.ie',
     'tcd---neuroscience',
     'logo/tcd.png',
     'https://www.tcd.ie/Neuroscience/',
-    '',
+    'The Trinity College Institute of Neuroscience (TCIN) is a Trinity Research Institute (TRI) with 50 Principal Investigators and 250 researchers from a wide range of disciplines including Psychology, Psychiatry, Physiology, Pharmacology, Medicine, Biochemistry, Engineering, and Genetics, among others. These diverse disciplinary origins contribute to its core activities: promoting and supporting interdisciplinary basic and translational research, as well as teaching, public engagement, and national leadership in Neuroscience.',
     1
   ),
   (
@@ -1957,7 +1957,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'tulane',
     'logo/tu_new_shield.svg',
     'https://tulane.edu/',
-    '',
+    'Tulane''s motto — non sibi, sed suis — embodies who we are and what we stand for. We are entrepreneurs on the front lines of life-changing technologies, as well as hometown heroes. Tulanians see challenges as opportunities, and strive to improve the lives of others in our own community and around the globe.',
     1
   ),
   (
@@ -1968,7 +1968,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'fda',
     'logo/fda.svg',
     'https://www.fda.gov/home',
-    '',
+    'The Food and Drug Administration is responsible for protecting the public health by ensuring the safety, efficacy, and security of human and veterinary drugs, biological products, and medical devices; and by ensuring the safety of our nation''s food supply, cosmetics, and products that emit radiation.  FDA also has responsibility for regulating the manufacturing, marketing, and distribution of tobacco products to protect the public health and to reduce tobacco use by minors.  FDA is responsible for advancing the public health by helping to speed innovations that make medical products more effective, safer, and more affordable and by helping the public get the accurate, science-based information they need to use medical products and foods to maintain and improve their health.  FDA also plays a significant role in the Nation''s counterterrorism capability. FDA fulfills this responsibility by ensuring the security of the food supply and by fostering development of medical products to ...',
     12
   ),
   (
@@ -1979,7 +1979,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'unc-eshelman-school-of-pharmacy',
     'logo/unc.png',
     'https://pharmacy.unc.edu/',
-    '',
+    'Everything we do begins and ends with a patient in mind.  Developing leaders in pharmacy education, pharmacy practice and pharmaceutical sciences who make a difference in human health worldwide.',
     1
   ),
   (
@@ -1990,7 +1990,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ua',
     'logo/ua.png',
     'https://www.ua.edu/',
-    '',
+    'We are dedicated to excellence in teaching, research and service. We provide a robust campus environment where our students can reach their greatest potential while learning from the best and brightest faculty and making a positive difference in the community, the state and the world.',
     1
   ),
   (
@@ -2001,7 +2001,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uab',
     'logo/uab.jpg',
     'https://www.uab.edu/home/',
-    '',
+    'At UAB, we have never settled on merely finding what''s next—we have helped build the future through new ideas and initiatives in the classroom, the laboratory, the studio and the clinic.',
     1
   ),
   (
@@ -2012,7 +2012,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uams',
     'logo/uams.jpg',
     'https://www.uams.edu/',
-    '',
+    'By 2029, the University of Arkansas for Medical Sciences (UAMS) will lead Arkansas to be the healthiest state in the region through its synergies of education, clinical care, research and purposeful leadership.  With this bold statement, UAMS resolved that in the coming decade its status as Arkansas'' only academic health system will allow it to deliver dramatic and lasting health and health care improvements to its home state. Aiding in this vision will be its statewide network of campuses for public education and clinical outreach, along with cores of expertise in medical specialties, population health, digital health, health informatics and translational research.',
     1
   ),
   (
@@ -2023,7 +2023,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'university-of-basel',
     'logo/uni_basel.svg',
     'https://www.unibas.ch/en.html',
-    '',
+    'As a comprehensive university offering a wide range of high-quality educational opportunities, the University of Basel attracts students from Switzerland and the entire world, offering them outstanding studying conditions as they work towards their bachelor''s, master''s or PhD degrees. Today, the University of Basel has around 13,000 students from over a hundred nations, including 2,900 PhD students.  The University of Basel has seven faculties covering a wide spectrum of academic disciplines. At the same time, the university has positioned itself amidst the international competition in the form of five strategic focal areas: Life Sciences, Visual Studies, Nanosciences, Sustainability and Energy Research and European and Global Studies. In international rankings, the University of Basel is regularly placed among the 100 top universities in the world thanks to its research achievements.  The University of Basel has deep roots in the economically powerful and culturally rich Basel r...',
     2
   ),
   (
@@ -2034,7 +2034,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ucsd',
     'logo/ucsd.png',
     'https://ucsd.edu/',
-    '',
+    'We make changemakers.  Recognized as one of the top 15 research universities worldwide, our culture of collaboration sparks discoveries that advance society and drive economic impact. Everything we do is dedicated to ensuring our students have the opportunity to become changemakers, equipped with the multidisciplinary tools needed to accelerate answers to our world''s most pressing issues.',
     1
   ),
   (
@@ -2045,7 +2045,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ucsf',
     'logo/ucsf.svg',
     'https://www.ucsf.edu/',
-    '',
+    'At UC San Francisco, we are driven by the idea that when the best research, the best teaching and the best patient care converge, we can deliver breakthroughs that help heal the world.  Excellence is in our DNA. From genomics and immunology to specialty care for women and children, UCSF brings together the world''s leading experts in nearly every area of health. We are home to five Nobel laureates who have advanced the understanding of cancer, neurodegenerative diseases, aging and stem cells. Our hospitals and educational programs consistently rank among the best in the country, according to the latest surveys by U.S. News & World Report.   We are the leading university dedicated exclusively to the health sciences.',
     5
   ),
   (
@@ -2056,7 +2056,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ucsc',
     'logo/uc-santa-cruz-2021.svg',
     'https://www.ucsc.edu/',
-    '',
+    'An inspired, global, public research university leading at the intersection of innovation and justice.',
     5
   ),
   (
@@ -2067,7 +2067,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uc',
     'logo/uc.png',
     'https://www.uc.edu/',
-    '',
+    'The University of Cincinnati offers students a balance of educational excellence and real-world experience.  UC is a public research university with an enrollment of nearly 48,000 students and is ranked No. 4 in the nation for co-ops and internships by U.S. News & World Report (No. 1 among public institutions).  Today, more than 315,000 living alumni count themselves as Bearcats — united not just by their loyalty to our nationally known sports teams, but by their common love of the place, the people and the ideas that make up the University of Cincinnati.',
     1
   ),
   (
@@ -2078,7 +2078,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'cu-anschutz',
     'logo/cu_anschutz.svg',
     'https://www.cuanschutz.edu/',
-    '',
+    'The University of Colorado Anschutz Medical Campus is the largest academic health center in the Rocky Mountain region at the forefront of transformative education, science, medicine and healthcare.  The campus includes the University of Colorado health professional schools, multiple centers and institutes and two nationally ranked hospitals, UCHealth University of Colorado Hospital and Children''s Hospital Colorado, which treat nearly 2 million patients each year.   All interconnected, these organizations collaboratively improve the quality of patient care they deliver, research they conduct and health professionals they train.',
     4
   ),
   (
@@ -2089,7 +2089,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uconn',
     'logo/uconn.png',
     'https://uconn.edu/',
-    '',
+    'Learning and academics are about exploring the things that interest you, growing with that knowledge, and finding the path on which you''ll be most successful. With 14 schools and colleges and more than 115+ undergraduate majors, you''ll find what you''re looking for at UConn. And what if you come up with something unique to study? You can create your own major.  Whether you want to learn from the past by studying history or you want to set the course for the future with groundbreaking scientific research, learning opportunities here abound. Challenge yourself to reach new academic heights in rigorous courses taught by our expert faculty. Take advantage of undergraduate research awards including the Summer Undergraduate Research Fund or UConn IDEA Grants; study in a lab; or pursue a creative endeavor. Push yourself further, supplementing traditional coursework with enrichment such as Education Abroad or our acclaimed Honors Program.  Whatever you choose, we''re here to help you fin...',
     1
   ),
   (
@@ -2100,7 +2100,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uh',
     'logo/uh-primary.svg',
     'https://www.uh.edu/',
-    '',
+    'At the University of Houston, we spur innovation by encouraging the very spark of an idea to the transfer of knowledge and technology. The UH innovation ecosystem has a rich history of advancing Houston''s innovation economy.',
     1
   ),
   (
@@ -2111,7 +2111,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uiuc',
     'logo/wordmark_horizontal.png',
     'https://illinois.edu/',
-    '',
+    'Illinois students, scholars, and alumni are a community with the power to change the world.  With our land-grant heritage as a foundation, we pioneer innovative research that tackles global problems and expands the human experience. Our transformative learning experiences, in and out of the classroom, are designed to produce alumni who desire to make a significant, societal impact.',
     1
   ),
   (
@@ -2119,21 +2119,21 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Kent',
     '',
     '',
-    'university-of-kent',
+    'kent',
     'logo/ukent.jpeg',
     'https://www.kent.ac.uk/',
-    '',
+    'Welcome to the university of ambition where desire meets determination.  We stand for ambition, with our diverse community of staff and students committed to making a difference at regional, national and global level. It''s something we''re very proud of.',
     1
   ),
   (
     '204',
     'University of Kentucky',
-    'UKY',
+    'UK',
     '',
     'uky',
     'logo/uky.png',
     'http://www.uky.edu/',
-    '',
+    'The University of Kentucky has a broad range of resources centered on a single campus in the heart of the Bluegrass. Our wide array of programs allows us to excel in multidisciplinary studies and fosters an environment of cooperative engagement across all colleges, programs, and research endeavors. Because of the lives we touch and teach, we remain anchored in our mission to Kentucky– to educate, innovate, heal, and serve. To be sure, our complex, multi-faceted mission looks different today in many ways than it did in 1865. However, our sense of responsibility to our communities on campus and across the region is resolute. The mission has evolved and grown. The vision of service to our Commonwealth and the world beyond remains the same. They remain our compass – the soul of the University of Kentucky.',
     1
   ),
   (
@@ -2144,7 +2144,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'unil',
     'logo/unil-logo.svg',
     'https://www.unil.ch/central/en/home.html',
-    '',
+    'The University of Lausanne is a higher teaching and research institution composed of seven faculties with approximately 17,100 students and about 4,400 research, teaching and technical staff.  Its research activities focus on three main themes: human and social sciences, life sciences and medicine, and environmental sciences.  UNIL lays great store by the quality and innovation of its teaching. This is characterised by a highly interdisciplinary approach which is even reflected in the organisation of its faculties.',
     2
   ),
   (
@@ -2152,10 +2152,10 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Lisbon',
     '',
     '',
-    'u-lisbon',
+    'ulisboa',
     'logo/ulisboa.png',
     'https://www.ulisboa.pt/en',
-    '',
+    'Universidade de Lisboa (ULisboa) is the largest and most prestigious university in Portugal and is one of Europe''s leading universities. Heir to a university tradition that spans over seven centuries, ULisboa acquired its current status in July 2013, following the merger of the former Universidade Técnica de Lisboa and Universidade de Lisboa.  ULisboa brings together various areas of knowledge and has a privileged position for facilitating the contemporary evolution of science, technology, arts and humanities. The quality of teaching, research, innovation and culture of ULisboa is attracting an ever increasing amount of talent from around the world.',
     2
   ),
   (
@@ -2166,7 +2166,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uol',
     'logo/uol.jpg',
     'https://london.ac.uk/',
-    '',
+    'The University of London is the UK''s leading provider of digital and blended distance education internationally, offering programmes to 45,000 students in 190 countries around the world. Although proudly rooted in London, our community and impact are global.  We are a national leader in the humanities, and we promote their value to society and the economy through knowledge creation and exchange.  We are also a federation of 17 esteemed higher education institutions, with collaboration at the heart of our ethos. The University of London federation is a collective community of more than 240,000 learners and 50,000 staff, delivering world-leading research across all disciplines.  Our passion for increasing access to education and mobilising the collective power and expertise of the federation is central to our ability to transform lives around the world and address the global challenges of the future.',
     2
   ),
   (
@@ -2177,7 +2177,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'university-of-luxembourg',
     'logo/university-of-luxembourg.png',
     'https://wwwen.uni.lu/',
-    '',
+    'Founded in 2003, the University of Luxembourg is the only public university of the Grand Duchy of Luxembourg.  Multilingual, international and research-oriented, it is also a modern institution with a personal atmosphere.',
     1
   ),
   (
@@ -2188,7 +2188,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'umd',
     'logo/umd.png',
     'https://www.umd.edu/',
-    '',
+    'The University of Maryland, College Park is the state''s flagship university and one of the nation''s preeminent public research universities. A global leader in research, entrepreneurship and innovation, the university is home to more than 40,700 students, 14,000 faculty and staff, and nearly 400,000 alumni all dedicated to the pursuit of Fearless Ideas. Located just outside Washington, D.C., we discover and share new knowledge every day through our renowned research enterprise and programs in academics, the arts and athletics. And we are committed to social entrepreneurship as the nation''s first “Do Good” campus.',
     2
   ),
   (
@@ -2199,7 +2199,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'umich',
     'logo/block-m-maize.png',
     'https://umich.edu/',
-    '',
+    'Welcome to the University of Michigan, a place with deep traditions focused on creating brighter futures. We invite you to explore the diverse and vibrant community that makes us the home of Leaders & Best.  More than any other university, we have the potential to be so much more than the sum of our many excellent parts. It''s this potential to have a positive impact on the society we serve that represents our greatest value as a university.',
     1
   ),
   (
@@ -2210,7 +2210,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'unc',
     'logo/univ-unc.png',
     'https://www.unc.edu/',
-    '',
+    'The nation''s first public university is at the heart of what''s next, preparing a diverse student body to become creators, explorers, innovators and leaders in North Carolina and throughout the world.  Carolina''s nationally recognized, innovative teaching, campus-wide spirit of inquiry and dedication to public service continue the legacy that began in 1795 when the University first opened its doors to students.  In Chapel Hill, students develop a voice for critical thought and the courage to guide change. They connect to the future they''re already shaping. Carolina is committed to access for all, providing life-changing opportunities such as the Carolina Covenant, which promises a debt-free education to low-income students.  In its third century – an era of groundbreaking study and research – UNC-Chapel Hill is harnessing the very best of our fast-changing world. We''re proud to advance knowledge for this and each generation to come.',
     3
   ),
   (
@@ -2221,7 +2221,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'notre-dame',
     'logo/notre_dame.png',
     'https://www.nd.edu/',
-    '',
+    'The University of Notre Dame was founded in November 1842 by Rev. Edward F. Sorin, C.S.C., a priest of the Congregation of Holy Cross, a French missionary order. It is located adjacent to South Bend, Indiana, the center of a metropolitan area with a population of more than 315,000. Chartered by the state of Indiana in 1844, the University was governed by the Holy Cross priests until 1967, when governance was transferred to a two-tiered, mixed board of lay and religious trustees and fellows.  Notre Dame has grown from the vision of Father Sorin, who sought to establish a great Catholic university in America, and has remained faithful to both its religious and intellectual traditions. Today, we seek to be an enlightening force for a world deeply in need. Our departments of theology and philosophy are regarded as among the finest in the world while faculty in all departments participate in our mission to ensure that Notre Dame''s Catholic character informs all of our endeavors. From l...',
     0
   ),
   (
@@ -2232,7 +2232,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'university-of-padova',
     'logo/university-of-padua.jpg',
     'https://www.unipd.it/en/',
-    '',
+    'The University of Padua is one of Europe''s oldest and most prestigious seats of learning. As a multi-disciplinary institute of higher education, the University aims to provide its students with professional training and a solid cultural background. The qualification received from the University of Padua act as a symbol of the ambitious objectives respected and coveted by both students and employers alike.  Founded in 1222, Padua''s Studium Patavinum was a place of study that readily welcomed Italian students and scholars, as well as those from various European countries searching for cultural freedom and expression. This freedom continues to define and express the essence of the University through its motto as Universa universis patavina libertas.',
     1
   ),
   (
@@ -2243,7 +2243,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'university-of-padua',
     'logo/university-of-padua.jpg',
     'https://www.unipd.it/en/',
-    '',
+    'The University of Padua is one of Europe''s oldest and most prestigious seats of learning. As a multi-disciplinary institute of higher education, the University aims to provide its students with professional training and a solid cultural background. The qualification received from the University of Padua act as a symbol of the ambitious objectives respected and coveted by both students and employers alike.  Founded in 1222, Padua''s Studium Patavinum was a place of study that readily welcomed Italian students and scholars, as well as those from various European countries searching for cultural freedom and expression. This freedom continues to define and express the essence of the University through its motto as Universa universis patavina libertas.',
     1
   ),
   (
@@ -2254,7 +2254,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'upenn',
     'logo/upenn.png',
     'https://www.upenn.edu/',
-    '',
+    'Penn''s academics are boosted by its inherent culture and ecosystem of innovation. You name it, if it''s cutting-edge, the University''s faculty—and students—have their hands in it. Grounded in the liberal arts and sciences and enriched by the integrated resources of four undergraduate and 12 graduate schools, Penn offers students an unparalleled education informed by inclusivity, intellectual rigor, research, and the impetus to create new knowledge to the benefit of individuals and communities around the world.',
     4
   ),
   (
@@ -2262,10 +2262,10 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Rochester',
     '',
     '',
-    'university-of-rochester',
-    'logo/university-of-rochester.jpg',
-    'https://www.urmedicine.org/',
-    '',
+    'rochester',
+    'logo/rochester.jpeg',
+    'https://www.rochester.edu/',
+    'One of the world''s leading research universities, Rochester has a long tradition of breaking boundaries—always pushing and questioning, learning and unlearning. We transform ideas into enterprises that create value and make the world ever better.',
     2
   ),
   (
@@ -2276,7 +2276,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'usf',
     'logo/usf.png',
     'https://www.usf.edu/',
-    '',
+    'Welcome to the University of South Florida. Though a relatively young university, founded in 1956, we have rich traditions – traditions of access and opportunity for students, of academic excellence, of groundbreaking research, of serving our communities.',
     1
   ),
   (
@@ -2287,29 +2287,29 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'university-of-southampton',
     'logo/university-of-southampton.png',
     'https://www.southampton.ac.uk/',
-    '',
+    'As a global top 100 university, our expert academics and wide range of study options will help you achieve your goals.',
     1
   ),
   (
     '219',
     'University of Texas Southwestern Medical Center',
-    'UTSW',
     '',
-    'utsw',
+    '',
+    'ut-southwestern',
     'logo/ut-swestern.gif',
     'https://www.utsouthwestern.edu/',
-    '',
+    'UT Southwestern, one of the premier academic medical centers in the nation, integrates pioneering biomedical research with exceptional clinical care and education. The institution''s faculty includes many distinguished members, including six who have been awarded Nobel Prizes since 1985. The faculty of more than 2,800 is responsible for groundbreaking medical advances and is committed to translating science-driven research quickly to new clinical treatments. UT Southwestern physicians provide medical care in about 80 specialties to more than 105,000 hospitalized patients, nearly 370,000 emergency room cases, and oversee approximately 3 million outpatient visits a year.',
     2
   ),
   (
     '220',
     'University of Toronto',
-    'UofT',
+    'U of T',
     '',
-    'uoft',
+    'utoronto',
     'logo/utoronto.png',
     'https://www.utoronto.ca/',
-    '',
+    'We are proud to be one of the world''s top research-intensive universities, bringing together top minds from every conceivable background and discipline to collaborate on the world''s most pressing challenges.  Our community is a catalyst for discovery, innovation and progress, creating knowledge and solutions that make a tangible difference around the globe. And we prepare our students for success through an outstanding global education rooted in excellence, inclusion and close-knit learning communities.  The ideas, innovations and contributions of more than 660,000 graduates advance U of T''s impact on communities across the globe.  Together, we continue to defy gravity by taking on what might seem unattainable today and generating the ideas and talent needed to build a more equitable, sustainable and prosperous future.',
     5
   ),
   (
@@ -2320,14 +2320,14 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uvm',
     'logo/the-university-of-vermont.png',
     'https://www.uvm.edu/',
-    '',
+    'UVM is a top research university of ideal size, large enough to offer a breadth of ideas, resources, and opportunities, yet scaled to enable close faculty-student mentorship across all levels of study, from bachelor''s to doctoral programs.',
     1
   ),
   (
     '222',
     'University of Verona',
     '',
-    '',
+    'relazioni.internazionali@ateneo.univr.it',
     'university-of-verona',
     'logo/university-of-verona.png',
     'https://www.univr.it/en/international',
@@ -2342,7 +2342,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uva',
     'logo/uva_primary_logo.jpg',
     'https://www.virginia.edu/',
-    '',
+    'The University is an iconic public institution of higher education, boasting nationally ranked schools and programs, diverse and distinguished faculty, a major academic medical center and proud history as a renowned research university. The community and culture of the University are enriched by active student self-governance, sustained commitment to the arts and a robust NCAA Division I Athletics program.',
     1
   ),
   (
@@ -2353,7 +2353,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uw',
     'logo/uw.svg',
     'https://www.washington.edu/',
-    '',
+    'Since our founding in 1861, the University of Washington has been a hub for learning, innovation, problem solving and community building. Driven by a mission to serve the greater good, our students, faculty and staff tackle today''s most pressing challenges with courage and creativity, making a difference across Washington state — and around the world.',
     7
   ),
   (
@@ -2364,7 +2364,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uw-madison',
     'logo/uw-logo.png',
     'https://www.wisc.edu/',
-    '',
+    'Since its founding in 1848, this campus has been a catalyst for the extraordinary. As a public land-grant university and major research institution, our students, staff, and faculty engage in a world-class education while solving real-world problems. With public service — or as we call it, the Wisconsin Idea — as our guiding principle, Badgers are creating a better future for everyone.',
     0
   ),
   (
@@ -2375,7 +2375,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uzh',
     'logo/uzh.png',
     'https://www.uzh.ch/en.html',
-    '',
+    'With its 28,000 enrolled students, the University of Zurich is Switzerland''s largest university. Founded in the year 1833, UZH was Europe''s first university to be established by a democratic political system. Made up of seven faculties covering some 100 different subject areas, the University offers a wide variety of Bachelor''s, Master''s and PhD programs.',
     2
   ),
   (
@@ -2386,7 +2386,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'uge',
     'logo/ugei-logo.svg',
     'https://www.ugei.com/',
-    '',
+    'Since 2008 when our journey began, we''ve been focused on expanding utilization of renewable energy. In our early days, we worked on finding use cases for clean energy technologies before they were widely adopted, building projects ranging from wind and solar microgrids in remote locations, to lighting the Eiffel Tower with 100% renewable energy in 2014. Over time we turned our focus entirely to solar and battery storage in the U.S. where we''re building a growing portfolio of distributed energy assets, Leaning on more than a decade of experience across 700 projects totaling more than 500 megawatts, we''re proud to be making a significant impact on the world''s transition to clean energy, and we''re just getting started. ',
     1
   ),
   (
@@ -2408,18 +2408,18 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'va-durham-health-care',
     'logo/va-logo-white.png',
     'https://www.durham.va.gov/',
-    '',
+    'Since 1953, Durham Veterans Affairs Medical Center has been improving the health of the men and women who have so proudly served our nation. We consider it our privilege to serve your healthcare needs in any way we can. Services are available to more than 200,000 Veterans living in a 27-county area of central and eastern North Carolina. The VA Durham Healthcare System provides you with outstanding health care, trains America''s future health care providers, and conducts important medical research. ',
     2
   ),
   (
     '230',
     'Verily',
     '',
-    '',
+    'info@verily.com',
     'verily',
     'logo/verily.jpeg',
     'https://verily.com/',
-    '',
+    'True, comprehensive health is expanding exponentially.  Massive increases in health information & computing power are coinciding with health challenges of a scale & magnitude we''ve never seen—creating urgency for value-based care and improved outcomes for all. Precision health represents a fundamental shift to health and to care that is more individualized, accessible, and affordable.',
     1
   ),
   (
@@ -2429,8 +2429,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     '',
     'vha-ie',
     'logo/vaInnovation.jpeg',
-    'https://www.va.gov/innovationecosystem/',
-    '',
+    'https://www.innovation.va.gov/ecosystem/views/home.html',
+    'VHA Innovation Ecosystem (VHA IE) is the catalyst for enabling the discovery and spread of mission-driven health care innovation that exceeds expectations, restores hope, and builds trust within the Veteran community. VHA IE leverages the collective power of innovation champions from across VA, academia, non-profit and industry to operationalize innovation in the Nation''s largest integrated health care system.',
     2
   ),
   (
@@ -2441,7 +2441,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'wustl',
     'logo/wustl.png',
     'https://wustl.edu/',
-    '',
+    'At WashU, we generate, disseminate, and apply knowledge. We foster freedom of inquiry and expression of ideas in our research, teaching and learning.  We aim to create an environment that encourages and supports wide-ranging exploration at the frontier of discovery by embracing diverse perspectives from individuals of all identities and backgrounds. We promote higher education and rigorous research as a fundamental component of an open, vibrant society. We strive to enhance the lives and livelihoods not only of our students, patients, and employees but also of the people of the greater St. Louis community and beyond. We do so by addressing scientific, social, economic, medical, and other challenges in the local, national, and international realms.',
     1
   ),
   (
@@ -2452,18 +2452,18 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'wayne-state-university',
     'logo/wayne-state-university.png',
     'https://wayne.edu/',
-    '',
+    'Our mission is to create and advance knowledge, prepare a diverse student body to thrive, and positively impact local and global communities. Our guiding values cut across organizational boundaries, bind us culturally, and permeate our strategic and tactical initiatives. They are the defining traits of the WSU community.',
     1
   ),
   (
     '234',
     'Weizmann Institute of Science',
     '',
-    '',
+    'contact-us@weizmann.ac.il',
     'weizmann-institute-of-science',
     'logo/wiz.jpeg',
     'https://www.weizmann.ac.il/pages/',
-    '',
+    'The Weizmann Institute of Science is one of the world''s leading multidisciplinary basic research institutions in the natural and exact sciences. It is located in Rehovot, Israel, just south of Tel Aviv. It was initially established as the Daniel Sieff Institute in 1934, by Israel and Rebecca Sieff of London in memory of their son Daniel. In 1949, it was renamed for Dr. Chaim Weizmann, the first President of the State of Israel and Founder of the Institute.',
     2
   ),
   (
@@ -2474,7 +2474,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'sanger',
     'logo/sanger.jpeg',
     'https://www.sanger.ac.uk/',
-    '',
+    'We tackle some of the most difficult challenges in genomic research. This demands science at scale; a visionary and creative approach to research that pushes the boundaries of our understanding in ever new and exciting ways.',
     2
   ),
   (
@@ -2485,7 +2485,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'ostp',
     'logo/ostp.png',
     'https://www.whitehouse.gov/ostp/',
-    '',
+    'President Biden often says, ''America is the only nation that can be defined by a single word: possibilities.'' The White House Office of Science and Technology (OSTP) works to bring that idea to life by harnessing the power of science, technology, and innovation to achieve America''s greatest aspirations. OSTP''s mission includes: a) Providing advice to the President and the Executive Office of the President on matters related to science and technology; b) Strengthening and advancing American science and technology; c) Working with federal departments and agencies and with Congress to create bold visions, unified strategies, clear plans, wise policies, and effective, equitable programs for science and technology; d) Engaging with external partners, including industry, academia, philanthropic organizations, and civil society; state, local, Tribal and territorial governments; and other nations; and, e) Ensuring equity, inclusion, and integrity in all aspects of science and technology.',
     1
   ),
   (
@@ -2496,7 +2496,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'inchi',
     'logo/inchi.png',
     'https://www.inchi-trust.org/',
-    '',
+    'InChI: open-source chemical structure representation algorithm. InChI is a structure-based chemical identifier, originally developed by IUPAC. As a standard identifier for chemical databases, InChI is essential for enabling effective information management across chemistry.  InChI with InChIKey are non-proprietary open standards. InChI turns chemical structures into unique machine readable strings, used for describing, storing and searching chemical structures. All associated algorithms and software are open source.',
     1
   ),
   (
@@ -2507,7 +2507,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'nctr',
     '',
     'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
-    '',
+    'The National Center for Toxicological Research (NCTR), is the only FDA Center located outside the Washington D.C. metropolitan area. The one-million square foot research campus in Jefferson, Arkansas plays a critical role in the missions of FDA and the Department of Health and Human Services to promote and protect public health.  Regulatory science researchers, academia, and other regulatory science research organizations and groups from around the world investigate, learn, and train at the Federal facility. NCTR, FDA''s internationally recognized research center, plays a critical role in FDA''s mission.  The unique scientific expertise of NCTR is critical in supporting FDA product centers and their regulatory roles. ',
     2
   );
 
