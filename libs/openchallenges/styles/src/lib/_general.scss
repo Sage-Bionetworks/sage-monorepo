@@ -87,16 +87,11 @@ em {
   display: flex;
   flex-flow: column wrap;
   align-content: center;
-
-  a {
-    text-decoration: none;
-  }
 }
 .btn-group > *:first-child {
   align-self: stretch;
 }
-.btn-group button,
-.btn-group a {
+.btn-group button {
   margin: 5px;
   padding: 3px 32px;
 }
