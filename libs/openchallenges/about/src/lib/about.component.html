@@ -1,6 +1,10 @@
 <main class="base mat-typography">
   <section id="header">
-    <img class="logo-icon" [src]="(logo$ | async)?.url" alt="OpenChallenges Icon" />
+    <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/openchallenges-icon.svg"
+          alt="OpenChallenges Icon"
+        />
     <h2>About OpenChallenges</h2>
   </section>
   <section id="overview" class="container">
@@ -47,7 +51,11 @@
       <div class="card">
         <div class="card-header">
           <div class="goal-icon">
-            <img class="icon" [src]="(bars$ | async)?.url" alt="Discoverable challenges" />
+            <img
+              class="icon"
+              src="/openchallenges-assets/images/icon-bars.svg"
+              alt="Discoverable challenges"
+            />
           </div>
           <h4 class="card-title text-center">Make challenges more discoverable</h4>
         </div>
@@ -61,7 +69,11 @@
       <div class="card">
         <div class="card-header">
           <div class="goal-icon">
-            <img class="icon" [src]="(fingerprint$ | async)?.url" alt="Empower identity" />
+            <img
+              class="icon"
+              src="/openchallenges-assets/images/icon-fingerprint.svg"
+              alt="Empower identity"
+            />
           </div>
           <h4 class="card-title text-center">Empower professional identity</h4>
         </div>
@@ -76,9 +88,11 @@
       </div>
       <div class="card">
         <div class="card-header">
-          <div class="goal-icon">
-            <img class="icon" [src]="(chart$ | async)?.url" alt="Increase intelligence" />
-          </div>
+          <img
+            class="icon"
+            src="/openchallenges-assets/images/icon-chart.svg"
+            alt="Increase intelligence"
+          />
           <h4 class="card-title text-center">Increase challenge intelligence</h4>
         </div>
         <div class="card-content">
@@ -93,7 +107,11 @@
       <div class="card">
         <div class="card-header">
           <div class="goal-icon">
-            <img class="icon" [src]="(graph$ | async)?.url" alt="Promote FAIR" />
+            <img
+              class="icon"
+              src="/openchallenges-assets/images/icon-graph.svg"
+              alt="Promote FAIR"
+            />
           </div>
           <h4 class="card-title text-center">Promote discoverability and resusability</h4>
         </div>
