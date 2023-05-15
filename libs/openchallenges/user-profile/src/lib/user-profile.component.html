@@ -1,40 +1,26 @@
-<div class="base mat-typography" *ngIf="user$ | async as user">
+<main class="base mat-typography" *ngIf="user$ | async as user">
   <section id="profile-top" class="row">
-    <div id="breadcrumbs" class="row">
-      <a aria-label="Back to home" href="/home"><mat-icon aria-hidden="true">home</mat-icon></a>
-      <mat-icon aria-hidden="true">chevron_right</mat-icon>
-      <span>{{ user.name }}</span>
-    </div>
     <openchallenges-avatar class="profile-pic" [avatar]="userAvatar"></openchallenges-avatar>
-    <div id="details" class="col">
+    <div id="profile-details" class="col">
       <h2>
-        Awesome User <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+        Awesome User
+        <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
       </h2>
       <p class="username">@awesome-user</p>
       <div class="profile-type">User</div>
     </div>
-    <div id="activity" class="col-4">
-      <div class="activity-card">
-        <p class="mat-body-strong">Registered:</p>
-        <p>01/01/2020</p>
-      </div>
-      <div class="activity-card">
-        <p class="mat-body-strong">Profile last updated:</p>
-        <p>03/31/2022</p>
-      </div>
-    </div>
   </section>
-  <section id="stats" class="row">
+  <section id="profile-stats" class="row">
     <div class="col fill-empty"></div>
     <div class="col">
       <openchallenges-user-profile-stats [loggedIn]="loggedIn"></openchallenges-user-profile-stats>
     </div>
   </section>
   <section id="profile-bottom" class="content">
-    <div class="sidenav col">
-      <div class="nav-group">
+    <div class="profile-sidenav col">
+      <div class="profile-nav-group">
         <a
-          class="nav-item"
+        class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'overview' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
@@ -42,7 +28,7 @@
           Biography
         </a>
         <a
-          class="nav-item"
+        class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'challenges' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
@@ -50,7 +36,7 @@
           Challenges
         </a>
         <a
-          class="nav-item"
+        class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'starred' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['starred'] }"
@@ -74,6 +60,6 @@
       </ng-container>
     </div>
   </section>
-</div>
+</main>
 
 <openchallenges-footer [version]="appVersion"></openchallenges-footer>
