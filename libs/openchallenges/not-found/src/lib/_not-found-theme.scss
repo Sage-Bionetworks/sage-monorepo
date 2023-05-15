@@ -3,22 +3,23 @@
 
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
-  $primary: map.get($config, 'primary');
-  $accent: map.get($config, 'accent');
-  $warn: map.get($config, 'warn');
-  $figma: map.get($config, 'figma');
+  $primary: map.get($config, primary);
+  $accent: map.get($config, accent);
 
-  .member-pic {
-    filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.5));
+  .home-btn {
+    background-color: mat.get-color-from-palette($accent) !important;
+    color: white !important;
+  }
+  .home-btn:hover {
+    background-color:  mat.get-color-from-palette($accent, 500);
   }
 }
 
 @mixin typography($theme) {
-  .card-name {
-    font-weight: 700;
-  }
-  .card-roles {
-    font-size: 1.1em;
+  $config: mat.get-typography-config($theme);
+
+  .err-code {
+    font-size: 160px;
   }
 }
 

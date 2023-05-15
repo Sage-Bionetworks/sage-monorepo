@@ -14,8 +14,9 @@
 @mixin typography($theme) {
   $config: mat.get-typography-config($theme);
 
-  .subtitle {
-    font-size: 0.75em;
+  .container p {
+    font-size: 17px;
+    line-height: 28px;
   }
 }
 

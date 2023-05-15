@@ -5,6 +5,11 @@ body {
   height: 100vh;
   margin: 0;
 }
+em {
+  color: #00b1e5;
+  font-style: normal;
+  font-weight: 700;
+}
 
 // GRID
 .base {
@@ -50,7 +55,7 @@ body {
   height: 140px;
 }
 .top-design {
-  background: url('/openchallenges-assets/images/about-banner.svg');
+  background: url('/openchallenges-assets/images/banner-sm.svg');
   background-size: cover;
   background-position: bottom;
   padding-top: 108px;
@@ -82,11 +87,16 @@ body {
   display: flex;
   flex-flow: column wrap;
   align-content: center;
+
+  a {
+    text-decoration: none;
+  }
 }
 .btn-group > *:first-child {
   align-self: stretch;
 }
-.btn-group button {
+.btn-group button,
+.btn-group a {
   margin: 5px;
   padding: 3px 32px;
 }
