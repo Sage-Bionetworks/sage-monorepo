@@ -11,6 +11,8 @@ import { logger, Level } from './logger';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
+import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
+// import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 import * as os from 'os';
 import * as fs from 'fs';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
@@ -22,6 +24,8 @@ import {
 } from './constants';
 import { SageStack } from './stack/sage-stack';
 import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
+import { NetworkConfig } from './network/network-config';
+import { Network } from './network/network';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -41,9 +45,46 @@ class OpenChallengesStack extends SageStack {
       keyName,
     });
 
+    const networkConfig = new NetworkConfig({
+      defaultRegion: AmazonRegion.US_EAST_1,
+      tagPrefix: 'openchallenges',
+      vpcCirdBlock: '10.0.0.0/16',
+    });
+
+    // The AWS VPC
+    const network = new Network(this, 'network', networkConfig);
+
+    new TerraformOutput(this, 'vpc_id', {
+      value: network.vpc.id,
+    });
+
+    const ports = [22, 80, 443];
+
+    const securityGroup = new SecurityGroup(this, 'security_group', {
+      name: 'openchallenges-sg',
+      vpcId: network.vpc.id,
+      egress: [
+        {
+          fromPort: 0,
+          toPort: 0,
+          cidrBlocks: ['0.0.0.0/0'],
+          protocol: '-1',
+        },
+      ],
+      ingress: ports.map((port) => ({
+        fromPort: port,
+        toPort: port,
+        // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
+        cidrBlocks: ['0.0.0.0/0'],
+        protocol: '-1',
+      })),
+    });
+
     const ec2Instance = new Instance(this, 'compute', {
       ami: Ami.UBUNTU_22_04_LTS,
       instanceType: AmazonEc2InstanceType.T2_MICRO,
+      // subnetId: publicSubnetA.id,
+      vpcSecurityGroupIds: [securityGroup.id],
       keyName: keyPair.keyName,
     });
 
