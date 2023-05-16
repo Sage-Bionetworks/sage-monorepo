@@ -59,12 +59,26 @@ Generate the SSH key for connecting to the EC2 instance that we will create as p
 ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/openchallenges-ec2 -N ''
 ```
 
+### Login into Terraform
+
+Enter this command and follow the instructions to authenticate with Terraform.
+
+```console
+terraform login
+```
+
 ## Usage
+
+### Generate the Terraform configuration file
+
+```console
+cdktf synth
+```
 
 ### Deploy the stack
 
 ```console
-cdktf deploy
+cdktf apply
 ```
 
 ### Connect to the EC2 instance
@@ -86,6 +100,32 @@ From this project folder:
 ```console
 cdktf destroy
 ```
+
+## FAQ
+
+### Error: Required plugins are not installe
+
+CDKTF may throw the following error when attempting to deploy the stack from a fresh development
+environment.
+
+```console
+$ cdktf apply
+2023-05-16 23:41:22 info: Welcome to the deployment of the OpenChallenges stack.
+
+openchallenges-stack  ╷
+                      │ Error: Required plugins are not installed
+                      │
+                      │ The installed provider plugins are not consistent with the packages selected
+                      │ in the dependency lock file:
+                      │   - registry.terraform.io/hashicorp/aws: there is no package for registry.terraform.io/hashicorp/aws 4.65.0 cached in .terraform/providers
+                      │
+                      │ Terraform uses external plugins to integrate with a variety of different
+                      │ infrastructure services. To download the plugins required for this
+                      │ configuration, run:
+                      │   terraform init
+```
+
+Removing the directory `cdktf.out` and running `cdktf apply` again should solve this issue.
 
 ## References
 
