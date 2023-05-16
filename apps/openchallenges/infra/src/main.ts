@@ -24,7 +24,7 @@ import {
   AmazonRegion,
 } from './constants';
 import { SageStack } from './stack/sage-stack';
-import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
+// import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-groups';
@@ -44,102 +44,106 @@ class OpenChallengesStack extends SageStack {
       region: AmazonRegion.US_EAST_1,
     });
 
-    const keyPair = new KeyPair(this, 'keypair', {
-      publicKey,
-      keyName,
-    });
+    // const keyPair = new KeyPair(this, 'keypair', {
+    //   publicKey,
+    //   keyName,
+    // });
 
-    const networkConfig = new NetworkConfig({
-      defaultRegion: AmazonRegion.US_EAST_1,
-      tagPrefix: 'openchallenges',
-      vpcCirdBlock: '10.0.0.0/16',
-    });
+    // const networkConfig = new NetworkConfig({
+    //   defaultRegion: AmazonRegion.US_EAST_1,
+    //   tagPrefix: 'openchallenges',
+    //   vpcCirdBlock: '10.0.0.0/16',
+    // });
 
-    // The AWS VPC
-    const network = new Network(this, 'network', networkConfig);
+    // // The AWS VPC
+    // const network = new Network(this, 'network', networkConfig);
 
-    // The security groups
-    const securityGroups = new SecurityGroups(
-      this,
-      'security_groups',
-      network.vpc.id
-    );
+    // // The security groups
+    // const securityGroups = new SecurityGroups(
+    //   this,
+    //   'security_groups',
+    //   network.vpc.id
+    // );
 
-    // The ECS Cluster
-    const cluster = new EcsCluster(this, 'ecs_cluster');
+    // // The ECS Cluster
+    // const cluster = new EcsCluster(this, 'ecs_cluster');
 
-    // Load Balancers - Need to come first for references in Task Definitions
-    const clientAlb = new EcsClientAlb(
-      this,
-      'client_alb',
-      network.publicSubnets,
-      securityGroups.clientAlbSg.id,
-      network.vpc.id
-    );
+    // // Load Balancers - Need to come first for references in Task Definitions
+    // const clientAlb = new EcsClientAlb(
+    //   this,
+    //   'client_alb',
+    //   network.publicSubnets,
+    //   securityGroups.clientAlbSg.id,
+    //   network.vpc.id
+    // );
 
-    const goldAlb = new EcsUpstreamServiceAlb(
-      this,
-      'gold_alb',
-      network.privateSubnets,
-      securityGroups.upstreamServiceAlbSg.id,
-      network.vpc.id
-    );
+    // const goldAlb = new EcsUpstreamServiceAlb(
+    //   this,
+    //   'gold_alb',
+    //   network.privateSubnets,
+    //   securityGroups.upstreamServiceAlbSg.id,
+    //   network.vpc.id
+    // );
 
-    const silverAlb = new EcsUpstreamServiceAlb(
-      this,
-      'silver_alb',
-      network.privateSubnets,
-      securityGroups.upstreamServiceAlbSg.id,
-      network.vpc.id
-    );
+    // const silverAlb = new EcsUpstreamServiceAlb(
+    //   this,
+    //   'silver_alb',
+    //   network.privateSubnets,
+    //   securityGroups.upstreamServiceAlbSg.id,
+    //   network.vpc.id
+    // );
 
-    // The Database
-    new Database(
-      this,
-      'database',
-      // vars,
-      network.privateSubnets[0].id,
-      securityGroups.databaseSg.id,
-      network.natGateway
-    );
+    // // The Database
+    // new Database(
+    //   this,
+    //   'database',
+    //   // vars,
+    //   network.privateSubnets[0].id,
+    //   securityGroups.databaseSg.id,
+    //   network.natGateway
+    // );
 
-    new TerraformOutput(this, 'vpc_id', {
-      value: network.vpc.id,
-    });
+    // new TerraformOutput(this, 'vpc_id', {
+    //   value: network.vpc.id,
+    // });
 
-    const ports = [22, 80, 443];
+    // const ports = [22, 80, 443];
 
-    const securityGroup = new SecurityGroup(this, 'security_group', {
-      name: 'openchallenges-sg',
-      vpcId: network.vpc.id,
-      egress: [
-        {
-          fromPort: 0,
-          toPort: 0,
-          cidrBlocks: ['0.0.0.0/0'],
-          protocol: '-1',
-        },
-      ],
-      ingress: ports.map((port) => ({
-        fromPort: port,
-        toPort: port,
-        // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
-        cidrBlocks: ['0.0.0.0/0'],
-        protocol: '-1',
-      })),
-    });
+    // const securityGroup = new SecurityGroup(this, 'security_group', {
+    //   name: 'openchallenges-sg',
+    //   vpcId: network.vpc.id,
+    //   egress: [
+    //     {
+    //       fromPort: 0,
+    //       toPort: 0,
+    //       cidrBlocks: ['0.0.0.0/0'],
+    //       protocol: '-1',
+    //     },
+    //   ],
+    //   ingress: ports.map((port) => ({
+    //     fromPort: port,
+    //     toPort: port,
+    //     // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
+    //     cidrBlocks: ['0.0.0.0/0'],
+    //     protocol: '-1',
+    //   })),
+    // });
 
-    const ec2Instance = new Instance(this, 'compute', {
-      ami: Ami.UBUNTU_22_04_LTS,
-      instanceType: AmazonEc2InstanceType.T2_MICRO,
-      // subnetId: publicSubnetA.id,
-      vpcSecurityGroupIds: [securityGroup.id],
-      keyName: keyPair.keyName,
-    });
+    // const ec2Instance = new Instance(this, 'compute', {
+    //   ami: Ami.UBUNTU_22_04_LTS,
+    //   instanceType: AmazonEc2InstanceType.T2_MICRO,
+    //   // subnetId: publicSubnetA.id,
+    //   vpcSecurityGroupIds: [securityGroup.id],
+    //   keyName: keyPair.keyName,
+    // });
 
-    new TerraformOutput(this, 'public_ip', {
-      value: ec2Instance.publicIp,
-    });
+    // new TerraformOutput(this, 'public_ip', {
+    //   value: ec2Instance.publicIp,
+    // });
+
+    // new S3Bucket(this, 'bucket', {
+    //   bucket: 'myprefixdemoay7rcmbkaj0',
+    // });
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(
@@ -148,10 +152,6 @@ class OpenChallengesStack extends SageStack {
         CostCenter: SageCostCenter.ITCR,
       })
     );
-
-    new S3Bucket(this, 'bucket', {
-      bucket: 'myPrefixDemo',
-    });
   }
 }
 

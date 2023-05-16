@@ -32,7 +32,7 @@ export class Database extends Construct {
       // privateIp: vars.databasePrivateIp,
       tags: { Name: `${nameTagPrefix}-database` },
       dependsOn: [natGateway],
-      userData: readFileSync('./resources/scripts/database.sh', 'utf8'),
+      userData: readFileSync('./src/resources/scripts/database.sh', 'utf8'),
     });
   }
 }

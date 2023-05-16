@@ -7,7 +7,7 @@ export class SageStack extends TerraformStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    Aspects.of(this).add(new S3PrefixValidationAspect('myPrefix'));
+    Aspects.of(this).add(new S3PrefixValidationAspect('openchallenges'));
     // Aspects.of(this).add(new CostCenterTagValidationAspect());
   }
 }
