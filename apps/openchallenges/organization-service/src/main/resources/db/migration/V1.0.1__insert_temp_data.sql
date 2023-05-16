@@ -64,7 +64,7 @@ VALUES (
     'logo/precisionfda.png',
     'https://precision.fda.gov/challenges',
     'A secure, collaborative, high-performance computing platform that builds a community of experts around the analysis of biological datasets in order to advance precision medicine.',
-    15
+    16
   ),
   (
     '15',
@@ -284,7 +284,7 @@ VALUES (
     'logo/booz-allen.jpg',
     'https://www.boozallen.com/',
     'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Booz Allen partners with public and private sector clients to solve their most difficult challenges through a combination of consulting, analytics, mission operations, technology, systems delivery, cybersecurity, engineering, and innovation expertise. \n\nWith international headquarters in McLean, Virginia, the firm employs more than 22,600 people globally and had revenue of $5.41 billion for the 12 months ended March 31, 2016.\n\nBooz Allen brings its pioneering work in advanced analytics—and the industry-leading expertise of its more than 600-member data science team—to transform our clients'' data into actions that keep them competitive in today''s data-driven economy. To learn about Booz Allen''s data science ...',
-    10
+    11
   ),
   (
     '35',
@@ -442,7 +442,7 @@ VALUES (
   ),
   (
     '49',
-    'Cincinnati Children''s Hospital Medical Center',
+    'Cincinnati Children''s',
     'CCHMC',
     '',
     'cchmc',
@@ -592,7 +592,7 @@ VALUES (
     'logo/dnanexus.png',
     'https://www.dnanexus.com/',
     'DNAnexus(R) has built the world''s most secure cloud platform and global network for scientific collaboration and accelerated discovery. We embrace challenges and partnership to tackle the world''s most exciting opportunities in human health.',
-    9
+    10
   ),
   (
     '63',
@@ -988,7 +988,7 @@ VALUES (
     'logo/intel.svg',
     'https://www.intel.com/content/www/us/en/homepage.html',
     'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking applications and end-to-end solutions on Intel technologies. Visit the Intel(r) Nervana(TM) AI Academy to gain access to tools, Intel optimized frameworks, libraries, technical experts and training, getting started guides, and more.',
-    1
+    2
   ),
   (
     '99',
@@ -1428,7 +1428,7 @@ VALUES (
     'logo/neosoma.jpg',
     'https://www.neosomainc.com/',
     'Every brain cancer patient is unique, and so is every brain tumor. Neuro-oncology teams need new tools and insights to advance the state of care. At Neosoma, our mission is to help clinicians improve outcomes by providing novel disease insights to physicians and clinical trials through innovative AI technology.',
-    1
+    2
   ),
   (
     '140',
@@ -1771,7 +1771,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/sage-bionetworks.png',
     'https://sagebionetworks.org/',
     'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine.  We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together across institutional boundaries to meaningfully address major medical research problems.  We incubate new ways for diverse groups of people to practice research together.  We advance our practices using an  integrated and iterative design cycle that plays out between our scientific teams and our core service teams.  As our innovations become norms, we develop them into robust core capabilities that can be put into practice across our portfolio of research programs.  This portfolio includes publicly funded programs that create data resources and knowledge bases, pre-competitive collaborations across industry partners, and federated networks of healthcare data providers. In turn, these projects provide an active pl...',
-    41
+    42
   ),
   (
     '172',
@@ -1925,7 +1925,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/jefferson.jpeg',
     'https://hospitals.jefferson.edu/',
     'We are Jefferson. At Jefferson Health, we are reimagining health care through our service-minded and diverse community of providers and specialists. Our mission is to improve lives. We strive to be bold and innovative, while putting your health and safety first. Each day, we are focused on you.',
-    1
+    2
   ),
   (
     '186',
@@ -2035,7 +2035,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ucsd.png',
     'https://ucsd.edu/',
     'We make changemakers.  Recognized as one of the top 15 research universities worldwide, our culture of collaboration sparks discoveries that advance society and drive economic impact. Everything we do is dedicated to ensuring our students have the opportunity to become changemakers, equipped with the multidisciplinary tools needed to accelerate answers to our world''s most pressing issues.',
-    1
+    2
   ),
   (
     '196',
@@ -2046,7 +2046,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/ucsf.svg',
     'https://www.ucsf.edu/',
     'At UC San Francisco, we are driven by the idea that when the best research, the best teaching and the best patient care converge, we can deliver breakthroughs that help heal the world.  Excellence is in our DNA. From genomics and immunology to specialty care for women and children, UCSF brings together the world''s leading experts in nearly every area of health. We are home to five Nobel laureates who have advanced the understanding of cancer, neurodegenerative diseases, aging and stem cells. Our hospitals and educational programs consistently rank among the best in the country, according to the latest surveys by U.S. News & World Report.   We are the leading university dedicated exclusively to the health sciences.',
-    5
+    6
   ),
   (
     '197',
@@ -2078,7 +2078,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'cu-anschutz',
     'logo/cu_anschutz.svg',
     'https://www.cuanschutz.edu/',
-    'The University of Colorado Anschutz Medical Campus is the largest academic health center in the Rocky Mountain region at the forefront of transformative education, science, medicine and healthcare.  The campus includes the University of Colorado health professional schools, multiple centers and institutes and two nationally ranked hospitals, UCHealth University of Colorado Hospital and Children''s Hospital Colorado, which treat nearly 2 million patients each year.   All interconnected, these organizations collaboratively improve the quality of patient care they deliver, research they conduct and health professionals they train.',
+    'The ​University of Colorado Anschutz Medical Campus is the largest academic health center in the Rocky Mountain region at the forefront of transformative education, science, medicine and healthcare.  The campus includes the University of Colorado health professional schools, multiple centers and institutes and two nationally ranked hospitals, UCHealth University of Colorado Hospital and Children''s Hospital Colorado, which treat nearly 2 million patients each year.   All interconnected, these organizations collaboratively improve the quality of patient care they deliver, research they conduct and health professionals they train.',
     4
   ),
   (
@@ -2130,7 +2130,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'University of Kentucky',
     'UK',
     '',
-    'uky',
+    'uk',
     'logo/uky.png',
     'http://www.uky.edu/',
     'The University of Kentucky has a broad range of resources centered on a single campus in the heart of the Bluegrass. Our wide array of programs allows us to excel in multidisciplinary studies and fosters an environment of cooperative engagement across all colleges, programs, and research endeavors. Because of the lives we touch and teach, we remain anchored in our mission to Kentucky– to educate, innovate, heal, and serve. To be sure, our complex, multi-faceted mission looks different today in many ways than it did in 1865. However, our sense of responsibility to our communities on campus and across the region is resolute. The mission has evolved and grown. The vision of service to our Commonwealth and the world beyond remains the same. They remain our compass – the soul of the University of Kentucky.',
@@ -2255,7 +2255,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/upenn.png',
     'https://www.upenn.edu/',
     'Penn''s academics are boosted by its inherent culture and ecosystem of innovation. You name it, if it''s cutting-edge, the University''s faculty—and students—have their hands in it. Grounded in the liberal arts and sciences and enriched by the integrated resources of four undergraduate and 12 graduate schools, Penn offers students an unparalleled education informed by inclusivity, intellectual rigor, research, and the impetus to create new knowledge to the benefit of individuals and communities around the world.',
-    4
+    5
   ),
   (
     '216',
@@ -2376,7 +2376,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'logo/uzh.png',
     'https://www.uzh.ch/en.html',
     'With its 28,000 enrolled students, the University of Zurich is Switzerland''s largest university. Founded in the year 1833, UZH was Europe''s first university to be established by a democratic political system. Made up of seven faculties covering some 100 different subject areas, the University offers a wide variety of Bachelor''s, Master''s and PhD programs.',
-    2
+    3
   ),
   (
     '227',
@@ -2509,6 +2509,193 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.fda.gov/about-fda/office-chief-scientist/national-center-toxicological-research',
     'The National Center for Toxicological Research (NCTR), is the only FDA Center located outside the Washington D.C. metropolitan area. The one-million square foot research campus in Jefferson, Arkansas plays a critical role in the missions of FDA and the Department of Health and Human Services to promote and protect public health.  Regulatory science researchers, academia, and other regulatory science research organizations and groups from around the world investigate, learn, and train at the Federal facility. NCTR, FDA''s internationally recognized research center, plays a critical role in FDA''s mission.  The unique scientific expertise of NCTR is critical in supporting FDA product centers and their regulatory roles. ',
     2
+  ),
+  (
+    '239',
+    'McGill University',
+    '',
+    '',
+    'mcgill',
+    'logo/mcgill.jpg',
+    'https://www.mcgill.ca/',
+    'McGill University is one of Canada''s best-known institutions of higher learning and one of the leading universities in the world. International students from more than 150 countries make up nearly 30% of McGill''s student body ‒ the highest proportion of any Canadian research university.',
+    1
+  ),
+  (
+    '240',
+    'Medical Artificial Intelligence Lab',
+    '',
+    'spark@mailab.io',
+    'mai-lab',
+    'logo/mai-lab.jpg',
+    'https://mailab.io/',
+    'We are a leading ecosystem for data science and artificial intelligence (AI) innovations in medical diagnostic imaging. Our lab is dedicated to creating AI solutions and data science applications to transform the healthcare landscape of countries in Africa. We are a team of scientists from around the world working locally to disrupt healthcare challenges in resourced limited settings by implementing AI innovations in Africa where it has the most potential.',
+    1
+  ),
+  (
+    '241',
+    'Duke University Medical Center',
+    '',
+    '',
+    'duke-health',
+    'logo/duke-health.jpg',
+    'https://www.dukehealth.org/locations/duke-university-medical-center',
+    'Duke University Medical Center is the name given to the group of patient care, education and medical research facilities on the medical campus of Duke University in Durham, North Carolina.',
+    1
+  ),
+  (
+    '242',
+    'Yale University',
+    '',
+    '',
+    'yale',
+    'logo/yale.jpg',
+    'https://www.yale.edu/',
+    'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale’s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city’s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
+    1
+  ),
+  (
+    '243',
+    'Missouri University',
+    '',
+    '',
+    'mizzou',
+    'logo/mizzou.jpg',
+    'https://missouri.edu/',
+    '',
+    1
+  ),
+  (
+    '244',
+    'Yale School of Medicine',
+    'YSM',
+    '',
+    'ysm',
+    'logo/ysm.png',
+    'https://medicine.yale.edu/',
+    'Yale School of Medicine educates and nurtures creative leaders in medicine and science, promoting curiosity and critical inquiry in an inclusive environment enriched by diversity. We advance discovery and innovation fostered by partnerships across the university, our local community, and the world. We care for patients with compassion, and commit to improving the health of all people.',
+    1
+  ),
+  (
+    '245',
+    'Children''s National Hospital',
+    '',
+    '',
+    'childrens-national',
+    'logo/childrens-national.jpg',
+    'https://childrensnational.org/',
+    'Children''s National Hospital is ranked #5 in the nation by U.S. News & World Report. We''re ranked #1 for newborns and we''re the best pediatric hospital for neurology and neurosurgery in the Mid-Atlantic. What''s more, we ranked in all 10 specialties, with top 10 honors in neurology and neurosurgery, cancer, nephrology, orthopedics, pulmonology and lung surgery, and diabetes and endocrinology. This recognition of our commitment to bringing health and well-being to all children continues to inspire our teams.',
+    1
+  ),
+  (
+    '246',
+    'Helmholtz AI',
+    '',
+    '',
+    'helmholtz-ai',
+    'logo/helmholtz-ai.jpg',
+    'https://www.helmholtz.ai/',
+    'We are a research-driven hub for applied artificial intelligence (AI) that: a) fosters cross-field creativity by stimulating collaborative research projects; b) identifies and leverages similarities between applications to advance generalised AI / machine learning (ML) methods; c) integrates field-specific excellence and AI/ML prowess; d) improves the quality, scalability and timely availability of emerging methods and tools; and e) empowers and trains the current and next generation of scientists, to enable the efficient and agile development and implementation of AI/ML assets across the whole Helmholtz Association.',
+    1
+  ),
+  (
+    '247',
+    'Mayo Clinic',
+    '',
+    '',
+    'mayo-clinic',
+    'logo/mayo-clinic.png',
+    'https://www.mayoclinic.org/',
+    'Mayo Clinic is a nonprofit organization committed to clinical practice, education and research, providing expert, whole-person care to everyone who needs healing.',
+    1
+  ),
+  (
+    '248',
+    'Technical University of Munich',
+    'TUM',
+    '',
+    'tum',
+    'logo/tum.jpg',
+    'https://www.tum.de/en/',
+    'TUM has once again been named a University of Excellence and is thus the only technical university to continuously retain this status since 2006. The title is awarded as a part of the Excellence Strategy of the German federal and state governments, in strategic international support of German cutting-edge research.  We are using this funding to realize the future concept TUM Agenda 2030. We are expanding technically-oriented humanities and social sciences and are reorganizing previous internal structures to be more innovation-oriented: The constraining, discipline-based Faculty structure is being replaced by seven Schools which are linked to one another by integrative research institutes. In the sense of an "open marketplace of knowledge", we support talented individuals in all their diversity, at all levels and across substantive subject boundaries. We work in alliances with international partners to re-orient towards Europe as well as to the southern global hemisphere in order to...',
+    1
+  ),
+  (
+    '249',
+    'Center for Devices and Radiological Health',
+    'CDRH',
+    '',
+    'cdrh',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/fda-organization/center-devices-and-radiological-health',
+    'In keeping with our mission, the Center for Devices and Radiological Health (CDRH) is responsible for protecting and promoting the public health.  We assure that patients and providers have timely and continued access to safe, effective, and high-quality medical devices and safe radiation-emitting products.  We provide consumers, patients, their caregivers, and providers with understandable and accessible science-based information about the products we oversee.  We facilitate medical device innovation by advancing regulatory science, providing industry with predictable, consistent, transparent, and efficient regulatory pathways, and assuring consumer confidence in devices marketed in the U.S.  We seek to continually improve our effectiveness in fulfilling our mission by planning strategically and regularly monitoring our progress.',
+    1
+  ),
+  (
+    '250',
+    'Lagos State University Teaching Hospital',
+    'LASUTH',
+    '',
+    'lasuth',
+    'logo/lasuth.jpg',
+    'https://www.lasuth.org.ng/',
+    'To provide high quality Healthcare Services in a friendly Environment where patients'' satisfaction is the ultimate.  Guided by the needs of our patients and their families, we aim to deliver the very best health care in a safe and compassionate environment; to advance care through innovative research and education; and to improve the health and well-being of the diverse communities we serve.',
+    1
+  ),
+  (
+    '251',
+    'NSIA-Kano Diagnostic Center',
+    'NKDC',
+    'enquiries@nkdc.ng',
+    'nkdc',
+    'logo/nkdc.jpeg',
+    'https://www.nhdic.ng/facility/nkdc/',
+    'The NKDC medical diagnostics facility opened its doors to the public on the 16th of March, 2020, in Kano - Northern Nigeria’s commercial centre. This state-of-the-art facility is home to a group of enthusiastic, passionate and patient-centric medical professionals who continuously aim to improve patient experiences. We offer 24/7 radiology and medical laboratory services all year round.',
+    1
+  ),
+  (
+    '252',
+    'Nationwide Children''s',
+    '',
+    '',
+    'nationwide-childrens',
+    'logo/nationwide-childrens.jpg',
+    'https://www.nationwidechildrens.org/',
+    'At Nationwide Children’s Hospital, our vision remains unchanged. We aspire to create the best outcomes for children everywhere. This means families come to Nationwide Children’s from around the globe knowing they will get the highest quality care. It means we will reach to cure rare diseases. It means we will sequence a child’s tumor to select the best care pathway. It means we will strive to make an entire population healthier, not just through their physical health, but also in their mental health. It means we will redefine the role of the children’s hospital in the achievement of optimal health.',
+    1
+  ),
+  (
+    '253',
+    'Dana-Farber Brigham Cancer Center',
+    '',
+    '',
+    'dana-farber-brigham-cancer-center',
+    'logo/bwh.png',
+    'https://www.brighamandwomens.org/cancer',
+    'At Dana-Farber Brigham Cancer Center, all we do is cancer. Because no two people are the same, our approach to treatment and care is personalized – with a deep understanding of your cancer and how to get you well.  Through our 12 specialized disease treatment centers, experts from our two organizations, Dana-Farber Cancer Institute and Brigham and Women’s Hospital, work together as one team to offer the most advanced treatments with compassion and care that makes all the difference.',
+    1
+  ),
+  (
+    '254',
+    'Lacunda Fund',
+    '',
+    'secretariat@lacunafund.org',
+    'lacunda-fund',
+    'logo/lacuna-fund.jpg',
+    'https://lacunafund.org/',
+    'Lacuna Fund is the world’s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
+    1
+  ),
+  (
+    '255',
+    'MLCommons',
+    '',
+    '',
+    'mlcommons',
+    'logo/mlc.jpg',
+    'https://mlcommons.org/en/',
+    'The mission of MLCommons(R) is to accelerate machine learning innovation and increase its positive impact on society. Together with its 50+ founding Members and Affiliates, including startups, leading companies, academics, and non-profits from around the globe, MLCommons will help grow machine learning from a research field into a mature industry through benchmarks, public datasets and best practices.  Every major technological advance follows a similar trajectory towards universal adoption and impact. The arc from research to broad accessibility generally takes from 30-40 years: from early automobiles to the family car, from development of ARPANET to the mainstream World Wide Web, from the first cellular phones to an smartphone in every pocket. Each of these examples started with technological breakthroughs, but for decades was limited by expertise, access, and expense.  Machine learning is no different. ML and artificial intelligence have been around for decades, but even today t...',
+    1
   );
 
 -- contributor_roles data
@@ -3171,4 +3358,39 @@ VALUES ('1', 1, 75, 'sponsor'),
   ('655', 5, 1, 'sponsor'),
   ('656', 4, 1, 'sponsor'),
   ('657', 1, 1, 'sponsor'),
-  ('658', 3, 1, 'sponsor');
+  ('658', 3, 1, 'sponsor'),
+  ('659', 167, 215, 'challenge_organizer'),
+  ('660', 167, 171, 'challenge_organizer'),
+  ('661', 167, 239, 'challenge_organizer'),
+  ('662', 167, 240, 'challenge_organizer'),
+  ('663', 167, 195, 'challenge_organizer'),
+  ('664', 167, 226, 'challenge_organizer'),
+  ('665', 167, 241, 'challenge_organizer'),
+  ('666', 167, 242, 'challenge_organizer'),
+  ('667', 167, 185, 'challenge_organizer'),
+  ('668', 167, 196, 'challenge_organizer'),
+  ('669', 167, 243, 'challenge_organizer'),
+  ('670', 167, 244, 'challenge_organizer'),
+  ('671', 167, 245, 'challenge_organizer'),
+  ('672', 167, 246, 'challenge_organizer'),
+  ('673', 167, 247, 'challenge_organizer'),
+  ('674', 167, 248, 'challenge_organizer'),
+  ('675', 167, 13, 'challenge_organizer'),
+  ('676', 167, 249, 'challenge_organizer'),
+  ('677', 167, 34, 'challenge_organizer'),
+  ('678', 167, 62, 'challenge_organizer'),
+  ('679', 167, 215, 'data_contributor'),
+  ('680', 167, 240, 'data_contributor'),
+  ('681', 167, 250, 'data_contributor'),
+  ('682', 167, 251, 'data_contributor'),
+  ('683', 167, 241, 'data_contributor'),
+  ('684', 167, 185, 'data_contributor'),
+  ('685', 167, 243, 'data_contributor'),
+  ('686', 167, 245, 'data_contributor'),
+  ('687', 167, 49, 'data_contributor'),
+  ('688', 167, 252, 'data_contributor'),
+  ('689', 167, 253, 'data_contributor'),
+  ('690', 167, 98, 'sponsor'),
+  ('691', 167, 139, 'sponsor'),
+  ('692', 167, 254, 'sponsor'),
+  ('693', 167, 255, 'sponsor');
