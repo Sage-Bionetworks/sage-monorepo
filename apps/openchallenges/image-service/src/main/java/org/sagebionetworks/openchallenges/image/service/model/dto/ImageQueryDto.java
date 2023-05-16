@@ -31,15 +31,16 @@ public class ImageQueryDto {
   }
 
   /**
-   * The object key of the image.
+   * The unique identifier of the image.
    *
    * @return objectKey
    */
   @NotNull
+  @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+")
   @Schema(
       name = "objectKey",
       example = "logo/dream.png",
-      description = "The object key of the image.",
+      description = "The unique identifier of the image.",
       required = true)
   public String getObjectKey() {
     return objectKey;

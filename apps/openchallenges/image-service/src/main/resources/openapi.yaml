@@ -80,6 +80,11 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
+    ImageKey:
+      description: The unique identifier of the image.
+      example: logo/dream.png
+      pattern: "^[a-zA-Z0-9\\/_-]+.[a-zA-Z0-9\\/_-]+"
+      type: string
     ImageHeight:
       default: original
       description: The height of the image.
@@ -105,8 +110,9 @@ components:
       description: An image query.
       properties:
         objectKey:
-          description: The object key of the image.
+          description: The unique identifier of the image.
           example: logo/dream.png
+          pattern: "^[a-zA-Z0-9\\/_-]+.[a-zA-Z0-9\\/_-]+"
           type: string
         height:
           $ref: '#/components/schemas/ImageHeight'
