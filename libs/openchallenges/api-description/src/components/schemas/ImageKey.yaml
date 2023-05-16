@@ -1,4 +1,4 @@
 description: The unique identifier of the image.
 type: string
-example: logo/openchallenges.png
+example: logo/dream.png
 pattern: ^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+
