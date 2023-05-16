@@ -2,9 +2,7 @@ type: object
 description: An image query.
 properties:
   objectKey:
-    description: The object key of the image.
-    type: string
-    example: logo/dream.png
+    $ref: ImageKey.yaml
   height:
     $ref: ImageHeight.yaml
   aspectRatio:

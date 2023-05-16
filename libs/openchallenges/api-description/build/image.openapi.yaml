@@ -38,6 +38,11 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    ImageKey:
+      description: The unique identifier of the image.
+      type: string
+      example: logo/dream.png
+      pattern: ^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+
     ImageHeight:
       description: The height of the image.
       type: string
@@ -63,9 +68,7 @@ components:
       description: An image query.
       properties:
         objectKey:
-          description: The object key of the image.
-          type: string
-          example: logo/dream.png
+          $ref: '#/components/schemas/ImageKey'
         height:
           $ref: '#/components/schemas/ImageHeight'
         aspectRatio:

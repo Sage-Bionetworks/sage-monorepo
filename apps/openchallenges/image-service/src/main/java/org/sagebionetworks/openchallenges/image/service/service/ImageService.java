@@ -39,6 +39,8 @@ public class ImageService {
           "Image height must also be specified when specifying the aspect ratio.");
     }
 
+    LOG.info("Requesting an image url for the objectId: {}", query.getObjectKey());
+
     ThumborUrlBuilder builder = thumbor.buildImage(query.getObjectKey());
     Integer height = getImageHeightInPx(query.getHeight());
 
