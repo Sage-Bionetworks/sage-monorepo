@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public enum ErrorConstants {
   IMAGE_HEIGHT_NOT_SPECIFIED(
       "IMAGE-SERVICE-1000", "Image height not found", HttpStatus.BAD_REQUEST),
-  BAD_REQUEST("IMAGE-SERVICE-1001", "Bad Request", HttpStatus.BAD_REQUEST);
+  BAD_REQUEST("IMAGE-SERVICE-1001", "Bad request", HttpStatus.BAD_REQUEST);
 
   private String type;
   private String title;
