@@ -93,15 +93,15 @@ class OpenChallengesStack extends SageStack {
       network.vpc.id
     );
 
-    // // The Database
-    // new Database(
-    //   this,
-    //   'database',
-    //   // vars,
-    //   network.privateSubnets[0].id,
-    //   securityGroups.databaseSg.id,
-    //   network.natGateway
-    // );
+    // The Database
+    new Database(
+      this,
+      'database',
+      // vars,
+      network.privateSubnets[0].id,
+      securityGroups.databaseSg.id,
+      network.natGateway
+    );
 
     // new TerraformOutput(this, 'vpc_id', {
     //   value: network.vpc.id,
