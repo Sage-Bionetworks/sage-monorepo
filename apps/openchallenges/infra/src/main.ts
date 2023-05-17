@@ -68,30 +68,30 @@ class OpenChallengesStack extends SageStack {
     // The ECS Cluster
     const cluster = new EcsCluster(this, 'ecs_cluster');
 
-    // // Load Balancers - Need to come first for references in Task Definitions
-    // const clientAlb = new EcsClientAlb(
-    //   this,
-    //   'client_alb',
-    //   network.publicSubnets,
-    //   securityGroups.clientAlbSg.id,
-    //   network.vpc.id
-    // );
+    // Load Balancers - Need to come first for references in Task Definitions
+    const clientAlb = new EcsClientAlb(
+      this,
+      'client_alb',
+      network.publicSubnets,
+      securityGroups.clientAlbSg.id,
+      network.vpc.id
+    );
 
-    // const goldAlb = new EcsUpstreamServiceAlb(
-    //   this,
-    //   'gold_alb',
-    //   network.privateSubnets,
-    //   securityGroups.upstreamServiceAlbSg.id,
-    //   network.vpc.id
-    // );
+    const goldAlb = new EcsUpstreamServiceAlb(
+      this,
+      'gold_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
+      network.vpc.id
+    );
 
-    // const silverAlb = new EcsUpstreamServiceAlb(
-    //   this,
-    //   'silver_alb',
-    //   network.privateSubnets,
-    //   securityGroups.upstreamServiceAlbSg.id,
-    //   network.vpc.id
-    // );
+    const silverAlb = new EcsUpstreamServiceAlb(
+      this,
+      'silver_alb',
+      network.privateSubnets,
+      securityGroups.upstreamServiceAlbSg.id,
+      network.vpc.id
+    );
 
     // // The Database
     // new Database(
