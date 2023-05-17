@@ -24,11 +24,12 @@ import {
   AmazonRegion,
 } from './constants';
 import { SageStack } from './stack/sage-stack';
-import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
+// import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-groups';
 import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
+import { Database } from './ec2/database';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -43,10 +44,10 @@ class OpenChallengesStack extends SageStack {
       region: AmazonRegion.US_EAST_1,
     });
 
-    const keyPair = new KeyPair(this, 'keypair', {
-      publicKey,
-      keyName,
-    });
+    // const keyPair = new KeyPair(this, 'keypair', {
+    //   publicKey,
+    //   keyName,
+    // });
 
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
@@ -92,43 +93,57 @@ class OpenChallengesStack extends SageStack {
       network.vpc.id
     );
 
-    new TerraformOutput(this, 'vpc_id', {
-      value: network.vpc.id,
-    });
+    // The Database
+    new Database(
+      this,
+      'database',
+      // vars,
+      network.privateSubnets[0].id,
+      securityGroups.databaseSg.id,
+      network.natGateway
+    );
 
-    const ports = [22, 80, 443];
+    // new TerraformOutput(this, 'vpc_id', {
+    //   value: network.vpc.id,
+    // });
 
-    const securityGroup = new SecurityGroup(this, 'security_group', {
-      name: 'openchallenges-sg',
-      vpcId: network.vpc.id,
-      egress: [
-        {
-          fromPort: 0,
-          toPort: 0,
-          cidrBlocks: ['0.0.0.0/0'],
-          protocol: '-1',
-        },
-      ],
-      ingress: ports.map((port) => ({
-        fromPort: port,
-        toPort: port,
-        // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
-        cidrBlocks: ['0.0.0.0/0'],
-        protocol: '-1',
-      })),
-    });
+    // const ports = [22, 80, 443];
 
-    const ec2Instance = new Instance(this, 'compute', {
-      ami: Ami.UBUNTU_22_04_LTS,
-      instanceType: AmazonEc2InstanceType.T2_MICRO,
-      // subnetId: publicSubnetA.id,
-      vpcSecurityGroupIds: [securityGroup.id],
-      keyName: keyPair.keyName,
-    });
+    // const securityGroup = new SecurityGroup(this, 'security_group', {
+    //   name: 'openchallenges-sg',
+    //   vpcId: network.vpc.id,
+    //   egress: [
+    //     {
+    //       fromPort: 0,
+    //       toPort: 0,
+    //       cidrBlocks: ['0.0.0.0/0'],
+    //       protocol: '-1',
+    //     },
+    //   ],
+    //   ingress: ports.map((port) => ({
+    //     fromPort: port,
+    //     toPort: port,
+    //     // TODO Do not use this in production, should be limited to specific IPs or disable (ssm?).
+    //     cidrBlocks: ['0.0.0.0/0'],
+    //     protocol: '-1',
+    //   })),
+    // });
 
-    new TerraformOutput(this, 'public_ip', {
-      value: ec2Instance.publicIp,
-    });
+    // const ec2Instance = new Instance(this, 'compute', {
+    //   ami: Ami.UBUNTU_22_04_LTS,
+    //   instanceType: AmazonEc2InstanceType.T2_MICRO,
+    //   // subnetId: publicSubnetA.id,
+    //   vpcSecurityGroupIds: [securityGroup.id],
+    //   keyName: keyPair.keyName,
+    // });
+
+    // new TerraformOutput(this, 'public_ip', {
+    //   value: ec2Instance.publicIp,
+    // });
+
+    // new S3Bucket(this, 'bucket', {
+    //   bucket: 'myprefixdemoay7rcmbkaj0',
+    // });
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(
@@ -137,10 +152,6 @@ class OpenChallengesStack extends SageStack {
         CostCenter: SageCostCenter.ITCR,
       })
     );
-
-    new S3Bucket(this, 'bucket', {
-      bucket: 'myPrefixDemo',
-    });
   }
 }
 
