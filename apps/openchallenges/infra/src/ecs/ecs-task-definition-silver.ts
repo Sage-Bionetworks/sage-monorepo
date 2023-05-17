@@ -2,10 +2,10 @@ import { Construct } from 'constructs';
 import { EcsTaskDefinition } from '@cdktf/provider-aws/lib/ecs-task-definition';
 import { Fn } from 'cdktf';
 
-export class EcsTaskDefinitionGold extends Construct {
+export class EcsTaskDefinitionSilver extends Construct {
   definition: EcsTaskDefinition;
 
-  constructor(scope: Construct, id: string, executionRoleArn: string) {
+  constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
@@ -15,7 +15,6 @@ export class EcsTaskDefinitionGold extends Construct {
       memory: '512',
       cpu: '256',
       networkMode: 'awsvpc',
-      executionRoleArn,
 
       containerDefinitions: Fn.jsonencode([
         {

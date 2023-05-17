@@ -31,6 +31,10 @@ import { SecurityGroups } from './security-groups';
 import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
 import { Database } from './ec2/database';
 import { EcsTaskDefinitionClient } from './ecs/ecs-task-definition-client';
+import { EcsServiceClient } from './ecs/ecs-service-client';
+import { EcsTaskDefinitionGold } from './ecs/ecs-task-definition-gold';
+import { EcsServiceUpstream } from './ecs/ecs-service-upstream';
+import { EcsTaskDefinitionSilver } from './ecs/ecs-task-definition-silver';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -111,16 +115,53 @@ class OpenChallengesStack extends SageStack {
       `http://${goldAlb.lb.dnsName},http://${silverAlb.lb.dnsName}`
     );
 
-    // new EcsServiceClient(
-    //   this,
-    //   'client',
-    //   vars,
-    //   cluster.arn,
-    //   clientTaskDefinition.def.arn,
-    //   clientAlb.targetGroup.arn,
-    //   vpc.privateSubnets,
-    //   securityGroups.clientService.id
-    // );
+    new EcsServiceClient(
+      this,
+      'client',
+      cluster.cluster.arn,
+      clientTaskDefinition.definition.arn,
+      clientAlb.targetGroup.arn,
+      network.privateSubnets,
+      securityGroups.clientServiceSg.id
+    );
+
+    // Gold Service Resources
+    const goldTaskDefinition = new EcsTaskDefinitionGold(
+      this,
+      'gold_task_definition'
+    );
+
+    new EcsServiceUpstream(
+      this,
+      'gold',
+      cluster.cluster.arn,
+      goldTaskDefinition.definition.arn,
+      goldAlb.targetGroup.arn,
+      network.privateSubnets,
+      securityGroups.upstreamServiceSg.id
+    );
+
+    // Silver Service Resources
+    const silverTaskDefinition = new EcsTaskDefinitionSilver(
+      this,
+      'silver_task_definition'
+    );
+
+    new EcsServiceUpstream(
+      this,
+      'silver',
+      cluster.cluster.arn,
+      silverTaskDefinition.definition.arn,
+      silverAlb.targetGroup.arn,
+      network.privateSubnets,
+      securityGroups.upstreamServiceSg.id
+    );
+
+    // Outputs
+    new TerraformOutput(this, 'client_service_endpoint', {
+      value: clientAlb.lb.dnsName,
+      description: 'DNS name (endpoint) of the AWS ALB for Client service',
+    });
 
     // new TerraformOutput(this, 'vpc_id', {
     //   value: network.vpc.id,
