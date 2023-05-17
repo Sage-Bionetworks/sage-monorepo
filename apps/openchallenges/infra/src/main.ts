@@ -30,6 +30,7 @@ import { Network } from './network/network';
 import { SecurityGroups } from './security-groups';
 import { EcsClientAlb, EcsCluster, EcsUpstreamServiceAlb } from './ecs';
 import { Database } from './ec2/database';
+import { EcsTaskDefinitionClient } from './ecs/ecs-task-definition-client';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -102,6 +103,24 @@ class OpenChallengesStack extends SageStack {
       securityGroups.databaseSg.id,
       network.natGateway
     );
+
+    // Client Service Resources
+    const clientTaskDefinition = new EcsTaskDefinitionClient(
+      this,
+      'client_task_definition',
+      `http://${goldAlb.lb.dnsName},http://${silverAlb.lb.dnsName}`
+    );
+
+    // new EcsServiceClient(
+    //   this,
+    //   'client',
+    //   vars,
+    //   cluster.arn,
+    //   clientTaskDefinition.def.arn,
+    //   clientAlb.targetGroup.arn,
+    //   vpc.privateSubnets,
+    //   securityGroups.clientService.id
+    // );
 
     // new TerraformOutput(this, 'vpc_id', {
     //   value: network.vpc.id,
