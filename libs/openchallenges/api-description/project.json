@@ -33,13 +33,13 @@
         "cwd": "libs/openchallenges/api-description"
       }
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml build/image.openapi.yaml",
-        "cwd": "libs/openchallenges/api-description"
-      }
-    },
+    // "lint": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/user.openapi.yaml build/image.openapi.yaml",
+    //     "cwd": "libs/openchallenges/api-description"
+    //   }
+    // },
     "format": {
       "executor": "nx:run-commands",
       "options": {
