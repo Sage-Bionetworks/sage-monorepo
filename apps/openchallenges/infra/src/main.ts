@@ -49,24 +49,24 @@ class OpenChallengesStack extends SageStack {
     //   keyName,
     // });
 
-    // const networkConfig = new NetworkConfig({
-    //   defaultRegion: AmazonRegion.US_EAST_1,
-    //   tagPrefix: 'openchallenges',
-    //   vpcCirdBlock: '10.0.0.0/16',
-    // });
+    const networkConfig = new NetworkConfig({
+      defaultRegion: AmazonRegion.US_EAST_1,
+      tagPrefix: 'openchallenges',
+      vpcCirdBlock: '10.0.0.0/16',
+    });
 
-    // // The AWS VPC
-    // const network = new Network(this, 'network', networkConfig);
+    // The AWS VPC
+    const network = new Network(this, 'network', networkConfig);
 
-    // // The security groups
-    // const securityGroups = new SecurityGroups(
-    //   this,
-    //   'security_groups',
-    //   network.vpc.id
-    // );
+    // The security groups
+    const securityGroups = new SecurityGroups(
+      this,
+      'security_groups',
+      network.vpc.id
+    );
 
-    // // The ECS Cluster
-    // const cluster = new EcsCluster(this, 'ecs_cluster');
+    // The ECS Cluster
+    const cluster = new EcsCluster(this, 'ecs_cluster');
 
     // // Load Balancers - Need to come first for references in Task Definitions
     // const clientAlb = new EcsClientAlb(

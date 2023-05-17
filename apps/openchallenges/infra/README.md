@@ -78,7 +78,7 @@ cdktf synth
 ### Deploy the stack
 
 ```console
-cdktf apply
+cdktf deploy
 ```
 
 ### Connect to the EC2 instance
