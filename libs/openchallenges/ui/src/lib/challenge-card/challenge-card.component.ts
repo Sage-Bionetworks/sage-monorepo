@@ -22,6 +22,7 @@ export class ChallengeCardComponent implements OnInit {
   banner$: Observable<Image> | undefined;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
+  desc!: string;
   incentives!: string;
   statusClass!: string;
   // difficulty!: string | undefined;
@@ -39,6 +40,9 @@ export class ChallengeCardComponent implements OnInit {
       //   ? startCase(this.challenge.difficulty.replace('-', ''))
       //   : undefined;
       this.platform = this.challenge.platform;
+      this.desc = this.challenge.headline
+        ? this.challenge.headline
+        : this.challenge.description;
       this.incentives =
         this.challenge.incentives.length === 0
           ? 'No incentives listed'
@@ -57,6 +61,14 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
+    }
+  }
+
+  shorthand(str: string) {
+    if (str.length >= 80) {
+      return str.substring(0, 80) + '...';
+    } else {
+      return str;
     }
   }
 }
