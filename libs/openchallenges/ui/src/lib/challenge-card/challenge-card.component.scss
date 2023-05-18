@@ -3,7 +3,7 @@
 .challenge-card {
   width: 320px;
   min-height: 360px;
-  padding: 16px 16px 4px;
+  padding: 12px 12px 4px;
   display: flex;
   position: relative;
   align-items: center;
@@ -12,8 +12,8 @@
   cursor: pointer;
 }
 .card-body {
-  min-height: 210px;
-  max-height: 210px;
+  min-height: 190px;
+  max-height: 190px;
 }
 .card-banner {
   height: 100%;
