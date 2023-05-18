@@ -3,7 +3,7 @@
 .challenge-card {
   width: 320px;
   min-height: 360px;
-  padding: 16px;
+  padding: 16px 16px 4px;
   display: flex;
   position: relative;
   align-items: center;
@@ -27,7 +27,7 @@
   height: 24px;
 }
 .status-tag {
-  max-width: 120px;
+  max-width: 110px;
   padding: 4px 0;
   display: flex;
   flex-direction: column;
