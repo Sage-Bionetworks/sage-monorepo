@@ -92,6 +92,10 @@ function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
 
+function schematic-build-images {
+  nx run-many --target=build-image --projects=schematic-* --parallel=3
+}
+
 # function challenge-seed-db {
 #   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"
 # }

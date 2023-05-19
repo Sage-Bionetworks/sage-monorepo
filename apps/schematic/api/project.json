@@ -15,10 +15,12 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "poetry config virtualenvs.in-project true",
+          "poetry config --local virtualenvs.in-project true",
+          "poetry config --local virtualenvs.create true",
           "poetry install --with prod,dev"
         ],
-        "cwd": "apps/schematic/api"
+        "cwd": "apps/schematic/api",
+        "parallel": false
       }
     },
     "serve": {
