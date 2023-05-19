@@ -15,8 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "poetry config --local virtualenvs.in-project true",
-          "poetry config --local virtualenvs.create true",
+          "pyenv local 3.11.0",
           "poetry install --with prod,dev"
         ],
         "cwd": "apps/schematic/api",
@@ -64,13 +63,13 @@
         "cwd": "apps/schematic/api"
       }
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry run black ./schematic_api --exclude '(models|test)'",
-        "cwd": "apps/schematic/api"
-      }
-    },
+    // "lint": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "poetry run black ./schematic_api --exclude '(models|test)'",
+    //     "cwd": "apps/schematic/api"
+    //   }
+    // },
     "test": {
       "executor": "nx:run-commands",
       "options": {

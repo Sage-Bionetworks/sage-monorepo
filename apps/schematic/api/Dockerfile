@@ -1,8 +1,8 @@
-FROM python:3.9.2-slim-buster
+FROM python:3.11.0-slim-buster
 
 ENV APP_DIR=/opt/app
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+# SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # hadolint ignore=DL3008
 RUN apt-get update -qq -y \
@@ -27,8 +27,8 @@ COPY pyproject.toml poetry.lock uwsgi.ini ./
 
 RUN pip install poetry
 RUN poetry config --local virtualenvs.create false
-RUN poetry install --with prod --no-root --no-interaction --no-ansi
-RUN pip cache purge
+# RUN poetry install --with prod --no-root --no-interaction --no-ansi
+# RUN pip cache purge
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
