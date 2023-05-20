@@ -30,6 +30,12 @@ RUN groupadd docker \
     kafkacat jq \
     # Required by AWS CLI
     mandoc \
+    # Required for setting up locales
+    locales \
+    # Required by pyenv
+    make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
@@ -80,6 +86,11 @@ RUN groupadd docker \
   && rm -rf /var/lib/apt/lists/* \
   && pip install --no-cache-dir pipenv
 
+# Setting up a UTF-8 locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+  && locale-gen
+ENV LANG=en_US.UTF-8
+
 ARG user=vscode
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
@@ -87,6 +98,11 @@ RUN useradd -m $user \
   && usermod --shell /bin/bash $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
   && printf "%s\n" \
+    "" \
+    "export PYENV_ROOT=\"\$HOME/.pyenv\"" \
+    "export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
+    "eval \"$(pyenv init --path)\"" \
+    "eval \"$(pyenv virtualenv-init -)\"" \
     "" \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
@@ -96,5 +112,8 @@ RUN useradd -m $user \
     "" | tee -a "/home/$user/.bashrc"
 
 USER $user
+
+# Install pyenv as the user
+RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
 CMD ["bash"]
