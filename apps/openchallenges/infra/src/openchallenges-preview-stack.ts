@@ -69,7 +69,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     );
 
     // Outputs
-    new TerraformOutput(this, 'public_ip', {
+    new TerraformOutput(this, 'bastion_public_ip', {
       value: bastion.instance.publicIp,
     });
   }
