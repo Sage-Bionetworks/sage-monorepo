@@ -1,8 +1,10 @@
 import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { Construct } from 'constructs';
-import { Ami } from '../constants';
+import { Ami, SageCostCenter } from '../constants';
 import { NatGateway } from '@cdktf/provider-aws/lib/nat-gateway';
 import { readFileSync } from 'fs';
+import { Aspects } from 'cdktf/lib/aspect';
+import { TagsAddingAspect } from '../tag/tags-adding-aspect';
 
 export class SingleStackInstance extends Construct {
   instance: Instance;
@@ -17,6 +19,7 @@ export class SingleStackInstance extends Construct {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
+    const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
 
     this.instance = new Instance(this, id, {
       ami: Ami.UBUNTU_22_04_LTS,
@@ -32,5 +35,13 @@ export class SingleStackInstance extends Construct {
         'utf8'
       ),
     });
+
+    // Add tags to every resource defined within this stack.
+    Aspects.of(this).add(
+      new TagsAddingAspect({
+        OwnerEmail: stackOwnerEmail,
+        CostCenter: SageCostCenter.ITCR,
+      })
+    );
   }
 }
