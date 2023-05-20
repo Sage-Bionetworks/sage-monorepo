@@ -11,12 +11,7 @@ import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 import * as os from 'os';
 import * as fs from 'fs';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
-import {
-  Ami,
-  AmazonEc2InstanceType,
-  SageCostCenter,
-  AmazonRegion,
-} from './constants';
+import { SageCostCenter, AmazonRegion } from './constants';
 import { SageStack } from './sage-stack';
 // import { S3Bucket } from '@cdktf/provider-aws/lib/s3-bucket';
 import { NetworkConfig } from './network/network-config';
@@ -29,7 +24,6 @@ import { EcsServiceClient } from './ecs/ecs-service-client';
 import { EcsTaskDefinitionGold } from './ecs/ecs-task-definition-gold';
 import { EcsServiceUpstream } from './ecs/ecs-service-upstream';
 import { EcsTaskDefinitionSilver } from './ecs/ecs-task-definition-silver';
-import { OpenChallengesPreviewStack } from './openchallenges-preview-stack';
 
 export class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {

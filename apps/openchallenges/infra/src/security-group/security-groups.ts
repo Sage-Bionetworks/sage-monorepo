@@ -9,6 +9,7 @@ export class SecurityGroups extends Construct {
   upstreamServiceAlbSg: SecurityGroup;
   upstreamServiceSg: SecurityGroup;
   databaseSg: SecurityGroup;
+  bastionSg: SecurityGroup;
 
   constructor(scope: Construct, id: string, vpcId: string) {
     super(scope, id);
@@ -26,6 +27,18 @@ export class SecurityGroups extends Construct {
         cidrBlocks: ['0.0.0.0/0'],
         ipv6CidrBlocks: ['::/0'],
         description: 'Allow HTTP traffic',
+      });
+
+    // reusable ingress SSH rule
+    const allowIngressSsh = (securityGroupId: string, constructId: string) =>
+      new SecurityGroupRule(this, constructId, {
+        securityGroupId,
+        type: 'ingress',
+        protocol: 'tcp',
+        fromPort: 22,
+        toPort: 22,
+        cidrBlocks: ['0.0.0.0/0'],
+        description: 'Allow SSH traffic',
       });
 
     // reusable egress all rule
@@ -52,6 +65,15 @@ export class SecurityGroups extends Construct {
         description:
           'Allow any inbound traffic from others with same security group',
       });
+
+    // Bastion security group and rules
+    this.bastionSg = new SecurityGroup(this, 'bastion_security_group', {
+      namePrefix: `${nameTagPrefix}-bastion`,
+      description: 'Security group for the bastion',
+      vpcId,
+    });
+    allowIngressSsh(this.bastionSg.id, 'bastion_allow_ssh');
+    allowEgressAll(this.bastionSg.id, 'bastion_allow_outbound');
 
     // Client Application Load Balancer Security Group and Rules
     this.clientAlbSg = new SecurityGroup(this, 'client_alb_security_group', {

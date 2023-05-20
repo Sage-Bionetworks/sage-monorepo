@@ -3,21 +3,27 @@
 import { Construct } from 'constructs';
 import { SageStack } from './sage-stack';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
-import { AmazonRegion } from './constants';
+import { AmazonRegion, Ami, SageCostCenter } from './constants';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SingleStackInstance } from './ec2/single-stack-instance';
 import { SecurityGroups } from './security-group/security-groups';
-import { TerraformOutput } from 'cdktf';
+import { Aspects, TerraformOutput } from 'cdktf';
+import { BastionConfig } from './bastion/bastion-config';
+import { Bastion } from './bastion/bastion';
+import { TagsAddingAspect } from './tag/tags-adding-aspect';
+import * as os from 'os';
+import * as fs from 'fs';
+import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    // const keyPath = `${os.homedir()}/.ssh/openchallenges-ec2.pub`;
-    // const publicKey = fs.readFileSync(keyPath, 'utf-8');
-    // const keyName = 'openchallenges-ec2-key';
-    // const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
+    const bastionKeyPath = `${os.homedir()}/.ssh/openchallenges-ec2.pub`;
+    const bastionPublicKey = fs.readFileSync(bastionKeyPath, 'utf-8');
+    const bastionKeyName = 'openchallenges-preview-bastion-key';
+    const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
 
     new AwsProvider(this, 'AWS', {
       region: AmazonRegion.US_EAST_1,
@@ -25,7 +31,7 @@ export class OpenChallengesPreviewStack extends SageStack {
 
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
-      tagPrefix: 'openchallenges',
+      tagPrefix: 'openchallenges-preview',
       vpcCirdBlock: '10.0.0.0/16',
     });
 
@@ -37,17 +43,34 @@ export class OpenChallengesPreviewStack extends SageStack {
       network.vpc.id
     );
 
-    const ec2Instance = new SingleStackInstance(
-      this,
-      'single_stack_instance',
-      // vars,
-      network.privateSubnets[0].id,
-      securityGroups.upstreamServiceSg.id,
-      network.natGateway
+    const bastionKeyPair = new KeyPair(this, 'bastion_keypair', {
+      publicKey: bastionPublicKey,
+      keyName: bastionKeyName,
+    });
+
+    const bastionConfig = new BastionConfig({
+      ami: Ami.UBUNTU_22_04_LTS,
+      defaultRegion: AmazonRegion.US_EAST_1,
+      instanceType: 't2.micro',
+      keyName: bastionKeyName,
+      securityGroupId: securityGroups.bastionSg.id,
+      subnetId: network.publicSubnets[0].id,
+      tagPrefix: 'openchallenges-preview',
+    });
+
+    const bastion = new Bastion(this, 'bastion', bastionConfig);
+
+    // Add tags to every resource defined within this stack.
+    Aspects.of(this).add(
+      new TagsAddingAspect({
+        OwnerEmail: stackOwnerEmail,
+        CostCenter: SageCostCenter.ITCR,
+      })
     );
 
+    // Outputs
     new TerraformOutput(this, 'public_ip', {
-      value: ec2Instance.instance.publicIp,
+      value: bastion.instance.publicIp,
     });
   }
 }
