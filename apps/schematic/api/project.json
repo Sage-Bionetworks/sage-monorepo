@@ -16,6 +16,8 @@
       "options": {
         "commands": [
           "pyenv local 3.11.0",
+          "eval \"$(pyenv init -)\"",
+          "poetry env use 3.11.0",
           "poetry install --with prod,dev"
         ],
         "cwd": "apps/schematic/api",
