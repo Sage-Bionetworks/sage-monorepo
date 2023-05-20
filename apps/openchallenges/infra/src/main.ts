@@ -35,6 +35,7 @@ import { EcsServiceClient } from './ecs/ecs-service-client';
 import { EcsTaskDefinitionGold } from './ecs/ecs-task-definition-gold';
 import { EcsServiceUpstream } from './ecs/ecs-service-upstream';
 import { EcsTaskDefinitionSilver } from './ecs/ecs-task-definition-silver';
+import { OpenChallengesPreviewStack } from './stack/openchallenges-preview-stack';
 
 class OpenChallengesStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -220,11 +221,21 @@ logger.info('Welcome to the deployment of the OpenChallenges stack.');
 
 const app = new App();
 const stack = new OpenChallengesStack(app, 'openchallenges-stack');
+const openchallengesPreviewStack = new OpenChallengesPreviewStack(
+  app,
+  'openchallenges-preview'
+);
 
 new CloudBackend(stack, {
   hostname: 'app.terraform.io',
   organization: 'sagebionetworks',
   workspaces: new NamedCloudWorkspace('openchallenges-test'),
+});
+
+new CloudBackend(openchallengesPreviewStack, {
+  hostname: 'app.terraform.io',
+  organization: 'sagebionetworks',
+  workspaces: new NamedCloudWorkspace('openchallenges-preview'),
 });
 
 app.synth();
