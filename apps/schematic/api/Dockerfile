@@ -2,7 +2,7 @@ FROM python:3.11.0-slim-buster
 
 ENV APP_DIR=/opt/app
 
-# SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # hadolint ignore=DL3008
 RUN apt-get update -qq -y \
