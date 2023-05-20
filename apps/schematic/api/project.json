@@ -15,8 +15,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
+          "pyenv install --skip-existing 3.11.0",
           "pyenv local 3.11.0",
-          "eval \"$(pyenv init -)\"",
           "poetry env use 3.11.0",
           "poetry install --with prod,dev"
         ],
@@ -65,13 +65,13 @@
         "cwd": "apps/schematic/api"
       }
     },
-    // "lint": {
-    //   "executor": "nx:run-commands",
-    //   "options": {
-    //     "command": "poetry run black ./schematic_api --exclude '(models|test)'",
-    //     "cwd": "apps/schematic/api"
-    //   }
-    // },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black ./schematic_api --exclude '(models|test)'",
+        "cwd": "apps/schematic/api"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
