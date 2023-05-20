@@ -3,10 +3,12 @@
 import { Construct } from 'constructs';
 import { SageStack } from './sage-stack';
 import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
-import { AmazonRegion } from '../constants';
-import { NetworkConfig } from '../network/network-config';
-import { Network } from '../network/network';
-import { SingleStackInstance } from '../ec2/single-stack-instance';
+import { AmazonRegion } from './constants';
+import { NetworkConfig } from './network/network-config';
+import { Network } from './network/network';
+import { SingleStackInstance } from './ec2/single-stack-instance';
+import { SecurityGroups } from './security-group/security-groups';
+import { TerraformOutput } from 'cdktf';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -29,19 +31,23 @@ export class OpenChallengesPreviewStack extends SageStack {
 
     const network = new Network(this, 'network', networkConfig);
 
-    // const securityGroups = new SecurityGroups(
-    //   this,
-    //   'security_groups',
-    //   network.vpc.id
-    // );
+    const securityGroups = new SecurityGroups(
+      this,
+      'security_groups',
+      network.vpc.id
+    );
 
-    // new SingleStackInstance(
-    //   this,
-    //   'single_stack_instance',
-    //   // vars,
-    //   network.privateSubnets[0].id,
-    //   securityGroups.databaseSg.id,
-    //   network.natGateway
-    // );
+    const ec2Instance = new SingleStackInstance(
+      this,
+      'single_stack_instance',
+      // vars,
+      network.privateSubnets[0].id,
+      securityGroups.upstreamServiceSg.id,
+      network.natGateway
+    );
+
+    new TerraformOutput(this, 'public_ip', {
+      value: ec2Instance.instance.publicIp,
+    });
   }
 }
