@@ -17,7 +17,7 @@ jobs:
   push:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/sage-devcontainer:3de9f17
+      image: sagebionetworks/sage-devcontainer:c793c92
       options: --user root
     if: ${{ github.event_name != 'pull_request' }}
     # env:
@@ -27,6 +27,9 @@ jobs:
         name: Checkout [${{ github.ref_name }}]
         with:
           fetch-depth: 0
+
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
@@ -105,7 +108,7 @@ jobs:
   pr:
     runs-on: ubuntu-latest
     container:
-      image: sagebionetworks/sage-devcontainer:3de9f17
+      image: sagebionetworks/sage-devcontainer:c793c92
       options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
@@ -124,6 +127,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
