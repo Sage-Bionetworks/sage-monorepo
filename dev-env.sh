@@ -133,9 +133,6 @@ function workspace-initialize-env {
     sudo ./tools/configure-hostnames.sh
   fi
 
-  eval "$(pyenv init --path)"
-  eval "$(pyenv virtualenv-init -)"
-
   # Needed to run ES containers (see https://github.com/Sage-Bionetworks/sage-monorepo/issues/1311)
   sudo sysctl -w vm.max_map_count=262144 1> /dev/null
 }
