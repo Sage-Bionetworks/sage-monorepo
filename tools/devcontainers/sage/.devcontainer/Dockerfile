@@ -101,8 +101,8 @@ RUN useradd -m $user \
     "" \
     "export PYENV_ROOT=\"\$HOME/.pyenv\"" \
     "export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
-    "eval \"$(pyenv init --path)\"" \
-    "eval \"$(pyenv virtualenv-init -)\"" \
+    "eval \"\$(pyenv init --path)\"" \
+    "eval \"\$(pyenv virtualenv-init -)\"" \
     "" \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
