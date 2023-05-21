@@ -28,6 +28,9 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
@@ -124,6 +127,9 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
