@@ -6,7 +6,6 @@ import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { AmazonRegion, Ami, SageCostCenter } from './constants';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
-import { SingleStackInstance } from './ec2/single-stack-instance';
 import { SecurityGroups } from './security-group/security-groups';
 import { Aspects, TerraformOutput } from 'cdktf';
 import { BastionConfig } from './bastion/bastion-config';
@@ -15,6 +14,8 @@ import { TagsAddingAspect } from './tag/tags-adding-aspect';
 import * as os from 'os';
 import * as fs from 'fs';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
+import { PreviewInstanceConfig } from './preview-instance/preview-instance-config';
+import { PreviewInstance } from './preview-instance/preview-instance';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -59,6 +60,22 @@ export class OpenChallengesPreviewStack extends SageStack {
     });
 
     const bastion = new Bastion(this, 'bastion', bastionConfig);
+
+    const previewInstanceConfig = new PreviewInstanceConfig({
+      ami: Ami.UBUNTU_22_04_LTS,
+      defaultRegion: AmazonRegion.US_EAST_1,
+      instanceType: 't2.micro',
+      keyName: bastionKeyName, // TODO Set unique key
+      securityGroupId: securityGroups.upstreamServiceSg.id,
+      subnetId: network.privateSubnets[0].id,
+      tagPrefix: 'openchallenges-preview',
+    });
+
+    const previewInstance = new PreviewInstance(
+      this,
+      'preview_instance',
+      previewInstanceConfig
+    );
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(
