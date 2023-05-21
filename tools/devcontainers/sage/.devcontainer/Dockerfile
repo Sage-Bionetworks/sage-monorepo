@@ -99,13 +99,8 @@ RUN useradd -m $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
   && printf "%s\n" \
     "" \
-<<<<<<< HEAD
-    "export PYENV_ROOT=\"\$HOME/.pyenv\"" \
-    "export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
-=======
     "#export PYENV_ROOT=\"\$HOME/.pyenv\"" \
     "#export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
->>>>>>> main
     "eval \"\$(pyenv init --path)\"" \
     "eval \"\$(pyenv virtualenv-init -)\"" \
     "" \
