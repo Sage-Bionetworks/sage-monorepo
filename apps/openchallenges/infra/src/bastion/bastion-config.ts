@@ -5,6 +5,7 @@ export class BastionConfig implements BastionConfigData {
   defaultRegion: string;
   instanceType: string;
   keyName: string;
+  privateIp: string | undefined;
   securityGroupId: string;
   subnetId: string;
   tagPrefix: string;
@@ -14,6 +15,7 @@ export class BastionConfig implements BastionConfigData {
     this.defaultRegion = config.defaultRegion;
     this.instanceType = config.instanceType;
     this.keyName = config.keyName;
+    this.privateIp = config.privateIp;
     this.securityGroupId = config.securityGroupId;
     this.subnetId = config.subnetId;
     this.tagPrefix = config.tagPrefix;

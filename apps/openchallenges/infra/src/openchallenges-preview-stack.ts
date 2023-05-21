@@ -25,6 +25,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const bastionPublicKey = fs.readFileSync(bastionKeyPath, 'utf-8');
     const bastionKeyName = 'openchallenges-preview-bastion-key';
     const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
+    const bastionPrivateIp = undefined;
 
     new AwsProvider(this, 'AWS', {
       region: AmazonRegion.US_EAST_1,
@@ -54,6 +55,7 @@ export class OpenChallengesPreviewStack extends SageStack {
       defaultRegion: AmazonRegion.US_EAST_1,
       instanceType: 't2.micro',
       keyName: bastionKeyName,
+      privateIp: bastionPrivateIp,
       securityGroupId: securityGroups.bastionSg.id,
       subnetId: network.publicSubnets[0].id,
       tagPrefix: 'openchallenges-preview',
@@ -86,8 +88,29 @@ export class OpenChallengesPreviewStack extends SageStack {
     );
 
     // Outputs
+    new TerraformOutput(this, 'public_subnet_0_cidr_block', {
+      value: network.publicSubnets[0].cidrBlock,
+    });
+    new TerraformOutput(this, 'public_subnet_1_cidr_block', {
+      value: network.publicSubnets[1].cidrBlock,
+    });
+    new TerraformOutput(this, 'private_subnet_0_cidr_block', {
+      value: network.privateSubnets[0].cidrBlock,
+    });
+    new TerraformOutput(this, 'private_subnet_1_cidr_block', {
+      value: network.privateSubnets[1].cidrBlock,
+    });
     new TerraformOutput(this, 'bastion_public_ip', {
       value: bastion.instance.publicIp,
+    });
+    new TerraformOutput(this, 'bastion_private_ip', {
+      value: bastion.instance.privateIp,
+    });
+    new TerraformOutput(this, 'preview_instance_public_ip', {
+      value: previewInstance.instance.publicIp,
+    });
+    new TerraformOutput(this, 'preview_instance_private_ip', {
+      value: previewInstance.instance.privateIp,
     });
   }
 }
