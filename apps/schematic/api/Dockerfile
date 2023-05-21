@@ -20,7 +20,7 @@ WORKDIR ${APP_DIR}
 COPY schematic_api schematic_api/
 COPY pyproject.toml poetry.lock uwsgi.ini ./
 
-RUN pip install poetry\
+RUN pip install poetry \
   && poetry config --local virtualenvs.create false \
   && poetry install --with prod --no-root --no-interaction --no-ansi \
   && pip cache purge
