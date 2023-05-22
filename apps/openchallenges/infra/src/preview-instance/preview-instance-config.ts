@@ -5,7 +5,7 @@ export class PreviewInstanceConfig implements PreviewInstanceConfigData {
   defaultRegion: string;
   instanceType: string;
   keyName: string;
-  securityGroupId: string;
+  securityGroupIds: string[];
   subnetId: string;
   tagPrefix: string;
 
@@ -14,7 +14,7 @@ export class PreviewInstanceConfig implements PreviewInstanceConfigData {
     this.defaultRegion = config.defaultRegion;
     this.instanceType = config.instanceType;
     this.keyName = config.keyName;
-    this.securityGroupId = config.securityGroupId;
+    this.securityGroupIds = config.securityGroupIds;
     this.subnetId = config.subnetId;
     this.tagPrefix = config.tagPrefix;
   }

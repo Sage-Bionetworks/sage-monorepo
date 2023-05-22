@@ -3,7 +3,7 @@ export interface PreviewInstanceConfigData {
   defaultRegion: string;
   instanceType: string;
   keyName: string;
-  securityGroupId: string;
+  securityGroupIds: string[];
   subnetId: string;
   tagPrefix: string;
 }

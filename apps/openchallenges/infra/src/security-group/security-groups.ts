@@ -10,11 +10,13 @@ export class SecurityGroups extends Construct {
   upstreamServiceSg: SecurityGroup;
   databaseSg: SecurityGroup;
   bastionSg: SecurityGroup;
+  sshFromBastionSg: SecurityGroup;
 
   constructor(scope: Construct, id: string, vpcId: string) {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
+    const bastionPrivateIp = '10.0.2.172'; // TODO DRY
 
     // reusable ingress 80 rule
     const allowIngress80 = (securityGroupId: string, constructId: string) =>
@@ -39,6 +41,21 @@ export class SecurityGroups extends Construct {
         toPort: 22,
         cidrBlocks: ['0.0.0.0/0'],
         description: 'Allow SSH traffic',
+      });
+
+    // reusable ingress SSH from bastion rule
+    const allowIngressSshFromBastion = (
+      securityGroupId: string,
+      constructId: string
+    ) =>
+      new SecurityGroupRule(this, constructId, {
+        securityGroupId,
+        type: 'ingress',
+        protocol: 'tcp',
+        fromPort: 22,
+        toPort: 22,
+        cidrBlocks: [`${bastionPrivateIp}/32`],
+        description: 'Allow SSH traffic from the bastion',
       });
 
     // reusable egress all rule
@@ -74,6 +91,21 @@ export class SecurityGroups extends Construct {
     });
     allowIngressSsh(this.bastionSg.id, 'bastion_allow_ssh');
     allowEgressAll(this.bastionSg.id, 'bastion_allow_outbound');
+
+    // SSH from bastion security group and rules
+    this.sshFromBastionSg = new SecurityGroup(
+      this,
+      'ssh_from_bastion_security_group',
+      {
+        namePrefix: `${nameTagPrefix}-ssh-from-bastion`,
+        description: 'SSH from bastion security group for the bastion',
+        vpcId,
+      }
+    );
+    allowIngressSshFromBastion(
+      this.sshFromBastionSg.id,
+      'allow_ssh_from_bastion'
+    );
 
     // Client Application Load Balancer Security Group and Rules
     this.clientAlbSg = new SecurityGroup(this, 'client_alb_security_group', {
