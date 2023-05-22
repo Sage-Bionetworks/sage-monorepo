@@ -1,6 +1,6 @@
 {
   "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:9315468",
+  "image": "sagebionetworks/sage-devcontainer:c793c92",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {

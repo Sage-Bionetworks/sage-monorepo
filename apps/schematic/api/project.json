@@ -15,10 +15,13 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "poetry config virtualenvs.in-project true",
+          "pyenv install --skip-existing 3.11.0",
+          "pyenv local 3.11.0",
+          "poetry env use 3.11.0",
           "poetry install --with prod,dev"
         ],
-        "cwd": "apps/schematic/api"
+        "cwd": "apps/schematic/api",
+        "parallel": false
       }
     },
     "serve": {

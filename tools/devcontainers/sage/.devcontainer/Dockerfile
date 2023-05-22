@@ -99,10 +99,10 @@ RUN useradd -m $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
   && printf "%s\n" \
     "" \
-    "export PYENV_ROOT=\"\$HOME/.pyenv\"" \
-    "export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
-    "eval \"$(pyenv init --path)\"" \
-    "eval \"$(pyenv virtualenv-init -)\"" \
+    "#export PYENV_ROOT=\"\$HOME/.pyenv\"" \
+    "#export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
+    "eval \"\$(pyenv init --path)\"" \
+    "eval \"\$(pyenv virtualenv-init -)\"" \
     "" \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
@@ -115,5 +115,10 @@ USER $user
 
 # Install pyenv as the user
 RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
+
+## Install Python environments
+ENV PYENV_ROOT /home/${user}/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+RUN pyenv install 3.11.0
 
 CMD ["bash"]
