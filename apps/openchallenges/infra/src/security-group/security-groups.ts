@@ -16,7 +16,7 @@ export class SecurityGroups extends Construct {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
-    const bastionPrivateIp = '10.0.2.172'; // TODO Add to config
+    const bastionPrivateIp = '10.70.2.172'; // TODO Add to config
     // const devcontainerPrivateIp = '10.41.30.105'; // TODO Add to config
 
     // reusable ingress 80 rule

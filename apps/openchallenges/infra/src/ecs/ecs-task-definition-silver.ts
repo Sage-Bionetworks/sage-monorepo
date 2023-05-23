@@ -42,7 +42,7 @@ export class EcsTaskDefinitionSilver extends Construct {
             },
             {
               name: 'UPSTREAM_URIS',
-              value: `http://10.0.32.253:27017`,
+              value: `http://10.70.32.253:27017`,
             },
           ],
         },
