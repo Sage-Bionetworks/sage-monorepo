@@ -4,16 +4,20 @@ import { SecurityGroupRule } from '@cdktf/provider-aws/lib/security-group-rule';
 import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 
 export class SecurityGroups extends Construct {
-  clientAlbSecurityGroup: SecurityGroup;
-  clientServiceSecurityGroup: SecurityGroup;
-  upstreamServiceAlbSecurityGroup: SecurityGroup;
-  upstreamServiceSecurityGroup: SecurityGroup;
-  databaseSecurityGroup: SecurityGroup;
+  clientAlbSg: SecurityGroup;
+  clientServiceSg: SecurityGroup;
+  upstreamServiceAlbSg: SecurityGroup;
+  upstreamServiceSg: SecurityGroup;
+  databaseSg: SecurityGroup;
+  bastionSg: SecurityGroup;
+  sshFromBastionSg: SecurityGroup;
 
   constructor(scope: Construct, id: string, vpcId: string) {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
+    const bastionPrivateIp = '10.0.2.172'; // TODO Add to config
+    // const devcontainerPrivateIp = '10.41.30.105'; // TODO Add to config
 
     // reusable ingress 80 rule
     const allowIngress80 = (securityGroupId: string, constructId: string) =>
@@ -26,6 +30,33 @@ export class SecurityGroups extends Construct {
         cidrBlocks: ['0.0.0.0/0'],
         ipv6CidrBlocks: ['::/0'],
         description: 'Allow HTTP traffic',
+      });
+
+    // reusable ingress SSH rule
+    const allowIngressSsh = (securityGroupId: string, constructId: string) =>
+      new SecurityGroupRule(this, constructId, {
+        securityGroupId,
+        type: 'ingress',
+        protocol: 'tcp',
+        fromPort: 22,
+        toPort: 22,
+        cidrBlocks: ['0.0.0.0/0'], // TODO Limit to a smaller set of IP(s)
+        description: 'Allow SSH traffic',
+      });
+
+    // reusable ingress SSH from bastion rule
+    const allowIngressSshFromBastion = (
+      securityGroupId: string,
+      constructId: string
+    ) =>
+      new SecurityGroupRule(this, constructId, {
+        securityGroupId,
+        type: 'ingress',
+        protocol: 'tcp',
+        fromPort: 22,
+        toPort: 22,
+        cidrBlocks: [`${bastionPrivateIp}/32`],
+        description: 'Allow SSH traffic from the bastion',
       });
 
     // reusable egress all rule
@@ -53,51 +84,64 @@ export class SecurityGroups extends Construct {
           'Allow any inbound traffic from others with same security group',
       });
 
-    // Client Application Load Balancer Security Group and Rules
-    this.clientAlbSecurityGroup = new SecurityGroup(
+    // Bastion security group and rules
+    this.bastionSg = new SecurityGroup(this, 'bastion_security_group', {
+      namePrefix: `${nameTagPrefix}-bastion`,
+      description: 'Security group for the bastion',
+      vpcId,
+    });
+    allowIngressSsh(this.bastionSg.id, 'bastion_allow_ssh');
+    allowEgressAll(this.bastionSg.id, 'bastion_allow_outbound');
+
+    // SSH from bastion security group and rules
+    this.sshFromBastionSg = new SecurityGroup(
       this,
-      'client_alb_security_group',
+      'ssh_from_bastion_security_group',
       {
-        namePrefix: `${nameTagPrefix}-ecs-client-alb`,
-        description:
-          'Security group for client service application load balancer',
+        namePrefix: `${nameTagPrefix}-ssh-from-bastion`,
+        description: 'SSH from bastion security group for the bastion',
         vpcId,
       }
     );
-    allowIngress80(this.clientAlbSecurityGroup.id, 'client_alb_allow_80');
-    allowEgressAll(this.clientAlbSecurityGroup.id, 'client_alb_allow_outbound');
+    allowIngressSshFromBastion(
+      this.sshFromBastionSg.id,
+      'allow_ssh_from_bastion'
+    );
+
+    // Client Application Load Balancer Security Group and Rules
+    this.clientAlbSg = new SecurityGroup(this, 'client_alb_security_group', {
+      namePrefix: `${nameTagPrefix}-ecs-client-alb`,
+      description:
+        'Security group for client service application load balancer',
+      vpcId,
+    });
+    allowIngress80(this.clientAlbSg.id, 'client_alb_allow_80');
+    allowEgressAll(this.clientAlbSg.id, 'client_alb_allow_outbound');
 
     // Client Service Security Group and Rules
-    this.clientServiceSecurityGroup = new SecurityGroup(
-      this,
-      'client_service',
-      {
-        namePrefix: `${nameTagPrefix}-client-service`,
-        description: 'security group for client service',
-        vpcId,
-      }
-    );
+    this.clientServiceSg = new SecurityGroup(this, 'client_service', {
+      namePrefix: `${nameTagPrefix}-client-service`,
+      description: 'security group for client service',
+      vpcId,
+    });
 
     new SecurityGroupRule(this, 'client_service_allow_alb_9090', {
-      securityGroupId: this.clientServiceSecurityGroup.id,
+      securityGroupId: this.clientServiceSg.id,
       type: 'ingress',
       protocol: 'tcp',
       fromPort: 9090,
       toPort: 9090,
-      sourceSecurityGroupId: this.clientAlbSecurityGroup.id,
+      sourceSecurityGroupId: this.clientAlbSg.id,
       description: 'Allow HTTP traffic on 9090 from the Client ALB',
     });
     allowInboundSelf(
-      this.clientServiceSecurityGroup.id,
+      this.clientServiceSg.id,
       'client_service_allow_inbound_self'
     );
-    allowEgressAll(
-      this.clientServiceSecurityGroup.id,
-      'client_service_allow_outbound'
-    );
+    allowEgressAll(this.clientServiceSg.id, 'client_service_allow_outbound');
 
     // Upstream Service ALB Security Group and Rules
-    this.upstreamServiceAlbSecurityGroup = new SecurityGroup(
+    this.upstreamServiceAlbSg = new SecurityGroup(
       this,
       'upstream_service_alb',
       {
@@ -108,7 +152,7 @@ export class SecurityGroups extends Construct {
     );
 
     new SecurityGroupRule(this, 'upstream_service_alb_allow_client_80', {
-      securityGroupId: this.upstreamServiceAlbSecurityGroup.id,
+      securityGroupId: this.upstreamServiceAlbSg.id,
       type: 'ingress',
       protocol: 'tcp',
       fromPort: 80,
@@ -118,55 +162,51 @@ export class SecurityGroups extends Construct {
       description: 'Allow HTTP traffic on 80 from the Client Service',
     });
     allowEgressAll(
-      this.upstreamServiceAlbSecurityGroup.id,
+      this.upstreamServiceAlbSg.id,
       'upstream_service_alb_allow_outbound'
     );
 
     // Upstream Service Security Group and Rules
-    this.upstreamServiceSecurityGroup = new SecurityGroup(
-      this,
-      'upstream_service',
-      {
-        namePrefix: `${nameTagPrefix}-upstream-service`,
-        description: 'Security group for upstream services',
-        vpcId,
-      }
-    );
+    this.upstreamServiceSg = new SecurityGroup(this, 'upstream_service', {
+      namePrefix: `${nameTagPrefix}-upstream-service`,
+      description: 'Security group for upstream services',
+      vpcId,
+    });
 
     new SecurityGroupRule(this, 'upstream_service_allow_alb_9090', {
-      securityGroupId: this.upstreamServiceSecurityGroup.id,
+      securityGroupId: this.upstreamServiceSg.id,
       type: 'ingress',
       protocol: 'tcp',
       fromPort: 9090,
       toPort: 9090,
-      sourceSecurityGroupId: this.upstreamServiceAlbSecurityGroup.id,
+      sourceSecurityGroupId: this.upstreamServiceAlbSg.id,
       description: 'Allow HTTP traffic on 9090 from the Upstream Service ALB',
     });
     allowInboundSelf(
-      this.upstreamServiceSecurityGroup.id,
+      this.upstreamServiceSg.id,
       'upstream_service_allow_inbound_self'
     );
     allowEgressAll(
-      this.upstreamServiceSecurityGroup.id,
+      this.upstreamServiceSg.id,
       'upstream_service_allow_outbound'
     );
 
     // Database Security Group and Rules
-    this.databaseSecurityGroup = new SecurityGroup(this, 'database', {
+    this.databaseSg = new SecurityGroup(this, 'database', {
       namePrefix: `${nameTagPrefix}-database`,
       description: 'Security group for the database',
       vpcId,
     });
 
     new SecurityGroupRule(this, 'database_allow_service_27017', {
-      securityGroupId: this.databaseSecurityGroup.id,
+      securityGroupId: this.databaseSg.id,
       type: 'ingress',
       protocol: 'tcp',
       fromPort: 27017,
       toPort: 27017,
-      sourceSecurityGroupId: this.upstreamServiceSecurityGroup.id,
+      sourceSecurityGroupId: this.upstreamServiceSg.id,
       description: 'Allow HTTP traffic on 27017 from the Upstream Services',
     });
-    allowEgressAll(this.databaseSecurityGroup.id, 'database_allow_outbound');
+    allowEgressAll(this.databaseSg.id, 'database_allow_outbound');
   }
 }

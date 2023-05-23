@@ -1,6 +1,6 @@
 import { Aspects, TerraformStack } from 'cdktf';
 import { Construct } from 'constructs';
-import { S3PrefixValidationAspect } from '../validation/s3-prefix-validation-aspect';
+import { S3PrefixValidationAspect } from './validation/s3-prefix-validation-aspect';
 // import { CostCenterTagValidationAspect } from '../validation/cost-center-tag-validation-aspect';
 
 export class SageStack extends TerraformStack {
