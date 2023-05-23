@@ -25,7 +25,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const bastionPublicKey = fs.readFileSync(bastionKeyPath, 'utf-8');
     const bastionKeyName = 'openchallenges-preview-bastion-key';
     const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
-    const bastionPrivateIp = '10.0.2.172';
+    const bastionPrivateIp = '10.70.2.172';
 
     new AwsProvider(this, 'AWS', {
       region: AmazonRegion.US_EAST_1,
@@ -34,7 +34,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
       tagPrefix: 'openchallenges-preview',
-      vpcCirdBlock: '10.0.0.0/16',
+      vpcCirdBlock: '10.70.0.0/16',
     });
 
     const network = new Network(this, 'network', networkConfig);

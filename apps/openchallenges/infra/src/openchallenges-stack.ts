@@ -46,7 +46,7 @@ export class OpenChallengesStack extends SageStack {
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
       tagPrefix: 'openchallenges',
-      vpcCirdBlock: '10.0.0.0/16',
+      vpcCirdBlock: '10.70.0.0/16',
     });
 
     // The AWS VPC

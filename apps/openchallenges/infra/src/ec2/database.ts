@@ -28,7 +28,7 @@ export class Database extends Construct {
       instanceType: 't2.micro',
       vpcSecurityGroupIds: [securityGroupId],
       subnetId,
-      privateIp: '10.0.32.253', // TODO replace by config param
+      privateIp: '10.70.32.253', // TODO replace by config param
       // privateIp: vars.databasePrivateIp,
       tags: { Name: `${nameTagPrefix}-database` },
       dependsOn: [natGateway],
