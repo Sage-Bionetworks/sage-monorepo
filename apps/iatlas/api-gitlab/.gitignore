@@ -142,6 +142,7 @@ cython_debug/
 !.vscode/cspell.json
 !.vscode/settings.json
 *.code-workspace
+!iatlas-api.code-workspace
 
 # OS
 .DS_Store
