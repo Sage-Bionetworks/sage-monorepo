@@ -87,7 +87,7 @@ Connect to the bastion using the private key. The public IP address shown below 
 with the address returned by Terraform at the end of the deployment process.
 
 ```console
-$ ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<bastion public ip>
+ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<bastion public ip>
 ```
 
 ### Connect to the Preview instance
@@ -95,7 +95,7 @@ $ ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<bastion public ip>
 Connect to the preview instance from the bastion:
 
 ```console
-$ ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<preview instance private ip>
+ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<preview instance private ip>
 ```
 
 ### Destroy the stack
