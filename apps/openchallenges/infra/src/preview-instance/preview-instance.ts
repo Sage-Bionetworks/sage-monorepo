@@ -15,7 +15,10 @@ export class PreviewInstance extends Construct {
       keyName: config.keyName,
       subnetId: config.subnetId,
       tags: { Name: `${config.tagPrefix}-preview-instance` },
-      userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
+      userData: readFileSync(
+        './src/resources/scripts/preview-instance.sh',
+        'utf8'
+      ),
       vpcSecurityGroupIds: config.securityGroupIds,
     });
   }

@@ -16,7 +16,8 @@ export class SecurityGroups extends Construct {
     super(scope, id);
 
     const nameTagPrefix = 'openchallenges';
-    const bastionPrivateIp = '10.0.2.172'; // TODO DRY
+    const bastionPrivateIp = '10.0.2.172'; // TODO Add to config
+    // const devcontainerPrivateIp = '10.41.30.105'; // TODO Add to config
 
     // reusable ingress 80 rule
     const allowIngress80 = (securityGroupId: string, constructId: string) =>
@@ -39,7 +40,7 @@ export class SecurityGroups extends Construct {
         protocol: 'tcp',
         fromPort: 22,
         toPort: 22,
-        cidrBlocks: ['0.0.0.0/0'],
+        cidrBlocks: ['0.0.0.0/0'], // TODO Limit to a smaller set of IP(s)
         description: 'Allow SSH traffic',
       });
 
