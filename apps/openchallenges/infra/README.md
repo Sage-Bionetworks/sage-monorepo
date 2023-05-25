@@ -81,16 +81,21 @@ cdktf synth
 cdktf deploy
 ```
 
-### Connect to the EC2 instance
+### Connect to the Bastion
 
-First, check that the security group of the EC2 instance to make sure that it access inbound SSH
-traffic.
-
-Connect to the instance using the private key. The IP address shown below should be replaced with
-the address returned by Terraform at the end of the deployment process.
+Connect to the bastion using the private key. The public IP address shown below should be replaced
+with the address returned by Terraform at the end of the deployment process.
 
 ```console
-$ ssh -i ~/.ssh/openchallenges-ec2 ubuntu@44.206.227.254
+ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<bastion public ip>
+```
+
+### Connect to the Preview instance
+
+Connect to the preview instance from the bastion:
+
+```console
+ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<preview instance private ip>
 ```
 
 ### Destroy the stack
