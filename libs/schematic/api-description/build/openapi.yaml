@@ -36,6 +36,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /storages/projects/{projectId}/manifests:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+    get:
+      tags:
+        - Storage
+      summary: Gets all manifests in a project folder that users have access to
+      description: Gets all manifests in a project folder that the current user has access to.
+      operationId: listStorageProjectManifests
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestsPage'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     ProjectId:
@@ -128,6 +148,26 @@ components:
       required:
         - title
         - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    Manifest:
+      description: A manifest ID object
+      type: string
+      example: syn26251389
+    ManifestsPage:
+      type: object
+      description: A page of manifests.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            manifests:
+              description: A list of manifests.
+              type: array
+              items:
+                $ref: '#/components/schemas/Manifest'
+          required:
+            - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
