@@ -3,50 +3,19 @@ import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { Construct } from 'constructs';
 import { readFileSync } from 'fs';
 import { BastionConfig } from './bastion-config';
-import { IamInstanceProfile } from '@cdktf/provider-aws/lib/iam-instance-profile';
-import { IamRole } from '@cdktf/provider-aws/lib/iam-role';
-import { DataAwsIamPolicyDocument } from '@cdktf/provider-aws/lib/data-aws-iam-policy-document';
+import { BastionInstanceProfile } from './bastion-instance-profile';
 
 export class Bastion extends Construct {
   instance: Instance;
+  instanceProfile: BastionInstanceProfile;
 
   constructor(scope: Construct, id: string, config: BastionConfig) {
     super(scope, id);
 
-    const policyDocument = new DataAwsIamPolicyDocument(
+    this.instanceProfile = new BastionInstanceProfile(
       this,
-      'bastion_assume_role',
-      {
-        statement: [
-          {
-            actions: ['sts:AssumeRole'],
-            effect: 'Allow',
-            principals: [
-              {
-                identifiers: ['ec2.amazonaws.com'],
-                type: 'Service',
-              },
-            ],
-          },
-        ],
-      }
-    );
-
-    const ssmInstanceRole = new IamRole(this, 'bastion_iam_role', {
-      name: `${config.tagPrefix}-ec2-role`,
-      assumeRolePolicy: policyDocument.json,
-      managedPolicyArns: [
-        'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore',
-      ],
-    });
-
-    const ssmInstanceProfile = new IamInstanceProfile(
-      this,
-      'ssm_instance_profile',
-      {
-        name: `${config.tagPrefix}-ssm-instance-profile`,
-        role: ssmInstanceRole.name,
-      }
+      'bastion_instance_profile',
+      config.tagPrefix
     );
 
     this.instance = new Instance(this, id, {
@@ -58,7 +27,7 @@ export class Bastion extends Construct {
       tags: { Name: `${config.tagPrefix}-bastion` },
       userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
       vpcSecurityGroupIds: [config.securityGroupId],
-      iamInstanceProfile: ssmInstanceProfile.name,
+      iamInstanceProfile: this.instanceProfile.iamInstanceProfile.name,
     });
   }
 }
