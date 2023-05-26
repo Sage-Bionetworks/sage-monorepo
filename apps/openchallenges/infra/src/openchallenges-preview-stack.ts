@@ -103,11 +103,8 @@ export class OpenChallengesPreviewStack extends SageStack {
     new TerraformOutput(this, 'private_subnet_1_cidr_block', {
       value: network.privateSubnets[1].cidrBlock,
     });
-    new TerraformOutput(this, 'bastion_public_ip', {
-      value: bastion.instance.publicIp,
-    });
-    new TerraformOutput(this, 'bastion_private_ip', {
-      value: bastion.instance.privateIp,
+    new TerraformOutput(this, 'bastion_id', {
+      value: bastion.instance.id,
     });
     new TerraformOutput(this, 'preview_instance_public_ip', {
       value: previewInstance.instance.publicIp,

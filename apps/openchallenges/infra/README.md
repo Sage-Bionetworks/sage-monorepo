@@ -83,6 +83,41 @@ cdktf deploy
 
 ### Connect to the Bastion
 
+#### With AWS SSM
+
+Add the following profile to `~/.aws/config`.
+
+```ini
+[profile cnb-dev]
+region = us-east-1
+sso_start_url = https://d-906769aa66.awsapps.com/start
+sso_region = us-east-1
+sso_account_id = 384625883722
+sso_role_name = Administrator
+output = json
+```
+
+Login to AWS SSO.
+
+```console
+aws --profile cnb-dev sso login
+```
+
+A browser window will pop up, asking for access from an application. Click `Allow`. You are now
+authenticated for remote access for the next 8-10 hours. Re-login as necessary.
+
+Connect to the instance as `ubuntu`, passing the `Instance ID` to `--target`.
+
+```console
+aws ssm start-session \
+  --profile cnb-dev \
+  --document-name AWS-StartInteractiveCommand \
+  --parameters command="sudo su - ubuntu" \
+  --target <instance id>
+```
+
+#### With SSH (deprecated)
+
 Connect to the bastion using the private key. The public IP address shown below should be replaced
 with the address returned by Terraform at the end of the deployment process.
 

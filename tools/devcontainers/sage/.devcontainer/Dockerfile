@@ -74,6 +74,10 @@ RUN groupadd docker \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
+  # Add AWS Session Manager plugin
+  && curl -fsSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o /tmp/session-manager-plugin.deb \
+  && dpkg -i /tmp/session-manager-plugin.deb \
+  && rm -fr /tmp/session-manager-plugin.deb \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
