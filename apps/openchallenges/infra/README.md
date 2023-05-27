@@ -81,9 +81,7 @@ cdktf synth
 cdktf deploy
 ```
 
-### Connect to the Bastion
-
-#### With AWS SSM
+### Connect to the Bastion with AWS SSM
 
 Add the following profile to `~/.aws/config`.
 
@@ -116,13 +114,20 @@ aws ssm start-session \
   --target <instance id>
 ```
 
-#### With SSH (deprecated)
+Add a new profile to the `~/.ssh/config`. Replace `<instance id>` with the ID of the instance.
 
-Connect to the bastion using the private key. The public IP address shown below should be replaced
-with the address returned by Terraform at the end of the deployment process.
+```
+Host oc-bastion
+  HostName <instance id>
+  User ubuntu
+  IdentityFile ~/.ssh/openchallenges-ec2
+  ProxyCommand sh -c "AWS_PROFILE=cnb-dev aws ssm start-session --target %h --document-name AWS-StartSSHSession --parameters 'portNumber=%p'"
+```
+
+Connect to the bastion with SSM:
 
 ```console
-ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<bastion public ip>
+ssh oc-bastion
 ```
 
 ### Connect to the Preview instance
