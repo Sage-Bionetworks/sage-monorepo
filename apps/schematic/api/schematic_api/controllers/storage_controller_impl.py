@@ -3,6 +3,8 @@ from schematic_api.models.dataset import Dataset  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 
 
+
+
 def list_storage_project_datasets(project_id):  # noqa: E501
     try:
         datasets = []
@@ -28,3 +30,7 @@ def list_storage_project_datasets(project_id):  # noqa: E501
         status = 500
         res = BasicError("Internal error", status, str(error))
     return res, status
+
+def list_storage_project_manifests(project_id):
+    return "some magic"
+
