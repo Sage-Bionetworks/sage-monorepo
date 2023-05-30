@@ -1,6 +1,7 @@
 from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.dataset import Dataset  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
+from schematic.store.synapse import SynapseStorage
 
 
 def list_storage_project_datasets(project_id):  # noqa: E501
@@ -31,4 +32,6 @@ def list_storage_project_datasets(project_id):  # noqa: E501
 
 
 def list_storage_project_manifests(project_id):
+    store = SynapseStorage(access_token='')
+
     return "some magic"
