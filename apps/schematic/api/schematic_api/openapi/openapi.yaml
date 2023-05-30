@@ -12,10 +12,60 @@ info:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
 - url: http://localhost/api/v1
+security:
+- bearerAuth: []
 tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+    get:
+      description: Gets all manifests in a project folder that the current user has
+        access to.
+      operationId: list_storage_project_manifests
+      parameters:
+      - description: The Synapse ID of a storage project.
+        explode: false
+        in: path
+        name: projectId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProjectId'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetView
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetView'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestsPage'
+          description: Success
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets all manifests in a project folder that users have access to
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /storages/projects/{projectId}/datasets:
     get:
       description: Gets all datasets in folder under a given storage project that
@@ -55,44 +105,6 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /storages/projects/{projectId}/manifests:
-    get:
-      description: Gets all manifests in a project folder that the current user has
-        access to.
-      operationId: list_storage_project_manifests
-      parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ManifestsPage'
-          description: Success
-        "404":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      summary: Gets all manifests in a project folder that users have access to
-      tags:
-      - Storage
-      x-openapi-router-controller: schematic_api.controllers.storage_controller
 components:
   parameters:
     projectId:
@@ -103,6 +115,17 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ProjectId'
+      style: simple
+    assetView:
+      description: ID of view listing all project data assets. E.g. for Synapse this
+        would be the Synapse ID of the fileview listing all data assets for a given
+        project
+      explode: false
+      in: path
+      name: assetView
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetView'
       style: simple
   responses:
     NotFound:
@@ -218,6 +241,12 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    AssetView:
+      description: ID of view listing all project data assets. E.g. for Synapse this
+        would be the Synapse ID of the fileview listing all data assets for a given
+        project.
+      example: syn23643253
+      type: string
     Manifest:
       description: A manifest ID object
       example: syn26251389
@@ -258,3 +287,9 @@ components:
       title: ManifestsPage_allOf
       type: object
       example: null
+  securitySchemes:
+    bearerAuth:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+      x-bearerInfoFunc: schematic_api.controllers.security_controller_.info_from_bearerAuth

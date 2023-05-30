@@ -1,4 +1,13 @@
 openapi: 3.0.3
+# 1) Define the security scheme type (HTTP bearer)
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+security:
+  - bearerAuth: [] 
 info:
   title: Schematic REST API
   version: 0.1.0
@@ -19,5 +28,5 @@ paths:
   /storages/projects/{projectId}/datasets:
     $ref: paths/storages/projects/@{projectId}/datasets.yaml
 
-  /storages/projects/{projectId}/manifests:
-    $ref: paths/storages/projects/@{projectId}/manifests.yaml
+  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+    $ref: paths/storages/asset-views/@{assetView}/projects/@{projectId}/manifests.yaml

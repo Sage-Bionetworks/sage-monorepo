@@ -22,6 +22,7 @@ class TestStorageController(BaseTestCase):
         """
         headers = { 
             'Accept': 'application/json',
+            'Authorization': 'Bearer special-key',
         }
         response = self.client.open(
             '/api/v1/storages/projects/{project_id}/datasets'.format(project_id='project_id_example'),
@@ -37,9 +38,10 @@ class TestStorageController(BaseTestCase):
         """
         headers = { 
             'Accept': 'application/json',
+            'Authorization': 'Bearer special-key',
         }
         response = self.client.open(
-            '/api/v1/storages/projects/{project_id}/manifests'.format(project_id='project_id_example'),
+            '/api/v1/storages/asset-views/{asset_view}/projects/{project_id}/manifests'.format(project_id='project_id_example', asset_view='asset_view_example'),
             method='GET',
             headers=headers)
         self.assert200(response,

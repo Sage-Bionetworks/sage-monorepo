@@ -1,62 +1,10 @@
 openapi: 3.0.3
-info:
-  title: Schematic REST API
-  version: 0.1.0
-  license:
-    name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
-  contact:
-    name: Support
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
-  x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
-servers:
-  - url: http://localhost/api/v1
-tags:
-  - name: Storage
-    description: Operations about storages.
-paths:
-  /storages/projects/{projectId}/datasets:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
-    get:
-      tags:
-        - Storage
-      summary: Gets all datasets in folder under a given storage project that the current user has access to.
-      description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: listStorageProjectDatasets
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DatasetsPage'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /storages/projects/{projectId}/manifests:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
-    get:
-      tags:
-        - Storage
-      summary: Gets all manifests in a project folder that users have access to
-      description: Gets all manifests in a project folder that the current user has access to.
-      operationId: listStorageProjectManifests
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ManifestsPage'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     ProjectId:
       description: A Synapse project ID.
@@ -150,6 +98,10 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+    AssetView:
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
+      type: string
+      example: syn23643253
     Manifest:
       description: A manifest ID object
       type: string
@@ -178,6 +130,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ProjectId'
+    assetView:
+      name: assetView
+      in: path
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetView'
   responses:
     NotFound:
       description: The specified resource was not found
@@ -191,3 +150,63 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+security:
+  - bearerAuth: []
+info:
+  title: Schematic REST API
+  version: 0.1.0
+  license:
+    name: Apache 2.0
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  contact:
+    name: Support
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
+  x-logo:
+    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+servers:
+  - url: http://localhost/api/v1
+tags:
+  - name: Storage
+    description: Operations about storages.
+paths:
+  /storages/projects/{projectId}/datasets:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+    get:
+      tags:
+        - Storage
+      summary: Gets all datasets in folder under a given storage project that the current user has access to.
+      description: Gets all datasets in folder under a given storage project that the current user has access to.
+      operationId: listStorageProjectDatasets
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetsPage'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetView'
+    get:
+      tags:
+        - Storage
+      summary: Gets all manifests in a project folder that users have access to
+      description: Gets all manifests in a project folder that the current user has access to.
+      operationId: listStorageProjectManifests
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestsPage'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
