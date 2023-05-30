@@ -8,25 +8,28 @@ from schematic.store.synapse import SynapseStorage
 from schematic import CONFIG
 
 
-def config_handler(asset_view:str=None) -> None:
+def config_handler(asset_view: str = None) -> None:
     """Load config file and update asset view if needded
-    Args: 
-        asset_view (str): asset view 
+    Args:
+        asset_view (str): asset view
     """
-    CONFIG.load_config("../../schematic/api/schematic_api/config.yml", asset_view=asset_view)
+    CONFIG.load_config(
+        "../../schematic/api/schematic_api/config.yml", asset_view=asset_view
+    )
+
 
 def get_access_token() -> str:
-    """Get access token from header
-    """
+    """Get access token from header"""
     bearer_token = None
     # Check if the Authorization header is present
-    if 'Authorization' in request.headers:
-        auth_header = request.headers['Authorization']
+    if "Authorization" in request.headers:
+        auth_header = request.headers["Authorization"]
 
         # Ensure the header starts with 'Bearer ' and retrieve the token
-        if auth_header.startswith('Bearer '):
-            bearer_token = auth_header.split(' ')[1]
+        if auth_header.startswith("Bearer "):
+            bearer_token = auth_header.split(" ")[1]
     return bearer_token
+
 
 def list_storage_project_datasets(project_id):  # noqa: E501
     try:
@@ -56,9 +59,8 @@ def list_storage_project_datasets(project_id):  # noqa: E501
 
 
 def list_storage_project_manifests(project_id, asset_view):
-    """List manifests in a given storage project
-    """
-    # load config 
+    """List manifests in a given storage project"""
+    # load config
     config_handler(asset_view=asset_view)
 
     # get access token
