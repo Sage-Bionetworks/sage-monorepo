@@ -27,7 +27,10 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run python -m schematic_api",
+        "commands": [
+          "nx run schematic-api:prepare-python", 
+          "poetry run python -m schematic_api"
+        ],
         "cwd": "apps/schematic/api"
       }
     },
