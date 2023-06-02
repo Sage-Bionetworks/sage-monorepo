@@ -22,7 +22,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config .validaterc --ruleset .spectral.yaml --verbose build/openapi.yaml",
+        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
         "cwd": "libs/schematic/api-description"
       }
     },
