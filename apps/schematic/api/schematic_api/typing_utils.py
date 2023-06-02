@@ -17,11 +17,12 @@ if sys.version_info < (3, 7):
         """ Determine whether klass is a List """
         return klass.__extra__ == list
 
+
 else:
 
     def is_generic(klass):
         """ Determine whether klass is a generic class """
-        return hasattr(klass, '__origin__')
+        return hasattr(klass, "__origin__")
 
     def is_dict(klass):
         """ Determine whether klass is a Dict """

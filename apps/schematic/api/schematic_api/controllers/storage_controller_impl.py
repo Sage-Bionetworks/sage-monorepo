@@ -6,7 +6,11 @@ from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.dataset import Dataset  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 from schematic_api.models.manifests_page import ManifestsPage
-from synapseclient.core.exceptions import SynapseNoCredentialsError, SynapseAuthenticationError, SynapseHTTPError
+from synapseclient.core.exceptions import (
+    SynapseNoCredentialsError,
+    SynapseAuthenticationError,
+    SynapseHTTPError,
+)
 from schematic.store.synapse import SynapseStorage
 from schematic import CONFIG
 
@@ -52,10 +56,9 @@ def list_storage_project_datasets(project_id):  # noqa: E501
         )
         res = page
         status = 200
-    except SynapseAuthenticationError as error: 
+    except SynapseAuthenticationError as error:
         status = 401
         res = ("Internal error", status, str(error))
-    
 
     # except DoesNotExist:
     #     status = 404
@@ -91,7 +94,7 @@ def list_storage_project_manifests(project_id, asset_view):
         res = page
         status = 200
 
-    except Exception as error: 
+    except Exception as error:
         status = 500
         res = BasicError("Internal error", status, str(error))
 
@@ -99,12 +102,11 @@ def list_storage_project_manifests(project_id, asset_view):
         status = 402
         res = BasicError("synapse authentication error", status, str(error))
 
-    except SynapseNoCredentialsError as error: 
+    except SynapseNoCredentialsError as error:
         status = 404
         res = BasicError("synapse no credentials error", status, str(error))
-    
-    except SynapseHTTPError as error: 
-        status = 500
-        res = BasicError('internal error', status, str(error))
-    return res, status
 
+    except SynapseHTTPError as error:
+        status = 500
+        res = BasicError("internal error", status, str(error))
+    return res, status
