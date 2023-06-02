@@ -4,6 +4,8 @@ import { SecurityGroupRule } from '@cdktf/provider-aws/lib/security-group-rule';
 import { SecurityGroup } from '@cdktf/provider-aws/lib/security-group';
 
 export class SecurityGroups extends Construct {
+  previewInstanceAlbSg: SecurityGroup;
+  previewInstanceSg: SecurityGroup;
   clientAlbSg: SecurityGroup;
   clientServiceSg: SecurityGroup;
   upstreamServiceAlbSg: SecurityGroup;
@@ -108,7 +110,51 @@ export class SecurityGroups extends Construct {
       'allow_ssh_from_bastion'
     );
 
-    // Client Application Load Balancer Security Group and Rules
+    // Preview Instance ALB Security Group and Rules
+    this.previewInstanceAlbSg = new SecurityGroup(
+      this,
+      'preview_instance_alb_sg',
+      {
+        namePrefix: `${nameTagPrefix}-preview-instance-alb`,
+        description: 'Security group for the preview instance ALB',
+        vpcId,
+      }
+    );
+    allowIngress80(
+      this.previewInstanceAlbSg.id,
+      'preview_instance_alb_allow_80'
+    );
+    allowEgressAll(
+      this.previewInstanceAlbSg.id,
+      'preview_instance_alb_allow_outbound'
+    );
+
+    // Preview Instance Security Group and Rules
+    this.previewInstanceSg = new SecurityGroup(this, 'preview_instance', {
+      namePrefix: `${nameTagPrefix}-preview-instance`,
+      description: 'Security group for the preview instance',
+      vpcId,
+    });
+
+    new SecurityGroupRule(this, 'preview_instance_allow_alb_8080', {
+      securityGroupId: this.previewInstanceSg.id,
+      type: 'ingress',
+      protocol: 'tcp',
+      fromPort: 8080,
+      toPort: 8080,
+      sourceSecurityGroupId: this.previewInstanceAlbSg.id,
+      description: 'Allow HTTP traffic on 8080 from the Preview Instance ALB',
+    });
+    allowInboundSelf(
+      this.previewInstanceSg.id,
+      'preview_instance_allow_inbound_self'
+    );
+    allowEgressAll(
+      this.previewInstanceSg.id,
+      'preview_instance_allow_outbound'
+    );
+
+    // Client Application ALB Security Group and Rules
     this.clientAlbSg = new SecurityGroup(this, 'client_alb_security_group', {
       namePrefix: `${nameTagPrefix}-ecs-client-alb`,
       description:
