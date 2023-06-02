@@ -99,14 +99,14 @@ def list_storage_project_manifests(project_id, asset_view):
         res = BasicError("Internal error", status, str(error))
 
     except SynapseAuthenticationError as error:
-        status = 402
-        res = BasicError("synapse authentication error", status, str(error))
+        status = 403
+        res = BasicError("Synapse authentication error. Unauthorized access.", status, str(error))
 
     except SynapseNoCredentialsError as error:
-        status = 404
-        res = BasicError("synapse no credentials error", status, str(error))
+        status = 401
+        res = BasicError("Synapse no credentials error", status, str(error))
 
     except SynapseHTTPError as error:
         status = 500
-        res = BasicError("internal error", status, str(error))
+        res = BasicError("Synapse http error", status, str(error))
     return res, status
