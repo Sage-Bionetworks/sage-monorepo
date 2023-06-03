@@ -16,6 +16,7 @@ import * as fs from 'fs';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import { PreviewInstanceConfig } from './preview-instance/preview-instance-config';
 import { PreviewInstance } from './preview-instance/preview-instance';
+import { PreviewInstanceAlb } from './preview-instance-alb/preview-instance-alb';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -37,14 +38,17 @@ export class OpenChallengesPreviewStack extends SageStack {
       vpcCirdBlock: '10.70.0.0/16',
     });
 
+    // The network
     const network = new Network(this, 'network', networkConfig);
 
+    // The security groups
     const securityGroups = new SecurityGroups(
       this,
       'security_groups',
       network.vpc.id
     );
 
+    // The bastion
     const bastionKeyPair = new KeyPair(this, 'bastion_keypair', {
       publicKey: bastionPublicKey,
       keyName: bastionKeyName,
@@ -63,13 +67,14 @@ export class OpenChallengesPreviewStack extends SageStack {
 
     const bastion = new Bastion(this, 'bastion', bastionConfig);
 
+    // The preview instance
     const previewInstanceConfig = new PreviewInstanceConfig({
       ami: Ami.UBUNTU_22_04_LTS,
       defaultRegion: AmazonRegion.US_EAST_1,
       instanceType: 't2.micro',
       keyName: bastionKeyName, // TODO Set unique key
       securityGroupIds: [
-        securityGroups.upstreamServiceSg.id,
+        securityGroups.previewInstanceSg.id,
         securityGroups.sshFromBastionSg.id,
       ],
       subnetId: network.privateSubnets[0].id,
@@ -80,6 +85,16 @@ export class OpenChallengesPreviewStack extends SageStack {
       this,
       'preview_instance',
       previewInstanceConfig
+    );
+
+    // The preview instance ALB
+    const previewInstanceAlb = new PreviewInstanceAlb(
+      this,
+      'preview_instance_alb',
+      network.publicSubnets,
+      securityGroups.previewInstanceAlbSg.id,
+      network.vpc.id,
+      previewInstance.instance.privateIp
     );
 
     // Add tags to every resource defined within this stack.
@@ -106,11 +121,13 @@ export class OpenChallengesPreviewStack extends SageStack {
     new TerraformOutput(this, 'bastion_id', {
       value: bastion.instance.id,
     });
-    new TerraformOutput(this, 'preview_instance_public_ip', {
-      value: previewInstance.instance.publicIp,
-    });
     new TerraformOutput(this, 'preview_instance_private_ip', {
       value: previewInstance.instance.privateIp,
+    });
+    new TerraformOutput(this, 'preview_instance_endpoint', {
+      value: previewInstanceAlb.lb.dnsName,
+      description:
+        'DNS name (endpoint) of the AWS ALB for the preview instance',
     });
   }
 }
