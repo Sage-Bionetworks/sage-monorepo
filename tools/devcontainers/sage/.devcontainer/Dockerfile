@@ -123,6 +123,8 @@ RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyen
 ## Install Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN pyenv install 3.11.0
+RUN pyenv install \
+  3.10.0 \
+  3.11.0
 
 CMD ["bash"]
