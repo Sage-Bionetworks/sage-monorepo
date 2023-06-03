@@ -106,7 +106,7 @@ def list_storage_project_manifests(project_id, asset_view):
 
     except SynapseHTTPError as error:
         status = 500
-        res = BasicError("Synapse http error", status, str(error))
+        res = BasicError("Synapse internal server error", status, str(error))
 
     except Exception as error:
         status = 500
