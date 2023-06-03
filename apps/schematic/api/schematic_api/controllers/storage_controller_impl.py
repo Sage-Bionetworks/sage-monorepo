@@ -96,13 +96,13 @@ def list_storage_project_manifests(project_id, asset_view):
 
     except SynapseAuthenticationError as error:
         status = 403
-        res = BasicError(
-            "Forbidden Synapse access error", status, str(error)
-        )
+        res = BasicError("Forbidden Synapse access error", status, str(error))
 
     except SynapseNoCredentialsError as error:
         status = 401
-        res = BasicError("Missing or invalid Synapse credentials error", status, str(error))
+        res = BasicError(
+            "Missing or invalid Synapse credentials error", status, str(error)
+        )
 
     except SynapseHTTPError as error:
         status = 500
