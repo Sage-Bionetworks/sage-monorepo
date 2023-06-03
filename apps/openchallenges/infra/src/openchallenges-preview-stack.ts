@@ -13,10 +13,13 @@ import { Bastion } from './bastion/bastion';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
 import * as os from 'os';
 import * as fs from 'fs';
+import * as YAML from 'yaml';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import { PreviewInstanceConfig } from './preview-instance/preview-instance-config';
 import { PreviewInstance } from './preview-instance/preview-instance';
 import { PreviewInstanceAlb } from './preview-instance-alb/preview-instance-alb';
+import { DnsConfig } from './config/dns-config';
+import { Dns } from './dns/dns';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -96,6 +99,12 @@ export class OpenChallengesPreviewStack extends SageStack {
       network.vpc.id,
       previewInstance.instance.privateIp
     );
+
+    // DNS
+    const dnsConfig = YAML.parse(
+      fs.readFileSync('config/dns-config.yml', 'utf8')
+    ) as DnsConfig;
+    const dns = new Dns(this, 'dns', dnsConfig);
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(

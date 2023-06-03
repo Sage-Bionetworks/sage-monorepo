@@ -4,6 +4,7 @@ accounts:
     # assumeRole:
     #   - roleArn: 'arn:aws:iam::<account id>:role/<role name>'
   - alias: prod
+    region: us-east-1
     # assumeRole:
     #   - roleArn: 'arn:aws:iam::<account id>:role/<role name>'
 zones:
