@@ -58,7 +58,7 @@ def list_storage_project_datasets(project_id):  # noqa: E501
         status = 200
     except SynapseAuthenticationError as error:
         status = 401
-        res = ("Internal error", status, str(error))
+        res = ("Unauthorized error", status, str(error))
 
     # except DoesNotExist:
     #     status = 404
@@ -94,21 +94,21 @@ def list_storage_project_manifests(project_id, asset_view):
         res = page
         status = 200
 
-    except Exception as error:
-        status = 500
-        res = BasicError("Internal error", status, str(error))
-
     except SynapseAuthenticationError as error:
         status = 403
         res = BasicError(
-            "Synapse authentication error. Unauthorized access.", status, str(error)
+            "Forbidden Synapse access error", status, str(error)
         )
 
     except SynapseNoCredentialsError as error:
         status = 401
-        res = BasicError("Synapse no credentials error", status, str(error))
+        res = BasicError("Missing or invalid Synapse credentials error", status, str(error))
 
     except SynapseHTTPError as error:
         status = 500
         res = BasicError("Synapse http error", status, str(error))
+
+    except Exception as error:
+        status = 500
+        res = BasicError("Internal error", status, str(error))
     return res, status
