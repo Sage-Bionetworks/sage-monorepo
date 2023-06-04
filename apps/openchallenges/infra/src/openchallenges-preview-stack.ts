@@ -104,6 +104,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const dnsConfig = YAML.parse(
       fs.readFileSync('config/dns-config.yml', 'utf8')
     ) as DnsConfig;
+
     const dns = new Dns(this, 'dns', dnsConfig);
 
     // Add tags to every resource defined within this stack.
