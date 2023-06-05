@@ -31,7 +31,7 @@ def cnr_tag_id(test_db, cnr_tag):
     return id
 
 
-def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_tag, cnr_tag_id):
+def test_CopyNumberResult_with_relations(app, data_set_id, entrez_id, gene_id, cnr_tag, cnr_tag_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set', 'feature', 'gene', 'tag']
@@ -47,7 +47,7 @@ def test_CopyNumberResult_with_relations(app, data_set_id, entrez, gene_id, cnr_
         string_representation_list.append(string_representation)
         assert result.feature.id == result.feature_id
         assert result.data_set.id == data_set_id
-        assert result.gene.entrez == entrez
+        assert result.gene.entrez_id == entrez_id
         assert result.gene.id == gene_id
         assert result.tag.id == result.tag_id
         assert result.tag.name == cnr_tag

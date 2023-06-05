@@ -1,6 +1,5 @@
 from sqlalchemy import orm
 from api import db
-from api.database import return_mutation_type_query
 from api.db_models import MutationType
 from .resolver_helpers import build_mutation_type_graphql_response, get_requested, get_selection_set, mutation_type_request_fields, request_mutation_types
 

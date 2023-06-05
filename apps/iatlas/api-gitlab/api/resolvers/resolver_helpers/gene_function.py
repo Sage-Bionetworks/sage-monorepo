@@ -1,6 +1,6 @@
 from sqlalchemy import orm
 from api import db
-from api.db_models import Gene, GeneFunction
+from api.db_models import Gene
 from .general_resolvers import build_option_args, get_selection_set
 
 

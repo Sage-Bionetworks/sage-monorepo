@@ -9,9 +9,8 @@ def test_CohortToSample_no_relations():
 
     assert isinstance(results, list)
     for result in results:
-        assert type(result.sample_id) is int
-        assert type(result.cohort_id) is int
-        assert type(result.tag_id) is float or NoneType
+        assert type(result.sample_id) is str
+        assert type(result.cohort_id) is str
 
 
 def test_CohortToSample_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id):
@@ -27,9 +26,8 @@ def test_CohortToSample_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id
         id = result.id
         string_representation = '<CohortToSample %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.sample_id) is int
+        assert type(result.sample_id) is str
         assert result.cohort_id == tcga_tag_cohort_id
-        assert type(result.tag_id) is int
 
         assert result.cohort.name == tcga_tag_cohort_name
         assert type(result.sample.name) is str
@@ -52,9 +50,8 @@ def test_CohortToSample_with_dataset_cohort(pcawg_cohort_name, pcawg_cohort_id):
         id = result.id
         string_representation = '<CohortToSample %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.sample_id) is int
+        assert type(result.sample_id) is str
         assert result.cohort_id == pcawg_cohort_id
-        assert type(result.tag_id) is NoneType
         assert result.cohort.name == pcawg_cohort_name
         assert type(result.sample.name) is str
         assert repr(result) == string_representation

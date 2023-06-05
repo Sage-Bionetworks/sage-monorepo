@@ -6,7 +6,7 @@ from . import Base
 class CohortToMutation(Base):
     __tablename__ = 'cohorts_to_mutations'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
 
     cohort_id = db.Column(db.Integer, db.ForeignKey(
         'cohorts.id'), primary_key=True)

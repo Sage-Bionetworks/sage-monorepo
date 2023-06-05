@@ -5,7 +5,7 @@ from api.database import return_heritability_result_query
 
 @pytest.fixture(scope='module')
 def hr_feature(test_db):
-    return 'Attractors_G_CD3E'
+    return 'BCR_Richness'
 
 
 @pytest.fixture(scope='module')
@@ -22,6 +22,9 @@ def test_HeritabilityResult_with_relations(app, data_set, data_set_id, hr_featur
     relationships_to_join = ['data_set', 'feature']
 
     query = return_heritability_result_query(*relationships_to_join)
+    import logging
+    logging.warning(query.filter_by(dataset_id=data_set_id).filter_by(
+        feature_id=hr_feature_id))
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=hr_feature_id).limit(3).all()
 

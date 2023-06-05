@@ -7,6 +7,10 @@ from api.database import return_tag_query
 def tag_name():
     return 'ACC'
 
+@pytest.fixture(scope='module')
+def tag_name_with_copy_number_results():
+    return 'C1'
+
 
 @pytest.fixture(scope='module')
 def tag_with_publication():
@@ -35,13 +39,13 @@ def test_Tag_no_relations(app, tag_name):
     assert result.driver_results == []
     assert result.node_tag_assoc == []
     assert result.nodes == []
-    assert type(result.id) is int
+    assert type(result.id) is str
     assert result.name == tag_name
-    assert type(result.characteristics) is str
+    assert type(result.description) is str
     assert type(result.color) is str or NoneType
     assert type(result.long_display) is str or NoneType
     assert type(result.short_display) is str or NoneType
-    assert result.type == 'group'
+    assert result.tag_type == 'group'
     assert type(result.order) is int or NoneType
 
 
@@ -49,13 +53,15 @@ def test_Tag_with_order(app, tag_with_order, tag_order):
     query = return_tag_query()
     result = query.filter_by(name=tag_with_order).one_or_none()
     assert result.name == tag_with_order
-    assert result.type == 'group'
+    assert result.tag_type == 'group'
     assert result.order == tag_order
 
 
-def test_Tag_with_copy_number_results(app, tag_name):
+def test_Tag_with_copy_number_results(app, tag_name_with_copy_number_results):
     query = return_tag_query('copy_number_results')
-    result = query.filter_by(name=tag_name).one_or_none()
+    result = query.filter_by(name=tag_name_with_copy_number_results).one_or_none()
+    import logging
+    logging.warning(query.filter_by(name=tag_name_with_copy_number_results))
 
     assert result
     assert isinstance(result.copy_number_results, list)
@@ -122,7 +128,7 @@ def test_Tag_with_publications(app, tag_with_publication):
     assert len(result.publications) > 0
     # Don't need to iterate through every result.
     for publication in result.publications[0:2]:
-        assert type(publication.name) is str
+        assert type(publication.title) is str
 
 
 def test_Tag_with_node_tag_assoc(app, tag_name):
@@ -161,7 +167,7 @@ def test_Tag_with_samples(app, tag_name):
     for sample in result.samples[0:2]:
         assert type(sample.name) is str
     assert result.name == tag_name
-    assert type(result.characteristics) is str
+    assert type(result.description) is str
     assert type(result.color) is str or NoneType
     assert type(result.long_display) is str or NoneType
     assert type(result.short_display) is str or NoneType

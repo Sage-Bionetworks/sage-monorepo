@@ -40,7 +40,7 @@ def test_NodeToTag_with_relations(app, nt_node, node_id):
         for tag in result.tags[0:2]:
             assert type(tag.name) is str
         assert result.node_id == node_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -56,4 +56,4 @@ def test_NodeToTag_no_relations(app, node_id):
         assert result.nodes == []
         assert result.tags == []
         assert result.node_id == node_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str

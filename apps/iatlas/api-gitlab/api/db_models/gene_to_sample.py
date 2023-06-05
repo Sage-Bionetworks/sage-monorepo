@@ -12,9 +12,9 @@ class GeneToSample(Base):
     sample_id = db.Column(db.Integer, db.ForeignKey(
         'samples.id'), primary_key=True)
 
-    rna_seq_expr = db.Column(db.Numeric, nullable=True)
+    rna_seq_expression = db.Column(db.Numeric, nullable=True)
 
-    nanostring_expr = db.Column(db.Numeric, nullable=True)
+    nanostring_expression = db.Column(db.Numeric, nullable=True)
 
     gene = db.relationship('Gene', backref=orm.backref(
         'gene_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')

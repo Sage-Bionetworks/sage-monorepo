@@ -53,6 +53,8 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
     relationships_to_join = ['data_set', 'feature', 'mutation', 'tag']
 
     query = return_driver_result_query(*relationships_to_join)
+    import logging
+    logging.warning(query)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=dr_feature_id).filter_by(
         mutation_id=dr_mutation_id).filter_by(tag_id=dr_tag_id).limit(3).all()
@@ -75,8 +77,8 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.log10_fold_change) is float or NoneType
-        assert type(result.n_mut) is int or NoneType
-        assert type(result.n_wt) is int or NoneType
+        assert type(result.n_mutant) is int or NoneType
+        assert type(result.n_wildtype) is int or NoneType
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -102,5 +104,5 @@ def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_mutation_
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.log10_fold_change) is float or NoneType
-        assert type(result.n_mut) is int or NoneType
-        assert type(result.n_wt) is int or NoneType
+        assert type(result.n_mutant) is int or NoneType
+        assert type(result.n_wildtype) is int or NoneType

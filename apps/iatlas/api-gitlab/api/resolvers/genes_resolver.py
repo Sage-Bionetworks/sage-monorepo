@@ -1,4 +1,4 @@
-from .resolver_helpers import build_gene_graphql_response, build_gene_request, get_selection_set, gene_related_sample_request_fields, gene_request_fields, get_requested, simple_gene_type_request_fields, simple_publication_request_fields
+from .resolver_helpers import build_gene_graphql_response, build_gene_request, get_selection_set, gene_related_sample_request_fields, gene_request_fields, get_requested, simple_gene_set_request_fields, simple_publication_request_fields
 from .resolver_helpers.paging_utils import paginate, paging_fields, create_paging
 
 
@@ -11,7 +11,7 @@ def resolve_genes(
         selection_set=selection_set, requested_field_mapping=gene_request_fields)
 
     gene_types_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=simple_gene_type_request_fields, child_node='geneTypes')
+        selection_set=selection_set, requested_field_mapping=simple_gene_set_request_fields, child_node='geneTypes')
 
     publications_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_publication_request_fields, child_node='publications')

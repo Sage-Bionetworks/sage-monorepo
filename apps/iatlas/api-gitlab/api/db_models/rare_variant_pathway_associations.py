@@ -5,7 +5,7 @@ from . import Base
 
 class RareVariantPathwayAssociation(Base):
     __tablename__ = 'rare_variant_pathway_associations'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     pathway = db.Column(db.String)
     p_value = db.Column(db.Numeric, nullable=True)
     min = db.Column(db.Numeric, nullable=True)
@@ -14,7 +14,7 @@ class RareVariantPathwayAssociation(Base):
     q1 = db.Column(db.Numeric, nullable=True)
     q2 = db.Column(db.Numeric, nullable=True)
     q3 = db.Column(db.Numeric, nullable=True)
-    n_mutants = db.Column(db.Integer, nullable=True)
+    n_mutant = db.Column(db.Integer, nullable=True)
     n_total = db.Column(db.Integer, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(

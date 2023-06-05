@@ -178,41 +178,23 @@ def feature_class2_feature_names(test_db, feature_class2_id):
 
 
 @ pytest.fixture(scope='session')
-def feature3():
-    return 'height'
-
-
-@ pytest.fixture(scope='session')
-def feature3_class():
-    return 'Clinical'
-
-
-@ pytest.fixture(scope='session')
-def feature3_id(test_db, feature3):
-    from api.db_models import Feature
-    (id, ) = test_db.session.query(Feature.id).filter_by(
-        name=feature3).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
-def entrez():
+def entrez_id():
     return 3627
 
 
 @pytest.fixture(scope='session')
-def gene_id(test_db, entrez):
+def gene_id(test_db, entrez_id):
     from api.db_models import Gene
-    (id, ) = test_db.session.query(Gene.id).filter_by(entrez=entrez).one_or_none()
+    (id, ) = test_db.session.query(Gene.id).filter_by(entrez_id=entrez_id).one_or_none()
     return id
 
 
 @ pytest.fixture(scope='session')
-def hgnc(test_db, entrez):
+def hgnc_id(test_db, entrez_id):
     from api.db_models import Gene
-    (hgnc, ) = test_db.session.query(
-        Gene.hgnc).filter_by(entrez=entrez).one_or_none()
-    return hgnc
+    (hgnc_id, ) = test_db.session.query(
+        Gene.hgnc_id).filter_by(entrez_id=entrez_id).one_or_none()
+    return hgnc_id
 
 
 @ pytest.fixture(scope='session')

@@ -125,7 +125,7 @@ def build_gene_request(requested, distinct=False, paging=None, entrez=None, gene
     gene_family_1 = aliased(GeneFamily, name='gf')
     gene_function_1 = aliased(GeneFunction, name='gfn')
     gene_to_sample_1 = aliased(GeneToSample, name='gts')
-    gene_to_type_1 = aliased(GeneToGeneSet, name='ggt')
+    gene_to_type_1 = aliased(id = db.Column(db.String, name='ggt')
     gene_type_1 = aliased(GeneType, name='gt')
     immune_checkpoint_1 = aliased(ImmuneCheckpoint, name='ic')
     pathway_1 = aliased(Pathway, name='py')
@@ -309,7 +309,7 @@ def get_gene_types(gene_id, requested, gene_types_requested, gene_type=None):
     sess = db.session
 
     gene_type_1 = aliased(GeneType, name='gt')
-    gene_to_gene_type_1 = aliased(GeneToGeneSet, name='ggt')
+    gene_to_gene_type_1 = aliased(id = db.Column(db.String, name='ggt')
 
     core_field_mapping = {
         'name': gene_type_1.name.label('name'),

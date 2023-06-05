@@ -27,10 +27,13 @@ def test_RareVariantPathwayAssociation_with_relations(app, data_set, data_set_id
     separator = ', '
     relationships_to_join = ['data_set', 'feature']
 
-    query = return_rare_variant_pathway_associations_query(
-        *relationships_to_join)
-    results = query.filter_by(dataset_id=data_set_id).filter_by(
-        feature_id=rvap_feature_id).filter_by(pathway=rvap_pathway).limit(3).all()
+    query = return_rare_variant_pathway_associations_query(*relationships_to_join)
+    results = query.filter_by(dataset_id=data_set_id).filter_by(feature_id=rvap_feature_id).filter_by(pathway=rvap_pathway).limit(3).all()
+    import logging
+    logging.warning(query.filter_by(dataset_id=data_set_id).filter_by(feature_id=rvap_feature_id).filter_by(pathway=rvap_pathway))
+    logging.warning(data_set_id)
+    logging.warning(rvap_feature_id)
+    logging.warning(rvap_pathway)
 
     assert isinstance(results, list)
     assert len(results) == 1
@@ -50,7 +53,7 @@ def test_RareVariantPathwayAssociation_with_relations(app, data_set, data_set_id
         assert type(result.q1) is Decimal
         assert type(result.q2) is Decimal
         assert type(result.q3) is Decimal
-        assert type(result.n_mutants) is int
+        assert type(result.n_mutant) is int
         assert type(result.n_total) is int
         assert repr(result) == string_representation
     assert repr(results) == '[' + \
@@ -77,5 +80,5 @@ def test_RareVariantPathwayAssociation_no_relations(app, data_set_id, rvap_featu
         assert type(result.q1) is Decimal or NoneType
         assert type(result.q2) is Decimal or NoneType
         assert type(result.q3) is Decimal or NoneType
-        assert type(result.n_mutants) is int or NoneType
+        assert type(result.n_mutant) is int or NoneType
         assert type(result.n_total) is int or NoneType

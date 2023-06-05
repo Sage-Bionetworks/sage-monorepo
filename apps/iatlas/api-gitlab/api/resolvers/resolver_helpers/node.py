@@ -2,7 +2,7 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
+from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToGeneSet, GeneSet, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
