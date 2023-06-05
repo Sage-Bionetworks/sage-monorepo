@@ -6,14 +6,41 @@ buildscript {
 
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
   id 'java'
+  id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
-  id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
 }
 
 repositories {
   mavenCentral()
   mavenLocal()
+}
+
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
+
+    integrationTest(JvmTestSuite) {
+      dependencies {
+        implementation project
+      }
+      sources {
+        java {
+          srcDirs = ['src/integrationTest/java']
+        }
+      }
+      targets {
+        all {
+          testTask.configure {
+            shouldRunAfter(test)
+          }
+        }
+      }
+    }
+  }
 }
 
 dependencies {
@@ -33,6 +60,7 @@ dependencies {
   implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+  testImplementation 'org.assertj:assertj-core:3.23.1'
 
   // Enable distributed tracing
   implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
@@ -60,6 +88,22 @@ tasks.withType(JavaCompile) {
 
 bootBuildImage {
   imageName = "sagebionetworks/${project.name}-base:latest"
+}
+
+test {
+	useJUnitPlatform()
+
+  testLogging.showStandardStreams = true
+
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+
+  failFast = true
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
 }
 
 spotless {

@@ -163,8 +163,8 @@ components:
     OrganizationLogin:
       description: The login of an organization
       type: string
-      minLength: 3
-      maxLength: 25
+      minLength: 2
+      maxLength: 64
       pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-org
     Organization:
@@ -183,11 +183,9 @@ components:
         description:
           type: string
           example: A description of the organization.
-        avatarUrl:
+        avatarKey:
           type: string
-          format: url
-          example: https://via.placeholder.com/300.png
-          nullable: true
+          example: logo/dream.png
         websiteUrl:
           type: string
           format: url
@@ -205,13 +203,15 @@ components:
           type: string
           format: date-time
           example: '2022-07-04T22:19:11Z'
+        acronym:
+          type: string
+          example: OC
       required:
         - id
         - name
         - email
         - login
         - description
-        - avatarUrl
         - websiteUrl
         - createdAt
         - updatedAt

@@ -1,4 +1,9 @@
 import { Component } from '@angular/core';
+import {
+  Image,
+  ImageService,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 
@@ -9,13 +14,21 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 })
 export class ChallengeSearchComponent {
   public isPlatformServer = false;
+  public searchOC$: Observable<Image> | undefined;
   searchTerms!: string | undefined;
 
   constructor(
     private readonly configService: ConfigService,
-    private router: Router
+    private router: Router,
+    private imageService: ImageService
   ) {
     this.isPlatformServer = this.configService.config.isPlatformServer;
+  }
+
+  ngOnInit() {
+    this.searchOC$ = this.imageService.getImage({
+      objectKey: 'home-search.svg',
+    });
   }
 
   onSearch(): void {

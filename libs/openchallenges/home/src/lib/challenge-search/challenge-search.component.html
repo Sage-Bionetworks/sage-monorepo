@@ -1,6 +1,6 @@
 <section id="landing" class="mat-typography">
-  <div class="container">
-    <div class="landing-content">
+  <div class="container row">
+    <div class="col-8">
       <h1>
         I want to find challenges related to
         <ngx-typed-js
@@ -13,28 +13,31 @@
           <span class="typing"></span>
         </ngx-typed-js>
       </h1>
-      <p class="mat-body-strong about-rocc">
+      <p class="mat-body-strong">
         OpenChallenges strives to provide a centralized hub of biomedical challenges from various
         hosting organizations. Our goal is to empower both participants with the most up-to-date 
         information about relevant challenges, as well as organizers with standardized challenge
         templates and intelligence.
       </p>
-      <p class="mat-body-strong">Let us help find the perfect challenge for you!</p>
-      <div class="search field field-grouped">
-        <div class="control control-expanded">
-          <input
-            class="input"
-            type="search"
-            name="search"
-            (keydown.enter)="onSearch()"
-            placeholder="I am interested in..."
-            [(ngModel)]="searchTerms"
-          />
-        </div>
-        <div class="control">
-          <button mat-raised-button class="btn" color="primary" (click)="onSearch()">Search</button>
-        </div>
-      </div>
+    </div>
+    <div class="col-4">
+      <img src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges">
+    </div>
+  </div>
+</section>
+<section id="search-oc" class="mat-typography">
+  <div class="container row">
+    <h3>Let us help find the perfect challenge for you!</h3>
+  </div>
+  <div class="container row">
+    <div class="search-field">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerms"
+        (keydown.enter)="onSearch()"
+        placeholder="I'm looking for..."
+      />
     </div>
   </div>
 </section>

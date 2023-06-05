@@ -33,8 +33,8 @@ public class OrganizationDto {
   @JsonProperty("description")
   private String description;
 
-  @JsonProperty("avatarUrl")
-  private String avatarUrl = null;
+  @JsonProperty("avatarKey")
+  private String avatarKey;
 
   @JsonProperty("websiteUrl")
   private String websiteUrl;
@@ -50,29 +50,8 @@ public class OrganizationDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public OrganizationDto id(Long id) {
-    this.id = id;
-    return this;
-  }
-
-  /**
-   * The unique identifier of an organization
-   *
-   * @return id
-   */
-  @NotNull
-  @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an organization",
-      required = true)
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
+  @JsonProperty("acronym")
+  private String acronym;
 
   public OrganizationDto name(String name) {
     this.name = name;
@@ -131,7 +110,7 @@ public class OrganizationDto {
    */
   @NotNull
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 25)
+  @Size(min = 2, max = 64)
   @Schema(
       name = "login",
       example = "example-org",
@@ -165,24 +144,23 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto avatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public OrganizationDto avatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
     return this;
   }
 
   /**
-   * Get avatarUrl
+   * Get avatarKey
    *
-   * @return avatarUrl
+   * @return avatarKey
    */
-  @NotNull
-  @Schema(name = "avatarUrl", example = "https://via.placeholder.com/300.png", required = true)
-  public String getAvatarUrl() {
-    return avatarUrl;
+  @Schema(name = "avatarKey", example = "logo/dream.png", required = false)
+  public String getAvatarKey() {
+    return avatarKey;
   }
 
-  public void setAvatarUrl(String avatarUrl) {
-    this.avatarUrl = avatarUrl;
+  public void setAvatarKey(String avatarKey) {
+    this.avatarKey = avatarKey;
   }
 
   public OrganizationDto websiteUrl(String websiteUrl) {
@@ -267,6 +245,25 @@ public class OrganizationDto {
     this.updatedAt = updatedAt;
   }
 
+  public OrganizationDto acronym(String acronym) {
+    this.acronym = acronym;
+    return this;
+  }
+
+  /**
+   * Get acronym
+   *
+   * @return acronym
+   */
+  @Schema(name = "acronym", example = "OC", required = false)
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -281,11 +278,12 @@ public class OrganizationDto {
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.avatarUrl, organization.avatarUrl)
+        && Objects.equals(this.avatarKey, organization.avatarKey)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
         && Objects.equals(this.createdAt, organization.createdAt)
-        && Objects.equals(this.updatedAt, organization.updatedAt);
+        && Objects.equals(this.updatedAt, organization.updatedAt)
+        && Objects.equals(this.acronym, organization.acronym);
   }
 
   @Override
@@ -296,11 +294,12 @@ public class OrganizationDto {
         email,
         login,
         description,
-        avatarUrl,
+        avatarKey,
         websiteUrl,
         challengeCount,
         createdAt,
-        updatedAt);
+        updatedAt,
+        acronym);
   }
 
   @Override
@@ -312,11 +311,12 @@ public class OrganizationDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
+    sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
+    sb.append("    acronym: ").append(toIndentedString(acronym)).append("\n");
     sb.append("}");
     return sb.toString();
   }

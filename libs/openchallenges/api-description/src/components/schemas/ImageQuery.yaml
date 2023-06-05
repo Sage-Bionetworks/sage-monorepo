@@ -1,0 +1,11 @@
+type: object
+description: An image query.
+properties:
+  objectKey:
+    $ref: ImageKey.yaml
+  height:
+    $ref: ImageHeight.yaml
+  aspectRatio:
+    $ref: ImageAspectRatio.yaml
+required:
+  - objectKey

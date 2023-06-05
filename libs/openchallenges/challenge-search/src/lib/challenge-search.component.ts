@@ -83,7 +83,7 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | undefined;
 
   pageNumber = 0;
-  pageSize = 20;
+  pageSize = 24;
   searchResultsCount = 0;
 
   // define filters
@@ -94,10 +94,10 @@ export class ChallengeSearchComponent
     // challengeDifficultyFilter,
     challengeSubmissionTypesFilter,
     challengeIncentiveTypesFilter,
-    challengePlatformFilter,
   ];
 
   dropdownFilters: Filter[] = [
+    challengePlatformFilter,
     challengeInputDataTypeFilter,
     challengeOrganizationFilter,
     challengeOrganizaterFilter,
@@ -133,9 +133,29 @@ export class ChallengeSearchComponent
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
+
+    // START # TODO Flagged in a merge conflict, commenting out for now
+    // this.challengePlatformService.listChallengePlatforms().subscribe(
+    //   (page) =>
+    //     (challengePlatformFilter.values = page.challengePlatforms.map(
+    // END
+
+    // update input data types filter values
+    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
+      (page) =>
+        (this.dropdownFilters[1].values = page.challengeInputDataTypes.map(
+          (datatype) => ({
+            value: datatype.slug,
+            label: datatype.name,
+            active: false,
+          })
+        ))
+    );
+
+    // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms.map(
+        (this.dropdownFilters[0].values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -190,7 +210,7 @@ export class ChallengeSearchComponent
         const searchedOrgs = page.organizations.map((org) => ({
           value: org.id,
           label: org.name,
-          avatarUrl: org.avatarUrl,
+          // avatarUrl: org.avatarUrl, // TODO Need to get the avatar URL from the image service
           active: false,
         })) as FilterValue[];
 

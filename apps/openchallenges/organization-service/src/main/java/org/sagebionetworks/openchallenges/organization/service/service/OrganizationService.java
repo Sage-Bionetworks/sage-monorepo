@@ -43,6 +43,8 @@ public class OrganizationService {
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
 
+    LOG.info("Final orgs {}", organizations);
+
     return OrganizationsPageDto.builder()
         .organizations(organizations)
         .number(organizationEntitiesPage.getNumber())
@@ -64,6 +66,9 @@ public class OrganizationService {
                     new OrganizationNotFoundException(
                         String.format(
                             "The organization with ID %s does not exist.", organizationLogin)));
-    return organizationMapper.convertToDto(orgEntity);
+
+    OrganizationDto org = organizationMapper.convertToDto(orgEntity);
+
+    return org;
   }
 }

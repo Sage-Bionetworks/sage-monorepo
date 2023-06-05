@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Image
+  summary: Get an image
+  description: Returns the image specified.
+  operationId: getImage
+  parameters:
+    - $ref: ../components/parameters/query/imageQuery.yaml
+  responses:
+    '200':
+      description: An image
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Image.yaml
+    '404':
+      $ref: ../components/responses/NotFound.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

@@ -1,53 +1,23 @@
-$screen-sm: 481px;
-$screen-lg: 641px;
-
-// TAGS
-a:hover,
-a:active {
-  outline: 0;
-  text-decoration: underline;
-}
-
-// GENERAL CLASSES
 .container {
-  max-width: 1128px;
+  max-width: 1320px;
   width: 100%;
   margin: 0 auto;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 16px 0;
 }
 .section-title {
-  text-align: center;
   margin-bottom: 42px;
-}
-.text-center {
-  text-align: center;
-}
-@media (min-width: $screen-sm) {
-  .container,
-  .container-sm {
-    padding-left: 24px;
-    padding-right: 24px;
-  }
 }
 
 #organizations {
-  background-color: #f8f8f8;
   padding: 88px 0;
+
+  .see-more {
+    margin-top: 18px;
+    padding: 26px 40px;
+  }
 }
 
 // CARDS
 .card-group {
   justify-content: center;
-}
-.org-card img {
-  width: 150px;
-  height: auto;
-  border-radius: 50%;
-  box-shadow: 0 16px 24px rgba(17, 16, 62, 0.12);
-  margin-bottom: 16px;
-}
-.card-footer {
-  align-self: flex-end;
-  margin-bottom: 12px;
 }

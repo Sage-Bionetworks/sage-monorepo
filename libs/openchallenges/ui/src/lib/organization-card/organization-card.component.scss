@@ -11,17 +11,22 @@
   border-radius: constants.$dl-radius-radius-radius16;
   cursor: pointer;
 }
-.card-body {
-  min-height: 108px;
-  max-height: 108px;
+.organization-card-banner {
+  margin-top: 16px;
+  border-radius: 50%;
 }
-
+.card-body {
+  // TODO: use the heights below when members are added
+  // min-height: 108px;
+  // max-height: 108px;
+  min-height: 90px;
+  max-height: 90px;
+}
 .organization-members {
   margin-top: 18px;
   display: flex;
   justify-content: center;
 }
-
 .member {
   margin: 3px;
 }

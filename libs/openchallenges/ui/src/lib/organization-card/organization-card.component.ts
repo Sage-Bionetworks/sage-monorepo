@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
+import { OrganizationCard } from './organization-card';
 // import * as internal from 'stream';
 import { Avatar } from '../avatar/avatar';
 
@@ -9,7 +9,7 @@ import { Avatar } from '../avatar/avatar';
   styleUrls: ['./organization-card.component.scss'],
 })
 export class OrganizationCardComponent implements OnInit {
-  @Input() organization!: Organization;
+  @Input() organizationCard!: OrganizationCard;
   // @Input() personAvatarSize = 36;
   organizationAvatar!: Avatar;
   avatar!: Avatar;
@@ -19,19 +19,18 @@ export class OrganizationCardComponent implements OnInit {
   challengesSupported: number | undefined;
 
   ngOnInit(): void {
-    if (this.organization) {
+    if (this.organizationCard) {
       this.organizationAvatar = {
-        name:
-          this.organization.name || this.organization.login.replace(/-/g, ' '),
-        src: this.organization.avatarUrl || '',
+        name: this.organizationCard.name,
+        src: this.organizationCard.avatarUrl,
         size: 140,
       };
     }
 
-    if (this.organization.challengeCount) {
+    if (this.organizationCard.challengeCount) {
       this.challengesSupported =
-        this.organization.challengeCount > 0
-          ? this.organization.challengeCount
+        this.organizationCard.challengeCount > 0
+          ? this.organizationCard.challengeCount
           : undefined;
     }
 

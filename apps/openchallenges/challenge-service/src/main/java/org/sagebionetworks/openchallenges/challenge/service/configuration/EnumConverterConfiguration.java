@@ -5,6 +5,8 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeD
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeSortDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDirectionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSortDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSortDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
@@ -61,6 +63,26 @@ public class EnumConverterConfiguration {
       @Override
       public ChallengeInputDataTypeSortDto convert(String source) {
         return ChallengeInputDataTypeSortDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, ChallengePlatformDirectionDto> challengePlatformDirectionConverter() {
+    return new Converter<String, ChallengePlatformDirectionDto>() {
+      @Override
+      public ChallengePlatformDirectionDto convert(String source) {
+        return ChallengePlatformDirectionDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, ChallengePlatformSortDto> challengePlatformSortConverter() {
+    return new Converter<String, ChallengePlatformSortDto>() {
+      @Override
+      public ChallengePlatformSortDto convert(String source) {
+        return ChallengePlatformSortDto.fromValue(source);
       }
     };
   }

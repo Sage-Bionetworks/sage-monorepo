@@ -28,6 +28,14 @@ RUN groupadd docker \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
     kafkacat jq \
+    # Required by AWS CLI
+    mandoc \
+    # Required for setting up locales
+    locales \
+    # Required by pyenv
+    make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev \
   # Add Node.js repository
   && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
   # Add GitHub CLI repository
@@ -44,7 +52,9 @@ RUN groupadd docker \
   # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok vault \
+    nodejs gh ngrok \
+    terraform=1.4.6-1 \
+    vault=1.13.2-1 \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
@@ -59,6 +69,15 @@ RUN groupadd docker \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb \
+  # Install AWS CLI
+  && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+  && unzip awscliv2.zip \
+  && ./aws/install \
+  && rm -fr awscliv2.zip ./aws \
+  # Add AWS Session Manager plugin
+  && curl -fsSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o /tmp/session-manager-plugin.deb \
+  && dpkg -i /tmp/session-manager-plugin.deb \
+  && rm -fr /tmp/session-manager-plugin.deb \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
@@ -71,6 +90,11 @@ RUN groupadd docker \
   && rm -rf /var/lib/apt/lists/* \
   && pip install --no-cache-dir pipenv
 
+# Setting up a UTF-8 locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+  && locale-gen
+ENV LANG=en_US.UTF-8
+
 ARG user=vscode
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
@@ -78,6 +102,11 @@ RUN useradd -m $user \
   && usermod --shell /bin/bash $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
   && printf "%s\n" \
+    "" \
+    "#export PYENV_ROOT=\"\$HOME/.pyenv\"" \
+    "#export PATH=\"\$PYENV_ROOT/bin:\$PATH\"" \
+    "eval \"\$(pyenv init --path)\"" \
+    "eval \"\$(pyenv virtualenv-init -)\"" \
     "" \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \
@@ -87,5 +116,15 @@ RUN useradd -m $user \
     "" | tee -a "/home/$user/.bashrc"
 
 USER $user
+
+# Install pyenv as the user
+RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
+
+## Install Python environments
+ENV PYENV_ROOT /home/${user}/.pyenv
+ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+RUN pyenv install \
+  3.10.0 \
+  3.11.0
 
 CMD ["bash"]

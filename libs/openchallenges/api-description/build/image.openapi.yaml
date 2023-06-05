@@ -16,15 +16,15 @@ tags:
   - name: Image
     description: Operations about images
 paths:
-  /images/{image}:
-    parameters:
-      - $ref: '#/components/parameters/image'
+  /images:
     get:
       tags:
         - Image
       summary: Get an image
-      description: Returns the image specified
+      description: Returns the image specified.
       operationId: getImage
+      parameters:
+        - $ref: '#/components/parameters/imageQuery'
       responses:
         '200':
           description: An image
@@ -41,7 +41,40 @@ components:
     ImageKey:
       description: The unique identifier of the image.
       type: string
-      example: logo/openchallenges.png
+      example: logo/dream.png
+      pattern: ^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+
+    ImageHeight:
+      description: The height of the image.
+      type: string
+      default: original
+      enum:
+        - original
+        - 100px
+        - 140px
+        - 250px
+        - 500px
+    ImageAspectRatio:
+      description: The aspect ratio of the image (the height of the image must be specified).
+      type: string
+      default: original
+      enum:
+        - original
+        - '16_9'
+        - '1_1'
+        - '3_2'
+        - '2_3'
+    ImageQuery:
+      type: object
+      description: An image query.
+      properties:
+        objectKey:
+          $ref: '#/components/schemas/ImageKey'
+        height:
+          $ref: '#/components/schemas/ImageHeight'
+        aspectRatio:
+          $ref: '#/components/schemas/ImageAspectRatio'
+      required:
+        - objectKey
     Image:
       type: object
       description: An image
@@ -75,13 +108,14 @@ components:
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
-    image:
-      name: image
-      in: path
-      description: The unique identifier of the image.
-      required: true
+    imageQuery:
+      name: imageQuery
+      description: The query used to get an image.
+      style: deepObject
+      explode: true
+      in: query
       schema:
-        $ref: '#/components/schemas/ImageKey'
+        $ref: '#/components/schemas/ImageQuery'
   responses:
     NotFound:
       description: The specified resource was not found

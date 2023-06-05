@@ -5,13 +5,18 @@
   $config: mat.get-color-config($theme);
   $primary: map.get($config, primary);
   $accent: map.get($config, accent);
+
+  .goal-icon {
+    background-color: mat.get-color-from-palette($primary, 50);
+  }
 }
 
 @mixin typography($theme) {
   $config: mat.get-typography-config($theme);
 
-  .subtitle {
-    font-size: 0.75em;
+  .container p {
+    font-size: 17px;
+    line-height: 28px;
   }
 }
 

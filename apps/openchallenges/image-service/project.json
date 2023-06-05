@@ -26,6 +26,13 @@
       "outputs": ["apps/openchallenges/image-service"],
       "dependsOn": ["^install"]
     },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "apps/openchallenges/image-service"
+      },
+      "dependsOn": ["^install"]
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
@@ -48,7 +55,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "./gradlew build --continuous",
+          "./gradlew build --continuous --exclude-task spotlessCheck --exclude-task test",
           "./gradlew bootRun"
         ],
         "cwd": "apps/openchallenges/image-service",

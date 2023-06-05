@@ -10,6 +10,8 @@ schematic_api/models/basic_error.py
 schematic_api/models/dataset.py
 schematic_api/models/datasets_page.py
 schematic_api/models/datasets_page_all_of.py
+schematic_api/models/manifests_page.py
+schematic_api/models/manifests_page_all_of.py
 schematic_api/models/page_metadata.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py

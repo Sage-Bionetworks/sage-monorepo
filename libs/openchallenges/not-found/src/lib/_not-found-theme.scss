@@ -1,0 +1,36 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, primary);
+  $accent: map.get($config, accent);
+
+  .home-btn {
+    background-color: mat.get-color-from-palette($accent) !important;
+    color: white !important;
+  }
+  .home-btn:hover {
+    background-color:  mat.get-color-from-palette($accent, 500);
+  }
+}
+
+@mixin typography($theme) {
+  $config: mat.get-typography-config($theme);
+
+  .err-code {
+    font-size: 160px;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

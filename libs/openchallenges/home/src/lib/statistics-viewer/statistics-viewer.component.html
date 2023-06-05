@@ -3,14 +3,29 @@
     <h3 class="section-title">Current Landscape</h3>
     <div class="row">
       <div class="col text-center">
-        <h2 [countUp]="166">0</h2>
+        <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/graphic-challenges.svg"
+          alt="Number of challenges"
+        />
+        <h2 *ngIf="challengeCount$ | async as challengeCount" [countUp]="challengeCount">0</h2>
         <p>annotated challenges</p>
       </div>
       <div class="col text-center">
-        <h2 [countUp]="238">0</h2>
+        <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/graphic-hosts.svg"
+          alt="Number of organizations & hosting societies"
+        />
+        <h2 *ngIf="orgCount$ | async as orgCount" [countUp]="orgCount">0</h2>
         <p>organizations & hosting societies</p>
       </div>
       <div class="col text-center">
+        <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/graphic-users.svg"
+          alt="Number of users"
+        />
         <h2 [countUp]="3">0</h2>
         <p>registered users</p>
       </div>

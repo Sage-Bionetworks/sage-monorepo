@@ -1,18 +1,64 @@
 <main *ngIf="challenge">
   <div id="bio">
-    <h3>Overview</h3>
-    <p>{{ challenge.description }}</p>
+    <h3 class="top-section-title">Overview</h3>
+    <p>{{ use_default(challenge.description) }}</p>
   </div>
-  <div id="info">
-    <p class="section-title">TOPICS</p>
-    <div class="row">
-      <!-- TODO: replace with topics from challenge object -->
-      <div *ngFor="let topic of mockTopics" class="topic-chip">
-        {{ topic }}
-      </div>
-    </div>
+  <div id="details">
+    <h3 class="section-title">Challenge Details</h3>
+    <table>
+      <tr>
+        <td class="text-right">Start Date</td>
+        <td>{{ challenge.startDate }}</td>
+      </tr>
+      <tr>
+        <td class="text-right">End Date</td>
+        <td>{{ challenge.endDate }}</td>
+      </tr>
+      <tr>
+        <td class="text-right">Status</td>
+        <td>{{ prettify(challenge.status) }}</td>
+      </tr>
+      <tr>
+        <td class="text-right">Platform</td>
+        <td>{{ challenge.platform.name }}</td>
+      </tr>
+      <!-- <tr>
+        <td class="text-right">Website URL</td>
+        <td>{{ challenge.websiteUrl }}</td>
+      </tr> -->
+      <tr>
+        <td class="text-right">DOI</td>
+        <td><a target="_blank" href="#">{{ mockDoi }}</a></td>
+      </tr>
+      <tr>
+        <td class="text-right">Submission Type</td>
+        <td>
+          <span nowrap *ngFor="let submissionType of challenge.submissionTypes; let isLast = last">
+            {{ prettify(submissionType) }}{{ isLast ? '' : ', ' }}</span
+          >
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right">Data Type(s)</td>
+        <td>
+          <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
+            {{ prettify(dataType.name) }}{{ isLast ? '' : ', ' }}
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right">Incentive(s)</td>
+        <td>
+          <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
+            {{ prettify(incentive) }}{{ isLast ? '' : ', ' }}</span
+          >
+        </td>
+      </tr>
+    </table>
+  </div>
+  <!-- <div id="info">
     <div class="col">
-      <p class="section-title">HOSTED BY</p>
+      <h3 class="section-title">Hosted By</h3>
       <div class="card-group">
         <openchallenges-organization-card
           *ngFor="let organization of organizations"
@@ -20,5 +66,9 @@
         ></openchallenges-organization-card>
       </div>
     </div>
-  </div>
+  </div> -->
+  <hr>
+  <span class="mat-caption created-updated-dates"
+    >Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }}
+  </span>
 </main>
