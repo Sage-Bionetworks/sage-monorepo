@@ -14,7 +14,7 @@ class GeneToGeneSet(Base):
         db.String, db.ForeignKey('gene_sets.id'), primary_key=True)
 
     genes = db.relationship('Gene', backref=orm.backref(
-        'gene_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
+        'gene_set_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
 
     gene_sets = db.relationship('GeneSet', backref=orm.backref(
         'gene_set_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')
