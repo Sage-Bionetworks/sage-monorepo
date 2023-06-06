@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Instance } from '@cdktf/provider-aws/lib/instance';
+import { AssetType, Fn, TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
 import { readFileSync } from 'fs';
 import { BastionConfig } from './bastion-config';
@@ -18,6 +19,11 @@ export class Bastion extends Construct {
       config.tagPrefix
     );
 
+    const instanceScript = new TerraformAsset(this, 'bastion_instance_script', {
+      path: `${process.cwd()}/src/resources/scripts/bastion.sh`,
+      type: AssetType.FILE,
+    });
+
     this.instance = new Instance(this, id, {
       ami: config.ami,
       instanceType: config.instanceType,
@@ -25,7 +31,11 @@ export class Bastion extends Construct {
       privateIp: config.privateIp,
       subnetId: config.subnetId,
       tags: { Name: `${config.tagPrefix}-bastion` },
-      userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
+      // userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
+      userData: Fn.templatefile(instanceScript.path, {
+        hello: 'Hello',
+      }),
+      userDataReplaceOnChange: true,
       vpcSecurityGroupIds: [config.securityGroupId],
       iamInstanceProfile: this.instanceProfile.iamInstanceProfile.name,
     });
