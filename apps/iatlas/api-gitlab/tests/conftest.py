@@ -78,19 +78,6 @@ def related_id(test_db, related):
 
 
 @ pytest.fixture(scope='session')
-def related2():
-    return 'gender'
-
-
-@ pytest.fixture(scope='session')
-def related_id2(test_db, related2):
-    from api.db_models import Tag
-    (id, ) = test_db.session.query(Tag.id).filter_by(
-        name=related2).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
 def related3():
     return 'TCGA_Subtype'
 

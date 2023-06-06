@@ -108,7 +108,7 @@ def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_
         query = query.filter(tag_1.name.in_(tag))
 
     if type:
-        query = query.filter(tag_1.type.in_(type))
+        query = query.filter(tag_1.tag_type.in_(type))
 
     if data_set:
         dataset_subquery = sess.query(dataset_to_tag_1.tag_id)
@@ -235,13 +235,13 @@ def get_related(tag_id, requested, related_requested):
         related_tag_1 = aliased(Tag, name='rt')
 
         related_core_field_mapping = {
-            'characteristics': related_tag_1.characteristics.label('tag_characteristics'),
+            'characteristics': related_tag_1.description.label('tag_characteristics'),
             'color': related_tag_1.color.label('tag_color'),
             'longDisplay': related_tag_1.long_display.label('tag_long_display'),
             'name': related_tag_1.name.label('tag_name'),
             'order': related_tag_1.order.label('tag_order'),
             'shortDisplay': related_tag_1.short_display.label('tag_short_display'),
-            'type': related_tag_1.type.label('tag_type'),
+            'type': related_tag_1.tag_type.label('tag_type'),
         }
 
         related_core = get_selected(

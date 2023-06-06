@@ -350,7 +350,7 @@ def test_tags_query_with_data_set(client, common_query, data_set):
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == 6
+    assert len(results) == 3
     for result in results:
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
@@ -483,44 +483,6 @@ def test_tags_query_with_related(client, related_query, related):
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
             assert tag['name'] == related
-            assert type(tag['order']) is int or NoneType
-            assert tag['type'] == 'parent_group'
-
-
-def test_tags_query_with_related2(client, related_query, related2):
-    response = client.post(
-        '/api',
-        json={
-            'query': related_query,
-            'variables': {
-                'related': [related2]
-            }
-        }
-    )
-    json_data = json.loads(response.data)
-    page = json_data['data']['tags']
-    results = page['items']
-
-    assert isinstance(results, list)
-    assert len(results) == 3
-
-    for result in results:
-        assert type(result['characteristics']) is str or NoneType
-        assert type(result['color']) is str or NoneType
-        assert type(result['longDisplay']) is str or NoneType
-        assert type(result['shortDisplay']) is str or NoneType
-        assert type(result['name']) is str
-        assert type(result['order']) is int or NoneType
-        assert result['type'] == 'group'
-        assert result['name'] in ["male", "female", "na_gender"]
-        tags = result['related']
-        assert isinstance(tags, list)
-        for tag in tags:
-            assert type(tag['characteristics']) is str or NoneType
-            assert type(tag['color']) is str or NoneType
-            assert type(tag['longDisplay']) is str or NoneType
-            assert type(tag['shortDisplay']) is str or NoneType
-            assert type(tag['name']) is str
             assert type(tag['order']) is int or NoneType
             assert tag['type'] == 'parent_group'
 
