@@ -95,6 +95,8 @@ sso_role_name = Administrator
 output = json
 ```
 
+> **Note** An interactive way to create this profile is to run `aws configure sso`.
+
 Login to AWS SSO.
 
 ```console
