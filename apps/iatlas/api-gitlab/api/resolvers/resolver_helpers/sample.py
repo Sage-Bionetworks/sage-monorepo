@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
 from api.db_models import (
-    Dataset, DatasetToSample, Feature, FeatureClass, FeatureToSample, Patient, Sample
+    Dataset, DatasetToSample, Feature, FeatureToSample, Patient, Sample
 )
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries

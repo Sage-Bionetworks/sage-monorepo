@@ -1,6 +1,6 @@
 from sqlalchemy import orm
 from api import db
-from api.db_models import FeatureClass, Feature, MethodTag
+from api.db_models import Feature
 from .database_helpers import general_core_fields, build_general_query
 
 feature_related_fields = [

@@ -1,6 +1,6 @@
 from sqlalchemy import orm
 from api import db
-from api.db_models import Mutation, MutationCode, MutationType
+from api.db_models import Mutation
 from .database_helpers import build_general_query, general_core_fields
 
 mutation_related_fields = [

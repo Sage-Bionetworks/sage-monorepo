@@ -1,7 +1,28 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
-    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_samples, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_cohorts,
+    resolve_colocalizations,
+    resolve_copy_number_results,
+    resolve_data_sets,
+    resolve_driver_results,
+    resolve_edges,
+    resolve_features,
+    resolve_gene_types,
+    resolve_genes,
+    resolve_germline_gwas_results,
+    resolve_heritability_results,
+    resolve_mutations,
+    resolve_nodes,
+    resolve_rare_variant_pathway_associations,
+    resolve_patients,
+    resolve_samples,
+    resolve_slides,
+    resolve_snps,
+    resolve_tags,
+    resolve_test,
+    resolve_heritability_results
+)
 
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -196,28 +217,28 @@ root.set_field('dataSets', resolve_data_sets)
 root.set_field('driverResults', resolve_driver_results)
 root.set_field('edges', resolve_edges)
 root.set_field('features', resolve_features)
-root.set_field('geneFamilies', resolve_gene_family)
-root.set_field('geneFunctions', resolve_gene_function)
+#root.set_field('geneFamilies', resolve_gene_family)
+#root.set_field('geneFunctions', resolve_gene_function)
 root.set_field('geneTypes', resolve_gene_types)
 root.set_field('genes', resolve_genes)
 root.set_field('germlineGwasResults', resolve_germline_gwas_results)
 root.set_field('heritabilityResults', resolve_heritability_results)
-root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
-root.set_field('methodTags', resolve_method_tags)
+#root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
+#root.set_field('methodTags', resolve_method_tags)
 root.set_field('mutations', resolve_mutations)
-root.set_field('mutationTypes', resolve_mutation_types)
+#root.set_field('mutationTypes', resolve_mutation_types)
 root.set_field('nodes', resolve_nodes)
-root.set_field('pathways', resolve_pathways)
+#root.set_field('pathways', resolve_pathways)
 root.set_field('patients', resolve_patients)
 root.set_field('rareVariantPathwayAssociations',
                resolve_rare_variant_pathway_associations)
 root.set_field('samples', resolve_samples)
 root.set_field('slides', resolve_slides)
 root.set_field('snps', resolve_snps)
-root.set_field('superCategories', resolve_super_categories)
+#root.set_field('superCategories', resolve_super_categories)
 root.set_field('tags', resolve_tags)
 root.set_field('test', resolve_test)
-root.set_field('therapyTypes', resolve_therapy_types)
+#root.set_field('therapyTypes', resolve_therapy_types)
 
 
 schema = make_executable_schema(

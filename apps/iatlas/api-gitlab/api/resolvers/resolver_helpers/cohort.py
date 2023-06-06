@@ -2,7 +2,7 @@ from logging import Logger
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Cohort, Dataset, Tag, Sample, Feature, Gene, Mutation, MutationCode, CohortToSample, CohortToFeature, CohortToGene, CohortToMutation
+from api.db_models import Cohort, Dataset, Tag, Sample, Feature, Gene, Mutation, CohortToSample, CohortToFeature, CohortToGene, CohortToMutation
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 

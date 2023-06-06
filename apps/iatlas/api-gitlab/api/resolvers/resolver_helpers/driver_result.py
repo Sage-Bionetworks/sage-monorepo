@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag, MutationType
+from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 

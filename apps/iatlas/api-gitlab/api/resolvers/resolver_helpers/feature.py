@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Feature, FeatureClass, FeatureToSample, MethodTag, Sample, Cohort, CohortToSample, CohortToFeature
+from api.db_models import Feature, FeatureToSample, Sample, Cohort, CohortToSample, CohortToFeature
 from .sample import build_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries

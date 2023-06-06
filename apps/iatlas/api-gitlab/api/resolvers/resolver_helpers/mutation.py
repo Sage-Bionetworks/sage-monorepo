@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation, Cohort, CohortToMutation, CohortToSample
+from api.db_models import Gene, Mutation, Patient, Sample, SampleToMutation, Cohort, CohortToMutation, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 

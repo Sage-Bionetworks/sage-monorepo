@@ -16,7 +16,6 @@ from .dataset_to_tag import DatasetToTag
 from .driver_result import DriverResult
 from .edge import Edge
 from .feature import Feature
-from .feature_class import FeatureClass
 from .feature_to_sample import FeatureToSample
 from .gene import Gene
 from .gene_to_sample import GeneToSample
@@ -24,10 +23,7 @@ from .gene_to_gene_set import GeneToGeneSet
 from .gene_set import GeneSet
 from .germline_gwas_result import GermlineGwasResult
 from .heritability_result import HeritabilityResult
-from .method_tag import MethodTag
 from .mutation import Mutation
-from .mutation_code import MutationCode
-from .mutation_type import MutationType
 from .node import Node
 from .node_to_tag import NodeToTag
 from .patient import Patient
