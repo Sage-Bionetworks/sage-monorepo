@@ -7,7 +7,7 @@ import { AmazonRegion, Ami, SageCostCenter } from './constants';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-group/security-groups';
-import { Aspects, TerraformOutput } from 'cdktf';
+import { Aspects, TerraformOutput, TerraformVariable } from 'cdktf';
 import { BastionConfig } from './bastion/bastion-config';
 import { Bastion } from './bastion/bastion';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
@@ -28,17 +28,30 @@ export class OpenChallengesPreviewStack extends SageStack {
     const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
     const bastionPrivateIp = '10.70.2.172';
 
+    // Inputs
+    const configServerGitToken = new TerraformVariable(
+      this,
+      'config_server_git_token',
+      {
+        type: 'string',
+        description:
+          'The Git token used by the config server to read config from the config repo',
+        sensitive: true,
+      }
+    );
+
+    // The AWS provider
     new AwsProvider(this, 'AWS', {
       region: AmazonRegion.US_EAST_1,
     });
 
+    // The network
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
       tagPrefix: 'openchallenges-preview',
       vpcCirdBlock: '10.70.0.0/16',
     });
 
-    // The network
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
