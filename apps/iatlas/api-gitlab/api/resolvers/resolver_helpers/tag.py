@@ -180,7 +180,7 @@ def get_publications(tag_id, requested, publications_requested):
             'doId': pub_1.do_id.label('do_id'),
             'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
             'journal': pub_1.journal.label('journal'),
-            'name': pub_1.name.label('name'),
+            'name': pub_1.title.label('name'),
             'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
             'title': pub_1.title.label('title'),
             'year': pub_1.year.label('year')
@@ -206,7 +206,7 @@ def get_publications(tag_id, requested, publications_requested):
         order = []
         append_to_order = order.append
         if 'name' in publications_requested:
-            append_to_order(pub_1.name)
+            append_to_order(pub_1.title)
         if 'pubmedId' in publications_requested:
             append_to_order(pub_1.pubmed_id)
         if 'doId' in publications_requested:
