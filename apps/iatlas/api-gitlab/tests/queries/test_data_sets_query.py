@@ -6,7 +6,7 @@ from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cur
 
 @pytest.fixture(scope='module')
 def data_set_type():
-    return 'ici'
+    return 'analysis'
 
 
 @pytest.fixture(scope='module')
@@ -129,7 +129,6 @@ def test_data_sets_cursor_pagination_last(client, common_query):
     paging = page['paging']
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
-
     assert len(items) == num
     assert paging['hasNextPage'] == False
     assert paging['hasPreviousPage'] == True
