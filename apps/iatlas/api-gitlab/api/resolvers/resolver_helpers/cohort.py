@@ -72,7 +72,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
 
     core = get_selected(requested, core_field_mapping)
@@ -96,7 +96,7 @@ def build_cohort_request(requested, data_set_requested, tag_requested, cohort=No
     if 'tag' in requested or tag:
         is_outer = not bool(tag)
         data_set_join_condition = build_join_condition(
-            tag_1.id, cohort_1.tag_id, filter_column=tag_1.name, filter_list=tag)
+            tag_1.id, cohort_1.cohort_tag_id, filter_column=tag_1.name, filter_list=tag)
         query = query.join(tag_1, and_(
             *data_set_join_condition), isouter=is_outer)
 
@@ -225,8 +225,8 @@ def get_mutations(id, requested, mutation_requested, mutation_gene_requested):
         }
 
         mutation_gene_core_field_mapping = {
-            'hgnc': gene_1.hgnc.label('gene_hgnc'),
-            'entrez': gene_1.entrez.label('gene_entrez'),
+            'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
+            'entrez': gene_1.entrez_id.label('gene_entrez'),
         }
 
         core = get_selected(mutation_requested, mutation_core_field_mapping)
