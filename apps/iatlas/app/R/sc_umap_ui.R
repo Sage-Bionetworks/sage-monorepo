@@ -15,8 +15,8 @@ sc_umap_ui <- function(id){
           shiny::selectInput(
             ns("color"),
             label = "Color by",
-            choices = c("cell_type", "cell_type_broad", "tissue", "subtype", "gene"),
-            selected = "cell_type_broad",
+            choices = c("cell_type", "type", "gene"),
+            selected = "cell_type",
             multiple = FALSE
           ),
           parameter_tabs <- tabsetPanel(
