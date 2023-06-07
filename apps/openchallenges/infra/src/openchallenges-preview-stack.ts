@@ -29,16 +29,11 @@ export class OpenChallengesPreviewStack extends SageStack {
     const bastionPrivateIp = '10.70.2.172';
 
     // Inputs
-    const configServerGitToken = new TerraformVariable(
-      this,
-      'config_server_git_token',
-      {
-        type: 'string',
-        description:
-          'The Git token used by the config server to read config from the config repo',
-        sensitive: true,
-      }
-    );
+    const hello = new TerraformVariable(this, 'hello', {
+      type: 'string',
+      description: 'Example of environment variable to add to the bastion',
+      sensitive: true,
+    });
 
     // The AWS provider
     new AwsProvider(this, 'AWS', {
@@ -70,6 +65,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const bastionConfig = new BastionConfig({
       ami: Ami.UBUNTU_22_04_LTS,
       defaultRegion: AmazonRegion.US_EAST_1,
+      hello: hello.value,
       instanceType: 't2.micro',
       keyName: bastionKeyName,
       privateIp: bastionPrivateIp,

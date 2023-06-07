@@ -33,7 +33,7 @@ export class Bastion extends Construct {
       tags: { Name: `${config.tagPrefix}-bastion` },
       // userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
       userData: Fn.templatefile(instanceScript.path, {
-        hello: 'Hello',
+        hello: config.hello,
       }),
       userDataReplaceOnChange: true,
       vpcSecurityGroupIds: [config.securityGroupId],

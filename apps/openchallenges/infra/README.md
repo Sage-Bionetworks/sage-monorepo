@@ -78,7 +78,7 @@ cdktf synth
 ### Deploy the stack
 
 ```console
-cdktf deploy
+TF_VAR_hello='Hello' cdktf deploy openchallenges-preview
 ```
 
 ### Connect to the Bastion with AWS SSM
