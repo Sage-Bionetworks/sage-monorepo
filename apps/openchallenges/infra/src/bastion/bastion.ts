@@ -2,7 +2,6 @@
 import { Instance } from '@cdktf/provider-aws/lib/instance';
 import { AssetType, Fn, TerraformAsset } from 'cdktf';
 import { Construct } from 'constructs';
-import { readFileSync } from 'fs';
 import { BastionConfig } from './bastion-config';
 import { BastionInstanceProfile } from './bastion-instance-profile';
 
