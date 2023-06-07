@@ -44,7 +44,9 @@ RUN groupadd docker \
   # Install extra packages
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok vault \
+    nodejs gh ngrok \
+    terraform=1.4.6-1 \
+    vault=1.13.2-1 \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \

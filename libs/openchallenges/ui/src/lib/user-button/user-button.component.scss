@@ -12,9 +12,23 @@
     box-sizing: border-box;
     max-height: 100%;
   }
-
+}
+.btn-container {
+  width: 100%
 }
 
 button.mat-menu-item {
   padding-right: 122px;
+}
+
+@media only screen and (max-width: 855px) {
+  .user-button {
+    width:100%;
+    div {
+      justify-content: center;
+      span{
+        padding-left: 8px;
+      }
+    }
+  }
 }

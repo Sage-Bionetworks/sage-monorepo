@@ -2,7 +2,11 @@
   <section class="title">
     <div class="container">
       <div class="section-outer">
-        <!-- <img class="logo" src="assets/images/openchallenges-icon.svg" alt="OpenChallenges Icon" /> -->
+        <img
+          class="logo-icon"
+          src="assets/images/openchallenges-icon.svg"
+          alt="OpenChallenges Icon"
+        />
         <img class="logo" [src]="(triforceImg$ | async)?.url" alt="OpenChallenges Icon" />
         <h2>About OpenChallenges</h2>
       </div>
@@ -10,9 +14,9 @@
   </section>
   <section class="vision">
     <div class="container">
-      <h4 class="welcome-msg">
-        Welcome to <span>OpenChallenges</span>, the centralized hub for all challenges biomedical
-        and more.
+      <h4 class="mat-body-strong welcome-msg">
+        Welcome to <em>OpenChallenges</em>, the centralized hub for all challenges biomedical and
+        more.
       </h4>
       <div class="section-inner">
         <p>
@@ -23,7 +27,8 @@
         <p>
           OpenChallenges (OC) strives to address some of the friction in the Challenge experience by
           providing a centralized hub to reduce participant search cost and increasing Challenge
-          visibility. Think of the ROCC like an EventBrite for the scientific benchmarking space!
+          visibility. Think of OpenChallenges like an EventBrite for the scientific benchmarking
+          space!
         </p>
       </div>
     </div>

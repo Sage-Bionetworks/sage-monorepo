@@ -19,13 +19,13 @@
 @mixin typography($theme) {
   em {
     font-style: normal;
+    font-weight: 700;
   }
   .card-name {
-    font-weight: 300 !important;
+    font-weight: 700;
   }
   .card-roles {
     font-size: 1.1em;
-    font-style: italic;
   }
 }
 

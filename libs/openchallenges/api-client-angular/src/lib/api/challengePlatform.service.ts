@@ -23,6 +23,8 @@ import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { ChallengePlatform } from '../model/challengePlatform';
 // @ts-ignore
+import { ChallengePlatformSearchQuery } from '../model/challengePlatformSearchQuery';
+// @ts-ignore
 import { ChallengePlatformsPage } from '../model/challengePlatformsPage';
 
 // @ts-ignore
@@ -158,24 +160,19 @@ export class ChallengePlatformService {
     /**
      * List challenge platforms
      * List challenge platforms
-     * @param pageNumber The page number.
-     * @param pageSize The number of items in a single page.
+     * @param challengePlatformSearchQuery The search query used to find challenge platforms.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengePlatformsPage>;
-    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengePlatformsPage>>;
-    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengePlatformsPage>>;
-    public listChallengePlatforms(pageNumber?: number, pageSize?: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+    public listChallengePlatforms(challengePlatformSearchQuery?: ChallengePlatformSearchQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengePlatformsPage>;
+    public listChallengePlatforms(challengePlatformSearchQuery?: ChallengePlatformSearchQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<ChallengePlatformsPage>>;
+    public listChallengePlatforms(challengePlatformSearchQuery?: ChallengePlatformSearchQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<ChallengePlatformsPage>>;
+    public listChallengePlatforms(challengePlatformSearchQuery?: ChallengePlatformSearchQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (pageNumber !== undefined && pageNumber !== null) {
+        if (challengePlatformSearchQuery !== undefined && challengePlatformSearchQuery !== null) {
           localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>pageNumber, 'pageNumber');
-        }
-        if (pageSize !== undefined && pageSize !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>pageSize, 'pageSize');
+            <any>challengePlatformSearchQuery, 'challengePlatformSearchQuery');
         }
 
         let localVarHeaders = this.defaultHeaders;

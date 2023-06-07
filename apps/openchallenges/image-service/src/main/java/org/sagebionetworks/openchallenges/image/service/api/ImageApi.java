@@ -11,9 +11,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.image.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -28,9 +30,9 @@ public interface ImageApi {
   }
 
   /**
-   * GET /images/{image} : Get an image Returns the image specified
+   * GET /images : Get an image Returns the image specified.
    *
-   * @param image The unique identifier of the image. (required)
+   * @param imageQuery The query used to get an image. (optional)
    * @return An image (status code 200) or The specified resource was not found (status code 404) or
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
@@ -75,15 +77,11 @@ public interface ImageApi {
       })
   @RequestMapping(
       method = RequestMethod.GET,
-      value = "/images/{image}",
+      value = "/images",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<ImageDto> getImage(
-      @Parameter(
-              name = "image",
-              description = "The unique identifier of the image.",
-              required = true)
-          @PathVariable("image")
-          String image) {
-    return getDelegate().getImage(image);
+      @Parameter(name = "imageQuery", description = "The query used to get an image.") @Valid
+          ImageQueryDto imageQuery) {
+    return getDelegate().getImage(imageQuery);
   }
 }

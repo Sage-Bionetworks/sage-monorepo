@@ -11,6 +11,10 @@
   border-radius: constants.$dl-radius-radius-radius16;
   cursor: pointer;
 }
+.card-body {
+  min-height: 108px;
+  max-height: 108px;
+}
 
 .organization-members {
   margin-top: 18px;

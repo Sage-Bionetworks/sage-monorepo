@@ -22,6 +22,8 @@ import { Observable }                                        from 'rxjs';
 import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { Image } from '../model/image';
+// @ts-ignore
+import { ImageQuery } from '../model/imageQuery';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
@@ -95,17 +97,20 @@ export class ImageService {
 
     /**
      * Get an image
-     * Returns the image specified
-     * @param image The unique identifier of the image.
+     * Returns the image specified.
+     * @param imageQuery The query used to get an image.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getImage(image: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Image>;
-    public getImage(image: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Image>>;
-    public getImage(image: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Image>>;
-    public getImage(image: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
-        if (image === null || image === undefined) {
-            throw new Error('Required parameter image was null or undefined when calling getImage.');
+    public getImage(imageQuery?: ImageQuery, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Image>;
+    public getImage(imageQuery?: ImageQuery, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Image>>;
+    public getImage(imageQuery?: ImageQuery, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Image>>;
+    public getImage(imageQuery?: ImageQuery, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+
+        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
+        if (imageQuery !== undefined && imageQuery !== null) {
+          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
+            <any>imageQuery, 'imageQuery');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -140,10 +145,11 @@ export class ImageService {
             }
         }
 
-        let localVarPath = `/images/${this.configuration.encodeParam({name: "image", value: image, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        let localVarPath = `/images`;
         return this.httpClient.get<Image>(`${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
+                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

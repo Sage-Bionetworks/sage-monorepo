@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeInputDataTypesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeInputDataTypeService;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,7 @@ public class ChallengeInputDataTypeApiDelegateImpl implements ChallengeInputData
 
   @Override
   public ResponseEntity<ChallengeInputDataTypesPageDto> listChallengeInputDataTypes(
-      Integer pageNumber, Integer pageSize) {
-    return ResponseEntity.ok(
-        challengeInputDataTypeService.listChallengeInputDataTypes(pageNumber, pageSize));
+      ChallengeInputDataTypeSearchQueryDto query) {
+    return ResponseEntity.ok(challengeInputDataTypeService.listChallengeInputDataTypes(query));
   }
 }

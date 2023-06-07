@@ -1,9 +1,11 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
+import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengePlatformNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengePlatformEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengePlatformMapper;
@@ -22,9 +24,7 @@ public class ChallengePlatformService {
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
-  public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
-    this.challengePlatformRepository = challengePlatformRepository;
-  }
+  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
   @Transactional(readOnly = true)
   public ChallengePlatformDto getChallengePlatform(String challengePlatformName) {
@@ -42,9 +42,16 @@ public class ChallengePlatformService {
   }
 
   @Transactional(readOnly = true)
-  public ChallengePlatformsPageDto listChallengePlatforms(Integer pageNumber, Integer pageSize) {
-    Pageable pageable = PageRequest.of(pageNumber, pageSize);
-    Page<ChallengePlatformEntity> entitiesPage = challengePlatformRepository.findAll(pageable);
+  public ChallengePlatformsPageDto listChallengePlatforms(ChallengePlatformSearchQueryDto query) {
+    log.info("query {}", query);
+
+    Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
+
+    List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
+    Page<ChallengePlatformEntity> entitiesPage =
+        challengePlatformRepository.findAll(
+            pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    log.info("entitiesPage {}", entitiesPage);
 
     List<ChallengePlatformDto> challengePlatforms =
         challengePlatformMapper.convertToDtoList(entitiesPage.getContent());

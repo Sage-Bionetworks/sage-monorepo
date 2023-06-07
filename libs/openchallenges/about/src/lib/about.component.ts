@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   Image,
+  ImageQuery,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -27,6 +28,9 @@ export class AboutComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.triforceImg$ = this.imageService.getImage('triforce.png');
+    const imageQuery: ImageQuery = {
+      objectKey: 'logo/dream.png',
+    };
+    this.triforceImg$ = this.imageService.getImage(imageQuery);
   }
 }

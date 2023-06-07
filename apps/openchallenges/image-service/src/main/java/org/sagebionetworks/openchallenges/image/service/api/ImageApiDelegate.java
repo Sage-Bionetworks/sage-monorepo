@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.image.service.api;
 import java.util.Optional;
 import javax.annotation.Generated;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,14 +21,14 @@ public interface ImageApiDelegate {
   }
 
   /**
-   * GET /images/{image} : Get an image Returns the image specified
+   * GET /images : Get an image Returns the image specified.
    *
-   * @param image The unique identifier of the image. (required)
+   * @param imageQuery The query used to get an image. (optional)
    * @return An image (status code 200) or The specified resource was not found (status code 404) or
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see ImageApi#getImage
    */
-  default ResponseEntity<ImageDto> getImage(String image) {
+  default ResponseEntity<ImageDto> getImage(ImageQueryDto imageQuery) {
     getRequest()
         .ifPresent(
             request -> {
