@@ -14,7 +14,7 @@ class RareVariantPathwayAssociation(Base):
     q1 = db.Column(db.Numeric, nullable=True)
     q2 = db.Column(db.Numeric, nullable=True)
     q3 = db.Column(db.Numeric, nullable=True)
-    n_mutant = db.Column(db.Integer, nullable=True)
+    n_mutants = db.Column(db.Integer, nullable=True)
     n_total = db.Column(db.Integer, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(

@@ -24,6 +24,7 @@ from .gene_set import GeneSet
 from .germline_gwas_result import GermlineGwasResult
 from .heritability_result import HeritabilityResult
 from .mutation import Mutation
+from .mutation_type import MutationType
 from .node import Node
 from .node_to_tag import NodeToTag
 from .patient import Patient

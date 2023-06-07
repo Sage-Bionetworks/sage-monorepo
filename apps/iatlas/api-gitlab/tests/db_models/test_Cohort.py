@@ -87,7 +87,7 @@ def test_cohort_mutations_relationship(app, tcga_tag_cohort_name, tcga_tag_cohor
         assert type(mutation.id) is str
         assert type(mutation.gene_id) is str
         assert type(mutation.mutation_code) is str
-        assert type(mutation.mutation_type) is str
+        assert type(mutation.mutation_type_id) is str
 
 
 def test_cohort_tag_relationship(app, tcga_tag_cohort_name, tcga_tag_cohort_id, related3, related_id3, data_set_id):

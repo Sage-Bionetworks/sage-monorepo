@@ -77,7 +77,7 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.log10_fold_change) is float or NoneType
-        assert type(result.n_mutant) is int or NoneType
+        assert type(result.n_mutants) is int or NoneType
         assert type(result.n_wildtype) is int or NoneType
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
@@ -104,5 +104,5 @@ def test_DriverResult_no_relations(app, data_set_id, dr_feature_id, dr_mutation_
         assert type(result.fold_change) is float or NoneType
         assert type(result.log10_p_value) is float or NoneType
         assert type(result.log10_fold_change) is float or NoneType
-        assert type(result.n_mutant) is int or NoneType
+        assert type(result.n_mutants) is int or NoneType
         assert type(result.n_wildtype) is int or NoneType

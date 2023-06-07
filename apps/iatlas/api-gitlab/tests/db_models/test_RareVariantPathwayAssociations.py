@@ -53,7 +53,7 @@ def test_RareVariantPathwayAssociation_with_relations(app, data_set, data_set_id
         assert type(result.q1) is Decimal
         assert type(result.q2) is Decimal
         assert type(result.q3) is Decimal
-        assert type(result.n_mutant) is int
+        assert type(result.n_mutants) is int
         assert type(result.n_total) is int
         assert repr(result) == string_representation
     assert repr(results) == '[' + \
@@ -80,5 +80,5 @@ def test_RareVariantPathwayAssociation_no_relations(app, data_set_id, rvap_featu
         assert type(result.q1) is Decimal or NoneType
         assert type(result.q2) is Decimal or NoneType
         assert type(result.q3) is Decimal or NoneType
-        assert type(result.n_mutant) is int or NoneType
+        assert type(result.n_mutants) is int or NoneType
         assert type(result.n_total) is int or NoneType

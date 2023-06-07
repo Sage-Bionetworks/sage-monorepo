@@ -23,12 +23,15 @@ def test_Mutation_no_relations(app, mutation_gene_id):
 
     assert isinstance(results, list)
     for result in results:
-        assert type(result.name) is str
-        assert type(result.gene) is NoneType
-        assert type(result.mutation_code) is str
-        assert type(result.mutation_type) is str
-        assert result.samples == []
         assert type(result.id) is str
+        assert type(result.name) is str
+        assert type(result.mutation_code) is str
+        assert type(result.mutation_type_id) is str
+
+        assert type(result.gene) is NoneType
+        assert type(result.mutation_type) is NoneType
+        assert result.samples == []
+
         assert result.gene_id == mutation_gene_id
         assert type(result.gene_id) is str
 
@@ -58,7 +61,7 @@ def test_Mutation_with_relations(app, mutation_entrez_id, mutation_gene_id):
         assert result.gene_id == mutation_gene_id
         assert type(result.gene_id) is str
         assert type(result.mutation_code) is str
-        assert type(result.mutation_type) is str
+        assert type(result.mutation_type_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'

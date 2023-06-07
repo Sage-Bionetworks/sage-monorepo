@@ -11,7 +11,7 @@ class DriverResult(Base):
     log10_p_value = db.Column(db.Numeric, nullable=True)
     log10_fold_change = db.Column(db.Numeric, nullable=True)
     n_wildtype = db.Column(db.Integer, nullable=True)
-    n_mutant = db.Column(db.Integer, nullable=True)
+    n_mutants = db.Column(db.Integer, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)
