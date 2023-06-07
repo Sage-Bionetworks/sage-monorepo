@@ -5,7 +5,7 @@ CREATE TABLE `challenge_platform`
     `id`                    int NOT NULL AUTO_INCREMENT,
     `slug`                  varchar(255) NOT NULL UNIQUE,
     `name`                  varchar(255) NOT NULL UNIQUE,
-    `avatar_url`            varchar(255) NOT NULL,
+    `avatar_key`            varchar(255) NOT NULL,
     `website_url`           varchar(255) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
