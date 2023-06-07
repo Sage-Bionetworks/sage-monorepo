@@ -15,9 +15,9 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "pyenv install --skip-existing 3.11.0",
-          "pyenv local 3.11.0",
-          "poetry env use 3.11.0",
+          "pyenv install --skip-existing 3.10.0",
+          "pyenv local 3.10.0",
+          "poetry env use 3.10.0",
           "poetry install --with prod,dev"
         ],
         "cwd": "apps/schematic/api",
@@ -34,10 +34,8 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/schematic/api"
-      },
-      "dependsOn": []
+        "command": "docker/schematic/serve-detach.sh schematic-api"
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
