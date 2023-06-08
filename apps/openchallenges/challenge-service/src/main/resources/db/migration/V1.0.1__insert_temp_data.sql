@@ -1,88 +1,88 @@
 -- challenge_platform data
 
-INSERT INTO challenge_platform (id, slug, name, avatar_url, website_url)
+INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url)
 VALUES (
     '1',
     'synapse',
     'Synapse',
-    'https://via.placeholder.com/300.png',
+    'logo/synapse.png',
     'https://synapse.org/'
   ),
   (
     '2',
     'cagi',
     'CAGI',
-    'https://via.placeholder.com/300.png',
+    'logo/cagi.png',
     'https://genomeinterpretation.org/challenges.html'
   ),
   (
     '3',
     'cami',
     'CAMI',
-    'https://via.placeholder.com/300.png',
+    'logo/cami.png',
     'https://data.cami-challenge.org/'
   ),
   (
     '4',
     'casp',
     'CASP',
-    'https://via.placeholder.com/300.png',
+    'logo/casp.png',
     'https://predictioncenter.org/'
   ),
   (
     '5',
     'grand-challenge',
     'Grand Challenge',
-    'https://via.placeholder.com/300.png',
+    'logo/grand-challenge.png',
     'https://grand-challenge.org/'
   ),
   (
     '6',
     'precision-fda',
     'precisionFDA',
-    'https://via.placeholder.com/300.png',
+    'logo/precisionfda.png',
     'https://precision.fda.gov/challenges'
   ),
   (
     '7',
     'easychair',
     'EasyChair',
-    'https://via.placeholder.com/300.png',
+    'logo/easy-chair.jpg',
     'https://easychair.org/'
   ),
   (
     '8',
     'kaggle',
     'Kaggle',
-    'https://via.placeholder.com/300.png',
+    'logo/kaggle.png',
     'https://www.kaggle.com/'
   ),
   (
     '9',
     'codalab',
     'CodaLab',
-    'https://via.placeholder.com/300.png',
+    'logo/codalab.jpg',
     'https://codalab.lisn.upsaclay.fr/'
   ),
   (
     '10',
     'codabench',
     'CodaBench',
-    'https://via.placeholder.com/300.png',
+    'logo/codalab.jpg',
     'https://www.codabench.org/'
   ),
   (
     '11',
     'openml',
     'OpenML',
-    'https://via.placeholder.com/300.png',
+    'logo/openml.jpg',
     'https://www.openml.org/'
   ),
   (
     '12',
     'papers-with-code',
     'PapersWithCode',
-    'https://via.placeholder.com/300.png',
+    'logo/papers-with-code.jpg',
     'https://paperswithcode.com/'
   );
 
