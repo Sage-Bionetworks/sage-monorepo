@@ -443,7 +443,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
-    '',
+    '10.1001/jamanetworkopen.2020.0265',
     '2016-11-18',
     '2017-05-16'
   ),
