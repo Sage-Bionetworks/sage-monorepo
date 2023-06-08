@@ -38,6 +38,7 @@ CREATE TABLE `challenge`
     `status`                ENUM('upcoming', 'active', 'completed'),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
+    `doi`                   varchar(80),
     `start_date`            DATE,
     `end_date`              DATE,
     -- `email`                 varchar(255) DEFAULT NULL,

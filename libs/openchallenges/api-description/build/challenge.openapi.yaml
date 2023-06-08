@@ -402,6 +402,8 @@ components:
           $ref: '#/components/schemas/ChallengeHeadline'
         description:
           $ref: '#/components/schemas/ChallengeDescription'
+        doi:
+          type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:

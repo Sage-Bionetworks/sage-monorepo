@@ -41,6 +41,7 @@ export interface Challenge {
      * The description of the challenge.
      */
     description: string;
+    doi?: string;
     status: ChallengeStatus;
     difficulty: ChallengeDifficulty;
     platform: SimpleChallengePlatform;
