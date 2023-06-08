@@ -36,6 +36,9 @@ public class ChallengeDto {
   @JsonProperty("description")
   private String description;
 
+  @JsonProperty("doi")
+  private String doi;
+
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
@@ -200,6 +203,25 @@ public class ChallengeDto {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public ChallengeDto doi(String doi) {
+    this.doi = doi;
+    return this;
+  }
+
+  /**
+   * Get doi
+   *
+   * @return doi
+   */
+  @Schema(name = "doi", required = false)
+  public String getDoi() {
+    return doi;
+  }
+
+  public void setDoi(String doi) {
+    this.doi = doi;
   }
 
   public ChallengeDto status(ChallengeStatusDto status) {
@@ -516,6 +538,7 @@ public class ChallengeDto {
         && Objects.equals(this.name, challenge.name)
         && Objects.equals(this.headline, challenge.headline)
         && Objects.equals(this.description, challenge.description)
+        && Objects.equals(this.doi, challenge.doi)
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
@@ -539,6 +562,7 @@ public class ChallengeDto {
         name,
         headline,
         description,
+        doi,
         status,
         difficulty,
         platform,
@@ -563,6 +587,7 @@ public class ChallengeDto {
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
