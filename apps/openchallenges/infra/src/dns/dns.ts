@@ -1,71 +1,34 @@
-/* eslint-disable no-new */
-import { AwsProvider } from '@cdktf/provider-aws/lib/provider';
 import { Construct } from 'constructs';
-import { DnsConfig } from '../config/dns-config';
-import { logger } from '../logger';
 import { Route53Zone } from '@cdktf/provider-aws/lib/route53-zone';
-import { ZoneConfig } from '../config/zone-config';
 import { Route53Record } from '@cdktf/provider-aws/lib/route53-record';
+import { Alb } from '@cdktf/provider-aws/lib/alb';
 
 export class Dns extends Construct {
-  awsProviders: { [id: string]: AwsProvider } = {};
+  devZone: Route53Zone;
+  record: Route53Record;
 
-  constructor(scope: Construct, id: string, config: DnsConfig) {
+  constructor(scope: Construct, id: string, lb: Alb) {
     super(scope, id);
 
-    // const nameTagPrefix = 'openchallenges';
-    logger.info('DNS config, {}', config);
-
-    config.accounts.forEach((accountConfig) => {
-      const id = accountConfig.alias || 'default';
-      this.awsProviders[id] = new AwsProvider(this, id, accountConfig);
-    });
-
-    // Configure hosted zones
-    config.zones.forEach((zoneConfig) => {
-      this.createZone(null, zoneConfig);
-    });
-  }
-
-  // Recursive method for adding zones
-  createZone(parent: Route53Zone | null, zoneConfig: ZoneConfig) {
-    const id = zoneConfig.name.replace('.', '_');
-
-    // add defaults and provider to zone config
-    zoneConfig = {
-      ...{
-        provider: this.awsProviders[zoneConfig.account],
-        zones: [],
-        records: [],
+    // TODO This resource must be managed outside of this stack when more than one stacks are
+    // deployed to this account.
+    this.devZone = new Route53Zone(this, 'dev_zone', {
+      name: 'dev.openchallenges.io',
+      tags: {
+        Name: 'dev.openchallenges.io',
       },
-      ...zoneConfig,
-    };
-    const zone = new Route53Zone(this, id, zoneConfig);
+    });
 
-    // if there is a parent zone, add NS records to it that point to the current zone
-    if (parent != null) {
-      const recordId = `${parent.id}_${id}`;
-      new Route53Record(this, recordId, {
-        provider: parent.provider,
-        zoneId: parent.zoneId,
-        type: 'NS',
-        ttl: 300,
-        name: zone.name,
-        records: zone.nameServers,
-      });
-    }
-
-    zoneConfig.zones.forEach((z) => this.createZone(zone, z));
-    zoneConfig.records.forEach((r) => {
-      const recordId = `${zone.id}_${r.name.replace('.', '_')}_${r.type}`;
-      const record = {
-        ...r,
-        ...{
-          provider: zone.provider,
-          zoneId: zone.zoneId,
-        },
-      };
-      new Route53Record(this, recordId, record);
+    // Create an alias record that points to the ALB
+    this.record = new Route53Record(this, 'record', {
+      name: 'preview.dev.openchallenges.io',
+      zoneId: this.devZone.id,
+      type: 'A',
+      alias: {
+        name: lb.dnsName,
+        zoneId: lb.zoneId,
+        evaluateTargetHealth: true,
+      },
     });
   }
 }

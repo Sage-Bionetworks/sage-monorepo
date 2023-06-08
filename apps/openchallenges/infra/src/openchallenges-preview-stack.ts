@@ -109,12 +109,8 @@ export class OpenChallengesPreviewStack extends SageStack {
       previewInstance.instance.privateIp
     );
 
-    // DNS
-    const dnsConfig = YAML.parse(
-      fs.readFileSync('config/dns-config.yml', 'utf8')
-    ) as DnsConfig;
-
-    const dns = new Dns(this, 'dns', dnsConfig);
+    // The DNS configuration
+    const dns = new Dns(this, 'dns', previewInstanceAlb.lb);
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(
