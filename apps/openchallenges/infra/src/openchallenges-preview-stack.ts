@@ -13,12 +13,10 @@ import { Bastion } from './bastion/bastion';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
 import * as os from 'os';
 import * as fs from 'fs';
-import * as YAML from 'yaml';
 import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import { PreviewInstanceConfig } from './preview-instance/preview-instance-config';
 import { PreviewInstance } from './preview-instance/preview-instance';
 import { PreviewInstanceAlb } from './preview-instance-alb/preview-instance-alb';
-import { DnsConfig } from './config/dns-config';
 import { Dns } from './dns/dns';
 
 export class OpenChallengesPreviewStack extends SageStack {
