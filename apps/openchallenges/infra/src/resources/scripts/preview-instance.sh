@@ -28,3 +28,5 @@ usermod -a --groups docker $user
 
 # Run Nginx server to test HTTP traffic (TODO: to remove when deploying the OC stack)
 docker run -it --rm -d -p 8080:80 --name web nginx
+
+# Prepare OpenChallenges stack
