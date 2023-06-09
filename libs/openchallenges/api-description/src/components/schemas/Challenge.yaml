@@ -11,6 +11,8 @@ properties:
     $ref: ChallengeHeadline.yaml
   description:
     $ref: ChallengeDescription.yaml
+  doi:
+    type: string
   status:
     $ref: ChallengeStatus.yaml
   difficulty:

@@ -606,6 +606,7 @@ components:
         headline: Example challenge headline
         slug: awesome-challenge
         startDate: 2017-07-21T00:00:00.000+00:00
+        doi: doi
         status: active
         inputDataTypes:
         - name: gene expression
@@ -644,6 +645,8 @@ components:
           example: This is an example description of the challenge.
           maxLength: 280
           minLength: 0
+          type: string
+        doi:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'

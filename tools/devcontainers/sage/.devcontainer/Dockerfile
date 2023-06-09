@@ -74,6 +74,10 @@ RUN groupadd docker \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
+  # Add AWS Session Manager plugin
+  && curl -fsSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o /tmp/session-manager-plugin.deb \
+  && dpkg -i /tmp/session-manager-plugin.deb \
+  && rm -fr /tmp/session-manager-plugin.deb \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
@@ -119,6 +123,8 @@ RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyen
 ## Install Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN pyenv install 3.11.0
+RUN pyenv install \
+  3.10.0 \
+  3.11.0
 
 CMD ["bash"]
