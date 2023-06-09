@@ -30,3 +30,24 @@ usermod -a --groups docker $user
 docker run -it --rm -d -p 8080:80 --name web nginx
 
 # Prepare OpenChallenges stack
+apt install git
+
+# Install Node.js
+curl -sL https://deb.nodesource.com/setup_18.x | bash -
+apt-get install -y nodejs gcc g++ make
+# apt-get install -y gcc g++ make
+
+# Install devcontainer CLI
+npm install -g @devcontainers/cli@0.25.2
+
+# Start OC stack inside the Sage monorepo devcontainer
+sudo -i -u ubuntu bash << EOF
+cd ~
+git clone --filter=blob:none https://github.com/Sage-Bionetworks/sage-monorepo.git
+devcontainer up --workspace-folder sage-monorepo
+EOF
+
+# devcontainer exec --workspace-folder sage-monorepo bash -c \
+#   ". ./dev-env.sh \
+#   && workspace-install \
+#   && openchallenges-build-images"
