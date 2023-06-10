@@ -29,6 +29,12 @@ export class PreviewInstance extends Construct {
       ),
       vpcSecurityGroupIds: config.securityGroupIds,
       iamInstanceProfile: this.instanceProfile.iamInstanceProfile.name,
+      rootBlockDevice: {
+        deleteOnTermination: true,
+        encrypted: true,
+        volumeSize: 20,
+        volumeType: 'gp2',
+      },
     });
   }
 }
