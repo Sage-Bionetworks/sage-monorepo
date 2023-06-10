@@ -27,12 +27,13 @@ export class PreviewInstance extends Construct {
         './src/resources/scripts/preview-instance.sh',
         'utf8'
       ),
+      userDataReplaceOnChange: true,
       vpcSecurityGroupIds: config.securityGroupIds,
       iamInstanceProfile: this.instanceProfile.iamInstanceProfile.name,
       rootBlockDevice: {
         deleteOnTermination: true,
         encrypted: true,
-        volumeSize: 20,
+        volumeSize: 50,
         volumeType: 'gp2',
       },
     });
