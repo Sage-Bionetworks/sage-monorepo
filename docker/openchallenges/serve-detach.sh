@@ -14,6 +14,7 @@ args=(
   --file docker/openchallenges/services/mysqld-exporter.yml
   --file docker/openchallenges/services/organization-service.yml
   --file docker/openchallenges/services/prometheus.yml
+  --file docker/openchallenges/services/reverse-proxy.yml
   --file docker/openchallenges/services/service-registry.yml
   --file docker/openchallenges/services/thumbor.yml
   --file docker/openchallenges/services/vault.yml
