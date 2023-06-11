@@ -4,5 +4,5 @@
 
 ```console
 docker exec -it openchallenges-reverse-proxy \
-  tail -f /var/log/nginx/phi-deidentifier.access.log
+  tail -f /var/log/nginx/openchallenges-reverse-proxy.access.log
 ```
