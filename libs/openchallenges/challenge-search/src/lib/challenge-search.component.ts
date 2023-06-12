@@ -350,7 +350,7 @@ export class ChallengeSearchComponent
         (selected as number[]).includes(value.value as number)
       );
     }
-    console.log(selected);
+
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
