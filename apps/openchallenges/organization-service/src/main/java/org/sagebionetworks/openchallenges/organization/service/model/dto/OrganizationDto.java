@@ -53,6 +53,30 @@ public class OrganizationDto {
   @JsonProperty("acronym")
   private String acronym;
 
+  public OrganizationDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of an organization
+   *
+   * @return id
+   */
+  @NotNull
+  @Schema(
+      name = "id",
+      example = "1",
+      description = "The unique identifier of an organization",
+      required = true)
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
   public OrganizationDto name(String name) {
     this.name = name;
     return this;
