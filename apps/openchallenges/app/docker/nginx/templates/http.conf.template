@@ -2,13 +2,13 @@ http {
   include       /etc/nginx/mime.types;
   default_type  application/octet-stream;
 
-  upstream service {
-    server ${SERVICE_HOST}:${SERVICE_PORT};
+  upstream api-gateway {
+    server ${API_GATEWAY_HOST}:${API_GATEWAY_PORT};
     keepalive 15;
   }
 
   server {
-    listen 80;
+    listen 4200;
     server_name openchallenges-app;
 
     error_log   /var/log/nginx/openchallenges-app.error.log;
@@ -38,7 +38,7 @@ http {
       proxy_set_header Connection "Keep-Alive";
       proxy_set_header Proxy-Connection "Keep-Alive";
 
-      proxy_pass http://service/api;
+      proxy_pass http://api-gateway/api;
     }
   }
 }
