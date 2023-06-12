@@ -12,7 +12,7 @@ INSERT INTO organization (
     challenge_count
   )
 VALUES (
-    '1',
+    1,
     'DREAM',
     'DREAM',
     'dream@sagebionetworks.org',
@@ -23,7 +23,7 @@ VALUES (
     47
   ),
   (
-    '3',
+    3,
     'CAFA',
     'CAFA',
     '',
@@ -34,7 +34,7 @@ VALUES (
     1
   ),
   (
-    '7',
+    7,
     'CAMI',
     'CAMI',
     '',
@@ -45,7 +45,7 @@ VALUES (
     2
   ),
   (
-    '12',
+    12,
     'MICCAI',
     'MICCAI',
     '',
@@ -56,7 +56,7 @@ VALUES (
     5
   ),
   (
-    '13',
+    13,
     'precisionFDA',
     'pFDA',
     '',
@@ -67,7 +67,7 @@ VALUES (
     16
   ),
   (
-    '15',
+    15,
     'National Institutes of Health',
     'NIH',
     '',
@@ -78,7 +78,7 @@ VALUES (
     7
   ),
   (
-    '16',
+    16,
     'Allen Institute',
     '',
     '',
@@ -89,7 +89,7 @@ VALUES (
     2
   ),
   (
-    '17',
+    17,
     'ALS Therapy Alliance',
     'ATA',
     'Staff@lstherapyalliance.org',
@@ -100,7 +100,7 @@ VALUES (
     1
   ),
   (
-    '18',
+    18,
     'Alzheimer''s Disease Neuroimaging Initiative',
     'ADNI',
     '',
@@ -111,7 +111,7 @@ VALUES (
     1
   ),
   (
-    '19',
+    19,
     'Alzheimer''s Research UK',
     '',
     '',
@@ -122,7 +122,7 @@ VALUES (
     1
   ),
   (
-    '20',
+    20,
     'Amazon Web Services',
     'AWS',
     '',
@@ -133,7 +133,7 @@ VALUES (
     1
   ),
   (
-    '21',
+    21,
     'American Joint Committee on Cancer',
     'AJCC',
     '',
@@ -144,7 +144,7 @@ VALUES (
     1
   ),
   (
-    '22',
+    22,
     'APOLLO network',
     '',
     'cancer.proteomics@mail.nih.gov',
@@ -155,7 +155,7 @@ VALUES (
     1
   ),
   (
-    '23',
+    23,
     'Apple Health',
     '',
     '',
@@ -166,7 +166,7 @@ VALUES (
     14
   ),
   (
-    '24',
+    24,
     'Arthritis Foundation',
     '',
     '',
@@ -177,7 +177,7 @@ VALUES (
     1
   ),
   (
-    '25',
+    25,
     'Arthritis Internet Registry',
     '',
     '',
@@ -188,7 +188,7 @@ VALUES (
     1
   ),
   (
-    '26',
+    26,
     'AstraZeneca',
     '',
     '',
@@ -199,7 +199,7 @@ VALUES (
     2
   ),
   (
-    '27',
+    27,
     'Autodesk Research',
     '',
     'autodesk.research@autodesk.com',
@@ -210,7 +210,7 @@ VALUES (
     1
   ),
   (
-    '28',
+    28,
     'BC Cancer Research Centre',
     'BCCRC',
     '',
@@ -221,7 +221,7 @@ VALUES (
     1
   ),
   (
-    '29',
+    29,
     'Bellvitge Institute for Biomedical Research',
     'IDIBELL',
     'info@idibell.cat',
@@ -232,7 +232,7 @@ VALUES (
     1
   ),
   (
-    '30',
+    30,
     'Berlin Institute of Health',
     'BIH',
     'info@bih-charite.de',
@@ -243,7 +243,7 @@ VALUES (
     1
   ),
   (
-    '31',
+    31,
     'Bill and Melinda Gates Foundation',
     '',
     '',
@@ -254,7 +254,7 @@ VALUES (
     1
   ),
   (
-    '32',
+    32,
     'Biogen',
     '',
     '',
@@ -265,7 +265,7 @@ VALUES (
     1
   ),
   (
-    '33',
+    33,
     'BioMarin Pharmaceutical Inc.',
     '',
     '',
@@ -276,7 +276,7 @@ VALUES (
     1
   ),
   (
-    '34',
+    34,
     'Booz Allen Hamilton',
     '',
     '',
@@ -287,7 +287,7 @@ VALUES (
     11
   ),
   (
-    '35',
+    35,
     'Braille Authority of North America',
     'BANA',
     'chair@brailleauthority.org',
@@ -298,7 +298,7 @@ VALUES (
     1
   ),
   (
-    '36',
+    36,
     'Breast Cancer Surveillance Consortium',
     'BCSC',
     'KPWA.scc@kp.org',
@@ -309,7 +309,7 @@ VALUES (
     1
   ),
   (
-    '37',
+    37,
     'Brigham and Women''s Hospital',
     'BWH',
     '',
@@ -320,7 +320,7 @@ VALUES (
     1
   ),
   (
-    '38',
+    38,
     'Brigham Young University',
     'BYU',
     'byu-info@byu.edu',
@@ -331,7 +331,7 @@ VALUES (
     1
   ),
   (
-    '39',
+    39,
     'BrightFocus Foundation',
     '',
     'info@brightfocus.org',
@@ -342,7 +342,7 @@ VALUES (
     1
   ),
   (
-    '40',
+    40,
     'Bristol Myers Squibb',
     'BMS',
     '',
@@ -353,7 +353,7 @@ VALUES (
     2
   ),
   (
-    '41',
+    41,
     'Broad Institute',
     '',
     '',
@@ -364,7 +364,7 @@ VALUES (
     4
   ),
   (
-    '42',
+    42,
     'Brown University',
     '',
     '',
@@ -375,7 +375,7 @@ VALUES (
     1
   ),
   (
-    '43',
+    43,
     'California Institute of Technology',
     '',
     '',
@@ -386,7 +386,7 @@ VALUES (
     2
   ),
   (
-    '44',
+    44,
     'Cancer Imaging Archive',
     'TCIA',
     '',
@@ -397,7 +397,7 @@ VALUES (
     1
   ),
   (
-    '45',
+    45,
     'Cancer Research UK',
     '',
     '',
@@ -408,7 +408,7 @@ VALUES (
     1
   ),
   (
-    '46',
+    46,
     'Cancer Target Discovery and Development',
     'CTD2',
     '',
@@ -419,7 +419,7 @@ VALUES (
     4
   ),
   (
-    '47',
+    47,
     'Celgene',
     '',
     '',
@@ -430,7 +430,7 @@ VALUES (
     3
   ),
   (
-    '48',
+    48,
     'Center for Research Computing',
     'CRC',
     'CRCSupport@nd.edu',
@@ -441,7 +441,7 @@ VALUES (
     1
   ),
   (
-    '49',
+    49,
     'Cincinnati Children''s',
     'CCHMC',
     '',
@@ -452,7 +452,7 @@ VALUES (
     1
   ),
   (
-    '50',
+    50,
     'Climb 4 Kidney Cancer',
     'C4KC',
     '',
@@ -463,7 +463,7 @@ VALUES (
     1
   ),
   (
-    '51',
+    51,
     'Clinical Proteomic Tumor Analysis Consortium',
     'CPTAC',
     '',
@@ -474,7 +474,7 @@ VALUES (
     1
   ),
   (
-    '52',
+    52,
     'Columbia University',
     '',
     'askcuit@columbia.edu',
@@ -485,7 +485,7 @@ VALUES (
     4
   ),
   (
-    '53',
+    53,
     'Conceptant',
     '',
     'connect@conceptant.com',
@@ -496,7 +496,7 @@ VALUES (
     1
   ),
   (
-    '54',
+    54,
     'Consejo Superior de Investigaciones Cientificas',
     'CSIC',
     '',
@@ -507,7 +507,7 @@ VALUES (
     1
   ),
   (
-    '55',
+    55,
     'CorEvitas',
     '',
     'info@corevitas.com',
@@ -518,7 +518,7 @@ VALUES (
     1
   ),
   (
-    '56',
+    56,
     'Corrona',
     '',
     '',
@@ -529,7 +529,7 @@ VALUES (
     1
   ),
   (
-    '57',
+    57,
     'Covert Lab',
     '',
     'covert.lab@gmail.com',
@@ -540,7 +540,7 @@ VALUES (
     1
   ),
   (
-    '58',
+    58,
     'Dana-Farber Cancer Institute',
     'DFCI',
     '',
@@ -551,7 +551,7 @@ VALUES (
     4
   ),
   (
-    '59',
+    59,
     'Defense Advanced Research Projects Agency',
     'DARPA',
     '',
@@ -562,7 +562,7 @@ VALUES (
     2
   ),
   (
-    '60',
+    60,
     'Department of Energy',
     'DOE',
     '',
@@ -573,7 +573,7 @@ VALUES (
     1
   ),
   (
-    '61',
+    61,
     'Diagnosticos da America SA',
     'DASA',
     '',
@@ -584,7 +584,7 @@ VALUES (
     1
   ),
   (
-    '62',
+    62,
     'DNAnexus',
     '',
     '',
@@ -595,7 +595,7 @@ VALUES (
     10
   ),
   (
-    '63',
+    63,
     'Dockstore',
     '',
     '',
@@ -606,7 +606,7 @@ VALUES (
     1
   ),
   (
-    '64',
+    64,
     'Duke University',
     '',
     '',
@@ -617,7 +617,7 @@ VALUES (
     3
   ),
   (
-    '65',
+    65,
     'Early Signal Foundation',
     '',
     '',
@@ -628,7 +628,7 @@ VALUES (
     1
   ),
   (
-    '66',
+    66,
     'Eck Institute for Global Health',
     'EIGH',
     '',
@@ -639,7 +639,7 @@ VALUES (
     1
   ),
   (
-    '67',
+    67,
     'Eli Lilly and Company',
     '',
     '',
@@ -650,7 +650,7 @@ VALUES (
     1
   ),
   (
-    '68',
+    68,
     'Elixir',
     '',
     '',
@@ -661,7 +661,7 @@ VALUES (
     1
   ),
   (
-    '69',
+    69,
     'Encyclopedia of DNA Elements Data Coordinating Center',
     'ENCODE',
     'encode-help@lists.stanford.edu',
@@ -672,7 +672,7 @@ VALUES (
     1
   ),
   (
-    '70',
+    70,
     'ENIGMA Consortium',
     'ENIGMA',
     'enigma@ini.usc.edu',
@@ -683,7 +683,7 @@ VALUES (
     1
   ),
   (
-    '71',
+    71,
     'ETH Zurich',
     'ETH',
     '',
@@ -694,7 +694,7 @@ VALUES (
     2
   ),
   (
-    '72',
+    72,
     'Eunice Kennedy Shriver National Institute',
     'NICHD',
     'NICHDInformationResourceCenter@mail.nih.gov',
@@ -705,7 +705,7 @@ VALUES (
     1
   ),
   (
-    '73',
+    73,
     'European Bioinformatics Institute',
     'EMBL-EBI',
     '',
@@ -716,7 +716,7 @@ VALUES (
     8
   ),
   (
-    '74',
+    74,
     'European Medicines Agency',
     'EMA',
     '',
@@ -727,7 +727,7 @@ VALUES (
     1
   ),
   (
-    '75',
+    75,
     'European Union',
     'EU',
     '',
@@ -738,7 +738,7 @@ VALUES (
     1
   ),
   (
-    '76',
+    76,
     'Evidation Health',
     '',
     '',
@@ -749,7 +749,7 @@ VALUES (
     1
   ),
   (
-    '77',
+    77,
     'Fehling Instruments',
     '',
     '',
@@ -760,7 +760,7 @@ VALUES (
     1
   ),
   (
-    '78',
+    78,
     'Feinstein Institutes for Medical Research',
     '',
     '',
@@ -771,7 +771,7 @@ VALUES (
     1
   ),
   (
-    '79',
+    79,
     'Francis Crick Institute',
     '',
     'info@crick.ac.uk',
@@ -782,7 +782,7 @@ VALUES (
     1
   ),
   (
-    '80',
+    80,
     'Fred Hutchinson Cancer Research Center',
     '',
     '',
@@ -793,7 +793,7 @@ VALUES (
     1
   ),
   (
-    '81',
+    81,
     'Genome Canada',
     '',
     'info@genomecanada.ca',
@@ -804,7 +804,7 @@ VALUES (
     3
   ),
   (
-    '82',
+    82,
     'George Washington University',
     'GWU',
     '',
@@ -815,7 +815,7 @@ VALUES (
     2
   ),
   (
-    '83',
+    83,
     'Georgetown University',
     '',
     '',
@@ -826,7 +826,7 @@ VALUES (
     1
   ),
   (
-    '84',
+    84,
     'German Cancer Research Center',
     'DKFZ',
     '',
@@ -837,7 +837,7 @@ VALUES (
     2
   ),
   (
-    '85',
+    85,
     'Global Alliance for Genomics and Health',
     'GA4GH',
     'info@ga4gh.org',
@@ -848,7 +848,7 @@ VALUES (
     1
   ),
   (
-    '86',
+    86,
     'H. Lee Moffitt Cancer Center and Research Institute',
     '',
     '',
@@ -859,7 +859,7 @@ VALUES (
     1
   ),
   (
-    '87',
+    87,
     'H3ABioNet',
     '',
     'info@h3abionet.org',
@@ -870,7 +870,7 @@ VALUES (
     1
   ),
   (
-    '88',
+    88,
     'Harvard University',
     '',
     '',
@@ -881,7 +881,7 @@ VALUES (
     3
   ),
   (
-    '89',
+    89,
     'Heidelberg University',
     '',
     '',
@@ -892,7 +892,7 @@ VALUES (
     10
   ),
   (
-    '90',
+    90,
     'HistoSonics Inc.',
     '',
     '',
@@ -903,7 +903,7 @@ VALUES (
     1
   ),
   (
-    '91',
+    91,
     'Hospital for Sick Children',
     '',
     '',
@@ -914,7 +914,7 @@ VALUES (
     3
   ),
   (
-    '92',
+    92,
     'Human Protein Atlas',
     'HPA',
     '',
@@ -925,7 +925,7 @@ VALUES (
     0
   ),
   (
-    '93',
+    93,
     'IBM',
     'IBM',
     '',
@@ -936,7 +936,7 @@ VALUES (
     27
   ),
   (
-    '94',
+    94,
     'Innovative Medicines Initiative',
     'IMI',
     '',
@@ -947,7 +947,7 @@ VALUES (
     1
   ),
   (
-    '95',
+    95,
     'Institut Curie',
     '',
     '',
@@ -958,7 +958,7 @@ VALUES (
     2
   ),
   (
-    '96',
+    96,
     'Institute for Molecular Medicine Finland',
     'FIMM',
     '',
@@ -969,7 +969,7 @@ VALUES (
     1
   ),
   (
-    '97',
+    97,
     'Institute of Translational Health Sciences',
     'ITHS',
     '',
@@ -980,7 +980,7 @@ VALUES (
     1
   ),
   (
-    '98',
+    98,
     'Intel Corporation',
     '',
     '',
@@ -991,7 +991,7 @@ VALUES (
     2
   ),
   (
-    '99',
+    99,
     'International Cancer Genome Consortium',
     'ICGC',
     '',
@@ -1002,7 +1002,7 @@ VALUES (
     5
   ),
   (
-    '100',
+    100,
     'International Flavors and Fragrances Inc.',
     'IFF',
     '',
@@ -1013,7 +1013,7 @@ VALUES (
     1
   ),
   (
-    '101',
+    101,
     'International Genome Sample Resource',
     'IGSR',
     '',
@@ -1024,7 +1024,7 @@ VALUES (
     1
   ),
   (
-    '102',
+    102,
     'International Society for Computational Biology',
     'ISCB',
     '',
@@ -1035,7 +1035,7 @@ VALUES (
     1
   ),
   (
-    '103',
+    103,
     'Intuitive Surgical Inc.',
     '',
     '',
@@ -1046,7 +1046,7 @@ VALUES (
     1
   ),
   (
-    '104',
+    104,
     'Iowa State University',
     '',
     'contact@iastate.edu',
@@ -1057,7 +1057,7 @@ VALUES (
     1
   ),
   (
-    '106',
+    106,
     'Kaiser Permanente Washington Health Research Institute',
     'KPWHRI',
     '',
@@ -1068,7 +1068,7 @@ VALUES (
     1
   ),
   (
-    '107',
+    107,
     'King''s College London',
     'KCL',
     '',
@@ -1079,7 +1079,7 @@ VALUES (
     1
   ),
   (
-    '108',
+    108,
     'Knowledge Engine for Genomics',
     '',
     'knoweng@illinois.edu',
@@ -1090,7 +1090,7 @@ VALUES (
     1
   ),
   (
-    '109',
+    109,
     'Koch Institute',
     '',
     'cancer@mit.edu',
@@ -1101,7 +1101,7 @@ VALUES (
     1
   ),
   (
-    '110',
+    110,
     'Laura and John Arnold Foundation',
     '',
     '',
@@ -1112,7 +1112,7 @@ VALUES (
     1
   ),
   (
-    '111',
+    111,
     'Lausanne University Hospital',
     'CHUV',
     '',
@@ -1123,7 +1123,7 @@ VALUES (
     1
   ),
   (
-    '112',
+    112,
     'Leukemia and Lymphoma Society',
     'LLS',
     '',
@@ -1134,7 +1134,7 @@ VALUES (
     1
   ),
   (
-    '113',
+    113,
     'Ligue Nationale Contre le Cancer',
     '',
     '',
@@ -1145,7 +1145,7 @@ VALUES (
     1
   ),
   (
-    '114',
+    114,
     'London''s Global University',
     'UCL',
     '',
@@ -1156,7 +1156,7 @@ VALUES (
     2
   ),
   (
-    '115',
+    115,
     'Ludwig Maximilian University of Munich',
     'LMU',
     '',
@@ -1167,7 +1167,7 @@ VALUES (
     2
   ),
   (
-    '116',
+    116,
     'Mahidol Oxford Tropical Medicine Research Unit',
     'MORU',
     '',
@@ -1178,7 +1178,7 @@ VALUES (
     1
   ),
   (
-    '117',
+    117,
     'March of Dimes',
     '',
     '',
@@ -1189,7 +1189,7 @@ VALUES (
     1
   ),
   (
-    '118',
+    118,
     'Massachusetts General Hospital',
     '',
     '',
@@ -1200,7 +1200,7 @@ VALUES (
     3
   ),
   (
-    '119',
+    119,
     'Massachusetts Institute of Technology',
     'MIT',
     '',
@@ -1211,7 +1211,7 @@ VALUES (
     2
   ),
   (
-    '120',
+    120,
     'MathWorks',
     '',
     '',
@@ -1222,7 +1222,7 @@ VALUES (
     1
   ),
   (
-    '121',
+    121,
     'Max Delbruck Center for Molecular Medicine',
     'MDC',
     '',
@@ -1233,7 +1233,7 @@ VALUES (
     1
   ),
   (
-    '122',
+    122,
     'MD Anderson Cancer Center',
     '',
     '',
@@ -1244,7 +1244,7 @@ VALUES (
     1
   ),
   (
-    '123',
+    123,
     'Medical Research Council',
     'MRC',
     '',
@@ -1255,7 +1255,7 @@ VALUES (
     0
   ),
   (
-    '124',
+    124,
     'Memorial Sloan Kettering Cancer Center',
     'MSK',
     '',
@@ -1266,7 +1266,7 @@ VALUES (
     2
   ),
   (
-    '125',
+    125,
     'Merck Co.',
     '',
     '',
@@ -1277,7 +1277,7 @@ VALUES (
     1
   ),
   (
-    '126',
+    126,
     'Michael J. Fox Foundation',
     'MJFF',
     'info@michaeljfox.org',
@@ -1288,7 +1288,7 @@ VALUES (
     2
   ),
   (
-    '127',
+    127,
     'MINES ParisTech',
     '',
     'contact@mines-paristech.fr',
@@ -1299,7 +1299,7 @@ VALUES (
     1
   ),
   (
-    '128',
+    128,
     'Mount Sinai',
     '',
     '',
@@ -1310,7 +1310,7 @@ VALUES (
     28
   ),
   (
-    '129',
+    129,
     'Multiple Myeloma Research Foundation',
     'MMRF',
     '',
@@ -1321,7 +1321,7 @@ VALUES (
     1
   ),
   (
-    '130',
+    130,
     'Nathan S. Kline Institute for Psychiatric Research',
     'NKI',
     'Webmaster@nki.rfmh.org',
@@ -1332,7 +1332,7 @@ VALUES (
     1
   ),
   (
-    '131',
+    131,
     'National Cancer Institute',
     'NCI',
     'NCIinfo@nih.gov',
@@ -1343,7 +1343,7 @@ VALUES (
     11
   ),
   (
-    '132',
+    132,
     'National Center for Advancing Translational Sciences',
     'NCATS',
     'info@ncats.nih.gov',
@@ -1354,7 +1354,7 @@ VALUES (
     1
   ),
   (
-    '133',
+    133,
     'National Center for Data to Health',
     'CD2H',
     '',
@@ -1365,7 +1365,7 @@ VALUES (
     2
   ),
   (
-    '134',
+    134,
     'National Institute of Environmental Health Sciences',
     'NIEHS',
     '',
@@ -1376,7 +1376,7 @@ VALUES (
     1
   ),
   (
-    '135',
+    135,
     'National Institute of General Medical Sciences',
     'NIGMS',
     '',
@@ -1387,7 +1387,7 @@ VALUES (
     2
   ),
   (
-    '136',
+    136,
     'National Institute of Standards and Technology',
     'NIST',
     'do-webmaster@nist.gov',
@@ -1398,7 +1398,7 @@ VALUES (
     2
   ),
   (
-    '137',
+    137,
     'National Science Foundation',
     'NSF',
     '',
@@ -1409,7 +1409,7 @@ VALUES (
     1
   ),
   (
-    '138',
+    138,
     'Natural Sciences and Engineering Research Council',
     'NSERC',
     '',
@@ -1420,7 +1420,7 @@ VALUES (
     3
   ),
   (
-    '139',
+    139,
     'Neosoma Inc.',
     '',
     '',
@@ -1431,7 +1431,7 @@ VALUES (
     2
   ),
   (
-    '140',
+    140,
     'Neurological Clinical Research Institute',
     'NCRI',
     'NCRI-info@mgh.harvard.edu',
@@ -1442,7 +1442,7 @@ VALUES (
     1
   ),
   (
-    '141',
+    141,
     'New York University',
     'NYC',
     '',
@@ -1453,7 +1453,7 @@ VALUES (
     1
   ),
   (
-    '142',
+    142,
     'Northeast ALS Consortium',
     'NEALS',
     'alstrials@neals.org',
@@ -1464,7 +1464,7 @@ VALUES (
     2
   ),
   (
-    '143',
+    143,
     'Northeastern University',
     'NEU',
     '',
@@ -1475,7 +1475,7 @@ VALUES (
     1
   ),
   (
-    '144',
+    144,
     'Northwestern University',
     'NU',
     '',
@@ -1486,7 +1486,7 @@ VALUES (
     1
   ),
   (
-    '145',
+    145,
     'Novo Nordisk',
     '',
     '',
@@ -1497,7 +1497,7 @@ VALUES (
     1
   ),
   (
-    '146',
+    146,
     'Numerate',
     '',
     '',
@@ -1508,7 +1508,7 @@ VALUES (
     1
   ),
   (
-    '147',
+    147,
     'NVIDIA',
     '',
     '',
@@ -1519,7 +1519,7 @@ VALUES (
     2
   ),
   (
-    '148',
+    148,
     'Ohio State University',
     'OSU',
     'webmaster@osu.edu',
@@ -1530,7 +1530,7 @@ VALUES (
     2
   ),
   (
-    '149',
+    149,
     'Ontario Institute for Cancer Research',
     'OICR',
     'info@oicr.on.ca',
@@ -1541,7 +1541,7 @@ VALUES (
     6
   ),
   (
-    '150',
+    150,
     'Oregon Health and Science University',
     'OHSU',
     '',
@@ -1552,7 +1552,7 @@ VALUES (
     11
   ),
   (
-    '151',
+    151,
     'Oslo University Hospital',
     'OUS',
     '',
@@ -1563,7 +1563,7 @@ VALUES (
     1
   ),
   (
-    '152',
+    152,
     'Pacific Northwest National Laboratory',
     'PNNL',
     '',
@@ -1574,7 +1574,7 @@ VALUES (
     2
   ),
   (
-    '153',
+    153,
     'Pfizer Inc.',
     '',
     '',
@@ -1585,7 +1585,7 @@ VALUES (
     1
   ),
   (
-    '154',
+    154,
     'Prize4Life',
     '',
     '',
@@ -1598,7 +1598,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '155',
+    155,
     'Project Data Sphere',
     '',
     '',
@@ -1609,7 +1609,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '156',
+    156,
     'Prostate Cancer Canada',
     '',
     '',
@@ -1620,7 +1620,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '157',
+    157,
     'Prostate Cancer Foundation',
     'PCF',
     '',
@@ -1631,7 +1631,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '158',
+    158,
     'Providence Health and Services',
     '',
     '',
@@ -1642,7 +1642,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '159',
+    159,
     'QIMR Berghofer Medical Research Institute',
     '',
     '',
@@ -1653,7 +1653,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '160',
+    160,
     'Queen''s University',
     '',
     '',
@@ -1664,7 +1664,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '161',
+    161,
     'Radboud University Medical Center',
     '',
     '',
@@ -1675,7 +1675,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '162',
+    162,
     'Radiological Society of North America',
     'RSNA',
     '',
@@ -1686,7 +1686,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '164',
+    164,
     'Ray and Dagmar Dolby Family Fund',
     '',
     'info@dolbyventures.com',
@@ -1697,7 +1697,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '165',
+    165,
     'Rice University',
     '',
     '',
@@ -1708,7 +1708,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '166',
+    166,
     'Robert Wood Johnson Foundation',
     'RWJF',
     '',
@@ -1719,7 +1719,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '167',
+    167,
     'Rockefeller University',
     '',
     '',
@@ -1730,7 +1730,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '168',
+    168,
     'Rosenberg Alzheimer''s Project',
     '',
     '',
@@ -1741,7 +1741,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '169',
+    169,
     'Rush University Medical Center',
     'RUSH',
     '',
@@ -1752,7 +1752,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '170',
+    170,
     'RWTH Aachen University',
     '',
     '',
@@ -1763,7 +1763,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     8
   ),
   (
-    '171',
+    171,
     'Sage Bionetworks',
     '',
     'info@sagebase.org',
@@ -1774,7 +1774,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     42
   ),
   (
-    '172',
+    172,
     'Sanofi',
     '',
     '',
@@ -1785,7 +1785,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '173',
+    173,
     'Sapienza University of Rome',
     '',
     '',
@@ -1796,7 +1796,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     3
   ),
   (
-    '174',
+    174,
     'Sartorius AG',
     '',
     '',
@@ -1807,7 +1807,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     0
   ),
   (
-    '175',
+    175,
     'Seattle Cancer Care Alliance',
     'SCCA',
     '',
@@ -1818,7 +1818,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '176',
+    176,
     'Semmelweis University',
     '',
     '',
@@ -1829,7 +1829,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '177',
+    177,
     'Sentieon',
     '',
     '​info@sentieon.com',
@@ -1840,7 +1840,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '178',
+    178,
     'Siemens Healthineers',
     '',
     '',
@@ -1851,7 +1851,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '179',
+    179,
     'Stanford University',
     '',
     '',
@@ -1862,7 +1862,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     6
   ),
   (
-    '180',
+    180,
     'Swiss Initiative in Systems Biology',
     '',
     'admin@systemsx.ch',
@@ -1873,7 +1873,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '181',
+    181,
     'Takeda',
     '',
     '',
@@ -1884,7 +1884,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '182',
+    182,
     'Texas Biomedical Research Institute',
     '',
     '',
@@ -1895,7 +1895,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '183',
+    183,
     'The University of California-Davis',
     '',
     '',
@@ -1906,7 +1906,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '184',
+    184,
     'The University of Texas at Austin',
     'UT',
     '',
@@ -1917,7 +1917,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '185',
+    185,
     'Thomas Jefferson University Hospital',
     '',
     '',
@@ -1928,7 +1928,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '186',
+    186,
     'TracInnovations',
     '',
     'info@tracinno.dk',
@@ -1939,7 +1939,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '187',
+    187,
     'Trinity College Institute of Neuroscience',
     '',
     'neuroscience@tcd.ie',
@@ -1950,7 +1950,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '188',
+    188,
     'Tulane University',
     '',
     '',
@@ -1961,7 +1961,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '189',
+    189,
     'U.S. Food and Drug Administration',
     'FDA',
     '',
@@ -1972,7 +1972,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     12
   ),
   (
-    '190',
+    190,
     'UNC Eshelman School of Pharmacy',
     '',
     '',
@@ -1983,7 +1983,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '191',
+    191,
     'University of Alabama',
     'UA',
     '',
@@ -1994,7 +1994,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '192',
+    192,
     'University of Alabama at Birmingham',
     'UAB',
     '',
@@ -2005,7 +2005,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '193',
+    193,
     'University of Arkansas for Medical Sciences',
     'UAMS',
     '',
@@ -2016,7 +2016,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '194',
+    194,
     'University of Basel',
     '',
     '',
@@ -2027,7 +2027,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '195',
+    195,
     'University of California San Diego',
     'UCSD',
     '',
@@ -2038,7 +2038,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '196',
+    196,
     'University of California San Francisco',
     'UCSF',
     '',
@@ -2049,7 +2049,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     6
   ),
   (
-    '197',
+    197,
     'University of California Santa Cruz',
     'UCSC',
     '',
@@ -2060,7 +2060,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     5
   ),
   (
-    '198',
+    198,
     'University of Cincinnati',
     'UC',
     '',
@@ -2071,7 +2071,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '199',
+    199,
     'University of Colorado Anschutz Medical Campus',
     '',
     '',
@@ -2082,7 +2082,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     4
   ),
   (
-    '200',
+    200,
     'University of Connecticut',
     'UCONN',
     '',
@@ -2093,7 +2093,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '201',
+    201,
     'University of Houston',
     'UH',
     '',
@@ -2104,7 +2104,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '202',
+    202,
     'University of Illinois Urbana-Champaign',
     'UIUC',
     '',
@@ -2115,7 +2115,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '203',
+    203,
     'University of Kent',
     '',
     '',
@@ -2126,7 +2126,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '204',
+    204,
     'University of Kentucky',
     'UK',
     '',
@@ -2137,7 +2137,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '205',
+    205,
     'University of Lausanne',
     'UNIL',
     '',
@@ -2148,7 +2148,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '206',
+    206,
     'University of Lisbon',
     '',
     '',
@@ -2159,7 +2159,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '207',
+    207,
     'University of London',
     'UoL',
     '',
@@ -2170,7 +2170,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '208',
+    208,
     'University of Luxembourg',
     '',
     '',
@@ -2181,7 +2181,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '209',
+    209,
     'University of Maryland',
     'UMD',
     '',
@@ -2192,7 +2192,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '210',
+    210,
     'University of Michigan',
     '',
     '',
@@ -2203,7 +2203,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '211',
+    211,
     'University of North Carolina at Chapel Hill',
     'UNC',
     '',
@@ -2214,7 +2214,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     3
   ),
   (
-    '212',
+    212,
     'University of Notre Dame',
     '',
     '',
@@ -2225,7 +2225,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     0
   ),
   (
-    '213',
+    213,
     'University of Padova',
     '',
     '',
@@ -2236,7 +2236,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '214',
+    214,
     'University of Padua',
     '',
     '',
@@ -2247,7 +2247,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '215',
+    215,
     'University of Pennsylvania',
     '',
     '',
@@ -2258,7 +2258,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     5
   ),
   (
-    '216',
+    216,
     'University of Rochester',
     '',
     '',
@@ -2269,7 +2269,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '217',
+    217,
     'University of South Florida',
     'USF',
     '',
@@ -2280,7 +2280,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '218',
+    218,
     'University of Southampton',
     '',
     '',
@@ -2291,7 +2291,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '219',
+    219,
     'University of Texas Southwestern Medical Center',
     '',
     '',
@@ -2302,7 +2302,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '220',
+    220,
     'University of Toronto',
     'U of T',
     '',
@@ -2313,7 +2313,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     5
   ),
   (
-    '221',
+    221,
     'University of Vermont',
     'UVM',
     '',
@@ -2324,7 +2324,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '222',
+    222,
     'University of Verona',
     '',
     'relazioni.internazionali@ateneo.univr.it',
@@ -2335,7 +2335,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '223',
+    223,
     'University of Virginia',
     'UVA',
     '',
@@ -2346,7 +2346,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '224',
+    224,
     'University of Washington',
     'UW',
     '',
@@ -2357,7 +2357,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     7
   ),
   (
-    '225',
+    225,
     'University of Wisconsin-Madison',
     '',
     '',
@@ -2368,7 +2368,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     0
   ),
   (
-    '226',
+    226,
     'University of Zurich',
     'UZH',
     '',
@@ -2379,7 +2379,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     3
   ),
   (
-    '227',
+    227,
     'Urban Green Energy',
     'UGE',
     '',
@@ -2390,7 +2390,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '228',
+    228,
     'US Army Medical Research Institute of Infectious Diseases',
     'USAMRIID',
     '',
@@ -2401,7 +2401,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '229',
+    229,
     'VA Durham Health Care',
     '',
     '',
@@ -2412,7 +2412,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '230',
+    230,
     'Verily',
     '',
     'info@verily.com',
@@ -2423,7 +2423,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '231',
+    231,
     'VHA Innovation Ecosystem',
     'VHA IE',
     '',
@@ -2434,7 +2434,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '232',
+    232,
     'Washington University in St. Louis',
     'WUStL',
     '',
@@ -2445,7 +2445,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '233',
+    233,
     'Wayne State University',
     '',
     '',
@@ -2456,7 +2456,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '234',
+    234,
     'Weizmann Institute of Science',
     '',
     'contact-us@weizmann.ac.il',
@@ -2467,7 +2467,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '235',
+    235,
     'Wellcome Sanger Institute',
     '',
     '',
@@ -2478,7 +2478,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '236',
+    236,
     'White House Office of Science and Technology Policy',
     'OSTP',
     '',
@@ -2489,7 +2489,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '237',
+    237,
     'InChI Trust',
     '',
     '',
@@ -2500,7 +2500,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '238',
+    238,
     'National Center for Toxicological Research',
     'NCTR',
     '',
@@ -2511,7 +2511,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     2
   ),
   (
-    '239',
+    239,
     'McGill University',
     '',
     '',
@@ -2522,7 +2522,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '240',
+    240,
     'Medical Artificial Intelligence Lab',
     '',
     'spark@mailab.io',
@@ -2533,7 +2533,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '241',
+    241,
     'Duke University Medical Center',
     '',
     '',
@@ -2544,7 +2544,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '242',
+    242,
     'Yale University',
     '',
     '',
@@ -2555,7 +2555,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '243',
+    243,
     'Missouri University',
     '',
     '',
@@ -2566,7 +2566,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '244',
+    244,
     'Yale School of Medicine',
     'YSM',
     '',
@@ -2577,7 +2577,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '245',
+    245,
     'Children''s National Hospital',
     '',
     '',
@@ -2588,7 +2588,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '246',
+    246,
     'Helmholtz AI',
     '',
     '',
@@ -2599,7 +2599,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '247',
+    247,
     'Mayo Clinic',
     '',
     '',
@@ -2610,7 +2610,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '248',
+    248,
     'Technical University of Munich',
     'TUM',
     '',
@@ -2621,7 +2621,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '249',
+    249,
     'Center for Devices and Radiological Health',
     'CDRH',
     '',
@@ -2632,7 +2632,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '250',
+    250,
     'Lagos State University Teaching Hospital',
     'LASUTH',
     '',
@@ -2643,7 +2643,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '251',
+    251,
     'NSIA-Kano Diagnostic Center',
     'NKDC',
     'enquiries@nkdc.ng',
@@ -2654,7 +2654,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '252',
+    252,
     'Nationwide Children''s',
     '',
     '',
@@ -2665,7 +2665,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '253',
+    253,
     'Dana-Farber Brigham Cancer Center',
     '',
     '',
@@ -2676,7 +2676,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '254',
+    254,
     'Lacunda Fund',
     '',
     'secretariat@lacunafund.org',
@@ -2687,7 +2687,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   ),
   (
-    '255',
+    255,
     'MLCommons',
     '',
     '',
@@ -2701,696 +2701,696 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
 -- contributor_roles data
 
 INSERT INTO challenge_contribution (id, challenge_id, organization_id, role)
-VALUES ('1', 1, 75, 'sponsor'),
-  ('2', 2, 28, 'data_contributor'),
-  ('3', 2, 45, 'data_contributor'),
-  ('4', 2, 151, 'data_contributor'),
-  ('5', 2, 52, 'sponsor'),
-  ('6', 3, 154, 'data_contributor'),
-  ('7', 3, 118, 'data_contributor'),
-  ('8', 3, 17, 'data_contributor'),
-  ('9', 3, 142, 'data_contributor'),
-  ('10', 4, 150, 'data_contributor'),
-  ('11', 4, 52, 'data_contributor'),
-  ('12', 4, 131, 'sponsor'),
-  ('13', 5, 134, 'challenge_organizer'),
-  ('14', 5, 132, 'challenge_organizer'),
-  ('15', 5, 211, 'challenge_organizer'),
-  ('16', 5, 101, 'data_contributor'),
-  ('17', 6, 54, 'challenge_organizer'),
-  ('18', 6, 146, 'challenge_organizer'),
-  ('19', 6, 171, 'challenge_organizer'),
-  ('20', 6, 227, 'challenge_organizer'),
-  ('21', 6, 27, 'challenge_organizer'),
-  ('22', 6, 128, 'challenge_organizer'),
-  ('23', 6, 93, 'challenge_organizer'),
-  ('24', 6, 179, 'challenge_organizer'),
-  ('25', 6, 89, 'challenge_organizer'),
-  ('26', 6, 73, 'challenge_organizer'),
-  ('27', 6, 170, 'challenge_organizer'),
-  ('28', 6, 119, 'challenge_organizer'),
-  ('29', 6, 171, 'sponsor'),
-  ('30', 6, 93, 'sponsor'),
-  ('31', 6, 57, 'sponsor'),
-  ('32', 6, 146, 'sponsor'),
-  ('33', 6, 120, 'sponsor'),
-  ('34', 7, 171, 'challenge_organizer'),
-  ('35', 7, 128, 'challenge_organizer'),
-  ('36', 7, 93, 'challenge_organizer'),
-  ('37', 7, 71, 'challenge_organizer'),
-  ('38', 7, 89, 'challenge_organizer'),
-  ('39', 7, 73, 'challenge_organizer'),
-  ('40', 7, 170, 'challenge_organizer'),
-  ('41', 7, 150, 'challenge_organizer'),
-  ('42', 7, 130, 'challenge_organizer'),
-  ('43', 8, 171, 'challenge_organizer'),
-  ('44', 8, 206, 'challenge_organizer'),
-  ('45', 8, 128, 'challenge_organizer'),
-  ('46', 8, 93, 'challenge_organizer'),
-  ('47', 8, 56, 'challenge_organizer'),
-  ('48', 8, 37, 'challenge_organizer'),
-  ('49', 8, 25, 'challenge_organizer'),
-  ('50', 8, 78, 'challenge_organizer'),
-  ('51', 8, 125, 'challenge_organizer'),
-  ('52', 8, 23, 'challenge_organizer'),
-  ('53', 8, 55, 'data_contributor'),
-  ('54', 8, 24, 'sponsor'),
-  ('55', 8, 125, 'sponsor'),
-  ('56', 8, 145, 'sponsor'),
-  ('57', 8, 181, 'sponsor'),
-  ('58', 8, 93, 'sponsor'),
-  ('59', 9, 171, 'challenge_organizer'),
-  ('60', 9, 150, 'challenge_organizer'),
-  ('61', 9, 128, 'challenge_organizer'),
-  ('62', 9, 93, 'challenge_organizer'),
-  ('63', 9, 197, 'challenge_organizer'),
-  ('64', 9, 149, 'challenge_organizer'),
-  ('65', 9, 23, 'challenge_organizer'),
-  ('66', 9, 99, 'data_contributor'),
-  ('67', 10, 165, 'challenge_organizer'),
-  ('68', 10, 171, 'challenge_organizer'),
-  ('69', 10, 128, 'challenge_organizer'),
-  ('70', 10, 93, 'challenge_organizer'),
-  ('71', 10, 23, 'challenge_organizer'),
-  ('72', 10, 122, 'challenge_organizer'),
-  ('73', 10, 122, 'data_contributor'),
-  ('74', 10, 122, 'sponsor'),
-  ('75', 10, 93, 'sponsor'),
-  ('76', 10, 171, 'sponsor'),
-  ('77', 10, 165, 'sponsor'),
-  ('78', 11, 171, 'challenge_organizer'),
-  ('79', 11, 150, 'challenge_organizer'),
-  ('80', 11, 128, 'challenge_organizer'),
-  ('81', 11, 41, 'challenge_organizer'),
-  ('82', 11, 58, 'challenge_organizer'),
-  ('83', 11, 205, 'challenge_organizer'),
-  ('84', 11, 93, 'challenge_organizer'),
-  ('85', 11, 23, 'challenge_organizer'),
-  ('86', 11, 41, 'data_contributor'),
-  ('87', 11, 58, 'data_contributor'),
-  ('88', 11, 46, 'sponsor'),
-  ('89', 11, 109, 'sponsor'),
-  ('90', 12, 107, 'challenge_organizer'),
-  ('91', 12, 171, 'challenge_organizer'),
-  ('92', 12, 204, 'challenge_organizer'),
-  ('93', 12, 128, 'challenge_organizer'),
-  ('94', 12, 93, 'challenge_organizer'),
-  ('95', 12, 38, 'challenge_organizer'),
-  ('96', 12, 223, 'challenge_organizer'),
-  ('97', 12, 119, 'challenge_organizer'),
-  ('98', 12, 23, 'challenge_organizer'),
-  ('99', 12, 82, 'challenge_organizer'),
-  ('100', 12, 169, 'data_contributor'),
-  ('101', 12, 18, 'data_contributor'),
-  ('102', 12, 94, 'data_contributor'),
-  ('103', 12, 19, 'sponsor'),
-  ('104', 12, 39, 'sponsor'),
-  ('105', 12, 74, 'sponsor'),
-  ('106', 12, 153, 'sponsor'),
-  ('107', 12, 164, 'sponsor'),
-  ('108', 12, 168, 'sponsor'),
-  ('109', 12, 172, 'sponsor'),
-  ('110', 12, 181, 'sponsor'),
-  ('111', 13, 206, 'challenge_organizer'),
-  ('112', 13, 167, 'challenge_organizer'),
-  ('113', 13, 171, 'challenge_organizer'),
-  ('114', 13, 93, 'challenge_organizer'),
-  ('115', 13, 128, 'challenge_organizer'),
-  ('116', 13, 23, 'challenge_organizer'),
-  ('117', 13, 167, 'data_contributor'),
-  ('118', 13, 100, 'sponsor'),
-  ('119', 13, 93, 'sponsor'),
-  ('120', 13, 171, 'sponsor'),
-  ('121', 13, 1, 'sponsor'),
-  ('122', 14, 58, 'challenge_organizer'),
-  ('123', 14, 93, 'challenge_organizer'),
-  ('124', 14, 124, 'challenge_organizer'),
-  ('125', 14, 155, 'challenge_organizer'),
-  ('126', 14, 157, 'challenge_organizer'),
-  ('127', 14, 171, 'challenge_organizer'),
-  ('128', 14, 188, 'challenge_organizer'),
-  ('129', 14, 196, 'challenge_organizer'),
-  ('130', 14, 199, 'challenge_organizer'),
-  ('131', 14, 219, 'challenge_organizer'),
-  ('132', 14, 26, 'data_contributor'),
-  ('133', 14, 47, 'data_contributor'),
-  ('134', 14, 172, 'data_contributor'),
-  ('135', 14, 124, 'data_contributor'),
-  ('136', 14, 157, 'sponsor'),
-  ('137', 14, 131, 'sponsor'),
-  ('138', 14, 21, 'sponsor'),
-  ('139', 15, 128, 'challenge_organizer'),
-  ('140', 15, 93, 'challenge_organizer'),
-  ('141', 15, 171, 'challenge_organizer'),
-  ('142', 15, 118, 'challenge_organizer'),
-  ('143', 15, 154, 'challenge_organizer'),
-  ('144', 15, 187, 'challenge_organizer'),
-  ('145', 15, 115, 'challenge_organizer'),
-  ('146', 15, 23, 'challenge_organizer'),
-  ('147', 15, 154, 'data_contributor'),
-  ('148', 15, 140, 'data_contributor'),
-  ('149', 15, 142, 'data_contributor'),
-  ('150', 15, 154, 'sponsor'),
-  ('151', 15, 93, 'sponsor'),
-  ('152', 15, 171, 'sponsor'),
-  ('153', 15, 1, 'sponsor'),
-  ('154', 15, 32, 'sponsor'),
-  ('155', 15, 67, 'sponsor'),
-  ('156', 16, 128, 'challenge_organizer'),
-  ('157', 16, 93, 'challenge_organizer'),
-  ('158', 16, 26, 'challenge_organizer'),
-  ('159', 16, 89, 'challenge_organizer'),
-  ('160', 16, 73, 'challenge_organizer'),
-  ('161', 16, 170, 'challenge_organizer'),
-  ('162', 16, 171, 'challenge_organizer'),
-  ('163', 16, 23, 'challenge_organizer'),
-  ('164', 16, 26, 'data_contributor'),
-  ('165', 16, 235, 'data_contributor'),
-  ('166', 16, 29, 'data_contributor'),
-  ('167', 16, 26, 'sponsor'),
-  ('168', 17, 128, 'challenge_organizer'),
-  ('169', 17, 93, 'challenge_organizer'),
-  ('170', 17, 197, 'challenge_organizer'),
-  ('171', 17, 149, 'challenge_organizer'),
-  ('172', 17, 171, 'challenge_organizer'),
-  ('173', 17, 23, 'challenge_organizer'),
-  ('174', 17, 99, 'data_contributor'),
-  ('175', 17, 149, 'sponsor'),
-  ('176', 17, 81, 'sponsor'),
-  ('177', 17, 138, 'sponsor'),
-  ('178', 17, 171, 'sponsor'),
-  ('179', 17, 197, 'sponsor'),
-  ('180', 17, 150, 'sponsor'),
-  ('181', 18, 235, 'challenge_organizer'),
-  ('182', 18, 128, 'challenge_organizer'),
-  ('183', 18, 93, 'challenge_organizer'),
-  ('184', 18, 197, 'challenge_organizer'),
-  ('185', 18, 150, 'challenge_organizer'),
-  ('186', 18, 149, 'challenge_organizer'),
-  ('187', 18, 79, 'challenge_organizer'),
-  ('188', 18, 220, 'challenge_organizer'),
-  ('189', 18, 171, 'challenge_organizer'),
-  ('190', 18, 23, 'challenge_organizer'),
-  ('191', 18, 149, 'data_contributor'),
-  ('192', 18, 99, 'data_contributor'),
-  ('193', 18, 149, 'data_contributor'),
-  ('194', 18, 156, 'sponsor'),
-  ('195', 18, 81, 'sponsor'),
-  ('196', 18, 138, 'sponsor'),
-  ('197', 19, 171, 'challenge_organizer'),
-  ('198', 19, 64, 'challenge_organizer'),
-  ('199', 19, 229, 'challenge_organizer'),
-  ('200', 19, 59, 'challenge_organizer'),
-  ('201', 19, 59, 'sponsor'),
-  ('202', 20, 171, 'challenge_organizer'),
-  ('203', 20, 205, 'challenge_organizer'),
-  ('204', 20, 128, 'challenge_organizer'),
-  ('205', 20, 93, 'challenge_organizer'),
-  ('206', 20, 89, 'challenge_organizer'),
-  ('207', 20, 73, 'challenge_organizer'),
-  ('208', 20, 170, 'challenge_organizer'),
-  ('209', 20, 118, 'challenge_organizer'),
-  ('210', 20, 23, 'challenge_organizer'),
-  ('211', 20, 111, 'challenge_organizer'),
-  ('212', 20, 205, 'data_contributor'),
-  ('213', 20, 180, 'sponsor'),
-  ('214', 21, 179, 'challenge_organizer'),
-  ('215', 21, 171, 'challenge_organizer'),
-  ('216', 21, 128, 'challenge_organizer'),
-  ('217', 21, 93, 'challenge_organizer'),
-  ('218', 21, 199, 'challenge_organizer'),
-  ('219', 21, 150, 'challenge_organizer'),
-  ('220', 21, 115, 'challenge_organizer'),
-  ('221', 21, 23, 'challenge_organizer'),
-  ('222', 21, 69, 'data_contributor'),
-  ('223', 22, 220, 'challenge_organizer'),
-  ('224', 22, 91, 'challenge_organizer'),
-  ('225', 22, 127, 'challenge_organizer'),
-  ('226', 22, 95, 'challenge_organizer'),
-  ('227', 22, 128, 'challenge_organizer'),
-  ('228', 22, 93, 'challenge_organizer'),
-  ('229', 22, 171, 'challenge_organizer'),
-  ('230', 22, 23, 'challenge_organizer'),
-  ('231', 22, 64, 'data_contributor'),
-  ('232', 22, 229, 'data_contributor'),
-  ('233', 23, 232, 'challenge_organizer'),
-  ('234', 23, 128, 'challenge_organizer'),
-  ('235', 23, 93, 'challenge_organizer'),
-  ('236', 23, 197, 'challenge_organizer'),
-  ('237', 23, 150, 'challenge_organizer'),
-  ('238', 23, 149, 'challenge_organizer'),
-  ('239', 23, 171, 'challenge_organizer'),
-  ('240', 23, 23, 'challenge_organizer'),
-  ('241', 23, 99, 'data_contributor'),
-  ('242', 23, 131, 'data_contributor'),
-  ('243', 23, 149, 'data_contributor'),
-  ('244', 23, 138, 'sponsor'),
-  ('245', 23, 81, 'sponsor'),
-  ('246', 23, 156, 'sponsor'),
-  ('247', 23, 131, 'sponsor'),
-  ('248', 24, 171, 'challenge_organizer'),
-  ('249', 24, 93, 'challenge_organizer'),
-  ('250', 24, 106, 'challenge_organizer'),
-  ('251', 24, 128, 'challenge_organizer'),
-  ('252', 24, 175, 'challenge_organizer'),
-  ('253', 24, 189, 'challenge_organizer'),
-  ('254', 24, 36, 'data_contributor'),
-  ('255', 24, 128, 'data_contributor'),
-  ('256', 24, 110, 'sponsor'),
-  ('257', 24, 80, 'sponsor'),
-  ('258', 24, 236, 'sponsor'),
-  ('259', 24, 93, 'sponsor'),
-  ('260', 24, 20, 'sponsor'),
-  ('261', 25, 47, 'challenge_organizer'),
-  ('262', 25, 129, 'challenge_organizer'),
-  ('263', 25, 171, 'challenge_organizer'),
-  ('264', 25, 193, 'data_contributor'),
-  ('265', 25, 58, 'data_contributor'),
-  ('266', 25, 86, 'data_contributor'),
-  ('267', 25, 89, 'data_contributor'),
-  ('268', 25, 129, 'data_contributor'),
-  ('269', 25, 47, 'sponsor'),
-  ('270', 26, 85, 'challenge_organizer'),
-  ('271', 26, 197, 'challenge_organizer'),
-  ('272', 26, 63, 'challenge_organizer'),
-  ('273', 26, 149, 'challenge_organizer'),
-  ('274', 26, 171, 'challenge_organizer'),
-  ('275', 26, 131, 'data_contributor'),
-  ('276', 26, 88, 'data_contributor'),
-  ('277', 26, 179, 'data_contributor'),
-  ('278', 26, 49, 'data_contributor'),
-  ('279', 26, 108, 'data_contributor'),
-  ('280', 26, 202, 'data_contributor'),
-  ('281', 26, 197, 'data_contributor'),
-  ('282', 26, 149, 'data_contributor'),
-  ('283', 26, 99, 'data_contributor'),
-  ('284', 26, 41, 'data_contributor'),
-  ('285', 27, 126, 'challenge_organizer'),
-  ('286', 27, 65, 'challenge_organizer'),
-  ('287', 27, 230, 'challenge_organizer'),
-  ('288', 27, 88, 'challenge_organizer'),
-  ('289', 27, 171, 'challenge_organizer'),
-  ('290', 27, 224, 'challenge_organizer'),
-  ('291', 27, 208, 'challenge_organizer'),
-  ('292', 27, 216, 'challenge_organizer'),
-  ('293', 27, 126, 'data_contributor'),
-  ('294', 27, 171, 'data_contributor'),
-  ('295', 27, 126, 'sponsor'),
-  ('296', 27, 166, 'sponsor'),
-  ('297', 28, 141, 'challenge_organizer'),
-  ('298', 28, 128, 'challenge_organizer'),
-  ('299', 28, 93, 'challenge_organizer'),
-  ('300', 28, 131, 'challenge_organizer'),
-  ('301', 28, 89, 'challenge_organizer'),
-  ('302', 28, 73, 'challenge_organizer'),
-  ('303', 28, 170, 'challenge_organizer'),
-  ('304', 28, 149, 'challenge_organizer'),
-  ('305', 28, 59, 'challenge_organizer'),
-  ('306', 28, 152, 'challenge_organizer'),
-  ('307', 28, 171, 'challenge_organizer'),
-  ('308', 28, 51, 'data_contributor'),
-  ('309', 28, 51, 'sponsor'),
-  ('310', 28, 59, 'sponsor'),
-  ('311', 28, 147, 'sponsor'),
-  ('312', 29, 211, 'challenge_organizer'),
-  ('313', 29, 128, 'challenge_organizer'),
-  ('314', 29, 210, 'challenge_organizer'),
-  ('315', 29, 171, 'challenge_organizer'),
-  ('316', 29, 195, 'challenge_organizer'),
-  ('317', 29, 128, 'data_contributor'),
-  ('318', 29, 128, 'sponsor'),
-  ('319', 30, 89, 'challenge_organizer'),
-  ('320', 30, 128, 'challenge_organizer'),
-  ('321', 30, 93, 'challenge_organizer'),
-  ('322', 30, 73, 'challenge_organizer'),
-  ('323', 30, 170, 'challenge_organizer'),
-  ('324', 30, 121, 'challenge_organizer'),
-  ('325', 30, 171, 'challenge_organizer'),
-  ('326', 30, 121, 'data_contributor'),
-  ('327', 31, 171, 'challenge_organizer'),
-  ('328', 31, 96, 'challenge_organizer'),
-  ('329', 31, 128, 'challenge_organizer'),
-  ('330', 31, 93, 'challenge_organizer'),
-  ('331', 31, 190, 'data_contributor'),
-  ('332', 31, 15, 'sponsor'),
-  ('333', 32, 87, 'challenge_organizer'),
-  ('334', 32, 48, 'challenge_organizer'),
-  ('335', 32, 66, 'challenge_organizer'),
-  ('336', 32, 128, 'challenge_organizer'),
-  ('337', 32, 93, 'challenge_organizer'),
-  ('338', 32, 171, 'challenge_organizer'),
-  ('339', 32, 182, 'data_contributor'),
-  ('340', 32, 116, 'data_contributor'),
-  ('341', 32, 15, 'data_contributor'),
-  ('342', 32, 31, 'sponsor'),
-  ('343', 33, 233, 'challenge_organizer'),
-  ('344', 33, 196, 'challenge_organizer'),
-  ('345', 33, 128, 'challenge_organizer'),
-  ('346', 33, 93, 'challenge_organizer'),
-  ('347', 33, 199, 'challenge_organizer'),
-  ('348', 33, 179, 'challenge_organizer'),
-  ('349', 33, 72, 'challenge_organizer'),
-  ('350', 33, 72, 'data_contributor'),
-  ('351', 33, 233, 'data_contributor'),
-  ('352', 33, 117, 'data_contributor'),
-  ('353', 34, 89, 'challenge_organizer'),
-  ('354', 34, 226, 'challenge_organizer'),
-  ('355', 34, 171, 'challenge_organizer'),
-  ('356', 34, 73, 'challenge_organizer'),
-  ('357', 34, 170, 'challenge_organizer'),
-  ('358', 34, 71, 'challenge_organizer'),
-  ('359', 34, 226, 'data_contributor'),
-  ('360', 34, 71, 'data_contributor'),
-  ('361', 35, 171, 'challenge_organizer'),
-  ('362', 35, 224, 'challenge_organizer'),
-  ('363', 35, 224, 'data_contributor'),
-  ('364', 35, 133, 'sponsor'),
-  ('365', 35, 97, 'sponsor'),
-  ('366', 35, 224, 'sponsor'),
-  ('367', 36, 43, 'challenge_organizer'),
-  ('368', 36, 171, 'challenge_organizer'),
-  ('369', 36, 234, 'challenge_organizer'),
-  ('370', 36, 114, 'challenge_organizer'),
-  ('371', 36, 224, 'challenge_organizer'),
-  ('372', 36, 16, 'challenge_organizer'),
-  ('373', 36, 93, 'challenge_organizer'),
-  ('374', 36, 43, 'data_contributor'),
-  ('375', 36, 114, 'data_contributor'),
-  ('376', 36, 234, 'data_contributor'),
-  ('377', 37, 95, 'challenge_organizer'),
-  ('378', 37, 113, 'challenge_organizer'),
-  ('379', 37, 150, 'challenge_organizer'),
-  ('380', 37, 171, 'challenge_organizer'),
-  ('381', 37, 179, 'challenge_organizer'),
-  ('382', 37, 16, 'data_contributor'),
-  ('383', 37, 234, 'data_contributor'),
-  ('384', 37, 114, 'data_contributor'),
-  ('385', 37, 43, 'data_contributor'),
-  ('386', 37, 171, 'data_contributor'),
-  ('387', 37, 131, 'sponsor'),
-  ('388', 38, 171, 'challenge_organizer'),
-  ('389', 38, 52, 'challenge_organizer'),
-  ('390', 38, 176, 'challenge_organizer'),
-  ('391', 38, 15, 'challenge_organizer'),
-  ('392', 38, 131, 'challenge_organizer'),
-  ('393', 38, 46, 'challenge_organizer'),
-  ('394', 38, 128, 'challenge_organizer'),
-  ('395', 38, 93, 'challenge_organizer'),
-  ('396', 38, 89, 'challenge_organizer'),
-  ('397', 38, 73, 'challenge_organizer'),
-  ('398', 38, 170, 'challenge_organizer'),
-  ('399', 38, 52, 'data_contributor'),
-  ('400', 39, 171, 'challenge_organizer'),
-  ('401', 39, 150, 'challenge_organizer'),
-  ('402', 39, 128, 'challenge_organizer'),
-  ('403', 39, 15, 'challenge_organizer'),
-  ('404', 39, 131, 'challenge_organizer'),
-  ('405', 39, 46, 'challenge_organizer'),
-  ('406', 39, 112, 'data_contributor'),
-  ('407', 39, 150, 'data_contributor'),
-  ('408', 40, 131, 'challenge_organizer'),
-  ('409', 40, 171, 'challenge_organizer'),
-  ('410', 40, 150, 'challenge_organizer'),
-  ('411', 40, 22, 'data_contributor'),
-  ('412', 40, 44, 'data_contributor'),
-  ('413', 40, 131, 'sponsor'),
-  ('414', 41, 192, 'challenge_organizer'),
-  ('415', 41, 128, 'challenge_organizer'),
-  ('416', 41, 93, 'challenge_organizer'),
-  ('417', 41, 199, 'challenge_organizer'),
-  ('418', 41, 171, 'challenge_organizer'),
-  ('419', 41, 192, 'data_contributor'),
-  ('420', 41, 133, 'sponsor'),
-  ('421', 41, 40, 'sponsor'),
-  ('422', 42, 171, 'challenge_organizer'),
-  ('423', 42, 144, 'challenge_organizer'),
-  ('424', 42, 126, 'challenge_organizer'),
-  ('425', 42, 76, 'challenge_organizer'),
-  ('426', 42, 126, 'data_contributor'),
-  ('427', 42, 144, 'data_contributor'),
-  ('428', 42, 216, 'data_contributor'),
-  ('429', 42, 191, 'data_contributor'),
-  ('430', 42, 198, 'data_contributor'),
-  ('431', 42, 161, 'data_contributor'),
-  ('432', 43, 171, 'challenge_organizer'),
-  ('433', 43, 52, 'challenge_organizer'),
-  ('434', 43, 176, 'challenge_organizer'),
-  ('435', 43, 15, 'challenge_organizer'),
-  ('436', 43, 46, 'challenge_organizer'),
-  ('437', 43, 128, 'challenge_organizer'),
-  ('438', 43, 89, 'challenge_organizer'),
-  ('439', 43, 52, 'data_contributor'),
-  ('440', 43, 46, 'sponsor'),
-  ('441', 44, 171, 'challenge_organizer'),
-  ('442', 44, 224, 'challenge_organizer'),
-  ('443', 44, 224, 'data_contributor'),
-  ('444', 45, 211, 'challenge_organizer'),
-  ('445', 45, 40, 'challenge_organizer'),
-  ('446', 45, 148, 'challenge_organizer'),
-  ('447', 45, 171, 'challenge_organizer'),
-  ('448', 45, 40, 'data_contributor'),
-  ('449', 46, 215, 'challenge_organizer'),
-  ('450', 46, 131, 'challenge_organizer'),
-  ('451', 46, 196, 'data_contributor'),
-  ('452', 46, 220, 'data_contributor'),
-  ('453', 46, 171, 'challenge_organizer'),
-  ('454', 46, 185, 'data_contributor'),
-  ('455', 46, 61, 'data_contributor'),
-  ('456', 46, 226, 'challenge_organizer'),
-  ('457', 46, 148, 'data_contributor'),
-  ('458', 47, 47, 'challenge_organizer'),
-  ('459', 47, 171, 'challenge_organizer'),
-  ('460', 47, 158, 'challenge_organizer'),
-  ('461', 47, 124, 'challenge_organizer'),
-  ('462', 47, 58, 'challenge_organizer'),
-  ('463', 47, 160, 'challenge_organizer'),
-  ('464', 47, 47, 'sponsor'),
-  ('465', 59, 30, 'data_contributor'),
-  ('466', 59, 224, 'data_contributor'),
-  ('467', 59, 196, 'data_contributor'),
-  ('468', 61, 64, 'data_contributor'),
-  ('469', 62, 173, 'data_contributor'),
-  ('470', 63, 224, 'data_contributor'),
-  ('471', 64, 184, 'data_contributor'),
-  ('472', 65, 33, 'data_contributor'),
-  ('473', 66, 196, 'data_contributor'),
-  ('474', 67, 159, 'data_contributor'),
-  ('475', 67, 70, 'data_contributor'),
-  ('476', 68, 42, 'data_contributor'),
-  ('477', 69, 200, 'data_contributor'),
-  ('478', 70, 91, 'data_contributor'),
-  ('479', 71, 214, 'data_contributor'),
-  ('480', 72, 179, 'data_contributor'),
-  ('481', 73, 41, 'data_contributor'),
-  ('482', 74, 213, 'data_contributor'),
-  ('483', 75, 91, 'data_contributor'),
-  ('484', 76, 88, 'data_contributor'),
-  ('485', 77, 220, 'data_contributor'),
-  ('486', 78, 222, 'data_contributor'),
-  ('487', 79, 217, 'data_contributor'),
-  ('488', 80, 221, 'data_contributor'),
-  ('489', 81, 173, 'data_contributor'),
-  ('490', 82, 173, 'data_contributor'),
-  ('491', 83, 220, 'data_contributor'),
-  ('492', 84, 218, 'data_contributor'),
-  ('493', 85, 41, 'data_contributor'),
-  ('494', 90, 104, 'challenge_organizer'),
-  ('495', 90, 3, 'challenge_organizer'),
-  ('496', 90, 102, 'challenge_organizer'),
-  ('497', 90, 215, 'challenge_organizer'),
-  ('498', 90, 143, 'challenge_organizer'),
-  ('499', 90, 224, 'challenge_organizer'),
-  ('500', 90, 203, 'challenge_organizer'),
-  ('501', 90, 219, 'challenge_organizer'),
-  ('502', 90, 137, 'sponsor'),
-  ('503', 90, 15, 'sponsor'),
-  ('504', 90, 60, 'sponsor'),
-  ('505', 90, 68, 'sponsor'),
-  ('506', 91, 209, 'challenge_organizer'),
-  ('507', 91, 183, 'challenge_organizer'),
-  ('508', 91, 194, 'challenge_organizer'),
-  ('509', 91, 207, 'challenge_organizer'),
-  ('510', 91, 135, 'sponsor'),
-  ('511', 92, 209, 'challenge_organizer'),
-  ('512', 92, 183, 'challenge_organizer'),
-  ('513', 92, 194, 'challenge_organizer'),
-  ('514', 92, 207, 'challenge_organizer'),
-  ('515', 92, 135, 'sponsor'),
-  ('516', 93, 189, 'sponsor'),
-  ('517', 94, 13, 'challenge_organizer'),
-  ('518', 94, 189, 'challenge_organizer'),
-  ('519', 94, 34, 'challenge_organizer'),
-  ('520', 94, 62, 'challenge_organizer'),
-  ('521', 94, 228, 'challenge_organizer'),
-  ('522', 94, 136, 'challenge_organizer'),
-  ('523', 94, 189, 'sponsor'),
-  ('524', 95, 13, 'challenge_organizer'),
-  ('525', 95, 189, 'challenge_organizer'),
-  ('526', 95, 152, 'challenge_organizer'),
-  ('527', 95, 201, 'challenge_organizer'),
-  ('528', 95, 128, 'challenge_organizer'),
-  ('529', 95, 93, 'challenge_organizer'),
-  ('530', 95, 62, 'challenge_organizer'),
-  ('531', 95, 34, 'challenge_organizer'),
-  ('532', 95, 189, 'sponsor'),
-  ('533', 96, 13, 'challenge_organizer'),
-  ('534', 96, 189, 'challenge_organizer'),
-  ('535', 96, 82, 'challenge_organizer'),
-  ('536', 96, 62, 'challenge_organizer'),
-  ('537', 96, 34, 'challenge_organizer'),
-  ('538', 96, 189, 'sponsor'),
-  ('539', 97, 13, 'challenge_organizer'),
-  ('540', 97, 189, 'challenge_organizer'),
-  ('541', 97, 83, 'challenge_organizer'),
-  ('542', 97, 34, 'challenge_organizer'),
-  ('543', 97, 189, 'sponsor'),
-  ('544', 98, 13, 'challenge_organizer'),
-  ('545', 98, 189, 'challenge_organizer'),
-  ('546', 98, 62, 'challenge_organizer'),
-  ('547', 98, 53, 'challenge_organizer'),
-  ('548', 98, 34, 'challenge_organizer'),
-  ('549', 98, 189, 'sponsor'),
-  ('550', 99, 136, 'challenge_organizer'),
-  ('551', 99, 13, 'challenge_organizer'),
-  ('552', 99, 189, 'challenge_organizer'),
-  ('553', 99, 62, 'challenge_organizer'),
-  ('554', 99, 34, 'challenge_organizer'),
-  ('555', 99, 189, 'sponsor'),
-  ('556', 100, 13, 'challenge_organizer'),
-  ('557', 100, 189, 'challenge_organizer'),
-  ('558', 100, 231, 'challenge_organizer'),
-  ('559', 100, 34, 'challenge_organizer'),
-  ('560', 100, 62, 'challenge_organizer'),
-  ('561', 100, 189, 'sponsor'),
-  ('562', 101, 13, 'challenge_organizer'),
-  ('563', 101, 189, 'challenge_organizer'),
-  ('564', 101, 34, 'challenge_organizer'),
-  ('565', 101, 62, 'challenge_organizer'),
-  ('566', 101, 189, 'sponsor'),
-  ('567', 102, 13, 'challenge_organizer'),
-  ('568', 102, 189, 'challenge_organizer'),
-  ('569', 102, 34, 'challenge_organizer'),
-  ('570', 102, 62, 'challenge_organizer'),
-  ('571', 102, 189, 'sponsor'),
-  ('572', 103, 13, 'challenge_organizer'),
-  ('573', 103, 189, 'challenge_organizer'),
-  ('574', 103, 34, 'challenge_organizer'),
-  ('575', 103, 62, 'challenge_organizer'),
-  ('576', 103, 131, 'challenge_organizer'),
-  ('577', 103, 177, 'challenge_organizer'),
-  ('578', 103, 189, 'sponsor'),
-  ('579', 104, 12, 'challenge_organizer'),
-  ('580', 104, 215, 'challenge_organizer'),
-  ('581', 104, 84, 'challenge_organizer'),
-  ('582', 104, 7, 'challenge_organizer'),
-  ('583', 104, 15, 'sponsor'),
-  ('584', 104, 90, 'sponsor'),
-  ('585', 104, 103, 'sponsor'),
-  ('586', 104, 50, 'sponsor'),
-  ('587', 105, 12, 'challenge_organizer'),
-  ('588', 105, 147, 'sponsor'),
-  ('589', 105, 35, 'sponsor'),
-  ('590', 106, 12, 'challenge_organizer'),
-  ('591', 106, 186, 'sponsor'),
-  ('592', 106, 178, 'sponsor'),
-  ('593', 107, 12, 'challenge_organizer'),
-  ('594', 107, 77, 'sponsor'),
-  ('595', 124, 12, 'challenge_organizer'),
-  ('596', 124, 215, 'challenge_organizer'),
-  ('597', 124, 84, 'challenge_organizer'),
-  ('598', 124, 7, 'challenge_organizer'),
-  ('599', 124, 98, 'sponsor'),
-  ('600', 124, 139, 'sponsor'),
-  ('601', 124, 162, 'sponsor'),
-  ('602', 161, 13, 'challenge_organizer'),
-  ('603', 161, 237, 'challenge_organizer'),
-  ('604', 162, 13, 'challenge_organizer'),
-  ('605', 162, 238, 'challenge_organizer'),
-  ('606', 163, 13, 'challenge_organizer'),
-  ('607', 163, 238, 'challenge_organizer'),
-  ('608', 164, 13, 'challenge_organizer'),
-  ('609', 164, 231, 'challenge_organizer'),
-  ('610', 165, 13, 'challenge_organizer'),
-  ('611', 55, 1, 'sponsor'),
-  ('612', 53, 1, 'sponsor'),
-  ('613', 52, 1, 'sponsor'),
-  ('614', 54, 1, 'sponsor'),
-  ('615', 166, 1, 'sponsor'),
-  ('616', 45, 1, 'sponsor'),
-  ('617', 44, 1, 'sponsor'),
-  ('618', 43, 1, 'sponsor'),
-  ('619', 40, 1, 'sponsor'),
-  ('620', 42, 1, 'sponsor'),
-  ('621', 39, 1, 'sponsor'),
-  ('622', 41, 1, 'sponsor'),
-  ('623', 35, 1, 'sponsor'),
-  ('624', 36, 1, 'sponsor'),
-  ('625', 34, 1, 'sponsor'),
-  ('626', 37, 1, 'sponsor'),
-  ('627', 33, 1, 'sponsor'),
-  ('628', 32, 1, 'sponsor'),
-  ('629', 31, 1, 'sponsor'),
-  ('630', 30, 1, 'sponsor'),
-  ('631', 29, 1, 'sponsor'),
-  ('632', 21, 1, 'sponsor'),
-  ('633', 27, 1, 'sponsor'),
-  ('634', 26, 1, 'sponsor'),
-  ('635', 28, 1, 'sponsor'),
-  ('636', 24, 1, 'sponsor'),
-  ('637', 25, 1, 'sponsor'),
-  ('638', 23, 1, 'sponsor'),
-  ('639', 20, 1, 'sponsor'),
-  ('640', 19, 1, 'sponsor'),
-  ('641', 18, 1, 'sponsor'),
-  ('642', 17, 1, 'sponsor'),
-  ('643', 16, 1, 'sponsor'),
-  ('644', 15, 1, 'sponsor'),
-  ('645', 14, 1, 'sponsor'),
-  ('646', 8, 1, 'sponsor'),
-  ('647', 13, 1, 'sponsor'),
-  ('648', 7, 1, 'sponsor'),
-  ('649', 11, 1, 'sponsor'),
-  ('650', 12, 1, 'sponsor'),
-  ('651', 10, 1, 'sponsor'),
-  ('652', 9, 1, 'sponsor'),
-  ('653', 6, 1, 'sponsor'),
-  ('654', 7, 1, 'sponsor'),
-  ('655', 5, 1, 'sponsor'),
-  ('656', 4, 1, 'sponsor'),
-  ('657', 1, 1, 'sponsor'),
-  ('658', 3, 1, 'sponsor'),
-  ('659', 167, 215, 'challenge_organizer'),
-  ('660', 167, 171, 'challenge_organizer'),
-  ('661', 167, 239, 'challenge_organizer'),
-  ('662', 167, 240, 'challenge_organizer'),
-  ('663', 167, 195, 'challenge_organizer'),
-  ('664', 167, 226, 'challenge_organizer'),
-  ('665', 167, 241, 'challenge_organizer'),
-  ('666', 167, 242, 'challenge_organizer'),
-  ('667', 167, 185, 'challenge_organizer'),
-  ('668', 167, 196, 'challenge_organizer'),
-  ('669', 167, 243, 'challenge_organizer'),
-  ('670', 167, 244, 'challenge_organizer'),
-  ('671', 167, 245, 'challenge_organizer'),
-  ('672', 167, 246, 'challenge_organizer'),
-  ('673', 167, 247, 'challenge_organizer'),
-  ('674', 167, 248, 'challenge_organizer'),
-  ('675', 167, 13, 'challenge_organizer'),
-  ('676', 167, 249, 'challenge_organizer'),
-  ('677', 167, 34, 'challenge_organizer'),
-  ('678', 167, 62, 'challenge_organizer'),
-  ('679', 167, 215, 'data_contributor'),
-  ('680', 167, 240, 'data_contributor'),
-  ('681', 167, 250, 'data_contributor'),
-  ('682', 167, 251, 'data_contributor'),
-  ('683', 167, 241, 'data_contributor'),
-  ('684', 167, 185, 'data_contributor'),
-  ('685', 167, 243, 'data_contributor'),
-  ('686', 167, 245, 'data_contributor'),
-  ('687', 167, 49, 'data_contributor'),
-  ('688', 167, 252, 'data_contributor'),
-  ('689', 167, 253, 'data_contributor'),
-  ('690', 167, 98, 'sponsor'),
-  ('691', 167, 139, 'sponsor'),
-  ('692', 167, 254, 'sponsor'),
-  ('693', 167, 255, 'sponsor');
+VALUES (1, 1, 75, 'sponsor'),
+  (2, 2, 28, 'data_contributor'),
+  (3, 2, 45, 'data_contributor'),
+  (4, 2, 151, 'data_contributor'),
+  (5, 2, 52, 'sponsor'),
+  (6, 3, 154, 'data_contributor'),
+  (7, 3, 118, 'data_contributor'),
+  (8, 3, 17, 'data_contributor'),
+  (9, 3, 142, 'data_contributor'),
+  (10, 4, 150, 'data_contributor'),
+  (11, 4, 52, 'data_contributor'),
+  (12, 4, 131, 'sponsor'),
+  (13, 5, 134, 'challenge_organizer'),
+  (14, 5, 132, 'challenge_organizer'),
+  (15, 5, 211, 'challenge_organizer'),
+  (16, 5, 101, 'data_contributor'),
+  (17, 6, 54, 'challenge_organizer'),
+  (18, 6, 146, 'challenge_organizer'),
+  (19, 6, 171, 'challenge_organizer'),
+  (20, 6, 227, 'challenge_organizer'),
+  (21, 6, 27, 'challenge_organizer'),
+  (22, 6, 128, 'challenge_organizer'),
+  (23, 6, 93, 'challenge_organizer'),
+  (24, 6, 179, 'challenge_organizer'),
+  (25, 6, 89, 'challenge_organizer'),
+  (26, 6, 73, 'challenge_organizer'),
+  (27, 6, 170, 'challenge_organizer'),
+  (28, 6, 119, 'challenge_organizer'),
+  (29, 6, 171, 'sponsor'),
+  (30, 6, 93, 'sponsor'),
+  (31, 6, 57, 'sponsor'),
+  (32, 6, 146, 'sponsor'),
+  (33, 6, 120, 'sponsor'),
+  (34, 7, 171, 'challenge_organizer'),
+  (35, 7, 128, 'challenge_organizer'),
+  (36, 7, 93, 'challenge_organizer'),
+  (37, 7, 71, 'challenge_organizer'),
+  (38, 7, 89, 'challenge_organizer'),
+  (39, 7, 73, 'challenge_organizer'),
+  (40, 7, 170, 'challenge_organizer'),
+  (41, 7, 150, 'challenge_organizer'),
+  (42, 7, 130, 'challenge_organizer'),
+  (43, 8, 171, 'challenge_organizer'),
+  (44, 8, 206, 'challenge_organizer'),
+  (45, 8, 128, 'challenge_organizer'),
+  (46, 8, 93, 'challenge_organizer'),
+  (47, 8, 56, 'challenge_organizer'),
+  (48, 8, 37, 'challenge_organizer'),
+  (49, 8, 25, 'challenge_organizer'),
+  (50, 8, 78, 'challenge_organizer'),
+  (51, 8, 125, 'challenge_organizer'),
+  (52, 8, 23, 'challenge_organizer'),
+  (53, 8, 55, 'data_contributor'),
+  (54, 8, 24, 'sponsor'),
+  (55, 8, 125, 'sponsor'),
+  (56, 8, 145, 'sponsor'),
+  (57, 8, 181, 'sponsor'),
+  (58, 8, 93, 'sponsor'),
+  (59, 9, 171, 'challenge_organizer'),
+  (60, 9, 150, 'challenge_organizer'),
+  (61, 9, 128, 'challenge_organizer'),
+  (62, 9, 93, 'challenge_organizer'),
+  (63, 9, 197, 'challenge_organizer'),
+  (64, 9, 149, 'challenge_organizer'),
+  (65, 9, 23, 'challenge_organizer'),
+  (66, 9, 99, 'data_contributor'),
+  (67, 10, 165, 'challenge_organizer'),
+  (68, 10, 171, 'challenge_organizer'),
+  (69, 10, 128, 'challenge_organizer'),
+  (70, 10, 93, 'challenge_organizer'),
+  (71, 10, 23, 'challenge_organizer'),
+  (72, 10, 122, 'challenge_organizer'),
+  (73, 10, 122, 'data_contributor'),
+  (74, 10, 122, 'sponsor'),
+  (75, 10, 93, 'sponsor'),
+  (76, 10, 171, 'sponsor'),
+  (77, 10, 165, 'sponsor'),
+  (78, 11, 171, 'challenge_organizer'),
+  (79, 11, 150, 'challenge_organizer'),
+  (80, 11, 128, 'challenge_organizer'),
+  (81, 11, 41, 'challenge_organizer'),
+  (82, 11, 58, 'challenge_organizer'),
+  (83, 11, 205, 'challenge_organizer'),
+  (84, 11, 93, 'challenge_organizer'),
+  (85, 11, 23, 'challenge_organizer'),
+  (86, 11, 41, 'data_contributor'),
+  (87, 11, 58, 'data_contributor'),
+  (88, 11, 46, 'sponsor'),
+  (89, 11, 109, 'sponsor'),
+  (90, 12, 107, 'challenge_organizer'),
+  (91, 12, 171, 'challenge_organizer'),
+  (92, 12, 204, 'challenge_organizer'),
+  (93, 12, 128, 'challenge_organizer'),
+  (94, 12, 93, 'challenge_organizer'),
+  (95, 12, 38, 'challenge_organizer'),
+  (96, 12, 223, 'challenge_organizer'),
+  (97, 12, 119, 'challenge_organizer'),
+  (98, 12, 23, 'challenge_organizer'),
+  (99, 12, 82, 'challenge_organizer'),
+  (100, 12, 169, 'data_contributor'),
+  (101, 12, 18, 'data_contributor'),
+  (102, 12, 94, 'data_contributor'),
+  (103, 12, 19, 'sponsor'),
+  (104, 12, 39, 'sponsor'),
+  (105, 12, 74, 'sponsor'),
+  (106, 12, 153, 'sponsor'),
+  (107, 12, 164, 'sponsor'),
+  (108, 12, 168, 'sponsor'),
+  (109, 12, 172, 'sponsor'),
+  (110, 12, 181, 'sponsor'),
+  (111, 13, 206, 'challenge_organizer'),
+  (112, 13, 167, 'challenge_organizer'),
+  (113, 13, 171, 'challenge_organizer'),
+  (114, 13, 93, 'challenge_organizer'),
+  (115, 13, 128, 'challenge_organizer'),
+  (116, 13, 23, 'challenge_organizer'),
+  (117, 13, 167, 'data_contributor'),
+  (118, 13, 100, 'sponsor'),
+  (119, 13, 93, 'sponsor'),
+  (120, 13, 171, 'sponsor'),
+  (121, 13, 1, 'sponsor'),
+  (122, 14, 58, 'challenge_organizer'),
+  (123, 14, 93, 'challenge_organizer'),
+  (124, 14, 124, 'challenge_organizer'),
+  (125, 14, 155, 'challenge_organizer'),
+  (126, 14, 157, 'challenge_organizer'),
+  (127, 14, 171, 'challenge_organizer'),
+  (128, 14, 188, 'challenge_organizer'),
+  (129, 14, 196, 'challenge_organizer'),
+  (130, 14, 199, 'challenge_organizer'),
+  (131, 14, 219, 'challenge_organizer'),
+  (132, 14, 26, 'data_contributor'),
+  (133, 14, 47, 'data_contributor'),
+  (134, 14, 172, 'data_contributor'),
+  (135, 14, 124, 'data_contributor'),
+  (136, 14, 157, 'sponsor'),
+  (137, 14, 131, 'sponsor'),
+  (138, 14, 21, 'sponsor'),
+  (139, 15, 128, 'challenge_organizer'),
+  (140, 15, 93, 'challenge_organizer'),
+  (141, 15, 171, 'challenge_organizer'),
+  (142, 15, 118, 'challenge_organizer'),
+  (143, 15, 154, 'challenge_organizer'),
+  (144, 15, 187, 'challenge_organizer'),
+  (145, 15, 115, 'challenge_organizer'),
+  (146, 15, 23, 'challenge_organizer'),
+  (147, 15, 154, 'data_contributor'),
+  (148, 15, 140, 'data_contributor'),
+  (149, 15, 142, 'data_contributor'),
+  (150, 15, 154, 'sponsor'),
+  (151, 15, 93, 'sponsor'),
+  (152, 15, 171, 'sponsor'),
+  (153, 15, 1, 'sponsor'),
+  (154, 15, 32, 'sponsor'),
+  (155, 15, 67, 'sponsor'),
+  (156, 16, 128, 'challenge_organizer'),
+  (157, 16, 93, 'challenge_organizer'),
+  (158, 16, 26, 'challenge_organizer'),
+  (159, 16, 89, 'challenge_organizer'),
+  (160, 16, 73, 'challenge_organizer'),
+  (161, 16, 170, 'challenge_organizer'),
+  (162, 16, 171, 'challenge_organizer'),
+  (163, 16, 23, 'challenge_organizer'),
+  (164, 16, 26, 'data_contributor'),
+  (165, 16, 235, 'data_contributor'),
+  (166, 16, 29, 'data_contributor'),
+  (167, 16, 26, 'sponsor'),
+  (168, 17, 128, 'challenge_organizer'),
+  (169, 17, 93, 'challenge_organizer'),
+  (170, 17, 197, 'challenge_organizer'),
+  (171, 17, 149, 'challenge_organizer'),
+  (172, 17, 171, 'challenge_organizer'),
+  (173, 17, 23, 'challenge_organizer'),
+  (174, 17, 99, 'data_contributor'),
+  (175, 17, 149, 'sponsor'),
+  (176, 17, 81, 'sponsor'),
+  (177, 17, 138, 'sponsor'),
+  (178, 17, 171, 'sponsor'),
+  (179, 17, 197, 'sponsor'),
+  (180, 17, 150, 'sponsor'),
+  (181, 18, 235, 'challenge_organizer'),
+  (182, 18, 128, 'challenge_organizer'),
+  (183, 18, 93, 'challenge_organizer'),
+  (184, 18, 197, 'challenge_organizer'),
+  (185, 18, 150, 'challenge_organizer'),
+  (186, 18, 149, 'challenge_organizer'),
+  (187, 18, 79, 'challenge_organizer'),
+  (188, 18, 220, 'challenge_organizer'),
+  (189, 18, 171, 'challenge_organizer'),
+  (190, 18, 23, 'challenge_organizer'),
+  (191, 18, 149, 'data_contributor'),
+  (192, 18, 99, 'data_contributor'),
+  (193, 18, 149, 'data_contributor'),
+  (194, 18, 156, 'sponsor'),
+  (195, 18, 81, 'sponsor'),
+  (196, 18, 138, 'sponsor'),
+  (197, 19, 171, 'challenge_organizer'),
+  (198, 19, 64, 'challenge_organizer'),
+  (199, 19, 229, 'challenge_organizer'),
+  (200, 19, 59, 'challenge_organizer'),
+  (201, 19, 59, 'sponsor'),
+  (202, 20, 171, 'challenge_organizer'),
+  (203, 20, 205, 'challenge_organizer'),
+  (204, 20, 128, 'challenge_organizer'),
+  (205, 20, 93, 'challenge_organizer'),
+  (206, 20, 89, 'challenge_organizer'),
+  (207, 20, 73, 'challenge_organizer'),
+  (208, 20, 170, 'challenge_organizer'),
+  (209, 20, 118, 'challenge_organizer'),
+  (210, 20, 23, 'challenge_organizer'),
+  (211, 20, 111, 'challenge_organizer'),
+  (212, 20, 205, 'data_contributor'),
+  (213, 20, 180, 'sponsor'),
+  (214, 21, 179, 'challenge_organizer'),
+  (215, 21, 171, 'challenge_organizer'),
+  (216, 21, 128, 'challenge_organizer'),
+  (217, 21, 93, 'challenge_organizer'),
+  (218, 21, 199, 'challenge_organizer'),
+  (219, 21, 150, 'challenge_organizer'),
+  (220, 21, 115, 'challenge_organizer'),
+  (221, 21, 23, 'challenge_organizer'),
+  (222, 21, 69, 'data_contributor'),
+  (223, 22, 220, 'challenge_organizer'),
+  (224, 22, 91, 'challenge_organizer'),
+  (225, 22, 127, 'challenge_organizer'),
+  (226, 22, 95, 'challenge_organizer'),
+  (227, 22, 128, 'challenge_organizer'),
+  (228, 22, 93, 'challenge_organizer'),
+  (229, 22, 171, 'challenge_organizer'),
+  (230, 22, 23, 'challenge_organizer'),
+  (231, 22, 64, 'data_contributor'),
+  (232, 22, 229, 'data_contributor'),
+  (233, 23, 232, 'challenge_organizer'),
+  (234, 23, 128, 'challenge_organizer'),
+  (235, 23, 93, 'challenge_organizer'),
+  (236, 23, 197, 'challenge_organizer'),
+  (237, 23, 150, 'challenge_organizer'),
+  (238, 23, 149, 'challenge_organizer'),
+  (239, 23, 171, 'challenge_organizer'),
+  (240, 23, 23, 'challenge_organizer'),
+  (241, 23, 99, 'data_contributor'),
+  (242, 23, 131, 'data_contributor'),
+  (243, 23, 149, 'data_contributor'),
+  (244, 23, 138, 'sponsor'),
+  (245, 23, 81, 'sponsor'),
+  (246, 23, 156, 'sponsor'),
+  (247, 23, 131, 'sponsor'),
+  (248, 24, 171, 'challenge_organizer'),
+  (249, 24, 93, 'challenge_organizer'),
+  (250, 24, 106, 'challenge_organizer'),
+  (251, 24, 128, 'challenge_organizer'),
+  (252, 24, 175, 'challenge_organizer'),
+  (253, 24, 189, 'challenge_organizer'),
+  (254, 24, 36, 'data_contributor'),
+  (255, 24, 128, 'data_contributor'),
+  (256, 24, 110, 'sponsor'),
+  (257, 24, 80, 'sponsor'),
+  (258, 24, 236, 'sponsor'),
+  (259, 24, 93, 'sponsor'),
+  (260, 24, 20, 'sponsor'),
+  (261, 25, 47, 'challenge_organizer'),
+  (262, 25, 129, 'challenge_organizer'),
+  (263, 25, 171, 'challenge_organizer'),
+  (264, 25, 193, 'data_contributor'),
+  (265, 25, 58, 'data_contributor'),
+  (266, 25, 86, 'data_contributor'),
+  (267, 25, 89, 'data_contributor'),
+  (268, 25, 129, 'data_contributor'),
+  (269, 25, 47, 'sponsor'),
+  (270, 26, 85, 'challenge_organizer'),
+  (271, 26, 197, 'challenge_organizer'),
+  (272, 26, 63, 'challenge_organizer'),
+  (273, 26, 149, 'challenge_organizer'),
+  (274, 26, 171, 'challenge_organizer'),
+  (275, 26, 131, 'data_contributor'),
+  (276, 26, 88, 'data_contributor'),
+  (277, 26, 179, 'data_contributor'),
+  (278, 26, 49, 'data_contributor'),
+  (279, 26, 108, 'data_contributor'),
+  (280, 26, 202, 'data_contributor'),
+  (281, 26, 197, 'data_contributor'),
+  (282, 26, 149, 'data_contributor'),
+  (283, 26, 99, 'data_contributor'),
+  (284, 26, 41, 'data_contributor'),
+  (285, 27, 126, 'challenge_organizer'),
+  (286, 27, 65, 'challenge_organizer'),
+  (287, 27, 230, 'challenge_organizer'),
+  (288, 27, 88, 'challenge_organizer'),
+  (289, 27, 171, 'challenge_organizer'),
+  (290, 27, 224, 'challenge_organizer'),
+  (291, 27, 208, 'challenge_organizer'),
+  (292, 27, 216, 'challenge_organizer'),
+  (293, 27, 126, 'data_contributor'),
+  (294, 27, 171, 'data_contributor'),
+  (295, 27, 126, 'sponsor'),
+  (296, 27, 166, 'sponsor'),
+  (297, 28, 141, 'challenge_organizer'),
+  (298, 28, 128, 'challenge_organizer'),
+  (299, 28, 93, 'challenge_organizer'),
+  (300, 28, 131, 'challenge_organizer'),
+  (301, 28, 89, 'challenge_organizer'),
+  (302, 28, 73, 'challenge_organizer'),
+  (303, 28, 170, 'challenge_organizer'),
+  (304, 28, 149, 'challenge_organizer'),
+  (305, 28, 59, 'challenge_organizer'),
+  (306, 28, 152, 'challenge_organizer'),
+  (307, 28, 171, 'challenge_organizer'),
+  (308, 28, 51, 'data_contributor'),
+  (309, 28, 51, 'sponsor'),
+  (310, 28, 59, 'sponsor'),
+  (311, 28, 147, 'sponsor'),
+  (312, 29, 211, 'challenge_organizer'),
+  (313, 29, 128, 'challenge_organizer'),
+  (314, 29, 210, 'challenge_organizer'),
+  (315, 29, 171, 'challenge_organizer'),
+  (316, 29, 195, 'challenge_organizer'),
+  (317, 29, 128, 'data_contributor'),
+  (318, 29, 128, 'sponsor'),
+  (319, 30, 89, 'challenge_organizer'),
+  (320, 30, 128, 'challenge_organizer'),
+  (321, 30, 93, 'challenge_organizer'),
+  (322, 30, 73, 'challenge_organizer'),
+  (323, 30, 170, 'challenge_organizer'),
+  (324, 30, 121, 'challenge_organizer'),
+  (325, 30, 171, 'challenge_organizer'),
+  (326, 30, 121, 'data_contributor'),
+  (327, 31, 171, 'challenge_organizer'),
+  (328, 31, 96, 'challenge_organizer'),
+  (329, 31, 128, 'challenge_organizer'),
+  (330, 31, 93, 'challenge_organizer'),
+  (331, 31, 190, 'data_contributor'),
+  (332, 31, 15, 'sponsor'),
+  (333, 32, 87, 'challenge_organizer'),
+  (334, 32, 48, 'challenge_organizer'),
+  (335, 32, 66, 'challenge_organizer'),
+  (336, 32, 128, 'challenge_organizer'),
+  (337, 32, 93, 'challenge_organizer'),
+  (338, 32, 171, 'challenge_organizer'),
+  (339, 32, 182, 'data_contributor'),
+  (340, 32, 116, 'data_contributor'),
+  (341, 32, 15, 'data_contributor'),
+  (342, 32, 31, 'sponsor'),
+  (343, 33, 233, 'challenge_organizer'),
+  (344, 33, 196, 'challenge_organizer'),
+  (345, 33, 128, 'challenge_organizer'),
+  (346, 33, 93, 'challenge_organizer'),
+  (347, 33, 199, 'challenge_organizer'),
+  (348, 33, 179, 'challenge_organizer'),
+  (349, 33, 72, 'challenge_organizer'),
+  (350, 33, 72, 'data_contributor'),
+  (351, 33, 233, 'data_contributor'),
+  (352, 33, 117, 'data_contributor'),
+  (353, 34, 89, 'challenge_organizer'),
+  (354, 34, 226, 'challenge_organizer'),
+  (355, 34, 171, 'challenge_organizer'),
+  (356, 34, 73, 'challenge_organizer'),
+  (357, 34, 170, 'challenge_organizer'),
+  (358, 34, 71, 'challenge_organizer'),
+  (359, 34, 226, 'data_contributor'),
+  (360, 34, 71, 'data_contributor'),
+  (361, 35, 171, 'challenge_organizer'),
+  (362, 35, 224, 'challenge_organizer'),
+  (363, 35, 224, 'data_contributor'),
+  (364, 35, 133, 'sponsor'),
+  (365, 35, 97, 'sponsor'),
+  (366, 35, 224, 'sponsor'),
+  (367, 36, 43, 'challenge_organizer'),
+  (368, 36, 171, 'challenge_organizer'),
+  (369, 36, 234, 'challenge_organizer'),
+  (370, 36, 114, 'challenge_organizer'),
+  (371, 36, 224, 'challenge_organizer'),
+  (372, 36, 16, 'challenge_organizer'),
+  (373, 36, 93, 'challenge_organizer'),
+  (374, 36, 43, 'data_contributor'),
+  (375, 36, 114, 'data_contributor'),
+  (376, 36, 234, 'data_contributor'),
+  (377, 37, 95, 'challenge_organizer'),
+  (378, 37, 113, 'challenge_organizer'),
+  (379, 37, 150, 'challenge_organizer'),
+  (380, 37, 171, 'challenge_organizer'),
+  (381, 37, 179, 'challenge_organizer'),
+  (382, 37, 16, 'data_contributor'),
+  (383, 37, 234, 'data_contributor'),
+  (384, 37, 114, 'data_contributor'),
+  (385, 37, 43, 'data_contributor'),
+  (386, 37, 171, 'data_contributor'),
+  (387, 37, 131, 'sponsor'),
+  (388, 38, 171, 'challenge_organizer'),
+  (389, 38, 52, 'challenge_organizer'),
+  (390, 38, 176, 'challenge_organizer'),
+  (391, 38, 15, 'challenge_organizer'),
+  (392, 38, 131, 'challenge_organizer'),
+  (393, 38, 46, 'challenge_organizer'),
+  (394, 38, 128, 'challenge_organizer'),
+  (395, 38, 93, 'challenge_organizer'),
+  (396, 38, 89, 'challenge_organizer'),
+  (397, 38, 73, 'challenge_organizer'),
+  (398, 38, 170, 'challenge_organizer'),
+  (399, 38, 52, 'data_contributor'),
+  (400, 39, 171, 'challenge_organizer'),
+  (401, 39, 150, 'challenge_organizer'),
+  (402, 39, 128, 'challenge_organizer'),
+  (403, 39, 15, 'challenge_organizer'),
+  (404, 39, 131, 'challenge_organizer'),
+  (405, 39, 46, 'challenge_organizer'),
+  (406, 39, 112, 'data_contributor'),
+  (407, 39, 150, 'data_contributor'),
+  (408, 40, 131, 'challenge_organizer'),
+  (409, 40, 171, 'challenge_organizer'),
+  (410, 40, 150, 'challenge_organizer'),
+  (411, 40, 22, 'data_contributor'),
+  (412, 40, 44, 'data_contributor'),
+  (413, 40, 131, 'sponsor'),
+  (414, 41, 192, 'challenge_organizer'),
+  (415, 41, 128, 'challenge_organizer'),
+  (416, 41, 93, 'challenge_organizer'),
+  (417, 41, 199, 'challenge_organizer'),
+  (418, 41, 171, 'challenge_organizer'),
+  (419, 41, 192, 'data_contributor'),
+  (420, 41, 133, 'sponsor'),
+  (421, 41, 40, 'sponsor'),
+  (422, 42, 171, 'challenge_organizer'),
+  (423, 42, 144, 'challenge_organizer'),
+  (424, 42, 126, 'challenge_organizer'),
+  (425, 42, 76, 'challenge_organizer'),
+  (426, 42, 126, 'data_contributor'),
+  (427, 42, 144, 'data_contributor'),
+  (428, 42, 216, 'data_contributor'),
+  (429, 42, 191, 'data_contributor'),
+  (430, 42, 198, 'data_contributor'),
+  (431, 42, 161, 'data_contributor'),
+  (432, 43, 171, 'challenge_organizer'),
+  (433, 43, 52, 'challenge_organizer'),
+  (434, 43, 176, 'challenge_organizer'),
+  (435, 43, 15, 'challenge_organizer'),
+  (436, 43, 46, 'challenge_organizer'),
+  (437, 43, 128, 'challenge_organizer'),
+  (438, 43, 89, 'challenge_organizer'),
+  (439, 43, 52, 'data_contributor'),
+  (440, 43, 46, 'sponsor'),
+  (441, 44, 171, 'challenge_organizer'),
+  (442, 44, 224, 'challenge_organizer'),
+  (443, 44, 224, 'data_contributor'),
+  (444, 45, 211, 'challenge_organizer'),
+  (445, 45, 40, 'challenge_organizer'),
+  (446, 45, 148, 'challenge_organizer'),
+  (447, 45, 171, 'challenge_organizer'),
+  (448, 45, 40, 'data_contributor'),
+  (449, 46, 215, 'challenge_organizer'),
+  (450, 46, 131, 'challenge_organizer'),
+  (451, 46, 196, 'data_contributor'),
+  (452, 46, 220, 'data_contributor'),
+  (453, 46, 171, 'challenge_organizer'),
+  (454, 46, 185, 'data_contributor'),
+  (455, 46, 61, 'data_contributor'),
+  (456, 46, 226, 'challenge_organizer'),
+  (457, 46, 148, 'data_contributor'),
+  (458, 47, 47, 'challenge_organizer'),
+  (459, 47, 171, 'challenge_organizer'),
+  (460, 47, 158, 'challenge_organizer'),
+  (461, 47, 124, 'challenge_organizer'),
+  (462, 47, 58, 'challenge_organizer'),
+  (463, 47, 160, 'challenge_organizer'),
+  (464, 47, 47, 'sponsor'),
+  (465, 59, 30, 'data_contributor'),
+  (466, 59, 224, 'data_contributor'),
+  (467, 59, 196, 'data_contributor'),
+  (468, 61, 64, 'data_contributor'),
+  (469, 62, 173, 'data_contributor'),
+  (470, 63, 224, 'data_contributor'),
+  (471, 64, 184, 'data_contributor'),
+  (472, 65, 33, 'data_contributor'),
+  (473, 66, 196, 'data_contributor'),
+  (474, 67, 159, 'data_contributor'),
+  (475, 67, 70, 'data_contributor'),
+  (476, 68, 42, 'data_contributor'),
+  (477, 69, 200, 'data_contributor'),
+  (478, 70, 91, 'data_contributor'),
+  (479, 71, 214, 'data_contributor'),
+  (480, 72, 179, 'data_contributor'),
+  (481, 73, 41, 'data_contributor'),
+  (482, 74, 213, 'data_contributor'),
+  (483, 75, 91, 'data_contributor'),
+  (484, 76, 88, 'data_contributor'),
+  (485, 77, 220, 'data_contributor'),
+  (486, 78, 222, 'data_contributor'),
+  (487, 79, 217, 'data_contributor'),
+  (488, 80, 221, 'data_contributor'),
+  (489, 81, 173, 'data_contributor'),
+  (490, 82, 173, 'data_contributor'),
+  (491, 83, 220, 'data_contributor'),
+  (492, 84, 218, 'data_contributor'),
+  (493, 85, 41, 'data_contributor'),
+  (494, 90, 104, 'challenge_organizer'),
+  (495, 90, 3, 'challenge_organizer'),
+  (496, 90, 102, 'challenge_organizer'),
+  (497, 90, 215, 'challenge_organizer'),
+  (498, 90, 143, 'challenge_organizer'),
+  (499, 90, 224, 'challenge_organizer'),
+  (500, 90, 203, 'challenge_organizer'),
+  (501, 90, 219, 'challenge_organizer'),
+  (502, 90, 137, 'sponsor'),
+  (503, 90, 15, 'sponsor'),
+  (504, 90, 60, 'sponsor'),
+  (505, 90, 68, 'sponsor'),
+  (506, 91, 209, 'challenge_organizer'),
+  (507, 91, 183, 'challenge_organizer'),
+  (508, 91, 194, 'challenge_organizer'),
+  (509, 91, 207, 'challenge_organizer'),
+  (510, 91, 135, 'sponsor'),
+  (511, 92, 209, 'challenge_organizer'),
+  (512, 92, 183, 'challenge_organizer'),
+  (513, 92, 194, 'challenge_organizer'),
+  (514, 92, 207, 'challenge_organizer'),
+  (515, 92, 135, 'sponsor'),
+  (516, 93, 189, 'sponsor'),
+  (517, 94, 13, 'challenge_organizer'),
+  (518, 94, 189, 'challenge_organizer'),
+  (519, 94, 34, 'challenge_organizer'),
+  (520, 94, 62, 'challenge_organizer'),
+  (521, 94, 228, 'challenge_organizer'),
+  (522, 94, 136, 'challenge_organizer'),
+  (523, 94, 189, 'sponsor'),
+  (524, 95, 13, 'challenge_organizer'),
+  (525, 95, 189, 'challenge_organizer'),
+  (526, 95, 152, 'challenge_organizer'),
+  (527, 95, 201, 'challenge_organizer'),
+  (528, 95, 128, 'challenge_organizer'),
+  (529, 95, 93, 'challenge_organizer'),
+  (530, 95, 62, 'challenge_organizer'),
+  (531, 95, 34, 'challenge_organizer'),
+  (532, 95, 189, 'sponsor'),
+  (533, 96, 13, 'challenge_organizer'),
+  (534, 96, 189, 'challenge_organizer'),
+  (535, 96, 82, 'challenge_organizer'),
+  (536, 96, 62, 'challenge_organizer'),
+  (537, 96, 34, 'challenge_organizer'),
+  (538, 96, 189, 'sponsor'),
+  (539, 97, 13, 'challenge_organizer'),
+  (540, 97, 189, 'challenge_organizer'),
+  (541, 97, 83, 'challenge_organizer'),
+  (542, 97, 34, 'challenge_organizer'),
+  (543, 97, 189, 'sponsor'),
+  (544, 98, 13, 'challenge_organizer'),
+  (545, 98, 189, 'challenge_organizer'),
+  (546, 98, 62, 'challenge_organizer'),
+  (547, 98, 53, 'challenge_organizer'),
+  (548, 98, 34, 'challenge_organizer'),
+  (549, 98, 189, 'sponsor'),
+  (550, 99, 136, 'challenge_organizer'),
+  (551, 99, 13, 'challenge_organizer'),
+  (552, 99, 189, 'challenge_organizer'),
+  (553, 99, 62, 'challenge_organizer'),
+  (554, 99, 34, 'challenge_organizer'),
+  (555, 99, 189, 'sponsor'),
+  (556, 100, 13, 'challenge_organizer'),
+  (557, 100, 189, 'challenge_organizer'),
+  (558, 100, 231, 'challenge_organizer'),
+  (559, 100, 34, 'challenge_organizer'),
+  (560, 100, 62, 'challenge_organizer'),
+  (561, 100, 189, 'sponsor'),
+  (562, 101, 13, 'challenge_organizer'),
+  (563, 101, 189, 'challenge_organizer'),
+  (564, 101, 34, 'challenge_organizer'),
+  (565, 101, 62, 'challenge_organizer'),
+  (566, 101, 189, 'sponsor'),
+  (567, 102, 13, 'challenge_organizer'),
+  (568, 102, 189, 'challenge_organizer'),
+  (569, 102, 34, 'challenge_organizer'),
+  (570, 102, 62, 'challenge_organizer'),
+  (571, 102, 189, 'sponsor'),
+  (572, 103, 13, 'challenge_organizer'),
+  (573, 103, 189, 'challenge_organizer'),
+  (574, 103, 34, 'challenge_organizer'),
+  (575, 103, 62, 'challenge_organizer'),
+  (576, 103, 131, 'challenge_organizer'),
+  (577, 103, 177, 'challenge_organizer'),
+  (578, 103, 189, 'sponsor'),
+  (579, 104, 12, 'challenge_organizer'),
+  (580, 104, 215, 'challenge_organizer'),
+  (581, 104, 84, 'challenge_organizer'),
+  (582, 104, 7, 'challenge_organizer'),
+  (583, 104, 15, 'sponsor'),
+  (584, 104, 90, 'sponsor'),
+  (585, 104, 103, 'sponsor'),
+  (586, 104, 50, 'sponsor'),
+  (587, 105, 12, 'challenge_organizer'),
+  (588, 105, 147, 'sponsor'),
+  (589, 105, 35, 'sponsor'),
+  (590, 106, 12, 'challenge_organizer'),
+  (591, 106, 186, 'sponsor'),
+  (592, 106, 178, 'sponsor'),
+  (593, 107, 12, 'challenge_organizer'),
+  (594, 107, 77, 'sponsor'),
+  (595, 124, 12, 'challenge_organizer'),
+  (596, 124, 215, 'challenge_organizer'),
+  (597, 124, 84, 'challenge_organizer'),
+  (598, 124, 7, 'challenge_organizer'),
+  (599, 124, 98, 'sponsor'),
+  (600, 124, 139, 'sponsor'),
+  (601, 124, 162, 'sponsor'),
+  (602, 161, 13, 'challenge_organizer'),
+  (603, 161, 237, 'challenge_organizer'),
+  (604, 162, 13, 'challenge_organizer'),
+  (605, 162, 238, 'challenge_organizer'),
+  (606, 163, 13, 'challenge_organizer'),
+  (607, 163, 238, 'challenge_organizer'),
+  (608, 164, 13, 'challenge_organizer'),
+  (609, 164, 231, 'challenge_organizer'),
+  (610, 165, 13, 'challenge_organizer'),
+  (611, 55, 1, 'sponsor'),
+  (612, 53, 1, 'sponsor'),
+  (613, 52, 1, 'sponsor'),
+  (614, 54, 1, 'sponsor'),
+  (615, 166, 1, 'sponsor'),
+  (616, 45, 1, 'sponsor'),
+  (617, 44, 1, 'sponsor'),
+  (618, 43, 1, 'sponsor'),
+  (619, 40, 1, 'sponsor'),
+  (620, 42, 1, 'sponsor'),
+  (621, 39, 1, 'sponsor'),
+  (622, 41, 1, 'sponsor'),
+  (623, 35, 1, 'sponsor'),
+  (624, 36, 1, 'sponsor'),
+  (625, 34, 1, 'sponsor'),
+  (626, 37, 1, 'sponsor'),
+  (627, 33, 1, 'sponsor'),
+  (628, 32, 1, 'sponsor'),
+  (629, 31, 1, 'sponsor'),
+  (630, 30, 1, 'sponsor'),
+  (631, 29, 1, 'sponsor'),
+  (632, 21, 1, 'sponsor'),
+  (633, 27, 1, 'sponsor'),
+  (634, 26, 1, 'sponsor'),
+  (635, 28, 1, 'sponsor'),
+  (636, 24, 1, 'sponsor'),
+  (637, 25, 1, 'sponsor'),
+  (638, 23, 1, 'sponsor'),
+  (639, 20, 1, 'sponsor'),
+  (640, 19, 1, 'sponsor'),
+  (641, 18, 1, 'sponsor'),
+  (642, 17, 1, 'sponsor'),
+  (643, 16, 1, 'sponsor'),
+  (644, 15, 1, 'sponsor'),
+  (645, 14, 1, 'sponsor'),
+  (646, 8, 1, 'sponsor'),
+  (647, 13, 1, 'sponsor'),
+  (648, 7, 1, 'sponsor'),
+  (649, 11, 1, 'sponsor'),
+  (650, 12, 1, 'sponsor'),
+  (651, 10, 1, 'sponsor'),
+  (652, 9, 1, 'sponsor'),
+  (653, 6, 1, 'sponsor'),
+  (654, 7, 1, 'sponsor'),
+  (655, 5, 1, 'sponsor'),
+  (656, 4, 1, 'sponsor'),
+  (657, 1, 1, 'sponsor'),
+  (658, 3, 1, 'sponsor'),
+  (659, 167, 215, 'challenge_organizer'),
+  (660, 167, 171, 'challenge_organizer'),
+  (661, 167, 239, 'challenge_organizer'),
+  (662, 167, 240, 'challenge_organizer'),
+  (663, 167, 195, 'challenge_organizer'),
+  (664, 167, 226, 'challenge_organizer'),
+  (665, 167, 241, 'challenge_organizer'),
+  (666, 167, 242, 'challenge_organizer'),
+  (667, 167, 185, 'challenge_organizer'),
+  (668, 167, 196, 'challenge_organizer'),
+  (669, 167, 243, 'challenge_organizer'),
+  (670, 167, 244, 'challenge_organizer'),
+  (671, 167, 245, 'challenge_organizer'),
+  (672, 167, 246, 'challenge_organizer'),
+  (673, 167, 247, 'challenge_organizer'),
+  (674, 167, 248, 'challenge_organizer'),
+  (675, 167, 13, 'challenge_organizer'),
+  (676, 167, 249, 'challenge_organizer'),
+  (677, 167, 34, 'challenge_organizer'),
+  (678, 167, 62, 'challenge_organizer'),
+  (679, 167, 215, 'data_contributor'),
+  (680, 167, 240, 'data_contributor'),
+  (681, 167, 250, 'data_contributor'),
+  (682, 167, 251, 'data_contributor'),
+  (683, 167, 241, 'data_contributor'),
+  (684, 167, 185, 'data_contributor'),
+  (685, 167, 243, 'data_contributor'),
+  (686, 167, 245, 'data_contributor'),
+  (687, 167, 49, 'data_contributor'),
+  (688, 167, 252, 'data_contributor'),
+  (689, 167, 253, 'data_contributor'),
+  (690, 167, 98, 'sponsor'),
+  (691, 167, 139, 'sponsor'),
+  (692, 167, 254, 'sponsor'),
+  (693, 167, 255, 'sponsor');
