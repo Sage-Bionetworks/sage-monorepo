@@ -40,7 +40,7 @@
             "output": "openchallenges-assets"
           },
           {
-            "input": "libs/shared/typescript/assets/src",
+            "input": "libs/openchallenges/assets/src",
             "glob": "favicon.ico",
             "output": ""
           }
