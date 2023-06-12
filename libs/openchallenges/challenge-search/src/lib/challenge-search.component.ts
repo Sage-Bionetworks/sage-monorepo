@@ -12,8 +12,14 @@ import {
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
   ChallengeInputDataTypeSearchQuery,
+  ImageService,
   OrganizationService,
   OrganizationSearchQuery,
+  Organization,
+  Image,
+  ImageQuery,
+  ImageHeight,
+  ImageAspectRatio,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -29,7 +35,16 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -44,6 +59,7 @@ import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -116,6 +132,7 @@ export class ChallengeSearchComponent
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
     private organizationService: OrganizationService,
+    private imageService: ImageService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -204,16 +221,26 @@ export class ChallengeSearchComponent
             searchTerms: searchTerm,
             sort: 'name',
           } as OrganizationSearchQuery)
+        ),
+        map((page) => page.organizations),
+        switchMap((orgs) =>
+          forkJoin({
+            orgs: of(orgs),
+            avatarUrls: forkJoinConcurrent(
+              orgs.map((org) => this.getOrganizationAvatarUrl(org)),
+              Infinity
+            ) as unknown as Observable<(Image | undefined)[]>,
+          })
         )
       )
-      .subscribe((page) => {
-        const searchedOrgs = page.organizations.map((org) => ({
+      .subscribe(({ orgs, avatarUrls }) => {
+        const searchedOrgs = orgs.map((org, index) => ({
           value: org.id,
           label: org.name,
-          // avatarUrl: org.avatarUrl, // TODO Need to get the avatar URL from the image service
+          avatarUrl: avatarUrls[index]?.url,
           active: false,
         })) as FilterValue[];
-
+        console.log(searchedOrgs);
         challengeOrganizationFilter.values = union(
           searchedOrgs,
           this.selectedOrgs
@@ -378,5 +405,19 @@ export class ChallengeSearchComponent
     this._snackBar.open(message, undefined, {
       duration: 30000,
     });
+  }
+
+  private getOrganizationAvatarUrl(
+    org: Organization
+  ): Observable<Image | undefined> {
+    if (org.avatarKey && org.avatarKey.length > 0) {
+      return this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._100px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery);
+    } else {
+      return of(undefined);
+    }
   }
 }
