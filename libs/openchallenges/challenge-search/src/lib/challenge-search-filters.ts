@@ -59,9 +59,8 @@ export const challengeInputDataTypeFilter: Filter = {
   query: 'inputDataTypes',
   label: 'Input Data Type',
   values: challengeInputDataTypeFilterValues,
-  // collapsed: false, # TODO Flagged in a merge conflict, commenting out for now
-  // showAvatar: false, # TODO Flagged in a merge conflict, commenting out for now
-  collapsed: true,
+  collapsed: false,
+  showAvatar: false,
 };
 
 export const challengeOrganizationFilter: Filter = {

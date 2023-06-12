@@ -150,29 +150,9 @@ export class ChallengeSearchComponent
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
-
-    // START # TODO Flagged in a merge conflict, commenting out for now
-    // this.challengePlatformService.listChallengePlatforms().subscribe(
-    //   (page) =>
-    //     (challengePlatformFilter.values = page.challengePlatforms.map(
-    // END
-
-    // update input data types filter values
-    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
-      (page) =>
-        (this.dropdownFilters[1].values = page.challengeInputDataTypes.map(
-          (datatype) => ({
-            value: datatype.slug,
-            label: datatype.name,
-            active: false,
-          })
-        ))
-    );
-
-    // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengePlatforms.map(
+        (challengePlatformFilter.values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -195,7 +175,6 @@ export class ChallengeSearchComponent
         )
       )
       .subscribe((page) => {
-        console.log(page.challengeInputDataTypes);
         const searchedInputDataTypes = page.challengeInputDataTypes.map(
           (dataType) => ({
             value: dataType.slug,
@@ -240,7 +219,7 @@ export class ChallengeSearchComponent
           avatarUrl: avatarUrls[index]?.url,
           active: false,
         })) as FilterValue[];
-        console.log(searchedOrgs);
+
         challengeOrganizationFilter.values = union(
           searchedOrgs,
           this.selectedOrgs
@@ -371,7 +350,7 @@ export class ChallengeSearchComponent
         (selected as number[]).includes(value.value as number)
       );
     }
-
+    console.log(selected);
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
