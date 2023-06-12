@@ -8,10 +8,12 @@ services:
     env_file:
       - ../../../apps/openchallenges/reverse-proxy/.env
     environment:
-      - SERVER_HOST=openchallenges-api-gateway
-      - SERVER_PORT=8082 # Port used by the server inside the container
+      - API_GATEWAY_HOST=openchallenges-api-gateway
+      - API_GATEWAY_PORT=8082 # Port used by the server inside the container
       - CLIENT_HOST=openchallenges-app
       - CLIENT_PORT=4200 # Port used by the server inside the container
+      - ZIPKIN_HOST=openchallenges-zipkin
+      - ZIPKIN_PORT=9411 # Port used by the server inside the container
     networks:
       - openchallenges
     ports:
