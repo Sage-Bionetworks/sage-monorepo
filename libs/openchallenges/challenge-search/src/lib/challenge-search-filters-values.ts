@@ -18,10 +18,10 @@ export const challengeStartYearRangeFilterValues: FilterValue[] = [
     value: undefined,
     label: 'All',
   },
-  {
-    value: updateYear(thisYear, 1, 1),
-    label: (thisYear + 1).toString(),
-  },
+  // {
+  //   value: updateYear(thisYear, 1, 1),
+  //   label: (thisYear + 1).toString(),
+  // },
   {
     value: updateYear(thisYear, 0, 0),
     label: thisYear.toString(),
