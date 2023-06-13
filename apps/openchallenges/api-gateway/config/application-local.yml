@@ -1,15 +1,15 @@
 openchallenges-organization-service:
   welcome-message: 'Welcome to the OpenChallenges API Gateway (local config).'
-
 # TODO: Remove from here once the config has been updated in the config GitHub repo.
-spring:
-  cloud:
-    gateway:
-      routes:
-        - id: openchallenges-thumbor
-          # The port Thumbor listens to inside the container
-          uri: http://openchallenges-thumbor:8889
-          predicates:
-            - Path=/img/**
-          filters:
-            - StripPrefix=1
+# spring:
+#   cloud:
+#     gateway:
+#       # default-filters:
+#       #   - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+#       globalcors:
+#         corsConfigurations:
+#           '[/**]':
+#             allowedOrigins: "*"
+#             allowedMethods:
+#             - GET
+#             - POST

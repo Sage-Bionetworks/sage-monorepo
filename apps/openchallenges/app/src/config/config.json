@@ -1,6 +1,6 @@
 {
-  "environment": "prod",
-  "apiUrl": "http://localhost:4200/api",
+  "environment": "dev",
+  "apiUrl": "http://localhost:8082/api/v1",
   "appVersion": "0.0.1",
   "keycloakRealm": "test"
 }
