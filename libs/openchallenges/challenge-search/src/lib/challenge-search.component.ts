@@ -392,7 +392,7 @@ export class ChallengeSearchComponent
     if (org.avatarKey && org.avatarKey.length > 0) {
       return this.imageService.getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._100px,
+        height: ImageHeight._32px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery);
     } else {
