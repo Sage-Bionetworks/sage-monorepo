@@ -1,88 +1,88 @@
 -- challenge_platform data
 
-INSERT INTO challenge_platform (id, slug, name, avatar_url, website_url)
+INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url)
 VALUES (
     '1',
     'synapse',
     'Synapse',
-    'https://via.placeholder.com/300.png',
+    'logo/synapse.png',
     'https://synapse.org/'
   ),
   (
     '2',
     'cagi',
     'CAGI',
-    'https://via.placeholder.com/300.png',
+    'logo/cagi.png',
     'https://genomeinterpretation.org/challenges.html'
   ),
   (
     '3',
     'cami',
     'CAMI',
-    'https://via.placeholder.com/300.png',
+    'logo/cami.png',
     'https://data.cami-challenge.org/'
   ),
   (
     '4',
     'casp',
     'CASP',
-    'https://via.placeholder.com/300.png',
+    'logo/casp.png',
     'https://predictioncenter.org/'
   ),
   (
     '5',
     'grand-challenge',
     'Grand Challenge',
-    'https://via.placeholder.com/300.png',
+    'logo/grand-challenge.png',
     'https://grand-challenge.org/'
   ),
   (
     '6',
     'precision-fda',
     'precisionFDA',
-    'https://via.placeholder.com/300.png',
+    'logo/precisionfda.png',
     'https://precision.fda.gov/challenges'
   ),
   (
     '7',
     'easychair',
     'EasyChair',
-    'https://via.placeholder.com/300.png',
+    'logo/easy-chair.jpg',
     'https://easychair.org/'
   ),
   (
     '8',
     'kaggle',
     'Kaggle',
-    'https://via.placeholder.com/300.png',
+    'logo/kaggle.png',
     'https://www.kaggle.com/'
   ),
   (
     '9',
     'codalab',
     'CodaLab',
-    'https://via.placeholder.com/300.png',
+    'logo/codalab.jpg',
     'https://codalab.lisn.upsaclay.fr/'
   ),
   (
     '10',
     'codabench',
     'CodaBench',
-    'https://via.placeholder.com/300.png',
+    'logo/codalab.jpg',
     'https://www.codabench.org/'
   ),
   (
     '11',
     'openml',
     'OpenML',
-    'https://via.placeholder.com/300.png',
+    'logo/openml.jpg',
     'https://www.openml.org/'
   ),
   (
     '12',
     'papers-with-code',
     'PapersWithCode',
-    'https://via.placeholder.com/300.png',
+    'logo/papers-with-code.jpg',
     'https://paperswithcode.com/'
   );
 
@@ -106,6 +106,7 @@ INSERT INTO challenge (
     status,
     difficulty,
     platform_id,
+    doi,
     start_date,
     end_date
   )
@@ -120,6 +121,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2012-06-01',
     '2012-10-01'
   ),
@@ -133,6 +135,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2012-07-12',
     '2012-10-15'
   ),
@@ -146,6 +149,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2012-06-01',
     '2012-10-01'
   ),
@@ -159,6 +163,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2012-06-01',
     '2012-10-01'
   ),
@@ -172,6 +177,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2013-06-10',
     '2013-09-15'
   ),
@@ -185,6 +191,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2013-06-10',
     '2013-09-23'
   ),
@@ -198,6 +205,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2013-06-10',
     '2013-09-16'
   ),
@@ -211,6 +219,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2014-02-10',
     '2014-06-04'
   ),
@@ -224,6 +233,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2013-12-14',
     '2016-04-22'
   ),
@@ -237,6 +247,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2014-06-02',
     '2014-09-15'
   ),
@@ -250,6 +261,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2014-06-02',
     '2014-09-29'
   ),
@@ -263,6 +275,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2014-06-02',
     '2014-10-17'
   ),
@@ -276,6 +289,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-01-15',
     '2015-05-01'
   ),
@@ -289,6 +303,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-03-16',
     '2015-07-27'
   ),
@@ -302,6 +317,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-06-22',
     '2015-10-04'
   ),
@@ -315,6 +331,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-09-03',
     '2016-03-14'
   ),
@@ -328,6 +345,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-08-17',
     '2016-04-10'
   ),
@@ -341,6 +359,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2015-11-16',
     '2016-06-30'
   ),
@@ -354,6 +373,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2016-05-16',
     '2016-09-28'
   ),
@@ -367,6 +387,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2016-06-24',
     '2016-10-01'
   ),
@@ -380,6 +401,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2016-07-07',
     '2017-01-11'
   ),
@@ -393,6 +415,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2016-06-15',
     '2017-04-30'
   ),
@@ -406,6 +429,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2016-06-29',
     '2017-05-02'
   ),
@@ -419,6 +443,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '10.1001/jamanetworkopen.2020.0265',
     '2016-11-18',
     '2017-05-16'
   ),
@@ -432,6 +457,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2017-06-30',
     '2017-11-08'
   ),
@@ -445,6 +471,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2017-07-21',
     '2017-12-31'
   ),
@@ -458,6 +485,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2017-07-06',
     '2017-11-10'
   ),
@@ -471,6 +499,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2017-06-26',
     '2017-11-20'
   ),
@@ -484,6 +513,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2017-10-05',
     '2018-02-26'
   ),
@@ -497,6 +527,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2018-09-04',
     '2018-11-21'
   ),
@@ -510,6 +541,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2018-10-01',
     '2019-04-18'
   ),
@@ -523,6 +555,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-04-30',
     '2019-08-15'
   ),
@@ -536,6 +569,7 @@ VALUES (
     'completed',
     'good_for_beginners',
     '1',
+    '',
     '2019-05-04',
     '2019-12-05'
   ),
@@ -549,6 +583,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2018-08-20',
     '2019-11-15'
   ),
@@ -562,6 +597,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-09-09',
     '2020-01-23'
   ),
@@ -575,6 +611,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-10-15',
     '2020-02-06'
   ),
@@ -588,6 +625,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-06-26',
     '2020-04-30'
   ),
@@ -601,6 +639,7 @@ VALUES (
     'completed',
     'good_for_beginners',
     '1',
+    '',
     '2019-12-02',
     '2020-02-13'
   ),
@@ -614,6 +653,7 @@ VALUES (
     'completed',
     'good_for_beginners',
     '1',
+    '',
     '2019-12-19',
     '2020-04-28'
   ),
@@ -627,6 +667,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2020-01-14',
     '2020-06-02'
   ),
@@ -640,6 +681,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-11-04',
     '2020-05-21'
   ),
@@ -653,6 +695,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2020-01-13',
     '2020-05-13'
   ),
@@ -666,6 +709,7 @@ VALUES (
     'completed',
     'good_for_beginners',
     '1',
+    '',
     '2020-04-28',
     '2020-07-27'
   ),
@@ -679,6 +723,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2020-04-30',
     '2021-07-01'
   ),
@@ -692,6 +737,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2020-11-17',
     '2021-02-25'
   ),
@@ -705,6 +751,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2021-07-07',
     '2021-10-15'
   ),
@@ -718,6 +765,7 @@ VALUES (
     'upcoming',
     'intermediate',
     '1',
+    '',
     NULL,
     NULL
   ),
@@ -731,6 +779,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-08-19',
     '2021-12-17'
   ),
@@ -744,6 +793,7 @@ VALUES (
     'active',
     'advanced',
     '1',
+    '',
     '2022-01-01',
     NULL
   ),
@@ -757,6 +807,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2022-04-08',
     '2022-08-15'
   ),
@@ -770,6 +821,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2022-05-02',
     '2022-08-07'
   ),
@@ -783,6 +835,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2022-07-19',
     '2022-09-16'
   ),
@@ -796,6 +849,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2022-09-20',
     '2023-01-30'
   ),
@@ -809,6 +863,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2022-11-29',
     '2023-02-08'
   ),
@@ -822,6 +877,7 @@ VALUES (
     'completed',
     'advanced',
     '1',
+    '',
     '2022-10-16',
     '2023-02-13'
   ),
@@ -835,6 +891,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2022-08-25',
     '2022-12-15'
   ),
@@ -848,6 +905,7 @@ VALUES (
     'upcoming',
     'good_for_beginners',
     '1',
+    '',
     NULL,
     NULL
   ),
@@ -858,9 +916,10 @@ VALUES (
     '',
     'The Xcelerate RARE: A Rare Disease Open Science Data Challenge is bringing together researchers and data scientists in a collaborative and competitive environment to make the best use of patient-provided data to solve big unknowns in healthcare. The Challenge will launch to researchers in late May 2023, focused on rare pediatric neurodevelopmental diseases. ',
     'https://www.synapse.org/#!Synapse:syn51198355/wiki/621435',
-    'upcoming',
+    'active',
     'intermediate',
     '1',
+    '',
     '2023-05-17',
     NULL
   ),
@@ -874,6 +933,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2018-01-04',
     '2018-05-03'
   ),
@@ -887,6 +947,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-10-21',
     '2017-12-20'
   ),
@@ -900,6 +961,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-09',
     '2018-04-19'
   ),
@@ -913,6 +975,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-30',
     '2018-04-18'
   ),
@@ -926,6 +989,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-30',
     '2017-12-01'
   ),
@@ -939,6 +1003,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-30',
     '2018-05-09'
   ),
@@ -952,6 +1017,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-09',
     '2018-04-25'
   ),
@@ -965,6 +1031,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-12-20',
     '2018-04-24'
   ),
@@ -978,6 +1045,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-12-20',
     '2018-05-01'
   ),
@@ -991,6 +1059,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-29',
     '2018-05-07'
   ),
@@ -1004,6 +1073,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-12-14',
     '2018-05-02'
   ),
@@ -1017,6 +1087,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-12-22',
     '2018-04-26'
   ),
@@ -1030,6 +1101,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-12-22',
     '2018-04-30'
   ),
@@ -1043,6 +1115,7 @@ VALUES (
     'completed',
     'intermediate',
     '2',
+    '',
     '2017-11-23',
     '2018-04-28'
   ),
@@ -1056,6 +1129,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1069,6 +1143,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1082,6 +1157,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-08-04',
     '2021-12-31'
   ),
@@ -1095,6 +1171,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1108,6 +1185,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1121,6 +1199,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1134,6 +1213,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-01',
     '2021-10-11'
   ),
@@ -1147,6 +1227,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-09-01'
   ),
@@ -1160,6 +1241,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-07-08',
     '2021-10-11'
   ),
@@ -1173,6 +1255,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-08-04',
     '2021-10-11'
   ),
@@ -1186,6 +1269,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-05-03',
     '2021-06-30'
   ),
@@ -1199,6 +1283,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-06-08',
     '2021-10-11'
   ),
@@ -1212,6 +1297,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-07-08',
     '2021-12-01'
   ),
@@ -1225,6 +1311,7 @@ VALUES (
     'completed',
     'intermediate',
     '3',
+    '',
     '2019-01-14',
     '2021-01-31'
   ),
@@ -1238,6 +1325,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     NULL
   ),
@@ -1252,6 +1340,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     NULL
   ),
@@ -1265,6 +1354,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     NULL
   ),
@@ -1278,6 +1368,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2019-10-21',
     '2020-02-12'
   ),
@@ -1291,6 +1382,7 @@ VALUES (
     'completed',
     'intermediate',
     '4',
+    '',
     '2018-04-18',
     '2018-08-20'
   ),
@@ -1304,6 +1396,7 @@ VALUES (
     'completed',
     'intermediate',
     '4',
+    '',
     '2020-05-04',
     '2020-09-07'
   ),
@@ -1317,6 +1410,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2018-02-15',
     '2018-04-26'
   ),
@@ -1330,6 +1424,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2018-08-03',
     '2018-10-18'
   ),
@@ -1343,6 +1438,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2018-09-24',
     '2018-12-19'
   ),
@@ -1356,6 +1452,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2019-05-14',
     '2019-10-18'
   ),
@@ -1369,6 +1466,7 @@ VALUES (
     'completed',
     'advanced',
     '6',
+    '',
     '2019-11-01',
     '2020-02-14'
   ),
@@ -1382,6 +1480,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2020-01-17',
     '2020-05-18'
   ),
@@ -1395,6 +1494,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2020-05-01',
     '2020-06-15'
   ),
@@ -1408,6 +1508,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2020-06-02',
     '2020-07-03'
   ),
@@ -1421,6 +1522,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2020-11-30',
     '2021-01-29'
   ),
@@ -1434,6 +1536,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2021-06-01',
     '2021-07-30'
   ),
@@ -1447,6 +1550,7 @@ VALUES (
     'completed',
     'advanced',
     '6',
+    '',
     '2021-06-21',
     '2021-09-13'
   ),
@@ -1460,6 +1564,7 @@ VALUES (
     'completed',
     'advanced',
     '5',
+    '',
     '2021-08-23',
     '2021-09-17'
   ),
@@ -1473,6 +1578,7 @@ VALUES (
     'completed',
     'advanced',
     '5',
+    '',
     '2021-04-05',
     '2021-09-27'
   ),
@@ -1486,6 +1592,7 @@ VALUES (
     'completed',
     'intermediate',
     '5',
+    '',
     '2021-09-21',
     '2021-12-06'
   ),
@@ -1499,6 +1606,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2021-04-01',
     '2021-07-16'
   ),
@@ -1512,6 +1620,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2020-11-09',
     '2020-11-22'
   ),
@@ -1525,6 +1634,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2016-07-26',
     '2016-09-12'
   ),
@@ -1538,6 +1648,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2016-07-26',
     '2016-09-12'
   ),
@@ -1551,6 +1662,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-01-12',
     '2017-04-12'
   ),
@@ -1564,6 +1676,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-02-13',
     '2017-05-05'
   ),
@@ -1577,6 +1690,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-03-15',
     '2017-06-21'
   ),
@@ -1590,6 +1704,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-06-26',
     '2017-10-02'
   ),
@@ -1603,6 +1718,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2018-07-31',
     '2018-08-13'
   ),
@@ -1616,6 +1732,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2018-11-16',
     '2019-03-30'
   ),
@@ -1629,6 +1746,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2019-09-22',
     '2019-10-16'
   ),
@@ -1642,6 +1760,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2020-04-21',
     '2020-07-22'
   ),
@@ -1655,6 +1774,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2020-08-12',
     '2020-08-13'
   ),
@@ -1668,6 +1788,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2020-09-25',
     '2020-12-31'
   ),
@@ -1681,6 +1802,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2020-11-25',
     '2020-12-05'
   ),
@@ -1694,6 +1816,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-05-06',
     '2021-05-21'
   ),
@@ -1707,6 +1830,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-04-14',
     '2022-07-14'
   ),
@@ -1720,6 +1844,7 @@ VALUES (
     'completed',
     'advanced',
     '8',
+    '',
     '2021-07-13',
     '2021-10-15'
   ),
@@ -1733,6 +1858,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-21',
     '2022-02-12'
   ),
@@ -1746,6 +1872,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-01-31',
     '2022-03-19'
   ),
@@ -1759,6 +1886,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-02-28',
     '2022-04-11'
   ),
@@ -1772,6 +1900,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2019-10-13',
     '2019-11-25'
   ),
@@ -1785,6 +1914,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-01-26',
     '2021-05-11'
   ),
@@ -1798,6 +1928,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-04-01',
     '2021-07-01'
   ),
@@ -1811,6 +1942,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-10-14',
     '2021-12-30'
   ),
@@ -1824,6 +1956,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-03-15',
     '2022-07-30'
   ),
@@ -1837,6 +1970,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-03-19',
     '2022-03-19'
   ),
@@ -1850,6 +1984,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2018-04-02',
     '2018-05-25'
   ),
@@ -1863,6 +1998,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2019-04-08',
     '2019-05-07'
   ),
@@ -1876,6 +2012,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2019-05-18',
     '2019-10-18'
   ),
@@ -1889,6 +2026,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2019-05-20',
     '2019-12-28'
   ),
@@ -1902,6 +2040,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-11-12',
     '2021-12-31'
   ),
@@ -1915,6 +2054,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-06',
     '2021-12-31'
   ),
@@ -1928,6 +2068,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-11-26',
     '2021-12-10'
   ),
@@ -1941,6 +2082,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-08',
     '2021-12-31'
   ),
@@ -1954,6 +2096,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-08',
     '2021-12-31'
   ),
@@ -1967,6 +2110,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-08',
     '2021-12-31'
   ),
@@ -1980,6 +2124,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-08',
     '2021-12-31'
   ),
@@ -1993,6 +2138,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2011-04-04',
     '2013-04-04'
   ),
@@ -2006,6 +2152,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2012-06-07',
     '2012-06-30'
   ),
@@ -2019,6 +2166,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2012-06-07',
     '2012-09-10'
   ),
@@ -2032,6 +2180,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2014-05-19',
     '2014-08-19'
   ),
@@ -2045,6 +2194,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2014-08-25',
     '2014-11-17'
   ),
@@ -2058,6 +2208,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-02-13',
     '2017-02-19'
   ),
@@ -2071,6 +2222,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2017-02-15',
     '2017-02-19'
   ),
@@ -2084,6 +2236,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-04-11',
     '2021-05-09'
   ),
@@ -2097,6 +2250,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-04',
     '2021-12-05'
   ),
@@ -2110,6 +2264,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2021-12-27',
     '2022-01-31'
   ),
@@ -2123,6 +2278,7 @@ VALUES (
     'completed',
     'intermediate',
     '8',
+    '',
     '2022-02-03',
     '2022-03-01'
   ),
@@ -2136,6 +2292,7 @@ VALUES (
     'active',
     'intermediate',
     '8',
+    '',
     '2022-11-28',
     '2023-02-27'
   ),
@@ -2151,6 +2308,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     '2021-06-15',
     '2021-09-22'
   ),
@@ -2164,6 +2322,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     '2022-05-20'
   ),
@@ -2177,6 +2336,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     '2022-05-20'
   ),
@@ -2190,6 +2350,7 @@ VALUES (
     'completed',
     'intermediate',
     '7',
+    '',
     NULL,
     '2022-05-20'
   ),
@@ -2203,6 +2364,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2022-11-01',
     '2023-03-01'
   ),
@@ -2216,6 +2378,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2022-07-11',
     '2022-07-26'
   ),
@@ -2229,6 +2392,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2022-05-02',
     '2022-07-08'
   ),
@@ -2242,6 +2406,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2021-04-14',
     '2022-01-28'
   ),
@@ -2255,6 +2420,7 @@ VALUES (
     'completed',
     'intermediate',
     '6',
+    '',
     '2021-07-19',
     '2021-09-12'
   ),
@@ -2268,6 +2434,7 @@ VALUES (
     'completed',
     'intermediate',
     '1',
+    '',
     '2022-06-15',
     '2022-08-07'
   ),
@@ -2278,9 +2445,10 @@ VALUES (
     '',
     'The International Brain Tumor Segmentation (BraTS) challenge. BraTS, since 2012, has focused on the generation of a benchmarking environment and dataset for the delineation of adult brain gliomas. The focus of this year’s challenge remains the generation of a common benchmarking environment, but its dataset is substantially expanded to ~4,500 cases towards addressing additional i) populations (e.g., sub-Saharan Africa patients), ii) tumors (e.g., meningioma), iii) clinical concerns (e.g., missing data), and iv) technical considerations (e.g., augmentations). Specifically, the focus of BraTS 2023 is to identify the current state-of-the-art algorithms for addressing (Task 1) the same adult glioma population as in the RSNA-ANSR-MICCAI BraTS challenge, as well as (Task 2) the underserved sub-Saharan African brain glioma patient population, (Task 3) intracranial meningioma, (Task 4) brain metastasis, (Task 5) pediatric brain tumor patients, (Task 6) global & local missing data, (Task 7...',
     'https://www.synapse.org/brats',
-    'upcoming',
+    'active',
     'advanced',
     '1',
+    '',
     '2023-06-01',
     '2023-08-25'
   );

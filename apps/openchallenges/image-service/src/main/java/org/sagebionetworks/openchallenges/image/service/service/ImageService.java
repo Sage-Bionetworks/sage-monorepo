@@ -56,6 +56,8 @@ public class ImageService {
     // we can't use switch here because height may be null
     if (height == ImageHeightDto.ORIGINAL) {
       return null;
+    } else if (height == ImageHeightDto._32PX) {
+      return 32;
     } else if (height == ImageHeightDto._100PX) {
       return 100;
     } else if (height == ImageHeightDto._140PX) {
@@ -73,13 +75,13 @@ public class ImageService {
     if (aspectRatio == ImageAspectRatioDto.ORIGINAL) {
       return 0; // Thumbor will use the original width
     } else if (aspectRatio == ImageAspectRatioDto._16_9) {
-      return Math.round(height * 16 / 9);
+      return Math.round(height * 16f / 9);
     } else if (aspectRatio == ImageAspectRatioDto._1_1) {
       return height;
     } else if (aspectRatio == ImageAspectRatioDto._3_2) {
-      return Math.round(height * 3 / 2);
+      return Math.round(height * 3f / 2);
     } else if (aspectRatio == ImageAspectRatioDto._2_3) {
-      return Math.round(height * 2 / 3);
+      return Math.round(height * 2f / 3);
     }
     return 0; // Thumbor will use the original width
   }

@@ -7,7 +7,7 @@ import { AmazonRegion, Ami, SageCostCenter } from './constants';
 import { NetworkConfig } from './network/network-config';
 import { Network } from './network/network';
 import { SecurityGroups } from './security-group/security-groups';
-import { Aspects, TerraformOutput } from 'cdktf';
+import { Aspects, TerraformOutput, TerraformVariable } from 'cdktf';
 import { BastionConfig } from './bastion/bastion-config';
 import { Bastion } from './bastion/bastion';
 import { TagsAddingAspect } from './tag/tags-adding-aspect';
@@ -28,17 +28,25 @@ export class OpenChallengesPreviewStack extends SageStack {
     const stackOwnerEmail = 'thomas.schaffter@sagebionetworks.org';
     const bastionPrivateIp = '10.70.2.172';
 
+    // Inputs
+    const hello = new TerraformVariable(this, 'hello', {
+      type: 'string',
+      description: 'Example of environment variable to add to the bastion',
+      sensitive: true,
+    });
+
+    // The AWS provider
     new AwsProvider(this, 'AWS', {
       region: AmazonRegion.US_EAST_1,
     });
 
+    // The network
     const networkConfig = new NetworkConfig({
       defaultRegion: AmazonRegion.US_EAST_1,
       tagPrefix: 'openchallenges-preview',
       vpcCirdBlock: '10.70.0.0/16',
     });
 
-    // The network
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
@@ -57,6 +65,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const bastionConfig = new BastionConfig({
       ami: Ami.UBUNTU_22_04_LTS,
       defaultRegion: AmazonRegion.US_EAST_1,
+      hello: hello.value,
       instanceType: 't2.micro',
       keyName: bastionKeyName,
       privateIp: bastionPrivateIp,

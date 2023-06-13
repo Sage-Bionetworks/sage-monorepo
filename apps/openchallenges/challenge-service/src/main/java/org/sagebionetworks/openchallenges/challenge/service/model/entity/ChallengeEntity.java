@@ -67,6 +67,10 @@ public class ChallengeEntity {
   @Column(name = "website_url", nullable = false)
   private String websiteUrl;
 
+  @Column(nullable = true)
+  @GenericField()
+  private String doi;
+
   @Column(nullable = false)
   @GenericField()
   private String status;

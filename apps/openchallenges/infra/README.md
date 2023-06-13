@@ -78,7 +78,7 @@ cdktf synth
 ### Deploy the stack
 
 ```console
-cdktf deploy
+TF_VAR_hello='Hello' cdktf deploy openchallenges-preview
 ```
 
 ### Connect to the Bastion with AWS SSM
@@ -94,6 +94,8 @@ sso_account_id = 384625883722
 sso_role_name = Administrator
 output = json
 ```
+
+> **Note** An interactive way to create this profile is to run `aws configure sso`.
 
 Login to AWS SSO.
 
