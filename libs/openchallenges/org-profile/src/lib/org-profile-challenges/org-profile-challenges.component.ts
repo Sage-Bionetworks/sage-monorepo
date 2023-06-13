@@ -33,6 +33,7 @@ export class OrgProfileChallengesComponent {
     const defaultQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
+      organizations: [this.organization.id],
     };
     this.query.next(defaultQuery);
 
