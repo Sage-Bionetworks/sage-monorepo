@@ -11,6 +11,8 @@ import javax.validation.constraints.*;
 public enum ImageHeightDto {
   ORIGINAL("original"),
 
+  _32PX("32px"),
+
   _100PX("100px"),
 
   _140PX("140px"),

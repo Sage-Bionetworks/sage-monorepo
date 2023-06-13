@@ -90,6 +90,7 @@ components:
       description: The height of the image.
       enum:
       - original
+      - 32px
       - 100px
       - 140px
       - 250px
