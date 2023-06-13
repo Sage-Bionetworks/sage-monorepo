@@ -14,10 +14,11 @@
 /**
  * The height of the image.
  */
-export type ImageHeight = 'original' | '100px' | '140px' | '250px' | '500px';
+export type ImageHeight = 'original' | '32px' | '100px' | '140px' | '250px' | '500px';
 
 export const ImageHeight = {
     Original: 'original' as ImageHeight,
+    _32px: '32px' as ImageHeight,
     _100px: '100px' as ImageHeight,
     _140px: '140px' as ImageHeight,
     _250px: '250px' as ImageHeight,
