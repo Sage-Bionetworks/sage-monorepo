@@ -227,6 +227,11 @@ components:
       - totalElements
       - totalPages
       type: object
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
     Email:
       description: An email address.
       example: john.smith@example.com
@@ -248,11 +253,17 @@ components:
         acronym: OC
         name: Example organization
         description: A description of the organization.
+        id: 1
         challengeCount: 10
         login: example-org
         email: john.smith@example.com
         updatedAt: 2022-07-04T22:19:11Z
       properties:
+        id:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
         name:
           example: Example organization
           type: string
@@ -298,6 +309,7 @@ components:
       - createdAt
       - description
       - email
+      - id
       - login
       - name
       - updatedAt
