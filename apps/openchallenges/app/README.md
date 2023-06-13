@@ -22,3 +22,5 @@
 - Proxy config: The configuration used by the Nginx to proxy requests to API servers can be
   specified in `docker/nginx/templates/http.conf.template`. CORS is enabled on the OC API gateway so
   there is no need to proxy the requests sent to it.
+- App config: The configuration used by the web app is defined by the file
+  `src/config/config.json.template` and the environment variables specified to the container.
