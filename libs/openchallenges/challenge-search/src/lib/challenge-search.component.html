@@ -69,7 +69,7 @@
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
             [values]="checkbox.values"
-            (checkboxChange)="onCheckboxChange($event, checkbox.query)"
+            (selectionChange)="onCheckboxSelectionChange($event, checkbox.query)"
             inputId="{{ checkbox.query }}"
           ></openchallenges-checkbox-filter>
         </p-panel>
@@ -80,8 +80,10 @@
           <openchallenges-search-dropdown-filter
             [values]="dropdown.values"
             placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
-            [showAvatar]="false"
-            (dropdownChange)="onDropdownChange($event, dropdown.query)"
+            [showAvatar]="dropdown.showAvatar"
+            [filterByApiClient]="true"
+            (selectionChange)="onDropdownSelectionChange($event, dropdown.query)"
+            (searchChange)="onDropdownSearchChange($event)"
           ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>

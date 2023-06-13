@@ -1,6 +1,8 @@
 type: object
 description: An organization
 properties:
+  id:
+    $ref: OrganizationId.yaml
   name:
     type: string
     example: Example organization
@@ -35,6 +37,7 @@ properties:
     type: string
     example: 'OC'
 required:
+  - id
   - name
   - email
   - login
