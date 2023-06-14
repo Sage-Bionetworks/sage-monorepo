@@ -7,8 +7,8 @@ http {
     keepalive 15;
   }
 
-  upstream client {
-    server ${CLIENT_HOST}:${CLIENT_PORT};
+  upstream app {
+    server ${APP_HOST}:${APP_PORT};
     keepalive 15;
   }
 
@@ -36,7 +36,7 @@ http {
       proxy_set_header Connection "Keep-Alive";
       proxy_set_header Proxy-Connection "Keep-Alive";
 
-      proxy_pass http://client;
+      proxy_pass http://app;
     }
 
     location /api {
