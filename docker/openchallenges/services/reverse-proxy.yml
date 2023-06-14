@@ -17,7 +17,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - '8000:80'
+      - '8000:8000'
     # volumes:
     #   - ../../../apps/openchallenges/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf:ro
     #   - ../../../apps/openchallenges/reverse-proxy/templates:/etc/nginx/templates:ro
