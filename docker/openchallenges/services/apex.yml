@@ -1,12 +1,12 @@
 version: '3.8'
 
 services:
-  openchallenges-reverse-proxy:
-    image: sagebionetworks/openchallenges-reverse-proxy:latest
-    container_name: openchallenges-reverse-proxy
+  openchallenges-apex:
+    image: sagebionetworks/openchallenges-apex:latest
+    container_name: openchallenges-apex
     restart: always
     env_file:
-      - ../../../apps/openchallenges/reverse-proxy/.env
+      - ../../../apps/openchallenges/apex/.env
     networks:
       - openchallenges
     ports:

@@ -1,29 +1,29 @@
 {
-  "name": "openchallenges-reverse-proxy",
+  "name": "openchallenges-apex",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/openchallenges-reverse-proxy/src",
+  "sourceRoot": "apps/openchallenges-apex/src",
   "projectType": "application",
   "targets": {
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/reverse-proxy"
+        "cwd": "apps/openchallenges/apex"
       }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-reverse-proxy"
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-apex"
       },
       "dependsOn": []
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/reverse-proxy",
+        "context": "apps/openchallenges/apex",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-reverse-proxy:latest"]
+        "tags": ["sagebionetworks/openchallenges-apex:latest"]
       }
     }
   },

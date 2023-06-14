@@ -19,10 +19,10 @@ http {
 
   server {
     listen 8000;
-    server_name openchallenges-reverse-proxy;
+    server_name openchallenges-apex;
 
-    error_log   /var/log/nginx/openchallenges-reverse-proxy.error.log;
-    access_log  /var/log/nginx/openchallenges-reverse-proxy.access.log;
+    error_log   /var/log/nginx/openchallenges-apex.error.log;
+    access_log  /var/log/nginx/openchallenges-apex.access.log;
 
     location / {
       proxy_set_header X-Real-IP $remote_addr;
