@@ -1,6 +1,11 @@
 @use 'libs/openchallenges/styles/src/lib/constants';
 
 .sage-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
   height: constants.$navbar-height;
   display: flex;
   flex-wrap: wrap;
