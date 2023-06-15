@@ -29,13 +29,13 @@
   vertical-align: middle;
 }
 
-@media only screen and (max-width: 855px) {
+@media only screen and (max-width: constants.$lg-breakpoint) {
   .navbar-item {
     width: 100%;
     align-self: center;
   }
   .sage-navbar {
-    height: 300px;
+    height: constants.$navbar-height-tall;
   }
   .flex-spacer {
     flex-grow: 0;
