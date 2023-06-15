@@ -1,12 +1,11 @@
 @use 'libs/openchallenges/styles/src/lib/constants';
 
-html
+html {
+  margin-top: constants.$navbar-height;
+}
 body {
   height: 100vh;
   margin: 0;
-}
-html {
-  margin-top: constants.$navbar-height;
 }
 em {
   color: #00b1e5;
