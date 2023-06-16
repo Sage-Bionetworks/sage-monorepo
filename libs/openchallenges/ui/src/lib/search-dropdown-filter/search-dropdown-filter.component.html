@@ -6,7 +6,23 @@
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
+  [filter]="filter"
+  (onFilter)="onSearch($event)"
 >
+  <!-- custom search bar to avoid conflicts against default filter func -->
+  <ng-template *ngIf="filterByApiClient" pTemplate="header">
+    <div class="custom-filter-container p-multiselect-filter-container">
+      <input
+        type="text"
+        role="textbox"
+        class="custom-filter p-multiselect-filter p-inputtext p-component"
+        autocomplete="on"
+        [(ngModel)]="searchTerm"
+        (input)="onCustomSearch()"
+      />
+      <span class="p-multiselect-filter-icon pi pi-search"></span>
+    </div>
+  </ng-template>
   <!-- custom list items -->
   <ng-template let-value pTemplate="values">
     <div class="item-container">

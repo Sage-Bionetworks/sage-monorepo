@@ -18,7 +18,7 @@ import { ImageAspectRatio } from './imageAspectRatio';
  */
 export interface ImageQuery { 
     /**
-     * The object key of the image.
+     * The unique identifier of the image.
      */
     objectKey: string;
     height?: ImageHeight;

@@ -7,6 +7,6 @@ COPY docker/10-envsubst-on-app-config-template.sh /docker-entrypoint.d/.
 
 RUN chmod +x /docker-entrypoint.d/10-envsubst-on-app-config-template.sh
 
-EXPOSE 80
+EXPOSE 4200
 
 CMD ["nginx", "-g", "daemon off;"]

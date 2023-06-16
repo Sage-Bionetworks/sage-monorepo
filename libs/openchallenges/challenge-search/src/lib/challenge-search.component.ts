@@ -11,6 +11,15 @@ import {
   ChallengePlatformService,
   ChallengeSearchQuery,
   ChallengeInputDataTypeService,
+  ChallengeInputDataTypeSearchQuery,
+  ImageService,
+  OrganizationService,
+  OrganizationSearchQuery,
+  Organization,
+  Image,
+  ImageQuery,
+  ImageHeight,
+  ImageAspectRatio,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -26,20 +35,31 @@ import {
   challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
-import { BehaviorSubject, Subject, switchMap, tap, throwError } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subject,
+  forkJoin,
+  map,
+  of,
+  switchMap,
+  throwError,
+} from 'rxjs';
 import {
   catchError,
   debounceTime,
   distinctUntilChanged,
   skip,
   takeUntil,
+  tap,
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-import { assign } from 'lodash';
+import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -59,6 +79,13 @@ export class ChallengeSearchComponent
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
     ''
   );
+
+  private orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
+    ''
+  );
+
+  private inputDataTypeSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
   searchTermValue = '';
@@ -92,6 +119,9 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
+  selectedOrgs: FilterValue[] = [];
+  selectedInputDataTypes: FilterValue[] = [];
+
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
 
@@ -101,6 +131,8 @@ export class ChallengeSearchComponent
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private challengeInputDataTypeService: ChallengeInputDataTypeService,
+    private organizationService: OrganizationService,
+    private imageService: ImageService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar
   ) {
@@ -117,22 +149,10 @@ export class ChallengeSearchComponent
       .listChallenges({} as ChallengeSearchQuery)
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
-    // update input data types filter values
-    this.challengeInputDataTypeService.listChallengeInputDataTypes().subscribe(
-      (page) =>
-        (this.dropdownFilters[1].values = page.challengeInputDataTypes.map(
-          (datatype) => ({
-            value: datatype.slug,
-            label: datatype.name,
-            active: false,
-          })
-        ))
-    );
-
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (this.dropdownFilters[0].values = page.challengePlatforms.map(
+        (challengePlatformFilter.values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -141,17 +161,71 @@ export class ChallengeSearchComponent
         ))
     );
 
-    // // mock up service to query all unique organizations
-    // this.listOrganizations().subscribe(
-    //   (organizations) =>
-    //     // update input data types filter values
-    //     (this.dropdownFilters[0].values = organizations.map((org) => ({
-    //       value: org.login,
-    //       label: org.name,
-    //       avatarUrl: org.avatarUrl,
-    //       active: false,
-    //     })))
-    // );
+    // update input data type filter values
+    this.inputDataTypeSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as ChallengeInputDataTypeSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        const searchedInputDataTypes = page.challengeInputDataTypes.map(
+          (dataType) => ({
+            value: dataType.slug,
+            label: dataType.name,
+            active: false,
+          })
+        ) as FilterValue[];
+
+        challengeInputDataTypeFilter.values = union(
+          searchedInputDataTypes,
+          this.selectedInputDataTypes
+        );
+      });
+
+    // update organization filter values
+    this.orgSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.organizationService.listOrganizations({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as OrganizationSearchQuery)
+        ),
+        map((page) => page.organizations),
+        switchMap((orgs) =>
+          forkJoin({
+            orgs: of(orgs),
+            avatarUrls: forkJoinConcurrent(
+              orgs.map((org) => this.getOrganizationAvatarUrl(org)),
+              Infinity
+            ) as unknown as Observable<(Image | undefined)[]>,
+          })
+        )
+      )
+      .subscribe(({ orgs, avatarUrls }) => {
+        const searchedOrgs = orgs.map((org, index) => ({
+          value: org.id,
+          label: org.name,
+          avatarUrl: avatarUrls[index]?.url,
+          active: false,
+        })) as FilterValue[];
+
+        challengeOrganizationFilter.values = union(
+          searchedOrgs,
+          this.selectedOrgs
+        );
+      });
+
     // // mock up service to query all unique organizers
     // this.listOrganizers().subscribe(
     //   (organizers) =>
@@ -254,18 +328,37 @@ export class ChallengeSearchComponent
     }
   }
 
-  onCheckboxChange(selected: string[], queryName: string): void {
+  onCheckboxSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
   }
 
-  onDropdownChange(selected: string[], queryName: string): void {
+  onDropdownSelectionChange(
+    selected: string[] | number[],
+    queryName: string
+  ): void {
+    if (queryName === 'inputDataTypes') {
+      this.selectedOrgs = challengeInputDataTypeFilter.values.filter((value) =>
+        (selected as string[]).includes(value.value as string)
+      );
+    }
+
+    if (queryName === 'organizations') {
+      this.selectedOrgs = challengeOrganizationFilter.values.filter((value) =>
+        (selected as number[]).includes(value.value as number)
+      );
+    }
+
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });
     this.query.next(newQuery);
+  }
+
+  onDropdownSearchChange(searched: string): void {
+    this.orgSearchTerms.next(searched);
   }
 
   onSortChange(): void {
@@ -274,10 +367,6 @@ export class ChallengeSearchComponent
     });
     this.query.next(newQuery);
   }
-
-  // private listOrganizations(): Observable<Organization[]> {
-  //   return of(MOCK_ORGANIZATIONS);
-  // }
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
   //   return of(MOCK_CHALLENGE_ORGANIZERS);
@@ -295,5 +384,19 @@ export class ChallengeSearchComponent
     this._snackBar.open(message, undefined, {
       duration: 30000,
     });
+  }
+
+  private getOrganizationAvatarUrl(
+    org: Organization
+  ): Observable<Image | undefined> {
+    if (org.avatarKey && org.avatarKey.length > 0) {
+      return this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._32px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery);
+    } else {
+      return of(undefined);
+    }
   }
 }

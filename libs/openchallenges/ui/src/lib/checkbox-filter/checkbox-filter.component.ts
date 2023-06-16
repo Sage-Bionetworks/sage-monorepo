@@ -10,10 +10,10 @@ export class CheckboxFilterComponent {
   @Input() values!: FilterValue[];
   @Input() selectedValues!: string[];
   @Input() inputId!: string;
-  @Output() checkboxChange = new EventEmitter<string[]>();
+  @Output() selectionChange = new EventEmitter<string[]>();
 
   onChange(selected: string[]): void {
-    this.checkboxChange.emit(selected);
+    this.selectionChange.emit(selected);
   }
 
   formatId(str: string): string {

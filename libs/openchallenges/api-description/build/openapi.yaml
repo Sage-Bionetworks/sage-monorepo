@@ -315,6 +315,11 @@ components:
       maxLength: 30
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-challenge-platform
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       type: string
@@ -386,6 +391,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengePlatformSlug'
+        organizations:
+          description: An array of organization ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationId'
         inputDataTypes:
           description: >-
             An array of challenge input data type ids used to filter the
@@ -554,6 +564,8 @@ components:
           $ref: '#/components/schemas/ChallengeHeadline'
         description:
           $ref: '#/components/schemas/ChallengeDescription'
+        doi:
+          type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
@@ -823,6 +835,7 @@ components:
       default: original
       enum:
         - original
+        - 32px
         - 100px
         - 140px
         - 250px
@@ -931,6 +944,8 @@ components:
       type: object
       description: An organization
       properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
         name:
           type: string
           example: Example organization
@@ -965,6 +980,7 @@ components:
           type: string
           example: OC
       required:
+        - id
         - name
         - email
         - login

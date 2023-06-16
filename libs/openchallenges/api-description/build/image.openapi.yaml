@@ -49,6 +49,7 @@ components:
       default: original
       enum:
         - original
+        - 32px
         - 100px
         - 140px
         - 250px

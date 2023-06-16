@@ -20,6 +20,12 @@ export class PreviewInstance extends Construct {
         'utf8'
       ),
       vpcSecurityGroupIds: config.securityGroupIds,
+      rootBlockDevice: {
+        deleteOnTermination: true,
+        encrypted: true,
+        volumeSize: 20,
+        volumeType: 'gp2',
+      },
     });
   }
 }
