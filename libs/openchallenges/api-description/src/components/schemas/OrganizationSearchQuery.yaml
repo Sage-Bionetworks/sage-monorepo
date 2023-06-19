@@ -13,11 +13,11 @@ properties:
     format: int32
     default: 100
     minimum: 1
-  challengeContributorRoles:
-    description: An array of challenge contributor roles used to filter the results.
+  challengeContributionRoles:
+    description: An array of challenge contribution roles used to filter the results.
     type: array
     items:
-      $ref: ChallengeContributorRole.yaml
+      $ref: ChallengeContributionRole.yaml
   sort:
     $ref: OrganizationSort.yaml
   direction:
