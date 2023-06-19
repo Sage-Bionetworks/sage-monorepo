@@ -22,7 +22,5 @@ services:
         condition: service_started
       openchallenges-image-service:
         condition: service_healthy
-      # openchallenges-keycloak:
-      #   condition: service_started
       openchallenges-organization-service:
         condition: service_healthy
