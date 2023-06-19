@@ -1,3 +1,2 @@
 openchallenges-image-service:
   welcome-message: 'Welcome to the image service (local config).'
-  thumbor-host: http://localhost:8889/
