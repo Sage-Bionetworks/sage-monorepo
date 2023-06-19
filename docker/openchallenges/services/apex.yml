@@ -21,7 +21,6 @@ services:
         condition: service_started
       openchallenges-zipkin:
         condition: service_healthy
-    command: [nginx-debug, '-g', 'daemon off;']
     deploy:
       resources:
         limits:
