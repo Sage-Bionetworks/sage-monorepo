@@ -7,9 +7,9 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/apex/.env
-    volumes:
-      - ../../../apps/openchallenges/apex/nginx.conf:/etc/nginx/nginx.conf
-      - ../../../apps/openchallenges/apex/templates:/etc/nginx/templates
+    # volumes:
+    #   - ../../../apps/openchallenges/apex/nginx.conf:/etc/nginx/nginx.conf
+    #   - ../../../apps/openchallenges/apex/templates:/etc/nginx/templates
     networks:
       - openchallenges
     ports:
