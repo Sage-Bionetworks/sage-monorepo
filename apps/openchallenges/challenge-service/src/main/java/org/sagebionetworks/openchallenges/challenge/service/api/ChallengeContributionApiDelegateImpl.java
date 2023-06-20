@@ -3,8 +3,10 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeContributionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 
-public class ChallengeContributionApiDelegateImpl implements ChallengeContributionApi {
+@Component
+public class ChallengeContributionApiDelegateImpl implements ChallengeContributionApiDelegate {
 
   private final ChallengeContributionService challengeContributionService;
 
