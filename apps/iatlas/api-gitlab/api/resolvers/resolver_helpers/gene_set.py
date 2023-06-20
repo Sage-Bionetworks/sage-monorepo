@@ -64,7 +64,7 @@ def build_gene_set_request(_obj, info, name=None):
     if 'genes' in relations:
         query = query.join((gene_1, gene_set_1.genes), isouter=True)
         option_args.append(orm.contains_eager(
-            gene_set_1.genes.of_set(gene_1)))
+            gene_set_1.genes.of_type(gene_1)))
 
     query = query.order_by(gene_set_1.name, gene_set_1.display)
 
