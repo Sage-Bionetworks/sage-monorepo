@@ -14,6 +14,7 @@ from api.resolvers import (
     resolve_heritability_results,
     resolve_mutations,
     resolve_mutation_types,
+    resolve_neoantigens,
     resolve_nodes,
     resolve_rare_variant_pathway_associations,
     resolve_patients,
@@ -55,6 +56,8 @@ heritability_result_query = load_schema_from_path(
     schema_dirname + '/heritabilityResult.query.graphql')
 mutation_query = load_schema_from_path(
     schema_dirname + '/mutation.query.graphql')
+neoantigen_query = load_schema_from_path(
+    schema_dirname + '/neoantigen.query.graphql')
 node_query = load_schema_from_path(
     schema_dirname + '/node.query.graphql')
 patient_query = load_schema_from_path(
@@ -82,6 +85,7 @@ type_defs = [
     gene_type_query,
     germline_gwas_result_query,
     heritability_result_query,
+    neoantigen_query,
     mutation_query,
     node_query,
     rare_variant_pathway_association_query,
@@ -182,6 +186,7 @@ heritability_result_node = ObjectType('HeritabilityResultNode')
 heritability_result = ObjectType('HeritabilityResult')
 mutation = ObjectType('Mutation')
 mutation_type = ObjectType('MutationType')
+neoantigen = ObjectType('Neoantigen')
 node = ObjectType('Node')
 node_result = ObjectType('NodeResult')
 patient = ObjectType('Patient')
@@ -222,6 +227,7 @@ root.set_field('germlineGwasResults', resolve_germline_gwas_results)
 root.set_field('heritabilityResults', resolve_heritability_results)
 root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
+root.set_field('neoantigens', resolve_neoantigens)
 root.set_field('nodes', resolve_nodes)
 root.set_field('patients', resolve_patients)
 root.set_field('rareVariantPathwayAssociations',
@@ -254,6 +260,7 @@ schema = make_executable_schema(
         heritability_result,
         mutation,
         mutation_type,
+        neoantigen,
         node,
         node_result,
         patient,

@@ -11,6 +11,7 @@ from .germline_gwas_results_resolver import resolve_germline_gwas_results
 from .heritability_results_resolver import resolve_heritability_results
 from .mutations_resolver import resolve_mutations
 from .mutation_types_resolver import resolve_mutation_types
+from .neoantigens_resolver import resolve_neoantigens
 from .nodes_resolver import resolve_nodes
 from .patient_resolver import resolve_patients
 from .rare_variant_pathway_association_resolver import resolve_rare_variant_pathway_associations
