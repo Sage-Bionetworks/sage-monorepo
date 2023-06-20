@@ -104,6 +104,6 @@ GET {{basePath}}/challengeInputDataTypes?searchTerms=genomic
 
 GET {{basePath}}/challenges/1
 
-### Get the contributions to challenge with ID 1.
+### Get the contributions to the challenge with ID 1.
 
 GET {{basePath}}/challenges/1/contributions
