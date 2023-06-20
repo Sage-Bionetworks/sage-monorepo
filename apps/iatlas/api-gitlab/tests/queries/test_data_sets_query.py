@@ -117,8 +117,7 @@ def test_data_sets_cursor_pagination_last(client, common_query):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {
-                'last': num,
-                'before': to_cursor_hash(1000)
+                'last': num
             }
         }})
     json_data = json.loads(response.data)
