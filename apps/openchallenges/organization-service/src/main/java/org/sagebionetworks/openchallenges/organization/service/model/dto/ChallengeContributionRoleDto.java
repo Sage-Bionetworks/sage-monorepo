@@ -6,9 +6,9 @@ import java.util.*;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** The role of a challenge contributor. */
+/** The nature of a challenge contribution. */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public enum ChallengeContributorRoleDto {
+public enum ChallengeContributionRoleDto {
   CHALLENGE_ORGANIZER("challenge_organizer"),
 
   DATA_CONTRIBUTOR("data_contributor"),
@@ -17,7 +17,7 @@ public enum ChallengeContributorRoleDto {
 
   private String value;
 
-  ChallengeContributorRoleDto(String value) {
+  ChallengeContributionRoleDto(String value) {
     this.value = value;
   }
 
@@ -32,8 +32,8 @@ public enum ChallengeContributorRoleDto {
   }
 
   @JsonCreator
-  public static ChallengeContributorRoleDto fromValue(String value) {
-    for (ChallengeContributorRoleDto b : ChallengeContributorRoleDto.values()) {
+  public static ChallengeContributionRoleDto fromValue(String value) {
+    for (ChallengeContributionRoleDto b : ChallengeContributionRoleDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

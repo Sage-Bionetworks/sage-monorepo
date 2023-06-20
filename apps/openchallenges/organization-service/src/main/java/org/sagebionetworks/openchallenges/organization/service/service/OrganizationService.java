@@ -38,12 +38,10 @@ public class OrganizationService {
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<OrganizationEntity> organizationEntitiesPage =
         organizationRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
-    LOG.info("organizationEntitiesPage {}", organizationEntitiesPage);
 
     List<OrganizationDto> organizations =
         organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
-
-    LOG.info("Final orgs {}", organizations);
+    LOG.debug("Organizations {}", organizations);
 
     return OrganizationsPageDto.builder()
         .organizations(organizations)
