@@ -3,6 +3,7 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { ChallengeService } from './api/challenge.service';
+import { ChallengeContributionService } from './api/challengeContribution.service';
 import { ChallengeInputDataTypeService } from './api/challengeInputDataType.service';
 import { ChallengePlatformService } from './api/challengePlatform.service';
 import { ImageService } from './api/image.service';
