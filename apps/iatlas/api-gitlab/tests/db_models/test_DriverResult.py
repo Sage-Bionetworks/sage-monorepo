@@ -53,8 +53,6 @@ def test_DriverResult_with_relations(app, data_set, data_set_id, dr_feature, dr_
     relationships_to_join = ['data_set', 'feature', 'mutation', 'tag']
 
     query = return_driver_result_query(*relationships_to_join)
-    import logging
-    logging.warning(query)
     results = query.filter_by(dataset_id=data_set_id).filter_by(
         feature_id=dr_feature_id).filter_by(
         mutation_id=dr_mutation_id).filter_by(tag_id=dr_tag_id).limit(3).all()

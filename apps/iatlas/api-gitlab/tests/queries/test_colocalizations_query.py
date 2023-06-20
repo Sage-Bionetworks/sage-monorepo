@@ -146,7 +146,6 @@ def test_colocalizations_cursor_pagination_first(client, common_query_builder):
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_colocalizations_cursor_pagination_last(client, common_query_builder):

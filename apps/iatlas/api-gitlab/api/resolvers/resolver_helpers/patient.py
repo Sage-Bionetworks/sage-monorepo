@@ -175,14 +175,7 @@ def get_samples(id, requested, sample=None):
             append_to_order(sample_1.name)
 
         query = query.order_by(*order) if order else query
-
-        import logging
-        logger = logging.getLogger("patient response")
-        logger.info(query)
-
-        x = query.all()
-        logger.info(x)
-        return(x)
+        return query.all()
 
     return []
 

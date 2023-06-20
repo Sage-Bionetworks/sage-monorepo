@@ -84,7 +84,7 @@ def build_rare_variant_pathway_association_request(
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
     feature_core_field_mapping = {
         'display': feature_1.display.label('feature_display'),

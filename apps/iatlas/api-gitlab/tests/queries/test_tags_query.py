@@ -252,10 +252,6 @@ def test_tags_cursor_pagination_first(client, paging_query):
     page = json_data['data']['tags']
     items = page['items']
     paging = page['paging']
-    import logging
-    logger = logging.getLogger('test tag')
-    logger.info(items)
-    logger.info(paging)
 
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
@@ -387,38 +383,7 @@ def test_tags_query_with_tag_type(client, common_query, tag_type):
         assert result['type'] == tag_type
 
 
-def test_tags_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
-    response = client.post(
-        '/api',
-        json={
-            'query': samples_query,
-            'variables': {
-                'cohort': [tcga_tag_cohort_name]
-            }
-        }
-    )
-    json_data = json.loads(response.data)
-    page = json_data['data']['tags']
-    results = page['items']
-
-    assert isinstance(results, list)
-    assert len(results) > 1
-    for result in results[0:3]:
-        assert type(result['characteristics']) is str or NoneType
-        assert type(result['color']) is str or NoneType
-        assert type(result['longDisplay']) is str or NoneType
-        assert type(result['shortDisplay']) is str or NoneType
-        assert type(result['name']) is str
-        samples = result['samples']
-        assert 'sampleCount' not in result
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for sample in samples:
-            assert type(sample['name']) is str
-            assert sample['name'] in tcga_tag_cohort_samples
-
-
-def test_tags_query_with_cohort2(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
+def test_tags_query_with_cohort(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
     response = client.post(
         '/api',
         json={

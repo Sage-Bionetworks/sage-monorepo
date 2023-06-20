@@ -83,17 +83,17 @@ def build_colocalization_request(
         'plotType': colocalization_1.plot_type.label('plot_type'),
         'tissue': colocalization_1.tissue.label('tissue'),
         'spliceLoc': colocalization_1.splice_loc.label('splice_loc'),
-        'plotLink': colocalization_1.plot_link.label('plot_link')
+        'plotLink': colocalization_1.link.label('plot_link')
     }
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
     coloc_data_set_core_field_mapping = {
         'display': coloc_data_set_1.display.label('coloc_data_set_display'),
         'name': coloc_data_set_1.name.label('coloc_data_set_name'),
-        'type': coloc_data_set_1.data_set_type.label('coloc_data_set_type')
+        'type': coloc_data_set_1.dataset_type.label('coloc_data_set_type')
     }
     feature_core_field_mapping = {
         'display': feature_1.display.label('feature_display'),
@@ -104,8 +104,8 @@ def build_colocalization_request(
         'germlineModule': feature_1.germline_module.label('feature_germline_module')
     }
     gene_core_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc')
+        'entrez': gene_1.entrez_id.label('gene_entrez'),
+        'hgnc': gene_1.hgnc_id.label('gene_hgnc')
     }
     snp_core_field_mapping = {
         'rsid': snp_1.rsid.label('snp_rsid'),
@@ -158,7 +158,7 @@ def build_colocalization_request(
     if 'gene' in requested or entrez:
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
-            gene_1.id, colocalization_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+            gene_1.id, colocalization_1.gene_id, filter_column=gene_1.entrez_id, filter_list=entrez)
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=is_outer)
 

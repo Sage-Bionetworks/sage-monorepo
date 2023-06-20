@@ -1,7 +1,6 @@
 from .resolver_helpers import build_ggr_graphql_response, build_germline_gwas_result_request, germline_gwas_result_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_feature_request_fields, snp_request_fields
 
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
-import logging
 
 
 def resolve_germline_gwas_results(

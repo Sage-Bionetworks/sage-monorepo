@@ -82,8 +82,6 @@ def test_GermlineGwasResult_no_relations(app, data_set_id, ggr_feature_id, ggr_s
 
 def test_GermlineGwasResult_no_filters(app):
     query = return_germline_gwas_result_query()
-    import logging
-    logging.warning(query)
     results = query.limit(3).all()
 
     assert isinstance(results, list)

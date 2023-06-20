@@ -34,8 +34,6 @@ def test_publication_with_genes(app, publication_title_with_gene):
 def test_with_gene_sets(app, publication_title_with_gene):
     query = return_publication_query('gene_sets')
     result = query.filter_by(title=publication_title_with_gene).one_or_none()
-    import logging
-    logging.warning(query.filter_by(title=publication_title_with_gene))
 
     assert result
     assert isinstance(result.gene_sets, list)
@@ -94,9 +92,6 @@ def test_publication_with_tags(app, publication_title_with_tag):
 def test_publication_no_relations(app, publication_title_with_tag):
     query = return_publication_query()
     result = query.filter_by(title=publication_title_with_tag).one_or_none()
-    import logging
-    logging.warning(query.filter_by(title=publication_title_with_tag))
-    logging.warning(result)
 
     assert result
     assert result.genes == []

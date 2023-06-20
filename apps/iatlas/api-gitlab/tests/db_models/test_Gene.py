@@ -123,8 +123,6 @@ def test_Gene_io_target(app):
 
     query = return_gene_query('gene_pathway', 'therapy_type')
     result = query.filter_by(entrez_id=55).one_or_none()
-    import logging
-    logging.warning(result)
 
     assert type(result.gene_pathway) is str
     assert result.gene_pathway == 'Innate Immune System'

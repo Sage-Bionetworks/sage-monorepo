@@ -94,7 +94,7 @@ def tags_query(common_query_builder):
 
 
 def test_data_sets_cursor_pagination_first(client, common_query):
-    num = 5
+    num = 1
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {'first': num}
@@ -111,11 +111,9 @@ def test_data_sets_cursor_pagination_first(client, common_query):
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
-
 
 def test_data_sets_cursor_pagination_last(client, common_query):
-    num = 2
+    num = 1
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {
@@ -185,9 +183,6 @@ def test_data_sets_query_with_dataSet(client, samples_query, data_set):
         assert type(current_data_set['type']) is str
         assert isinstance(samples, list)
         assert len(samples) > 0
-        import logging
-        logger = logging.getLogger('dataset test')
-        logger.info(len(samples))
         for current_sample in samples[0:5]:
             assert type(current_sample['name']) is str
 

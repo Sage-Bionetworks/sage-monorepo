@@ -2,9 +2,6 @@ from .resolver_helpers import build_rvpa_graphql_response, build_rare_variant_pa
 
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
-import logging
-
-
 def resolve_rare_variant_pathway_associations(
         _obj, info, distinct=False, paging=None, dataSet=None, feature=None, pathway=None, maxPValue=None, minPValue=None):
 

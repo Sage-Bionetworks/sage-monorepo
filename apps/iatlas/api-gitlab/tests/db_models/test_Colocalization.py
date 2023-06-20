@@ -2,7 +2,6 @@ import pytest
 from tests import NoneType
 from decimal import Decimal
 from api.database import return_colocalization_query
-import logging
 
 
 @pytest.fixture(scope='module')

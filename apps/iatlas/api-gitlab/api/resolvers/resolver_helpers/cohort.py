@@ -1,4 +1,3 @@
-from logging import Logger
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
@@ -118,7 +117,7 @@ def get_samples(id, requested, sample_requested, tag_requested):
         }
 
         tag_core_field_mapping = {
-            'characteristics': tag_1.characteristics.label('tag_characteristics'),
+            'characteristics': tag_1.description.label('tag_characteristics'),
             'color': tag_1.color.label('tag_color'),
             'longDisplay': tag_1.long_display.label('tag_long_display'),
             'name': tag_1.name.label('tag_name'),
@@ -140,7 +139,7 @@ def get_samples(id, requested, sample_requested, tag_requested):
 
         if 'tag' in sample_requested:
             sample_tag_join_condition = build_join_condition(
-                tag_1.id, cohort_to_sample_1.tag_id)
+                tag_1.id, cohort_to_sample_1.cohorts_to_samples_tag_id)
             query = query.join(tag_1, and_(
                 *sample_tag_join_condition), isouter=True)
 
@@ -188,8 +187,8 @@ def get_genes(id, requested, gene_requested):
         gene_1 = aliased(Gene, name='g')
 
         gene_core_field_mapping = {
-            'hgnc': gene_1.hgnc.label('gene_hgnc'),
-            'entrez': gene_1.entrez.label('gene_entrez'),
+            'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
+            'entrez': gene_1.entrez_id.label('gene_entrez'),
         }
 
         core = get_selected(gene_requested, gene_core_field_mapping)
@@ -218,10 +217,9 @@ def get_mutations(id, requested, mutation_requested, mutation_gene_requested):
         cohort_to_mutation_1 = aliased(CohortToMutation, name='ctm')
         mutation_1 = aliased(Mutation, name='m')
         gene_1 = aliased(Gene, name='g')
-        mutation_code_1 = aliased(MutationCode, name='mc')
 
         mutation_core_field_mapping = {
-            'mutationCode': mutation_code_1.code.label('mutation_code')
+            'mutationCode': mutation_1.mutation_code.label('mutation_code')
         }
 
         mutation_gene_core_field_mapping = {
@@ -242,13 +240,6 @@ def get_mutations(id, requested, mutation_requested, mutation_gene_requested):
 
         query = query.join(mutation_1, and_(
             *mutation_join_condition), isouter=False)
-
-        if 'mutationCode' in mutation_requested:
-            mutation_code_join_condition = build_join_condition(
-                mutation_1.mutation_code_id, mutation_code_1.id)
-
-            query = query.join(mutation_code_1, and_(
-                *mutation_code_join_condition), isouter=False)
 
         if 'gene' in mutation_requested:
             mutation_gene_join_condition = build_join_condition(

@@ -1,7 +1,6 @@
 from .resolver_helpers import build_coloc_graphql_response, build_colocalization_request, colocalization_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_feature_request_fields, simple_gene_request_fields, snp_request_fields
 
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
-import logging
 
 
 def resolve_colocalizations(

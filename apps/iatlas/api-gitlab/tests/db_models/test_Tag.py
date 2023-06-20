@@ -60,8 +60,6 @@ def test_Tag_with_order(app, tag_with_order, tag_order):
 def test_Tag_with_copy_number_results(app, tag_name_with_copy_number_results):
     query = return_tag_query('copy_number_results')
     result = query.filter_by(name=tag_name_with_copy_number_results).one_or_none()
-    import logging
-    logging.warning(query.filter_by(name=tag_name_with_copy_number_results))
 
     assert result
     assert isinstance(result.copy_number_results, list)

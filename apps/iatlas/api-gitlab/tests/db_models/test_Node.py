@@ -98,9 +98,6 @@ def test_Node_with_tags(app, node_gene_id):
 def test_Node_no_relations(app, node_gene_id):
     query = return_node_query()
     results = query.filter_by(node_gene_id=node_gene_id).limit(3).all()
-    import logging
-    logging.warning(query.filter_by(node_gene_id=node_gene_id))
-    logging.warning(node_gene_id)
 
     assert isinstance(results, list)
     for result in results:

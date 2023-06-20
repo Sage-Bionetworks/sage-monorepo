@@ -14,6 +14,9 @@ class CohortToSample(Base):
     sample_id = db.Column(db.Integer, db.ForeignKey(
         'samples.id'), primary_key=True)
 
+    cohorts_to_samples_tag_id = db.Column(db.Integer, db.ForeignKey(
+        'tags.id'), primary_key=True)
+
     cohort = db.relationship('Cohort', backref=orm.backref(
         'cohort_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')
 

@@ -38,8 +38,6 @@ def test_gene_set_with_gene_set_assoc(app, gene_set):
     assert len(result.gene_set_assoc) > 0
     # Don't need to iterate through every result.
     for gene_set_rel in result.gene_set_assoc[0:2]:
-        import logging
-        logging.warning(gene_set_rel)
         assert gene_set_rel.gene_set_id == result.id
 
 

@@ -125,19 +125,6 @@ def tag_i2d(test_db, tag2):
 
 
 @ pytest.fixture(scope='session')
-def chosen_feature():
-    return 'Det_Ratio'
-
-
-@ pytest.fixture(scope='session')
-def chosen_feature_id(test_db, chosen_feature):
-    from api.db_models import Feature
-    (id, ) = test_db.session.query(Feature.id).filter_by(
-        name=chosen_feature).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
 def feature_class():
     return 'TIL Map Characteristic'
 
@@ -146,22 +133,12 @@ def feature_class():
 def feature_class2():
     return 'DNA Alteration'
 
-
 @ pytest.fixture(scope='session')
-def feature_class2_id(test_db, feature_class2):
-    from api.db_models import FeatureClass
-    (id, ) = test_db.session.query(FeatureClass.id).filter_by(
-        name=feature_class2).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
-def feature_class2_feature_names(test_db, feature_class2_id):
+def feature_class2_feature_names(test_db, feature_class2):
     from api.db_models import Feature
-    res = test_db.session.query(Feature.name).filter_by(
-        class_id=feature_class2_id).all()
-    features = [feature[0] for feature in res]
-    return features
+    names = test_db.session.query(Feature.name).filter_by(feature_class=feature_class2).all()
+    names = [name[0] for name in names]
+    return names
 
 
 @ pytest.fixture(scope='session')
@@ -342,9 +319,6 @@ def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
     response = client.post('/api', json={'query': cohort_query, 'variables': {
         'cohort': [pcawg_cohort_name]
     }})
-    import logging
-    logger = logging.getLogger("feature response")
-    logger.info(pcawg_cohort_name)
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     cohort = page['items'][0]

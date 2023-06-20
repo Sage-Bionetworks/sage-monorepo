@@ -10,6 +10,7 @@ from .genes_resolver import resolve_genes
 from .germline_gwas_results_resolver import resolve_germline_gwas_results
 from .heritability_results_resolver import resolve_heritability_results
 from .mutations_resolver import resolve_mutations
+from .mutation_types_resolver import resolve_mutation_types
 from .nodes_resolver import resolve_nodes
 from .patient_resolver import resolve_patients
 from .rare_variant_pathway_association_resolver import resolve_rare_variant_pathway_associations
@@ -18,3 +19,4 @@ from .slide_resolver import resolve_slides
 from .snp_resolver import resolve_snps
 from .tags_resolver import resolve_tags
 from .test_resolver import resolve_test
+

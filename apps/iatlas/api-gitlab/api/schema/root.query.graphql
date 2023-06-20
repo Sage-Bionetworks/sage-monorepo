@@ -200,22 +200,6 @@ type Query {
   ): Feature!
 
   """
-  The "geneFamilies" query
-  """
-  geneFamilies(
-    "A list of names of the gene families to look up."
-    name: [String!]
-  ): [GeneFamily!]
-
-  """
-  The "geneTypes" query
-  """
-  geneFunctions(
-    "A list of names of the gene functions to look up."
-    name: [String!]
-  ): [GeneFunction!]
-
-  """
   The "genes" query
 
   If no arguments are passed, this will return all genes.
@@ -294,22 +278,6 @@ type Query {
     "Immune traits clustered based on their Pearson correlation coefficients, described by Sayaman et al, 2021."
     cluster: [String!]
   ): HeritabilityResult!
-
-  """
-  The "ImmuneCheckpoints" query
-  """
-  immuneCheckpoints(
-    "A list of names of the immune checkpoints to look up."
-    name: [String!]
-  ): [ImmuneCheckpoint!]
-
-  """
-  The "methodTags" query
-  """
-  methodTags(
-    "A list of names of the method tags to look up."
-    name: [String!]
-  ): [MethodTag!]!
 
   """
   The "mutations" type
@@ -419,14 +387,6 @@ type Query {
   ): Patient!
 
   """
-  The "Pathways" query
-  """
-  pathways(
-    "A list of names of the pathways to look up."
-    name: [String!]
-  ): [Pathway!]
-
-   """
   The "rareVariantPathwayAssociation" query
 
   If no arguments are passed, this will return all rare variant pathway associations.
@@ -547,14 +507,6 @@ type Query {
   ): Snp!
 
   """
-  The "superCategories" query
-  """
-  superCategories(
-    "A list of names of the super categories to look up."
-    name: [String!]
-  ): [SuperCategory!]!
-
-  """
   The "tags" query
   """
   tags(
@@ -575,14 +527,6 @@ type Query {
     "A list of tag types: 'group' or 'parent_group' or 'meta_group' or 'network'"
     type: [TagTypeEnum!]
   ): Tag!
-
-  """
-  The "therapyTypes" query\
-  """
-  therapyTypes(
-    "A list of names of the therapy types to look up."
-    name: [String!]
-  ): [TherapyType!]!
 
   """
   A simple test query that is independent of the database.
