@@ -1,0 +1,15 @@
+type: object
+description: A page of challenge challenge contributions.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      challengeContributions:
+        description: A list of challenge contributions.
+        type: array
+        items:
+          $ref: ChallengeContribution.yaml
+    required:
+      - challengeContributions
+x-java-class-annotations:
+  - '@lombok.Builder'

@@ -60,6 +60,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /challenges/{challengeId}/contributions:
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: List challenge contributions
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
     get:
       tags:
@@ -502,6 +522,44 @@ components:
       required:
         - title
         - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+    ChallengeContribution:
+      type: object
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
+    ChallengeContributionsPage:
+      type: object
+      description: A page of challenge challenge contributions.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengeContributions:
+              description: A list of challenge contributions.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengeContribution'
+          required:
+            - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeInputDataTypeSort:

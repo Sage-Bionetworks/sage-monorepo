@@ -1,4 +1,4 @@
-description: The role of a challenge contributor.
+description: The nature of a challenge contribution.
 type: string
 enum:
   - challenge_organizer
