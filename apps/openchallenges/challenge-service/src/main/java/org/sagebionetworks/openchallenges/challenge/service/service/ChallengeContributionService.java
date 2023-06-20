@@ -22,12 +22,10 @@ public class ChallengeContributionService {
 
   public ChallengeContributionsPageDto listChallengeContributions(Long challengeId) {
 
-    LOG.info("listChallengeContributions {}", challengeId);
-
     List<ChallengeContributionEntity> entities =
-        challengeContributionRepository.findAllByChallengeId(challengeId);
+        challengeContributionRepository.findAllByChallenge_id(challengeId);
 
-    LOG.info("entities {}", entities);
+    LOG.info("entities {}", entities.size());
     return ChallengeContributionsPageDto.builder().build();
   }
 }
