@@ -41,12 +41,16 @@ npm install -g @devcontainers/cli@0.25.2
 # Start the OC stack inside the Sage monorepo devcontainer
 sudo -i -u ubuntu bash << EOF
 cd ~
-git clone --filter=blob:none https://github.com/Sage-Bionetworks/sage-monorepo.git
-git reset --hard 3563aac
+git clone https://github.com/Sage-Bionetworks/sage-monorepo.git
+cd sage-monorepo
+git reset --hard 0deb92f
+cd ..
 
 devcontainer up --workspace-folder sage-monorepo
 devcontainer exec --workspace-folder sage-monorepo bash -c \
   ". ./dev-env.sh \
-  && workspace-install"
+  && workspace-install \
+  && ./tools/switch-devcontainer-to-docker-outside-of-docker.sh \
+  && openchallenges-build-images"
 EOF
 
