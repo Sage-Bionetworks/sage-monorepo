@@ -255,8 +255,8 @@ export class ChallengeSearchComponent
         pageSize: params['pageSize'] || this.pageSize,
         sort: params['sort'] || this.sortedBy,
         searchTerms: params['searchTerms'] || undefined,
-        minStartDate: params['minStartDate'] || this.selectedYear?.start,
-        maxStartDate: params['maxStartDate'] || this.selectedYear?.end,
+        minStartDate: params['minStartDate'] || undefined,
+        maxStartDate: params['maxStartDate'] || undefined,
         status: params['status'] || undefined,
         submissionTypes: params['submissionTypes'] || undefined,
         incentives: params['incentives'] || undefined,
@@ -265,6 +265,13 @@ export class ChallengeSearchComponent
       } as ChallengeSearchQuery;
 
       this.query.next(urlQuery);
+
+      // updating year checkbox not working for some reasons
+      this.selectedYear = {
+        start: urlQuery.minStartDate as string,
+        end: urlQuery.maxStartDate as string,
+      } as DateRange;
+      this.sortedBy = urlQuery.sort as string;
     });
   }
 
