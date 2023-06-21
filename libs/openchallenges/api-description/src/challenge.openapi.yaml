@@ -24,6 +24,8 @@ paths:
     $ref: paths/challenges.yaml
   /challenges/{challengeId}:
     $ref: paths/challenges/@{challengeId}.yaml
+  /challenges/{challengeId}/contributions:
+    $ref: paths/challenges/@{challengeId}/contributions.yaml
   /challengeInputDataTypes:
     $ref: paths/challengeInputDataTypes.yaml
   /challengePlatforms:
