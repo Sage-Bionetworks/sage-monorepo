@@ -13,7 +13,7 @@ def test_gene_types_query_with_passed_gene_type(client, gene_type):
     query = """query GeneTypes($name: [String!]) {
         geneTypes(name: $name) {
             display
-            genes { entrez }
+            genes { entrez, hgnc }
             name
         }
     }"""

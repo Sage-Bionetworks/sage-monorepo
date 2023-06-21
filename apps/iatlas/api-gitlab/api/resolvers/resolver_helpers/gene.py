@@ -55,8 +55,8 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
                               cohort, sample, max_rna_seq_expr, min_rna_seq_expr)
         return {
             'id': id,
-            'entrez': get_value(gene, prefix + 'entrez'),
-            'hgnc': get_value(gene, prefix + 'hgnc'),
+            'entrez': get_value(gene, prefix + 'entrez') or get_value(gene, prefix + 'entrez_id'),
+            'hgnc': get_value(gene, prefix + 'hgnc') or get_value(gene, prefix + 'hgnc_id'),
             'description': get_value(gene, prefix + 'description'),
             'friendlyName': get_value(gene, prefix + 'friendly_name'),
             'ioLandscapeName': get_value(gene, prefix + 'io_landscape_name'),
@@ -78,7 +78,7 @@ def build_pub_gene_gene_type_join_condition(gene_ids, gene_type, pub_gene_gene_t
         pub_gene_gene_type_model.publication_id, pub_model.id, pub_gene_gene_type_model.gene_id, gene_ids)
 
     if gene_type:
-        gene_type_1 = aliased(GeneType, name='gt')
+        gene_type_1 = aliased(GeneSet, name='gt')
         gene_type_subquery = db.session.query(gene_type_1.id).filter(
             gene_type_1.name.in_(gene_type))
         join_condition.append(
@@ -157,7 +157,8 @@ def build_gene_request(requested, distinct=False, paging=None, entrez=None, gene
         query = query.join(
             gene_to_type_1, and_(
                 gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.gene_set_id.in_(
-                    sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type))
+                    sess.query(gene_type_1.id).filter(
+                        gene_type_1.name.in_(gene_type))
                 )
             )
         )
