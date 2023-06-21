@@ -10,10 +10,10 @@
 # References:
 # - https://github.com/devcontainers/features/tree/main/src/docker-outside-of-docker
 
-DEV_CONTAINER_DEFINITION_FILE="$WORKSPACE_DIR/.devcontainer/devcontainer.json"
+DEV_CONTAINER_DEFINITION_FILE=".devcontainer/devcontainer.json"
 
 # Remove the feature "docker-in-docker" from the devcontainer definition
-cat <<< $(jq 'delpaths([paths | select(.[0] == "features" and 
+cat <<< $(jq 'delpaths([paths | select(.[0] == "features" and
     (.[1] | tostring | startswith("ghcr.io/devcontainers/features/docker-in-docker")))])' \
   $DEV_CONTAINER_DEFINITION_FILE) \
   > $DEV_CONTAINER_DEFINITION_FILE
