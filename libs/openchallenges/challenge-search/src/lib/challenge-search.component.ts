@@ -237,22 +237,31 @@ export class ChallengeSearchComponent
     //     })))
     // );
 
-    const defaultQuery: ChallengeSearchQuery = {
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-      searchTerms: this.searchTermValue,
-      sort: this.sortedBy,
-      minStartDate: this.selectedYear?.start || undefined,
-      maxStartDate: this.selectedYear?.end || undefined,
-    } as ChallengeSearchQuery;
+    // const defaultQuery: ChallengeSearchQuery = {
+    //   pageNumber: this.pageNumber,
+    //   pageSize: this.pageSize,
+    //   searchTerms: this.searchTermValue,
+    //   sort: this.sortedBy,
+    //   minStartDate: this.selectedYear?.start || undefined,
+    //   maxStartDate: this.selectedYear?.end || undefined,
+    // } as ChallengeSearchQuery;
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      // only support querying by searchTerm from query url for now
-      if (params['searchTerms']) {
-        this.searchTermValue = params['searchTerms'];
-        defaultQuery['searchTerms'] = params['searchTerms'];
-      }
-      this.query.next(defaultQuery);
+      const urlQuery = {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sort: this.sortedBy,
+        searchTerms: params['searchTerms'] || undefined,
+        minStartDate: params['minStartDate'] || undefined,
+        maxStartDate: params['maxStartDate'] || undefined,
+        status: params['status'] || undefined,
+        submissionTypes: params['submissionTypes'] || undefined,
+        incentives: params['incentives'] || undefined,
+        inputDataTypes: params['inputDataTypes'] || undefined,
+        organizations: params['organizations'] || undefined,
+      } as ChallengeSearchQuery;
+
+      this.query.next(urlQuery);
     });
   }
 
@@ -304,35 +313,58 @@ export class ChallengeSearchComponent
     this.isCustomYear = (this.selectedYear as string) === 'custom';
     const yearRange = this.selectedYear;
     // update query with new year range
-    const newQuery = assign(this.query.getValue(), {
-      minStartDate: yearRange ? yearRange.start : undefined,
-      maxStartDate: yearRange ? yearRange.end : undefined,
+    // const newQuery = assign(this.query.getValue(), {
+    //   minStartDate: yearRange ? yearRange.start : undefined,
+    //   maxStartDate: yearRange ? yearRange.end : undefined,
+    // });
+    // this.query.next(newQuery);
+    this.router.navigate([], {
+      queryParams: {
+        minStartDate: yearRange ? yearRange.start : undefined,
+        maxStartDate: yearRange ? yearRange.end : undefined,
+      },
     });
-    this.query.next(newQuery);
   }
 
   onCalendarChange(): void {
     this.isCustomYear = true;
     if (this.calendar) {
-      const newQuery = assign(this.query.getValue(), {
-        minStartDate: this.datepipe.transform(
-          this.calendar.value[0],
-          'yyyy-MM-dd'
-        ),
-        maxStartDate: this.datepipe.transform(
-          this.calendar.value[1],
-          'yyyy-MM-dd'
-        ),
+      // const newQuery = assign(this.query.getValue(), {
+      //   minStartDate: this.datepipe.transform(
+      //     this.calendar.value[0],
+      //     'yyyy-MM-dd'
+      //   ),
+      //   maxStartDate: this.datepipe.transform(
+      //     this.calendar.value[1],
+      //     'yyyy-MM-dd'
+      //   ),
+      // });
+      // this.query.next(newQuery);
+      this.router.navigate([], {
+        queryParams: {
+          minStartDate: this.datepipe.transform(
+            this.calendar.value[0],
+            'yyyy-MM-dd'
+          ),
+          maxStartDate: this.datepipe.transform(
+            this.calendar.value[1],
+            'yyyy-MM-dd'
+          ),
+        },
       });
-      this.query.next(newQuery);
     }
   }
 
   onCheckboxSelectionChange(selected: string[], queryName: string): void {
-    const newQuery = assign(this.query.getValue(), {
-      [queryName]: selected,
+    // const newQuery = assign(this.query.getValue(), {
+    //   [queryName]: selected,
+    // });
+    // this.query.next(newQuery);
+    this.router.navigate([], {
+      queryParams: {
+        [queryName]: selected,
+      },
     });
-    this.query.next(newQuery);
   }
 
   onDropdownSelectionChange(
@@ -351,10 +383,15 @@ export class ChallengeSearchComponent
       );
     }
 
-    const newQuery = assign(this.query.getValue(), {
-      [queryName]: selected,
+    this.router.navigate([], {
+      queryParams: {
+        [queryName]: selected,
+      },
     });
-    this.query.next(newQuery);
+    // const newQuery = assign(this.query.getValue(), {
+    //   [queryName]: selected,
+    // });
+    // this.query.next(newQuery);
   }
 
   onDropdownSearchChange(searched: string): void {
@@ -362,10 +399,15 @@ export class ChallengeSearchComponent
   }
 
   onSortChange(): void {
-    const newQuery = assign(this.query.getValue(), {
-      sort: this.sortedBy,
+    // const newQuery = assign(this.query.getValue(), {
+    //   sort: this.sortedBy,
+    // });
+    // this.query.next(newQuery);
+    this.router.navigate([], {
+      queryParams: {
+        sort: this.sortedBy,
+      },
     });
-    this.query.next(newQuery);
   }
 
   // private listOrganizers(): Observable<ChallengeOrganizer[]> {
