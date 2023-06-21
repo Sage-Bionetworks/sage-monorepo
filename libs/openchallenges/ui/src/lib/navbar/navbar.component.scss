@@ -1,6 +1,11 @@
 @use 'libs/openchallenges/styles/src/lib/constants';
 
 .sage-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
   height: constants.$navbar-height;
   display: flex;
   flex-wrap: wrap;
@@ -24,13 +29,13 @@
   vertical-align: middle;
 }
 
-@media only screen and (max-width: 855px) {
+@media only screen and (max-width: constants.$lg-breakpoint) {
   .navbar-item {
     width: 100%;
     align-self: center;
   }
   .sage-navbar {
-    height: 300px;
+    height: constants.$navbar-height-tall;
   }
   .flex-spacer {
     flex-grow: 0;

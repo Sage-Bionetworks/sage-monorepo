@@ -9,4 +9,6 @@ export interface Filter {
   values: FilterValue[];
   /* Whether this panel of filter is collapsed. */
   collapsed: boolean;
+  /* Whether to show the avatar of filter value (now only applicable to dropdown filter). */
+  showAvatar?: boolean;
 }

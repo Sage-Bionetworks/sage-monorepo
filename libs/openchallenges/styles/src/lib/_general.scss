@@ -1,8 +1,10 @@
 @use 'libs/openchallenges/styles/src/lib/constants';
 
-html,
+html {
+  margin-top: constants.$navbar-height;
+}
 body {
-  height: 100vh;
+  max-height: 100vh;
   margin: 0;
 }
 em {
@@ -366,5 +368,10 @@ table {
   }
   .profile-sidenav {
     max-width: 320px;
+  }
+}
+@media only screen and (max-width: constants.$lg-breakpoint) {
+  html {
+    margin-top: constants.$navbar-height-tall;
   }
 }

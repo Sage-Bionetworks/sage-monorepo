@@ -18,6 +18,7 @@ export const challengeStartYearRangeFilter: Filter = {
   collapsed: false,
 };
 
+// checkbox filters
 export const challengeStatusFilter: Filter = {
   query: 'status',
   label: 'Status',
@@ -53,11 +54,13 @@ export const challengePlatformFilter: Filter = {
   collapsed: true,
 };
 
+// dropdown filters
 export const challengeInputDataTypeFilter: Filter = {
   query: 'inputDataTypes',
   label: 'Input Data Type',
   values: challengeInputDataTypeFilterValues,
-  collapsed: true,
+  collapsed: false,
+  showAvatar: false,
 };
 
 export const challengeOrganizationFilter: Filter = {
@@ -65,6 +68,7 @@ export const challengeOrganizationFilter: Filter = {
   label: 'Organization',
   values: challengeOrganizationFilterValues,
   collapsed: true,
+  showAvatar: true,
 };
 
 export const challengeOrganizaterFilter: Filter = {
@@ -72,4 +76,5 @@ export const challengeOrganizaterFilter: Filter = {
   label: 'Organizer',
   values: challengeOrganizerFilterValues,
   collapsed: true,
+  showAvatar: true,
 };

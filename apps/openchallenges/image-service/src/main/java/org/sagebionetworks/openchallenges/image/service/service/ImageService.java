@@ -56,6 +56,8 @@ public class ImageService {
     // we can't use switch here because height may be null
     if (height == ImageHeightDto.ORIGINAL) {
       return null;
+    } else if (height == ImageHeightDto._32PX) {
+      return 32;
     } else if (height == ImageHeightDto._100PX) {
       return 100;
     } else if (height == ImageHeightDto._140PX) {

@@ -116,6 +116,10 @@
       "label": "schematic-notebook",
       "onAutoForward": "silent"
     },
+    "8000": {
+      "label": "openchallenges-reverse-proxy",
+      "onAutoForward": "silent"
+    },
     "8010": {
       "label": "openchallenges-api-docs",
       "onAutoForward": "silent"
