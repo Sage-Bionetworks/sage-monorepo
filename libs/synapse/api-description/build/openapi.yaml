@@ -6,166 +6,18 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
-    ProjectId:
-      description: A Synapse project ID.
-      type: string
-      example: syn26251192
-    PageMetadata:
+    ChallengePagedResults:
+      title: ChallengePagedResults
       type: object
-      description: The metadata of a page.
       properties:
-        number:
-          description: The page number.
+        totalNumberOfResults:
           type: integer
-          format: int32
-          example: 99
-        size:
-          description: The number of items in a single page.
-          type: integer
-          format: int32
-          example: 99
-        totalElements:
-          description: Total number of elements in the result set.
-          type: integer
-          format: int64
-          example: 99
-        totalPages:
-          description: Total number of pages in the result set.
-          type: integer
-          format: int32
-          example: 99
-        hasNext:
-          description: Returns if there is a next page.
-          type: boolean
-          example: true
-        hasPrevious:
-          description: Returns if there is a previous page.
-          type: boolean
-          example: true
-      required:
-        - number
-        - size
-        - totalElements
-        - totalPages
-        - hasNext
-        - hasPrevious
-    Dataset:
-      type: object
-      description: A dataset.
-      properties:
-        name:
-          type: string
-          description: The name of the dataset.
-          example: Example dataset
-      required:
-        - name
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    DatasetsPage:
-      type: object
-      description: A page of datasets.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            datasets:
-              description: A list of datasets.
-              type: array
-              items:
-                $ref: '#/components/schemas/Dataset'
-          required:
-            - datasets
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    AssetView:
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
-      type: string
-      example: syn23643253
-    Manifest:
-      description: A manifest ID object
-      type: string
-      example: syn26251389
-    ManifestsPage:
-      type: object
-      description: A page of manifests.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            manifests:
-              description: A list of manifests.
-              type: array
-              items:
-                $ref: '#/components/schemas/Manifest'
-          required:
-            - manifests
-      x-java-class-annotations:
-        - '@lombok.Builder'
-  parameters:
-    projectId:
-      name: projectId
-      in: path
-      description: The Synapse ID of a storage project.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ProjectId'
-    assetView:
-      name: assetView
-      in: path
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-      required: true
-      schema:
-        $ref: '#/components/schemas/AssetView'
-  responses:
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    BadRequest:
-      description: Invalid request
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
+          description: The total number of results
+      description: List the Challenges for which the given participant is registered. To be in the returned list the caller must have READ permission on the project associated with the Challenge.
 security:
   - bearerAuth: []
 info:
-  title: Schematic REST API
+  title: Synapse REST API
   version: 0.1.0
   license:
     name: Apache 2.0
@@ -178,51 +30,47 @@ info:
 servers:
   - url: http://localhost/api/v1
 tags:
-  - name: Storage
-    description: Operations about storages.
+  - name: Challenge
+    description: Operations about challenges.
 paths:
-  /storages/projects/{projectId}/datasets:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
+  /challenges:
     get:
       tags:
-        - Storage
-      summary: Gets all datasets in folder under a given storage project that the current user has access to.
-      description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: listStorageProjectDatasets
+        - Challenge
+      summary: List the Challenges for which the given participant is registered.
+      description: |
+        List the Challenges for which the given participant is registered.
+        To be in the returned list the caller must have READ permission on the
+        project associated with the Challenge.
+      operationId: listChallengesForParticipant
+      parameters:
+        - name: participantId
+          in: query
+          description: Synapse user id
+          required: true
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Maximum number of results returned
+          required: false
+          schema:
+            type: integer
+            default: 10
+            minimum: 10
+            maximum: 100
+        - name: offset
+          in: query
+          description: Index of the first result that must be returned
+          required: false
+          schema:
+            type: integer
+            default: 0
+            minimum: 0
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DatasetsPage'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetView'
-    get:
-      tags:
-        - Storage
-      summary: Gets all manifests in a project folder that users have access to
-      description: Gets all manifests in a project folder that the current user has access to.
-      operationId: listStorageProjectManifests
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ManifestsPage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+                $ref: '#/components/schemas/ChallengePagedResults'
