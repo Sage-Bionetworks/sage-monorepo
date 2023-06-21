@@ -29,28 +29,40 @@ usermod -a --groups docker $user
 # Run Nginx server to test HTTP traffic (TODO: to remove when deploying the OC stack)
 # docker run -it --rm -d -p 8080:80 --name web nginx
 
-# Deploy the OpenChallenges stack from its source code (main)
-
-# Install git and Node.js
+# Install git, jq and Node.js
 curl -sL https://deb.nodesource.com/setup_18.x | bash -
-apt install -y git nodejs gcc g++ make
+apt install -y git jq nodejs gcc g++ make
 
 # Install devcontainer CLI
 npm install -g @devcontainers/cli@0.25.2
 
-# Start the OC stack inside the Sage monorepo devcontainer
+# Deploy the stack from its source.
 sudo -i -u ubuntu bash << EOF
 cd ~
-git clone https://github.com/Sage-Bionetworks/sage-monorepo.git
+
+# Clone the repository and checkout the commit specified
+git clone --filter=blob:none --no-checkout https://github.com/Sage-Bionetworks/sage-monorepo.git
 cd sage-monorepo
-git reset --hard 0deb92f
+git checkout 45fdf04c406d6f24cfdd832ea19bbf16312ffd19
+
+# So that the images built inside the dev container are available on the host (i.e. outside the dev
+# container)
+./tools/switch-devcontainer-to-docker-outside-of-docker.sh
+
+# Step outside of the repository
 cd ..
 
+# Start the dev container
 devcontainer up --workspace-folder sage-monorepo
+
+# Build the images
 devcontainer exec --workspace-folder sage-monorepo bash -c \
   ". ./dev-env.sh \
   && workspace-install \
   && ./tools/switch-devcontainer-to-docker-outside-of-docker.sh \
   && openchallenges-build-images"
+
+# Remove the dev container
+docker rm -f sage_devcontainer
 EOF
 
