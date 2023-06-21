@@ -55,7 +55,10 @@ import {
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-import { assign, union } from 'lodash';
+import {
+  // assign,
+  union,
+} from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -248,12 +251,12 @@ export class ChallengeSearchComponent
 
     this.activatedRoute.queryParams.subscribe((params) => {
       const urlQuery = {
-        pageNumber: this.pageNumber,
-        pageSize: this.pageSize,
-        sort: this.sortedBy,
+        pageNumber: params['pageNumber'] || this.pageNumber,
+        pageSize: params['pageSize'] || this.pageSize,
+        sort: params['sort'] || this.sortedBy,
         searchTerms: params['searchTerms'] || undefined,
-        minStartDate: params['minStartDate'] || undefined,
-        maxStartDate: params['maxStartDate'] || undefined,
+        minStartDate: params['minStartDate'] || this.selectedYear?.start,
+        maxStartDate: params['maxStartDate'] || this.selectedYear?.end,
         status: params['status'] || undefined,
         submissionTypes: params['submissionTypes'] || undefined,
         incentives: params['incentives'] || undefined,
@@ -415,11 +418,17 @@ export class ChallengeSearchComponent
   // }
 
   onPageChange(event: any) {
-    const newQuery = assign(this.query.getValue(), {
-      pageNumber: event.page,
-      pageSize: event.rows,
+    // const newQuery = assign(this.query.getValue(), {
+    //   pageNumber: event.page,
+    //   pageSize: event.rows,
+    // });
+    // this.query.next(newQuery);
+    this.router.navigate([], {
+      queryParams: {
+        pageNumber: event.page,
+        pageSize: event.rows,
+      },
     });
-    this.query.next(newQuery);
   }
 
   openSnackBar(message: string) {
