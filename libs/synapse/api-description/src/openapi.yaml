@@ -25,5 +25,5 @@ tags:
   - name: Challenge
     description: Operations about challenges.
 paths:
-  /challenges:
-    $ref: paths/challenges.yaml
+  /challenge:
+    $ref: paths/challenge.yaml

@@ -33,7 +33,7 @@ tags:
   - name: Challenge
     description: Operations about challenges.
 paths:
-  /challenges:
+  /challenge:
     get:
       tags:
         - Challenge
