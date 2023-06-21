@@ -146,7 +146,6 @@ def test_heritabilityResults_cursor_pagination_last(client, common_query_builder
         '/api', json={'query': query, 'variables': {
             'paging': {
                 'last': num,
-                'before': to_cursor_hash(1000)
             }
         }})
     json_data = json.loads(response.data)

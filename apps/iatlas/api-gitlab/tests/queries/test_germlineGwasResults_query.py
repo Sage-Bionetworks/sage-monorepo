@@ -4,6 +4,7 @@ from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.database import return_germline_gwas_result_query
 
+
 @pytest.fixture(scope='module')
 def test_ggr():
     return {
@@ -160,7 +161,6 @@ def test_germlineGwasResults_cursor_pagination_last(client, common_query_builder
         '/api', json={'query': query, 'variables': {
             'paging': {
                 'last': num,
-                'before': to_cursor_hash(1000)
             }
         }})
     json_data = json.loads(response.data)
