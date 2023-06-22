@@ -140,6 +140,84 @@ Connect to the preview instance from the bastion:
 ssh -i ~/.ssh/openchallenges-ec2 ubuntu@<preview instance private ip>
 ```
 
+### Check that the container images are available
+
+The images are built using the dev container shown below. This container is then automatically
+removed once the images have been built. The example below shows that the container is still
+running and that more time is needed to build the images.
+
+```console
+$ docker ps --format 'table {{.Names}}\t{{.Status}}'
+sage_devcontainer   Up 14 minutes
+```
+
+### Configure the OC containers
+
+The following configuration must be changed in the private GitHub repo that hosts the remote config
+files.
+
+- `openchallenges-image-service-development.yml`
+  - Set `openchallenges-image-service.thumbor-host` to `<alb_dns_name>/img/`
+
+The config files of the stack components (`.env`) have been generated during the creation of the
+instance from their example config files (`.env.example`). The config of the following components
+need to be updated before deploying the stack with Docker Compose.
+
+- `apps/openchallenges/app/.env`
+  - Set `API_URL` to `<alb_dns_name>/api/v1`
+- `apps/openchallenges/config-server/.env`
+  - Set `GIT_DEFAULT_LABEL` to `private-preview` or any other branches that includes the config
+    needed
+  - Set `GIT_USERNAME` and `GIT_TOKEN` with credentials that give the config server read access to
+    the GitHub repo specified in `GIT_URI`
+- `apps/openchallenges/thumbor/.env`
+  - Use the config example `.env.example.aws`
+  - Set `AWS_LOADER_BUCKET_NAME` to the name of the S3 bucket
+  - Set `AWS_LOADER_S3_ACCESS_KEY_ID` and `AWS_LOADER_S3_SECRET_ACCESS_KEY` to give Thumbor read
+    access to the S3 bucket
+  - Review the other parameters, e.g. `AWS_LOADER_REGION_NAME` and `AWS_LOADER_S3_ENDPOINT_URL` that
+    depends on the region where the S3 bucket live
+
+### Deploy the OC containers
+
+The following requirements applies when running Elasticsearch in Docker in production.
+
+```console
+sudo sysctl -w vm.max_map_count=262144
+```
+
+Step into the sage-monorepo folder.
+
+```console
+cd ~/sage-monorepo
+```
+
+Run the command below to start the OC containers.
+
+```console
+$ ./docker/openchallenges/serve-detach.sh openchallenges-apex
+[+] Building 0.0s (0/0)                                                                                                
+[+] Running 15/15
+ ✔ Container openchallenges-zipkin                Healthy                                                        67.0s 
+ ✔ Container openchallenges-elasticsearch-node-3  Healthy                                                         0.5s 
+ ✔ Container openchallenges-mariadb               Healthy                                                         1.5s 
+ ✔ Container openchallenges-vault                 Healthy                                                         0.5s 
+ ✔ Container openchallenges-config-server         Healthy                                                         1.5s 
+ ✔ Container openchallenges-service-registry      Healthy                                                         1.5s 
+ ✔ Container openchallenges-thumbor               Healthy                                                         1.5s 
+ ✔ Container openchallenges-api-gateway           Healthy                                                        67.0s 
+ ✔ Container openchallenges-image-service         Healthy                                                        22.3s 
+ ✔ Container openchallenges-elasticsearch-node-2  Healthy                                                         0.5s 
+ ✔ Container openchallenges-elasticsearch         Healthy                                                        20.5s 
+ ✔ Container openchallenges-challenge-service     Started                                                         0.7s 
+ ✔ Container openchallenges-organization-service  Healthy                                                        44.7s 
+ ✔ Container openchallenges-app                   Started                                                         0.7s 
+ ✔ Container openchallenges-apex                  Started
+```
+
+> **Note** If the above command is stuck on containers that report the status `Error`, try stopping
+> the command and run it again.
+
 ### Destroy the stack
 
 From this project folder:
@@ -150,7 +228,7 @@ cdktf destroy
 
 ## FAQ
 
-### Error: Required plugins are not installe
+### Error: Required plugins are not installed
 
 CDKTF may throw the following error when attempting to deploy the stack from a fresh development
 environment.
