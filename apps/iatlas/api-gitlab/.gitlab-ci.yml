@@ -109,8 +109,10 @@ tests:coverage-report-staging:
       - coverage
     expire_in: 30 days
     reports:
-      # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage_staging.xml"
+      coverage_report:
+        coverage_format: cobertura
+        path: build/cobertura.xml
+
 
 tests:coverage-report-prod:
   tags:
@@ -148,8 +150,10 @@ tests:coverage-report-prod:
       - coverage
     expire_in: 30 days
     reports:
-      # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage.xml"
+      coverage_report:
+        coverage_format: cobertura
+        path: build/cobertura.xml
+
 
 pages:
   tags:
