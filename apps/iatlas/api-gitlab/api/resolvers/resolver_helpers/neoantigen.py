@@ -1,6 +1,11 @@
+from sqlalchemy import and_
+from sqlalchemy.orm import aliased
+from api import db
 from api.db_models import Neoantigen, Gene, Patient
+from .general_resolvers import build_join_condition, get_selected, get_value
 from .gene import build_gene_graphql_response
 from .patient import build_patient_graphql_response
+from .paging_utils import get_pagination_queries
 
 
 neoantigen_request_fields = {
@@ -15,15 +20,16 @@ neoantigen_request_fields = {
 def build_neoantigen_graphql_response(neoantigen):
     result_dict = {
         'id': get_value(neoantigen, 'id'),
-        'pmhc': get_value(neoantigen, 'p_value'),
-        'tpm': get_value(neoantigen, 'fdr'),
+        'pmhc': get_value(neoantigen, 'pmhc'),
+        'tpm': get_value(neoantigen, 'tpm'),
         'gene': build_gene_graphql_response()(neoantigen),
-        'gene': build_patient_graphql_response()(neoantigen),
+        'patient': build_patient_graphql_response()(neoantigen),
     }
     return(result_dict)
 
 
 def build_neoantigen_request(
+    requested,
     patient_requested,
     gene_requested,
     distinct=False,
@@ -69,13 +75,13 @@ def build_neoantigen_request(
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
             gene_1.id,
-            neoantigen_1.dataset_id,
+            neoantigen_1.neoantigen_gene_id,
             filter_column=gene_1.entrez_id,
             filter_list=entrez
         )
         query = query.join(
             gene_1,
-            and_(*data_set_join_condition),
+            and_(*gene_join_condition),
             isouter=is_outer
         )
 
@@ -83,13 +89,13 @@ def build_neoantigen_request(
         is_outer = not bool(patient)
         patient_join_condition = build_join_condition(
             patient_1.id,
-            neoantigen_1.dataset_id,
+            neoantigen_1.patient_id,
             filter_column=patient_1.name,
             filter_list=patient
         )
         query = query.join(
             patient_1,
-            and_(*data_set_join_condition),
+            and_(*patient_join_condition),
             isouter=is_outer
         )
 

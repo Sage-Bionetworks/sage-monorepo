@@ -8,7 +8,7 @@ type NeoantigenNode implements BaseNode {
   "The pmhc of the neoantigen"
   pmhc: String!
   "The tpm of the neoantigen"
-  tpm: Float!
+  tpm: Float
   "The Gene related to the neoantigen."
   gene: SimpleGene
   "The Patient related to the neoantigen."

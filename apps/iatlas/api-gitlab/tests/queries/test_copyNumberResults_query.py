@@ -77,6 +77,7 @@ query CopyNumberResults(
 }
 """
 
+
 @pytest.fixture(scope='module')
 def test_cnr():
     return {
@@ -262,8 +263,7 @@ def test_copyNumberResults_missing_pagination(client, common_query_builder):
     query = common_query_builder("""{ items { pValue } }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': ['TCGA'],
-            'tag': ['C1']
+            'dataSet': ['TCGA']
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']

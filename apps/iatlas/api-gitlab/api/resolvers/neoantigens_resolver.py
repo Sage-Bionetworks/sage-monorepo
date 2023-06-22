@@ -1,3 +1,5 @@
+
+
 from .resolver_helpers import (
     build_neoantigen_graphql_response,
     build_neoantigen_request,
@@ -10,15 +12,16 @@ from .resolver_helpers import (
 
 from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
 
+
 def resolve_neoantigens(
-     _obj, info, distinct=False, patient=None, entrez=None, pmhc=None
-    ):
+    _obj, info, distinct=False, paging=None, patient=None, entrez=None, pmhc=None
+):
     # The selection is nested under the 'items' node.
     selection_set = get_selection_set(info=info, child_node='items')
 
     requested = get_requested(
         selection_set=selection_set,
-        requested_field_mapping=neoantigen_result_request_fields
+        requested_field_mapping=neoantigen_request_fields
     )
 
     patient_requested = get_requested(
@@ -29,11 +32,13 @@ def resolve_neoantigens(
 
     gene_requested = get_requested(
         selection_set=selection_set,
-        requested_field_mapping=gene_request_fields,
+        requested_field_mapping=simple_gene_request_fields,
         child_node='gene'
     )
 
-    query, count_query = build_neoantigen_result_request(
+    paging = paging if paging else Paging.DEFAULT
+
+    query, count_query = build_neoantigen_request(
         requested,
         patient_requested,
         gene_requested,

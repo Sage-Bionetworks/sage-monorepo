@@ -53,7 +53,7 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
         publications = get_publications(id, requested, publications_requested)
         samples = get_samples(id, requested, sample_requested,
                               cohort, sample, max_rna_seq_expr, min_rna_seq_expr)
-        return {
+        result_dict = {
             'id': id,
             'entrez': get_value(gene, prefix + 'entrez') or get_value(gene, prefix + 'entrez_id'),
             'hgnc': get_value(gene, prefix + 'hgnc') or get_value(gene, prefix + 'hgnc_id'),
@@ -70,6 +70,7 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
             'publications': map(build_publication_graphql_response, publications),
             'samples': map(build_sample_graphql_response(), samples)
         }
+        return result_dict
     return f
 
 
