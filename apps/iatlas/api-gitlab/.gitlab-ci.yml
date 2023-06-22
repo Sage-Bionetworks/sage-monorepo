@@ -9,7 +9,7 @@ default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
     # Install aws cli (also installs binutils, jq, unzip, and wget) - (Running on Alpine)
-    - GLIBC_VER=2.34.r0
+    - GLIBC_VER=2.34-r0
     - apk add --force-overwrite --no-cache binutils curl jq unzip
     # Install glibc compatibility for alpine (Needed for AWS cli v2)
     - curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
