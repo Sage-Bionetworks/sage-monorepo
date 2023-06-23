@@ -18,6 +18,13 @@
         "push": false,
         "tags": ["sagebionetworks/openchallenges-rstudio:latest"]
       }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-rstudio"
+      },
+      "dependsOn": []
     }
   },
   "tags": ["type:app", "scope:client"],

@@ -6,9 +6,9 @@ services:
     container_name: openchallenges-rstudio
     restart: always
     env_file:
-      - .env
+      - ../../../apps/openchallenges/rstudio/.env
     volumes:
-      - ./workspace:/home/rstudio/workspace
+      - ../../../apps/openchallenges/rstudio/workspace:/home/rstudio/workspace
     networks:
       - openchallenges
     ports:
