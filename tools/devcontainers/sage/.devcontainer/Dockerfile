@@ -97,6 +97,11 @@ RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
   && locale-gen
 ENV LANG=en_US.UTF-8
 
+## Install the R environment
+RUN curl "https://cdn.rstudio.com/r/debian-11/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+  && gdebi --non-interactive /tmp/r_amd64.deb \
+  && rm -fr /tmp/r_amd64.deb
+
 ARG user=vscode
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
