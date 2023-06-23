@@ -83,6 +83,12 @@ RUN groupadd docker \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
+  # Install the R environment
+  && curl "https://cdn.rstudio.com/r/debian-11/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+    && gdebi --non-interactive /tmp/r_amd64.deb \
+    && rm -fr /tmp/r_amd64.deb \
+    && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
+    && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
   # Increase the max number of file watchers
   # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
@@ -96,11 +102,6 @@ RUN groupadd docker \
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
   && locale-gen
 ENV LANG=en_US.UTF-8
-
-## Install the R environment
-RUN curl "https://cdn.rstudio.com/r/debian-11/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
-  && gdebi --non-interactive /tmp/r_amd64.deb \
-  && rm -fr /tmp/r_amd64.deb
 
 ARG user=vscode
 RUN useradd -m $user \
