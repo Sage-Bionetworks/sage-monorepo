@@ -92,33 +92,31 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ incentiveTypesFilter.label }}"
+        header="{{ incentivesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="incentiveTypesFilter.collapsed"
+        [collapsed]="incentivesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="incentiveTypesFilter.values"
+          [values]="incentivesFilter.values"
           [selectedValues]="selectedIncentives"
           (selectionChange)="onIncentivesChange($event)"
-          inputId="{{ incentiveTypesFilter.query }}"
+          inputId="{{ incentivesFilter.query }}"
         ></openchallenges-checkbox-filter>
       </p-panel>
       <p-divider></p-divider>
-      <!-- <p-panel
+      <p-panel
         header="{{ platformsFilter.label }}"
         [toggleable]="true"
         [collapsed]="platformsFilter.collapsed"
       >
-        <openchallenges-search-dropdown-filter
+        <openchallenges-checkbox-filter
           [values]="platformsFilter.values"
-          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="platformsFilter.showAvatar"
-          [filterByApiClient]="true"
+          [selectedValues]="selectedPlatforms"
           (selectionChange)="onPlatformsChange($event)"
-          (searchChange)="onPlatformsSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
+          inputId="{{ platformsFilter.query }}"
+        ></openchallenges-checkbox-filter>
       </p-panel>
-      <p-divider></p-divider> -->
+      <p-divider></p-divider>
       <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"

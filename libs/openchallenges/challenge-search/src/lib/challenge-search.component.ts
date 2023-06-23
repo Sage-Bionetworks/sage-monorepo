@@ -29,7 +29,7 @@ import {
   // challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
   challengeInputDataTypesFilter,
-  challengeIncentiveTypesFilter,
+  challengeIncentivesFilter,
   challengePlatformsFilter,
   challengeOrganizationsFilter,
   // challengeOrganizaterFilter,
@@ -115,7 +115,7 @@ export class ChallengeSearchComponent
   // ];
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
-  incentiveTypesFilter = challengeIncentiveTypesFilter;
+  incentivesFilter = challengeIncentivesFilter;
 
   platformsFilter = challengePlatformsFilter;
   inputDataTypesFilter = challengeInputDataTypesFilter;
@@ -130,8 +130,8 @@ export class ChallengeSearchComponent
   selectedStatus: string[] = [];
   selectedSubmissionTypes: string[] = [];
   selectedIncentives: string[] = [];
-
   selectedPlatforms: string[] = [];
+
   selectedOrgs: number[] = [];
   selectedInputDataTypes: string[] = [];
 
@@ -177,6 +177,13 @@ export class ChallengeSearchComponent
           ? params['incentives']
           : [params['incentives']];
         this.selectedIncentives = incentives;
+      }
+
+      if (params['platforms']) {
+        const platforms = Array.isArray(params['platforms'])
+          ? params['platforms']
+          : [params['platforms']];
+        this.selectedPlatforms = platforms;
       }
 
       if (params['inputDataTypes']) {
@@ -424,6 +431,14 @@ export class ChallengeSearchComponent
     this.router.navigate([], {
       queryParams: {
         incentives: selected,
+      },
+    });
+  }
+
+  onPlatformsChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParams: {
+        platforms: selected,
       },
     });
   }

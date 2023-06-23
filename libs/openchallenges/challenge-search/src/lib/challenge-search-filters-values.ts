@@ -97,7 +97,7 @@ export const challengeSubmissionTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengeIncentiveTypesFilterValues: FilterValue[] = [
+export const challengeIncentivesFilterValues: FilterValue[] = [
   {
     value: 'monetary',
     label: 'Monetary',

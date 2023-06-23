@@ -5,7 +5,7 @@ import {
   // challengeDifficultyFilterValues,
   challengeInputDataTypesFilterValues,
   challengeSubmissionTypesFilterValues,
-  challengeIncentiveTypesFilterValues,
+  challengeIncentivesFilterValues,
   challengePlatformsFilterValues,
   challengeOrganizationsFilterValues,
   challengeOrganizersFilterValues,
@@ -40,10 +40,10 @@ export const challengeSubmissionTypesFilter: Filter = {
   collapsed: true,
 };
 
-export const challengeIncentiveTypesFilter: Filter = {
+export const challengeIncentivesFilter: Filter = {
   query: 'incentives',
   label: 'Incentive Type',
-  values: challengeIncentiveTypesFilterValues,
+  values: challengeIncentivesFilterValues,
   collapsed: true,
 };
 
