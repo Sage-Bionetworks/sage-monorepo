@@ -136,14 +136,14 @@ export class SecurityGroups extends Construct {
       vpcId,
     });
 
-    new SecurityGroupRule(this, 'preview_instance_allow_alb_8080', {
+    new SecurityGroupRule(this, 'preview_instance_allow_alb_8000', {
       securityGroupId: this.previewInstanceSg.id,
       type: 'ingress',
       protocol: 'tcp',
-      fromPort: 8080,
-      toPort: 8080,
+      fromPort: 8000,
+      toPort: 8000,
       sourceSecurityGroupId: this.previewInstanceAlbSg.id,
-      description: 'Allow HTTP traffic on 8080 from the Preview Instance ALB',
+      description: 'Allow HTTP traffic on 8000 from the Preview Instance ALB',
     });
     allowInboundSelf(
       this.previewInstanceSg.id,
