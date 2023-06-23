@@ -90,6 +90,7 @@ export class ChallengeSearchComponent
     new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
+
   searchTermValue = '';
 
   challenges: Challenge[] = [];
@@ -199,6 +200,22 @@ export class ChallengeSearchComponent
           : [params['organizations']];
         this.selectedOrgs = organizations;
       }
+
+      const defaultQuery = {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sort: this.sortedBy,
+        // searchTerms: params['searchTerms'] || undefined,
+        // minStartDate: params['minStartDate'] || undefined,
+        // maxStartDate: params['maxStartDate'] || undefined,
+        status: this.selectedStatus,
+        submissionTypes: this.selectedSubmissionTypes,
+        incentives: this.selectedIncentives,
+        inputDataTypes: this.selectedInputDataTypes,
+        organizations: this.selectedOrgs,
+      } as ChallengeSearchQuery;
+
+      this.query.next(defaultQuery);
     });
     // update the total number of challenges in database with empty query
     this.challengeService
@@ -299,22 +316,6 @@ export class ChallengeSearchComponent
   }
 
   ngAfterContentInit(): void {
-    const defaultQuery = {
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-      sort: this.sortedBy,
-      // searchTerms: params['searchTerms'] || undefined,
-      // minStartDate: params['minStartDate'] || undefined,
-      // maxStartDate: params['maxStartDate'] || undefined,
-      status: this.selectedStatus,
-      submissionTypes: this.selectedSubmissionTypes,
-      incentives: this.selectedIncentives,
-      inputDataTypes: this.selectedInputDataTypes,
-      organizations: this.selectedOrgs,
-    } as ChallengeSearchQuery;
-
-    this.query.next(defaultQuery);
-
     // updating year checkbox not working for some reasons
     // this.selectedYear = {
     //   start: urlQuery.minStartDate as string,
@@ -413,6 +414,7 @@ export class ChallengeSearchComponent
 
   onStatusChange(selected: string[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         status: selected,
       },
@@ -421,6 +423,7 @@ export class ChallengeSearchComponent
 
   onSubmissionTypesChange(selected: string[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         submissionTypes: selected,
       },
@@ -429,6 +432,7 @@ export class ChallengeSearchComponent
 
   onIncentivesChange(selected: string[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         incentives: selected,
       },
@@ -481,6 +485,7 @@ export class ChallengeSearchComponent
 
   onOrganizationsChange(selected: number[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         organizations: selected,
       },
@@ -528,6 +533,7 @@ export class ChallengeSearchComponent
     // });
     // this.query.next(newQuery);
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         sort: this.sortedBy,
       },
@@ -541,6 +547,7 @@ export class ChallengeSearchComponent
     // });
     // this.query.next(newQuery);
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         pageNumber: event.page,
         pageSize: event.rows,
