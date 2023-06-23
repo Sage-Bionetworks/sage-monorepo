@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  openchallenges-rstudio:
+    image: sagebionetworks/openchallenges-rstudio:latest
+    container_name: openchallenges-rstudio
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - ./workspace:/home/rstudio/workspace
+    networks:
+      - openchallenges
+    ports:
+      - '8787:8787'
+
+networks:
+  openchallenges:
+    name: openchallenges

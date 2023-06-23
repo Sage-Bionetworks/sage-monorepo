@@ -1,0 +1,25 @@
+{
+  "name": "openchallenges-rstudio",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/rstudio/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/rstudio"
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/rstudio",
+        "push": false,
+        "tags": ["sagebionetworks/openchallenges-rstudio:latest"]
+      }
+    }
+  },
+  "tags": ["type:app", "scope:client"],
+  "implicitDependencies": []
+}
