@@ -129,7 +129,7 @@ export class ChallengeSearchComponent
 
   selectedStatus: string[] = [];
   selectedSubmissionTypes: string[] = [];
-  selectedIncentiveTypes: string[] = [];
+  selectedIncentives: string[] = [];
 
   selectedPlatforms: string[] = [];
   selectedOrgs: number[] = [];
@@ -172,11 +172,11 @@ export class ChallengeSearchComponent
         this.selectedSubmissionTypes = submissionTypes;
       }
 
-      if (params['incentiveTypes']) {
-        const incentiveTypes = Array.isArray(params['incentiveTypes'])
-          ? params['incentiveTypes']
-          : [params['incentiveTypes']];
-        this.selectedIncentiveTypes = incentiveTypes;
+      if (params['incentives']) {
+        const incentives = Array.isArray(params['incentives'])
+          ? params['incentives']
+          : [params['incentives']];
+        this.selectedIncentives = incentives;
       }
 
       if (params['inputDataTypes']) {
@@ -301,7 +301,7 @@ export class ChallengeSearchComponent
       // maxStartDate: params['maxStartDate'] || undefined,
       status: this.selectedStatus,
       submissionTypes: this.selectedSubmissionTypes,
-      incentives: this.selectedIncentiveTypes,
+      incentives: this.selectedIncentives,
       inputDataTypes: this.selectedInputDataTypes,
       organizations: this.selectedOrgs,
     } as ChallengeSearchQuery;
@@ -420,10 +420,10 @@ export class ChallengeSearchComponent
     });
   }
 
-  onIncentiveTypesChange(selected: string[]): void {
+  onIncentivesChange(selected: string[]): void {
     this.router.navigate([], {
       queryParams: {
-        incentiveTypes: selected,
+        incentives: selected,
       },
     });
   }
