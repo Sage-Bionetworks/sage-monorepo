@@ -65,7 +65,33 @@
         </div>
       </p-panel>
       <p-divider></p-divider>
-      <ng-container *ngFor="let checkbox of checkboxFilters">
+      <p-panel
+        header="{{ statusFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="statusFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="statusFilter.values"
+          [selectedValues]="selectedStatus"
+          (selectionChange)="onStatusChange($event)"
+          inputId="{{ statusFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ submissionTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="submissionTypesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="submissionTypesFilter.values"
+          [selectedValues]="selectedSubmissionTypes"
+          (selectionChange)="onSubmissionTypesChange($event)"
+          inputId="{{ submissionTypesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
             [values]="checkbox.values"
@@ -74,7 +100,7 @@
           ></openchallenges-checkbox-filter>
         </p-panel>
         <p-divider></p-divider>
-      </ng-container>
+      </ng-container> -->
       <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <openchallenges-search-dropdown-filter

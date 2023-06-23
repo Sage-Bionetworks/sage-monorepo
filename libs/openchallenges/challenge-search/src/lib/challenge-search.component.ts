@@ -29,7 +29,7 @@ import {
   // challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
   challengeInputDataTypeFilter,
-  challengeIncentiveTypesFilter,
+  // challengeIncentiveTypesFilter,
   challengePlatformFilter,
   challengeOrganizationFilter,
   challengeOrganizaterFilter,
@@ -108,13 +108,14 @@ export class ChallengeSearchComponent
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
-  checkboxFilters: Filter[] = [
-    challengeStatusFilter,
-    // challengeDifficultyFilter,
-    challengeSubmissionTypesFilter,
-    challengeIncentiveTypesFilter,
-  ];
-
+  // checkboxFilters: Filter[] = [
+  //   challengeStatusFilter,
+  //   // challengeDifficultyFilter,
+  //   challengeSubmissionTypesFilter,
+  //   challengeIncentiveTypesFilter,
+  // ];
+  statusFilter = challengeStatusFilter;
+  submissionTypesFilter = challengeSubmissionTypesFilter;
   dropdownFilters: Filter[] = [
     challengePlatformFilter,
     challengeInputDataTypeFilter,
@@ -122,6 +123,8 @@ export class ChallengeSearchComponent
     challengeOrganizaterFilter,
   ];
 
+  selectedStatus: string[] = [];
+  selectedSubmissionTypes: string[] = [];
   selectedOrgs: FilterValue[] = [];
   selectedInputDataTypes: FilterValue[] = [];
 
@@ -250,28 +253,44 @@ export class ChallengeSearchComponent
     // } as ChallengeSearchQuery;
 
     this.activatedRoute.queryParams.subscribe((params) => {
-      const urlQuery = {
-        pageNumber: params['pageNumber'] || this.pageNumber,
-        pageSize: params['pageSize'] || this.pageSize,
-        sort: params['sort'] || this.sortedBy,
+      if (params['status']) {
+        const status = Array.isArray(params['status'])
+          ? params['status']
+          : [params['status']];
+        this.selectedStatus = status;
+      }
+
+      if (params['submissionTypes']) {
+        const submissionTypes = Array.isArray(params['submissionTypes'])
+          ? params['submissionTypes']
+          : [params['submissionTypes']];
+        this.selectedSubmissionTypes = submissionTypes;
+      }
+
+      const defaultQuery = {
+        pageNumber: this.pageNumber,
+        pageSize: this.pageSize,
+        sort: this.sortedBy,
         searchTerms: params['searchTerms'] || undefined,
         minStartDate: params['minStartDate'] || undefined,
         maxStartDate: params['maxStartDate'] || undefined,
-        status: params['status'] || undefined,
+        status: this.selectedStatus,
         submissionTypes: params['submissionTypes'] || undefined,
         incentives: params['incentives'] || undefined,
         inputDataTypes: params['inputDataTypes'] || undefined,
         organizations: params['organizations'] || undefined,
       } as ChallengeSearchQuery;
 
-      this.query.next(urlQuery);
+      this.query.next(defaultQuery);
 
       // updating year checkbox not working for some reasons
-      this.selectedYear = {
-        start: urlQuery.minStartDate as string,
-        end: urlQuery.maxStartDate as string,
-      } as DateRange;
-      this.sortedBy = urlQuery.sort as string;
+      // this.selectedYear = {
+      //   start: urlQuery.minStartDate as string,
+      //   end: urlQuery.maxStartDate as string,
+      // } as DateRange;
+      // this.sortedBy = urlQuery.sort as string;
+      // this.selectedStatus = [urlQuery.status] as string[];
+      console.log(this.selectedStatus);
     });
   }
 
@@ -363,6 +382,22 @@ export class ChallengeSearchComponent
         },
       });
     }
+  }
+
+  onStatusChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParams: {
+        status: selected,
+      },
+    });
+  }
+
+  onSubmissionTypesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParams: {
+        submissionTypes: selected,
+      },
+    });
   }
 
   onCheckboxSelectionChange(selected: string[], queryName: string): void {
