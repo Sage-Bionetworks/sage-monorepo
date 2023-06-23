@@ -1,0 +1,24 @@
+{
+  "name": "openchallenges-api-client-r",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/openchallenges/api-client-r/src",
+  "projectType": "library",
+  "prefix": "openchallenges",
+  "targets": {
+    "openapi-generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          // "rm -fr src/lib/*",
+          "openapi-generator-cli generate"
+        ],
+        "cwd": "libs/openchallenges/api-client-r",
+        "parallel": false
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": [
+    "openchallenges-api-description"
+  ]
+}
