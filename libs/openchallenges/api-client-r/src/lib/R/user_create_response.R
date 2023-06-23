@@ -8,6 +8,8 @@
 #' @description UserCreateResponse Class
 #' @format An \code{R6Class} generator object
 #' @field id The unique identifier of an account integer
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,20 +17,28 @@ UserCreateResponse <- R6::R6Class(
   "UserCreateResponse",
   public = list(
     `id` = NULL,
+    `_field_list` = c("id"),
+    `additional_properties` = list(),
     #' Initialize a new UserCreateResponse class.
     #'
     #' @description
     #' Initialize a new UserCreateResponse class.
     #'
     #' @param id The unique identifier of an account
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`id`, ...) {
+    initialize = function(`id`, additional_properties = NULL, ...) {
       if (!missing(`id`)) {
         if (!(is.numeric(`id`) && length(`id`) == 1)) {
           stop(paste("Error! Invalid data for `id`. Must be an integer:", `id`))
         }
         self$`id` <- `id`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -44,6 +54,10 @@ UserCreateResponse <- R6::R6Class(
         UserCreateResponseObject[["id"]] <-
           self$`id`
       }
+      for (key in names(self$additional_properties)) {
+        UserCreateResponseObject[[key]] <- self$additional_properties[[key]]
+      }
+
       UserCreateResponseObject
     },
     #' Deserialize JSON string into an instance of UserCreateResponse
@@ -59,6 +73,13 @@ UserCreateResponse <- R6::R6Class(
       if (!is.null(this_object$`id`)) {
         self$`id` <- this_object$`id`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -81,6 +102,11 @@ UserCreateResponse <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of UserCreateResponse
     #'
@@ -93,6 +119,13 @@ UserCreateResponse <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`id` <- this_object$`id`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to UserCreateResponse

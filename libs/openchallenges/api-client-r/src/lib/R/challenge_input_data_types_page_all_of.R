@@ -8,6 +8,8 @@
 #' @description ChallengeInputDataTypesPageAllOf Class
 #' @format An \code{R6Class} generator object
 #' @field challengeInputDataTypes A list of challenge input data types. list(\link{ChallengeInputDataType})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,19 +17,27 @@ ChallengeInputDataTypesPageAllOf <- R6::R6Class(
   "ChallengeInputDataTypesPageAllOf",
   public = list(
     `challengeInputDataTypes` = NULL,
+    `_field_list` = c("challengeInputDataTypes"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengeInputDataTypesPageAllOf class.
     #'
     #' @description
     #' Initialize a new ChallengeInputDataTypesPageAllOf class.
     #'
     #' @param challengeInputDataTypes A list of challenge input data types.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`challengeInputDataTypes`, ...) {
+    initialize = function(`challengeInputDataTypes`, additional_properties = NULL, ...) {
       if (!missing(`challengeInputDataTypes`)) {
         stopifnot(is.vector(`challengeInputDataTypes`), length(`challengeInputDataTypes`) != 0)
         sapply(`challengeInputDataTypes`, function(x) stopifnot(R6::is.R6(x)))
         self$`challengeInputDataTypes` <- `challengeInputDataTypes`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -43,6 +53,10 @@ ChallengeInputDataTypesPageAllOf <- R6::R6Class(
         ChallengeInputDataTypesPageAllOfObject[["challengeInputDataTypes"]] <-
           lapply(self$`challengeInputDataTypes`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        ChallengeInputDataTypesPageAllOfObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengeInputDataTypesPageAllOfObject
     },
     #' Deserialize JSON string into an instance of ChallengeInputDataTypesPageAllOf
@@ -58,6 +72,13 @@ ChallengeInputDataTypesPageAllOf <- R6::R6Class(
       if (!is.null(this_object$`challengeInputDataTypes`)) {
         self$`challengeInputDataTypes` <- ApiClient$new()$deserializeObj(this_object$`challengeInputDataTypes`, "array[ChallengeInputDataType]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -80,6 +101,11 @@ ChallengeInputDataTypesPageAllOf <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengeInputDataTypesPageAllOf
     #'
@@ -92,6 +118,13 @@ ChallengeInputDataTypesPageAllOf <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`challengeInputDataTypes` <- ApiClient$new()$deserializeObj(this_object$`challengeInputDataTypes`, "array[ChallengeInputDataType]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengeInputDataTypesPageAllOf

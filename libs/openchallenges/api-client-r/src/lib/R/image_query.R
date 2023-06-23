@@ -10,6 +10,8 @@
 #' @field objectKey The unique identifier of the image. character
 #' @field height  \link{ImageHeight} [optional]
 #' @field aspectRatio  \link{ImageAspectRatio} [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -19,6 +21,8 @@ ImageQuery <- R6::R6Class(
     `objectKey` = NULL,
     `height` = NULL,
     `aspectRatio` = NULL,
+    `_field_list` = c("objectKey", "height", "aspectRatio"),
+    `additional_properties` = list(),
     #' Initialize a new ImageQuery class.
     #'
     #' @description
@@ -27,9 +31,10 @@ ImageQuery <- R6::R6Class(
     #' @param objectKey The unique identifier of the image.
     #' @param height height
     #' @param aspectRatio aspectRatio
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`objectKey`, `height` = NULL, `aspectRatio` = NULL, ...) {
+    initialize = function(`objectKey`, `height` = NULL, `aspectRatio` = NULL, additional_properties = NULL, ...) {
       if (!missing(`objectKey`)) {
         if (!(is.character(`objectKey`) && length(`objectKey`) == 1)) {
           stop(paste("Error! Invalid data for `objectKey`. Must be a string:", `objectKey`))
@@ -49,6 +54,11 @@ ImageQuery <- R6::R6Class(
         }
         stopifnot(R6::is.R6(`aspectRatio`))
         self$`aspectRatio` <- `aspectRatio`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -72,6 +82,10 @@ ImageQuery <- R6::R6Class(
         ImageQueryObject[["aspectRatio"]] <-
           self$`aspectRatio`$toJSON()
       }
+      for (key in names(self$additional_properties)) {
+        ImageQueryObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ImageQueryObject
     },
     #' Deserialize JSON string into an instance of ImageQuery
@@ -97,6 +111,13 @@ ImageQuery <- R6::R6Class(
         `aspectratio_object`$fromJSON(jsonlite::toJSON(this_object$`aspectRatio`, auto_unbox = TRUE, digits = NA))
         self$`aspectRatio` <- `aspectratio_object`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -135,6 +156,11 @@ ImageQuery <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ImageQuery
     #'
@@ -149,6 +175,13 @@ ImageQuery <- R6::R6Class(
       self$`objectKey` <- this_object$`objectKey`
       self$`height` <- ImageHeight$new()$fromJSON(jsonlite::toJSON(this_object$`height`, auto_unbox = TRUE, digits = NA))
       self$`aspectRatio` <- ImageAspectRatio$new()$fromJSON(jsonlite::toJSON(this_object$`aspectRatio`, auto_unbox = TRUE, digits = NA))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ImageQuery

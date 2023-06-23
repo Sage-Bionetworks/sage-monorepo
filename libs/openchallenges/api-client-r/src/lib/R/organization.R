@@ -18,6 +18,8 @@
 #' @field createdAt  character
 #' @field updatedAt  character
 #' @field acronym  character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -35,6 +37,8 @@ Organization <- R6::R6Class(
     `createdAt` = NULL,
     `updatedAt` = NULL,
     `acronym` = NULL,
+    `_field_list` = c("id", "name", "email", "login", "description", "avatarKey", "websiteUrl", "challengeCount", "createdAt", "updatedAt", "acronym"),
+    `additional_properties` = list(),
     #' Initialize a new Organization class.
     #'
     #' @description
@@ -51,9 +55,10 @@ Organization <- R6::R6Class(
     #' @param avatarKey avatarKey
     #' @param challengeCount challengeCount
     #' @param acronym acronym
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`id`, `name`, `email`, `login`, `description`, `websiteUrl`, `createdAt`, `updatedAt`, `avatarKey` = NULL, `challengeCount` = NULL, `acronym` = NULL, ...) {
+    initialize = function(`id`, `name`, `email`, `login`, `description`, `websiteUrl`, `createdAt`, `updatedAt`, `avatarKey` = NULL, `challengeCount` = NULL, `acronym` = NULL, additional_properties = NULL, ...) {
       if (!missing(`id`)) {
         if (!(is.numeric(`id`) && length(`id`) == 1)) {
           stop(paste("Error! Invalid data for `id`. Must be an integer:", `id`))
@@ -120,6 +125,11 @@ Organization <- R6::R6Class(
         }
         self$`acronym` <- `acronym`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -174,6 +184,10 @@ Organization <- R6::R6Class(
         OrganizationObject[["acronym"]] <-
           self$`acronym`
       }
+      for (key in names(self$additional_properties)) {
+        OrganizationObject[[key]] <- self$additional_properties[[key]]
+      }
+
       OrganizationObject
     },
     #' Deserialize JSON string into an instance of Organization
@@ -219,6 +233,13 @@ Organization <- R6::R6Class(
       if (!is.null(this_object$`acronym`)) {
         self$`acronym` <- this_object$`acronym`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -321,6 +342,11 @@ Organization <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of Organization
     #'
@@ -343,6 +369,13 @@ Organization <- R6::R6Class(
       self$`createdAt` <- this_object$`createdAt`
       self$`updatedAt` <- this_object$`updatedAt`
       self$`acronym` <- this_object$`acronym`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to Organization

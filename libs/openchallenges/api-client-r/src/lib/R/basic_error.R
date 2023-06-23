@@ -11,6 +11,8 @@
 #' @field status The HTTP status code integer
 #' @field detail A human readable explanation specific to this occurrence of the problem character [optional]
 #' @field type An absolute URI that identifies the problem type character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -21,6 +23,8 @@ BasicError <- R6::R6Class(
     `status` = NULL,
     `detail` = NULL,
     `type` = NULL,
+    `_field_list` = c("title", "status", "detail", "type"),
+    `additional_properties` = list(),
     #' Initialize a new BasicError class.
     #'
     #' @description
@@ -30,9 +34,10 @@ BasicError <- R6::R6Class(
     #' @param status The HTTP status code
     #' @param detail A human readable explanation specific to this occurrence of the problem
     #' @param type An absolute URI that identifies the problem type
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`title`, `status`, `detail` = NULL, `type` = NULL, ...) {
+    initialize = function(`title`, `status`, `detail` = NULL, `type` = NULL, additional_properties = NULL, ...) {
       if (!missing(`title`)) {
         if (!(is.character(`title`) && length(`title`) == 1)) {
           stop(paste("Error! Invalid data for `title`. Must be a string:", `title`))
@@ -56,6 +61,11 @@ BasicError <- R6::R6Class(
           stop(paste("Error! Invalid data for `type`. Must be a string:", `type`))
         }
         self$`type` <- `type`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -83,6 +93,10 @@ BasicError <- R6::R6Class(
         BasicErrorObject[["type"]] <-
           self$`type`
       }
+      for (key in names(self$additional_properties)) {
+        BasicErrorObject[[key]] <- self$additional_properties[[key]]
+      }
+
       BasicErrorObject
     },
     #' Deserialize JSON string into an instance of BasicError
@@ -107,6 +121,13 @@ BasicError <- R6::R6Class(
       if (!is.null(this_object$`type`)) {
         self$`type` <- this_object$`type`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -153,6 +174,11 @@ BasicError <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of BasicError
     #'
@@ -168,6 +194,13 @@ BasicError <- R6::R6Class(
       self$`status` <- this_object$`status`
       self$`detail` <- this_object$`detail`
       self$`type` <- this_object$`type`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to BasicError

@@ -21,6 +21,8 @@
 #' @field status An array of challenge status used to filter the results. list(\link{ChallengeStatus}) [optional]
 #' @field submissionTypes An array of challenge submission types used to filter the results. list(\link{ChallengeSubmissionType}) [optional]
 #' @field searchTerms A string of search terms used to filter the results. character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -41,6 +43,8 @@ ChallengeSearchQuery <- R6::R6Class(
     `status` = NULL,
     `submissionTypes` = NULL,
     `searchTerms` = NULL,
+    `_field_list` = c("pageNumber", "pageSize", "sort", "direction", "difficulties", "incentives", "minStartDate", "maxStartDate", "platforms", "organizations", "inputDataTypes", "status", "submissionTypes", "searchTerms"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengeSearchQuery class.
     #'
     #' @description
@@ -60,9 +64,10 @@ ChallengeSearchQuery <- R6::R6Class(
     #' @param status An array of challenge status used to filter the results.
     #' @param submissionTypes An array of challenge submission types used to filter the results.
     #' @param searchTerms A string of search terms used to filter the results.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`pageNumber` = 0, `pageSize` = 100, `sort` = NULL, `direction` = NULL, `difficulties` = NULL, `incentives` = NULL, `minStartDate` = NULL, `maxStartDate` = NULL, `platforms` = NULL, `organizations` = NULL, `inputDataTypes` = NULL, `status` = NULL, `submissionTypes` = NULL, `searchTerms` = NULL, ...) {
+    initialize = function(`pageNumber` = 0, `pageSize` = 100, `sort` = NULL, `direction` = NULL, `difficulties` = NULL, `incentives` = NULL, `minStartDate` = NULL, `maxStartDate` = NULL, `platforms` = NULL, `organizations` = NULL, `inputDataTypes` = NULL, `status` = NULL, `submissionTypes` = NULL, `searchTerms` = NULL, additional_properties = NULL, ...) {
       if (!is.null(`pageNumber`)) {
         if (!(is.numeric(`pageNumber`) && length(`pageNumber`) == 1)) {
           stop(paste("Error! Invalid data for `pageNumber`. Must be an integer:", `pageNumber`))
@@ -142,6 +147,11 @@ ChallengeSearchQuery <- R6::R6Class(
         }
         self$`searchTerms` <- `searchTerms`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -208,6 +218,10 @@ ChallengeSearchQuery <- R6::R6Class(
         ChallengeSearchQueryObject[["searchTerms"]] <-
           self$`searchTerms`
       }
+      for (key in names(self$additional_properties)) {
+        ChallengeSearchQueryObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengeSearchQueryObject
     },
     #' Deserialize JSON string into an instance of ChallengeSearchQuery
@@ -266,6 +280,13 @@ ChallengeSearchQuery <- R6::R6Class(
       if (!is.null(this_object$`searchTerms`)) {
         self$`searchTerms` <- this_object$`searchTerms`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -392,6 +413,11 @@ ChallengeSearchQuery <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengeSearchQuery
     #'
@@ -417,6 +443,13 @@ ChallengeSearchQuery <- R6::R6Class(
       self$`status` <- ApiClient$new()$deserializeObj(this_object$`status`, "array[ChallengeStatus]", loadNamespace("openapi"))
       self$`submissionTypes` <- ApiClient$new()$deserializeObj(this_object$`submissionTypes`, "array[ChallengeSubmissionType]", loadNamespace("openapi"))
       self$`searchTerms` <- this_object$`searchTerms`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengeSearchQuery

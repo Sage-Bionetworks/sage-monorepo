@@ -13,6 +13,8 @@
 #' @field sort  \link{OrganizationSort} [optional]
 #' @field direction  \link{OrganizationDirection} [optional]
 #' @field searchTerms A string of search terms used to filter the results. character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -25,6 +27,8 @@ OrganizationSearchQuery <- R6::R6Class(
     `sort` = NULL,
     `direction` = NULL,
     `searchTerms` = NULL,
+    `_field_list` = c("pageNumber", "pageSize", "challengeContributionRoles", "sort", "direction", "searchTerms"),
+    `additional_properties` = list(),
     #' Initialize a new OrganizationSearchQuery class.
     #'
     #' @description
@@ -36,9 +40,10 @@ OrganizationSearchQuery <- R6::R6Class(
     #' @param sort sort
     #' @param direction direction
     #' @param searchTerms A string of search terms used to filter the results.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`pageNumber` = 0, `pageSize` = 100, `challengeContributionRoles` = NULL, `sort` = NULL, `direction` = NULL, `searchTerms` = NULL, ...) {
+    initialize = function(`pageNumber` = 0, `pageSize` = 100, `challengeContributionRoles` = NULL, `sort` = NULL, `direction` = NULL, `searchTerms` = NULL, additional_properties = NULL, ...) {
       if (!is.null(`pageNumber`)) {
         if (!(is.numeric(`pageNumber`) && length(`pageNumber`) == 1)) {
           stop(paste("Error! Invalid data for `pageNumber`. Must be an integer:", `pageNumber`))
@@ -76,6 +81,11 @@ OrganizationSearchQuery <- R6::R6Class(
         }
         self$`searchTerms` <- `searchTerms`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -110,6 +120,10 @@ OrganizationSearchQuery <- R6::R6Class(
         OrganizationSearchQueryObject[["searchTerms"]] <-
           self$`searchTerms`
       }
+      for (key in names(self$additional_properties)) {
+        OrganizationSearchQueryObject[[key]] <- self$additional_properties[[key]]
+      }
+
       OrganizationSearchQueryObject
     },
     #' Deserialize JSON string into an instance of OrganizationSearchQuery
@@ -144,6 +158,13 @@ OrganizationSearchQuery <- R6::R6Class(
       if (!is.null(this_object$`searchTerms`)) {
         self$`searchTerms` <- this_object$`searchTerms`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -206,6 +227,11 @@ OrganizationSearchQuery <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of OrganizationSearchQuery
     #'
@@ -223,6 +249,13 @@ OrganizationSearchQuery <- R6::R6Class(
       self$`sort` <- OrganizationSort$new()$fromJSON(jsonlite::toJSON(this_object$`sort`, auto_unbox = TRUE, digits = NA))
       self$`direction` <- OrganizationDirection$new()$fromJSON(jsonlite::toJSON(this_object$`direction`, auto_unbox = TRUE, digits = NA))
       self$`searchTerms` <- this_object$`searchTerms`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to OrganizationSearchQuery

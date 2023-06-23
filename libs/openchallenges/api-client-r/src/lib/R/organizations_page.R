@@ -14,6 +14,8 @@
 #' @field hasNext Returns if there is a next page. character
 #' @field hasPrevious Returns if there is a previous page. character
 #' @field organizations A list of organizations list(\link{Organization})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -27,6 +29,8 @@ OrganizationsPage <- R6::R6Class(
     `hasNext` = NULL,
     `hasPrevious` = NULL,
     `organizations` = NULL,
+    `_field_list` = c("number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "organizations"),
+    `additional_properties` = list(),
     #' Initialize a new OrganizationsPage class.
     #'
     #' @description
@@ -39,9 +43,10 @@ OrganizationsPage <- R6::R6Class(
     #' @param hasNext Returns if there is a next page.
     #' @param hasPrevious Returns if there is a previous page.
     #' @param organizations A list of organizations
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, `organizations`, ...) {
+    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, `organizations`, additional_properties = NULL, ...) {
       if (!missing(`number`)) {
         if (!(is.numeric(`number`) && length(`number`) == 1)) {
           stop(paste("Error! Invalid data for `number`. Must be an integer:", `number`))
@@ -83,6 +88,11 @@ OrganizationsPage <- R6::R6Class(
         sapply(`organizations`, function(x) stopifnot(R6::is.R6(x)))
         self$`organizations` <- `organizations`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -121,6 +131,10 @@ OrganizationsPage <- R6::R6Class(
         OrganizationsPageObject[["organizations"]] <-
           lapply(self$`organizations`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        OrganizationsPageObject[[key]] <- self$additional_properties[[key]]
+      }
+
       OrganizationsPageObject
     },
     #' Deserialize JSON string into an instance of OrganizationsPage
@@ -154,6 +168,13 @@ OrganizationsPage <- R6::R6Class(
       if (!is.null(this_object$`organizations`)) {
         self$`organizations` <- ApiClient$new()$deserializeObj(this_object$`organizations`, "array[Organization]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -224,6 +245,11 @@ OrganizationsPage <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of OrganizationsPage
     #'
@@ -242,6 +268,13 @@ OrganizationsPage <- R6::R6Class(
       self$`hasNext` <- this_object$`hasNext`
       self$`hasPrevious` <- this_object$`hasPrevious`
       self$`organizations` <- ApiClient$new()$deserializeObj(this_object$`organizations`, "array[Organization]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to OrganizationsPage

@@ -8,6 +8,8 @@
 #' @description OrganizationsPageAllOf Class
 #' @format An \code{R6Class} generator object
 #' @field organizations A list of organizations list(\link{Organization})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,19 +17,27 @@ OrganizationsPageAllOf <- R6::R6Class(
   "OrganizationsPageAllOf",
   public = list(
     `organizations` = NULL,
+    `_field_list` = c("organizations"),
+    `additional_properties` = list(),
     #' Initialize a new OrganizationsPageAllOf class.
     #'
     #' @description
     #' Initialize a new OrganizationsPageAllOf class.
     #'
     #' @param organizations A list of organizations
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`organizations`, ...) {
+    initialize = function(`organizations`, additional_properties = NULL, ...) {
       if (!missing(`organizations`)) {
         stopifnot(is.vector(`organizations`), length(`organizations`) != 0)
         sapply(`organizations`, function(x) stopifnot(R6::is.R6(x)))
         self$`organizations` <- `organizations`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -43,6 +53,10 @@ OrganizationsPageAllOf <- R6::R6Class(
         OrganizationsPageAllOfObject[["organizations"]] <-
           lapply(self$`organizations`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        OrganizationsPageAllOfObject[[key]] <- self$additional_properties[[key]]
+      }
+
       OrganizationsPageAllOfObject
     },
     #' Deserialize JSON string into an instance of OrganizationsPageAllOf
@@ -58,6 +72,13 @@ OrganizationsPageAllOf <- R6::R6Class(
       if (!is.null(this_object$`organizations`)) {
         self$`organizations` <- ApiClient$new()$deserializeObj(this_object$`organizations`, "array[Organization]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -80,6 +101,11 @@ OrganizationsPageAllOf <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of OrganizationsPageAllOf
     #'
@@ -92,6 +118,13 @@ OrganizationsPageAllOf <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`organizations` <- ApiClient$new()$deserializeObj(this_object$`organizations`, "array[Organization]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to OrganizationsPageAllOf

@@ -26,6 +26,8 @@
 #' @field starredCount The number of times the challenge has been starred by users. integer
 #' @field createdAt  character
 #' @field updatedAt  character
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -51,6 +53,8 @@ Challenge <- R6::R6Class(
     `starredCount` = NULL,
     `createdAt` = NULL,
     `updatedAt` = NULL,
+    `_field_list` = c("id", "slug", "name", "headline", "description", "doi", "status", "difficulty", "platform", "websiteUrl", "avatarUrl", "incentives", "submissionTypes", "inputDataTypes", "startDate", "endDate", "starredCount", "createdAt", "updatedAt"),
+    `additional_properties` = list(),
     #' Initialize a new Challenge class.
     #'
     #' @description
@@ -75,9 +79,10 @@ Challenge <- R6::R6Class(
     #' @param inputDataTypes inputDataTypes
     #' @param startDate The start date of the challenge.
     #' @param endDate The end date of the challenge.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`id`, `slug`, `name`, `description`, `status`, `difficulty`, `platform`, `incentives`, `submissionTypes`, `starredCount`, `createdAt`, `updatedAt`, `headline` = NULL, `doi` = NULL, `websiteUrl` = NULL, `avatarUrl` = NULL, `inputDataTypes` = NULL, `startDate` = NULL, `endDate` = NULL, ...) {
+    initialize = function(`id`, `slug`, `name`, `description`, `status`, `difficulty`, `platform`, `incentives`, `submissionTypes`, `starredCount`, `createdAt`, `updatedAt`, `headline` = NULL, `doi` = NULL, `websiteUrl` = NULL, `avatarUrl` = NULL, `inputDataTypes` = NULL, `startDate` = NULL, `endDate` = NULL, additional_properties = NULL, ...) {
       if (!missing(`id`)) {
         if (!(is.numeric(`id`) && length(`id`) == 1)) {
           stop(paste("Error! Invalid data for `id`. Must be an integer:", `id`))
@@ -189,6 +194,11 @@ Challenge <- R6::R6Class(
         }
         self$`endDate` <- `endDate`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -275,6 +285,10 @@ Challenge <- R6::R6Class(
         ChallengeObject[["updatedAt"]] <-
           self$`updatedAt`
       }
+      for (key in names(self$additional_properties)) {
+        ChallengeObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengeObject
     },
     #' Deserialize JSON string into an instance of Challenge
@@ -350,6 +364,13 @@ Challenge <- R6::R6Class(
       if (!is.null(this_object$`updatedAt`)) {
         self$`updatedAt` <- this_object$`updatedAt`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -516,6 +537,11 @@ Challenge <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of Challenge
     #'
@@ -546,6 +572,13 @@ Challenge <- R6::R6Class(
       self$`starredCount` <- this_object$`starredCount`
       self$`createdAt` <- this_object$`createdAt`
       self$`updatedAt` <- this_object$`updatedAt`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to Challenge

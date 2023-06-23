@@ -14,6 +14,8 @@
 #' @field hasNext Returns if there is a next page. character
 #' @field hasPrevious Returns if there is a previous page. character
 #' @field challengePlatforms A list of challenge platforms. list(\link{ChallengePlatform})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -27,6 +29,8 @@ ChallengePlatformsPage <- R6::R6Class(
     `hasNext` = NULL,
     `hasPrevious` = NULL,
     `challengePlatforms` = NULL,
+    `_field_list` = c("number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "challengePlatforms"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengePlatformsPage class.
     #'
     #' @description
@@ -39,9 +43,10 @@ ChallengePlatformsPage <- R6::R6Class(
     #' @param hasNext Returns if there is a next page.
     #' @param hasPrevious Returns if there is a previous page.
     #' @param challengePlatforms A list of challenge platforms.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, `challengePlatforms`, ...) {
+    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, `challengePlatforms`, additional_properties = NULL, ...) {
       if (!missing(`number`)) {
         if (!(is.numeric(`number`) && length(`number`) == 1)) {
           stop(paste("Error! Invalid data for `number`. Must be an integer:", `number`))
@@ -83,6 +88,11 @@ ChallengePlatformsPage <- R6::R6Class(
         sapply(`challengePlatforms`, function(x) stopifnot(R6::is.R6(x)))
         self$`challengePlatforms` <- `challengePlatforms`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -121,6 +131,10 @@ ChallengePlatformsPage <- R6::R6Class(
         ChallengePlatformsPageObject[["challengePlatforms"]] <-
           lapply(self$`challengePlatforms`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        ChallengePlatformsPageObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengePlatformsPageObject
     },
     #' Deserialize JSON string into an instance of ChallengePlatformsPage
@@ -154,6 +168,13 @@ ChallengePlatformsPage <- R6::R6Class(
       if (!is.null(this_object$`challengePlatforms`)) {
         self$`challengePlatforms` <- ApiClient$new()$deserializeObj(this_object$`challengePlatforms`, "array[ChallengePlatform]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -224,6 +245,11 @@ ChallengePlatformsPage <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengePlatformsPage
     #'
@@ -242,6 +268,13 @@ ChallengePlatformsPage <- R6::R6Class(
       self$`hasNext` <- this_object$`hasNext`
       self$`hasPrevious` <- this_object$`hasPrevious`
       self$`challengePlatforms` <- ApiClient$new()$deserializeObj(this_object$`challengePlatforms`, "array[ChallengePlatform]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengePlatformsPage

@@ -8,6 +8,8 @@
 #' @description Image Class
 #' @format An \code{R6Class} generator object
 #' @field url  character
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,20 +17,28 @@ Image <- R6::R6Class(
   "Image",
   public = list(
     `url` = NULL,
+    `_field_list` = c("url"),
+    `additional_properties` = list(),
     #' Initialize a new Image class.
     #'
     #' @description
     #' Initialize a new Image class.
     #'
     #' @param url url
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`url`, ...) {
+    initialize = function(`url`, additional_properties = NULL, ...) {
       if (!missing(`url`)) {
         if (!(is.character(`url`) && length(`url`) == 1)) {
           stop(paste("Error! Invalid data for `url`. Must be a string:", `url`))
         }
         self$`url` <- `url`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -44,6 +54,10 @@ Image <- R6::R6Class(
         ImageObject[["url"]] <-
           self$`url`
       }
+      for (key in names(self$additional_properties)) {
+        ImageObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ImageObject
     },
     #' Deserialize JSON string into an instance of Image
@@ -59,6 +73,13 @@ Image <- R6::R6Class(
       if (!is.null(this_object$`url`)) {
         self$`url` <- this_object$`url`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -81,6 +102,11 @@ Image <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of Image
     #'
@@ -93,6 +119,13 @@ Image <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`url` <- this_object$`url`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to Image

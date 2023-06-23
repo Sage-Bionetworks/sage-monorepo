@@ -13,6 +13,8 @@
 #' @field name  character [optional]
 #' @field avatarUrl  character [optional]
 #' @field bio  character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -25,6 +27,8 @@ UserCreateRequest <- R6::R6Class(
     `name` = NULL,
     `avatarUrl` = NULL,
     `bio` = NULL,
+    `_field_list` = c("login", "email", "password", "name", "avatarUrl", "bio"),
+    `additional_properties` = list(),
     #' Initialize a new UserCreateRequest class.
     #'
     #' @description
@@ -36,9 +40,10 @@ UserCreateRequest <- R6::R6Class(
     #' @param name name
     #' @param avatarUrl avatarUrl
     #' @param bio bio
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`login`, `email`, `password`, `name` = NULL, `avatarUrl` = NULL, `bio` = NULL, ...) {
+    initialize = function(`login`, `email`, `password`, `name` = NULL, `avatarUrl` = NULL, `bio` = NULL, additional_properties = NULL, ...) {
       if (!missing(`login`)) {
         if (!(is.character(`login`) && length(`login`) == 1)) {
           stop(paste("Error! Invalid data for `login`. Must be a string:", `login`))
@@ -75,6 +80,11 @@ UserCreateRequest <- R6::R6Class(
         }
         self$`bio` <- `bio`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -109,6 +119,10 @@ UserCreateRequest <- R6::R6Class(
         UserCreateRequestObject[["bio"]] <-
           self$`bio`
       }
+      for (key in names(self$additional_properties)) {
+        UserCreateRequestObject[[key]] <- self$additional_properties[[key]]
+      }
+
       UserCreateRequestObject
     },
     #' Deserialize JSON string into an instance of UserCreateRequest
@@ -139,6 +153,13 @@ UserCreateRequest <- R6::R6Class(
       if (!is.null(this_object$`bio`)) {
         self$`bio` <- this_object$`bio`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -201,6 +222,11 @@ UserCreateRequest <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of UserCreateRequest
     #'
@@ -218,6 +244,13 @@ UserCreateRequest <- R6::R6Class(
       self$`name` <- this_object$`name`
       self$`avatarUrl` <- this_object$`avatarUrl`
       self$`bio` <- this_object$`bio`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to UserCreateRequest

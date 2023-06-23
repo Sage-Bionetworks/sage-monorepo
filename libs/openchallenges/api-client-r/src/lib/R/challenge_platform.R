@@ -14,6 +14,8 @@
 #' @field websiteUrl  character
 #' @field createdAt  character
 #' @field updatedAt  character
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -27,6 +29,8 @@ ChallengePlatform <- R6::R6Class(
     `websiteUrl` = NULL,
     `createdAt` = NULL,
     `updatedAt` = NULL,
+    `_field_list` = c("id", "slug", "name", "avatarUrl", "websiteUrl", "createdAt", "updatedAt"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengePlatform class.
     #'
     #' @description
@@ -39,9 +43,10 @@ ChallengePlatform <- R6::R6Class(
     #' @param websiteUrl websiteUrl
     #' @param createdAt createdAt
     #' @param updatedAt updatedAt
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`id`, `slug`, `name`, `avatarUrl`, `websiteUrl`, `createdAt`, `updatedAt`, ...) {
+    initialize = function(`id`, `slug`, `name`, `avatarUrl`, `websiteUrl`, `createdAt`, `updatedAt`, additional_properties = NULL, ...) {
       if (!missing(`id`)) {
         if (!(is.numeric(`id`) && length(`id`) == 1)) {
           stop(paste("Error! Invalid data for `id`. Must be an integer:", `id`))
@@ -84,6 +89,11 @@ ChallengePlatform <- R6::R6Class(
         }
         self$`updatedAt` <- `updatedAt`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -122,6 +132,10 @@ ChallengePlatform <- R6::R6Class(
         ChallengePlatformObject[["updatedAt"]] <-
           self$`updatedAt`
       }
+      for (key in names(self$additional_properties)) {
+        ChallengePlatformObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengePlatformObject
     },
     #' Deserialize JSON string into an instance of ChallengePlatform
@@ -155,6 +169,13 @@ ChallengePlatform <- R6::R6Class(
       if (!is.null(this_object$`updatedAt`)) {
         self$`updatedAt` <- this_object$`updatedAt`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -225,6 +246,11 @@ ChallengePlatform <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengePlatform
     #'
@@ -243,6 +269,13 @@ ChallengePlatform <- R6::R6Class(
       self$`websiteUrl` <- this_object$`websiteUrl`
       self$`createdAt` <- this_object$`createdAt`
       self$`updatedAt` <- this_object$`updatedAt`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengePlatform

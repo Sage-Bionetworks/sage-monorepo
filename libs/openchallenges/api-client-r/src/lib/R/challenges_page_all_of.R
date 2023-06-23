@@ -8,6 +8,8 @@
 #' @description ChallengesPageAllOf Class
 #' @format An \code{R6Class} generator object
 #' @field challenges A list of challenges. list(\link{Challenge})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,19 +17,27 @@ ChallengesPageAllOf <- R6::R6Class(
   "ChallengesPageAllOf",
   public = list(
     `challenges` = NULL,
+    `_field_list` = c("challenges"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengesPageAllOf class.
     #'
     #' @description
     #' Initialize a new ChallengesPageAllOf class.
     #'
     #' @param challenges A list of challenges.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`challenges`, ...) {
+    initialize = function(`challenges`, additional_properties = NULL, ...) {
       if (!missing(`challenges`)) {
         stopifnot(is.vector(`challenges`), length(`challenges`) != 0)
         sapply(`challenges`, function(x) stopifnot(R6::is.R6(x)))
         self$`challenges` <- `challenges`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -43,6 +53,10 @@ ChallengesPageAllOf <- R6::R6Class(
         ChallengesPageAllOfObject[["challenges"]] <-
           lapply(self$`challenges`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        ChallengesPageAllOfObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengesPageAllOfObject
     },
     #' Deserialize JSON string into an instance of ChallengesPageAllOf
@@ -58,6 +72,13 @@ ChallengesPageAllOf <- R6::R6Class(
       if (!is.null(this_object$`challenges`)) {
         self$`challenges` <- ApiClient$new()$deserializeObj(this_object$`challenges`, "array[Challenge]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -80,6 +101,11 @@ ChallengesPageAllOf <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengesPageAllOf
     #'
@@ -92,6 +118,13 @@ ChallengesPageAllOf <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`challenges` <- ApiClient$new()$deserializeObj(this_object$`challenges`, "array[Challenge]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengesPageAllOf

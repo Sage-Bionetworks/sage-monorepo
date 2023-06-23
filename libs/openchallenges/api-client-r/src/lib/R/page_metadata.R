@@ -13,6 +13,8 @@
 #' @field totalPages Total number of pages in the result set. integer
 #' @field hasNext Returns if there is a next page. character
 #' @field hasPrevious Returns if there is a previous page. character
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -25,6 +27,8 @@ PageMetadata <- R6::R6Class(
     `totalPages` = NULL,
     `hasNext` = NULL,
     `hasPrevious` = NULL,
+    `_field_list` = c("number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious"),
+    `additional_properties` = list(),
     #' Initialize a new PageMetadata class.
     #'
     #' @description
@@ -36,9 +40,10 @@ PageMetadata <- R6::R6Class(
     #' @param totalPages Total number of pages in the result set.
     #' @param hasNext Returns if there is a next page.
     #' @param hasPrevious Returns if there is a previous page.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, ...) {
+    initialize = function(`number`, `size`, `totalElements`, `totalPages`, `hasNext`, `hasPrevious`, additional_properties = NULL, ...) {
       if (!missing(`number`)) {
         if (!(is.numeric(`number`) && length(`number`) == 1)) {
           stop(paste("Error! Invalid data for `number`. Must be an integer:", `number`))
@@ -75,6 +80,11 @@ PageMetadata <- R6::R6Class(
         }
         self$`hasPrevious` <- `hasPrevious`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -109,6 +119,10 @@ PageMetadata <- R6::R6Class(
         PageMetadataObject[["hasPrevious"]] <-
           self$`hasPrevious`
       }
+      for (key in names(self$additional_properties)) {
+        PageMetadataObject[[key]] <- self$additional_properties[[key]]
+      }
+
       PageMetadataObject
     },
     #' Deserialize JSON string into an instance of PageMetadata
@@ -139,6 +153,13 @@ PageMetadata <- R6::R6Class(
       if (!is.null(this_object$`hasPrevious`)) {
         self$`hasPrevious` <- this_object$`hasPrevious`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -201,6 +222,11 @@ PageMetadata <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of PageMetadata
     #'
@@ -218,6 +244,13 @@ PageMetadata <- R6::R6Class(
       self$`totalPages` <- this_object$`totalPages`
       self$`hasNext` <- this_object$`hasNext`
       self$`hasPrevious` <- this_object$`hasPrevious`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to PageMetadata

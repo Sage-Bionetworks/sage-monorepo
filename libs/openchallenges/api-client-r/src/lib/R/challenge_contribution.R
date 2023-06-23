@@ -10,6 +10,8 @@
 #' @field challengeId The unique identifier of the challenge. integer
 #' @field organizationId The unique identifier of an organization integer
 #' @field role  \link{ChallengeContributionRole}
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -19,6 +21,8 @@ ChallengeContribution <- R6::R6Class(
     `challengeId` = NULL,
     `organizationId` = NULL,
     `role` = NULL,
+    `_field_list` = c("challengeId", "organizationId", "role"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengeContribution class.
     #'
     #' @description
@@ -27,9 +31,10 @@ ChallengeContribution <- R6::R6Class(
     #' @param challengeId The unique identifier of the challenge.
     #' @param organizationId The unique identifier of an organization
     #' @param role role
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`challengeId`, `organizationId`, `role`, ...) {
+    initialize = function(`challengeId`, `organizationId`, `role`, additional_properties = NULL, ...) {
       if (!missing(`challengeId`)) {
         if (!(is.numeric(`challengeId`) && length(`challengeId`) == 1)) {
           stop(paste("Error! Invalid data for `challengeId`. Must be an integer:", `challengeId`))
@@ -48,6 +53,11 @@ ChallengeContribution <- R6::R6Class(
         }
         stopifnot(R6::is.R6(`role`))
         self$`role` <- `role`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -71,6 +81,10 @@ ChallengeContribution <- R6::R6Class(
         ChallengeContributionObject[["role"]] <-
           self$`role`$toJSON()
       }
+      for (key in names(self$additional_properties)) {
+        ChallengeContributionObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengeContributionObject
     },
     #' Deserialize JSON string into an instance of ChallengeContribution
@@ -94,6 +108,13 @@ ChallengeContribution <- R6::R6Class(
         `role_object`$fromJSON(jsonlite::toJSON(this_object$`role`, auto_unbox = TRUE, digits = NA))
         self$`role` <- `role_object`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -132,6 +153,11 @@ ChallengeContribution <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengeContribution
     #'
@@ -146,6 +172,13 @@ ChallengeContribution <- R6::R6Class(
       self$`challengeId` <- this_object$`challengeId`
       self$`organizationId` <- this_object$`organizationId`
       self$`role` <- ChallengeContributionRole$new()$fromJSON(jsonlite::toJSON(this_object$`role`, auto_unbox = TRUE, digits = NA))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengeContribution

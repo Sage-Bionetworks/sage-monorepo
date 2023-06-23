@@ -10,6 +10,8 @@
 #' @field id The unique identifier of a challenge input data type. integer
 #' @field slug The slug of the challenge input data type. character
 #' @field name The name of the challenge input data type. character
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -19,6 +21,8 @@ SimpleChallengeInputDataType <- R6::R6Class(
     `id` = NULL,
     `slug` = NULL,
     `name` = NULL,
+    `_field_list` = c("id", "slug", "name"),
+    `additional_properties` = list(),
     #' Initialize a new SimpleChallengeInputDataType class.
     #'
     #' @description
@@ -27,9 +31,10 @@ SimpleChallengeInputDataType <- R6::R6Class(
     #' @param id The unique identifier of a challenge input data type.
     #' @param slug The slug of the challenge input data type.
     #' @param name The name of the challenge input data type.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`id`, `slug`, `name`, ...) {
+    initialize = function(`id`, `slug`, `name`, additional_properties = NULL, ...) {
       if (!missing(`id`)) {
         if (!(is.numeric(`id`) && length(`id`) == 1)) {
           stop(paste("Error! Invalid data for `id`. Must be an integer:", `id`))
@@ -47,6 +52,11 @@ SimpleChallengeInputDataType <- R6::R6Class(
           stop(paste("Error! Invalid data for `name`. Must be a string:", `name`))
         }
         self$`name` <- `name`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -70,6 +80,10 @@ SimpleChallengeInputDataType <- R6::R6Class(
         SimpleChallengeInputDataTypeObject[["name"]] <-
           self$`name`
       }
+      for (key in names(self$additional_properties)) {
+        SimpleChallengeInputDataTypeObject[[key]] <- self$additional_properties[[key]]
+      }
+
       SimpleChallengeInputDataTypeObject
     },
     #' Deserialize JSON string into an instance of SimpleChallengeInputDataType
@@ -91,6 +105,13 @@ SimpleChallengeInputDataType <- R6::R6Class(
       if (!is.null(this_object$`name`)) {
         self$`name` <- this_object$`name`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -129,6 +150,11 @@ SimpleChallengeInputDataType <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of SimpleChallengeInputDataType
     #'
@@ -143,6 +169,13 @@ SimpleChallengeInputDataType <- R6::R6Class(
       self$`id` <- this_object$`id`
       self$`slug` <- this_object$`slug`
       self$`name` <- this_object$`name`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to SimpleChallengeInputDataType

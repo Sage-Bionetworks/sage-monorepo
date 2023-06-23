@@ -8,6 +8,8 @@
 #' @description ChallengeContributionsPageAllOf Class
 #' @format An \code{R6Class} generator object
 #' @field challengeContributions A list of challenge contributions. list(\link{ChallengeContribution})
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -15,19 +17,27 @@ ChallengeContributionsPageAllOf <- R6::R6Class(
   "ChallengeContributionsPageAllOf",
   public = list(
     `challengeContributions` = NULL,
+    `_field_list` = c("challengeContributions"),
+    `additional_properties` = list(),
     #' Initialize a new ChallengeContributionsPageAllOf class.
     #'
     #' @description
     #' Initialize a new ChallengeContributionsPageAllOf class.
     #'
     #' @param challengeContributions A list of challenge contributions.
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`challengeContributions`, ...) {
+    initialize = function(`challengeContributions`, additional_properties = NULL, ...) {
       if (!missing(`challengeContributions`)) {
         stopifnot(is.vector(`challengeContributions`), length(`challengeContributions`) != 0)
         sapply(`challengeContributions`, function(x) stopifnot(R6::is.R6(x)))
         self$`challengeContributions` <- `challengeContributions`
+      }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
       }
     },
     #' To JSON string
@@ -43,6 +53,10 @@ ChallengeContributionsPageAllOf <- R6::R6Class(
         ChallengeContributionsPageAllOfObject[["challengeContributions"]] <-
           lapply(self$`challengeContributions`, function(x) x$toJSON())
       }
+      for (key in names(self$additional_properties)) {
+        ChallengeContributionsPageAllOfObject[[key]] <- self$additional_properties[[key]]
+      }
+
       ChallengeContributionsPageAllOfObject
     },
     #' Deserialize JSON string into an instance of ChallengeContributionsPageAllOf
@@ -58,6 +72,13 @@ ChallengeContributionsPageAllOf <- R6::R6Class(
       if (!is.null(this_object$`challengeContributions`)) {
         self$`challengeContributions` <- ApiClient$new()$deserializeObj(this_object$`challengeContributions`, "array[ChallengeContribution]", loadNamespace("openapi"))
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -80,6 +101,11 @@ ChallengeContributionsPageAllOf <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of ChallengeContributionsPageAllOf
     #'
@@ -92,6 +118,13 @@ ChallengeContributionsPageAllOf <- R6::R6Class(
     fromJSONString = function(input_json) {
       this_object <- jsonlite::fromJSON(input_json)
       self$`challengeContributions` <- ApiClient$new()$deserializeObj(this_object$`challengeContributions`, "array[ChallengeContribution]", loadNamespace("openapi"))
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to ChallengeContributionsPageAllOf

@@ -17,6 +17,8 @@
 #' @field updatedAt  character
 #' @field type  character
 #' @field bio  character [optional]
+#' @field _field_list a list of fields list(character)
+#' @field additional_properties additional properties list(character) [optional]
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
 #' @export
@@ -33,6 +35,8 @@ User <- R6::R6Class(
     `updatedAt` = NULL,
     `type` = NULL,
     `bio` = NULL,
+    `_field_list` = c("id", "login", "email", "name", "status", "avatarUrl", "createdAt", "updatedAt", "type", "bio"),
+    `additional_properties` = list(),
     #' Initialize a new User class.
     #'
     #' @description
@@ -48,9 +52,10 @@ User <- R6::R6Class(
     #' @param status status
     #' @param avatarUrl avatarUrl
     #' @param bio bio
+    #' @param additional_properties additional properties (optional)
     #' @param ... Other optional arguments.
     #' @export
-    initialize = function(`login`, `email`, `createdAt`, `updatedAt`, `type`, `id` = NULL, `name` = NULL, `status` = NULL, `avatarUrl` = NULL, `bio` = NULL, ...) {
+    initialize = function(`login`, `email`, `createdAt`, `updatedAt`, `type`, `id` = NULL, `name` = NULL, `status` = NULL, `avatarUrl` = NULL, `bio` = NULL, additional_properties = NULL, ...) {
       if (!missing(`login`)) {
         if (!(is.character(`login`) && length(`login`) == 1)) {
           stop(paste("Error! Invalid data for `login`. Must be a string:", `login`))
@@ -112,6 +117,11 @@ User <- R6::R6Class(
         }
         self$`bio` <- `bio`
       }
+      if (!is.null(additional_properties)) {
+        for (key in names(additional_properties)) {
+          self$additional_properties[[key]] <- additional_properties[[key]]
+        }
+      }
     },
     #' To JSON string
     #'
@@ -162,6 +172,10 @@ User <- R6::R6Class(
         UserObject[["bio"]] <-
           self$`bio`
       }
+      for (key in names(self$additional_properties)) {
+        UserObject[[key]] <- self$additional_properties[[key]]
+      }
+
       UserObject
     },
     #' Deserialize JSON string into an instance of User
@@ -206,6 +220,13 @@ User <- R6::R6Class(
       if (!is.null(this_object$`bio`)) {
         self$`bio` <- this_object$`bio`
       }
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' To JSON string
@@ -300,6 +321,11 @@ User <- R6::R6Class(
       )
       jsoncontent <- paste(jsoncontent, collapse = ",")
       json_string <- as.character(jsonlite::minify(paste("{", jsoncontent, "}", sep = "")))
+      json_obj <- jsonlite::fromJSON(json_string)
+      for (key in names(self$additional_properties)) {
+        json_obj[[key]] <- self$additional_properties[[key]]
+      }
+      json_string <- as.character(jsonlite::minify(jsonlite::toJSON(json_obj, auto_unbox = TRUE, digits = NA)))
     },
     #' Deserialize JSON string into an instance of User
     #'
@@ -321,6 +347,13 @@ User <- R6::R6Class(
       self$`updatedAt` <- this_object$`updatedAt`
       self$`type` <- this_object$`type`
       self$`bio` <- this_object$`bio`
+      # process additional properties/fields in the payload
+      for (key in names(this_object)) {
+        if (!(key %in% self$`_field_list`)) { # json key not in list of fields
+          self$additional_properties[[key]] <- this_object[[key]]
+        }
+      }
+
       self
     },
     #' Validate JSON input with respect to User
