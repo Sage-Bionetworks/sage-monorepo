@@ -116,13 +116,13 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengePlatformFilterValues: FilterValue[] = [];
+export const challengePlatformsFilterValues: FilterValue[] = [];
 
-export const challengeInputDataTypeFilterValues: FilterValue[] = [];
+export const challengeInputDataTypesFilterValues: FilterValue[] = [];
 
-export const challengeOrganizationFilterValues: FilterValue[] = [];
+export const challengeOrganizationsFilterValues: FilterValue[] = [];
 
-export const challengeOrganizerFilterValues: FilterValue[] = [];
+export const challengeOrganizersFilterValues: FilterValue[] = [];
 
 export const challengeSortFilterValues: FilterValue[] = [
   {

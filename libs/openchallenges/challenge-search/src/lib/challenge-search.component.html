@@ -104,6 +104,53 @@
         ></openchallenges-checkbox-filter>
       </p-panel>
       <p-divider></p-divider>
+      <!-- <p-panel
+        header="{{ platformsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="platformsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="platformsFilter.values"
+          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="platformsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onPlatformsChange($event)"
+          (searchChange)="onPlatformsSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider> -->
+      <p-panel
+        header="{{ inputDataTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="inputDataTypesFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="inputDataTypesFilter.values"
+          [selectedValues]="selectedInputDataTypes"
+          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onInputDataTypesChange($event)"
+          (searchChange)="onInputDataTypeSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ organizationsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="organizationsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="organizationsFilter.values"
+          [selectedValues]="selectedOrgs"
+          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="organizationsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onOrganizationsChange($event)"
+          (searchChange)="onOrganizationSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
       <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
@@ -114,7 +161,7 @@
         </p-panel>
         <p-divider></p-divider>
       </ng-container> -->
-      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
+      <!-- <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
         <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
           <openchallenges-search-dropdown-filter
             [values]="dropdown.values"
@@ -126,7 +173,7 @@
           ></openchallenges-search-dropdown-filter>
         </p-panel>
         <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container>
+      </ng-container> -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>

@@ -28,12 +28,11 @@ import {
   challengeStatusFilter,
   // challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
-  challengeInputDataTypeFilter,
-  // challengeIncentiveTypesFilter,
-  challengePlatformFilter,
-  challengeOrganizationFilter,
-  challengeOrganizaterFilter,
+  challengeInputDataTypesFilter,
   challengeIncentiveTypesFilter,
+  challengePlatformsFilter,
+  challengeOrganizationsFilter,
+  // challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 import {
@@ -84,9 +83,8 @@ export class ChallengeSearchComponent
     ''
   );
 
-  private orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
-    ''
-  );
+  private organizationSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
 
   private inputDataTypeSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
@@ -119,19 +117,23 @@ export class ChallengeSearchComponent
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentiveTypesFilter = challengeIncentiveTypesFilter;
 
-  dropdownFilters: Filter[] = [
-    challengePlatformFilter,
-    challengeInputDataTypeFilter,
-    challengeOrganizationFilter,
-    challengeOrganizaterFilter,
-  ];
+  platformsFilter = challengePlatformsFilter;
+  inputDataTypesFilter = challengeInputDataTypesFilter;
+  organizationsFilter = challengeOrganizationsFilter;
+  // dropdownFilters: Filter[] = [
+  //   challengePlatformFilter,
+  //   challengeInputDataTypeFilter,
+  //   challengeOrganizationFilter,
+  //   challengeOrganizaterFilter,
+  // ];
 
   selectedStatus: string[] = [];
   selectedSubmissionTypes: string[] = [];
   selectedIncentiveTypes: string[] = [];
 
-  selectedOrgs: FilterValue[] = [];
-  selectedInputDataTypes: FilterValue[] = [];
+  selectedPlatforms: string[] = [];
+  selectedOrgs: number[] = [];
+  selectedInputDataTypes: string[] = [];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
@@ -155,6 +157,42 @@ export class ChallengeSearchComponent
     this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.sortedBy = challengeSortFilterValues[0].value as string;
 
+    this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['status']) {
+        const status = Array.isArray(params['status'])
+          ? params['status']
+          : [params['status']];
+        this.selectedStatus = status;
+      }
+
+      if (params['submissionTypes']) {
+        const submissionTypes = Array.isArray(params['submissionTypes'])
+          ? params['submissionTypes']
+          : [params['submissionTypes']];
+        this.selectedSubmissionTypes = submissionTypes;
+      }
+
+      if (params['incentiveTypes']) {
+        const incentiveTypes = Array.isArray(params['incentiveTypes'])
+          ? params['incentiveTypes']
+          : [params['incentiveTypes']];
+        this.selectedIncentiveTypes = incentiveTypes;
+      }
+
+      if (params['inputDataTypes']) {
+        const inputDataTypes = Array.isArray(params['inputDataTypes'])
+          ? params['inputDataTypes']
+          : [params['inputDataTypes']];
+        this.selectedInputDataTypes = inputDataTypes;
+      }
+
+      if (params['organizations']) {
+        const organizations = Array.isArray(params['organizations'])
+          ? params['organizations']
+          : [params['organizations']];
+        this.selectedOrgs = organizations;
+      }
+    });
     // update the total number of challenges in database with empty query
     this.challengeService
       .listChallenges({} as ChallengeSearchQuery)
@@ -163,7 +201,7 @@ export class ChallengeSearchComponent
     // update platform filter values
     this.challengePlatformService.listChallengePlatforms().subscribe(
       (page) =>
-        (challengePlatformFilter.values = page.challengePlatforms.map(
+        (this.platformsFilter.values = page.challengePlatforms.map(
           (platform) => ({
             value: platform.slug,
             label: platform.name,
@@ -194,14 +232,17 @@ export class ChallengeSearchComponent
           })
         ) as FilterValue[];
 
-        challengeInputDataTypeFilter.values = union(
-          searchedInputDataTypes,
-          this.selectedInputDataTypes
+        const selectedInputDataTypesValues = searchedInputDataTypes.filter(
+          (value) => this.selectedInputDataTypes.includes(value.value as string)
         );
+        this.inputDataTypesFilter.values = union(
+          searchedInputDataTypes,
+          selectedInputDataTypesValues
+        ) as FilterValue[];
       });
 
     // update organization filter values
-    this.orgSearchTerms
+    this.organizationSearchTerms
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
@@ -231,22 +272,14 @@ export class ChallengeSearchComponent
           active: false,
         })) as FilterValue[];
 
-        challengeOrganizationFilter.values = union(
-          searchedOrgs,
-          this.selectedOrgs
+        const selectedOrgValues = searchedOrgs.filter((value) =>
+          this.selectedOrgs.includes(value.value as number)
         );
+        this.organizationsFilter.values = union(
+          searchedOrgs,
+          selectedOrgValues
+        ) as FilterValue[];
       });
-
-    // // mock up service to query all unique organizers
-    // this.listOrganizers().subscribe(
-    //   (organizers) =>
-    //     (this.dropdownFilters[1].values = organizers.map((organizer) => ({
-    //       value: organizer.challengeId,
-    //       label: organizer.name,
-    //       avatarUrl: organizer.avatarUrl,
-    //       active: false,
-    //     })))
-    // );
 
     // const defaultQuery: ChallengeSearchQuery = {
     //   pageNumber: this.pageNumber,
@@ -256,57 +289,32 @@ export class ChallengeSearchComponent
     //   minStartDate: this.selectedYear?.start || undefined,
     //   maxStartDate: this.selectedYear?.end || undefined,
     // } as ChallengeSearchQuery;
-
-    this.activatedRoute.queryParams.subscribe((params) => {
-      if (params['status']) {
-        const status = Array.isArray(params['status'])
-          ? params['status']
-          : [params['status']];
-        this.selectedStatus = status;
-      }
-
-      if (params['submissionTypes']) {
-        const submissionTypes = Array.isArray(params['submissionTypes'])
-          ? params['submissionTypes']
-          : [params['submissionTypes']];
-        this.selectedSubmissionTypes = submissionTypes;
-      }
-
-      if (params['incentiveTypes']) {
-        const incentiveTypes = Array.isArray(params['incentiveTypes'])
-          ? params['incentiveTypes']
-          : [params['incentiveTypes']];
-        this.selectedIncentiveTypes = incentiveTypes;
-      }
-
-      const defaultQuery = {
-        pageNumber: this.pageNumber,
-        pageSize: this.pageSize,
-        sort: this.sortedBy,
-        searchTerms: params['searchTerms'] || undefined,
-        minStartDate: params['minStartDate'] || undefined,
-        maxStartDate: params['maxStartDate'] || undefined,
-        status: this.selectedStatus,
-        submissionTypes: params['submissionTypes'] || undefined,
-        incentives: params['incentives'] || undefined,
-        inputDataTypes: params['inputDataTypes'] || undefined,
-        organizations: params['organizations'] || undefined,
-      } as ChallengeSearchQuery;
-
-      this.query.next(defaultQuery);
-
-      // updating year checkbox not working for some reasons
-      // this.selectedYear = {
-      //   start: urlQuery.minStartDate as string,
-      //   end: urlQuery.maxStartDate as string,
-      // } as DateRange;
-      // this.sortedBy = urlQuery.sort as string;
-      // this.selectedStatus = [urlQuery.status] as string[];
-      console.log(this.selectedStatus);
-    });
   }
 
   ngAfterContentInit(): void {
+    const defaultQuery = {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+      sort: this.sortedBy,
+      // searchTerms: params['searchTerms'] || undefined,
+      // minStartDate: params['minStartDate'] || undefined,
+      // maxStartDate: params['maxStartDate'] || undefined,
+      status: this.selectedStatus,
+      submissionTypes: this.selectedSubmissionTypes,
+      incentives: this.selectedIncentiveTypes,
+      inputDataTypes: this.selectedInputDataTypes,
+      organizations: this.selectedOrgs,
+    } as ChallengeSearchQuery;
+
+    this.query.next(defaultQuery);
+
+    // updating year checkbox not working for some reasons
+    // this.selectedYear = {
+    //   start: urlQuery.minStartDate as string,
+    //   end: urlQuery.maxStartDate as string,
+    // } as DateRange;
+    // this.sortedBy = urlQuery.sort as string;
+
     this.searchTerms
       .pipe(
         skip(1),
@@ -420,48 +428,84 @@ export class ChallengeSearchComponent
     });
   }
 
-  onCheckboxSelectionChange(selected: string[], queryName: string): void {
-    // const newQuery = assign(this.query.getValue(), {
-    //   [queryName]: selected,
-    // });
-    // this.query.next(newQuery);
+  // onCheckboxSelectionChange(selected: string[], queryName: string): void {
+  //   // const newQuery = assign(this.query.getValue(), {
+  //   //   [queryName]: selected,
+  //   // });
+  //   // this.query.next(newQuery);
+  //   this.router.navigate([], {
+  //     queryParams: {
+  //       [queryName]: selected,
+  //     },
+  //   });
+  // }
+
+  // onPlatformsChange(selected: string[]): void {
+  //   this.router.navigate([], {
+  //     queryParams: {
+  //       platforms: selected,
+  //     },
+  //   });
+  // }
+
+  // onPlatformSearchChange(searched: string): void {
+  //   this.orgSearchTerms.next(searched);
+  // }
+
+  onInputDataTypesChange(selected: string[]): void {
     this.router.navigate([], {
       queryParams: {
-        [queryName]: selected,
+        inputDataTypes: selected,
       },
     });
   }
 
-  onDropdownSelectionChange(
-    selected: string[] | number[],
-    queryName: string
-  ): void {
-    if (queryName === 'inputDataTypes') {
-      this.selectedOrgs = challengeInputDataTypeFilter.values.filter((value) =>
-        (selected as string[]).includes(value.value as string)
-      );
-    }
+  onInputDataTypeSearchChange(searched: string): void {
+    this.inputDataTypeSearchTerms.next(searched);
+  }
 
-    if (queryName === 'organizations') {
-      this.selectedOrgs = challengeOrganizationFilter.values.filter((value) =>
-        (selected as number[]).includes(value.value as number)
-      );
-    }
-
+  onOrganizationsChange(selected: number[]): void {
     this.router.navigate([], {
       queryParams: {
-        [queryName]: selected,
+        organizations: selected,
       },
     });
-    // const newQuery = assign(this.query.getValue(), {
-    //   [queryName]: selected,
-    // });
-    // this.query.next(newQuery);
   }
 
-  onDropdownSearchChange(searched: string): void {
-    this.orgSearchTerms.next(searched);
+  onOrganizationSearchChange(searched: string): void {
+    this.organizationSearchTerms.next(searched);
   }
+
+  // onDropdownSelectionChange(
+  //   selected: string[] | number[],
+  //   queryName: string
+  // ): void {
+  //   if (queryName === 'inputDataTypes') {
+  //     this.selectedOrgs = this.inputDataTypesFilter.values.filter((value) =>
+  //       (selected as string[]).includes(value.value as string)
+  //     );
+  //   }
+
+  //   if (queryName === 'organizations') {
+  //     this.selectedOrgs = this.organizationsFilter.values.filter((value) =>
+  //       (selected as number[]).includes(value.value as number)
+  //     );
+  //   }
+
+  //   this.router.navigate([], {
+  //     queryParams: {
+  //       [queryName]: selected,
+  //     },
+  //   });
+  // const newQuery = assign(this.query.getValue(), {
+  //   [queryName]: selected,
+  // });
+  // this.query.next(newQuery);
+  // }
+
+  // onDropdownSearchChange(searched: string): void {
+  //   this.orgSearchTerms.next(searched);
+  // }
 
   onSortChange(): void {
     // const newQuery = assign(this.query.getValue(), {
@@ -474,10 +518,6 @@ export class ChallengeSearchComponent
       },
     });
   }
-
-  // private listOrganizers(): Observable<ChallengeOrganizer[]> {
-  //   return of(MOCK_CHALLENGE_ORGANIZERS);
-  // }
 
   onPageChange(event: any) {
     // const newQuery = assign(this.query.getValue(), {
