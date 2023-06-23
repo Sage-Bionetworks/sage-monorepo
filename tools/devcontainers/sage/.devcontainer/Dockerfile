@@ -83,7 +83,7 @@ RUN groupadd docker \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
-  # Install the R environment
+  # Install R
   && curl "https://cdn.rstudio.com/r/debian-11/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
     && gdebi --non-interactive /tmp/r_amd64.deb \
     && rm -fr /tmp/r_amd64.deb \
