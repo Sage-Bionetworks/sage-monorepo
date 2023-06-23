@@ -91,6 +91,19 @@
         ></openchallenges-checkbox-filter>
       </p-panel>
       <p-divider></p-divider>
+      <p-panel
+        header="{{ incentiveTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="incentiveTypesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="incentiveTypesFilter.values"
+          [selectedValues]="selectedIncentiveTypes"
+          (selectionChange)="onIncentiveTypesChange($event)"
+          inputId="{{ incentiveTypesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
       <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
         <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
           <openchallenges-checkbox-filter
