@@ -201,6 +201,18 @@ export class ChallengeSearchComponent
         this.selectedOrgs = organizations;
       }
 
+      if (params['pageNumber']) {
+        this.pageNumber = params['pageNumber'];
+      }
+
+      if (params['pageSize']) {
+        this.pageSize = params['pageSize'];
+      }
+
+      if (params['sort']) {
+        this.sortedBy = params['sort'];
+      }
+
       const defaultQuery = {
         pageNumber: this.pageNumber,
         pageSize: this.pageSize,
