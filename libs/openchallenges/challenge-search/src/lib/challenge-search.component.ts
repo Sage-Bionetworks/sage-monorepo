@@ -101,8 +101,8 @@ export class ChallengeSearchComponent
   isCustomYear = false;
 
   selectedYear!: DateRange | string | undefined;
-  selectedminStartDate!: string | undefined;
-  selectedmaxStartDate!: string | undefined;
+  selectedMinStartDate!: string | undefined;
+  selectedMaxStartDate!: string | undefined;
 
   pageNumber = 0;
   pageSize = 24;
@@ -162,13 +162,18 @@ export class ChallengeSearchComponent
 
     this.activatedRoute.queryParams.subscribe((params) => {
       if (params['minStartDate'] || params['maxStartDate']) {
-        const yearRange = [
-          new Date(params['minStartDate']),
-          new Date(params['maxStartDate']),
-        ];
         this.selectedYear = 'custom';
         this.isCustomYear = true;
-        this.customMonthRange = yearRange;
+
+        this.selectedMinStartDate = params['minStartDate'];
+        this.selectedMaxStartDate = params['maxStartDate'];
+
+        const yearRange = [
+          params['minStartDate'] ? new Date(params['minStartDate']) : undefined,
+          params['maxStartDate'] ? new Date(params['maxStartDate']) : undefined,
+        ];
+
+        this.customMonthRange = yearRange as Date[];
       }
 
       if (params['status']) {
@@ -230,8 +235,8 @@ export class ChallengeSearchComponent
         pageSize: this.pageSize,
         sort: this.sortedBy,
         // searchTerms: params['searchTerms'] || undefined,
-        minStartDate: this.selectedminStartDate,
-        maxStartDate: this.selectedmaxStartDate,
+        minStartDate: this.selectedMinStartDate,
+        maxStartDate: this.selectedMaxStartDate,
         status: this.selectedStatus,
         submissionTypes: this.selectedSubmissionTypes,
         incentives: this.selectedIncentives,
@@ -402,8 +407,8 @@ export class ChallengeSearchComponent
       this.router.navigate([], {
         queryParamsHandling: 'merge',
         queryParams: {
-          minStartDate: this.selectedminStartDate,
-          maxStartDate: this.selectedmaxStartDate,
+          minStartDate: this.selectedMinStartDate,
+          maxStartDate: this.selectedMaxStartDate,
         },
       });
     }
