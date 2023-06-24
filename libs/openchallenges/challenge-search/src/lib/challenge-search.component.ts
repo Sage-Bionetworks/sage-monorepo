@@ -313,10 +313,10 @@ export class ChallengeSearchComponent
         takeUntil(this.destroy)
       )
       .subscribe((searched) => {
-        // update query string in url
+        const searchedTerms = searched === '' ? undefined : searched;
         this.router.navigate([], {
           queryParamsHandling: 'merge',
-          queryParams: { searchTerms: searched },
+          queryParams: { searchTerms: searchedTerms },
         });
       });
 
