@@ -26,13 +26,11 @@ import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
-  // challengeDifficultyFilter,
   challengeSubmissionTypesFilter,
   challengeInputDataTypesFilter,
   challengeIncentivesFilter,
   challengePlatformsFilter,
   challengeOrganizationsFilter,
-  // challengeOrganizaterFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 import {
@@ -55,10 +53,7 @@ import {
 } from 'rxjs/operators';
 import { Calendar } from 'primeng/calendar';
 import { DatePipe } from '@angular/common';
-import {
-  // assign,
-  union,
-} from 'lodash';
+import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -113,13 +108,6 @@ export class ChallengeSearchComponent
   defaultPageSize = 24;
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
-
-  // checkboxFilters: Filter[] = [
-  //   challengeStatusFilter,
-  //   // challengeDifficultyFilter,
-  //   challengeSubmissionTypesFilter,
-  //   challengeIncentiveTypesFilter,
-  // ];
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentivesFilter = challengeIncentivesFilter;
@@ -127,12 +115,6 @@ export class ChallengeSearchComponent
   platformsFilter = challengePlatformsFilter;
   inputDataTypesFilter = challengeInputDataTypesFilter;
   organizationsFilter = challengeOrganizationsFilter;
-  // dropdownFilters: Filter[] = [
-  //   challengePlatformFilter,
-  //   challengeInputDataTypeFilter,
-  //   challengeOrganizationFilter,
-  //   challengeOrganizaterFilter,
-  // ];
 
   selectedStatus!: string[];
   selectedSubmissionTypes!: string[];
@@ -320,25 +302,9 @@ export class ChallengeSearchComponent
           selectedOrgValues
         ) as FilterValue[];
       });
-
-    // const defaultQuery: ChallengeSearchQuery = {
-    //   pageNumber: this.pageNumber,
-    //   pageSize: this.pageSize,
-    //   searchTerms: this.searchTermValue,
-    //   sort: this.sortedBy,
-    //   minStartDate: this.selectedYear?.start || undefined,
-    //   maxStartDate: this.selectedYear?.end || undefined,
-    // } as ChallengeSearchQuery;
   }
 
   ngAfterContentInit(): void {
-    // updating year checkbox not working for some reasons
-    // this.selectedYear = {
-    //   start: urlQuery.minStartDate as string,
-    //   end: urlQuery.maxStartDate as string,
-    // } as DateRange;
-    // this.sortedBy = urlQuery.sort as string;
-
     this.searchTerms
       .pipe(
         skip(1),
@@ -392,12 +358,6 @@ export class ChallengeSearchComponent
   onYearChange(): void {
     this.isCustomYear = (this.selectedYear as string) === 'custom';
     if (!this.isCustomYear) {
-      // update query with new year range
-      // const newQuery = assign(this.query.getValue(), {
-      //   minStartDate: yearRange ? yearRange.start : undefined,
-      //   maxStartDate: yearRange ? yearRange.end : undefined,
-      // });
-      // this.query.next(newQuery);
       const yearRange = this.selectedYear as DateRange | undefined;
       this.router.navigate([], {
         queryParamsHandling: 'merge',
@@ -412,20 +372,8 @@ export class ChallengeSearchComponent
   }
 
   onCalendarChange(): void {
-    console.log(this.calendar);
     this.isCustomYear = true;
     if (this.calendar) {
-      // const newQuery = assign(this.query.getValue(), {
-      //   minStartDate: this.datePipe.transform(
-      //     this.calendar.value[0],
-      //     'yyyy-MM-dd'
-      //   ),
-      //   maxStartDate: this.datePipe.transform(
-      //     this.calendar.value[1],
-      //     'yyyy-MM-dd'
-      //   ),
-      // });
-      // this.query.next(newQuery);
       this.router.navigate([], {
         queryParamsHandling: 'merge',
         queryParams: {
@@ -477,30 +425,6 @@ export class ChallengeSearchComponent
     });
   }
 
-  // onCheckboxSelectionChange(selected: string[], queryName: string): void {
-  //   // const newQuery = assign(this.query.getValue(), {
-  //   //   [queryName]: selected,
-  //   // });
-  //   // this.query.next(newQuery);
-  //   this.router.navigate([], {
-  //     queryParams: {
-  //       [queryName]: selected,
-  //     },
-  //   });
-  // }
-
-  // onPlatformsChange(selected: string[]): void {
-  //   this.router.navigate([], {
-  //     queryParams: {
-  //       platforms: selected,
-  //     },
-  //   });
-  // }
-
-  // onPlatformSearchChange(searched: string): void {
-  //   this.orgSearchTerms.next(searched);
-  // }
-
   onInputDataTypesChange(selected: string[]): void {
     this.router.navigate([], {
       queryParams: {
@@ -526,37 +450,6 @@ export class ChallengeSearchComponent
     this.organizationSearchTerms.next(searched);
   }
 
-  // onDropdownSelectionChange(
-  //   selected: string[] | number[],
-  //   queryName: string
-  // ): void {
-  //   if (queryName === 'inputDataTypes') {
-  //     this.selectedOrgs = this.inputDataTypesFilter.values.filter((value) =>
-  //       (selected as string[]).includes(value.value as string)
-  //     );
-  //   }
-
-  //   if (queryName === 'organizations') {
-  //     this.selectedOrgs = this.organizationsFilter.values.filter((value) =>
-  //       (selected as number[]).includes(value.value as number)
-  //     );
-  //   }
-
-  //   this.router.navigate([], {
-  //     queryParams: {
-  //       [queryName]: selected,
-  //     },
-  //   });
-  // const newQuery = assign(this.query.getValue(), {
-  //   [queryName]: selected,
-  // });
-  // this.query.next(newQuery);
-  // }
-
-  // onDropdownSearchChange(searched: string): void {
-  //   this.orgSearchTerms.next(searched);
-  // }
-
   onSortChange(): void {
     // const newQuery = assign(this.query.getValue(), {
     //   sort: this.sortedBy,
@@ -571,11 +464,6 @@ export class ChallengeSearchComponent
   }
 
   onPageChange(event: any) {
-    // const newQuery = assign(this.query.getValue(), {
-    //   pageNumber: event.page,
-    //   pageSize: event.rows,
-    // });
-    // this.query.next(newQuery);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
