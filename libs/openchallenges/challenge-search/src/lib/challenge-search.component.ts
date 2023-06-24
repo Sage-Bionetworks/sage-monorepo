@@ -91,8 +91,6 @@ export class ChallengeSearchComponent
 
   private destroy = new Subject<void>();
 
-  searchTermValue = '';
-
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
   searchResultsCount = 0;
@@ -104,15 +102,15 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | string | undefined;
   selectedMinStartDate!: string | undefined;
   selectedMaxStartDate!: string | undefined;
+  searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  selectedSortedBy!: number;
+  sortedBy!: string;
 
   // set default selection
   defaultSortedBy = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
-
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
 
@@ -145,7 +143,6 @@ export class ChallengeSearchComponent
   selectedInputDataTypes!: string[];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
-  sortedBy!: string;
 
   refreshed = true;
 
@@ -170,8 +167,8 @@ export class ChallengeSearchComponent
       this.selectedMaxStartDate = params['maxStartDate'];
 
       const isDateDefined = params['minStartDate'] || params['maxStartDate'];
-      if (isDateDefined) {
-        if (this.refreshed) {
+      if (this.refreshed) {
+        if (isDateDefined) {
           // display custom range only once with defined date query after refreshing
           this.selectedYear = 'custom';
           this.isCustomYear = true;
@@ -186,9 +183,9 @@ export class ChallengeSearchComponent
 
           this.customMonthRange = yearRange as Date[];
           this.refreshed = false;
+        } else {
+          this.selectedYear = undefined;
         }
-      } else {
-        this.selectedYear = undefined;
       }
 
       this.selectedStatus = params['status']
@@ -215,15 +212,16 @@ export class ChallengeSearchComponent
         ? this.ensureArray(params['organizations'])
         : [];
 
+      this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = params['pageNumber'];
       this.selectedPageSize = params['pageSize'];
-      this.selectedSortedBy = params['sort'];
+      this.sortedBy = params['sort'];
 
       const defaultQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
-        sort: this.selectedSortedBy || this.defaultSortedBy,
-        // searchTerms: params['searchTerms'] || undefined,
+        sort: this.sortedBy || this.defaultSortedBy,
+        searchTerms: this.searchedTerms,
         minStartDate: this.selectedMinStartDate,
         maxStartDate: this.selectedMaxStartDate,
         status: this.selectedStatus,
@@ -348,9 +346,12 @@ export class ChallengeSearchComponent
         distinctUntilChanged(),
         takeUntil(this.destroy)
       )
-      .subscribe((searchTerms) => {
+      .subscribe((searched) => {
         // update query string in url
-        this.router.navigate([], { queryParams: { searchTerms } });
+        this.router.navigate([], {
+          queryParamsHandling: 'merge',
+          queryParams: { searchTerms: searched },
+        });
       });
 
     this.query
@@ -385,7 +386,7 @@ export class ChallengeSearchComponent
 
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
-    this.searchTerms.next(this.searchTermValue);
+    this.searchTerms.next(this.searchedTerms);
   }
 
   onYearChange(): void {
