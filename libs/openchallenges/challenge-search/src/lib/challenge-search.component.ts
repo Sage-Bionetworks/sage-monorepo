@@ -95,6 +95,7 @@ export class ChallengeSearchComponent
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
+  searchResultsCount = 0;
 
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: Date[] | undefined;
@@ -103,10 +104,14 @@ export class ChallengeSearchComponent
   selectedYear!: DateRange | string | undefined;
   selectedMinStartDate!: string | undefined;
   selectedMaxStartDate!: string | undefined;
+  selectedPageNumber!: number;
+  selectedPageSize!: number;
+  selectedSortedBy!: number;
 
-  pageNumber = 0;
-  pageSize = 24;
-  searchResultsCount = 0;
+  // set default selection
+  defaultSortedBy = 'relevance';
+  defaultPageNumber = 0;
+  defaultPageSize = 24;
 
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
@@ -131,16 +136,18 @@ export class ChallengeSearchComponent
   //   challengeOrganizaterFilter,
   // ];
 
-  selectedStatus: string[] = [];
-  selectedSubmissionTypes: string[] = [];
-  selectedIncentives: string[] = [];
-  selectedPlatforms: string[] = [];
+  selectedStatus!: string[];
+  selectedSubmissionTypes!: string[];
+  selectedIncentives!: string[];
+  selectedPlatforms!: string[];
 
-  selectedOrgs: number[] = [];
-  selectedInputDataTypes: string[] = [];
+  selectedOrgs!: number[];
+  selectedInputDataTypes!: string[];
 
   sortFilters: FilterValue[] = challengeSortFilterValues;
   sortedBy!: string;
+
+  refreshed = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -157,83 +164,65 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
-    // set default selection
-    this.sortedBy = challengeSortFilterValues[0].value as string;
-
     this.activatedRoute.queryParams.subscribe((params) => {
-      if (params['minStartDate'] || params['maxStartDate']) {
-        this.selectedYear = 'custom';
-        this.isCustomYear = true;
+      // Chunk of codes below used to update selected values that represent in the UI of filters
+      this.selectedMinStartDate = params['minStartDate'];
+      this.selectedMaxStartDate = params['maxStartDate'];
 
-        this.selectedMinStartDate = params['minStartDate'];
-        this.selectedMaxStartDate = params['maxStartDate'];
+      const isDateDefined = params['minStartDate'] || params['maxStartDate'];
+      if (isDateDefined) {
+        if (this.refreshed) {
+          // display custom range only once with defined date query after refreshing
+          this.selectedYear = 'custom';
+          this.isCustomYear = true;
+          const yearRange = [
+            params['minStartDate']
+              ? new Date(params['minStartDate'])
+              : undefined,
+            params['maxStartDate']
+              ? new Date(params['maxStartDate'])
+              : undefined,
+          ];
 
-        const yearRange = [
-          params['minStartDate'] ? new Date(params['minStartDate']) : undefined,
-          params['maxStartDate'] ? new Date(params['maxStartDate']) : undefined,
-        ];
-
-        this.customMonthRange = yearRange as Date[];
+          this.customMonthRange = yearRange as Date[];
+          this.refreshed = false;
+        }
+      } else {
+        this.selectedYear = undefined;
       }
 
-      if (params['status']) {
-        const status = Array.isArray(params['status'])
-          ? params['status']
-          : [params['status']];
-        this.selectedStatus = status;
-      }
+      this.selectedStatus = params['status']
+        ? this.ensureArray(params['status'])
+        : [];
 
-      if (params['submissionTypes']) {
-        const submissionTypes = Array.isArray(params['submissionTypes'])
-          ? params['submissionTypes']
-          : [params['submissionTypes']];
-        this.selectedSubmissionTypes = submissionTypes;
-      }
+      this.selectedSubmissionTypes = params['submissionTypes']
+        ? this.ensureArray(params['submissionTypes'])
+        : [];
 
-      if (params['incentives']) {
-        const incentives = Array.isArray(params['incentives'])
-          ? params['incentives']
-          : [params['incentives']];
-        this.selectedIncentives = incentives;
-      }
+      this.selectedIncentives = params['incentives']
+        ? this.ensureArray(params['incentives'])
+        : [];
 
-      if (params['platforms']) {
-        const platforms = Array.isArray(params['platforms'])
-          ? params['platforms']
-          : [params['platforms']];
-        this.selectedPlatforms = platforms;
-      }
+      this.selectedPlatforms = params['platforms']
+        ? this.ensureArray(params['platforms'])
+        : [];
 
-      if (params['inputDataTypes']) {
-        const inputDataTypes = Array.isArray(params['inputDataTypes'])
-          ? params['inputDataTypes']
-          : [params['inputDataTypes']];
-        this.selectedInputDataTypes = inputDataTypes;
-      }
+      this.selectedInputDataTypes = params['inputDataTypes']
+        ? this.ensureArray(params['inputDataTypes'])
+        : [];
 
-      if (params['organizations']) {
-        const organizations = Array.isArray(params['organizations'])
-          ? params['organizations']
-          : [params['organizations']];
-        this.selectedOrgs = organizations;
-      }
+      this.selectedOrgs = params['organizations']
+        ? this.ensureArray(params['organizations'])
+        : [];
 
-      if (params['pageNumber']) {
-        this.pageNumber = params['pageNumber'];
-      }
-
-      if (params['pageSize']) {
-        this.pageSize = params['pageSize'];
-      }
-
-      if (params['sort']) {
-        this.sortedBy = params['sort'];
-      }
+      this.selectedPageNumber = params['pageNumber'];
+      this.selectedPageSize = params['pageSize'];
+      this.selectedSortedBy = params['sort'];
 
       const defaultQuery = {
-        pageNumber: this.pageNumber,
-        pageSize: this.pageSize,
-        sort: this.sortedBy,
+        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
+        pageSize: this.selectedPageSize || this.defaultPageSize,
+        sort: this.selectedSortedBy || this.defaultSortedBy,
         // searchTerms: params['searchTerms'] || undefined,
         minStartDate: this.selectedMinStartDate,
         maxStartDate: this.selectedMaxStartDate,
@@ -390,6 +379,10 @@ export class ChallengeSearchComponent
     this.destroy.complete();
   }
 
+  ensureArray(value: any): any[] {
+    return Array.isArray(value) ? value : [value];
+  }
+
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
     this.searchTerms.next(this.searchTermValue);
@@ -404,17 +397,21 @@ export class ChallengeSearchComponent
       //   maxStartDate: yearRange ? yearRange.end : undefined,
       // });
       // this.query.next(newQuery);
+      const yearRange = this.selectedYear as DateRange | undefined;
       this.router.navigate([], {
         queryParamsHandling: 'merge',
         queryParams: {
-          minStartDate: this.selectedMinStartDate,
-          maxStartDate: this.selectedMaxStartDate,
+          minStartDate: yearRange?.start ? yearRange.start : undefined,
+          maxStartDate: yearRange?.end ? yearRange.end : undefined,
         },
       });
+      // reset custom range
+      this.customMonthRange = undefined;
     }
   }
 
   onCalendarChange(): void {
+    console.log(this.calendar);
     this.isCustomYear = true;
     if (this.calendar) {
       // const newQuery = assign(this.query.getValue(), {

@@ -180,8 +180,8 @@
         </openchallenges-challenge-card>
       </div>
       <openchallenges-paginator
-        [pageNumber]="pageNumber"
-        [pageSize]="pageSize"
+        [pageNumber]="selectedPageNumber"
+        [pageSize]="selectedPageSize"
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"
