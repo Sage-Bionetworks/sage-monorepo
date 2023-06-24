@@ -73,7 +73,7 @@ export class ChallengeSearchComponent
   implements OnInit, AfterContentInit, OnDestroy
 {
   public appVersion: string;
-  datepipe: DatePipe = new DatePipe('en-US');
+  datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
@@ -97,9 +97,12 @@ export class ChallengeSearchComponent
   totalChallengesCount = 0;
 
   @ViewChild('calendar') calendar?: Calendar;
-  customMonthRange!: DateRange;
+  customMonthRange!: Date[] | undefined;
   isCustomYear = false;
-  selectedYear!: DateRange | undefined;
+
+  selectedYear!: DateRange | string | undefined;
+  selectedminStartDate!: string | undefined;
+  selectedmaxStartDate!: string | undefined;
 
   pageNumber = 0;
   pageSize = 24;
@@ -155,10 +158,19 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     // set default selection
-    this.selectedYear = this.startYearRangeFilter.values[0].value as DateRange;
     this.sortedBy = challengeSortFilterValues[0].value as string;
 
     this.activatedRoute.queryParams.subscribe((params) => {
+      if (params['minStartDate'] || params['maxStartDate']) {
+        const yearRange = [
+          new Date(params['minStartDate']),
+          new Date(params['maxStartDate']),
+        ];
+        this.selectedYear = 'custom';
+        this.isCustomYear = true;
+        this.customMonthRange = yearRange;
+      }
+
       if (params['status']) {
         const status = Array.isArray(params['status'])
           ? params['status']
@@ -218,8 +230,8 @@ export class ChallengeSearchComponent
         pageSize: this.pageSize,
         sort: this.sortedBy,
         // searchTerms: params['searchTerms'] || undefined,
-        // minStartDate: params['minStartDate'] || undefined,
-        // maxStartDate: params['maxStartDate'] || undefined,
+        minStartDate: this.selectedminStartDate,
+        maxStartDate: this.selectedmaxStartDate,
         status: this.selectedStatus,
         submissionTypes: this.selectedSubmissionTypes,
         incentives: this.selectedIncentives,
@@ -380,42 +392,45 @@ export class ChallengeSearchComponent
 
   onYearChange(): void {
     this.isCustomYear = (this.selectedYear as string) === 'custom';
-    const yearRange = this.selectedYear;
-    // update query with new year range
-    // const newQuery = assign(this.query.getValue(), {
-    //   minStartDate: yearRange ? yearRange.start : undefined,
-    //   maxStartDate: yearRange ? yearRange.end : undefined,
-    // });
-    // this.query.next(newQuery);
-    this.router.navigate([], {
-      queryParams: {
-        minStartDate: yearRange ? yearRange.start : undefined,
-        maxStartDate: yearRange ? yearRange.end : undefined,
-      },
-    });
+    if (!this.isCustomYear) {
+      // update query with new year range
+      // const newQuery = assign(this.query.getValue(), {
+      //   minStartDate: yearRange ? yearRange.start : undefined,
+      //   maxStartDate: yearRange ? yearRange.end : undefined,
+      // });
+      // this.query.next(newQuery);
+      this.router.navigate([], {
+        queryParamsHandling: 'merge',
+        queryParams: {
+          minStartDate: this.selectedminStartDate,
+          maxStartDate: this.selectedmaxStartDate,
+        },
+      });
+    }
   }
 
   onCalendarChange(): void {
     this.isCustomYear = true;
     if (this.calendar) {
       // const newQuery = assign(this.query.getValue(), {
-      //   minStartDate: this.datepipe.transform(
+      //   minStartDate: this.datePipe.transform(
       //     this.calendar.value[0],
       //     'yyyy-MM-dd'
       //   ),
-      //   maxStartDate: this.datepipe.transform(
+      //   maxStartDate: this.datePipe.transform(
       //     this.calendar.value[1],
       //     'yyyy-MM-dd'
       //   ),
       // });
       // this.query.next(newQuery);
       this.router.navigate([], {
+        queryParamsHandling: 'merge',
         queryParams: {
-          minStartDate: this.datepipe.transform(
+          minStartDate: this.datePipe.transform(
             this.calendar.value[0],
             'yyyy-MM-dd'
           ),
-          maxStartDate: this.datepipe.transform(
+          maxStartDate: this.datePipe.transform(
             this.calendar.value[1],
             'yyyy-MM-dd'
           ),
