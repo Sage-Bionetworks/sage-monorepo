@@ -5,22 +5,21 @@ from . import Base
 
 class Node(Base):
     __tablename__ = 'nodes'
-    id = db.Column(db.Integer, primary_key=True)
-
-    dataset_id = db.Column(
-        db.Integer, db.ForeignKey('datasets.id'), nullable=True)
-
-    feature_id = db.Column(
-        db.Integer, db.ForeignKey('features.id'), nullable=True)
-
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=True)
-
+    id = db.Column(db.String, primary_key=True)
     label = db.Column(db.String, nullable=True)
     network = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
     score = db.Column(db.Numeric, nullable=True)
     x = db.Column(db.Numeric, nullable=True)
     y = db.Column(db.Numeric, nullable=True)
+
+    dataset_id = db.Column(
+        db.Integer, db.ForeignKey('datasets.id'), nullable=True)
+
+    node_feature_id = db.Column(
+        db.Integer, db.ForeignKey('features.id'), nullable=True)
+
+    node_gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=True)
 
     data_set = db.relationship(
         'Dataset', backref=orm.backref('node', uselist=True, lazy='noload'),

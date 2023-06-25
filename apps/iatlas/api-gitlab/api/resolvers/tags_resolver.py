@@ -27,7 +27,13 @@ def resolve_tags(_obj, info, distinct=False, paging=None, cohort=None, dataSet=N
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
 
-    res = paginate(query, count_query, paging, distinct,
-                   build_tag_graphql_response(requested, sample_requested, publications_requested, related_requested, cohort=cohort, sample=sample), pagination_requested)
+    res = paginate(
+        query,
+        count_query,
+        paging,
+        distinct,
+        build_tag_graphql_response(requested, sample_requested, publications_requested, related_requested, cohort=cohort, sample=sample),
+        pagination_requested
+    )
 
     return(res)

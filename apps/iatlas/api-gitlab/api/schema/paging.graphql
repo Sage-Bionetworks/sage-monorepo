@@ -17,13 +17,13 @@ input PagingInput {
   page: Int
   "When performing OFFSET paging, the number or records requested."
   limit: Int
-  "When performing CURSOR paging, the number of records requested AFTER the CURSOR."
-  first: Int
-  "When performing CURSOR paging, the number of records requested BEFORE the CURSOR."
-  last: Int
-  "When performing CURSOR paging: the CURSOR to be used in tandem with 'last'"
-  before: String
   "When performing CURSOR paging: the CURSOR to be used in tandem with 'first'"
+  first: Int
+  "When performing CURSOR paging: the CURSOR to be used in tandem with 'last'"
+  last: Int
+  "When performing CURSOR paging, the number of records requested BEFORE the CURSOR."
+  before: String
+  "When performing CURSOR paging, the number of records requested AFTER the CURSOR."
   after: String
 }
 

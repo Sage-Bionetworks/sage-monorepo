@@ -93,7 +93,7 @@ def build_copy_number_result_request(
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
 
     feature_field_mapping = {
@@ -104,8 +104,8 @@ def build_copy_number_result_request(
     }
 
     gene_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'entrez': gene_1.entrez_id.label('gene_entrez'),
+        'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
         'description': gene_1.description.label('gene_description'),
         'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
@@ -161,7 +161,7 @@ def build_copy_number_result_request(
     if entrez or 'gene' in requested:
         is_outer = not bool(entrez)
         data_set_join_condition = build_join_condition(
-            gene_1.id, copy_number_result_1.gene_id, filter_column=gene_1.entrez, filter_list=entrez)
+            gene_1.id, copy_number_result_1.gene_id, filter_column=gene_1.entrez_id, filter_list=entrez)
         query = query.join(gene_1, and_(
             *data_set_join_condition), isouter=is_outer)
 

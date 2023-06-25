@@ -80,7 +80,7 @@ def common_query(common_query_builder):
 
 @pytest.fixture(scope='module')
 def max_p_value():
-    return 0.000084099999999999998
+    return 0.1
 
 
 @pytest.fixture(scope='module')
@@ -122,7 +122,6 @@ def test_heritabilityResults_cursor_pagination_first(client, common_query_builde
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_heritabilityResults_cursor_pagination_last(client, common_query_builder):
@@ -147,7 +146,6 @@ def test_heritabilityResults_cursor_pagination_last(client, common_query_builder
         '/api', json={'query': query, 'variables': {
             'paging': {
                 'last': num,
-                'before': to_cursor_hash(1000)
             }
         }})
     json_data = json.loads(response.data)

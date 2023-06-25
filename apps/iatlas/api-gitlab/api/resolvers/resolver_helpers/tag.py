@@ -71,13 +71,13 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
 
 def get_tag_column_labels(requested, tag, prefix='tag_', add_id=False):
     mapping = {
-        'characteristics': tag.characteristics.label('tag_characteristics'),
+        'characteristics': tag.description.label('tag_characteristics'),
         'color': tag.color.label('tag_color'),
         'longDisplay': tag.long_display.label('tag_long_display'),
         'name': tag.name.label('tag_name'),
         'order': tag.order.label('tag_order'),
         'shortDisplay': tag.short_display.label('tag_short_display'),
-        'type': tag.type.label('tag_type'),
+        'type': tag.tag_type.label('tag_type'),
     }
     labels = get_selected(requested, mapping)
 
@@ -108,7 +108,7 @@ def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_
         query = query.filter(tag_1.name.in_(tag))
 
     if type:
-        query = query.filter(tag_1.type.in_(type))
+        query = query.filter(tag_1.tag_type.in_(type))
 
     if data_set:
         dataset_subquery = sess.query(dataset_to_tag_1.tag_id)
@@ -161,7 +161,7 @@ def build_tag_request(requested, distinct=False, paging=None, cohort=None, data_
     if 'color' in requested:
         append_to_order(tag_1.color)
     if 'characteristics' in requested:
-        append_to_order(tag_1.characteristics)
+        append_to_order(tag_1.description)
 
     query = query.order_by(*order) if order else query
 
@@ -180,7 +180,7 @@ def get_publications(tag_id, requested, publications_requested):
             'doId': pub_1.do_id.label('do_id'),
             'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
             'journal': pub_1.journal.label('journal'),
-            'name': pub_1.name.label('name'),
+            'name': pub_1.title.label('name'),
             'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
             'title': pub_1.title.label('title'),
             'year': pub_1.year.label('year')
@@ -206,7 +206,7 @@ def get_publications(tag_id, requested, publications_requested):
         order = []
         append_to_order = order.append
         if 'name' in publications_requested:
-            append_to_order(pub_1.name)
+            append_to_order(pub_1.title)
         if 'pubmedId' in publications_requested:
             append_to_order(pub_1.pubmed_id)
         if 'doId' in publications_requested:
@@ -235,13 +235,13 @@ def get_related(tag_id, requested, related_requested):
         related_tag_1 = aliased(Tag, name='rt')
 
         related_core_field_mapping = {
-            'characteristics': related_tag_1.characteristics.label('tag_characteristics'),
+            'characteristics': related_tag_1.description.label('tag_characteristics'),
             'color': related_tag_1.color.label('tag_color'),
             'longDisplay': related_tag_1.long_display.label('tag_long_display'),
             'name': related_tag_1.name.label('tag_name'),
             'order': related_tag_1.order.label('tag_order'),
             'shortDisplay': related_tag_1.short_display.label('tag_short_display'),
-            'type': related_tag_1.type.label('tag_type'),
+            'type': related_tag_1.tag_type.label('tag_type'),
         }
 
         related_core = get_selected(

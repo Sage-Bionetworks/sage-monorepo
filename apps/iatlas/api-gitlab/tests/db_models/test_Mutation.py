@@ -5,15 +5,15 @@ from api.db_models import Mutation
 
 
 @pytest.fixture(scope='module')
-def mutation_entrez(test_db):
+def mutation_entrez_id(test_db):
     return 92
 
 
 @pytest.fixture(scope='module')
-def mutation_gene_id(test_db, mutation_entrez):
+def mutation_gene_id(test_db, mutation_entrez_id):
     from api.db_models import Gene
     (id, ) = test_db.session.query(Gene.id).filter_by(
-        entrez=mutation_entrez).one_or_none()
+        entrez_id=mutation_entrez_id).one_or_none()
     return id
 
 
@@ -23,19 +23,20 @@ def test_Mutation_no_relations(app, mutation_gene_id):
 
     assert isinstance(results, list)
     for result in results:
+        assert type(result.id) is str
         assert type(result.name) is str
+        assert type(result.mutation_code) is str
+        assert type(result.mutation_type_id) is str
+
         assert type(result.gene) is NoneType
-        assert type(result.mutation_code) is NoneType
         assert type(result.mutation_type) is NoneType
         assert result.samples == []
-        assert type(result.id) is int
+
         assert result.gene_id == mutation_gene_id
-        assert type(result.gene_id) is int
-        assert type(result.mutation_code_id) is int
-        assert type(result.mutation_type_id) is int or NoneType
+        assert type(result.gene_id) is str
 
 
-def test_Mutation_with_relations(app, mutation_entrez, mutation_gene_id):
+def test_Mutation_with_relations(app, mutation_entrez_id, mutation_gene_id):
     string_representation_list = []
     separator = ', '
     relationships_to_load = [
@@ -51,19 +52,16 @@ def test_Mutation_with_relations(app, mutation_entrez, mutation_gene_id):
         string_representation = '<Mutation %r>' % mutation_id
         string_representation_list.append(string_representation)
         assert type(result.name) is str
-        assert result.gene.entrez == mutation_entrez
+        assert result.gene.entrez_id == mutation_entrez_id
         assert result.gene.id == mutation_gene_id
-        assert result.mutation_code.id == result.mutation_code_id
-        if result.mutation_type:
-            assert result.mutation_type.id == result.mutation_type_id
         if result.samples:
             assert isinstance(result.samples, list)
             for sample in result.samples[0:2]:
-                assert type(sample.id) is int
+                assert type(sample.id) is str
         assert result.gene_id == mutation_gene_id
-        assert type(result.gene_id) is int
-        assert type(result.mutation_code_id) is int
-        assert type(result.mutation_type_id) is int or NoneType
+        assert type(result.gene_id) is str
+        assert type(result.mutation_code) is str
+        assert type(result.mutation_type_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'

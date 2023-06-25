@@ -1,7 +1,30 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
-    resolve_cohorts, resolve_colocalizations, resolve_copy_number_results, resolve_data_sets, resolve_driver_results, resolve_edges, resolve_features, resolve_gene_family, resolve_gene_function, resolve_gene_types, resolve_genes, resolve_germline_gwas_results, resolve_heritability_results, resolve_immune_checkpoints, resolve_method_tags, resolve_mutations, resolve_mutation_types, resolve_nodes, resolve_rare_variant_pathway_associations, resolve_pathways, resolve_patients, resolve_samples, resolve_slides, resolve_snps, resolve_super_categories, resolve_tags, resolve_test, resolve_therapy_types)
+    resolve_cohorts,
+    resolve_colocalizations,
+    resolve_copy_number_results,
+    resolve_data_sets,
+    resolve_driver_results,
+    resolve_edges,
+    resolve_features,
+    resolve_gene_types,
+    resolve_genes,
+    resolve_germline_gwas_results,
+    resolve_heritability_results,
+    resolve_mutations,
+    resolve_mutation_types,
+    resolve_neoantigens,
+    resolve_nodes,
+    resolve_rare_variant_pathway_associations,
+    resolve_patients,
+    resolve_samples,
+    resolve_slides,
+    resolve_snps,
+    resolve_tags,
+    resolve_test,
+    resolve_heritability_results
+)
 
 
 schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
@@ -25,28 +48,18 @@ edge_query = load_schema_from_path(
 feature_query = load_schema_from_path(
     schema_dirname + '/feature.query.graphql')
 gene_query = load_schema_from_path(schema_dirname + '/gene.query.graphql')
-gene_family_query = load_schema_from_path(
-    schema_dirname + '/geneFamily.query.graphql')
-gene_function_query = load_schema_from_path(
-    schema_dirname + '/geneFunction.query.graphql')
 gene_type_query = load_schema_from_path(
     schema_dirname + '/geneType.query.graphql')
 germline_gwas_result_query = load_schema_from_path(
     schema_dirname + '/germlineGwasResult.query.graphql')
 heritability_result_query = load_schema_from_path(
     schema_dirname + '/heritabilityResult.query.graphql')
-immune_checkpoint_query = load_schema_from_path(
-    schema_dirname + '/immuneCheckpoint.query.graphql')
-method_tag_query = load_schema_from_path(
-    schema_dirname + '/methodTag.query.graphql')
 mutation_query = load_schema_from_path(
     schema_dirname + '/mutation.query.graphql')
-mutation_code_query = load_schema_from_path(
-    schema_dirname + '/mutationCode.query.graphql')
+neoantigen_query = load_schema_from_path(
+    schema_dirname + '/neoantigen.query.graphql')
 node_query = load_schema_from_path(
     schema_dirname + '/node.query.graphql')
-pathway_query = load_schema_from_path(
-    schema_dirname + '/pathway.query.graphql')
 patient_query = load_schema_from_path(
     schema_dirname + '/patient.query.graphql')
 publication_query = load_schema_from_path(
@@ -56,14 +69,33 @@ rare_variant_pathway_association_query = load_schema_from_path(
 sample_query = load_schema_from_path(schema_dirname + '/sample.query.graphql')
 slide_query = load_schema_from_path(schema_dirname + '/slide.query.graphql')
 snp_query = load_schema_from_path(schema_dirname + '/snp.query.graphql')
-super_category = load_schema_from_path(
-    schema_dirname + '/superCategory.query.graphql')
 tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
-therapy_type_query = load_schema_from_path(
-    schema_dirname + '/therapyType.query.graphql')
 
 type_defs = [
-    root_query, paging_types, cohort_query, colocalization_query, copy_number_result_query, data_set_query, driver_result_query, edge_query, feature_query, gene_query, gene_family_query, gene_function_query, gene_type_query, germline_gwas_result_query, heritability_result_query, immune_checkpoint_query, method_tag_query, mutation_query, mutation_code_query, node_query, rare_variant_pathway_association_query, pathway_query, patient_query, publication_query, sample_query, slide_query, snp_query, super_category, tag_query, therapy_type_query]
+    root_query,
+    paging_types,
+    cohort_query,
+    colocalization_query,
+    copy_number_result_query,
+    data_set_query,
+    driver_result_query,
+    edge_query,
+    feature_query,
+    gene_query,
+    gene_type_query,
+    germline_gwas_result_query,
+    heritability_result_query,
+    neoantigen_query,
+    mutation_query,
+    node_query,
+    rare_variant_pathway_association_query,
+    patient_query,
+    publication_query,
+    sample_query,
+    slide_query,
+    snp_query,
+    tag_query
+]
 
 # Initialize custom scalars.
 direction_enum_scalar = ScalarType('DirectionEnum')
@@ -147,21 +179,16 @@ driver_result = ObjectType('DriverResult')
 edge_result = ObjectType('EdgeResult')
 feature = ObjectType('Feature')
 gene = ObjectType('Gene')
-gene_family = ObjectType('GeneFamily')
-gene_function = ObjectType('GeneFunction')
 gene_type = ObjectType('GeneType')
 germline_gwas_result_node = ObjectType('GermlineGwasResultNode')
 germline_gwas_result = ObjectType('GermlineGwasResult')
 heritability_result_node = ObjectType('HeritabilityResultNode')
 heritability_result = ObjectType('HeritabilityResult')
-immune_checkpoint = ObjectType('ImmuneCheckpoint')
-method_tag = ObjectType('MethodTag')
 mutation = ObjectType('Mutation')
-mutation_code = ObjectType('MutationCode')
 mutation_type = ObjectType('MutationType')
+neoantigen = ObjectType('Neoantigen')
 node = ObjectType('Node')
 node_result = ObjectType('NodeResult')
-pathway = ObjectType('Pathway')
 patient = ObjectType('Patient')
 publication = ObjectType('Publication')
 rare_variant_pathway_association = ObjectType(
@@ -171,9 +198,7 @@ sample = ObjectType('Sample')
 sample_by_mutation_status = ObjectType('SampleByMutationStatus')
 slide = ObjectType('Slide')
 snp = ObjectType('Snp')
-super_category = ObjectType('SuperCategory')
 tag = ObjectType('Tag')
-therapy_type = ObjectType('TherapyType')
 
 # Initialize schema objects (simple).
 simple_data_set = ObjectType('SimpleDataSet')
@@ -196,32 +221,64 @@ root.set_field('dataSets', resolve_data_sets)
 root.set_field('driverResults', resolve_driver_results)
 root.set_field('edges', resolve_edges)
 root.set_field('features', resolve_features)
-root.set_field('geneFamilies', resolve_gene_family)
-root.set_field('geneFunctions', resolve_gene_function)
 root.set_field('geneTypes', resolve_gene_types)
 root.set_field('genes', resolve_genes)
 root.set_field('germlineGwasResults', resolve_germline_gwas_results)
 root.set_field('heritabilityResults', resolve_heritability_results)
-root.set_field('immuneCheckpoints', resolve_immune_checkpoints)
-root.set_field('methodTags', resolve_method_tags)
 root.set_field('mutations', resolve_mutations)
 root.set_field('mutationTypes', resolve_mutation_types)
+root.set_field('neoantigens', resolve_neoantigens)
 root.set_field('nodes', resolve_nodes)
-root.set_field('pathways', resolve_pathways)
 root.set_field('patients', resolve_patients)
 root.set_field('rareVariantPathwayAssociations',
                resolve_rare_variant_pathway_associations)
 root.set_field('samples', resolve_samples)
 root.set_field('slides', resolve_slides)
 root.set_field('snps', resolve_snps)
-root.set_field('superCategories', resolve_super_categories)
 root.set_field('tags', resolve_tags)
 root.set_field('test', resolve_test)
-root.set_field('therapyTypes', resolve_therapy_types)
 
 
 schema = make_executable_schema(
     type_defs,
     [
-        root, cohort, colocalization, copy_number_result, data_set, direction_enum_scalar, driver_result, edge_result, ethnicity_enum_scalar, feature, gender_enum_scalar, gene, gene_family, gene_function, gene_type, germline_gwas_result, germline_gwas_result_node, heritability_result_node, heritability_result, immune_checkpoint, method_tag, mutation, mutation_code, mutation_type, node, node_result, pathway, patient, publication, race_enum_scalar, rare_variant_pathway_association, related_by_data_set, sample, sample_by_mutation_status, simple_data_set, simple_feature, simple_gene, simple_gene_type, simple_node, simple_publication, simple_tag, slide, snp, tag, super_category, therapy_type]
+        root,
+        cohort,
+        colocalization,
+        copy_number_result,
+        data_set,
+        direction_enum_scalar,
+        driver_result,
+        edge_result,
+        ethnicity_enum_scalar,
+        feature, gender_enum_scalar,
+        gene,
+        gene_type,
+        germline_gwas_result,
+        germline_gwas_result_node,
+        heritability_result_node,
+        heritability_result,
+        mutation,
+        mutation_type,
+        neoantigen,
+        node,
+        node_result,
+        patient,
+        publication,
+        race_enum_scalar,
+        rare_variant_pathway_association,
+        related_by_data_set,
+        sample,
+        sample_by_mutation_status,
+        simple_data_set,
+        simple_feature,
+        simple_gene,
+        simple_gene_type,
+        simple_node,
+        simple_publication,
+        simple_tag,
+        slide,
+        snp,
+        tag
+    ]
 )

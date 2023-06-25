@@ -5,7 +5,7 @@ from . import Base
 
 class GermlineGwasResult(Base):
     __tablename__ = 'germline_gwas_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     maf = db.Column(db.Numeric, nullable=True)
 

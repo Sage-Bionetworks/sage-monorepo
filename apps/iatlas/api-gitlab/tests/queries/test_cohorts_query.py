@@ -117,7 +117,6 @@ def test_cohorts_cursor_pagination_first(client, common_query_builder):
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_cohorts_cursor_pagination_last(client, common_query_builder):
@@ -141,8 +140,7 @@ def test_cohorts_cursor_pagination_last(client, common_query_builder):
     response = client.post(
         '/api', json={'query': query, 'variables': {
             'paging': {
-                'last': num,
-                'before': to_cursor_hash(1000)
+                'last': num
             }
         }})
     json_data = json.loads(response.data)

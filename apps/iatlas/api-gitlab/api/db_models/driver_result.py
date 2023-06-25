@@ -5,13 +5,13 @@ from . import Base
 
 class DriverResult(Base):
     __tablename__ = 'driver_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     fold_change = db.Column(db.Numeric, nullable=True)
     log10_p_value = db.Column(db.Numeric, nullable=True)
     log10_fold_change = db.Column(db.Numeric, nullable=True)
-    n_wt = db.Column(db.Integer, nullable=True)
-    n_mut = db.Column(db.Integer, nullable=True)
+    n_wildtype = db.Column(db.Integer, nullable=True)
+    n_mutants = db.Column(db.Integer, nullable=True)
 
     dataset_id = db.Column(db.Integer, db.ForeignKey(
         'datasets.id'), nullable=False)

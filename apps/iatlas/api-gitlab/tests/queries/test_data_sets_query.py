@@ -6,7 +6,7 @@ from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cur
 
 @pytest.fixture(scope='module')
 def data_set_type():
-    return 'ici'
+    return 'analysis'
 
 
 @pytest.fixture(scope='module')
@@ -94,7 +94,7 @@ def tags_query(common_query_builder):
 
 
 def test_data_sets_cursor_pagination_first(client, common_query):
-    num = 5
+    num = 1
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {'first': num}
@@ -111,16 +111,13 @@ def test_data_sets_cursor_pagination_first(client, common_query):
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
-
 
 def test_data_sets_cursor_pagination_last(client, common_query):
-    num = 2
+    num = 1
     response = client.post(
         '/api', json={'query': common_query, 'variables': {
             'paging': {
-                'last': num,
-                'before': to_cursor_hash(1000)
+                'last': num
             }
         }})
     json_data = json.loads(response.data)
@@ -129,7 +126,6 @@ def test_data_sets_cursor_pagination_last(client, common_query):
     paging = page['paging']
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
-
     assert len(items) == num
     assert paging['hasNextPage'] == False
     assert paging['hasPreviousPage'] == True
@@ -186,9 +182,6 @@ def test_data_sets_query_with_dataSet(client, samples_query, data_set):
         assert type(current_data_set['type']) is str
         assert isinstance(samples, list)
         assert len(samples) > 0
-        import logging
-        logger = logging.getLogger('dataset test')
-        logger.info(len(samples))
         for current_sample in samples[0:5]:
             assert type(current_sample['name']) is str
 

@@ -1,6 +1,6 @@
 import json
 import pytest
-from api.database import return_gene_type_query
+from api.database import return_gene_set_query
 from tests import NoneType
 
 
@@ -13,7 +13,7 @@ def test_gene_types_query_with_passed_gene_type(client, gene_type):
     query = """query GeneTypes($name: [String!]) {
         geneTypes(name: $name) {
             display
-            genes { entrez }
+            genes { entrez, hgnc }
             name
         }
     }"""
@@ -58,7 +58,7 @@ def test_gene_types_query_no_args(client):
     json_data = json.loads(response.data)
     results = json_data['data']['geneTypes']
 
-    gene_type_count = return_gene_type_query('id').count()
+    gene_type_count = return_gene_set_query('id').count()
 
     assert isinstance(results, list)
     assert len(results) == gene_type_count

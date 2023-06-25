@@ -2,7 +2,7 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Gene, Mutation, MutationCode, MutationType, Patient, Sample, SampleToMutation, Cohort, CohortToMutation, CohortToSample
+from api.db_models import Gene, Mutation, MutationType, Patient, Sample, SampleToMutation, Cohort, CohortToMutation, CohortToSample
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
@@ -16,10 +16,10 @@ mutation_request_fields = {
 }
 
 
-def get_mutation_column_labels(requested, mutation, mutation_code, add_id=False):
+def get_mutation_column_labels(requested, mutation, add_id=False):
     mapping = {
         'name': mutation.name.label('mutation_name'),
-        'mutationCode': mutation_code.code.label('mutation_code')
+        'mutationCode': mutation.mutation_code.label('mutation_code')
     }
     labels = get_selected(requested, mapping)
 
@@ -85,7 +85,6 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, d
 
     gene_1 = aliased(Gene, name='g')
     mutation_1 = aliased(Mutation, name='m')
-    mutation_code_1 = aliased(MutationCode, name='mc')
     mutation_type_1 = aliased(MutationType, name='mt')
     sample_1 = aliased(Sample, name='s')
     sample_to_mutation_1 = aliased(SampleToMutation, name='sm')
@@ -93,7 +92,7 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, d
     cohort_to_mutation_1 = aliased(CohortToMutation, name='ctm')
 
     mutation_core = get_mutation_column_labels(
-        requested, mutation_1, mutation_code_1, add_id=True)
+        requested, mutation_1, add_id=True)
 
     gene_core = get_simple_gene_column_labels(gene_requested, gene_1)
 
@@ -106,8 +105,12 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, d
     if mutation:
         query = query.filter(mutation_1.name.in_(mutation))
 
-    query = build_simple_mutation_request(query, requested, mutation_1, gene_1, mutation_code_1,
-                                          mutation_type_1, entrez=entrez, mutation_code=mutation_code, mutation_type=mutation_type)
+    query = build_simple_mutation_request(
+        query, requested, mutation_1, gene_1, mutation_type_1,
+        entrez=entrez,
+        mutation_code=mutation_code,
+        mutation_type=mutation_type
+    )
 
     if sample:
         sample_subquery = sess.query(
@@ -135,39 +138,32 @@ def build_mutation_request(requested, gene_requested, mutation_type_requested, d
     return get_pagination_queries(query, paging, distinct, cursor_field=mutation_1.id)
 
 
-def build_simple_mutation_request(query, requested, mutation_obj, gene_obj, mutation_code_obj, mutation_type_obj, entrez=None, mutation_code=None, mutation_type=None):
+def build_simple_mutation_request(query, requested, mutation_obj, gene_obj, mutation_type_obj, entrez=None, mutation_code=None, mutation_type=None):
     '''
-    Builds a SQL request
+    Adds to a SQL query
 
     All positional arguments are required. Positional arguments are:
-        1st position - a set of the requested fields at the root of the graphql request
-        2nd position - a set of the requested fields in the 'gene' node of the graphql request. If 'gene' is not requested, this will be an empty set.
-        3rd position - a set of the requested fields in the 'mutationType' node of the graphql request. If 'mutationType' is not requested, this will be an empty set.
-
+        1st position - a sql query
+        2nd position - a set of the requested fields at the root of the graphql request
+        3rd position - a mutation table object
+        4th position - a gene table object
+        5th position - a mutation type table object
     All keyword arguments are optional. Keyword arguments are:
-        `distinct` - a boolean, indicates whether duplicate records should be filtered out
-        `paging` - a dict containing pagination metadata
-        `cohort` - a list of strings, cohort names
         `entrez` - a list of integers, gene entrez ids
         `mutation` - a list of strings, mutation names
         `mutation_code` - a list of strings, mutation codes
         `mutation_type` - a list of strings, mutation type names
-        `sample` - a list of strings, sample names
     '''
 
     if 'gene' in requested or entrez:
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
-            gene_obj.id, mutation_obj.gene_id, filter_column=gene_obj.entrez, filter_list=entrez)
+            gene_obj.id, mutation_obj.gene_id,
+            filter_column=gene_obj.entrez_id,
+            filter_list=entrez
+        )
         query = query.join(gene_obj, and_(
             *gene_join_condition), isouter=is_outer)
-
-    if 'mutationCode' in requested or mutation_code:
-        is_outer = not bool(mutation_code)
-        mutation_code_join_condition = build_join_condition(
-            mutation_code_obj.id, mutation_obj.mutation_code_id, filter_column=mutation_code_obj.code, filter_list=mutation_code)
-        query = query.join(mutation_code_obj, and_(
-            *mutation_code_join_condition), isouter=is_outer)
 
     if 'mutationType' in requested or mutation_type:
         is_outer = not bool(mutation_type)
@@ -175,6 +171,9 @@ def build_simple_mutation_request(query, requested, mutation_obj, gene_obj, muta
             mutation_type_obj.id, mutation_obj.mutation_type_id, filter_column=mutation_type_obj.name, filter_list=mutation_type)
         query = query.join(mutation_type_obj, and_(
             *mutation_type_join_condition), isouter=is_outer)
+
+    if mutation_code:
+        query = query.filter(mutation_obj.mutation_code.in_(mutation_code))
 
     return(query)
 
@@ -193,7 +192,7 @@ def get_samples(mutation_id, requested, sample_requested, status=None, sample=No
 
     core_field_mapping = {
         'name': sample_1.name.label('sample_name'),
-        'status': sample_to_mutation_1.status.label('sample_mutation_status')
+        'status': sample_to_mutation_1.mutation_status.label('sample_mutation_status')
     }
 
     core = get_selected(sample_requested, core_field_mapping)
@@ -203,7 +202,7 @@ def get_samples(mutation_id, requested, sample_requested, status=None, sample=No
     query = query.filter(sample_to_mutation_1.mutation_id == mutation_id)
 
     if status:
-        query = query.filter(sample_to_mutation_1.status.in_(status))
+        query = query.filter(sample_to_mutation_1.mutation_status.in_(status))
 
     sample_join_condition = build_join_condition(
         sample_to_mutation_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=sample)
@@ -222,9 +221,5 @@ def get_samples(mutation_id, requested, sample_requested, status=None, sample=No
 
         query = query.filter(
             sample_to_mutation_1.sample_id.in_(cohort_subquery))
-
-        import logging
-        logger = logging.getLogger('test mutation')
-        logger.info(cohort_subquery)
 
     return query.all()

@@ -5,7 +5,7 @@ from . import Base
 
 class HeritabilityResult(Base):
     __tablename__ = 'heritability_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     fdr = db.Column(db.Numeric, nullable=True)
     variance = db.Column(db.Numeric, nullable=True)

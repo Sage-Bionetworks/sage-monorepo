@@ -34,6 +34,10 @@ def min_score():
 def network():
     return 'Extracellular Network'
 
+@pytest.fixture(scope='module')
+def node_entrez_id():
+    return 5797
+
 
 @pytest.fixture(scope='module')
 def common_query_builder():
@@ -185,7 +189,7 @@ def test_nodes_query_with_passed_related(client, common_query_builder, related):
             assert type(gene['entrez']) is int
 
 
-def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
+def test_nodes_query_with_passed_entrez(client, common_query_builder, node_entrez_id):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -193,7 +197,7 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'entrez': [entrez]}})
+                                         'variables': {'entrez': [node_entrez_id]}})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
@@ -203,7 +207,7 @@ def test_nodes_query_with_passed_entrez(client, common_query_builder, entrez):
     for result in results[0:2]:
         gene = result['gene']
         assert type(result['name']) is str
-        assert gene['entrez'] == entrez
+        assert gene['entrez'] == node_entrez_id
 
 
 def test_nodes_query_with_passed_feature(client, common_query_builder, node_feature):
@@ -408,7 +412,7 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
         assert any(current_tag['name'] == tag for current_tag in tags)
 
 
-def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, entrez, tag):
+def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, node_entrez_id, tag):
     query = common_query_builder("""{
                                     items {
                                         name
@@ -417,7 +421,7 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, en
                                     }
                                 }""")
     response = client.post('/api', json={'query': query,
-                                         'variables': {'entrez': [entrez], 'tag': [tag]}})
+                                         'variables': {'entrez': [node_entrez_id], 'tag': [tag]}})
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
@@ -428,7 +432,7 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, en
         gene = result['gene']
         tags = result['tags']
         assert type(result['name']) is str
-        assert gene['entrez'] == entrez
+        assert gene['entrez'] == node_entrez_id
         assert isinstance(tags, list)
         assert len(tags) > 0
         assert any(current_tag['name'] == tag for current_tag in tags)

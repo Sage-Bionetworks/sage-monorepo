@@ -20,9 +20,9 @@ def test_DatasetToSample_with_relations(app, data_set_id):
         assert len(result.samples) > 0
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
-            assert type(sample.id) is int
+            assert type(sample.id) is str
             assert type(sample.name) is str
-        assert type(result.sample_id) is int
+        assert type(result.sample_id) is str
         assert repr(result) == '<DatasetToSample %r>' % data_set_id
     assert repr(results) == '[<DatasetToSample %r>]' % data_set_id
 
@@ -37,4 +37,4 @@ def test_DatasetToSample_no_relations(app, data_set_id):
         assert result.data_sets == []
         assert result.samples == []
         assert result.dataset_id == data_set_id
-        assert type(result.sample_id) is int
+        assert type(result.sample_id) is str

@@ -4,10 +4,10 @@ from . import Base
 
 class Dataset(Base):
     __tablename__ = 'datasets'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
     display = db.Column(db.String, nullable=True)
-    data_set_type = db.Column('type', db.String, nullable=False)
+    dataset_type = db.Column(db.String, nullable=False)
 
     samples = db.relationship(
         'Sample', secondary='datasets_to_samples', uselist=True, lazy='noload')

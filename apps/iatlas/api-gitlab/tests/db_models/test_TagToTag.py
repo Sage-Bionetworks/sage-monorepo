@@ -40,7 +40,7 @@ def test_TagToTag_with_relations(app, tt_tag, tt_tag_id):
             assert tag.id == tt_tag_id
             assert tag.name == tt_tag
         assert result.tag_id == tt_tag_id
-        assert type(result.related_tag_id) is int
+        assert type(result.related_tag_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -56,4 +56,4 @@ def test_TagToTag_no_relations(app, tt_tag_id):
         assert result.related_tags == []
         assert result.tags == []
         assert result.tag_id == tt_tag_id
-        assert type(result.related_tag_id) is int
+        assert type(result.related_tag_id) is str

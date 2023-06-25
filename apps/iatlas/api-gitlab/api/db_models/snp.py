@@ -5,7 +5,7 @@ from . import Base
 
 class Snp(Base):
     __tablename__ = 'snps'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
     rsid = db.Column(db.String, nullable=True)
     chr = db.Column(db.String, nullable=True)

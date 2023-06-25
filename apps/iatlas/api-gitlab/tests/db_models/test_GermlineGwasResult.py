@@ -5,7 +5,7 @@ from api.database import return_germline_gwas_result_query
 
 @pytest.fixture(scope='module')
 def ggr_feature(test_db):
-    return 'Cell_Proportion_B_Cells_Memory_Binary_MedianLowHigh'
+    return 'Eosinophils'
 
 
 @pytest.fixture(scope='module')
@@ -18,7 +18,7 @@ def ggr_feature_id(test_db, ggr_feature):
 
 @pytest.fixture(scope='module')
 def ggr_snp(test_db):
-    return '7:104003135:C:G'
+    return '13:105003803:C:T'
 
 
 @pytest.fixture(scope='module')

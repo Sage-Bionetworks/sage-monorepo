@@ -6,7 +6,7 @@ from api.enums import direction_enum
 
 class CopyNumberResult(Base):
     __tablename__ = 'copy_number_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     direction = db.Column(direction_enum, nullable=False)
     mean_normal = db.Column(db.Numeric, nullable=True)
     mean_cnv = db.Column(db.Numeric, nullable=True)

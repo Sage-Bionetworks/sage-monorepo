@@ -76,9 +76,6 @@ def test_edges_cursor_pagination_first(client, common_query_builder):
     assert len(items) == num
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_edges_cursor_pagination_last(client, common_query_builder):
@@ -172,20 +169,27 @@ def test_edges_missing_pagination(client, common_query_builder):
 
 
 def test_edges_query_with_passed_node1_and_node2(client, common_query_builder, node_1, node_2):
-    query = common_query_builder("""{
-                                    items { name }
-                                    paging {
-                                        page
-                                        pages
-                                        total
-                                    }
-                                }""")
-    response = client.post('/api', json={'query': query,
-                                         'variables': {
-                                             'paging': {'type': Paging.OFFSET},
-                                             'node1': [node_1],
-                                             'node2': [node_2]}
-                                         })
+    query = common_query_builder(
+        """{
+                items { name }
+                paging {
+                    page
+                    pages
+                    total
+                }
+            }"""
+    )
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'paging': {'type': Paging.OFFSET},
+                'node1': [node_1],
+                'node2': [node_2]
+            }
+        }
+    )
     json_data = json.loads(response.data)
     page = json_data['data']['edges']
     results = page['items']

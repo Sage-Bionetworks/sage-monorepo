@@ -5,7 +5,7 @@ from . import Base
 
 class Slide(Base):
     __tablename__ = 'slides'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
 

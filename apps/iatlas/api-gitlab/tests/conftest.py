@@ -78,19 +78,6 @@ def related_id(test_db, related):
 
 
 @ pytest.fixture(scope='session')
-def related2():
-    return 'gender'
-
-
-@ pytest.fixture(scope='session')
-def related_id2(test_db, related2):
-    from api.db_models import Tag
-    (id, ) = test_db.session.query(Tag.id).filter_by(
-        name=related2).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
 def related3():
     return 'TCGA_Subtype'
 
@@ -138,19 +125,6 @@ def tag_i2d(test_db, tag2):
 
 
 @ pytest.fixture(scope='session')
-def chosen_feature():
-    return 'Det_Ratio'
-
-
-@ pytest.fixture(scope='session')
-def chosen_feature_id(test_db, chosen_feature):
-    from api.db_models import Feature
-    (id, ) = test_db.session.query(Feature.id).filter_by(
-        name=chosen_feature).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
 def feature_class():
     return 'TIL Map Characteristic'
 
@@ -159,60 +133,32 @@ def feature_class():
 def feature_class2():
     return 'DNA Alteration'
 
-
 @ pytest.fixture(scope='session')
-def feature_class2_id(test_db, feature_class2):
-    from api.db_models import FeatureClass
-    (id, ) = test_db.session.query(FeatureClass.id).filter_by(
-        name=feature_class2).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
-def feature_class2_feature_names(test_db, feature_class2_id):
+def feature_class2_feature_names(test_db, feature_class2):
     from api.db_models import Feature
-    res = test_db.session.query(Feature.name).filter_by(
-        class_id=feature_class2_id).all()
-    features = [feature[0] for feature in res]
-    return features
+    names = test_db.session.query(Feature.name).filter_by(feature_class=feature_class2).all()
+    names = [name[0] for name in names]
+    return names
 
 
 @ pytest.fixture(scope='session')
-def feature3():
-    return 'height'
-
-
-@ pytest.fixture(scope='session')
-def feature3_class():
-    return 'Clinical'
-
-
-@ pytest.fixture(scope='session')
-def feature3_id(test_db, feature3):
-    from api.db_models import Feature
-    (id, ) = test_db.session.query(Feature.id).filter_by(
-        name=feature3).one_or_none()
-    return id
-
-
-@ pytest.fixture(scope='session')
-def entrez():
+def entrez_id():
     return 3627
 
 
 @pytest.fixture(scope='session')
-def gene_id(test_db, entrez):
+def gene_id(test_db, entrez_id):
     from api.db_models import Gene
-    (id, ) = test_db.session.query(Gene.id).filter_by(entrez=entrez).one_or_none()
+    (id, ) = test_db.session.query(Gene.id).filter_by(entrez_id=entrez_id).one_or_none()
     return id
 
 
 @ pytest.fixture(scope='session')
-def hgnc(test_db, entrez):
+def hgnc_id(test_db, entrez_id):
     from api.db_models import Gene
-    (hgnc, ) = test_db.session.query(
-        Gene.hgnc).filter_by(entrez=entrez).one_or_none()
-    return hgnc
+    (hgnc_id, ) = test_db.session.query(
+        Gene.hgnc_id).filter_by(entrez_id=entrez_id).one_or_none()
+    return hgnc_id
 
 
 @ pytest.fixture(scope='session')
@@ -373,9 +319,6 @@ def pcawg_cohort_samples(client, pcawg_cohort_name, cohort_query):
     response = client.post('/api', json={'query': cohort_query, 'variables': {
         'cohort': [pcawg_cohort_name]
     }})
-    import logging
-    logger = logging.getLogger("feature response")
-    logger.info(pcawg_cohort_name)
     json_data = json.loads(response.data)
     page = json_data['data']['cohorts']
     cohort = page['items'][0]

@@ -20,15 +20,15 @@ def test_SampleToMutation_with_relations(app, sample_id):
         assert len(result.mutations) > 0
         # Don't need to iterate through every result.
         for mutation in result.mutations[0:2]:
-            assert type(mutation.id) is int
+            assert type(mutation.id) is str
         assert isinstance(result.samples, list)
         assert len(result.samples) > 0
         # Don't need to iterate through every result.
         for sample in result.samples[0:2]:
             assert sample.id == sample_id
         assert result.sample_id == sample_id
-        assert type(result.mutation_id) is int
-        assert result.status in status_enum.enums
+        assert type(result.mutation_id) is str
+        assert result.mutation_status in status_enum.enums
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -44,5 +44,5 @@ def test_SampleToMutation_no_relations(app, sample_id):
         assert result.mutations == []
         assert result.samples == []
         assert result.sample_id == sample_id
-        assert type(result.mutation_id) is int
-        assert result.status in status_enum.enums
+        assert type(result.mutation_id) is str
+        assert result.mutation_status in status_enum.enums

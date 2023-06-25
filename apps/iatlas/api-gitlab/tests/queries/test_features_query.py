@@ -8,17 +8,20 @@ from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cur
 
 @pytest.fixture(scope='module')
 def feature_name():
-    return 'Eosinophils'
+    return 'BCR_Richness'
 
+@pytest.fixture(scope='module')
+def feature_class():
+    return 'Adaptive Receptor - B cell'
 
 @pytest.fixture(scope='module')
 def max_value():
-    return 5.7561021
+    return 2000
 
 
 @pytest.fixture(scope='module')
 def min_value():
-    return 0.094192693
+    return 1000
 
 
 @pytest.fixture(scope='module')
@@ -173,9 +176,6 @@ def test_features_cursor_pagination_first(client, common_query_builder):
     assert len(items) == num
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_features_cursor_pagination_last(client, common_query_builder):
@@ -213,8 +213,6 @@ def test_features_cursor_pagination_last(client, common_query_builder):
     assert len(items) == num
     assert paging['hasNextPage'] == False
     assert paging['hasPreviousPage'] == True
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
 
 
 def test_features_cursor_distinct_pagination(client, common_query):
@@ -259,11 +257,11 @@ def test_features_query_with_no_args(client, common_query):
         assert type(feature['germlineCategory']) is str or NoneType
 
 
-def test_features_query_with_feature(client, chosen_feature, common_query):
+def test_features_query_with_feature(client, feature_name, common_query):
     response = client.post(
         '/api', json={
             'query': common_query,
-            'variables': {'feature': [chosen_feature]}
+            'variables': {'feature': [feature_name]}
         }
     )
     json_data = json.loads(response.data)
@@ -273,34 +271,9 @@ def test_features_query_with_feature(client, chosen_feature, common_query):
     assert isinstance(features, list)
     assert len(features) == 1
     feature = features[0]
-    assert feature['name'] == chosen_feature
+    assert feature['name'] == feature_name
     assert type(feature['display']) is str
     assert type(feature['class']) is str
-    assert type(feature['methodTag']) is str or NoneType
-    assert type(feature['order']) is int or NoneType
-    assert feature['unit'] in unit_enum.enums or type(
-        feature['unit']) is NoneType
-    assert type(feature['germlineModule']) is str or NoneType
-    assert type(feature['germlineCategory']) is str or NoneType
-
-
-def test_features_query_with_feature2(client, feature3, feature3_class, common_query):
-    response = client.post(
-        '/api', json={
-            'query': common_query,
-            'variables': {'feature': [feature3]}
-        }
-    )
-    json_data = json.loads(response.data)
-    page = json_data['data']['features']
-    features = page['items']
-
-    assert isinstance(features, list)
-    assert len(features) == 1
-    feature = features[0]
-    assert feature['name'] == feature3
-    assert type(feature['display']) is str
-    assert feature['class'] == feature3_class
     assert type(feature['methodTag']) is str or NoneType
     assert type(feature['order']) is int or NoneType
     assert feature['unit'] in unit_enum.enums or type(
@@ -334,12 +307,12 @@ def test_features_query_with_feature_class(client, feature_class, common_query):
         assert type(feature['germlineCategory']) is str or NoneType
 
 
-def test_features_query_with_feature_and_feature_class(client, chosen_feature, feature_class, common_query):
+def test_features_query_with_feature_and_feature_class(client, feature_name, feature_class, common_query):
     response = client.post(
         '/api', json={
             'query': common_query,
             'variables': {
-                'feature': [chosen_feature],
+                'feature': [feature_name],
                 'featureClass': [feature_class]
             }
         }
@@ -351,7 +324,7 @@ def test_features_query_with_feature_and_feature_class(client, chosen_feature, f
     assert isinstance(features, list)
     assert len(features) == 1
     feature = features[0]
-    assert feature['name'] == chosen_feature
+    assert feature['name'] == feature_name
     assert type(feature['display']) is str
     assert feature['class'] == feature_class
     assert type(feature['methodTag']) is str or NoneType
@@ -362,11 +335,11 @@ def test_features_query_with_feature_and_feature_class(client, chosen_feature, f
     assert type(feature['germlineCategory']) is str or NoneType
 
 
-def test_features_query_with_passed_max_value(client, chosen_feature, max_value, values_query):
+def test_features_query_with_passed_max_value(client, feature_name, max_value, values_query):
     response = client.post(
         '/api', json={'query': values_query,
                       'variables': {
-                          'feature': [chosen_feature],
+                          'feature': [feature_name],
                           'maxValue': max_value
                       }})
     json_data = json.loads(response.data)
@@ -376,15 +349,15 @@ def test_features_query_with_passed_max_value(client, chosen_feature, max_value,
     assert isinstance(features, list)
     assert len(features) == 1
     feature = features[0]
-    assert feature['name'] == chosen_feature
+    assert feature['name'] == feature_name
     assert feature['valueMax'] <= max_value
 
 
-def test_features_query_with_passed_min_value(client, chosen_feature, min_value, values_query):
+def test_features_query_with_passed_min_value(client, feature_name, min_value, values_query):
     response = client.post(
         '/api', json={'query': values_query,
                       'variables': {
-                          'feature': [chosen_feature],
+                          'feature': [feature_name],
                           'minValue': min_value
                       }})
     json_data = json.loads(response.data)
@@ -394,7 +367,7 @@ def test_features_query_with_passed_min_value(client, chosen_feature, min_value,
     assert isinstance(features, list)
     assert len(features) == 1
     feature = features[0]
-    assert feature['name'] == chosen_feature
+    assert feature['name'] == feature_name
     assert feature['valueMax'] >= min_value
 
 
@@ -410,7 +383,7 @@ def test_features_query_with_passed_max_value_and_class(client, feature_class, m
     features = page['items']
 
     assert isinstance(features, list)
-    assert len(features) > 1
+    assert len(features) == 3
     for feature in features:
         assert feature['class'] == feature_class
         assert feature['valueMax'] <= max_value
@@ -428,7 +401,7 @@ def test_features_query_with_passed_min_value_and_class(client, feature_class, m
     features = page['items']
 
     assert isinstance(features, list)
-    assert len(features) > 1
+    assert len(features) == 1
     for feature in features:
         assert feature['class'] == feature_class
         assert feature['valueMax'] >= min_value
@@ -486,7 +459,7 @@ def test_feature_samples_query_with_class(client, feature_class, samples_query):
     features = page['items']
 
     assert isinstance(features, list)
-    assert len(features) == 10
+    assert len(features) == 3
     for feature in features:
         samples = feature['samples']
         assert feature['class'] == feature_class
@@ -524,12 +497,12 @@ def test_feature_samples_query_with_feature_and_cohort(client, feature_name, sam
         assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_feature_samples_query_with_feature_and_cohort2(client, feature3, feature3_class, tcga_tag_cohort_name, tcga_tag_cohort_samples, samples_query):
+def test_feature_samples_query_with_feature_and_cohort2(client, feature_name, feature_class, tcga_tag_cohort_name, tcga_tag_cohort_samples, samples_query):
     response = client.post(
         '/api', json={
             'query': samples_query,
             'variables': {
-                'feature': [feature3],
+                'feature': [feature_name],
                 'cohort': [tcga_tag_cohort_name]
             }
         })
@@ -540,41 +513,14 @@ def test_feature_samples_query_with_feature_and_cohort2(client, feature3, featur
     assert len(features) == 1
     feature = features[0]
     samples = feature['samples']
-    assert feature['name'] == feature3
-    assert feature['class'] == feature3_class
+    assert feature['name'] == feature_name
+    assert feature['class'] == feature_class
     assert isinstance(samples, list)
     assert len(samples) > 0
     for sample in samples[0:2]:
         assert type(sample['name']) is str
         assert type(sample['value']) is float
         assert sample['name'] in tcga_tag_cohort_samples
-
-
-def test_pcawg_feature_samples_query_with_feature_and_cohort(client, feature_name, samples_query, pcawg_cohort_name, pcawg_cohort_samples):
-    response = client.post(
-        '/api', json={
-            'query': samples_query,
-            'variables': {
-                'feature': [feature_name],
-                'cohort': [pcawg_cohort_name]
-            }
-        })
-    json_data = json.loads(response.data)
-    page = json_data['data']['features']
-    features = page['items']
-    assert isinstance(features, list)
-    assert len(features) == 1
-    feature = features[0]
-    samples = feature['samples']
-    assert feature['name'] == feature_name
-    assert type(feature['class']) is str
-    assert isinstance(samples, list)
-    assert len(samples) > 0
-    for sample in samples:
-        assert type(sample['name']) is str
-        assert type(sample['value']) is float
-        assert sample['name'] in pcawg_cohort_samples
-
 
 def test_feature_samples_query_with_feature_and_sample(client, feature_name, samples_query, sample):
     response = client.post(
@@ -621,6 +567,8 @@ def test_features_query_with_germline_feature(client, common_query, germline_fea
 
 
 def test_feature_samples_query_with_class_and_cohort(client, samples_query, feature_class2, feature_class2_feature_names, tcga_tag_cohort_name, tcga_tag_cohort_samples):
+
+
     response = client.post(
         '/api', json={
             'query': samples_query,

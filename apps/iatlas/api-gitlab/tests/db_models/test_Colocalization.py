@@ -2,7 +2,6 @@ import pytest
 from tests import NoneType
 from decimal import Decimal
 from api.database import return_colocalization_query
-import logging
 
 
 @pytest.fixture(scope='module')
@@ -32,15 +31,15 @@ def coloc_snp_id(test_db, coloc_snp_name):
 
 
 @pytest.fixture(scope='module')
-def coloc_gene_entrez(test_db):
+def coloc_gene_entrez_id(test_db):
     return 4677
 
 
 @pytest.fixture(scope='module')
-def coloc_gene_id(test_db, coloc_gene_entrez):
+def coloc_gene_id(test_db, coloc_gene_entrez_id):
     from api.db_models import Gene
     (id, ) = test_db.session.query(Gene.id).filter_by(
-        entrez=coloc_gene_entrez).one_or_none()
+        entrez_id=coloc_gene_entrez_id).one_or_none()
     return id
 
 
@@ -105,7 +104,7 @@ def coloc_tissue(test_db):
     return "Artery Aorta"
 
 
-def test_sQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_data_set1, coloc_data_set1_id, coloc_feature, coloc_feature_id, coloc_gene_entrez, coloc_gene_id, coloc_snp_name, coloc_snp_id, coloc_qtl_type1, coloc_ecaviar_pp, coloc_plot_type1, coloc_splice_loc):
+def test_sQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_data_set1, coloc_data_set1_id, coloc_feature, coloc_feature_id, coloc_gene_entrez_id, coloc_gene_id, coloc_snp_name, coloc_snp_id, coloc_qtl_type1, coloc_ecaviar_pp, coloc_plot_type1, coloc_splice_loc):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set',
@@ -130,19 +129,19 @@ def test_sQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_da
         assert result.snp.id == coloc_snp_id
         assert result.snp.name == coloc_snp_name
         assert result.gene.id == coloc_gene_id
-        assert result.gene.entrez == coloc_gene_entrez
+        assert result.gene.entrez_id == coloc_gene_entrez_id
         assert result.qtl_type == coloc_qtl_type1
         assert result.ecaviar_pp == coloc_ecaviar_pp
         assert result.plot_type == coloc_plot_type1
         assert result.tissue is None
         assert result.splice_loc == coloc_splice_loc
-        assert type(result.plot_link) is str
+        assert type(result.link) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
 
 
-def test_eQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_data_set2, coloc_data_set2_id, coloc_feature, coloc_feature_id, coloc_gene_entrez, coloc_gene_id, coloc_snp_name, coloc_snp_id, coloc_qtl_type2, coloc_plot_type2, coloc_tissue):
+def test_eQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_data_set2, coloc_data_set2_id, coloc_feature, coloc_feature_id, coloc_gene_entrez_id, coloc_gene_id, coloc_snp_name, coloc_snp_id, coloc_qtl_type2, coloc_plot_type2, coloc_tissue):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['data_set',
@@ -167,13 +166,13 @@ def test_eQTL_Colocalization_with_relations(app, data_set, data_set_id, coloc_da
         assert result.snp.id == coloc_snp_id
         assert result.snp.name == coloc_snp_name
         assert result.gene.id == coloc_gene_id
-        assert result.gene.entrez == coloc_gene_entrez
+        assert result.gene.entrez_id == coloc_gene_entrez_id
         assert result.qtl_type == coloc_qtl_type2
         assert result.ecaviar_pp is None
         assert result.plot_type == coloc_plot_type2
         assert result.tissue == coloc_tissue
         assert result.splice_loc is None
-        assert type(result.plot_link) is str
+        assert type(result.link) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -202,5 +201,5 @@ def test_Colocalization_no_relations(app, data_set_id, coloc_feature_id, coloc_g
         assert type(result.plot_type) is str or NoneType
         assert type(result.splice_loc) is str or NoneType
         assert type(result.splice_loc) is str or NoneType
-        assert type(result.plot_link) is str or NoneType
+        assert type(result.link) is str or NoneType
         assert repr(result) == string_representation

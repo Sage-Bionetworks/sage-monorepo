@@ -27,10 +27,8 @@ def test_RareVariantPathwayAssociation_with_relations(app, data_set, data_set_id
     separator = ', '
     relationships_to_join = ['data_set', 'feature']
 
-    query = return_rare_variant_pathway_associations_query(
-        *relationships_to_join)
-    results = query.filter_by(dataset_id=data_set_id).filter_by(
-        feature_id=rvap_feature_id).filter_by(pathway=rvap_pathway).limit(3).all()
+    query = return_rare_variant_pathway_associations_query(*relationships_to_join)
+    results = query.filter_by(dataset_id=data_set_id).filter_by(feature_id=rvap_feature_id).filter_by(pathway=rvap_pathway).limit(3).all()
 
     assert isinstance(results, list)
     assert len(results) == 1

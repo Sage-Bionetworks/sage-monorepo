@@ -14,9 +14,6 @@ edge_request_fields = {'label',
 
 def build_edge_graphql_response(edge):
     from .node import build_node_graphql_response
-    import logging
-    logger = logging.getLogger('node response')
-    logger.info(edge)
     dict = {
         'id': get_value(edge, 'id'),
         'label': get_value(edge, 'label'),
@@ -25,7 +22,6 @@ def build_edge_graphql_response(edge):
         'node1': build_node_graphql_response(prefix='node1_')(edge),
         'node2': build_node_graphql_response(prefix='node2_')(edge)
     }
-    logger.info(dict)
     return(dict)
 
 

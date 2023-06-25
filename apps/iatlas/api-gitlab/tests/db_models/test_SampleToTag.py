@@ -25,7 +25,7 @@ def test_SampleToTag_with_relations(app, sample_id):
         for tag in result.tags[0:2]:
             assert type(tag.name) is str
         assert result.sample_id == sample_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -41,4 +41,4 @@ def test_SampleToTag_no_relations(app, sample_id):
         assert result.samples == []
         assert result.tags == []
         assert result.sample_id == sample_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str

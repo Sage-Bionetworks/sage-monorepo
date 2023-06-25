@@ -48,7 +48,7 @@ def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None,
     }
     patient_core_field_mapping = {
         'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
-        'barcode': patient_1.barcode.label('patient_barcode'),
+        'barcode': patient_1.name.label('patient_barcode'),
         'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
         'gender': patient_1.gender.label('patient_gender'),
         'height': patient_1.height.label('patient_height'),
@@ -72,7 +72,7 @@ def build_slide_request(requested, patient_requested, max_age_at_diagnosis=None,
         is_outer = not has_patient_filters
 
         patient_join_condition = build_join_condition(
-            slide_1.patient_id, patient_1.id, patient_1.barcode, barcode)
+            slide_1.patient_id, patient_1.id, patient_1.name, barcode)
 
         if bool(max_age_at_diagnosis):
             patient_join_condition.append(

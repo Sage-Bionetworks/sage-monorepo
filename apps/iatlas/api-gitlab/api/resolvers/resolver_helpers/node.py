@@ -2,7 +2,7 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
+from api.db_models import Dataset, DatasetToTag, Feature, Gene, GeneToGeneSet, GeneSet, Node, NodeToTag, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
@@ -118,7 +118,7 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
 
     feature_field_mapping = {
@@ -129,8 +129,8 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     }
 
     gene_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'entrez': gene_1.entrez_id.label('gene_entrez'),
+        'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
         'description': gene_1.description.label('gene_description'),
         'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
@@ -175,10 +175,6 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
         tag_subquery2 = tag_subquery2.having(
             func.count(node_to_tag_2.tag_id) == n_tags)
 
-        import logging
-        logger = logging.getLogger("node request")
-        logger.info(tag_subquery2)
-
         query = query.filter(
             node_1.id.in_(tag_subquery2))
 
@@ -202,29 +198,25 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     if feature or 'feature' in requested or feature_class:
         is_outer = not bool(feature)
         feature_join_condition = build_join_condition(
-            feature_1.id, node_1.feature_id, feature_1.name, feature)
+            feature_1.id, node_1.node_feature_id, feature_1.name, feature)
         query = query.join(feature_1, and_(
             *feature_join_condition), isouter=is_outer)
 
         if feature_class:
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_class_join_condition = build_join_condition(
-                feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-            query = query.join(
-                feature_class_1, and_(*feature_class_join_condition))
+            query = query.filter(feature_1.feature_class.in_(feature_class))
 
     if entrez or 'gene' in requested or gene_type:
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
-            gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+            gene_1.id, node_1.node_gene_id, gene_1.entrez_id, entrez)
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=is_outer)
 
         if gene_type:
-            gene_type_1 = aliased(GeneType, name='gt')
-            gene_to_type_1 = aliased(GeneToType, name='ggt')
+            gene_type_1 = aliased(GeneSet, name='gt')
+            gene_to_type_1 = aliased(GeneToGeneSet, name='ggt')
             query = query.join(gene_to_type_1, and_(
-                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
+                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.gene_set_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=node_1.id)
 

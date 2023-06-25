@@ -37,4 +37,4 @@ def test_DatasetToTag_no_relations(app, data_set_id):
         assert result.data_sets == []
         assert result.tags == []
         assert result.dataset_id == data_set_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
