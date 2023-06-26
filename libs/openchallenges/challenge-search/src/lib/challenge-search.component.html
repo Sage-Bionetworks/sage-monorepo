@@ -149,29 +149,6 @@
         ></openchallenges-search-dropdown-filter>
       </p-panel>
       <p-divider></p-divider>
-      <!-- <ng-container *ngFor="let checkbox of checkboxFilters">
-        <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
-          <openchallenges-checkbox-filter
-            [values]="checkbox.values"
-            (selectionChange)="onCheckboxSelectionChange($event, checkbox.query)"
-            inputId="{{ checkbox.query }}"
-          ></openchallenges-checkbox-filter>
-        </p-panel>
-        <p-divider></p-divider>
-      </ng-container> -->
-      <!-- <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
-        <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
-          <openchallenges-search-dropdown-filter
-            [values]="dropdown.values"
-            placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
-            [showAvatar]="dropdown.showAvatar"
-            [filterByApiClient]="true"
-            (selectionChange)="onDropdownSelectionChange($event, dropdown.query)"
-            (searchChange)="onDropdownSearchChange($event)"
-          ></openchallenges-search-dropdown-filter>
-        </p-panel>
-        <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container> -->
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
@@ -180,8 +157,8 @@
         </openchallenges-challenge-card>
       </div>
       <openchallenges-paginator
-        [pageNumber]="selectedPageNumber"
-        [pageSize]="selectedPageSize"
+        [pageNumber]="selectedPageNumber || defaultPageNumber"
+        [pageSize]="selectedPageSize || defaultPageSize"
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"

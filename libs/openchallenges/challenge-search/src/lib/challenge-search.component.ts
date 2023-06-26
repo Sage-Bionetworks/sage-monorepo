@@ -102,10 +102,11 @@ export class ChallengeSearchComponent
   selectedPageSize!: number;
   sortedBy!: string;
 
-  // set default selection
+  // set default values
   defaultSortedBy = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
+
   // define filters
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
   statusFilter = challengeStatusFilter;
@@ -451,10 +452,6 @@ export class ChallengeSearchComponent
   }
 
   onSortChange(): void {
-    // const newQuery = assign(this.query.getValue(), {
-    //   sort: this.sortedBy,
-    // });
-    // this.query.next(newQuery);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
@@ -464,6 +461,7 @@ export class ChallengeSearchComponent
   }
 
   onPageChange(event: any) {
+    console.log(event);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
