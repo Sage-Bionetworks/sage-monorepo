@@ -14,6 +14,8 @@ export interface AppConfig {
   appVersion: string;
   keycloakRealm: string;
   isPlatformServer: boolean;
+  privacyPolicyUrl: string;
+  termsOfUseUrl: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
