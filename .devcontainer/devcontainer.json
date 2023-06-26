@@ -64,6 +64,7 @@
     8091,
     8092,
     8200,
+    8787,
     8888,
     8889,
     9000,
@@ -170,6 +171,10 @@
     },
     "8200": {
       "label": "openchallenges-vault",
+      "onAutoForward": "silent"
+    },
+    "8787": {
+      "label": "openchallenges-rstudio",
       "onAutoForward": "silent"
     },
     "8888": {
