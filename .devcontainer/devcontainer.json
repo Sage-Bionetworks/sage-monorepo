@@ -101,6 +101,10 @@
       "label": "openchallenges-opensearch-dashboards",
       "onAutoForward": "silent"
     },
+    "6787": {
+      "label": "synapse-rstudio",
+      "onAutoForward": "silent"
+    },
     "7010": {
       "label": "schematic-api-docs",
       "onAutoForward": "silent"
