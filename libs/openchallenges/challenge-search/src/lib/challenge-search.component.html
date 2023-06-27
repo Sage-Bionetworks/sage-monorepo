@@ -109,12 +109,15 @@
         [toggleable]="true"
         [collapsed]="platformsFilter.collapsed"
       >
-        <openchallenges-checkbox-filter
+        <openchallenges-search-dropdown-filter
           [values]="platformsFilter.values"
           [selectedValues]="selectedPlatforms"
+          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="platformsFilter.showAvatar"
+          [filterByApiClient]="true"
           (selectionChange)="onPlatformsChange($event)"
-          inputId="{{ platformsFilter.query }}"
-        ></openchallenges-checkbox-filter>
+          (searchChange)="onPlatformSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
       </p-panel>
       <p-divider></p-divider>
       <p-panel

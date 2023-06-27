@@ -8,8 +8,9 @@ import {
 import {
   Challenge,
   ChallengeService,
-  ChallengePlatformService,
   ChallengeSearchQuery,
+  ChallengePlatformService,
+  ChallengePlatformSearchQuery,
   ChallengeInputDataTypeService,
   ChallengeInputDataTypeSearchQuery,
   ImageService,
@@ -78,10 +79,13 @@ export class ChallengeSearchComponent
     ''
   );
 
-  private organizationSearchTerms: BehaviorSubject<string> =
+  private platformSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
   private inputDataTypeSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+
+  private organizationSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
@@ -117,9 +121,9 @@ export class ChallengeSearchComponent
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentivesFilter = challengeIncentivesFilter;
-  platformsFilter = challengePlatformsFilter;
 
   // dropdown filters
+  platformsFilter = challengePlatformsFilter;
   inputDataTypesFilter = challengeInputDataTypesFilter;
   organizationsFilter = challengeOrganizationsFilter;
 
@@ -214,16 +218,33 @@ export class ChallengeSearchComponent
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
-    this.challengePlatformService.listChallengePlatforms().subscribe(
-      (page) =>
-        (this.platformsFilter.values = page.challengePlatforms.map(
-          (platform) => ({
-            value: platform.slug,
-            label: platform.name,
-            active: false,
-          })
-        ))
-    );
+    this.platformSearchTerms
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        takeUntil(this.destroy),
+        switchMap((searchTerm) =>
+          this.challengePlatformService.listChallengePlatforms({
+            searchTerms: searchTerm,
+            sort: 'name',
+          } as ChallengePlatformSearchQuery)
+        )
+      )
+      .subscribe((page) => {
+        const searchedPlatforms = page.challengePlatforms.map((platform) => ({
+          value: platform.slug,
+          label: platform.name,
+          active: false,
+        })) as FilterValue[];
+
+        const selectedPlatformValues = searchedPlatforms.filter((value) =>
+          this.selectedPlatforms.includes(value.value as string)
+        );
+        this.platformsFilter.values = union(
+          searchedPlatforms,
+          selectedPlatformValues
+        ) as FilterValue[];
+      });
 
     // update input data type filter values
     this.inputDataTypeSearchTerms
@@ -422,12 +443,15 @@ export class ChallengeSearchComponent
   }
 
   onPlatformsChange(selected: string[]): void {
-    console.log(selected);
     this.router.navigate([], {
       queryParams: {
         platforms: this.collapseParam(selected),
       },
     });
+  }
+
+  onPlatformSearchChange(searched: string): void {
+    this.platformSearchTerms.next(searched);
   }
 
   onInputDataTypesChange(selected: string[]): void {
