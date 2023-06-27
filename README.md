@@ -1,80 +1,127 @@
-# Sage Monorepo
+<h1 align="center">Sage Monorepo</h1>
 
-[![GitHub CI](https://img.shields.io/github/workflow/status/Sage-Bionetworks/sage-monorepo/CI.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/actions)
-[![GitHub License](https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE)
-<!-- [![Coverage Status](https://img.shields.io/coveralls/github/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=coverage&logo=Coveralls)](https://coveralls.io/github/Sage-Bionetworks/sage-monorepo?branch=main) -->
+<p align="center">
+  <br>
+  <img src="docs/images/angular-cli-logo.png" alt="Angular CLI logo" width="100px" height="108px"/>
+  <br><br>
+  <h3 align="center">
+    A development environment for building robust apps faster.
+  </h3>
+  <br>
+</p>
 
-## Introduction
+<p align="center">
+  <a href="https://docs.google.com/document/d/12oA-Uol_NsWUtC9LHlAlpcgZXXY9jkxFXqK2EMF96XM">Overview</a>
+  ·
+  <a href="CONTRIBUTING.md">Contributing Guidelines</a>
+  ·
+  <a href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Submit an Issue</a>
+  <br>
+  <br>
+</p>
 
-This [Nx monorepo](https://nx.dev/) includes the codebase of several Sage projects.
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/Sage-Bionetworks/sage-monorepo/ci.yml?branch=main&color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github&label=CI/CD" alt="Sage Monorepo CI/CD" />
+  <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE" alt="Sage Monorepo License" />
+</p>
 
-## Projects
+---
 
-The list of all the applications and libraries developed is available [here](docs/projects.md).
+## Documentation
 
-## Requirements
+Get started with Sage Monorepo, learn the fundamentals and explore advanced topics.
 
-- [Docker Engine] version **18.06.0** or newer (including [Compose V2][compose-v2])
-- [Visual Studio Code] version **1.68.1** or newer
+- [Overview of Sage Monorepo]
+- Cheat Sheet (coming soon)
+- [Docs](docs)
 
-## Usage
+## Development Setup
 
-### Opening the workspace in VS Code
+### Requirements
 
-Click on this badge to open the workspace in VS Code using our development container.
+- [Docker Engine] OR [GitHub Codespace]
+- [Visual Studio Code]
 
-[![Open in Remote - Containers](https://img.shields.io/static/v1?label=Remote%20-%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo "Open in VS Code Remote - Containers")
+### Open Sage Monorepo in VS Code
 
-If you plan to contribute to this project, please create a fork and use its URL for cloning. For
-more information on contributing and/or our Forking Workflow approach, see
-[CONTRIBUTING.md](.github/CONTRIBUTING.md).
+**Option 1**: Click on the button shown below to open Sage Monorepo in its [development container]
+with VS Code. This option is suitable if you want to explore the content of Sage Monorepo.
 
-    git clone --filter=blob:none <repo url>
+[![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo 'Open in VS Code Dev Containers')
+
+**Option 2**: If you plan to contribute to this project, please [create a fork] and use its URL for
+cloning. For more information on contributing and/or our Forking Workflow approach, see
+[CONTRIBUTING.md](CONTRIBUTING.md).
+
+```console
+git clone --filter=blob:none <fork url>
+```
 
 Then open your fork repo inside our devcontainer using these instructions:
 
 - [Developing inside a Container](./docs/devcontainer.md)
 - [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
 
-### Preparing the workspace
+### Open Sage Monorepo in GitHub Codespace
 
-- Run `workspace-install` to install workspace tools like `nx` and `jest`.
-- Run `workspace-nx-cloud-help` to start configuring Nx Cloud (optional).
+TODO
 
-### Preparing the databases
+## Quick Start
 
-- Run `nx import-dev-data openchallenges-keycloak` to seed Keycloak database.
+Please refer to the Quick Start section of the [Overview of Sage Monorepo].
 
-> **Warning** Keycloak must not be running when executing this command.
+## Ecosystem
 
-### Starting the OpenChallenges
+- Java
+- Node.js
+- Python
+- R
 
-    nx serve openchallenges-app
+## Changelog
 
-You can access the OpenChallenges on http://localhost:4200.
+TODO
 
-## Documentation
+## Contributing
 
-Checkout the folder [docs](./docs) to learn more about this monorepo.
+### Contributing Guidelines
 
-## License
+Read through our [contributing guidelines][contributing] to learn about our submission process,
+coding rules and more.
 
-[Apache License 2.0]
+### Want to Help?
 
-## Core Team
+Want to report a bug, contribute some code, or improve documentation? Excellent! Read up on our
+guidelines for [contributing][contributing] and then check out one of our issues labeled as
+<kbd>[help wanted](https://github.com/Sage-Bionetworks/sage-monorepo/labels/help%20wanted)</kbd> or
+<kbd>[good first
+issue](https://github.com/Sage-Bionetworks/sage-monorepo/labels/good%20first%20issue)</kbd>.
 
-- [Thomas Schaffter](https://github.com/tschaffter)
-- [Verena Chung](https://github.com/vpchung)
-- [Rongrong Chai](https://github.com/rrchai)
-- [Maria Diaz](https://github.com/mdsage1)
+### Code of Conduct
 
-<!-- <a href="https://github.com/Sage-Bionetworks/sage-monorepo/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=Sage-Bionetworks/sage-monorepo" width="20%"/>
-</a> -->
+Help us keep Sage Monorepo open and inclusive. Please read and follow our [Code of Conduct].
+
+## Community
+
+Join the conversation and help the community.
+
+- TODO: Add Slack or Discord
+
+## Projects
+
+- OpenChallenges
+- Schematic (evaluation)
+- Synapse (evaluation)
+
+Love Sage Monorepo and its projects? Give our repo a star ⭐.
 
 <!-- Links -->
 
-[Docker Engine]: https://docs.docker.com/get-docker/
-[compose-v2]: https://docs.docker.com/compose/cli-command/
-[Visual Studio Code]: https://code.visualstudio.com/
-[Apache License 2.0]: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+[docker engine]: https://docs.docker.com/get-docker/
+[visual studio code]: https://code.visualstudio.com/
+[apache license 2.0]: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
+[GitHub Codespace]: https://github.com/features/codespaces
+[Overview of Sage Monorepo]: https://docs.google.com/document/d/12oA-Uol_NsWUtC9LHlAlpcgZXXY9jkxFXqK2EMF96XM
+[Code of Conduct]: CODE_OF_CONDUCT.md
+[contributing]: CONTRIBUTING.md
+[development container]: https://containers.dev/
+[create a fork]: https://github.com/Sage-Bionetworks/sage-monorepo/fork
