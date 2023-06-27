@@ -190,8 +190,8 @@ export class ChallengeSearchComponent
       );
 
       this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = params['pageNumber'];
-      this.selectedPageSize = params['pageSize'];
+      this.selectedPageNumber = +params['pageNumber'];
+      this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
       const defaultQuery = {
@@ -413,8 +413,6 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
-    console.log(this.collapseParam(selected));
-    console.log(selected);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
@@ -490,6 +488,7 @@ export class ChallengeSearchComponent
   }
 
   onPageChange(event: any) {
+    console.log(event);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
