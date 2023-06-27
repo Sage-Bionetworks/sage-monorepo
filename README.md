@@ -50,14 +50,14 @@ with VS Code. This option is suitable if you want to explore the content of Sage
 [![Open in Dev Containers](https://img.shields.io/static/v1?label=Dev%20Containers&message=Open&color=blue&logo=visualstudiocode&style=for-the-badge)](https://vscode.dev/redirect?url=vscode://ms-vscode-remote.remote-containers/cloneInVolume?url=https://github.com/Sage-Bionetworks/sage-monorepo 'Open in VS Code Dev Containers')
 
 **Option 2**: If you plan to contribute to this project, please [create a fork] and use its URL for
-cloning. For more information on contributing and/or our Forking Workflow approach, see
+cloning. For more information on contributing and/or our Forking Workflow, see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ```console
 git clone --filter=blob:none <fork url>
 ```
 
-Then open your fork repo inside our devcontainer using these instructions:
+Then open your fork repo inside our dev container using these instructions:
 
 - [Developing inside a Container](./docs/devcontainer.md)
 - [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
