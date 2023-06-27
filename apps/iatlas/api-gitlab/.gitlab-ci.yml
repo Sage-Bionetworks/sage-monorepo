@@ -187,9 +187,9 @@ Build Container Staging:
   only:
     - staging
   stage: build_container
-  image: docker:19.03.1-dind
+  image: docker:23.0.6-dind
   services:
-    - name: docker:19.03.1-dind
+    - name: docker:23.0.6-dind
   before_script:
     - echo "Building Staging container."
   script:
@@ -209,9 +209,9 @@ Build Container Prod:
   only:
     - master
   stage: build_container
-  image: docker:19.03.1-dind
+  image: docker:23.0.6-dind
   services:
-    - name: docker:19.03.1-dind
+    - name: docker:23.0.6-dind
   before_script:
     - echo "Building Prod container."
   script:
