@@ -6,4 +6,6 @@ export const MOCK_APP_CONFIG: AppConfig = {
   appVersion: '0.0.1',
   keycloakRealm: 'test',
   isPlatformServer: false,
+  privacyPolicyUrl: '',
+  termsOfUseUrl: '',
 };

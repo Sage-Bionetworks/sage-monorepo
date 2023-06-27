@@ -5,7 +5,7 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 @Component({
   selector: 'openchallenges-footer',
   standalone: true,
-  imports: [CommonModule, ConfigService],
+  imports: [CommonModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
