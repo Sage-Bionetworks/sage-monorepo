@@ -86,6 +86,7 @@ accepted_neoantigen_option_args = ['patient', 'gene']
 accepted_neoantigen_query_args = [
     'id',
     'pmhc',
+    'freq_pmhc',
     'tpm',
     'neoantiogen_gene_id',
     'patient_id',

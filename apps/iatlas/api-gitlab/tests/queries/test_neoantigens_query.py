@@ -4,22 +4,6 @@ from tests import NoneType
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
 from api.db_models import Neoantigen, Gene, Patient
 
-'''
-@pytest.fixture(scope='module')
-def hr_feature():
-    return 'BCR_Richness'
-
-
-@pytest.fixture(scope='module')
-def hr_germline_module():
-    return 'Unassigned'
-
-
-@pytest.fixture(scope='module')
-def hr_germline_category():
-    return 'Adaptive Receptor'
-'''
-
 
 @pytest.fixture(scope='module')
 def test_neoantigen(test_db):
@@ -28,6 +12,7 @@ def test_neoantigen(test_db):
         Neoantigen.patient_id,
         Neoantigen.neoantigen_gene_id,
         Neoantigen.pmhc,
+        Neoantigen.freq_pmhc,
         Neoantigen.tpm
     )
     query = query.filter(Neoantigen.neoantigen_gene_id.isnot(None)).limit(1)
@@ -82,6 +67,7 @@ def common_query(common_query_builder):
               id
               tpm
               pmhc
+              freqPmhc
               patient { barcode }
               gene {
                 entrez
@@ -209,10 +195,10 @@ def test_query(client, common_query):
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:3]:
-        import logging
         assert type(result['id']) is str
         assert type(result['tpm']) is float or NoneType
         assert type(result['pmhc']) is str
+        assert type(result['freqPmhc']) is int
         assert type(result['gene']['entrez']) is int or NoneType
         assert type(result['gene']['hgnc']) is int or NoneType
         assert type(result['patient']['barcode']) is str
@@ -238,6 +224,7 @@ def test_query_specific_neoantigen(client, common_query, test_neoantigen, test_g
         assert type(result['id']) is str
         assert result['tpm'] == test_neoantigen.tpm
         assert result['pmhc'] == test_neoantigen.pmhc
+        assert result['freqPmhc'] == test_neoantigen.freq_pmhc
         assert result['gene']['entrez'] == test_gene.entrez_id
         assert result['gene']['hgnc'] == test_gene.hgnc_id
         assert result['patient']['barcode'] == test_patient.name

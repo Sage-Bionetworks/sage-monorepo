@@ -11,6 +11,7 @@ from .paging_utils import get_pagination_queries
 neoantigen_request_fields = {
     "id",
     "pmhc",
+    "freqPmhc",
     "tpm",
     "gene",
     "patient",
@@ -21,6 +22,7 @@ def build_neoantigen_graphql_response(neoantigen):
     result_dict = {
         'id': get_value(neoantigen, 'id'),
         'pmhc': get_value(neoantigen, 'pmhc'),
+        'freqPmhc': get_value(neoantigen, 'freq_pmhc'),
         'tpm': get_value(neoantigen, 'tpm'),
         'gene': build_gene_graphql_response()(neoantigen),
         'patient': build_patient_graphql_response()(neoantigen),
@@ -48,6 +50,7 @@ def build_neoantigen_request(
         'id': neoantigen_1.id.label('id'),
         'tpm': neoantigen_1.tpm.label('tpm'),
         'pmhc': neoantigen_1.pmhc.label('pmhc'),
+        'freqPmhc': neoantigen_1.freq_pmhc.label('freq_pmhc'),
     }
     gene_core_field_mapping = {
         'entrez': gene_1.entrez_id.label('gene_entrez'),
