@@ -371,7 +371,6 @@ export class ChallengeSearchComponent
   }
 
   onSearchChange(): void {
-    // update searchTerms to trigger the query' searchTerm
     this.searchTerms.next(this.searchedTerms);
   }
 
@@ -444,6 +443,7 @@ export class ChallengeSearchComponent
 
   onPlatformsChange(selected: string[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         platforms: this.collapseParam(selected),
       },
@@ -456,6 +456,7 @@ export class ChallengeSearchComponent
 
   onInputDataTypesChange(selected: string[]): void {
     this.router.navigate([], {
+      queryParamsHandling: 'merge',
       queryParams: {
         inputDataTypes: this.collapseParam(selected),
       },
