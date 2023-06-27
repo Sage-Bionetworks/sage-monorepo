@@ -201,6 +201,7 @@ export class ChallengeSearchComponent
         maxStartDate: this.selectedMaxStartDate,
         status: this.selectedStatus,
         submissionTypes: this.selectedSubmissionTypes,
+        platforms: this.selectedPlatforms,
         incentives: this.selectedIncentives,
         inputDataTypes: this.selectedInputDataTypes,
         organizations: this.selectedOrgs,
@@ -422,6 +423,7 @@ export class ChallengeSearchComponent
   }
 
   onPlatformsChange(selected: string[]): void {
+    console.log(selected);
     this.router.navigate([], {
       queryParams: {
         platforms: this.collapseParam(selected),
