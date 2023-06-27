@@ -183,27 +183,9 @@ export class ChallengeSearchComponent
       this.selectedIncentives = this.splitParam(params['incentives']);
       this.selectedPlatforms = this.splitParam(params['platforms']);
       this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
-      this.selectedOrgs = this.splitParam(params['organizations']);
-
-      // this.selectedSubmissionTypes = params['submissionTypes']
-      //   ? this.ensureList(params['submissionTypes'])
-      //   : [];
-
-      // this.selectedIncentives = params['incentives']
-      //   ? this.ensureList(params['incentives'])
-      //   : [];
-
-      // this.selectedPlatforms = params['platforms']
-      //   ? this.ensureList(params['platforms'])
-      //   : [];
-
-      // this.selectedInputDataTypes = params['inputDataTypes']
-      //   ? this.ensureList(params['inputDataTypes'])
-      //   : [];
-
-      // this.selectedOrgs = params['organizations']
-      //   ? this.ensureList(params['organizations'])
-      //   : [];
+      this.selectedOrgs = this.splitParam(params['organizations']).map(
+        (idString) => +idString
+      );
 
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = params['pageNumber'];
