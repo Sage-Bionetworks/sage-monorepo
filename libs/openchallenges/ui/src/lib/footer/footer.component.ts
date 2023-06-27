@@ -15,7 +15,7 @@ export class FooterComponent {
   termsOfUseUrl: string;
 
   constructor(private readonly configService: ConfigService) {
-    this.privacyPolicyUrl = configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = configService.config.termsOfUseUrl;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 }
