@@ -103,6 +103,7 @@ export class ChallengeSearchComponent
   sortedBy!: string;
 
   // set default values
+  defaultSelectedYear = undefined;
   defaultSortedBy = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
@@ -148,20 +149,29 @@ export class ChallengeSearchComponent
       // Chunk of codes below used to update selected values that represent in the UI of filters
       this.selectedMinStartDate = params['minStartDate'];
       this.selectedMaxStartDate = params['maxStartDate'];
-
+      console.log(this.selectedYear);
       const isDateDefined = params['minStartDate'] || params['maxStartDate'];
 
-      if (isDateDefined && this.refreshed) {
-        // display custom range only once with defined date query after refreshing
-        this.selectedYear = 'custom';
-        this.isCustomYear = true;
-        const yearRange = [
-          params['minStartDate'] ? new Date(params['minStartDate']) : undefined,
-          params['maxStartDate'] ? new Date(params['maxStartDate']) : undefined,
-        ];
+      if (isDateDefined) {
+        if (this.refreshed) {
+          // display custom range only once with defined date query after refreshing
+          this.selectedYear = 'custom';
+          this.isCustomYear = true;
+          const yearRange = [
+            params['minStartDate']
+              ? new Date(params['minStartDate'])
+              : undefined,
+            params['maxStartDate']
+              ? new Date(params['maxStartDate'])
+              : undefined,
+          ];
 
-        this.customMonthRange = yearRange as Date[];
-        this.refreshed = false;
+          this.customMonthRange = yearRange as Date[];
+          this.refreshed = false;
+        }
+      } else {
+        // ensure to select default year range if no date defined
+        this.selectedYear = this.defaultSelectedYear;
       }
 
       this.selectedStatus = params['status']
