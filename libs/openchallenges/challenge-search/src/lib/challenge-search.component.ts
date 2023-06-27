@@ -56,7 +56,7 @@ import { DatePipe } from '@angular/common';
 import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 
 @Component({
@@ -93,6 +93,7 @@ export class ChallengeSearchComponent
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: Date[] | undefined;
   isCustomYear = false;
+  refreshed = true;
 
   selectedYear!: DateRange | string | undefined;
   selectedMinStartDate!: string | undefined;
@@ -109,27 +110,26 @@ export class ChallengeSearchComponent
   defaultPageSize = 24;
 
   // define filters
+  sortFilters: FilterValue[] = challengeSortFilterValues;
   startYearRangeFilter: Filter = challengeStartYearRangeFilter;
+
+  // checkbox filters
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentivesFilter = challengeIncentivesFilter;
-
   platformsFilter = challengePlatformsFilter;
+
+  // dropdown filters
   inputDataTypesFilter = challengeInputDataTypesFilter;
   organizationsFilter = challengeOrganizationsFilter;
 
+  // define selected filter values
   selectedStatus!: string[];
   selectedSubmissionTypes!: string[];
   selectedIncentives!: string[];
   selectedPlatforms!: string[];
-
   selectedOrgs!: number[];
   selectedInputDataTypes!: string[];
-
-  sortFilters: FilterValue[] = challengeSortFilterValues;
-
-  refreshed = true;
-  activeQueryParams!: Params;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -147,9 +147,6 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
-      // update current query params
-      this.activeQueryParams = params;
-
       // Chunk of codes below used to update selected values that represent in the UI of filters
       this.selectedMinStartDate = params['minStartDate'];
       this.selectedMaxStartDate = params['maxStartDate'];
@@ -178,6 +175,7 @@ export class ChallengeSearchComponent
         this.selectedYear = this.defaultSelectedYear;
       }
 
+      // update selected filter values based on params in url
       this.selectedStatus = this.splitParam(params['status']);
       this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
       this.selectedIncentives = this.splitParam(params['incentives']);
@@ -209,6 +207,7 @@ export class ChallengeSearchComponent
 
       this.query.next(defaultQuery);
     });
+
     // update the total number of challenges in database with empty query
     this.challengeService
       .listChallenges({} as ChallengeSearchQuery)
