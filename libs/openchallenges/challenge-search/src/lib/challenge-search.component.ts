@@ -150,25 +150,18 @@ export class ChallengeSearchComponent
       this.selectedMaxStartDate = params['maxStartDate'];
 
       const isDateDefined = params['minStartDate'] || params['maxStartDate'];
-      if (this.refreshed) {
-        if (isDateDefined) {
-          // display custom range only once with defined date query after refreshing
-          this.selectedYear = 'custom';
-          this.isCustomYear = true;
-          const yearRange = [
-            params['minStartDate']
-              ? new Date(params['minStartDate'])
-              : undefined,
-            params['maxStartDate']
-              ? new Date(params['maxStartDate'])
-              : undefined,
-          ];
 
-          this.customMonthRange = yearRange as Date[];
-          this.refreshed = false;
-        } else {
-          this.selectedYear = undefined;
-        }
+      if (isDateDefined && this.refreshed) {
+        // display custom range only once with defined date query after refreshing
+        this.selectedYear = 'custom';
+        this.isCustomYear = true;
+        const yearRange = [
+          params['minStartDate'] ? new Date(params['minStartDate']) : undefined,
+          params['maxStartDate'] ? new Date(params['maxStartDate']) : undefined,
+        ];
+
+        this.customMonthRange = yearRange as Date[];
+        this.refreshed = false;
       }
 
       this.selectedStatus = params['status']
@@ -357,6 +350,7 @@ export class ChallengeSearchComponent
   }
 
   onYearChange(): void {
+    this.refreshed = false;
     this.isCustomYear = (this.selectedYear as string) === 'custom';
     if (!this.isCustomYear) {
       const yearRange = this.selectedYear as DateRange | undefined;
