@@ -488,7 +488,6 @@ export class ChallengeSearchComponent
   }
 
   onPageChange(event: any) {
-    console.log(event);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
