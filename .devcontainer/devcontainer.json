@@ -1,6 +1,6 @@
 {
   "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:b5ec4f9",
+  "image": "sagebionetworks/sage-devcontainer:7f9d3e3",
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
@@ -64,6 +64,7 @@
     8091,
     8092,
     8200,
+    8787,
     8888,
     8889,
     9000,
@@ -170,6 +171,10 @@
     },
     "8200": {
       "label": "openchallenges-vault",
+      "onAutoForward": "silent"
+    },
+    "8787": {
+      "label": "openchallenges-rstudio",
       "onAutoForward": "silent"
     },
     "8888": {

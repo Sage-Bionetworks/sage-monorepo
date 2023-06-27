@@ -35,7 +35,7 @@ export class PreviewInstanceAlb extends Construct {
 
     this.targetGroup = new LbTargetGroup(this, 'preview_instance_alb_targets', {
       namePrefix: 'pi-',
-      port: 8080,
+      port: 8000,
       protocol: 'HTTP',
       vpcId,
       deregistrationDelay: '30',
