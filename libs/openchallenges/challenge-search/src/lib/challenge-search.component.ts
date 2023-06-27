@@ -358,11 +358,13 @@ export class ChallengeSearchComponent
   }
 
   splitParam(activeParam: string | undefined, by = ','): any[] {
-    return activeParam ? activeParam.toString().split(by) : [];
+    return activeParam ? activeParam.split(by) : [];
   }
 
-  collapseParam(param: any, by = ','): string {
-    return this.splitParam(param).join(by);
+  collapseParam(selectedParam: any, by = ','): string | undefined {
+    return selectedParam.length === 0
+      ? undefined
+      : this.splitParam(selectedParam.toString()).join(by);
   }
 
   onSearchChange(): void {
@@ -409,6 +411,7 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
+    console.log(this.collapseParam(selected));
     console.log(selected);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
