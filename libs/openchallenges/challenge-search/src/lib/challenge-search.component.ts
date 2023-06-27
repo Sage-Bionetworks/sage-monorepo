@@ -56,7 +56,7 @@ import { DatePipe } from '@angular/common';
 import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 
 @Component({
@@ -129,6 +129,7 @@ export class ChallengeSearchComponent
   sortFilters: FilterValue[] = challengeSortFilterValues;
 
   refreshed = true;
+  activeQueryParams!: Params;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -146,10 +147,13 @@ export class ChallengeSearchComponent
 
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
+      // update current query params
+      this.activeQueryParams = params;
+
       // Chunk of codes below used to update selected values that represent in the UI of filters
       this.selectedMinStartDate = params['minStartDate'];
       this.selectedMaxStartDate = params['maxStartDate'];
-      console.log(this.selectedYear);
+
       const isDateDefined = params['minStartDate'] || params['maxStartDate'];
 
       if (isDateDefined) {
@@ -174,29 +178,32 @@ export class ChallengeSearchComponent
         this.selectedYear = this.defaultSelectedYear;
       }
 
-      this.selectedStatus = params['status']
-        ? this.ensureArray(params['status'])
-        : [];
+      this.selectedStatus = this.splitParam(params['status']);
+      this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
+      this.selectedIncentives = this.splitParam(params['incentives']);
+      this.selectedPlatforms = this.splitParam(params['platforms']);
+      this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
+      this.selectedOrgs = this.splitParam(params['organizations']);
 
-      this.selectedSubmissionTypes = params['submissionTypes']
-        ? this.ensureArray(params['submissionTypes'])
-        : [];
+      // this.selectedSubmissionTypes = params['submissionTypes']
+      //   ? this.ensureList(params['submissionTypes'])
+      //   : [];
 
-      this.selectedIncentives = params['incentives']
-        ? this.ensureArray(params['incentives'])
-        : [];
+      // this.selectedIncentives = params['incentives']
+      //   ? this.ensureList(params['incentives'])
+      //   : [];
 
-      this.selectedPlatforms = params['platforms']
-        ? this.ensureArray(params['platforms'])
-        : [];
+      // this.selectedPlatforms = params['platforms']
+      //   ? this.ensureList(params['platforms'])
+      //   : [];
 
-      this.selectedInputDataTypes = params['inputDataTypes']
-        ? this.ensureArray(params['inputDataTypes'])
-        : [];
+      // this.selectedInputDataTypes = params['inputDataTypes']
+      //   ? this.ensureList(params['inputDataTypes'])
+      //   : [];
 
-      this.selectedOrgs = params['organizations']
-        ? this.ensureArray(params['organizations'])
-        : [];
+      // this.selectedOrgs = params['organizations']
+      //   ? this.ensureList(params['organizations'])
+      //   : [];
 
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = params['pageNumber'];
@@ -350,8 +357,12 @@ export class ChallengeSearchComponent
     this.destroy.complete();
   }
 
-  ensureArray(value: any): any[] {
-    return Array.isArray(value) ? value : [value];
+  splitParam(activeParam: string | undefined, by = ','): any[] {
+    return activeParam ? activeParam.toString().split(by) : [];
+  }
+
+  collapseParam(param: any, by = ','): string {
+    return this.splitParam(param).join(by);
   }
 
   onSearchChange(): void {
@@ -361,6 +372,7 @@ export class ChallengeSearchComponent
 
   onYearChange(): void {
     this.refreshed = false;
+
     this.isCustomYear = (this.selectedYear as string) === 'custom';
     if (!this.isCustomYear) {
       const yearRange = this.selectedYear as DateRange | undefined;
@@ -371,6 +383,7 @@ export class ChallengeSearchComponent
           maxStartDate: yearRange?.end ? yearRange.end : undefined,
         },
       });
+
       // reset custom range
       this.customMonthRange = undefined;
     }
@@ -396,10 +409,11 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
+    console.log(selected);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
-        status: selected,
+        status: this.collapseParam(selected),
       },
     });
   }
@@ -408,7 +422,7 @@ export class ChallengeSearchComponent
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
-        submissionTypes: selected,
+        submissionTypes: this.collapseParam(selected),
       },
     });
   }
@@ -417,7 +431,7 @@ export class ChallengeSearchComponent
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
-        incentives: selected,
+        incentives: this.collapseParam(selected),
       },
     });
   }
@@ -425,7 +439,7 @@ export class ChallengeSearchComponent
   onPlatformsChange(selected: string[]): void {
     this.router.navigate([], {
       queryParams: {
-        platforms: selected,
+        platforms: this.collapseParam(selected),
       },
     });
   }
@@ -433,7 +447,7 @@ export class ChallengeSearchComponent
   onInputDataTypesChange(selected: string[]): void {
     this.router.navigate([], {
       queryParams: {
-        inputDataTypes: selected,
+        inputDataTypes: this.collapseParam(selected),
       },
     });
   }
@@ -446,7 +460,7 @@ export class ChallengeSearchComponent
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
-        organizations: selected,
+        organizations: this.collapseParam(selected),
       },
     });
   }
@@ -465,7 +479,6 @@ export class ChallengeSearchComponent
   }
 
   onPageChange(event: any) {
-    console.log(event);
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
