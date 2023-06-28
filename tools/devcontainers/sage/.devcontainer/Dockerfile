@@ -17,6 +17,8 @@ ARG yarnVersion="3.3.0"
 ARG devcontainerCliVersion="0.25.2"
 # https://pypi.org/project/poetry
 ARG poetryVersion="1.3.1"
+# https://docs.posit.co/resources/install-r/#specify-r-version
+ARG rVersion="4.2.3"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -27,7 +29,7 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat jq \
+    kafkacat jq ca-certificates-java gdebi-core \
     # Required by AWS CLI
     mandoc \
     # Required for setting up locales
@@ -81,6 +83,12 @@ RUN groupadd docker \
   # Install Poetry
   && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
+  # Install R
+  && curl "https://cdn.rstudio.com/r/debian-11/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+    && gdebi --non-interactive /tmp/r_amd64.deb \
+    && rm -fr /tmp/r_amd64.deb \
+    && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
+    && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
   # Increase the max number of file watchers
   # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
