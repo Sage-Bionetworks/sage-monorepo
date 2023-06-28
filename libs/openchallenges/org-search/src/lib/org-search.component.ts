@@ -55,7 +55,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   );
 
   private destroy = new Subject<void>();
-  searchTermValue = '';
 
   searchResultsCount = 0;
   totalOrgCount = 0;
@@ -192,7 +191,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
-    this.searchTerms.next(this.searchTermValue);
+    this.searchTerms.next(this.searchedTerms);
   }
 
   onContributionRolesChange(selected: string[]): void {
