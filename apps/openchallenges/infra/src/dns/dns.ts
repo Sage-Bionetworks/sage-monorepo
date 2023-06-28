@@ -14,8 +14,8 @@ export class Dns extends Construct {
 
     const nameTagPrefix = 'openchallenges';
 
-    // TODO This resource must be managed outside of this stack when more than one stacks are
-    // deployed to this account.
+    // TODO This resource should be managed outside of this stack when more than one stack will be
+    // referencing this zone
     this.devZone = new Route53Zone(this, 'dev_zone', {
       name: 'dev.openchallenges.io',
       tags: {
