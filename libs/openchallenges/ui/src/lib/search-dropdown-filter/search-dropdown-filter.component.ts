@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterValue } from '../checkbox-filter/filter-value.model';
 import { Avatar } from '../avatar/avatar';
 
@@ -7,27 +7,51 @@ import { Avatar } from '../avatar/avatar';
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
-export class SearchDropdownFilterComponent {
+export class SearchDropdownFilterComponent implements OnInit {
   @Input() values!: FilterValue[];
-  @Input() selectedValues!: string[];
+  @Input() selectedValues!: any[];
   @Input() placeholder = 'Search items';
-  @Input() showAvatar = true;
-  @Output() dropdownChange = new EventEmitter<string[]>();
+  @Input() showAvatar!: boolean | undefined;
+  @Input() filterByApiClient!: boolean | undefined;
+  @Output() selectionChange = new EventEmitter<any[]>();
+  @Output() searchChange = new EventEmitter<string>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
     hideTransitionOptions: '0ms',
   };
 
-  onChange(selected: string[]): void {
-    this.dropdownChange.emit(selected);
+  searchTerm = '';
+  filter = true;
+
+  ngOnInit(): void {
+    this.showAvatar = this.showAvatar ? this.showAvatar : false;
+
+    if (this.filterByApiClient) {
+      // if search field will be updated with query results
+      // disable default filter and use custom search bar
+      this.filter = !this.filterByApiClient;
+    }
+  }
+
+  onSearch(event: any): void {
+    this.searchChange.emit(event.filter);
+  }
+
+  onCustomSearch(): void {
+    this.searchChange.emit(this.searchTerm);
+  }
+
+  onChange(selected: any[]): void {
+    // this filter will emit as string anyways
+    this.selectionChange.emit(selected);
   }
 
   getAvatar(value: FilterValue): Avatar {
     return {
       name: value.label || '',
       src: value.avatarUrl ? value.avatarUrl : '',
-      size: 24,
+      size: 32,
     };
   }
 }

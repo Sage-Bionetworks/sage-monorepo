@@ -15,7 +15,7 @@ import {
   FilterValue,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
-import { contributorRolesFilter } from './org-search-filters';
+import { contributionRolesFilter } from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
 import {
   BehaviorSubject,
@@ -65,7 +65,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   searchResultsCount = 0;
 
   // define filters
-  checkboxFilters: Filter[] = [contributorRolesFilter];
+  checkboxFilters: Filter[] = [contributionRolesFilter];
   sortFilters: FilterValue[] = organizationSortFilterValues;
   sortedBy!: string;
 
@@ -159,7 +159,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchTerms.next(this.searchTermValue);
   }
 
-  onCheckboxChange(selected: string[], queryName: string): void {
+  onCheckboxSelectionChange(selected: string[], queryName: string): void {
     const newQuery = assign(this.query.getValue(), {
       [queryName]: selected,
     });

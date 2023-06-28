@@ -67,6 +67,10 @@ public class ChallengeEntity {
   @Column(name = "website_url", nullable = false)
   private String websiteUrl;
 
+  @Column(nullable = true)
+  @GenericField()
+  private String doi;
+
   @Column(nullable = false)
   @GenericField()
   private String status;
@@ -80,6 +84,13 @@ public class ChallengeEntity {
   @IndexedEmbedded(includePaths = {"slug", "name"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
+
+  @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
+  @IndexedEmbedded(
+      name = "contributions",
+      includePaths = {"role", "organization_id"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
+  private List<ChallengeContributionEntity> contributions;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(

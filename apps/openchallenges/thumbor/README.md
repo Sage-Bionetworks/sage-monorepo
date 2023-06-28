@@ -1,5 +1,9 @@
 # OpenChallenges Thumbor
 
+## Overview
+
+This component is based on [Thumbor S3 Docker].
+
 ## Usage
 
 ### Prepare the service
@@ -116,4 +120,5 @@ the values stored in LastPass.
 
 <!-- Links -->
 
+[Thumbor S3 Docker]: https://github.com/beeyev/thumbor-s3-docker
 [Triforce image]: https://static.wikia.nocookie.net/zelda_gamepedia_en/images/7/70/ALBW_Triforce_Artwork.png/revision/latest/scale-to-width-down/1000?cb=20140604184126&format=original

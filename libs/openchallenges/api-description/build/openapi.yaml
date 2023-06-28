@@ -66,6 +66,26 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/contributions':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: List challenge contributions
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
     get:
       tags:
@@ -315,6 +335,11 @@ components:
       maxLength: 30
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: example-challenge-platform
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       type: string
@@ -386,6 +411,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengePlatformSlug'
+        organizations:
+          description: An array of organization ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationId'
         inputDataTypes:
           description: >-
             An array of challenge input data type ids used to filter the
@@ -554,6 +584,8 @@ components:
           $ref: '#/components/schemas/ChallengeHeadline'
         description:
           $ref: '#/components/schemas/ChallengeDescription'
+        doi:
+          type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
@@ -644,6 +676,44 @@ components:
       required:
         - title
         - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+    ChallengeContribution:
+      type: object
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
+    ChallengeContributionsPage:
+      type: object
+      description: A page of challenge challenge contributions.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengeContributions:
+              description: A list of challenge contributions.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengeContribution'
+          required:
+            - challengeContributions
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeInputDataTypeSort:
@@ -823,6 +893,7 @@ components:
       default: original
       enum:
         - original
+        - 32px
         - 100px
         - 140px
         - 250px
@@ -862,14 +933,6 @@ components:
         - url
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengeContributorRole:
-      description: The role of a challenge contributor.
-      type: string
-      enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -902,11 +965,11 @@ components:
           format: int32
           default: 100
           minimum: 1
-        challengeContributorRoles:
-          description: An array of challenge contributor roles used to filter the results.
+        challengeContributionRoles:
+          description: An array of challenge contribution roles used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/ChallengeContributorRole'
+            $ref: '#/components/schemas/ChallengeContributionRole'
         sort:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
@@ -931,6 +994,8 @@ components:
       type: object
       description: An organization
       properties:
+        id:
+          $ref: '#/components/schemas/OrganizationId'
         name:
           type: string
           example: Example organization
@@ -965,6 +1030,7 @@ components:
           type: string
           example: OC
       required:
+        - id
         - name
         - email
         - login

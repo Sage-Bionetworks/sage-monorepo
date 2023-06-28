@@ -10,13 +10,10 @@ services:
     networks:
       - openchallenges
     ports:
-      - '8889:8888'
+      - '8889:8889'
     volumes:
       - openchallenges-thumbor-data:/data
-    # depends_on:
-    #   openchallenges-minio:
-    #     condition: service_started
     deploy:
       resources:
         limits:
-          memory: 200M
+          memory: 500M

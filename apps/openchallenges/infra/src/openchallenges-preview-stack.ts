@@ -81,7 +81,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const previewInstanceConfig = new PreviewInstanceConfig({
       ami: Ami.UBUNTU_22_04_LTS,
       defaultRegion: AmazonRegion.US_EAST_1,
-      instanceType: 't2.micro',
+      instanceType: 't3.xlarge',
       keyName: bastionKeyName, // TODO Set unique key
       securityGroupIds: [
         securityGroups.previewInstanceSg.id,
@@ -133,6 +133,9 @@ export class OpenChallengesPreviewStack extends SageStack {
     });
     new TerraformOutput(this, 'bastion_id', {
       value: bastion.instance.id,
+    });
+    new TerraformOutput(this, 'preview_instance_id', {
+      value: previewInstance.instance.id,
     });
     new TerraformOutput(this, 'preview_instance_private_ip', {
       value: previewInstance.instance.privateIp,

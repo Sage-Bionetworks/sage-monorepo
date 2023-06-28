@@ -16,8 +16,10 @@ import { assign } from 'lodash';
 export class OrgProfileChallengesComponent {
   @Input() organization!: Organization;
   challenges: Challenge[] = [];
+  // default pagination
   pageNumber = 0;
   pageSize = 12;
+  pageSizeOptions!: number[];
   totalChallengesCount = 0;
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -26,6 +28,15 @@ export class OrgProfileChallengesComponent {
   constructor(private challengeService: ChallengeService) {}
 
   ngOnInit(): void {
+    this.pageSizeOptions = this.getPageSizeOptions(this.pageSize);
+
+    const defaultQuery = {
+      pageNumber: this.pageNumber,
+      pageSize: this.pageSize,
+      organizations: [this.organization.id],
+    };
+    this.query.next(defaultQuery);
+
     this.query
       .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
       .subscribe((page) => {
@@ -40,5 +51,9 @@ export class OrgProfileChallengesComponent {
       pageSize: event.rows,
     });
     this.query.next(newQuery);
+  }
+
+  getPageSizeOptions(pageSize: number): number[] {
+    return [pageSize, pageSize * 2, pageSize * 3];
   }
 }

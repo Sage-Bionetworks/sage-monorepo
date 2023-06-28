@@ -98,6 +98,45 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Challenge
+  /challenges/{challengeId}/contributions:
+    get:
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      parameters:
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge contributions
+      tags:
+      - ChallengeContribution
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengeContribution
   /challengeInputDataTypes:
     get:
       description: List challenge input data types
@@ -325,6 +364,11 @@ components:
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
     ChallengeInputDataTypeSlug:
       description: The slug of the challenge input data type.
       example: gene-expression
@@ -395,6 +439,11 @@ components:
           description: An array of challenge platform ids used to filter the results.
           items:
             $ref: '#/components/schemas/ChallengePlatformSlug'
+          type: array
+        organizations:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationId'
           type: array
         inputDataTypes:
           description: An array of challenge input data type ids used to filter the
@@ -606,6 +655,7 @@ components:
         headline: Example challenge headline
         slug: awesome-challenge
         startDate: 2017-07-21T00:00:00.000+00:00
+        doi: doi
         status: active
         inputDataTypes:
         - name: gene expression
@@ -644,6 +694,8 @@ components:
           example: This is an example description of the challenge.
           maxLength: 280
           minLength: 0
+          type: string
+        doi:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
@@ -734,6 +786,42 @@ components:
       required:
       - status
       - title
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      enum:
+      - challenge_organizer
+      - data_contributor
+      - sponsor
+      example: challenge_organizer
+      type: string
+    ChallengeContribution:
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+      - challengeId
+      - organizationId
+      - role
+      type: object
+    ChallengeContributionsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ChallengeContributionsPage_allOf'
+      description: A page of challenge challenge contributions.
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -927,6 +1015,17 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    ChallengeContributionsPage_allOf:
+      properties:
+        challengeContributions:
+          description: A list of challenge contributions.
+          items:
+            $ref: '#/components/schemas/ChallengeContribution'
+          type: array
+      required:
+      - challengeContributions
       type: object
       example: null
     ChallengeInputDataTypesPage_allOf:

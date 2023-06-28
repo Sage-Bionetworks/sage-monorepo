@@ -1,0 +1,19 @@
+parameters:
+  - $ref: ../../../components/parameters/path/challengeId.yaml
+get:
+  tags:
+    - ChallengeContribution
+  summary: List challenge contributions
+  description: List challenge contributions
+  operationId: listChallengeContributions
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ChallengeContributionsPage.yaml
+      description: Success
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

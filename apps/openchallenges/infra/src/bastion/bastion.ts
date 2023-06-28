@@ -23,14 +23,13 @@ export class Bastion extends Construct {
       type: AssetType.FILE,
     });
 
-    this.instance = new Instance(this, id, {
+    this.instance = new Instance(this, 'bastion_instance', {
       ami: config.ami,
       instanceType: config.instanceType,
       keyName: config.keyName,
       privateIp: config.privateIp,
       subnetId: config.subnetId,
       tags: { Name: `${config.tagPrefix}-bastion` },
-      // userData: readFileSync('./src/resources/scripts/bastion.sh', 'utf8'),
       userData: Fn.templatefile(instanceScript.path, {
         hello: config.hello,
       }),

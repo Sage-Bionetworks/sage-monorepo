@@ -13,7 +13,7 @@
           <input
             type="text"
             pInputText
-            [(ngModel)]="searchTermValue"
+            [(ngModel)]="searchedTerms"
             (input)="onSearchChange()"
             placeholder="Search challenges"
           />
@@ -65,27 +65,92 @@
         </div>
       </p-panel>
       <p-divider></p-divider>
-      <ng-container *ngFor="let checkbox of checkboxFilters">
-        <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
-          <openchallenges-checkbox-filter
-            [values]="checkbox.values"
-            (checkboxChange)="onCheckboxChange($event, checkbox.query)"
-            inputId="{{ checkbox.query }}"
-          ></openchallenges-checkbox-filter>
-        </p-panel>
-        <p-divider></p-divider>
-      </ng-container>
-      <ng-container *ngFor="let dropdown of dropdownFilters; last as isLast">
-        <p-panel header="{{ dropdown.label }}" [toggleable]="true" [collapsed]="dropdown.collapsed">
-          <openchallenges-search-dropdown-filter
-            [values]="dropdown.values"
-            placeholder="{{ dropdown.label.toLowerCase() + '(s)' }}  "
-            [showAvatar]="false"
-            (dropdownChange)="onDropdownChange($event, dropdown.query)"
-          ></openchallenges-search-dropdown-filter>
-        </p-panel>
-        <p-divider *ngIf="!isLast"></p-divider>
-      </ng-container>
+      <p-panel
+        header="{{ statusFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="statusFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="statusFilter.values"
+          [selectedValues]="selectedStatus"
+          (selectionChange)="onStatusChange($event)"
+          inputId="{{ statusFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ submissionTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="submissionTypesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="submissionTypesFilter.values"
+          [selectedValues]="selectedSubmissionTypes"
+          (selectionChange)="onSubmissionTypesChange($event)"
+          inputId="{{ submissionTypesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ incentivesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="incentivesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="incentivesFilter.values"
+          [selectedValues]="selectedIncentives"
+          (selectionChange)="onIncentivesChange($event)"
+          inputId="{{ incentivesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ platformsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="platformsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="platformsFilter.values"
+          [selectedValues]="selectedPlatforms"
+          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="platformsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onPlatformsChange($event)"
+          (searchChange)="onPlatformSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ inputDataTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="inputDataTypesFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="inputDataTypesFilter.values"
+          [selectedValues]="selectedInputDataTypes"
+          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onInputDataTypesChange($event)"
+          (searchChange)="onInputDataTypeSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ organizationsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="organizationsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="organizationsFilter.values"
+          [selectedValues]="selectedOrgs"
+          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="organizationsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onOrganizationsChange($event)"
+          (searchChange)="onOrganizationSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
@@ -94,8 +159,8 @@
         </openchallenges-challenge-card>
       </div>
       <openchallenges-paginator
-        [pageNumber]="pageNumber"
-        [pageSize]="pageSize"
+        [pageNumber]="selectedPageNumber || defaultPageNumber"
+        [pageSize]="selectedPageSize || defaultPageSize"
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"

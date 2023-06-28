@@ -32,6 +32,10 @@ GET {{basePath}}/challenges?difficulties=intermediate
 
 GET {{basePath}}/challenges?submissionTypes=container_image
 
+### List the challenges that include DREAM (id=1) as a contributor.
+
+GET {{basePath}}/challenges?organizations=1
+
 ### List the challenges with a monetary or publication incentive.
 
 GET {{basePath}}/challenges?incentives=monetary,publication
@@ -99,3 +103,7 @@ GET {{basePath}}/challengeInputDataTypes?searchTerms=genomic
 ### Get the challenge with ID 1.
 
 GET {{basePath}}/challenges/1
+
+### Get the contributions to the challenge with ID 1.
+
+GET {{basePath}}/challenges/1/contributions

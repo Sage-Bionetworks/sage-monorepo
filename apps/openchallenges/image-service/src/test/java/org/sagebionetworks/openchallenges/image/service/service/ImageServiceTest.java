@@ -15,13 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.sagebionetworks.openchallenges.app.config.data.ImageServiceConfigData;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @ExtendWith(MockitoExtension.class)
-public class ImageServiceTest {
-
-  private static final Logger LOG = LoggerFactory.getLogger(ImageServiceTest.class);
+class ImageServiceTest {
 
   @Mock private ImageServiceConfigData imageServiceConfigData;
 
