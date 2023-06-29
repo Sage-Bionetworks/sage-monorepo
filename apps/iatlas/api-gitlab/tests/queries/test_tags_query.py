@@ -383,6 +383,36 @@ def test_tags_query_with_tag_type(client, common_query, tag_type):
         assert result['type'] == tag_type
 
 
+def test_tags_query_with_samples(client, samples_query):
+    response = client.post(
+        '/api',
+        json={
+            'query': samples_query,
+            'variables': {
+                'tag': ["C1"],
+                'cohort': ["TCGA_Immune_Subtype"],
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['tags']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) == 1
+    for result in results:
+        assert result['name'] == "C1"
+        assert type(result['characteristics']) is str or NoneType
+        assert type(result['color']) is str or NoneType
+        assert type(result['longDisplay']) is str or NoneType
+        assert type(result['shortDisplay']) is str or NoneType
+        assert type(result['order']) is int or NoneType
+        assert isinstance(result['samples'], list)
+        assert len(result['samples']) > 1
+        for sample in result['samples']:
+            assert type(sample['name']) is str
+
+
 def test_tags_query_with_cohort(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
     response = client.post(
         '/api',
