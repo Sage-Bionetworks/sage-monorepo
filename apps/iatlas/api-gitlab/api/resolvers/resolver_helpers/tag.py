@@ -284,11 +284,9 @@ def get_samples(tag_id, requested, sample_requested, cohort=None, sample=None):
         sample_query = sess.query(*sample_core)
         sample_query = sample_query.select_from(sample_1)
 
-        tag_subquery = sess.query(sample_to_tag_1.sample_id)
-        tag_join_condition = build_join_condition(
-            sample_to_tag_1.sample_id, sample_1.id, filter_column=sample_to_tag_1.tag_id, filter_list=[tag_id])
-        tag_subquery = tag_subquery.join(cohort_1, and_(
-            *tag_join_condition), isouter=False)
+        tag_subquery = sess.query(
+            sample_to_tag_1.sample_id).filter(sample_to_tag_1.tag_id.in_([tag_id]))
+
         sample_query = sample_query.filter(
             sample_1.id.in_(tag_subquery))
 
