@@ -1,0 +1,180 @@
+name: 'Publish Project Images'
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+env:
+  NX_BRANCH: ${{ github.event.number }}
+  NX_RUN_GROUP: ${{ github.run_id }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
+  NX_CLOUD_ENV_NAME: 'linux'
+  IMAGE_NAMESPACE: 'sagebionetworks'
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    container:
+      image: sagebionetworks/sage-devcontainer:7f9d3e3
+      options: --user root
+    if: ${{ github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout [${{ github.ref_name }}]
+        with:
+          fetch-depth: 0
+
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Setup Node.js cache
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # - name: Setup pipenv cache
+      #   id: cache-pipenv
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /root/.gradle/caches
+            /root/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
+
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      # - name: Setup Python virtualenvs
+      #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      #   run: yarn nx python api
+
+      - run: yarn nx run-many --target=prepare
+      - run: yarn nx run-many --target=prepare-java --parallel=1
+      - run: yarn nx run-many --target=prepare-python
+      - run: yarn nx run-many --target=build-image
+
+  pr:
+    runs-on: ubuntu-latest
+    container:
+      image: sagebionetworks/sage-devcontainer:7f9d3e3
+      options: --user root
+    # Runs this job if triggered by a PR and if at least one of these conditions are true:
+    # - the PR originate from a fork
+    # - the branch name does not start with `renovate/` since we know that the workflow would have
+    #   been already triggered by the `push` event.
+    if: |
+      github.event_name == 'pull_request'
+        && (
+          github.event.pull_request.head.repo.full_name !=
+            github.event.pull_request.base.repo.full_name
+          || !startsWith(github.head_ref, 'renovate/')
+        )
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          fetch-depth: 0
+
+      - name: Prevent git error about detected dubious ownership
+        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Setup Node.js cache
+        id: cache-node
+        uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      # - name: Setup pipenv cache
+      #   id: cache-pipenv
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: ~/.local/share/virtualenvs
+      #     key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
+
+      - name: Setup poetry cache
+        id: cache-poetry
+        uses: actions/cache@v3
+        with:
+          path: ~/.local/share/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Setup Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /root/.gradle/caches
+            /root/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Configure hostnames
+        run: ./tools/configure-hostnames.sh
+
+      - name: Install Node.js dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: yarn install --immutable
+
+      # - name: Setup Python virtualenvs
+      #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      #   run: yarn nx python api
+
+      - run: yarn nx run-many --target=prepare
+      - run: yarn nx run-many --target=prepare-java --parallel=1
+      - run: yarn nx run-many --target=prepare-python
+      - run: yarn nx run-many --target=build-image
