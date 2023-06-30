@@ -65,3 +65,12 @@ jobs:
 
       - name: Show Docker version
         run: docker --version
+
+      - name: Show images on the host
+        run: docker images
+
+      - name: Install devcontainer CLI
+        run: npm install -g @devcontainers/cli@0.25.2
+
+      - name: Show devcontainer CLI version
+        run: devcontainers --version
