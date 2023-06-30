@@ -59,7 +59,6 @@ devcontainer up --workspace-folder sage-monorepo
 devcontainer exec --workspace-folder sage-monorepo bash -c \
   ". ./dev-env.sh \
   && workspace-install \
-  && ./tools/switch-devcontainer-to-docker-outside-of-docker.sh \
   && openchallenges-build-images"
 
 # Remove the dev container

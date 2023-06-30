@@ -1,6 +1,6 @@
 import { FilterValue } from '@sagebionetworks/openchallenges/ui';
 
-export const contributionRolesFilterValues: FilterValue[] = [
+export const challengeContributionRolesFilterValues: FilterValue[] = [
   {
     value: 'challenge_organizer',
     label: 'Challenge Organizer',

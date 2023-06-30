@@ -12,7 +12,7 @@
           <input
             type="text"
             pInputText
-            [(ngModel)]="searchTermValue"
+            [(ngModel)]="searchedTerms"
             (input)="onSearchChange()"
             placeholder="Search organizations"
           />
@@ -33,16 +33,18 @@
   </section>
   <section id="bottom" class="content">
     <div class="facets">
-      <ng-container *ngFor="let checkbox of checkboxFilters">
-        <p-panel header="{{ checkbox.label }}" [toggleable]="true" [collapsed]="checkbox.collapsed">
-          <openchallenges-checkbox-filter
-            [values]="checkbox.values"
-            (selectionChange)="onCheckboxSelectionChange($event, checkbox.query)"
-            inputId="{{ checkbox.query }}"
-          ></openchallenges-checkbox-filter>
-        </p-panel>
-        <!-- <p-divider></p-divider> -->
-      </ng-container>
+      <p-panel
+        header="{{ contributionRolesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="contributionRolesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="contributionRolesFilter.values"
+          [selectedValues]="selectedContributionRoles"
+          (selectionChange)="onContributionRolesChange($event)"
+          inputId="{{ contributionRolesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
@@ -54,8 +56,8 @@
         </openchallenges-organization-card>
       </div>
       <openchallenges-paginator
-        [pageNumber]="pageNumber"
-        [pageSize]="pageSize"
+        [pageNumber]="selectedPageNumber || defaultPageNumber"
+        [pageSize]="selectedPageSize || defaultPageSize"
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"

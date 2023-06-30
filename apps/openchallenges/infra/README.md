@@ -218,6 +218,60 @@ $ ./docker/openchallenges/serve-detach.sh openchallenges-apex
 > **Note** If the above command is stuck on containers that report the status `Error`, try stopping
 > the command and run it again.
 
+### Manually build the OC images
+
+Step into the repo folder:
+
+```console
+cd ~/sage-monorepo
+```
+
+Stash the changes:
+
+```console
+git stash
+```
+
+Checkout a different version from `main`:
+
+```console
+git fetch
+git checkout <commit_id>
+```
+
+Set the dev container definition file to use `docker-outside-of-docker`:
+
+```console
+./tools/switch-devcontainer-to-docker-outside-of-docker.sh
+```
+
+Stop the containers that are running:
+
+```console
+docker stop $(docker ps -aq)
+docker system prune
+```
+
+Step outside of the repo folder, start the dev container, build the OC images and stop the dev
+container:
+
+```console
+# Step outside of the repository
+cd ..
+
+# Start the dev container
+devcontainer up --workspace-folder sage-monorepo
+
+# Build the images
+devcontainer exec --workspace-folder sage-monorepo bash -c \
+  ". ./dev-env.sh \
+  && workspace-install \
+  && openchallenges-build-images"
+
+# Remove the dev container
+docker rm -f sage_devcontainer
+```
+
 ### Destroy the stack
 
 From this project folder:

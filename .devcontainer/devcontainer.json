@@ -9,6 +9,11 @@
   },
 
   "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
     "vscode": {
       "extensions": [
         "1000ch.svgo",
@@ -36,7 +41,9 @@
         "vscjava.vscode-java-pack",
         "webhint.vscode-webhint"
       ],
-      "settings": {}
+      "settings": {
+        "workbench.startupEditor": "readme"
+      }
     }
   },
 
@@ -99,6 +106,10 @@
     },
     "5601": {
       "label": "openchallenges-opensearch-dashboards",
+      "onAutoForward": "silent"
+    },
+    "6787": {
+      "label": "synapse-rstudio",
       "onAutoForward": "silent"
     },
     "7010": {
