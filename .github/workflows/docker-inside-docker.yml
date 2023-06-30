@@ -87,11 +87,17 @@ jobs:
           # Start the dev container
           devcontainer up --workspace-folder sage-monorepo
 
-          # Build the images
-          devcontainer exec --workspace-folder sage-monorepo bash -c \
-            ". ./dev-env.sh \
-            && workspace-install \
-            && openchallenges-build-images"
+          # # Build the images
+          # devcontainer exec --workspace-folder sage-monorepo bash -c \
+          #   ". ./dev-env.sh \
+          #   && workspace-install \
+          #   && openchallenges-build-images"
+
+      - name: Create hello file
+        run: devcontainer exec --workspace-folder sage-monorepo bash -c "touch ~/hello"
+
+      - name: Show hello file
+        run: devcontainer exec --workspace-folder sage-monorepo bash -c "ls ~/hello"
 
       - name: Show images available to the host
         run: docker images
