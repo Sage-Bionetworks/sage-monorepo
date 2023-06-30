@@ -75,7 +75,7 @@ jobs:
       - name: Show devcontainer CLI version
         run: devcontainer --version
 
-      - name: Run task inside the Sage Monorepo dev container
+      - name: Start the dev container
         run: |
           # So that the images built inside the dev container are available on the host (i.e.
           # outside the dev container)
@@ -87,17 +87,22 @@ jobs:
           # Start the dev container
           devcontainer up --workspace-folder sage-monorepo
 
-          # # Build the images
-          # devcontainer exec --workspace-folder sage-monorepo bash -c \
-          #   ". ./dev-env.sh \
-          #   && workspace-install \
-          #   && openchallenges-build-images"
+      - name: Prepare the projects
+        run: |
+          cd ..
+          devcontainer exec --workspace-folder sage-monorepo bash -c \
+            ". ./dev-env.sh \
+            && workspace-install"
 
-      - name: Create hello file
-        run: cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c "touch ~/hello"
+      - name: Build the images of the affected projects
+        run: |
+          cd ..
+          devcontainer exec --workspace-folder sage-monorepo bash -c \
+            ". ./dev-env.sh \
+            && nx affected --target=build-image --parallel=3"
 
-      - name: Show hello file
-        run: cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c "ls ~/hello"
+      - name: Stop the dev container
+        run: docker rm -f sage_devcontainer
 
       - name: Show images available to the host
         run: docker images
