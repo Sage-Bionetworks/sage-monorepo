@@ -74,3 +74,21 @@ jobs:
 
       - name: Show devcontainer CLI version
         run: devcontainer --version
+
+      - name: Run task inside the Sage Monorepo dev container
+        run: |
+          # So that the images built inside the dev container are available on the host (i.e.
+          # outside the dev container)
+          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
+
+          # Step outside of the repository
+          cd ..
+
+          # Start the dev container
+          devcontainer up --workspace-folder sage-monorepo
+
+          # Build the images
+          devcontainer exec --workspace-folder sage-monorepo bash -c \
+            ". ./dev-env.sh \
+            && workspace-install \
+            && openchallenges-build-images"
