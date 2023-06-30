@@ -9,6 +9,11 @@
   },
 
   "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
     "vscode": {
       "extensions": [
         "1000ch.svgo",
@@ -36,7 +41,9 @@
         "vscjava.vscode-java-pack",
         "webhint.vscode-webhint"
       ],
-      "settings": {}
+      "settings": {
+        "workbench.startupEditor": "readme"
+      }
     }
   },
 
@@ -64,6 +71,7 @@
     8091,
     8092,
     8200,
+    8787,
     8888,
     8889,
     9000,
@@ -98,6 +106,10 @@
     },
     "5601": {
       "label": "openchallenges-opensearch-dashboards",
+      "onAutoForward": "silent"
+    },
+    "6787": {
+      "label": "synapse-rstudio",
       "onAutoForward": "silent"
     },
     "7010": {
@@ -170,6 +182,10 @@
     },
     "8200": {
       "label": "openchallenges-vault",
+      "onAutoForward": "silent"
+    },
+    "8787": {
+      "label": "openchallenges-rstudio",
       "onAutoForward": "silent"
     },
     "8888": {

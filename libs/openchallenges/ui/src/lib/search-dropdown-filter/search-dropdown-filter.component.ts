@@ -9,11 +9,11 @@ import { Avatar } from '../avatar/avatar';
 })
 export class SearchDropdownFilterComponent implements OnInit {
   @Input() values!: FilterValue[];
-  @Input() selectedValues!: string[];
+  @Input() selectedValues!: any[];
   @Input() placeholder = 'Search items';
   @Input() showAvatar!: boolean | undefined;
   @Input() filterByApiClient!: boolean | undefined;
-  @Output() selectionChange = new EventEmitter<string[]>();
+  @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
 
   overlayOptions = {
@@ -42,7 +42,8 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.searchChange.emit(this.searchTerm);
   }
 
-  onChange(selected: string[]): void {
+  onChange(selected: any[]): void {
+    // this filter will emit as string anyways
     this.selectionChange.emit(selected);
   }
 
