@@ -104,5 +104,5 @@ jobs:
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
 
-      - name: Show images available to the host
+      - name: Show the images available to the host
         run: docker images
