@@ -92,3 +92,6 @@ jobs:
             ". ./dev-env.sh \
             && workspace-install \
             && openchallenges-build-images"
+
+      - name: Show images available to the host
+        run: docker images
