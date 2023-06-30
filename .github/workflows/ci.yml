@@ -195,3 +195,4 @@ jobs:
       - run: yarn nx affected --target=build
       - run: yarn nx affected --target=test
       - run: yarn nx affected --target=integration-test
+      - run: yarn nx affected --target=build-image-2
