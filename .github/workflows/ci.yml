@@ -204,26 +204,23 @@ jobs:
           cd ..
           devcontainer up --workspace-folder sage-monorepo
 
-      - name: Prepare the projects
+      - name: Prepare the workspace in the dev container
         run: |
           cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install"
 
-      - name: Build the images of the projects
+      - name: Lint the affected projects
         run: |
           cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image-2 --parallel=3"
+            && nx affected --target=lint"
+
+      # - name: Build the images of the projects
+      #   run: |
+      #     cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=build-image-2 --parallel=3"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
-
-      # - name: Install Node.js dependencies
-      #   if: steps.cache-node.outputs.cache-hit != 'true'
-      #   run: yarn install --immutable
-
-      # # - name: Setup Python virtualenvs
-      # #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
-      # #   run: yarn nx python api
 
       # - run: yarn nx affected --target=prepare
       # - run: yarn nx affected --target=prepare-java --parallel=1
