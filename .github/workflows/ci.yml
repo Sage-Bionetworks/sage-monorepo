@@ -191,8 +191,8 @@ jobs:
       - name: Install devcontainer CLI
         run: npm install -g @devcontainers/cli@0.25.2
 
-      - name: Configure hostnames
-        run: ./tools/configure-hostnames.sh
+      # - name: Configure hostnames
+      #   run: ./tools/configure-hostnames.sh
 
       - name: Start the dev container
         run: |
