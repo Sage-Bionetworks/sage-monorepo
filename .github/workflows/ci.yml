@@ -206,12 +206,12 @@ jobs:
 
       - name: Prepare the workspace in the dev container
         run: |
-          cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install"
 
       - name: Lint the affected projects
         run: |
-          cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=lint"
 
       # - name: Build the images of the projects
