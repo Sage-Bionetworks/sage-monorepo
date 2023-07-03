@@ -206,14 +206,12 @@ jobs:
 
       - name: Prepare the projects
         run: |
-          cd ..
-          devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+          cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install"
 
       - name: Build the images of the projects
         run: |
-          cd ..
-          devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+          cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=build-image-2 --parallel=3"
 
       - name: Stop the dev container
