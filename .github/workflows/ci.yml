@@ -107,9 +107,6 @@ jobs:
 
   pr:
     runs-on: ubuntu-latest
-    container:
-      image: sagebionetworks/sage-devcontainer:7f9d3e3
-      options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
     # - the branch name does not start with `renovate/` since we know that the workflow would have
@@ -177,21 +174,63 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set buildx as the default builder
+        run: docker buildx install
+
+      - name: Cache Docker layers
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-single-buildx
+
+      - name: Install devcontainer CLI
+        run: npm install -g @devcontainers/cli@0.25.2
+
       - name: Configure hostnames
         run: ./tools/configure-hostnames.sh
 
-      - name: Install Node.js dependencies
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: yarn install --immutable
+      - name: Start the dev container
+        run: |
+          # Update the dev container definition to use docker-outside-of-docker instead of
+          # docker-in-docker so that the images built inside the dev container are available to the
+          # host (i.e. outside the dev container).
+          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-      # - name: Setup Python virtualenvs
-      #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
-      #   run: yarn nx python api
+          cd ..
+          devcontainer up --workspace-folder sage-monorepo
 
-      - run: yarn nx affected --target=prepare
-      - run: yarn nx affected --target=prepare-java --parallel=1
-      - run: yarn nx affected --target=prepare-python
-      - run: yarn nx affected --target=lint
-      - run: yarn nx affected --target=build
-      - run: yarn nx affected --target=test
-      - run: yarn nx affected --target=integration-test
+      - name: Prepare the projects
+        run: |
+          cd ..
+          devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+            workspace-install"
+
+      - name: Build the images of the projects
+        run: |
+          cd ..
+          devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
+            nx run-many --target=build-image-2 --parallel=3"
+
+      - name: Stop the dev container
+        run: docker rm -f sage_devcontainer
+
+      # - name: Install Node.js dependencies
+      #   if: steps.cache-node.outputs.cache-hit != 'true'
+      #   run: yarn install --immutable
+
+      # # - name: Setup Python virtualenvs
+      # #   if: steps.cache-pipenv.outputs.cache-hit != 'true'
+      # #   run: yarn nx python api
+
+      # - run: yarn nx affected --target=prepare
+      # - run: yarn nx affected --target=prepare-java --parallel=1
+      # - run: yarn nx affected --target=prepare-python
+      # - run: yarn nx affected --target=lint
+      # - run: yarn nx affected --target=build
+      # - run: yarn nx affected --target=test
+      # - run: yarn nx affected --target=integration-test
