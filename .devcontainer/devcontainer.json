@@ -3,11 +3,13 @@
   "image": "sagebionetworks/sage-devcontainer:7f9d3e3",
 
   "containerEnv": {
+    "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
-    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}",
     "NX_CLOUD_AUTH_TOKEN": "${localEnv:NX_CLOUD_AUTH_TOKEN}",
     "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
-    "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}"
+    "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}",
+    "NX_HEAD": "${localEnv:NX_HEAD}",
+    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}"
   },
 
   "features": {
