@@ -210,27 +210,27 @@ jobs:
 
       - name: Lint the affected projects
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build"
 
       - name: Test the affected projects (unit)
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
       - name: Build the images of the affected projects
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build-image"
 
       - name: Stop the dev container
