@@ -107,17 +107,7 @@ jobs:
 
   pr:
     runs-on: ubuntu-latest
-    # Runs this job if triggered by a PR and if at least one of these conditions are true:
-    # - the PR originate from a fork
-    # - the branch name does not start with `renovate/` since we know that the workflow would have
-    #   been already triggered by the `push` event.
-    if: |
-      github.event_name == 'pull_request'
-        && (
-          github.event.pull_request.head.repo.full_name !=
-            github.event.pull_request.base.repo.full_name
-          || !startsWith(github.head_ref, 'renovate/')
-        )
+    if: github.event_name == 'pull_request'
     steps:
       - uses: actions/checkout@v3
         with:
@@ -125,8 +115,8 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
 
-      - name: Prevent git error about detected dubious ownership
-        run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
+      # - name: Prevent git error about detected dubious ownership
+      #   run: git config --global --add safe.directory /__w/sage-monorepo/sage-monorepo
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
@@ -210,21 +200,28 @@ jobs:
 
       - name: Lint the affected projects
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
             && nx affected --target=lint"
 
-      # - name: Build the images of the projects
-      #   run: |
-      #     cd .. && devcontainer exec --workspace-folder sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx run-many --target=build-image-2 --parallel=3"
+      - name: Build the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+            && nx affected --target=build"
+
+      - name: Test the affected projects (unit)
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+            && nx affected --target=test"
+
+      - name: Test the affected projects (integration)
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+            && nx affected --target=integration-test"
+
+      - name: Build the images of the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh && \
+            && nx affected --target=build-image"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
-
-      # - run: yarn nx affected --target=prepare
-      # - run: yarn nx affected --target=prepare-java --parallel=1
-      # - run: yarn nx affected --target=prepare-python
-      # - run: yarn nx affected --target=lint
-      # - run: yarn nx affected --target=build
-      # - run: yarn nx affected --target=test
-      # - run: yarn nx affected --target=integration-test
