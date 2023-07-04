@@ -201,7 +201,7 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo --remote-env NX_BASE=${NX_BASE} --remote-env NX_HEAD=${NX_HEAD}
+          devcontainer up --workspace-folder ../sage-monorepo
 
       - name: Prepare the workspace in the dev container
         run: |
