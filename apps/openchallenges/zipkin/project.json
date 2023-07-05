@@ -23,7 +23,14 @@
       "options": {
         "context": "apps/openchallenges/zipkin",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-zipkin:latest"]
+        "metadata": {
+          "images": ["sagebionetworks/openchallenges-zipkin"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=dev",
+            "type=sha"
+          ]
+        }
       }
     }
   },

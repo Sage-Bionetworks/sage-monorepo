@@ -75,6 +75,7 @@
     "@nrwl/nx-plugin": "15.3.3",
     "@nrwl/web": "15.3.3",
     "@nrwl/workspace": "15.3.3",
+    "@nx-tools/container-metadata": "4.0.3",
     "@nx-tools/nx-container": "4.0.3",
     "@nxrocks/nx-spring-boot": "6.0.0",
     "@openapitools/openapi-generator-cli": "2.5.2",
