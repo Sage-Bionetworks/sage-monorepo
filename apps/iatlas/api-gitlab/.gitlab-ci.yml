@@ -4,18 +4,20 @@ variables:
   DOCKER_TLS_CERTDIR: ""
   DOCKER_IMAGE_TAG_STAGING: ${CI_COMMIT_SHORT_SHA}-staging
   DOCKER_IMAGE_TAG_PROD: ${CI_COMMIT_SHORT_SHA}
+  DOCKER_DRIVER: overlay2
 
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
     # Install aws cli (also installs binutils, jq, unzip, and wget) - (Running on Alpine)
-    - GLIBC_VER=2.31-r0
+    - GLIBC_VER=2.34-r0
     - apk add --no-cache binutils curl jq unzip
     # Install glibc compatibility for alpine (Needed for AWS cli v2)
     - curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
     - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk
     - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk
-    - apk add --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
+    - apk add --force-overwrite --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
+    - apk fix --force-overwrite alpine-baselayout-data
     # Install AWS cli v2
     - curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
     - unzip awscliv2.zip
@@ -110,7 +112,10 @@ tests:coverage-report-staging:
     expire_in: 30 days
     reports:
       # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage_staging.xml"
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/iatlas-api_coverage_staging.xml
+
 
 tests:coverage-report-prod:
   tags:
@@ -149,7 +154,10 @@ tests:coverage-report-prod:
     expire_in: 30 days
     reports:
       # Make the coverage xml available.
-      cobertura: "coverage/iatlas-api_coverage.xml"
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/iatlas-api_coverage.xml
+
 
 pages:
   tags:
@@ -181,9 +189,9 @@ Build Container Staging:
   only:
     - staging
   stage: build_container
-  image: docker:19.03.1-dind
+  image: docker:23.0.6-dind
   services:
-    - name: docker:19.03.1-dind
+    - name: docker:23.0.6-dind
   before_script:
     - echo "Building Staging container."
   script:
@@ -203,9 +211,9 @@ Build Container Prod:
   only:
     - master
   stage: build_container
-  image: docker:19.03.1-dind
+  image: docker:23.0.6-dind
   services:
-    - name: docker:19.03.1-dind
+    - name: docker:23.0.6-dind
   before_script:
     - echo "Building Prod container."
   script:
@@ -240,3 +248,4 @@ Deploy:Prod:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
     - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
+
