@@ -15,14 +15,11 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-zipkin"
-      },
-      "dependsOn": []
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/zipkin",
-        "push": false,
         "metadata": {
           "images": ["sagebionetworks/openchallenges-zipkin"],
           "tags": [
@@ -30,7 +27,8 @@
             "type=raw,value=dev",
             "type=sha"
           ]
-        }
+        },
+        "push": false
       }
     }
   },
