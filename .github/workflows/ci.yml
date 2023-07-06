@@ -236,7 +236,7 @@ jobs:
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
           devcontainer up --workspace-folder ../sage-monorepo \
-            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker
+            --mount type="bind,source=$HOME/.docker,target=/home/vscode/.docker"
 
       - name: Prepare the workspace in the dev container
         run: |
