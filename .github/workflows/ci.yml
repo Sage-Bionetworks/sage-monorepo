@@ -267,10 +267,5 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build-image"
 
-      - name: Publish the images of the projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-image"
-
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
