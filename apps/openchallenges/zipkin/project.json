@@ -30,7 +30,7 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/zipkin",
-        "push": false,
+        "push": true,
         "tags": ["sagemonorepo/openchallenges-zipkin:latest"]
       }
     }
