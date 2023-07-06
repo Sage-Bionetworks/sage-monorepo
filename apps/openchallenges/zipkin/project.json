@@ -30,6 +30,19 @@
         },
         "push": false
       }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["sagebionetworks/openchallenges-zipkin"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
     }
   },
   "tags": ["type:service", "scope:backend"],
