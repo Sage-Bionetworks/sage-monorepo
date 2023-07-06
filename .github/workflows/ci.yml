@@ -223,6 +223,8 @@ jobs:
 
       - run: cat ~/.docker/config.json
 
+      - run: echo $HOME
+
       - name: Install devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
