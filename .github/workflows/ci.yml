@@ -219,6 +219,8 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - run: compgen -A command docker
+
       - name: Install devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
