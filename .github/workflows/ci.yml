@@ -221,6 +221,8 @@ jobs:
 
       - run: compgen -A command docker
 
+      - run: cat ~/.docker/config.json
+
       - name: Install devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
