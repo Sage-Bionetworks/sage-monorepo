@@ -13,9 +13,9 @@
   },
 
   "features": {
-    // "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
-    //   "version": "20.10.21"
-    // }
+    "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
+      "version": "20.10.21"
+    }
   },
 
   "customizations": {
