@@ -79,7 +79,7 @@ jobs:
             ${{ runner.os }}-single-buildx
 
       - name: Install devcontainer CLI
-        run: npm install -g @devcontainers/cli@0.25.2
+        run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
         run: |
@@ -206,8 +206,27 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v2
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - run: compgen -A command docker
+
+      - run: cat ~/.docker/config.json
+
+      - run: echo $HOME
+
       - name: Install devcontainer CLI
-        run: npm install -g @devcontainers/cli@0.25.2
+        run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
         run: |
@@ -216,7 +235,8 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo
+          devcontainer up --workspace-folder ../sage-monorepo \
+            --mount type="bind,source=$HOME/.docker,target=/home/vscode/.docker"
 
       - name: Prepare the workspace in the dev container
         run: |
@@ -247,6 +267,11 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build-image"
+
+      - name: Publish the images of the projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx run-many --target=publish-image"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer

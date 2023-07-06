@@ -23,7 +23,15 @@
       "options": {
         "context": "apps/openchallenges/zipkin",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-zipkin:latest"]
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-zipkin:latest"]
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/zipkin",
+        "push": true,
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-zipkin:latest"]
       }
     }
   },
