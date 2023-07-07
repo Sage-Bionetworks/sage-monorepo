@@ -11,20 +11,46 @@
         "cwd": "apps/openchallenges/rstudio"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/rstudio",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-rstudio:latest"]
-      }
-    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-rstudio"
       },
       "dependsOn": []
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-rstudio"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-rstudio"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-rstudio:local --quiet",
+        "color": true
+      }
     }
   },
   "tags": ["type:app", "scope:client"],
