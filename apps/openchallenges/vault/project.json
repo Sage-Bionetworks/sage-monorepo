@@ -20,9 +20,28 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/vault",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-vault:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-vault"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=dev",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-vault"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
       }
     }
   },
