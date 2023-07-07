@@ -15,8 +15,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-thumbor"
-      },
-      "dependsOn": []
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
