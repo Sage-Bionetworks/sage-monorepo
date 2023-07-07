@@ -1,6 +1,6 @@
 {
   "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:7f9d3e3",
+  "image": "sagebionetworks/sage-devcontainer:e045b26",
 
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
@@ -13,8 +13,8 @@
   },
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
-      "version": "20.10.21"
+    "ghcr.io/devcontainers/features/docker-in-docker:2.2.0": {
+      "version": "20.10.24"
     }
   },
 
