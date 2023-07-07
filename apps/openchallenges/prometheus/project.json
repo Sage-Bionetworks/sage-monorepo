@@ -21,6 +21,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/prometheus",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-prometheus"],
           "tags": [

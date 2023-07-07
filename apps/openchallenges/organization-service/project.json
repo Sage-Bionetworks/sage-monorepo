@@ -73,6 +73,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/organization-service",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-organization-service"],
           "tags": [

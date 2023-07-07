@@ -24,6 +24,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/grafana",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-grafana"],
           "tags": [

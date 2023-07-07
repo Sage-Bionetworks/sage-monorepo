@@ -64,6 +64,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/api-gateway",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-api-gateway"],
           "tags": [
