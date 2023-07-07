@@ -14,11 +14,13 @@ ARG hyperfineVersion="1.15.0"
 # https://github.com/yarnpkg/berry
 ARG yarnVersion="3.3.0"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.25.2"
+ARG devcontainerCliVersion="0.49.0"
 # https://pypi.org/project/poetry
 ARG poetryVersion="1.3.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
+# https://aquasecurity.github.io/trivy
+ARG trivyVersion="0.43.1"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -89,6 +91,10 @@ RUN groupadd docker \
     && rm -fr /tmp/r_amd64.deb \
     && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
     && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
+  # Install Travy
+  && curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
+    && dpkg -i /tmp/trivy.deb \
+    && rm -fr /tmp/trivy.deb \
   # Increase the max number of file watchers
   # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
