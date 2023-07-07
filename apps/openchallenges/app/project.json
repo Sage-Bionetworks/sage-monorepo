@@ -139,11 +139,37 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/app",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-app:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       },
       "dependsOn": ["build"]
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-app:local --quiet",
+        "color": true
+      }
     },
     "server": {
       "executor": "@angular-devkit/build-angular:server",
