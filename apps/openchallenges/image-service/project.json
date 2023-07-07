@@ -80,11 +80,37 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/image-service",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-image-service:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-image-service"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       },
       "dependsOn": ["build-image-base"]
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-image-service"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-image-service:local --quiet",
+        "color": true
+      }
     },
     "openapi-generate": {
       "executor": "nx:run-commands",
