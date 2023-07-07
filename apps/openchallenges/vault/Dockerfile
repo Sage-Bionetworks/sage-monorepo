@@ -1,4 +1,4 @@
-FROM vault:1.12.2
+FROM vault:1.12.7
 
 RUN apk add curl jq
 

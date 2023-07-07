@@ -1,1 +1,1 @@
-FROM openzipkin/zipkin:2.24.0
+FROM openzipkin/zipkin:2.24.2
