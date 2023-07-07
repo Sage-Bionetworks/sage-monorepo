@@ -25,6 +25,13 @@
         "push": false,
         "tags": ["sagebionetworks/openchallenges-zipkin:latest"]
       }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image sagebionetworks/openchallenges-zipkin:latest --quiet",
+        "color": true
+      }
     }
   },
   "tags": ["type:service", "scope:backend"],
