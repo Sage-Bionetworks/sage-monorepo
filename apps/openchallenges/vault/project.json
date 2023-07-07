@@ -24,7 +24,7 @@
           "images": ["ghcr.io/sage-bionetworks/openchallenges-vault"],
           "tags": [
             "type=edge,branch=main",
-            "type=raw,value=dev",
+            "type=raw,value=local",
             "type=sha"
           ]
         },
@@ -42,6 +42,13 @@
           ]
         },
         "push": true
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-vault:local --quiet",
+        "color": true
       }
     }
   },
