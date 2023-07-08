@@ -20,6 +20,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/zipkin",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-zipkin"],
           "tags": [

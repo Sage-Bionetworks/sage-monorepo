@@ -21,8 +21,35 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/mariadb",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-mariadb:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-mariadb"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-mariadb"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-mariadb:local --quiet",
+        "color": true
       }
     }
   },
