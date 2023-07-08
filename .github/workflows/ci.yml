@@ -131,7 +131,7 @@ jobs:
       - name: Scan the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-*"
+            && nx run-many --target=scan-image --projects=openchallenges-* --max-parallel=1"
 
       - name: Publish the images of the affected projects
         run: |
@@ -269,7 +269,7 @@ jobs:
       - name: Scan the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-*"
+            && nx run-many --target=scan-image --projects=openchallenges-* --max-parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
