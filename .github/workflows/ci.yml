@@ -264,7 +264,9 @@ jobs:
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=openchallenges-*"
+            && nx run-many --target=build-image --projects=openchallenges-* --max-parallel=1"
+
+      - run: df -h
 
       - name: Scan the images of the affected projects
         run: |
