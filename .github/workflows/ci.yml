@@ -131,12 +131,12 @@ jobs:
       - name: Scan the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch"
+            && nx run-many --target=scan-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio"
 
       - name: Publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch"
+            && nx run-many --target=publish-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
@@ -264,14 +264,14 @@ jobs:
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch"
+            && nx run-many --target=build-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio"
 
       - run: df -h
 
       - name: Scan the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch"
+            && nx run-many --target=scan-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
