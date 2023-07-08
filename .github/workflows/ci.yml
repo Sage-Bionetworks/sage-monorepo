@@ -128,15 +128,17 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=build-image --projects=openchallenges-*"
 
-      - name: Scan the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-* --parallel=1 --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio,openchallenges-thumbor"
+      - run: df -h
+
+      # - name: Scan the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=scan-image --projects=openchallenges-* --parallel=1"
 
       - name: Publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio,openchallenges-thumbor"
+            && nx run-many --target=publish-image --projects=openchallenges-*"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
@@ -264,14 +266,14 @@ jobs:
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=openchallenges-* --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio,openchallenges-thumbor"
+            && nx run-many --target=build-image --projects=openchallenges-*"
 
       - run: df -h
 
-      - name: Scan the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=scan-image --projects=openchallenges-* --parallel=1 --exclude=openchallenges-zipkin,openchallenges-vault,openchallenges-elasticsearch,openchallenges-rstudio,openchallenges-thumbor"
+      # - name: Scan the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=scan-image --projects=openchallenges-* --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
