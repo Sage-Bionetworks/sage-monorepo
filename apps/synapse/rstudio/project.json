@@ -14,7 +14,7 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/synapse/api",
+        "context": "apps/synapse/rstudio",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/synapse-rstudio"],
           "tags": [

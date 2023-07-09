@@ -123,22 +123,22 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - name: Build the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=openchallenges-*"
+      # - name: Build the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=build-image --projects=openchallenges-*"
 
-      - run: df -h
+      # - run: df -h
 
       # - name: Scan the images of the affected projects
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx run-many --target=scan-image --projects=openchallenges-* --parallel=1"
 
-      - name: Publish the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-image --projects=openchallenges-*"
+      # - name: Publish the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=publish-image --projects=openchallenges-*"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
@@ -263,12 +263,12 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - name: Build the images of the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=openchallenges-*"
+      # - name: Build the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=build-image --projects=openchallenges-*"
 
-      - run: df -h
+      # - run: df -h
 
       # - name: Scan the images of the affected projects
       #   run: |
