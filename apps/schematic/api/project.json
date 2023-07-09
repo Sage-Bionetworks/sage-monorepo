@@ -52,6 +52,34 @@
         "push": false
       }
     },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/schematic/api",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      }
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/schematic-api:*\" --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/schematic-api:local --quiet",
+        "color": true
+      }
+    },
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {

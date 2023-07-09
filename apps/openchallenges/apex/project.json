@@ -36,6 +36,7 @@
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
           "tags": [
@@ -45,6 +46,13 @@
         },
         "push": true
       }
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-apex:*\" --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",

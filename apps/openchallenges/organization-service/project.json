@@ -89,6 +89,7 @@
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/organization-service",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-organization-service"],
           "tags": [
@@ -98,6 +99,13 @@
         },
         "push": true
       }
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-organization-service:*\" --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
