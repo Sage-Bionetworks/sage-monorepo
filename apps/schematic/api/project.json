@@ -41,8 +41,15 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/schematic/api",
-        "push": false,
-        "tags": ["sagebionetworks/schematic-api:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       }
     },
     "openapi-generate": {

@@ -15,8 +15,15 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/synapse/rstudio",
-        "push": false,
-        "tags": ["sagebionetworks/synapse-rstudio:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/synapse-rstudio"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       }
     },
     "serve-detach": {

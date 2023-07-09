@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-image-service:
-    image: sagebionetworks/openchallenges-image-service:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-image-service:local
     container_name: openchallenges-image-service
     restart: always
     env_file:

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-rstudio:
-    image: sagebionetworks/openchallenges-rstudio:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-rstudio:local
     container_name: openchallenges-rstudio
     restart: always
     env_file:
