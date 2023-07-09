@@ -257,7 +257,7 @@ jobs:
       - name: Publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-and-remove-image --parallel=1"
+            && nx run-many --target=build-and-remove-image --parallel=1"
 
       - run: docker system df
 
