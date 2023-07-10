@@ -66,8 +66,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker
 
       - name: Cache Docker layers
         uses: actions/cache@v3
@@ -201,8 +199,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker
 
       - name: Cache Docker layers
         uses: actions/cache@v3
