@@ -212,6 +212,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
