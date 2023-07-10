@@ -44,5 +44,5 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = "sagebionetworks/${project.name}-base:latest"
+  imageName = "sagebionetworks/${project.name}-base:local"
 }
