@@ -88,6 +88,7 @@
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
+      "context": "apps/openchallenges/challenge-service",
       "options": {
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-challenge-service"],
@@ -98,6 +99,20 @@
         },
         "push": true
       }
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-challenge-service:*\" --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-challenge-service:*\" --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",

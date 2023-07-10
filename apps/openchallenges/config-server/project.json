@@ -97,6 +97,7 @@
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
+        "context": "apps/openchallenges/config-server",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-config-server"],
           "tags": [
@@ -106,6 +107,20 @@
         },
         "push": true
       }
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-config-server:*\" --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=\"ghcr.io/sage-bionetworks/openchallenges-config-server:*\" --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
