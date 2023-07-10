@@ -106,7 +106,8 @@
           ]
         },
         "push": true
-      }
+      },
+      "dependsOn": ["build-image"]
     },
     "publish-and-remove-image": {
       "executor": "nx:run-commands",
