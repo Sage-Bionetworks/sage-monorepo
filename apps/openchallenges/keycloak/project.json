@@ -31,7 +31,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import:ro sagebionetworks/openchallenges-keycloak:latest import --dir /opt/keycloak/data/import --override true"
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import:ro ghcr.io/sage-bionetworks/openchallenges-keycloak:local import --dir /opt/keycloak/data/import --override true"
         ],
         "cwd": "apps/openchallenges/keycloak"
       },
@@ -41,7 +41,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import sagebionetworks/openchallenges-keycloak:latest export --dir /opt/keycloak/data/import"
+          "docker run --rm --env-file .env -v \"$(pwd)\"/data/h2:/opt/keycloak/data/h2 -v \"$(pwd)\"/data/import:/opt/keycloak/data/import ghcr.io/sage-bionetworks/openchallenges-keycloak:local export --dir /opt/keycloak/data/import"
         ],
         "cwd": "apps/openchallenges/keycloak"
       },
@@ -52,7 +52,7 @@
       "options": {
         "context": "apps/openchallenges/keycloak",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-keycloak:latest"]
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-keycloak:local"]
       }
     }
   },
