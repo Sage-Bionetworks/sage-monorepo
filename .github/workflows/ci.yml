@@ -85,7 +85,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install devcontainer CLI
+      - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
@@ -214,7 +214,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
-      - name: Install devcontainer CLI
+      - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
