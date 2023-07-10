@@ -52,5 +52,5 @@ springBoot {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-core-service:latest'
+  imageName = 'ghcr.io/sage-bionetworks/openchallenges-core-service:local'
 }

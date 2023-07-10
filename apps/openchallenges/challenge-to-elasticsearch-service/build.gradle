@@ -55,7 +55,7 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-challenge-to-elasticsearch-service:latest'
+  imageName = 'ghcr.io/sage-bionetworks/openchallenges-challenge-to-elasticsearch-service:local'
 }
 
 spotless {

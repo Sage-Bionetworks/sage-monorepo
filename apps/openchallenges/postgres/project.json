@@ -32,7 +32,7 @@
       "options": {
         "context": "apps/openchallenges/postgres",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-postgres:latest"]
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-postgres:local"]
       }
     }
   },

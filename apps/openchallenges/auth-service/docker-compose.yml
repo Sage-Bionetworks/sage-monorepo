@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openchallenges-auth-service:
-    image: sagebionetworks/openchallenges-auth-service:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-auth-service:local
     container_name: openchallenges-auth-service
     restart: always
     env_file:
