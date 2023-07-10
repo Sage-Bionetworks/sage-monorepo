@@ -254,7 +254,7 @@ jobs:
       - run: df -h
       - run: docker system df
 
-      - name: Publish the images of the affected projects
+      - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=build-and-remove-image --parallel=1"
