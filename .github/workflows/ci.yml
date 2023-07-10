@@ -251,15 +251,10 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - run: df -h
-      - run: docker system df
-
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=build-and-remove-image --parallel=1"
-
-      - run: docker system df
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
