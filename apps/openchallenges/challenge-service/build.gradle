@@ -79,7 +79,7 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = "sagebionetworks/${project.name}-base:local"
+  imageName = "ghcr.io/sage-bionetworks/${project.name}-base:local"
 }
 
 spotless {
