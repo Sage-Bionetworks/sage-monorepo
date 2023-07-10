@@ -212,6 +212,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
+      - run: docker buildx ls
+
       - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
