@@ -1,4 +1,4 @@
-FROM sagebionetworks/openchallenges-image-service-base:latest
+FROM ghcr.io/sage-bionetworks/openchallenges-image-service-base:latest
 
 USER root
 
