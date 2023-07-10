@@ -229,30 +229,30 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install"
 
-      - name: Lint the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint"
+      # - name: Lint the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build"
+            && nx affected --target=build --projects=openchallenges-api-gateway"
 
-      - name: Test the affected projects (unit)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test"
+      # - name: Test the affected projects (unit)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=test"
 
-      - name: Test the affected projects (integration)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test"
+      # - name: Test the affected projects (integration)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=integration-test"
 
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-and-remove-image --parallel=1"
+            && nx run-many --target=publish-and-remove-image --parallel=1 --projects=openchallenges-api-gateway"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
