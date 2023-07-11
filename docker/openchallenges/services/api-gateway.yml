@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-api-gateway:
-    image: ghcr.io/sage-bionetworks/openchallenges-api-gateway:local
+    image: ghcr.io/sage-bionetworks/openchallenges-api-gateway:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-api-gateway
     restart: always
     env_file:
