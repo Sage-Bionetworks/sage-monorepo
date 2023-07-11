@@ -95,7 +95,7 @@
     "publish-and-remove-image": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-gateway:* --quiet) --force"
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-gateway:* --quiet) --force"
       },
       "dependsOn": ["publish-image"]
     },
