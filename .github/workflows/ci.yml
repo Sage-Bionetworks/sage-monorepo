@@ -69,13 +69,13 @@ jobs:
         with:
           driver: docker
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-single-buildx
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-single-buildx
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -204,13 +204,13 @@ jobs:
         with:
           driver: docker
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-single-buildx
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-single-buildx
 
       - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
