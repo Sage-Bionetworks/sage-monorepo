@@ -204,6 +204,8 @@ jobs:
         with:
           driver: docker
 
+      - run: docker --version
+
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
       #   with:
