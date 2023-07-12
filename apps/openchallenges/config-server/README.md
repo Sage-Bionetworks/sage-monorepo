@@ -4,7 +4,7 @@
 
 Update the file `.env` with the required information.
 
-### Data source: GitHub repository
+### Git Backend
 
 One of the data sources of the config server is a GitHub repository where the configuration files of
 the OC services are stored. This GitHub repository should be private and not include sensitive
@@ -20,6 +20,17 @@ GIT_DEFAULT_LABEL=test
 GIT_USERNAME=<username>
 GIT_TOKEN=<token>
 ```
+
+### Authentication with SSH
+
+Generate the SSH key for connecting to the EC2 instance that we will create as part of the stack.
+
+```console
+ssh-keygen -t ed25519 -C "your_email@example.com" -f ~/.ssh/openchallenges-config-server -N ''
+```
+
+Add the public key generated to the "Deploy keys" of the GitHub repo that hosts the config.
+
 
 ### Data source: Vault
 
