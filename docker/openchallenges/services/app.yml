@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-app:
-    image: ghcr.io/sage-bionetworks/openchallenges-app:local
+    image: ghcr.io/sage-bionetworks/openchallenges-app:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-app
     restart: always
     networks:
