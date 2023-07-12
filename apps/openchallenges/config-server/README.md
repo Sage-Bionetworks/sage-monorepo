@@ -1,27 +1,26 @@
 # OpenChallenges Config Server
 
+## Overview
+
+This Spring Cloud Config Server provides externalized configuration in a distributed system of
+OpenChallenges.
+
 ## Configuration
 
-Update the file `.env` with the required information.
+The config of the config server lives in two files:
 
-### Git Backend
+- `.env`
+- `src/main/resources/application.yml`
 
-One of the data sources of the config server is a GitHub repository where the configuration files of
-the OC services are stored. This GitHub repository should be private and not include sensitive
-information like credentials, which should be stored in the project Vault instance.
+## Config Storage Backends
 
-```console
-GIT_URI=https://github.com/Sage-Bionetworks/openchallenges-config-server-repository.git
+This config server pulls the configuration of the OpenChallenges distributed system from two storage
+backends. By order of priority:
 
-# Name of the branch or tag
-GIT_DEFAULT_LABEL=test
+- Vault
+- Git repository
 
-# The token only needs read access to the repo
-GIT_USERNAME=<username>
-GIT_TOKEN=<token>
-```
-
-### Authentication with SSH
+## Git Storage Backend
 
 Generate the SSH key for connecting to the EC2 instance that we will create as part of the stack.
 
@@ -39,16 +38,21 @@ $ ssh-keyscan -t ed25519 github.com
 github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
 ```
 
-### Data source: Vault
+This host key is currently included in the example config file `.env.example` and can be left as is.
+
+After creating `.env` from `.env.example`, the variables shown below must be set:
+
+- `GIT_PRIVATE_KEY="-----BEGIN OPENSSH PRIVATE KEY-----\nchangeme\n-----END OPENSSH PRIVATE KEY-----"`
+
+## Vault Storage Backend
 
 TBA
 
-## Get config from the Config Server
+## Test: Fetch the config of a component
 
 Build and start the config server (development server):
 
 ```console
-nx build openchallenges-config-server
 nx serve openchallenges-config-server
 ```
 
