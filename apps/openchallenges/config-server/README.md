@@ -42,7 +42,9 @@ This host key is currently included in the example config file `.env.example` an
 
 After creating `.env` from `.env.example`, the variables shown below must be set:
 
-- `GIT_PRIVATE_KEY="-----BEGIN OPENSSH PRIVATE KEY-----\nchangeme\n-----END OPENSSH PRIVATE KEY-----"`
+- `GIT_PRIVATE_KEY`: The private SSH key previously generated. The key must be folded in one line by
+  replacing line breaks by `\n`.
+
 
 ## Vault Storage Backend
 
