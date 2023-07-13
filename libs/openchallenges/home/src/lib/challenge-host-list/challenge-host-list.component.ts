@@ -22,6 +22,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 export class ChallengeHostListComponent implements OnInit {
   organizationCards$!: Observable<OrganizationCard[]>;
 
+  
   constructor(
     private organizationService: OrganizationService,
     private imageService: ImageService
