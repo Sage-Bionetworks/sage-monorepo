@@ -183,6 +183,9 @@ components:
         description:
           type: string
           example: A description of the organization.
+        featured:
+          type: boolean
+          example: true
         avatarKey:
           type: string
           example: logo/dream.png
@@ -212,6 +215,7 @@ components:
         - email
         - login
         - description
+        - featured
         - websiteUrl
         - createdAt
         - updatedAt

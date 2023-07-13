@@ -33,6 +33,9 @@ public class OrganizationDto {
   @JsonProperty("description")
   private String description;
 
+  @JsonProperty("featured")
+  private Boolean featured;
+
   @JsonProperty("avatarKey")
   private String avatarKey;
 
@@ -166,6 +169,26 @@ public class OrganizationDto {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public OrganizationDto featured(Boolean featured) {
+    this.featured = featured;
+    return this;
+  }
+
+  /**
+   * Get featured
+   *
+   * @return featured
+   */
+  @NotNull
+  @Schema(name = "featured", example = "true", required = true)
+  public Boolean getFeatured() {
+    return featured;
+  }
+
+  public void setFeatured(Boolean featured) {
+    this.featured = featured;
   }
 
   public OrganizationDto avatarKey(String avatarKey) {
@@ -302,6 +325,7 @@ public class OrganizationDto {
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
+        && Objects.equals(this.featured, organization.featured)
         && Objects.equals(this.avatarKey, organization.avatarKey)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
@@ -318,6 +342,7 @@ public class OrganizationDto {
         email,
         login,
         description,
+        featured,
         avatarKey,
         websiteUrl,
         challengeCount,
@@ -335,6 +360,7 @@ public class OrganizationDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
+    sb.append("    featured: ").append(toIndentedString(featured)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");

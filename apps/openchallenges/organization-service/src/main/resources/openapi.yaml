@@ -248,6 +248,7 @@ components:
       description: An organization
       example:
         createdAt: 2022-07-04T22:19:11Z
+        featured: true
         avatarKey: logo/dream.png
         websiteUrl: https://example.com
         acronym: OC
@@ -282,6 +283,9 @@ components:
         description:
           example: A description of the organization.
           type: string
+        featured:
+          example: true
+          type: boolean
         avatarKey:
           example: logo/dream.png
           type: string
@@ -309,6 +313,7 @@ components:
       - createdAt
       - description
       - email
+      - featured
       - id
       - login
       - name
