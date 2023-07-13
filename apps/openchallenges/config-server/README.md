@@ -62,7 +62,7 @@ Try to fetch the config of the organization service:
 
 ```console
 $ curl -s --user "openchallenges:changeme" \
-  http://openchallenges-config-server:8090/openchallenges-organization-service/development/test | jq
+  http://openchallenges-config-server:8090/openchallenges-organization-service/dev/test-2 | jq
 {
   "name": "openchallenges-organization-service",
   "profiles": [
