@@ -43,7 +43,7 @@ cd ~
 # Clone the repository and checkout the commit specified
 git clone --filter=blob:none --no-checkout https://github.com/Sage-Bionetworks/sage-monorepo.git
 cd sage-monorepo
-git checkout ed39cfa29b7dc59aafd3e58b4b049d900e8f78ad
+git checkout 3a3d48e2344fa9d68fbeb858bb17107b2209ebf3
 
 # Start the dev container
 devcontainer up --workspace-folder ../sage-monorepo
