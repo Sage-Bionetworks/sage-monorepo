@@ -58,7 +58,10 @@ import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import {
+  forkJoinConcurrent,
+  isExactType,
+} from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -337,7 +340,14 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges query', query)),
-        switchMap((query) => this.challengeService.listChallenges(query)),
+        switchMap((query) => {
+          console.log(isExactType<ChallengeSearchQuery>(query));
+          if (isExactType<ChallengeSearchQuery>(query)) {
+            return this.challengeService.listChallenges(query);
+          } else {
+            throw new Error('Invalid challenge search query');
+          }
+        }),
         tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
