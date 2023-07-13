@@ -35,10 +35,7 @@ import {
   takeUntil,
 } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {
-  forkJoinConcurrent,
-  isExactType,
-} from '@sagebionetworks/openchallenges/util';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -135,13 +132,9 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
     const orgPage$ = this.query.pipe(
       tap((query) => console.log('List organization query: ', query)),
-      switchMap((query) => {
-        if (isExactType<OrganizationSearchQuery>(query)) {
-          return this.organizationService.listOrganizations(query);
-        } else {
-          throw new Error('Invalid organization search query');
-        }
-      }),
+      switchMap((query: OrganizationSearchQuery) =>
+        this.organizationService.listOrganizations(query)
+      ),
       tap((page) => console.log('List of organizations: ', page.organizations)),
       catchError((err) => {
         if (err.message) {
