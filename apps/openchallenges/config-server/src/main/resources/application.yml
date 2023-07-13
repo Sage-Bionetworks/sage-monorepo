@@ -17,9 +17,11 @@ spring:
           token: changeme
         git:
           uri: ${GIT_URI}
+          ignoreLocalSshSettings: true
+          hostKey: ${GIT_HOST_KEY}
+          hostKeyAlgorithm: ${GIT_HOST_KEY_ALGORITHM}
+          privateKey: ${GIT_PRIVATE_KEY}
           default-label: ${GIT_DEFAULT_LABEL}
-          username: ${GIT_USERNAME}
-          password: ${GIT_TOKEN}
           clone-on-start: true
           order: 2
     fail-fast: true
