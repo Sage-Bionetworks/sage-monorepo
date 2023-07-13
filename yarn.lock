@@ -24,6 +24,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@actions/github@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "@actions/github@npm:5.1.1"
+  dependencies:
+    "@actions/http-client": ^2.0.1
+    "@octokit/core": ^3.6.0
+    "@octokit/plugin-paginate-rest": ^2.17.0
+    "@octokit/plugin-rest-endpoint-methods": ^5.13.0
+  checksum: 2210bd7f8e1e8b407b7df74a259523dc4c63f4ad3a6bfcc0d7867b6e9c3499bd3e25d7de7a9a1bbd0de3be441a8832d5c0b5c0cff3036cd477378c0ec5502434
+  languageName: node
+  linkType: hard
+
+"@actions/http-client@npm:^2.0.1":
+  version: 2.1.0
+  resolution: "@actions/http-client@npm:2.1.0"
+  dependencies:
+    tunnel: ^0.0.6
+  checksum: 25a72a952cc95fb4b3ab086da73a5754dd0957c206637cace69be2e16f018cc1b3d3c40d3bcf89ffd8a5929d5e8445594b498b50db306a50ad7536023f8e3800
+  languageName: node
+  linkType: hard
+
 "@actions/io@npm:^1.0.1":
   version: 1.1.2
   resolution: "@actions/io@npm:1.1.2"
@@ -2292,6 +2313,16 @@ __metadata:
     core-js-pure: ^3.25.1
     regenerator-runtime: ^0.13.4
   checksum: 38a1e8fcd2ba1f76c951259c98a5a11052123923adbf30ec8b2fec202dbbe38c6db61658ef9398e00c30f799e2e54ea036e56a09f43229261918bf5ec1b7d03a
+  languageName: node
+  linkType: hard
+
+"@babel/runtime-corejs3@npm:^7.12.1":
+  version: 7.22.6
+  resolution: "@babel/runtime-corejs3@npm:7.22.6"
+  dependencies:
+    core-js-pure: ^3.30.2
+    regenerator-runtime: ^0.13.11
+  checksum: 4e1ab78cdb797fe82668df0fcb8c2dccb6c4b12787b07536c4457952c49ff06465a9304b2cff7a31d7e21af6e57008a84ccb0c9886b6aa9cbf4b446c3a8c05e5
   languageName: node
   linkType: hard
 
@@ -6435,6 +6466,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx-tools/ci-context@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@nx-tools/ci-context@npm:4.0.3"
+  dependencies:
+    "@actions/github": ^5.1.1
+    "@nx-tools/core": 4.0.3
+    ci-info: ^3.5.0
+  checksum: 5389993612d3663b4e42348f06de7ec3c514659d2473ed6e10c8fb3b4a1a4b24adeca8e78375f649f3a602821d103f90ff8e6ba1a8394c5586742915d609c211
+  languageName: node
+  linkType: hard
+
+"@nx-tools/container-metadata@npm:4.0.3":
+  version: 4.0.3
+  resolution: "@nx-tools/container-metadata@npm:4.0.3"
+  dependencies:
+    "@nx-tools/ci-context": 4.0.3
+    "@nx-tools/core": 4.0.3
+    "@renovate/pep440": ^1.0.0
+    csv-parse: ^4.16.3
+    handlebars: ^4.7.7
+    moment: ^2.29.4
+  peerDependencies:
+    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+    dotenv: ">=10.0.0"
+  checksum: 0290bca710d58494397a9ca37a418e3936b39cce9d34f22bf667a16a62d47d9058a08c653992511f08a27b43f8f984efe8b5c4575e521fe28b3410c7152fd6a8
+  languageName: node
+  linkType: hard
+
 "@nx-tools/core@npm:4.0.3":
   version: 4.0.3
   resolution: "@nx-tools/core@npm:4.0.3"
@@ -7281,7 +7340,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/core@npm:^3.2.4":
+"@octokit/core@npm:^3.2.4, @octokit/core@npm:^3.6.0":
   version: 3.6.0
   resolution: "@octokit/core@npm:3.6.0"
   dependencies:
@@ -7373,7 +7432,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-paginate-rest@npm:^2.6.2":
+"@octokit/plugin-paginate-rest@npm:^2.17.0, @octokit/plugin-paginate-rest@npm:^2.6.2":
   version: 2.21.3
   resolution: "@octokit/plugin-paginate-rest@npm:2.21.3"
   dependencies:
@@ -7384,7 +7443,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/plugin-rest-endpoint-methods@npm:^5.0.1":
+"@octokit/plugin-rest-endpoint-methods@npm:^5.0.1, @octokit/plugin-rest-endpoint-methods@npm:^5.13.0":
   version: 5.16.2
   resolution: "@octokit/plugin-rest-endpoint-methods@npm:5.16.2"
   dependencies:
@@ -7726,6 +7785,15 @@ __metadata:
     pluralize: ^8.0.0
     yaml-ast-parser: 0.0.43
   checksum: 17acdc9822c13a9cd823d0badbefe7b42be1782a035565c2895fbb66e4cbc379e31a5d3f4ec421f65ba044343524cb577c0d2039d7578df48684c6039948232b
+  languageName: node
+  linkType: hard
+
+"@renovate/pep440@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@renovate/pep440@npm:1.0.0"
+  dependencies:
+    xregexp: 4.4.1
+  checksum: 1ee0cd86bb62f2fc175be474758be038582662485cae32e0f2faef5ae42fb182518b958a77cce4d3d652c87bc30b72436fd62ea4908f2ece15830bd39c8676c2
   languageName: node
   linkType: hard
 
@@ -12109,6 +12177,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ci-info@npm:^3.5.0":
+  version: 3.8.0
+  resolution: "ci-info@npm:3.8.0"
+  checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
+  languageName: node
+  linkType: hard
+
 "cipher-base@npm:^1.0.0, cipher-base@npm:^1.0.1, cipher-base@npm:^1.0.3":
   version: 1.0.4
   resolution: "cipher-base@npm:1.0.4"
@@ -12866,6 +12941,13 @@ __metadata:
   version: 3.25.5
   resolution: "core-js-pure@npm:3.25.5"
   checksum: e48799a8ab28f00ef3db18377142ff2c578574ab2b18ebddde6cbf12823e0181a57c80e3caa6046ce2a2e439d603a252be767583ddc54248e3d1060bc5012127
+  languageName: node
+  linkType: hard
+
+"core-js-pure@npm:^3.30.2":
+  version: 3.31.0
+  resolution: "core-js-pure@npm:3.31.0"
+  checksum: 2bc5d2f6c3c9732fd5c066529b8d41fae9c746206ddf7614712dc4120a9efd47bf894df4fc600fde8c04324171c1999869798b48b23fca128eff5f09f58cd2f6
   languageName: node
   linkType: hard
 
@@ -22816,7 +22898,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:>= 2.9.0":
+"moment@npm:>= 2.9.0, moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
   checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
@@ -26603,7 +26685,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"regenerator-runtime@npm:0.13.11, regenerator-runtime@npm:^0.13.10":
+"regenerator-runtime@npm:0.13.11, regenerator-runtime@npm:^0.13.10, regenerator-runtime@npm:^0.13.11":
   version: 0.13.11
   resolution: "regenerator-runtime@npm:0.13.11"
   checksum: 27481628d22a1c4e3ff551096a683b424242a216fee44685467307f14d58020af1e19660bf2e26064de946bad7eff28950eae9f8209d55723e2d9351e632bbb4
@@ -27279,6 +27361,7 @@ __metadata:
     "@nrwl/nx-plugin": 15.3.3
     "@nrwl/web": 15.3.3
     "@nrwl/workspace": 15.3.3
+    "@nx-tools/container-metadata": 4.0.3
     "@nx-tools/nx-container": 4.0.3
     "@nxrocks/nx-spring-boot": 6.0.0
     "@openapitools/openapi-generator-cli": 2.5.2
@@ -29859,6 +29942,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tunnel@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "tunnel@npm:0.0.6"
+  checksum: c362948df9ad34b649b5585e54ce2838fa583aa3037091aaed66793c65b423a264e5229f0d7e9a95513a795ac2bd4cb72cda7e89a74313f182c1e9ae0b0994fa
+  languageName: node
+  linkType: hard
+
 "tweetnacl@npm:^0.14.3, tweetnacl@npm:~0.14.0":
   version: 0.14.5
   resolution: "tweetnacl@npm:0.14.5"
@@ -31338,6 +31428,15 @@ __metadata:
   version: 2.0.0
   resolution: "xregexp@npm:2.0.0"
   checksum: de62d1f01c9f1a67c80cafe48a3dc081b324249a0e88e65dc9acae9cce6d8e63c9d91c0f97e2ad2d8c5351c856c139c04dc55ebd941e59b7d1d5c1169e164cff
+  languageName: node
+  linkType: hard
+
+"xregexp@npm:4.4.1":
+  version: 4.4.1
+  resolution: "xregexp@npm:4.4.1"
+  dependencies:
+    "@babel/runtime-corejs3": ^7.12.1
+  checksum: 134d70116655f0de90725a0d2aaf73b2a69f8b4cd7f1908e394c7ff4de53819a0a2d9595e1722d71334a33d9392071b1f983f5954c57d83ab3e451116d9f8499
   languageName: node
   linkType: hard
 

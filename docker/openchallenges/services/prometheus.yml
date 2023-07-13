@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-prometheus:
-    image: sagebionetworks/openchallenges-prometheus:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-prometheus:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-prometheus
     restart: always
     env_file:

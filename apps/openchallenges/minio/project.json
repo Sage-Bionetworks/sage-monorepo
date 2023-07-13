@@ -23,7 +23,7 @@
       "options": {
         "context": "apps/openchallenges/minio",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-minio:latest"]
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-minio:local"]
       }
     }
   },

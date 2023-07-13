@@ -1,4 +1,4 @@
-FROM sagebionetworks/openchallenges-challenge-service-base:latest
+FROM ghcr.io/sage-bionetworks/openchallenges-challenge-service-base:local
 
 USER root
 

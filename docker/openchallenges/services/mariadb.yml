@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-mariadb:
-    image: sagebionetworks/openchallenges-mariadb:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-mariadb:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-mariadb
     restart: always
     env_file:

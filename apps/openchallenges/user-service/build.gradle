@@ -64,7 +64,7 @@ springBoot {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-user-service:latest'
+  imageName = 'ghcr.io/sage-bionetworks/openchallenges-user-service:local'
 }
 
 spotless {

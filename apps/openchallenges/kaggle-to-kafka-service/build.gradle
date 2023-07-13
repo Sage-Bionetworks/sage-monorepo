@@ -52,7 +52,7 @@ tasks.withType(JavaCompile) {
 }
 
 bootBuildImage {
-  imageName = 'sagebionetworks/openchallenges-kaggle-to-kafka-service:latest'
+  imageName = 'ghcr.io/sage-bionetworks/openchallenges-kaggle-to-kafka-service:local'
 }
 
 spotless {

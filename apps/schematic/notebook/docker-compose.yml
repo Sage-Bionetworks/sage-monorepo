@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   schematic-notebook:
-    image: sagebionetworks/schematic-notebook:latest
+    image: ghcr.io/sage-bionetworks/schematic-notebook:local
     container_name: schematic-notebook
     restart: always
     env_file:

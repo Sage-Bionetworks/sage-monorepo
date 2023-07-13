@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-elasticsearch:
-    image: sagebionetworks/openchallenges-elasticsearch:${ELASTIC_VERION:-latest}
+    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-elasticsearch
     restart: always
     environment:
@@ -31,7 +31,7 @@ services:
         condition: service_healthy
 
   openchallenges-elasticsearch-node-2:
-    image: sagebionetworks/openchallenges-elasticsearch:${ELASTIC_VERION:-latest}
+    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-elasticsearch-node-2
     restart: always
     environment:
@@ -53,7 +53,7 @@ services:
           memory: 2G
 
   openchallenges-elasticsearch-node-3:
-    image: sagebionetworks/openchallenges-elasticsearch:${ELASTIC_VERION:-latest}
+    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERION:-local}
     container_name: openchallenges-elasticsearch-node-3
     restart: always
     environment:

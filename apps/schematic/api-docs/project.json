@@ -38,8 +38,15 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/schematic/api-docs",
-        "push": false,
-        "tags": ["sagebionetworks/schematic-api-docs:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api-docs"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       },
       "dependsOn": ["build"]
     }

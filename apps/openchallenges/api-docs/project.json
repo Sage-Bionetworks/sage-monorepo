@@ -39,7 +39,7 @@
       "options": {
         "context": "apps/openchallenges/api-docs",
         "push": false,
-        "tags": ["sagebionetworks/openchallenges-api-docs:latest"]
+        "tags": ["ghcr.io/sage-bionetworks/openchallenges-api-docs:local"]
       }
     }
   },

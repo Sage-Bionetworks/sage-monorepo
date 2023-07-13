@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openchallenges-api-docs:
-    image: sagebionetworks/openchallenges-api-docs:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-api-docs:local
     container_name: openchallenges-api-docs
     restart: always
     env_file:
