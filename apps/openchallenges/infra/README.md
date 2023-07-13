@@ -168,8 +168,7 @@ need to be updated before deploying the stack with Docker Compose.
 - `apps/openchallenges/config-server/.env`
   - Set `GIT_DEFAULT_LABEL` to `private-preview` or any other branches that includes the config
     needed
-  - Set `GIT_USERNAME` and `GIT_TOKEN` with credentials that give the config server read access to
-    the GitHub repo specified in `GIT_URI`
+  - Set `GIT_PRIVATE_KEY` (see the README of the Config Server) 
 - `apps/openchallenges/thumbor/.env`
   - Use the config example `.env.example.aws`
   - Set `AWS_LOADER_BUCKET_NAME` to the name of the S3 bucket

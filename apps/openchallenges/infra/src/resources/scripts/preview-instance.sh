@@ -44,5 +44,15 @@ cd ~
 git clone --filter=blob:none --no-checkout https://github.com/Sage-Bionetworks/sage-monorepo.git
 cd sage-monorepo
 git checkout ed39cfa29b7dc59aafd3e58b4b049d900e8f78ad
+
+# Start the dev container
+devcontainer up --workspace-folder ../sage-monorepo
+
+# Prepare the workspace, including creating the .env config files
+devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+  && workspace-install"
+
+# Remove the dev container
+docker rm -f sage_devcontainer
 EOF
 
