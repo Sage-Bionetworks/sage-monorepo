@@ -1,22 +1,23 @@
-import os
-from flask import request
-from flask import current_app as app
-from schematic_api.models.basic_error import BasicError  # noqa: E501
+"""Implementation of all endpoints"""
+from typing import Optional, Union
+from flask import request  # type: ignore
 
-from schematic_api.models.dataset import Dataset  # noqa: E501
-from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
+from schematic_api.models.basic_error import BasicError
+from schematic_api.models.dataset import Dataset
+from schematic_api.models.datasets_page import DatasetsPage
 from schematic_api.models.manifests_page import ManifestsPage
-from synapseclient.core.exceptions import (
+
+from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
     SynapseAuthenticationError,
     SynapseHTTPError,
 )
-from schematic.store.synapse import SynapseStorage
-from schematic import CONFIG
+from schematic.store.synapse import SynapseStorage  # type: ignore
+from schematic import CONFIG  # type: ignore
 
 
-def config_handler(asset_view: str = None) -> None:
-    """Load config file and update asset view if needded
+def config_handler(asset_view: Optional[str] = None) -> None:
+    """Load config file and update asset view if needed
     Args:
         asset_view (str): asset view
     """
@@ -25,7 +26,7 @@ def config_handler(asset_view: str = None) -> None:
     )
 
 
-def get_access_token() -> str:
+def get_access_token() -> Optional[str]:
     """Get access token from header"""
     bearer_token = None
     # Check if the Authorization header is present
@@ -38,7 +39,9 @@ def get_access_token() -> str:
     return bearer_token
 
 
-def list_storage_project_datasets(project_id):  # noqa: E501
+def list_storage_project_datasets(
+    project_id: str,
+) -> tuple[Union[DatasetsPage, BasicError], int]:
     try:
         datasets = []
         datasets.append(Dataset(name="dataset-1"))
@@ -54,11 +57,11 @@ def list_storage_project_datasets(project_id):  # noqa: E501
             has_previous=False,
             datasets=datasets,
         )
-        res = page
+        res: Union[DatasetsPage, BasicError] = page
         status = 200
     except SynapseAuthenticationError as error:
         status = 401
-        res = ("Unauthorized error", status, str(error))
+        res = BasicError("Unauthorized error", status, str(error))
 
     # except DoesNotExist:
     #     status = 404
@@ -69,7 +72,9 @@ def list_storage_project_datasets(project_id):  # noqa: E501
     return res, status
 
 
-def list_storage_project_manifests(project_id, asset_view):
+def list_storage_project_manifests(
+    project_id: str, asset_view: str
+) -> tuple[Union[ManifestsPage, BasicError], int]:
     """List manifests in a given storage project"""
     # load config
     config_handler(asset_view=asset_view)
@@ -91,18 +96,18 @@ def list_storage_project_manifests(project_id, asset_view):
             has_previous=False,
             manifests=lst_storage_projects,
         )
-        res = page
+        res: Union[ManifestsPage, BasicError] = page
         status = 200
-
-    except SynapseAuthenticationError as error:
-        status = 403
-        res = BasicError("Forbidden Synapse access error", status, str(error))
 
     except SynapseNoCredentialsError as error:
         status = 401
         res = BasicError(
             "Missing or invalid Synapse credentials error", status, str(error)
         )
+
+    except SynapseAuthenticationError as error:
+        status = 403
+        res = BasicError("Forbidden Synapse access error", status, str(error))
 
     except SynapseHTTPError as error:
         status = 500
@@ -111,4 +116,5 @@ def list_storage_project_manifests(project_id, asset_view):
     except Exception as error:
         status = 500
         res = BasicError("Internal error", status, str(error))
+
     return res, status
