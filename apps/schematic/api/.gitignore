@@ -67,3 +67,6 @@ target/
 
 #secrets
 *secrets*
+
+#schematic downloaded manifests
+manifests
