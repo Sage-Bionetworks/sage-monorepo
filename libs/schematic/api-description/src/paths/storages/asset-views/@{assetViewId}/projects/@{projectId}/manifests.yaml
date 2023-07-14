@@ -1,6 +1,6 @@
 parameters:
   - $ref: ../../../../../../components/parameters/path/projectId.yaml
-  - $ref: ../../../../../../components/parameters/path/assetView.yaml
+  - $ref: ../../../../../../components/parameters/path/assetViewId.yaml
 get:
   tags:
     - Storage

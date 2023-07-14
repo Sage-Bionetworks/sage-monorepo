@@ -130,13 +130,13 @@ def list_storage_project_datasets(
 
 @handle_exceptions
 def list_storage_project_manifests(
-    project_id: str, asset_view: str
+    project_id: str, asset_view_id: str
 ) -> tuple[Union[ManifestsPage, BasicError], int]:
     """Attempts to get a list of manifests from a Synapse project
 
     Args:
         project_id (str): A Synapse id
-        asset_view (str): A Synapse id
+        asset_view_id (str): A Synapse id
 
     Returns:
         tuple[Union[ManifestsPage, BasicError], int]: A tuple
@@ -144,7 +144,7 @@ def list_storage_project_manifests(
           The second item is the response status
     """
     # load config
-    config_handler(asset_view=asset_view)
+    config_handler(asset_view=asset_view_id)
 
     # get access token
     bearer_token = get_access_token()

@@ -18,7 +18,7 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
     get:
       description: Gets all manifests in a project folder that the current user has
         access to.
@@ -37,10 +37,10 @@ paths:
           a given project
         explode: false
         in: path
-        name: assetView
+        name: assetViewId
         required: true
         schema:
-          $ref: '#/components/schemas/AssetView'
+          $ref: '#/components/schemas/AssetViewId'
         style: simple
       responses:
         "200":
@@ -128,16 +128,16 @@ components:
       schema:
         $ref: '#/components/schemas/ProjectId'
       style: simple
-    assetView:
+    assetViewId:
       description: ID of view listing all project data assets. E.g. for Synapse this
         would be the Synapse ID of the fileview listing all data assets for a given
         project
       explode: false
       in: path
-      name: assetView
+      name: assetViewId
       required: true
       schema:
-        $ref: '#/components/schemas/AssetView'
+        $ref: '#/components/schemas/AssetViewId'
       style: simple
   responses:
     NotFound:
@@ -265,11 +265,14 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    AssetView:
+    AssetViewId:
       description: ID of view listing all project data assets. E.g. for Synapse this
         would be the Synapse ID of the fileview listing all data assets for a given
         project.
       example: syn23643253
+      maxLength: 25
+      minLength: 3
+      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     Manifest:
       description: A manifest ID object

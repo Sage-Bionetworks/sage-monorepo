@@ -1,0 +1,6 @@
+description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
+type: string
+minLength: 3
+maxLength: 25
+pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+example: syn23643253

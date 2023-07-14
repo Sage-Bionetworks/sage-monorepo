@@ -28,5 +28,5 @@ paths:
   /storages/projects/{projectId}/datasets:
     $ref: paths/storages/projects/@{projectId}/datasets.yaml
 
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
-    $ref: paths/storages/asset-views/@{assetView}/projects/@{projectId}/manifests.yaml
+  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
+    $ref: paths/storages/asset-views/@{assetViewId}/projects/@{projectId}/manifests.yaml
