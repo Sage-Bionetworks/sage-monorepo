@@ -2,10 +2,10 @@
 apis:
   main:
     root: '../../../libs/openchallenges/api-description/build/openapi.yaml'
-theme:
-  openapi:
-    theme:
-      rightPanel:
-        backgroundColor: '#314fa7'
-      sidebar:
-        backgroundColor: '#ffffff'
+# theme:
+#   openapi:
+#     theme:
+#       rightPanel:
+#         backgroundColor: '#314fa7'
+#       sidebar:
+#         backgroundColor: '#ffffff'
