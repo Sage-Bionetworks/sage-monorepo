@@ -6,6 +6,7 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.dataset import Dataset
 from schematic_api.models.datasets_page import DatasetsPage
 from schematic_api.models.manifests_page import ManifestsPage
+from schematic_api.models.manifest import Manifest
 
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
@@ -150,16 +151,26 @@ def list_storage_project_manifests(
 
     # load token to synapse storage
     store = SynapseStorage(access_token=bearer_token)
-    lst_storage_projects = store.getProjectManifests(projectId=project_id)
+    project_manifests = store.getProjectManifests(projectId=project_id)
+    manifests = [
+        Manifest(
+            name=item[1][1],
+            synapse_id=item[1][0],
+            dataset_name=item[0][1],
+            dataset_synapse_id=item[0][0],
+            component_name=item[2][0],
+        )
+        for item in project_manifests
+    ]
 
     page = ManifestsPage(
         number=0,
         size=100,
-        total_elements=len(lst_storage_projects),
+        total_elements=len(manifests),
         total_pages=1,
         has_next=False,
         has_previous=False,
-        manifests=lst_storage_projects,
+        manifests=manifests,
     )
     res: Union[ManifestsPage, BasicError] = page
     status = 200
