@@ -1,5 +1,5 @@
 """Implementation of all endpoints"""
-from typing import Optional, Union
+from typing import Optional, Union, Any
 from flask import request  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
@@ -38,6 +38,46 @@ def get_access_token() -> Optional[str]:
         if auth_header.startswith("Bearer "):
             bearer_token = auth_header.split(" ")[1]
     return bearer_token
+
+
+def handle_exceptions(endpoint_function: callable) -> callable:
+    """
+    This is designed to be used as a decorator for endpoint functions.
+    The endpoint function is called in a try block, and then various
+      Synapse and Schematic exceptions are handled and returned as the
+      BasicError object.
+
+    Args:
+        f (callable): _description_
+    """
+
+    def func(*args, **kwargs):
+        try:
+            return endpoint_function(*args, **kwargs)
+
+        except SynapseNoCredentialsError as error:
+            status = 401
+            res = BasicError(
+                "Missing or invalid Synapse credentials error", status, str(error)
+            )
+            return res, status
+
+        except SynapseAuthenticationError as error:
+            status = 403
+            res = BasicError("Forbidden Synapse access error", status, str(error))
+            return res, status
+
+        except AccessCredentialsError as error:
+            status = 404
+            res = BasicError("Synapse entity access error", status, str(error))
+            return res, status
+
+        except Exception as error:  # pylint: disable=broad-exception-caught
+            status = 500
+            res = BasicError("Internal error", status, str(error))
+            return res, status
+
+    return func
 
 
 def list_storage_project_datasets(
@@ -87,6 +127,7 @@ def list_storage_project_datasets(
     return res, status
 
 
+@handle_exceptions
 def list_storage_project_manifests(
     project_id: str, asset_view: str
 ) -> tuple[Union[ManifestsPage, BasicError], int]:
@@ -108,38 +149,19 @@ def list_storage_project_manifests(
     bearer_token = get_access_token()
 
     # load token to synapse storage
-    try:
-        store = SynapseStorage(access_token=bearer_token)
-        lst_storage_projects = store.getProjectManifests(projectId=project_id)
+    store = SynapseStorage(access_token=bearer_token)
+    lst_storage_projects = store.getProjectManifests(projectId=project_id)
 
-        page = ManifestsPage(
-            number=0,
-            size=100,
-            total_elements=len(lst_storage_projects),
-            total_pages=1,
-            has_next=False,
-            has_previous=False,
-            manifests=lst_storage_projects,
-        )
-        res: Union[ManifestsPage, BasicError] = page
-        status = 200
-
-    except SynapseNoCredentialsError as error:
-        status = 401
-        res = BasicError(
-            "Missing or invalid Synapse credentials error", status, str(error)
-        )
-
-    except SynapseAuthenticationError as error:
-        status = 403
-        res = BasicError("Forbidden Synapse access error", status, str(error))
-
-    except AccessCredentialsError as error:
-        status = 404
-        res = BasicError("Synapse entity access error", status, str(error))
-
-    except Exception as error:  # pylint: disable=broad-exception-caught
-        status = 500
-        res = BasicError("Internal error", status, str(error))
+    page = ManifestsPage(
+        number=0,
+        size=100,
+        total_elements=len(lst_storage_projects),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        manifests=lst_storage_projects,
+    )
+    res: Union[ManifestsPage, BasicError] = page
+    status = 200
 
     return res, status
