@@ -23,7 +23,6 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericFie
 @AllArgsConstructor
 public class OrganizationCategoryEntity {
 
-
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)

@@ -56,8 +56,7 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
-    if (query.getCategories() != null
-        && !query.getCategories().isEmpty()) {
+    if (query.getCategories() != null && !query.getCategories().isEmpty()) {
       predicates.add(getCategoriesPredicate(pf, query));
     }
     if (query.getChallengeContributionRoles() != null
@@ -131,13 +130,11 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     return pf.bool(
             b -> {
               for (OrganizationCategoryDto category : query.getCategories()) {
-                b.should(
-                    pf.match().field("categories.category").matching(category.toString()));
+                b.should(pf.match().field("categories.category").matching(category.toString()));
               }
             })
         .toPredicate();
   }
-
 
   /**
    * Combines the organization search predicates.

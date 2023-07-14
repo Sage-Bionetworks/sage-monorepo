@@ -116,9 +116,24 @@ public class OrganizationSearchQueryDto {
     this.categories = categories;
   }
 
+  public OrganizationSearchQueryDto challengeContributionRoles(
+      List<ChallengeContributionRoleDto> challengeContributionRoles) {
+    this.challengeContributionRoles = challengeContributionRoles;
+    return this;
+  }
+
+  public OrganizationSearchQueryDto addChallengeContributionRolesItem(
+      ChallengeContributionRoleDto challengeContributionRolesItem) {
+    if (this.challengeContributionRoles == null) {
+      this.challengeContributionRoles = new ArrayList<>();
+    }
+    this.challengeContributionRoles.add(challengeContributionRolesItem);
+    return this;
+  }
+
   /**
    * An array of challenge contribution roles used to filter the results.
-   *  
+   *
    * @return challengeContributionRoles
    */
   @Valid
