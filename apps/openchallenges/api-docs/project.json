@@ -29,17 +29,58 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/openchallenges/api-docs"
-      },
-      "dependsOn": ["prepare", "build-image"]
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-api-docs"
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/api-docs",
-        "push": false,
-        "tags": ["ghcr.io/sage-bionetworks/openchallenges-api-docs:local"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-api-docs"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/api-docs",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-api-docs"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": ["build-image"]
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-docs:* --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-docs:* --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-api-docs:local --quiet",
+        "color": true
       }
     }
   },
