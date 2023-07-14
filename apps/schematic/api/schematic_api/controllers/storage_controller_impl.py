@@ -48,7 +48,7 @@ def handle_exceptions(endpoint_function: callable) -> callable:
       BasicError object.
 
     Args:
-        f (callable): _description_
+        f (callable): A function that calls the input function
     """
 
     def func(*args, **kwargs):
