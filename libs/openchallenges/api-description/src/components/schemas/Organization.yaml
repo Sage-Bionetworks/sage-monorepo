@@ -16,7 +16,7 @@ properties:
   categories:
     type: array
     items:
-      $ref: OrganizationCategories.yaml
+      $ref: OrganizationCategory.yaml
   avatarKey:
     type: string
     example: logo/dream.png
@@ -45,8 +45,8 @@ required:
   - name
   - email
   - login
-  - description
   - categories
+  - description
   - websiteUrl
   - createdAt
   - updatedAt

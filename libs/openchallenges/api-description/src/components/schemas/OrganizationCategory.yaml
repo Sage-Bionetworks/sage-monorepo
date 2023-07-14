@@ -1,4 +1,4 @@
-description: The categories of the organization.
+description: The category of the organization.
 type: string
 enum:
   - featured

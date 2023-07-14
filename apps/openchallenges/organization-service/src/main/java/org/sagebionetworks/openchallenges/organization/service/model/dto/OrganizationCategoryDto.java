@@ -6,14 +6,14 @@ import java.util.*;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** The categories of the organization. */
+/** The category of the organization. */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public enum OrganizationCategoriesDto {
+public enum OrganizationCategoryDto {
   FEATURED("featured");
 
   private String value;
 
-  OrganizationCategoriesDto(String value) {
+  OrganizationCategoryDto(String value) {
     this.value = value;
   }
 
@@ -28,8 +28,8 @@ public enum OrganizationCategoriesDto {
   }
 
   @JsonCreator
-  public static OrganizationCategoriesDto fromValue(String value) {
-    for (OrganizationCategoriesDto b : OrganizationCategoriesDto.values()) {
+  public static OrganizationCategoryDto fromValue(String value) {
+    for (OrganizationCategoryDto b : OrganizationCategoryDto.values()) {
       if (b.value.equals(value)) {
         return b;
       }

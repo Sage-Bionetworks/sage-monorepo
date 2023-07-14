@@ -134,8 +134,8 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
-    OrganizationCategories:
-      description: The categories of the organization.
+    OrganizationCategory:
+      description: The category of the organization.
       enum:
       - featured
       example: featured
@@ -182,7 +182,7 @@ components:
         categories:
           description: The array of organization categories used to filter the results.
           items:
-            $ref: '#/components/schemas/OrganizationCategories'
+            $ref: '#/components/schemas/OrganizationCategory'
           type: array
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the
@@ -298,7 +298,7 @@ components:
           type: string
         categories:
           items:
-            $ref: '#/components/schemas/OrganizationCategories'
+            $ref: '#/components/schemas/OrganizationCategory'
           type: array
         avatarKey:
           example: logo/dream.png

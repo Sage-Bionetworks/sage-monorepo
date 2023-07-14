@@ -37,7 +37,7 @@ public class OrganizationDto {
 
   @JsonProperty("categories")
   @Valid
-  private List<OrganizationCategoriesDto> categories = new ArrayList<>();
+  private List<OrganizationCategoryDto> categories = new ArrayList<>();
 
   @JsonProperty("avatarKey")
   private String avatarKey;
@@ -174,12 +174,12 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto categories(List<OrganizationCategoriesDto> categories) {
+  public OrganizationDto categories(List<OrganizationCategoryDto> categories) {
     this.categories = categories;
     return this;
   }
 
-  public OrganizationDto addCategoriesItem(OrganizationCategoriesDto categoriesItem) {
+  public OrganizationDto addCategoriesItem(OrganizationCategoryDto categoriesItem) {
     if (this.categories == null) {
       this.categories = new ArrayList<>();
     }
@@ -195,11 +195,11 @@ public class OrganizationDto {
   @NotNull
   @Valid
   @Schema(name = "categories", required = true)
-  public List<OrganizationCategoriesDto> getCategories() {
+  public List<OrganizationCategoryDto> getCategories() {
     return categories;
   }
 
-  public void setCategories(List<OrganizationCategoriesDto> categories) {
+  public void setCategories(List<OrganizationCategoryDto> categories) {
     this.categories = categories;
   }
 

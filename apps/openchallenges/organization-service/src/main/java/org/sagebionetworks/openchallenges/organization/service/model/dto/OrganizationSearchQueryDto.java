@@ -26,7 +26,7 @@ public class OrganizationSearchQueryDto {
 
   @JsonProperty("categories")
   @Valid
-  private List<OrganizationCategoriesDto> categories = null;
+  private List<OrganizationCategoryDto> categories = null;
 
   @JsonProperty("challengeContributionRoles")
   @Valid
@@ -84,12 +84,12 @@ public class OrganizationSearchQueryDto {
     this.pageSize = pageSize;
   }
 
-  public OrganizationSearchQueryDto categories(List<OrganizationCategoriesDto> categories) {
+  public OrganizationSearchQueryDto categories(List<OrganizationCategoryDto> categories) {
     this.categories = categories;
     return this;
   }
 
-  public OrganizationSearchQueryDto addCategoriesItem(OrganizationCategoriesDto categoriesItem) {
+  public OrganizationSearchQueryDto addCategoriesItem(OrganizationCategoryDto categoriesItem) {
     if (this.categories == null) {
       this.categories = new ArrayList<>();
     }
@@ -107,11 +107,11 @@ public class OrganizationSearchQueryDto {
       name = "categories",
       description = "The array of organization categories used to filter the results.",
       required = false)
-  public List<OrganizationCategoriesDto> getCategories() {
+  public List<OrganizationCategoryDto> getCategories() {
     return categories;
   }
 
-  public void setCategories(List<OrganizationCategoriesDto> categories) {
+  public void setCategories(List<OrganizationCategoryDto> categories) {
     this.categories = categories;
   }
 
