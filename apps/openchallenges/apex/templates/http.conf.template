@@ -61,7 +61,7 @@ http {
       proxy_set_header Connection "Keep-Alive";
       proxy_set_header Proxy-Connection "Keep-Alive";
 
-      proxy_pass http://api-docs;
+      proxy_pass http://api-docs/;
     }
 
     location /api {
