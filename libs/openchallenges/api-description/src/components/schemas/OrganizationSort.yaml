@@ -4,6 +4,5 @@ default: relevance
 enum:
   - challenge_count
   - created
-  - featured
   - name
   - relevance

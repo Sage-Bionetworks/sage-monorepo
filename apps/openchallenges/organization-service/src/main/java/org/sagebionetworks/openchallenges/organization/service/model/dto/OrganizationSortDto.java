@@ -13,8 +13,6 @@ public enum OrganizationSortDto {
 
   CREATED("created"),
 
-  FEATURED("featured"),
-
   NAME("name"),
 
   RELEVANCE("relevance");

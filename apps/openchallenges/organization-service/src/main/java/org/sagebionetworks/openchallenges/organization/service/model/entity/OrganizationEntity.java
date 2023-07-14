@@ -62,10 +62,6 @@ public class OrganizationEntity {
   @GenericField(name = "challenge_count", sortable = Sortable.YES)
   private Integer challengeCount;
 
-  @Column(name = "featured", nullable = false)
-  @GenericField(name = "featured", sortable = Sortable.YES)
-  private Boolean featured;
-
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(
       name = "challenge_contributions",
