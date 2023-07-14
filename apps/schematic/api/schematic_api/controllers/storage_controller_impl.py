@@ -10,9 +10,10 @@ from schematic_api.models.manifests_page import ManifestsPage
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
     SynapseAuthenticationError,
-    SynapseHTTPError,
 )
+
 from schematic.store.synapse import SynapseStorage  # type: ignore
+from schematic.exceptions import AccessCredentialsError  # type: ignore
 from schematic import CONFIG  # type: ignore
 
 
@@ -42,6 +43,17 @@ def get_access_token() -> Optional[str]:
 def list_storage_project_datasets(
     project_id: str,
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
+    """Attempts to get a list of datasets from a Synapse project
+
+    Args:
+        project_id (str): A synapse id
+
+    Returns:
+        tuple[Union[DatasetsPage, BasicError], int]: A tuple
+          The first item is either the datasets or an error object
+          The second item is the response status
+    """
+
     try:
         datasets = []
         datasets.append(Dataset(name="dataset-1"))
@@ -59,6 +71,7 @@ def list_storage_project_datasets(
         )
         res: Union[DatasetsPage, BasicError] = page
         status = 200
+
     except SynapseAuthenticationError as error:
         status = 401
         res = BasicError("Unauthorized error", status, str(error))
@@ -66,16 +79,28 @@ def list_storage_project_datasets(
     # except DoesNotExist:
     #     status = 404
     #     res = BasicError("The specified resource was not found", status)
-    except Exception as error:
+
+    except Exception as error:  # pylint: disable=broad-exception-caught
         status = 500
         res = BasicError("Internal error", status, str(error))
+
     return res, status
 
 
 def list_storage_project_manifests(
     project_id: str, asset_view: str
 ) -> tuple[Union[ManifestsPage, BasicError], int]:
-    """List manifests in a given storage project"""
+    """Attempts to get a list of manifests from a Synapse project
+
+    Args:
+        project_id (str): A Synapse id
+        asset_view (str): A Synapse id
+
+    Returns:
+        tuple[Union[ManifestsPage, BasicError], int]: A tuple
+          The first item is either the manifests or an error object
+          The second item is the response status
+    """
     # load config
     config_handler(asset_view=asset_view)
 
@@ -109,11 +134,11 @@ def list_storage_project_manifests(
         status = 403
         res = BasicError("Forbidden Synapse access error", status, str(error))
 
-    except SynapseHTTPError as error:
-        status = 500
-        res = BasicError("Synapse internal server error", status, str(error))
+    except AccessCredentialsError as error:
+        status = 404
+        res = BasicError("Synapse entity access error", status, str(error))
 
-    except Exception as error:
+    except Exception as error:  # pylint: disable=broad-exception-caught
         status = 500
         res = BasicError("Internal error", status, str(error))
 
