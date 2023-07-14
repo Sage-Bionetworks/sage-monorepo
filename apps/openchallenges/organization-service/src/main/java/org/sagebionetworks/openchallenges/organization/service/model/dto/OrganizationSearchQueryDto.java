@@ -111,8 +111,7 @@ public class OrganizationSearchQueryDto {
     return categories;
   }
 
-  public void setCategories(
-      List<OrganizationCategoryDto> categories) {
+  public void setCategories(List<OrganizationCategoryDto> categories) {
     this.categories = categories;
   }
 
