@@ -14,25 +14,22 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redoc-cli build ../../../libs/schematic/api-description/build/openapi.yaml --output ./build/redoc-static.html",
+        "command": "redocly build-docs --config redocly.yaml --template index.hbs --output build/redoc-static.html",
         "cwd": "apps/schematic/api-docs"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up",
+        "command": "redocly preview-docs --config redocly.yaml --port 8010",
         "cwd": "apps/schematic/api-docs"
-      },
-      "dependsOn": []
+      }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/schematic/api-docs"
-      },
-      "dependsOn": []
+        "command": "docker/schematic/serve-detach.sh schematic-api-docs"
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
@@ -47,8 +44,43 @@
           ]
         },
         "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/schematic/api-docs",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api-docs"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build-image"]
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api-docs:* --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api-docs:* --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/schematic-api-docs:local --quiet",
+        "color": true
+      }
     }
   },
   "tags": ["type:docs", "scope:backend"],
