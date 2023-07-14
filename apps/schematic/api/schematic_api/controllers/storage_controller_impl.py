@@ -1,12 +1,6 @@
 """Implementation of all endpoints"""
-from typing import Optional, Union, Any
+from typing import Optional, Union, Callable, Any
 from flask import request  # type: ignore
-
-from schematic_api.models.basic_error import BasicError
-from schematic_api.models.dataset import Dataset
-from schematic_api.models.datasets_page import DatasetsPage
-from schematic_api.models.manifests_page import ManifestsPage
-from schematic_api.models.manifest import Manifest
 
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
@@ -16,6 +10,12 @@ from synapseclient.core.exceptions import (  # type: ignore
 from schematic.store.synapse import SynapseStorage  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 from schematic import CONFIG  # type: ignore
+
+from schematic_api.models.basic_error import BasicError
+from schematic_api.models.dataset import Dataset
+from schematic_api.models.datasets_page import DatasetsPage
+from schematic_api.models.manifests_page import ManifestsPage
+from schematic_api.models.manifest import Manifest
 
 
 def config_handler(asset_view: Optional[str] = None) -> None:
@@ -41,7 +41,7 @@ def get_access_token() -> Optional[str]:
     return bearer_token
 
 
-def handle_exceptions(endpoint_function: callable) -> callable:
+def handle_exceptions(endpoint_function: Callable) -> Callable:
     """
     This is designed to be used as a decorator for endpoint functions.
     The endpoint function is called in a try block, and then various
@@ -49,10 +49,10 @@ def handle_exceptions(endpoint_function: callable) -> callable:
       BasicError object.
 
     Args:
-        f (callable): A function that calls the input function
+        f (Callable): A function that calls the input function
     """
 
-    def func(*args, **kwargs):
+    def func(*args: Any, **kwargs: Any) -> tuple[Union[Any, BasicError], int]:
         try:
             return endpoint_function(*args, **kwargs)
 
