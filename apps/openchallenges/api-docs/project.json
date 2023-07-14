@@ -21,10 +21,9 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up",
+        "command": "redocly preview-docs --config redocly.yaml --port 8010",
         "cwd": "apps/openchallenges/api-docs"
-      },
-      "dependsOn": ["prepare", "build-image"]
+      }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
