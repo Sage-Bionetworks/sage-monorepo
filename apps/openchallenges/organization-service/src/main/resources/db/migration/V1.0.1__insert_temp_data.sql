@@ -2698,6 +2698,13 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     1
   );
 
+-- organization_category data
+
+INSERT INTO organization_category (id, organization_id, category)
+VALUES (1, 1, 'featured'),
+  (2, 12, 'featured'),
+  (3, 13, 'featured');
+
 -- contributor_roles data
 
 INSERT INTO challenge_contribution (id, challenge_id, organization_id, role)

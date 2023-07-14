@@ -16,6 +16,18 @@ CREATE TABLE `organization` (
   CONSTRAINT login_check CHECK (char_length(login) >= 2)
 );
 
+-- organization_category definition
+
+CREATE TABLE `organization_category`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `organization_id`       bigint(20) NOT NULL,
+    `category`              ENUM('featured'),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`organization_id`) REFERENCES organization(`id`),
+    CONSTRAINT unique_item UNIQUE (`id`)
+);
+
 -- contributor_roles definition
 
 CREATE TABLE `challenge_contribution`
