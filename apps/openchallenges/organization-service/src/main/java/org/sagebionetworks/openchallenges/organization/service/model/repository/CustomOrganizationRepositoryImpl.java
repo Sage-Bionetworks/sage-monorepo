@@ -149,6 +149,7 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
         sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
     SearchSort nameSort = sf.field("name_sort").order(orderWithDefaultAsc).toSort();
+    SearchSort featuredSort = sf.field("featured").order(orderWithDefaultAsc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
     SearchSort relevanceSort =
         (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
@@ -164,6 +165,9 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
       }
       case NAME -> {
         return nameSort;
+      }
+      case FEATURED -> {
+        return featuredSort;
       }
       case RELEVANCE -> {
         return relevanceSort;

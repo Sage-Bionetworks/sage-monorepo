@@ -28,6 +28,10 @@ GET {{basePath}}/organizations?sort=created&direction=desc
 
 GET {{basePath}}/organizations?sort=name
 
+### Sort the orgs by whether they are featured.
+
+GET {{basePath}}/organizations?sort=featured
+
 ### Sort the orgs by the number of challenges they contributed to.
 
 GET {{basePath}}/organizations?sort=challenge_count&pageSize=5

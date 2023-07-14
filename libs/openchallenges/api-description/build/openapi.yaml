@@ -940,6 +940,7 @@ components:
       enum:
         - challenge_count
         - created
+        - featured
         - name
         - relevance
     OrganizationDirection:
