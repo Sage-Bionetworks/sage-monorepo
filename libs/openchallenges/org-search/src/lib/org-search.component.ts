@@ -132,7 +132,9 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
     const orgPage$ = this.query.pipe(
       tap((query) => console.log('List organization query: ', query)),
-      switchMap((query) => this.organizationService.listOrganizations(query)),
+      switchMap((query: OrganizationSearchQuery) =>
+        this.organizationService.listOrganizations(query)
+      ),
       tap((page) => console.log('List of organizations: ', page.organizations)),
       catchError((err) => {
         if (err.message) {
