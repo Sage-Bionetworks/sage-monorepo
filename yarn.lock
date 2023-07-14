@@ -26097,7 +26097,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redoc@npm:2.0.0, redoc@npm:~2.0.0":
+"redoc@npm:~2.0.0":
   version: 2.0.0
   resolution: "redoc@npm:2.0.0"
   dependencies:
@@ -26897,7 +26897,6 @@ __metadata:
     primeicons: 6.0.1
     primeng: 15.1.0
     probot: 12.2.8
-    redoc: 2.0.0
     regenerator-runtime: 0.13.11
     rxjs: 7.5.7
     serverless: 3.22.0
