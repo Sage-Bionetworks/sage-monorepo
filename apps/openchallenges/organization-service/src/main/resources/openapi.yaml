@@ -265,9 +265,6 @@ components:
         name: Example organization
         description: A description of the organization.
         id: 1
-        categories:
-        - featured
-        - featured
         challengeCount: 10
         login: example-org
         email: john.smith@example.com
@@ -296,10 +293,6 @@ components:
         description:
           example: A description of the organization.
           type: string
-        categories:
-          items:
-            $ref: '#/components/schemas/OrganizationCategory'
-          type: array
         avatarKey:
           example: logo/dream.png
           type: string
@@ -324,7 +317,6 @@ components:
           example: OC
           type: string
       required:
-      - categories
       - createdAt
       - description
       - email

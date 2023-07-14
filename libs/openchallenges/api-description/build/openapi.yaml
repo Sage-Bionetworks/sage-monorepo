@@ -1017,10 +1017,6 @@ components:
         description:
           type: string
           example: A description of the organization.
-        categories:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrganizationCategory'
         avatarKey:
           type: string
           example: logo/dream.png
@@ -1049,7 +1045,6 @@ components:
         - name
         - email
         - login
-        - categories
         - description
         - websiteUrl
         - createdAt

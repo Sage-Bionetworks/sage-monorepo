@@ -118,8 +118,8 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
   }
 
   /**
-   * Matches the organization whose at least one of their categories is in the list of
-   * categories specified.
+   * Matches the organization whose at least one of their categories is in the list of categories
+   * specified.
    *
    * @param pf
    * @param query

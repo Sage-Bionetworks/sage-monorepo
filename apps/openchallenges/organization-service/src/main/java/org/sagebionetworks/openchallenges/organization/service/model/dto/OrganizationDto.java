@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.OffsetDateTime;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -34,10 +32,6 @@ public class OrganizationDto {
 
   @JsonProperty("description")
   private String description;
-
-  @JsonProperty("categories")
-  @Valid
-  private List<OrganizationCategoryDto> categories = new ArrayList<>();
 
   @JsonProperty("avatarKey")
   private String avatarKey;
@@ -174,35 +168,6 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto categories(List<OrganizationCategoryDto> categories) {
-    this.categories = categories;
-    return this;
-  }
-
-  public OrganizationDto addCategoriesItem(OrganizationCategoryDto categoriesItem) {
-    if (this.categories == null) {
-      this.categories = new ArrayList<>();
-    }
-    this.categories.add(categoriesItem);
-    return this;
-  }
-
-  /**
-   * Get categories
-   *
-   * @return categories
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "categories", required = true)
-  public List<OrganizationCategoryDto> getCategories() {
-    return categories;
-  }
-
-  public void setCategories(List<OrganizationCategoryDto> categories) {
-    this.categories = categories;
-  }
-
   public OrganizationDto avatarKey(String avatarKey) {
     this.avatarKey = avatarKey;
     return this;
@@ -337,7 +302,6 @@ public class OrganizationDto {
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.categories, organization.categories)
         && Objects.equals(this.avatarKey, organization.avatarKey)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
@@ -354,7 +318,6 @@ public class OrganizationDto {
         email,
         login,
         description,
-        categories,
         avatarKey,
         websiteUrl,
         challengeCount,
@@ -372,7 +335,6 @@ public class OrganizationDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");

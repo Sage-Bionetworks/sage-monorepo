@@ -98,14 +98,14 @@ public class OrganizationSearchQueryDto {
   }
 
   /**
-   * An array of organization categories used to filter the results.
+   * The array of organization categories used to filter the results.
    *
    * @return categories
    */
   @Valid
   @Schema(
       name = "categories",
-      description = "An array of organization categories used to filter the results.",
+      description = "The array of organization categories used to filter the results.",
       required = false)
   public List<OrganizationCategoryDto> getCategories() {
     return categories;
