@@ -2817,28 +2817,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/is-prop-valid@npm:^0.8.8":
-  version: 0.8.8
-  resolution: "@emotion/is-prop-valid@npm:0.8.8"
-  dependencies:
-    "@emotion/memoize": 0.7.4
-  checksum: bb7ec6d48c572c540e24e47cc94fc2f8dec2d6a342ae97bc9c8b6388d9b8d283862672172a1bb62d335c02662afe6291e10c71e9b8642664a8b43416cdceffac
-  languageName: node
-  linkType: hard
-
 "@emotion/is-prop-valid@npm:^1.1.0":
   version: 1.2.0
   resolution: "@emotion/is-prop-valid@npm:1.2.0"
   dependencies:
     "@emotion/memoize": ^0.8.0
   checksum: cc7a19850a4c5b24f1514665289442c8c641709e6f7711067ad550e05df331da0692a16148e85eda6f47e31b3261b64d74c5e25194d053223be16231f969d633
-  languageName: node
-  linkType: hard
-
-"@emotion/memoize@npm:0.7.4":
-  version: 0.7.4
-  resolution: "@emotion/memoize@npm:0.7.4"
-  checksum: 4e3920d4ec95995657a37beb43d3f4b7d89fed6caa2b173a4c04d10482d089d5c3ea50bbc96618d918b020f26ed6e9c4026bbd45433566576c1f7b056c3271dc
   languageName: node
   linkType: hard
 
@@ -7726,35 +7710,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@redocly/cli@npm:1.0.0-beta.114":
-  version: 1.0.0-beta.114
-  resolution: "@redocly/cli@npm:1.0.0-beta.114"
+"@redocly/cli@npm:1.0.0-beta.131":
+  version: 1.0.0-beta.131
+  resolution: "@redocly/cli@npm:1.0.0-beta.131"
   dependencies:
-    "@redocly/openapi-core": 1.0.0-beta.114
+    "@redocly/openapi-core": 1.0.0-beta.131
     assert-node-version: ^1.0.3
     chokidar: ^3.5.1
     colorette: ^1.2.0
     glob: ^7.1.6
     glob-promise: ^3.4.0
     handlebars: ^4.7.6
-    mobx: ^6.3.2
+    mobx: ^6.0.4
     portfinder: ^1.0.26
-    react: ^17.0.1
-    react-dom: ^17.0.1
+    react: ^17.0.0
+    react-dom: ^17.0.0
     redoc: ~2.0.0
+    semver: ^7.5.2
     simple-websocket: ^9.0.0
-    styled-components: 5.3.3
+    styled-components: ^5.1.1
     yargs: 17.0.1
   bin:
     openapi: bin/cli.js
     redocly: bin/cli.js
-  checksum: e2c19d93dd8b30d0633b0ff7af8801ab1bce73b5957ba22f38c4ba078cbb522707a9ea1f24a839b782a8b94b11d974fcea5f3dd8757ff83b3ad116c486c96cf0
+  checksum: ba6888a6b9aeaad603299ff64b81bf9e9f8c2be90c187a107b0e4a4b14892d9de1bf490efa7b996e90e5d324014b7aaf8f1827e510fbb31ef88c14e66e26ebcb
   languageName: node
   linkType: hard
 
-"@redocly/openapi-core@npm:1.0.0-beta.114":
-  version: 1.0.0-beta.114
-  resolution: "@redocly/openapi-core@npm:1.0.0-beta.114"
+"@redocly/openapi-core@npm:1.0.0-beta.131":
+  version: 1.0.0-beta.131
+  resolution: "@redocly/openapi-core@npm:1.0.0-beta.131"
   dependencies:
     "@redocly/ajv": ^8.11.0
     "@types/node": ^14.11.8
@@ -7766,7 +7751,7 @@ __metadata:
     node-fetch: ^2.6.1
     pluralize: ^8.0.0
     yaml-ast-parser: 0.0.43
-  checksum: a368a78c4cecc905dad557cae6ee26940897e0581de211c9498f2659d91f8f9bf585f035f477d463320c10fd53aaf13fa740926c5c4e003845eccebbb8c316e0
+  checksum: 5313cd8a8e6686abcbb86bc802cb0b985eb612e2da713ec8e98e75124a51aa6c5bca72cc79a59b9eb4d8ff6aa177f280e198dc61f03f5f682328d100277115a7
   languageName: node
   linkType: hard
 
@@ -22882,6 +22867,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mobx@npm:^6.0.4":
+  version: 6.9.1
+  resolution: "mobx@npm:6.9.1"
+  checksum: 98a0cc10c3ae46bd8ca71bd204e8574c4ed52a8e457ce53cd73e8b3a79f538fbb527eb9df708d92181f3ea0fb2efdb9fa9dafc1f86f2b950e268dceda842752d
+  languageName: node
+  linkType: hard
+
 "mobx@npm:^6.3.2":
   version: 6.6.2
   resolution: "mobx@npm:6.6.2"
@@ -26384,7 +26376,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:^17.0.1":
+"react-dom@npm:^17.0.0, react-dom@npm:^17.0.1":
   version: 17.0.2
   resolution: "react-dom@npm:17.0.2"
   dependencies:
@@ -26423,7 +26415,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^17.0.1":
+"react@npm:^17.0.0, react@npm:^17.0.1":
   version: 17.0.2
   resolution: "react@npm:17.0.2"
   dependencies:
@@ -27367,7 +27359,7 @@ __metadata:
     "@openapitools/openapi-generator-cli": 2.5.2
     "@prettier/plugin-xml": 2.2.0
     "@probot/adapter-aws-lambda-serverless": 3.0.1
-    "@redocly/cli": 1.0.0-beta.114
+    "@redocly/cli": 1.0.0-beta.131
     "@swc-node/register": 1.5.4
     "@swc/cli": 0.1.57
     "@swc/core": 1.3.19
@@ -27722,6 +27714,17 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 2d266937756689a76f124ffb4c1ea3e1bbb2b263219f90ada8a11aebebe1280b13bb76cca2ca96bdee3dbc554cbc0b24752eb895b2a51577aa644427e9229f2b
+  languageName: node
+  linkType: hard
+
+"semver@npm:^7.5.2":
+  version: 7.5.4
+  resolution: "semver@npm:7.5.4"
+  dependencies:
+    lru-cache: ^6.0.0
+  bin:
+    semver: bin/semver.js
+  checksum: 12d8ad952fa353b0995bf180cdac205a4068b759a140e5d3c608317098b3575ac2f1e09182206bf2eb26120e1c0ed8fb92c48c592f6099680de56bb071423ca3
   languageName: node
   linkType: hard
 
@@ -29029,13 +29032,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:5.3.3":
-  version: 5.3.3
-  resolution: "styled-components@npm:5.3.3"
+"styled-components@npm:^5.1.1":
+  version: 5.3.11
+  resolution: "styled-components@npm:5.3.11"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
-    "@emotion/is-prop-valid": ^0.8.8
+    "@emotion/is-prop-valid": ^1.1.0
     "@emotion/stylis": ^0.8.4
     "@emotion/unitless": ^0.7.4
     babel-plugin-styled-components: ">= 1.12.0"
@@ -29047,7 +29050,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: a104341068fc39fa2c73950a34970d832dc7a511fc52b3df12f34e6746031f1f128f53b4d540bf39d9f0da043cf0d91517faf874d2c87de5e385f5c2e7620436
+  checksum: 10edd4dae3b0231ec02d86bdd09c88e894eedfa7e9d4f8e562b09fb69c67a27d586cbcf35c785002d59b3bf11e6c0940b0efce40d13ae9ed148b26b1dc8f3284
   languageName: node
   linkType: hard
 
