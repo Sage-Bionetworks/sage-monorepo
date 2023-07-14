@@ -58,6 +58,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    OrganizationCategories:
+      description: The categories of the organization.
+      type: string
+      enum:
+        - featured
+      example: featured
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
@@ -98,6 +104,11 @@ components:
           format: int32
           default: 100
           minimum: 1
+        categories:
+          description: The array of organization categories used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationCategories'
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the results.
           type: array
@@ -183,9 +194,10 @@ components:
         description:
           type: string
           example: A description of the organization.
-        featured:
-          type: boolean
-          example: true
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationCategories'
         avatarKey:
           type: string
           example: logo/dream.png
@@ -215,7 +227,7 @@ components:
         - email
         - login
         - description
-        - featured
+        - categories
         - websiteUrl
         - createdAt
         - updatedAt

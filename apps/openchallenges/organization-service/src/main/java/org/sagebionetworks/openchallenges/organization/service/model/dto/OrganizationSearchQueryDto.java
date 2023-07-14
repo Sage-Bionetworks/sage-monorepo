@@ -24,6 +24,10 @@ public class OrganizationSearchQueryDto {
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
+  @JsonProperty("categories")
+  @Valid
+  private List<OrganizationCategoriesDto> categories = null;
+
   @JsonProperty("challengeContributionRoles")
   @Valid
   private List<ChallengeContributionRoleDto> challengeContributionRoles = null;
@@ -78,6 +82,37 @@ public class OrganizationSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public OrganizationSearchQueryDto categories(List<OrganizationCategoriesDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public OrganizationSearchQueryDto addCategoriesItem(OrganizationCategoriesDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * The array of organization categories used to filter the results.
+   *
+   * @return categories
+   */
+  @Valid
+  @Schema(
+      name = "categories",
+      description = "The array of organization categories used to filter the results.",
+      required = false)
+  public List<OrganizationCategoriesDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<OrganizationCategoriesDto> categories) {
+    this.categories = categories;
   }
 
   public OrganizationSearchQueryDto challengeContributionRoles(
@@ -188,6 +223,7 @@ public class OrganizationSearchQueryDto {
     OrganizationSearchQueryDto organizationSearchQuery = (OrganizationSearchQueryDto) o;
     return Objects.equals(this.pageNumber, organizationSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, organizationSearchQuery.pageSize)
+        && Objects.equals(this.categories, organizationSearchQuery.categories)
         && Objects.equals(
             this.challengeContributionRoles, organizationSearchQuery.challengeContributionRoles)
         && Objects.equals(this.sort, organizationSearchQuery.sort)
@@ -198,7 +234,7 @@ public class OrganizationSearchQueryDto {
   @Override
   public int hashCode() {
     return Objects.hash(
-        pageNumber, pageSize, challengeContributionRoles, sort, direction, searchTerms);
+        pageNumber, pageSize, categories, challengeContributionRoles, sort, direction, searchTerms);
   }
 
   @Override
@@ -207,6 +243,7 @@ public class OrganizationSearchQueryDto {
     sb.append("class OrganizationSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    challengeContributionRoles: ")
         .append(toIndentedString(challengeContributionRoles))
         .append("\n");

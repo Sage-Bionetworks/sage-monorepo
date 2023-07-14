@@ -1,0 +1,5 @@
+description: The categories of the organization.
+type: string
+enum:
+  - featured
+example: featured

@@ -13,9 +13,10 @@ properties:
   description:
     type: string
     example: A description of the organization.
-  featured:
-    type: boolean
-    example: true
+  categories:
+    type: array
+    items:
+      $ref: OrganizationCategories.yaml
   avatarKey:
     type: string
     example: logo/dream.png
@@ -45,7 +46,7 @@ required:
   - email
   - login
   - description
-  - featured
+  - categories
   - websiteUrl
   - createdAt
   - updatedAt

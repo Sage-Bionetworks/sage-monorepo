@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -33,8 +35,9 @@ public class OrganizationDto {
   @JsonProperty("description")
   private String description;
 
-  @JsonProperty("featured")
-  private Boolean featured;
+  @JsonProperty("categories")
+  @Valid
+  private List<OrganizationCategoriesDto> categories = new ArrayList<>();
 
   @JsonProperty("avatarKey")
   private String avatarKey;
@@ -171,24 +174,33 @@ public class OrganizationDto {
     this.description = description;
   }
 
-  public OrganizationDto featured(Boolean featured) {
-    this.featured = featured;
+  public OrganizationDto categories(List<OrganizationCategoriesDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public OrganizationDto addCategoriesItem(OrganizationCategoriesDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
     return this;
   }
 
   /**
-   * Get featured
+   * Get categories
    *
-   * @return featured
+   * @return categories
    */
   @NotNull
-  @Schema(name = "featured", example = "true", required = true)
-  public Boolean getFeatured() {
-    return featured;
+  @Valid
+  @Schema(name = "categories", required = true)
+  public List<OrganizationCategoriesDto> getCategories() {
+    return categories;
   }
 
-  public void setFeatured(Boolean featured) {
-    this.featured = featured;
+  public void setCategories(List<OrganizationCategoriesDto> categories) {
+    this.categories = categories;
   }
 
   public OrganizationDto avatarKey(String avatarKey) {
@@ -325,7 +337,7 @@ public class OrganizationDto {
         && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.featured, organization.featured)
+        && Objects.equals(this.categories, organization.categories)
         && Objects.equals(this.avatarKey, organization.avatarKey)
         && Objects.equals(this.websiteUrl, organization.websiteUrl)
         && Objects.equals(this.challengeCount, organization.challengeCount)
@@ -342,7 +354,7 @@ public class OrganizationDto {
         email,
         login,
         description,
-        featured,
+        categories,
         avatarKey,
         websiteUrl,
         challengeCount,
@@ -360,7 +372,7 @@ public class OrganizationDto {
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
-    sb.append("    featured: ").append(toIndentedString(featured)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    challengeCount: ").append(toIndentedString(challengeCount)).append("\n");
