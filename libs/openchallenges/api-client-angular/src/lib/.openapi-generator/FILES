@@ -8,6 +8,7 @@ api/challengeInputDataType.service.ts
 api/challengePlatform.service.ts
 api/image.service.ts
 api/organization.service.ts
+api/user.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -45,7 +46,6 @@ model/imageHeight.ts
 model/imageQuery.ts
 model/models.ts
 model/organization.ts
-model/organizationCategory.ts
 model/organizationDirection.ts
 model/organizationSearchQuery.ts
 model/organizationSort.ts
@@ -54,5 +54,11 @@ model/organizationsPageAllOf.ts
 model/pageMetadata.ts
 model/simpleChallengeInputDataType.ts
 model/simpleChallengePlatform.ts
+model/user.ts
+model/userCreateRequest.ts
+model/userCreateResponse.ts
+model/userStatus.ts
+model/usersPage.ts
+model/usersPageAllOf.ts
 param.ts
 variables.ts
