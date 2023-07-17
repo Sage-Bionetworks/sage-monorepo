@@ -30,6 +30,7 @@ export * from './imageAspectRatio';
 export * from './imageHeight';
 export * from './imageQuery';
 export * from './organization';
+export * from './organizationCategory';
 export * from './organizationDirection';
 export * from './organizationSearchQuery';
 export * from './organizationSort';
