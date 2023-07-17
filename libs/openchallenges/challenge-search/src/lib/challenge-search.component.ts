@@ -337,7 +337,9 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges query', query)),
-        switchMap((query) => this.challengeService.listChallenges(query)),
+        switchMap((query: ChallengeSearchQuery) =>
+          this.challengeService.listChallenges(query)
+        ),
         tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {

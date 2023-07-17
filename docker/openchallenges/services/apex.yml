@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-apex:
-    image: ghcr.io/sage-bionetworks/openchallenges-apex:${OPENCHALLENGES_VERION:-local}
+    image: ghcr.io/sage-bionetworks/openchallenges-apex:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-apex
     restart: always
     env_file:
