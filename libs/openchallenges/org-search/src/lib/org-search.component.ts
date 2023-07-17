@@ -107,7 +107,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
         searchTerms: this.searchedTerms,
-        contributionRoles: this.selectedContributionRoles,
+        challengeContributionRoles: this.selectedContributionRoles,
       } as OrganizationSearchQuery;
 
       this.query.next(defaultQuery);
