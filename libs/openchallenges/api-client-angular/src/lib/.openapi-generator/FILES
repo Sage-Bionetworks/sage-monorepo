@@ -46,6 +46,7 @@ model/imageHeight.ts
 model/imageQuery.ts
 model/models.ts
 model/organization.ts
+model/organizationCategory.ts
 model/organizationDirection.ts
 model/organizationSearchQuery.ts
 model/organizationSort.ts
