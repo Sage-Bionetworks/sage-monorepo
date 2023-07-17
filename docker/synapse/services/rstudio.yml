@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   synapse-rstudio:
-    image: ghcr.io/sage-bionetworks/synapse-rstudio:${SYNAPSE_VERION:-local}
+    image: ghcr.io/sage-bionetworks/synapse-rstudio:${SYNAPSE_VERSION:-local}
     container_name: synapse-rstudio
     restart: always
     env_file:
