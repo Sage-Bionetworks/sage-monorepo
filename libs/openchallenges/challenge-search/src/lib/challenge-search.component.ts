@@ -25,6 +25,9 @@ import {
   ChallengeStatus,
   ChallengeSubmissionType,
   ChallengeIncentive,
+  ChallengePlatformSort,
+  ChallengeInputDataTypeSort,
+  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -218,7 +221,7 @@ export class ChallengeSearchComponent
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({} as ChallengeSearchQuery)
+      .listChallenges({})
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
@@ -227,12 +230,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengePlatformService.listChallengePlatforms({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengePlatformSort = 'name';
+          const platformQuery: ChallengePlatformSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengePlatformSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengePlatformService.listChallengePlatforms(
+            platformQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedPlatforms = page.challengePlatforms.map((platform) => ({
@@ -256,12 +263,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengeInputDataTypeSort = 'name';
+          const inputDataTypeQuery: ChallengeInputDataTypeSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengeInputDataTypeSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengeInputDataTypeService.listChallengeInputDataTypes(
+            inputDataTypeQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedInputDataTypes = page.challengeInputDataTypes.map(
@@ -287,12 +298,14 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
+        switchMap((searchTerm: string) => {
+          const sortBy: OrganizationSort = 'name';
+          const orgQuery: OrganizationSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as OrganizationSearchQuery)
-        ),
+            sort: sortBy,
+          };
+          return this.organizationService.listOrganizations(orgQuery);
+        }),
         map((page) => page.organizations),
         switchMap((orgs) =>
           forkJoin({
