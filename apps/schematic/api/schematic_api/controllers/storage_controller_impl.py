@@ -82,8 +82,7 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
 
 
 def list_storage_project_datasets(
-    project_id: str,
-    asset_view_id: str
+    project_id: str, asset_view_id: str
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
     """Attempts to get a list of datasets from a Synapse project
 
