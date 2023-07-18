@@ -8,6 +8,8 @@ import {
   ImageHeight,
   ImageAspectRatio,
   Organization,
+  OrganizationSort,
+  ChallengeContributionRole,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -63,7 +65,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  sortedBy!: string;
+  sortedBy!: OrganizationSort;
 
   // set default values
   defaultSortedBy = 'relevance';
@@ -77,7 +79,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   contributionRolesFilter = challengeContributionRolesFilter;
 
   // define selected filter values
-  selectedContributionRoles!: string[];
+  selectedContributionRoles!: ChallengeContributionRole[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -102,13 +104,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
-      const defaultQuery = {
+      const defaultQuery: OrganizationSearchQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
         searchTerms: this.searchedTerms,
         challengeContributionRoles: this.selectedContributionRoles,
-      } as OrganizationSearchQuery;
+      };
 
       this.query.next(defaultQuery);
     });

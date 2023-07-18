@@ -21,6 +21,10 @@ import {
   ImageQuery,
   ImageHeight,
   ImageAspectRatio,
+  ChallengeSort,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+  ChallengeIncentive,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -105,7 +109,7 @@ export class ChallengeSearchComponent
   searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  sortedBy!: string;
+  sortedBy!: ChallengeSort;
 
   // set default values
   defaultSelectedYear = undefined;
@@ -128,9 +132,9 @@ export class ChallengeSearchComponent
   organizationsFilter = challengeOrganizationsFilter;
 
   // define selected filter values
-  selectedStatus!: string[];
-  selectedSubmissionTypes!: string[];
-  selectedIncentives!: string[];
+  selectedStatus!: ChallengeStatus[];
+  selectedSubmissionTypes!: ChallengeSubmissionType[];
+  selectedIncentives!: ChallengeIncentive[];
   selectedPlatforms!: string[];
   selectedOrgs!: number[];
   selectedInputDataTypes!: string[];
@@ -194,7 +198,7 @@ export class ChallengeSearchComponent
       this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
-      const defaultQuery = {
+      const defaultQuery: ChallengeSearchQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
@@ -207,7 +211,7 @@ export class ChallengeSearchComponent
         incentives: this.selectedIncentives,
         inputDataTypes: this.selectedInputDataTypes,
         organizations: this.selectedOrgs,
-      } as ChallengeSearchQuery;
+      };
 
       this.query.next(defaultQuery);
     });
