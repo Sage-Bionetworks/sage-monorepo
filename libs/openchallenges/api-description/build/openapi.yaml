@@ -847,6 +847,12 @@ components:
         - url
       x-java-class-annotations:
         - '@lombok.Builder'
+    OrganizationCategory:
+      description: The category of the organization.
+      type: string
+      enum:
+        - featured
+      example: featured
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -879,6 +885,11 @@ components:
           format: int32
           default: 100
           minimum: 1
+        categories:
+          description: The array of organization categories used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationCategory'
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the results.
           type: array

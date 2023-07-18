@@ -64,6 +64,12 @@ public class OrganizationEntity {
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
   @IndexedEmbedded(
+      name = "categories",
+      includePaths = {"category"})
+  private List<OrganizationCategoryEntity> categories;
+
+  @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
+  @IndexedEmbedded(
       name = "challenge_contributions",
       includePaths = {"role"})
   private List<ChallengeContributionEntity> challengeContributions;

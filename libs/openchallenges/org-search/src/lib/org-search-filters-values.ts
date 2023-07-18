@@ -15,6 +15,13 @@ export const challengeContributionRolesFilterValues: FilterValue[] = [
   },
 ];
 
+export const organizationCategoriesFilterValues: FilterValue[] = [
+  {
+    value: 'featured',
+    label: 'Featured',
+  },
+];
+
 export const organizationSortFilterValues: FilterValue[] = [
   {
     value: 'relevance',
