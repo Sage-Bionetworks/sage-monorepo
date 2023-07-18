@@ -32,7 +32,7 @@ function workspace-install {
   # task (download gradle), enough though caching already helps.
   nx run-many --target=prepare
   nx run-many --target=prepare-java --parallel=1
-  nx run-many --target=prepare-python --exclude=schematic-api
+  nx run-many --target=prepare-python
 }
 
 function workspace-prepare {
