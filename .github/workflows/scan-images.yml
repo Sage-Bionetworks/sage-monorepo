@@ -1,16 +1,15 @@
 name: Scan image
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-  # schedule:
-  # 13:44 on Thursday
-  # - cron: 44 13 * * 4
-  # every 10 minutes
-  # - cron: '*/10 * * * *'
-  # workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  # pull_request:
+  schedule:
+    # 19:29 on Thursday
+    - cron: 29 19 * * 4
+    # every 2 hours (during evaluation)
+    - cron: 0 */2 * * *
 
 jobs:
   trivy-edge:
