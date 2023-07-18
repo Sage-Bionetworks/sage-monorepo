@@ -1,4 +1,4 @@
-name: Scan Git repository
+name: Scan Git repo
 on:
   push:
     branches:
