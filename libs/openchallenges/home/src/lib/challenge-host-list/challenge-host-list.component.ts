@@ -33,7 +33,7 @@ export class ChallengeHostListComponent implements OnInit {
       pageSize: 4,
       searchTerms: '',
       sort: 'challenge_count',
-    } as OrganizationSearchQuery;
+    };
 
     const orgPage$ = this.organizationService.listOrganizations(query).pipe(
       catchError((err) => {
