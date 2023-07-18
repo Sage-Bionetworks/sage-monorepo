@@ -105,7 +105,8 @@ class TestListStorageProjectManifests:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_manifests(
-                project_id=synapse_asset_view_id, asset_view=synapse_project_id
+                project_id=synapse_asset_view_id, 
+                asset_view_id=synapse_project_id
             )
             assert status == 404
             assert isinstance(result, BasicError)
@@ -124,7 +125,8 @@ class TestListStorageProjectManifests:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_manifests(
-                project_id=synapse_project_id, asset_view=synapse_asset_view_id
+                project_id=synapse_project_id, 
+                asset_view_id=synapse_asset_view_id
             )
             assert status == 200
             assert isinstance(result, ManifestsPage)

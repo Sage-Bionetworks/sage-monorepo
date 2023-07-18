@@ -83,6 +83,7 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
 
 def list_storage_project_datasets(
     project_id: str,
+    asset_view_id: str
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
     """Attempts to get a list of datasets from a Synapse project
 
@@ -95,37 +96,24 @@ def list_storage_project_datasets(
           The second item is the response status
     """
 
-    try:
-        datasets = []
-        datasets.append(Dataset(name="dataset-1"))
-        datasets.append(Dataset(name="dataset-2"))
-        datasets.append(Dataset(name="dataset-3"))
+    config_handler(asset_view=asset_view_id)
+    access_token = get_access_token()
+    store = SynapseStorage(access_token=access_token)
+    datasets = store.getStorageDatasetsInProject(projectId=project_id)
 
-        page = DatasetsPage(
-            number=0,
-            size=100,
-            total_elements=len(datasets),
-            total_pages=1,
-            has_next=False,
-            has_previous=False,
-            datasets=datasets,
-        )
-        res: Union[DatasetsPage, BasicError] = page
-        status = 200
+    page = DatasetsPage(
+        number=0,
+        size=100,
+        total_elements=len(datasets),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        datasets=datasets,
+    )
+    result: Union[DatasetsPage, BasicError] = page
+    status = 200
 
-    except SynapseAuthenticationError as error:
-        status = 401
-        res = BasicError("Unauthorized error", status, str(error))
-
-    # except DoesNotExist:
-    #     status = 404
-    #     res = BasicError("The specified resource was not found", status)
-
-    except Exception as error:  # pylint: disable=broad-exception-caught
-        status = 500
-        res = BasicError("Internal error", status, str(error))
-
-    return res, status
+    return result, status
 
 
 @handle_exceptions
@@ -146,11 +134,8 @@ def list_storage_project_manifests(
     # load config
     config_handler(asset_view=asset_view_id)
 
-    # get access token
-    bearer_token = get_access_token()
-
-    # load token to synapse storage
-    store = SynapseStorage(access_token=bearer_token)
+    access_token = get_access_token()
+    store = SynapseStorage(access_token=access_token)
     project_manifests = store.getProjectManifests(projectId=project_id)
     manifests = [
         Manifest(
@@ -172,7 +157,7 @@ def list_storage_project_manifests(
         has_previous=False,
         manifests=manifests,
     )
-    res: Union[ManifestsPage, BasicError] = page
+    result: Union[ManifestsPage, BasicError] = page
     status = 200
 
-    return res, status
+    return result, status
