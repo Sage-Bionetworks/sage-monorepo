@@ -14,7 +14,7 @@ on:
 
 jobs:
   trivy-edge:
-    name: ${{ matrix.image }} image scan
+    name: ${{ matrix.image }}
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
