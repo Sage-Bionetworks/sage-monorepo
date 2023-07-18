@@ -1,4 +1,4 @@
-name: Trivy security analysis of edge images
+name: Scan image
 
 on:
   push:
