@@ -2,10 +2,10 @@
 apis:
   main:
     root: '../../../libs/schematic/api-description/build/openapi.yaml'
-# theme:
-#   openapi:
-#     theme:
-#       rightPanel:
-#         backgroundColor: '#314fa7'
+theme:
+  openapi:
+    theme:
+      rightPanel:
+        backgroundColor: '#314fa7'
 #       sidebar:
 #         backgroundColor: '#ffffff'

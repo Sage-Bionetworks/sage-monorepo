@@ -21,6 +21,13 @@ import {
   ImageQuery,
   ImageHeight,
   ImageAspectRatio,
+  ChallengeSort,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+  ChallengeIncentive,
+  ChallengePlatformSort,
+  ChallengeInputDataTypeSort,
+  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -105,7 +112,7 @@ export class ChallengeSearchComponent
   searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  sortedBy!: string;
+  sortedBy!: ChallengeSort;
 
   // set default values
   defaultSelectedYear = undefined;
@@ -128,9 +135,9 @@ export class ChallengeSearchComponent
   organizationsFilter = challengeOrganizationsFilter;
 
   // define selected filter values
-  selectedStatus!: string[];
-  selectedSubmissionTypes!: string[];
-  selectedIncentives!: string[];
+  selectedStatus!: ChallengeStatus[];
+  selectedSubmissionTypes!: ChallengeSubmissionType[];
+  selectedIncentives!: ChallengeIncentive[];
   selectedPlatforms!: string[];
   selectedOrgs!: number[];
   selectedInputDataTypes!: string[];
@@ -194,7 +201,7 @@ export class ChallengeSearchComponent
       this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
-      const defaultQuery = {
+      const defaultQuery: ChallengeSearchQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
@@ -207,14 +214,14 @@ export class ChallengeSearchComponent
         incentives: this.selectedIncentives,
         inputDataTypes: this.selectedInputDataTypes,
         organizations: this.selectedOrgs,
-      } as ChallengeSearchQuery;
+      };
 
       this.query.next(defaultQuery);
     });
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({} as ChallengeSearchQuery)
+      .listChallenges({})
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
@@ -223,12 +230,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengePlatformService.listChallengePlatforms({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengePlatformSort = 'name';
+          const platformQuery: ChallengePlatformSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengePlatformSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengePlatformService.listChallengePlatforms(
+            platformQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedPlatforms = page.challengePlatforms.map((platform) => ({
@@ -252,12 +263,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengeInputDataTypeSort = 'name';
+          const inputDataTypeQuery: ChallengeInputDataTypeSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengeInputDataTypeSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengeInputDataTypeService.listChallengeInputDataTypes(
+            inputDataTypeQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedInputDataTypes = page.challengeInputDataTypes.map(
@@ -283,12 +298,14 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
+        switchMap((searchTerm: string) => {
+          const sortBy: OrganizationSort = 'name';
+          const orgQuery: OrganizationSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as OrganizationSearchQuery)
-        ),
+            sort: sortBy,
+          };
+          return this.organizationService.listOrganizations(orgQuery);
+        }),
         map((page) => page.organizations),
         switchMap((orgs) =>
           forkJoin({
