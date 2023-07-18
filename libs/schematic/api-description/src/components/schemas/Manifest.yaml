@@ -1,3 +1,23 @@
+type: object
 description: A manifest ID object
-type: string
-example: syn26251389
+properties:
+  name:
+    type: string
+    description: The name of the manifest file.
+    example: synapse_storage_manifest.csv
+  synapseId:
+    type: string
+    description: The Synapse id of the manifest file.
+    example: syn1
+  datasetName:
+    type: string
+    description: The name of the dataset the manifest belongs to.
+    example: dataset_X
+  datasetSynapseId:
+    type: string
+    description: The Synapse id of the dataset the manifest belongs to.
+    example: syn2
+  componentName:
+    type: string
+    description: The name of the component the manifest is of.
+    example: patient

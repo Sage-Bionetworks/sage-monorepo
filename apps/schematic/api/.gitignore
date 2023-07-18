@@ -64,3 +64,9 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#secrets
+*secrets*
+
+#schematic downloaded manifests
+manifests
