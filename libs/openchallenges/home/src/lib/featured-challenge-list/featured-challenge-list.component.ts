@@ -25,7 +25,7 @@ export class FeaturedChallengeListComponent implements OnInit {
       pageSize: 3,
       searchTerms: '',
       sort: 'recently_started',
-    } as ChallengeSearchQuery;
+    };
     this.query.next(defaultQuery);
     this.query
       .pipe(switchMap((query) => this.challengeService.listChallenges(query)))

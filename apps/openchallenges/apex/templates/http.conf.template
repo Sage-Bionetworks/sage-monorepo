@@ -59,6 +59,12 @@ http {
       proxy_pass http://api-gateway;
     }
 
+    location = /health {
+      access_log off;
+      add_header 'Content-Type' 'application/json';
+      return 200 '{"status": "UP"}';
+    }
+
     location /img/ {
       proxy_set_header X-Real-IP $remote_addr;
       proxy_set_header X-Forwarded-For $remote_addr;

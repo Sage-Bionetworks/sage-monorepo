@@ -33,7 +33,11 @@ export class UserProfileChallengesComponent {
 
   ngOnInit(): void {
     this.query
-      .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
+      .pipe(
+        switchMap((query: ChallengeSearchQuery) =>
+          this.challengeService.listChallenges(query)
+        )
+      )
       .subscribe((page) => {
         this.totalChallengesCount = page.totalElements;
         this.challenges = page.challenges;

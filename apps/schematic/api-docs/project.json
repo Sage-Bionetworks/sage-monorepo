@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly preview-docs --config redocly.yaml --port 8010",
+        "command": "redocly preview-docs --config redocly.yaml --port 7010",
         "cwd": "apps/schematic/api-docs"
       }
     },
