@@ -1,9 +1,9 @@
 name: Scan image
 
 on:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   # pull_request:
   schedule:
     # 19:29 on Thursday
