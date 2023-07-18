@@ -21,8 +21,10 @@ jobs:
       fail-fast: false
       matrix:
         image:
-          - 'openchallenges-zipkin'
           - 'openchallenges-apex'
+          - 'openchallenges-api-gateway'
+          - 'openchallenges-challenge-service'
+          - 'openchallenges-zipkin'
 
     steps:
       - name: Login to GitHub Container Registry
