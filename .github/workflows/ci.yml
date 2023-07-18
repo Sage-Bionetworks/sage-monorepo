@@ -105,27 +105,27 @@ jobs:
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint --exclude=schematic-api"
+            && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build --exclude=schematic-api"
+            && nx affected --target=build"
 
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test --exclude=schematic-api"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test --exclude=schematic-api"
+            && nx affected --target=integration-test"
 
       - name: Publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=publish-and-remove-image --parallel=1 --exclude=schematic-api"
+            && nx affected --target=publish-and-remove-image --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
@@ -232,27 +232,27 @@ jobs:
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint --exclude=schematic-api"
+            && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build --exclude=schematic-api"
+            && nx affected --target=build"
 
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test --exclude=schematic-api"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test --exclude=schematic-api"
+            && nx affected --target=integration-test"
 
       - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build-and-remove-image --parallel=1 --exclude=schematic-api"
+            && nx affected --target=build-and-remove-image --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
