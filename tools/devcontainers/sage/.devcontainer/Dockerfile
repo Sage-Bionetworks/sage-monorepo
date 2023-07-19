@@ -1,5 +1,5 @@
-ARG imageVersion=bullseye-20221004-slim
-FROM debian:$imageVersion
+ARG imageVersion=jammy-20230624
+FROM ubuntu:$imageVersion
 
 # Safer bash scripts with 'set -euxo pipefail'
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
