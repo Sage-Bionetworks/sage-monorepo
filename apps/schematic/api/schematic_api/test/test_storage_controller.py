@@ -3,13 +3,20 @@
 from __future__ import absolute_import
 import unittest
 
-from flask import json
-from six import BytesIO
+from yaml import safe_load
 
-from schematic_api.models.basic_error import BasicError  # noqa: E501
-from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
-from schematic_api.models.manifests_page import ManifestsPage  # noqa: E501
 from schematic_api.test import BaseTestCase
+
+from .conftest import SECRETS_PATH
+
+with open(SECRETS_PATH, mode="rt", encoding="utf-8") as file:
+    DICT = safe_load(file)
+PROJECT_ID = "syn26251192"
+ASSET_VIEW_ID = "syn23643253"
+HEADERS = {
+    'Accept': 'application/json',
+    'Authorization': f'Bearer {DICT["synapse_auth_token"]}',
+}
 
 
 class TestStorageController(BaseTestCase):
@@ -18,34 +25,66 @@ class TestStorageController(BaseTestCase):
     def test_list_storage_project_datasets(self):
         """Test case for list_storage_project_datasets
 
-        Gets all datasets in folder under a given storage project that the current user has access to.
+        Gets all datasets in folder under a given storage project that the 
+         current user has access to.
         """
-        headers = { 
-            'Accept': 'application/json',
-            'Authorization': 'Bearer special-key',
-        }
+        endpoint_url = (
+            "/api/v1/storages/asset-views/"
+            f"{ASSET_VIEW_ID}/projects/{PROJECT_ID}/datasets"
+        )
         response = self.client.open(
-            '/api/v1/storages/projects/{project_id}/datasets'.format(project_id='project_id_example'),
+            endpoint_url,
             method='GET',
-            headers=headers)
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+            headers=HEADERS
+        )
+        self.assert200(
+            response,
+            f"Response body is : {response.data.decode('utf-8')}"
+        )
+
+        assert not response.json['hasNext']
+        assert not response.json['hasPrevious']
+        assert response.json['number'] == 0
+        assert response.json['size'] == 100
+        assert response.json['totalElements'] == 1
+        assert response.json['totalPages'] == 1
+        assert len(response.json['datasets']) == 1
 
     def test_list_storage_project_manifests(self):
         """Test case for list_storage_project_manifests
 
         Gets all manifests in a project folder that users have access to
         """
-        headers = { 
-            'Accept': 'application/json',
-            'Authorization': 'Bearer special-key',
-        }
+        endpoint_url = (
+            "/api/v1/storages/asset-views/"
+            f"{ASSET_VIEW_ID}/projects/{PROJECT_ID}/manifests"
+        )
         response = self.client.open(
-            '/api/v1/storages/asset-views/{asset_view_id}/projects/{project_id}/manifests'.format(project_id='project_id_example', asset_view_id='asset_view_id_example'),
+            endpoint_url,
             method='GET',
-            headers=headers)
-        self.assert200(response,
-                       'Response body is : ' + response.data.decode('utf-8'))
+            headers=HEADERS
+        )
+        self.assert200(
+            response,
+            f"Response body is : {response.data.decode('utf-8')}"
+        )
+
+        assert not response.json['hasNext']
+        assert not response.json['hasPrevious']
+        assert response.json['number'] == 0
+        assert response.json['size'] == 100
+        assert response.json['totalElements'] == 1
+        assert response.json['totalPages'] == 1
+        manifests = response.json['manifests']
+        assert len(manifests) == 1
+        for manifest in manifests:
+            assert list(manifest.keys()) == [
+                "componentName",
+                "datasetName",
+                "datasetSynapseId",
+                "name",
+                "synapseId"
+            ]
 
 
 if __name__ == '__main__':
