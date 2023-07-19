@@ -28,6 +28,7 @@ export class FeaturedChallengeListComponent implements OnInit {
     };
     this.query.next(defaultQuery);
     this.query
+      // TODO: update to retrieve featured challenges
       .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
       .subscribe((page) => {
         this.challenges = page.challenges;
