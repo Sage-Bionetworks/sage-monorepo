@@ -25,7 +25,7 @@ class TestStorageController(BaseTestCase):
     def test_list_storage_project_datasets(self):
         """Test case for list_storage_project_datasets
 
-        Gets all datasets in folder under a given storage project that the 
+        Gets all datasets in folder under a given storage project that the
          current user has access to.
         """
         endpoint_url = (
