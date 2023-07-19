@@ -61,7 +61,7 @@ class TestListStorageProjectManifests:
             return_value="xxx",
         ):
             result, status = list_storage_project_manifests("syn1", "syn2")
-            assert status == 403
+            assert status == 401
             assert isinstance(result, BasicError)
             assert result.title == "Forbidden Synapse access error"
 
@@ -73,7 +73,7 @@ class TestListStorageProjectManifests:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_manifests("syn1", "syn2")
-            assert status == 404
+            assert status == 403
             assert isinstance(result, BasicError)
             assert result.title == "Synapse entity access error"
 
@@ -93,7 +93,7 @@ class TestListStorageProjectManifests:
                 project_id=synapse_asset_view_id,
                 asset_view_id=synapse_project_id
             )
-            assert status == 404
+            assert status == 403
             assert isinstance(result, BasicError)
             assert result.title == "Synapse entity access error"
 

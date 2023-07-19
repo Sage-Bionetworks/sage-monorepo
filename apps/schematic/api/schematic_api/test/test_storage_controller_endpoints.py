@@ -80,10 +80,10 @@ class TestStorageController(BaseTestCase):
         for manifest in manifests:
             assert list(manifest.keys()) == [
                 "componentName",
+                "datasetId",
                 "datasetName",
-                "datasetSynapseId",
-                "name",
-                "synapseId"
+                "id",
+                "name"
             ]
 
 

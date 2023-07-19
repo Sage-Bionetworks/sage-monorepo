@@ -23,9 +23,7 @@ def list_storage_project_datasets(project_id, asset_view_id):  # noqa: E501
 
     :rtype: Union[DatasetsPage, Tuple[DatasetsPage, int], Tuple[DatasetsPage, int, Dict[str, str]]
     """
-    return storage_controller_impl.list_storage_project_datasets(
-        project_id, asset_view_id
-    )
+    return storage_controller_impl.list_storage_project_datasets(project_id, asset_view_id)
 
 
 def list_storage_project_manifests(project_id, asset_view_id):  # noqa: E501
@@ -40,6 +38,4 @@ def list_storage_project_manifests(project_id, asset_view_id):  # noqa: E501
 
     :rtype: Union[ManifestsPage, Tuple[ManifestsPage, int], Tuple[ManifestsPage, int, Dict[str, str]]
     """
-    return storage_controller_impl.list_storage_project_manifests(
-        project_id, asset_view_id
-    )
+    return storage_controller_impl.list_storage_project_manifests(project_id, asset_view_id)

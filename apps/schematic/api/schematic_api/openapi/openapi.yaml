@@ -188,17 +188,12 @@ components:
       description: The request cannot be fulfilled due to an unexpected server error
   schemas:
     ProjectId:
-      description: A Synapse project ID.
+      description: A project ID.
       example: syn26251192
       type: string
     AssetViewId:
-      description: ID of view listing all project data assets. E.g. for Synapse this
-        would be the Synapse ID of the fileview listing all data assets for a given
-        project.
+      description: An asset view ID.
       example: syn23643253
-      maxLength: 25
-      minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     PageMetadata:
       description: The metadata of a page.
@@ -254,7 +249,13 @@ components:
           example: Example dataset
           title: name
           type: string
+        id:
+          description: The ID of the dataset.
+          example: Syn1
+          title: id
+          type: string
       required:
+      - id
       - name
       title: Dataset
       type: object
@@ -297,33 +298,36 @@ components:
       x-java-class-annotations:
       - '@lombok.Builder'
     Manifest:
-      description: A manifest ID object
+      description: A manifest object
       properties:
         name:
           description: The name of the manifest file.
           example: synapse_storage_manifest.csv
           title: name
           type: string
-        synapseId:
-          description: The Synapse id of the manifest file.
+        id:
+          description: The id of the manifest file.
           example: syn1
-          title: synapseId
+          title: id
           type: string
         datasetName:
           description: The name of the dataset the manifest belongs to.
           example: dataset_X
           title: datasetName
           type: string
-        datasetSynapseId:
-          description: The Synapse id of the dataset the manifest belongs to.
+        datasetId:
+          description: The id of the dataset the manifest belongs to.
           example: syn2
-          title: datasetSynapseId
+          title: datasetId
           type: string
         componentName:
           description: The name of the component the manifest is of.
           example: patient
           title: componentName
           type: string
+      required:
+      - id
+      - name
       title: Manifest
       type: object
     ManifestsPage:

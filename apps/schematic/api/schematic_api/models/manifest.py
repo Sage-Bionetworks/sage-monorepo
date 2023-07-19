@@ -15,40 +15,40 @@ class Manifest(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, synapse_id=None, dataset_name=None, dataset_synapse_id=None, component_name=None):  # noqa: E501
+    def __init__(self, name=None, id=None, dataset_name=None, dataset_id=None, component_name=None):  # noqa: E501
         """Manifest - a model defined in OpenAPI
 
         :param name: The name of this Manifest.  # noqa: E501
         :type name: str
-        :param synapse_id: The synapse_id of this Manifest.  # noqa: E501
-        :type synapse_id: str
+        :param id: The id of this Manifest.  # noqa: E501
+        :type id: str
         :param dataset_name: The dataset_name of this Manifest.  # noqa: E501
         :type dataset_name: str
-        :param dataset_synapse_id: The dataset_synapse_id of this Manifest.  # noqa: E501
-        :type dataset_synapse_id: str
+        :param dataset_id: The dataset_id of this Manifest.  # noqa: E501
+        :type dataset_id: str
         :param component_name: The component_name of this Manifest.  # noqa: E501
         :type component_name: str
         """
         self.openapi_types = {
             'name': str,
-            'synapse_id': str,
+            'id': str,
             'dataset_name': str,
-            'dataset_synapse_id': str,
+            'dataset_id': str,
             'component_name': str
         }
 
         self.attribute_map = {
             'name': 'name',
-            'synapse_id': 'synapseId',
+            'id': 'id',
             'dataset_name': 'datasetName',
-            'dataset_synapse_id': 'datasetSynapseId',
+            'dataset_id': 'datasetId',
             'component_name': 'componentName'
         }
 
         self._name = name
-        self._synapse_id = synapse_id
+        self._id = id
         self._dataset_name = dataset_name
-        self._dataset_synapse_id = dataset_synapse_id
+        self._dataset_id = dataset_id
         self._component_name = component_name
 
     @classmethod
@@ -82,31 +82,35 @@ class Manifest(Model):
         :param name: The name of this Manifest.
         :type name: str
         """
+        if name is None:
+            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name
 
     @property
-    def synapse_id(self):
-        """Gets the synapse_id of this Manifest.
+    def id(self):
+        """Gets the id of this Manifest.
 
-        The Synapse id of the manifest file.  # noqa: E501
+        The id of the manifest file.  # noqa: E501
 
-        :return: The synapse_id of this Manifest.
+        :return: The id of this Manifest.
         :rtype: str
         """
-        return self._synapse_id
+        return self._id
 
-    @synapse_id.setter
-    def synapse_id(self, synapse_id):
-        """Sets the synapse_id of this Manifest.
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Manifest.
 
-        The Synapse id of the manifest file.  # noqa: E501
+        The id of the manifest file.  # noqa: E501
 
-        :param synapse_id: The synapse_id of this Manifest.
-        :type synapse_id: str
+        :param id: The id of this Manifest.
+        :type id: str
         """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
-        self._synapse_id = synapse_id
+        self._id = id
 
     @property
     def dataset_name(self):
@@ -132,27 +136,27 @@ class Manifest(Model):
         self._dataset_name = dataset_name
 
     @property
-    def dataset_synapse_id(self):
-        """Gets the dataset_synapse_id of this Manifest.
+    def dataset_id(self):
+        """Gets the dataset_id of this Manifest.
 
-        The Synapse id of the dataset the manifest belongs to.  # noqa: E501
+        The id of the dataset the manifest belongs to.  # noqa: E501
 
-        :return: The dataset_synapse_id of this Manifest.
+        :return: The dataset_id of this Manifest.
         :rtype: str
         """
-        return self._dataset_synapse_id
+        return self._dataset_id
 
-    @dataset_synapse_id.setter
-    def dataset_synapse_id(self, dataset_synapse_id):
-        """Sets the dataset_synapse_id of this Manifest.
+    @dataset_id.setter
+    def dataset_id(self, dataset_id):
+        """Sets the dataset_id of this Manifest.
 
-        The Synapse id of the dataset the manifest belongs to.  # noqa: E501
+        The id of the dataset the manifest belongs to.  # noqa: E501
 
-        :param dataset_synapse_id: The dataset_synapse_id of this Manifest.
-        :type dataset_synapse_id: str
+        :param dataset_id: The dataset_id of this Manifest.
+        :type dataset_id: str
         """
 
-        self._dataset_synapse_id = dataset_synapse_id
+        self._dataset_id = dataset_id
 
     @property
     def component_name(self):

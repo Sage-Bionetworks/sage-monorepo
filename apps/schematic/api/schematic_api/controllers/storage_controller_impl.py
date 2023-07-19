@@ -59,17 +59,23 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
         except SynapseNoCredentialsError as error:
             status = 401
             res = BasicError(
-                "Missing or invalid Synapse credentials error", status, str(error)
+                "Missing or invalid Synapse credentials error",
+                status,
+                str(error)
             )
             return res, status
 
         except SynapseAuthenticationError as error:
-            status = 403
-            res = BasicError("Forbidden Synapse access error", status, str(error))
+            status = 401
+            res = BasicError(
+                "Forbidden Synapse access error",
+                status,
+                str(error)
+            )
             return res, status
 
         except AccessCredentialsError as error:
-            status = 404
+            status = 403
             res = BasicError("Synapse entity access error", status, str(error))
             return res, status
 
@@ -98,7 +104,14 @@ def list_storage_project_datasets(
     config_handler(asset_view=asset_view_id)
     access_token = get_access_token()
     store = SynapseStorage(access_token=access_token)
-    datasets = store.getStorageDatasetsInProject(projectId=project_id)
+    project_datasets = store.getStorageDatasetsInProject(projectId=project_id)
+    datasets = [
+        Dataset(
+            id=item[1][0],
+            name=item[1][1],
+        )
+        for item in project_datasets
+    ]
 
     page = DatasetsPage(
         number=0,
@@ -139,9 +152,9 @@ def list_storage_project_manifests(
     manifests = [
         Manifest(
             name=item[1][1],
-            synapse_id=item[1][0],
+            id=item[1][0],
             dataset_name=item[0][1],
-            dataset_synapse_id=item[0][0],
+            dataset_id=item[0][0],
             component_name=item[2][0],
         )
         for item in project_manifests
