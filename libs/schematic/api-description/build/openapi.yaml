@@ -76,15 +76,12 @@ components:
       bearerFormat: JWT
   schemas:
     ProjectId:
-      description: A Synapse project ID.
+      description: A project ID.
       type: string
       example: syn26251192
     AssetViewId:
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
+      description: An asset view ID.
       type: string
-      minLength: 3
-      maxLength: 25
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: syn23643253
     PageMetadata:
       type: object
@@ -133,8 +130,13 @@ components:
           type: string
           description: The name of the dataset.
           example: Example dataset
+        id:
+          type: string
+          description: The ID of the dataset.
+          example: Syn1
       required:
         - name
+        - id
       x-java-class-annotations:
         - '@lombok.Builder'
     DatasetsPage:
@@ -176,28 +178,31 @@ components:
         - '@lombok.Builder'
     Manifest:
       type: object
-      description: A manifest ID object
+      description: A manifest object
       properties:
         name:
           type: string
           description: The name of the manifest file.
           example: synapse_storage_manifest.csv
-        synapseId:
+        id:
           type: string
-          description: The Synapse id of the manifest file.
+          description: The id of the manifest file.
           example: syn1
         datasetName:
           type: string
           description: The name of the dataset the manifest belongs to.
           example: dataset_X
-        datasetSynapseId:
+        datasetId:
           type: string
-          description: The Synapse id of the dataset the manifest belongs to.
+          description: The id of the dataset the manifest belongs to.
           example: syn2
         componentName:
           type: string
           description: The name of the component the manifest is of.
           example: patient
+      required:
+        - name
+        - id
     ManifestsPage:
       type: object
       description: A page of manifests.
