@@ -1,4 +1,4 @@
-ARG imageVersion=jammy-20230624
+ARG imageVersion=focal-20230624
 FROM ubuntu:$imageVersion
 
 # Safer bash scripts with 'set -euxo pipefail'
