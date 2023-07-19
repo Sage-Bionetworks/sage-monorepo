@@ -22,7 +22,7 @@ HEADERS = {
 class TestStorageController(BaseTestCase):
     """StorageController integration test stubs"""
 
-    def test_list_storage_project_datasets(self):
+    def test_list_storage_project_datasets(self) -> None:
         """Test case for list_storage_project_datasets
 
         Gets all datasets in folder under a given storage project that the
@@ -56,7 +56,7 @@ class TestStorageController(BaseTestCase):
                 "name"
             ]
 
-    def test_list_storage_project_manifests(self):
+    def test_list_storage_project_manifests(self) -> None:
         """Test case for list_storage_project_manifests
 
         Gets all manifests in a project folder that users have access to

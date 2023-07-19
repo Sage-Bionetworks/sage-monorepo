@@ -21,7 +21,7 @@ class TestListStorageProjectDatasets:
         synapse_auth_token: str,
         synapse_project_id: str,
         synapse_asset_view_id: str,
-    ):
+    ) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
@@ -39,7 +39,7 @@ class TestListStorageProjectDatasets:
 class TestListStorageProjectManifests:
     """Test case for list_storage_project_manifests"""
 
-    def test_no_access_token(self):
+    def test_no_access_token(self) -> None:
         """Test with no Synapse access token"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
@@ -53,7 +53,7 @@ class TestListStorageProjectManifests:
                 result.title == "Missing or invalid Synapse credentials error"
             )
 
-    def test_bad_access_token(self):
+    def test_bad_access_token(self) -> None:
         """Test with incorrect Synapse access token"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
@@ -65,7 +65,7 @@ class TestListStorageProjectManifests:
             assert isinstance(result, BasicError)
             assert result.title == "Forbidden Synapse access error"
 
-    def test_no_access_to_entities(self, synapse_auth_token: str):
+    def test_no_access_to_entities(self, synapse_auth_token: str) -> None:
         """Test with incorrect Synapse ids"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
@@ -82,7 +82,7 @@ class TestListStorageProjectManifests:
         synapse_auth_token: str,
         synapse_project_id: str,
         synapse_asset_view_id: str,
-    ):
+    ) -> None:
         """Test with Synapse ids switched"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
@@ -102,7 +102,7 @@ class TestListStorageProjectManifests:
         synapse_auth_token: str,
         synapse_project_id: str,
         synapse_asset_view_id: str,
-    ):
+    ) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
