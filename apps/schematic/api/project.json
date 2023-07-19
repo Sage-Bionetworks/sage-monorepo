@@ -122,6 +122,13 @@
         "cwd": "apps/schematic/api"
       }
     },
+    "pylint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+        "cwd": "apps/schematic/api"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {

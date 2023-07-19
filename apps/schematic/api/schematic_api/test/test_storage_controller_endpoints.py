@@ -1,4 +1,4 @@
-# coding: utf-8
+"""Tests for endpoints"""
 
 from __future__ import absolute_import
 import unittest
@@ -14,8 +14,8 @@ with open(SECRETS_PATH, mode="rt", encoding="utf-8") as file:
 PROJECT_ID = "syn26251192"
 ASSET_VIEW_ID = "syn23643253"
 HEADERS = {
-    'Accept': 'application/json',
-    'Authorization': f'Bearer {DICT["synapse_auth_token"]}',
+    "Accept": "application/json",
+    "Authorization": f'Bearer {DICT["synapse_auth_token"]}',
 }
 
 
@@ -32,29 +32,19 @@ class TestStorageController(BaseTestCase):
             "/api/v1/storages/asset-views/"
             f"{ASSET_VIEW_ID}/projects/{PROJECT_ID}/datasets"
         )
-        response = self.client.open(
-            endpoint_url,
-            method='GET',
-            headers=HEADERS
-        )
-        self.assert200(
-            response,
-            f"Response body is : {response.data.decode('utf-8')}"
-        )
+        response = self.client.open(endpoint_url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
-        assert not response.json['hasNext']
-        assert not response.json['hasPrevious']
-        assert response.json['number'] == 0
-        assert response.json['size'] == 100
-        assert response.json['totalElements'] == 1
-        assert response.json['totalPages'] == 1
-        datasets = response.json['datasets']
+        assert not response.json["hasNext"]
+        assert not response.json["hasPrevious"]
+        assert response.json["number"] == 0
+        assert response.json["size"] == 100
+        assert response.json["totalElements"] == 1
+        assert response.json["totalPages"] == 1
+        datasets = response.json["datasets"]
         assert len(datasets) == 1
         for dataset in datasets:
-            assert list(dataset.keys()) == [
-                "id",
-                "name"
-            ]
+            assert list(dataset.keys()) == ["id", "name"]
 
     def test_list_storage_project_manifests(self) -> None:
         """Test case for list_storage_project_manifests
@@ -65,23 +55,16 @@ class TestStorageController(BaseTestCase):
             "/api/v1/storages/asset-views/"
             f"{ASSET_VIEW_ID}/projects/{PROJECT_ID}/manifests"
         )
-        response = self.client.open(
-            endpoint_url,
-            method='GET',
-            headers=HEADERS
-        )
-        self.assert200(
-            response,
-            f"Response body is : {response.data.decode('utf-8')}"
-        )
+        response = self.client.open(endpoint_url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
-        assert not response.json['hasNext']
-        assert not response.json['hasPrevious']
-        assert response.json['number'] == 0
-        assert response.json['size'] == 100
-        assert response.json['totalElements'] == 1
-        assert response.json['totalPages'] == 1
-        manifests = response.json['manifests']
+        assert not response.json["hasNext"]
+        assert not response.json["hasPrevious"]
+        assert response.json["number"] == 0
+        assert response.json["size"] == 100
+        assert response.json["totalElements"] == 1
+        assert response.json["totalPages"] == 1
+        manifests = response.json["manifests"]
         assert len(manifests) == 1
         for manifest in manifests:
             assert list(manifest.keys()) == [
@@ -89,9 +72,9 @@ class TestStorageController(BaseTestCase):
                 "datasetId",
                 "datasetName",
                 "id",
-                "name"
+                "name",
             ]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -13,7 +13,7 @@ from schematic_api.controllers.storage_controller_impl import (
 )
 
 
-class TestListStorageProjectDatasets:
+class TestListStorageProjectDatasets:  # pylint: disable=too-few-public-methods
     """Test case for list_storage_project_datasets"""
 
     def test_success(
@@ -29,8 +29,7 @@ class TestListStorageProjectDatasets:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_datasets(
-                project_id=synapse_project_id,
-                asset_view_id=synapse_asset_view_id
+                project_id=synapse_project_id, asset_view_id=synapse_asset_view_id
             )
             assert status == 200
             assert isinstance(result, DatasetsPage)
@@ -49,9 +48,8 @@ class TestListStorageProjectManifests:
             result, status = list_storage_project_manifests("syn1", "syn2")
             assert status == 401
             assert isinstance(result, BasicError)
-            assert (
-                result.title == "Missing or invalid Synapse credentials error"
-            )
+            title = result.title  # pylint: disable=no-member
+            assert title == "Missing or invalid Synapse credentials error"
 
     def test_bad_access_token(self) -> None:
         """Test with incorrect Synapse access token"""
@@ -63,7 +61,8 @@ class TestListStorageProjectManifests:
             result, status = list_storage_project_manifests("syn1", "syn2")
             assert status == 401
             assert isinstance(result, BasicError)
-            assert result.title == "Forbidden Synapse access error"
+            title = result.title  # pylint: disable=no-member
+            assert title == "Forbidden Synapse access error"
 
     def test_no_access_to_entities(self, synapse_auth_token: str) -> None:
         """Test with incorrect Synapse ids"""
@@ -75,7 +74,8 @@ class TestListStorageProjectManifests:
             result, status = list_storage_project_manifests("syn1", "syn2")
             assert status == 403
             assert isinstance(result, BasicError)
-            assert result.title == "Synapse entity access error"
+            title = result.title  # pylint: disable=no-member
+            assert title == "Synapse entity access error"
 
     def test_switched_ids(
         self,
@@ -90,12 +90,12 @@ class TestListStorageProjectManifests:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_manifests(
-                project_id=synapse_asset_view_id,
-                asset_view_id=synapse_project_id
+                project_id=synapse_asset_view_id, asset_view_id=synapse_project_id
             )
             assert status == 403
             assert isinstance(result, BasicError)
-            assert result.title == "Synapse entity access error"
+            title = result.title  # pylint: disable=no-member
+            assert title == "Synapse entity access error"
 
     def test_success(
         self,
@@ -110,8 +110,7 @@ class TestListStorageProjectManifests:
             return_value=synapse_auth_token,
         ):
             result, status = list_storage_project_manifests(
-                project_id=synapse_project_id,
-                asset_view_id=synapse_asset_view_id
+                project_id=synapse_project_id, asset_view_id=synapse_asset_view_id
             )
             assert status == 200
             assert isinstance(result, ManifestsPage)
