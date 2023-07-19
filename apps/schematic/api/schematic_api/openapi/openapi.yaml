@@ -61,6 +61,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
         "404":
           content:
             application/problem+json:
@@ -117,6 +123,12 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
         "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
           content:
             application/problem+json:
               schema:

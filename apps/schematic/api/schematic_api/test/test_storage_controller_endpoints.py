@@ -48,7 +48,13 @@ class TestStorageController(BaseTestCase):
         assert response.json['size'] == 100
         assert response.json['totalElements'] == 1
         assert response.json['totalPages'] == 1
-        assert len(response.json['datasets']) == 1
+        datasets = response.json['datasets']
+        assert len(datasets) == 1
+        for dataset in datasets:
+            assert list(dataset.keys()) == [
+                "id",
+                "name"
+            ]
 
     def test_list_storage_project_manifests(self):
         """Test case for list_storage_project_manifests

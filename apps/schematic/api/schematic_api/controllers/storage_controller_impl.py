@@ -59,13 +59,19 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
         except SynapseNoCredentialsError as error:
             status = 401
             res = BasicError(
-                "Missing or invalid Synapse credentials error", status, str(error)
+                "Missing or invalid Synapse credentials error",
+                status,
+                str(error)
             )
             return res, status
 
         except SynapseAuthenticationError as error:
             status = 401
-            res = BasicError("Forbidden Synapse access error", status, str(error))
+            res = BasicError(
+                "Forbidden Synapse access error",
+                status,
+                str(error)
+            )
             return res, status
 
         except AccessCredentialsError as error:
