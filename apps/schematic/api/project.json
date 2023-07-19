@@ -114,14 +114,21 @@
         "command": "poetry run black ./schematic_api --exclude '(models|test)'",
         "cwd": "apps/schematic/api"
       }
+    },
+    "mypy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run tox",
+        "cwd": "apps/schematic/api"
+      }
     }
-    // "test": {
-    //   "executor": "nx:run-commands",
-    //   "options": {
-    //     "command": "poetry run tox",
-    //     "cwd": "apps/schematic/api"
-    //   }
-    // }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [
