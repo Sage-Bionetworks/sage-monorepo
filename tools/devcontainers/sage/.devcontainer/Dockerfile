@@ -12,7 +12,7 @@ ARG actVersion="0.2.48"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.17.0"
 # https://github.com/yarnpkg/berry
-ARG yarnVersion="3.3.0"
+ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.49.0"
 # https://pypi.org/project/poetry
