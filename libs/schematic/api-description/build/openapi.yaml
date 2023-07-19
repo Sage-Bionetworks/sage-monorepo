@@ -18,9 +18,10 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/projects/{projectId}/datasets:
+  /storages/asset-views/{assetViewId}/projects/{projectId}/datasets:
     parameters:
       - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetViewId'
     get:
       tags:
         - Storage
@@ -34,14 +35,18 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
     parameters:
       - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetView'
+      - $ref: '#/components/parameters/assetViewId'
     get:
       tags:
         - Storage
@@ -74,6 +79,13 @@ components:
       description: A Synapse project ID.
       type: string
       example: syn26251192
+    AssetViewId:
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
+      type: string
+      minLength: 3
+      maxLength: 25
+      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
+      example: syn23643253
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -162,13 +174,6 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    AssetViewId:
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
-      type: string
-      minLength: 3
-      maxLength: 25
-      pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
-      example: syn23643253
     Manifest:
       type: object
       description: A manifest ID object
@@ -225,18 +230,6 @@ components:
       schema:
         $ref: '#/components/schemas/AssetViewId'
   responses:
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     BadRequest:
       description: Invalid request
       content:
@@ -249,67 +242,15 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
-security:
-  - bearerAuth: []
-info:
-  title: Schematic REST API
-  version: 0.1.0
-  license:
-    name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
-  contact:
-    name: Support
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
-  x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
-servers:
-  - url: http://localhost/api/v1
-tags:
-  - name: Storage
-    description: Operations about storages.
-paths:
-  /storages/projects/{projectId}/datasets:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
-    get:
-      tags:
-        - Storage
-      summary: Gets all datasets in folder under a given storage project that the current user has access to.
-      description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: listStorageProjectDatasets
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DatasetsPage'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
-    parameters:
-      - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetViewId'
-    get:
-      tags:
-        - Storage
-      summary: Gets all manifests in a project folder that users have access to
-      description: Gets all manifests in a project folder that the current user has access to.
-      operationId: listStorageProjectManifests
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ManifestsPage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
