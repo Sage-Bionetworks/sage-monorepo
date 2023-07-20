@@ -55,18 +55,28 @@ public class OrganizationService {
   }
 
   @Transactional(readOnly = true)
-  public OrganizationDto getOrganization(String org) {
+  public OrganizationDto getOrganization(String identifier) {
+    String orgLogin = String.valueOf(identifier);
+    Long orgId = null;
+    try {
+      orgId = Long.valueOf(orgLogin);
+    } catch (Exception ignore) {
+      // Ignore
+    }
+
+    LOG.info("login: {}", orgLogin);
+    LOG.info("id: {}", orgId);
+
     OrganizationEntity orgEntity =
         organizationRepository
-            .findBySimpleNaturalId(org)
+            .findByIdOrLogin(orgId, orgLogin)
             .orElseThrow(
                 () ->
                     new OrganizationNotFoundException(
                         String.format(
-                            "The organization with ID %s does not exist.", org)));
+                            "The organization with the ID or login %s does not exist.",
+                            identifier)));
 
-    OrganizationDto orgDto = organizationMapper.convertToDto(orgEntity);
-
-    return orgDto;
+    return organizationMapper.convertToDto(orgEntity);
   }
 }

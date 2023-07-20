@@ -1,6 +1,13 @@
 name: org
 in: path
-description: The unique identifier of the organization.
+description: The id or login of the organization.
 required: true
 schema:
-  $ref: ../../schemas/OrganizationLogin.yaml
+  type: string
+  minLength: 1
+  maxLength: 25
+examples:
+  byString:
+    value: 'dream'
+  byId:
+    value: '1'
