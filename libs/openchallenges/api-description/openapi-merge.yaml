@@ -5,5 +5,5 @@ inputs:
   - inputFile: build/challenge.openapi.yaml
   - inputFile: build/image.openapi.yaml
   - inputFile: build/organization.openapi.yaml
-  # - inputFile: build/user.openapi.yaml
+  - inputFile: build/user.openapi.yaml
 output: build/openapi.yaml

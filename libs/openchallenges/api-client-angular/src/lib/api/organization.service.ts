@@ -100,7 +100,7 @@ export class OrganizationService {
     /**
      * Get an organization
      * Returns the organization specified
-     * @param org The unique identifier of the organization.
+     * @param org The id or login of the organization.
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
