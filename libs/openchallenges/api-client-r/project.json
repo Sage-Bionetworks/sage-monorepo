@@ -17,7 +17,7 @@
       "options": {
         "commands": [
           "rm -fr src/lib/*",
-          "java -jar openapi-generator-cli.jar openapi-generator-cli generate"
+          "java -jar openapi-generator-cli.jar generate -i ../api-description/build/openapi.yaml -g r"
         ],
         "cwd": "libs/openchallenges/api-client-r",
         "parallel": false
