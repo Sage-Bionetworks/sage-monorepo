@@ -128,7 +128,9 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" | tee -a "/home/$user/.bashrc"
+    "" | tee -a "/home/$user/.bashrc" \
+  # Set the default version of Yarn
+  && corepack prepare "yarn@${yarnVersion}" --activate
 
 USER $user
 
