@@ -5,12 +5,19 @@
   "projectType": "library",
   "prefix": "openchallenges",
   "targets": {
+    "download-openapi-generator-snapshot": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "wget -O openapi-generator-cli.jar https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/7.0.0-SNAPSHOT/openapi-generator-cli-7.0.0-20230720.164703-191.jar",
+        "cwd": "libs/openchallenges/api-client-r"
+      }
+    },
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
           "rm -fr src/lib/*",
-          "openapi-generator-cli generate"
+          "java -jar openapi-generator-cli.jar openapi-generator-cli generate"
         ],
         "cwd": "libs/openchallenges/api-client-r",
         "parallel": false
