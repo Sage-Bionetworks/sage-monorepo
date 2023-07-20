@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openchallenges-mongo:
-    image: sagebionetworks/openchallenges-mongo:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-mongo:local
     container_name: openchallenges-mongo
     restart: always
     env_file:

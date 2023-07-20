@@ -82,10 +82,53 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/config-server",
-        "push": false,
-        "tags": ["sagebionetworks/openchallenges-config-server:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-config-server"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       },
       "dependsOn": ["build-image-base"]
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/config-server",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-config-server"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": ["build-image"]
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-config-server:* --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-config-server:* --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-config-server:local --quiet",
+        "color": true
+      }
     }
   },
   "tags": ["type:service", "scope:backend"],

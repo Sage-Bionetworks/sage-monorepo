@@ -2,6 +2,7 @@
 
 args=(
   # List of services in alphanumeric order
+  --file docker/schematic/services/api-docs.yml
   --file docker/schematic/services/api.yml
 
   --file docker/schematic/networks.yml

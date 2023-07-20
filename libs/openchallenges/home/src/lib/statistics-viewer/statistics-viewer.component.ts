@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  ChallengeSearchQuery,
   ChallengeService,
   Image,
   ImageHeight,
   ImageService,
-  OrganizationSearchQuery,
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable, map } from 'rxjs';
@@ -49,14 +47,14 @@ export class StatisticsViewerComponent implements OnInit {
       .listChallenges({
         pageNumber: 1,
         pageSize: 1,
-      } as ChallengeSearchQuery)
+      })
       .pipe(map((page) => page.totalElements));
 
     this.orgCount$ = this.organizationService
       .listOrganizations({
         pageNumber: 1,
         pageSize: 1,
-      } as OrganizationSearchQuery)
+      })
       .pipe(map((page) => page.totalElements));
   }
 }

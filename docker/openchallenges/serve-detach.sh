@@ -3,6 +3,7 @@
 args=(
   # List of services in alphanumeric order
   --file docker/openchallenges/services/apex.yml
+  --file docker/openchallenges/services/api-docs.yml
   --file docker/openchallenges/services/api-gateway.yml
   --file docker/openchallenges/services/app.yml
   --file docker/openchallenges/services/challenge-service.yml

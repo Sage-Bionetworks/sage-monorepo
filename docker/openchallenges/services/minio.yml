@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-minio:
-    image: sagebionetworks/openchallenges-minio:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-minio:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-minio
     restart: always
     env_file:

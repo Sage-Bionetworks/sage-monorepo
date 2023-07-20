@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openchallenges-keycloak:
-    image: sagebionetworks/openchallenges-keycloak:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-keycloak:local
     container_name: openchallenges-keycloak
     restart: always
     env_file:

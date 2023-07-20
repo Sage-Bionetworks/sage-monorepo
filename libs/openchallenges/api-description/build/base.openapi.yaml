@@ -4,12 +4,12 @@ info:
   title: OpenChallenges REST API
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
 components: {}

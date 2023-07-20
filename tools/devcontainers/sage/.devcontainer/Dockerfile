@@ -1,4 +1,4 @@
-ARG imageVersion=bullseye-20221004-slim
+ARG imageVersion=bullseye-20230703-slim
 FROM debian:$imageVersion
 
 # Safer bash scripts with 'set -euxo pipefail'
@@ -8,17 +8,19 @@ ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
 # https://github.com/nektos/act
-ARG actVersion="0.2.34"
+ARG actVersion="0.2.48"
 # https://github.com/sharkdp/hyperfine
-ARG hyperfineVersion="1.15.0"
+ARG hyperfineVersion="1.17.0"
 # https://github.com/yarnpkg/berry
-ARG yarnVersion="3.3.0"
+ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.25.2"
+ARG devcontainerCliVersion="0.49.0"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.3.1"
+ARG poetryVersion="1.5.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
+# https://aquasecurity.github.io/trivy
+ARG trivyVersion="0.43.1"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -55,16 +57,17 @@ RUN groupadd docker \
   && apt-get update -qq -y \
   && apt-get install --no-install-recommends -qq -y \
     nodejs gh ngrok \
-    terraform=1.4.6-1 \
-    vault=1.13.2-1 \
+    terraform \
+    vault \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
+  # Install Yarn
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
   # Install @devcontainers/cli
   && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
-  # Install nektos/act
+  # Install act
   && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
   # Install hyperfine
   && curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
@@ -89,6 +92,10 @@ RUN groupadd docker \
     && rm -fr /tmp/r_amd64.deb \
     && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
     && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
+  # Install Travy
+  && curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
+    && dpkg -i /tmp/trivy.deb \
+    && rm -fr /tmp/trivy.deb \
   # Increase the max number of file watchers
   # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
   && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
@@ -121,7 +128,9 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" | tee -a "/home/$user/.bashrc"
+    "" | tee -a "/home/$user/.bashrc" \
+  # Set the default version of Yarn
+  && corepack prepare "yarn@${yarnVersion}" --activate
 
 USER $user
 

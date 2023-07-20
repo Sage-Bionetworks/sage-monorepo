@@ -8,13 +8,19 @@ import {
   ImageHeight,
   ImageAspectRatio,
   Organization,
+  OrganizationSort,
+  ChallengeContributionRole,
+  OrganizationCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   FilterValue,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
-import { challengeContributionRolesFilter } from './org-search-filters';
+import {
+  challengeContributionRolesFilter,
+  organizationCategoriesFilter,
+} from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
 import {
   BehaviorSubject,
@@ -63,7 +69,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  sortedBy!: string;
+  sortedBy!: OrganizationSort;
 
   // set default values
   defaultSortedBy = 'relevance';
@@ -75,9 +81,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // checkbox filters
   contributionRolesFilter = challengeContributionRolesFilter;
+  categoriesFilter = organizationCategoriesFilter;
 
   // define selected filter values
-  selectedContributionRoles!: string[];
+  selectedContributionRoles!: ChallengeContributionRole[];
+  selectedCategories!: OrganizationCategory[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -96,19 +104,20 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       this.selectedContributionRoles = this.splitParam(
         params['contributionRoles']
       );
-
+      this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'];
       this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
-      const defaultQuery = {
+      const defaultQuery: OrganizationSearchQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
         searchTerms: this.searchedTerms,
-        contributionRoles: this.selectedContributionRoles,
-      } as OrganizationSearchQuery;
+        challengeContributionRoles: this.selectedContributionRoles,
+        categories: this.selectedCategories,
+      };
 
       this.query.next(defaultQuery);
     });
@@ -132,7 +141,9 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
     const orgPage$ = this.query.pipe(
       tap((query) => console.log('List organization query: ', query)),
-      switchMap((query) => this.organizationService.listOrganizations(query)),
+      switchMap((query: OrganizationSearchQuery) =>
+        this.organizationService.listOrganizations(query)
+      ),
       tap((page) => console.log('List of organizations: ', page.organizations)),
       catchError((err) => {
         if (err.message) {
@@ -199,6 +210,15 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       queryParamsHandling: 'merge',
       queryParams: {
         contributionRoles: this.collapseParam(selected),
+      },
+    });
+  }
+
+  onCategoriesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        categories: this.collapseParam(selected),
       },
     });
   }

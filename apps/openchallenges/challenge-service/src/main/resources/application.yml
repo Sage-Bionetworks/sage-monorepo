@@ -2,7 +2,7 @@ spring:
   application:
     name: openchallenges-challenge-service
   profiles:
-    active: development,local
+    active: dev,local
   config:
     import: 'configserver:http://openchallenges-config-server:8090'
   cloud:

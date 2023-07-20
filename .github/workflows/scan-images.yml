@@ -1,0 +1,73 @@
+name: Scan image
+
+on:
+  push:
+    branches:
+      - main
+  # pull_request:
+  schedule:
+    # 19:29 on Thursday
+    - cron: 29 19 * * 4
+    # every 2 hours (during evaluation)
+    - cron: 0 */2 * * *
+
+jobs:
+  trivy-edge:
+    name: ${{ matrix.image }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # TODO: Get this list programmatically
+        image:
+          - 'openchallenges-apex'
+          - 'openchallenges-api-gateway'
+          - 'openchallenges-challenge-service'
+          - 'openchallenges-zipkin'
+
+    steps:
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull the image
+        run: |
+          docker pull ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
+
+      # Deliberately chosen master here to keep up-to-date.
+      - name: Run Trivy vulnerability scanner for any major issues
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results-${{ matrix.image }}-edge.sarif
+
+      # Show all detected issues.
+      # Note this will show a lot more, including major un-fixed ones.
+      - name: Run Trivy vulnerability scanner for local output
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
+          format: table
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: trivy-results-${{ matrix.image }}-edge.sarif
+          category: ${{ matrix.image }}:edge image
+          wait-for-processing: true
+
+      - name: Detain results for debug if needed
+        uses: actions/upload-artifact@v3
+        with:
+          name: trivy-results-${{ matrix.image }}-edge.sarif
+          path: trivy-results-${{ matrix.image }}-edge.sarif
+          if-no-files-found: error

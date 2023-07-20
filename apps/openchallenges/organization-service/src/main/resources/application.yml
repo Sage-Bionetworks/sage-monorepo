@@ -2,7 +2,7 @@ spring:
   application:
     name: openchallenges-organization-service
   profiles:
-    active: development,local
+    active: dev,local
   config:
     import: 'configserver:http://openchallenges-config-server:8090'
     # name: openchallenges-organization-service,openchallenges
