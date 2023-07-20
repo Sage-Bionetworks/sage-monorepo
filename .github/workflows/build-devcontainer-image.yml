@@ -14,7 +14,7 @@ on:
       - 'tools/devcontainers/sage/**/Dockerfile'
 
 env:
-  IMAGE_REPOSITORY: sagebionetworks/sage-devcontainer
+  IMAGE_REPOSITORY: ghcr.io/sage-bionetworks/sage-devcontainer
   DEFAULT_BRANCH: main
 
 jobs:
