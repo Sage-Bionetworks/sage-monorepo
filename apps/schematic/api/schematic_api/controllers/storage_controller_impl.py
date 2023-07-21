@@ -81,6 +81,21 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
     return func
 
 
+def get_project_datasets(project_id: str) -> list[tuple[str, str]]:
+    """Gets a list of datasets from the project
+
+    Args:
+        project_id (str): The id for the project
+
+    Returns:
+        list[tuple(str, str)]: A list of datasets in tuple form
+    """
+    access_token = get_access_token()
+    store = SynapseStorage(access_token=access_token)
+    return store.getStorageDatasetsInProject(projectId=project_id)
+
+
+@handle_exceptions
 def list_storage_project_datasets(
     project_id: str, asset_view_id: str
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
@@ -96,16 +111,8 @@ def list_storage_project_datasets(
     """
 
     config_handler(asset_view=asset_view_id)
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
-    project_datasets = store.getStorageDatasetsInProject(projectId=project_id)
-    datasets = [
-        Dataset(
-            id=item[1][0],
-            name=item[1][1],
-        )
-        for item in project_datasets
-    ]
+    dataset_tuples = get_project_datasets(project_id)
+    datasets = [Dataset(id=item[1][0], name=item[1][1]) for item in dataset_tuples]
 
     page = DatasetsPage(
         number=0,
@@ -120,6 +127,22 @@ def list_storage_project_datasets(
     status = 200
 
     return result, status
+
+
+def get_project_manifests(
+    project_id: str,
+) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
+    """Gets a list of manifests from the project
+
+    Args:
+        project_id (str): The id for the project
+
+    Returns:
+        list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]: A list of manifests
+    """
+    access_token = get_access_token()
+    store = SynapseStorage(access_token=access_token)
+    return store.getProjectManifests(projectId=project_id)
 
 
 @handle_exceptions
@@ -139,10 +162,7 @@ def list_storage_project_manifests(
     """
     # load config
     config_handler(asset_view=asset_view_id)
-
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
-    project_manifests = store.getProjectManifests(projectId=project_id)
+    project_manifests = get_project_manifests(project_id)
     manifests = [
         Manifest(
             name=item[1][1],

@@ -1,44 +1,16 @@
-"""Pytest fixtures for whole API"""
-
-import os
-from typing import Generator, Any
+"""Globals and pytest fixtures for testing"""
+from typing import Generator
 import pytest
-from yaml import safe_load
 
-TESTS_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(TESTS_DIR, "data")
-SECRETS_PATH = os.path.join(DATA_DIR, "secrets.yaml")
+EXAMPLE_MANIFEST_METADATA = [
+    (("dataset_id1", "dataset_name1"), ("id1", "name1"), ("component1", "component1")),
+    (("dataset_id2", "dataset_name2"), ("id2", "name2"), ("component2", "component2")),
+]
 
 
-@pytest.fixture(scope="session", name="secrets_dict")
-def fixture_secrets_dict() -> Generator:
+@pytest.fixture(scope="session", name="example_manifest_metadata")
+def fixture_example_manifest_metadata() -> Generator:
     """
-    Yields a dict with various secrets
+    Yields an example of a list of manifest metadata
     """
-    with open(SECRETS_PATH, mode="rt", encoding="utf-8") as file:
-        dct = safe_load(file)
-    yield dct
-
-
-@pytest.fixture(scope="session", name="synapse_auth_token")
-def fixture_synapse_auth_token(secrets_dict: dict[str, Any]) -> Generator:
-    """
-    Yields a Synapse authorization token
-    """
-    yield secrets_dict["synapse_auth_token"]
-
-
-@pytest.fixture(scope="session", name="synapse_project_id")
-def fixture_synapse_project_id() -> Generator:
-    """
-    Yields a Synapse project ID
-    """
-    yield "syn30988314"
-
-
-@pytest.fixture(scope="session", name="synapse_asset_view_id")
-def fixture_synapse_asset_view_id() -> Generator:
-    """
-    Yields a Synapse asset view ID
-    """
-    yield "syn23643253"
+    yield EXAMPLE_MANIFEST_METADATA
