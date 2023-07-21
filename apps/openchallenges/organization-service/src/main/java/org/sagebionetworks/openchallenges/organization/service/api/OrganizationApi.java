@@ -81,7 +81,7 @@ public interface OrganizationApi {
       value = "/organizations/{org}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
-      @Size(min = 1, max = 25)
+      @Size(min = 1, max = 64)
           @Parameter(
               name = "org",
               description = "The id or login of the organization.",

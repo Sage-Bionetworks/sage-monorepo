@@ -71,7 +71,7 @@ paths:
         name: org
         required: true
         schema:
-          maxLength: 25
+          maxLength: 64
           minLength: 1
           type: string
         style: simple
@@ -124,7 +124,7 @@ components:
       name: org
       required: true
       schema:
-        maxLength: 25
+        maxLength: 64
         minLength: 1
         type: string
       style: simple
