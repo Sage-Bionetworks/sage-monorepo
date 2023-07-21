@@ -24,7 +24,7 @@ public interface OrganizationApiDelegate {
   /**
    * GET /organizations/{org} : Get an organization Returns the organization specified
    *
-   * @param org The unique identifier of the organization. (required)
+   * @param org The id or login of the organization. (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see OrganizationApi#getOrganization

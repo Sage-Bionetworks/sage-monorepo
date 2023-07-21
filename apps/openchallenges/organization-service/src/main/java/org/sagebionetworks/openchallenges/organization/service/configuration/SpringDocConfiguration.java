@@ -25,7 +25,8 @@ public class SpringDocConfiguration {
                 .license(
                     new License()
                         .name("Apache 2.0")
-                        .url("https://github.com/Sage-Bionetworks/sage-monorepo"))
+                        .url(
+                            "https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt"))
                 .version("1.0.0"));
   }
 }

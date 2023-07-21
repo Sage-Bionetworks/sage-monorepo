@@ -13,7 +13,7 @@ CREATE TABLE `organization` (
   `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `acronym` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT login_check CHECK (char_length(login) >= 2)
+  CONSTRAINT login_check CHECK (char_length(`login`) >= 2 and `login` regexp '^[a-z]')
 );
 
 -- organization_category definition
