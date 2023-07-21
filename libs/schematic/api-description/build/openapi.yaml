@@ -18,10 +18,11 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/asset-views/{assetViewId}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -45,10 +46,11 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -87,6 +89,12 @@ components:
       description: An asset view ID.
       type: string
       example: syn23643253
+    AssetType:
+      description: A type of asset.
+      type: string
+      example: synapse
+      enum:
+        - synapse
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -238,6 +246,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetViewId'
+    assetType:
+      name: assetType
+      in: path
+      description: Type of asset, such as Synapse
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetType'
   responses:
     BadRequest:
       description: Invalid request
