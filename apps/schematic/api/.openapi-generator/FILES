@@ -5,6 +5,7 @@ schematic_api/controllers/security_controller_.py
 schematic_api/controllers/storage_controller.py
 schematic_api/encoder.py
 schematic_api/models/__init__.py
+schematic_api/models/asset_type.py
 schematic_api/models/base_model_.py
 schematic_api/models/basic_error.py
 schematic_api/models/dataset.py

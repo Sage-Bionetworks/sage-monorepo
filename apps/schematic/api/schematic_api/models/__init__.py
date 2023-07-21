@@ -3,6 +3,7 @@
 # flake8: noqa
 from __future__ import absolute_import
 # import models into model package
+from schematic_api.models.asset_type import AssetType
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.dataset import Dataset
 from schematic_api.models.datasets_page import DatasetsPage

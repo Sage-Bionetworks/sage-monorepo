@@ -81,28 +81,55 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
     return func
 
 
-def get_project_datasets(project_id: str) -> list[tuple[str, str]]:
+def get_asset_storage_class(asset_type: str) -> Callable:
+    """Returns the class associated with the asset type.
+
+    Args:
+        asset_type (str): An asset type, such as "synapse".
+
+    Raises:
+        ValueError: When the asset_type isn't in the asst_type dictionary
+
+    Returns:
+        Callable: A class that has
+        - access_token parameter
+        - getStorageDatasetsInProject method
+        - getProjectManifests method
+    """
+    asset_type_dict = {"synapse": SynapseStorage}
+    asset_type_object = asset_type_dict.get(asset_type)
+    if asset_type_object is None:
+        msg = f"{asset_type} is not an allowed value: [{list(asset_type_dict.keys())}]"
+        raise ValueError(msg)
+    return asset_type_object
+
+
+def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, str]]:
     """Gets a list of datasets from the project
 
     Args:
         project_id (str): The id for the project
+        asset_type (str): The type of asset, ie "synapse"
 
     Returns:
         list[tuple(str, str)]: A list of datasets in tuple form
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
     return store.getStorageDatasetsInProject(projectId=project_id)
 
 
 @handle_exceptions
 def list_storage_project_datasets(
-    project_id: str, asset_view_id: str
+    project_id: str, asset_view_id: str, asset_type: str
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
     """Attempts to get a list of datasets from a Synapse project
 
     Args:
-        project_id (str): A synapse id
+        project_id (str): The Id for the project to get datasets from
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
 
     Returns:
         tuple[Union[DatasetsPage, BasicError], int]: A tuple
@@ -111,7 +138,7 @@ def list_storage_project_datasets(
     """
 
     config_handler(asset_view=asset_view_id)
-    dataset_tuples = get_project_datasets(project_id)
+    dataset_tuples = get_project_datasets(project_id, asset_type)
     datasets = [Dataset(id=item[1][0], name=item[1][1]) for item in dataset_tuples]
 
     page = DatasetsPage(
@@ -130,30 +157,33 @@ def list_storage_project_datasets(
 
 
 def get_project_manifests(
-    project_id: str,
+    project_id: str, asset_type: str
 ) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
     """Gets a list of manifests from the project
 
     Args:
         project_id (str): The id for the project
+        asset_type (str): The type of asset, ie "synapse"
 
     Returns:
         list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]: A list of manifests
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
     return store.getProjectManifests(projectId=project_id)
 
 
 @handle_exceptions
 def list_storage_project_manifests(
-    project_id: str, asset_view_id: str
+    project_id: str, asset_view_id: str, asset_type: str
 ) -> tuple[Union[ManifestsPage, BasicError], int]:
     """Attempts to get a list of manifests from a Synapse project
 
     Args:
         project_id (str): A Synapse id
         asset_view_id (str): A Synapse id
+        asset_type (str): The type of asset, ie "synapse"
 
     Returns:
         tuple[Union[ManifestsPage, BasicError], int]: A tuple
@@ -162,7 +192,7 @@ def list_storage_project_manifests(
     """
     # load config
     config_handler(asset_view=asset_view_id)
-    project_manifests = get_project_manifests(project_id)
+    project_manifests = get_project_manifests(project_id, asset_type)
     manifests = [
         Manifest(
             name=item[1][1],

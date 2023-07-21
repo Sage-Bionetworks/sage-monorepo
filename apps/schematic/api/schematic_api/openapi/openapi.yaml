@@ -18,7 +18,7 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
-  /storages/asset-views/{assetViewId}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     get:
       description: Gets all datasets in folder under a given storage project that
         the current user has access to.
@@ -41,6 +41,14 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
         style: simple
       responses:
         "200":
@@ -85,7 +93,7 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /storages/asset-views/{assetViewId}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     get:
       description: Gets all manifests in a project folder that the current user has
         access to.
@@ -108,6 +116,14 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
         style: simple
       responses:
         "200":
@@ -173,6 +189,15 @@ components:
       schema:
         $ref: '#/components/schemas/AssetViewId'
       style: simple
+    assetType:
+      description: "Type of asset, such as Synapse"
+      explode: false
+      in: path
+      name: assetType
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetType'
+      style: simple
   responses:
     BadRequest:
       content:
@@ -206,6 +231,13 @@ components:
     AssetViewId:
       description: An asset view ID.
       example: syn23643253
+      type: string
+    AssetType:
+      description: A type of asset.
+      enum:
+      - synapse
+      example: synapse
+      title: AssetType
       type: string
     PageMetadata:
       description: The metadata of a page.
