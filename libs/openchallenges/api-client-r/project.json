@@ -9,7 +9,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "sudo apt update && sudo apt install -y libxml2-dev",
+          "sudo apt update && sudo apt install -y libxml2-dev libharfbuzz-dev libfribidi-dev libtiff5-dev",
           "wget -O openapi-generator-cli.jar https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/7.0.0-SNAPSHOT/openapi-generator-cli-7.0.0-20230720.164703-191.jar"
         ],
         "cwd": "libs/openchallenges/api-client-r"
@@ -30,6 +30,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "R -e 'lintr::lint_package()'",
+        "cwd": "libs/openchallenges/api-client-r"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "R -e 'devtools::test()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     }
