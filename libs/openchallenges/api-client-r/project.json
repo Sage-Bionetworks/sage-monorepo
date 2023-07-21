@@ -39,6 +39,18 @@
         "command": "R -e 'devtools::test()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "R CMD build .",
+          "R CMD check openapi_1.0.0.tar.gz --no-manual",
+          "R CMD INSTALL --preclean openapi_1.0.0.tar.gz"
+        ],
+        "cwd": "libs/openchallenges/api-client-r",
+        "parallel": false
+      }
     }
   },
   "tags": [],
