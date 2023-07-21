@@ -5,7 +5,7 @@
   "projectType": "library",
   "prefix": "openchallenges",
   "targets": {
-    "download-openapi-generator-snapshot": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "wget -O openapi-generator-cli.jar https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/7.0.0-SNAPSHOT/openapi-generator-cli-7.0.0-20230720.164703-191.jar",
