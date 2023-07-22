@@ -20,3 +20,6 @@
 ^git_push\.sh$
 ^openapi\.Rcheck$
 ^\.\.Rcheck$
+openapi-generator-cli.jar
+openapitools.json
+project.json
