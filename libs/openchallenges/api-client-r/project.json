@@ -29,14 +29,14 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "R -e 'lintr::lint_package()'",
+        "command": "Rscript -e 'lintr::lint_package()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "R -e 'devtools::test()'",
+        "command": "Rscript -e 'devtools::test()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
