@@ -10,13 +10,17 @@ import {
   Organization,
   OrganizationSort,
   ChallengeContributionRole,
+  OrganizationCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   FilterValue,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
-import { challengeContributionRolesFilter } from './org-search-filters';
+import {
+  challengeContributionRolesFilter,
+  organizationCategoriesFilter,
+} from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
 import {
   BehaviorSubject,
@@ -77,9 +81,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // checkbox filters
   contributionRolesFilter = challengeContributionRolesFilter;
+  categoriesFilter = organizationCategoriesFilter;
 
   // define selected filter values
   selectedContributionRoles!: ChallengeContributionRole[];
+  selectedCategories!: OrganizationCategory[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -98,7 +104,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       this.selectedContributionRoles = this.splitParam(
         params['contributionRoles']
       );
-
+      this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'];
       this.selectedPageSize = +params['pageSize'];
@@ -110,6 +116,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         sort: this.sortedBy || this.defaultSortedBy,
         searchTerms: this.searchedTerms,
         challengeContributionRoles: this.selectedContributionRoles,
+        categories: this.selectedCategories,
       };
 
       this.query.next(defaultQuery);
@@ -203,6 +210,15 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       queryParamsHandling: 'merge',
       queryParams: {
         contributionRoles: this.collapseParam(selected),
+      },
+    });
+  }
+
+  onCategoriesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        categories: this.collapseParam(selected),
       },
     });
   }

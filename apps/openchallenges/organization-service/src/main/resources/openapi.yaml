@@ -5,11 +5,11 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: OpenChallenges Organization REST API
   version: 1.0.0
   x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
 - url: http://localhost/v1
 tags:
@@ -60,13 +60,20 @@ paths:
       description: Returns the organization specified
       operationId: getOrganization
       parameters:
-      - description: The unique identifier of the organization.
+      - description: The id or login of the organization.
+        examples:
+          byString:
+            value: dream
+          byId:
+            value: "1"
         explode: false
         in: path
         name: org
         required: true
         schema:
-          $ref: '#/components/schemas/OrganizationLogin'
+          maxLength: 64
+          minLength: 1
+          type: string
         style: simple
       responses:
         "200":
@@ -106,13 +113,20 @@ components:
         $ref: '#/components/schemas/OrganizationSearchQuery'
       style: form
     org:
-      description: The unique identifier of the organization.
+      description: The id or login of the organization.
+      examples:
+        byString:
+          value: dream
+        byId:
+          value: "1"
       explode: false
       in: path
       name: org
       required: true
       schema:
-        $ref: '#/components/schemas/OrganizationLogin'
+        maxLength: 64
+        minLength: 1
+        type: string
       style: simple
   responses:
     BadRequest:
@@ -134,6 +148,12 @@ components:
             $ref: '#/components/schemas/BasicError'
       description: The specified resource was not found
   schemas:
+    OrganizationCategory:
+      description: The category of the organization.
+      enum:
+      - featured
+      example: featured
+      type: string
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
@@ -173,6 +193,11 @@ components:
           format: int32
           minimum: 1
           type: integer
+        categories:
+          description: The array of organization categories used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationCategory'
+          type: array
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the
             results.

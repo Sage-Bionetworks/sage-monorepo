@@ -33,7 +33,7 @@ public interface OrganizationApi {
   /**
    * GET /organizations/{org} : Get an organization Returns the organization specified
    *
-   * @param org The unique identifier of the organization. (required)
+   * @param org The id or login of the organization. (required)
    * @return An organization (status code 200) or The specified resource was not found (status code
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
@@ -81,11 +81,10 @@ public interface OrganizationApi {
       value = "/organizations/{org}",
       produces = {"application/json", "application/problem+json"})
   default ResponseEntity<OrganizationDto> getOrganization(
-      @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-          @Size(min = 2, max = 64)
+      @Size(min = 1, max = 64)
           @Parameter(
               name = "org",
-              description = "The unique identifier of the organization.",
+              description = "The id or login of the organization.",
               required = true)
           @PathVariable("org")
           String org) {

@@ -31,6 +31,7 @@ export class ChallengeHostListComponent implements OnInit {
     const query: OrganizationSearchQuery = {
       pageNumber: 0,
       pageSize: 4,
+      categories: ['featured'],
       searchTerms: '',
       sort: 'challenge_count',
     };

@@ -19,6 +19,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # TODO: Get this list programmatically
         image:
           - 'openchallenges-apex'
           - 'openchallenges-api-gateway'
@@ -42,10 +43,9 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
-          # Filter out any that have no current fix.
           ignore-unfixed: true
-          # Only include major issues.
-          severity: CRITICAL,HIGH
+          severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
           format: template
           template: '@/contrib/sarif.tpl'
           output: trivy-results-${{ matrix.image }}-edge.sarif
@@ -65,7 +65,6 @@ jobs:
           category: ${{ matrix.image }}:edge image
           wait-for-processing: true
 
-      # In case we need to analyse the uploaded files for some reason.
       - name: Detain results for debug if needed
         uses: actions/upload-artifact@v3
         with:
