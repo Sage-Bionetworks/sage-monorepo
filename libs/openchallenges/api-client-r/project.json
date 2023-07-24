@@ -5,11 +5,20 @@
   "projectType": "library",
   "prefix": "openchallenges",
   "targets": {
-    "prepare-r": {
+    "prepare-system": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "sudo apt update && sudo apt install -y libxml2-dev libharfbuzz-dev libfribidi-dev libtiff5-dev",
+          "sudo apt update && sudo apt install -y libxml2-dev libharfbuzz-dev libfribidi-dev libtiff5-dev"
+        ],
+        "cwd": "libs/openchallenges/api-client-r"
+      }
+    },
+    "prepare-r-proto": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "Rscript -e 'renv::restore()'",
           "wget -O openapi-generator-cli.jar https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/7.0.0-SNAPSHOT/openapi-generator-cli-7.0.0-20230720.164703-191.jar"
         ],
         "cwd": "libs/openchallenges/api-client-r"
@@ -26,21 +35,21 @@
         "parallel": false
       }
     },
-    "lint": {
+    "lint-proto": {
       "executor": "nx:run-commands",
       "options": {
         "command": "Rscript -e 'lintr::lint_package()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
-    "test": {
+    "test-proto": {
       "executor": "nx:run-commands",
       "options": {
         "command": "Rscript -e 'devtools::test()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
-    "build": {
+    "build-proto": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
