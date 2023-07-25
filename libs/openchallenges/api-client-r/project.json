@@ -5,16 +5,7 @@
   "projectType": "library",
   "prefix": "openchallenges",
   "targets": {
-    "prepare-system": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "sudo apt update && sudo apt install -y libxml2-dev libharfbuzz-dev libfribidi-dev libtiff5-dev"
-        ],
-        "cwd": "libs/openchallenges/api-client-r"
-      }
-    },
-    "prepare-r-proto": {
+    "prepare-r": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -35,21 +26,21 @@
         "parallel": false
       }
     },
-    "lint-proto": {
+    "lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "Rscript -e 'lintr::lint_package()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
-    "test-proto": {
+    "test": {
       "executor": "nx:run-commands",
       "options": {
         "command": "Rscript -e 'devtools::test()'",
         "cwd": "libs/openchallenges/api-client-r"
       }
     },
-    "build-proto": {
+    "build": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [

@@ -31,7 +31,6 @@ function workspace-install {
   # TODO: Find a more efficient way than looping through all the Java project to execute the same
   # task (download gradle), enough though caching already helps.
   nx run-many --target=prepare
-  nx run-many --target=prepare-system --parallel=1
   nx run-many --target=prepare-java --parallel=1
   nx run-many --target=prepare-python
   nx run-many --target=prepare-r
