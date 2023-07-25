@@ -12,3 +12,4 @@ from schematic_api.models.manifest import Manifest
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifests_page_all_of import ManifestsPageAllOf
 from schematic_api.models.page_metadata import PageMetadata
+from schematic_api.models.return_type import ReturnType

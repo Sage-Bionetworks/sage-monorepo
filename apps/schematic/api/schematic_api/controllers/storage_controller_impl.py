@@ -1,12 +1,12 @@
 """Implementation of all endpoints"""
 from typing import Optional, Union, Callable, Any
-from flask import request  # type: ignore
+import os
 
+from flask import request  # type: ignore
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
     SynapseAuthenticationError,
 )
-
 from schematic.store.synapse import SynapseStorage  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 from schematic import CONFIG  # type: ignore
@@ -102,6 +102,39 @@ def get_asset_storage_class(asset_type: str) -> Callable:
         msg = f"{asset_type} is not an allowed value: [{list(asset_type_dict.keys())}]"
         raise ValueError(msg)
     return asset_type_object
+
+
+def get_asset_view(asset_view_id: str, asset_type: str, return_type: str) -> Any:
+    """_summary_
+
+    Args:
+        asset_view_id (str): _description_
+        asset_type (str): _description_
+        return_type (str): _description_
+
+    Raises:
+        ValueError: _description_
+
+    Returns:
+        Any: _description_
+    """
+    config_handler(asset_view=asset_view_id)
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    file_view_table_df = store.getStorageFileviewTable()
+
+    if return_type == "json":
+        result = file_view_table_df.to_json()
+    elif return_type == "csv":
+        path = os.getcwd()
+        export_path = os.path.join(path, "tests/data/file_view_table.csv")
+        result = file_view_table_df.to_csv(export_path, index=False)
+    else:
+        raise ValueError(f"{return_type} must be one of ['json', 'csv']")
+
+    status = 200
+    return result, status
 
 
 def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, str]]:

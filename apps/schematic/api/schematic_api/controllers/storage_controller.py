@@ -8,8 +8,30 @@ from schematic_api.models.asset_type import AssetType  # noqa: E501
 from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 from schematic_api.models.manifests_page import ManifestsPage  # noqa: E501
+from schematic_api.models.return_type import ReturnType  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import storage_controller_impl
+
+
+def asset_view(asset_view_id, asset_type, return_type):  # noqa: E501
+    """Gets the asset view assocaited with the id in either json or csv file form.
+
+    Gets the asset view assocaited with the id in either json or csv file form. # noqa: E501
+
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param return_type: Type of return value, ie. \&quot;json\&quot;
+    :type return_type: dict | bytes
+
+    :rtype: Union[object, Tuple[object, int], Tuple[object, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    if connexion.request.is_json:
+        return_type = ReturnType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.asset_view(asset_view_id, asset_type, return_type)
 
 
 def list_storage_project_datasets(project_id, asset_view_id, asset_type):  # noqa: E501

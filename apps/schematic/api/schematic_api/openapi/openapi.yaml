@@ -18,6 +18,84 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /assetTypes/{assetType}/assetViews/{assetViewId}:
+    get:
+      description: Gets the asset view assocaited with the id in either json or csv
+        file form.
+      operationId: asset_view
+      parameters:
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: "Type of return value, ie. \"json\""
+        explode: true
+        in: query
+        name: returnType
+        required: true
+        schema:
+          $ref: '#/components/schemas/ReturnType'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+            application/csv:
+              schema:
+                $ref: '#/components/schemas/AssetViewCsv'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets the asset view assocaited with the id in either json or csv file
+        form.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     get:
       description: Gets all datasets in folder under a given storage project that
@@ -198,6 +276,15 @@ components:
       schema:
         $ref: '#/components/schemas/AssetType'
       style: simple
+    returnType:
+      description: "Type of return value, ie. \"json\""
+      explode: true
+      in: query
+      name: returnType
+      required: true
+      schema:
+        $ref: '#/components/schemas/ReturnType'
+      style: form
   responses:
     BadRequest:
       content:
@@ -383,6 +470,21 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    ReturnType:
+      default: json
+      description: A type of return value
+      enum:
+      - json
+      - csv
+      example: json
+      title: ReturnType
+      type: string
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
+    AssetViewCsv:
+      description: An asset view in csv format
+      type: string
     DatasetsPage_allOf:
       properties:
         datasets:
