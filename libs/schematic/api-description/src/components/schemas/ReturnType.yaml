@@ -1,0 +1,5 @@
+description: A type of return value
+type: string
+example: json
+enum: [json, csv]
+default: json

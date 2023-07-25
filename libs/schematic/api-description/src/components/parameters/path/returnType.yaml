@@ -1,0 +1,6 @@
+name: returnType
+in: query
+description: Type of return value, ie. "json"
+required: true
+schema:
+  $ref: ../../schemas/ReturnType.yaml

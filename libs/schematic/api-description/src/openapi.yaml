@@ -30,3 +30,6 @@ paths:
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/assetView.yaml

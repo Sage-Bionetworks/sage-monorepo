@@ -74,6 +74,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/returnType'
+    get:
+      tags:
+        - Storage
+      summary: Gets the asset view assocaited with the id in either json or csv file form.
+      description: Gets the asset view assocaited with the id in either json or csv file form.
+      operationId: assetView
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+            application/csv:
+              schema:
+                $ref: '#/components/schemas/AssetViewCsv'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -231,6 +262,20 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
+    ReturnType:
+      description: A type of return value
+      type: string
+      example: json
+      enum:
+        - json
+        - csv
+      default: json
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
+    AssetViewCsv:
+      description: An asset view in csv format
+      type: string
   parameters:
     projectId:
       name: projectId
@@ -253,6 +298,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    returnType:
+      name: returnType
+      in: query
+      description: Type of return value, ie. "json"
+      required: true
+      schema:
+        $ref: '#/components/schemas/ReturnType'
   responses:
     BadRequest:
       description: Invalid request
