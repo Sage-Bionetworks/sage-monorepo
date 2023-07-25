@@ -114,12 +114,12 @@ class TestManifests(BaseTestCase):
             assert len(manifests) == 2
             manifest = manifests[0]
             assert list(manifest.keys()) == [
-                    "componentName",
-                    "datasetId",
-                    "datasetName",
-                    "id",
-                    "name",
-                ]
+                "componentName",
+                "datasetId",
+                "datasetName",
+                "id",
+                "name",
+            ]
             assert manifest["name"] == "name1"
             assert manifest["id"] == "id1"
             assert manifest["componentName"] == "component1"
