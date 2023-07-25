@@ -15,10 +15,7 @@
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "poetry config virtualenvs.in-project true",
-          "poetry install"
-        ],
+        "command": "./prepare-python.sh",
         "cwd": "apps/schematic/notebook"
       }
     },

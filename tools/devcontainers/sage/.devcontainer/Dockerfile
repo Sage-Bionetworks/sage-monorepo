@@ -99,9 +99,6 @@ RUN groupadd docker \
   && curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
     && dpkg -i /tmp/trivy.deb \
     && rm -fr /tmp/trivy.deb \
-  # Increase the max number of file watchers
-  # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/856
-  && echo fs.inotify.max_user_watches=524288 | tee -a /etc/sysctl.conf \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
@@ -144,7 +141,8 @@ RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyen
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install \
-  3.10.0 \
+  3.9.2 \
+  3.10.6 \
   3.11.0
 
 CMD ["bash"]
