@@ -74,6 +74,36 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: listDatasetFiles
+      parameters:
+        - $ref: '#/components/parameters/useFullFilePath'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -231,6 +261,44 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    useFullFilePath:
+      description: Whether or not to return the full path of output, or just the basename.
+      type: boolean
+      default: false
+    File:
+      type: object
+      description: A file.
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: file.txt
+        id:
+          type: string
+          description: The ID of the file.
+          example: Syn1
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FilesPage:
+      type: object
+      description: A page of files.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            files:
+              description: A list of files.
+              type: array
+              items:
+                $ref: '#/components/schemas/File'
+          required:
+            - files
+      x-java-class-annotations:
+        - '@lombok.Builder'
   parameters:
     projectId:
       name: projectId
@@ -253,6 +321,20 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    datasetId:
+      name: datasetId
+      in: path
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    useFullFilePath:
+      name: useFullFilePath
+      in: query
+      description: Whether or not to return the full path of output, or just the basename.
+      required: false
+      schema:
+        $ref: '#/components/schemas/useFullFilePath'
   responses:
     BadRequest:
       description: Invalid request

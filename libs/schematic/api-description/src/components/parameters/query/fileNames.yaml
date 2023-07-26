@@ -1,0 +1,6 @@
+name: filesNames
+description: A list of file names used to filter the output.
+in: query
+required: false
+schema:
+  $ref: ../../schemas/fileNames.yaml

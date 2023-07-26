@@ -17,7 +17,8 @@
       "options": {
         "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
         "cwd": "libs/schematic/api-description"
-      }
+      },
+      "dependsOn": ["build"]
     },
     "format": {
       "executor": "nx:run-commands",
