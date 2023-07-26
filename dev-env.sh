@@ -27,11 +27,12 @@ function workspace-cd {
 export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
 function workspace-install {
-  yarn install --immutable
+  echo $0
+  # yarn install --immutable
   # TODO: Find a more efficient way than looping through all the Java project to execute the same
   # task (download gradle), enough though caching already helps.
-  nx run-many --target=prepare
-  nx run-many --target=prepare-java --parallel=1
+  # nx run-many --target=prepare
+  # nx run-many --target=prepare-java --parallel=1
   nx run-many --target=prepare-python
 }
 

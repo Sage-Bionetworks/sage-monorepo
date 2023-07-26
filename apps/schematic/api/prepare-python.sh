@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+echo $0
+
 pyenv install --skip-existing 3.10.0
 pyenv local 3.10.0
 poetry env use 3.10.0
