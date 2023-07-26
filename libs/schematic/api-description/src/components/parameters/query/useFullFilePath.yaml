@@ -3,4 +3,4 @@ in: query
 description: Whether or not to return the full path of output, or just the basename.
 required: false
 schema:
-  $ref: ../../schemas/useFullFilePath.yaml
+  $ref: ../../schemas/UseFullFilePath.yaml

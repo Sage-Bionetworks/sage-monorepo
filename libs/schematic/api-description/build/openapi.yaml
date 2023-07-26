@@ -271,7 +271,7 @@ components:
       type: array
       items:
         type: string
-    useFullFilePath:
+    UseFullFilePath:
       description: Whether or not to return the full path of output, or just the basename.
       type: boolean
       default: false
@@ -335,7 +335,7 @@ components:
       schema:
         $ref: '#/components/schemas/DatasetId'
     fileNames:
-      name: filesNames
+      name: fileNames
       description: A list of file names used to filter the output.
       in: query
       required: false
@@ -347,7 +347,7 @@ components:
       description: Whether or not to return the full path of output, or just the basename.
       required: false
       schema:
-        $ref: '#/components/schemas/useFullFilePath'
+        $ref: '#/components/schemas/UseFullFilePath'
   responses:
     BadRequest:
       description: Invalid request

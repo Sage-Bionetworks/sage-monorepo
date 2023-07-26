@@ -14,7 +14,7 @@ from schematic_api.controllers import storage_controller_impl
 
 
 def list_dataset_files(
-    dataset_id, asset_view_id, asset_type, use_full_file_path=None
+    dataset_id, asset_view_id, asset_type, file_names=None, use_full_file_path=None
 ):  # noqa: E501
     """Gets all files associated with a dataset.
 
@@ -26,6 +26,8 @@ def list_dataset_files(
     :type asset_view_id: str
     :param asset_type: Type of asset, such as Synapse
     :type asset_type: dict | bytes
+    :param file_names: A list of file names used to filter the output.
+    :type file_names: List[str]
     :param use_full_file_path: Whether or not to return the full path of output, or just the basename.
     :type use_full_file_path: bool
 
@@ -34,7 +36,7 @@ def list_dataset_files(
     if connexion.request.is_json:
         asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
     return storage_controller_impl.list_dataset_files(
-        dataset_id, asset_view_id, asset_type, use_full_file_path=None
+        dataset_id, asset_view_id, asset_type, file_names=None, use_full_file_path=None
     )
 
 

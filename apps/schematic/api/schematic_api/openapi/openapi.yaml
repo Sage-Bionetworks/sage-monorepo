@@ -49,6 +49,14 @@ paths:
         schema:
           $ref: '#/components/schemas/AssetType'
         style: simple
+      - description: A list of file names used to filter the output.
+        explode: true
+        in: query
+        name: fileNames
+        required: false
+        schema:
+          $ref: '#/components/schemas/fileNames'
+        style: form
       - description: "Whether or not to return the full path of output, or just the\
           \ basename."
         explode: true
@@ -56,7 +64,7 @@ paths:
         name: useFullFilePath
         required: false
         schema:
-          $ref: '#/components/schemas/useFullFilePath'
+          $ref: '#/components/schemas/UseFullFilePath'
         style: form
       responses:
         "200":
@@ -289,6 +297,15 @@ components:
       schema:
         $ref: '#/components/schemas/DatasetId'
       style: simple
+    fileNames:
+      description: A list of file names used to filter the output.
+      explode: true
+      in: query
+      name: fileNames
+      required: false
+      schema:
+        $ref: '#/components/schemas/fileNames'
+      style: form
     useFullFilePath:
       description: "Whether or not to return the full path of output, or just the\
         \ basename."
@@ -297,7 +314,7 @@ components:
       name: useFullFilePath
       required: false
       schema:
-        $ref: '#/components/schemas/useFullFilePath'
+        $ref: '#/components/schemas/UseFullFilePath'
       style: form
   responses:
     BadRequest:
@@ -488,7 +505,12 @@ components:
       description: A dataset ID.
       example: syn23643250
       type: string
-    useFullFilePath:
+    fileNames:
+      description: A list of file names.
+      items:
+        type: string
+      type: array
+    UseFullFilePath:
       default: false
       description: "Whether or not to return the full path of output, or just the\
         \ basename."
