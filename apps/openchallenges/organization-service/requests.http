@@ -36,6 +36,10 @@ GET {{basePath}}/organizations?sort=name
 
 GET {{basePath}}/organizations?sort=challenge_count&pageSize=5
 
-### Get an organization by ID
+### Get an organization by login
 
 GET {{basePath}}/organizations/dream
+
+### Get an organization by ID
+
+GET {{basePath}}/organizations/1
