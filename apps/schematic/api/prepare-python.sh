@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
 
-pyenv install --skip-existing 3.10.0
+PYTHON_VERSION="3.10.0"
 
-echo "INIT"
+pyenv install --skip-existing $PYTHON_VERSION
+
+# Initializing pyenv again solves an issue encountered by GitHub action where the version of Python
+# installed above is not detected.
 eval "$(pyenv init -)"
-# eval "$(pyenv virtualenv-init -)"
 
-echo "pyenv local"
-pyenv local 3.10.0
 
-echo "poetry env use"
-poetry env use 3.10.0
-
+pyenv local $PYTHON_VERSION
+poetry env use $PYTHON_VERSION
 poetry run pip install "cython<3.0.0"
 poetry run pip install --no-build-isolation pyyaml==5.4.1
 poetry install --with prod,dev
