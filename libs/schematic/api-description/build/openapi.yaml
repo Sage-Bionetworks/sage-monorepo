@@ -86,6 +86,7 @@ paths:
       description: Gets all files associated with a dataset.
       operationId: listDatasetFiles
       parameters:
+        - $ref: '#/components/parameters/fileNames'
         - $ref: '#/components/parameters/useFullFilePath'
       responses:
         '200':
@@ -265,6 +266,11 @@ components:
       description: A dataset ID.
       type: string
       example: syn23643250
+    fileNames:
+      description: A list of file names.
+      type: array
+      items:
+        type: string
     useFullFilePath:
       description: Whether or not to return the full path of output, or just the basename.
       type: boolean
@@ -328,6 +334,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/DatasetId'
+    fileNames:
+      name: filesNames
+      description: A list of file names used to filter the output.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/fileNames'
     useFullFilePath:
       name: useFullFilePath
       in: query

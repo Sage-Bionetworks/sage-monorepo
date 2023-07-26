@@ -9,7 +9,7 @@ get:
   description: Gets all files associated with a dataset.
   operationId: listDatasetFiles
   parameters:
-    #  - $ref: ../../../../../../../components/parameters/query/fileNames.yaml
+    - $ref: ../../../../../../../components/parameters/query/fileNames.yaml
     - $ref: ../../../../../../../components/parameters/query/useFullFilePath.yaml
   responses:
     '200':
