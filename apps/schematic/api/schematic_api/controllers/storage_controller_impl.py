@@ -107,10 +107,10 @@ def get_asset_storage_class(asset_type: str) -> Callable:
 
 
 def get_dataset_files(
-        dataset_id: str,
-        asset_type: str,
-        file_names: Optional[list[str]],
-        use_full_file_path: bool
+    dataset_id: str,
+    asset_type: str,
+    file_names: Optional[list[str]],
+    use_full_file_path: bool,
 ) -> list[tuple[str, str]]:
     """Gets a list of datasets from the project
 
@@ -125,9 +125,7 @@ def get_dataset_files(
     asset_type_object = get_asset_storage_class(asset_type)
     store = asset_type_object(access_token=access_token)
     return store.store.getFilesInStorageDataset(
-        datasetId=dataset_id,
-        fileNames=file_names,
-        fullpath=use_full_file_path
+        datasetId=dataset_id, fileNames=file_names, fullpath=use_full_file_path
     )
 
 
@@ -138,7 +136,7 @@ def list_dataset_files(
     asset_type: str,
     file_names: Optional[list[str]] = None,
     use_full_file_path: bool = False,
-) -> tuple[Union[DatasetsPage, BasicError], int]:
+) -> tuple[Union[FilesPage, BasicError], int]:
     """Attempts to get a list of files associated with a dataset
 
     Args:
@@ -146,15 +144,18 @@ def list_dataset_files(
         asset_view_id (str): The id for the asset view of the project
         asset_type (str): The type of asset, ie "synapse"
         file_names (Optional[list[str]]): An optional list of file names to filter the output by
+        use_full_file_path: Whether or not to return the full file path of each file
 
     Returns:
-        tuple[Union[DatasetsPage, BasicError], int]: A tuple
+        tuple[Union[FilesPage, BasicError], int]: A tuple
           The first item is either the datasets or an error object
           The second item is the response status
     """
 
     config_handler(asset_view=asset_view_id)
-    file_tuples = get_dataset_files(dataset_id, asset_type, file_names, use_full_file_path)
+    file_tuples = get_dataset_files(
+        dataset_id, asset_type, file_names, use_full_file_path
+    )
     files = [File(id=item[0], name=item[1]) for item in file_tuples]
 
     page = FilesPage(
@@ -164,9 +165,9 @@ def list_dataset_files(
         total_pages=1,
         has_next=False,
         has_previous=False,
-        datasets=files,
+        files=files,
     )
-    result: Union[DatasetsPage, BasicError] = page
+    result: Union[FilesPage, BasicError] = page
     status = 200
 
     return result, status
