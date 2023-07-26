@@ -109,8 +109,8 @@ INSERT INTO challenge (
     doi,
     start_date,
     end_date,
-    createdAt,
-    updatedAt
+    created_at,
+    updated_at
   )
 VALUES (
     '1',
