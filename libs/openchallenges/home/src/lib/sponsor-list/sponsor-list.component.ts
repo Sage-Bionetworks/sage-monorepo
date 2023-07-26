@@ -24,10 +24,6 @@ export class SponsorListComponent implements OnInit {
       objectKey: 'logo/nci-itcr.png',
       height: this.height,
     });
-    this.aws$ = this.imageService.getImage({
-      objectKey: 'logo/aws.svg',
-      height: this.height,
-    });
     this.sage$ = this.imageService.getImage({
       objectKey: 'logo/sage-bionetworks.png',
       height: this.height,
