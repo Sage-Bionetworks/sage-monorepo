@@ -172,7 +172,7 @@ def list_storage_project_datasets(
 
     config_handler(asset_view=asset_view_id)
     dataset_tuples = get_project_datasets(project_id, asset_type)
-    datasets = [Dataset(id=item[1][0], name=item[1][1]) for item in dataset_tuples]
+    datasets = [Dataset(id=item[0], name=item[1]) for item in dataset_tuples]
 
     page = DatasetsPage(
         number=0,

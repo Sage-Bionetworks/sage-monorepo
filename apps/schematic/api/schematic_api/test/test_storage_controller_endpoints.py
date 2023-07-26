@@ -45,8 +45,10 @@ class TestDatasets(BaseTestCase):
             assert response.json["totalPages"] == 1
             datasets = response.json["datasets"]
             assert len(datasets) == 2
-            for dataset in datasets:
-                assert list(dataset.keys()) == ["id", "name"]
+            dataset = datasets[0]
+            assert list(dataset.keys()) == ["id", "name"]
+            assert dataset["name"] == "name1"
+            assert dataset["id"] == "id1"
 
     def test_401(self) -> None:
         """Test for 401 result"""
@@ -110,14 +112,19 @@ class TestManifests(BaseTestCase):
             assert response.json["totalPages"] == 1
             manifests = response.json["manifests"]
             assert len(manifests) == 2
-            for manifest in manifests:
-                assert list(manifest.keys()) == [
-                    "componentName",
-                    "datasetId",
-                    "datasetName",
-                    "id",
-                    "name",
-                ]
+            manifest = manifests[0]
+            assert list(manifest.keys()) == [
+                "componentName",
+                "datasetId",
+                "datasetName",
+                "id",
+                "name",
+            ]
+            assert manifest["name"] == "name1"
+            assert manifest["id"] == "id1"
+            assert manifest["componentName"] == "component1"
+            assert manifest["datasetId"] == "dataset_id1"
+            assert manifest["datasetName"] == "dataset_name1"
 
     def test_401(self) -> None:
         """Test for 401 result"""
