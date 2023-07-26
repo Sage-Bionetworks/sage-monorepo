@@ -113,7 +113,7 @@ INSERT INTO challenge (
     updated_at
   )
 VALUES (
-    '1',
+    1,
     'network-topology-and-parameter-inference',
     'Network Topology and Parameter Inference',
     '',
@@ -127,10 +127,10 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:09'
+    '2023-07-26 19:47:10'
   ),
   (
-    '2',
+    2,
     'breast-cancer-prognosis',
     'Breast Cancer Prognosis',
     '',
@@ -143,10 +143,10 @@ VALUES (
     '2012-07-12',
     '2012-10-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:11'
+    '2023-07-26 19:47:13'
   ),
   (
-    '3',
+    3,
     'phil-bowen-als-prediction-prize4life',
     'Phil Bowen ALS Prediction Prize4Life',
     '',
@@ -159,10 +159,10 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:23'
+    '2023-07-26 19:47:15'
   ),
   (
-    '4',
+    4,
     'drug-sensitivity-and-drug-synergy-prediction',
     'Drug Sensitivity and Drug Synergy Prediction',
     '',
@@ -175,10 +175,10 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:33'
+    '2023-07-26 19:47:17'
   ),
   (
-    '5',
+    5,
     'niehs-ncats-unc-toxicogenetics',
     'NIEHS-NCATS-UNC Toxicogenetics',
     '',
@@ -191,10 +191,10 @@ VALUES (
     '2013-06-10',
     '2013-09-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:36'
+    '2023-07-26 19:47:19'
   ),
   (
-    '6',
+    6,
     'whole-cell-parameter-estimation',
     'Whole-Cell Parameter Estimation',
     '',
@@ -207,10 +207,10 @@ VALUES (
     '2013-06-10',
     '2013-09-23',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:37'
+    '2023-07-26 19:47:21'
   ),
   (
-    '7',
+    7,
     'hpn-dream-breast-cancer-network-inference',
     'HPN-DREAM Breast Cancer Network Inference',
     '',
@@ -223,10 +223,10 @@ VALUES (
     '2013-06-10',
     '2013-09-16',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:38'
+    '2023-07-26 19:47:22'
   ),
   (
-    '8',
+    8,
     'rheumatoid-arthritis-responder',
     'Rheumatoid Arthritis Responder',
     '',
@@ -239,10 +239,10 @@ VALUES (
     '2014-02-10',
     '2014-06-04',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:39'
+    '2023-07-26 19:47:24'
   ),
   (
-    '9',
+    9,
     'smc-dna',
     'SMC-DNA',
     '',
@@ -255,10 +255,10 @@ VALUES (
     '2013-12-14',
     '2016-04-22',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:40'
+    '2023-07-26 19:47:26'
   ),
   (
-    '10',
+    10,
     'acute-myeloid-leukemia-outcome-prediction',
     'Acute Myeloid Leukemia Outcome Prediction',
     '',
@@ -271,10 +271,10 @@ VALUES (
     '2014-06-02',
     '2014-09-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:41'
+    '2023-07-26 19:47:28'
   ),
   (
-    '11',
+    11,
     'broad-dream-gene-essentiality-prediction',
     'Broad-DREAM Gene Essentiality Prediction',
     '',
@@ -287,10 +287,10 @@ VALUES (
     '2014-06-02',
     '2014-09-29',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:43'
+    '2023-07-26 19:47:33'
   ),
   (
-    '12',
+    12,
     'alzheimers-disease-big-data',
     'Alzheimer''s Disease Big Data',
     '',
@@ -303,10 +303,10 @@ VALUES (
     '2014-06-02',
     '2014-10-17',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:42'
+    '2023-07-26 19:47:34'
   ),
   (
-    '13',
+    13,
     'olfaction-prediction',
     'Olfaction Prediction',
     '',
@@ -319,10 +319,10 @@ VALUES (
     '2015-01-15',
     '2015-05-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:43'
+    '2023-07-26 19:47:36'
   ),
   (
-    '14',
+    14,
     'prostate-cancer',
     'Prostate Cancer',
     '',
@@ -335,10 +335,10 @@ VALUES (
     '2015-03-16',
     '2015-07-27',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:48'
+    '2023-07-26 19:47:38'
   ),
   (
-    '15',
+    15,
     'als-stratification-prize4life',
     'ALS Stratification Prize4Life',
     '',
@@ -351,10 +351,10 @@ VALUES (
     '2015-06-22',
     '2015-10-04',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:43'
+    '2023-07-26 19:47:40'
   ),
   (
-    '16',
+    16,
     'astrazeneca-sanger-drug-combination-prediction',
     'AstraZeneca-Sanger Drug Combination Prediction',
     '',
@@ -367,10 +367,10 @@ VALUES (
     '2015-09-03',
     '2016-03-14',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:44'
+    '2023-07-26 19:47:41'
   ),
   (
-    '17',
+    17,
     'smc-dna-meta',
     'SMC-DNA Meta',
     '',
@@ -383,10 +383,10 @@ VALUES (
     '2015-08-17',
     '2016-04-10',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:50'
+    '2023-07-26 19:47:43'
   ),
   (
-    '18',
+    18,
     'smc-het',
     'SMC-Het',
     '',
@@ -399,10 +399,10 @@ VALUES (
     '2015-11-16',
     '2016-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:51'
+    '2023-07-26 19:47:45'
   ),
   (
-    '19',
+    19,
     'respiratory-viral',
     'Respiratory Viral',
     '',
@@ -415,10 +415,10 @@ VALUES (
     '2016-05-16',
     '2016-09-28',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:53'
+    '2023-07-26 19:47:46'
   ),
   (
-    '20',
+    20,
     'disease-module-identification',
     'Disease Module Identification',
     '',
@@ -431,10 +431,10 @@ VALUES (
     '2016-06-24',
     '2016-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:54'
+    '2023-07-26 19:48:43'
   ),
   (
-    '21',
+    21,
     'encode',
     'ENCODE',
     '',
@@ -447,10 +447,10 @@ VALUES (
     '2016-07-07',
     '2017-01-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:55'
+    '2023-07-26 19:48:44'
   ),
   (
-    '22',
+    22,
     'idea',
     'Idea',
     '',
@@ -463,10 +463,10 @@ VALUES (
     '2016-06-15',
     '2017-04-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:55'
+    '2023-07-26 19:48:45'
   ),
   (
-    '23',
+    23,
     'smc-rna',
     'SMC-RNA',
     '',
@@ -479,10 +479,10 @@ VALUES (
     '2016-06-29',
     '2017-05-02',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:56'
+    '2023-07-26 19:48:46'
   ),
   (
-    '24',
+    24,
     'digital-mammography',
     'Digital Mammography',
     '',
@@ -495,10 +495,10 @@ VALUES (
     '2016-11-18',
     '2017-05-16',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:57'
+    '2023-07-26 19:48:48'
   ),
   (
-    '25',
+    25,
     'multiple-myeloma',
     'Multiple Myeloma',
     '',
@@ -511,10 +511,10 @@ VALUES (
     '2017-06-30',
     '2017-11-08',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:23:57'
+    '2023-07-26 19:48:48'
   ),
   (
-    '26',
+    26,
     'ga4gh-dream-workflow-execution',
     'GA4GH-DREAM Workflow Execution',
     '',
@@ -527,10 +527,10 @@ VALUES (
     '2017-07-21',
     '2017-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:03'
+    '2023-07-26 19:48:51'
   ),
   (
-    '27',
+    27,
     'parkinsons-disease-digital-biomarker',
     'Parkinson''s Disease Digital Biomarker',
     '',
@@ -543,10 +543,10 @@ VALUES (
     '2017-07-06',
     '2017-11-10',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:03'
+    '2023-07-26 19:48:52'
   ),
   (
-    '28',
+    28,
     'nci-cptac-proteogenomics',
     'NCI-CPTAC Proteogenomics',
     '',
@@ -559,10 +559,10 @@ VALUES (
     '2017-06-26',
     '2017-11-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:04'
+    '2023-07-26 19:48:52'
   ),
   (
-    '29',
+    29,
     'multi-targeting-drug',
     'Multi-Targeting Drug',
     '',
@@ -575,10 +575,10 @@ VALUES (
     '2017-10-05',
     '2018-02-26',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:05'
+    '2023-07-26 19:48:53'
   ),
   (
-    '30',
+    30,
     'single-cell-transcriptomics',
     'Single Cell Transcriptomics',
     '',
@@ -591,10 +591,10 @@ VALUES (
     '2018-09-04',
     '2018-11-21',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:07'
+    '2023-07-26 19:48:54'
   ),
   (
-    '31',
+    31,
     'idg-drug-kinase-binding',
     'IDG Drug-Kinase Binding',
     '',
@@ -607,10 +607,10 @@ VALUES (
     '2018-10-01',
     '2019-04-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:08'
+    '2023-07-26 19:48:57'
   ),
   (
-    '32',
+    32,
     'malaria',
     'Malaria',
     '',
@@ -623,10 +623,10 @@ VALUES (
     '2019-04-30',
     '2019-08-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:08'
+    '2023-07-26 19:48:58'
   ),
   (
-    '33',
+    33,
     'preterm-birth-prediction-transcriptomics',
     'Preterm Birth Prediction - Transcriptomics',
     '',
@@ -639,10 +639,10 @@ VALUES (
     '2019-05-04',
     '2019-12-05',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:09'
+    '2023-07-26 19:48:58'
   ),
   (
-    '34',
+    34,
     'single-cell-signaling-in-breast-cancer',
     'Single-Cell Signaling in Breast Cancer',
     '',
@@ -655,10 +655,10 @@ VALUES (
     '2018-08-20',
     '2019-11-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:14'
+    '2023-07-26 19:48:59'
   ),
   (
-    '35',
+    35,
     'ehr-mortality-prediction',
     'EHR Mortality Prediction',
     '',
@@ -671,14 +671,15 @@ VALUES (
     '2019-09-09',
     '2020-01-23',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:14'
+    '2023-07-26 19:49:00'
   ),
   (
-    '36',
+    36,
     'allen-institute-cell-lineage-reconstruction',
     'Allen Institute Cell Lineage Reconstruction',
     '',
-    'The recent advent of new CRISPR-based molecular tools allows the reconstruction of cell lineages based on the phylogenetical analysis of DNA mutations induced by CRISPR during development and promises to solve the lineage of complex model organisms at single-cell resolution. To date, however, no lineage reconstruction algorithms have been rigorously examined for their performance/robustness across diverse molecular tools, datasets, and number of cells/size of lineage trees. It also remains unclear whether new Machine-Learning algorithms that go beyond the classical ones developed for reconstructing phylogenetic trees, could consistently reconstruct cell lineages to a high degree of accuracy. The challenge - a partnership between The Allen Institute and DREAM - will comprise 3 subchallenges that consist of reconstructing cell lineage trees of different sizes and nature. In subchallenge 1, participants will be given experimental molecular data to reconstruct in vitro cell lineages ...',
+    'The recent advent of new CRISPR-based molecular tools allows the reconstruction of cell lineages based on the phylogenetical analysis of DNA mutations induced by CRISPR during development and promises to solve the lineage of complex model organisms at single-cell resolution.
+ To date, however, no lineage reconstruction algorithms have been rigorously examined for their performance/robustness across diverse molecular tools, datasets, and number of cells/size of lineage trees. It also remains unclear whether new Machine-Learning algorithms that go beyond the classical ones developed for reconstructing phylogenetic trees, could consistently reconstruct cell lineages to a high degree of accuracy. The challenge - a partnership between The Allen Institute and DREAM - will comprise 3 subchallenges that consist of reconstructing cell lineage trees of different sizes and nature. In subchallenge 1, participants will be given experimental molecular data to reconstruct in vitro cell lineages ...',
     'https://www.synapse.org/#!Synapse:syn20692755',
     'completed',
     'intermediate',
@@ -687,10 +688,10 @@ VALUES (
     '2019-10-15',
     '2020-02-06',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:15'
+    '2023-07-26 19:49:01'
   ),
   (
-    '37',
+    37,
     'tumor-deconvolution',
     'Tumor Deconvolution',
     '',
@@ -703,10 +704,10 @@ VALUES (
     '2019-06-26',
     '2020-04-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:15'
+    '2023-07-26 19:49:01'
   ),
   (
-    '38',
+    38,
     'ctd2-pancancer-drug-activity',
     'CTD2 Pancancer Drug Activity',
     '',
@@ -719,10 +720,10 @@ VALUES (
     '2019-12-02',
     '2020-02-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:16'
+    '2023-07-26 19:49:04'
   ),
   (
-    '39',
+    39,
     'ctd2-beataml',
     'CTD2 BeatAML',
     '',
@@ -735,10 +736,10 @@ VALUES (
     '2019-12-19',
     '2020-04-28',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:17'
+    '2023-07-26 19:49:04'
   ),
   (
-    '40',
+    40,
     'metadata-automation',
     'Metadata Automation',
     '',
@@ -751,10 +752,10 @@ VALUES (
     '2020-01-14',
     '2020-06-02',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:19'
+    '2023-07-26 19:49:05'
   ),
   (
-    '41',
+    41,
     'automated-scoring-of-radiographic-joint-damage',
     'Automated Scoring of Radiographic Joint Damage',
     '',
@@ -767,10 +768,10 @@ VALUES (
     '2019-11-04',
     '2020-05-21',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:20'
+    '2023-07-26 19:49:08'
   ),
   (
-    '42',
+    42,
     'beat-pd',
     'BEAT-PD',
     '',
@@ -783,10 +784,10 @@ VALUES (
     '2020-01-13',
     '2020-05-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:21'
+    '2023-07-26 19:49:09'
   ),
   (
-    '43',
+    43,
     'ctd2-pancancer-chemosensitivity',
     'CTD2 Pancancer Chemosensitivity',
     '',
@@ -799,10 +800,10 @@ VALUES (
     '2020-04-28',
     '2020-07-27',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:22'
+    '2023-07-26 19:49:10'
   ),
   (
-    '44',
+    44,
     'ehr-covid-19',
     'EHR COVID-19',
     '',
@@ -815,10 +816,10 @@ VALUES (
     '2020-04-30',
     '2021-07-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:23'
+    '2023-07-26 19:49:11'
   ),
   (
-    '45',
+    45,
     'anti-pd1-response-prediction',
     'Anti-PD1 Response Prediction',
     '',
@@ -831,10 +832,10 @@ VALUES (
     '2020-11-17',
     '2021-02-25',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:24'
+    '2023-07-26 19:49:12'
   ),
   (
-    '46',
+    46,
     'brats-2021-challenge',
     'BraTS 2021 Challenge',
     '',
@@ -847,10 +848,10 @@ VALUES (
     '2021-07-07',
     '2021-10-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:25'
+    '2023-07-26 19:49:17'
   ),
   (
-    '47',
+    47,
     'cancer-data-registry-nlp',
     'Cancer Data Registry NLP',
     '',
@@ -863,10 +864,10 @@ VALUES (
     NULL,
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:26'
+    '2023-07-26 19:49:19'
   ),
   (
-    '48',
+    48,
     'barda-community-challenge-pediatric-covid-19-data-challenge',
     'BARDA Community Challenge - Pediatric COVID-19 Data Challenge',
     '',
@@ -879,10 +880,10 @@ VALUES (
     '2021-08-19',
     '2021-12-17',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:27'
+    '2023-07-26 19:49:20'
   ),
   (
-    '49',
+    49,
     'brats-continuous-evaluation',
     'BraTS Continuous Evaluation',
     '',
@@ -895,10 +896,10 @@ VALUES (
     '2022-01-01',
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:28'
+    '2023-07-26 19:49:21'
   ),
   (
-    '50',
+    50,
     'fets-2022',
     'FeTS 2022',
     '',
@@ -912,10 +913,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-04-08',
     '2022-08-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:29'
+    '2023-07-26 19:49:22'
   ),
   (
-    '51',
+    51,
     'random-promotor',
     'Random Promotor',
     '',
@@ -928,10 +929,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-05-02',
     '2022-08-07',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:30'
+    '2023-07-26 19:49:22'
   ),
   (
-    '52',
+    52,
     'preterm-birth-prediction-microbiome',
     'Preterm Birth Prediction - Microbiome',
     '',
@@ -944,10 +945,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-07-19',
     '2022-09-16',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:31'
+    '2023-07-26 19:49:23'
   ),
   (
-    '53',
+    53,
     'finrisk',
     'FINRISK - Heart Failure and Microbiome',
     '',
@@ -960,10 +961,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-09-20',
     '2023-01-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:32'
+    '2023-07-26 19:51:19'
   ),
   (
-    '54',
+    54,
     'scrna-seq-and-scatac-seq-data-analysis',
     'scRNA-seq and scATAC-seq Data Analysis',
     '',
@@ -976,10 +977,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-11-29',
     '2023-02-08',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:33'
+    '2023-07-26 19:49:24'
   ),
   (
-    '55',
+    55,
     'cough-diagnostic-algorithm-for-tuberculosis',
     'COugh Diagnostic Algorithm for Tuberculosis',
     '',
@@ -992,10 +993,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-10-16',
     '2023-02-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:34'
+    '2023-07-26 19:49:25'
   ),
   (
-    '56',
+    56,
     'nih-long-covid-computational-challenge',
     'NIH Long COVID Computational Challenge',
     '',
@@ -1008,10 +1009,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-08-25',
     '2022-12-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:35'
+    '2023-07-26 19:49:26'
   ),
   (
-    '57',
+    57,
     'bridge2ai',
     'Bridge2AI',
     'What makes a good color palette?',
@@ -1024,10 +1025,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:37'
+    '2023-07-26 19:49:28'
   ),
   (
-    '58',
+    58,
     'rare-x-open-data-science',
     'RARE-X Open Data Science',
     '',
@@ -1040,10 +1041,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2023-05-17',
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:37'
+    '2023-07-26 19:49:30'
   ),
   (
-    '59',
+    59,
     'cagi5-regulation-saturation',
     'CAGI5: Regulation saturation',
     '',
@@ -1056,10 +1057,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-01-04',
     '2018-05-03',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:39'
+    '2023-07-26 19:49:31'
   ),
   (
-    '60',
+    60,
     'cagi5-calm1',
     'CAGI5: CALM1',
     '',
@@ -1072,10 +1073,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-10-21',
     '2017-12-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:40'
+    '2023-07-26 19:49:33'
   ),
   (
-    '61',
+    61,
     'cagi5-pcm1',
     'CAGI5: PCM1',
     '',
@@ -1088,10 +1089,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-09',
     '2018-04-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:41'
+    '2023-07-26 19:49:36'
   ),
   (
-    '62',
+    62,
     'cagi5-frataxin',
     'CAGI5: Frataxin',
     '',
@@ -1104,10 +1105,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-30',
     '2018-04-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:43'
+    '2023-07-26 19:49:36'
   ),
   (
-    '63',
+    63,
     'cagi5-tpmt-and-p10',
     'CAGI5: TPMT and p10',
     '',
@@ -1120,10 +1121,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-30',
     '2017-12-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:44'
+    '2023-07-26 19:49:37'
   ),
   (
-    '64',
+    64,
     'cagi5-annotate-all-nonsynonymous-variants',
     'CAGI5: Annotate all nonsynonymous variants',
     '',
@@ -1136,10 +1137,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-30',
     '2018-05-09',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:45'
+    '2023-07-26 19:49:38'
   ),
   (
-    '65',
+    65,
     'cagi5-gaa',
     'CAGI5: GAA',
     '',
@@ -1152,10 +1153,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-09',
     '2018-04-25',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:24:46'
+    '2023-07-26 19:49:39'
   ),
   (
-    '66',
+    66,
     'cagi5-chek2',
     'CAGI5: CHEK2',
     '',
@@ -1168,10 +1169,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-12-20',
     '2018-04-24',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:22'
+    '2023-07-26 19:49:40'
   ),
   (
-    '67',
+    67,
     'cagi5-enigma',
     'CAGI5: ENIGMA',
     '',
@@ -1184,10 +1185,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-12-20',
     '2018-05-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:25'
+    '2023-07-26 19:49:42'
   ),
   (
-    '68',
+    68,
     'cagi5-mapsy',
     'CAGI5: MaPSy',
     '',
@@ -1200,10 +1201,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-29',
     '2018-05-07',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:25'
+    '2023-07-26 19:49:42'
   ),
   (
-    '69',
+    69,
     'cagi5-vex-seq',
     'CAGI5: Vex-seq',
     '',
@@ -1216,10 +1217,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-12-14',
     '2018-05-02',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:25'
+    '2023-07-26 19:49:43'
   ),
   (
-    '70',
+    70,
     'cagi5-sickkids-clinical-genomes',
     'CAGI5: SickKids clinical genomes',
     '',
@@ -1232,10 +1233,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-12-22',
     '2018-04-26',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:57'
+    '2023-07-26 19:49:43'
   ),
   (
-    '71',
+    71,
     'cagi5-id-panel',
     'CAGI5: ID Panel',
     '',
@@ -1248,10 +1249,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-12-22',
     '2018-04-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:58'
+    '2023-07-26 19:49:44'
   ),
   (
-    '72',
+    72,
     'cagi5-clotting-disease-exomes',
     'CAGI5: Clotting disease exomes',
     '',
@@ -1264,10 +1265,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-11-23',
     '2018-04-28',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '73',
+    73,
     'cagi6-rare-genomes-project',
     'CAGI6: Rare Genomes Project',
     '',
@@ -1280,10 +1281,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '74',
+    74,
     'cagi6-intellectual-disability-panel',
     'CAGI6: Intellectual Disability Panel',
     '',
@@ -1296,10 +1297,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '75',
+    75,
     'cagi6-sickkids-clinical-genomes-and-transcriptomes',
     'CAGI6: SickKids clinical genomes and transcriptomes',
     '',
@@ -1312,10 +1313,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-08-04',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '76',
+    76,
     'cagi6-polygenic-risk-scores',
     'CAGI6: Polygenic Risk Scores',
     '',
@@ -1328,10 +1329,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '77',
+    77,
     'cagi6-hmbs',
     'CAGI6: HMBS',
     '',
@@ -1344,10 +1345,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '78',
+    78,
     'cagi6-cam',
     'CAGI6: CaM',
     '',
@@ -1360,10 +1361,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '79',
+    79,
     'cagi6-annotate-all-missense',
     'CAGI6: Annotate All Missense',
     '',
@@ -1376,10 +1377,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-01',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '80',
+    80,
     'cagi6-stk11',
     'CAGI6: STK11',
     '',
@@ -1392,10 +1393,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-09-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '81',
+    81,
     'cagi6-mapk1',
     'CAGI6: MAPK1',
     '',
@@ -1408,10 +1409,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-07-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '82',
+    82,
     'cagi6-mapk3',
     'CAGI6: MAPK3',
     '',
@@ -1424,10 +1425,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-08-04',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '83',
+    83,
     'cagi6-mthfr',
     'CAGI6: MTHFR',
     '',
@@ -1440,10 +1441,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-05-03',
     '2021-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '84',
+    84,
     'cagi6-splicing-vus',
     'CAGI6: Splicing VUS',
     '',
@@ -1456,10 +1457,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '85',
+    85,
     'cagi6-sherloc-clinical-classification',
     'CAGI6: Sherloc clinical classification',
     '',
@@ -1472,10 +1473,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-07-08',
     '2021-12-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:27:59'
+    '2023-07-26 19:49:44'
   ),
   (
-    '86',
+    86,
     'cami-ii',
     'CAMI II',
     '',
@@ -1488,10 +1489,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-01-14',
     '2021-01-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:28:00'
+    '2023-07-26 19:49:45'
   ),
   (
-    '87',
+    87,
     'camda18-metasub-forensics',
     'CAMDA18: MetaSUB Forensics',
     '',
@@ -1504,10 +1505,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:28:11'
+    '2023-07-26 19:49:46'
   ),
   (
-    '88',
+    88,
     'camda18-cmap-drug-safety',
     'CAMDA18: CMap Drug Safety',
     '',
@@ -1521,10 +1522,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:28:11'
+    '2023-07-26 19:49:46'
   ),
   (
-    '89',
+    89,
     'camda18-cancer-data-integration',
     'CAMDA18: Cancer Data Integration',
     '',
@@ -1537,10 +1538,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-25 22:28:12'
+    '2023-07-26 19:49:47'
   ),
   (
-    '90',
+    90,
     'cafa-4',
     'CAFA 4',
     '',
@@ -1553,10 +1554,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-10-21',
     '2020-02-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:25'
+    '2023-07-26 19:49:47'
   ),
   (
-    '91',
+    91,
     'casp13',
     'CASP13',
     '',
@@ -1569,10 +1570,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-04-18',
     '2018-08-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:25'
+    '2023-07-26 19:49:48'
   ),
   (
-    '92',
+    92,
     'casp14',
     'CASP14',
     '',
@@ -1585,10 +1586,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-05-04',
     '2020-09-07',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:27'
+    '2023-07-26 19:49:51'
   ),
   (
-    '93',
+    93,
     'cfsan-pathogen-detection',
     'CFSAN Pathogen Detection',
     '',
@@ -1601,10 +1602,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-02-15',
     '2018-04-26',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:28'
+    '2023-07-26 19:49:51'
   ),
   (
-    '94',
+    94,
     'cdrh-biothreat',
     'CDRH Biothreat',
     '',
@@ -1617,10 +1618,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-08-03',
     '2018-10-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:28'
+    '2023-07-26 19:49:52'
   ),
   (
-    '95',
+    95,
     'multi-omics-enabled-sample-mislabeling-correction',
     'Multi-omics Enabled Sample Mislabeling Correction',
     '',
@@ -1633,10 +1634,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-09-24',
     '2018-12-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:29'
+    '2023-07-26 19:49:52'
   ),
   (
-    '96',
+    96,
     'biocompute-object-app-a-thon',
     'BioCompute Object App-a-thon',
     '',
@@ -1649,10 +1650,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-05-14',
     '2019-10-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:30'
+    '2023-07-26 19:49:53'
   ),
   (
-    '97',
+    97,
     'brain-cancer-predictive-modeling-and-biomarker-discovery',
     'Brain Cancer Predictive Modeling and Biomarker Discovery',
     '',
@@ -1665,10 +1666,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-11-01',
     '2020-02-14',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:30'
+    '2023-07-26 19:49:53'
   ),
   (
-    '98',
+    98,
     'gaining-new-insights-by-detecting-adverse-event-anomalies',
     'Gaining New Insights by Detecting Adverse Event Anomalies',
     '',
@@ -1681,10 +1682,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-01-17',
     '2020-05-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:31'
+    '2023-07-26 19:49:54'
   ),
   (
-    '99',
+    99,
     'calling-variants-in-difficult-to-map-regions',
     'Calling Variants in Difficult-to-Map Regions',
     '',
@@ -1697,10 +1698,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-05-01',
     '2020-06-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:32'
+    '2023-07-26 19:49:55'
   ),
   (
-    '100',
+    100,
     'vha-innovation-ecosystem-and-covid-19-risk-factor-modeling',
     'VHA Innovation Ecosystem and COVID-19 Risk Factor Modeling',
     '',
@@ -1713,10 +1714,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-06-02',
     '2020-07-03',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:32'
+    '2023-07-26 19:49:56'
   ),
   (
-    '101',
+    101,
     'covid-19-precision-immunology-app-a-thon',
     'COVID-19 Precision Immunology App-a-thon',
     '',
@@ -1729,10 +1730,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-11-30',
     '2021-01-29',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:33'
+    '2023-07-26 19:49:57'
   ),
   (
-    '102',
+    102,
     'smarter-food-safety-low-cost-tech-enabled-traceability',
     'Smarter Food Safety Low Cost Tech-Enabled Traceability',
     '',
@@ -1745,10 +1746,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-01',
     '2021-07-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:34'
+    '2023-07-26 19:49:57'
   ),
   (
-    '103',
+    103,
     'tumor-mutational-burden-tmb-challenge-phase-1',
     'Tumor Mutational Burden (TMB) Challenge Phase 1',
     '',
@@ -1761,10 +1762,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-21',
     '2021-09-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:35'
+    '2023-07-26 19:49:57'
   ),
   (
-    '104',
+    104,
     'kidney-and-kidney-tumor-segmentation',
     'Kidney and Kidney Tumor Segmentation',
     '',
@@ -1777,10 +1778,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-08-23',
     '2021-09-17',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:35'
+    '2023-07-26 19:49:58'
   ),
   (
-    '105',
+    105,
     'cross-modality-da-for-medical-image-segmentation',
     'Cross-Modality DA for Medical Image Segmentation',
     '',
@@ -1793,10 +1794,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-04-05',
     '2021-09-27',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:36'
+    '2023-07-26 19:49:59'
   ),
   (
-    '106',
+    106,
     'real-noise-mri',
     'Real Noise MRI',
     '',
@@ -1809,10 +1810,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-09-21',
     '2021-12-06',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:37'
+    '2023-07-26 19:49:59'
   ),
   (
-    '107',
+    107,
     'deep-generative-model-challenge-for-da-in-surgery',
     'Deep Generative Model Challenge for DA in Surgery',
     '',
@@ -1825,10 +1826,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-04-01',
     '2021-07-16',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:38'
+    '2023-07-26 19:50:00'
   ),
   (
-    '108',
+    108,
     'aimdatathon',
     'AIM Datathon 2020',
     'Join the AI in Medicine ( AIM ) Datathon 2020',
@@ -1841,10 +1842,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-11-09',
     '2020-11-22',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:39'
+    '2023-07-26 19:50:02'
   ),
   (
-    '109',
+    109,
     'opc-recurrence',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Local Recurrence Prediction',
     'Determine from CT data whether a tumor will be controlled by definitive radiatio',
@@ -1857,10 +1858,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2016-07-26',
     '2016-09-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:40'
+    '2023-07-26 19:50:03'
   ),
   (
-    '110',
+    110,
     'oropharynx-radiomics-hpv',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Human Papilloma Virus (HPV) Status Prediction',
     'Predict from CT data the HPV phenotype of oropharynx tumors; compare to ground-t',
@@ -1873,10 +1874,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2016-07-26',
     '2016-09-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:41'
+    '2023-07-26 19:50:03'
   ),
   (
-    '111',
+    111,
     'data-science-bowl-2017',
     'Data Science Bowl 2017',
     'Can you improve lung cancer detection?',
@@ -1889,10 +1890,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-01-12',
     '2017-04-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:41'
+    '2023-07-26 19:50:04'
   ),
   (
-    '112',
+    112,
     'predict-impact-of-air-quality-on-death-rates',
     'Predict impact of air quality on mortality rates',
     'Predict CVD and cancer caused mortality rates in England using air quality data ',
@@ -1905,10 +1906,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-02-13',
     '2017-05-05',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:42'
+    '2023-07-26 19:50:04'
   ),
   (
-    '113',
+    113,
     'intel-mobileodt-cervical-cancer-screening',
     'Intel & MobileODT Cervical Cancer Screening',
     'Which cancer treatment will be most effective?',
@@ -1921,10 +1922,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-03-15',
     '2017-06-21',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:43'
+    '2023-07-26 19:50:05'
   ),
   (
-    '114',
+    114,
     'msk-redefining-cancer-treatment',
     'Personalized Medicine: Redefining Cancer Treatment',
     'Predict the effect of Genetic Variants to enable Personalized Medicine',
@@ -1937,10 +1938,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-06-26',
     '2017-10-02',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:44'
+    '2023-07-26 19:50:05'
   ),
   (
-    '115',
+    115,
     'mubravo',
     'Predicting Cancer Diagnosis',
     'Bravo''s machine learning competition!',
@@ -1953,10 +1954,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-07-31',
     '2018-08-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:45'
+    '2023-07-26 19:50:08'
   ),
   (
-    '116',
+    116,
     'histopathologic-cancer-detection',
     'Histopathologic Cancer Detection',
     'Identify metastatic tissue in histopathologic scans of lymph node sections',
@@ -1969,10 +1970,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-11-16',
     '2019-03-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:46'
+    '2023-07-26 19:50:10'
   ),
   (
-    '117',
+    117,
     'tjml1920-decision-trees',
     'TJML 2019-20 Breast Cancer Detection Competition',
     'Use a decision tree to identify malignant breast cancer tumors',
@@ -1985,10 +1986,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-09-22',
     '2019-10-16',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:47'
+    '2023-07-26 19:50:09'
   ),
   (
-    '118',
+    118,
     'prostate-cancer-grade-assessment',
     'Prostate cANcer graDe Assessment (PANDA) Challenge',
     'Prostate cancer diagnosis using the Gleason grading system',
@@ -2001,10 +2002,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-04-21',
     '2020-07-22',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:49'
+    '2023-07-26 19:50:10'
   ),
   (
-    '119',
+    119,
     'breast-cancer',
     'Breast Cancer',
     'Use cell nuclei categories to predict breast cancer tumor.',
@@ -2017,10 +2018,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-08-12',
     '2020-08-13',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:50'
+    '2023-07-26 19:50:10'
   ),
   (
-    '120',
+    120,
     'breast-cancer-detection',
     'Breast Cancer Detection',
     'breast cancer detection',
@@ -2033,10 +2034,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-09-25',
     '2020-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:51'
+    '2023-07-26 19:50:11'
   ),
   (
-    '121',
+    121,
     'hrpred',
     'Prediction of High Risk Patients',
     'Classification of high and low risk cancer patients',
@@ -2049,10 +2050,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2020-11-25',
     '2020-12-05',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:52'
+    '2023-07-26 19:50:11'
   ),
   (
-    '122',
+    122,
     'ml4moleng-cancer',
     'MIT ML4MolEng: Predicting Cancer Progression',
     'MIT 3.100, 10.402, 20.301 In class ML competition (Spring 2021)',
@@ -2065,10 +2066,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-05-06',
     '2021-05-21',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:54'
+    '2023-07-26 19:50:12'
   ),
   (
-    '123',
+    123,
     'uw-madison-gi-tract-image-segmentation',
     'UW-Madison GI Tract Image Segmentation',
     'Track healthy organs in medical scans to improve cancer treatment',
@@ -2081,10 +2082,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-04-14',
     '2022-07-14',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:54'
+    '2023-07-26 19:50:13'
   ),
   (
-    '124',
+    124,
     'rsna-miccai-brain-tumor-radiogenomic-classification',
     'RSNA-MICCAI Brain Tumor Radiogenomic Classification',
     'Predict the status of a genetic biomarker important for brain cancer treatment',
@@ -2097,10 +2098,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-07-13',
     '2021-10-15',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:56'
+    '2023-07-26 19:50:13'
   ),
   (
-    '125',
+    125,
     'breastcancer',
     'Breast Cancer - Beginners ML',
     'Beginners hands-on experience with ML basics',
@@ -2113,10 +2114,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-21',
     '2022-02-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:57'
+    '2023-07-26 19:50:13'
   ),
   (
-    '126',
+    126,
     'ml-olympiad-health-and-education',
     'ML Olympiad - Let''s Fight lung cancer',
     'Use your ML expertise to help us step another step toward defeating cancer [ Sta',
@@ -2129,10 +2130,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-01-31',
     '2022-03-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:58'
+    '2023-07-26 19:50:14'
   ),
   (
-    '127',
+    127,
     'cs98-22-dl-task1',
     'CS98X-22-DL-Task1',
     'This competition is related to Task 1 in coursework - breast cancer classificati',
@@ -2145,10 +2146,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-02-28',
     '2022-04-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:29:59'
+    '2023-07-26 19:50:16'
   ),
   (
-    '128',
+    128,
     'parasitedetection-iiitb2019',
     'Parasite detection',
     'detect if cell image has parasite or is uninfected',
@@ -2161,10 +2162,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-10-13',
     '2019-11-25',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:00'
+    '2023-07-26 19:50:16'
   ),
   (
-    '129',
+    129,
     'hpa-single-cell-image-classification',
     'Human Protein Atlas - Single Cell Classification',
     'Find individual human cell differences in microscope images',
@@ -2177,10 +2178,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-01-26',
     '2021-05-11',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:01'
+    '2023-07-26 19:50:17'
   ),
   (
-    '130',
+    130,
     'stem-cell-predcition',
     'Stem Cell Predcition',
     'Classify stem and non-stem cells using RNA-seq data',
@@ -2193,10 +2194,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-04-01',
     '2021-07-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:02'
+    '2023-07-26 19:50:18'
   ),
   (
-    '131',
+    131,
     'sartorius-cell-instance-segmentation',
     'Sartorius - Cell Instance Segmentation',
     'Detect single neuronal cells in microscopy images',
@@ -2209,10 +2210,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-10-14',
     '2021-12-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:04'
+    '2023-07-26 19:50:18'
   ),
   (
-    '132',
+    132,
     'pvelad',
     'Photovoltaic cell anomaly detection',
     'Hosted by Hebei University of Technology (AIHebut research group) and Beihang Un',
@@ -2225,10 +2226,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-03-15',
     '2022-07-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:05'
+    '2023-07-26 19:50:19'
   ),
   (
-    '133',
+    133,
     'blood-mnist',
     'Blood-MNIST',
     'Classifying blood cell types using Weights and Biases',
@@ -2241,10 +2242,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-03-19',
     '2022-03-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:06'
+    '2023-07-26 19:50:19'
   ),
   (
-    '134',
+    134,
     'insilicomolhack',
     'MolHack',
     'Apply deep learning to speedup drug validation',
@@ -2257,10 +2258,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2018-04-02',
     '2018-05-25',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:08'
+    '2023-07-26 19:50:20'
   ),
   (
-    '135',
+    135,
     'codata2019challenge',
     'Cell Response Classification',
     'From recorded timeseries of many cells in a well, predict which drug treatment h',
@@ -2273,10 +2274,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-04-08',
     '2019-05-07',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:08'
+    '2023-07-26 19:50:21'
   ),
   (
-    '136',
+    136,
     'drug-solubility-challenge',
     'Drug solubility challenge',
     'Solubility is vital to achieve desired concentration of drug for anticipated pha',
@@ -2289,10 +2290,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-05-18',
     '2019-10-18',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:11'
+    '2023-07-26 19:50:22'
   ),
   (
-    '137',
+    137,
     'kinase-inhibition-challenge',
     'Kinase inhibition challenge',
     'Protein kinases have become a major class of drug targets, accumulating a huge a',
@@ -2305,10 +2306,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2019-05-20',
     '2019-12-28',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:12'
+    '2023-07-26 19:50:22'
   ),
   (
-    '138',
+    138,
     'ai-drug-discovery',
     'AI Drug Discovery Workshop and Coding Challenge',
     'Developing Fundamental AI Programming Skills for Drug Discovery',
@@ -2321,10 +2322,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-11-12',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:12'
+    '2023-07-26 19:50:23'
   ),
   (
-    '139',
+    139,
     'protein-compound-affinity',
     'Structure-free protein-ligand affinity prediction - Task 1 Fitting',
     'Developing new AI models for drug discovery, main portal (Task-1 fitting)',
@@ -2337,10 +2338,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-06',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:13'
+    '2023-07-26 19:50:24'
   ),
   (
-    '140',
+    140,
     'cisc873-dm-f21-a5',
     'CISC873-DM-F21-A5',
     'Anti-Cancer Drug Activity Prediction',
@@ -2353,10 +2354,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-11-26',
     '2021-12-10',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:14'
+    '2023-07-26 19:50:24'
   ),
   (
-    '141',
+    141,
     'pro-lig-aff-task2-mse',
     'Structure-free protein-ligand affinity prediction - Task 2 Fitting',
     'Developing new AI models for drug discovery (Task-2 fitting)',
@@ -2369,10 +2370,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-08',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:15'
+    '2023-07-26 19:50:25'
   ),
   (
-    '142',
+    142,
     'pro-lig-aff-task1-pearsonr',
     'Structure-free protein-ligand affinity prediction - Task 1 Ranking',
     'Developing new AI models for drug discovery (Task-1 ranking)',
@@ -2385,10 +2386,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-08',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:17'
+    '2023-07-26 19:50:25'
   ),
   (
-    '143',
+    143,
     'pro-lig-aff-task2-pearsonr',
     'Structure-free protein-ligand affinity prediction - Task 2 Ranking',
     'Developing new AI models for drug discovery (Task-2 ranking)',
@@ -2401,10 +2402,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-08',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:17'
+    '2023-07-26 19:50:38'
   ),
   (
-    '144',
+    144,
     'pro-lig-aff-task3-spearmanr',
     'Structure-free protein-ligand affinity prediction - Task 3 Ranking',
     'Developing new AI models for drug discovery (Task-3 ranking)',
@@ -2417,10 +2418,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-08',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:20'
+    '2023-07-26 19:50:39'
   ),
   (
-    '145',
+    145,
     'hhp',
     'Heritage Health Prize',
     'Identify patients who will be admitted to a hospital within the next year using ',
@@ -2433,10 +2434,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2011-04-04',
     '2013-04-04',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:21'
+    '2023-07-26 19:50:39'
   ),
   (
-    '146',
+    146,
     'pf2012',
     'Practice Fusion Analyze This! 2012 - Prediction Challenge',
     'Start digging into electronic health records and submit your ideas for the most ',
@@ -2449,10 +2450,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2012-06-07',
     '2012-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:21'
+    '2023-07-26 19:50:40'
   ),
   (
-    '147',
+    147,
     'pf2012-at',
     'Practice Fusion Analyze This! 2012 - Open Challenge',
     'Start digging into electronic health records and submit your creative, insightfu',
@@ -2465,10 +2466,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2012-06-07',
     '2012-09-10',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:23'
+    '2023-07-26 19:50:41'
   ),
   (
-    '148',
+    148,
     'seizure-detection',
     'UPenn and Mayo Clinic''s Seizure Detection Challenge',
     'Detect seizures in intracranial EEG recordings',
@@ -2481,10 +2482,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2014-05-19',
     '2014-08-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:24'
+    '2023-07-26 19:50:41'
   ),
   (
-    '149',
+    149,
     'seizure-prediction',
     'American Epilepsy Society Seizure Prediction Challenge',
     'Predict seizures in intracranial EEG recordings',
@@ -2497,10 +2498,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2014-08-25',
     '2014-11-17',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:25'
+    '2023-07-26 19:50:42'
   ),
   (
-    '150',
+    150,
     'deephealth-1',
     'Deep Health - alcohol',
     'Find Correlations and patterns with Medical data',
@@ -2513,10 +2514,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-02-13',
     '2017-02-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:25'
+    '2023-07-26 19:50:44'
   ),
   (
-    '151',
+    151,
     'deep-health-3',
     'Deep Health - Diabetes 2',
     'This competition is for those attending the Deep Health Hackathon.  Predict the ',
@@ -2529,10 +2530,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2017-02-15',
     '2017-02-19',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:29'
+    '2023-07-26 19:50:44'
   ),
   (
-    '152',
+    152,
     'd012554-2021',
     'D012554 - 2021',
     'Classify the health of a fetus using CTG data',
@@ -2545,10 +2546,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-04-11',
     '2021-05-09',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:29'
+    '2023-07-26 19:50:45'
   ),
   (
-    '153',
+    153,
     'idao-2022-bootcamp-insomnia',
     'IDAO 2022. ML Bootcamp - Insomnia',
     'Predict sleep disorder on given human health data',
@@ -2561,10 +2562,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-04',
     '2021-12-05',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:30'
+    '2023-07-26 19:50:46'
   ),
   (
-    '154',
+    154,
     'tweet-mental-health-classification',
     'Tweet Mental Health Classification',
     'Build Models to classify tweets to determine mental health',
@@ -2577,10 +2578,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-12-27',
     '2022-01-31',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:30'
+    '2023-07-26 19:50:46'
   ),
   (
-    '155',
+    155,
     'ml-olympiad-good-health-and-well-being',
     'ML Olympiad - GOOD HEALTH AND WELL BEING',
     'Use your ML expertise to classify if a patient has heart disease or not',
@@ -2593,10 +2594,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-02-03',
     '2022-03-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:31'
+    '2023-07-26 19:50:47'
   ),
   (
-    '156',
+    156,
     'rsna-breast-cancer-detection',
     'RSNA Screening Mammography Breast Cancer Detection',
     'Find breast cancers in screening mammograms',
@@ -2609,10 +2610,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-11-28',
     '2023-02-27',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:34'
+    '2023-07-26 19:50:48'
   ),
   (
-    '157',
+    157,
     'biocreative-vii-text-mining-drug-and-chemical-protein-interactions-drugprot',
     'BioCreative VII: Text mining drug and chemical-protein interactions (DrugProt)',
     '',
@@ -2627,10 +2628,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-06-15',
     '2021-09-22',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:34'
+    '2023-07-26 19:50:48'
   ),
   (
-    '158',
+    158,
     'extended-literature-ai-for-drug-induced-liver-injury',
     'Extended Literature AI for Drug Induced Liver Injury',
     '',
@@ -2643,10 +2644,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     '2022-05-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:35'
+    '2023-07-26 19:50:49'
   ),
   (
-    '159',
+    159,
     'anti-microbial-resistance-forensics',
     'Anti-Microbial Resistance Forensics',
     '',
@@ -2659,10 +2660,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     '2022-05-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:36'
+    '2023-07-26 19:50:49'
   ),
   (
-    '160',
+    160,
     'disease-maps-to-modelling-covid-19',
     'Disease Maps to Modelling COVID-19',
     'Use the COVID-19 disease map to suggest drugs candidate for repurposing, that co',
@@ -2675,10 +2676,10 @@ Task 2 (“Federated Evaluation”) se...',
     NULL,
     '2022-05-20',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:37'
+    '2023-07-26 19:50:50'
   ),
   (
-    '161',
+    161,
     'crowdsourced-evaluation-of-inchi-based-tautomer-identification',
     'Crowdsourced Evaluation of InChI-based Tautomer Identification',
     'Calling on scientists from industry, government, and academia dealing with chemi',
@@ -2691,10 +2692,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-11-01',
     '2023-03-01',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:37'
+    '2023-07-26 19:50:51'
   ),
   (
-    '162',
+    162,
     'nctr-indel-calling-from-oncopanel-sequencing-challenge-phase-2',
     'NCTR Indel Calling from Oncopanel Sequencing Challenge Phase 2',
     'In Phase 2, participants who completed in Phase 1 of the challenge have the opti',
@@ -2707,10 +2708,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-07-11',
     '2022-07-26',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:40'
+    '2023-07-26 19:50:51'
   ),
   (
-    '163',
+    163,
     'nctr-indel-calling-from-oncopanel-sequencing-data-challenge-phase-1',
     'NCTR Indel Calling from Oncopanel Sequencing Data Challenge Phase 1',
     'Genetic variation involving indels (insertions and deletions) in the cancer geno',
@@ -2723,10 +2724,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-05-02',
     '2022-07-08',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:40'
+    '2023-07-26 19:50:54'
   ),
   (
-    '164',
+    164,
     'vha-innovation-ecosystem-and-precisionfda-covid-19-risk-factor-modeling-challenge-phase-2',
     'VHA Innovation Ecosystem and precisionFDA COVID-19 Risk Factor Modeling Challenge Phase 2',
     'The focus of Phase 2 was to validate the top performing models on two additional',
@@ -2739,10 +2740,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-04-14',
     '2022-01-28',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:41'
+    '2023-07-26 19:50:54'
   ),
   (
-    '165',
+    165,
     'tumor-mutational-burden-tmb-challenge-phase-2',
     'Tumor Mutational Burden (TMB) Challenge Phase 2',
     'The goal of the Friends of Cancer Research and precisionFDA Tumor Mutational Bur',
@@ -2755,10 +2756,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2021-07-19',
     '2021-09-12',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:44'
+    '2023-07-26 19:50:55'
   ),
   (
-    '166',
+    166,
     'predicting-gene-expression-using-millions-of-random-promoter-sequences',
     'Predicting Gene Expression Using Millions of Random Promoter Sequences',
     '',
@@ -2771,10 +2772,10 @@ Task 2 (“Federated Evaluation”) se...',
     '2022-06-15',
     '2022-08-07',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:44'
+    '2023-07-26 19:50:57'
   ),
   (
-    '167',
+    167,
     'brats-2023',
     'BraTS 2023',
     '',
@@ -2787,7 +2788,7 @@ Task 2 (“Federated Evaluation”) se...',
     '2023-06-01',
     '2023-08-25',
     '2023-06-23 00:00:00',
-    '2023-07-25 22:30:46'
+    '2023-07-26 19:50:58'
   );
 
   -- challenge_organization_role data
