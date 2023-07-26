@@ -21,11 +21,11 @@ export class SponsorListComponent implements OnInit {
 
   ngOnInit() {
     this.itcr$ = this.imageService.getImage({
-      objectKey: 'nih-itcr-logo.png',
+      objectKey: 'logo/nci-itcr-alt.png',
       height: this.height,
     });
     this.sage$ = this.imageService.getImage({
-      objectKey: 'SageBionetworks-Logo.svg',
+      objectKey: 'logo/sage-bionetworks-alt.svg',
       height: this.height,
     });
   }
