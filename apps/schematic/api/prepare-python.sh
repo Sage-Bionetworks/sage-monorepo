@@ -2,6 +2,10 @@
 
 pyenv install --skip-existing 3.10.0
 
+echo "INIT"
+eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
+
 echo "pyenv local"
 pyenv local 3.10.0
 
