@@ -13,7 +13,9 @@ from schematic_api import util
 from schematic_api.controllers import storage_controller_impl
 
 
-def list_dataset_files(dataset_id, asset_view_id, asset_type, use_full_file_path=None):  # noqa: E501
+def list_dataset_files(
+    dataset_id, asset_view_id, asset_type, use_full_file_path=None
+):  # noqa: E501
     """Gets all files associated with a dataset.
 
     Gets all files associated with a dataset. # noqa: E501
@@ -30,8 +32,10 @@ def list_dataset_files(dataset_id, asset_view_id, asset_type, use_full_file_path
     :rtype: Union[FilesPage, Tuple[FilesPage, int], Tuple[FilesPage, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        asset_type =  AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.list_dataset_files(dataset_id, asset_view_id, asset_type, use_full_file_path=None)
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.list_dataset_files(
+        dataset_id, asset_view_id, asset_type, use_full_file_path=None
+    )
 
 
 def list_storage_project_datasets(project_id, asset_view_id, asset_type):  # noqa: E501
@@ -49,8 +53,10 @@ def list_storage_project_datasets(project_id, asset_view_id, asset_type):  # noq
     :rtype: Union[DatasetsPage, Tuple[DatasetsPage, int], Tuple[DatasetsPage, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        asset_type =  AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.list_storage_project_datasets(project_id, asset_view_id, asset_type)
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.list_storage_project_datasets(
+        project_id, asset_view_id, asset_type
+    )
 
 
 def list_storage_project_manifests(project_id, asset_view_id, asset_type):  # noqa: E501
@@ -68,5 +74,7 @@ def list_storage_project_manifests(project_id, asset_view_id, asset_type):  # no
     :rtype: Union[ManifestsPage, Tuple[ManifestsPage, int], Tuple[ManifestsPage, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        asset_type =  AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.list_storage_project_manifests(project_id, asset_view_id, asset_type)
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.list_storage_project_manifests(
+        project_id, asset_view_id, asset_type
+    )
