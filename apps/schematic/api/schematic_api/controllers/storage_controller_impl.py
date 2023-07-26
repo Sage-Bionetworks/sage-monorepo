@@ -124,7 +124,7 @@ def get_dataset_files(
     access_token = get_access_token()
     asset_type_object = get_asset_storage_class(asset_type)
     store = asset_type_object(access_token=access_token)
-    return store.store.getFilesInStorageDataset(
+    return store.getFilesInStorageDataset(
         datasetId=dataset_id, fileNames=file_names, fullpath=use_full_file_path
     )
 
@@ -151,7 +151,6 @@ def list_dataset_files(
           The first item is either the datasets or an error object
           The second item is the response status
     """
-
     config_handler(asset_view=asset_view_id)
     file_tuples = get_dataset_files(
         dataset_id, asset_type, file_names, use_full_file_path
