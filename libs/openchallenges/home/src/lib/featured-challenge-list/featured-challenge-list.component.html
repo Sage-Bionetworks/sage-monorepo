@@ -1,4 +1,4 @@
-<section id="featured-challenges" class="mat-typography cards" *ngIf="challenges$ | async challenges">
+<section id="featured-challenges" class="mat-typography cards">
   <div class="container">
     <div class="text-center">
       <h3 class="section-title">Featured Challenges</h3>
@@ -6,7 +6,7 @@
     </div>
     <div class="cards-wrap">
       <div class="card-group">
-        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
+        <openchallenges-challenge-card *ngFor="let challenge of (challenges$ | async)" [challenge]="challenge">
         </openchallenges-challenge-card>
       </div>
     </div>
