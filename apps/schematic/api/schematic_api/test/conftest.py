@@ -3,8 +3,8 @@ from typing import Generator
 import pytest
 
 EXAMPLE_MANIFEST_METADATA = [
-    (("dataset_id1", "dataset_name1"), ("id1", "name1"), ("component1", "component1")),
-    (("dataset_id2", "dataset_name2"), ("id2", "name2"), ("component2", "component2")),
+    (("dataset_id1", "dataset_name1"), ("syn1", "name1"), ("component1", "component1")),
+    (("dataset_id2", "dataset_name2"), ("syn2", "name2"), ("component2", "component2")),
 ]
 
 

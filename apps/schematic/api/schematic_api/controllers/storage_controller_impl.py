@@ -21,16 +21,6 @@ from schematic_api.models.attributes_page import AttributesPage
 from schematic_api.models.attribute import Attribute
 
 
-def config_handler(asset_view: Optional[str] = None) -> None:
-    """Load config file and update asset view if needed
-    Args:
-        asset_view (str): asset view
-    """
-    CONFIG.load_config(
-        "../../schematic/api/schematic_api/config.yml", asset_view=asset_view
-    )
-
-
 def get_access_token() -> Optional[str]:
     """Get access token from header"""
     bearer_token = None
@@ -140,7 +130,7 @@ def list_storage_project_datasets(
           The second item is the response status
     """
 
-    config_handler(asset_view=asset_view_id)
+    CONFIG.synapse_master_fileview_id = asset_view_id
     dataset_tuples = get_project_datasets(project_id, asset_type)
     datasets = [Dataset(id=item[0], name=item[1]) for item in dataset_tuples]
 
@@ -194,7 +184,7 @@ def list_storage_project_manifests(
           The second item is the response status
     """
     # load config
-    config_handler(asset_view=asset_view_id)
+    CONFIG.synapse_master_fileview_id = asset_view_id
     project_manifests = get_project_manifests(project_id, asset_type)
     manifests = [
         Manifest(
