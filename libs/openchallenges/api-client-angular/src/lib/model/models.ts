@@ -1,5 +1,6 @@
 export * from './basicError';
 export * from './challenge';
+export * from './challengeCategory';
 export * from './challengeContribution';
 export * from './challengeContributionRole';
 export * from './challengeContributionsPage';
