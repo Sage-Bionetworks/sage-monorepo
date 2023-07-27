@@ -137,6 +137,19 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
+      header="{{categoriesFilter.label }}"
+      [toggleable]="true"
+      [collapsed]="categoriesFilter.collapsed"
+      >
+      <openchallenges-checkbox-filter
+        [values]="categoriesFilter.values"
+        [selectedValues]="selectedCategories"
+        (selectionChange)="onCategoriesChange($event)"
+        inputId="{{ categoriesFilter.query }}"
+      ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
         header="{{ organizationsFilter.label }}"
         [toggleable]="true"
         [collapsed]="organizationsFilter.collapsed"

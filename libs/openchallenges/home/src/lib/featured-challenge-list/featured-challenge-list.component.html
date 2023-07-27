@@ -6,7 +6,7 @@
     </div>
     <div class="cards-wrap">
       <div class="card-group">
-        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
+        <openchallenges-challenge-card *ngFor="let challenge of (challenges$ | async)" [challenge]="challenge">
         </openchallenges-challenge-card>
       </div>
     </div>
