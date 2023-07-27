@@ -57,7 +57,7 @@ GET {{basePath}}/challenges?inputDataTypes=genomic
 
 GET {{basePath}}/challenges?categories=featured
 
-### Sort the challenges by their starred count in desc oder.
+### Sort the challenges by their starred count in desc order
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
 
