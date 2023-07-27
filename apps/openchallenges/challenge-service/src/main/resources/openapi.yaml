@@ -5,11 +5,11 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: OpenChallenges Challenge REST API
   version: 1.0.0
   x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
 - url: http://localhost/v1
 tags:
@@ -393,6 +393,12 @@ components:
       - other
       example: container_image
       type: string
+    ChallengeCategory:
+      description: The category of the challenge.
+      enum:
+      - featured
+      example: featured
+      type: string
     ChallengeSearchQuery:
       description: A challenge search query.
       properties:
@@ -460,6 +466,11 @@ components:
           description: An array of challenge submission types used to filter the results.
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        categories:
+          description: The array of challenge categories used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
           type: array
         searchTerms:
           description: A string of search terms used to filter the results.

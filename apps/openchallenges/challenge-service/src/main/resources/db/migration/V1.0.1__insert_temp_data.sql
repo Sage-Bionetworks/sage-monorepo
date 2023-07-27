@@ -3433,3 +3433,10 @@ VALUES ('1', 1, 1),
   ('2', 2, 1),
   ('3', 1, 2),
   ('4', 4, 4);
+
+-- challenge_category data
+
+INSERT INTO challenge_category (id, challenge_id, category)
+VALUES (1, 49, 'featured'),
+  (2, 58, 'featured'),
+  (3, 167, 'featured');

@@ -278,6 +278,12 @@ components:
         - notebook
         - other
       example: container_image
+    ChallengeCategory:
+      description: The category of the challenge.
+      type: string
+      enum:
+        - featured
+      example: featured
     ChallengeSearchQuery:
       type: object
       description: A challenge search query.
@@ -347,6 +353,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        categories:
+          description: The array of challenge categories used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
