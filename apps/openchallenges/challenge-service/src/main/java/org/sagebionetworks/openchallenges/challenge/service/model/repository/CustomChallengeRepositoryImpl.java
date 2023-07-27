@@ -21,6 +21,7 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeI
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -72,6 +73,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     }
     if (query.getOrganizations() != null && !query.getOrganizations().isEmpty()) {
       predicates.add(getOrganizationsPredicate(pf, query));
+    }
+    if (query.getCategories() != null && !query.getCategories().isEmpty()) {
+      predicates.add(getCategoriesPredicate(pf, query));
     }
 
     SearchSort sort = getSearchSort(sf, query);
@@ -235,6 +239,25 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             b -> {
               for (ChallengeIncentiveDto incentive : query.getIncentives()) {
                 b.should(pf.match().field("incentives.name").matching(incentive.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the organization whose at least one of their categories is in the list of categories
+   * specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getCategoriesPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (ChallengeCategoryDto category : query.getCategories()) {
+                b.should(pf.match().field("categories.category").matching(category.toString()));
               }
             })
         .toPredicate();
