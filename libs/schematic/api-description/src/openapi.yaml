@@ -24,9 +24,14 @@ servers:
 tags:
   - name: Storage
     description: Operations about storages.
+  - name: Schema
+    description: Operations dealign with a schema
 paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
+
+  /schemas/{schemaUrl}/components/{componentLabel}/attributes:
+    $ref: paths/schemas/@{schemaUrl}/components/@{componentLabel}/attributes.yaml
