@@ -3437,6 +3437,6 @@ VALUES ('1', 1, 1),
 -- challenge_category data
 
 INSERT INTO challenge_category (id, challenge_id, category)
-VALUES (1, 49, 'featured'),
-  (2, 58, 'featured'),
-  (3, 167, 'featured');
+VALUES (1, 161, 'featured'),
+  (2, 156, 'featured'),
+  (3, 58, 'featured');
