@@ -26,10 +26,10 @@ class TestListStorageProjectDatasets:
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_project_datasets",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
             result, status = list_storage_project_datasets(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
             assert isinstance(result, DatasetsPage)
@@ -42,7 +42,7 @@ class TestListStorageProjectDatasets:
             side_effect=SynapseNoCredentialsError,
         ):
             result, status = list_storage_project_datasets(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -55,7 +55,7 @@ class TestListStorageProjectDatasets:
             side_effect=SynapseAuthenticationError,
         ):
             result, status = list_storage_project_datasets(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -68,7 +68,7 @@ class TestListStorageProjectDatasets:
             side_effect=AccessCredentialsError("project"),
         ):
             result, status = list_storage_project_datasets(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
             assert isinstance(result, BasicError)
@@ -81,7 +81,7 @@ class TestListStorageProjectDatasets:
             side_effect=TypeError,
         ):
             result, status = list_storage_project_datasets(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500
             assert isinstance(result, BasicError)
@@ -98,7 +98,7 @@ class TestListStorageProjectManifests:
             return_value=example_manifest_metadata,
         ):
             result, status = list_storage_project_manifests(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
             assert isinstance(result, ManifestsPage)
@@ -111,7 +111,7 @@ class TestListStorageProjectManifests:
             side_effect=SynapseNoCredentialsError,
         ):
             result, status = list_storage_project_manifests(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -124,7 +124,7 @@ class TestListStorageProjectManifests:
             side_effect=SynapseAuthenticationError,
         ):
             result, status = list_storage_project_manifests(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -137,7 +137,7 @@ class TestListStorageProjectManifests:
             side_effect=AccessCredentialsError("project"),
         ):
             result, status = list_storage_project_manifests(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
             assert isinstance(result, BasicError)
@@ -150,7 +150,7 @@ class TestListStorageProjectManifests:
             side_effect=TypeError,
         ):
             result, status = list_storage_project_manifests(
-                project_id="id1", asset_view_id="id2", asset_type="synapse"
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500
             assert isinstance(result, BasicError)
