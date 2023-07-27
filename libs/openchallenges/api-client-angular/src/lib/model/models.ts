@@ -1,5 +1,6 @@
 export * from './basicError';
 export * from './challenge';
+export * from './challengeCategory';
 export * from './challengeContribution';
 export * from './challengeContributionRole';
 export * from './challengeContributionsPage';
@@ -39,9 +40,3 @@ export * from './organizationsPageAllOf';
 export * from './pageMetadata';
 export * from './simpleChallengeInputDataType';
 export * from './simpleChallengePlatform';
-export * from './user';
-export * from './userCreateRequest';
-export * from './userCreateResponse';
-export * from './userStatus';
-export * from './usersPage';
-export * from './usersPageAllOf';
