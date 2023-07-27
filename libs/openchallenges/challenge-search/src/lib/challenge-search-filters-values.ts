@@ -120,6 +120,13 @@ export const challengePlatformsFilterValues: FilterValue[] = [];
 
 export const challengeInputDataTypesFilterValues: FilterValue[] = [];
 
+export const challengeCategoriesFilterValues: FilterValue[] = [
+  {
+    value: 'featured',
+    label: 'Featured',
+  },
+];
+
 export const challengeOrganizationsFilterValues: FilterValue[] = [];
 
 export const challengeOrganizersFilterValues: FilterValue[] = [];

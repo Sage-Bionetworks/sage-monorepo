@@ -28,6 +28,7 @@ import {
   ChallengePlatformSort,
   ChallengeInputDataTypeSort,
   OrganizationSort,
+  ChallengeCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -39,6 +40,7 @@ import {
   challengeIncentivesFilter,
   challengePlatformsFilter,
   challengeOrganizationsFilter,
+  challengeCategoriesFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 import {
@@ -128,6 +130,7 @@ export class ChallengeSearchComponent
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentivesFilter = challengeIncentivesFilter;
+  categoriesFilter = challengeCategoriesFilter;
 
   // dropdown filters
   platformsFilter = challengePlatformsFilter;
@@ -138,6 +141,7 @@ export class ChallengeSearchComponent
   selectedStatus!: ChallengeStatus[];
   selectedSubmissionTypes!: ChallengeSubmissionType[];
   selectedIncentives!: ChallengeIncentive[];
+  selectedCategories!: ChallengeCategory[];
   selectedPlatforms!: string[];
   selectedOrgs!: number[];
   selectedInputDataTypes!: string[];
@@ -192,6 +196,7 @@ export class ChallengeSearchComponent
       this.selectedIncentives = this.splitParam(params['incentives']);
       this.selectedPlatforms = this.splitParam(params['platforms']);
       this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
+      this.selectedCategories = this.splitParam(params['categories']);
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
@@ -213,6 +218,7 @@ export class ChallengeSearchComponent
         platforms: this.selectedPlatforms,
         incentives: this.selectedIncentives,
         inputDataTypes: this.selectedInputDataTypes,
+        categories: this.selectedCategories,
         organizations: this.selectedOrgs,
       };
 
@@ -469,6 +475,15 @@ export class ChallengeSearchComponent
 
   onPlatformSearchChange(searched: string): void {
     this.platformSearchTerms.next(searched);
+  }
+
+  onCategoriesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        categories: this.collapseParam(selected),
+      },
+    });
   }
 
   onInputDataTypesChange(selected: string[]): void {
