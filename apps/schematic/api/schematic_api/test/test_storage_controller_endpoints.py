@@ -59,14 +59,11 @@ class TestListDatasetFiles(BaseTestCase):
             return_value=[("id1", "name1"), ("id2", "name2")],
         ) as mock_function:
             url = f"{FILES_URL}?fileNames=file.text"
-            import logging
-            logging.warning(url)
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with('id2', 'synapse', ["file.text"], None)
-            assert False
+            mock_function.assert_called_once_with("id2", "synapse", ["file.text"], None)
 
     def test_use_full_file_path(self) -> None:
         """Test with use_full_file_path parameter"""
@@ -81,7 +78,7 @@ class TestListDatasetFiles(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with('id2', 'synapse', None, True)
+            mock_function.assert_called_once_with("id2", "synapse", None, True)
 
     def test_401(self) -> None:
         """Test for 401 result"""
