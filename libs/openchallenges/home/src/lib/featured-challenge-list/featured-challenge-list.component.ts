@@ -4,7 +4,7 @@ import {
   ChallengeService,
   ChallengeSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { BehaviorSubject, switchMap } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
@@ -12,26 +12,23 @@ import { BehaviorSubject, switchMap } from 'rxjs';
   styleUrls: ['./featured-challenge-list.component.scss'],
 })
 export class FeaturedChallengeListComponent implements OnInit {
-  private query: BehaviorSubject<ChallengeSearchQuery> =
-    new BehaviorSubject<ChallengeSearchQuery>({});
-
-  challenges: Challenge[] = [];
+  challenges$!: Observable<Challenge[]>;
 
   constructor(private challengeService: ChallengeService) {}
 
   ngOnInit() {
-    const defaultQuery: ChallengeSearchQuery = {
+    const query: ChallengeSearchQuery = {
       pageNumber: 0,
-      pageSize: 3,
+      pageSize: 4, // only display first 4 for now
+      categories: ['featured'],
       searchTerms: '',
       sort: 'recently_started',
     };
-    this.query.next(defaultQuery);
-    this.query
-      // TODO: update to retrieve featured challenges
-      .pipe(switchMap((query) => this.challengeService.listChallenges(query)))
-      .subscribe((page) => {
-        this.challenges = page.challenges;
-      });
+    this.challenges$ = this.challengeService.listChallenges(query).pipe(
+      map((page) => page.challenges),
+      catchError((err) => {
+        return throwError(() => new Error(err.message));
+      })
+    );
   }
 }
