@@ -2,84 +2,84 @@
 
 INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url)
 VALUES (
-    '1',
+    1,
     'synapse',
     'Synapse',
     'logo/synapse.png',
     'https://synapse.org/'
   ),
   (
-    '2',
+    2,
     'cagi',
     'CAGI',
     'logo/cagi.png',
     'https://genomeinterpretation.org/challenges.html'
   ),
   (
-    '3',
+    3,
     'cami',
     'CAMI',
     'logo/cami.png',
     'https://data.cami-challenge.org/'
   ),
   (
-    '4',
+    4,
     'casp',
     'CASP',
     'logo/casp.png',
     'https://predictioncenter.org/'
   ),
   (
-    '5',
+    5,
     'grand-challenge',
     'Grand Challenge',
     'logo/grand-challenge.png',
     'https://grand-challenge.org/'
   ),
   (
-    '6',
+    6,
     'precision-fda',
     'precisionFDA',
     'logo/precisionfda.png',
     'https://precision.fda.gov/challenges'
   ),
   (
-    '7',
+    7,
     'easychair',
     'EasyChair',
     'logo/easy-chair.jpg',
     'https://easychair.org/'
   ),
   (
-    '8',
+    8,
     'kaggle',
     'Kaggle',
     'logo/kaggle.png',
     'https://www.kaggle.com/'
   ),
   (
-    '9',
+    9,
     'codalab',
     'CodaLab',
     'logo/codalab.jpg',
     'https://codalab.lisn.upsaclay.fr/'
   ),
   (
-    '10',
+    10,
     'codabench',
     'CodaBench',
     'logo/codalab.jpg',
     'https://www.codabench.org/'
   ),
   (
-    '11',
+    11,
     'openml',
     'OpenML',
     'logo/openml.jpg',
     'https://www.openml.org/'
   ),
   (
-    '12',
+    12,
     'papers-with-code',
     'PapersWithCode',
     'logo/papers-with-code.jpg',
@@ -89,10 +89,10 @@ VALUES (
 -- challenge_input_data_type
 
 INSERT INTO challenge_input_data_type (id, slug, name)
-VALUES ('1', 'genomic', 'genomic'),
-  ('2', 'proteomic', 'proteomic'),
-  ('3', 'gene-expression', 'gene expression'),
-  ('4', 'metabolomic', 'metabolomic');
+VALUES (1, 'genomic', 'genomic'),
+  (2, 'proteomic', 'proteomic'),
+  (3, 'gene-expression', 'gene expression'),
+  (4, 'metabolomic', 'metabolomic');
 
 -- challenge data
 
@@ -108,10 +108,12 @@ INSERT INTO challenge (
     platform_id,
     doi,
     start_date,
-    end_date
+    end_date,
+    created_at,
+    updated_at
   )
 VALUES (
-    '1',
+    1,
     'network-topology-and-parameter-inference',
     'Network Topology and Parameter Inference',
     '',
@@ -123,10 +125,12 @@ VALUES (
     '1',
     '',
     '2012-06-01',
-    '2012-10-01'
+    '2012-10-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:10'
   ),
   (
-    '2',
+    2,
     'breast-cancer-prognosis',
     'Breast Cancer Prognosis',
     '',
@@ -137,10 +141,12 @@ VALUES (
     '1',
     '',
     '2012-07-12',
-    '2012-10-15'
+    '2012-10-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:13'
   ),
   (
-    '3',
+    3,
     'phil-bowen-als-prediction-prize4life',
     'Phil Bowen ALS Prediction Prize4Life',
     '',
@@ -151,10 +157,12 @@ VALUES (
     '1',
     '',
     '2012-06-01',
-    '2012-10-01'
+    '2012-10-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:15'
   ),
   (
-    '4',
+    4,
     'drug-sensitivity-and-drug-synergy-prediction',
     'Drug Sensitivity and Drug Synergy Prediction',
     '',
@@ -165,10 +173,12 @@ VALUES (
     '1',
     '',
     '2012-06-01',
-    '2012-10-01'
+    '2012-10-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:17'
   ),
   (
-    '5',
+    5,
     'niehs-ncats-unc-toxicogenetics',
     'NIEHS-NCATS-UNC Toxicogenetics',
     '',
@@ -179,10 +189,12 @@ VALUES (
     '1',
     '',
     '2013-06-10',
-    '2013-09-15'
+    '2013-09-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:19'
   ),
   (
-    '6',
+    6,
     'whole-cell-parameter-estimation',
     'Whole-Cell Parameter Estimation',
     '',
@@ -193,10 +205,12 @@ VALUES (
     '1',
     '',
     '2013-06-10',
-    '2013-09-23'
+    '2013-09-23',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:21'
   ),
   (
-    '7',
+    7,
     'hpn-dream-breast-cancer-network-inference',
     'HPN-DREAM Breast Cancer Network Inference',
     '',
@@ -207,10 +221,12 @@ VALUES (
     '1',
     '',
     '2013-06-10',
-    '2013-09-16'
+    '2013-09-16',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:22'
   ),
   (
-    '8',
+    8,
     'rheumatoid-arthritis-responder',
     'Rheumatoid Arthritis Responder',
     '',
@@ -221,10 +237,12 @@ VALUES (
     '1',
     '',
     '2014-02-10',
-    '2014-06-04'
+    '2014-06-04',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:24'
   ),
   (
-    '9',
+    9,
     'smc-dna',
     'SMC-DNA',
     '',
@@ -235,10 +253,12 @@ VALUES (
     '1',
     '',
     '2013-12-14',
-    '2016-04-22'
+    '2016-04-22',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:26'
   ),
   (
-    '10',
+    10,
     'acute-myeloid-leukemia-outcome-prediction',
     'Acute Myeloid Leukemia Outcome Prediction',
     '',
@@ -249,10 +269,12 @@ VALUES (
     '1',
     '',
     '2014-06-02',
-    '2014-09-15'
+    '2014-09-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:28'
   ),
   (
-    '11',
+    11,
     'broad-dream-gene-essentiality-prediction',
     'Broad-DREAM Gene Essentiality Prediction',
     '',
@@ -263,10 +285,12 @@ VALUES (
     '1',
     '',
     '2014-06-02',
-    '2014-09-29'
+    '2014-09-29',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:33'
   ),
   (
-    '12',
+    12,
     'alzheimers-disease-big-data',
     'Alzheimer''s Disease Big Data',
     '',
@@ -277,10 +301,12 @@ VALUES (
     '1',
     '',
     '2014-06-02',
-    '2014-10-17'
+    '2014-10-17',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:34'
   ),
   (
-    '13',
+    13,
     'olfaction-prediction',
     'Olfaction Prediction',
     '',
@@ -291,10 +317,12 @@ VALUES (
     '1',
     '',
     '2015-01-15',
-    '2015-05-01'
+    '2015-05-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:36'
   ),
   (
-    '14',
+    14,
     'prostate-cancer',
     'Prostate Cancer',
     '',
@@ -305,10 +333,12 @@ VALUES (
     '1',
     '',
     '2015-03-16',
-    '2015-07-27'
+    '2015-07-27',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:38'
   ),
   (
-    '15',
+    15,
     'als-stratification-prize4life',
     'ALS Stratification Prize4Life',
     '',
@@ -319,10 +349,12 @@ VALUES (
     '1',
     '',
     '2015-06-22',
-    '2015-10-04'
+    '2015-10-04',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:40'
   ),
   (
-    '16',
+    16,
     'astrazeneca-sanger-drug-combination-prediction',
     'AstraZeneca-Sanger Drug Combination Prediction',
     '',
@@ -333,10 +365,12 @@ VALUES (
     '1',
     '',
     '2015-09-03',
-    '2016-03-14'
+    '2016-03-14',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:41'
   ),
   (
-    '17',
+    17,
     'smc-dna-meta',
     'SMC-DNA Meta',
     '',
@@ -347,10 +381,12 @@ VALUES (
     '1',
     '',
     '2015-08-17',
-    '2016-04-10'
+    '2016-04-10',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:43'
   ),
   (
-    '18',
+    18,
     'smc-het',
     'SMC-Het',
     '',
@@ -361,10 +397,12 @@ VALUES (
     '1',
     '',
     '2015-11-16',
-    '2016-06-30'
+    '2016-06-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:45'
   ),
   (
-    '19',
+    19,
     'respiratory-viral',
     'Respiratory Viral',
     '',
@@ -375,10 +413,12 @@ VALUES (
     '1',
     '',
     '2016-05-16',
-    '2016-09-28'
+    '2016-09-28',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:47:46'
   ),
   (
-    '20',
+    20,
     'disease-module-identification',
     'Disease Module Identification',
     '',
@@ -389,10 +429,12 @@ VALUES (
     '1',
     '',
     '2016-06-24',
-    '2016-10-01'
+    '2016-10-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:43'
   ),
   (
-    '21',
+    21,
     'encode',
     'ENCODE',
     '',
@@ -403,10 +445,12 @@ VALUES (
     '1',
     '',
     '2016-07-07',
-    '2017-01-11'
+    '2017-01-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:44'
   ),
   (
-    '22',
+    22,
     'idea',
     'Idea',
     '',
@@ -417,10 +461,12 @@ VALUES (
     '1',
     '',
     '2016-06-15',
-    '2017-04-30'
+    '2017-04-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:45'
   ),
   (
-    '23',
+    23,
     'smc-rna',
     'SMC-RNA',
     '',
@@ -431,10 +477,12 @@ VALUES (
     '1',
     '',
     '2016-06-29',
-    '2017-05-02'
+    '2017-05-02',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:46'
   ),
   (
-    '24',
+    24,
     'digital-mammography',
     'Digital Mammography',
     '',
@@ -445,10 +493,12 @@ VALUES (
     '1',
     '10.1001/jamanetworkopen.2020.0265',
     '2016-11-18',
-    '2017-05-16'
+    '2017-05-16',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:48'
   ),
   (
-    '25',
+    25,
     'multiple-myeloma',
     'Multiple Myeloma',
     '',
@@ -459,10 +509,12 @@ VALUES (
     '1',
     '',
     '2017-06-30',
-    '2017-11-08'
+    '2017-11-08',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:48'
   ),
   (
-    '26',
+    26,
     'ga4gh-dream-workflow-execution',
     'GA4GH-DREAM Workflow Execution',
     '',
@@ -473,10 +525,12 @@ VALUES (
     '1',
     '',
     '2017-07-21',
-    '2017-12-31'
+    '2017-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:51'
   ),
   (
-    '27',
+    27,
     'parkinsons-disease-digital-biomarker',
     'Parkinson''s Disease Digital Biomarker',
     '',
@@ -487,10 +541,12 @@ VALUES (
     '1',
     '',
     '2017-07-06',
-    '2017-11-10'
+    '2017-11-10',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:52'
   ),
   (
-    '28',
+    28,
     'nci-cptac-proteogenomics',
     'NCI-CPTAC Proteogenomics',
     '',
@@ -501,10 +557,12 @@ VALUES (
     '1',
     '',
     '2017-06-26',
-    '2017-11-20'
+    '2017-11-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:52'
   ),
   (
-    '29',
+    29,
     'multi-targeting-drug',
     'Multi-Targeting Drug',
     '',
@@ -515,10 +573,12 @@ VALUES (
     '1',
     '',
     '2017-10-05',
-    '2018-02-26'
+    '2018-02-26',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:53'
   ),
   (
-    '30',
+    30,
     'single-cell-transcriptomics',
     'Single Cell Transcriptomics',
     '',
@@ -529,10 +589,12 @@ VALUES (
     '1',
     '',
     '2018-09-04',
-    '2018-11-21'
+    '2018-11-21',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:54'
   ),
   (
-    '31',
+    31,
     'idg-drug-kinase-binding',
     'IDG Drug-Kinase Binding',
     '',
@@ -543,10 +605,12 @@ VALUES (
     '1',
     '',
     '2018-10-01',
-    '2019-04-18'
+    '2019-04-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:57'
   ),
   (
-    '32',
+    32,
     'malaria',
     'Malaria',
     '',
@@ -557,10 +621,12 @@ VALUES (
     '1',
     '',
     '2019-04-30',
-    '2019-08-15'
+    '2019-08-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:58'
   ),
   (
-    '33',
+    33,
     'preterm-birth-prediction-transcriptomics',
     'Preterm Birth Prediction - Transcriptomics',
     '',
@@ -571,10 +637,12 @@ VALUES (
     '1',
     '',
     '2019-05-04',
-    '2019-12-05'
+    '2019-12-05',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:58'
   ),
   (
-    '34',
+    34,
     'single-cell-signaling-in-breast-cancer',
     'Single-Cell Signaling in Breast Cancer',
     '',
@@ -585,10 +653,12 @@ VALUES (
     '1',
     '',
     '2018-08-20',
-    '2019-11-15'
+    '2019-11-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:48:59'
   ),
   (
-    '35',
+    35,
     'ehr-mortality-prediction',
     'EHR Mortality Prediction',
     '',
@@ -599,10 +669,12 @@ VALUES (
     '1',
     '',
     '2019-09-09',
-    '2020-01-23'
+    '2020-01-23',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:00'
   ),
   (
-    '36',
+    36,
     'allen-institute-cell-lineage-reconstruction',
     'Allen Institute Cell Lineage Reconstruction',
     '',
@@ -613,10 +685,12 @@ VALUES (
     '1',
     '',
     '2019-10-15',
-    '2020-02-06'
+    '2020-02-06',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:01'
   ),
   (
-    '37',
+    37,
     'tumor-deconvolution',
     'Tumor Deconvolution',
     '',
@@ -627,10 +701,12 @@ VALUES (
     '1',
     '',
     '2019-06-26',
-    '2020-04-30'
+    '2020-04-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:01'
   ),
   (
-    '38',
+    38,
     'ctd2-pancancer-drug-activity',
     'CTD2 Pancancer Drug Activity',
     '',
@@ -641,10 +717,12 @@ VALUES (
     '1',
     '',
     '2019-12-02',
-    '2020-02-13'
+    '2020-02-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:04'
   ),
   (
-    '39',
+    39,
     'ctd2-beataml',
     'CTD2 BeatAML',
     '',
@@ -655,10 +733,12 @@ VALUES (
     '1',
     '',
     '2019-12-19',
-    '2020-04-28'
+    '2020-04-28',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:04'
   ),
   (
-    '40',
+    40,
     'metadata-automation',
     'Metadata Automation',
     '',
@@ -669,10 +749,12 @@ VALUES (
     '1',
     '',
     '2020-01-14',
-    '2020-06-02'
+    '2020-06-02',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:05'
   ),
   (
-    '41',
+    41,
     'automated-scoring-of-radiographic-joint-damage',
     'Automated Scoring of Radiographic Joint Damage',
     '',
@@ -683,10 +765,12 @@ VALUES (
     '1',
     '',
     '2019-11-04',
-    '2020-05-21'
+    '2020-05-21',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:08'
   ),
   (
-    '42',
+    42,
     'beat-pd',
     'BEAT-PD',
     '',
@@ -697,10 +781,12 @@ VALUES (
     '1',
     '',
     '2020-01-13',
-    '2020-05-13'
+    '2020-05-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:09'
   ),
   (
-    '43',
+    43,
     'ctd2-pancancer-chemosensitivity',
     'CTD2 Pancancer Chemosensitivity',
     '',
@@ -711,10 +797,12 @@ VALUES (
     '1',
     '',
     '2020-04-28',
-    '2020-07-27'
+    '2020-07-27',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:10'
   ),
   (
-    '44',
+    44,
     'ehr-covid-19',
     'EHR COVID-19',
     '',
@@ -725,10 +813,12 @@ VALUES (
     '1',
     '',
     '2020-04-30',
-    '2021-07-01'
+    '2021-07-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:11'
   ),
   (
-    '45',
+    45,
     'anti-pd1-response-prediction',
     'Anti-PD1 Response Prediction',
     '',
@@ -739,10 +829,12 @@ VALUES (
     '1',
     '',
     '2020-11-17',
-    '2021-02-25'
+    '2021-02-25',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:12'
   ),
   (
-    '46',
+    46,
     'brats-2021-challenge',
     'BraTS 2021 Challenge',
     '',
@@ -753,10 +845,12 @@ VALUES (
     '1',
     '',
     '2021-07-07',
-    '2021-10-15'
+    '2021-10-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:17'
   ),
   (
-    '47',
+    47,
     'cancer-data-registry-nlp',
     'Cancer Data Registry NLP',
     '',
@@ -767,10 +861,12 @@ VALUES (
     '1',
     '',
     NULL,
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:19'
   ),
   (
-    '48',
+    48,
     'barda-community-challenge-pediatric-covid-19-data-challenge',
     'BARDA Community Challenge - Pediatric COVID-19 Data Challenge',
     '',
@@ -781,10 +877,12 @@ VALUES (
     '1',
     '',
     '2021-08-19',
-    '2021-12-17'
+    '2021-12-17',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:20'
   ),
   (
-    '49',
+    49,
     'brats-continuous-evaluation',
     'BraTS Continuous Evaluation',
     '',
@@ -795,10 +893,12 @@ VALUES (
     '1',
     '',
     '2022-01-01',
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:21'
   ),
   (
-    '50',
+    50,
     'fets-2022',
     'FeTS 2022',
     '',
@@ -809,10 +909,12 @@ VALUES (
     '1',
     '',
     '2022-04-08',
-    '2022-08-15'
+    '2022-08-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:22'
   ),
   (
-    '51',
+    51,
     'random-promotor',
     'Random Promotor',
     '',
@@ -823,10 +925,12 @@ VALUES (
     '1',
     '',
     '2022-05-02',
-    '2022-08-07'
+    '2022-08-07',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:22'
   ),
   (
-    '52',
+    52,
     'preterm-birth-prediction-microbiome',
     'Preterm Birth Prediction - Microbiome',
     '',
@@ -837,10 +941,12 @@ VALUES (
     '1',
     '',
     '2022-07-19',
-    '2022-09-16'
+    '2022-09-16',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:23'
   ),
   (
-    '53',
+    53,
     'finrisk',
     'FINRISK - Heart Failure and Microbiome',
     '',
@@ -851,10 +957,12 @@ VALUES (
     '1',
     '',
     '2022-09-20',
-    '2023-01-30'
+    '2023-01-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:51:19'
   ),
   (
-    '54',
+    54,
     'scrna-seq-and-scatac-seq-data-analysis',
     'scRNA-seq and scATAC-seq Data Analysis',
     '',
@@ -865,10 +973,12 @@ VALUES (
     '1',
     '',
     '2022-11-29',
-    '2023-02-08'
+    '2023-02-08',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:24'
   ),
   (
-    '55',
+    55,
     'cough-diagnostic-algorithm-for-tuberculosis',
     'COugh Diagnostic Algorithm for Tuberculosis',
     '',
@@ -879,10 +989,12 @@ VALUES (
     '1',
     '',
     '2022-10-16',
-    '2023-02-13'
+    '2023-02-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:25'
   ),
   (
-    '56',
+    56,
     'nih-long-covid-computational-challenge',
     'NIH Long COVID Computational Challenge',
     '',
@@ -893,10 +1005,12 @@ VALUES (
     '1',
     '',
     '2022-08-25',
-    '2022-12-15'
+    '2022-12-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:26'
   ),
   (
-    '57',
+    57,
     'bridge2ai',
     'Bridge2AI',
     'What makes a good color palette?',
@@ -907,10 +1021,12 @@ VALUES (
     '1',
     '',
     NULL,
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:28'
   ),
   (
-    '58',
+    58,
     'rare-x-open-data-science',
     'RARE-X Open Data Science',
     '',
@@ -921,10 +1037,12 @@ VALUES (
     '1',
     '',
     '2023-05-17',
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:30'
   ),
   (
-    '59',
+    59,
     'cagi5-regulation-saturation',
     'CAGI5: Regulation saturation',
     '',
@@ -935,10 +1053,12 @@ VALUES (
     '2',
     '',
     '2018-01-04',
-    '2018-05-03'
+    '2018-05-03',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:31'
   ),
   (
-    '60',
+    60,
     'cagi5-calm1',
     'CAGI5: CALM1',
     '',
@@ -949,10 +1069,12 @@ VALUES (
     '2',
     '',
     '2017-10-21',
-    '2017-12-20'
+    '2017-12-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:33'
   ),
   (
-    '61',
+    61,
     'cagi5-pcm1',
     'CAGI5: PCM1',
     '',
@@ -963,10 +1085,12 @@ VALUES (
     '2',
     '',
     '2017-11-09',
-    '2018-04-19'
+    '2018-04-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:36'
   ),
   (
-    '62',
+    62,
     'cagi5-frataxin',
     'CAGI5: Frataxin',
     '',
@@ -977,10 +1101,12 @@ VALUES (
     '2',
     '',
     '2017-11-30',
-    '2018-04-18'
+    '2018-04-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:36'
   ),
   (
-    '63',
+    63,
     'cagi5-tpmt-and-p10',
     'CAGI5: TPMT and p10',
     '',
@@ -991,10 +1117,12 @@ VALUES (
     '2',
     '',
     '2017-11-30',
-    '2017-12-01'
+    '2017-12-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:37'
   ),
   (
-    '64',
+    64,
     'cagi5-annotate-all-nonsynonymous-variants',
     'CAGI5: Annotate all nonsynonymous variants',
     '',
@@ -1005,10 +1133,12 @@ VALUES (
     '2',
     '',
     '2017-11-30',
-    '2018-05-09'
+    '2018-05-09',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:38'
   ),
   (
-    '65',
+    65,
     'cagi5-gaa',
     'CAGI5: GAA',
     '',
@@ -1019,10 +1149,12 @@ VALUES (
     '2',
     '',
     '2017-11-09',
-    '2018-04-25'
+    '2018-04-25',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:39'
   ),
   (
-    '66',
+    66,
     'cagi5-chek2',
     'CAGI5: CHEK2',
     '',
@@ -1033,10 +1165,12 @@ VALUES (
     '2',
     '',
     '2017-12-20',
-    '2018-04-24'
+    '2018-04-24',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:40'
   ),
   (
-    '67',
+    67,
     'cagi5-enigma',
     'CAGI5: ENIGMA',
     '',
@@ -1047,10 +1181,12 @@ VALUES (
     '2',
     '',
     '2017-12-20',
-    '2018-05-01'
+    '2018-05-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:42'
   ),
   (
-    '68',
+    68,
     'cagi5-mapsy',
     'CAGI5: MaPSy',
     '',
@@ -1061,10 +1197,12 @@ VALUES (
     '2',
     '',
     '2017-11-29',
-    '2018-05-07'
+    '2018-05-07',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:42'
   ),
   (
-    '69',
+    69,
     'cagi5-vex-seq',
     'CAGI5: Vex-seq',
     '',
@@ -1075,10 +1213,12 @@ VALUES (
     '2',
     '',
     '2017-12-14',
-    '2018-05-02'
+    '2018-05-02',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:43'
   ),
   (
-    '70',
+    70,
     'cagi5-sickkids-clinical-genomes',
     'CAGI5: SickKids clinical genomes',
     '',
@@ -1089,10 +1229,12 @@ VALUES (
     '2',
     '',
     '2017-12-22',
-    '2018-04-26'
+    '2018-04-26',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:43'
   ),
   (
-    '71',
+    71,
     'cagi5-id-panel',
     'CAGI5: ID Panel',
     '',
@@ -1103,10 +1245,12 @@ VALUES (
     '2',
     '',
     '2017-12-22',
-    '2018-04-30'
+    '2018-04-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '72',
+    72,
     'cagi5-clotting-disease-exomes',
     'CAGI5: Clotting disease exomes',
     '',
@@ -1117,10 +1261,12 @@ VALUES (
     '2',
     '',
     '2017-11-23',
-    '2018-04-28'
+    '2018-04-28',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '73',
+    73,
     'cagi6-rare-genomes-project',
     'CAGI6: Rare Genomes Project',
     '',
@@ -1131,10 +1277,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '74',
+    74,
     'cagi6-intellectual-disability-panel',
     'CAGI6: Intellectual Disability Panel',
     '',
@@ -1145,10 +1293,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '75',
+    75,
     'cagi6-sickkids-clinical-genomes-and-transcriptomes',
     'CAGI6: SickKids clinical genomes and transcriptomes',
     '',
@@ -1159,10 +1309,12 @@ VALUES (
     '1',
     '',
     '2021-08-04',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '76',
+    76,
     'cagi6-polygenic-risk-scores',
     'CAGI6: Polygenic Risk Scores',
     '',
@@ -1173,10 +1325,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '77',
+    77,
     'cagi6-hmbs',
     'CAGI6: HMBS',
     '',
@@ -1187,10 +1341,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '78',
+    78,
     'cagi6-cam',
     'CAGI6: CaM',
     '',
@@ -1201,10 +1357,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '79',
+    79,
     'cagi6-annotate-all-missense',
     'CAGI6: Annotate All Missense',
     '',
@@ -1215,10 +1373,12 @@ VALUES (
     '1',
     '',
     '2021-06-01',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '80',
+    80,
     'cagi6-stk11',
     'CAGI6: STK11',
     '',
@@ -1229,10 +1389,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-09-01'
+    '2021-09-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '81',
+    81,
     'cagi6-mapk1',
     'CAGI6: MAPK1',
     '',
@@ -1243,10 +1405,12 @@ VALUES (
     '1',
     '',
     '2021-07-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '82',
+    82,
     'cagi6-mapk3',
     'CAGI6: MAPK3',
     '',
@@ -1257,10 +1421,12 @@ VALUES (
     '1',
     '',
     '2021-08-04',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '83',
+    83,
     'cagi6-mthfr',
     'CAGI6: MTHFR',
     '',
@@ -1271,10 +1437,12 @@ VALUES (
     '1',
     '',
     '2021-05-03',
-    '2021-06-30'
+    '2021-06-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '84',
+    84,
     'cagi6-splicing-vus',
     'CAGI6: Splicing VUS',
     '',
@@ -1285,10 +1453,12 @@ VALUES (
     '1',
     '',
     '2021-06-08',
-    '2021-10-11'
+    '2021-10-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '85',
+    85,
     'cagi6-sherloc-clinical-classification',
     'CAGI6: Sherloc clinical classification',
     '',
@@ -1299,10 +1469,12 @@ VALUES (
     '1',
     '',
     '2021-07-08',
-    '2021-12-01'
+    '2021-12-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:44'
   ),
   (
-    '86',
+    86,
     'cami-ii',
     'CAMI II',
     '',
@@ -1313,10 +1485,12 @@ VALUES (
     '3',
     '',
     '2019-01-14',
-    '2021-01-31'
+    '2021-01-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:45'
   ),
   (
-    '87',
+    87,
     'camda18-metasub-forensics',
     'CAMDA18: MetaSUB Forensics',
     '',
@@ -1327,10 +1501,12 @@ VALUES (
     '7',
     '',
     NULL,
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:46'
   ),
   (
-    '88',
+    88,
     'camda18-cmap-drug-safety',
     'CAMDA18: CMap Drug Safety',
     '',
@@ -1342,10 +1518,12 @@ VALUES (
     '7',
     '',
     NULL,
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:46'
   ),
   (
-    '89',
+    89,
     'camda18-cancer-data-integration',
     'CAMDA18: Cancer Data Integration',
     '',
@@ -1356,10 +1534,12 @@ VALUES (
     '7',
     '',
     NULL,
-    NULL
+    NULL,
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:47'
   ),
   (
-    '90',
+    90,
     'cafa-4',
     'CAFA 4',
     '',
@@ -1370,10 +1550,12 @@ VALUES (
     '1',
     '',
     '2019-10-21',
-    '2020-02-12'
+    '2020-02-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:47'
   ),
   (
-    '91',
+    91,
     'casp13',
     'CASP13',
     '',
@@ -1384,10 +1566,12 @@ VALUES (
     '4',
     '',
     '2018-04-18',
-    '2018-08-20'
+    '2018-08-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:48'
   ),
   (
-    '92',
+    92,
     'casp14',
     'CASP14',
     '',
@@ -1398,10 +1582,12 @@ VALUES (
     '4',
     '',
     '2020-05-04',
-    '2020-09-07'
+    '2020-09-07',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:51'
   ),
   (
-    '93',
+    93,
     'cfsan-pathogen-detection',
     'CFSAN Pathogen Detection',
     '',
@@ -1412,10 +1598,12 @@ VALUES (
     '6',
     '',
     '2018-02-15',
-    '2018-04-26'
+    '2018-04-26',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:51'
   ),
   (
-    '94',
+    94,
     'cdrh-biothreat',
     'CDRH Biothreat',
     '',
@@ -1426,10 +1614,12 @@ VALUES (
     '6',
     '',
     '2018-08-03',
-    '2018-10-18'
+    '2018-10-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:52'
   ),
   (
-    '95',
+    95,
     'multi-omics-enabled-sample-mislabeling-correction',
     'Multi-omics Enabled Sample Mislabeling Correction',
     '',
@@ -1440,10 +1630,12 @@ VALUES (
     '6',
     '',
     '2018-09-24',
-    '2018-12-19'
+    '2018-12-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:52'
   ),
   (
-    '96',
+    96,
     'biocompute-object-app-a-thon',
     'BioCompute Object App-a-thon',
     '',
@@ -1454,10 +1646,12 @@ VALUES (
     '6',
     '',
     '2019-05-14',
-    '2019-10-18'
+    '2019-10-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:53'
   ),
   (
-    '97',
+    97,
     'brain-cancer-predictive-modeling-and-biomarker-discovery',
     'Brain Cancer Predictive Modeling and Biomarker Discovery',
     '',
@@ -1468,10 +1662,12 @@ VALUES (
     '6',
     '',
     '2019-11-01',
-    '2020-02-14'
+    '2020-02-14',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:53'
   ),
   (
-    '98',
+    98,
     'gaining-new-insights-by-detecting-adverse-event-anomalies',
     'Gaining New Insights by Detecting Adverse Event Anomalies',
     '',
@@ -1482,10 +1678,12 @@ VALUES (
     '6',
     '',
     '2020-01-17',
-    '2020-05-18'
+    '2020-05-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:54'
   ),
   (
-    '99',
+    99,
     'calling-variants-in-difficult-to-map-regions',
     'Calling Variants in Difficult-to-Map Regions',
     '',
@@ -1496,10 +1694,12 @@ VALUES (
     '6',
     '',
     '2020-05-01',
-    '2020-06-15'
+    '2020-06-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:55'
   ),
   (
-    '100',
+    100,
     'vha-innovation-ecosystem-and-covid-19-risk-factor-modeling',
     'VHA Innovation Ecosystem and COVID-19 Risk Factor Modeling',
     '',
@@ -1510,10 +1710,12 @@ VALUES (
     '6',
     '',
     '2020-06-02',
-    '2020-07-03'
+    '2020-07-03',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:56'
   ),
   (
-    '101',
+    101,
     'covid-19-precision-immunology-app-a-thon',
     'COVID-19 Precision Immunology App-a-thon',
     '',
@@ -1524,10 +1726,12 @@ VALUES (
     '6',
     '',
     '2020-11-30',
-    '2021-01-29'
+    '2021-01-29',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:57'
   ),
   (
-    '102',
+    102,
     'smarter-food-safety-low-cost-tech-enabled-traceability',
     'Smarter Food Safety Low Cost Tech-Enabled Traceability',
     '',
@@ -1538,10 +1742,12 @@ VALUES (
     '6',
     '',
     '2021-06-01',
-    '2021-07-30'
+    '2021-07-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:57'
   ),
   (
-    '103',
+    103,
     'tumor-mutational-burden-tmb-challenge-phase-1',
     'Tumor Mutational Burden (TMB) Challenge Phase 1',
     '',
@@ -1552,10 +1758,12 @@ VALUES (
     '6',
     '',
     '2021-06-21',
-    '2021-09-13'
+    '2021-09-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:57'
   ),
   (
-    '104',
+    104,
     'kidney-and-kidney-tumor-segmentation',
     'Kidney and Kidney Tumor Segmentation',
     '',
@@ -1566,10 +1774,12 @@ VALUES (
     '5',
     '',
     '2021-08-23',
-    '2021-09-17'
+    '2021-09-17',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:58'
   ),
   (
-    '105',
+    105,
     'cross-modality-da-for-medical-image-segmentation',
     'Cross-Modality DA for Medical Image Segmentation',
     '',
@@ -1580,10 +1790,12 @@ VALUES (
     '5',
     '',
     '2021-04-05',
-    '2021-09-27'
+    '2021-09-27',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:59'
   ),
   (
-    '106',
+    106,
     'real-noise-mri',
     'Real Noise MRI',
     '',
@@ -1594,10 +1806,12 @@ VALUES (
     '5',
     '',
     '2021-09-21',
-    '2021-12-06'
+    '2021-12-06',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:49:59'
   ),
   (
-    '107',
+    107,
     'deep-generative-model-challenge-for-da-in-surgery',
     'Deep Generative Model Challenge for DA in Surgery',
     '',
@@ -1608,10 +1822,12 @@ VALUES (
     '1',
     '',
     '2021-04-01',
-    '2021-07-16'
+    '2021-07-16',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:00'
   ),
   (
-    '108',
+    108,
     'aimdatathon',
     'AIM Datathon 2020',
     'Join the AI in Medicine ( AIM ) Datathon 2020',
@@ -1622,10 +1838,12 @@ VALUES (
     '8',
     '',
     '2020-11-09',
-    '2020-11-22'
+    '2020-11-22',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:02'
   ),
   (
-    '109',
+    109,
     'opc-recurrence',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Local Recurrence Prediction',
     'Determine from CT data whether a tumor will be controlled by definitive radiatio',
@@ -1636,10 +1854,12 @@ VALUES (
     '8',
     '',
     '2016-07-26',
-    '2016-09-12'
+    '2016-09-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:03'
   ),
   (
-    '110',
+    110,
     'oropharynx-radiomics-hpv',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Human Papilloma Virus (HPV) Status Prediction',
     'Predict from CT data the HPV phenotype of oropharynx tumors; compare to ground-t',
@@ -1650,10 +1870,12 @@ VALUES (
     '8',
     '',
     '2016-07-26',
-    '2016-09-12'
+    '2016-09-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:03'
   ),
   (
-    '111',
+    111,
     'data-science-bowl-2017',
     'Data Science Bowl 2017',
     'Can you improve lung cancer detection?',
@@ -1664,10 +1886,12 @@ VALUES (
     '8',
     '',
     '2017-01-12',
-    '2017-04-12'
+    '2017-04-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:04'
   ),
   (
-    '112',
+    112,
     'predict-impact-of-air-quality-on-death-rates',
     'Predict impact of air quality on mortality rates',
     'Predict CVD and cancer caused mortality rates in England using air quality data ',
@@ -1678,10 +1902,12 @@ VALUES (
     '8',
     '',
     '2017-02-13',
-    '2017-05-05'
+    '2017-05-05',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:04'
   ),
   (
-    '113',
+    113,
     'intel-mobileodt-cervical-cancer-screening',
     'Intel & MobileODT Cervical Cancer Screening',
     'Which cancer treatment will be most effective?',
@@ -1692,10 +1918,12 @@ VALUES (
     '8',
     '',
     '2017-03-15',
-    '2017-06-21'
+    '2017-06-21',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:05'
   ),
   (
-    '114',
+    114,
     'msk-redefining-cancer-treatment',
     'Personalized Medicine: Redefining Cancer Treatment',
     'Predict the effect of Genetic Variants to enable Personalized Medicine',
@@ -1706,10 +1934,12 @@ VALUES (
     '8',
     '',
     '2017-06-26',
-    '2017-10-02'
+    '2017-10-02',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:05'
   ),
   (
-    '115',
+    115,
     'mubravo',
     'Predicting Cancer Diagnosis',
     'Bravo''s machine learning competition!',
@@ -1720,10 +1950,12 @@ VALUES (
     '8',
     '',
     '2018-07-31',
-    '2018-08-13'
+    '2018-08-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:08'
   ),
   (
-    '116',
+    116,
     'histopathologic-cancer-detection',
     'Histopathologic Cancer Detection',
     'Identify metastatic tissue in histopathologic scans of lymph node sections',
@@ -1734,10 +1966,12 @@ VALUES (
     '8',
     '',
     '2018-11-16',
-    '2019-03-30'
+    '2019-03-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:10'
   ),
   (
-    '117',
+    117,
     'tjml1920-decision-trees',
     'TJML 2019-20 Breast Cancer Detection Competition',
     'Use a decision tree to identify malignant breast cancer tumors',
@@ -1748,10 +1982,12 @@ VALUES (
     '8',
     '',
     '2019-09-22',
-    '2019-10-16'
+    '2019-10-16',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:09'
   ),
   (
-    '118',
+    118,
     'prostate-cancer-grade-assessment',
     'Prostate cANcer graDe Assessment (PANDA) Challenge',
     'Prostate cancer diagnosis using the Gleason grading system',
@@ -1762,10 +1998,12 @@ VALUES (
     '8',
     '',
     '2020-04-21',
-    '2020-07-22'
+    '2020-07-22',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:10'
   ),
   (
-    '119',
+    119,
     'breast-cancer',
     'Breast Cancer',
     'Use cell nuclei categories to predict breast cancer tumor.',
@@ -1776,10 +2014,12 @@ VALUES (
     '8',
     '',
     '2020-08-12',
-    '2020-08-13'
+    '2020-08-13',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:10'
   ),
   (
-    '120',
+    120,
     'breast-cancer-detection',
     'Breast Cancer Detection',
     'breast cancer detection',
@@ -1790,10 +2030,12 @@ VALUES (
     '8',
     '',
     '2020-09-25',
-    '2020-12-31'
+    '2020-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:11'
   ),
   (
-    '121',
+    121,
     'hrpred',
     'Prediction of High Risk Patients',
     'Classification of high and low risk cancer patients',
@@ -1804,10 +2046,12 @@ VALUES (
     '8',
     '',
     '2020-11-25',
-    '2020-12-05'
+    '2020-12-05',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:11'
   ),
   (
-    '122',
+    122,
     'ml4moleng-cancer',
     'MIT ML4MolEng: Predicting Cancer Progression',
     'MIT 3.100, 10.402, 20.301 In class ML competition (Spring 2021)',
@@ -1818,10 +2062,12 @@ VALUES (
     '8',
     '',
     '2021-05-06',
-    '2021-05-21'
+    '2021-05-21',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:12'
   ),
   (
-    '123',
+    123,
     'uw-madison-gi-tract-image-segmentation',
     'UW-Madison GI Tract Image Segmentation',
     'Track healthy organs in medical scans to improve cancer treatment',
@@ -1832,10 +2078,12 @@ VALUES (
     '8',
     '',
     '2022-04-14',
-    '2022-07-14'
+    '2022-07-14',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:13'
   ),
   (
-    '124',
+    124,
     'rsna-miccai-brain-tumor-radiogenomic-classification',
     'RSNA-MICCAI Brain Tumor Radiogenomic Classification',
     'Predict the status of a genetic biomarker important for brain cancer treatment',
@@ -1846,10 +2094,12 @@ VALUES (
     '8',
     '',
     '2021-07-13',
-    '2021-10-15'
+    '2021-10-15',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:13'
   ),
   (
-    '125',
+    125,
     'breastcancer',
     'Breast Cancer - Beginners ML',
     'Beginners hands-on experience with ML basics',
@@ -1860,10 +2110,12 @@ VALUES (
     '8',
     '',
     '2021-12-21',
-    '2022-02-12'
+    '2022-02-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:13'
   ),
   (
-    '126',
+    126,
     'ml-olympiad-health-and-education',
     'ML Olympiad - Let''s Fight lung cancer',
     'Use your ML expertise to help us step another step toward defeating cancer [ Sta',
@@ -1874,10 +2126,12 @@ VALUES (
     '8',
     '',
     '2022-01-31',
-    '2022-03-19'
+    '2022-03-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:14'
   ),
   (
-    '127',
+    127,
     'cs98-22-dl-task1',
     'CS98X-22-DL-Task1',
     'This competition is related to Task 1 in coursework - breast cancer classificati',
@@ -1888,10 +2142,12 @@ VALUES (
     '8',
     '',
     '2022-02-28',
-    '2022-04-11'
+    '2022-04-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:16'
   ),
   (
-    '128',
+    128,
     'parasitedetection-iiitb2019',
     'Parasite detection',
     'detect if cell image has parasite or is uninfected',
@@ -1902,10 +2158,12 @@ VALUES (
     '8',
     '',
     '2019-10-13',
-    '2019-11-25'
+    '2019-11-25',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:16'
   ),
   (
-    '129',
+    129,
     'hpa-single-cell-image-classification',
     'Human Protein Atlas - Single Cell Classification',
     'Find individual human cell differences in microscope images',
@@ -1916,10 +2174,12 @@ VALUES (
     '8',
     '',
     '2021-01-26',
-    '2021-05-11'
+    '2021-05-11',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:17'
   ),
   (
-    '130',
+    130,
     'stem-cell-predcition',
     'Stem Cell Predcition',
     'Classify stem and non-stem cells using RNA-seq data',
@@ -1930,10 +2190,12 @@ VALUES (
     '8',
     '',
     '2021-04-01',
-    '2021-07-01'
+    '2021-07-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:18'
   ),
   (
-    '131',
+    131,
     'sartorius-cell-instance-segmentation',
     'Sartorius - Cell Instance Segmentation',
     'Detect single neuronal cells in microscopy images',
@@ -1944,10 +2206,12 @@ VALUES (
     '8',
     '',
     '2021-10-14',
-    '2021-12-30'
+    '2021-12-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:18'
   ),
   (
-    '132',
+    132,
     'pvelad',
     'Photovoltaic cell anomaly detection',
     'Hosted by Hebei University of Technology (AIHebut research group) and Beihang Un',
@@ -1958,10 +2222,12 @@ VALUES (
     '8',
     '',
     '2022-03-15',
-    '2022-07-30'
+    '2022-07-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:19'
   ),
   (
-    '133',
+    133,
     'blood-mnist',
     'Blood-MNIST',
     'Classifying blood cell types using Weights and Biases',
@@ -1972,10 +2238,12 @@ VALUES (
     '8',
     '',
     '2022-03-19',
-    '2022-03-19'
+    '2022-03-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:19'
   ),
   (
-    '134',
+    134,
     'insilicomolhack',
     'MolHack',
     'Apply deep learning to speedup drug validation',
@@ -1986,10 +2254,12 @@ VALUES (
     '8',
     '',
     '2018-04-02',
-    '2018-05-25'
+    '2018-05-25',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:20'
   ),
   (
-    '135',
+    135,
     'codata2019challenge',
     'Cell Response Classification',
     'From recorded timeseries of many cells in a well, predict which drug treatment h',
@@ -2000,10 +2270,12 @@ VALUES (
     '8',
     '',
     '2019-04-08',
-    '2019-05-07'
+    '2019-05-07',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:21'
   ),
   (
-    '136',
+    136,
     'drug-solubility-challenge',
     'Drug solubility challenge',
     'Solubility is vital to achieve desired concentration of drug for anticipated pha',
@@ -2014,10 +2286,12 @@ VALUES (
     '8',
     '',
     '2019-05-18',
-    '2019-10-18'
+    '2019-10-18',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:22'
   ),
   (
-    '137',
+    137,
     'kinase-inhibition-challenge',
     'Kinase inhibition challenge',
     'Protein kinases have become a major class of drug targets, accumulating a huge a',
@@ -2028,10 +2302,12 @@ VALUES (
     '8',
     '',
     '2019-05-20',
-    '2019-12-28'
+    '2019-12-28',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:22'
   ),
   (
-    '138',
+    138,
     'ai-drug-discovery',
     'AI Drug Discovery Workshop and Coding Challenge',
     'Developing Fundamental AI Programming Skills for Drug Discovery',
@@ -2042,10 +2318,12 @@ VALUES (
     '8',
     '',
     '2021-11-12',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:23'
   ),
   (
-    '139',
+    139,
     'protein-compound-affinity',
     'Structure-free protein-ligand affinity prediction - Task 1 Fitting',
     'Developing new AI models for drug discovery, main portal (Task-1 fitting)',
@@ -2056,10 +2334,12 @@ VALUES (
     '8',
     '',
     '2021-12-06',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:24'
   ),
   (
-    '140',
+    140,
     'cisc873-dm-f21-a5',
     'CISC873-DM-F21-A5',
     'Anti-Cancer Drug Activity Prediction',
@@ -2070,10 +2350,12 @@ VALUES (
     '8',
     '',
     '2021-11-26',
-    '2021-12-10'
+    '2021-12-10',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:24'
   ),
   (
-    '141',
+    141,
     'pro-lig-aff-task2-mse',
     'Structure-free protein-ligand affinity prediction - Task 2 Fitting',
     'Developing new AI models for drug discovery (Task-2 fitting)',
@@ -2084,10 +2366,12 @@ VALUES (
     '8',
     '',
     '2021-12-08',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:25'
   ),
   (
-    '142',
+    142,
     'pro-lig-aff-task1-pearsonr',
     'Structure-free protein-ligand affinity prediction - Task 1 Ranking',
     'Developing new AI models for drug discovery (Task-1 ranking)',
@@ -2098,10 +2382,12 @@ VALUES (
     '8',
     '',
     '2021-12-08',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:25'
   ),
   (
-    '143',
+    143,
     'pro-lig-aff-task2-pearsonr',
     'Structure-free protein-ligand affinity prediction - Task 2 Ranking',
     'Developing new AI models for drug discovery (Task-2 ranking)',
@@ -2112,10 +2398,12 @@ VALUES (
     '8',
     '',
     '2021-12-08',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:38'
   ),
   (
-    '144',
+    144,
     'pro-lig-aff-task3-spearmanr',
     'Structure-free protein-ligand affinity prediction - Task 3 Ranking',
     'Developing new AI models for drug discovery (Task-3 ranking)',
@@ -2126,10 +2414,12 @@ VALUES (
     '8',
     '',
     '2021-12-08',
-    '2021-12-31'
+    '2021-12-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:39'
   ),
   (
-    '145',
+    145,
     'hhp',
     'Heritage Health Prize',
     'Identify patients who will be admitted to a hospital within the next year using ',
@@ -2140,10 +2430,12 @@ VALUES (
     '8',
     '',
     '2011-04-04',
-    '2013-04-04'
+    '2013-04-04',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:39'
   ),
   (
-    '146',
+    146,
     'pf2012',
     'Practice Fusion Analyze This! 2012 - Prediction Challenge',
     'Start digging into electronic health records and submit your ideas for the most ',
@@ -2154,10 +2446,12 @@ VALUES (
     '8',
     '',
     '2012-06-07',
-    '2012-06-30'
+    '2012-06-30',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:40'
   ),
   (
-    '147',
+    147,
     'pf2012-at',
     'Practice Fusion Analyze This! 2012 - Open Challenge',
     'Start digging into electronic health records and submit your creative, insightfu',
@@ -2168,10 +2462,12 @@ VALUES (
     '8',
     '',
     '2012-06-07',
-    '2012-09-10'
+    '2012-09-10',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:41'
   ),
   (
-    '148',
+    148,
     'seizure-detection',
     'UPenn and Mayo Clinic''s Seizure Detection Challenge',
     'Detect seizures in intracranial EEG recordings',
@@ -2182,10 +2478,12 @@ VALUES (
     '8',
     '',
     '2014-05-19',
-    '2014-08-19'
+    '2014-08-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:41'
   ),
   (
-    '149',
+    149,
     'seizure-prediction',
     'American Epilepsy Society Seizure Prediction Challenge',
     'Predict seizures in intracranial EEG recordings',
@@ -2196,10 +2494,12 @@ VALUES (
     '8',
     '',
     '2014-08-25',
-    '2014-11-17'
+    '2014-11-17',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:42'
   ),
   (
-    '150',
+    150,
     'deephealth-1',
     'Deep Health - alcohol',
     'Find Correlations and patterns with Medical data',
@@ -2210,10 +2510,12 @@ VALUES (
     '8',
     '',
     '2017-02-13',
-    '2017-02-19'
+    '2017-02-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:44'
   ),
   (
-    '151',
+    151,
     'deep-health-3',
     'Deep Health - Diabetes 2',
     'This competition is for those attending the Deep Health Hackathon.  Predict the ',
@@ -2224,10 +2526,12 @@ VALUES (
     '8',
     '',
     '2017-02-15',
-    '2017-02-19'
+    '2017-02-19',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:44'
   ),
   (
-    '152',
+    152,
     'd012554-2021',
     'D012554 - 2021',
     'Classify the health of a fetus using CTG data',
@@ -2238,10 +2542,12 @@ VALUES (
     '8',
     '',
     '2021-04-11',
-    '2021-05-09'
+    '2021-05-09',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:45'
   ),
   (
-    '153',
+    153,
     'idao-2022-bootcamp-insomnia',
     'IDAO 2022. ML Bootcamp - Insomnia',
     'Predict sleep disorder on given human health data',
@@ -2252,10 +2558,12 @@ VALUES (
     '8',
     '',
     '2021-12-04',
-    '2021-12-05'
+    '2021-12-05',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:46'
   ),
   (
-    '154',
+    154,
     'tweet-mental-health-classification',
     'Tweet Mental Health Classification',
     'Build Models to classify tweets to determine mental health',
@@ -2266,10 +2574,12 @@ VALUES (
     '8',
     '',
     '2021-12-27',
-    '2022-01-31'
+    '2022-01-31',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:46'
   ),
   (
-    '155',
+    155,
     'ml-olympiad-good-health-and-well-being',
     'ML Olympiad - GOOD HEALTH AND WELL BEING',
     'Use your ML expertise to classify if a patient has heart disease or not',
@@ -2280,24 +2590,28 @@ VALUES (
     '8',
     '',
     '2022-02-03',
-    '2022-03-01'
+    '2022-03-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:47'
   ),
   (
-    '156',
+    156,
     'rsna-breast-cancer-detection',
     'RSNA Screening Mammography Breast Cancer Detection',
     'Find breast cancers in screening mammograms',
     'Find breast cancers in screening mammograms',
     'https://www.kaggle.com/competitions/rsna-breast-cancer-detection',
-    'completed',
+    'active',
     'intermediate',
     '8',
     '',
     '2022-11-28',
-    '2023-02-27'
+    '2023-02-27',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:48'
   ),
   (
-    '157',
+    157,
     'biocreative-vii-text-mining-drug-and-chemical-protein-interactions-drugprot',
     'BioCreative VII: Text mining drug and chemical-protein interactions (DrugProt)',
     '',
@@ -2310,10 +2624,12 @@ VALUES (
     '7',
     '',
     '2021-06-15',
-    '2021-09-22'
+    '2021-09-22',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:48'
   ),
   (
-    '158',
+    158,
     'extended-literature-ai-for-drug-induced-liver-injury',
     'Extended Literature AI for Drug Induced Liver Injury',
     '',
@@ -2324,10 +2640,12 @@ VALUES (
     '7',
     '',
     NULL,
-    '2022-05-20'
+    '2022-05-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:49'
   ),
   (
-    '159',
+    159,
     'anti-microbial-resistance-forensics',
     'Anti-Microbial Resistance Forensics',
     '',
@@ -2338,10 +2656,12 @@ VALUES (
     '7',
     '',
     NULL,
-    '2022-05-20'
+    '2022-05-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:49'
   ),
   (
-    '160',
+    160,
     'disease-maps-to-modelling-covid-19',
     'Disease Maps to Modelling COVID-19',
     'Use the COVID-19 disease map to suggest drugs candidate for repurposing, that co',
@@ -2352,10 +2672,12 @@ VALUES (
     '7',
     '',
     NULL,
-    '2022-05-20'
+    '2022-05-20',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:50'
   ),
   (
-    '161',
+    161,
     'crowdsourced-evaluation-of-inchi-based-tautomer-identification',
     'Crowdsourced Evaluation of InChI-based Tautomer Identification',
     'Calling on scientists from industry, government, and academia dealing with chemi',
@@ -2366,10 +2688,12 @@ VALUES (
     '6',
     '',
     '2022-11-01',
-    '2023-03-01'
+    '2023-03-01',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:51'
   ),
   (
-    '162',
+    162,
     'nctr-indel-calling-from-oncopanel-sequencing-challenge-phase-2',
     'NCTR Indel Calling from Oncopanel Sequencing Challenge Phase 2',
     'In Phase 2, participants who completed in Phase 1 of the challenge have the opti',
@@ -2380,10 +2704,12 @@ VALUES (
     '6',
     '',
     '2022-07-11',
-    '2022-07-26'
+    '2022-07-26',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:51'
   ),
   (
-    '163',
+    163,
     'nctr-indel-calling-from-oncopanel-sequencing-data-challenge-phase-1',
     'NCTR Indel Calling from Oncopanel Sequencing Data Challenge Phase 1',
     'Genetic variation involving indels (insertions and deletions) in the cancer geno',
@@ -2394,10 +2720,12 @@ VALUES (
     '6',
     '',
     '2022-05-02',
-    '2022-07-08'
+    '2022-07-08',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:54'
   ),
   (
-    '164',
+    164,
     'vha-innovation-ecosystem-and-precisionfda-covid-19-risk-factor-modeling-challenge-phase-2',
     'VHA Innovation Ecosystem and precisionFDA COVID-19 Risk Factor Modeling Challenge Phase 2',
     'The focus of Phase 2 was to validate the top performing models on two additional',
@@ -2408,10 +2736,12 @@ VALUES (
     '6',
     '',
     '2021-04-14',
-    '2022-01-28'
+    '2022-01-28',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:54'
   ),
   (
-    '165',
+    165,
     'tumor-mutational-burden-tmb-challenge-phase-2',
     'Tumor Mutational Burden (TMB) Challenge Phase 2',
     'The goal of the Friends of Cancer Research and precisionFDA Tumor Mutational Bur',
@@ -2422,10 +2752,12 @@ VALUES (
     '6',
     '',
     '2021-07-19',
-    '2021-09-12'
+    '2021-09-12',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:55'
   ),
   (
-    '166',
+    166,
     'predicting-gene-expression-using-millions-of-random-promoter-sequences',
     'Predicting Gene Expression Using Millions of Random Promoter Sequences',
     '',
@@ -2436,10 +2768,12 @@ VALUES (
     '1',
     '',
     '2022-06-15',
-    '2022-08-07'
+    '2022-08-07',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:57'
   ),
   (
-    '167',
+    167,
     'brats-2023',
     'BraTS 2023',
     '',
@@ -2450,7 +2784,9 @@ VALUES (
     '1',
     '',
     '2023-06-01',
-    '2023-08-25'
+    '2023-08-25',
+    '2023-06-23 00:00:00',
+    '2023-07-26 19:50:58'
   );
 
   -- challenge_organization_role data
@@ -3153,278 +3489,278 @@ VALUES (1, 1, 75, 'sponsor'),
 -- challenge_incentive data
 
 INSERT INTO challenge_incentive (id, name, challenge_id)
-VALUES ('1', 'publication', 1),
-  ('2', 'publication', 2),
-  ('3', 'speaking_engagement', 2),
-  ('4', 'monetary', 3),
-  ('5', 'publication', 5),
-  ('6', 'speaking_engagement', 5),
-  ('7', 'publication', 6),
-  ('8', 'speaking_engagement', 6),
-  ('9', 'monetary', 7),
-  ('10', 'publication', 7),
-  ('11', 'publication', 8),
-  ('12', 'speaking_engagement', 8),
-  ('13', 'publication', 9),
-  ('14', 'publication', 10),
-  ('15', 'speaking_engagement', 10),
-  ('16', 'publication', 11),
-  ('17', 'speaking_engagement', 11),
-  ('18', 'publication', 12),
-  ('19', 'speaking_engagement', 12),
-  ('20', 'monetary', 14),
-  ('21', 'publication', 14),
-  ('22', 'speaking_engagement', 14),
-  ('23', 'monetary', 15),
-  ('24', 'publication', 15),
-  ('25', 'speaking_engagement', 15),
-  ('26', 'publication', 16),
-  ('27', 'speaking_engagement', 16),
-  ('28', 'publication', 17),
-  ('29', 'speaking_engagement', 17),
-  ('30', 'monetary', 24),
-  ('31', 'publication', 24),
-  ('32', 'speaking_engagement', 24),
-  ('33', 'monetary', 25),
-  ('34', 'publication', 25),
-  ('35', 'speaking_engagement', 25),
-  ('36', 'publication', 26),
-  ('37', 'monetary', 27),
-  ('38', 'publication', 27),
-  ('39', 'publication', 28),
-  ('40', 'publication', 29),
-  ('41', 'publication', 30),
-  ('42', 'publication', 31),
-  ('43', 'speaking_engagement', 31),
-  ('44', 'publication', 34),
-  ('45', 'speaking_engagement', 34),
-  ('46', 'publication', 37),
-  ('47', 'speaking_engagement', 37),
-  ('48', 'publication', 38),
-  ('49', 'speaking_engagement', 38),
-  ('50', 'monetary', 46),
-  ('51', 'publication', 100),
-  ('52', 'speaking_engagement', 100),
-  ('53', 'publication', 101),
-  ('54', 'speaking_engagement', 101),
-  ('55', 'monetary', 111),
-  ('56', 'monetary', 113),
-  ('57', 'monetary', 114),
-  ('58', 'monetary', 118),
-  ('59', 'monetary', 123),
-  ('60', 'monetary', 124),
-  ('61', 'monetary', 129),
-  ('62', 'monetary', 131),
-  ('63', 'monetary', 145),
-  ('64', 'monetary', 146),
-  ('65', 'monetary', 147),
-  ('66', 'monetary', 148),
-  ('67', 'monetary', 149),
-  ('68', 'monetary', 156),
-  ('69', 'publication', 157),
-  ('70', 'other', 157),
-  ('71', 'publication', 158),
-  ('72', 'speaking_engagement', 158),
-  ('73', 'publication', 159),
-  ('74', 'speaking_engagement', 159),
-  ('75', 'publication', 160),
-  ('76', 'speaking_engagement', 160),
-  ('77', 'publication', 161),
-  ('78', 'other', 161),
-  ('79', 'publication', 162),
-  ('80', 'speaking_engagement', 162),
-  ('81', 'publication', 163),
-  ('82', 'speaking_engagement', 163),
-  ('83', 'publication', 165),
-  ('84', 'speaking_engagement', 166),
-  ('85', 'other', 166);
+VALUES (1, 'publication', 1),
+  (2, 'publication', 2),
+  (3, 'speaking_engagement', 2),
+  (4, 'monetary', 3),
+  (5, 'publication', 5),
+  (6, 'speaking_engagement', 5),
+  (7, 'publication', 6),
+  (8, 'speaking_engagement', 6),
+  (9, 'monetary', 7),
+  (10, 'publication', 7),
+  (11, 'publication', 8),
+  (12, 'speaking_engagement', 8),
+  (13, 'publication', 9),
+  (14, 'publication', 10),
+  (15, 'speaking_engagement', 10),
+  (16, 'publication', 11),
+  (17, 'speaking_engagement', 11),
+  (18, 'publication', 12),
+  (19, 'speaking_engagement', 12),
+  (20, 'monetary', 14),
+  (21, 'publication', 14),
+  (22, 'speaking_engagement', 14),
+  (23, 'monetary', 15),
+  (24, 'publication', 15),
+  (25, 'speaking_engagement', 15),
+  (26, 'publication', 16),
+  (27, 'speaking_engagement', 16),
+  (28, 'publication', 17),
+  (29, 'speaking_engagement', 17),
+  (30, 'monetary', 24),
+  (31, 'publication', 24),
+  (32, 'speaking_engagement', 24),
+  (33, 'monetary', 25),
+  (34, 'publication', 25),
+  (35, 'speaking_engagement', 25),
+  (36, 'publication', 26),
+  (37, 'monetary', 27),
+  (38, 'publication', 27),
+  (39, 'publication', 28),
+  (40, 'publication', 29),
+  (41, 'publication', 30),
+  (42, 'publication', 31),
+  (43, 'speaking_engagement', 31),
+  (44, 'publication', 34),
+  (45, 'speaking_engagement', 34),
+  (46, 'publication', 37),
+  (47, 'speaking_engagement', 37),
+  (48, 'publication', 38),
+  (49, 'speaking_engagement', 38),
+  (50, 'monetary', 46),
+  (51, 'publication', 100),
+  (52, 'speaking_engagement', 100),
+  (53, 'publication', 101),
+  (54, 'speaking_engagement', 101),
+  (55, 'monetary', 111),
+  (56, 'monetary', 113),
+  (57, 'monetary', 114),
+  (58, 'monetary', 118),
+  (59, 'monetary', 123),
+  (60, 'monetary', 124),
+  (61, 'monetary', 129),
+  (62, 'monetary', 131),
+  (63, 'monetary', 145),
+  (64, 'monetary', 146),
+  (65, 'monetary', 147),
+  (66, 'monetary', 148),
+  (67, 'monetary', 149),
+  (68, 'monetary', 156),
+  (69, 'publication', 157),
+  (70, 'other', 157),
+  (71, 'publication', 158),
+  (72, 'speaking_engagement', 158),
+  (73, 'publication', 159),
+  (74, 'speaking_engagement', 159),
+  (75, 'publication', 160),
+  (76, 'speaking_engagement', 160),
+  (77, 'publication', 161),
+  (78, 'other', 161),
+  (79, 'publication', 162),
+  (80, 'speaking_engagement', 162),
+  (81, 'publication', 163),
+  (82, 'speaking_engagement', 163),
+  (83, 'publication', 165),
+  (84, 'speaking_engagement', 166),
+  (85, 'other', 166);
 
 -- challenge_submission_type data
 
 INSERT INTO challenge_submission_type (id, name, challenge_id)
-VALUES ('1', 'prediction_file', 1),
-  ('2', 'prediction_file', 2),
-  ('3', 'prediction_file', 3),
-  ('4', 'prediction_file', 4),
-  ('5', 'prediction_file', 5),
-  ('6', 'prediction_file', 6),
-  ('7', 'prediction_file', 7),
-  ('8', 'prediction_file', 8),
-  ('9', 'prediction_file', 9),
-  ('10', 'prediction_file', 10),
-  ('11', 'prediction_file', 11),
-  ('12', 'prediction_file', 12),
-  ('13', 'prediction_file', 13),
-  ('14', 'prediction_file', 14),
-  ('15', 'prediction_file', 15),
-  ('16', 'prediction_file', 16),
-  ('17', 'prediction_file', 17),
-  ('18', 'prediction_file', 18),
-  ('19', 'prediction_file', 19),
-  ('20', 'prediction_file', 20),
-  ('21', 'prediction_file', 21),
-  ('22', 'other', 22),
-  ('23', 'prediction_file', 23),
-  ('24', 'container_image', 24),
-  ('25', 'container_image', 25),
-  ('26', 'prediction_file', 26),
-  ('27', 'prediction_file', 27),
-  ('28', 'container_image', 28),
-  ('29', 'prediction_file', 29),
-  ('30', 'prediction_file', 30),
-  ('31', 'prediction_file', 31),
-  ('32', 'prediction_file', 32),
-  ('33', 'prediction_file', 33),
-  ('34', 'prediction_file', 34),
-  ('35', 'container_image', 35),
-  ('36', 'prediction_file', 36),
-  ('37', 'container_image', 37),
-  ('38', 'prediction_file', 38),
-  ('39', 'container_image', 39),
-  ('40', 'container_image', 40),
-  ('41', 'container_image', 41),
-  ('42', 'prediction_file', 42),
-  ('43', 'prediction_file', 43),
-  ('44', 'container_image', 44),
-  ('45', 'container_image', 45),
-  ('46', 'prediction_file', 46),
-  ('47', 'container_image', 46),
-  ('48', 'container_image', 47),
-  ('49', 'other', 48),
-  ('50', 'prediction_file', 49),
-  ('51', 'container_image', 49),
-  ('52', 'prediction_file', 50),
-  ('53', 'container_image', 50),
-  ('54', 'prediction_file', 51),
-  ('55', 'container_image', 52),
-  ('56', 'container_image', 53),
-  ('57', 'container_image', 54),
-  ('58', 'container_image', 55),
-  ('59', 'other', 56),
-  ('60', 'prediction_file', 57),
-  ('61', 'container_image', 58),
-  ('62', 'prediction_file', 59),
-  ('63', 'prediction_file', 60),
-  ('64', 'prediction_file', 61),
-  ('65', 'prediction_file', 62),
-  ('66', 'prediction_file', 63),
-  ('67', 'prediction_file', 64),
-  ('68', 'prediction_file', 65),
-  ('69', 'prediction_file', 66),
-  ('70', 'prediction_file', 67),
-  ('71', 'prediction_file', 68),
-  ('72', 'prediction_file', 69),
-  ('73', 'prediction_file', 70),
-  ('74', 'prediction_file', 71),
-  ('75', 'prediction_file', 72),
-  ('76', 'prediction_file', 73),
-  ('77', 'prediction_file', 74),
-  ('78', 'prediction_file', 75),
-  ('79', 'prediction_file', 76),
-  ('80', 'prediction_file', 77),
-  ('81', 'prediction_file', 78),
-  ('82', 'prediction_file', 79),
-  ('83', 'prediction_file', 80),
-  ('84', 'prediction_file', 81),
-  ('85', 'prediction_file', 82),
-  ('86', 'prediction_file', 83),
-  ('87', 'prediction_file', 84),
-  ('88', 'prediction_file', 85),
-  ('89', 'prediction_file', 86),
-  ('90', 'container_image', 86),
-  ('91', 'other', 87),
-  ('92', 'other', 88),
-  ('93', 'other', 89),
-  ('94', 'prediction_file', 90),
-  ('95', 'prediction_file', 91),
-  ('96', 'prediction_file', 92),
-  ('97', 'prediction_file', 93),
-  ('98', 'prediction_file', 94),
-  ('99', 'prediction_file', 95),
-  ('100', 'prediction_file', 96),
-  ('101', 'prediction_file', 97),
-  ('102', 'prediction_file', 98),
-  ('103', 'prediction_file', 99),
-  ('104', 'prediction_file', 100),
-  ('105', 'prediction_file', 101),
-  ('106', 'prediction_file', 102),
-  ('107', 'prediction_file', 103),
-  ('108', 'container_image', 104),
-  ('109', 'prediction_file', 105),
-  ('110', 'container_image', 105),
-  ('111', 'prediction_file', 106),
-  ('112', 'container_image', 107),
-  ('113', 'notebook', 108),
-  ('114', 'notebook', 109),
-  ('115', 'notebook', 110),
-  ('116', 'notebook', 111),
-  ('117', 'notebook', 112),
-  ('118', 'notebook', 113),
-  ('119', 'notebook', 114),
-  ('120', 'notebook', 115),
-  ('121', 'notebook', 116),
-  ('122', 'notebook', 117),
-  ('123', 'notebook', 118),
-  ('124', 'notebook', 119),
-  ('125', 'notebook', 120),
-  ('126', 'notebook', 121),
-  ('127', 'notebook', 122),
-  ('128', 'notebook', 123),
-  ('129', 'notebook', 124),
-  ('130', 'notebook', 125),
-  ('131', 'notebook', 126),
-  ('132', 'notebook', 127),
-  ('133', 'notebook', 128),
-  ('134', 'notebook', 129),
-  ('135', 'notebook', 130),
-  ('136', 'notebook', 131),
-  ('137', 'notebook', 132),
-  ('138', 'notebook', 133),
-  ('139', 'notebook', 134),
-  ('140', 'notebook', 135),
-  ('141', 'notebook', 136),
-  ('142', 'notebook', 137),
-  ('143', 'notebook', 138),
-  ('144', 'notebook', 139),
-  ('145', 'notebook', 140),
-  ('146', 'notebook', 141),
-  ('147', 'notebook', 142),
-  ('148', 'notebook', 143),
-  ('149', 'notebook', 144),
-  ('150', 'notebook', 145),
-  ('151', 'notebook', 146),
-  ('152', 'notebook', 147),
-  ('153', 'notebook', 148),
-  ('154', 'notebook', 149),
-  ('155', 'notebook', 150),
-  ('156', 'notebook', 151),
-  ('157', 'notebook', 152),
-  ('158', 'notebook', 153),
-  ('159', 'notebook', 154),
-  ('160', 'notebook', 155),
-  ('161', 'notebook', 156),
-  ('162', 'prediction_file', 157),
-  ('163', 'other', 158),
-  ('164', 'other', 159),
-  ('165', 'other', 160),
-  ('166', 'prediction_file', 161),
-  ('167', 'prediction_file', 162),
-  ('168', 'other', 162),
-  ('169', 'prediction_file', 163),
-  ('170', 'other', 163),
-  ('171', 'prediction_file', 164),
-  ('172', 'prediction_file', 165),
-  ('173', 'prediction_file', 166),
-  ('174', 'other', 166),
-  ('175', 'prediction_file', 167),
-  ('176', 'container_image', 167);
+VALUES (1, 'prediction_file', 1),
+  (2, 'prediction_file', 2),
+  (3, 'prediction_file', 3),
+  (4, 'prediction_file', 4),
+  (5, 'prediction_file', 5),
+  (6, 'prediction_file', 6),
+  (7, 'prediction_file', 7),
+  (8, 'prediction_file', 8),
+  (9, 'prediction_file', 9),
+  (10, 'prediction_file', 10),
+  (11, 'prediction_file', 11),
+  (12, 'prediction_file', 12),
+  (13, 'prediction_file', 13),
+  (14, 'prediction_file', 14),
+  (15, 'prediction_file', 15),
+  (16, 'prediction_file', 16),
+  (17, 'prediction_file', 17),
+  (18, 'prediction_file', 18),
+  (19, 'prediction_file', 19),
+  (20, 'prediction_file', 20),
+  (21, 'prediction_file', 21),
+  (22, 'other', 22),
+  (23, 'prediction_file', 23),
+  (24, 'container_image', 24),
+  (25, 'container_image', 25),
+  (26, 'prediction_file', 26),
+  (27, 'prediction_file', 27),
+  (28, 'container_image', 28),
+  (29, 'prediction_file', 29),
+  (30, 'prediction_file', 30),
+  (31, 'prediction_file', 31),
+  (32, 'prediction_file', 32),
+  (33, 'prediction_file', 33),
+  (34, 'prediction_file', 34),
+  (35, 'container_image', 35),
+  (36, 'prediction_file', 36),
+  (37, 'container_image', 37),
+  (38, 'prediction_file', 38),
+  (39, 'container_image', 39),
+  (40, 'container_image', 40),
+  (41, 'container_image', 41),
+  (42, 'prediction_file', 42),
+  (43, 'prediction_file', 43),
+  (44, 'container_image', 44),
+  (45, 'container_image', 45),
+  (46, 'prediction_file', 46),
+  (47, 'container_image', 46),
+  (48, 'container_image', 47),
+  (49, 'other', 48),
+  (50, 'prediction_file', 49),
+  (51, 'container_image', 49),
+  (52, 'prediction_file', 50),
+  (53, 'container_image', 50),
+  (54, 'prediction_file', 51),
+  (55, 'container_image', 52),
+  (56, 'container_image', 53),
+  (57, 'container_image', 54),
+  (58, 'container_image', 55),
+  (59, 'other', 56),
+  (60, 'prediction_file', 57),
+  (61, 'container_image', 58),
+  (62, 'prediction_file', 59),
+  (63, 'prediction_file', 60),
+  (64, 'prediction_file', 61),
+  (65, 'prediction_file', 62),
+  (66, 'prediction_file', 63),
+  (67, 'prediction_file', 64),
+  (68, 'prediction_file', 65),
+  (69, 'prediction_file', 66),
+  (70, 'prediction_file', 67),
+  (71, 'prediction_file', 68),
+  (72, 'prediction_file', 69),
+  (73, 'prediction_file', 70),
+  (74, 'prediction_file', 71),
+  (75, 'prediction_file', 72),
+  (76, 'prediction_file', 73),
+  (77, 'prediction_file', 74),
+  (78, 'prediction_file', 75),
+  (79, 'prediction_file', 76),
+  (80, 'prediction_file', 77),
+  (81, 'prediction_file', 78),
+  (82, 'prediction_file', 79),
+  (83, 'prediction_file', 80),
+  (84, 'prediction_file', 81),
+  (85, 'prediction_file', 82),
+  (86, 'prediction_file', 83),
+  (87, 'prediction_file', 84),
+  (88, 'prediction_file', 85),
+  (89, 'prediction_file', 86),
+  (90, 'container_image', 86),
+  (91, 'other', 87),
+  (92, 'other', 88),
+  (93, 'other', 89),
+  (94, 'prediction_file', 90),
+  (95, 'prediction_file', 91),
+  (96, 'prediction_file', 92),
+  (97, 'prediction_file', 93),
+  (98, 'prediction_file', 94),
+  (99, 'prediction_file', 95),
+  (100, 'prediction_file', 96),
+  (101, 'prediction_file', 97),
+  (102, 'prediction_file', 98),
+  (103, 'prediction_file', 99),
+  (104, 'prediction_file', 100),
+  (105, 'prediction_file', 101),
+  (106, 'prediction_file', 102),
+  (107, 'prediction_file', 103),
+  (108, 'container_image', 104),
+  (109, 'prediction_file', 105),
+  (110, 'container_image', 105),
+  (111, 'prediction_file', 106),
+  (112, 'container_image', 107),
+  (113, 'notebook', 108),
+  (114, 'notebook', 109),
+  (115, 'notebook', 110),
+  (116, 'notebook', 111),
+  (117, 'notebook', 112),
+  (118, 'notebook', 113),
+  (119, 'notebook', 114),
+  (120, 'notebook', 115),
+  (121, 'notebook', 116),
+  (122, 'notebook', 117),
+  (123, 'notebook', 118),
+  (124, 'notebook', 119),
+  (125, 'notebook', 120),
+  (126, 'notebook', 121),
+  (127, 'notebook', 122),
+  (128, 'notebook', 123),
+  (129, 'notebook', 124),
+  (130, 'notebook', 125),
+  (131, 'notebook', 126),
+  (132, 'notebook', 127),
+  (133, 'notebook', 128),
+  (134, 'notebook', 129),
+  (135, 'notebook', 130),
+  (136, 'notebook', 131),
+  (137, 'notebook', 132),
+  (138, 'notebook', 133),
+  (139, 'notebook', 134),
+  (140, 'notebook', 135),
+  (141, 'notebook', 136),
+  (142, 'notebook', 137),
+  (143, 'notebook', 138),
+  (144, 'notebook', 139),
+  (145, 'notebook', 140),
+  (146, 'notebook', 141),
+  (147, 'notebook', 142),
+  (148, 'notebook', 143),
+  (149, 'notebook', 144),
+  (150, 'notebook', 145),
+  (151, 'notebook', 146),
+  (152, 'notebook', 147),
+  (153, 'notebook', 148),
+  (154, 'notebook', 149),
+  (155, 'notebook', 150),
+  (156, 'notebook', 151),
+  (157, 'notebook', 152),
+  (158, 'notebook', 153),
+  (159, 'notebook', 154),
+  (160, 'notebook', 155),
+  (161, 'notebook', 156),
+  (162, 'prediction_file', 157),
+  (163, 'other', 158),
+  (164, 'other', 159),
+  (165, 'other', 160),
+  (166, 'prediction_file', 161),
+  (167, 'prediction_file', 162),
+  (168, 'other', 162),
+  (169, 'prediction_file', 163),
+  (170, 'other', 163),
+  (171, 'prediction_file', 164),
+  (172, 'prediction_file', 165),
+  (173, 'prediction_file', 166),
+  (174, 'other', 166),
+  (175, 'prediction_file', 167),
+  (176, 'container_image', 167);
 
 -- challenge_star data
 
 INSERT INTO challenge_star (id, challenge_id, user_id)
-VALUES ('1', 1, 1),
-  ('2', 2, 1),
-  ('3', 1, 2);
+VALUES (1, 1, 1),
+  (2, 2, 1),
+  (3, 1, 2);
 
 -- challenge_x_challenge_input_data_type definition
 
