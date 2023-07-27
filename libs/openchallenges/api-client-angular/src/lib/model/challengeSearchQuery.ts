@@ -10,7 +10,6 @@
  * Do not edit the class manually.
  */
 import { ChallengeDirection } from './challengeDirection';
-import { ChallengeCategory } from './challengeCategory';
 import { ChallengeSort } from './challengeSort';
 import { ChallengeDifficulty } from './challengeDifficulty';
 import { ChallengeStatus } from './challengeStatus';
@@ -68,10 +67,6 @@ export interface ChallengeSearchQuery {
      * An array of challenge submission types used to filter the results.
      */
     submissionTypes?: Array<ChallengeSubmissionType>;
-    /**
-     * The array of challenge categories used to filter the results.
-     */
-    categories?: Array<ChallengeCategory>;
     /**
      * A string of search terms used to filter the results.
      */

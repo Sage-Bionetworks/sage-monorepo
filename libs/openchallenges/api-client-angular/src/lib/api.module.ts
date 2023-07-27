@@ -8,6 +8,7 @@ import { ChallengeInputDataTypeService } from './api/challengeInputDataType.serv
 import { ChallengePlatformService } from './api/challengePlatform.service';
 import { ImageService } from './api/image.service';
 import { OrganizationService } from './api/organization.service';
+import { UserService } from './api/user.service';
 
 @NgModule({
   imports:      [],

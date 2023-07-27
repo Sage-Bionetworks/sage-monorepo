@@ -12,11 +12,14 @@
 
 
 /**
- * The category of the challenge.
+ * The account status of a user
  */
-export type ChallengeCategory = 'featured';
+export type UserStatus = 'pending' | 'approved' | 'disabled' | 'blacklist';
 
-export const ChallengeCategory = {
-    Featured: 'featured' as ChallengeCategory
+export const UserStatus = {
+    Pending: 'pending' as UserStatus,
+    Approved: 'approved' as UserStatus,
+    Disabled: 'disabled' as UserStatus,
+    Blacklist: 'blacklist' as UserStatus
 };
 
