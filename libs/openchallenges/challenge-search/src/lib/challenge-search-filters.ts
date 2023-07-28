@@ -9,6 +9,7 @@ import {
   challengePlatformsFilterValues,
   challengeOrganizationsFilterValues,
   challengeOrganizersFilterValues,
+  challengeCategoriesFilterValues,
 } from './challenge-search-filters-values';
 
 export const challengeStartYearRangeFilter: Filter = {
@@ -61,6 +62,13 @@ export const challengeInputDataTypesFilter: Filter = {
   values: challengeInputDataTypesFilterValues,
   collapsed: false,
   showAvatar: false,
+};
+
+export const challengeCategoriesFilter: Filter = {
+  query: 'categories',
+  label: 'Category',
+  values: challengeCategoriesFilterValues,
+  collapsed: false,
 };
 
 export const challengeOrganizationsFilter: Filter = {

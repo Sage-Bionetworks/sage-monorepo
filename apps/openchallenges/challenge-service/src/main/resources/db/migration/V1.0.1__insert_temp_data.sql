@@ -3765,7 +3765,14 @@ VALUES (1, 1, 1),
 -- challenge_x_challenge_input_data_type definition
 
 INSERT INTO challenge_x_challenge_input_data_type (id, challenge_id, challenge_input_data_type_id)
-VALUES (1, 1, 1),
-  (2, 2, 1),
-  (3, 1, 2),
-  (4, 4, 4);
+VALUES ('1', 1, 1),
+  ('2', 2, 1),
+  ('3', 1, 2),
+  ('4', 4, 4);
+
+-- challenge_category data
+
+INSERT INTO challenge_category (id, challenge_id, category)
+VALUES (1, 161, 'featured'),
+  (2, 156, 'featured'),
+  (3, 58, 'featured');
