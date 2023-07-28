@@ -62,6 +62,7 @@
     3306,
     4200,
     4211,
+    5000,
     5432,
     5601,
     7010,
@@ -112,6 +113,10 @@
     },
     "5432": {
       "label": "openchallenges-postgres",
+      "onAutoForward": "silent"
+    },
+    "5000": {
+      "label": "sonarqube",
       "onAutoForward": "silent"
     },
     "5601": {
