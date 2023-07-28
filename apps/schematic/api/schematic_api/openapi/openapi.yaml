@@ -206,8 +206,8 @@ paths:
             error
       summary: Gets attributes associated with a given component
       tags:
-      - Storage
-      x-openapi-router-controller: schematic_api.controllers.storage_controller
+      - Schema
+      x-openapi-router-controller: schematic_api.controllers.schema_controller
 components:
   parameters:
     projectId:
