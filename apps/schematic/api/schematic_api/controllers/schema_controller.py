@@ -26,9 +26,7 @@ def list_component_attributes(schema_url, component_label):  # noqa: E501
     return schema_controller_impl.list_component_attributes(schema_url, component_label)
 
 
-def list_component_dependencies(
-    schema_url, component_label, return_display_names, return_ordered_by_schema
-):  # noqa: E501
+def list_component_dependencies(schema_url, component_label, return_display_names=None, return_ordered_by_schema=None):  # noqa: E501
     """Gets the immediate dependencies that are related to a given component in the schema.
 
     Gets the immediate dependencies that are related to a given component in the schema. # noqa: E501
@@ -44,6 +42,4 @@ def list_component_dependencies(
 
     :rtype: Union[ComponentsPage, Tuple[ComponentsPage, int], Tuple[ComponentsPage, int, Dict[str, str]]
     """
-    return schema_controller_impl.list_component_dependencies(
-        schema_url, component_label, return_display_names, return_ordered_by_schema
-    )
+    return schema_controller_impl.list_component_dependencies(schema_url, component_label, return_display_names=None, return_ordered_by_schema=None)
