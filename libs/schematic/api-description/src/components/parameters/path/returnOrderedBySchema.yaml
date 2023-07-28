@@ -1,0 +1,6 @@
+name: returnOrderedBySchema
+in: query
+description: Whether or not to order the components by their order in the schema, otherwise random
+required: true
+schema:
+  $ref: ../../schemas/ReturnOrderedBySchema.yaml

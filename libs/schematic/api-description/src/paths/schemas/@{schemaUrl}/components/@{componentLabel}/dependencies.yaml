@@ -6,7 +6,7 @@ get:
     - Schema
   summary: Gets the immediate dependencies that are related to a given component in the schema.
   description: Gets the immediate dependencies that are related to a given component in the schema.
-  operationId: listStorageProjectDatasets
+  operationId: listComponentDependencies
   parameters:
     - $ref: ../../../../../components/parameters/path/returnDisplayNames.yaml
     - $ref: ../../../../../components/parameters/path/returnOrderedBySchema.yaml

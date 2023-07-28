@@ -1,0 +1,6 @@
+name: returnDisplayNames
+in: query
+description: Whether or not to return the display names of the component, otherwise the label
+required: true
+schema:
+  $ref: ../../schemas/ReturnDisplayNames.yaml
