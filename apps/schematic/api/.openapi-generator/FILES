@@ -12,6 +12,9 @@ schematic_api/models/attributes_page.py
 schematic_api/models/attributes_page_all_of.py
 schematic_api/models/base_model_.py
 schematic_api/models/basic_error.py
+schematic_api/models/component.py
+schematic_api/models/components_page.py
+schematic_api/models/components_page_all_of.py
 schematic_api/models/dataset.py
 schematic_api/models/datasets_page.py
 schematic_api/models/datasets_page_all_of.py
@@ -21,6 +24,5 @@ schematic_api/models/manifests_page_all_of.py
 schematic_api/models/page_metadata.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
-schematic_api/test/test_schema_controller.py
 schematic_api/typing_utils.py
 schematic_api/util.py
