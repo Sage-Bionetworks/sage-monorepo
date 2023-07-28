@@ -5,11 +5,29 @@ from typing import Tuple
 from typing import Union
 
 from schematic_api.models.asset_type import AssetType  # noqa: E501
+from schematic_api.models.attributes_page import AttributesPage  # noqa: E501
 from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.datasets_page import DatasetsPage  # noqa: E501
 from schematic_api.models.manifests_page import ManifestsPage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import storage_controller_impl
+
+
+def list_component_attributes(schema_url, component_label):  # noqa: E501
+    """Gets attributes associated with a given component
+
+    Gets attributes associated with a given component # noqa: E501
+
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+    :param component_label: The label of a component in a schema
+    :type component_label: str
+
+    :rtype: Union[AttributesPage, Tuple[AttributesPage, int], Tuple[AttributesPage, int, Dict[str, str]]
+    """
+    return storage_controller_impl.list_component_attributes(
+        schema_url, component_label
+    )
 
 
 def list_storage_project_datasets(project_id, asset_view_id, asset_type):  # noqa: E501

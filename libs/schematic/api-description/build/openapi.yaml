@@ -17,6 +17,8 @@ security:
 tags:
   - name: Storage
     description: Operations about storages.
+  - name: Schema
+    description: Operations dealign with a schema
 paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     parameters:
@@ -72,6 +74,25 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /schemas/{schemaUrl}/components/{componentLabel}/attributes:
+    parameters:
+      - $ref: '#/components/parameters/schemaUrl'
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Storage
+      summary: Gets attributes associated with a given component
+      description: Gets attributes associated with a given component
+      operationId: listComponentAttributes
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -231,6 +252,40 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
+    SchemaUrl:
+      description: The URL of a schema in jsonld form
+      type: string
+      example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
+    Attribute:
+      type: object
+      description: A attribute from a component in a schema
+      properties:
+        name:
+          type: string
+          description: The name of the attribute.
+          example: molecularlyInteractsWith
+      required:
+        - name
+    AttributesPage:
+      type: object
+      description: A page of attributes.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            attributes:
+              description: A list of attributrs.
+              type: array
+              items:
+                $ref: '#/components/schemas/Attribute'
+          required:
+            - attributes
+      x-java-class-annotations:
+        - '@lombok.Builder'
   parameters:
     projectId:
       name: projectId
@@ -253,6 +308,20 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    schemaUrl:
+      name: schemaUrl
+      in: path
+      description: The URL of a schema in jsonld form
+      required: true
+      schema:
+        $ref: '#/components/schemas/SchemaUrl'
+    componentLabel:
+      name: componentLabel
+      in: path
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
   responses:
     BadRequest:
       description: Invalid request
