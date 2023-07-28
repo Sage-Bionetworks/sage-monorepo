@@ -13,6 +13,7 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 COMPONENT_ATTRIBUTES_URL = "/api/v1/schemas/xxx/components/component1/attributes"
+COMPONENT_DEPENDENCIES_URL = "/api/v1/schemas/xxx/components/component1/dependencies"
 
 
 class TestComponentAttributes(BaseTestCase):
@@ -54,6 +55,70 @@ class TestComponentAttributes(BaseTestCase):
         ):
             response = self.client.open(
                 COMPONENT_ATTRIBUTES_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestComponentDependencies(BaseTestCase):
+    """Test case for component dependencies endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_dependencies",
+            return_value=["dependency1", "dependency2"],
+        ):
+            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=true"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            assert not response.json["hasNext"]
+            assert not response.json["hasPrevious"]
+            assert response.json["number"] == 0
+            assert response.json["size"] == 100
+            assert response.json["totalElements"] == 2
+            assert response.json["totalPages"] == 1
+            dependencies = response.json["components"]
+            assert len(dependencies) == 2
+            dependency = dependencies[0]
+            assert list(dependency.keys()) == ["name"]
+            assert dependency["name"] == "dependency1"
+
+    def test_return_display_names(self) -> None:
+        """Test for returnDisplayNames parameter"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_dependencies",
+            return_value=["dependency1", "dependency2"],
+        ):
+            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=true"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=false"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_dependencies",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                COMPONENT_DEPENDENCIES_URL, method="GET", headers=HEADERS
             )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
