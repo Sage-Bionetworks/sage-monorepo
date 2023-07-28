@@ -384,14 +384,14 @@ components:
       name: returnDisplayNames
       in: query
       description: Whether or not to return the display names of the component, otherwise the label
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/ReturnDisplayNames'
     returnOrderedBySchema:
       name: returnOrderedBySchema
       in: query
       description: Whether or not to order the components by their order in the schema, otherwise random
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
   responses:
