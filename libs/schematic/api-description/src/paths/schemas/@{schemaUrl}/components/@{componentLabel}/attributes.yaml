@@ -3,7 +3,7 @@ parameters:
   - $ref: ../../../../../components/parameters/path/componentLabel.yaml
 get:
   tags:
-    - Storage
+    - Schema
   summary: Gets attributes associated with a given component
   description: Gets attributes associated with a given component
   operationId: listComponentAttributes

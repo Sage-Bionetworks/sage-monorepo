@@ -1,24 +1,16 @@
 """Implementation of all endpoints"""
-from typing import Optional, Union, Callable, Any
+from typing import Optional, Union, Callable
 from flask import request  # type: ignore
 
-from synapseclient.core.exceptions import (  # type: ignore
-    SynapseNoCredentialsError,
-    SynapseAuthenticationError,
-)
-
 from schematic.store.synapse import SynapseStorage  # type: ignore
-from schematic.exceptions import AccessCredentialsError  # type: ignore
 from schematic import CONFIG  # type: ignore
-from schematic.schemas.explorer import SchemaExplorer  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.dataset import Dataset
 from schematic_api.models.datasets_page import DatasetsPage
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifest import Manifest
-from schematic_api.models.attributes_page import AttributesPage
-from schematic_api.models.attribute import Attribute
+from schematic_api.controllers.utils import handle_exceptions
 
 
 def get_access_token() -> Optional[str]:
@@ -32,46 +24,6 @@ def get_access_token() -> Optional[str]:
         if auth_header.startswith("Bearer "):
             bearer_token = auth_header.split(" ")[1]
     return bearer_token
-
-
-def handle_exceptions(endpoint_function: Callable) -> Callable:
-    """
-    This is designed to be used as a decorator for endpoint functions.
-    The endpoint function is called in a try block, and then various
-      Synapse and Schematic exceptions are handled and returned as the
-      BasicError object.
-
-    Args:
-        f (Callable): A function that calls the input function
-    """
-
-    def func(*args: Any, **kwargs: Any) -> tuple[Union[Any, BasicError], int]:
-        try:
-            return endpoint_function(*args, **kwargs)
-
-        except SynapseNoCredentialsError as error:
-            status = 401
-            res = BasicError(
-                "Missing or invalid Synapse credentials error", status, str(error)
-            )
-            return res, status
-
-        except SynapseAuthenticationError as error:
-            status = 401
-            res = BasicError("Forbidden Synapse access error", status, str(error))
-            return res, status
-
-        except AccessCredentialsError as error:
-            status = 403
-            res = BasicError("Synapse entity access error", status, str(error))
-            return res, status
-
-        except Exception as error:  # pylint: disable=broad-exception-caught
-            status = 500
-            res = BasicError("Internal error", status, str(error))
-            return res, status
-
-    return func
 
 
 def get_asset_storage_class(asset_type: str) -> Callable:
@@ -207,58 +159,6 @@ def list_storage_project_manifests(
         manifests=manifests,
     )
     result: Union[ManifestsPage, BasicError] = page
-    status = 200
-
-    return result, status
-
-
-# schema controller functions -------------------------------------------------
-
-
-def get_component_attributes(schema_url: str, component_label: str) -> list[str]:
-    """Gets the attributes associated with the component
-
-    Args:
-        schema_url (str): _description_
-        component_label (str): _description_
-
-    Returns:
-        list[str]: _description_
-    """
-    schema_explorer = SchemaExplorer()
-    schema_explorer.load_schema(schema_url)
-    return schema_explorer.find_class_specific_properties(component_label)
-
-
-@handle_exceptions
-def list_component_attributes(
-    schema_url: str, component_label: str
-) -> tuple[Union[AttributesPage, BasicError], int]:
-    """Lists the attributes associated with the component
-
-    Args:
-        schema_url (str): _description_
-        component_label (str): _description_
-
-    Returns:
-        tuple[Union[AttributesPage, BasicError], int]: _description_
-    """
-
-    attributes = [
-        Attribute(attribute)
-        for attribute in get_component_attributes(schema_url, component_label)
-    ]
-
-    page = AttributesPage(
-        number=0,
-        size=100,
-        total_elements=len(attributes),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        attributes=attributes,
-    )
-    result: Union[AttributesPage, BasicError] = page
     status = 200
 
     return result, status

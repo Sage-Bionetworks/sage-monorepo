@@ -104,7 +104,7 @@ paths:
       - $ref: '#/components/parameters/componentLabel'
     get:
       tags:
-        - Storage
+        - Schema
       summary: Gets attributes associated with a given component
       description: Gets attributes associated with a given component
       operationId: listComponentAttributes
