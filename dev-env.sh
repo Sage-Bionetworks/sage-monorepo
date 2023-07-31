@@ -33,6 +33,7 @@ function workspace-install {
   nx run-many --target=prepare
   nx run-many --target=prepare-java --parallel=1
   nx run-many --target=prepare-python
+  nx run-many --target=prepare-r
 }
 
 function workspace-prepare {
