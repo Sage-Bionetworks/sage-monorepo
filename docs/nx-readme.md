@@ -19,15 +19,15 @@ Below are our core plugins:
 - [React](https://reactjs.org)
   - `npm install --save-dev @nrwl/react`
 - Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
+  - `npm install --save-dev @nx/web`
 - [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
+  - `npm install --save-dev @nx/angular`
 - [Nest](https://nestjs.com)
   - `npm install --save-dev @nrwl/nest`
 - [Express](https://expressjs.com)
   - `npm install --save-dev @nrwl/express`
 - [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+  - `npm install --save-dev @nx/node`
 
 There are also many [community plugins](https://nx.dev/community) you could add.
 
@@ -81,8 +81,6 @@ Run `nx graph` to see a diagram of the dependencies of your projects.
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
 
 ## ☁ Nx Cloud
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { makeStateKey, TransferState } from '@angular/platform-browser';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Observable, of } from 'rxjs';
 import { AWESOME_USER_PROFILE, EMPTY_USER_PROFILE } from './mock-user-profiles';
@@ -9,7 +9,7 @@ import { UserProfile } from './user-profile';
 @Injectable({
   providedIn: 'root',
 })
-export class UserProfileResolver implements Resolve<UserProfile> {
+export class UserProfileResolver  {
   constructor(
     private transferState: TransferState,
     private configService: ConfigService // @Inject(PLATFORM_ID) private platformId

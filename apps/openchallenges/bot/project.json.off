@@ -4,7 +4,7 @@
   "projectType": "application",
   "targets": {
     "build-watch": {
-      "executor": "@nrwl/workspace:run-commands",
+      "executor": "@nx/workspace:run-commands",
       "options": {
         "command": "tsc -p tsconfig.app.json --watch",
         "cwd": "apps/challenge-bot"
@@ -39,14 +39,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"]
       }
     },
     "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/challenge-bot/src/**/*.ts"],
@@ -54,7 +54,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["coverage/apps/challenge-bot"],
       "options": {
         "jestConfig": "apps/challenge-bot/jest.config.ts",
