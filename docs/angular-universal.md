@@ -39,20 +39,23 @@ The previous version of the OpenChallenges app generated in early 2022 is refere
 app.
 
 1. Create an Angular app.
-    ```console
-    nx generate @nrwl/angular:app openchallenges --routing=true --style=scss
-    ```
-    > **Note** Add the option `--dry-run` to preview the output of Nx commands.
 
-    > **Note** The legacy OpenChallenges app generated early 2022 was build with the generator
-    > `@nrwl/angular:webpack-browser`. The newly generated app is now built with
-    > `@angular-devkit/build-angular:browser` (see `project.json`).
+   ```console
+   nx generate @nx/angular:app openchallenges --routing=true --style=scss
+   ```
+
+   > **Note** Add the option `--dry-run` to preview the output of Nx commands.
+
+   > **Note** The legacy OpenChallenges app generated early 2022 was build with the generator
+   > `@nx/angular:webpack-browser`. The newly generated app is now built with
+   > `@angular-devkit/build-angular:browser` (see `project.json`).
 
 2. Let's use the Angular Universal schematic to initialize our SSR setup for the
    `openchallenges` application by running the following in the terminal:
-    ```console
-    nx generate @schematics/angular:universal --project=openchallenges
-    ```
+
+   ```console
+   nx generate @schematics/angular:universal --project=openchallenges
+   ```
 
 3. Follow the instructions listed in the article [Server-side rendering (SSR) with Angular for Nx
    workspaces] to add the project target `serve-ssr`.
@@ -61,134 +64,143 @@ app.
    `src/config` from the legacy OpenChallenges app.
 
 5. Update `project.json`
-    - Add this line to the top of `project.json` is missing.
-      ```console
-      "$schema": "../../node_modules/nx/schemas/project-schema.json",
-      ```
 
-    - Update the value of `prefix`.
-      ```console
-      "prefix": "openchallenges",
-      ```
+   - Add this line to the top of `project.json` is missing.
 
-    - Copy-paste the following targets from the legacy app.
-      - `prepare`
-      - `lint-fix`
-      - `build-image`
+     ```console
+     "$schema": "../../node_modules/nx/schemas/project-schema.json",
+     ```
 
-    - Update the value of `assets` specified in the `build` target.
-      ```console
-      "assets": [
-        "apps/openchallenges/src/assets",
-        "apps/openchallenges/src/config",
-        {
-          "input": "libs/shared/typescript/assets/src/assets",
-          "glob": "**/*",
-          "output": "assets"
-        },
-        {
-          "input": "libs/openchallenges/assets/src/assets",
-          "glob": "**/*",
-          "output": "openchallenges-assets"
-        },
-        {
-          "input": "libs/shared/typescript/assets/src",
-          "glob": "favicon.ico",
-          "output": ""
+   - Update the value of `prefix`.
+
+     ```console
+     "prefix": "openchallenges",
+     ```
+
+   - Copy-paste the following targets from the legacy app.
+
+     - `prepare`
+     - `lint-fix`
+     - `build-image`
+
+   - Update the value of `assets` specified in the `build` target.
+
+     ```console
+     "assets": [
+       "apps/openchallenges/src/assets",
+       "apps/openchallenges/src/config",
+       {
+         "input": "libs/shared/typescript/assets/src/assets",
+         "glob": "**/*",
+         "output": "assets"
+       },
+       {
+         "input": "libs/openchallenges/assets/src/assets",
+         "glob": "**/*",
+         "output": "openchallenges-assets"
+       },
+       {
+         "input": "libs/shared/typescript/assets/src",
+         "glob": "favicon.ico",
+         "output": ""
+       }
+     ],
+     ```
+
+   - Update the value of `budgets` in the `configurations` object of the `build` target.
+
+     ```console
+     "budgets": [
+       {
+         "type": "initial",
+         "maximumWarning": "500kb",
+         "maximumError": "1mb"
+       },
+       {
+         "type": "anyComponentStyle",
+         "maximumWarning": "2kb",
+         "maximumError": "8kb"
+       }
+     ],
+     ```
+
+   - Empty the array value of `fileReplacements` in the `configurations` object of the
+     `build` target.
+
+   - Set the project `tags`.
+
+     ```console
+     "tags": [
+       "type:app",
+       "scope:client"
+     ],
+     ```
+
+   - Set the project `implicitDependencies`.
+     ```console
+     "implicitDependencies": [
+       "openchallenges-styles",
+       "openchallenges-themes",
+       "shared-typescript-assets",
+       "openchallenges-api-gateway",
+       "openchallenges-keycloak"
+     ]
+     ```
+
+- Replace the content of the `src/main.ts` with the following code to make use of the
+  configuration defined in the folder `src/config` to enable [Build once, deploy many].
+
+  ```console
+  import { enableProdMode } from '@angular/core';
+  import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+  import { AppModule } from './app/app.module';
+  import {
+    AppConfig,
+    APP_CONFIG,
+    Environment,
+  } from '@sagebionetworks/openchallenges/config';
+
+  function bootstrap() {
+    fetch('/config/config.json')
+      .then((response) => response.json() as Promise<AppConfig>)
+      .then((config: AppConfig) => {
+        if (
+          [Environment.Production, Environment.Staging].includes(
+            config.environment
+          )
+        ) {
+          enableProdMode();
         }
-      ],
-      ```
 
-    - Update the value of `budgets` in the `configurations` object of the `build` target.
-      ```console
-      "budgets": [
-        {
-          "type": "initial",
-          "maximumWarning": "500kb",
-          "maximumError": "1mb"
-        },
-        {
-          "type": "anyComponentStyle",
-          "maximumWarning": "2kb",
-          "maximumError": "8kb"
-        }
-      ],
-      ```
+        console.log('openchallenges config', config);
 
-    - Empty the array value of `fileReplacements` in the `configurations` object of the
-      `build` target.
+        platformBrowserDynamic([{ provide: APP_CONFIG, useValue: config }])
+          .bootstrapModule(AppModule)
+          .catch((err) => console.error(err));
+      });
+  }
 
-    - Set the project `tags`.
-      ```console
-      "tags": [
-        "type:app",
-        "scope:client"
-      ],
-      ```
+  if (document.readyState === 'complete') {
+    bootstrap();
+  } else {
+    document.addEventListener('DOMContentLoaded', bootstrap);
+  }
+  ```
 
-    - Set the project `implicitDependencies`.
-      ```console
-      "implicitDependencies": [
-        "openchallenges-styles",
-        "openchallenges-themes",
-        "shared-typescript-assets",
-        "openchallenges-api-gateway",
-        "openchallenges-keycloak"
-      ]
-      ```
+- Update the `src` files based on the legacy code. These files include but are not limited to:
 
-  - Replace the content of the `src/main.ts` with the following code to make use of the
-    configuration defined in the folder `src/config` to enable [Build once, deploy many].
-    ```console
-    import { enableProdMode } from '@angular/core';
-    import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+  - `src/app/*`
+  - `_app-theme.scss`
+  - `src/index.html`
+  - `src/proxy.conf.json`
+  - `styles.scss`
 
-    import { AppModule } from './app/app.module';
-    import {
-      AppConfig,
-      APP_CONFIG,
-      Environment,
-    } from '@sagebionetworks/openchallenges/config';
-
-    function bootstrap() {
-      fetch('/config/config.json')
-        .then((response) => response.json() as Promise<AppConfig>)
-        .then((config: AppConfig) => {
-          if (
-            [Environment.Production, Environment.Staging].includes(
-              config.environment
-            )
-          ) {
-            enableProdMode();
-          }
-
-          console.log('openchallenges config', config);
-
-          platformBrowserDynamic([{ provide: APP_CONFIG, useValue: config }])
-            .bootstrapModule(AppModule)
-            .catch((err) => console.error(err));
-        });
-    }
-
-    if (document.readyState === 'complete') {
-      bootstrap();
-    } else {
-      document.addEventListener('DOMContentLoaded', bootstrap);
-    }
-    ```
-
-  - Update the `src` files based on the legacy code. These files include but are not limited to:
-    - `src/app/*`
-    - `_app-theme.scss`
-    - `src/index.html`
-    - `src/proxy.conf.json`
-    - `styles.scss`
-
-  - Update the files in the project folder based on their legacy version. These files include but
-    are not limited to:
-    - `docker/`
-    - `.eslintrc.json`
-    - `Dockerfile`
+- Update the files in the project folder based on their legacy version. These files include but
+  are not limited to:
+  - `docker/`
+  - `.eslintrc.json`
+  - `Dockerfile`
 
 ## Build the Angular Universal Bundle
 
@@ -257,8 +269,8 @@ http://localhost:4000/
 
 <!-- Links -->
 
-[Server-side rendering (SSR) with Angular for Nx workspaces]: https://blog.nrwl.io/server-side-rendering-ssr-with-angular-for-nx-workspaces-14e2414ca532
-[Build once, deploy many]: https://12factor.net/codebase
-[Server-side rendering (SSR) with Angular Universal]: https://angular.io/guide/universal
-[Angular Universal: a Complete Practical Guide]: https://blog.angular-university.io/angular-universal/
-[Rendering on the Web]: https://web.dev/rendering-on-the-web/
+[server-side rendering (ssr) with angular for nx workspaces]: https://blog.nrwl.io/server-side-rendering-ssr-with-angular-for-nx-workspaces-14e2414ca532
+[build once, deploy many]: https://12factor.net/codebase
+[server-side rendering (ssr) with angular universal]: https://angular.io/guide/universal
+[angular universal: a complete practical guide]: https://blog.angular-university.io/angular-universal/
+[rendering on the web]: https://web.dev/rendering-on-the-web/

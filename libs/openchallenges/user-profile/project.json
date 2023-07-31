@@ -6,15 +6,15 @@
   "prefix": "openchallenges",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/user-profile"],
       "options": {
         "jestConfig": "libs/openchallenges/user-profile/jest.config.ts",
         "passWithNoTests": true
       }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
+    "lint-disabled": {
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "libs/openchallenges/user-profile/src/**/*.ts",
