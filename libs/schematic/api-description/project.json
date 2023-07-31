@@ -7,15 +7,8 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["openapi bundle --output build/openapi.yaml src/openapi.yaml"],
+        "commands": ["redocly bundle --output build/openapi.yaml src/openapi.yaml"],
         "parallel": true,
-        "cwd": "libs/schematic/api-description"
-      }
-    },
-    "serve": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "openapi preview-docs src/openapi.yaml",
         "cwd": "libs/schematic/api-description"
       }
     },
@@ -39,5 +32,6 @@
       }
     }
   },
-  "tags": []
+  "tags": [],
+  "implicitDependencies": []
 }

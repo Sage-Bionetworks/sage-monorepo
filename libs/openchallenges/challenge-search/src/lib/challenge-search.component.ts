@@ -21,6 +21,14 @@ import {
   ImageQuery,
   ImageHeight,
   ImageAspectRatio,
+  ChallengeSort,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+  ChallengeIncentive,
+  ChallengePlatformSort,
+  ChallengeInputDataTypeSort,
+  OrganizationSort,
+  ChallengeCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
@@ -32,6 +40,7 @@ import {
   challengeIncentivesFilter,
   challengePlatformsFilter,
   challengeOrganizationsFilter,
+  challengeCategoriesFilter,
 } from './challenge-search-filters';
 import { challengeSortFilterValues } from './challenge-search-filters-values';
 import {
@@ -105,7 +114,7 @@ export class ChallengeSearchComponent
   searchedTerms!: string;
   selectedPageNumber!: number;
   selectedPageSize!: number;
-  sortedBy!: string;
+  sortedBy!: ChallengeSort;
 
   // set default values
   defaultSelectedYear = undefined;
@@ -121,6 +130,7 @@ export class ChallengeSearchComponent
   statusFilter = challengeStatusFilter;
   submissionTypesFilter = challengeSubmissionTypesFilter;
   incentivesFilter = challengeIncentivesFilter;
+  categoriesFilter = challengeCategoriesFilter;
 
   // dropdown filters
   platformsFilter = challengePlatformsFilter;
@@ -128,9 +138,10 @@ export class ChallengeSearchComponent
   organizationsFilter = challengeOrganizationsFilter;
 
   // define selected filter values
-  selectedStatus!: string[];
-  selectedSubmissionTypes!: string[];
-  selectedIncentives!: string[];
+  selectedStatus!: ChallengeStatus[];
+  selectedSubmissionTypes!: ChallengeSubmissionType[];
+  selectedIncentives!: ChallengeIncentive[];
+  selectedCategories!: ChallengeCategory[];
   selectedPlatforms!: string[];
   selectedOrgs!: number[];
   selectedInputDataTypes!: string[];
@@ -185,6 +196,7 @@ export class ChallengeSearchComponent
       this.selectedIncentives = this.splitParam(params['incentives']);
       this.selectedPlatforms = this.splitParam(params['platforms']);
       this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
+      this.selectedCategories = this.splitParam(params['categories']);
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
@@ -194,7 +206,7 @@ export class ChallengeSearchComponent
       this.selectedPageSize = +params['pageSize'];
       this.sortedBy = params['sort'];
 
-      const defaultQuery = {
+      const defaultQuery: ChallengeSearchQuery = {
         pageNumber: this.selectedPageNumber || this.defaultPageNumber,
         pageSize: this.selectedPageSize || this.defaultPageSize,
         sort: this.sortedBy || this.defaultSortedBy,
@@ -206,15 +218,16 @@ export class ChallengeSearchComponent
         platforms: this.selectedPlatforms,
         incentives: this.selectedIncentives,
         inputDataTypes: this.selectedInputDataTypes,
+        categories: this.selectedCategories,
         organizations: this.selectedOrgs,
-      } as ChallengeSearchQuery;
+      };
 
       this.query.next(defaultQuery);
     });
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({} as ChallengeSearchQuery)
+      .listChallenges({})
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
@@ -223,12 +236,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengePlatformService.listChallengePlatforms({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengePlatformSort = 'name';
+          const platformQuery: ChallengePlatformSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengePlatformSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengePlatformService.listChallengePlatforms(
+            platformQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedPlatforms = page.challengePlatforms.map((platform) => ({
@@ -252,12 +269,16 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.challengeInputDataTypeService.listChallengeInputDataTypes({
+        switchMap((searchTerm: string) => {
+          const sortedBy: ChallengeInputDataTypeSort = 'name';
+          const inputDataTypeQuery: ChallengeInputDataTypeSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as ChallengeInputDataTypeSearchQuery)
-        )
+            sort: sortedBy,
+          };
+          return this.challengeInputDataTypeService.listChallengeInputDataTypes(
+            inputDataTypeQuery
+          );
+        })
       )
       .subscribe((page) => {
         const searchedInputDataTypes = page.challengeInputDataTypes.map(
@@ -283,12 +304,14 @@ export class ChallengeSearchComponent
         debounceTime(400),
         distinctUntilChanged(),
         takeUntil(this.destroy),
-        switchMap((searchTerm) =>
-          this.organizationService.listOrganizations({
+        switchMap((searchTerm: string) => {
+          const sortBy: OrganizationSort = 'name';
+          const orgQuery: OrganizationSearchQuery = {
             searchTerms: searchTerm,
-            sort: 'name',
-          } as OrganizationSearchQuery)
-        ),
+            sort: sortBy,
+          };
+          return this.organizationService.listOrganizations(orgQuery);
+        }),
         map((page) => page.organizations),
         switchMap((orgs) =>
           forkJoin({
@@ -337,7 +360,9 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges query', query)),
-        switchMap((query) => this.challengeService.listChallenges(query)),
+        switchMap((query: ChallengeSearchQuery) =>
+          this.challengeService.listChallenges(query)
+        ),
         tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
@@ -450,6 +475,15 @@ export class ChallengeSearchComponent
 
   onPlatformSearchChange(searched: string): void {
     this.platformSearchTerms.next(searched);
+  }
+
+  onCategoriesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        categories: this.collapseParam(selected),
+      },
+    });
   }
 
   onInputDataTypesChange(selected: string[]): void {

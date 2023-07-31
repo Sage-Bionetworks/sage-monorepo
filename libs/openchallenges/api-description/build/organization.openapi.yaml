@@ -4,12 +4,12 @@ info:
   title: OpenChallenges Organization REST API
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
   - url: http://localhost/v1
 tags:
@@ -58,6 +58,12 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
+    OrganizationCategory:
+      description: The category of the organization.
+      type: string
+      enum:
+        - featured
+      example: featured
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
@@ -98,6 +104,11 @@ components:
           format: int32
           default: 100
           minimum: 1
+        categories:
+          description: The array of organization categories used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationCategory'
         challengeContributionRoles:
           description: An array of challenge contribution roles used to filter the results.
           type: array
@@ -262,10 +273,17 @@ components:
     org:
       name: org
       in: path
-      description: The unique identifier of the organization.
+      description: The id or login of the organization.
       required: true
       schema:
-        $ref: '#/components/schemas/OrganizationLogin'
+        type: string
+        minLength: 1
+        maxLength: 64
+      examples:
+        byString:
+          value: dream
+        byId:
+          value: '1'
   responses:
     BadRequest:
       description: Invalid request

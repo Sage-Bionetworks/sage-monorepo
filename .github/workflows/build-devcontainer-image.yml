@@ -14,7 +14,7 @@ on:
       - 'tools/devcontainers/sage/**/Dockerfile'
 
 env:
-  IMAGE_REPOSITORY: sagebionetworks/sage-devcontainer
+  IMAGE_REPOSITORY: ghcr.io/sage-bionetworks/sage-devcontainer
   DEFAULT_BRANCH: main
 
 jobs:
@@ -71,14 +71,15 @@ jobs:
             --image-name "${IMAGE_NAME}:${IMAGE_TAG}" \
             --workspace-folder "${WORKSPACE_FOLDER}"
 
-      - name: Login to Docker Hub
+      - name: Login to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push the image to Docker Hub
+      - name: Push the image to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request' }}
         run: |
           IMAGE_NAME=${{ steps.prep.outputs.image_name }}

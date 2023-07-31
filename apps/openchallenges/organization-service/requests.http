@@ -16,6 +16,10 @@ GET {{basePath}}/organizations
 
 GET {{basePath}}/organizations?searchTerms=dream
 
+### List the organizations that categorized as featured
+
+GET {{basePath}}/organizations?categories=featured
+
 ### List the organizations that contributed as either sponsor and/or data_contributor.
 
 GET {{basePath}}/organizations?challengeContributionRoles=sponsor,data_contributor
@@ -32,6 +36,10 @@ GET {{basePath}}/organizations?sort=name
 
 GET {{basePath}}/organizations?sort=challenge_count&pageSize=5
 
-### Get an organization by ID
+### Get an organization by login
 
 GET {{basePath}}/organizations/dream
+
+### Get an organization by ID
+
+GET {{basePath}}/organizations/1

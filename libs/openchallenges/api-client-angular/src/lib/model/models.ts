@@ -1,5 +1,6 @@
 export * from './basicError';
 export * from './challenge';
+export * from './challengeCategory';
 export * from './challengeContribution';
 export * from './challengeContributionRole';
 export * from './challengeContributionsPage';
@@ -30,6 +31,7 @@ export * from './imageAspectRatio';
 export * from './imageHeight';
 export * from './imageQuery';
 export * from './organization';
+export * from './organizationCategory';
 export * from './organizationDirection';
 export * from './organizationSearchQuery';
 export * from './organizationSort';

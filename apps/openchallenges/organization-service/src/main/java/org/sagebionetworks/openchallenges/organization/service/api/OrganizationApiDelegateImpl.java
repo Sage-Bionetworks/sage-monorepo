@@ -19,7 +19,7 @@ public class OrganizationApiDelegateImpl implements OrganizationApiDelegate {
   }
 
   @Override
-  public ResponseEntity<OrganizationDto> getOrganization(String organizationLogin) {
-    return ResponseEntity.ok(organizationService.getOrganization(organizationLogin));
+  public ResponseEntity<OrganizationDto> getOrganization(String identifier) {
+    return ResponseEntity.ok(organizationService.getOrganization(identifier));
   }
 }

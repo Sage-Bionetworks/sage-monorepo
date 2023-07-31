@@ -33,6 +33,7 @@ function workspace-install {
   nx run-many --target=prepare
   nx run-many --target=prepare-java --parallel=1
   nx run-many --target=prepare-python
+  nx run-many --target=prepare-r
 }
 
 function workspace-prepare {
@@ -136,7 +137,4 @@ function workspace-initialize-env {
   if [ -f "./tools/configure-hostnames.sh" ]; then
     sudo ./tools/configure-hostnames.sh
   fi
-
-  # Needed to run ES containers (see https://github.com/Sage-Bionetworks/sage-monorepo/issues/1311)
-  sudo sysctl -w vm.max_map_count=262144 1> /dev/null
 }

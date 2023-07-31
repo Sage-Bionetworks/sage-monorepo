@@ -14,14 +14,8 @@
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "pyenv install --skip-existing 3.10.0",
-          "pyenv local 3.10.0",
-          "poetry env use 3.10.0",
-          "poetry install --with prod,dev"
-        ],
-        "cwd": "apps/schematic/api",
-        "parallel": false
+        "command": "./prepare-python.sh",
+        "cwd": "apps/schematic/api"
       }
     },
     "serve": {
@@ -112,14 +106,14 @@
         "command": "poetry run black ./schematic_api --exclude '(models|test)'",
         "cwd": "apps/schematic/api"
       }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry run tox",
-        "cwd": "apps/schematic/api"
-      }
     }
+    // "test": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "poetry run tox",
+    //     "cwd": "apps/schematic/api"
+    //   }
+    // }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [

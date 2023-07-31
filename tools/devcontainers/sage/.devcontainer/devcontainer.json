@@ -3,7 +3,7 @@
 	"build": {
 		"dockerfile": "Dockerfile",
 		"args": {
-			"imageVersion": "bullseye-20221004-slim",
+			"imageVersion": "jammy-20230624",
       "devcontainerVersion": "${localEnv:DEVCONTAINER_VERSION}"
 		}
 	},
