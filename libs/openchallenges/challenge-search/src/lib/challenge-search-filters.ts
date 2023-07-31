@@ -3,12 +3,13 @@ import {
   challengeStartYearRangeFilterValues,
   challengeStatusFilterValues,
   // challengeDifficultyFilterValues,
-  challengeInputDataTypeFilterValues,
+  challengeInputDataTypesFilterValues,
   challengeSubmissionTypesFilterValues,
-  challengeIncentiveTypesFilterValues,
-  challengePlatformFilterValues,
-  challengeOrganizationFilterValues,
-  challengeOrganizerFilterValues,
+  challengeIncentivesFilterValues,
+  challengePlatformsFilterValues,
+  challengeOrganizationsFilterValues,
+  challengeOrganizersFilterValues,
+  challengeCategoriesFilterValues,
 } from './challenge-search-filters-values';
 
 export const challengeStartYearRangeFilter: Filter = {
@@ -40,41 +41,48 @@ export const challengeSubmissionTypesFilter: Filter = {
   collapsed: true,
 };
 
-export const challengeIncentiveTypesFilter: Filter = {
+export const challengeIncentivesFilter: Filter = {
   query: 'incentives',
   label: 'Incentive Type',
-  values: challengeIncentiveTypesFilterValues,
+  values: challengeIncentivesFilterValues,
   collapsed: true,
 };
 
-export const challengePlatformFilter: Filter = {
+export const challengePlatformsFilter: Filter = {
   query: 'platforms',
   label: 'Platform',
-  values: challengePlatformFilterValues,
+  values: challengePlatformsFilterValues,
   collapsed: true,
 };
 
 // dropdown filters
-export const challengeInputDataTypeFilter: Filter = {
+export const challengeInputDataTypesFilter: Filter = {
   query: 'inputDataTypes',
   label: 'Input Data Type',
-  values: challengeInputDataTypeFilterValues,
+  values: challengeInputDataTypesFilterValues,
   collapsed: false,
   showAvatar: false,
 };
 
-export const challengeOrganizationFilter: Filter = {
+export const challengeCategoriesFilter: Filter = {
+  query: 'categories',
+  label: 'Category',
+  values: challengeCategoriesFilterValues,
+  collapsed: false,
+};
+
+export const challengeOrganizationsFilter: Filter = {
   query: 'organizations',
   label: 'Organization',
-  values: challengeOrganizationFilterValues,
+  values: challengeOrganizationsFilterValues,
   collapsed: true,
   showAvatar: true,
 };
 
-export const challengeOrganizaterFilter: Filter = {
+export const challengeOrganizatersFilter: Filter = {
   query: 'organizers',
   label: 'Organizer',
-  values: challengeOrganizerFilterValues,
+  values: challengeOrganizersFilterValues,
   collapsed: true,
   showAvatar: true,
 };

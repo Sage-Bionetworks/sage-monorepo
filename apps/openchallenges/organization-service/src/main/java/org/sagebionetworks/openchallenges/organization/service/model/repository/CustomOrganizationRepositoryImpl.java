@@ -16,7 +16,8 @@ import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.organization.service.exception.BadRequestException;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributorRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.ChallengeContributionRoleDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationCategoryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDirectionDto;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
@@ -55,9 +56,12 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
-    if (query.getChallengeContributorRoles() != null
-        && !query.getChallengeContributorRoles().isEmpty()) {
-      predicates.add(getChallengeContributorRolesPredicate(pf, query));
+    if (query.getCategories() != null && !query.getCategories().isEmpty()) {
+      predicates.add(getCategoriesPredicate(pf, query));
+    }
+    if (query.getChallengeContributionRoles() != null
+        && !query.getChallengeContributionRoles().isEmpty()) {
+      predicates.add(getChallengeContributionRolesPredicate(pf, query));
     }
 
     SearchSort sort = getSearchSort(sf, query);
@@ -101,13 +105,32 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @param query
    * @return
    */
-  private SearchPredicate getChallengeContributorRolesPredicate(
+  private SearchPredicate getChallengeContributionRolesPredicate(
       SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
     return pf.bool(
             b -> {
-              for (ChallengeContributorRoleDto role : query.getChallengeContributorRoles()) {
+              for (ChallengeContributionRoleDto role : query.getChallengeContributionRoles()) {
                 b.should(
                     pf.match().field("challenge_contributions.role").matching(role.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the organization whose at least one of their categories is in the list of categories
+   * specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getCategoriesPredicate(
+      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (OrganizationCategoryDto category : query.getCategories()) {
+                b.should(pf.match().field("categories.category").matching(category.toString()));
               }
             })
         .toPredicate();

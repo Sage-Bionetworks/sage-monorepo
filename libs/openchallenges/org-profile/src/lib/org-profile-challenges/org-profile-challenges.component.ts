@@ -30,7 +30,7 @@ export class OrgProfileChallengesComponent {
   ngOnInit(): void {
     this.pageSizeOptions = this.getPageSizeOptions(this.pageSize);
 
-    const defaultQuery = {
+    const defaultQuery: ChallengeSearchQuery = {
       pageNumber: this.pageNumber,
       pageSize: this.pageSize,
       organizations: [this.organization.id],

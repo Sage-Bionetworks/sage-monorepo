@@ -1,0 +1,5 @@
+description: The category of the challenge.
+type: string
+enum:
+  - featured
+example: featured

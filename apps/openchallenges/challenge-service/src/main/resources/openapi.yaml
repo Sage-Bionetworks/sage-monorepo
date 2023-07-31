@@ -5,11 +5,11 @@ info:
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   license:
     name: Apache 2.0
-    url: https://github.com/Sage-Bionetworks/sage-monorepo
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   title: OpenChallenges Challenge REST API
   version: 1.0.0
   x-logo:
-    url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
 - url: http://localhost/v1
 tags:
@@ -98,6 +98,45 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: Challenge
+  /challenges/{challengeId}/contributions:
+    get:
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      parameters:
+      - description: The unique identifier of the challenge.
+        explode: false
+        in: path
+        name: challengeId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChallengeId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List challenge contributions
+      tags:
+      - ChallengeContribution
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengeContribution
   /challengeInputDataTypes:
     get:
       description: List challenge input data types
@@ -354,6 +393,12 @@ components:
       - other
       example: container_image
       type: string
+    ChallengeCategory:
+      description: The category of the challenge.
+      enum:
+      - featured
+      example: featured
+      type: string
     ChallengeSearchQuery:
       description: A challenge search query.
       properties:
@@ -421,6 +466,11 @@ components:
           description: An array of challenge submission types used to filter the results.
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+          type: array
+        categories:
+          description: The array of challenge categories used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
           type: array
         searchTerms:
           description: A string of search terms used to filter the results.
@@ -750,6 +800,42 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      enum:
+      - challenge_organizer
+      - data_contributor
+      - sponsor
+      example: challenge_organizer
+      type: string
+    ChallengeContribution:
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          description: The unique identifier of the challenge.
+          example: 1
+          format: int64
+          type: integer
+        organizationId:
+          description: The unique identifier of an organization
+          example: 1
+          format: int64
+          type: integer
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+      - challengeId
+      - organizationId
+      - role
+      type: object
+    ChallengeContributionsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ChallengeContributionsPage_allOf'
+      description: A page of challenge challenge contributions.
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     ChallengeInputDataTypeSort:
       default: relevance
       description: What to sort results by.
@@ -940,6 +1026,17 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    ChallengeContributionsPage_allOf:
+      properties:
+        challengeContributions:
+          description: A list of challenge contributions.
+          items:
+            $ref: '#/components/schemas/ChallengeContribution'
+          type: array
+      required:
+      - challengeContributions
       type: object
       example: null
     ChallengeInputDataTypesPage_allOf:

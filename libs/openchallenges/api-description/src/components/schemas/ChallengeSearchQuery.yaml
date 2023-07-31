@@ -64,6 +64,11 @@ properties:
     type: array
     items:
       $ref: ChallengeSubmissionType.yaml
+  categories:
+    description: The array of challenge categories used to filter the results.
+    type: array
+    items:
+      $ref: ChallengeCategory.yaml
   searchTerms:
     description: A string of search terms used to filter the results.
     type: string

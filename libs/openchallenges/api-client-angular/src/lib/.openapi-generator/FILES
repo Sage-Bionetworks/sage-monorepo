@@ -3,6 +3,7 @@ README.md
 api.module.ts
 api/api.ts
 api/challenge.service.ts
+api/challengeContribution.service.ts
 api/challengeInputDataType.service.ts
 api/challengePlatform.service.ts
 api/image.service.ts
@@ -14,7 +15,10 @@ git_push.sh
 index.ts
 model/basicError.ts
 model/challenge.ts
-model/challengeContributorRole.ts
+model/challengeContribution.ts
+model/challengeContributionRole.ts
+model/challengeContributionsPage.ts
+model/challengeContributionsPageAllOf.ts
 model/challengeDifficulty.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
@@ -42,6 +46,7 @@ model/imageHeight.ts
 model/imageQuery.ts
 model/models.ts
 model/organization.ts
+model/organizationCategory.ts
 model/organizationDirection.ts
 model/organizationSearchQuery.ts
 model/organizationSort.ts

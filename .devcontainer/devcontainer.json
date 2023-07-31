@@ -1,14 +1,29 @@
 {
-  "name": "Sage",
-  "image": "sagebionetworks/sage-devcontainer:b5ec4f9",
+  "name": "Sage Dev Container",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:55645b0",
+
+  "containerEnv": {
+    "NX_BASE": "${localEnv:NX_BASE}",
+    "NX_BRANCH": "${localEnv:NX_BRANCH}",
+    "NX_CLOUD_AUTH_TOKEN": "${localEnv:NX_CLOUD_AUTH_TOKEN}",
+    "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
+    "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}",
+    "NX_HEAD": "${localEnv:NX_HEAD}",
+    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}"
+  },
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.0.0": {
-      "version": "20.10.21"
+    "ghcr.io/devcontainers/features/docker-in-docker:2.2.0": {
+      "version": "20.10.24"
     }
   },
 
   "customizations": {
+    "codespaces": {
+      "openFiles": [
+        "README.md"
+      ]
+    },
     "vscode": {
       "extensions": [
         "1000ch.svgo",
@@ -36,7 +51,9 @@
         "vscjava.vscode-java-pack",
         "webhint.vscode-webhint"
       ],
-      "settings": {}
+      "settings": {
+        "workbench.startupEditor": "readme"
+      }
     }
   },
 
@@ -64,6 +81,7 @@
     8091,
     8092,
     8200,
+    8787,
     8888,
     8889,
     9000,
@@ -98,6 +116,10 @@
     },
     "5601": {
       "label": "openchallenges-opensearch-dashboards",
+      "onAutoForward": "silent"
+    },
+    "6787": {
+      "label": "synapse-rstudio",
       "onAutoForward": "silent"
     },
     "7010": {
@@ -170,6 +192,10 @@
     },
     "8200": {
       "label": "openchallenges-vault",
+      "onAutoForward": "silent"
+    },
+    "8787": {
+      "label": "openchallenges-rstudio",
       "onAutoForward": "silent"
     },
     "8888": {

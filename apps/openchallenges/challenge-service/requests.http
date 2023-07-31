@@ -52,7 +52,12 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
 GET {{basePath}}/challenges?inputDataTypes=genomic
 
-### Sort the challenges by their starred count in desc oder.
+
+### List the challenge that categorized as featured
+
+GET {{basePath}}/challenges?categories=featured
+
+### Sort the challenges by their starred count in desc order
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
 
@@ -103,3 +108,7 @@ GET {{basePath}}/challengeInputDataTypes?searchTerms=genomic
 ### Get the challenge with ID 1.
 
 GET {{basePath}}/challenges/1
+
+### Get the contributions to the challenge with ID 1.
+
+GET {{basePath}}/challenges/1/contributions

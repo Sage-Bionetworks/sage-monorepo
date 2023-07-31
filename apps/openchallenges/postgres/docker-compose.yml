@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   openchallenges-postgres:
-    image: sagebionetworks/openchallenges-postgres:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-postgres:local
     container_name: openchallenges-postgres
     env_file:
       - .env

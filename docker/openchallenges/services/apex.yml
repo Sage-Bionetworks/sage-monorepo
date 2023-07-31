@@ -2,23 +2,27 @@ version: '3.8'
 
 services:
   openchallenges-apex:
-    image: sagebionetworks/openchallenges-apex:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-apex:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-apex
     restart: always
     env_file:
       - ../../../apps/openchallenges/apex/.env
+    # volumes:
+    #   - ../../../apps/openchallenges/apex/nginx.conf:/etc/nginx/nginx.conf
+    #   - ../../../apps/openchallenges/apex/templates:/etc/nginx/templates
     networks:
       - openchallenges
     ports:
       - '8000:8000'
     depends_on:
+      openchallenges-api-docs:
+        condition: service_healthy
       openchallenges-api-gateway:
         condition: service_healthy
       openchallenges-app:
         condition: service_started
       openchallenges-zipkin:
         condition: service_healthy
-    command: [nginx-debug, '-g', 'daemon off;']
     deploy:
       resources:
         limits:

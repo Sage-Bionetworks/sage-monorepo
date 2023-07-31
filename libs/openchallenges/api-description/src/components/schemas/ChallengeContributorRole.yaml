@@ -1,7 +1,0 @@
-description: The role of a challenge contributor.
-type: string
-enum:
-  - challenge_organizer
-  - data_contributor
-  - sponsor
-example: challenge_organizer

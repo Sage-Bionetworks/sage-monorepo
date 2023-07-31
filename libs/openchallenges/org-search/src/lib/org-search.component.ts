@@ -8,14 +8,19 @@ import {
   ImageHeight,
   ImageAspectRatio,
   Organization,
+  OrganizationSort,
+  ChallengeContributionRole,
+  OrganizationCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
-  Filter,
   FilterValue,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
-import { contributorRolesFilter } from './org-search-filters';
+import {
+  challengeContributionRolesFilter,
+  organizationCategoriesFilter,
+} from './org-search-filters';
 import { organizationSortFilterValues } from './org-search-filters-values';
 import {
   BehaviorSubject,
@@ -26,6 +31,7 @@ import {
   of,
   Observable,
   forkJoin,
+  tap,
 } from 'rxjs';
 import {
   catchError,
@@ -34,9 +40,9 @@ import {
   shareReplay,
   takeUntil,
 } from 'rxjs/operators';
-import { assign } from 'lodash';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-org-search',
@@ -55,21 +61,35 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   );
 
   private destroy = new Subject<void>();
-  searchTermValue = '';
 
-  organizationCards: OrganizationCard[] = [];
-  totalOrgCount = 0;
-
-  pageNumber = 0;
-  pageSize = 24;
   searchResultsCount = 0;
+  totalOrgCount = 0;
+  organizationCards: OrganizationCard[] = [];
+
+  searchedTerms!: string;
+  selectedPageNumber!: number;
+  selectedPageSize!: number;
+  sortedBy!: OrganizationSort;
+
+  // set default values
+  defaultSortedBy = 'relevance';
+  defaultPageNumber = 0;
+  defaultPageSize = 24;
 
   // define filters
-  checkboxFilters: Filter[] = [contributorRolesFilter];
   sortFilters: FilterValue[] = organizationSortFilterValues;
-  sortedBy!: string;
+
+  // checkbox filters
+  contributionRolesFilter = challengeContributionRolesFilter;
+  categoriesFilter = organizationCategoriesFilter;
+
+  // define selected filter values
+  selectedContributionRoles!: ChallengeContributionRole[];
+  selectedCategories!: OrganizationCategory[];
 
   constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
     private organizationService: OrganizationService,
     private imageService: ImageService,
     private readonly configService: ConfigService,
@@ -79,35 +99,52 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnInit() {
-    // set default selection
-    this.sortedBy = organizationSortFilterValues[0].value as string;
+    this.activatedRoute.queryParams.subscribe((params) => {
+      // update selected filter values based on params in url
+      this.selectedContributionRoles = this.splitParam(
+        params['contributionRoles']
+      );
+      this.selectedCategories = this.splitParam(params['categories']);
+      this.searchedTerms = params['searchTerms'];
+      this.selectedPageNumber = +params['pageNumber'];
+      this.selectedPageSize = +params['pageSize'];
+      this.sortedBy = params['sort'];
 
-    // update the total number of challenges in database with empty query
+      const defaultQuery: OrganizationSearchQuery = {
+        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
+        pageSize: this.selectedPageSize || this.defaultPageSize,
+        sort: this.sortedBy || this.defaultSortedBy,
+        searchTerms: this.searchedTerms,
+        challengeContributionRoles: this.selectedContributionRoles,
+        categories: this.selectedCategories,
+      };
+
+      this.query.next(defaultQuery);
+    });
+
+    // update the total number of orgs in database
     this.organizationService
       .listOrganizations({})
       .subscribe((page) => (this.totalOrgCount = page.totalElements));
-
-    const defaultQuery: OrganizationSearchQuery = {
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-      searchTerms: this.searchTermValue,
-      sort: this.sortedBy,
-    } as OrganizationSearchQuery;
-    this.query.next(defaultQuery);
   }
 
   ngAfterContentInit(): void {
     this.searchTerms
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
-      .subscribe((search) => {
-        const newQuery = assign(this.query.getValue(), {
-          searchTerms: search,
+      .subscribe((searched) => {
+        const searchedTerms = searched === '' ? undefined : searched;
+        this.router.navigate([], {
+          queryParamsHandling: 'merge',
+          queryParams: { searchTerms: searchedTerms },
         });
-        this.query.next(newQuery);
       });
 
     const orgPage$ = this.query.pipe(
-      switchMap((query) => this.organizationService.listOrganizations(query)),
+      tap((query) => console.log('List organization query: ', query)),
+      switchMap((query: OrganizationSearchQuery) =>
+        this.organizationService.listOrganizations(query)
+      ),
+      tap((page) => console.log('List of organizations: ', page.organizations)),
       catchError((err) => {
         if (err.message) {
           this.openSnackBar(
@@ -144,7 +181,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     });
 
     organizationCards$.subscribe((organizationCards) => {
-      console.log('organizationCards', organizationCards);
       this.organizationCards = organizationCards;
     });
   }
@@ -154,31 +190,56 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.destroy.complete();
   }
 
-  onSearchChange(): void {
-    // update searchTerms to trigger the query' searchTerm
-    this.searchTerms.next(this.searchTermValue);
+  splitParam(activeParam: string | undefined, by = ','): any[] {
+    return activeParam ? activeParam.split(by) : [];
   }
 
-  onCheckboxSelectionChange(selected: string[], queryName: string): void {
-    const newQuery = assign(this.query.getValue(), {
-      [queryName]: selected,
+  collapseParam(selectedParam: any, by = ','): string | undefined {
+    return selectedParam.length === 0
+      ? undefined
+      : this.splitParam(selectedParam.toString()).join(by);
+  }
+
+  onSearchChange(): void {
+    // update searchTerms to trigger the query' searchTerm
+    this.searchTerms.next(this.searchedTerms);
+  }
+
+  onContributionRolesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        contributionRoles: this.collapseParam(selected),
+      },
     });
-    this.query.next(newQuery);
+  }
+
+  onCategoriesChange(selected: string[]): void {
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        categories: this.collapseParam(selected),
+      },
+    });
   }
 
   onSortChange(): void {
-    const newQuery = assign(this.query.getValue(), {
-      sort: this.sortedBy,
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        sort: this.sortedBy,
+      },
     });
-    this.query.next(newQuery);
   }
 
   onPageChange(event: any) {
-    const newQuery = assign(this.query.getValue(), {
-      pageNumber: event.page,
-      pageSize: event.rows,
+    this.router.navigate([], {
+      queryParamsHandling: 'merge',
+      queryParams: {
+        pageNumber: event.page,
+        pageSize: event.rows,
+      },
     });
-    this.query.next(newQuery);
   }
 
   openSnackBar(message: string) {

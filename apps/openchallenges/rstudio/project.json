@@ -1,0 +1,75 @@
+{
+  "name": "openchallenges-rstudio",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/openchallenges/rstudio/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/openchallenges/rstudio"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh openchallenges-rstudio"
+      },
+      "dependsOn": []
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/rstudio",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-rstudio"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/openchallenges/rstudio",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/openchallenges-rstudio"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": ["build-image"]
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-rstudio:* --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-rstudio:* --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-rstudio:local --quiet",
+        "color": true
+      }
+    }
+  },
+  "tags": ["type:app", "scope:client"],
+  "implicitDependencies": []
+}

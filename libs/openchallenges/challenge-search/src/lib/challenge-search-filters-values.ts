@@ -97,7 +97,7 @@ export const challengeSubmissionTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengeIncentiveTypesFilterValues: FilterValue[] = [
+export const challengeIncentivesFilterValues: FilterValue[] = [
   {
     value: 'monetary',
     label: 'Monetary',
@@ -116,13 +116,20 @@ export const challengeIncentiveTypesFilterValues: FilterValue[] = [
   },
 ];
 
-export const challengePlatformFilterValues: FilterValue[] = [];
+export const challengePlatformsFilterValues: FilterValue[] = [];
 
-export const challengeInputDataTypeFilterValues: FilterValue[] = [];
+export const challengeInputDataTypesFilterValues: FilterValue[] = [];
 
-export const challengeOrganizationFilterValues: FilterValue[] = [];
+export const challengeCategoriesFilterValues: FilterValue[] = [
+  {
+    value: 'featured',
+    label: 'Featured',
+  },
+];
 
-export const challengeOrganizerFilterValues: FilterValue[] = [];
+export const challengeOrganizationsFilterValues: FilterValue[] = [];
+
+export const challengeOrganizersFilterValues: FilterValue[] = [];
 
 export const challengeSortFilterValues: FilterValue[] = [
   {

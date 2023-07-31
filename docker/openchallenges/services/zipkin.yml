@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   openchallenges-zipkin:
-    image: sagebionetworks/openchallenges-zipkin:latest
+    image: ghcr.io/sage-bionetworks/openchallenges-zipkin:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-zipkin
     restart: always
     env_file:

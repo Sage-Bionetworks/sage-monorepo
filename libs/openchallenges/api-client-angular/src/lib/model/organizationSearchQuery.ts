@@ -9,9 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ChallengeContributionRole } from './challengeContributionRole';
 import { OrganizationSort } from './organizationSort';
 import { OrganizationDirection } from './organizationDirection';
-import { ChallengeContributorRole } from './challengeContributorRole';
+import { OrganizationCategory } from './organizationCategory';
 
 
 /**
@@ -27,9 +28,13 @@ export interface OrganizationSearchQuery {
      */
     pageSize?: number;
     /**
-     * An array of challenge contributor roles used to filter the results.
+     * The array of organization categories used to filter the results.
      */
-    challengeContributorRoles?: Array<ChallengeContributorRole>;
+    categories?: Array<OrganizationCategory>;
+    /**
+     * An array of challenge contribution roles used to filter the results.
+     */
+    challengeContributionRoles?: Array<ChallengeContributionRole>;
     sort?: OrganizationSort;
     direction?: OrganizationDirection | null;
     /**

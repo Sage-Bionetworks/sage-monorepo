@@ -14,14 +14,8 @@
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "pyenv install --skip-existing 3.10.0",
-          "pyenv local 3.10.0",
-          "poetry env use 3.10.0",
-          "poetry install --with prod,dev"
-        ],
-        "cwd": "apps/schematic/api",
-        "parallel": false
+        "command": "./prepare-python.sh",
+        "cwd": "apps/schematic/api"
       }
     },
     "serve": {
@@ -41,8 +35,51 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/schematic/api",
-        "push": false,
-        "tags": ["sagebionetworks/schematic-api:latest"]
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/schematic/api",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": ["build-image"]
+    },
+    "publish-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api:* --quiet) --force"
+      },
+      "dependsOn": ["publish-image"]
+    },
+    "build-and-remove-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api:* --quiet) --force"
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/schematic-api:local --quiet",
+        "color": true
       }
     },
     "openapi-generate": {
@@ -69,14 +106,14 @@
         "command": "poetry run black ./schematic_api --exclude '(models|test)'",
         "cwd": "apps/schematic/api"
       }
-    },
-    "test": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry run tox",
-        "cwd": "apps/schematic/api"
-      }
     }
+    // "test": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "poetry run tox",
+    //     "cwd": "apps/schematic/api"
+    //   }
+    // }
   },
   "tags": ["type:service", "scope:backend"],
   "implicitDependencies": [

@@ -15,10 +15,7 @@
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "poetry config virtualenvs.in-project true",
-          "poetry install"
-        ],
+        "command": "./prepare-python.sh",
         "cwd": "apps/openchallenges/notebook"
       }
     },
@@ -45,7 +42,7 @@
     //   "options": {
     //     "context": "apps/openchallenges/notebook",
     //     "push": false,
-    //     "tags": ["sagebionetworks/openchallenges-notebook:latest"]
+    //     "tags": ["ghcr.io/sage-bionetworks/openchallenges-notebook:latest"]
     //   }
     // }
   },

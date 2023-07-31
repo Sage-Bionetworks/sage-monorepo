@@ -1,5 +1,7 @@
 package org.sagebionetworks.openchallenges.challenge.service.configuration;
 
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeContributionRoleDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
@@ -16,6 +18,26 @@ import org.springframework.core.convert.converter.Converter;
 
 @Configuration
 public class EnumConverterConfiguration {
+
+  @Bean
+  Converter<String, ChallengeCategoryDto> challengeCategoryConverter() {
+    return new Converter<String, ChallengeCategoryDto>() {
+      @Override
+      public ChallengeCategoryDto convert(String source) {
+        return ChallengeCategoryDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, ChallengeContributionRoleDto> challengeContributionRoleConverter() {
+    return new Converter<String, ChallengeContributionRoleDto>() {
+      @Override
+      public ChallengeContributionRoleDto convert(String source) {
+        return ChallengeContributionRoleDto.fromValue(source);
+      }
+    };
+  }
 
   @Bean
   Converter<String, ChallengeDifficultyDto> challengeDifficultyConverter() {

@@ -117,3 +117,15 @@ CREATE TABLE `challenge_star`
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_item UNIQUE (`challenge_id`, `user_id`)
 );
+
+-- challenge_category definition
+
+CREATE TABLE `challenge_category`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `challenge_id`          bigint(20) NOT NULL,
+    `category`              ENUM('featured'),
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
+    CONSTRAINT unique_item UNIQUE (`id`)
+);

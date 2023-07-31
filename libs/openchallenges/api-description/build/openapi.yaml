@@ -4,12 +4,12 @@ info:
   title: OpenChallenges REST API
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
+    url: 'https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt'
   contact:
     name: Support
     url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
   x-logo:
-    url: 'https://Sage-Bionetworks.github.io/rocc-schemas/logo.png'
+    url: 'https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png'
 servers:
   - url: 'http://localhost/v1'
 tags:
@@ -64,6 +64,26 @@ paths:
                 $ref: '#/components/schemas/Challenge'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  '/challenges/{challengeId}/contributions':
+    parameters:
+      - $ref: '#/components/parameters/challengeId'
+    get:
+      tags:
+        - ChallengeContribution
+      summary: List challenge contributions
+      description: List challenge contributions
+      operationId: listChallengeContributions
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengeContributionsPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
@@ -344,6 +364,12 @@ components:
         - notebook
         - other
       example: container_image
+    ChallengeCategory:
+      description: The category of the challenge.
+      type: string
+      enum:
+        - featured
+      example: featured
     ChallengeSearchQuery:
       type: object
       description: A challenge search query.
@@ -413,6 +439,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        categories:
+          description: The array of challenge categories used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
@@ -658,6 +689,44 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
+    ChallengeContributionRole:
+      description: The nature of a challenge contribution.
+      type: string
+      enum:
+        - challenge_organizer
+        - data_contributor
+        - sponsor
+      example: challenge_organizer
+    ChallengeContribution:
+      type: object
+      description: A challenge contribution.
+      properties:
+        challengeId:
+          $ref: '#/components/schemas/ChallengeId'
+        organizationId:
+          $ref: '#/components/schemas/OrganizationId'
+        role:
+          $ref: '#/components/schemas/ChallengeContributionRole'
+      required:
+        - challengeId
+        - organizationId
+        - role
+    ChallengeContributionsPage:
+      type: object
+      description: A page of challenge challenge contributions.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            challengeContributions:
+              description: A list of challenge contributions.
+              type: array
+              items:
+                $ref: '#/components/schemas/ChallengeContribution'
+          required:
+            - challengeContributions
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ChallengeInputDataTypeSort:
       description: What to sort results by.
       type: string
@@ -875,14 +944,12 @@ components:
         - url
       x-java-class-annotations:
         - '@lombok.Builder'
-    ChallengeContributorRole:
-      description: The role of a challenge contributor.
+    OrganizationCategory:
+      description: The category of the organization.
       type: string
       enum:
-        - challenge_organizer
-        - data_contributor
-        - sponsor
-      example: challenge_organizer
+        - featured
+      example: featured
     OrganizationSort:
       description: What to sort results by.
       type: string
@@ -915,11 +982,16 @@ components:
           format: int32
           default: 100
           minimum: 1
-        challengeContributorRoles:
-          description: An array of challenge contributor roles used to filter the results.
+        categories:
+          description: The array of organization categories used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/ChallengeContributorRole'
+            $ref: '#/components/schemas/OrganizationCategory'
+        challengeContributionRoles:
+          description: An array of challenge contribution roles used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeContributionRole'
         sort:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
@@ -1205,10 +1277,17 @@ components:
     org:
       name: org
       in: path
-      description: The unique identifier of the organization.
+      description: The id or login of the organization.
       required: true
       schema:
-        $ref: '#/components/schemas/OrganizationLogin'
+        type: string
+        minLength: 1
+        maxLength: 64
+      examples:
+        byString:
+          value: dream
+        byId:
+          value: '1'
     pageNumber:
       name: pageNumber
       description: The page number.

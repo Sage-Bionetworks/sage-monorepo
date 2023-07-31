@@ -31,9 +31,10 @@ export class ChallengeHostListComponent implements OnInit {
     const query: OrganizationSearchQuery = {
       pageNumber: 0,
       pageSize: 4,
+      categories: ['featured'],
       searchTerms: '',
       sort: 'challenge_count',
-    } as OrganizationSearchQuery;
+    };
 
     const orgPage$ = this.organizationService.listOrganizations(query).pipe(
       catchError((err) => {
