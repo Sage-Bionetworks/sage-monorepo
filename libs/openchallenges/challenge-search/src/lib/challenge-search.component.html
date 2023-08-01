@@ -1,36 +1,34 @@
 <main class="base mat-typography">
-  <section id="top" class="header">
-    <div id="search-top">
-      <div id="title" class="row">
-        <div class="col col-10">
-          <h2>Challenges</h2>
-          <!-- TODO: add "Add Challenge" button when service is available -->
-        </div>
+  <section id="search-top">
+    <div id="title" class="row">
+      <div class="col col-10">
+        <h2>Challenges</h2>
+        <!-- TODO: add "Add Challenge" button when service is available -->
       </div>
-      <div class="search-sort-container row">
-        <div class="search-field">
-          <span class="p-input-icon-left">
-            <i class="pi pi-search"></i>
-            <input
-              type="text"
-              pInputText
-              [(ngModel)]="searchedTerms"
-              (input)="onSearchChange()"
-              placeholder="Search challenges"
-            />
-          </span>
-        </div>
-        <div class="sort-field">
-          <span class="sort-title">Sort by</span>
-          <p-dropdown
-            [options]="sortFilters"
-            [(ngModel)]="sortedBy"
-            optionLabel="label"
-            optionValue="value"
-            scrollHeight="unset"
-            (onChange)="onSortChange()"
-          ></p-dropdown>
-        </div>
+    </div>
+    <div class="search-sort-container row">
+      <div class="search-field">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="searchedTerms"
+            (input)="onSearchChange()"
+            placeholder="Search challenges"
+          />
+        </span>
+      </div>
+      <div class="sort-field">
+        <span class="sort-title">Sort by</span>
+        <p-dropdown
+          [options]="sortFilters"
+          [(ngModel)]="sortedBy"
+          optionLabel="label"
+          optionValue="value"
+          scrollHeight="unset"
+          (onChange)="onSortChange()"
+        ></p-dropdown>
       </div>
     </div>
   </section>
