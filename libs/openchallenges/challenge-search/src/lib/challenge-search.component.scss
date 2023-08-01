@@ -2,11 +2,9 @@
   padding: 70px 0 32px;
   align-items: center;
 }
-
 #bottom {
   display: flex;
   flex-wrap: nowrap;
-  padding: 0;
 }
 .calendar-group {
   align-items: center;
@@ -38,16 +36,7 @@
     border: none;
   }
 }
-::ng-deep .p-panel.p-panel-toggleable {
-  padding: 24px 32px;
-  border-bottom: 1px solid #ced4da;
-
-  .p-panel-header {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-
-  .p-panel-content {
-    padding-bottom: 0;
-  }
+::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
+  padding-top: 0;
+  padding-bottom: 0;
 }

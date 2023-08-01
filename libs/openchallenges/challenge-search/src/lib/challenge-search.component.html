@@ -32,7 +32,7 @@
       </div>
     </div>
   </section>
-  <section id="bottom">
+  <section id="bottom" class="content">
     <div class="facets">
       <p-panel
         header="Challenge Year"
@@ -64,6 +64,7 @@
           ></p-calendar>
         </div>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ statusFilter.label }}"
         [toggleable]="true"
@@ -76,6 +77,7 @@
           inputId="{{ statusFilter.query }}"
         ></openchallenges-checkbox-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ submissionTypesFilter.label }}"
         [toggleable]="true"
@@ -88,6 +90,7 @@
           inputId="{{ submissionTypesFilter.query }}"
         ></openchallenges-checkbox-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ incentivesFilter.label }}"
         [toggleable]="true"
@@ -100,6 +103,7 @@
           inputId="{{ incentivesFilter.query }}"
         ></openchallenges-checkbox-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ platformsFilter.label }}"
         [toggleable]="true"
@@ -115,6 +119,7 @@
           (searchChange)="onPlatformSearchChange($event)"
         ></openchallenges-search-dropdown-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
@@ -130,18 +135,20 @@
           (searchChange)="onInputDataTypeSearchChange($event)"
         ></openchallenges-search-dropdown-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
-        header="{{ categoriesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="categoriesFilter.collapsed"
+      header="{{categoriesFilter.label }}"
+      [toggleable]="true"
+      [collapsed]="categoriesFilter.collapsed"
       >
-        <openchallenges-checkbox-filter
-          [values]="categoriesFilter.values"
-          [selectedValues]="selectedCategories"
-          (selectionChange)="onCategoriesChange($event)"
-          inputId="{{ categoriesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+      <openchallenges-checkbox-filter
+        [values]="categoriesFilter.values"
+        [selectedValues]="selectedCategories"
+        (selectionChange)="onCategoriesChange($event)"
+        inputId="{{ categoriesFilter.query }}"
+      ></openchallenges-checkbox-filter>
       </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ organizationsFilter.label }}"
         [toggleable]="true"
@@ -158,7 +165,7 @@
         ></openchallenges-search-dropdown-filter>
       </p-panel>
     </div>
-    <div class="main col content">
+    <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
         <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
