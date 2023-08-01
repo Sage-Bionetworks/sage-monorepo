@@ -8,7 +8,7 @@ This document explains how to create Angular and Web Components libraries.
 
 ### Creating the library
 
-    nx g @nrwl/angular:lib awesome-lib [--dry-run]
+    nx g @nx/angular:lib awesome-lib [--dry-run]
 
 The library is added to `tsconfig.base.json`, which will make it available to other projects.
 
@@ -17,15 +17,15 @@ The library is added to `tsconfig.base.json`, which will make it available to ot
 Creation of the UI library for the web-app in `libs/web/ui`.
 
 ```console
-nx g @nrwl/angular:lib ui --directory web
-nx g @nrwl/angular:component footer --project=web-ui
+nx g @nx/angular:lib ui --directory web
+nx g @nx/angular:component footer --project=web-ui
 ```
 
 ## Web Components library
 
 ### Creating the library
 
-    nx g @nrwl/web:lib ui-footer [--dry-run]
+    nx g @nx/web:lib ui-footer [--dry-run]
 
 The library is added to `tsconfig.base.json`, which will make it available to other projects.
 
@@ -56,12 +56,7 @@ import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent, NxWelcomeComponent],
-  imports: [
-    BrowserModule,
-    RouterModule.forRoot(
-      { initialNavigation: 'enabledBlocking' }
-    ),
-  ],
+  imports: [BrowserModule, RouterModule.forRoot({ initialNavigation: 'enabledBlocking' })],
   providers: [],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],
@@ -114,5 +109,4 @@ export default App;
 
 - [Share Components across Front Ends frameworks using Nx and Web
   Components](https://crocsx.hashnode.dev/share-components-across-front-ends-frameworks-using-nx-and-web-components)
-- [Working with Nx.dev using React, Angular and native web components (Part 1 of
-  3)](https://medium.com/@fabianandrescano/working-with-nx-dev-9761da40566a)
+- [Working with Nx.dev using React, Angular and native web components (Part 1 of 3)](https://medium.com/@fabianandrescano/working-with-nx-dev-9761da40566a)

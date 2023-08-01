@@ -113,13 +113,13 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["apps/openchallenges/app/**/*.ts", "apps/openchallenges/app/**/*.html"]
       }
     },
     "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "apps/openchallenges/app/src/**/*.ts",
@@ -129,7 +129,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/openchallenges/app"],
       "options": {
         "jestConfig": "apps/openchallenges/app/jest.config.ts",
@@ -142,11 +142,7 @@
         "context": "apps/openchallenges/app",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
@@ -158,10 +154,7 @@
         "context": "apps/openchallenges/app",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -208,7 +201,8 @@
         "development": {
           "optimization": false,
           "sourceMap": true,
-          "extractLicenses": false
+          "extractLicenses": false,
+          "buildOptimizer": false
         }
       },
       "defaultConfiguration": "production",

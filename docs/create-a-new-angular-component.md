@@ -21,16 +21,16 @@ where/how to copy-paste code from the [Figma-to-code export] into the app (start
 To create a UI library within `openchallenges`, run:
 
 ```console
-nx g @nrwl/angular:lib <new library name> --directory openchallenges
+nx g @nx/angular:lib <new library name> --directory openchallenges
 ```
 
 (Optional but recommended) Use `--dryrun` to first see what and where the entities will be created;
 this will help visualize and validate the intended directory structure, e.g.
 
 ```console
-$ nx g @nrwl/angular:lib awesome-lib --directory openchallenges --dry-run
+$ nx g @nx/angular:lib awesome-lib --directory openchallenges --dry-run
 
->  NX  Generating @nrwl/angular:library
+>  NX  Generating @nx/angular:library
 
 ...
 UPDATE workspace.json
@@ -59,7 +59,7 @@ steps are required:
 2.  Simiarly, in `src/index.ts`, remove `openchallenges-` from the import filepath.
 3.  In the library module (`<new library name>.module.ts`), remove `ChallengeRegistry` from
     the class name, e.g.
-          `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
+    `export class ChallengeRegistryAwesomeLibModule {}` → `export class AwesomeLibModule {}`
 
 > **Note**: still have questions about libraries? See [Libraries] for more details.
 
@@ -68,7 +68,7 @@ steps are required:
 To create the component, use:
 
 ```console
-nx g @nrwl/angular:component <new component name> --project <project-name>
+nx g @nx/angular:component <new component name> --project <project-name>
 ```
 
 where `<project name>` is the name of the project defined in `project.json` of the newly-created
@@ -89,9 +89,9 @@ For example, to create an Angular component for the `awesome-lib` library, the p
 The resulting command would then be:
 
 ```console
-$ nx g @nrwl/angular:component awesome-lib --project openchallenges-awesome-lib --dry-run
+$ nx g @nx/angular:component awesome-lib --project openchallenges-awesome-lib --dry-run
 
->  NX  Generating @nrwl/angular:component
+>  NX  Generating @nx/angular:component
 
 CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.scss
 CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib/awesome-lib.component.html
@@ -109,9 +109,9 @@ NOTE: The "dryRun" flag means no changes were made.
 To directly create the files into the parent folder, use `--flat` in the command:
 
 ```console
-$ nx g @nrwl/angular:component awesome-lib --project openchallenges-awesome-lib --flat -dry-run
+$ nx g @nx/angular:component awesome-lib --project openchallenges-awesome-lib --flat -dry-run
 
->  NX  Generating @nrwl/angular:component
+>  NX  Generating @nx/angular:component
 
 CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.scss
 CREATE libs/openchallenges/awesome-lib/src/lib/awesome-lib.component.html
