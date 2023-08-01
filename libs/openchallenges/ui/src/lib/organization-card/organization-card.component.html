@@ -8,17 +8,16 @@
     </div>
     <div class="card-body">
       <p class="card-title">{{ organizationCard.name }}</p>
-      <div *ngIf="organizationMembers && showMember" class="organization-members">
+      <div *ngIf="organizationMembers && showMember" class="card-subtitle">
         <openchallenges-avatar
           *ngFor="let member of organizationMembers | slice: 0:4"
-          class="member"
           [name]="member.name"
           [src]="member.avatarUrl || ''"
           [size]="32"
         >
         </openchallenges-avatar>
       </div>
-      <p class="card-subtitle" *ngIf="otherMembersCount > 0">+ {{ otherMembersCount }} other members</p>
+      <p class="mat-caption" *ngIf="otherMembersCount > 0">+ {{ otherMembersCount }} other members</p>
     </div>
     <div class="card-footer">
       <div *ngIf="challengesSupported" class="support-tag mat-small">
