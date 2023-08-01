@@ -1,3 +1,5 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
 #title {
   padding: 70px 0 32px;
   align-items: center;
@@ -16,7 +18,10 @@
   }
 }
 ::ng-deep .p-dropdown {
-  width: 14rem;
+  max-width: 14rem;
+}
+::ng-deep p-multiselect .p-multiselect.p-component {
+  width: 200px;
 }
 .year-btn-group,
 ::ng-deep .p-field-checkbox {
@@ -39,4 +44,10 @@
 ::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+@media screen and (max-width: constants.$md-breakpoint) {
+  ::ng-deep p-multiselect .p-multiselect.p-component {
+    width: 100%;
+  }
 }
