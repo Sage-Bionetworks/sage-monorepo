@@ -6,6 +6,9 @@
   display: flex;
   flex-wrap: nowrap;
 }
+.calendar-group {
+  align-items: center;
+}
 ::ng-deep .search-field {
   .p-input-icon-left,
   input {
@@ -13,8 +16,12 @@
   }
 }
 ::ng-deep .p-dropdown {
-  width: 14rem;
+  min-width: 14rem;
 }
+::ng-deep p-multiselect .p-multiselect-panel.p-component {
+  min-width: 320px;
+}
+.year-btn-group,
 ::ng-deep .p-field-checkbox {
   margin-bottom: 8px;
 
