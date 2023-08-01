@@ -27,10 +27,8 @@ def list_storage_project_datasets(project_id, asset_view_id, asset_type):  # noq
     :rtype: Union[DatasetsPage, Tuple[DatasetsPage, int], Tuple[DatasetsPage, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.list_storage_project_datasets(
-        project_id, asset_view_id, asset_type
-    )
+        asset_type =  AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.list_storage_project_datasets(project_id, asset_view_id, asset_type)
 
 
 def list_storage_project_manifests(project_id, asset_view_id, asset_type):  # noqa: E501
@@ -48,7 +46,5 @@ def list_storage_project_manifests(project_id, asset_view_id, asset_type):  # no
     :rtype: Union[ManifestsPage, Tuple[ManifestsPage, int], Tuple[ManifestsPage, int, Dict[str, str]]
     """
     if connexion.request.is_json:
-        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.list_storage_project_manifests(
-        project_id, asset_view_id, asset_type
-    )
+        asset_type =  AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.list_storage_project_manifests(project_id, asset_view_id, asset_type)

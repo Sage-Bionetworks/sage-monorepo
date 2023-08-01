@@ -21,6 +21,5 @@ schematic_api/models/manifests_page_all_of.py
 schematic_api/models/page_metadata.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
-schematic_api/test/test_schema_controller.py
 schematic_api/typing_utils.py
 schematic_api/util.py

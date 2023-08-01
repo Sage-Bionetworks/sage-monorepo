@@ -169,19 +169,19 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /schemas/{schemaUrl}/components/{componentLabel}/attributes:
+  /components/{componentLabel}/attributes:
     get:
       description: Gets attributes associated with a given component
       operationId: list_component_attributes
       parameters:
       - description: The URL of a schema in jsonld form
-        explode: false
-        in: path
+        explode: true
+        in: query
         name: schemaUrl
         required: true
         schema:
           $ref: '#/components/schemas/SchemaUrl'
-        style: simple
+        style: form
       - description: The label of a component in a schema
         explode: false
         in: path
@@ -241,13 +241,13 @@ components:
       style: simple
     schemaUrl:
       description: The URL of a schema in jsonld form
-      explode: false
-      in: path
+      explode: true
+      in: query
       name: schemaUrl
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
-      style: simple
+      style: form
     componentLabel:
       description: The label of a component in a schema
       explode: false
