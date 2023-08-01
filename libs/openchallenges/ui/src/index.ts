@@ -12,6 +12,7 @@ export * from './lib/person-card/mock-challenge-organizers';
 export * from './lib/person-card/mock-challenge-sponsors';
 export * from './lib/person-card/mock-persons';
 export * from './lib/navbar/navbar-section';
+export * from './lib/organization-card/mock-members';
 export * from './lib/organization-card/mock-organization-card';
 export * from './lib/organization-card/organization-card';
 export * from './lib/user-button/menu-item';
