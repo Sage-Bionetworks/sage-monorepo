@@ -105,6 +105,7 @@ em {
 
 // SEARCH PAGES
 #search-top {
+  border-bottom: 1px solid #ced4da;
   padding: 0 32px 80px;
 }
 .search-sort-container {
@@ -125,19 +126,11 @@ em {
   white-space: nowrap;
 }
 .facets {
-  padding: 48px 21px;
-  height: 100%;
-  min-width: 320px;
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  border-style: solid;
-  border-width: 2px;
-  border-radius: 8px;
-
-  & > * {
-    width: 100%;
-  }
+  border-right: 1px solid #ced4da;
+  max-width: 350px;
+}
+.main {
+  padding: 32px 0;
 }
 
 // PROFILE PAGES
