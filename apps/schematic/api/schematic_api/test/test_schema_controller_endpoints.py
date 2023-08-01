@@ -12,7 +12,7 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-COMPONENT_DEPENDENCIES_URL = "/api/v1/components/component1/dependencies?schemaUrl=url1"
+COMPONENT_DEPENDENCIES_URL = "/api/v1/components/component1/parents?schemaUrl=url1"
 COMPONENT_ATTRIBUTES_URL = "/api/v1/components/component1/attributes?schemaUrl=url1"
 
 
