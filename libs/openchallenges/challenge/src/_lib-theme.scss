@@ -1,7 +1,7 @@
 @use './lib/challenge-theme' as challenge;
 @use './lib//challenge-overview/challenge-overview-theme' as challenge-overview;
 @use './lib//challenge-organizers/challenge-organizers-theme' as challenge-organizers;
-@use './lib//challenge-sponsors/challenge-sponsors-theme' as challenge-sponsors;
+@use './lib//challenge-contributors/challenge-contributors-theme' as challenge-contributors;
 @use './lib//challenge-stargazers/challenge-stargazers-theme' as challenge-stargazers;
 @use './lib//challenge-stats/challenge-stats-theme' as challenge-stats;
 
@@ -9,7 +9,7 @@
   @include challenge.theme($theme);
   @include challenge-overview.theme($theme);
   @include challenge-organizers.theme($theme);
-  @include challenge-sponsors.theme($theme);
+  @include challenge-contributors.theme($theme);
   @include challenge-stargazers.theme($theme);
   @include challenge-stats.theme($theme);
 }

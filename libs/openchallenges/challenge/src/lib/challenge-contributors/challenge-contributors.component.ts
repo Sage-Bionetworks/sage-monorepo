@@ -15,11 +15,11 @@ import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { Observable, forkJoin, of, switchMap } from 'rxjs';
 
 @Component({
-  selector: 'openchallenges-challenge-sponsors',
-  templateUrl: './challenge-sponsors.component.html',
-  styleUrls: ['./challenge-sponsors.component.scss'],
+  selector: 'openchallenges-challenge-contributors',
+  templateUrl: './challenge-contributors.component.html',
+  styleUrls: ['./challenge-contributors.component.scss'],
 })
-export class ChallengeSponsorsComponent implements OnInit {
+export class ChallengeContributorsComponent implements OnInit {
   @Input() challenge!: Challenge;
   organizationCards$!: Observable<OrganizationCard[]>;
   constructor(
