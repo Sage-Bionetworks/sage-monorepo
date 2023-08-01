@@ -16,8 +16,8 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/id1/projects/id2/datasets"
-MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/id1/projects/id2/manifests"
+DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/datasets"
+MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/manifests"
 
 
 class TestDatasets(BaseTestCase):
@@ -29,9 +29,8 @@ class TestDatasets(BaseTestCase):
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_project_datasets",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-
             response = self.client.open(DATASETS_URL, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -48,7 +47,7 @@ class TestDatasets(BaseTestCase):
             dataset = datasets[0]
             assert list(dataset.keys()) == ["id", "name"]
             assert dataset["name"] == "name1"
-            assert dataset["id"] == "id1"
+            assert dataset["id"] == "syn1"
 
     def test_401(self) -> None:
         """Test for 401 result"""
@@ -98,7 +97,6 @@ class TestManifests(BaseTestCase):
             "get_project_manifests",
             return_value=EXAMPLE_MANIFEST_METADATA,
         ):
-
             response = self.client.open(MANIFESTS_URL, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -121,7 +119,7 @@ class TestManifests(BaseTestCase):
                 "name",
             ]
             assert manifest["name"] == "name1"
-            assert manifest["id"] == "id1"
+            assert manifest["id"] == "syn1"
             assert manifest["componentName"] == "component1"
             assert manifest["datasetId"] == "dataset_id1"
             assert manifest["datasetName"] == "dataset_name1"
