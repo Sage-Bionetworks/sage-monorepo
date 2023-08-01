@@ -80,10 +80,6 @@ function workspace-graph {
   nx graph
 }
 
-function openchallenges-db-cli {
-  node dist/apps/openchallenges/db-cli/src/index.js "$@"
-}
-
 function openchallenges-infra {
   node dist/apps/openchallenges/infra/src/main.js "$@"
 }
@@ -100,10 +96,6 @@ function schematic-build-images {
 function synapse-build-images {
   nx run-many --target=build-image --projects=synapse-* --parallel=3
 }
-
-# function challenge-seed-db {
-#   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"
-# }
 
 function workspace-nx-cloud-help {
   printf "%s\n" \
