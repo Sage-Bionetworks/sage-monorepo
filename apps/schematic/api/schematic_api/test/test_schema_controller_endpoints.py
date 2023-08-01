@@ -73,12 +73,15 @@ class TestComponentDependencies(BaseTestCase):
             schematic_api.controllers.schema_controller_impl,
             "get_component_dependencies",
             return_value=["dependency1", "dependency2"],
-        ):
-            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=true"
-            response = self.client.open(url, method="GET", headers=HEADERS)
+        ) as mock_function:
+            response = self.client.open(
+                COMPONENT_DEPENDENCIES_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
+
+            mock_function.assert_called_once_with("url1", "component1", None, None)
 
             assert not response.json["hasNext"]
             assert not response.json["hasPrevious"]
@@ -99,18 +102,20 @@ class TestComponentDependencies(BaseTestCase):
             schematic_api.controllers.schema_controller_impl,
             "get_component_dependencies",
             return_value=["dependency1", "dependency2"],
-        ):
-            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=true"
+        ) as mock_function:
+            url = f"{COMPONENT_DEPENDENCIES_URL}&returnDisplayNames=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
+            mock_function.assert_called_once_with("url1", "component1", True, None)
 
             url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=false"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
+            mock_function.assert_called_once_with("url1", "component1", False, None)
 
     def test_500(self) -> None:
         """Test for 500 result"""
