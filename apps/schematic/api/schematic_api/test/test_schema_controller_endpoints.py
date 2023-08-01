@@ -81,7 +81,7 @@ class TestComponentDependencies(BaseTestCase):
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
 
-            mock_function.assert_called_once_with("url1", "component1", None, None)
+            mock_function.assert_called_once_with("url1", "component1", True, True)
 
             assert not response.json["hasNext"]
             assert not response.json["hasPrevious"]
@@ -108,14 +108,36 @@ class TestComponentDependencies(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url1", "component1", True, None)
+            mock_function.assert_called_with("url1", "component1", True, True)
 
-            url = f"{COMPONENT_DEPENDENCIES_URL}?returnDisplayNames=false"
+            url = f"{COMPONENT_DEPENDENCIES_URL}&returnDisplayNames=false"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url1", "component1", False, None)
+            mock_function.assert_called_with("url1", "component1", False, True)
+
+    def test_return_ordered_by_schema(self) -> None:
+        """Test for returnOrderedBySchema parameter"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_dependencies",
+            return_value=["dependency1", "dependency2"],
+        ) as mock_function:
+            url = f"{COMPONENT_DEPENDENCIES_URL}&returnOrderedBySchema=true"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("url1", "component1", True, True)
+
+            url = f"{COMPONENT_DEPENDENCIES_URL}&returnOrderedBySchema=false"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("url1", "component1", True, False)
 
     def test_500(self) -> None:
         """Test for 500 result"""
