@@ -1,0 +1,18 @@
+parameters:
+  - $ref: ../../../components/parameters/path/schemaUrl.yaml
+  - $ref: ../../../components/parameters/path/componentLabel.yaml
+get:
+  tags:
+    - Schema
+  summary: Gets attributes associated with a given component
+  description: Gets attributes associated with a given component
+  operationId: listComponentAttributes
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/AttributesPage.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

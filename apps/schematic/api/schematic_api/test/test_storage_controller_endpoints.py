@@ -1,6 +1,6 @@
-"""Tests for endpoints"""
+"""Tests for storage endpoints"""
 
-
+# pylint: disable=duplicate-code
 from __future__ import absolute_import
 import unittest
 from unittest.mock import patch

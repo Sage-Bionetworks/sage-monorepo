@@ -1,4 +1,4 @@
-"""Tests for endpoint functions"""
+"""Tests for storage endpoint functions"""
 
 from unittest.mock import patch
 

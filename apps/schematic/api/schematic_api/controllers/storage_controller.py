@@ -36,7 +36,7 @@ def list_dataset_files(
     if connexion.request.is_json:
         asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
     return storage_controller_impl.list_dataset_files(
-        dataset_id, asset_view_id, asset_type, file_names=None, use_full_file_path=None
+        dataset_id, asset_view_id, asset_type, file_names, use_full_file_path
     )
 
 

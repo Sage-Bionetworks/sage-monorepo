@@ -1,0 +1,9 @@
+type: object
+description: A attribute from a component in a schema
+properties:
+  name:
+    type: string
+    description: The name of the attribute.
+    example: molecularlyInteractsWith
+required:
+  - name
