@@ -108,7 +108,7 @@ def get_asset_view(asset_view_id: str, asset_type: str, return_type: str) -> Any
     Returns:
         Any: _description_
     """
-    config_handler(asset_view=asset_view_id)
+    CONFIG.synapse_master_fileview_id = asset_view_id
     access_token = get_access_token()
     asset_type_object = get_asset_storage_class(asset_type)
     store = asset_type_object(access_token=access_token)
