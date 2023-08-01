@@ -94,7 +94,7 @@ def get_asset_storage_class(asset_type: str) -> Callable:
     return asset_type_object
 
 
-def get_asset_view(asset_view_id: str, asset_type: str, return_type: str) -> Any:
+def asset_view(asset_view_id: str, asset_type: str, return_type: str) -> Any:
     """_summary_
 
     Args:
