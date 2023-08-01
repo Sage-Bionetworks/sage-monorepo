@@ -1,5 +1,21 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
 :host ::ng-deep .p-multiselect {
-  width: 250px;
+  min-width: 200px;
+  height: 45px;
+}
+
+:host ::ng-deep .p-overlay {
+  position: absolute;
+  right: 0;
+  top: 0 !important;
+  transform: translateX(100%);
+}
+
+:host ::ng-deep .p-multiselect-trigger-icon {
+  &::before {
+    content: '\e901';
+  }
 }
 
 :host ::ng-deep .p-multiselect-label {
@@ -13,10 +29,10 @@
   .item-container {
     display: inline-flex;
     align-items: center;
+    gap: 12px;
+    margin-left: 6px;
 
     .item-label {
-      margin-left: 8px;
-      max-width: 120px;
       word-wrap: break-word;
       white-space: normal;
     }
@@ -35,5 +51,20 @@
 
   .p-multiselect-close {
     order: 3;
+  }
+}
+
+@media screen and (max-width: constants.$md-breakpoint) {
+  :host ::ng-deep .p-multiselect {
+    width: 100%;
+  }
+  :host ::ng-deep .p-overlay {
+    transform: translateX(0);
+    top: 45px !important;
+  }
+  :host ::ng-deep .p-multiselect-trigger-icon {
+    &::before {
+      content: '\e902';
+    }
   }
 }
