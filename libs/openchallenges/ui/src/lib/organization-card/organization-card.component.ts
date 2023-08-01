@@ -10,7 +10,7 @@ import { MOCK_MEMBERS, OrganizationMember } from './mock-members';
 })
 export class OrganizationCardComponent implements OnInit {
   @Input() organizationCard!: OrganizationCard;
-  @Input() showMember = true;
+  @Input() showMember = false;
   @Input() stars = 0;
   organizationAvatar!: Avatar;
   organizationMembers!: OrganizationMember[];

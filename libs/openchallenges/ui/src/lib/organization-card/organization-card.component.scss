@@ -22,7 +22,13 @@
   // min-height: 90px;
   // max-height: 90px;
 }
-.card-subtitle {
+.members {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.member-group {
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;

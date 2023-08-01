@@ -5,6 +5,7 @@
       <openchallenges-organization-card
         *ngFor="let organizationCard of organizationCards$ | async"
         [organizationCard]="organizationCard"
+        [showMember]="true"
       >
       </openchallenges-organization-card>
     </div>
