@@ -2,13 +2,11 @@
   <div id="sponsors">
     <h3>Sponsors</h3>
     <div class="card-group">
-      <openchallenges-person-card
-        *ngFor="let sponsor of sponsors"
-        [name]="sponsor.name"
-        [avatarSize]="120"
-        [affiliation]="organizationCard.name"
+      <openchallenges-organization-card
+        *ngFor="let organizationCard of organizationCards$ | async"
+        [organizationCard]="organizationCard"
       >
-      </openchallenges-person-card>
+      </openchallenges-organization-card>
     </div>
   </div>
 </main>

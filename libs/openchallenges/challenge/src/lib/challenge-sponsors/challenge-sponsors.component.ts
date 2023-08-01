@@ -1,9 +1,19 @@
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
-  MOCK_CHALLENGE_SPONSORS,
-  MOCK_ORGANIZATION_CARDS,
-} from '@sagebionetworks/openchallenges/ui';
+  Challenge,
+  // ChallengeContributionService,
+  // Image,
+  // ImageAspectRatio,
+  // ImageHeight,
+  // ImageQuery,
+  // ImageService,
+  // Organization,
+  // OrganizationService,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { MOCK_ORGANIZATION_CARDS } from '@sagebionetworks/openchallenges/ui';
+// import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+// import { Observable, forkJoin, of, switchMap } from 'rxjs';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-sponsors',
@@ -12,6 +22,69 @@ import {
 })
 export class ChallengeSponsorsComponent {
   @Input() challenge!: Challenge;
-  sponsors = MOCK_CHALLENGE_SPONSORS;
-  organizationCard = MOCK_ORGANIZATION_CARDS[0];
+  // organizationCards$!: Observable<OrganizationCard[]>;
+  organizationCards$ = of(MOCK_ORGANIZATION_CARDS);
+  // constructor(
+  //   // private challengeContributionService: ChallengeContributionService,
+  //   // private organizationService: OrganizationService,
+  //   // private imageService: ImageService
+  // ) {}
+
+  // ngOnInit() {
+  //   this.organizationCards$ = of(MOCK_ORGANIZATION_CARDS);
+  // this.organizationCards$ = this.challengeContributionService.listChallengeContributions(
+  //   this.challenge.id
+  //   ).pipe(
+  // switchMap((page) =>
+  //   forkJoinConcurrent(
+  //     page.challengeContributions.map((contribution) =>
+  //       this.organizationService.getOrganization(
+  //         contribution.organizationId
+  //         )
+  //       ),
+  //     Infinity
+  //   )
+  // ),
+  //   switchMap((orgs) =>
+  //     forkJoin({
+  //       orgs: of(orgs),
+  //       avatarUrls: forkJoinConcurrent(
+  //         orgs.map((org) => this.getOrganizationAvatarUrl(org)),
+  //         Infinity
+  //       ) as unknown as Observable<(Image | undefined)[]>,
+  //     })
+  //   ),
+  //   switchMap(({ orgs, avatarUrls }) =>
+  //     of(
+  //       orgs.map((org, index) =>
+  //         this.getOrganizationCard(org, avatarUrls[index])
+  //       )
+  //     )
+  //   )
+  // );
+  // }
+
+  // TODO Avoid duplicated code (see org search component)
+  // private getOrganizationAvatarUrl(org: Organization): Observable<Image | undefined> {
+  //   if (org.avatarKey && org.avatarKey.length > 0) {
+  //     return this.imageService.getImage({
+  //       objectKey: org.avatarKey,
+  //       height: ImageHeight._140px,
+  //       aspectRatio: ImageAspectRatio._11,
+  //     } as ImageQuery);
+  //   } else {
+  //     return of(undefined);
+  //   }
+  // }
+
+  // // TODO Avoid duplicated code (see org search component)
+  // private getOrganizationCard(org: Organization, avatarUrl: Image | undefined): OrganizationCard {
+  //   return {
+  //     acronym: org.acronym,
+  //     avatarUrl: avatarUrl?.url,
+  //     challengeCount: org.challengeCount,
+  //     login: org.login,
+  //     name: org.name,
+  //   } as OrganizationCard;
+  // }
 }
