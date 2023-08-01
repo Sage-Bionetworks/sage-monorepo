@@ -26,15 +26,10 @@ def list_component_attributes(schema_url, component_label):  # noqa: E501
     return schema_controller_impl.list_component_attributes(schema_url, component_label)
 
 
-def list_component_dependencies(
-    schema_url,
-    component_label,
-    return_display_names=None,
-    return_ordered_by_schema=None,
-):  # noqa: E501
-    """Gets the immediate dependencies that are related to a given component in the schema.
+def list_component_dependencies(schema_url, component_label, return_display_names=None, return_ordered_by_schema=None):  # noqa: E501
+    """Gets the components immediate parent components in the schema.
 
-    Gets the immediate dependencies that are related to a given component in the schema. # noqa: E501
+    Gets the components immediate parent components in the schema. # noqa: E501
 
     :param schema_url: The URL of a schema in jsonld form
     :type schema_url: str
@@ -47,6 +42,4 @@ def list_component_dependencies(
 
     :rtype: Union[ComponentsPage, Tuple[ComponentsPage, int], Tuple[ComponentsPage, int, Dict[str, str]]
     """
-    return schema_controller_impl.list_component_dependencies(
-        schema_url, component_label, return_display_names, return_ordered_by_schema
-    )
+    return schema_controller_impl.list_component_dependencies(schema_url, component_label, return_display_names, return_ordered_by_schema)

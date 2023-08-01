@@ -208,10 +208,9 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
-  /components/{componentLabel}/dependencies:
+  /components/{componentLabel}/parents:
     get:
-      description: Gets the immediate dependencies that are related to a given component
-        in the schema.
+      description: Gets the components immediate parent components in the schema.
       operationId: list_component_dependencies
       parameters:
       - description: The URL of a schema in jsonld form
@@ -262,8 +261,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets the immediate dependencies that are related to a given component
-        in the schema.
+      summary: Gets the components immediate parent components in the schema.
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
