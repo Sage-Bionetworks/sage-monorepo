@@ -28,10 +28,10 @@ class TestListDatasetFiles:
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_dataset_files",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
             result, status = list_dataset_files(
-                dataset_id="id1", asset_view_id="id2", asset_type="synapse"
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
             assert isinstance(result, FilesPage)
@@ -44,7 +44,7 @@ class TestListDatasetFiles:
             side_effect=SynapseNoCredentialsError,
         ):
             result, status = list_dataset_files(
-                dataset_id="id1", asset_view_id="id2", asset_type="synapse"
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -57,7 +57,7 @@ class TestListDatasetFiles:
             side_effect=SynapseAuthenticationError,
         ):
             result, status = list_dataset_files(
-                dataset_id="id1", asset_view_id="id2", asset_type="synapse"
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
             assert isinstance(result, BasicError)
@@ -70,7 +70,7 @@ class TestListDatasetFiles:
             side_effect=AccessCredentialsError("project"),
         ):
             result, status = list_dataset_files(
-                dataset_id="id1", asset_view_id="id2", asset_type="synapse"
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
             assert isinstance(result, BasicError)
@@ -83,7 +83,7 @@ class TestListDatasetFiles:
             side_effect=TypeError,
         ):
             result, status = list_dataset_files(
-                dataset_id="id1", asset_view_id="id2", asset_type="synapse"
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500
             assert isinstance(result, BasicError)

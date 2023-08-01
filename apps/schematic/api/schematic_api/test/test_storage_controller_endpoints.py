@@ -16,7 +16,7 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-FILES_URL = "/api/v1/assetTypes/synapse/assetViews/id1/datasets/id2/files"
+FILES_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/datasets/syn2/files"
 DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/datasets"
 MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/manifests"
 
@@ -30,7 +30,7 @@ class TestListDatasetFiles(BaseTestCase):
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_dataset_files",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
             response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
             self.assert200(
@@ -45,10 +45,10 @@ class TestListDatasetFiles(BaseTestCase):
             assert response.json["totalPages"] == 1
             files = response.json["files"]
             assert len(files) == 2
-            file = files[0]
-            assert list(file.keys()) == ["id", "name"]
-            assert file["name"] == "name1"
-            assert file["id"] == "id1"
+            file1 = files[0]
+            assert list(file1.keys()) == ["id", "name"]
+            assert file1["name"] == "name1"
+            assert file1["id"] == "syn1"
 
     def test_file_names(self) -> None:
         """Test with file_names parameter"""
@@ -56,14 +56,29 @@ class TestListDatasetFiles(BaseTestCase):
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_dataset_files",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ) as mock_function:
+            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", None, False)
+
             url = f"{FILES_URL}?fileNames=file.text"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("id2", "synapse", ["file.text"], None)
+            mock_function.assert_called_with("syn2", "synapse", ["file.text"], False)
+
+            url = f"{FILES_URL}?fileNames=file.text&fileNames=file2.text"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with(
+                "syn2", "synapse", ["file.text", "file2.text"], False
+            )
 
     def test_use_full_file_path(self) -> None:
         """Test with use_full_file_path parameter"""
@@ -71,14 +86,21 @@ class TestListDatasetFiles(BaseTestCase):
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
             "get_dataset_files",
-            return_value=[("id1", "name1"), ("id2", "name2")],
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
         ) as mock_function:
             url = f"{FILES_URL}?useFullFilePath=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("id2", "synapse", None, True)
+            mock_function.assert_called_with("syn2", "synapse", None, True)
+
+            url = f"{FILES_URL}?useFullFilePath=false"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", None, False)
 
     def test_401(self) -> None:
         """Test for 401 result"""
