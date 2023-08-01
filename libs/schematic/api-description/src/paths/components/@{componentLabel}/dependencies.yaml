@@ -1,0 +1,21 @@
+parameters:
+  - $ref: ../../../components/parameters/path/schemaUrl.yaml
+  - $ref: ../../../components/parameters/path/componentLabel.yaml
+get:
+  tags:
+    - Schema
+  summary: Gets the immediate dependencies that are related to a given component in the schema.
+  description: Gets the immediate dependencies that are related to a given component in the schema.
+  operationId: listComponentDependencies
+  parameters:
+    - $ref: ../../../components/parameters/path/returnDisplayNames.yaml
+    - $ref: ../../../components/parameters/path/returnOrderedBySchema.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ComponentsPage.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

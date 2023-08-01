@@ -33,8 +33,8 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
 
-  /schemas/{schemaUrl}/components/{componentLabel}/dependencies:
-    $ref: paths/schemas/@{schemaUrl}/components/@{componentLabel}/dependencies.yaml
+  /components/{componentLabel}/dependencies:
+    $ref: paths/components/@{componentLabel}/dependencies.yaml
 
-  /schemas/{schemaUrl}/components/{componentLabel}/attributes:
-    $ref: paths/schemas/@{schemaUrl}/components/@{componentLabel}/attributes.yaml
+  /components/{componentLabel}/attributes:
+    $ref: paths/components/@{componentLabel}/attributes.yaml

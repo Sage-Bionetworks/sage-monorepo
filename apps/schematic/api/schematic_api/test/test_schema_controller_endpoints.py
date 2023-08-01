@@ -12,8 +12,8 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-COMPONENT_ATTRIBUTES_URL = "/api/v1/schemas/xxx/components/component1/attributes"
-COMPONENT_DEPENDENCIES_URL = "/api/v1/schemas/xxx/components/component1/dependencies"
+COMPONENT_DEPENDENCIES_URL = "/api/v1/components/component1/dependencies?schemaUrl=url1"
+COMPONENT_ATTRIBUTES_URL = "/api/v1/components/component1/attributes?schemaUrl=url1"
 
 
 class TestComponentAttributes(BaseTestCase):
@@ -26,13 +26,15 @@ class TestComponentAttributes(BaseTestCase):
             schematic_api.controllers.schema_controller_impl,
             "get_component_attributes",
             return_value=["attribute1", "attribute2"],
-        ):
+        ) as mock_function:
             response = self.client.open(
                 COMPONENT_ATTRIBUTES_URL, method="GET", headers=HEADERS
             )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
+
+            mock_function.assert_called_once_with("url1", "component1")
 
             assert not response.json["hasNext"]
             assert not response.json["hasPrevious"]

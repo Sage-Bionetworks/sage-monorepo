@@ -1,6 +1,6 @@
 parameters:
-  - $ref: ../../../../../components/parameters/path/schemaUrl.yaml
-  - $ref: ../../../../../components/parameters/path/componentLabel.yaml
+  - $ref: ../../../components/parameters/path/schemaUrl.yaml
+  - $ref: ../../../components/parameters/path/componentLabel.yaml
 get:
   tags:
     - Schema
@@ -13,6 +13,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../../../components/schemas/AttributesPage.yaml
+            $ref: ../../../components/schemas/AttributesPage.yaml
     '500':
-      $ref: ../../../../../components/responses/InternalServerError.yaml
+      $ref: ../../../components/responses/InternalServerError.yaml
