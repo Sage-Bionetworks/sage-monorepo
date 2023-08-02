@@ -43,23 +43,14 @@ cd ~
 # Clone the repository and checkout the commit specified
 git clone --filter=blob:none --no-checkout https://github.com/Sage-Bionetworks/sage-monorepo.git
 cd sage-monorepo
-git checkout 45fdf04c406d6f24cfdd832ea19bbf16312ffd19
-
-# So that the images built inside the dev container are available on the host (i.e. outside the dev
-# container)
-./tools/switch-devcontainer-to-docker-outside-of-docker.sh
-
-# Step outside of the repository
-cd ..
+git checkout 3a3d48e2344fa9d68fbeb858bb17107b2209ebf3
 
 # Start the dev container
-devcontainer up --workspace-folder sage-monorepo
+devcontainer up --workspace-folder ../sage-monorepo
 
-# Build the images
-devcontainer exec --workspace-folder sage-monorepo bash -c \
-  ". ./dev-env.sh \
-  && workspace-install \
-  && openchallenges-build-images"
+# Prepare the workspace, including creating the .env config files
+devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+  && workspace-install"
 
 # Remove the dev container
 docker rm -f sage_devcontainer
