@@ -15,21 +15,26 @@ class Dataset(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None):  # noqa: E501
+    def __init__(self, name=None, id=None):  # noqa: E501
         """Dataset - a model defined in OpenAPI
 
         :param name: The name of this Dataset.  # noqa: E501
         :type name: str
+        :param id: The id of this Dataset.  # noqa: E501
+        :type id: str
         """
         self.openapi_types = {
-            'name': str
+            'name': str,
+            'id': str
         }
 
         self.attribute_map = {
-            'name': 'name'
+            'name': 'name',
+            'id': 'id'
         }
 
         self._name = name
+        self._id = id
 
     @classmethod
     def from_dict(cls, dikt) -> 'Dataset':
@@ -66,3 +71,28 @@ class Dataset(Model):
             raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
 
         self._name = name
+
+    @property
+    def id(self):
+        """Gets the id of this Dataset.
+
+        The ID of the dataset.  # noqa: E501
+
+        :return: The id of this Dataset.
+        :rtype: str
+        """
+        return self._id
+
+    @id.setter
+    def id(self, id):
+        """Sets the id of this Dataset.
+
+        The ID of the dataset.  # noqa: E501
+
+        :param id: The id of this Dataset.
+        :type id: str
+        """
+        if id is None:
+            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
+
+        self._id = id

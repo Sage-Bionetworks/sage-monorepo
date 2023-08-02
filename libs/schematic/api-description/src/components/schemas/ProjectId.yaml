@@ -1,6 +1,3 @@
-description: A Synapse project ID.
+description: A project ID.
 type: string
-# minLength: 3
-# maxLength: 25
-# pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
 example: syn26251192
