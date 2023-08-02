@@ -30,14 +30,14 @@
         <td class="text-right">DOI</td>
         <td>
           <a
-            *ngIf="challenge.doi; else na"
+            *ngIf="challenge.doi; else na_doi"
             rel="noopener"
             target="_blank"
             href="https://doi.org/{{ challenge.doi }}"
             >{{ challenge.doi }}</a
           >
         </td>
-        <ng-template #na>
+        <ng-template #na_doi>
           <span>Not available</span>
         </ng-template>
       </tr>
