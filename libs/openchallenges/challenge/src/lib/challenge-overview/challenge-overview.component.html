@@ -62,11 +62,14 @@
       </tr>
       <tr>
         <td class="text-right">Incentive(s)</td>
-        <td>
+        <td *ngIf="challenge.incentives && challenge.incentives.length > 0; else na_prize">
           <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
             {{ prettify(incentive) }}{{ isLast ? '' : ', ' }}</span
           >
         </td>
+        <ng-template #na_prize>
+          <td><span>Not available</span></td>
+        </ng-template>
       </tr>
     </table>
   </div>
