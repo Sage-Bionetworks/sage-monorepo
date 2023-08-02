@@ -16,6 +16,8 @@ from schematic_api.models.dataset import Dataset
 from schematic_api.models.datasets_page import DatasetsPage
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifest import Manifest
+from schematic_api.models.project import Project
+from schematic_api.models.projects_page import ProjectsPage
 
 
 def get_access_token() -> Optional[str]:
@@ -92,6 +94,56 @@ def get_asset_storage_class(asset_type: str) -> Callable:
         msg = f"{asset_type} is not an allowed value: [{list(asset_type_dict.keys())}]"
         raise ValueError(msg)
     return asset_type_object
+
+
+def get_projects(asset_type: str) -> list[tuple[str, str]]:
+    """Gets a list of projects
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        list[tuple(str, str)]: A list of projects in tuple form
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    return store.getStorageProjects()
+
+
+@handle_exceptions
+def list_projects(
+    asset_view_id: str, asset_type: str
+) -> tuple[Union[ProjectsPage, BasicError], int]:
+    """Attempts to get a list of projects the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[Union[ProjectsPage, BasicError], int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_tuples = get_projects(asset_type)
+    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
+
+    page = ProjectsPage(
+        number=0,
+        size=100,
+        total_elements=len(projects),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        projects=projects,
+    )
+    result: Union[ProjectsPage, BasicError] = page
+    status = 200
+
+    return result, status
 
 
 def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, str]]:
