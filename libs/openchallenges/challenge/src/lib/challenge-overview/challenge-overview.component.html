@@ -20,7 +20,9 @@
       </tr>
       <tr>
         <td class="text-right">Platform</td>
-        <td>{{ use_default(challenge.platform.name) }}</td>
+        <td [ngClass]="{ 'text-grey': challenge.platform.name === '' }">
+          {{ use_default(challenge.platform.name) }}
+        </td>
       </tr>
       <!-- <tr>
         <td class="text-right">Website URL</td>
@@ -38,7 +40,7 @@
           >
         </td>
         <ng-template #na_doi>
-          <span>Not available</span>
+          <span class="text-grey">Not available</span>
         </ng-template>
       </tr>
       <tr>
@@ -57,7 +59,7 @@
           </span>
         </td>
         <ng-template #na_data>
-          <td><span>Not available</span></td>
+          <td><span class="text-grey">Not available</span></td>
         </ng-template>
       </tr>
       <tr>
@@ -68,7 +70,7 @@
           >
         </td>
         <ng-template #na_prize>
-          <td><span>Not available</span></td>
+          <td><span class="text-grey">Not available</span></td>
         </ng-template>
       </tr>
     </table>
@@ -89,7 +91,9 @@
     Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }} //
     See something missing or not up-to-date?
     <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{challenge.id}}&entry.1040159972={{challenge.slug}}"
+      href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{
+        challenge.id
+      }}&entry.1040159972={{ challenge.slug }}"
       target="_blank"
       >Suggest an edit here!</a
     >
