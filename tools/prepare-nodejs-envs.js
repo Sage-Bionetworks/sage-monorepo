@@ -17,7 +17,7 @@ const installNodejsDependencies = () => {
   });
 };
 
-console.log('✨ Preparing Node.js dependencies');
+console.log('✨ Preparing Node.js environments');
 getGitDiffFiles().then((changedFiles) => {
   if (changedFiles.includes('yarn.lock')) {
     if (gitHookName === 'post-merge') {
