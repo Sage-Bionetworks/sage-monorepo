@@ -37,7 +37,6 @@ const prepareREnvironment = (projectNames) => {
   }).on('exit', function (error) {
     if (error) {
       console.log(`error: ${error.message}`);
-      return;
     }
   });
 };
