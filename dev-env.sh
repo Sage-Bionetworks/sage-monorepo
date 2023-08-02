@@ -138,6 +138,7 @@ function workspace-initialize-env {
     sudo ./tools/configure-hostnames.sh
   fi
 
-  # Needed to run ES containers (see https://github.com/Sage-Bionetworks/sage-monorepo/issues/1311)
+  # Needed to run ES containers
+  # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/1899
   sudo sysctl -w vm.max_map_count=262144 1> /dev/null
 }
