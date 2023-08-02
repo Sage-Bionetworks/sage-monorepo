@@ -11,20 +11,19 @@ python = "3.10.0"
 connexion = {version = "2.14.1", extras = ["swagger-ui"]}
 swagger-ui-bundle = "0.0.9"
 python-dateutil = "2.8.2"
-Flask = "1.1.4"
+Flask = "2.1.3"
 Flask-Cors = "3.0.10"
-schematicpy = "23.1.1"
+schematicpy = "23.7.1"
 synapseclient = "2.7.1"
 
-
 [tool.poetry.group.dev.dependencies]
-black = {version = "20.8b1", allow-prereleases = true}
+black = "23.7.0"
+mypy = "^1.4.1"
+pylint = "^2.17.4"
 
 
 [tool.poetry.group.prod.dependencies]
 uWSGI = "2.0.21"
-click = "7.1.2"
-
 
 [tool.poetry.group.test.dependencies]
 pytest = "7.2.0"

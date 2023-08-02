@@ -18,7 +18,82 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
+    get:
+      description: Gets all datasets in folder under a given storage project that
+        the current user has access to.
+      operationId: list_storage_project_datasets
+      parameters:
+      - description: The Synapse ID of a storage project.
+        explode: false
+        in: path
+        name: projectId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProjectId'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetsPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets all datasets in folder under a given storage project that the
+        current user has access to.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     get:
       description: Gets all manifests in a project folder that the current user has
         access to.
@@ -37,10 +112,18 @@ paths:
           a given project
         explode: false
         in: path
-        name: assetView
+        name: assetViewId
         required: true
         schema:
-          $ref: '#/components/schemas/AssetView'
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
         style: simple
       responses:
         "200":
@@ -56,6 +139,12 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
         "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
           content:
             application/problem+json:
               schema:
@@ -78,45 +167,6 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /storages/projects/{projectId}/datasets:
-    get:
-      description: Gets all datasets in folder under a given storage project that
-        the current user has access to.
-      operationId: list_storage_project_datasets
-      parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DatasetsPage'
-          description: Success
-        "404":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The specified resource was not found
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      summary: Gets all datasets in folder under a given storage project that the
-        current user has access to.
-      tags:
-      - Storage
-      x-openapi-router-controller: schematic_api.controllers.storage_controller
 components:
   parameters:
     projectId:
@@ -128,30 +178,27 @@ components:
       schema:
         $ref: '#/components/schemas/ProjectId'
       style: simple
-    assetView:
+    assetViewId:
       description: ID of view listing all project data assets. E.g. for Synapse this
         would be the Synapse ID of the fileview listing all data assets for a given
         project
       explode: false
       in: path
-      name: assetView
+      name: assetViewId
       required: true
       schema:
-        $ref: '#/components/schemas/AssetView'
+        $ref: '#/components/schemas/AssetViewId'
+      style: simple
+    assetType:
+      description: "Type of asset, such as Synapse"
+      explode: false
+      in: path
+      name: assetType
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetType'
       style: simple
   responses:
-    NotFound:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The specified resource was not found
-    InternalServerError:
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-      description: The request cannot be fulfilled due to an unexpected server error
     BadRequest:
       content:
         application/problem+json:
@@ -164,10 +211,33 @@ components:
           schema:
             $ref: '#/components/schemas/BasicError'
       description: Unauthorized
+    NotFound:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The specified resource was not found
+    InternalServerError:
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+      description: The request cannot be fulfilled due to an unexpected server error
   schemas:
     ProjectId:
-      description: A Synapse project ID.
+      description: A project ID.
       example: syn26251192
+      type: string
+    AssetViewId:
+      description: An asset view ID.
+      example: syn23643253
+      type: string
+    AssetType:
+      description: A type of asset.
+      enum:
+      - synapse
+      example: synapse
+      title: AssetType
       type: string
     PageMetadata:
       description: The metadata of a page.
@@ -223,7 +293,13 @@ components:
           example: Example dataset
           title: name
           type: string
+        id:
+          description: The ID of the dataset.
+          example: Syn1
+          title: id
+          type: string
       required:
+      - id
       - name
       title: Dataset
       type: object
@@ -265,17 +341,39 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    AssetView:
-      description: ID of view listing all project data assets. E.g. for Synapse this
-        would be the Synapse ID of the fileview listing all data assets for a given
-        project.
-      example: syn23643253
-      type: string
     Manifest:
-      description: A manifest ID object
-      example: syn26251389
+      description: A manifest object
+      properties:
+        name:
+          description: The name of the manifest file.
+          example: synapse_storage_manifest.csv
+          title: name
+          type: string
+        id:
+          description: The id of the manifest file.
+          example: syn1
+          title: id
+          type: string
+        datasetName:
+          description: The name of the dataset the manifest belongs to.
+          example: dataset_X
+          title: datasetName
+          type: string
+        datasetId:
+          description: The id of the dataset the manifest belongs to.
+          example: syn2
+          title: datasetId
+          type: string
+        componentName:
+          description: The name of the component the manifest is of.
+          example: patient
+          title: componentName
+          type: string
+      required:
+      - id
+      - name
       title: Manifest
-      type: string
+      type: object
     ManifestsPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'

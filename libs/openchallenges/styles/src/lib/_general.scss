@@ -125,9 +125,9 @@ em {
   white-space: nowrap;
 }
 .facets {
-  padding: 48px 21px;
+  padding: 24px 16px;
   height: 100%;
-  min-width: 320px;
+  min-width: 280px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -249,7 +249,11 @@ table {
   display: flex;
   flex-wrap: wrap;
   gap: 24px;
-  padding: 28px 0;
+  padding: 16px 0;
+
+  & > * {
+    flex: 1 1 auto;
+  }
 }
 .card-banner {
   width: 100%;
@@ -265,6 +269,7 @@ table {
   margin: 15px 0 !important;
   font-weight: 700 !important;
   line-height: 24px !important;
+  height: 2.5em;
 }
 .card-body {
   width: 100%;
