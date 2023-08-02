@@ -9,7 +9,10 @@ from schematic_api.models.attribute import Attribute
 from schematic_api.controllers.utils import handle_exceptions
 
 
-def get_component_attributes(schema_url: str, component_label: str) -> list[str]:
+def get_component_attributes(
+    component_label: str,
+    schema_url: str,
+) -> list[str]:
     """Gets the attributes associated with the component
 
     Args:
@@ -26,7 +29,8 @@ def get_component_attributes(schema_url: str, component_label: str) -> list[str]
 
 @handle_exceptions
 def list_component_attributes(
-    schema_url: str, component_label: str
+    component_label: str,
+    schema_url: str,
 ) -> tuple[Union[AttributesPage, BasicError], int]:
     """Lists the attributes associated with the component
 
@@ -42,7 +46,7 @@ def list_component_attributes(
 
     attributes = [
         Attribute(attribute)
-        for attribute in get_component_attributes(schema_url, component_label)
+        for attribute in get_component_attributes(component_label, schema_url)
     ]
 
     page = AttributesPage(

@@ -21,7 +21,8 @@ class TestComponentAttributes:
             return_value=["attribute1", "attribute2"],
         ):
             result, status = list_component_attributes(
-                schema_url="xxx", component_label="label"
+                component_label="label",
+                schema_url="xxx",
             )
             assert status == 200
             assert isinstance(result, AttributesPage)
@@ -34,7 +35,8 @@ class TestComponentAttributes:
             side_effect=TypeError,
         ):
             result, status = list_component_attributes(
-                schema_url="xxx", component_label="label"
+                component_label="label",
+                schema_url="xxx",
             )
             assert status == 500
             assert isinstance(result, BasicError)
