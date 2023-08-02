@@ -1,6 +1,6 @@
-// For each Python project in the workspace, this script checks if their dependencies, as defined in
-// their lock files, have changed since the last git operation. The Nx target `prepare-python` is
-// then run for all the projects that had their dependencies updated.
+// For each R project in the workspace, this script checks if their dependencies, as defined in
+// their lock files, have changed since the last git operation. The Nx target `prepare-r` is then
+// run for all the projects that had their dependencies updated.
 
 'use strict';
 
