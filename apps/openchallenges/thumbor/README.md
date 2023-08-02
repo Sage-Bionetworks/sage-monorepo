@@ -36,13 +36,6 @@ Add images to the AWS S3 bucket `openchallenges-img`.
 
 See below for information on how to create and configure the AWS S3 buckets.
 
-### Upload an image to MinIO (deprecated)
-
-1. Open MinIO web console http://localhost:9001/.
-2. Login into MinIO (see MinIO project folder for the default credentials).
-3. Upload an image to the bucket `img`
-    - E.g. Download the [Triforce image] and name it `triforce.png`.
-
 ### Access the image with Thumbor
 
 Open this link and you should see the resized image:
