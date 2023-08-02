@@ -13,11 +13,11 @@ def get_component_attributes(schema_url: str, component_label: str) -> list[str]
     """Gets the attributes associated with the component
 
     Args:
-        schema_url (str): _description_
-        component_label (str): _description_
+        schema_url (str): The URL of the schema in jsonld form
+        component_label (str): The label of the component
 
     Returns:
-        list[str]: _description_
+        list[str]: A list of attributes of the component
     """
     schema_explorer = SchemaExplorer()
     schema_explorer.load_schema(schema_url)
@@ -31,11 +31,13 @@ def list_component_attributes(
     """Lists the attributes associated with the component
 
     Args:
-        schema_url (str): _description_
-        component_label (str): _description_
+        schema_url (str): The URL of the schema in jsonld form
+        component_label (str): The label of the component
 
     Returns:
-        tuple[Union[AttributesPage, BasicError], int]: _description_
+        tuple[Union[AttributesPage, BasicError], int]: A tuple
+          The first item is either the attributes or an error object
+          The second item is the response status
     """
 
     attributes = [
