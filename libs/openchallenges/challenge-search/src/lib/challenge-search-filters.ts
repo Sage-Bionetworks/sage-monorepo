@@ -68,7 +68,7 @@ export const challengeCategoriesFilter: Filter = {
   query: 'categories',
   label: 'Category',
   values: challengeCategoriesFilterValues,
-  collapsed: false,
+  collapsed: true,
 };
 
 export const challengeOrganizationsFilter: Filter = {

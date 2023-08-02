@@ -1,0 +1,4 @@
+description: A type of asset.
+type: string
+example: synapse
+enum: [synapse]

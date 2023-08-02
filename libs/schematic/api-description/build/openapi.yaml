@@ -18,9 +18,11 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     parameters:
       - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -34,14 +36,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     parameters:
       - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetView'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -59,6 +68,8 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -71,9 +82,19 @@ components:
       bearerFormat: JWT
   schemas:
     ProjectId:
-      description: A Synapse project ID.
+      description: A project ID.
       type: string
       example: syn26251192
+    AssetViewId:
+      description: An asset view ID.
+      type: string
+      example: syn23643253
+    AssetType:
+      description: A type of asset.
+      type: string
+      example: synapse
+      enum:
+        - synapse
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -121,8 +142,13 @@ components:
           type: string
           description: The name of the dataset.
           example: Example dataset
+        id:
+          type: string
+          description: The ID of the dataset.
+          example: Syn1
       required:
         - name
+        - id
       x-java-class-annotations:
         - '@lombok.Builder'
     DatasetsPage:
@@ -162,14 +188,33 @@ components:
         - status
       x-java-class-annotations:
         - '@lombok.Builder'
-    AssetView:
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
-      type: string
-      example: syn23643253
     Manifest:
-      description: A manifest ID object
-      type: string
-      example: syn26251389
+      type: object
+      description: A manifest object
+      properties:
+        name:
+          type: string
+          description: The name of the manifest file.
+          example: synapse_storage_manifest.csv
+        id:
+          type: string
+          description: The id of the manifest file.
+          example: syn1
+        datasetName:
+          type: string
+          description: The name of the dataset the manifest belongs to.
+          example: dataset_X
+        datasetId:
+          type: string
+          description: The id of the dataset the manifest belongs to.
+          example: syn2
+        componentName:
+          type: string
+          description: The name of the component the manifest is of.
+          example: patient
+      required:
+        - name
+        - id
     ManifestsPage:
       type: object
       description: A page of manifests.
@@ -194,26 +239,21 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ProjectId'
-    assetView:
-      name: assetView
+    assetViewId:
+      name: assetViewId
       in: path
       description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
       required: true
       schema:
-        $ref: '#/components/schemas/AssetView'
+        $ref: '#/components/schemas/AssetViewId'
+    assetType:
+      name: assetType
+      in: path
+      description: Type of asset, such as Synapse
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetType'
   responses:
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
-    InternalServerError:
-      description: The request cannot be fulfilled due to an unexpected server error
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     BadRequest:
       description: Invalid request
       content:
@@ -222,6 +262,18 @@ components:
             $ref: '#/components/schemas/BasicError'
     Unauthorized:
       description: Unauthorized
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    InternalServerError:
+      description: The request cannot be fulfilled due to an unexpected server error
       content:
         application/problem+json:
           schema:

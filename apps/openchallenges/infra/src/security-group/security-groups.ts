@@ -34,6 +34,19 @@ export class SecurityGroups extends Construct {
         description: 'Allow HTTP traffic',
       });
 
+    // reusable ingress 443 rule
+    const allowIngress443 = (securityGroupId: string, constructId: string) =>
+      new SecurityGroupRule(this, constructId, {
+        securityGroupId,
+        type: 'ingress',
+        protocol: 'tcp',
+        fromPort: 443,
+        toPort: 443,
+        cidrBlocks: ['0.0.0.0/0'],
+        ipv6CidrBlocks: ['::/0'],
+        description: 'Allow HTTPS traffic',
+      });
+
     // reusable ingress SSH rule
     const allowIngressSsh = (securityGroupId: string, constructId: string) =>
       new SecurityGroupRule(this, constructId, {
@@ -123,6 +136,10 @@ export class SecurityGroups extends Construct {
     allowIngress80(
       this.previewInstanceAlbSg.id,
       'preview_instance_alb_allow_80'
+    );
+    allowIngress443(
+      this.previewInstanceAlbSg.id,
+      'preview_instance_alb_allow_443'
     );
     allowEgressAll(
       this.previewInstanceAlbSg.id,
