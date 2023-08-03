@@ -35,6 +35,80 @@
   <section id="bottom" class="content">
     <div class="facets">
       <p-panel
+        header="{{ statusFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="statusFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="statusFilter.values"
+          [selectedValues]="selectedStatus"
+          (selectionChange)="onStatusChange($event)"
+          inputId="{{ statusFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ incentivesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="incentivesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="incentivesFilter.values"
+          [selectedValues]="selectedIncentives"
+          (selectionChange)="onIncentivesChange($event)"
+          inputId="{{ incentivesFilter.query }}"
+        ></openchallenges-checkbox-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <!-- <p-panel
+        header="{{ inputDataTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="inputDataTypesFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="inputDataTypesFilter.values"
+          [selectedValues]="selectedInputDataTypes"
+          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onInputDataTypesChange($event)"
+          (searchChange)="onInputDataTypeSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider> -->
+      <p-panel
+        header="{{ platformsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="platformsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="platformsFilter.values"
+          [selectedValues]="selectedPlatforms"
+          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="platformsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onPlatformsChange($event)"
+          (searchChange)="onPlatformSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ organizationsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="organizationsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="organizationsFilter.values"
+          [selectedValues]="selectedOrgs"
+          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="organizationsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onOrganizationsChange($event)"
+          (searchChange)="onOrganizationSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
@@ -66,19 +140,6 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ statusFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="statusFilter.collapsed"
-      >
-        <openchallenges-checkbox-filter
-          [values]="statusFilter.values"
-          [selectedValues]="selectedStatus"
-          (selectionChange)="onStatusChange($event)"
-          inputId="{{ statusFilter.query }}"
-        ></openchallenges-checkbox-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
         header="{{ submissionTypesFilter.label }}"
         [toggleable]="true"
         [collapsed]="submissionTypesFilter.collapsed"
@@ -92,51 +153,6 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ incentivesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="incentivesFilter.collapsed"
-      >
-        <openchallenges-checkbox-filter
-          [values]="incentivesFilter.values"
-          [selectedValues]="selectedIncentives"
-          (selectionChange)="onIncentivesChange($event)"
-          inputId="{{ incentivesFilter.query }}"
-        ></openchallenges-checkbox-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
-        header="{{ platformsFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="platformsFilter.collapsed"
-      >
-        <openchallenges-search-dropdown-filter
-          [values]="platformsFilter.values"
-          [selectedValues]="selectedPlatforms"
-          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="platformsFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onPlatformsChange($event)"
-          (searchChange)="onPlatformSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
-        header="{{ inputDataTypesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="inputDataTypesFilter.collapsed"
-      >
-        <openchallenges-search-dropdown-filter
-          [values]="inputDataTypesFilter.values"
-          [selectedValues]="selectedInputDataTypes"
-          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="inputDataTypesFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onInputDataTypesChange($event)"
-          (searchChange)="onInputDataTypeSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
         header="{{ categoriesFilter.label }}"
         [toggleable]="true"
         [collapsed]="categoriesFilter.collapsed"
@@ -147,22 +163,6 @@
           (selectionChange)="onCategoriesChange($event)"
           inputId="{{ categoriesFilter.query }}"
         ></openchallenges-checkbox-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
-        header="{{ organizationsFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="organizationsFilter.collapsed"
-      >
-        <openchallenges-search-dropdown-filter
-          [values]="organizationsFilter.values"
-          [selectedValues]="selectedOrgs"
-          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="organizationsFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onOrganizationsChange($event)"
-          (searchChange)="onOrganizationSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
       </p-panel>
     </div>
     <div class="main col">
