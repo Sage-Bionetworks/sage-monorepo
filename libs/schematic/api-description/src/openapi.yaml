@@ -33,3 +33,6 @@ paths:
 
   /components/{componentLabel}/attributes:
     $ref: paths/components/@{componentLabel}/attributes.yaml
+
+  /components/{componentLabel}/parents:
+    $ref: paths/components/@{componentLabel}/parents.yaml
