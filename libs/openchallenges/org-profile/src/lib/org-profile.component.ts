@@ -37,6 +37,7 @@ import {
 })
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
   account$!: Observable<Account | undefined>;
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
@@ -55,6 +56,7 @@ export class OrgProfileComponent implements OnInit {
     private imageService: ImageService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit(): void {

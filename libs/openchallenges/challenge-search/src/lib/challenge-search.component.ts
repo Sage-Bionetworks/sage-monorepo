@@ -78,6 +78,7 @@ export class ChallengeSearchComponent
   implements OnInit, AfterContentInit, OnDestroy
 {
   public appVersion: string;
+  public dataUpdatedOn: string;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -158,6 +159,7 @@ export class ChallengeSearchComponent
     private _snackBar: MatSnackBar
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {
