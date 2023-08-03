@@ -24,7 +24,7 @@ export class OrganizationCardComponent implements OnInit {
       this.organizationAvatar = {
         name: this.organizationCard.name,
         src: this.organizationCard.avatarUrl,
-        size: 140,
+        size: 160,
       };
     }
 
