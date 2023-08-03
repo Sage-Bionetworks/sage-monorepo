@@ -15,3 +15,6 @@ from schematic_api.models.manifest import Manifest
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifests_page_all_of import ManifestsPageAllOf
 from schematic_api.models.page_metadata import PageMetadata
+from schematic_api.models.validation_rule import ValidationRule
+from schematic_api.models.validation_rules_page import ValidationRulesPage
+from schematic_api.models.validation_rules_page_all_of import ValidationRulesPageAllOf
