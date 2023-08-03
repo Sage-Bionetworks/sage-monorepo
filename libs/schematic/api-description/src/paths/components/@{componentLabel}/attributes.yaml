@@ -7,7 +7,7 @@ get:
   description: Gets attributes associated with a given component
   operationId: listComponentAttributes
   parameters:
-    - $ref: ../../../components/parameters/path/schemaUrl.yaml
+    - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:
     '200':
       description: Success
