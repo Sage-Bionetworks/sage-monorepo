@@ -169,13 +169,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
           ),
         })
       ),
-      switchMap(({ orgs, avatarUrls }) => {
-        return of(
+      switchMap(({ orgs, avatarUrls }) =>
+        of(
           orgs.map((org, index) =>
             this.getOrganizationCard(org, avatarUrls[index])
           )
-        );
-      })
+        )
+      )
     );
 
     orgPage$.subscribe((page) => {
