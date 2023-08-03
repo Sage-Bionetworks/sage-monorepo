@@ -47,22 +47,19 @@
         ></openchallenges-checkbox-filter>
       </p-panel>
       <p-divider></p-divider>
-      <!-- <p-panel
-        header="{{ inputDataTypesFilter.label }}"
+      <p-panel
+        header="{{ incentivesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="inputDataTypesFilter.collapsed"
+        [collapsed]="incentivesFilter.collapsed"
       >
-        <openchallenges-search-dropdown-filter
-          [values]="inputDataTypesFilter.values"
-          [selectedValues]="selectedInputDataTypes"
-          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="inputDataTypesFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onInputDataTypesChange($event)"
-          (searchChange)="onInputDataTypeSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
+        <openchallenges-checkbox-filter
+          [values]="incentivesFilter.values"
+          [selectedValues]="selectedIncentives"
+          (selectionChange)="onIncentivesChange($event)"
+          inputId="{{ incentivesFilter.query }}"
+        ></openchallenges-checkbox-filter>
       </p-panel>
-      <p-divider></p-divider> -->
+      <p-divider></p-divider>
       <p-panel
         header="{{ platformsFilter.label }}"
         [toggleable]="true"
@@ -80,16 +77,19 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ incentivesFilter.label }}"
+        header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="incentivesFilter.collapsed"
+        [collapsed]="inputDataTypesFilter.collapsed"
       >
-        <openchallenges-checkbox-filter
-          [values]="incentivesFilter.values"
-          [selectedValues]="selectedIncentives"
-          (selectionChange)="onIncentivesChange($event)"
-          inputId="{{ incentivesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        <openchallenges-search-dropdown-filter
+          [values]="inputDataTypesFilter.values"
+          [selectedValues]="selectedInputDataTypes"
+          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onInputDataTypesChange($event)"
+          (searchChange)="onInputDataTypeSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
       </p-panel>
       <p-divider></p-divider>
       <p-panel
