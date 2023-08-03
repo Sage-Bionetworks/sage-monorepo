@@ -94,9 +94,9 @@ paths:
                 $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /components/{componentLabel}/validationRules:
+  /components/{componentDisplay}/validationRules:
     parameters:
-      - $ref: '#/components/parameters/componentLabel'
+      - $ref: '#/components/parameters/componentDisplay'
     get:
       tags:
         - Schema
@@ -305,6 +305,10 @@ components:
             - attributes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentDisplay:
+      description: The display name of a component in a schema
+      type: string
+      example: MolecularEntity
     ValidationRule:
       type: object
       description: A validation rule.
@@ -369,6 +373,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
+    componentDisplay:
+      name: componentDisplay
+      in: path
+      description: The display name of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentDisplay'
   responses:
     BadRequest:
       description: Invalid request

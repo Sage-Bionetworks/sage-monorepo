@@ -1,5 +1,5 @@
 parameters:
-  - $ref: ../../../components/parameters/path/componentLabel.yaml
+  - $ref: ../../../components/parameters/path/componentDisplay.yaml
 get:
   tags:
     - Schema

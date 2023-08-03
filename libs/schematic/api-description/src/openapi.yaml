@@ -34,5 +34,5 @@ paths:
   /components/{componentLabel}/attributes:
     $ref: paths/components/@{componentLabel}/attributes.yaml
 
-  /components/{componentLabel}/validationRules:
-    $ref: paths/components/@{componentLabel}/validationRules.yaml
+  /components/{componentDisplay}/validationRules:
+    $ref: paths/components/@{componentDisplay}/validationRules.yaml
