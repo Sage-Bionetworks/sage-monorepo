@@ -5,7 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
 import { ChallengeOrganizersModule } from './challenge-organizers/challenge-organizers.module';
-import { ChallengeSponsorsModule } from './challenge-sponsors/challenge-sponsors.module';
+import { ChallengeContributorsModule } from './challenge-contributors/challenge-contributors.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
@@ -24,7 +24,7 @@ import {
     MatIconModule,
     ChallengeOverviewModule,
     ChallengeOrganizersModule,
-    ChallengeSponsorsModule,
+    ChallengeContributorsModule,
     ChallengeStargazersModule,
     ChallengeRoutingModule,
     ChallengeStatsModule,

@@ -56,7 +56,7 @@
   //     }
   //   ]
   // },
-  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
+  "eslint.workingDirectories": ["."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
