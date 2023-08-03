@@ -209,7 +209,7 @@ paths:
   /components/{componentLabel}/parents:
     get:
       description: Gets the components immediate parent components in the schema.
-      operationId: list_component_dependencies
+      operationId: list_component_parents
       parameters:
       - description: The label of a component in a schema
         explode: false

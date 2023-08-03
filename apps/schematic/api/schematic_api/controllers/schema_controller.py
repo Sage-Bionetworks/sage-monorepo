@@ -26,7 +26,7 @@ def list_component_attributes(component_label, schema_url):  # noqa: E501
     return schema_controller_impl.list_component_attributes(component_label, schema_url)
 
 
-def list_component_dependencies(
+def list_component_parents(
     component_label,
     schema_url,
     return_display_names=None,
@@ -47,6 +47,6 @@ def list_component_dependencies(
 
     :rtype: Union[ComponentsPage, Tuple[ComponentsPage, int], Tuple[ComponentsPage, int, Dict[str, str]]
     """
-    return schema_controller_impl.list_component_dependencies(
+    return schema_controller_impl.list_component_parents(
         component_label, schema_url, return_display_names, return_ordered_by_schema
     )
