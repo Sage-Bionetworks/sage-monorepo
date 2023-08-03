@@ -321,7 +321,7 @@ export class ChallengeSearchComponent
             avatarUrls: forkJoinConcurrent(
               orgs.map((org) => this.getOrganizationAvatarUrl(org)),
               Infinity
-            ) as unknown as Observable<(Image | undefined)[]>,
+            ),
           })
         )
       )
@@ -539,17 +539,20 @@ export class ChallengeSearchComponent
     });
   }
 
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._32px,
+        height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of image service'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 }
