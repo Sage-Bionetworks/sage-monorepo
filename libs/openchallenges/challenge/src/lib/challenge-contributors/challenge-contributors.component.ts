@@ -77,7 +77,7 @@ export class ChallengeContributorsComponent implements OnInit {
       .pipe(
         catchError(() => {
           console.error(
-            'Unable to get the image url. Please check the logs of image service'
+            'Unable to get the image url. Please check the logs of the image service.'
           );
           return of({ url: '' });
         })
