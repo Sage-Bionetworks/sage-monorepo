@@ -33,10 +33,10 @@ export class CnbDevStack extends SageStack {
     new TerraformOutput(this, 'dev_zone_id', {
       value: dns.devZone.id,
     });
-    new TerraformOutput(this, 'openchallenge_dev_cert_arn', {
+    new TerraformOutput(this, 'openchallenges_dev_cert_arn', {
       value: dns.openchallengesDevCert.arn,
     });
-    new TerraformOutput(this, 'openchallenge_prod_cert_arn', {
+    new TerraformOutput(this, 'openchallenges_prod_cert_arn', {
       value: dns.openchallengesProdCert.arn,
     });
   }
