@@ -61,22 +61,6 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ platformsFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="platformsFilter.collapsed"
-      >
-        <openchallenges-search-dropdown-filter
-          [values]="platformsFilter.values"
-          [selectedValues]="selectedPlatforms"
-          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="platformsFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onPlatformsChange($event)"
-          (searchChange)="onPlatformSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
         [collapsed]="inputDataTypesFilter.collapsed"
@@ -89,6 +73,22 @@
           [filterByApiClient]="true"
           (selectionChange)="onInputDataTypesChange($event)"
           (searchChange)="onInputDataTypeSearchChange($event)"
+        ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="{{ platformsFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="platformsFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [values]="platformsFilter.values"
+          [selectedValues]="selectedPlatforms"
+          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="platformsFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onPlatformsChange($event)"
+          (searchChange)="onPlatformSearchChange($event)"
         ></openchallenges-search-dropdown-filter>
       </p-panel>
       <p-divider></p-divider>
