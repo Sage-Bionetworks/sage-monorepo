@@ -11,6 +11,21 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
+def component_is_required(component_display, schema_url):  # noqa: E501
+    """Gets whether or not the component is required in the schema
+
+    Gets whether or not the component is required in the schema # noqa: E501
+
+    :param component_display: The display name of a component in a schema
+    :type component_display: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
+    """
+    return schema_controller_impl.component_is_required(component_display, schema_url)
+
+
 def list_component_attributes(component_label, schema_url):  # noqa: E501
     """Gets attributes associated with a given component
 
