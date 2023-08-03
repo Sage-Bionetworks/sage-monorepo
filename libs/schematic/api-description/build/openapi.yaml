@@ -74,6 +74,37 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: listDatasetFiles
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /components/{componentLabel}/attributes:
     parameters:
       - $ref: '#/components/parameters/componentLabel'
@@ -273,6 +304,52 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    FileNames:
+      description: A list of file names.
+      type: array
+      items:
+        type: string
+    UseFullFilePath:
+      description: Whether or not to return the full path of output, or just the basename.
+      type: boolean
+      default: false
+    File:
+      type: object
+      description: A file.
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: file.txt
+        id:
+          type: string
+          description: The ID of the file.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FilesPage:
+      type: object
+      description: A page of files.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            files:
+              description: A list of files.
+              type: array
+              items:
+                $ref: '#/components/schemas/File'
+          required:
+            - files
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ComponentLabel:
       description: The label of a component in a schema
       type: string
@@ -365,6 +442,27 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    datasetId:
+      name: datasetId
+      in: path
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    fileNames:
+      name: fileNames
+      description: A list of file names used to filter the output.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/FileNames'
+    useFullFilePath:
+      name: useFullFilePath
+      in: query
+      description: Whether or not to return the full path of output, or just the basename.
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseFullFilePath'
     componentLabel:
       name: componentLabel
       in: path
