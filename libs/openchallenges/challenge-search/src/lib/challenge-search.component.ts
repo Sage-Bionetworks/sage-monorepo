@@ -119,7 +119,7 @@ export class ChallengeSearchComponent
 
   // set default values
   defaultSelectedYear = undefined;
-  defaultSortedBy = 'relevance';
+  defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
 
@@ -204,14 +204,14 @@ export class ChallengeSearchComponent
       );
 
       this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'];
-      this.selectedPageSize = +params['pageSize'];
-      this.sortedBy = params['sort'];
+      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
+      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: ChallengeSearchQuery = {
-        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
-        pageSize: this.selectedPageSize || this.defaultPageSize,
-        sort: this.sortedBy || this.defaultSortedBy,
+        pageNumber: this.selectedPageNumber,
+        pageSize: this.selectedPageSize,
+        sort: this.sortedBy,
         searchTerms: this.searchedTerms,
         minStartDate: this.selectedMinStartDate,
         maxStartDate: this.selectedMaxStartDate,

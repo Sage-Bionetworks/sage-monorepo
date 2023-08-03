@@ -12,7 +12,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { OrganizationCard } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
-import { Observable, forkJoin, of, switchMap } from 'rxjs';
+import { Observable, forkJoin, map, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
@@ -42,6 +42,7 @@ export class ChallengeContributorsComponent implements OnInit {
             Infinity
           )
         ),
+        map((orgs: Organization[]) => this.sortOrgs(orgs)),
         switchMap((orgs) =>
           forkJoin({
             orgs: of(orgs),
@@ -59,6 +60,10 @@ export class ChallengeContributorsComponent implements OnInit {
           )
         )
       );
+  }
+
+  private sortOrgs(orgs: Organization[]): Organization[] {
+    return orgs.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   }
 
   // TODO Avoid duplicated code (see org search component)

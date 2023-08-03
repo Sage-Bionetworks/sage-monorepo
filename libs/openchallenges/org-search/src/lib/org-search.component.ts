@@ -73,7 +73,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   sortedBy!: OrganizationSort;
 
   // set default values
-  defaultSortedBy = 'relevance';
+  defaultSortedBy: OrganizationSort = 'challenge_count';
   defaultPageNumber = 0;
   defaultPageSize = 24;
 
@@ -108,14 +108,14 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       );
       this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'];
-      this.selectedPageSize = +params['pageSize'];
-      this.sortedBy = params['sort'];
+      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
+      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: OrganizationSearchQuery = {
-        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
-        pageSize: this.selectedPageSize || this.defaultPageSize,
-        sort: this.sortedBy || this.defaultSortedBy,
+        pageNumber: this.selectedPageNumber,
+        pageSize: this.selectedPageSize,
+        sort: this.sortedBy,
         searchTerms: this.searchedTerms,
         challengeContributionRoles: this.selectedContributionRoles,
         categories: this.selectedCategories,
