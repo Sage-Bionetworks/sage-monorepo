@@ -94,6 +94,26 @@ paths:
                 $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/validationRules:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the validation rules associated with a given component
+      description: Gets the validation rules associated with a given component
+      operationId: listComponentValidationRules
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -283,6 +303,34 @@ components:
                 $ref: '#/components/schemas/Attribute'
           required:
             - attributes
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ValidationRule:
+      type: object
+      description: A validation rule.
+      properties:
+        name:
+          type: string
+          description: The name of the rule.
+          example: list strict
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ValidationRulesPage:
+      type: object
+      description: A page of validation rules.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            validation_rules:
+              description: A list of validation rules.
+              type: array
+              items:
+                $ref: '#/components/schemas/ValidationRule'
+          required:
+            - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
