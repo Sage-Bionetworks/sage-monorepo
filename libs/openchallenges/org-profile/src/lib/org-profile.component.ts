@@ -106,7 +106,7 @@ export class OrgProfileComponent implements OnInit {
     return this.imageService
       .getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._140px,
+        height: ImageHeight._250px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery)
       .pipe(

@@ -543,7 +543,7 @@ export class ChallengeSearchComponent
     return this.imageService
       .getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._140px,
+        height: ImageHeight._32px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery)
       .pipe(
