@@ -36,3 +36,6 @@ paths:
 
   /components/{componentDisplay}/validationRules:
     $ref: paths/components/@{componentDisplay}/validationRules.yaml
+
+  /components/{componentDisplay}/isRequired:
+    $ref: paths/components/@{componentDisplay}/isRequired.yaml
