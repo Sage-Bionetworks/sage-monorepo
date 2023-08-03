@@ -51,8 +51,8 @@ class TestComponentAttributes(BaseTestCase):
     def test_500(self) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_attributes",
             side_effect=TypeError,
         ):
             response = self.client.open(
