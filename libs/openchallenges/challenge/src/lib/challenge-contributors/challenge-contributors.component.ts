@@ -63,9 +63,7 @@ export class ChallengeContributorsComponent implements OnInit {
   }
 
   private sortOrgs(orgs: Organization[]): Organization[] {
-    return orgs.sort(
-      (a, b) => (b.challengeCount || 0) - (a.challengeCount ?? 0)
-    );
+    return orgs.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
   }
 
   // TODO Avoid duplicated code (see org search component)
