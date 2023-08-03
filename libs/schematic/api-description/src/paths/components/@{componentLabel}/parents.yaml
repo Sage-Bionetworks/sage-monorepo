@@ -5,7 +5,7 @@ get:
     - Schema
   summary: Gets the components immediate parent components in the schema.
   description: Gets the components immediate parent components in the schema.
-  operationId: listComponentDependencies
+  operationId: listComponentParents
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
     - $ref: ../../../components/parameters/query/returnDisplayNames.yaml
