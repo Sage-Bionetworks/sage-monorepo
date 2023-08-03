@@ -12,6 +12,46 @@ from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.controllers.utils import handle_exceptions
 
 
+def get_component_is_required(
+    component_display: str,
+    schema_url: str,
+) -> bool:
+    """Gets whether or not the component is required by the schema
+
+    Args:
+        component_display(str): The display name of the component
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+       bool: Whether or no the component is required
+    """
+    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
+    return schema_generator.is_node_required(component_display)
+
+
+@handle_exceptions
+def component_is_required(
+    component_display: str,
+    schema_url: str,
+) -> tuple[Union[bool, BasicError], int]:
+    """Finds whether or not the component is required by the schema
+
+    Args:
+        component_display(str): The display name of the component
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+        tuple[Union[bool, BasicError], int]: A tuple
+          The first item is either whether or no the component is required or an error object
+          The second item is the response status
+    """
+    result: Union[bool, BasicError] = get_component_is_required(
+        component_display, schema_url
+    )
+    status = 200
+    return result, status
+
+
 def get_component_attributes(
     component_label: str,
     schema_url: str,

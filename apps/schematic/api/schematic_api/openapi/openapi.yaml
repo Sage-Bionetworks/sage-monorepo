@@ -193,7 +193,7 @@ paths:
           content:
             application/json:
               schema:
-                description: Whether or not the item is required
+                description: Whether or not the component is required in the schema
                 type: boolean
           description: Success
         "500":

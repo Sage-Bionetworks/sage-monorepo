@@ -7,9 +7,42 @@ from schematic_api.models.attributes_page import AttributesPage
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
+    component_is_required,
     list_component_validation_rules,
     list_component_attributes,
 )
+
+
+class TestComponentIsRequired:
+    """Test case for component_is_required"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_is_required",
+            return_value=True,
+        ):
+            result, status = component_is_required(
+                component_display="name",
+                schema_url="xxx",
+            )
+            assert status == 200
+            assert result
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_is_required",
+            side_effect=TypeError,
+        ):
+            result, status = component_is_required(
+                component_display="name",
+                schema_url="xxx",
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
 
 
 class TestComponentAttributes:

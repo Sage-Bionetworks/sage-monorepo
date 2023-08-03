@@ -12,10 +12,64 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
+COMPONENT_IS_REQUIRED_URL = "/api/v1/components/component1/isRequired?schemaUrl=url1"
 COMPONENT_ATTRIBUTES_URL = "/api/v1/components/component1/attributes?schemaUrl=url1"
 COMPONENT_VALIDATION_RULES_URL = (
     "/api/v1/components/component1/validationRules?schemaUrl=url1"
 )
+
+
+class TestComponentIsRequired(BaseTestCase):
+    """Test case for component is required endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_is_required",
+            return_value=True,
+        ) as mock_function:
+            response = self.client.open(
+                COMPONENT_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("component1", "url1")
+            assert response.json
+
+    def test_success2(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_is_required",
+            return_value=False,
+        ) as mock_function:
+            response = self.client.open(
+                COMPONENT_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("component1", "url1")
+            assert not response.json
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component_is_required",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                COMPONENT_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestComponentAttributes(BaseTestCase):
