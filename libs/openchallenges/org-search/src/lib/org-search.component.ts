@@ -51,6 +51,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public appVersion: string;
+  public dataUpdatedOn: string;
 
   private query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
@@ -96,6 +97,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     private _snackBar: MatSnackBar
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {

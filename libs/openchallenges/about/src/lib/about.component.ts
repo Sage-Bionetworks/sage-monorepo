@@ -12,8 +12,10 @@ import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 })
 export class AboutComponent {
   public appVersion: string;
+  public dataUpdatedOn: string;
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 }
