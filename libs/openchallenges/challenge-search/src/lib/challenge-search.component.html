@@ -47,37 +47,6 @@
         ></openchallenges-checkbox-filter>
       </p-panel>
       <p-divider></p-divider>
-      <p-panel
-        header="Challenge Year"
-        [toggleable]="true"
-        [collapsed]="startYearRangeFilter.collapsed"
-      >
-        <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
-          <p-radioButton
-            [inputId]="year.label!"
-            [value]="year.value"
-            [(ngModel)]="selectedYear"
-            (onClick)="onYearChange()"
-          ></p-radioButton>
-          <label [for]="year.label">{{ year.label }}</label>
-        </div>
-        <div class="col calendar-group" *ngIf="isCustomYear">
-          <label for="custombar">mm/yyyy - mm/yyyy</label>
-          <p-calendar
-            #calendar
-            [(ngModel)]="customMonthRange"
-            view="month"
-            dateFormat="mm/yy"
-            selectionMode="range"
-            [yearNavigator]="true"
-            [readonlyInput]="false"
-            inputId="custombar"
-            (onSelect)="onCalendarChange()"
-            (onInput)="onCalendarChange()"
-          ></p-calendar>
-        </div>
-      </p-panel>
-      <p-divider></p-divider>
       <!-- <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
@@ -137,6 +106,37 @@
           (selectionChange)="onOrganizationsChange($event)"
           (searchChange)="onOrganizationSearchChange($event)"
         ></openchallenges-search-dropdown-filter>
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
+        header="Challenge Year"
+        [toggleable]="true"
+        [collapsed]="startYearRangeFilter.collapsed"
+      >
+        <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
+          <p-radioButton
+            [inputId]="year.label!"
+            [value]="year.value"
+            [(ngModel)]="selectedYear"
+            (onClick)="onYearChange()"
+          ></p-radioButton>
+          <label [for]="year.label">{{ year.label }}</label>
+        </div>
+        <div class="col calendar-group" *ngIf="isCustomYear">
+          <label for="custombar">mm/yyyy - mm/yyyy</label>
+          <p-calendar
+            #calendar
+            [(ngModel)]="customMonthRange"
+            view="month"
+            dateFormat="mm/yy"
+            selectionMode="range"
+            [yearNavigator]="true"
+            [readonlyInput]="false"
+            inputId="custombar"
+            (onSelect)="onCalendarChange()"
+            (onInput)="onCalendarChange()"
+          ></p-calendar>
+        </div>
       </p-panel>
       <p-divider></p-divider>
       <p-panel
