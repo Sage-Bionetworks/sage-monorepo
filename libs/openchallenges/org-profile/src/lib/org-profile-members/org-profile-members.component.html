@@ -1,15 +1,12 @@
 <main>
-  <div id="members" class="row col">
+  <div id="members">
     <h3>Members</h3>
     <div class="card-group">
       <openchallenges-person-card
         *ngFor="let member of members"
         [name]="member.name"
-        [avatarUrl]="member.avatarUrl"
         [avatarSize]="120"
         [affiliation]="organization.name"
-        [role]="member.roles.includes('admin') ? 'Admin' : undefined"
-        [addChips]="true"
       >
       </openchallenges-person-card>
     </div>
