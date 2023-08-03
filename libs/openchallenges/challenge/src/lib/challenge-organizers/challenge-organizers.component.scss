@@ -1,3 +1,7 @@
 #organizers h3 {
   margin-top: 14px;
 }
+
+.card-group {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 23%));
+}

@@ -19,6 +19,7 @@ import { BasicError as ApiClientError } from '@sagebionetworks/openchallenges/ap
 })
 export class LoginComponent implements OnInit, OnDestroy {
   public appVersion: string;
+  public dataUpdatedOn: string;
 
   loginForm!: UntypedFormGroup;
   errors = {
@@ -35,6 +36,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit(): void {
