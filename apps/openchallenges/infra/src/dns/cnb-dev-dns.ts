@@ -4,7 +4,8 @@ import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
 
 export class CnbDevDns extends Construct {
   devZone: Route53Zone;
-  cert: AcmCertificate;
+  openchallengesDevCert: AcmCertificate;
+  openchallengesProdCert: AcmCertificate;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -18,21 +19,47 @@ export class CnbDevDns extends Construct {
       },
     });
 
-    this.cert = new AcmCertificate(this, 'openchallenges_cert', {
-      domainName: 'dev.openchallenges.io',
-      validationMethod: 'DNS',
-      validationOption: [
-        {
-          domainName: 'dev.openchallenges.io',
-          validationDomain: 'openchallenges.io',
+    this.openchallengesDevCert = new AcmCertificate(
+      this,
+      'openchallenges_dev_cert',
+      {
+        domainName: 'dev.openchallenges.io',
+        validationMethod: 'DNS',
+        validationOption: [
+          {
+            domainName: 'dev.openchallenges.io',
+            validationDomain: 'openchallenges.io',
+          },
+        ],
+        lifecycle: {
+          createBeforeDestroy: true,
         },
-      ],
-      lifecycle: {
-        createBeforeDestroy: true,
-      },
-      tags: {
-        Name: `${nameTagPrefix}-openchallenges-cert`,
-      },
-    });
+        tags: {
+          Name: `${nameTagPrefix}-openchallenges-dev-cert`,
+        },
+      }
+    );
+
+    this.openchallengesProdCert = new AcmCertificate(
+      this,
+      'openchallenges_prod_cert',
+      {
+        domainName: 'openchallenges.io',
+        subjectAlternativeNames: ['*.openchallenges.io'],
+        validationMethod: 'DNS',
+        validationOption: [
+          {
+            domainName: 'openchallenges.io',
+            validationDomain: 'openchallenges.io',
+          },
+        ],
+        lifecycle: {
+          createBeforeDestroy: true,
+        },
+        tags: {
+          Name: `${nameTagPrefix}-openchallenges-prod-cert`,
+        },
+      }
+    );
   }
 }
