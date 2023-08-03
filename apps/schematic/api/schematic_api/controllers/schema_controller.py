@@ -26,18 +26,18 @@ def list_component_attributes(component_label, schema_url):  # noqa: E501
     return schema_controller_impl.list_component_attributes(component_label, schema_url)
 
 
-def list_component_validation_rules(component_label, schema_url):  # noqa: E501
+def list_component_validation_rules(component_display, schema_url):  # noqa: E501
     """Gets the validation rules associated with a given component
 
     Gets the validation rules associated with a given component # noqa: E501
 
-    :param component_label: The label of a component in a schema
-    :type component_label: str
+    :param component_display: The display name of a component in a schema
+    :type component_display: str
     :param schema_url: The URL of a schema in jsonld form
     :type schema_url: str
 
     :rtype: Union[ValidationRulesPage, Tuple[ValidationRulesPage, int], Tuple[ValidationRulesPage, int, Dict[str, str]]
     """
     return schema_controller_impl.list_component_validation_rules(
-        component_label, schema_url
+        component_display, schema_url
     )

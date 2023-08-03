@@ -68,32 +68,32 @@ def list_component_attributes(
 
 
 def get_component_validation_rules(
-    component_label: str,
+    component_display: str,
     schema_url: str,
 ) -> list[str]:
     """Gets the validation_rules associated with the component
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
-        component_label (str): The label of the component
+        component_display (str): The display name of the component
 
     Returns:
         list[str]: A list of validation_rules of the component
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    return schema_generator.get_node_validation_rules(component_label)
+    return schema_generator.get_node_validation_rules(component_display)
 
 
 @handle_exceptions
 def list_component_validation_rules(
-    component_label: str,
+    component_display: str,
     schema_url: str,
 ) -> tuple[Union[ValidationRulesPage, BasicError], int]:
     """Lists the validation_rules associated with the component
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
-        component_label (str): The label of the component
+        component_display(str): The display name of the component
 
     Returns:
         tuple[Union[AttributesPage, BasicError], int]: A tuple
@@ -103,7 +103,7 @@ def list_component_validation_rules(
 
     validation_rules = [
         ValidationRule(attribute)
-        for attribute in get_component_validation_rules(component_label, schema_url)
+        for attribute in get_component_validation_rules(component_display, schema_url)
     ]
 
     page = ValidationRulesPage(
