@@ -166,7 +166,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
             Infinity
-          ) as unknown as Observable<(Image | undefined)[]>,
+          ),
         })
       ),
       switchMap(({ orgs, avatarUrls }) =>
@@ -250,23 +250,26 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of image service'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image | undefined
+    avatarUrl: Image
   ): OrganizationCard {
     return {
       acronym: org.acronym,
