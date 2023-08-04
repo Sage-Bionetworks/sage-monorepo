@@ -1,0 +1,16 @@
+type: object
+description: A schema relationship.
+properties:
+  component1:
+    type: string
+    description: The dsiaplay name of the first component in the relationship.
+    example: Component1
+  component2:
+    type: string
+    description: The diaplay name of the second component in the relationship.
+    example: Component2
+required:
+  - component1
+  - component2
+x-java-class-annotations:
+  - '@lombok.Builder'

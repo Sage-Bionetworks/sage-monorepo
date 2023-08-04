@@ -39,3 +39,6 @@ paths:
 
   /components/{componentLabel}/parents:
     $ref: paths/components/@{componentLabel}/parents.yaml
+
+  /relationships/{relationshipType}:
+    $ref: paths/relationships/@{relationshipType}/relationships.yaml

@@ -1,0 +1,19 @@
+parameters:
+  - $ref: ../../../components/parameters/path/relationshipType.yaml
+get:
+  tags:
+    - Schema
+  summary: Gets a subgraph containing all relationships of a given type
+  description: Gets a subgraph containing all relationships of a given type
+  operationId: listRelationships
+  parameters:
+    - $ref: ../../../components/parameters/query/schemaUrl.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/RelationshipsPage.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

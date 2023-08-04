@@ -1,0 +1,15 @@
+type: object
+description: A page of relationships.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      relationships:
+        description: A list of relationships
+        type: array
+        items:
+          $ref: Relationship.yaml
+    required:
+      - relationships
+x-java-class-annotations:
+  - '@lombok.Builder'
