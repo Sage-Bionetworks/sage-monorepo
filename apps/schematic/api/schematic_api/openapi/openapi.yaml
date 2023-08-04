@@ -790,7 +790,7 @@ components:
       - '@lombok.Builder'
     RelationshipType:
       description: A type of schema relationship
-      example: synapse
+      example: requiresDependency
       type: string
     Relationship:
       description: A schema relationship.
