@@ -443,7 +443,7 @@ components:
     RelationshipType:
       description: A type of schema relationship
       type: string
-      example: synapse
+      example: requiresDependency
     Relationship:
       type: object
       description: A schema relationship.
