@@ -1,7 +1,7 @@
 @use 'libs/openchallenges/styles/src/lib/_constants' as constants;
 
 .challenge-card {
-  min-width: 300px;
+  width: 300px;
   min-height: 360px;
   padding: 12px 12px 4px;
   display: flex;
