@@ -5,8 +5,10 @@ from unittest.mock import patch
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.attributes_page import AttributesPage
 from schematic_api.models.components_page import ComponentsPage
+from schematic_api.models.relationships_page import RelationshipsPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
+    list_relationships,
     list_component_parents,
     list_component_attributes,
 )
@@ -71,6 +73,38 @@ class TestComponentParents:
             result, status = list_component_parents(
                 schema_url="xxx",
                 component_label="label",
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
+
+
+class TestListRelationships:
+    """Tests for list_relationships"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_relationships",
+            return_value=[["component1", "component2"], ["component2", "component3"]],
+        ):
+            result, status = list_relationships(
+                schema_url="xxx",
+                relationship_type="type",
+            )
+            assert status == 200
+            assert isinstance(result, RelationshipsPage)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_relationships",
+            side_effect=TypeError,
+        ):
+            result, status = list_relationships(
+                schema_url="xxx",
+                relationship_type="type",
             )
             assert status == 500
             assert isinstance(result, BasicError)

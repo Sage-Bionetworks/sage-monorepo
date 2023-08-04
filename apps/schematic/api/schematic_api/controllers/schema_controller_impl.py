@@ -165,6 +165,7 @@ def get_relationships(
     return [list(edge) for edge in relationship_subgraph.edges]
 
 
+@handle_exceptions
 def list_relationships(
     relationship_type: str,
     schema_url: str,
