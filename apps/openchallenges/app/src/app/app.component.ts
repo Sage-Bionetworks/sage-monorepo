@@ -45,11 +45,11 @@ export class AppComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.router.events.forEach((item) => {
-      if (item instanceof NavigationEnd) {
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationEnd) {
         const gtmTag = {
           event: 'page',
-          pageName: item.url,
+          pageName: event.url,
         };
 
         this.gtmService.pushTag(gtmTag);
