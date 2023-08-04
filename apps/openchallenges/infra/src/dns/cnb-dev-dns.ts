@@ -4,7 +4,7 @@ import { AcmCertificate } from '@cdktf/provider-aws/lib/acm-certificate';
 
 export class CnbDevDns extends Construct {
   devZone: Route53Zone;
-  openchallengesCert: AcmCertificate;
+  cert: AcmCertificate;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -18,13 +18,12 @@ export class CnbDevDns extends Construct {
       },
     });
 
-    this.openchallengesCert = new AcmCertificate(this, 'openchallenges_cert', {
-      domainName: 'openchallenges.io',
-      subjectAlternativeNames: ['*.openchallenges.io'],
+    this.cert = new AcmCertificate(this, 'openchallenges_cert', {
+      domainName: 'dev.openchallenges.io',
       validationMethod: 'DNS',
       validationOption: [
         {
-          domainName: 'openchallenges.io',
+          domainName: 'dev.openchallenges.io',
           validationDomain: 'openchallenges.io',
         },
       ],
