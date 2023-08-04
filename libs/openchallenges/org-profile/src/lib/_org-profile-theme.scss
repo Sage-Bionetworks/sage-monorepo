@@ -44,6 +44,9 @@
     background-color: map.get($figma, dl-color-default-navbardark);
     color: white;
   }
+  .text-grey {
+    color: rgba(black, 0.38);
+  }
 
   @media (max-width: 479px) {
     .profile-pic {
