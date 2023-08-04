@@ -20035,17 +20035,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-echarts@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "ngx-echarts@npm:16.0.0"
-  dependencies:
-    tslib: ^2.3.0
-  peerDependencies:
-    echarts: ">=5.0.0"
-  checksum: 8762f9bff45246610afe58179536764fdadf30a535984f0c91974aa6c935e6e9966ae71b495301fa555cbd4ea7145895080749772726b1180af7423d7804a246
-  languageName: node
-  linkType: hard
-
 "ngx-typed-js@npm:2.1.1":
   version: 2.1.1
   resolution: "ngx-typed-js@npm:2.1.1"
@@ -23917,7 +23906,6 @@ __metadata:
     ng-packagr: 16.1.0
     ngx-avatars: 1.5.0
     ngx-countup: 13.1.0
-    ngx-echarts: ^16.0.0
     ngx-typed-js: 2.1.1
     nock: 13.2.9
     nodemon: 2.0.20

@@ -8,6 +8,7 @@ import { Component, OnInit } from '@angular/core';
 // } from '@sagebionetworks/openchallenges/api-client-angular';
 // import { Observable, map } from 'rxjs';
 import { EChartsOption } from 'echarts';
+import * as echarts from 'echarts';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
@@ -30,24 +31,28 @@ export class StatisticsViewerComponent implements OnInit {
   //   private imageService: ImageService
   // ) {}
 
-  chartOption: EChartsOption = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-      },
-    ],
-  };
+  option!: EChartsOption;
 
   ngOnInit() {
-    console.log(1);
+    const chartDom = document.getElementById('statistics')!;
+    const myChart = echarts.init(chartDom);
+    this.option = {
+      xAxis: {
+        type: 'category',
+        data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          data: [150, 230, 224, 218, 135, 147, 260],
+          type: 'line',
+        },
+      ],
+    };
+
+    this.option && myChart.setOption(this.option);
     // this.challengeImg$ = this.imageService.getImage({
     //   objectKey: 'home-challenges.svg',
     //   height: this.imgHeight,
