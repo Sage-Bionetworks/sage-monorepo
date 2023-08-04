@@ -21,7 +21,7 @@ import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 })
 export class ChallengeContributorsComponent implements OnInit {
   @Input() challenge!: Challenge;
-  organizationCards$!: Observable<OrganizationCard[]>;
+  organizationCards!: OrganizationCard[];
   constructor(
     private challengeContributionService: ChallengeContributionService,
     private organizationService: OrganizationService,
@@ -29,7 +29,7 @@ export class ChallengeContributorsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.organizationCards$ = this.challengeContributionService
+    this.challengeContributionService
       .listChallengeContributions(this.challenge.id)
       .pipe(
         switchMap((page) =>
@@ -59,7 +59,8 @@ export class ChallengeContributorsComponent implements OnInit {
             )
           )
         )
-      );
+      )
+      .subscribe((orgCards) => (this.organizationCards = orgCards));
   }
 
   private sortOrgs(orgs: Organization[]): Organization[] {
