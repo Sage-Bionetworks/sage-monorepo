@@ -7,6 +7,7 @@ from typing import Union
 from schematic_api.models.attributes_page import AttributesPage  # noqa: E501
 from schematic_api.models.basic_error import BasicError  # noqa: E501
 from schematic_api.models.components_page import ComponentsPage  # noqa: E501
+from schematic_api.models.relationships_page import RelationshipsPage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
@@ -50,3 +51,18 @@ def list_component_parents(
     return schema_controller_impl.list_component_parents(
         component_label, schema_url, return_display_names, return_ordered_by_schema
     )
+
+
+def list_relationships(relationship_type, schema_url):  # noqa: E501
+    """Gets a subgraph containing all relationships of a given type
+
+    Gets a subgraph containing all relationships of a given type # noqa: E501
+
+    :param relationship_type: Type of relationship in a schema, such as requiresDependency
+    :type relationship_type: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[RelationshipsPage, Tuple[RelationshipsPage, int], Tuple[RelationshipsPage, int, Dict[str, str]]
+    """
+    return schema_controller_impl.list_relationships(relationship_type, schema_url)
