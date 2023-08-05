@@ -246,7 +246,7 @@ table {
 // CARDS
 .card-group {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 24px;
   padding: 16px 0;
 }
@@ -312,10 +312,6 @@ table {
   .content {
     flex-direction: column;
   }
-  .card-group {
-    flex-direction: column;
-    align-items: center;
-  }
 }
 @media screen and (min-width: constants.$md-breakpoint) {
   .col,
@@ -373,5 +369,10 @@ table {
 @media only screen and (max-width: constants.$lg-breakpoint) {
   html {
     margin-top: constants.$navbar-height-tall;
+  }
+
+  .card-group {
+    grid-template-columns: 60%;
+    justify-content: center;
   }
 }
