@@ -888,14 +888,14 @@ VALUES (
     '',
     'Brain tumors are among the deadliest types of cancer. Specifically, glioblastoma, and diffuse astrocytic glioma with molecular features of glioblastoma (WHO Grade 4 astrocytoma), are the most common and aggressive malignant primary tumor of the central nervous system in adults, with extreme intrinsic heterogeneity in appearance, shape, and histology, with a median survival of approximately 15 months. Brain tumors in general are challenging to diagnose, hard to treat and inherently resistant to conventional therapy because of the challenges in delivering drugs to the brain, as well as the inherent high heterogeneity of these tumors in their radiographic, morphologic, and molecular landscapes. Years of extensive research to improve diagnosis, characterization, and treatment have decreased mortality rates in the U.S by 7% over the past 30 years. Although modest, these research innovations have not translated to improvements in survival for adults and children in low- and middle-incom...',
     'https://www.synapse.org/brats_ce',
-    'active',
+    'completed',
     'advanced',
     '1',
     '',
     '2022-01-01',
     NULL,
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:21'
+    '2023-08-04 21:41:43'
   ),
   (
     50,
@@ -2601,14 +2601,14 @@ VALUES (
     'Find breast cancers in screening mammograms',
     'Find breast cancers in screening mammograms',
     'https://www.kaggle.com/competitions/rsna-breast-cancer-detection',
-    'active',
+    'completed',
     'intermediate',
     '8',
     '',
     '2022-11-28',
     '2023-02-27',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:50:48'
+    '2023-08-04 21:42:27'
   ),
   (
     157,
