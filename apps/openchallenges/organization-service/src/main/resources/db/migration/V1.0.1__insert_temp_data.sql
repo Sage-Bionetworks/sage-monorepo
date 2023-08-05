@@ -37,7 +37,7 @@ VALUES (
     'The Critical Assessment of protein Function Annotation algorithms (CAFA) is an experiment designed to assess the performance of computational methods dedicated to predicting protein function, often using a time challenge. Briefly, CAFA organizers provide a large number of unannotated or incompletely annotated protein sequences. The predictors then predict the function of these proteins by associating them with Gene Ontology terms or Human Phenoytpe Ontology terms. Following the prediction deadline, there is a wait period of several months during which some proteins whose functions were unknown will receive experimental verification. Those proteins constitute the benchmark set, against which the methods are tested. Other data sources include experiments by wet lab collaborators and biocuration dedicated to CAFA.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:18',
-    1
+    2
   ),
   (
     7,
@@ -1220,7 +1220,7 @@ VALUES (
     'Society membership reflects commitment toward the advancement of computational biology. The ISCB is an international non-profit organization whose members come from the global bioinformatics and computational biology communities. The ISCB serves its global membership by providing high-quality meetings, publications, and reports on methods and tools; by disseminating key information about bioinformatics resources and relevant news from related fields; and by actively facilitating training, education, employment, career development, and networking. We advocate and provide leadership for resources and policies in support of scientific endeavors and to benefit society at large.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:40',
-    1
+    2
   ),
   (
     103,
@@ -1246,7 +1246,7 @@ VALUES (
     'Iowa State is a large university with a small feel. Forge lifelong friendships and earn a degree that will take you anywhere.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:42',
-    1
+    2
   ),
   (
     106,
@@ -1272,7 +1272,7 @@ VALUES (
     'King''s College London is an internationally renowned university delivering exceptional education and world-leading research. We are dedicated to driving positive and sustainable change in society and realising our vision of making the world a better place. ',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:44',
-    1
+    2
   ),
   (
     108,
@@ -1636,7 +1636,7 @@ VALUES (
     'The National Institute of General Medical Sciences (NIGMS) supports basic research that increases our understanding of biological processes and lays the foundation for advances in disease diagnosis, treatment, and prevention. NIGMS-funded scientists investigate how living systems work at a range of levels—from molecules and cells to tissues and organs—in research organisms, humans, and populations. Additionally, to ensure the vitality and continued productivity of the research enterprise, NIGMS provides leadership in training the next generation of scientists, enhancing the diversity of the scientific workforce, and developing research capacity throughout the country.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:07',
-    2
+    3
   ),
   (
     136,
@@ -1740,7 +1740,7 @@ VALUES (
     'At Northeastern, experience is our essence and ethos. It''s what you gain when you make the world your classroom, your laboratory, and your platform to create change or grow your enterprise. Throughout our university network, experience draws you into society and compels you to solve its complex challenges. It makes you agile and able to reinvent yourself. To find ways of doing things differently, and better. And to seize opportunities as they unfold—anytime, anywhere.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:13',
-    1
+    2
   ),
   (
     144,
@@ -1792,7 +1792,7 @@ VALUES (
     'NVIDIA pioneered accelerated computing to tackle challenges no one else can solve. Our work in AI and the metaverse is transforming the world''s largest industries and profoundly impacting society.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:16',
-    2
+    3
   ),
   (
     148,
@@ -1976,7 +1976,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Radboud university medical center specializes in patient care, scientific research, teaching and training. Our mission is to have a significant impact on health care. We aim to be pioneers in shaping the health care of the future. We do this in a person-centered and innovative way.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:31',
-    1
+    2
   ),
   (
     162,
@@ -1989,7 +1989,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world''s premier radiology forum, drawing approximately 55,000 attendees annually to McCormick Place in Chicago, and publishes two top peer-reviewed journals: *Radiology*, the highest-impact scientific journal in the field, and *RadioGraphics*, the only journal dedicated to continuing education in radiology. The Society is based in Oak Brook, Ill.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:33',
-    1
+    2
   ),
   (
     164,
@@ -2392,7 +2392,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'As a comprehensive university offering a wide range of high-quality educational opportunities, the University of Basel attracts students from Switzerland and the entire world, offering them outstanding studying conditions as they work towards their bachelor''s, master''s or PhD degrees. Today, the University of Basel has around 13,000 students from over a hundred nations, including 2,900 PhD students.  The University of Basel has seven faculties covering a wide spectrum of academic disciplines. At the same time, the university has positioned itself amidst the international competition in the form of five strategic focal areas: Life Sciences, Visual Studies, Nanosciences, Sustainability and Energy Research and European and Global Studies. In international rankings, the University of Basel is regularly placed among the 100 top universities in the world thanks to its research achievements.  The University of Basel has deep roots in the economically powerful and culturally rich Basel r...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:59',
-    2
+    3
   ),
   (
     195,
@@ -2405,7 +2405,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'We make changemakers.  Recognized as one of the top 15 research universities worldwide, our culture of collaboration sparks discoveries that advance society and drive economic impact. Everything we do is dedicated to ensuring our students have the opportunity to become changemakers, equipped with the multidisciplinary tools needed to accelerate answers to our world''s most pressing issues.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:00',
-    2
+    3
   ),
   (
     196,
@@ -2587,7 +2587,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The University of Maryland, College Park is the state''s flagship university and one of the nation''s preeminent public research universities. A global leader in research, entrepreneurship and innovation, the university is home to more than 40,700 students, 14,000 faculty and staff, and nearly 400,000 alumni all dedicated to the pursuit of Fearless Ideas. Located just outside Washington, D.C., we discover and share new knowledge every day through our renowned research enterprise and programs in academics, the arts and athletics. And we are committed to social entrepreneurship as the nation''s first “Do Good” campus.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:12',
-    2
+    3
   ),
   (
     210,
@@ -2639,7 +2639,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The University of Padua is one of Europe''s oldest and most prestigious seats of learning. As a multi-disciplinary institute of higher education, the University aims to provide its students with professional training and a solid cultural background. The qualification received from the University of Padua act as a symbol of the ambitious objectives respected and coveted by both students and employers alike.  Founded in 1222, Padua''s Studium Patavinum was a place of study that readily welcomed Italian students and scholars, as well as those from various European countries searching for cultural freedom and expression. This freedom continues to define and express the essence of the University through its motto as Universa universis patavina libertas.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:16',
-    1
+    2
   ),
   (
     214,
@@ -2665,7 +2665,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Penn''s academics are boosted by its inherent culture and ecosystem of innovation. You name it, if it''s cutting-edge, the University''s faculty—and students—have their hands in it. Grounded in the liberal arts and sciences and enriched by the integrated resources of four undergraduate and 12 graduate schools, Penn offers students an unparalleled education informed by inclusivity, intellectual rigor, research, and the impetus to create new knowledge to the benefit of individuals and communities around the world.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:17',
-    5
+    6
   ),
   (
     216,
