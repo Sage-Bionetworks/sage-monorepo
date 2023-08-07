@@ -26,16 +26,27 @@
     <section id="profile-bottom" class="content">
       <div class="profile-sidenav col">
         <div class="profile-nav-group">
-          <a class="profile-nav-item">
+          <a
+            class="profile-nav-item active-tab"
+            href="/challenge/{{challenge.id}}/{{challenge.slug}}#overview"
+          >
             Overview
           </a>
-          <a class="profile-nav-item">
+          <a
+            class="profile-nav-item"
+            href="/challenge/{{challenge.id}}/{{challenge.slug}}#challenge-details">
             Challenge Details
           </a>
-          <a class="profile-nav-item">
+          <a
+            class="profile-nav-item"
+            href="/challenge/{{challenge.id}}/{{challenge.slug}}#organizers"
+          >
             Organizers
           </a>
-          <a class="profile-nav-item">
+          <a
+            class="profile-nav-item"
+            href="/challenge/{{challenge.id}}/{{challenge.slug}}#contributors"  
+          >
             Contributors
           </a>
           <!-- <a
