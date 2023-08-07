@@ -127,7 +127,7 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:10'
+    '2023-08-04 21:55:55'
   ),
   (
     2,
@@ -399,7 +399,7 @@ VALUES (
     '2015-11-16',
     '2016-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:45'
+    '2023-07-26 20:40:13'
   ),
   (
     19,
@@ -815,7 +815,7 @@ VALUES (
     '2020-04-30',
     '2021-07-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:11'
+    '2023-07-27 19:18:50'
   ),
   (
     45,
@@ -895,7 +895,7 @@ VALUES (
     '2022-01-01',
     NULL,
     '2023-06-23 00:00:00',
-    '2023-08-04 21:41:43'
+    '2023-07-26 19:49:21'
   ),
   (
     50,
@@ -1037,9 +1037,9 @@ VALUES (
     '1',
     '',
     '2023-05-17',
-    NULL,
+    '2023-08-16',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:30'
+    '2023-08-07 20:19:38'
   ),
   (
     59,
@@ -1552,7 +1552,7 @@ VALUES (
     '2019-10-21',
     '2020-02-12',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:47'
+    '2023-08-05 00:32:49'
   ),
   (
     91,
@@ -2608,7 +2608,7 @@ VALUES (
     '2022-11-28',
     '2023-02-27',
     '2023-06-23 00:00:00',
-    '2023-08-04 21:42:27'
+    '2023-07-26 19:50:48'
   ),
   (
     157,
@@ -2770,7 +2770,7 @@ VALUES (
     '2022-06-15',
     '2022-08-07',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:50:57'
+    '2023-08-07 20:20:45'
   ),
   (
     167,
@@ -2802,7 +2802,7 @@ VALUES (
     '1111-01-01',
     NULL,
     '2023-08-04 21:47:38',
-    '2023-08-04 21:51:37'
+    '2023-08-07 20:20:55'
   ),
   (
     169,
@@ -2818,7 +2818,7 @@ VALUES (
     '2022-04-18',
     '1111-01-01',
     '2023-08-04 21:52:12',
-    '2023-08-04 21:54:15'
+    '2023-08-07 20:20:23'
   ),
   (
     170,
@@ -2834,7 +2834,7 @@ VALUES (
     '2023-04-01',
     '2023-08-22',
     '2023-08-04 21:54:31',
-    '2023-08-04 21:56:49'
+    '2023-08-07 20:20:05'
   ),
   (
     171,
@@ -2850,7 +2850,7 @@ VALUES (
     '2023-07-19',
     '2023-09-07',
     '2023-08-04 23:49:44',
-    '2023-08-04 23:55:02'
+    '2023-08-07 20:20:07'
   ),
   (
     172,
@@ -2866,7 +2866,7 @@ VALUES (
     '2023-06-29',
     '2023-09-10',
     '2023-08-04 23:58:01',
-    '2023-08-05 0:04:42'
+    '2023-08-07 20:20:08'
   ),
   (
     173,
@@ -2914,7 +2914,7 @@ VALUES (
     '2023-05-11',
     '2023-08-10',
     '2023-08-05 0:32:01',
-    '2023-08-05 5:18:20'
+    '2023-08-07 20:20:09'
   ),
   (
     176,
@@ -2930,7 +2930,7 @@ VALUES (
     '2023-04-18',
     '2023-08-21',
     '2023-08-05 5:18:40',
-    '2023-08-05 5:19:42'
+    '2023-08-07 20:20:11'
   ),
   (
     177,
@@ -2946,7 +2946,7 @@ VALUES (
     '2023-07-26',
     '2023-10-13',
     '2023-08-05 5:24:09',
-    '2023-08-05 5:25:23'
+    '2023-08-07 20:20:12'
   ),
   (
     178,
@@ -2995,6 +2995,22 @@ VALUES (
     '2022-11-15',
     '2023-08-05 5:43:25',
     '2023-08-05 5:44:44'
+  ),
+  (
+    181,
+    'multi-atlas-labeling-beyond-the-cranial-vault',
+    'Multi-Atlas Labeling Beyond the Cranial Vault',
+    '',
+    'Multi-atlas labeling has proven to be an effective paradigm for creating segmentation algorithms from training data. These approaches have been extraordinarily successful for brain and cranial structures (e.g., our prior MICCAI workshops: MLSF’11, MAL’12, SATA’13). After the original challenges closed, the data continue to drive scientific innovation; 144 groups have registered for the 2012 challenge (brain only) and 115 groups for the 2013 challenge (brain/heart/canine leg). However, innovation in application outside of the head and to soft tissues has been more limited. This workshop will provide a snapshot of the current progress in the field through extended discussions and provide researchers an opportunity to characterize their methods on a newly created and released standardized dataset of abdominal anatomy on clinically acquired CT. The datasets will be freely available both during and after the challenge. We have two separate new challenges: abdomen and cervix on routinel...',
+    'https://www.synapse.org/#!Synapse:syn3193805/wiki/89480',
+    'active',
+    'intermediate',
+    '1',
+    '',
+    '2015-04-15',
+    NULL,
+    '2023-08-07 20:21:22',
+    '2023-08-07 20:34:50'
   );
 
   -- challenge_organization_role data
@@ -3739,7 +3755,18 @@ VALUES (1, 1, 75, 'sponsor'),
   (737, 177, 162, 'challenge_organizer'),
   (738, 176, 3, 'challenge_organizer'),
   (739, 175, 278, 'challenge_organizer'),
-  (740, 179, 279, 'challenge_organizer');
+  (740, 179, 279, 'challenge_organizer'),
+  (741, 174, 12, 'sponsor'),
+  (742, 172, 12, 'sponsor'),
+  (743, 173, 12, 'sponsor'),
+  (744, 171, 12, 'sponsor'),
+  (745, 167, 12, 'sponsor'),
+  (746, 181, 12, 'sponsor'),
+  (747, 181, 280, 'challenge_organizer'),
+  (748, 181, 281, 'challenge_organizer'),
+  (749, 181, 211, 'challenge_organizer'),
+  (750, 181, 282, 'challenge_organizer'),
+  (751, 181, 171, 'challenge_organizer');
 
 -- challenge_incentive data
 
@@ -4032,7 +4059,8 @@ VALUES (1, 'prediction_file', 1),
   (183, 'notebook', 177),
   (184, 'notebook', 178),
   (185, 'notebook', 179),
-  (186, 'notebook', 180);
+  (186, 'notebook', 180),
+  (187, 'prediction_file', 181);
 
 -- challenge_star data
 
