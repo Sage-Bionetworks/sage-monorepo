@@ -1,9 +1,9 @@
-<main *ngIf="challenge">
-  <div id="bio">
+<div *ngIf="challenge">
+  <div id="overview">
     <h3 class="top-section-title">Overview</h3>
     <p>{{ use_default(challenge.description) }}</p>
   </div>
-  <div id="details">
+  <div id="challenge-details">
     <h3 class="section-title">Challenge Details</h3>
     <table>
       <tr>
@@ -71,4 +71,4 @@
       </tr>
     </table>
   </div>
-</main>
+</div>
