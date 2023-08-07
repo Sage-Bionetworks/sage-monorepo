@@ -23,7 +23,7 @@ VALUES (
     'https://dreamchallenges.org',
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:17:33',
+    '2023-08-05 06:10:02',
     47
   ),
   (
@@ -63,7 +63,7 @@ VALUES (
     'The Medical Image Computing and Computer Assisted Intervention Society (the MICCAI Society) is dedicated to the promotion, preservation and facilitation of research, education and practice in the field of medical image computing and computer assisted medical interventions including biomedical imaging and medical robotics. The Society achieves this aim through the organization and operation of annual high quality international conferences, workshops, tutorials and publications that promote and foster the exchange and dissemination of advanced knowledge, expertise and experience in the field produced by leading institutions and outstanding scientists, physicians and educators around the world. The MICCAI Society is committed to maintaining high academic standards and independence from any personal, political or commercial interests.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:24',
-    5
+    11
   ),
   (
     13,
@@ -2093,7 +2093,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine.  We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together across institutional boundaries to meaningfully address major medical research problems.  We incubate new ways for diverse groups of people to practice research together.  We advance our practices using an  integrated and iterative design cycle that plays out between our scientific teams and our core service teams.  As our innovations become norms, we develop them into robust core capabilities that can be put into practice across our portfolio of research programs.  This portfolio includes publicly funded programs that create data resources and knowledge bases, pre-competitive collaborations across industry partners, and federated networks of healthcare data providers. In turn, these projects provide an active pl...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:40',
-    42
+    43
   ),
   (
     172,
@@ -2613,7 +2613,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The nation''s first public university is at the heart of what''s next, preparing a diverse student body to become creators, explorers, innovators and leaders in North Carolina and throughout the world.  Carolina''s nationally recognized, innovative teaching, campus-wide spirit of inquiry and dedication to public service continue the legacy that began in 1795 when the University first opened its doors to students.  In Chapel Hill, students develop a voice for critical thought and the courage to guide change. They connect to the future they''re already shaping. Carolina is committed to access for all, providing life-changing opportunities such as the Carolina Covenant, which promises a debt-free education to low-income students.  In its third century – an era of groundbreaking study and research – UNC-Chapel Hill is harnessing the very best of our fast-changing world. We''re proud to advance knowledge for this and each generation to come.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:15',
-    3
+    4
   ),
   (
     212,
@@ -3171,7 +3171,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://lacunafund.org/',
     'Lacuna Fund is the world’s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:50',
+    '2023-08-04 22:03:25',
     1
   ),
   (
@@ -3499,6 +3499,47 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
 Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer’s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson’s disease. Additional disease areas are being evaluated for addition to AMP.',
     '2023-08-05 05:39:55',
     '2023-08-05 05:42:53',
+    1
+  ),
+  (
+    280,
+    'Vanderbilt University',
+    '',
+    '',
+    'vanderbilt',
+    '',
+    'https://www.vanderbilt.edu/',
+    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what’s possible and working diligently in the service of others. Vanderbilt’s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
+    '2023-08-07 20:28:32',
+    '2023-08-07 20:29:06',
+    1
+  ),
+  (
+    281,
+    'Basque Center On Cognition, Brain and Language',
+    'BCBL',
+    '',
+    'bcbl',
+    '',
+    'https://www.bcbl.eu/en',
+    'Our research aims to unravel the neurocognitive mechanisms involved in the acquisition, comprehension and production of language, with special emphasis on bilingualism and multilingualism.
+
+We study processes involved in normal child language acquisition and second language learning in adults, as well as learning disorders, language disorders, language-related effects of aging and neurodegeneration and language use in different social contexts.',
+    '2023-08-07 20:29:41',
+    '2023-08-07 20:30:41',
+    1
+  ),
+  (
+    282,
+    'Erasmus MC',
+    'EMC',
+    '',
+    'emc',
+    '',
+    'https://www.erasmusmc.nl/en/',
+    'We are Erasmus MC. Every day our staff, volunteers, and students work with dedication and commitment and are passionate about everything that we stand for.',
+    '2023-08-07 20:31:10',
+    '2023-08-07 20:31:47',
     1
   );
 
@@ -4251,4 +4292,15 @@ VALUES (1, 1, 75, 'sponsor'),
   (737, 177, 162, 'challenge_organizer'),
   (738, 176, 3, 'challenge_organizer'),
   (739, 175, 278, 'challenge_organizer'),
-  (740, 179, 279, 'challenge_organizer');
+  (740, 179, 279, 'challenge_organizer'),
+  (741, 174, 12, 'sponsor'),
+  (742, 172, 12, 'sponsor'),
+  (743, 173, 12, 'sponsor'),
+  (744, 171, 12, 'sponsor'),
+  (745, 167, 12, 'sponsor'),
+  (746, 181, 12, 'sponsor'),
+  (747, 181, 280, 'challenge_organizer'),
+  (748, 181, 281, 'challenge_organizer'),
+  (749, 181, 211, 'challenge_organizer'),
+  (750, 181, 282, 'challenge_organizer'),
+  (751, 181, 171, 'challenge_organizer');
