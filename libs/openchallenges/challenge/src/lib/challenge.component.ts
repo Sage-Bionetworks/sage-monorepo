@@ -71,7 +71,7 @@ export class ChallengeComponent implements OnInit {
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
         name: challenge.name,
-        src: challenge.avatarUrl || '',
+        src: challenge.avatarUrl ?? '',
         size: 250,
       };
 
