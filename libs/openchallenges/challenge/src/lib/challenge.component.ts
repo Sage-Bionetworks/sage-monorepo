@@ -1,20 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Challenge,
   ChallengeService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   catchError,
-  map,
+  // map,
   Observable,
   of,
-  Subscription,
+  // Subscription,
   switchMap,
   throwError,
 } from 'rxjs';
-import { Tab } from './tab.model';
-import { CHALLENGE_TABS } from './challenge-tabs';
+// import { Tab } from './tab.model';
+// import { CHALLENGE_TABS } from './challenge-tabs';
 import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -35,10 +35,10 @@ export class ChallengeComponent implements OnInit {
   // progressValue = 0;
   // remainDays!: number | undefined;
   challengeAvatar!: Avatar;
-  tabs = CHALLENGE_TABS;
-  tabKeys: string[] = Object.keys(this.tabs);
-  activeTab!: Tab;
-  private subscriptions: Subscription[] = [];
+  // tabs = CHALLENGE_TABS;
+  // tabKeys: string[] = Object.keys(this.tabs);
+  // activeTab!: Tab;
+  // private subscriptions: Subscription[] = [];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -89,14 +89,14 @@ export class ChallengeComponent implements OnInit {
       //   : undefined;
     });
 
-    const activeTabSub = this.activatedRoute.queryParamMap
-      .pipe(
-        map((params: ParamMap) => params.get('tab')),
-        map((key) => (key === null ? 'overview' : key))
-      )
-      .subscribe((key) => (this.activeTab = this.tabs[key]));
+    // const activeTabSub = this.activatedRoute.queryParamMap
+    //   .pipe(
+    //     map((params: ParamMap) => params.get('tab')),
+    //     map((key) => (key === null ? 'overview' : key))
+    //   )
+    //   .subscribe((key) => (this.activeTab = this.tabs[key]));
 
-    this.subscriptions.push(activeTabSub);
+    // this.subscriptions.push(activeTabSub);
   }
 
   // calcDays(startDate: string, endDate: string): number {

@@ -26,28 +26,16 @@
     <section id="profile-bottom" class="content">
       <div class="profile-sidenav col">
         <div class="profile-nav-group">
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'overview' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
-          >
+          <a class="profile-nav-item">
             Overview
           </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'organizers' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-          >
+          <a class="profile-nav-item">
+            Challenge Details
+          </a>
+          <a class="profile-nav-item">
             Organizers
           </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'contributors' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
-          >
+          <a class="profile-nav-item">
             Contributors
           </a>
           <!-- <a
@@ -61,25 +49,18 @@
         </div>
       </div>
       <div class="main col">
-        <ng-container [ngSwitch]="activeTab">
-          <openchallenges-challenge-overview
-            *ngSwitchCase="tabs['overview']"
-            [challenge]="challenge"
-          >
-          </openchallenges-challenge-overview>
-          <openchallenges-challenge-organizers
-            *ngSwitchCase="tabs['organizers']"
-            [challenge]="challenge"
-          >
-          </openchallenges-challenge-organizers>
-          <openchallenges-challenge-contributors
-            *ngSwitchCase="tabs['contributors']"
-            [challenge]="challenge"
-          >
-          </openchallenges-challenge-contributors>
-          <!-- <openchallenges-challenge-stargazers
-            *ngSwitchCase="tabs['stargazers']"
-            [challenge]="challenge"
+        <openchallenges-challenge-overview
+          [challenge]="challenge"
+        ></openchallenges-challenge-overview>
+        <openchallenges-challenge-organizers
+          [challenge]="challenge"
+        ></openchallenges-challenge-organizers>
+        <openchallenges-challenge-contributors
+          [challenge]="challenge"
+        ></openchallenges-challenge-contributors>
+        <!-- <openchallenges-challenge-stargazers
+          [challenge]="challenge"
+        ></openchallenges-challenge-stargazers> -->
           >
           </openchallenges-challenge-stargazers> -->
         </ng-container>
