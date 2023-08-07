@@ -63,6 +63,12 @@
   .text-grey {
     color: rgba(black, 0.38);
   }
+  .created-updated-dates {
+    color: mat.get-color-from-palette($figma, dl-color-default-navbardark);
+  }
+  hr {
+    background-color: map.get($figma, dl-color-default-primary1);
+  }
 
   @media (max-width: 479px) {
     .profile-pic {
@@ -82,6 +88,9 @@
     div.avatar-content {
       font-family: 'Lato', sans-serif !important;
     }
+  }
+  .created-updated-dates {
+    font-style: italic !important;
   }
   @media screen and (max-width: 641px) {
     #profile-details > h2 {

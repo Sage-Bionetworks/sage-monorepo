@@ -61,9 +61,18 @@
         <!-- <openchallenges-challenge-stargazers
           [challenge]="challenge"
         ></openchallenges-challenge-stargazers> -->
+        <hr />
+        <span class="mat-caption created-updated-dates">
+          Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }} //
+          See something missing or not up-to-date?
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{
+              challenge.id
+            }}&entry.1040159972={{ challenge.slug }}"
+            target="_blank"
+            >Suggest an edit here!</a
           >
-          </openchallenges-challenge-stargazers> -->
-        </ng-container>
+        </span>
       </div>
     </section>
   </ng-container>
