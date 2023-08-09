@@ -3233,6 +3233,54 @@ VALUES (
     '2023-06-08',
     '2023-08-08 19:47:54',
     '2023-08-08 21:47:57'
+  ),
+  (
+    195,
+    'chaimeleon',
+    'CHAIMELEON Open Challenges',
+    '',
+    'The CHAIMELEON Open Challenges is a competition designed to train and refine AI models to answer clinical questions about five types of cancer: prostate, lung, breast, colon, and rectal. Participants are challenged to collaborate and develop innovative AI-powered solutions that can significantly impact cancer diagnosis, management, and treatment. They will be evaluated considering a balance between the performance of their AI algorithms to predict different clinical endpoints such as disease staging, treatment response or progression free survival and their trustworthiness.  The challenges are open to the whole scientific and tech community interested in AI. They are a unique opportunity to showcase how AI can be used to advance medical research and improve patient outcomes within the CHAIMELEON project.',
+    'https://chaimeleon.grand-challenge.org/',
+    'upcoming',
+    'intermediate',
+    '6',
+    '',
+    NULL,
+    '2023-12-31',
+    '2023-08-09 17:13:09',
+    '2023-08-09 22:40:12'
+  ),
+  (
+    196,
+    'topcow23',
+    'Topology-Aware Anatomical Segmentation of the Circle of Willis for CTA and MRA',
+    '',
+    'The aim of the challenge is to extract the CoW angio-architecture from 3D angiographic imaging by segmentation of the vessel components. There are two sub-tasks: binary segmentation of CoW vessels, and multi-class CoW anatomical segmentation. We release a new dataset of joint-modalities, CTA and MRA of the same patient cohort, both with annotations of the anatomy of CoW. Our challenge has two tracks for the same segmentation task, namely CTA track and MRA track. We made use of the clinical information from both modalities during our annotation. And participants can pick whichever modality they want, both CTA and MRA, and choose to tackle the task for either modality.',
+    'https://topcow23.grand-challenge.org/',
+    'upcoming',
+    'intermediate',
+    '6',
+    '',
+    '2023-08-20',
+    '2023-09-25',
+    '2023-08-09 17:16:22',
+    '2023-08-09 22:41:03'
+  ),
+  (
+    197,
+    'crown2023',
+    'Circle of Willis Intracranial Artery Classification and Quantification Challenge 2023',
+    '',
+    'The purpose of this challenge is to compare automatic methods for classification of the circle of Willis (CoW) configuration and quantification of the CoW major artery diameters and bifurcation angles.',
+    'https://crown.isi.uu.nl/',
+    'active',
+    'intermediate',
+    '1',
+    '',
+    '2023-05-01',
+    '2023-08-15',
+    '2023-08-09 22:13:24',
+    '2023-08-09 23:04:54'
   );
 
   -- challenge_organization_role data
@@ -4031,7 +4079,25 @@ VALUES (1, 1, 75, 'sponsor'),
   (791, 194, 302, 'data_contributor'),
   (792, 194, 303, 'data_contributor'),
   (793, 194, 304, 'data_contributor'),
-  (794, 194, 126, 'sponsor');
+  (794, 194, 126, 'sponsor'),
+  (795, 195, 75, 'sponsor'),
+  (796, 195, 312, 'challenge_organizer'),
+  (797, 196, 12, 'sponsor'),
+  (798, 196, 226, 'challenge_organizer'),
+  (799, 196, 306, 'challenge_organizer'),
+  (800, 196, 307, 'challenge_organizer'),
+  (801, 196, 308, 'challenge_organizer'),
+  (802, 196, 248, 'challenge_organizer'),
+  (803, 196, 305, 'challenge_organizer'),
+  (804, 196, 309, 'challenge_organizer'),
+  (805, 196, 310, 'challenge_organizer'),
+  (806, 196, 220, 'challenge_organizer'),
+  (807, 196, 261, 'data_contributor'),
+  (808, 196, 311, 'data_contributor'),
+  (809, 197, 261, 'challenge_organizer'),
+  (810, 197, 261, 'data_contributor'),
+  (811, 197, 12, 'sponsor'),
+  (812, 196, 305, 'data_contributor');
 
 -- challenge_incentive data
 
@@ -4151,8 +4217,14 @@ VALUES (1, 'publication', 1),
   (113, 'speaking_engagement', 193),
   (114, 'other', 193),
   (115, 'monetary', 194),
-  (116, 'speaking_engagement', 194);
-
+  (116, 'speaking_engagement', 194),
+  (117, 'monetary', 195),
+  (118, 'publication', 195),
+  (119, 'publication', 196),
+  (120, 'speaking_engagement', 196),
+  (121, 'other', 196),
+  (122, 'publication', 197),
+  (123, 'speaking_engagement', 197);
 -- challenge_submission_type data
 
 INSERT INTO challenge_submission_type (id, name, challenge_id)
@@ -4356,7 +4428,10 @@ VALUES (1, 'prediction_file', 1),
   (198, 'notebook', 192),
   (199, 'container_image', 192),
   (200, 'notebook', 193),
-  (201, 'notebook', 194);
+  (201, 'notebook', 194),
+  (202, 'container_image', 195),
+  (203, 'container_image', 196),
+  (204, 'container_image', 197);
 
 -- challenge_star data
 
