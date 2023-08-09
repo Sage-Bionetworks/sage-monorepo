@@ -25,28 +25,12 @@
       <div class="profile-sidenav col">
         <div class="profile-nav-group">
           <a
+            *ngFor="let link of links"
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'overview' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
+            href="{{rootUrl}}#{{link.id}}"
+            [ngClass]="{ 'active-tab': activeLink === link.id }"
           >
-            Overview
-          </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'challenges' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
-          >
-            Challenges
-          </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'members' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['members'] }"
-          >
-            Members
+            {{link.name}}
           </a>
         </div>
       </div>

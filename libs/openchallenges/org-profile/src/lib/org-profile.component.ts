@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Account } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
   catchError,
@@ -12,8 +12,7 @@ import {
   switchMap,
   throwError,
 } from 'rxjs';
-import { Tab } from './tab.model';
-import { ORG_PROFILE_TABS } from './org-profile-tabs';
+import { ORG_PROFILE_LINKS } from './org-profile-links';
 import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -43,10 +42,10 @@ export class OrgProfileComponent implements OnInit {
   organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;
   // organizationAvatar!: Avatar;
-  tabs = ORG_PROFILE_TABS;
-  tabKeys: string[] = Object.keys(this.tabs);
-  activeTab!: Tab;
   private subscriptions: Subscription[] = [];
+  rootUrl = this.router.url.split('#')[0];
+  links = ORG_PROFILE_LINKS ?? [];
+  public activeLink = 'overview';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -92,14 +91,18 @@ export class OrgProfileComponent implements OnInit {
       )
     );
 
-    const activeTabSub = this.activatedRoute.queryParamMap
-      .pipe(
-        map((params: ParamMap) => params.get('tab')),
-        map((key) => (key === null ? 'overview' : key))
-      )
-      .subscribe((key) => (this.activeTab = this.tabs[key]));
+    this.subscriptions.push(
+      this.activatedRoute.fragment.subscribe((fragment) => {
+        if (fragment != null) {
+          this.activeLink = fragment;
 
-    this.subscriptions.push(activeTabSub);
+          const target = document.getElementById(this.activeLink);
+          if (target) {
+            target.scrollIntoView();
+          }
+        }
+      })
+    );
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
