@@ -11,6 +11,9 @@
   .text-grey {
     color: rgba(black, 0.38);
   }
+  hr {
+    background-color: map.get($figma, dl-color-default-primary1);
+  }
 }
 
 @mixin typography($theme) {

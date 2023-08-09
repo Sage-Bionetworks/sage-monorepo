@@ -35,20 +35,26 @@
         </div>
       </div>
       <div class="main col">
-        <ng-container [ngSwitch]="activeTab">
-          <openchallenges-org-profile-overview
-            *ngSwitchCase="tabs['overview']"
-            [organization]="org"
-          >
-          </openchallenges-org-profile-overview>
-          <openchallenges-org-profile-challenges
-            *ngSwitchCase="tabs['challenges']"
-            [organization]="org"
-          >
-          </openchallenges-org-profile-challenges>
-          <openchallenges-org-profile-members *ngSwitchCase="tabs['members']" [organization]="org">
-          </openchallenges-org-profile-members>
-        </ng-container>
+        <openchallenges-org-profile-overview
+          [organization]="org"
+        >
+        </openchallenges-org-profile-overview>
+        <openchallenges-org-profile-challenges
+          [organization]="org"
+        >
+        </openchallenges-org-profile-challenges>
+        <openchallenges-org-profile-members
+          [organization]="org">
+        </openchallenges-org-profile-members>
+        <hr />
+        <span class="mat-caption created-updated-dates"
+          >Added to the OC on {{ org.createdAt }} and last modified on {{ org.updatedAt }} //
+          See something missing or not up-to-date?
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfQbQl11MG_5TXT7fL07YenRD3MIQYfG2lXrpo3jnh_iA4nsw/viewform?usp=pp_url&entry.414773782={{org.id}}&entry.1040159972={{org.login}}"
+            target="_blank"
+          >Suggest an edit here!</a>
+        </span>
       </div>
     </section>
   </ng-container>
