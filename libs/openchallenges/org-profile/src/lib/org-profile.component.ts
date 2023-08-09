@@ -44,7 +44,7 @@ export class OrgProfileComponent implements OnInit {
   // organizationAvatar!: Avatar;
   private subscriptions: Subscription[] = [];
   rootUrl = this.router.url.split('#')[0];
-  links = ORG_PROFILE_LINKS ?? [];
+  links = ORG_PROFILE_LINKS;
   public activeLink = 'overview';
 
   constructor(
