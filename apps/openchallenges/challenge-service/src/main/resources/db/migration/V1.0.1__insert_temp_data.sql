@@ -84,6 +84,13 @@ VALUES (
     'PapersWithCode',
     'logo/papers-with-code.jpg',
     'https://paperswithcode.com/'
+  ),
+  (
+    13,
+    'eterna',
+    'Eterna',
+    '',
+    'https://eternagame.org/'
   );
 
 -- challenge_input_data_type
