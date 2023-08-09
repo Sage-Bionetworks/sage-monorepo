@@ -27,36 +27,13 @@
       <div class="profile-sidenav col">
         <div class="profile-nav-group">
           <a
-            class="profile-nav-item active-tab"
-            href="/challenge/{{challenge.id}}/{{challenge.slug}}#overview"
-          >
-            Overview
-          </a>
-          <a
+            *ngFor="let link of links"
             class="profile-nav-item"
-            href="/challenge/{{challenge.id}}/{{challenge.slug}}#details">
-            Challenge Details
-          </a>
-          <a
-            class="profile-nav-item"
-            href="/challenge/{{challenge.id}}/{{challenge.slug}}#organizers"
+            href="{{rootUrl}}/{{challenge.slug}}#{{link.id}}"
+            [ngClass]="{ 'active-tab': activeLink === link.id }"
           >
-            Organizers
+            {{link.name}}
           </a>
-          <a
-            class="profile-nav-item"
-            href="/challenge/{{challenge.id}}/{{challenge.slug}}#contributors"  
-          >
-            Contributors
-          </a>
-          <!-- <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'stargazers' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['stargazers'] }"
-          >
-            Stargazers
-          </a> -->
         </div>
       </div>
       <div class="main col">

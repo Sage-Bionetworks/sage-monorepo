@@ -6,15 +6,13 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   catchError,
-  // map,
   Observable,
   of,
-  // Subscription,
+  Subscription,
   switchMap,
   throwError,
 } from 'rxjs';
-// import { Tab } from './tab.model';
-// import { CHALLENGE_TABS } from './challenge-tabs';
+import { CHALLENGE_LINKS } from './challenge-links';
 import { Avatar } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -32,13 +30,11 @@ export class ChallengeComponent implements OnInit {
   public dataUpdatedOn: string;
   challenge$!: Observable<Challenge>;
   loggedIn = false;
-  // progressValue = 0;
-  // remainDays!: number | undefined;
   challengeAvatar!: Avatar;
-  // tabs = CHALLENGE_TABS;
-  // tabKeys: string[] = Object.keys(this.tabs);
-  // activeTab!: Tab;
-  // private subscriptions: Subscription[] = [];
+  private subscriptions: Subscription[] = [];
+  rootUrl = this.router.url.split('#')[0];
+  links = CHALLENGE_LINKS;
+  public activeLink = 'overview';
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -74,40 +70,19 @@ export class ChallengeComponent implements OnInit {
         src: challenge.avatarUrl ?? '',
         size: 250,
       };
-
-      // this.progressValue =
-      //   challenge.startDate && challenge.endDate
-      //     ? this.calcProgress(
-      //         new Date().toUTCString(),
-      //         challenge.startDate,
-      //         challenge.endDate
-      //       )
-      //     : 0;
-
-      // this.remainDays = challenge.endDate
-      //   ? this.calcDays(new Date().toUTCString(), challenge.endDate)
-      //   : undefined;
     });
 
-    // const activeTabSub = this.activatedRoute.queryParamMap
-    //   .pipe(
-    //     map((params: ParamMap) => params.get('tab')),
-    //     map((key) => (key === null ? 'overview' : key))
-    //   )
-    //   .subscribe((key) => (this.activeTab = this.tabs[key]));
+    this.subscriptions.push(
+      this.activatedRoute.fragment.subscribe((fragment) => {
+        if (fragment != null) {
+          this.activeLink = fragment;
 
-    // this.subscriptions.push(activeTabSub);
+          const target = document.getElementById(this.activeLink);
+          if (target) {
+            target.scrollIntoView();
+          }
+        }
+      })
+    );
   }
-
-  // calcDays(startDate: string, endDate: string): number {
-  //   const timeDiff = +new Date(endDate) - +new Date(startDate);
-  //   return Math.round(timeDiff / (1000 * 60 * 60 * 24));
-  // }
-
-  // calcProgress(today: string, startDate: string, endDate: string): number {
-  //   return (
-  //     (this.calcDays(startDate, today) / this.calcDays(startDate, endDate)) *
-  //     100
-  //   );
-  // }
 }
