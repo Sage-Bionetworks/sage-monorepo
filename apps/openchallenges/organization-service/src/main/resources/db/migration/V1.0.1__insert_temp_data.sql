@@ -22,7 +22,7 @@ VALUES (
     'logo/dream.png',
     'https://dreamchallenges.org',
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
-    '2023-06-23 00:00:00',
+    '2023-08-04 07:33:09',
     '2023-08-05 06:10:02',
     47
   ),
@@ -63,7 +63,7 @@ VALUES (
     'The Medical Image Computing and Computer Assisted Intervention Society (the MICCAI Society) is dedicated to the promotion, preservation and facilitation of research, education and practice in the field of medical image computing and computer assisted medical interventions including biomedical imaging and medical robotics. The Society achieves this aim through the organization and operation of annual high quality international conferences, workshops, tutorials and publications that promote and foster the exchange and dissemination of advanced knowledge, expertise and experience in the field produced by leading institutions and outstanding scientists, physicians and educators around the world. The MICCAI Society is committed to maintaining high academic standards and independence from any personal, political or commercial interests.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:24',
-    11
+    13
   ),
   (
     13,
@@ -89,7 +89,7 @@ VALUES (
     'The National Institutes of Health (NIH), a part of the U.S. Department of Health and Human Services, is the nation''s medical research agency — making important discoveries that improve health and save lives.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:26',
-    7
+    9
   ),
   (
     16,
@@ -216,9 +216,9 @@ VALUES (
     'arthritis-internet-registry',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:13:35',
+    '2023-08-08 17:59:48',
     1
   ),
   (
@@ -427,7 +427,7 @@ VALUES (
     'We seek to better understand the roots of disease and narrow the gap between new biological insights and impact for patients.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:51',
-    4
+    5
   ),
   (
     42,
@@ -502,9 +502,9 @@ VALUES (
     'celgene',
     'logo/celgene.jpg',
     'https://www.celgene.com',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:13:56',
+    '2023-08-08 17:58:26',
     3
   ),
   (
@@ -619,9 +619,9 @@ VALUES (
     'corrona',
     'logo/corrona.jpeg',
     'https://www.corrona.org',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:03',
+    '2023-08-08 17:58:48',
     1
   ),
   (
@@ -736,9 +736,9 @@ VALUES (
     'early-signal',
     '',
     'http://www.earlysignal.org',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:10',
+    '2023-08-08 17:58:54',
     1
   ),
   (
@@ -765,7 +765,7 @@ VALUES (
     'Lilly was founded in 1876 by Colonel Eli Lilly, a man committed to creating high-quality medicines that met real needs in an era of unreliable elixirs peddled by questionable characters. His charge to the generations of employees who have followed was this: "Take what you find here and make it better and better."  More than 145 years later, we remain committed to his vision through every aspect of our business and the people we serve starting with those who take our medicines, and extending to health care professionals, employees and the communities in which we live. ',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:11',
-    1
+    3
   ),
   (
     68,
@@ -1427,8 +1427,8 @@ VALUES (
     'https://www.mit.edu/',
     'The MIT community is driven by a shared purpose: to make a better world through education, research, and innovation. We are fun and quirky, elite but not elitist, inventive and artistic, obsessed with numbers, and welcoming to talented people regardless of where they come from.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:54',
-    2
+    '2023-08-08 18:47:20',
+    3
   ),
   (
     120,
@@ -1519,7 +1519,7 @@ VALUES (
     'The Michael J. Fox Foundation is dedicated to finding a cure for Parkinson''s disease through an aggressively funded research agenda and to ensuring the development of improved therapies for those living with Parkinson''s today.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:00',
-    2
+    3
   ),
   (
     127,
@@ -1753,7 +1753,7 @@ VALUES (
     'Northwestern is committed to excellent teaching, innovative research and the personal and intellectual growth of its students in a diverse academic community.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:14',
-    1
+    2
   ),
   (
     145,
@@ -1776,9 +1776,9 @@ VALUES (
     'numerate',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:16',
+    '2023-08-08 17:59:10',
     1
   ),
   (
@@ -1792,7 +1792,7 @@ VALUES (
     'NVIDIA pioneered accelerated computing to tackle challenges no one else can solve. Our work in AI and the metaverse is transforming the world''s largest industries and profoundly impacting society.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:16',
-    3
+    4
   ),
   (
     148,
@@ -1880,11 +1880,9 @@ VALUES (
     'prize4life',
     'logo/prize4life.jpeg',
     'http://www.prize4life.org',
-    'This organization may no longer exists or has been merged under another organization.
-========
-Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
+    'This organization may no longer exist or has been merged under another organization.\n========\nPrize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:26',
+    '2023-08-08 17:45:38',
     2
   ),
   (
@@ -2051,9 +2049,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'rosenberg-alzheimers-project',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:37',
+    '2023-08-08 17:59:30',
     1
   ),
   (
@@ -2197,7 +2195,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Stanford was founded almost 150 years ago on a bedrock of societal purpose. Our mission is to contribute to the world by educating students for lives of leadership and purposeful contribution; advancing fundamental knowledge and cultivating creativity; and accelerating solutions and amplifying their impact.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:46',
-    6
+    12
   ),
   (
     180,
@@ -2396,7 +2394,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
   ),
   (
     195,
-    'University of California San Diego',
+    'University of California, San Diego',
     'UCSD',
     '',
     'ucsd',
@@ -2404,12 +2402,12 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://ucsd.edu/',
     'We make changemakers.  Recognized as one of the top 15 research universities worldwide, our culture of collaboration sparks discoveries that advance society and drive economic impact. Everything we do is dedicated to ensuring our students have the opportunity to become changemakers, equipped with the multidisciplinary tools needed to accelerate answers to our world''s most pressing issues.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:00',
+    '2023-08-08 18:48:47',
     3
   ),
   (
     196,
-    'University of California San Francisco',
+    'University of California, San Francisco',
     'UCSF',
     '',
     'ucsf',
@@ -2417,12 +2415,12 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.ucsf.edu/',
     'At UC San Francisco, we are driven by the idea that when the best research, the best teaching and the best patient care converge, we can deliver breakthroughs that help heal the world.  Excellence is in our DNA. From genomics and immunology to specialty care for women and children, UCSF brings together the world''s leading experts in nearly every area of health. We are home to five Nobel laureates who have advanced the understanding of cancer, neurodegenerative diseases, aging and stem cells. Our hospitals and educational programs consistently rank among the best in the country, according to the latest surveys by U.S. News & World Report.   We are the leading university dedicated exclusively to the health sciences.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:01',
+    '2023-08-08 18:48:39',
     6
   ),
   (
     197,
-    'University of California Santa Cruz',
+    'University of California, Santa Cruz',
     'UCSC',
     '',
     'ucsc',
@@ -2430,8 +2428,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.ucsc.edu/',
     'An inspired, global, public research university leading at the intersection of innovation and justice.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:02',
-    5
+    '2023-08-08 18:48:44',
+    6
   ),
   (
     198,
@@ -3013,7 +3011,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'yale',
     'logo/yale.jpg',
     'https://www.yale.edu/',
-    'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale’s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city’s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
+    'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale''s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city''s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:40',
     1
@@ -3130,7 +3128,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'nkdc',
     'logo/nkdc.jpeg',
     'https://www.nhdic.ng/facility/nkdc/',
-    'The NKDC medical diagnostics facility opened its doors to the public on the 16th of March, 2020, in Kano - Northern Nigeria’s commercial centre. This state-of-the-art facility is home to a group of enthusiastic, passionate and patient-centric medical professionals who continuously aim to improve patient experiences. We offer 24/7 radiology and medical laboratory services all year round.',
+    'The NKDC medical diagnostics facility opened its doors to the public on the 16th of March, 2020, in Kano - Northern Nigeria''s commercial centre. This state-of-the-art facility is home to a group of enthusiastic, passionate and patient-centric medical professionals who continuously aim to improve patient experiences. We offer 24/7 radiology and medical laboratory services all year round.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:45',
     1
@@ -3143,7 +3141,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'nationwide-childrens',
     'logo/nationwide-childrens.jpg',
     'https://www.nationwidechildrens.org/',
-    'At Nationwide Children’s Hospital, our vision remains unchanged. We aspire to create the best outcomes for children everywhere. This means families come to Nationwide Children’s from around the globe knowing they will get the highest quality care. It means we will reach to cure rare diseases. It means we will sequence a child’s tumor to select the best care pathway. It means we will strive to make an entire population healthier, not just through their physical health, but also in their mental health. It means we will redefine the role of the children’s hospital in the achievement of optimal health.',
+    'At Nationwide Children''s Hospital, our vision remains unchanged. We aspire to create the best outcomes for children everywhere. This means families come to Nationwide Children''s from around the globe knowing they will get the highest quality care. It means we will reach to cure rare diseases. It means we will sequence a child''s tumor to select the best care pathway. It means we will strive to make an entire population healthier, not just through their physical health, but also in their mental health. It means we will redefine the role of the children''s hospital in the achievement of optimal health.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:46',
     1
@@ -3156,7 +3154,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'dana-farber-brigham-cancer-center',
     'logo/bwh.png',
     'https://www.brighamandwomens.org/cancer',
-    'At Dana-Farber Brigham Cancer Center, all we do is cancer. Because no two people are the same, our approach to treatment and care is personalized – with a deep understanding of your cancer and how to get you well.  Through our 12 specialized disease treatment centers, experts from our two organizations, Dana-Farber Cancer Institute and Brigham and Women’s Hospital, work together as one team to offer the most advanced treatments with compassion and care that makes all the difference.',
+    'At Dana-Farber Brigham Cancer Center, all we do is cancer. Because no two people are the same, our approach to treatment and care is personalized – with a deep understanding of your cancer and how to get you well.  Through our 12 specialized disease treatment centers, experts from our two organizations, Dana-Farber Cancer Institute and Brigham and Women''s Hospital, work together as one team to offer the most advanced treatments with compassion and care that makes all the difference.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:46',
     1
@@ -3169,7 +3167,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'lacunda-fund',
     'logo/lacuna-fund.jpg',
     'https://lacunafund.org/',
-    'Lacuna Fund is the world’s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
+    'Lacuna Fund is the world''s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
     '2023-06-23 00:00:00',
     '2023-08-04 22:03:25',
     1
@@ -3195,7 +3193,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'hms',
     'logo/hms.jpg',
     'https://hms.harvard.edu/',
-    'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They’ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
+    'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They''ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
     '2023-08-04 06:00:47',
     '2023-08-04 23:38:09',
     1
@@ -3377,7 +3375,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'kch',
     '',
     'https://www.kch.nhs.uk/',
-    'We are one of London’s largest and busiest teaching hospitals. We provide a strong profile of local hospital services for people living in the boroughs of Lambeth, Southwark, Lewisham, and Bromley. Our specialist services are also available to patients from a wider area. We providing nationally and internationally recognised treatment and care in liver disease and transplantation, neurosciences, haemato-oncology, and fetal medicine. Our vision is to be bold, and our new Trust values – Kind, Respectful Team – help ensure we bring a positive attitude to the way we interact with patients, relatives, and the many people who use our services.',
+    'We are one of London''s largest and busiest teaching hospitals. We provide a strong profile of local hospital services for people living in the boroughs of Lambeth, Southwark, Lewisham, and Bromley. Our specialist services are also available to patients from a wider area. We providing nationally and internationally recognised treatment and care in liver disease and transplantation, neurosciences, haemato-oncology, and fetal medicine. Our vision is to be bold, and our new Trust values – Kind, Respectful Team – help ensure we bring a positive attitude to the way we interact with patients, relatives, and the many people who use our services.',
     '2023-08-05 00:08:37',
     '2023-08-05 00:09:46',
     2
@@ -3403,7 +3401,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'robarts',
     '',
     'https://www.robarts.ca/',
-    'Opened in 1986, Robarts Research Institute at Western University is a medical research facility in London, Ontario, with more than 600 people working to investigate some of the most debilitating diseases of our time, from heart disease and stroke to diabetes, Alzheimer’s and many forms of cancer. We believe we’ve got a winning formula to accelerate medical discovery: attract the brightest and best people, give them the freedom to think big and set the bar high. From our roots under the scientific leadership of renowned neurologist Dr. Henry Barnett - whose work with Aspirin as a preventive therapy for heart attack and stroke remains one of the most important developments in 20th century medicine - the Institute has applied that formula to become a national leader in biological, clinical and imaging research.',
+    'Opened in 1986, Robarts Research Institute at Western University is a medical research facility in London, Ontario, with more than 600 people working to investigate some of the most debilitating diseases of our time, from heart disease and stroke to diabetes, Alzheimer''s and many forms of cancer. We believe we''ve got a winning formula to accelerate medical discovery: attract the brightest and best people, give them the freedom to think big and set the bar high. From our roots under the scientific leadership of renowned neurologist Dr. Henry Barnett - whose work with Aspirin as a preventive therapy for heart attack and stroke remains one of the most important developments in 20th century medicine - the Institute has applied that formula to become a national leader in biological, clinical and imaging research.',
     '2023-08-05 00:12:27',
     '2023-08-05 00:13:00',
     1
@@ -3416,7 +3414,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'bana-uk',
     '',
     'https://www.bana-uk.com/',
-    'BANA was formed in 1992 by a group of patients and their partners.  They were introduced to each other by ENT and Neurosurgeon Consultants from the Queen’s Medical Centre Hospital in Nottingham and from the very beginning, mutual support was their primary aim.  They also wanted to provide reliable information to those diagnosed and to promote research into Acoustic Neuromas and the effects associated with them. More than two decades on, these fledgling intentions remain the charitable objectives that drive the charity forward on behalf of all those affected.',
+    'BANA was formed in 1992 by a group of patients and their partners.  They were introduced to each other by ENT and Neurosurgeon Consultants from the Queen''s Medical Centre Hospital in Nottingham and from the very beginning, mutual support was their primary aim.  They also wanted to provide reliable information to those diagnosed and to promote research into Acoustic Neuromas and the effects associated with them. More than two decades on, these fledgling intentions remain the charitable objectives that drive the charity forward on behalf of all those affected.',
     '2023-08-05 00:15:03',
     '2023-08-05 00:16:46',
     1
@@ -3494,9 +3492,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'amp-pd',
     '',
     'https://www.amp-pd.org/',
-    'The Accelerating Medicines Partnership(R) (AMP(R)) program is a public-private partnership between the National Institutes of Health (NIH), multiple biopharmaceutical and life sciences companies, and non-profit organizations.
-
-Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer’s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson’s disease. Additional disease areas are being evaluated for addition to AMP.',
+    'The Accelerating Medicines Partnership(R) (AMP(R)) program is a public-private partnership between the National Institutes of Health (NIH), multiple biopharmaceutical and life sciences companies, and non-profit organizations. Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer''s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson''s disease. Additional disease areas are being evaluated for addition to AMP.',
     '2023-08-05 05:39:55',
     '2023-08-05 05:42:53',
     1
@@ -3509,7 +3505,7 @@ Managed through the Foundation for the NIH (FNIH), AMP aims to identify and vali
     'vanderbilt',
     '',
     'https://www.vanderbilt.edu/',
-    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what’s possible and working diligently in the service of others. Vanderbilt’s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
+    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what''s possible and working diligently in the service of others. Vanderbilt''s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
     '2023-08-07 20:28:32',
     '2023-08-07 20:29:06',
     1
@@ -3522,9 +3518,7 @@ Managed through the Foundation for the NIH (FNIH), AMP aims to identify and vali
     'bcbl',
     '',
     'https://www.bcbl.eu/en',
-    'Our research aims to unravel the neurocognitive mechanisms involved in the acquisition, comprehension and production of language, with special emphasis on bilingualism and multilingualism.
-
-We study processes involved in normal child language acquisition and second language learning in adults, as well as learning disorders, language disorders, language-related effects of aging and neurodegeneration and language use in different social contexts.',
+    'Our research aims to unravel the neurocognitive mechanisms involved in the acquisition, comprehension and production of language, with special emphasis on bilingualism and multilingualism. We study processes involved in normal child language acquisition and second language learning in adults, as well as learning disorders, language disorders, language-related effects of aging and neurodegeneration and language use in different social contexts.',
     '2023-08-07 20:29:41',
     '2023-08-07 20:30:41',
     1
