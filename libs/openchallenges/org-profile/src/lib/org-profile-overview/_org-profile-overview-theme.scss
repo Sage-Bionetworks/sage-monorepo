@@ -8,7 +8,8 @@
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
 
-  .text-grey {
+  .text-grey, 
+  span.text-grey a {
     color: rgba(black, 0.38);
   }
 }

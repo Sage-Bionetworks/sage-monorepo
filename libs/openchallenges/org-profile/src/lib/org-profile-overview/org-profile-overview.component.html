@@ -2,7 +2,16 @@
   <div id="bio" class="row">
     <div class="col">
       <h3>Overview</h3>
-      <p>{{ use_default(org.description) }}</p>
+      <p>
+        {{ use_default(org.description) }}
+        <span class="text-grey" *ngIf="org.description.endsWith('...')">
+          (continue reading on
+          <a href="{{ org.websiteUrl }}"
+            >their website
+            <mat-icon aria-hidden="true">open_in_new</mat-icon></a
+          >)
+        </span>
+      </p>
     </div>
   </div>
   <div id="details">
