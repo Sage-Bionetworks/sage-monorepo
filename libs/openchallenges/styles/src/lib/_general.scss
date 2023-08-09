@@ -183,6 +183,9 @@ em {
   text-align: right;
 }
 .profile-nav-group {
+  position: sticky;
+  position: -webkit-sticky;
+  top: constants.$navbar-height + 32px;
   margin: 18px;
   padding: 48px 18px;
   display: flex;

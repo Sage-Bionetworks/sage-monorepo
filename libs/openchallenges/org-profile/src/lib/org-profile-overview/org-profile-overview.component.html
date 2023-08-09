@@ -8,10 +8,6 @@
   <div id="details">
     <h3 class="section-title">Organization Details</h3>
     <table>
-      <!-- <tr>
-        <td class="text-right">Website</td>
-        <td>{{ org.websiteUrl }}</td>
-      </tr> -->
       <tr>
         <td class="text-right">Acronym</td>
         <td [ngClass]="{ 'text-grey': org.acronym === '' }">{{ use_default(org.acronym) }}</td>
