@@ -53,6 +53,9 @@ export class ChallengeComponent implements OnInit {
       ),
       switchMap((challenge) => {
         this.router.navigate(['/challenge', challenge.id, challenge.slug]);
+        // Resetting here, to account for when the page refreshes or when the
+        // link is shared with the challenge name in the url already
+        this.rootUrl = this.router.url.split('#')[0];
         return of(challenge);
       }),
       catchError((err) => {

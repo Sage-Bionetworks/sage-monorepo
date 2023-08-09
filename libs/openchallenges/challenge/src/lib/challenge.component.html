@@ -29,7 +29,7 @@
           <a
             *ngFor="let link of links"
             class="profile-nav-item"
-            href="{{rootUrl}}/{{challenge.slug}}#{{link.id}}"
+            href="{{rootUrl}}#{{link.id}}"
             [ngClass]="{ 'active-tab': activeLink === link.id }"
           >
             {{link.name}}
