@@ -7,7 +7,7 @@ export const ORG_PROFILE_LINKS: Link[] = [
   },
   {
     id: 'details',
-    name: 'Details',
+    name: 'Organization Details',
   },
   {
     id: 'challenges',

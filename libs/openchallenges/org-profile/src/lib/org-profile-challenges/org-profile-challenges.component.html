@@ -1,16 +1,14 @@
-<main>
-  <div id="challenges">
-    <h3 class="section-title">Challenges</h3>
-    <div class="card-group">
-      <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
-      </openchallenges-challenge-card>
-    </div>
-    <openchallenges-paginator
-      [pageNumber]="pageNumber"
-      [pageSize]="pageSize"
-      [totalRecords]="totalChallengesCount"
-      [itemsPerPage]="pageSizeOptions"
-      (pageChange)="onPageChange($event)"
-    ></openchallenges-paginator>
+<div id="challenges">
+  <h3 class="section-title">Challenges</h3>
+  <div class="card-group">
+    <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
+    </openchallenges-challenge-card>
   </div>
-</main>
+  <openchallenges-paginator
+    [pageNumber]="pageNumber"
+    [pageSize]="pageSize"
+    [totalRecords]="totalChallengesCount"
+    [itemsPerPage]="pageSizeOptions"
+    (pageChange)="onPageChange($event)"
+  ></openchallenges-paginator>
+</div>

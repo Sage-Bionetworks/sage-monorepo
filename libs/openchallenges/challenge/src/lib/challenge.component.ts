@@ -76,7 +76,6 @@ export class ChallengeComponent implements OnInit {
       this.activatedRoute.fragment.subscribe((fragment) => {
         if (fragment != null) {
           this.activeLink = fragment;
-
           const target = document.getElementById(this.activeLink);
           if (target) {
             target.scrollIntoView();
