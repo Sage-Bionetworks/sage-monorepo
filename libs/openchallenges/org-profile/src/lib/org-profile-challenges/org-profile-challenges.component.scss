@@ -1,3 +1,8 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
+#challenges {
+  scroll-margin-top: constants.$navbar-height + 20px;
+}
 .section-title {
   margin-top: 32px;
 }
