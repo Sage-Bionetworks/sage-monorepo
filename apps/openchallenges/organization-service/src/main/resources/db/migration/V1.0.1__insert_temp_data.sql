@@ -63,7 +63,7 @@ VALUES (
     'The Medical Image Computing and Computer Assisted Intervention Society (the MICCAI Society) is dedicated to the promotion, preservation and facilitation of research, education and practice in the field of medical image computing and computer assisted medical interventions including biomedical imaging and medical robotics. The Society achieves this aim through the organization and operation of annual high quality international conferences, workshops, tutorials and publications that promote and foster the exchange and dissemination of advanced knowledge, expertise and experience in the field produced by leading institutions and outstanding scientists, physicians and educators around the world. The MICCAI Society is committed to maintaining high academic standards and independence from any personal, political or commercial interests.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:24',
-    13
+    15
   ),
   (
     13,
@@ -869,7 +869,7 @@ VALUES (
     'The common principles and values that underlie life in the EU: freedom, democracy, equality and the rule of law, promoting peace and stability.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:16',
-    1
+    2
   ),
   (
     76,
@@ -2728,7 +2728,7 @@ VALUES (
     'We are proud to be one of the world''s top research-intensive universities, bringing together top minds from every conceivable background and discipline to collaborate on the world''s most pressing challenges.  Our community is a catalyst for discovery, innovation and progress, creating knowledge and solutions that make a tangible difference around the globe. And we prepare our students for success through an outstanding global education rooted in excellence, inclusion and close-knit learning communities.  The ideas, innovations and contributions of more than 660,000 graduates advance U of T''s impact on communities across the globe.  Together, we continue to defy gravity by taking on what might seem unattainable today and generating the ideas and talent needed to build a more equitable, sustainable and prosperous future.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:21',
-    5
+    6
   ),
   (
     221,
@@ -2806,7 +2806,7 @@ VALUES (
     'With its 28,000 enrolled students, the University of Zurich is Switzerland''s largest university. Founded in the year 1833, UZH was Europe''s first university to be established by a democratic political system. Made up of seven faculties covering some 100 different subject areas, the University offers a wide variety of Bachelor''s, Master''s and PhD programs.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:26',
-    3
+    4
   ),
   (
     227,
@@ -3092,7 +3092,7 @@ VALUES (
     'TUM has once again been named a University of Excellence and is thus the only technical university to continuously retain this status since 2006. The title is awarded as a part of the Excellence Strategy of the German federal and state governments, in strategic international support of German cutting-edge research.  We are using this funding to realize the future concept TUM Agenda 2030. We are expanding technically-oriented humanities and social sciences and are reorganizing previous internal structures to be more innovation-oriented: The constraining, discipline-based Faculty structure is being replaced by seven Schools which are linked to one another by integrative research institutes. In the sense of an "open marketplace of knowledge", we support talented individuals in all their diversity, at all levels and across substantive subject boundaries. We work in alliances with international partners to re-orient towards Europe as well as to the southern global hemisphere in order to...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:44',
-    1
+    2
   ),
   (
     249,
@@ -3261,7 +3261,7 @@ VALUES (
     'In the UMC Utrecht research is concentrated in six strategic programs with each a limited number of disease targets. Patient care is integrated in these programs. A relentless multidisciplinary approach guarantees patients benefit from the latest available expertise and innovative technological solutions.',
     '2023-08-04 22:16:49',
     '2023-08-04 22:19:36',
-    1
+    3
   ),
   (
     262,
@@ -3821,6 +3821,110 @@ Our organization leverages the unique strengths of individual researchers across
     'Since 1966, the Hinda and Arthur Marcus Institute for Aging Research has challenged conventional wisdom to better understand how we age. The questions we ask - and the answers we uncover - directly impact standards of care and help seniors live more vital, meaningful lives. The Marcus Institute is one of the largest gerontological research facilities in a clinical setting in the U.S. Our decades-long relationship with Harvard Medical School attracts expert teaching staff and outstanding research fellows. Our research portfolio increased 90% from 2010 to 2022 and ranks us in the top 10% of institutions funded by the National Institutes of Health.',
     '2023-08-08 19:59:31',
     '2023-08-08 20:00:08',
+    1
+  ),
+  (
+    305,
+    'University Hospital Zurich',
+    'USZ',
+    '',
+    'usz',
+    '',
+    'https://www.usz.ch/en/',
+    'The University Hospital Zurich (USZ) is open to all patients every day and provides fundamental medical care and cutting-edge medicine in a central location in Zurich. We use our superior academic knowledge to treat a wide range of health issues, taking a personal touch and utilizing highly specialized and up-to-date research.',
+    '2023-08-09 22:21:15',
+    '2023-08-09 22:21:34',
+    1
+  ),
+  (
+    306,
+    'Zurich University of Applied Sciences',
+    'ZHAW',
+    '',
+    'zhaw',
+    '',
+    'https://www.zhaw.ch/en/university/',
+    'The ZHAW is one of the leading universities of applied sciences in Switzerland. It offers teaching, research, continuing education and other services that are both practice-oriented and science-based.  Research & development at the ZHAW focuses on key societal challenges, with a particular emphasis on energy and societal integration. With its expertise in sustainable development and digital transformation, the ZHAW imparts forward-looking knowledge and takes an active part in shaping the digital and ecological transformation. With locations in Winterthur, Zurich and Wädenswil, the ZHAW is firmly anchored in its region whilst collaborating with international partners.',
+    '2023-08-09 22:22:32',
+    '2023-08-09 22:22:57',
+    1
+  ),
+  (
+    307,
+    'Helmholtz Munich',
+    '',
+    '',
+    'helmholtz-munich',
+    '',
+    'https://www.helmholtz-munich.de/en',
+    'We are Helmholtz Munich. We discover breakthrough solutions for better health in a rapidly changing world. Our world is constantly changing. This impacts our health. Many widespread diseases such as diabetes, allergies and lung diseases are on the rise. Climate change is causing new diseases to emerge. We develop solutions for a healthier future. Our cutting-edge research is the springboard for medical innovations. Together with our partners, we accelerate the transfer from ideas to applications, from labs to startups, from science to society.',
+    '2023-08-09 22:23:10',
+    '2023-08-09 22:24:12',
+    1
+  ),
+  (
+    308,
+    'Imperial College London',
+    '',
+    '',
+    'imperial',
+    '',
+    'https://www.imperial.ac.uk/',
+    'Imperial is a global top ten university with a world-class reputation in science, engineering, business and medicine. Together, we are Imperial.',
+    '2023-08-09 22:24:26',
+    '2023-08-09 22:25:15',
+    1
+  ),
+  (
+    309,
+    'Geneva University Hospitals',
+    'HUG',
+    '',
+    'hug',
+    '',
+    'https://www.hug.ch/',
+    'The result of a centuries-old tradition of excellence in medicine and science, the HUG was created in 1995. Bringing together the eight Geneva public hospitals and, since July 1, 2016, two clinics (Joli-Mont and Crans-Montana), they represent the leading university hospital in Switzerland. They also have 30 outpatient consultations, spread throughout the canton of Geneva.',
+    '2023-08-09 22:26:11',
+    '2023-08-09 22:26:46',
+    1
+  ),
+  (
+    310,
+    'National University Hospital',
+    'NUH',
+    '',
+    'nuh',
+    '',
+    'https://www.nuh.com.sg/Pages/Home.aspx',
+    'The National University Hospital (NUH) is Singapore’s leading university hospital. While the hospital at Kent Ridge first received its patients on 24 June 1985, our legacy started from 1905, the date of the founding of what is today the NUS Yong Loo Lin School of Medicine. NUH is the principal teaching hospital of the medical school.  Our unique identity as a university hospital is a key attraction for healthcare professionals who aspire to do more than practise tertiary medical care. We offer an environment where research and teaching are an integral part of medicine, and continue to shape medicine and transform care for the community we care for.  We are an academic medical centre with over 1,200 beds, serving more than one million patients a year with over 50 medical, surgical and dental specialties. NUH is the only public and not-for-profit hospital in Singapore to provide trusted care for adults, women and children under one roof, including the only paediatric kidney and liver...',
+    '2023-08-09 22:27:16',
+    '2023-08-09 22:28:14',
+    1
+  ),
+  (
+    311,
+    'Princess Maxima Center for Pediatric Oncology',
+    '',
+    '',
+    'princess-maxima-center',
+    '',
+    'https://www.prinsesmaximacentrum.nl/en',
+    'When a child is seriously ill with cancer, only one thing comes first: cure. That is why at the Princess Máxima Center for pediatric oncology we work together every day in a groundbreaking and passionate way to improve the survival rate and quality of life of children with cancer. Now, and in the longer term. Because children still have a whole life ahead of them. The Princess Máxima Center is not an ordinary hospital, but a research hospital. All children with cancer in the Netherlands are treated here. This makes the Princess Máxima Center the largest pediatric cancer center in Europe. Over 450 researchers and 900 healthcare professionals work closely with Dutch and international hospitals on better treatments and new perspectives on cures. In this way, we give the child of today the very best care and take important steps to improve the chances of survival for the children who are not yet cured.',
+    '2023-08-09 22:29:04',
+    '2023-08-09 22:30:33',
+    1
+  ),
+  (
+    312,
+    'CHAIMELEON Consortium',
+    '',
+    '',
+    'chaimeleon',
+    '',
+    'https://chaimeleon.eu/#partners',
+    'The interdisciplinary CHAIMELEON consortium is made up of 18 partners from 9 countries:  Fundación para la Investigación del Hospital Universitario la Fe de la Comunidad Valenciana (ES), Universita di Pisa (IT), Universita Degli Studi di Roma la Sapienza (IT), Centro Hospitalar Universitário de Santo António (PT), ICCS Policlinico San Donato (IT), College des Enseignants de Radiologie (FR), Universiteit Masstricht (NL), Charité Universitätsmedizin Berlin (DE), Imperial College London (UK), Ben-Gurion University of the Negev (IL), Universitat Politècnica de Valencia (ES), GE Healthcare (DE), Quibim (ES), Medexprim (FR), Bahia (ES), Matical Innovation (ES), European Institute of Biomedical Imaging Research (AT), Universitat de Valencia (ES). It constitutes a pan-European ecosystem of knowledge, infrastructures, biobanks and technologies on oncology, AI/in-silico and cloud computing addressed to health. The CHAIMELON project also collaborates with other European projects and initiatives.',
+    '2023-08-09 22:48:43',
+    '2023-08-09 22:51:15',
     1
   );
 
@@ -4627,4 +4731,22 @@ VALUES (1, 1, 75, 'sponsor'),
   (791, 194, 302, 'data_contributor'),
   (792, 194, 303, 'data_contributor'),
   (793, 194, 304, 'data_contributor'),
-  (794, 194, 126, 'sponsor');
+  (794, 194, 126, 'sponsor'),
+  (795, 195, 75, 'sponsor'),
+  (796, 195, 312, 'challenge_organizer'),
+  (797, 196, 12, 'sponsor'),
+  (798, 196, 226, 'challenge_organizer'),
+  (799, 196, 306, 'challenge_organizer'),
+  (800, 196, 307, 'challenge_organizer'),
+  (801, 196, 308, 'challenge_organizer'),
+  (802, 196, 248, 'challenge_organizer'),
+  (803, 196, 305, 'challenge_organizer'),
+  (804, 196, 309, 'challenge_organizer'),
+  (805, 196, 310, 'challenge_organizer'),
+  (806, 196, 220, 'challenge_organizer'),
+  (807, 196, 261, 'data_contributor'),
+  (808, 196, 311, 'data_contributor'),
+  (809, 197, 261, 'challenge_organizer'),
+  (810, 197, 261, 'data_contributor'),
+  (811, 197, 12, 'sponsor'),
+  (812, 196, 305, 'data_contributor');
