@@ -3,101 +3,101 @@
 INSERT INTO challenge_platform (id, slug, name, avatar_key, website_url)
 VALUES (
     1,
-    'other',
-    'Other',
-    '',
-    ''
-  ),
-  (
-    2,
     'synapse',
     'Synapse',
     'logo/synapse.png',
     'https://synapse.org/'
   ),
   (
-    3,
+    2,
     'cagi',
     'CAGI',
     'logo/cagi.png',
     'https://genomeinterpretation.org/challenges.html'
   ),
   (
-    4,
+    3,
     'cami',
     'CAMI',
     'logo/cami.png',
     'https://data.cami-challenge.org/'
   ),
   (
-    5,
+    4,
     'casp',
     'CASP',
     'logo/casp.png',
     'https://predictioncenter.org/'
   ),
   (
-    6,
+    5,
     'grand-challenge',
     'Grand Challenge',
     'logo/grand-challenge.png',
     'https://grand-challenge.org/'
   ),
   (
-    7,
+    6,
     'precision-fda',
     'precisionFDA',
     'logo/precisionfda.png',
     'https://precision.fda.gov/challenges'
   ),
   (
-    8,
+    7,
     'easychair',
     'EasyChair',
     'logo/easy-chair.jpg',
     'https://easychair.org/'
   ),
   (
-    9,
+    8,
     'kaggle',
     'Kaggle',
     'logo/kaggle.png',
     'https://www.kaggle.com/'
   ),
   (
-    10,
+    9,
     'codalab',
     'CodaLab',
     'logo/codalab.jpg',
     'https://codalab.lisn.upsaclay.fr/'
   ),
   (
-    11,
+    10,
     'codabench',
     'CodaBench',
     'logo/codalab.jpg',
     'https://www.codabench.org/'
   ),
   (
-    12,
+    11,
     'openml',
     'OpenML',
     'logo/openml.jpg',
     'https://www.openml.org/'
   ),
   (
-    13,
+    12,
     'papers-with-code',
     'PapersWithCode',
     'logo/papers-with-code.jpg',
     'https://paperswithcode.com/'
   ),
   (
-    14,
+    13,
     'eterna',
     'Eterna',
     '',
     'https://eternagame.org/'
+  ),
+  (
+    0,
+    'other',
+    'Other',
+    '',
+    ''
   );
 
 -- challenge_input_data_type
