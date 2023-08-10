@@ -35,7 +35,7 @@ CREATE TABLE `challenge`
     `description`           varchar(1000) NOT NULL,
     `avatar_url`            varchar(255),
     `website_url`           varchar(255) NOT NULL,
-    `status`                ENUM('upcoming', 'active', 'completed'),
+    `status`                ENUM('upcoming', 'active', 'completed', ''),
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
     `doi`                   varchar(80),
