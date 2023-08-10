@@ -93,7 +93,7 @@ VALUES (
     'https://eternagame.org/'
   ),
   (
-    0,
+    14,
     'other',
     'Other',
     '',
@@ -3275,7 +3275,7 @@ VALUES (
     'https://crown.isi.uu.nl/',
     'active',
     'intermediate',
-    '0',
+    '14',
     '',
     '2023-05-01',
     '2023-08-15',
