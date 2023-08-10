@@ -76,7 +76,7 @@ VALUES (
     'A secure, collaborative, high-performance computing platform that builds a community of experts around the analysis of biological datasets in order to advance precision medicine.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:25',
-    16
+    17
   ),
   (
     15,
@@ -336,7 +336,7 @@ VALUES (
     'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Booz Allen partners with public and private sector clients to solve their most difficult challenges through a combination of consulting, analytics, mission operations, technology, systems delivery, cybersecurity, engineering, and innovation expertise. \n\nWith international headquarters in McLean, Virginia, the firm employs more than 22,600 people globally and had revenue of $5.41 billion for the 12 months ended March 31, 2016.\n\nBooz Allen brings its pioneering work in advanced analytics—and the industry-leading expertise of its more than 600-member data science team—to transform our clients'' data into actions that keep them competitive in today''s data-driven economy. To learn about Booz Allen''s data science ...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:45',
-    11
+    12
   ),
   (
     35,
@@ -1649,7 +1649,7 @@ VALUES (
     'The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce. NIST is one of the nation''s oldest physical science laboratories. Congress established the agency to remove a major challenge to U.S. industrial competitiveness at the time — a second-rate measurement infrastructure that lagged behind the capabilities of the United Kingdom, Germany and other economic rivals. From the smart electric power grid and electronic health records to atomic clocks, advanced nanomaterials and computer chips, innumerable products and services rely in some way on technology, measurement and standards provided by the National Institute of Standards and Technology.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:08',
-    2
+    3
   ),
   (
     137,
@@ -2871,7 +2871,7 @@ VALUES (
     'VHA Innovation Ecosystem (VHA IE) is the catalyst for enabling the discovery and spread of mission-driven health care innovation that exceeds expectations, restores hope, and builds trust within the Veteran community. VHA IE leverages the collective power of innovation champions from across VA, academia, non-profit and industry to operationalize innovation in the Nation''s largest integrated health care system.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:31',
-    2
+    3
   ),
   (
     232,
@@ -3011,7 +3011,7 @@ VALUES (
     'yale',
     'logo/yale.jpg',
     'https://www.yale.edu/',
-    'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale''s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city''s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
+    'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale’s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city’s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:40',
     1
@@ -3096,7 +3096,7 @@ VALUES (
   ),
   (
     249,
-    'Center for Devices and Radiological Health',
+    'FDA Center for Devices and Radiological Health',
     'CDRH',
     '',
     'cdrh',
@@ -3104,8 +3104,8 @@ VALUES (
     'https://www.fda.gov/about-fda/fda-organization/center-devices-and-radiological-health',
     'In keeping with our mission, the Center for Devices and Radiological Health (CDRH) is responsible for protecting and promoting the public health.  We assure that patients and providers have timely and continued access to safe, effective, and high-quality medical devices and safe radiation-emitting products.  We provide consumers, patients, their caregivers, and providers with understandable and accessible science-based information about the products we oversee.  We facilitate medical device innovation by advancing regulatory science, providing industry with predictable, consistent, transparent, and efficient regulatory pathways, and assuring consumer confidence in devices marketed in the U.S.  We seek to continually improve our effectiveness in fulfilling our mission by planning strategically and regularly monitoring our progress.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:44',
-    1
+    '2023-08-10 21:36:27',
+    2
   ),
   (
     250,
@@ -3128,7 +3128,7 @@ VALUES (
     'nkdc',
     'logo/nkdc.jpeg',
     'https://www.nhdic.ng/facility/nkdc/',
-    'The NKDC medical diagnostics facility opened its doors to the public on the 16th of March, 2020, in Kano - Northern Nigeria''s commercial centre. This state-of-the-art facility is home to a group of enthusiastic, passionate and patient-centric medical professionals who continuously aim to improve patient experiences. We offer 24/7 radiology and medical laboratory services all year round.',
+    'The NKDC medical diagnostics facility opened its doors to the public on the 16th of March, 2020, in Kano - Northern Nigeria’s commercial centre. This state-of-the-art facility is home to a group of enthusiastic, passionate and patient-centric medical professionals who continuously aim to improve patient experiences. We offer 24/7 radiology and medical laboratory services all year round.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:45',
     1
@@ -3141,7 +3141,7 @@ VALUES (
     'nationwide-childrens',
     'logo/nationwide-childrens.jpg',
     'https://www.nationwidechildrens.org/',
-    'At Nationwide Children''s Hospital, our vision remains unchanged. We aspire to create the best outcomes for children everywhere. This means families come to Nationwide Children''s from around the globe knowing they will get the highest quality care. It means we will reach to cure rare diseases. It means we will sequence a child''s tumor to select the best care pathway. It means we will strive to make an entire population healthier, not just through their physical health, but also in their mental health. It means we will redefine the role of the children''s hospital in the achievement of optimal health.',
+    'At Nationwide Children’s Hospital, our vision remains unchanged. We aspire to create the best outcomes for children everywhere. This means families come to Nationwide Children’s from around the globe knowing they will get the highest quality care. It means we will reach to cure rare diseases. It means we will sequence a child’s tumor to select the best care pathway. It means we will strive to make an entire population healthier, not just through their physical health, but also in their mental health. It means we will redefine the role of the children’s hospital in the achievement of optimal health.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:46',
     1
@@ -3154,7 +3154,7 @@ VALUES (
     'dana-farber-brigham-cancer-center',
     'logo/bwh.png',
     'https://www.brighamandwomens.org/cancer',
-    'At Dana-Farber Brigham Cancer Center, all we do is cancer. Because no two people are the same, our approach to treatment and care is personalized – with a deep understanding of your cancer and how to get you well.  Through our 12 specialized disease treatment centers, experts from our two organizations, Dana-Farber Cancer Institute and Brigham and Women''s Hospital, work together as one team to offer the most advanced treatments with compassion and care that makes all the difference.',
+    'At Dana-Farber Brigham Cancer Center, all we do is cancer. Because no two people are the same, our approach to treatment and care is personalized – with a deep understanding of your cancer and how to get you well.  Through our 12 specialized disease treatment centers, experts from our two organizations, Dana-Farber Cancer Institute and Brigham and Women’s Hospital, work together as one team to offer the most advanced treatments with compassion and care that makes all the difference.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:46',
     1
@@ -3167,7 +3167,7 @@ VALUES (
     'lacunda-fund',
     'logo/lacuna-fund.jpg',
     'https://lacunafund.org/',
-    'Lacuna Fund is the world''s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
+    'Lacuna Fund is the world’s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
     '2023-06-23 00:00:00',
     '2023-08-04 22:03:25',
     1
@@ -3193,7 +3193,7 @@ VALUES (
     'hms',
     'logo/hms.jpg',
     'https://hms.harvard.edu/',
-    'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They''ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
+    'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They’ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
     '2023-08-04 06:00:47',
     '2023-08-04 23:38:09',
     1
@@ -3375,7 +3375,7 @@ VALUES (
     'kch',
     '',
     'https://www.kch.nhs.uk/',
-    'We are one of London''s largest and busiest teaching hospitals. We provide a strong profile of local hospital services for people living in the boroughs of Lambeth, Southwark, Lewisham, and Bromley. Our specialist services are also available to patients from a wider area. We providing nationally and internationally recognised treatment and care in liver disease and transplantation, neurosciences, haemato-oncology, and fetal medicine. Our vision is to be bold, and our new Trust values – Kind, Respectful Team – help ensure we bring a positive attitude to the way we interact with patients, relatives, and the many people who use our services.',
+    'We are one of London’s largest and busiest teaching hospitals. We provide a strong profile of local hospital services for people living in the boroughs of Lambeth, Southwark, Lewisham, and Bromley. Our specialist services are also available to patients from a wider area. We providing nationally and internationally recognised treatment and care in liver disease and transplantation, neurosciences, haemato-oncology, and fetal medicine. Our vision is to be bold, and our new Trust values – Kind, Respectful Team – help ensure we bring a positive attitude to the way we interact with patients, relatives, and the many people who use our services.',
     '2023-08-05 00:08:37',
     '2023-08-05 00:09:46',
     2
@@ -3401,7 +3401,7 @@ VALUES (
     'robarts',
     '',
     'https://www.robarts.ca/',
-    'Opened in 1986, Robarts Research Institute at Western University is a medical research facility in London, Ontario, with more than 600 people working to investigate some of the most debilitating diseases of our time, from heart disease and stroke to diabetes, Alzheimer''s and many forms of cancer. We believe we''ve got a winning formula to accelerate medical discovery: attract the brightest and best people, give them the freedom to think big and set the bar high. From our roots under the scientific leadership of renowned neurologist Dr. Henry Barnett - whose work with Aspirin as a preventive therapy for heart attack and stroke remains one of the most important developments in 20th century medicine - the Institute has applied that formula to become a national leader in biological, clinical and imaging research.',
+    'Opened in 1986, Robarts Research Institute at Western University is a medical research facility in London, Ontario, with more than 600 people working to investigate some of the most debilitating diseases of our time, from heart disease and stroke to diabetes, Alzheimer’s and many forms of cancer. We believe we’ve got a winning formula to accelerate medical discovery: attract the brightest and best people, give them the freedom to think big and set the bar high. From our roots under the scientific leadership of renowned neurologist Dr. Henry Barnett - whose work with Aspirin as a preventive therapy for heart attack and stroke remains one of the most important developments in 20th century medicine - the Institute has applied that formula to become a national leader in biological, clinical and imaging research.',
     '2023-08-05 00:12:27',
     '2023-08-05 00:13:00',
     1
@@ -3414,7 +3414,7 @@ VALUES (
     'bana-uk',
     '',
     'https://www.bana-uk.com/',
-    'BANA was formed in 1992 by a group of patients and their partners.  They were introduced to each other by ENT and Neurosurgeon Consultants from the Queen''s Medical Centre Hospital in Nottingham and from the very beginning, mutual support was their primary aim.  They also wanted to provide reliable information to those diagnosed and to promote research into Acoustic Neuromas and the effects associated with them. More than two decades on, these fledgling intentions remain the charitable objectives that drive the charity forward on behalf of all those affected.',
+    'BANA was formed in 1992 by a group of patients and their partners.  They were introduced to each other by ENT and Neurosurgeon Consultants from the Queen’s Medical Centre Hospital in Nottingham and from the very beginning, mutual support was their primary aim.  They also wanted to provide reliable information to those diagnosed and to promote research into Acoustic Neuromas and the effects associated with them. More than two decades on, these fledgling intentions remain the charitable objectives that drive the charity forward on behalf of all those affected.',
     '2023-08-05 00:15:03',
     '2023-08-05 00:16:46',
     1
@@ -3492,7 +3492,7 @@ VALUES (
     'amp-pd',
     '',
     'https://www.amp-pd.org/',
-    'The Accelerating Medicines Partnership(R) (AMP(R)) program is a public-private partnership between the National Institutes of Health (NIH), multiple biopharmaceutical and life sciences companies, and non-profit organizations. Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer''s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson''s disease. Additional disease areas are being evaluated for addition to AMP.',
+    'The Accelerating Medicines Partnership(R) (AMP(R)) program is a public-private partnership between the National Institutes of Health (NIH), multiple biopharmaceutical and life sciences companies, and non-profit organizations. Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer’s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson’s disease. Additional disease areas are being evaluated for addition to AMP.',
     '2023-08-05 05:39:55',
     '2023-08-05 05:42:53',
     1
@@ -3505,7 +3505,7 @@ VALUES (
     'vanderbilt',
     '',
     'https://www.vanderbilt.edu/',
-    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what''s possible and working diligently in the service of others. Vanderbilt''s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
+    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what’s possible and working diligently in the service of others. Vanderbilt’s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
     '2023-08-07 20:28:32',
     '2023-08-07 20:29:06',
     1
@@ -3544,7 +3544,7 @@ VALUES (
     'iu',
     '',
     'https://www.iu.edu/index.html',
-    'IU is home to top-ranked business and music schools. We''re home to the world''s first school of philanthropy, the nation''s first school of informatics, and the country''s largest medical school. Our hundreds of academic programs are among the world''s best, and we''re always looking toward the horizon, thinking about what''s next. To better prepare our students for the careers of tomorrow, we''ve launched or reconfigured 10 schools in the last decade, and we''re constantly adding new academic programs, like IU Bloomington''s Intelligent Systems Engineering program and IU Online''s 100% virtual Master of Science in Educational Technology for Learning.',
+    'IU is home to top-ranked business and music schools. We’re home to the world’s first school of philanthropy, the nation’s first school of informatics, and the country’s largest medical school. Our hundreds of academic programs are among the world’s best, and we’re always looking toward the horizon, thinking about what’s next. To better prepare our students for the careers of tomorrow, we’ve launched or reconfigured 10 schools in the last decade, and we’re constantly adding new academic programs, like IU Bloomington’s Intelligent Systems Engineering program and IU Online’s 100% virtual Master of Science in Educational Technology for Learning.',
     '2023-08-08 17:26:11',
     '2023-08-08 17:28:12',
     2
@@ -3584,7 +3584,7 @@ Our organization leverages the unique strengths of individual researchers across
     'google',
     '',
     'https://about.google/',
-    'Our mission is to organize the world''s information and make it universally accessible and useful.',
+    'Our mission is to organize the world’s information and make it universally accessible and useful.',
     '2023-08-08 17:29:33',
     '2023-08-08 17:30:47',
     2
@@ -3597,7 +3597,7 @@ Our organization leverages the unique strengths of individual researchers across
     'precision-value-health',
     '',
     'https://www.precisionvaluehealth.com/',
-    'Across the commercialization continuum, Precision Value & Health teams are focused on transforming data for health and leveraging evidence and insights to tailor communications for every stakeholder. From payers to health systems, scientists to healthcare providers, and consumers to advocates, our results are designed to shift the trajectory and accelerate your success. Precision Value & Health''s teams include PRECISIONadvisors (global pricing and market access strategy), PRECISIONeffect (branding and launch experts), PRECISIONheor (evidence generation and strategy), PRECISIONscientia (medical communications), PRECISIONvalue (managed markets marketing), and PRECISIONxtract (data-driven solutions and engagement).',
+    'Across the commercialization continuum, Precision Value & Health teams are focused on transforming data for health and leveraging evidence and insights to tailor communications for every stakeholder. From payers to health systems, scientists to healthcare providers, and consumers to advocates, our results are designed to shift the trajectory and accelerate your success. Precision Value & Health’s teams include PRECISIONadvisors (global pricing and market access strategy), PRECISIONeffect (branding and launch experts), PRECISIONheor (evidence generation and strategy), PRECISIONscientia (medical communications), PRECISIONvalue (managed markets marketing), and PRECISIONxtract (data-driven solutions and engagement).',
     '2023-08-08 17:37:16',
     '2023-08-08 17:40:34',
     1
@@ -3688,7 +3688,7 @@ Our organization leverages the unique strengths of individual researchers across
     'c-gem',
     '',
     'https://gem-net.net/',
-    'C-GEM is establishing a fundamentally new way to program chemical matter and transform the way scientists design and produce materials and medicines. Using computation and experiment, C-GEM is repurposing nature''s protein synthesizing machine–the ribosome and its associated translation factors–to biosynthesize genetically encoded, sequence-defined chemical polymers with unprecedented functions and activities. Our combined activities span the fields of chemical biology, synthetic biology, synthetic chemistry, structural biology, computational biology, and molecular biology, and are highly collaborative. To catalyze these efforts, C-GEM implemented GEM-NET, a sophisticated data management system to promote data sharing within and outside the team, and with industry, the NSF, and the public. By fostering innovation at the chemical-biology-materials frontier, C-GEM is establishing a diverse chemical workforce, perfecting the integration of research with training, and captivating scient...',
+    'C-GEM is establishing a fundamentally new way to program chemical matter and transform the way scientists design and produce materials and medicines. Using computation and experiment, C-GEM is repurposing nature’s protein synthesizing machine–the ribosome and its associated translation factors–to biosynthesize genetically encoded, sequence-defined chemical polymers with unprecedented functions and activities. Our combined activities span the fields of chemical biology, synthetic biology, synthetic chemistry, structural biology, computational biology, and molecular biology, and are highly collaborative. To catalyze these efforts, C-GEM implemented GEM-NET, a sophisticated data management system to promote data sharing within and outside the team, and with industry, the NSF, and the public. By fostering innovation at the chemical-biology-materials frontier, C-GEM is establishing a diverse chemical workforce, perfecting the integration of research with training, and captivating scient...',
     '2023-08-08 19:14:43',
     '2023-08-08 19:38:06',
     1
@@ -3701,7 +3701,7 @@ Our organization leverages the unique strengths of individual researchers across
     'oregon-state',
     '',
     'https://oregonstate.edu/',
-    'Oregon State University is a dynamic community of dreamers, doers, problem-solvers and change-makers. We don''t wait for challenges to present themselves — we seek them out and take them on. We welcome students, faculty and staff from every background and perspective into a community where everyone feels seen and heard. We have deep-rooted mindfulness for the natural world and all who depend on it, and together, we apply knowledge, tools and skills to build a better future for all.',
+    'Oregon State University is a dynamic community of dreamers, doers, problem-solvers and change-makers. We don’t wait for challenges to present themselves — we seek them out and take them on. We welcome students, faculty and staff from every background and perspective into a community where everyone feels seen and heard. We have deep-rooted mindfulness for the natural world and all who depend on it, and together, we apply knowledge, tools and skills to build a better future for all.',
     '2023-08-08 19:23:28',
     '2023-08-08 19:37:53',
     1
@@ -3727,7 +3727,7 @@ Our organization leverages the unique strengths of individual researchers across
     'nih-lincs-program',
     '',
     'https://lincsproject.org/LINCS/',
-    'The LINCS project is based on the premise that disrupting any one of the many steps of a given biological process will cause related changes in the molecular and cellular characteristics, behavior, and/or function of the cell – the observable composite of which is known as the cellular phenotype. Observing how and when a cell''s phenotype is altered by specific stressors can provide clues about the underlying mechanisms involved in perturbation and, ultimately, disease.',
+    'The LINCS project is based on the premise that disrupting any one of the many steps of a given biological process will cause related changes in the molecular and cellular characteristics, behavior, and/or function of the cell – the observable composite of which is known as the cellular phenotype. Observing how and when a cell’s phenotype is altered by specific stressors can provide clues about the underlying mechanisms involved in perturbation and, ultimately, disease.',
     '2023-08-08 19:25:32',
     '2023-08-08 19:37:57',
     1
@@ -3740,7 +3740,7 @@ Our organization leverages the unique strengths of individual researchers across
     'recursion',
     '',
     'https://www.recursion.com/',
-    'From our earliest days, our story was unlikely. We are a company started by two graduate students and a professor, headquartered in Salt Lake City, Utah. Our humble and unlikely beginnings are foundational to what we''ve built today.  We were underdogs, and felt that way.  Now we are leaders in this space, and we vow to stay hungry and focused on our mission. We are a biotechnology company scaling more like a technology company, and we are just getting started.',
+    'From our earliest days, our story was unlikely. We are a company started by two graduate students and a professor, headquartered in Salt Lake City, Utah. Our humble and unlikely beginnings are foundational to what we’ve built today.  We were underdogs, and felt that way.  Now we are leaders in this space, and we vow to stay hungry and focused on our mission. We are a biotechnology company scaling more like a technology company, and we are just getting started.',
     '2023-08-08 19:41:20',
     '2023-08-08 19:42:43',
     1
@@ -3753,7 +3753,7 @@ Our organization leverages the unique strengths of individual researchers across
     'google-cloud',
     '',
     'https://cloud.google.com/?hl=en',
-    'Google Cloud is widely recognized as a global leader in delivering a secure, open and intelligent enterprise cloud platform. Our technology is built on Google''s private network and is the product of nearly 20 years of innovation in security, network architecture, collaboration, artificial intelligence and open source software. We offer a simply engineered set of tools and unparalleled technology across Google Cloud Platform and G Suite that help bring people, insights and ideas together. Customers across more than 150 countries trust Google Cloud to modernize their computing environment for today''s digital world.',
+    'Google Cloud is widely recognized as a global leader in delivering a secure, open and intelligent enterprise cloud platform. Our technology is built on Google’s private network and is the product of nearly 20 years of innovation in security, network architecture, collaboration, artificial intelligence and open source software. We offer a simply engineered set of tools and unparalleled technology across Google Cloud Platform and G Suite that help bring people, insights and ideas together. Customers across more than 150 countries trust Google Cloud to modernize their computing environment for today’s digital world.',
     '2023-08-08 19:43:02',
     '2023-08-08 19:44:33',
     1
@@ -3766,7 +3766,7 @@ Our organization leverages the unique strengths of individual researchers across
     'doit',
     '',
     'https://www.doit.com/',
-    'You have the cloud and we have your back. For nearly a decade, we''ve been helping businesses build and scale cloud solutions with our world-class cloud engineering support. We help our customers with technical support and consulting on building and operating complex large-scale distributed systems, developing better machine learning models and setting up big data solutions using Google Cloud, Amazon AWS and Microsoft Azure.',
+    'You have the cloud and we have your back. For nearly a decade, we’ve been helping businesses build and scale cloud solutions with our world-class cloud engineering support. We help our customers with technical support and consulting on building and operating complex large-scale distributed systems, developing better machine learning models and setting up big data solutions using Google Cloud, Amazon AWS and Microsoft Azure.',
     '2023-08-08 19:43:17',
     '2023-08-08 19:44:51',
     1
@@ -3925,6 +3925,84 @@ Our organization leverages the unique strengths of individual researchers across
     'The interdisciplinary CHAIMELEON consortium is made up of 18 partners from 9 countries:  Fundación para la Investigación del Hospital Universitario la Fe de la Comunidad Valenciana (ES), Universita di Pisa (IT), Universita Degli Studi di Roma la Sapienza (IT), Centro Hospitalar Universitário de Santo António (PT), ICCS Policlinico San Donato (IT), College des Enseignants de Radiologie (FR), Universiteit Masstricht (NL), Charité Universitätsmedizin Berlin (DE), Imperial College London (UK), Ben-Gurion University of the Negev (IL), Universitat Politècnica de Valencia (ES), GE Healthcare (DE), Quibim (ES), Medexprim (FR), Bahia (ES), Matical Innovation (ES), European Institute of Biomedical Imaging Research (AT), Universitat de Valencia (ES). It constitutes a pan-European ecosystem of knowledge, infrastructures, biobanks and technologies on oncology, AI/in-silico and cloud computing addressed to health. The CHAIMELON project also collaborates with other European projects and initiatives.',
     '2023-08-09 22:48:43',
     '2023-08-09 22:51:15',
+    1
+  ),
+  (
+    313,
+    'FDA Office of Digital Transformation',
+    'ODT',
+    '',
+    'odt',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-commissioner/office-digital-transformation',
+    'The Office of Digital Transformation (ODT) provides the vision and leadership in information technology (IT), data, and cybersecurity needed to advance FDA’s mission and strategic priorities. ODT is led by the Chief Information Officer and reports to the FDA Commissioner. ODT directs and coordinates enterprise strategic planning, policy, and resource management to ensure that Agency IT, data, and cybersecurity investments and activities provide maximum value to FDA. ODT is comprised of the Office of Information Management and Technology (OIMT), Office of Data, Analytics, and Research (ODAR), and the Office of Information Security (OIS), under the direction of the Chief Technology Officer (CTO), Chief Data Officer (CDO), and Chief Information Security Officer (CISO).   ODT is committed to delivering trusted technology and data solutions that enable FDA to reimagine the possible. Watch this video to learn more about our organization and how we are striving to make an impact at FDA. ',
+    '2023-08-10 21:37:33',
+    '2023-08-10 21:39:34',
+    2
+  ),
+  (
+    314,
+    'FDA Office of Minority Health and Health Equity',
+    'OMHHE',
+    '',
+    'omhhe',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-commissioner/office-minority-health-and-health-equity',
+    'The FDA Office of Minority Health and Health Equity (OMHHE) serves to promote and protect the health of diverse populations through research and communication of science that addresses health disparities.',
+    '2023-08-10 21:37:42',
+    '2023-08-10 21:40:30',
+    1
+  ),
+  (
+    315,
+    'FDA Office of Data, Analytics, and Research',
+    'ODAR',
+    '',
+    'odar',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-digital-transformation/office-data-analytics-and-research-odar',
+    'The Office of Data, Analytics, and Research (ODAR) manages and improves FDA’s ability to leverage data as a strategic asset by establishing enterprise data strategy and priorities. ',
+    '2023-08-10 21:37:44',
+    '2023-08-10 21:38:28',
+    2
+  ),
+  (
+    316,
+    'Medicines and Healthcare products Regulatory Agency',
+    'MHRA',
+    '',
+    'mhra',
+    '',
+    'https://www.gov.uk/government/organisations/medicines-and-healthcare-products-regulatory-agency',
+    'We are the regulator of medicines, medical devices and blood components for transfusion in the UK. We put patients first in everything we do, right across the lifecycle of the products we regulate. We rigorously use science and data to inform our decisions, enable medical innovation and to make sure that medicines and healthcare products available in the UK are safe and effective.',
+    '2023-08-10 22:10:11',
+    '2023-08-10 22:11:14',
+    1
+  ),
+  (
+    317,
+    'MDClone',
+    '',
+    '',
+    'mdclone',
+    '',
+    'https://www.mdclone.com/',
+    'MDClone is a technology firm focused on unlocking healthcare data and empowering exploration, discovery, and collaboration to improve patients'' health.  At MDClone, we are a growing startup with big aspirations. We are determined to make an impact on healthcare worldwide with tools, processes, and services focused on turning data into better outcomes. MDClone is focused on empowering healthcare institutions, enabling stronger and more secure relationships between healthcare providers and life science companies, and developing regional and global collaboration with privacy-enabled shared data sets.  ',
+    '2023-08-10 22:11:58',
+    '2023-08-10 22:12:33',
+    1
+  ),
+  (
+    318,
+    'Washington Business Dynamics',
+    'WBD',
+    '',
+    'wbd',
+    '',
+    'https://www.wbdynamics.com/',
+    'Since our founding, WBD has sought to be a management consulting provider of choice for the federal government and the private sector. We are privileged to count many of the world’s foremost institutions and organizations among our client list. We partnered with these organizations’ senior leaders and immediately began uncovering value. Our staff brings a superior analytic capability, time-tested best practices, and a logical approach to solve problems and position organizations for future success.',
+    '2023-08-10 22:12:50',
+    '2023-08-10 22:13:23',
     1
   );
 
@@ -4749,4 +4827,17 @@ VALUES (1, 1, 75, 'sponsor'),
   (809, 197, 261, 'challenge_organizer'),
   (810, 197, 261, 'data_contributor'),
   (811, 197, 12, 'sponsor'),
-  (812, 196, 305, 'data_contributor');
+  (812, 196, 305, 'data_contributor'),
+  (813, 198, 13, 'challenge_organizer'),
+  (814, 198, 313, 'challenge_organizer'),
+  (815, 198, 314, 'challenge_organizer'),
+  (816, 198, 315, 'challenge_organizer'),
+  (817, 199, 231, 'challenge_organizer'),
+  (818, 199, 249, 'challenge_organizer'),
+  (819, 199, 313, 'challenge_organizer'),
+  (820, 199, 315, 'challenge_organizer'),
+  (821, 199, 136, 'challenge_organizer'),
+  (822, 199, 316, 'challenge_organizer'),
+  (823, 199, 34, 'challenge_organizer'),
+  (824, 199, 317, 'challenge_organizer'),
+  (825, 199, 318, 'challenge_organizer');
