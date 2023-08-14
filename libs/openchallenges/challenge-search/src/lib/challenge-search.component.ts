@@ -78,6 +78,7 @@ export class ChallengeSearchComponent
   implements OnInit, AfterContentInit, OnDestroy
 {
   public appVersion: string;
+  public dataUpdatedOn: string;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -118,7 +119,7 @@ export class ChallengeSearchComponent
 
   // set default values
   defaultSelectedYear = undefined;
-  defaultSortedBy = 'relevance';
+  defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
 
@@ -158,6 +159,7 @@ export class ChallengeSearchComponent
     private _snackBar: MatSnackBar
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {
@@ -202,14 +204,14 @@ export class ChallengeSearchComponent
       );
 
       this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'];
-      this.selectedPageSize = +params['pageSize'];
-      this.sortedBy = params['sort'];
+      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
+      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: ChallengeSearchQuery = {
-        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
-        pageSize: this.selectedPageSize || this.defaultPageSize,
-        sort: this.sortedBy || this.defaultSortedBy,
+        pageNumber: this.selectedPageNumber,
+        pageSize: this.selectedPageSize,
+        sort: this.sortedBy,
         searchTerms: this.searchedTerms,
         minStartDate: this.selectedMinStartDate,
         maxStartDate: this.selectedMaxStartDate,
@@ -319,7 +321,7 @@ export class ChallengeSearchComponent
             avatarUrls: forkJoinConcurrent(
               orgs.map((org) => this.getOrganizationAvatarUrl(org)),
               Infinity
-            ) as unknown as Observable<(Image | undefined)[]>,
+            ),
           })
         )
       )
@@ -537,17 +539,20 @@ export class ChallengeSearchComponent
     });
   }
 
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._32px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of the image service.'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 }

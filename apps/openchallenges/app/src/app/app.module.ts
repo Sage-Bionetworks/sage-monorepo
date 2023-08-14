@@ -57,6 +57,7 @@ import {
       useFactory: (configService: ConfigService) => configService.config.apiUrl,
       deps: [ConfigService],
     },
+    { provide: 'googleTagManagerId', useValue: 'GTM-NBR5XD8C' },
   ],
   bootstrap: [AppComponent],
 })

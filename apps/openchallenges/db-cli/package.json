@@ -1,6 +1,0 @@
-{
-  "name": "@sagebionetworks/openchallenges-db-cli",
-  "version": "0.0.1",
-  "type": "commonjs",
-  "description": "CLI for managing OpenChallenges DB instances."
-}

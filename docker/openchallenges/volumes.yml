@@ -7,8 +7,5 @@ volumes:
   openchallenges-grafana-data:
     name: openchallenges-grafana-data
 
-  openchallenges-minio-data:
-    name: openchallenges-minio-data
-
   openchallenges-thumbor-data:
     name: openchallenges-thumbor-data

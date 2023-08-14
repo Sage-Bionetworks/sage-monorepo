@@ -39,7 +39,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATION_CARDS[0].name,
       src: MOCK_ORGANIZATION_CARDS[0].avatarUrl,
-      size: 140,
+      size: 160,
     });
   });
 
@@ -49,7 +49,7 @@ describe('OrganizationCardComponent', () => {
     expect(component.organizationAvatar).toEqual({
       name: MOCK_ORGANIZATION_CARDS[0].name,
       src: undefined,
-      size: 140,
+      size: 160,
     });
   });
 
@@ -59,7 +59,7 @@ describe('OrganizationCardComponent', () => {
   //   expect(component.organizationAvatar).toEqual({
   //     name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
   //     src: '',
-  //     size: 140,
+  //     size: 160,
   //   });
   // });
 });

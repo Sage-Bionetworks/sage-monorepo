@@ -38,21 +38,21 @@ export const challengeSubmissionTypesFilter: Filter = {
   query: 'submissionTypes',
   label: 'Submission Type',
   values: challengeSubmissionTypesFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 export const challengeIncentivesFilter: Filter = {
   query: 'incentives',
   label: 'Incentive Type',
   values: challengeIncentivesFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 export const challengePlatformsFilter: Filter = {
   query: 'platforms',
   label: 'Platform',
   values: challengePlatformsFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 // dropdown filters
@@ -68,14 +68,14 @@ export const challengeCategoriesFilter: Filter = {
   query: 'categories',
   label: 'Category',
   values: challengeCategoriesFilterValues,
-  collapsed: true,
+  collapsed: false,
 };
 
 export const challengeOrganizationsFilter: Filter = {
   query: 'organizations',
   label: 'Organization',
   values: challengeOrganizationsFilterValues,
-  collapsed: true,
+  collapsed: false,
   showAvatar: true,
 };
 
@@ -83,6 +83,6 @@ export const challengeOrganizatersFilter: Filter = {
   query: 'organizers',
   label: 'Organizer',
   values: challengeOrganizersFilterValues,
-  collapsed: true,
+  collapsed: false,
   showAvatar: true,
 };

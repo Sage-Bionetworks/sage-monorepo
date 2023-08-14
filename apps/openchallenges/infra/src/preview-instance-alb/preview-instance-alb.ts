@@ -63,7 +63,7 @@ export class PreviewInstanceAlb extends Construct {
         port: 443,
         protocol: 'HTTPS',
         certificateArn:
-          'arn:aws:acm:us-east-1:384625883722:certificate/b1c70716-8f19-4d06-9737-1dd34f56afc4',
+          'arn:aws:acm:us-east-1:384625883722:certificate/c1d8b793-66d1-41eb-bddf-3cfedbad6a72',
 
         defaultAction: [
           {
