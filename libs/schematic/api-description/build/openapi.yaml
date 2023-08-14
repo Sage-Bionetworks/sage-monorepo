@@ -114,6 +114,33 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all storage projects the current user has access to.
+      description: Gets all storage projects the current user has access to.
+      operationId: listProjects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -335,6 +362,39 @@ components:
                 $ref: '#/components/schemas/ValidationRule'
           required:
             - validation_rules
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    Project:
+      type: object
+      description: A project.
+      properties:
+        name:
+          type: string
+          description: The name of the project.
+          example: Example project
+        id:
+          type: string
+          description: The ID of the project.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ProjectsPage:
+      type: object
+      description: A page of projects.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            projects:
+              description: A list of projects.
+              type: array
+              items:
+                $ref: '#/components/schemas/Project'
+          required:
+            - projects
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:

@@ -71,13 +71,13 @@ export const routes: Routes = [
         (m) => m.ChallengeModule
       ),
   },
-  {
-    path: 'user/:userLogin',
-    loadChildren: () =>
-      import('@sagebionetworks/openchallenges/user-profile').then(
-        (m) => m.UserProfileModule
-      ),
-  },
+  // {
+  //   path: 'user/:userLogin',
+  //   loadChildren: () =>
+  //     import('@sagebionetworks/openchallenges/user-profile').then(
+  //       (m) => m.UserProfileModule
+  //     ),
+  // },
   {
     path: '**',
     redirectTo: '/not-found',

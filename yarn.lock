@@ -9211,6 +9211,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"angular-google-tag-manager@npm:1.8.0":
+  version: 1.8.0
+  resolution: "angular-google-tag-manager@npm:1.8.0"
+  dependencies:
+    tslib: ^2.5.0
+  peerDependencies:
+    "@angular/common": ^16.0.0
+    "@angular/compiler": ^16.0.0
+  checksum: d9247ce6ab0f7683a78b835a822cc0b122e4a8de15074d2aadb1e85a0ebcf3c8cbb47d744900db55ee2ae3d5ff706e5ea7cdfd1c355b4a12079f265d22211b0a
+  languageName: node
+  linkType: hard
+
 "ansi-align@npm:^3.0.0":
   version: 3.0.1
   resolution: "ansi-align@npm:3.0.1"
@@ -23857,6 +23869,7 @@ __metadata:
     "@types/validator": 13.7.10
     "@typescript-eslint/eslint-plugin": 5.62.0
     "@typescript-eslint/parser": 5.62.0
+    angular-google-tag-manager: 1.8.0
     babel-jest: 29.4.3
     canvas: 2.10.2
     cdktf: 0.16.1

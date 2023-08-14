@@ -36,3 +36,6 @@ paths:
 
   /components/{componentDisplay}/validationRules:
     $ref: paths/components/@{componentDisplay}/validationRules.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml

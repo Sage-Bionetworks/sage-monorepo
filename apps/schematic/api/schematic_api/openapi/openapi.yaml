@@ -18,6 +18,71 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    get:
+      description: Gets all storage projects the current user has access to.
+      operationId: list_projects
+      parameters:
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets all storage projects the current user has access to.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     get:
       description: Gets all datasets in folder under a given storage project that
@@ -544,6 +609,35 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    Project:
+      description: A project.
+      properties:
+        name:
+          description: The name of the project.
+          example: Example project
+          title: name
+          type: string
+        id:
+          description: The ID of the project.
+          example: Syn1
+          title: id
+          type: string
+      required:
+      - id
+      - name
+      title: Project
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    ProjectsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ProjectsPage_allOf'
+      description: A page of projects.
+      title: ProjectsPage
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     DatasetsPage_allOf:
       properties:
         datasets:
@@ -594,6 +688,19 @@ components:
       required:
       - validation_rules
       title: ValidationRulesPage_allOf
+      type: object
+      example: null
+    ProjectsPage_allOf:
+      properties:
+        projects:
+          description: A list of projects.
+          items:
+            $ref: '#/components/schemas/Project'
+          title: projects
+          type: array
+      required:
+      - projects
+      title: ProjectsPage_allOf
       type: object
       example: null
   securitySchemes:
