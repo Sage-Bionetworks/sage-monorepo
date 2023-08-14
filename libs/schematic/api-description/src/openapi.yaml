@@ -39,3 +39,6 @@ paths:
 
   /components/{componentLabel}/parents:
     $ref: paths/components/@{componentLabel}/parents.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
