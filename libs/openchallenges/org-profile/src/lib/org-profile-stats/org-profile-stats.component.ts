@@ -9,9 +9,14 @@ import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { UiModule } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-org-profile-stats',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, UiModule],
   templateUrl: './org-profile-stats.component.html',
   styleUrls: ['./org-profile-stats.component.scss'],
 })
