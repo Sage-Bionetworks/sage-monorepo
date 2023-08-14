@@ -29,40 +29,42 @@ export const routes: Routes = [
     path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
-        (m) => m.OrgSearchModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'login',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/login').then(
-        (m) => m.LoginModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'signup',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/signup').then(
-        (m) => m.SignupModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'team',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/team').then((m) => m.TeamModule),
+      import('@sagebionetworks/openchallenges/team').then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'not-found',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/not-found').then(
-        (m) => m.NotFoundModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'org/:orgLogin',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-profile').then(
-        (m) => m.OrgProfileModule
+        (routes) => routes.routes
       ),
   },
   {
