@@ -42,3 +42,6 @@ paths:
 
   /relationships/{relationshipType}:
     $ref: paths/relationships/@{relationshipType}/relationships.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml

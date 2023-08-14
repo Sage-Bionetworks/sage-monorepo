@@ -84,8 +84,6 @@
     8787,
     8888,
     8889,
-    9000,
-    9001,
     9090,
     9104,
     9200,
@@ -204,14 +202,6 @@
     },
     "8889": {
       "label": "openchallenges-thumbor",
-      "onAutoForward": "silent"
-    },
-    "9000": {
-      "label": "openchallenges-minio",
-      "onAutoForward": "silent"
-    },
-    "9001": {
-      "label": "openchallenges-minio (console)",
       "onAutoForward": "silent"
     },
     "9090": {

@@ -17,8 +17,75 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 FILES_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/datasets/syn2/files"
+PROJECTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects"
 DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/datasets"
 MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/manifests"
+
+
+class TestListProjects(BaseTestCase):
+    """Test case for projects endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_projects",
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
+        ):
+            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            assert not response.json["hasNext"]
+            assert not response.json["hasPrevious"]
+            assert response.json["number"] == 0
+            assert response.json["size"] == 100
+            assert response.json["totalElements"] == 2
+            assert response.json["totalPages"] == 1
+            projects = response.json["projects"]
+            assert len(projects) == 2
+            project = projects[0]
+            assert list(project.keys()) == ["id", "name"]
+            assert project["name"] == "name1"
+            assert project["id"] == "syn1"
+
+    def test_401(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_projects",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            self.assert401(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_403(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_projects",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            self.assert403(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_projects",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestListDatasetFiles(BaseTestCase):
@@ -139,7 +206,7 @@ class TestListDatasetFiles(BaseTestCase):
             )
 
 
-class TestDatasets(BaseTestCase):
+class TestListStorageProjectDatasets(BaseTestCase):
     """Test case for datasets endpoint"""
 
     def test_success(self) -> None:
@@ -205,7 +272,7 @@ class TestDatasets(BaseTestCase):
             )
 
 
-class TestManifests(BaseTestCase):
+class TestListStorageProjectManifests(BaseTestCase):
     """Test case for manifests endpoint"""
 
     def test_success(self) -> None:

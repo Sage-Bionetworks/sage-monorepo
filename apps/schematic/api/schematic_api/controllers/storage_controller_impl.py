@@ -12,6 +12,8 @@ from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifest import Manifest
 from schematic_api.models.file import File
 from schematic_api.models.files_page import FilesPage
+from schematic_api.models.project import Project
+from schematic_api.models.projects_page import ProjectsPage
 from schematic_api.controllers.utils import handle_exceptions
 
 
@@ -112,6 +114,56 @@ def list_dataset_files(
         files=files,
     )
     result: Union[FilesPage, BasicError] = page
+    status = 200
+
+    return result, status
+
+
+def get_projects(asset_type: str) -> list[tuple[str, str]]:
+    """Gets a list of projects
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        list[tuple(str, str)]: A list of projects in tuple form
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    return store.getStorageProjects()
+
+
+@handle_exceptions
+def list_projects(
+    asset_view_id: str, asset_type: str
+) -> tuple[Union[ProjectsPage, BasicError], int]:
+    """Attempts to get a list of projects the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[Union[ProjectsPage, BasicError], int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_tuples = get_projects(asset_type)
+    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
+
+    page = ProjectsPage(
+        number=0,
+        size=100,
+        total_elements=len(projects),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        projects=projects,
+    )
+    result: Union[ProjectsPage, BasicError] = page
     status = 200
 
     return result, status

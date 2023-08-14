@@ -36,6 +36,7 @@ import { getUserProfileSeoData } from './user-profile-seo';
 })
 export class UserProfileComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
   account$!: Observable<Account | undefined>;
   user$: Observable<User> = of(MOCK_USER);
   loggedIn = true;
@@ -57,6 +58,7 @@ export class UserProfileComponent implements OnInit {
     private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit(): void {
