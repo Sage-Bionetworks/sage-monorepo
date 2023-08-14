@@ -1,8 +1,32 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { UiModule, FooterComponent } from '@sagebionetworks/openchallenges/ui';
+import { SharedUtilModule } from '@sagebionetworks/shared/util';
+import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
+import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
+import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
+import { FeaturedChallengeListComponent } from './featured-challenge-list/featured-challenge-list.component';
+import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
+import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
+import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 
 @Component({
   selector: 'openchallenges-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    UiModule,
+    ChallengeHostListComponent,
+    ChallengeRegistrationComponent,
+    ChallengeSearchComponent,
+    FeaturedChallengeListComponent,
+    SponsorListComponent,
+    StatisticsViewerComponent,
+    TopicsViewerComponent,
+    SharedUtilModule,
+    FooterComponent,
+  ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
