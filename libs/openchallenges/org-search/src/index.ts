@@ -1,1 +1,1 @@
-export * from './lib/org-search.module';
+export * from './lib/org-search.routes';

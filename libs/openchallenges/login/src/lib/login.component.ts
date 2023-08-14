@@ -1,19 +1,40 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
+  FormsModule,
+  ReactiveFormsModule,
   UntypedFormBuilder,
   UntypedFormControl,
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '@sagebionetworks/openchallenges/auth';
+import { Router, RouterModule } from '@angular/router';
+import { AuthModule, AuthService } from '@sagebionetworks/openchallenges/auth';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 import { Subscription } from 'rxjs';
 import { BasicError as ApiClientError } from '@sagebionetworks/openchallenges/api-client-angular';
+import { CommonModule } from '@angular/common';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
+import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
+import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
+import { UiModule } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-login',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    AuthModule,
+    UiModule,
+  ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
