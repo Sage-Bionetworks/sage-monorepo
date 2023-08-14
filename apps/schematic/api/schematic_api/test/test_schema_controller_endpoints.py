@@ -72,6 +72,9 @@ class TestComponentIsRequired(BaseTestCase):
             )
 
 
+COMPONENT_ATTRIBUTES_URL = "/api/v1/components/component1/attributes?schemaUrl=url1"
+
+
 class TestComponentAttributes(BaseTestCase):
     """Test case for component attributes endpoint"""
 
