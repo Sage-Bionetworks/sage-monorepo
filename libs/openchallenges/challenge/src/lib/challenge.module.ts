@@ -5,7 +5,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
 import { ChallengeOrganizersModule } from './challenge-organizers/challenge-organizers.module';
-import { ChallengeContributorsModule } from './challenge-contributors/challenge-contributors.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
@@ -15,6 +14,7 @@ import {
   FooterComponent,
   UiModule,
 } from '@sagebionetworks/openchallenges/ui';
+import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
 
 @NgModule({
   declarations: [ChallengeComponent],
@@ -24,7 +24,7 @@ import {
     MatIconModule,
     ChallengeOverviewModule,
     ChallengeOrganizersModule,
-    ChallengeContributorsModule,
+    ChallengeContributorsComponent,
     ChallengeStargazersModule,
     ChallengeRoutingModule,
     ChallengeStatsModule,
