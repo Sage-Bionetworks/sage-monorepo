@@ -6,9 +6,15 @@ import {
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { NgxTypedJsModule } from 'ngx-typed-js';
+import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
   selector: 'openchallenges-challenge-search',
+  standalone: true,
+  imports: [CommonModule, FormsModule, NgxTypedJsModule, InputTextModule],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })

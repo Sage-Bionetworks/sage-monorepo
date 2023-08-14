@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   Image,
   ImageService,
@@ -7,6 +9,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-registration',
+  standalone: true,
+  imports: [CommonModule, MatButtonModule],
   templateUrl: './challenge-registration.component.html',
   styleUrls: ['./challenge-registration.component.scss'],
 })
