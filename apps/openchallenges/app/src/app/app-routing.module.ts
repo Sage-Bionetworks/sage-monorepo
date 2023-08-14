@@ -7,7 +7,9 @@ export const routes: Routes = [
   {
     path: 'home',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/home').then((m) => m.HomeModule),
+      import('@sagebionetworks/openchallenges/home').then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'about',
@@ -15,13 +17,12 @@ export const routes: Routes = [
       import('@sagebionetworks/openchallenges/about').then(
         (routes) => routes.routes
       ),
-    data: {},
   },
   {
     path: 'challenge',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge-search').then(
-        (m) => m.ChallengeSearchModule
+        (routes) => routes.routes
       ),
   },
   {

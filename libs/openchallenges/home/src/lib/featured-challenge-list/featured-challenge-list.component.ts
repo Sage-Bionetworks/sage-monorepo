@@ -1,13 +1,17 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   Challenge,
   ChallengeService,
   ChallengeSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
+import { UiModule } from '@sagebionetworks/openchallenges/ui';
 import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
+  standalone: true,
+  imports: [CommonModule, UiModule],
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],
 })
