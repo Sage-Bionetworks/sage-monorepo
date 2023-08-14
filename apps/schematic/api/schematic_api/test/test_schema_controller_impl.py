@@ -7,8 +7,8 @@ from schematic_api.models.attributes_page import AttributesPage
 from schematic_api.models.components_page import ComponentsPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
-    list_component_parents,
     list_component_attributes,
+    list_component_parents,
 )
 
 
