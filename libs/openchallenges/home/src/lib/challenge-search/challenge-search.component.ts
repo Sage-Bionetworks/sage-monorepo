@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   Image,
   ImageService,
@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent {
+export class ChallengeSearchComponent implements OnInit {
   public isPlatformServer = false;
   public searchOC$: Observable<Image> | undefined;
   searchTerms!: string | undefined;
