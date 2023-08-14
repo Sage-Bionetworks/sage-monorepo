@@ -31,5 +31,8 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
 
+  /components/{componentLabel}/attributes:
+    $ref: paths/components/@{componentLabel}/attributes.yaml
+
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
