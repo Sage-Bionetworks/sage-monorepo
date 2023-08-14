@@ -84,6 +84,20 @@ VALUES (
     'PapersWithCode',
     'logo/papers-with-code.jpg',
     'https://paperswithcode.com/'
+  ),
+  (
+    13,
+    'eterna',
+    'Eterna',
+    'logo/eterna.svg',
+    'https://eternagame.org/'
+  ),
+  (
+    14,
+    'other',
+    'Other',
+    '',
+    ''
   );
 
 -- challenge_input_data_type
@@ -127,7 +141,7 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:10'
+    '2023-08-09 08:42:17'
   ),
   (
     2,
@@ -175,7 +189,7 @@ VALUES (
     '2012-06-01',
     '2012-10-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:17'
+    '2023-08-09 08:42:24'
   ),
   (
     5,
@@ -191,7 +205,7 @@ VALUES (
     '2013-06-10',
     '2013-09-15',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:19'
+    '2023-08-09 08:42:24'
   ),
   (
     6,
@@ -399,7 +413,7 @@ VALUES (
     '2015-11-16',
     '2016-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:47:45'
+    '2023-07-26 20:40:13'
   ),
   (
     19,
@@ -678,7 +692,7 @@ VALUES (
     'allen-institute-cell-lineage-reconstruction',
     'Allen Institute Cell Lineage Reconstruction',
     '',
-    'The recent advent of new CRISPR-based molecular tools allows the reconstruction of cell lineages based on the phylogenetical analysis of DNA mutations induced by CRISPR during development and promises to solve the lineage of complex model organisms at single-cell resolution. To date, however, no lineage reconstruction algorithms have been rigorously examined for their performance/robustness across diverse molecular tools, datasets, and number of cells/size of lineage trees. It also remains unclear whether new Machine-Learning algorithms that go beyond the classical ones developed for reconstructing phylogenetic trees, could consistently reconstruct cell lineages to a high degree of accuracy. The challenge - a partnership between The Allen Institute and DREAM - will comprise 3 subchallenges that consist of reconstructing cell lineage trees of different sizes and nature. In subchallenge 1, participants will be given experimental molecular data to reconstruct in vitro cell lineages ...',
+    'The recent advent of new CRISPR-based molecular tools allows the reconstruction of cell lineages based on the phylogenetical analysis of DNA mutations induced by CRISPR during development and promises to solve the lineage of complex model organisms at single-cell resolution.  To date, however, no lineage reconstruction algorithms have been rigorously examined for their performance/robustness across diverse molecular tools, datasets, and number of cells/size of lineage trees. It also remains unclear whether new Machine-Learning algorithms that go beyond the classical ones developed for reconstructing phylogenetic trees, could consistently reconstruct cell lineages to a high degree of accuracy. The challenge - a partnership between The Allen Institute and DREAM - will comprise 3 subchallenges that consist of reconstructing cell lineage trees of different sizes and nature. In subchallenge 1, participants will be given experimental molecular data to reconstruct in vitro cell lineages ...',
     'https://www.synapse.org/#!Synapse:syn20692755',
     'completed',
     'intermediate',
@@ -687,7 +701,7 @@ VALUES (
     '2019-10-15',
     '2020-02-06',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:01'
+    '2023-08-09 08:39:22'
   ),
   (
     37,
@@ -815,7 +829,7 @@ VALUES (
     '2020-04-30',
     '2021-07-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:11'
+    '2023-07-27 19:18:50'
   ),
   (
     45,
@@ -895,14 +909,14 @@ VALUES (
     '2022-01-01',
     NULL,
     '2023-06-23 00:00:00',
-    '2023-08-04 21:41:43'
+    '2023-08-09 08:42:59'
   ),
   (
     50,
     'fets-2022',
     'FeTS 2022',
     '',
-    'FeTS 2022 focuses on benchmarking methods for federated learning (FL), and particularly i) weight aggregation methods for federated training, and ii) algorithmic generalizability on out-of-sample data based on federated evaluation. In line with its last instance (FeTS 2021 - the 1st FL challenge ever organized), FeTS 2022 targets the task of brain tumor segmentation and builds upon i) the centralized dataset of >8,000 clinically-acquired multi-institutional MRI scans (from the RSNA-ASNR-MICCAI BraTS 2021 challenge) with their real-world partitioning, and ii) the collaborative network of remote independent institutions included in a real-world federation. Participants are welcome to compete in either of the two challenge tasks: Task 1 (“Federated Training”) seeks effective weight aggregation methods for the creation of a consensus model given a pre-defined segmentation algorithm for training, while also (optionally) accounting for network outages. Task 2 (“Federated Evaluation”) se...',
+    'FeTS 2022 focuses on benchmarking methods for federated learning (FL), and particularly i) weight aggregation methods for federated training, and ii) algorithmic generalizability on out-of-sample data based on federated evaluation. In line with its last instance (FeTS 2021 - the 1st FL challenge ever organized), FeTS 2022 targets the task of brain tumor segmentation and builds upon i) the centralized dataset of >8,000 clinically-acquired multi-institutional MRI scans (from the RSNA-ASNR-MICCAI BraTS 2021 challenge) with their real-world partitioning, and ii) the collaborative network of remote independent institutions included in a real-world federation. Participants are welcome to compete in either of the two challenge tasks:  Task 1 (“Federated Training”) seeks effective weight aggregation methods for the creation of a consensus model given a pre-defined segmentation algorithm for training, while also (optionally) accounting for network outages.  Task 2 (“Federated Evaluation”) ...',
     'https://www.synapse.org/#!Synapse:syn28546456/wiki/617093',
     'completed',
     'advanced',
@@ -911,7 +925,7 @@ VALUES (
     '2022-04-08',
     '2022-08-15',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:22'
+    '2023-08-09 08:40:15'
   ),
   (
     51,
@@ -966,7 +980,7 @@ VALUES (
     'scrna-seq-and-scatac-seq-data-analysis',
     'scRNA-seq and scATAC-seq Data Analysis',
     '',
-    'Understanding transcriptional regulation at individual cell resolution is fundamental to understanding complex biological systems such as tissues and organs. Emerging high-throughput sequencing technologies now allow for transcript quantification and chromatin accessibility at the single cell level. These technologies present unique challenges due to inherent data sparsity. Proper signal correction is key to accurate gene expression quantification via scRNA-seq, which propagates into downstream analyses such as differential gene expression analysis and cell-type identification. In the even more sparse scATAC-seq data, the correct identification of informative features is key to assessing cell heterogeneity at the chromatin level. The aims of this challenge will be two-fold: To evaluate computational methods for signal correction and peak identification in scRNA-seq and scATAC-seq, respectively. To assess the impact of these methods on downstream analysis',
+    'Understanding transcriptional regulation at individual cell resolution is fundamental to understanding complex biological systems such as tissues and organs. Emerging high-throughput sequencing technologies now allow for transcript quantification and chromatin accessibility at the single cell level. These technologies present unique challenges due to inherent data sparsity. Proper signal correction is key to accurate gene expression quantification via scRNA-seq, which propagates into downstream analyses such as differential gene expression analysis and cell-type identification. In the even more sparse scATAC-seq data, the correct identification of informative features is key to assessing cell heterogeneity at the chromatin level. The aims of this challenge will be two-fold:  1) To evaluate computational methods for signal correction and peak identification in scRNA-seq and scATAC-seq, respectively;  2) To assess the impact of these methods on downstream analysis',
     'https://www.synapse.org/#!Synapse:syn26720920/wiki/615338',
     'completed',
     'advanced',
@@ -975,7 +989,7 @@ VALUES (
     '2022-11-29',
     '2023-02-08',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:24'
+    '2023-08-09 08:40:41'
   ),
   (
     55,
@@ -1037,9 +1051,9 @@ VALUES (
     '1',
     '',
     '2023-05-17',
-    NULL,
+    '2023-08-16',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:30'
+    '2023-08-07 20:19:38'
   ),
   (
     59,
@@ -1263,7 +1277,7 @@ VALUES (
     '2017-11-23',
     '2018-04-28',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:32'
   ),
   (
     73,
@@ -1279,7 +1293,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:32'
   ),
   (
     74,
@@ -1295,7 +1309,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:34'
   ),
   (
     75,
@@ -1311,7 +1325,7 @@ VALUES (
     '2021-08-04',
     '2021-12-31',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:37'
   ),
   (
     76,
@@ -1327,7 +1341,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:39'
   ),
   (
     77,
@@ -1343,7 +1357,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:40'
   ),
   (
     78,
@@ -1359,7 +1373,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:41'
   ),
   (
     79,
@@ -1375,7 +1389,7 @@ VALUES (
     '2021-06-01',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:42'
   ),
   (
     80,
@@ -1391,7 +1405,7 @@ VALUES (
     '2021-06-08',
     '2021-09-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:43'
   ),
   (
     81,
@@ -1407,7 +1421,7 @@ VALUES (
     '2021-07-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:44'
   ),
   (
     82,
@@ -1423,7 +1437,7 @@ VALUES (
     '2021-08-04',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:45'
   ),
   (
     83,
@@ -1439,7 +1453,7 @@ VALUES (
     '2021-05-03',
     '2021-06-30',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:45'
   ),
   (
     84,
@@ -1455,7 +1469,7 @@ VALUES (
     '2021-06-08',
     '2021-10-11',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:47'
   ),
   (
     85,
@@ -1471,7 +1485,7 @@ VALUES (
     '2021-07-08',
     '2021-12-01',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:44'
+    '2023-08-09 08:43:48'
   ),
   (
     86,
@@ -1552,7 +1566,7 @@ VALUES (
     '2019-10-21',
     '2020-02-12',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:47'
+    '2023-08-05 00:32:49'
   ),
   (
     91,
@@ -1735,7 +1749,7 @@ VALUES (
     'smarter-food-safety-low-cost-tech-enabled-traceability',
     'Smarter Food Safety Low Cost Tech-Enabled Traceability',
     '',
-    'The motivation is tapping into new technologies and integrating data streams will help to advance the widespread, consistent implementation of traceability systems across the food industry. However, the affordability of such technologies, particularly for smaller companies, can be a barrier to implementing tech-enabled traceability systems.  FDA''s New Era of Smarter Food Safety initiative strives to work with stakeholders to explore low-cost or no-cost options so that our approaches are inclusive of and viable for human and animal food operations of all sizes. Democratizing the benefits of digitizing data will allow the entire food system to move more rapidly towards digital traceability systems. The primary goal is to encourage stakeholders, including technology providers, public health advocates, entrepreneurs, and innovators from all disciplines and around the world, to develop traceability hardware, software, or data analytics platforms that are low-cost or no-cost to the en...',
+    'The motivation is tapping into new technologies and integrating data streams will help to advance the widespread, consistent implementation of traceability systems across the food industry. However, the affordability of such technologies, particularly for smaller companies, can be a barrier to implementing tech-enabled traceability systems.  FDA''s New Era of Smarter Food Safety initiative strives to work with stakeholders to explore low-cost or no-cost options so that our approaches are inclusive of and viable for human and animal food operations of all sizes. Democratizing the benefits of digitizing data will allow the entire food system to move more rapidly towards digital traceability systems. The primary goal is to encourage stakeholders, including technology providers, public health advocates, entrepreneurs, and innovators from all disciplines and around the world, to develop traceability hardware, software, or data analytics platforms that are low-cost or no-cost to the end...',
     'https://precision.fda.gov/challenges/13',
     'completed',
     'intermediate',
@@ -1744,7 +1758,7 @@ VALUES (
     '2021-06-01',
     '2021-07-30',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:49:57'
+    '2023-08-09 08:46:13'
   ),
   (
     103,
@@ -1846,7 +1860,7 @@ VALUES (
     109,
     'opc-recurrence',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Local Recurrence Prediction',
-    'Determine from CT data whether a tumor will be controlled by definitive radiatio',
+    'Determine from CT data whether a tumor will be controlled by definitive radi...',
     'Determine from CT data whether a tumor will be controlled by definitive radiation therapy.',
     'https://www.kaggle.com/competitions/opc-recurrence',
     'completed',
@@ -1862,7 +1876,7 @@ VALUES (
     110,
     'oropharynx-radiomics-hpv',
     'Oropharynx Cancer (OPC) Radiomics Challenge :: Human Papilloma Virus (HPV) Status Prediction',
-    'Predict from CT data the HPV phenotype of oropharynx tumors; compare to ground-t',
+    'Predict from CT data the HPV phenotype of oropharynx tumors; compare to grou...',
     'Predict from CT data the HPV phenotype of oropharynx tumors; compare to ground-truth results previously obtained by p16 or HPV testing.',
     'https://www.kaggle.com/competitions/oropharynx-radiomics-hpv',
     'completed',
@@ -1894,7 +1908,7 @@ VALUES (
     112,
     'predict-impact-of-air-quality-on-death-rates',
     'Predict impact of air quality on mortality rates',
-    'Predict CVD and cancer caused mortality rates in England using air quality data ',
+    'Predict CVD and cancer caused mortality rates in England using air quality d...',
     'Predict CVD and cancer caused mortality rates in England using air quality data available from Copernicus Atmosphere Monitoring Service',
     'https://www.kaggle.com/competitions/predict-impact-of-air-quality-on-death-rates',
     'completed',
@@ -2118,7 +2132,7 @@ VALUES (
     126,
     'ml-olympiad-health-and-education',
     'ML Olympiad - Let''s Fight lung cancer',
-    'Use your ML expertise to help us step another step toward defeating cancer [ Sta',
+    'Use your ML expertise to help us step another step toward defeating cancer [...',
     'Use your ML expertise to help us step another step toward defeating cancer [ Starts on the 14th February ]',
     'https://www.kaggle.com/competitions/ml-olympiad-health-and-education',
     'completed',
@@ -2134,7 +2148,7 @@ VALUES (
     127,
     'cs98-22-dl-task1',
     'CS98X-22-DL-Task1',
-    'This competition is related to Task 1 in coursework - breast cancer classificati',
+    'This competition is related to Task 1 in coursework - breast cancer classifi...',
     'This competition is related to Task 1 in coursework - breast cancer classification',
     'https://www.kaggle.com/competitions/CS98-22-DL-Task1',
     'completed',
@@ -2199,7 +2213,7 @@ VALUES (
     'sartorius-cell-instance-segmentation',
     'Sartorius - Cell Instance Segmentation',
     'Detect single neuronal cells in microscopy images',
-    'Detect single neuronal cells in microscopy images',
+    'In this competition, you’ll detect and delineate distinct objects of interest in biological images depicting neuronal cell types commonly used in the study of neurological disorders. More specifically, you''ll use phase contrast microscopy images to train and test your model for instance segmentation of neuronal cells. Successful models will do this with a high level of accuracy. If successful, you''ll help further research in neurobiology thanks to the collection of robust quantitative data. Researchers may be able to use this to more easily measure the effects of disease and treatment conditions on neuronal cells. As a result, new drugs could be discovered to treat the millions of people with these leading causes of death and disability.',
     'https://www.kaggle.com/competitions/sartorius-cell-instance-segmentation',
     'completed',
     'intermediate',
@@ -2208,13 +2222,13 @@ VALUES (
     '2021-10-14',
     '2021-12-30',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:50:18'
+    '2023-08-08 17:53:06'
   ),
   (
     132,
     'pvelad',
     'Photovoltaic cell anomaly detection',
-    'Hosted by Hebei University of Technology (AIHebut research group) and Beihang Un',
+    'Hosted by Hebei University of Technology (AIHebut research group) and Beihan...',
     'Hosted by Hebei University of Technology (AIHebut research group) and Beihang University (NAVE research group)',
     'https://www.kaggle.com/competitions/pvelad',
     'completed',
@@ -2262,7 +2276,7 @@ VALUES (
     135,
     'codata2019challenge',
     'Cell Response Classification',
-    'From recorded timeseries of many cells in a well, predict which drug treatment h',
+    'From recorded timeseries of many cells in a well, predict which drug treatme...',
     'From recorded timeseries of many cells in a well, predict which drug treatment has been applied',
     'https://www.kaggle.com/competitions/codata2019challenge',
     'completed',
@@ -2278,7 +2292,7 @@ VALUES (
     136,
     'drug-solubility-challenge',
     'Drug solubility challenge',
-    'Solubility is vital to achieve desired concentration of drug for anticipated pha',
+    'Solubility is vital to achieve desired concentration of drug for anticipated...',
     'Solubility is vital to achieve desired concentration of drug for anticipated pharmacological response.',
     'https://www.kaggle.com/competitions/drug-solubility-challenge',
     'completed',
@@ -2294,7 +2308,7 @@ VALUES (
     137,
     'kinase-inhibition-challenge',
     'Kinase inhibition challenge',
-    'Protein kinases have become a major class of drug targets, accumulating a huge a',
+    'Protein kinases have become a major class of drug targets, accumulating a hu...',
     'Protein kinases have become a major class of drug targets, accumulating a huge amount of data',
     'https://www.kaggle.com/competitions/kinase-inhibition-challenge',
     'completed',
@@ -2422,7 +2436,7 @@ VALUES (
     145,
     'hhp',
     'Heritage Health Prize',
-    'Identify patients who will be admitted to a hospital within the next year using ',
+    'Identify patients who will be admitted to a hospital within the next year us...',
     'Identify patients who will be admitted to a hospital within the next year using historical claims data. (Enter by 06:59:59 UTC Oct 4 2012)',
     'https://www.kaggle.com/competitions/hhp',
     'completed',
@@ -2438,7 +2452,7 @@ VALUES (
     146,
     'pf2012',
     'Practice Fusion Analyze This! 2012 - Prediction Challenge',
-    'Start digging into electronic health records and submit your ideas for the most ',
+    'Start digging into electronic health records and submit your ideas for the m...',
     'Start digging into electronic health records and submit your ideas for the most promising, impactful or interesting predictive modeling competitions',
     'https://www.kaggle.com/competitions/pf2012',
     'completed',
@@ -2454,7 +2468,7 @@ VALUES (
     147,
     'pf2012-at',
     'Practice Fusion Analyze This! 2012 - Open Challenge',
-    'Start digging into electronic health records and submit your creative, insightfu',
+    'Start digging into electronic health records and submit your creative, insig...',
     'Start digging into electronic health records and submit your creative, insightful, and visually striking analyses.',
     'https://www.kaggle.com/competitions/pf2012-at',
     'completed',
@@ -2518,7 +2532,7 @@ VALUES (
     151,
     'deep-health-3',
     'Deep Health - Diabetes 2',
-    'This competition is for those attending the Deep Health Hackathon.  Predict the ',
+    'This competition is for those attending the Deep Health Hackathon.  Predict ...',
     'This competition is for those attending the Deep Health Hackathon.  Predict the next occurrence of diabetes',
     'https://www.kaggle.com/competitions/deep-health-3',
     'completed',
@@ -2608,7 +2622,7 @@ VALUES (
     '2022-11-28',
     '2023-02-27',
     '2023-06-23 00:00:00',
-    '2023-08-04 21:42:27'
+    '2023-08-09 08:47:37'
   ),
   (
     157,
@@ -2664,7 +2678,7 @@ VALUES (
     160,
     'disease-maps-to-modelling-covid-19',
     'Disease Maps to Modelling COVID-19',
-    'Use the COVID-19 disease map to suggest drugs candidate for repurposing, that co',
+    'Use the COVID-19 disease map to suggest drugs candidate for repurposing, tha...',
     'The Disease Maps to modeling COVID-19 Challenge provides highly detailed expert-curated molecular mechanistic maps for COVID-19. Combine them with available omic data to expand the current biological knowledge on COVID-19 mechanism of infection and downstream consequences. The main topic for this year''s challenge is drug repurposing with the possibility of Real World Data based validation of the most promising candidates suggested.',
     'http://camda2022.bioinf.jku.at/contest_dataset#disease_maps_to_modelling_covid-19',
     'completed',
@@ -2680,7 +2694,7 @@ VALUES (
     161,
     'crowdsourced-evaluation-of-inchi-based-tautomer-identification',
     'Crowdsourced Evaluation of InChI-based Tautomer Identification',
-    'Calling on scientists from industry, government, and academia dealing with chemi',
+    'Calling on scientists from industry, government, and academia dealing with c...',
     'This challenge focuses on the International Chemical Identifier (InChI), which was developed and is maintained under the auspices of the International Union of Pure and Applied Chemistry (IUPAC) and the InChI Trust. The InChI Trust, the IUPAC Working Group on Tautomers, and the U.S. Food and Drug Administration (FDA) call on the scientific community dealing with chemical repositories/data sets and analytics of compounds to test the recently modified InChI algorithm, which was designed for advanced recognition of tautomers. Participants will evaluate this algorithm against real chemical samples in this Crowdsourced Evaluation of InChI-based Tautomer Identification.',
     'https://precision.fda.gov/challenges/29',
     'completed',
@@ -2696,7 +2710,7 @@ VALUES (
     162,
     'nctr-indel-calling-from-oncopanel-sequencing-challenge-phase-2',
     'NCTR Indel Calling from Oncopanel Sequencing Challenge Phase 2',
-    'In Phase 2, participants who completed in Phase 1 of the challenge have the opti',
+    'In Phase 2, participants who completed in Phase 1 of the challenge have the ...',
     'The high value of clinically actionable information obtained by oncopanel sequencing makes it a crucial tool for precision oncology[1,2]. With the surge in availability of oncopanels, it is critical to ensure that they have been thoroughly tested and are properly used. FDA has initiated the Sequencing Quality Control phase II (SEQC2) project[3] to develop standard analysis protocols and quality control metrics for fit-for-purpose use of Next Generation Sequencing (NGS) data including oncopanel sequencing to inform regulatory science research and precision medicine. The Oncopanel Sequencing Working Group of FDA-led SEQC2 has developed a reference sample[4] suitable for benchmarking oncopanels and comprehensively assessed the analytical performance of several oncopanels[1,2]. The genomic deoxyribonucleic acid (gDNA) reference sample was derived from ten Universal Human Reference RNA (UHRR, Agilent Technologies, Inc) cell-lines and made publicly available by Agilent. Substantial gene...',
     'https://precision.fda.gov/challenges/22',
     'completed',
@@ -2712,7 +2726,7 @@ VALUES (
     163,
     'nctr-indel-calling-from-oncopanel-sequencing-data-challenge-phase-1',
     'NCTR Indel Calling from Oncopanel Sequencing Data Challenge Phase 1',
-    'Genetic variation involving indels (insertions and deletions) in the cancer geno',
+    'Genetic variation involving indels (insertions and deletions) in the cancer ...',
     'The high value of clinically actionable information obtained by oncopanel sequencing makes it a crucial tool for precision oncology[1,2]. With the surge in availability of oncopanels, it is critical to ensure that they have been thoroughly tested and are properly used. FDA has initiated the Sequencing Quality Control phase II (SEQC2) project[3] to develop standard analysis protocols and quality control metrics for fit-for-purpose use of Next Generation Sequencing (NGS) data including oncopanel sequencing to inform regulatory science research and precision medicine. The Oncopanel Sequencing Working Group of FDA-led SEQC2 has developed a reference sample[4] suitable for benchmarking oncopanels and comprehensively assessed the analytical performance of several oncopanels[1,2]. The genomic deoxyribonucleic acid (gDNA) reference sample was derived from ten Universal Human Reference RNA (UHRR, Agilent Technologies, Inc) cell-lines and made publicly available by Agilent. Substantial gene...',
     'https://precision.fda.gov/challenges/21',
     'completed',
@@ -2728,7 +2742,7 @@ VALUES (
     164,
     'vha-innovation-ecosystem-and-precisionfda-covid-19-risk-factor-modeling-challenge-phase-2',
     'VHA Innovation Ecosystem and precisionFDA COVID-19 Risk Factor Modeling Challenge Phase 2',
-    'The focus of Phase 2 was to validate the top performing models on two additional',
+    'The focus of Phase 2 was to validate the top performing models on two additi...',
     'The novel coronavirus disease 2019 (COVID-19) is a respiratory disease caused by a new type of coronavirus, known as “severe acute respiratory syndrome coronavirus 2,” or SARS-CoV-2. On March 11, 2020, the World Health Organization (WHO) declared the outbreak a global pandemic. As of January 22nd, 2022, the Johns Hopkins University COVID-19 dashboard reports over 338 million total confirmed cases worldwide. Although most people have mild to moderate symptoms, the disease can cause severe medical complications leading to death in some people. The Centers for Disease Control and Prevention (CDC) have identified several risk factors for severe COVID-19 illness, including people 65 years and older, individuals living in nursing homes or long-term care facilities, and those with serious underlying medical conditions. The Veteran population has a higher prevalence of several of the known risk factors for severe COVID-19 illness, such as advanced age, heart disease, and diabetes. Identif...',
     'https://precision.fda.gov/challenges/20',
     'completed',
@@ -2744,7 +2758,7 @@ VALUES (
     165,
     'tumor-mutational-burden-tmb-challenge-phase-2',
     'Tumor Mutational Burden (TMB) Challenge Phase 2',
-    'The goal of the Friends of Cancer Research and precisionFDA Tumor Mutational Bur',
+    'The goal of the Friends of Cancer Research and precisionFDA Tumor Mutational...',
     'Tumor mutational burden (TMB) is generally defined as the number of mutations detected in a patient''s tumor sample per megabase of DNA sequenced. However different algorithms use different methods for calculating TMB. Mutations in genes in tumor cells may lead to the creation of neoantigens, which have the potential to activate an immune system response against the tumor, and the likelihood of an immune system response may increase with the number of mutations. Thus, TMB is a biomarker for some immunotherapy drugs, called immune checkpoint inhibitors, such as those that target the PD-1 and PD-L1 pathways (Chan et al., 2019). An outstanding problem is the lack of standardization for TMB calculation and reporting between different assays. To address this problem, the Friends of Cancer Research convened a working group of industry and regulatory stakeholders to develop guidance and tools for TMB harmonization. Results from the first phase of this effort were presented at AACR 2020 (...',
     'https://precision.fda.gov/challenges/18',
     'completed',
@@ -2770,7 +2784,7 @@ VALUES (
     '2022-06-15',
     '2022-08-07',
     '2023-06-23 00:00:00',
-    '2023-07-26 19:50:57'
+    '2023-08-07 20:20:45'
   ),
   (
     167,
@@ -2799,10 +2813,10 @@ VALUES (
     'intermediate',
     '2',
     '',
-    '1111-01-01',
+    NULL,
     NULL,
     '2023-08-04 21:47:38',
-    '2023-08-04 21:51:37'
+    '2023-08-08 18:52:54'
   ),
   (
     169,
@@ -2816,9 +2830,9 @@ VALUES (
     '4',
     '',
     '2022-04-18',
-    '1111-01-01',
+    NULL,
     '2023-08-04 21:52:12',
-    '2023-08-04 21:54:15'
+    '2023-08-08 18:52:57'
   ),
   (
     170,
@@ -2834,7 +2848,7 @@ VALUES (
     '2023-04-01',
     '2023-08-22',
     '2023-08-04 21:54:31',
-    '2023-08-04 21:56:49'
+    '2023-08-07 20:20:05'
   ),
   (
     171,
@@ -2850,7 +2864,7 @@ VALUES (
     '2023-07-19',
     '2023-09-07',
     '2023-08-04 23:49:44',
-    '2023-08-04 23:55:02'
+    '2023-08-07 20:20:07'
   ),
   (
     172,
@@ -2866,13 +2880,13 @@ VALUES (
     '2023-06-29',
     '2023-09-10',
     '2023-08-04 23:58:01',
-    '2023-08-05 0:04:42'
+    '2023-08-07 20:20:08'
   ),
   (
     173,
     'mvseg2023',
     'MVSEG2023',
-    'Automatically segment mitral valve leaflets from single frame 3D trans-esophagea',
+    'Automatically segment mitral valve leaflets from single frame 3D trans-esoph...',
     'Mitral valve (MV) disease is a common pathologic problem occurring in approximately 2 % of the general population but climbing to 10 % in those over the age of 75. The preferred intervention for mitral regurgitation is valve repair, due to superior patient outcomes compared to those following valve replacement. Mitral valve interventions are technically challenging due to the functional and anatomical complexity of mitral pathologies. Repair must be tailored to the patient-specific anatomy and pathology, which requires considerable expert training and experience. Automatic segmentation of the mitral valve leaflets from 3D transesophageal echocardiography (TEE) may play an important role in treatment planning, as well as physical and computational modelling of patient-specific valve pathologies and potential repair approaches. This may have important implications in the drive towards personalized care and has the potential to impact clinical outcomes for those undergoing mitral val...',
     'https://www.synapse.org/#!Synapse:syn51186045/wiki/621356',
     'completed',
@@ -2888,7 +2902,7 @@ VALUES (
     174,
     'crossmoda23',
     'CrossMoDA23',
-    'This challenge proposes is the third edition of the first medical imaging benchm',
+    'This challenge proposes is the third edition of the first medical imaging be...',
     'Domain Adaptation (DA) has recently raised strong interest in the medical imaging community. By encouraging algorithms to be robust to unseen situations or different input data domains, Domain Adaptation improves the applicability of machine learning approaches to various clinical settings. While a large variety of DA techniques has been proposed, most of these techniques have been validated either on private datasets or on small publicly available datasets. Moreover, these datasets mostly address single-class problems. To tackle these limitations, the crossMoDA challenge introduced the first large and multi-class dataset for unsupervised cross-modality Domain Adaptation. From an application perspective, crossMoDA focuses on MRI segmentation for Vestibular Schwannoma. Compared to the previous crossMoDA instance, which made use of multi-institutional data acquired in controlled conditions for radiosurgery planning and focused on a 2 class segmentation task (tumour and cochlea), the...',
     'https://www.synapse.org/#!Synapse:syn51236108/wiki/621615',
     'completed',
@@ -2904,17 +2918,17 @@ VALUES (
     175,
     'icr-identify-age-related-conditions',
     'ICR - Identifying Age-Related Conditions',
-    'Use Machine Learning to detect conditions with measurements of anonymous charact',
+    'Use Machine Learning to detect conditions with measurements of anonymous cha...',
     'The goal of this competition is to predict if a person has any of three medical conditions. You are being asked to predict if the person has one or more of any of the three medical conditions (Class 1), or none of the three medical conditions (Class 0). You will create a model trained on measurements of health characteristics. To determine if someone has these medical conditions requires a long and intrusive process to collect information from patients. With predictive models, we can shorten this process and keep patient details private by collecting key characteristics relative to the conditions, then encoding these characteristics.',
     'https://www.kaggle.com/competitions/icr-identify-age-related-conditions',
-    'active',
+    'completed',
     'intermediate',
     '8',
     '',
     '2023-05-11',
     '2023-08-10',
     '2023-08-05 0:32:01',
-    '2023-08-05 5:18:20'
+    '2023-08-08 21:59:15'
   ),
   (
     176,
@@ -2930,7 +2944,7 @@ VALUES (
     '2023-04-18',
     '2023-08-21',
     '2023-08-05 5:18:40',
-    '2023-08-05 5:19:42'
+    '2023-08-07 20:20:11'
   ),
   (
     177,
@@ -2946,13 +2960,13 @@ VALUES (
     '2023-07-26',
     '2023-10-13',
     '2023-08-05 5:24:09',
-    '2023-08-05 5:25:23'
+    '2023-08-07 20:20:12'
   ),
   (
     178,
     'hubmap-hacking-the-human-vasculature',
     'HuBMAP - Hacking the Human Vasculature',
-    'Segment instances of microvascular structures from healthy human kidney tissue s',
+    'Segment instances of microvascular structures from healthy human kidney tiss...',
     'The goal of this competition is to segment instances of microvascular structures, including capillaries, arterioles, and venules. You''ll create a model trained on 2D PAS-stained histology images from healthy human kidney tissue slides. Your help in automating the segmentation of microvasculature structures will improve researchers'' understanding of how the blood vessels are arranged in human tissues.',
     'https://www.kaggle.com/competitions/hubmap-hacking-the-human-vasculature',
     'completed',
@@ -2968,7 +2982,7 @@ VALUES (
     179,
     'amp-parkinsons-disease-progression-prediction',
     'AMP(R)-Parkinson''s Disease Progression Prediction',
-    'Use protein and peptide data measurements from Parkinson''s Disease patients to ',
+    'Use protein and peptide data measurements from Parkinson''s Disease patients...',
     'The goal of this competition is to predict MDS-UPDR scores, which measure progression in patients with Parkinson''s disease. The Movement Disorder Society-Sponsored Revision of the Unified Parkinson''s Disease Rating Scale (MDS-UPDRS) is a comprehensive assessment of both motor and non-motor symptoms associated with Parkinson''s. You will develop a model trained on data of protein and peptide levels over time in subjects with Parkinson’s disease versus normal age-matched control subjects. Your work could help provide important breakthrough information about which molecules change as Parkinson’s disease progresses.',
     'https://www.kaggle.com/competitions/amp-parkinsons-disease-progression-prediction',
     'completed',
@@ -2995,6 +3009,310 @@ VALUES (
     '2022-11-15',
     '2023-08-05 5:43:25',
     '2023-08-05 5:44:44'
+  ),
+  (
+    181,
+    'multi-atlas-labeling-beyond-the-cranial-vault',
+    'Multi-Atlas Labeling Beyond the Cranial Vault',
+    '',
+    'Multi-atlas labeling has proven to be an effective paradigm for creating segmentation algorithms from training data. These approaches have been extraordinarily successful for brain and cranial structures (e.g., our prior MICCAI workshops: MLSF’11, MAL’12, SATA’13). After the original challenges closed, the data continue to drive scientific innovation; 144 groups have registered for the 2012 challenge (brain only) and 115 groups for the 2013 challenge (brain/heart/canine leg). However, innovation in application outside of the head and to soft tissues has been more limited. This workshop will provide a snapshot of the current progress in the field through extended discussions and provide researchers an opportunity to characterize their methods on a newly created and released standardized dataset of abdominal anatomy on clinically acquired CT. The datasets will be freely available both during and after the challenge. We have two separate new challenges: abdomen and cervix on routinel...',
+    'https://www.synapse.org/#!Synapse:syn3193805/wiki/89480',
+    'active',
+    'intermediate',
+    '1',
+    '',
+    '2015-04-15',
+    NULL,
+    '2023-08-07 20:21:22',
+    '2023-08-10 5:38:08'
+  ),
+  (
+    182,
+    'hubmap-organ-segmentation',
+    'HuBMAP + HPA - Hacking the Human Body',
+    'Segment multi-organ functional tissue units',
+    'In this competition, you’ll identify and segment functional tissue units (FTUs) across five human organs. You''ll build your model using a dataset of tissue section images, with the best submissions segmenting FTUs as accurately as possible. If successful, you''ll help accelerate the world’s understanding of the relationships between cell and tissue organization. With a better idea of the relationship of cells, researchers will have more insight into the function of cells that impact human health. Further, the Human Reference Atlas constructed by HuBMAP will be freely available for use by researchers and pharmaceutical companies alike, potentially improving and prolonging human life.',
+    'https://www.kaggle.com/competitions/hubmap-organ-segmentation',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2022-06-22',
+    '2022-09-22',
+    '2023-08-08 16:30:22',
+    '2023-08-08 21:47:25'
+  ),
+  (
+    183,
+    'hubmap-kidney-segmentation',
+    'HuBMAP - Hacking the Kidney',
+    'Identify glomeruli in human kidney tissue images',
+    'This competition, “Hacking the Kidney," starts by mapping the human kidney at single cell resolution. Your challenge is to detect functional tissue units (FTUs) across different tissue preparation pipelines. An FTU is defined as a “three-dimensional block of cells centered around a capillary, such that each cell in this block is within diffusion distance from any other cell in the same block” ([de Bono, 2013](https://www.ncbi.nlm.nih.gov/pubmed/24103658)). The goal of this competition is the implementation of a successful and robust glomeruli FTU detector. You will also have the opportunity to present your findings to a panel of judges for additional consideration. Successful submissions will construct the tools, resources, and cell atlases needed to determine how the relationships between cells can affect the health of an individual. Advancements in HuBMAP will accelerate the world’s understanding of the relationships between cell and tissue organization and function and human health.',
+    'https://www.kaggle.com/competitions/hubmap-kidney-segmentation',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2020-11-16',
+    '2021-05-10',
+    '2023-08-08 17:31:46',
+    '2023-08-08 21:47:21'
+  ),
+  (
+    184,
+    'ventilator-pressure-prediction',
+    'Google Brain - Ventilator Pressure Prediction',
+    'Simulate a ventilator connected to a sedated patient''s lung',
+    'In this competition, you’ll simulate a ventilator connected to a sedated patient''s lung. The best submissions will take lung attributes compliance and resistance into account. If successful, you''ll help overcome the cost barrier of developing new methods for controlling mechanical ventilators. This will pave the way for algorithms that adapt to patients and reduce the burden on clinicians during these novel times and beyond. As a result, ventilator treatments may become more widely available to help patients breathe.',
+    'https://www.kaggle.com/competitions/ventilator-pressure-prediction',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2021-09-22',
+    '2021-11-03',
+    '2023-08-08 17:53:33',
+    '2023-08-08 17:54:50'
+  ),
+  (
+    185,
+    'stanford-covid-vaccine',
+    'OpenVaccine: COVID-19 mRNA Vaccine Degradation Prediction',
+    'Urgent need to bring the COVID-19 vaccine to mass production',
+    'In this competition, we are looking to leverage the data science expertise of the Kaggle community to develop models and design rules for RNA degradation. Your model will predict likely degradation rates at each base of an RNA molecule, trained on a subset of an Eterna dataset comprising over 3000 RNA molecules (which span a panoply of sequences and structures) and their degradation rates at each position. We will then score your models on a second generation of RNA sequences that have just been devised by Eterna players for COVID-19 mRNA vaccines. These final test sequences are currently being synthesized and experimentally characterized at Stanford University in parallel to your modeling efforts -- Nature will score your models!',
+    'https://www.kaggle.com/competitions/stanford-covid-vaccine',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2020-09-10',
+    '2020-10-06',
+    '2023-08-08 18:06:17',
+    '2023-08-08 18:07:30'
+  ),
+  (
+    186,
+    'openvaccine',
+    'OpenVaccine',
+    'To develop mRNA vaccines stable enough to be deployed to everyone in the wor...',
+    'mRNA vaccines are a relatively new technology that have come into the limelight with the onset of COVID-19. They were the first COVID-19 vaccines to start clinical trials (initially formulated in a matter of days) and the first to be approved and distributed. mRNA vaccines have the potential to transform immunization, being significantly faster to formulate and produce, cheaper, and more effective - including against mutant strains. However, there is one key bottleneck to their widespread viability and our ability to immunize the entire world: poor refrigerator stability in prefilled syringes. The OpenVaccine challenge aims to allow a worldwide community of game players to create an enhanced vaccine to be injected into millions of people. The challenge: design an mRNA that codes for the same amino acid sequence of the spike protein, but is 2x-10x+ more stable. Through a number of academic partnerships and the launch of a Kaggle machine learning challenge to create best-in-class al...',
+    'https://eternagame.org/challenges/10845741',
+    'completed',
+    'intermediate',
+    '13',
+    'https://doi.org/10.1038/s41467-022-28776-w',
+    NULL,
+    '2021-12-12',
+    '2023-08-08 18:22:49',
+    '2023-08-08 19:08:57'
+  ),
+  (
+    187,
+    'opentb',
+    'OpenTB',
+    'What if we could use RNA to detect a gene sequence found to be present only ...',
+    'OpenTB used a recently reported gene signature for active tuberculosis based on three RNAs in the blood. This signature could form the basis for a fast, color-based test for TB, similar to an over-the-counter pregnancy test. What was needed was a sensor that could detect the concentrations of three RNAs, carry out the needed calculation, and report the result by binding another molecule. Over four rounds, players designed RNA sensors that can do the math on these 3 genes. Through experimental feedback, they honed their skills and techniques, which resulted in the creation of multiple designs that have been shown to be successful. These findings are being prepared to be published, and future work will be done to develop diagnostic devices integrating these designs',
+    'https://eternagame.org/challenges/10845742',
+    'completed',
+    'intermediate',
+    '13',
+    '',
+    '2016-05-04',
+    '2018-04-15',
+    '2023-08-08 18:43:09',
+    '2023-08-08 19:04:00'
+  ),
+  (
+    188,
+    'opencrispr',
+    'OpenCRISPR',
+    'A project to discover design patterns for guide RNAs to make gene editing mo...',
+    'CRISPR gene editing is a RNA-based method that can target essentially any gene in a living organism for genetic changes. Since its first demonstration, CRISPR has been revolutionizing biology and promises to change how we tackle numerous human diseases from malaria to cancer. Stanford''s Center for Personal Dynamic Regulomes and UC Berkeley''s Innovative Genomics Institute have challenged Eterna players to solve a remaining hurdle in making this technology safe for use. Scientists want the power to turn on and off CRISPR on demand with small molecules. This is almost a perfect match to the small-molecule switches that the Eterna community has worked on. In fact, the MS2 RNA hairpin often used in Eterna is routinely used to recruit new functionality to CRISPR complexes through other molecules tethered to the MS2 protein. The puzzles began with OpenCRISPR Controls, looking for solutions to lock in or lock out the MS2 RNA hairpin within a special loop in the CRISPR RNA. We hope the r...',
+    'https://eternagame.org/challenges/10845743',
+    'completed',
+    'intermediate',
+    '13',
+    'https://doi.org/10.1021/acssynbio.9b00142',
+    '2017-08-26',
+    NULL,
+    '2023-08-08 18:43:14',
+    '2023-08-10 5:38:26'
+  ),
+  (
+    189,
+    'openknot',
+    'OpenKnot',
+    'Many important biological processes depend on RNAs that form pseudoknots, an...',
+    'RNA pseudoknots have significant biological importance in various processes. They participate in gene regulation by influencing translation initiation or termination in mRNA molecules. Pseudoknots also play a role in programmed ribosomal frameshifting, leading to the production of different protein products from a single mRNA. RNA viruses, including SARS-CoV-2 and Dengue virus, utilize pseudoknots to regulate their replication and control the synthesis of viral proteins. Additionally, certain RNA molecules with pseudoknot structures exhibit enzymatic activity, acting as ribozymes and catalyzing biochemical reactions. These functions highlight the crucial role of RNA pseudoknots in gene expression, proteomic diversity, viral replication, and enzymatic processes. Several unanswered scientific questions surround RNA pseudoknots. One key area of inquiry is understanding the folding pathways of pseudoknots and how they form from linear RNA sequences. Elucidating the structural dynamics...',
+    'https://eternagame.org/challenges/11843006',
+    'active',
+    'intermediate',
+    '13',
+    '',
+    '2022-06-17',
+    NULL,
+    '2023-08-08 18:43:22',
+    '2023-08-10 5:38:35'
+  ),
+  (
+    190,
+    'openaso',
+    'OpenASO',
+    'A research initiative aimed at developing innovative design principles for R...',
+    'The DNA genome is the blueprint for building and operating cells, but this information must be decoded into RNA molecules to be useful. Transcription is the process of decoding DNA genomic information into RNA, resulting in RNA transcripts. Genes are specific sequences of DNA that contain information to produce a specific RNA transcript. The fate of most mRNA molecules in the cell is to be translated by ribosomes into protein molecules. However, mRNA splicing is a crucial step that occurs between the formation of an RNA transcript and protein translation. This step is essential because genes contain non-protein coding introns and protein-coding exons. Splicing removes introns and joins exons to produce a mature mRNA molecule that can be decoded into the correct protein molecule. When the splicing process is corrupted due to genetic mutations, the resulting RNA can become toxic, leading to the synthesis of non-functional proteins or no protein at all, causing various human diseases...',
+    'https://eternagame.org/challenges/11546273',
+    'active',
+    'intermediate',
+    '13',
+    '',
+    '2023-02-20',
+    NULL,
+    '2023-08-08 18:43:25',
+    '2023-08-10 5:38:36'
+  ),
+  (
+    191,
+    'openribosome',
+    'OpenRibosome',
+    'We aim to 1) gain fundamental insights into the ribosome''s RNA sequence-fol...',
+    'Our modern world has many challenges - challenges like climate change, increasing waste production, and human health. Imagine: we could replace petrochemistry with biology, single-use plastics with selectively degradable polymers, broad chemotherapeutics with targeted medicines for fighting specific cancer cells, and complex health equipment with point-of-care diagnostics. These innovations and many more can empower us to confront the challenges affecting humanity, our world, and beyond. But how do we actually create these smart materials and medicines? Is it possible to do so by repurposing one of Nature''s molecular machines? We think we can. The answer? Customized ribosomes. In Nature, ribosomes are the catalysts for protein assembly. And proteins are more or less similar, chemically, to the smart materials and medicines we want to synthesize. If we could modify ribosomes to build polymers with diverse components - beyond the canonical amino acids us',
+    'https://eternagame.org/challenges/11043833',
+    'active',
+    'intermediate',
+    '13',
+    'https://doi.org/10.1038/s41467-023-35827-3',
+    '2019-01-31',
+    NULL,
+    '2023-08-08 18:43:27',
+    '2023-08-10 5:42:45'
+  ),
+  (
+    192,
+    'lish-moa',
+    'Mechanisms of Action (MoA) Prediction',
+    'Can you improve the algorithm that classifies drugs based on their biologica...',
+    'Can you improve the algorithm that classifies drugs based on their biological activity?',
+    'https://www.kaggle.com/competitions/lish-moa',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2020-09-03',
+    '2020-11-30',
+    '2023-08-08 19:09:31',
+    '2023-08-08 19:10:54'
+  ),
+  (
+    193,
+    'recursion-cellular-image-classification',
+    'Recursion Cellular Image Classification',
+    'CellSignal: Disentangling biological signal from experimental noise in cellu...',
+    'This competition will have you disentangling experimental noise from real biological signals. Your entry will classify images of cells under one of 1,108 different genetic perturbations. You can help eliminate the noise introduced by technical execution and environmental variation between experiments. If successful, you could dramatically improve the industry’s ability to model cellular images according to their relevant biology. In turn, applying AI could greatly decrease the cost of treatments, and ensure these treatments get to patients faster.',
+    'https://www.kaggle.com/competitions/recursion-cellular-image-classification',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2019-06-27',
+    '2019-09-26',
+    '2023-08-08 19:38:42',
+    '2023-08-08 19:40:06'
+  ),
+  (
+    194,
+    'tlvmc-parkinsons-freezing-gait-prediction',
+    'Parkinson''s Freezing of Gait Prediction',
+    'Event detection from wearable sensor data',
+    'The goal of this competition is to detect freezing of gait (FOG), a debilitating symptom that afflicts many people with Parkinson’s disease. You will develop a machine learning model trained on data collected from a wearable 3D lower back sensor. Your work will help researchers better understand when and why FOG episodes occur. This will improve the ability of medical professionals to optimally evaluate, monitor, and ultimately, prevent FOG events.',
+    'https://www.kaggle.com/competitions/tlvmc-parkinsons-freezing-gait-prediction',
+    'completed',
+    'intermediate',
+    '8',
+    '',
+    '2023-03-09',
+    '2023-06-08',
+    '2023-08-08 19:47:54',
+    '2023-08-08 21:47:57'
+  ),
+  (
+    195,
+    'chaimeleon',
+    'CHAIMELEON Open Challenges',
+    '',
+    'The CHAIMELEON Open Challenges is a competition designed to train and refine AI models to answer clinical questions about five types of cancer: prostate, lung, breast, colon, and rectal. Participants are challenged to collaborate and develop innovative AI-powered solutions that can significantly impact cancer diagnosis, management, and treatment. They will be evaluated considering a balance between the performance of their AI algorithms to predict different clinical endpoints such as disease staging, treatment response or progression free survival and their trustworthiness.  The challenges are open to the whole scientific and tech community interested in AI. They are a unique opportunity to showcase how AI can be used to advance medical research and improve patient outcomes within the CHAIMELEON project.',
+    'https://chaimeleon.grand-challenge.org/',
+    'upcoming',
+    'intermediate',
+    '5',
+    '',
+    NULL,
+    '2023-12-31',
+    '2023-08-09 17:13:09',
+    '2023-08-09 22:40:12'
+  ),
+  (
+    196,
+    'topcow23',
+    'Topology-Aware Anatomical Segmentation of the Circle of Willis for CTA and MRA',
+    '',
+    'The aim of the challenge is to extract the CoW angio-architecture from 3D angiographic imaging by segmentation of the vessel components. There are two sub-tasks: binary segmentation of CoW vessels, and multi-class CoW anatomical segmentation. We release a new dataset of joint-modalities, CTA and MRA of the same patient cohort, both with annotations of the anatomy of CoW. Our challenge has two tracks for the same segmentation task, namely CTA track and MRA track. We made use of the clinical information from both modalities during our annotation. And participants can pick whichever modality they want, both CTA and MRA, and choose to tackle the task for either modality.',
+    'https://topcow23.grand-challenge.org/',
+    'upcoming',
+    'intermediate',
+    '5',
+    '',
+    '2023-08-20',
+    '2023-09-25',
+    '2023-08-09 17:16:22',
+    '2023-08-09 22:41:03'
+  ),
+  (
+    197,
+    'crown2023',
+    'Circle of Willis Intracranial Artery Classification and Quantification Challenge 2023',
+    '',
+    'The purpose of this challenge is to compare automatic methods for classification of the circle of Willis (CoW) configuration and quantification of the CoW major artery diameters and bifurcation angles.',
+    'https://crown.isi.uu.nl/',
+    'active',
+    'intermediate',
+    '14',
+    '',
+    '2023-05-01',
+    '2023-08-15',
+    '2023-08-09 22:13:24',
+    '2023-08-10 5:44:38'
+  ),
+  (
+    198,
+    'making-sense-of-electronic-health-record-ehr-race-and-ethnicity-data',
+    'Making Sense of Electronic Health Record (EHR) Race and Ethnicity Data',
+    'The US Food and Drug Administration (FDA) calls on stakeholders, including t...',
+    'The urgency of the coronavirus disease 2019 (COVID-19) pandemic has heightened interest in the use of real-world data (RWD) to obtain timely information about patients and populations and has focused attention on EHRs. The pandemic has also heightened awareness of long-standing racial and ethnic health disparities along a continuum from underlying social determinants of health, exposure to risk, access to insurance and care, quality of care, and responses to treatments. This highlighted the potential that EHRs can be used to describe and contribute to our understanding of racial and ethnic health disparities and their solutions. The OMB Revisions to the Standards for the Classification of Federal Data on Race and Ethnicity provides minimum standards for maintaining, collecting, and presenting data on race and ethnicity for all Federal reporting purposes, and defines the two separate constructs of race and ethnicity.',
+    'https://precision.fda.gov/challenges/30',
+    'completed',
+    'intermediate',
+    '6',
+    '',
+    '2023-05-31',
+    '2023-06-23',
+    '2023-08-10 18:28:06',
+    '2023-08-10 21:18:15'
+  ),
+  (
+    199,
+    'v-champs',
+    'The Veterans Cardiac Health and AI Model Predictions (V-CHAMPS)',
+    'The Veterans Health Administration Innovation Ecosystem, the Digital Health ...',
+    'To better understand the risk and protective factors in the Veteran population, the VHA IE and its collaborating partners are calling upon the public to develop AI/ML models to predict cardiovascular health outcomes, including readmission and mortality, using synthetically generated Veteran health records.  The Challenge consists of two Phases: Phase 1 is focused on synthetic data. In this Phase of the Challenge, AI/ML models will be developed by Challenge participants and trained and tested on the synthetic data sets provided to them, with a view towards predicting outcome variables for Veterans who have been diagnosed with chronic heart failure (please note that in Phase 1, the data is synthetic Veteran health records). Phase 2 will focus on validating and further exploring the limits of the AI/ML models. During this Phase, high-performing AI/ML models from Phase 1 will be brought into the VA system and validated on the real-world Veterans health data within the VHA. These model...',
+    'https://precision.fda.gov/challenges/31',
+    'completed',
+    'intermediate',
+    '6',
+    '',
+    '2023-05-25',
+    '2023-08-02',
+    '2023-08-10 21:41:10',
+    '2023-08-10 22:08:01'
   );
 
   -- challenge_organization_role data
@@ -3739,7 +4057,92 @@ VALUES (1, 1, 75, 'sponsor'),
   (737, 177, 162, 'challenge_organizer'),
   (738, 176, 3, 'challenge_organizer'),
   (739, 175, 278, 'challenge_organizer'),
-  (740, 179, 279, 'challenge_organizer');
+  (740, 179, 279, 'challenge_organizer'),
+  (741, 174, 12, 'sponsor'),
+  (742, 172, 12, 'sponsor'),
+  (743, 173, 12, 'sponsor'),
+  (744, 171, 12, 'sponsor'),
+  (745, 167, 12, 'sponsor'),
+  (746, 181, 12, 'sponsor'),
+  (747, 181, 280, 'challenge_organizer'),
+  (748, 181, 281, 'challenge_organizer'),
+  (749, 181, 211, 'challenge_organizer'),
+  (750, 181, 282, 'challenge_organizer'),
+  (751, 181, 171, 'challenge_organizer'),
+  (752, 182, 283, 'challenge_organizer'),
+  (753, 182, 284, 'challenge_organizer'),
+  (754, 182, 285, 'challenge_organizer'),
+  (755, 182, 67, 'challenge_organizer'),
+  (756, 182, 286, 'challenge_organizer'),
+  (757, 182, 12, 'sponsor'),
+  (758, 182, 15, 'sponsor'),
+  (759, 183, 283, 'challenge_organizer'),
+  (760, 183, 67, 'challenge_organizer'),
+  (761, 183, 287, 'challenge_organizer'),
+  (762, 183, 286, 'challenge_organizer'),
+  (763, 183, 288, 'challenge_organizer'),
+  (764, 183, 289, 'challenge_organizer'),
+  (765, 183, 12, 'sponsor'),
+  (766, 183, 15, 'sponsor'),
+  (767, 184, 290, 'challenge_organizer'),
+  (768, 184, 291, 'challenge_organizer'),
+  (769, 185, 179, 'challenge_organizer'),
+  (770, 186, 179, 'challenge_organizer'),
+  (771, 186, 292, 'challenge_organizer'),
+  (772, 187, 179, 'challenge_organizer'),
+  (773, 187, 119, 'challenge_organizer'),
+  (774, 188, 179, 'challenge_organizer'),
+  (775, 188, 293, 'challenge_organizer'),
+  (776, 189, 179, 'challenge_organizer'),
+  (777, 190, 197, 'challenge_organizer'),
+  (778, 191, 179, 'challenge_organizer'),
+  (779, 191, 294, 'challenge_organizer'),
+  (780, 191, 144, 'challenge_organizer'),
+  (781, 191, 295, 'challenge_organizer'),
+  (782, 192, 41, 'challenge_organizer'),
+  (783, 192, 296, 'challenge_organizer'),
+  (784, 192, 297, 'challenge_organizer'),
+  (785, 193, 298, 'challenge_organizer'),
+  (786, 193, 299, 'sponsor'),
+  (787, 193, 300, 'sponsor'),
+  (788, 193, 147, 'sponsor'),
+  (789, 193, 301, 'sponsor'),
+  (790, 194, 302, 'challenge_organizer'),
+  (791, 194, 302, 'data_contributor'),
+  (792, 194, 303, 'data_contributor'),
+  (793, 194, 304, 'data_contributor'),
+  (794, 194, 126, 'sponsor'),
+  (795, 195, 75, 'sponsor'),
+  (796, 195, 312, 'challenge_organizer'),
+  (797, 196, 12, 'sponsor'),
+  (798, 196, 226, 'challenge_organizer'),
+  (799, 196, 306, 'challenge_organizer'),
+  (800, 196, 307, 'challenge_organizer'),
+  (801, 196, 308, 'challenge_organizer'),
+  (802, 196, 248, 'challenge_organizer'),
+  (803, 196, 305, 'challenge_organizer'),
+  (804, 196, 309, 'challenge_organizer'),
+  (805, 196, 310, 'challenge_organizer'),
+  (806, 196, 220, 'challenge_organizer'),
+  (807, 196, 261, 'data_contributor'),
+  (808, 196, 311, 'data_contributor'),
+  (809, 197, 261, 'challenge_organizer'),
+  (810, 197, 261, 'data_contributor'),
+  (811, 197, 12, 'sponsor'),
+  (812, 196, 305, 'data_contributor'),
+  (813, 198, 13, 'challenge_organizer'),
+  (814, 198, 313, 'challenge_organizer'),
+  (815, 198, 314, 'challenge_organizer'),
+  (816, 198, 315, 'challenge_organizer'),
+  (817, 199, 231, 'challenge_organizer'),
+  (818, 199, 249, 'challenge_organizer'),
+  (819, 199, 313, 'challenge_organizer'),
+  (820, 199, 315, 'challenge_organizer'),
+  (821, 199, 136, 'challenge_organizer'),
+  (822, 199, 316, 'challenge_organizer'),
+  (823, 199, 34, 'challenge_organizer'),
+  (824, 199, 317, 'challenge_organizer'),
+  (825, 199, 318, 'challenge_organizer');
 
 -- challenge_incentive data
 
@@ -3842,7 +4245,34 @@ VALUES (1, 'publication', 1),
   (96, 'monetary', 178),
   (97, 'monetary', 179),
   (98, 'monetary', 180),
-  (99, 'speaking_engagement', 180);
+  (99, 'speaking_engagement', 180),
+  (100, 'monetary', 182),
+  (101, 'speaking_engagement', 182),
+  (102, 'monetary', 183),
+  (103, 'monetary', 184),
+  (104, 'monetary', 185),
+  (105, 'publication', 186),
+  (106, 'publication', 187),
+  (107, 'publication', 188),
+  (108, 'publication', 189),
+  (109, 'publication', 190),
+  (110, 'publication', 191),
+  (111, 'monetary', 192),
+  (112, 'monetary', 193),
+  (113, 'speaking_engagement', 193),
+  (114, 'other', 193),
+  (115, 'monetary', 194),
+  (116, 'speaking_engagement', 194),
+  (117, 'monetary', 195),
+  (118, 'publication', 195),
+  (119, 'publication', 196),
+  (120, 'speaking_engagement', 196),
+  (121, 'other', 196),
+  (122, 'publication', 197),
+  (123, 'speaking_engagement', 197),
+  (124, 'other', 198),
+  (125, 'publication', 199),
+  (126, 'speaking_engagement', 199);
 
 -- challenge_submission_type data
 
@@ -4032,7 +4462,28 @@ VALUES (1, 'prediction_file', 1),
   (183, 'notebook', 177),
   (184, 'notebook', 178),
   (185, 'notebook', 179),
-  (186, 'notebook', 180);
+  (186, 'notebook', 180),
+  (187, 'prediction_file', 181),
+  (188, 'notebook', 182),
+  (189, 'notebook', 183),
+  (190, 'notebook', 184),
+  (191, 'notebook', 185),
+  (192, 'other', 186),
+  (193, 'other', 187),
+  (194, 'other', 188),
+  (195, 'other', 189),
+  (196, 'other', 190),
+  (197, 'other', 191),
+  (198, 'notebook', 192),
+  (199, 'container_image', 192),
+  (200, 'notebook', 193),
+  (201, 'notebook', 194),
+  (202, 'container_image', 195),
+  (203, 'container_image', 196),
+  (204, 'container_image', 197),
+  (205, 'notebook', 198),
+  (206, 'prediction_file', 199),
+  (207, 'other', 199);
 
 -- challenge_star data
 

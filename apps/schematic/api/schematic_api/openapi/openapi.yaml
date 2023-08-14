@@ -562,7 +562,7 @@ components:
       example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
       type: string
     Attribute:
-      description: A attribute from a component in a schema
+      description: An attribute from a component in a schema
       properties:
         name:
           description: The name of the attribute.
