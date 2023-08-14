@@ -48,7 +48,9 @@ export const routes: Routes = [
   {
     path: 'team',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/team').then((m) => m.TeamModule),
+      import('@sagebionetworks/openchallenges/team').then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'not-found',
