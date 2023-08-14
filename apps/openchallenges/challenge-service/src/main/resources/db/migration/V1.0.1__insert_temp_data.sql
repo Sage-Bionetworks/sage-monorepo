@@ -89,7 +89,7 @@ VALUES (
     13,
     'eterna',
     'Eterna',
-    '',
+    'logo/eterna.svg',
     'https://eternagame.org/'
   ),
   (
