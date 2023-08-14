@@ -35,7 +35,7 @@ export const routes: Routes = [
     path: 'login',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/login').then(
-        (m) => m.LoginModule
+        (routes) => routes.routes
       ),
   },
   {
