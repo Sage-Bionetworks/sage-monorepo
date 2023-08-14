@@ -29,6 +29,7 @@ import {
 })
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
   challenge$!: Observable<Challenge>;
   loggedIn = false;
   // progressValue = 0;
@@ -46,6 +47,7 @@ export class ChallengeComponent implements OnInit {
     private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit(): void {

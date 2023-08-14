@@ -14,9 +14,10 @@ import {
   KAuthService,
   AuthService,
 } from '@sagebionetworks/openchallenges/auth';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { KeycloakService } from 'keycloak-angular';
 import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
 @Component({
   selector: 'openchallenges-root',
@@ -39,10 +40,22 @@ export class AppComponent implements OnInit, OnDestroy {
     private kauthService: KAuthService,
     private authService: AuthService,
     private keycloakService: KeycloakService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private gtmService: GoogleTagManagerService
   ) {}
 
   ngOnInit() {
+    this.router.events.forEach((event) => {
+      if (event instanceof NavigationEnd) {
+        const gtmTag = {
+          event: 'page',
+          pageName: event.url,
+        };
+
+        this.gtmService.pushTag(gtmTag);
+      }
+    });
+
     this.kauthService
       .isLoggedIn()
       .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));

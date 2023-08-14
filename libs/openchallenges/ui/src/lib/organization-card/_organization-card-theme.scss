@@ -13,7 +13,8 @@
     box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
   }
   .organization-card-banner {
-    box-shadow: 1px 5px 18px 0px #d4d4d4;
+    border: solid 1px rgba(black, 0.38);
+    box-shadow: none !important;
   }
 }
 

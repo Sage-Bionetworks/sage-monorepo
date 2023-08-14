@@ -21,6 +21,7 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 })
 export class SignupComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
 
   newUserForm!: UntypedFormGroup;
   errors = {
@@ -37,6 +38,7 @@ export class SignupComponent implements OnInit {
     private readonly configService: ConfigService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit(): void {

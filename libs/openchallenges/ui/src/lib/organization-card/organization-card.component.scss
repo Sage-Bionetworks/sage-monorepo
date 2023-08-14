@@ -2,7 +2,7 @@
 
 .organization-card {
   width: 300px;
-  min-height: 160px;
+  min-height: 180px;
   padding: 12px;
   display: flex;
   position: relative;
@@ -19,16 +19,21 @@
   // TODO: use the heights below when members are added
   // min-height: 108px;
   // max-height: 108px;
-  min-height: 90px;
-  max-height: 90px;
+  // min-height: 90px;
+  // max-height: 90px;
 }
-.organization-members {
-  margin-top: 18px;
+.members {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
 }
-.member {
-  margin: 3px;
+.member-group {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 6px;
 }
 
 // FOOTER

@@ -30,6 +30,7 @@
     "@nguniversal/express-engine": "16.1.1",
     "@swc/helpers": "0.5.1",
     "@types/commander": "^2.12.2",
+    "angular-google-tag-manager": "1.8.0",
     "cdktf": "0.16.1",
     "commander": "9.4.1",
     "constructs": "10.2.13",
