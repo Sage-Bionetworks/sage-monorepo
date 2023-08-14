@@ -42,7 +42,7 @@ export const routes: Routes = [
     path: 'signup',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/signup').then(
-        (m) => m.SignupModule
+        (routes) => routes.routes
       ),
   },
   {
