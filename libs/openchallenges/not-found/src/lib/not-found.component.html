@@ -6,8 +6,16 @@
   </div>
   <div class="btn-group">
     <a mat-raised-button class="home-btn" href="/home">Home</a>
-    <a mat-raised-button color="basic" href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose">Contact Us</a>
+    <a
+      mat-raised-button
+      color="basic"
+      href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose"
+      >Contact Us</a
+    >
   </div>
 </main>
 
-<openchallenges-footer [version]="appVersion"></openchallenges-footer>
+<openchallenges-footer
+  [appVersion]="appVersion"
+  [dataUpdatedOn]="dataUpdatedOn"
+></openchallenges-footer>

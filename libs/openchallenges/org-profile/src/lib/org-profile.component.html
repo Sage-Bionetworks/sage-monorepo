@@ -9,7 +9,7 @@
       <div id="profile-details" class="col">
         <h2>
           {{ org.name }}
-          <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+          <!-- <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon> -->
         </h2>
         <p class="username">@{{ org.login }}</p>
         <div class="profile-type">Organization</div>
@@ -69,4 +69,7 @@
     </section>
   </ng-container>
 </main>
-<openchallenges-footer [version]="appVersion"></openchallenges-footer>
+<openchallenges-footer
+  [appVersion]="appVersion"
+  [dataUpdatedOn]="dataUpdatedOn"
+></openchallenges-footer>

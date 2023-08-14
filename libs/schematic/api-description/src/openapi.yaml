@@ -39,3 +39,6 @@ paths:
 
   /components/{componentDisplay}/isRequired:
     $ref: paths/components/@{componentDisplay}/isRequired.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml

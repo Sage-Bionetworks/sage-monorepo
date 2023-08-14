@@ -20,7 +20,7 @@
     <div class="profile-sidenav col">
       <div class="profile-nav-group">
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'overview' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
@@ -28,7 +28,7 @@
           Biography
         </a>
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'challenges' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
@@ -36,7 +36,7 @@
           Challenges
         </a>
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'starred' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['starred'] }"
@@ -62,4 +62,7 @@
   </section>
 </main>
 
-<openchallenges-footer [version]="appVersion"></openchallenges-footer>
+<openchallenges-footer
+  [appVersion]="appVersion"
+  [dataUpdatedOn]="dataUpdatedOn"
+></openchallenges-footer>

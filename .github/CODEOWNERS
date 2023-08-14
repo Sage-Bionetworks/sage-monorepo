@@ -1,9 +1,9 @@
 * @tschaffter
 
-/apps/openchallenges/ @tschaffter @rrchai @vpchung
-/libs/openchallenges/ @tschaffter @rrchai @vpchung
+/apps/openchallenges/ @rrchai @tschaffter @vpchung
+/libs/openchallenges/ @rrchai @tschaffter @vpchung
 
-/apps/schematic/ @linglp @andrewelamb
-/libs/schematic/ @linglp @andrewelamb
+/apps/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage 
+/libs/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage 
 
 /libs/shared/ @tschaffter

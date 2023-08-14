@@ -13,6 +13,7 @@ import { Observable } from 'rxjs';
 })
 export class TeamComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
   public logo$: Observable<Image> | undefined;
   public thomas$: Observable<Image> | undefined;
   public rong$: Observable<Image> | undefined;
@@ -26,6 +27,7 @@ export class TeamComponent implements OnInit {
     private imageService: ImageService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {
