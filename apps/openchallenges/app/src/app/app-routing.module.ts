@@ -15,13 +15,12 @@ export const routes: Routes = [
       import('@sagebionetworks/openchallenges/about').then(
         (routes) => routes.routes
       ),
-    data: {},
   },
   {
     path: 'challenge',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge-search').then(
-        (m) => m.ChallengeSearchModule
+        (routes) => routes.routes
       ),
   },
   {
