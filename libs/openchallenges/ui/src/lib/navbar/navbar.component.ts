@@ -7,7 +7,7 @@ import { ButtonGithubComponent } from '../button-github/button-github.component'
 import { CommonModule } from '@angular/common';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { RouterModule } from '@angular/router';
-import { UserButtonModule } from '../user-button/user-button.module';
+import { UserButtonComponent } from '../user-button/user-button.component';
 
 @Component({
   selector: 'openchallenges-navbar',
@@ -17,7 +17,7 @@ import { UserButtonModule } from '../user-button/user-button.module';
     RouterModule,
     MatButtonModule,
     ButtonGithubComponent,
-    UserButtonModule,
+    UserButtonComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],

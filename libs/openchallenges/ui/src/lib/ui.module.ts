@@ -1,25 +1,35 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ChallengeCardModule } from './challenge-card/challenge-card.module';
-import { OrganizationCardModule } from './organization-card/organization-card.module';
-import { UserButtonModule } from './user-button/user-button.module';
-import { PersonCardModule } from './person-card/person-card.module';
-import { CheckboxFilterModule } from './checkbox-filter/checkbox-filter.module';
-import { SearchDropdownFilterModule } from './search-dropdown-filter/search-dropdown-filter.module';
-import { PaginatorModule } from './paginator/paginator.module';
 import { NavbarComponent } from './navbar/navbar.component';
+import { ChallengeCardComponent } from './challenge-card/challenge-card.component';
+import { CheckboxFilterComponent } from './checkbox-filter/checkbox-filter.component';
+import { OrganizationCardComponent } from './organization-card/organization-card.component';
+import { PaginatorComponent } from './paginator/paginator.component';
+import { PersonCardComponent } from './person-card/person-card.component';
+import { SearchDropdownFilterComponent } from './search-dropdown-filter/search-dropdown-filter.component';
+import { UserButtonComponent } from './user-button/user-button.component';
 
 @NgModule({
-  imports: [CommonModule, NavbarComponent],
-  exports: [
-    ChallengeCardModule,
-    CheckboxFilterModule,
-    PaginatorModule,
-    PersonCardModule,
+  imports: [
+    CommonModule,
     NavbarComponent,
-    OrganizationCardModule,
-    SearchDropdownFilterModule,
-    UserButtonModule,
+    ChallengeCardComponent,
+    CheckboxFilterComponent,
+    PaginatorComponent,
+    OrganizationCardComponent,
+    PersonCardComponent,
+    SearchDropdownFilterComponent,
+    UserButtonComponent,
+  ],
+  exports: [
+    ChallengeCardComponent,
+    CheckboxFilterComponent,
+    PaginatorComponent,
+    PersonCardComponent,
+    NavbarComponent,
+    OrganizationCardComponent,
+    SearchDropdownFilterComponent,
+    UserButtonComponent,
   ],
 })
 export class UiModule {}
