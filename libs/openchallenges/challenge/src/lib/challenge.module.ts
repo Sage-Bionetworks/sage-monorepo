@@ -4,7 +4,6 @@ import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-t
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
 import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
-import { ChallengeOrganizersModule } from './challenge-organizers/challenge-organizers.module';
 import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
 import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
@@ -15,6 +14,7 @@ import {
   UiModule,
 } from '@sagebionetworks/openchallenges/ui';
 import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
+import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-organizers.component';
 
 @NgModule({
   declarations: [ChallengeComponent],
@@ -23,7 +23,7 @@ import { ChallengeContributorsComponent } from './challenge-contributors/challen
     MatTabsModule,
     MatIconModule,
     ChallengeOverviewModule,
-    ChallengeOrganizersModule,
+    ChallengeOrganizersComponent,
     ChallengeContributorsComponent,
     ChallengeStargazersModule,
     ChallengeRoutingModule,
