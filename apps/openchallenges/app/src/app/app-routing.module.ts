@@ -54,7 +54,7 @@ export const routes: Routes = [
     path: 'not-found',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/not-found').then(
-        (m) => m.NotFoundModule
+        (routes) => routes.routes
       ),
   },
   {
