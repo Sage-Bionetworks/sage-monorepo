@@ -3,11 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeComponent } from './challenge.component';
-import { ChallengeOverviewModule } from './challenge-overview/challenge-overview.module';
-import { ChallengeStargazersModule } from './challenge-stargazers/challenge-stargazers.module';
 import { ChallengeRoutingModule } from './challenge-routing.module';
-import { ChallengeStatsModule } from './challenge-stats/challenge-stats.module';
-// import { ProgressBarModule } from 'primeng/progressbar';
 import {
   AvatarComponent,
   FooterComponent,
@@ -15,6 +11,9 @@ import {
 } from '@sagebionetworks/openchallenges/ui';
 import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
 import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-organizers.component';
+import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
+import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
+import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
 
 @NgModule({
   declarations: [ChallengeComponent],
@@ -22,12 +21,12 @@ import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-o
     CommonModule,
     MatTabsModule,
     MatIconModule,
-    ChallengeOverviewModule,
+    ChallengeOverviewComponent,
     ChallengeOrganizersComponent,
     ChallengeContributorsComponent,
-    ChallengeStargazersModule,
+    ChallengeStargazersComponent,
     ChallengeRoutingModule,
-    ChallengeStatsModule,
+    ChallengeStatsComponent,
     // ProgressBarModule,
     UiModule,
     AvatarComponent,
