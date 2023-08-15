@@ -14,10 +14,12 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
+  CheckboxFilterComponent,
   FilterValue,
   FooterComponent,
   OrganizationCard,
-  UiModule,
+  OrganizationCardComponent,
+  PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeContributionRolesFilter,
@@ -65,12 +67,14 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     MatIconModule,
     MatSnackBarModule,
     RouterModule,
-    UiModule,
     FormsModule,
     PanelModule,
     RadioButtonModule,
     ReactiveFormsModule,
     FooterComponent,
+    PaginatorComponent,
+    OrganizationCardComponent,
+    CheckboxFilterComponent,
   ],
   templateUrl: './org-search.component.html',
   styleUrls: ['./org-search.component.scss'],

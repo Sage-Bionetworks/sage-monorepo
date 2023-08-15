@@ -12,7 +12,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { KeycloakAngularModule } from 'keycloak-angular';
 import { AuthModule } from '@sagebionetworks/openchallenges/auth';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
 import { AppComponent } from './app.component';
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
@@ -20,6 +19,7 @@ import {
   configFactory,
   ConfigService,
 } from '@sagebionetworks/openchallenges/config';
+import { NavbarComponent } from '@sagebionetworks/openchallenges/ui';
 
 @NgModule({
   declarations: [AppComponent],
@@ -33,9 +33,9 @@ import {
     MatButtonModule,
     KeycloakAngularModule,
     AuthModule.forRoot(),
-    UiModule,
     MatProgressSpinnerModule,
     SharedUtilModule,
+    NavbarComponent,
   ],
   providers: [
     {

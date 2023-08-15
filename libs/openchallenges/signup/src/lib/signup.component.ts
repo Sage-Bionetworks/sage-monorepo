@@ -22,7 +22,6 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { AuthModule } from '@sagebionetworks/openchallenges/auth';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
 import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
 @Component({
@@ -38,7 +37,6 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
     MatFormFieldModule,
     MatInputModule,
     AuthModule,
-    UiModule,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],

@@ -5,13 +5,13 @@ import {
   ChallengeService,
   ChallengeSearchQuery,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
+import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
   standalone: true,
-  imports: [CommonModule, UiModule],
+  imports: [CommonModule, ChallengeCardComponent],
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],
 })

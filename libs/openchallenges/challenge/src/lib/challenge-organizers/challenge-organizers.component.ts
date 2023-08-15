@@ -4,13 +4,13 @@ import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   MOCK_CHALLENGE_ORGANIZERS,
   MOCK_ORGANIZATION_CARDS,
-  UiModule,
+  PersonCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-challenge-organizers',
   standalone: true,
-  imports: [CommonModule, UiModule],
+  imports: [CommonModule, PersonCardComponent],
   templateUrl: './challenge-organizers.component.html',
   styleUrls: ['./challenge-organizers.component.scss'],
 })

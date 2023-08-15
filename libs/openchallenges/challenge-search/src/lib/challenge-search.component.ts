@@ -32,10 +32,13 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
+  ChallengeCardComponent,
+  CheckboxFilterComponent,
   Filter,
   FilterValue,
   FooterComponent,
-  UiModule,
+  PaginatorComponent,
+  SearchDropdownFilterComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
@@ -93,12 +96,15 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     MatIconModule,
     MatSnackBarModule,
     RouterModule,
-    UiModule,
     FormsModule,
     PanelModule,
     RadioButtonModule,
     ReactiveFormsModule,
     FooterComponent,
+    PaginatorComponent,
+    ChallengeCardComponent,
+    CheckboxFilterComponent,
+    SearchDropdownFilterComponent,
   ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
