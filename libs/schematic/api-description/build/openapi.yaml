@@ -135,6 +135,28 @@ paths:
                 $ref: '#/components/schemas/ComponentLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/parents:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the components immediate parent components in the schema.
+      description: Gets the components immediate parent components in the schema.
+      operationId: listComponentParents
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentsPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
@@ -389,6 +411,42 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
       default: true
+    ReturnDisplayNames:
+      description: Whether or not to return the display names of the component, otherwise the label
+      type: boolean
+      default: true
+    ReturnOrderedBySchema:
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      type: boolean
+      default: true
+    Component:
+      type: object
+      description: A component of a schema.
+      properties:
+        name:
+          type: string
+          description: The name of the component.
+          example: Patient
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ComponentsPage:
+      type: object
+      description: A page of components.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            components:
+              description: A list of components.
+              type: array
+              items:
+                $ref: '#/components/schemas/Component'
+          required:
+            - components
+      x-java-class-annotations:
+        - '@lombok.Builder'
     Project:
       type: object
       description: A project.
@@ -471,6 +529,20 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       schema:
         $ref: '#/components/schemas/UseStrictCamelCase'
+    returnDisplayNames:
+      name: returnDisplayNames
+      in: query
+      description: Whether or not to return the display names of the component, otherwise the label
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnDisplayNames'
+    returnOrderedBySchema:
+      name: returnOrderedBySchema
+      in: query
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnOrderedBySchema'
   responses:
     BadRequest:
       description: Invalid request

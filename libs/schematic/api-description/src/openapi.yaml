@@ -40,5 +40,8 @@ paths:
   /components/{componentDisplay}/componentLabel:
     $ref: paths/components/@{componentDisplay}/componentLabel.yaml
 
+  /components/{componentLabel}/parents:
+    $ref: paths/components/@{componentLabel}/parents.yaml
+
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
