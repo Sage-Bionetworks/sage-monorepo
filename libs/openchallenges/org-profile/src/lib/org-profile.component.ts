@@ -23,7 +23,6 @@ import {
   Avatar,
   AvatarComponent,
   FooterComponent,
-  UiModule,
 } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -60,7 +59,6 @@ import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.
     OrgProfileChallengesComponent,
     OrgProfileMembersComponent,
     OrgProfileStatsComponent,
-    UiModule,
     AvatarComponent,
     FooterComponent,
   ],

@@ -6,13 +6,13 @@ import {
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { UiModule, FooterComponent } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-team',
   standalone: true,
-  imports: [CommonModule, RouterModule, UiModule, FooterComponent],
+  imports: [CommonModule, RouterModule, FooterComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })

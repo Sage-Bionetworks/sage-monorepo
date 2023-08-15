@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { UiModule, FooterComponent } from '@sagebionetworks/openchallenges/ui';
+import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
 import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
@@ -16,7 +16,6 @@ import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
   standalone: true,
   imports: [
     CommonModule,
-    UiModule,
     ChallengeHostListComponent,
     ChallengeRegistrationComponent,
     ChallengeSearchComponent,

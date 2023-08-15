@@ -11,7 +11,10 @@ import {
   OrganizationService,
   Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationCard, UiModule } from '@sagebionetworks/openchallenges/ui';
+import {
+  OrganizationCard,
+  OrganizationCardComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { forkJoin, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -19,7 +22,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'openchallenges-challenge-host-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, UiModule],
+  imports: [CommonModule, MatButtonModule, OrganizationCardComponent],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })

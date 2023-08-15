@@ -24,7 +24,6 @@ import {
   Avatar,
   AvatarComponent,
   FooterComponent,
-  UiModule,
 } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -53,7 +52,6 @@ import { CommonModule } from '@angular/common';
     ChallengeContributorsComponent,
     ChallengeStargazersComponent,
     ChallengeStatsComponent,
-    UiModule,
     AvatarComponent,
     FooterComponent,
   ],

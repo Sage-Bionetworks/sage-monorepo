@@ -18,7 +18,6 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
 import { MatLegacyCardModule as MatCardModule } from '@angular/material/legacy-card';
 import { MatLegacyFormFieldModule as MatFormFieldModule } from '@angular/material/legacy-form-field';
 import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy-input';
-import { UiModule } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-login',
@@ -33,7 +32,6 @@ import { UiModule } from '@sagebionetworks/openchallenges/ui';
     MatFormFieldModule,
     MatInputModule,
     AuthModule,
-    UiModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

@@ -11,14 +11,17 @@ import {
   Organization,
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationCard, UiModule } from '@sagebionetworks/openchallenges/ui';
+import {
+  OrganizationCard,
+  OrganizationCardComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
   standalone: true,
-  imports: [CommonModule, UiModule],
+  imports: [CommonModule, OrganizationCardComponent],
   templateUrl: './challenge-contributors.component.html',
   styleUrls: ['./challenge-contributors.component.scss'],
 })
