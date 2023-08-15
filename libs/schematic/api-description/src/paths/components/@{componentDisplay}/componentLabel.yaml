@@ -5,7 +5,7 @@ get:
     - Schema
   summary: Gets the label of the component
   description: Gets the label of the component
-  operationId: componentLabel
+  operationId: getComponentLabel
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
     - $ref: ../../../components/parameters/query/useStrictCamelCase.yaml

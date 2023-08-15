@@ -13,6 +13,50 @@ from schematic_api.models.component import Component
 from schematic_api.controllers.utils import handle_exceptions
 
 
+def get_component_label_from_schematic(
+    component_display: str, schema_url: str, use_strict_camel_case: bool
+) -> str:
+    """Gets the label of the component
+
+    Args:
+        component_display(str): The display name of the component
+        schema_url (str): The URL of the schema in jsonld form
+        use_strict_camel_case (bool): whether or not to use strict camel case when doing the
+          conversion
+
+    Returns:
+        str: The component label
+    """
+    schema_explorer = SchemaExplorer()
+    schema_explorer.load_schema(schema_url)
+    return schema_explorer.get_property_label_from_display_name(
+        component_display, use_strict_camel_case
+    )
+
+
+def get_component_label(
+    component_display: str, schema_url: str, use_strict_camel_case: bool
+) -> tuple[Union[str, BasicError], int]:
+    """Gets the label of the component
+
+    Args:
+        component_display(str): The display name of the component
+        schema_url (str): The URL of the schema in jsonld form
+        use_strict_camel_case (bool): whether or not to use strict camel case when doing the
+          conversion
+
+    Returns:
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the label or an error object
+          The second item is the response status
+    """
+    result: Union[str, BasicError] = get_component_label_from_schematic(
+        component_display, schema_url, use_strict_camel_case
+    )
+    status = 200
+    return result, status
+
+
 def get_component_attributes(
     component_label: str,
     schema_url: str,

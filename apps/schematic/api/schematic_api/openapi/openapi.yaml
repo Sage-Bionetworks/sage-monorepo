@@ -235,7 +235,7 @@ paths:
   /components/{componentDisplay}/componentLabel:
     get:
       description: Gets the label of the component
-      operationId: component_label
+      operationId: get_component_label
       parameters:
       - description: The display name of a component in a schema
         explode: false

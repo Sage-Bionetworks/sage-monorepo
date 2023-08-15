@@ -122,7 +122,7 @@ paths:
         - Schema
       summary: Gets the label of the component
       description: Gets the label of the component
-      operationId: componentLabel
+      operationId: getComponentLabel
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'

@@ -12,7 +12,7 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
-def component_label(
+def get_component_label(
     component_display, schema_url, use_strict_camel_case=None
 ):  # noqa: E501
     """Gets the label of the component
@@ -28,7 +28,7 @@ def component_label(
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return schema_controller_impl.component_label(
+    return schema_controller_impl.get_component_label(
         component_display, schema_url, use_strict_camel_case
     )
 
