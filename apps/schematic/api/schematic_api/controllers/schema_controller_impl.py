@@ -6,8 +6,8 @@ from schematic.schemas.generator import SchemaGenerator, SchemaExplorer  # type:
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.attributes_page import AttributesPage
 from schematic_api.models.attribute import Attribute
-from schematic_api.models.components_page import ComponentsPage
-from schematic_api.models.component import Component
+from schematic_api.models.nodes_page import NodesPage
+from schematic_api.models.node import Node
 from schematic_api.controllers.utils import handle_exceptions
 
 
@@ -66,8 +66,8 @@ def list_component_attributes(
     return result, status
 
 
-def get_component_parents(
-    component_label: str,
+def get_node_dependencies(
+    node_label: str,
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
@@ -75,8 +75,8 @@ def get_component_parents(
     """Gets the components that the input component is dependent on
 
     Args:
+        node_label (str): The label of the component to get dependencies for
         schema_url (str): The URL of the schema in json form
-        component_label (str): The label of the component to get dependencies for
         return_display_names (bool): Whether or not to return the display names of the component,
           otherwise the label
         return_ordered_by_schema (bool):Whether or not to order the components by their order in
@@ -87,27 +87,27 @@ def get_component_parents(
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
     return schema_generator.get_node_dependencies(
-        source_node=component_label,
+        source_node=node_label,
         display_names=return_display_names,
         schema_ordered=return_ordered_by_schema,
     )
 
 
 @handle_exceptions
-def list_component_parents(
-    component_label: str,
+def list_node_dependencies(
+    node_label: str,
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
-) -> tuple[Union[ComponentsPage, BasicError], int]:
+) -> tuple[Union[NodesPage, BasicError], int]:
     """Lists the components that the input component is dependent on
 
     Args:
+        node_label (str): The label of the node to get dependencies for
         schema_url (str): The URL of the schema in json form
-        component_label (str): The label of the component to get dependencies for
-        return_display_names (bool): Whether or not to return the display names of the component,
+        return_display_names (bool): Whether or not to return the display names of the dependencies,
           otherwise the label
-        return_ordered_by_schema (bool):Whether or not to order the components by their order in
+        return_ordered_by_schema (bool):Whether or not to order the dependencies by their order in
           the schema, otherwise random
 
     Returns:
@@ -116,23 +116,23 @@ def list_component_parents(
           The second item is the response status
     """
 
-    components = [
-        Component(component)
-        for component in get_component_parents(
-            component_label, schema_url, return_display_names, return_ordered_by_schema
+    nodes = [
+        Node(node)
+        for node in get_node_dependencies(
+            node_label, schema_url, return_display_names, return_ordered_by_schema
         )
     ]
 
-    page = ComponentsPage(
+    page = NodesPage(
         number=0,
         size=100,
-        total_elements=len(components),
+        total_elements=len(nodes),
         total_pages=1,
         has_next=False,
         has_previous=False,
-        components=components,
+        nodes=nodes,
     )
-    result: Union[ComponentsPage, BasicError] = page
+    result: Union[NodesPage, BasicError] = page
     status = 200
 
     return result, status

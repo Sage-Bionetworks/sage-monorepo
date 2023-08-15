@@ -271,18 +271,20 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
-  /components/{componentLabel}/parents:
+  /nodes/{nodeLabel}/dependencies:
     get:
-      description: Gets the components immediate parent components in the schema.
-      operationId: list_component_parents
+      description: Gets the immediate dependencies that are related to the given source
+        node
+      operationId: list_node_dependencies
       parameters:
-      - description: The label of a component in a schema
+      - description: The label of the source node in a schema to get the dependencies
+          of
         explode: false
         in: path
-        name: componentLabel
+        name: nodeLabel
         required: true
         schema:
-          $ref: '#/components/schemas/ComponentLabel'
+          $ref: '#/components/schemas/NodeLabel'
         style: simple
       - description: The URL of a schema in jsonld form
         explode: true
@@ -315,7 +317,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ComponentsPage'
+                $ref: '#/components/schemas/NodesPage'
           description: Success
         "500":
           content:
@@ -324,7 +326,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets the components immediate parent components in the schema.
+      summary: Gets the immediate dependencies that are related to the given source
+        node
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
@@ -377,6 +380,16 @@ components:
       schema:
         $ref: '#/components/schemas/SchemaUrl'
       style: form
+    nodeLabel:
+      description: The label of the source node in a schema to get the dependencies
+        of
+      explode: false
+      in: path
+      name: nodeLabel
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabel'
+      style: simple
     returnDisplayNames:
       description: "Whether or not to return the display names of the component, otherwise\
         \ the label"
@@ -611,36 +624,40 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    NodeLabel:
+      description: The label of a node in a schema
+      example: MolecularEntity
+      type: string
     ReturnDisplayNames:
       default: true
-      description: "Whether or not to return the display names of the component, otherwise\
-        \ the label"
+      description: Whether or not to return the display names of the node otherwise
+        the label
       type: boolean
     ReturnOrderedBySchema:
       default: true
       description: "Whether or not to order the components by their order in the schema,\
         \ otherwise random"
       type: boolean
-    Component:
-      description: A component of a schema.
+    Node:
+      description: A node of a schema.
       properties:
         name:
-          description: The name of the component.
+          description: The name of the node.
           example: Patient
           title: name
           type: string
       required:
       - name
-      title: Component
+      title: Node
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    ComponentsPage:
+    NodesPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ComponentsPage_allOf'
-      description: A page of components.
-      title: ComponentsPage
+      - $ref: '#/components/schemas/NodesPage_allOf'
+      description: A page of nodes.
+      title: NodesPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -712,17 +729,17 @@ components:
       title: AttributesPage_allOf
       type: object
       example: null
-    ComponentsPage_allOf:
+    NodesPage_allOf:
       properties:
-        components:
-          description: A list of components.
+        nodes:
+          description: A list of nodes.
           items:
-            $ref: '#/components/schemas/Component'
-          title: components
+            $ref: '#/components/schemas/Node'
+          title: nodes
           type: array
       required:
-      - components
-      title: ComponentsPage_allOf
+      - nodes
+      title: NodesPage_allOf
       type: object
       example: null
     ProjectsPage_allOf:
