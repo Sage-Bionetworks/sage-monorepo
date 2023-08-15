@@ -114,6 +114,27 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentDisplay}/componentLabel:
+    parameters:
+      - $ref: '#/components/parameters/componentDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the label of the component
+      description: Gets the label of the component
+      operationId: componentLabel
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/useStrictCamelCase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentLabel'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
@@ -364,6 +385,10 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
+    UseStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel case
+      type: boolean
+      default: true
     Project:
       type: object
       description: A project.
@@ -440,6 +465,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ComponentDisplay'
+    useStrictCamelCase:
+      name: useStrictCamelCase
+      in: query
+      description: Whether or not to use the more strict way of converting to camel case
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
   responses:
     BadRequest:
       description: Invalid request
