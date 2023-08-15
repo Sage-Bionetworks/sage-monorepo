@@ -8,7 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
-import { AuthModule, AuthService } from '@sagebionetworks/openchallenges/auth';
+import { AuthService } from '@sagebionetworks/openchallenges/auth';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 import { Subscription } from 'rxjs';
@@ -31,7 +31,6 @@ import { MatLegacyInputModule as MatInputModule } from '@angular/material/legacy
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    AuthModule,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],

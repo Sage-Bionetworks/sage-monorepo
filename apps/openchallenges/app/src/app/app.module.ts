@@ -11,7 +11,6 @@ import { CountUpModule } from 'ngx-countup';
 import { HttpClientModule } from '@angular/common/http';
 import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { KeycloakAngularModule } from 'keycloak-angular';
-import { AuthModule } from '@sagebionetworks/openchallenges/auth';
 import { AppComponent } from './app.component';
 import { MatLegacyProgressSpinnerModule as MatProgressSpinnerModule } from '@angular/material/legacy-progress-spinner';
 import { SharedUtilModule } from '@sagebionetworks/shared/util';
@@ -32,7 +31,7 @@ import { NavbarComponent } from '@sagebionetworks/openchallenges/ui';
     HttpClientModule,
     MatButtonModule,
     KeycloakAngularModule,
-    AuthModule.forRoot(),
+    // AuthModule.forRoot(),
     MatProgressSpinnerModule,
     SharedUtilModule,
     NavbarComponent,

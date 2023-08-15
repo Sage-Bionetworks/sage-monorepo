@@ -20,7 +20,6 @@ import {
   UserService,
   BasicError as ApiClientError,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { AuthModule } from '@sagebionetworks/openchallenges/auth';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
@@ -36,7 +35,6 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    AuthModule,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
