@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { AuthGuard } from './auth.guard';
-// import { KAuthGuard } from '@sagebionetworks/openchallenges/auth';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
@@ -29,13 +28,6 @@ export const routes: Routes = [
     path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
-        (routes) => routes.routes
-      ),
-  },
-  {
-    path: 'login',
-    loadChildren: () =>
-      import('@sagebionetworks/openchallenges/login').then(
         (routes) => routes.routes
       ),
   },
@@ -74,13 +66,6 @@ export const routes: Routes = [
         (routes) => routes.routes
       ),
   },
-  // {
-  //   path: 'user/:userLogin',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/user-profile').then(
-  //       (m) => m.UserProfileModule
-  //     ),
-  // },
   {
     path: '**',
     redirectTo: '/not-found',
