@@ -74,15 +74,42 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /components/{componentLabel}/attributes:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
-      - $ref: '#/components/parameters/componentLabel'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all storage projects the current user has access to.
+      description: Gets all storage projects the current user has access to.
+      operationId: listProjects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/attributes:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
     get:
       tags:
         - Schema
-      summary: Gets attributes associated with a given component
-      description: Gets attributes associated with a given component
-      operationId: listComponentAttributes
+      summary: Gets attributes associated with a given node
+      description: Gets attributes associated with a given node
+      operationId: listNodeAttributes
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -94,15 +121,15 @@ paths:
                 $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /components/{componentDisplay}/componentLabel:
+  /nodes/{nodeDisplay}/nodeLabel:
     parameters:
-      - $ref: '#/components/parameters/componentDisplay'
+      - $ref: '#/components/parameters/nodeDisplay'
     get:
       tags:
         - Schema
-      summary: Gets the label of the component
-      description: Gets the label of the component
-      operationId: getComponentLabel
+      summary: Gets the label of the node
+      description: Gets the label of the node
+      operationId: getNodeLabel
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'
@@ -112,7 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ComponentLabel'
+                $ref: '#/components/schemas/NodeLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeLabel}/dependencies:
@@ -155,33 +182,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationRulesPage'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
-    parameters:
-      - $ref: '#/components/parameters/assetViewId'
-      - $ref: '#/components/parameters/assetType'
-    get:
-      tags:
-        - Storage
-      summary: Gets all storage projects the current user has access to.
-      description: Gets all storage projects the current user has access to.
-      operationId: listProjects
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProjectsPage'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -341,8 +341,41 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
+    Project:
+      type: object
+      description: A project.
+      properties:
+        name:
+          type: string
+          description: The name of the project.
+          example: Example project
+        id:
+          type: string
+          description: The ID of the project.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ProjectsPage:
+      type: object
+      description: A page of projects.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            projects:
+              description: A list of projects.
+              type: array
+              items:
+                $ref: '#/components/schemas/Project'
+          required:
+            - projects
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodeLabel:
+      description: The label of a node in a schema
       type: string
       example: MolecularEntity
     SchemaUrl:
@@ -375,18 +408,14 @@ components:
             - attributes
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentDisplay:
-      description: The display name of a component in a schema
+    NodeDisplay:
+      description: The display name of a node in a schema
       type: string
       example: MolecularEntity
     UseStrictCamelCase:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
       default: true
-    NodeLabel:
-      description: The label of a node in a schema
-      type: string
-      example: MolecularEntity
     ReturnDisplayNames:
       description: Whether or not to return the display names of the node otherwise the label
       type: boolean
@@ -423,10 +452,6 @@ components:
             - nodes
       x-java-class-annotations:
         - '@lombok.Builder'
-    NodeDisplay:
-      description: The display name of a node in a schema
-      type: string
-      example: MolecularEntity
     ValidationRule:
       type: object
       description: A validation rule.
@@ -455,39 +480,6 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
-    Project:
-      type: object
-      description: A project.
-      properties:
-        name:
-          type: string
-          description: The name of the project.
-          example: Example project
-        id:
-          type: string
-          description: The ID of the project.
-          example: Syn1
-      required:
-        - name
-        - id
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    ProjectsPage:
-      type: object
-      description: A page of projects.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            projects:
-              description: A list of projects.
-              type: array
-              items:
-                $ref: '#/components/schemas/Project'
-          required:
-            - projects
-      x-java-class-annotations:
-        - '@lombok.Builder'
   parameters:
     projectId:
       name: projectId
@@ -510,33 +502,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
-    componentLabel:
-      name: componentLabel
-      in: path
-      description: The label of a component in a schema
-      required: true
-      schema:
-        $ref: '#/components/schemas/ComponentLabel'
-    schemaUrl:
-      name: schemaUrl
-      in: query
-      description: The URL of a schema in jsonld form
-      required: true
-      schema:
-        $ref: '#/components/schemas/SchemaUrl'
-    componentDisplay:
-      name: componentDisplay
-      in: path
-      description: The display name of a component in a schema
-      required: true
-      schema:
-        $ref: '#/components/schemas/ComponentDisplay'
-    useStrictCamelCase:
-      name: useStrictCamelCase
-      in: query
-      description: Whether or not to use the more strict way of converting to camel case
-      schema:
-        $ref: '#/components/schemas/UseStrictCamelCase'
     nodeLabel:
       name: nodeLabel
       in: path
@@ -544,6 +509,26 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/NodeLabel'
+    schemaUrl:
+      name: schemaUrl
+      in: query
+      description: The URL of a schema in jsonld form
+      required: true
+      schema:
+        $ref: '#/components/schemas/SchemaUrl'
+    nodeDisplay:
+      name: nodeDisplay
+      in: path
+      description: The display name of the node in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeDisplay'
+    useStrictCamelCase:
+      name: useStrictCamelCase
+      in: query
+      description: Whether or not to use the more strict way of converting to camel case
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
     returnDisplayNames:
       name: returnDisplayNames
       in: query
@@ -558,13 +543,6 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
-    nodeDisplay:
-      name: nodeDisplay
-      in: path
-      description: The display name of the node in a schema
-      required: true
-      schema:
-        $ref: '#/components/schemas/NodeDisplay'
   responses:
     BadRequest:
       description: Invalid request

@@ -13,34 +13,35 @@ from schematic_api.models.node import Node
 from schematic_api.controllers.utils import handle_exceptions
 
 
-def get_component_label_from_schematic(
-    component_display: str, schema_url: str, use_strict_camel_case: bool
+def get_node_label_from_schematic(
+    node_display: str, schema_url: str, use_strict_camel_case: bool
 ) -> str:
-    """Gets the label of the component
+    """Gets the label of the node
 
     Args:
-        component_display(str): The display name of the component
+        node_display(str): The display name of the node
         schema_url (str): The URL of the schema in jsonld form
         use_strict_camel_case (bool): whether or not to use strict camel case when doing the
           conversion
 
     Returns:
-        str: The component label
+        str: The node label
     """
     schema_explorer = SchemaExplorer()
     schema_explorer.load_schema(schema_url)
     return schema_explorer.get_property_label_from_display_name(
-        component_display, use_strict_camel_case
+        node_display, use_strict_camel_case
     )
 
 
-def get_component_label(
-    component_display: str, schema_url: str, use_strict_camel_case: bool
+@handle_exceptions
+def get_node_label(
+    node_display: str, schema_url: str, use_strict_camel_case: bool
 ) -> tuple[Union[str, BasicError], int]:
-    """Gets the label of the component
+    """Gets the label of the node
 
     Args:
-        component_display(str): The display name of the component
+        node_display(str): The display name of the node
         schema_url (str): The URL of the schema in jsonld form
         use_strict_camel_case (bool): whether or not to use strict camel case when doing the
           conversion
@@ -50,41 +51,41 @@ def get_component_label(
           The first item is either the label or an error object
           The second item is the response status
     """
-    result: Union[str, BasicError] = get_component_label_from_schematic(
-        component_display, schema_url, use_strict_camel_case
+    result: Union[str, BasicError] = get_node_label_from_schematic(
+        node_display, schema_url, use_strict_camel_case
     )
     status = 200
     return result, status
 
 
-def get_component_attributes(
-    component_label: str,
+def get_node_attributes(
+    node_label: str,
     schema_url: str,
 ) -> list[str]:
-    """Gets the attributes associated with the component
+    """Gets the attributes associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
-        component_label (str): The label of the component
+        node_label (str): The label of the node
 
     Returns:
-        list[str]: A list of attributes of the component
+        list[str]: A list of attributes of the node
     """
     schema_explorer = SchemaExplorer()
     schema_explorer.load_schema(schema_url)
-    return schema_explorer.find_class_specific_properties(component_label)
+    return schema_explorer.find_class_specific_properties(node_label)
 
 
 @handle_exceptions
-def list_component_attributes(
-    component_label: str,
+def list_node_attributes(
+    node_label: str,
     schema_url: str,
 ) -> tuple[Union[AttributesPage, BasicError], int]:
-    """Lists the attributes associated with the component
+    """Lists the attributes associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
-        component_label (str): The label of the component
+        node_label (str): The label of the node
 
     Returns:
         tuple[Union[AttributesPage, BasicError], int]: A tuple
@@ -94,7 +95,7 @@ def list_component_attributes(
 
     attributes = [
         Attribute(attribute)
-        for attribute in get_component_attributes(component_label, schema_url)
+        for attribute in get_node_attributes(node_label, schema_url)
     ]
 
     page = AttributesPage(
@@ -172,18 +173,18 @@ def get_node_dependencies(
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
 ) -> list[str]:
-    """Gets the components that the input component is dependent on
+    """Gets the nodes that the input node is dependent on
 
     Args:
-        node_label (str): The label of the component to get dependencies for
+        node_label (str): The label of the node to get dependencies for
         schema_url (str): The URL of the schema in json form
-        return_display_names (bool): Whether or not to return the display names of the component,
+        return_display_names (bool): Whether or not to return the display names of the node,
           otherwise the label
-        return_ordered_by_schema (bool):Whether or not to order the components by their order in
+        return_ordered_by_schema (bool):Whether or not to order the nodes by their order in
           the schema, otherwise random
 
     Returns:
-        list[str]: A list of component labels or display names
+        list[str]: A list of node labels or display names
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
     return schema_generator.get_node_dependencies(
@@ -200,7 +201,7 @@ def list_node_dependencies(
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
 ) -> tuple[Union[NodesPage, BasicError], int]:
-    """Lists the components that the input component is dependent on
+    """Lists the nodes that the input node is dependent on
 
     Args:
         node_label (str): The label of the node to get dependencies for
@@ -211,8 +212,8 @@ def list_node_dependencies(
           the schema, otherwise random
 
     Returns:
-        tuple[Union[ComponentsPage, BasicError], int]: A tuple
-          The first item is either the components or an error object
+        tuple[Union[NodesPage, BasicError], int]: A tuple
+          The first item is either the nodes or an error object
           The second item is the response status
     """
 
