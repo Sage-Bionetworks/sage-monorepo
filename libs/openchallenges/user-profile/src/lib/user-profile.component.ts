@@ -31,7 +31,6 @@ import {
   MOCK_USER,
   Avatar,
   FooterComponent,
-  UiModule,
   AvatarComponent,
 } from '@sagebionetworks/openchallenges/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/openchallenges/ui';
