@@ -1,11 +1,11 @@
 parameters:
-  - $ref: ../../../components/parameters/path/componentLabel.yaml
+  - $ref: ../../../components/parameters/path/nodeLabel.yaml
 get:
   tags:
     - Schema
-  summary: Gets attributes associated with a given component
-  description: Gets attributes associated with a given component
-  operationId: listComponentAttributes
+  summary: Gets attributes associated with a given node
+  description: Gets attributes associated with a given node
+  operationId: listNodeAttributes
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:
