@@ -211,13 +211,17 @@ jobs:
         with:
           driver: docker
 
-      - name: Cache Docker layers
+      - name: Setup Docker cache
         uses: actions/cache@v3
         with:
-          path: /tmp/.buildx-cache
+          path: |
+            /tmp/.buildx-cache
+            /var/lib/docker
           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-single-buildx
+
+      - run: docker images
 
       - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
@@ -230,6 +234,8 @@ jobs:
           # ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
           devcontainer up --workspace-folder ../sage-monorepo
+
+      - run: docker images
 
       - name: Prepare the workspace in the dev container
         run: |
