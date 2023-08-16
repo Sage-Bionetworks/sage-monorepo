@@ -216,6 +216,7 @@ jobs:
         with:
           path: |
             /tmp/.buildx-cache
+            /var/lib/docker/buildkit
           key: ${{ runner.os }}-single-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-single-buildx
@@ -233,9 +234,7 @@ jobs:
           # ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
           mkdir /tmp/.buildx-cache
-          devcontainer up --cache-from /tmp/.buildx-cache --workspace-folder ../sage-monorepo
-
-      - run: ls /tmp/.buildx-cache
+          devcontainer up --workspace-folder ../sage-monorepo
 
       # - run: docker images
 
