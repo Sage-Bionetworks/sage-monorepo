@@ -170,6 +170,10 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
+      - run: nproc
+      - run: cat /proc/meminfo
+      - run: df -h
+
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
