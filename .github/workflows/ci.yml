@@ -229,7 +229,10 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo
+          devcontainer up \
+            --mount type=bind,source=/root/.gradle/caches,target=/root/.gradle/caches \
+            --mount type=bind,source=/root/.gradle/wrapper,target=/root/.gradle/wrapper \
+            --workspace-folder ../sage-monorepo
 
       - name: Prepare the workspace in the dev container
         run: |
