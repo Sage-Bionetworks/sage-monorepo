@@ -31,7 +31,7 @@ import {
   MOCK_USER,
   Avatar,
   FooterComponent,
-  UiModule,
+  AvatarComponent,
 } from '@sagebionetworks/openchallenges/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -45,6 +45,7 @@ import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-t
 import { UserProfileChallengesComponent } from './user-profile-challenges/user-profile-challenges.component';
 import { UserProfileOverviewComponent } from './user-profile-overview/user-profile-overview.component';
 import { UserProfileStarredComponent } from './user-profile-starred/user-profile-starred.component';
+import { UserProfileStatsComponent } from './user-profile-stats/user-profile-stats.component';
 
 @Component({
   selector: 'openchallenges-user',
@@ -53,12 +54,13 @@ import { UserProfileStarredComponent } from './user-profile-starred/user-profile
     CommonModule,
     MatTabsModule,
     MatIconModule,
-    UiModule,
     RouterModule,
     UserProfileChallengesComponent,
     UserProfileOverviewComponent,
     UserProfileStarredComponent,
     FooterComponent,
+    AvatarComponent,
+    UserProfileStatsComponent,
   ],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],

@@ -4,13 +4,13 @@ import { User } from '@sagebionetworks/openchallenges/api-client-angular-depreca
 import {
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
-  UiModule,
+  OrganizationCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-user-profile-overview',
   standalone: true,
-  imports: [CommonModule, UiModule],
+  imports: [CommonModule, OrganizationCardComponent],
   templateUrl: './user-profile-overview.component.html',
   styleUrls: ['./user-profile-overview.component.scss'],
 })
