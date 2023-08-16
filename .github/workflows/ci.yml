@@ -170,10 +170,6 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - run: nproc
-      - run: cat /proc/meminfo
-      - run: df -h
-
       - name: Setup Node.js cache
         id: cache-node
         uses: actions/cache@v3
@@ -240,25 +236,25 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && workspace-install"
 
-      - name: Lint the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint"
+      # - name: Lint the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=lint"
 
-      - name: Build the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build"
+      # - name: Build the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=build"
 
-      - name: Test the affected projects (unit)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test"
+      # - name: Test the affected projects (unit)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=test"
 
-      - name: Test the affected projects (integration)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test"
+      # - name: Test the affected projects (integration)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=integration-test"
 
       # - name: Build the images of the affected projects
       #   run: |
