@@ -149,6 +149,8 @@ jobs:
 
   pr:
     runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/sage-bionetworks/sage-devcontainer:55645b0
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
     # - the branch name does not start with `renovate/` since we know that the workflow would have
@@ -171,7 +173,6 @@ jobs:
         uses: nrwl/nx-set-shas@v3
 
       - name: Setup Node.js cache
-        id: cache-node
         uses: actions/cache@v3
         with:
           path: '**/node_modules'
@@ -219,57 +220,57 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-single-buildx
 
-      - name: Install the devcontainer CLI
-        run: npm install -g @devcontainers/cli@0.49.0
+      # - name: Install the devcontainer CLI
+      #   run: npm install -g @devcontainers/cli@0.49.0
 
-      - name: Start the dev container
-        run: |
-          # Update the dev container definition to use docker-outside-of-docker instead of
-          # docker-in-docker so that the images built inside the dev container are available to the
-          # host (i.e. outside the dev container).
-          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
+      # - name: Start the dev container
+      #   run: |
+      #     # Update the dev container definition to use docker-outside-of-docker instead of
+      #     # docker-in-docker so that the images built inside the dev container are available to the
+      #     # host (i.e. outside the dev container).
+      #     ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up \
-            --mount type=bind,source=/root/.gradle/caches,target=/root/.gradle/caches \
-            --mount type=bind,source=/root/.gradle/wrapper,target=/root/.gradle/wrapper \
-            --workspace-folder ../sage-monorepo
+      #     devcontainer up \
+      #       --mount type=bind,source=/root/.gradle/caches,target=/root/.gradle/caches \
+      #       --mount type=bind,source=/root/.gradle/wrapper,target=/root/.gradle/wrapper \
+      #       --workspace-folder ../sage-monorepo
 
-      - name: Prepare the workspace in the dev container
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && workspace-install"
-
-      - name: Lint the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint"
-
-      - name: Build the affected projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build"
-
-      - name: Test the affected projects (unit)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test"
-
-      - name: Test the affected projects (integration)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test"
-
-      # - name: Build the images of the affected projects
+      # - name: Prepare the workspace in the dev container
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=build-and-remove-image --parallel=1"
+      #       && workspace-install"
 
-      - name: Build the images of the SELECTED projects
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-and-remove-image \
-              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
-              --parallel=1"
+      # - name: Lint the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=lint"
 
-      - name: Stop the dev container
-        run: docker rm -f sage_devcontainer
+      # - name: Build the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=build"
+
+      # - name: Test the affected projects (unit)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=test"
+
+      # - name: Test the affected projects (integration)
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=integration-test"
+
+      # # - name: Build the images of the affected projects
+      # #   run: |
+      # #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      # #       && nx affected --target=build-and-remove-image --parallel=1"
+
+      # - name: Build the images of the SELECTED projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=build-and-remove-image \
+      #         --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
+      #         --parallel=1"
+
+      # - name: Stop the dev container
+      #   run: docker rm -f sage_devcontainer
