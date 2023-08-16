@@ -236,10 +236,10 @@ jobs:
 
       - run: docker images
 
-      - name: Prepare the workspace in the dev container
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && workspace-install"
+      # - name: Prepare the workspace in the dev container
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && workspace-install"
 
       # - name: Lint the affected projects
       #   run: |
