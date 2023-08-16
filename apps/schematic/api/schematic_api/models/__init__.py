@@ -14,6 +14,9 @@ from schematic_api.models.datasets_page_all_of import DatasetsPageAllOf
 from schematic_api.models.manifest import Manifest
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifests_page_all_of import ManifestsPageAllOf
+from schematic_api.models.node import Node
+from schematic_api.models.nodes_page import NodesPage
+from schematic_api.models.nodes_page_all_of import NodesPageAllOf
 from schematic_api.models.page_metadata import PageMetadata
 from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
