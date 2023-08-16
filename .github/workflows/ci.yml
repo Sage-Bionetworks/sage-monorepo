@@ -234,6 +234,8 @@ jobs:
 
           devcontainer up --cache-from /tmp/.buildx-cache --workspace-folder ../sage-monorepo
 
+      - run: ls /tmp/.buildx-cache
+
       # - run: docker images
 
       # - name: Prepare the workspace in the dev container
