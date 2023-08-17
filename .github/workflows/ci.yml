@@ -237,7 +237,7 @@ jobs:
             tee /etc/apt/sources.list.d/docker.list > /dev/null
 
           apt-get update -qq -y
-          # export DEBIAN_FRONTEND=noninteractive apt-get install docker-ce-cli
+          export DEBIAN_FRONTEND=noninteractive apt-get install docker-ce-cli -qq -y
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
