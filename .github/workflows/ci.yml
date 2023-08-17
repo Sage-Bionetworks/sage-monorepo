@@ -253,7 +253,8 @@ jobs:
 
       - name: Prepare workspace
         run: |
-          . ./dev-env.sh && workspace-install
+          . ./dev-env.sh
+          workspace-install
           # su vscode -c ". ./dev-env.sh && workspace-install"
 
       # - run: yarn nx affected --target=prepare
