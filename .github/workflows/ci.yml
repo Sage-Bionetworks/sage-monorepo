@@ -224,7 +224,7 @@ jobs:
       - name: Prepare the workspace in the dev container
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=prepare-r"
+            && yarn nx run-many --target=prepare-r"
 
       # - name: Lint the affected projects
       #   run: |
