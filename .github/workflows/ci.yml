@@ -20,9 +20,6 @@ jobs:
     # env:
     #   NX_BRANCH: main
     steps:
-      - name: Check id
-        run: id
-
       - uses: actions/checkout@v3
         name: Checkout [${{ github.ref_name }}]
         with:
@@ -167,6 +164,9 @@ jobs:
           || !startsWith(github.head_ref, 'renovate/')
         )
     steps:
+      - name: Check id
+        run: id
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
