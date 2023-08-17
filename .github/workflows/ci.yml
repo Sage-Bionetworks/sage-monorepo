@@ -247,14 +247,14 @@ jobs:
             "# source dev-env.sh if found in the current directory" \
             "if [ -f dev-env.sh ]; then" \
             "  . ./dev-env.sh" \
-            "  workspace-initialize-env" \
             "fi" \
             "" | tee -a "/root/.bashrc"
 
       - name: Prepare workspace
         run: |
-          . ./dev-env.sh
-          workspace-install
+          echo "plop"
+          # . ./dev-env.sh
+          # workspace-install
           # su vscode -c ". ./dev-env.sh && workspace-install"
 
       # - run: yarn nx affected --target=prepare
