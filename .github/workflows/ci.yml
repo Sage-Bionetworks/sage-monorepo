@@ -236,6 +236,11 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && ls -al /workspaces/sage-monorepo/.yarn/cache"
 
+      - name: Install Node.js packages
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && yarn install --immutable"
+
       # - name: Prepare the workspace in the dev container
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
