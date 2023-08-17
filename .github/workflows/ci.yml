@@ -205,7 +205,7 @@ jobs:
           # Update the dev container definition to use docker-outside-of-docker instead of
           # docker-in-docker so that the images built inside the dev container are available to the
           # host (i.e. outside the dev container).
-          #./tools/switch-devcontainer-to-docker-outside-of-docker.sh
+          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
           devcontainer up --workspace-folder ../sage-monorepo
 
