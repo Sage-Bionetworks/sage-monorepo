@@ -234,7 +234,7 @@ jobs:
 
       - name: Prepare workspace
         run: |
-          workspace-install
+          su vscode -c ". ./dev-env.sh && workspace-install"
 
       # - run: yarn nx affected --target=prepare
       # - run: yarn nx affected --target=prepare-java --parallel=1
