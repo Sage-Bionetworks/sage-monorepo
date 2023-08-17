@@ -151,7 +151,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ghcr.io/sage-bionetworks/sage-devcontainer:55645b0
-      # options: --user root
+      options: --user root
     # Runs this job if triggered by a PR and if at least one of these conditions are true:
     # - the PR originate from a fork
     # - the branch name does not start with `renovate/` since we know that the workflow would have
@@ -231,6 +231,9 @@ jobs:
       #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
       #     restore-keys: |
       #       ${{ runner.os }}-single-buildx
+
+      - name: Check root bashrc
+        run: cat ~/.bashrc
 
       - name: Prepare workspace
         run: |
