@@ -233,7 +233,23 @@ jobs:
       #       ${{ runner.os }}-single-buildx
 
       - name: Check root bashrc
-        run: cat ~/.bashrc
+        run: |
+          cat ~/.bashrc
+          cat /root/.bashrc
+
+      - name: Set up .bashrc
+        run: |
+          printf "%s\n" \
+            "" \
+            "eval \"\$(pyenv init --path)\"" \
+            "eval \"\$(pyenv virtualenv-init -)\"" \
+            "" \
+            "# source dev-env.sh if found in the current directory" \
+            "if [ -f dev-env.sh ]; then" \
+            "  . ./dev-env.sh" \
+            "  workspace-initialize-env" \
+            "fi" \
+            "" | tee -a "~/.bashrc"
 
       - name: Prepare workspace
         run: |
