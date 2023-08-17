@@ -224,6 +224,7 @@ jobs:
       - name: Prepare the workspace in the dev container
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && chown -R vscode:vscode /home/vscode/.cache/R/renv/cache \
             && yarn nx run-many --target=prepare-r"
 
       # - name: Lint the affected projects
