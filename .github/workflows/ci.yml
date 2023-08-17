@@ -170,10 +170,10 @@ jobs:
       - name: Set up Renv cache
         uses: actions/cache@v3
         with:
-          path: '/tmp/.cache/R/renv/cache' # '~/.cache/R/renv/cache'
-          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          path: '/tmp/.cache/R/renv/cache'
+          key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
           restore-keys: |
-            ${{ runner.os }}-renv-
+            ${{ runner.os }}-renv-cache-
 
       # - name: Setup poetry cache
       #   id: cache-poetry
@@ -232,11 +232,6 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && yarn nx run-many --target=prepare-r"
-
-      - name: Enforce cache update for a local NX cache
-        run: |
-          STATE_CACHE_KEY="${{ runner.os }}-renv-${{ github.head_ref }}-${{ hashFiles('**/renv.lock') }}"
-          echo "STATE_CACHE_KEY=${STATE_CACHE_KEY}" >> $GITHUB_ENV
 
       # - name: Lint the affected projects
       #   run: |
