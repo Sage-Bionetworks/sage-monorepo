@@ -265,5 +265,5 @@ jobs:
       #         --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
       #         --parallel=1"
 
-      - name: Stop the dev container
-        run: docker rm -f sage_devcontainer
+      # - name: Stop the dev container
+      #   run: docker rm -f sage_devcontainer
