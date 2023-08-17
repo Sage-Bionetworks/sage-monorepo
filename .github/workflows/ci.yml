@@ -236,7 +236,7 @@ jobs:
             "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
             tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-          # apt-get update -qq -y
+          apt-get update -qq -y
           # export DEBIAN_FRONTEND=noninteractive apt-get install docker-ce-cli
 
       - name: Set up Docker Buildx
