@@ -233,6 +233,11 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && yarn nx run-many --target=prepare-r"
 
+      - name: Enforce cache update for a local NX cache
+        run: |
+          STATE_CACHE_KEY="${{ runner.os }}-renv-${{ github.head_ref }}-${{ hashFiles('**/renv.lock') }}"
+          echo "STATE_CACHE_KEY=${STATE_CACHE_KEY}" >> $GITHUB_ENV
+
       # - name: Lint the affected projects
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
