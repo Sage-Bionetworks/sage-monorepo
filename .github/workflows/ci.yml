@@ -224,14 +224,13 @@ jobs:
       - name: Prepare the workspace in the dev container
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
-            sudo chown -R vscode:vscode /home/vscode/.cache
+            sudo chown -R vscode:vscode /home/vscode/.cache \
             && . ./dev-env.sh \
             && yarn install --immutable"
 
       - name: Install R packages
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
-            && . ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && yarn nx run-many --target=prepare-r"
 
       # - name: Lint the affected projects
