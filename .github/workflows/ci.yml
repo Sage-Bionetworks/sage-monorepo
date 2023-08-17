@@ -20,6 +20,8 @@ jobs:
     # env:
     #   NX_BRANCH: main
     steps:
+      - run: id
+
       - uses: actions/checkout@v3
         name: Checkout [${{ github.ref_name }}]
         with:
