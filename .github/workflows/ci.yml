@@ -234,7 +234,7 @@ jobs:
 
       - name: Check root bashrc
         run: |
-          cat ~/.bashrc
+          # cat ~/.bashrc
           cat /root/.bashrc
 
       - name: Set up .bashrc
@@ -249,7 +249,7 @@ jobs:
             "  . ./dev-env.sh" \
             "  workspace-initialize-env" \
             "fi" \
-            "" | tee -a "~/.bashrc"
+            "" | tee -a "/root/.bashrc"
 
       - name: Prepare workspace
         run: |
