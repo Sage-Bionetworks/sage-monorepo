@@ -215,14 +215,16 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
+          mkdir -p /tmp/.cache/R/renv/cache
+
           devcontainer up \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --workspace-folder ../sage-monorepo
 
-      # - name: Prepare the workspace in the dev container
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && workspace-install"
+      - name: Prepare the workspace in the dev container
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx run-many --target=prepare-r"
 
       # - name: Lint the affected projects
       #   run: |
