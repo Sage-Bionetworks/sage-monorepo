@@ -167,7 +167,7 @@ jobs:
       - name: Check id
         run: |
           id
-          ls /__w/_temp/
+          sudo ls /__w/_temp/
 
       - uses: actions/checkout@v3
         with:
