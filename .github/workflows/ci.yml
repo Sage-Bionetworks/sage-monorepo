@@ -165,7 +165,9 @@ jobs:
         )
     steps:
       - name: Check id
-        run: id
+        run: |
+          id
+          ls /__w/_temp/
 
       - uses: actions/checkout@v3
         with:
