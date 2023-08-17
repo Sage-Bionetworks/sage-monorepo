@@ -232,6 +232,18 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-single-buildx
 
+      - name: Prepare workspace
+        run: |
+          . ./dev-env.sh
+          workspace-install
+
+      # - run: yarn nx affected --target=prepare
+      # - run: yarn nx affected --target=prepare-java --parallel=1
+      - run: yarn nx affected --target=lint
+      # - run: yarn nx affected --target=build
+      # - run: yarn nx affected --target=test
+      # - run: yarn nx affected --target=integration-test
+
       # - name: Install the devcontainer CLI
       #   run: npm install -g @devcontainers/cli@0.49.0
 
