@@ -231,10 +231,10 @@ jobs:
 
           devcontainer up --workspace-folder ../sage-monorepo
 
-      - name: ls yarn cache folder inside the dev container
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && ls -al /workspaces/sage-monorepo/.yarn/cache"
+      # - name: ls yarn cache folder inside the dev container
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && ls -al /workspaces/sage-monorepo/.yarn/cache"
 
       - name: Install Node.js packages
         run: |
