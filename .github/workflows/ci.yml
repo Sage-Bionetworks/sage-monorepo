@@ -36,6 +36,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Set up Renv cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/R/renv/cache'
+          key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-cache-
+
       - name: Setup poetry cache
         id: cache-poetry
         uses: actions/cache@v3
@@ -83,12 +91,17 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo \
-            --mount type="bind,source=$HOME/.docker,target=/home/vscode/.docker"
+          mkdir -p /tmp/.cache/R/renv/cache
 
-      - name: Prepare the workspace in the dev container
+          devcontainer up \
+            --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
+            --workspace-folder ../sage-monorepo
+
+      - name: Prepare the workspace
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+            sudo chown -R vscode:vscode /home/vscode/.cache \
+            && . ./dev-env.sh \
             && workspace-install"
 
       - name: Lint the affected projects
@@ -167,6 +180,14 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-yarn-
 
+      - name: Set up Renv cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/R/renv/cache'
+          key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-cache-
+
       # - name: Setup poetry cache
       #   id: cache-poetry
       #   uses: actions/cache@v3
@@ -174,28 +195,28 @@ jobs:
       #     path: ~/.local/share/virtualenvs
       #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Setup Gradle cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            /root/.gradle/caches
-            /root/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+      # - name: Setup Gradle cache
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: |
+      #       /root/.gradle/caches
+      #       /root/.gradle/wrapper
+      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-gradle-
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
+      #   with:
+      #     driver: docker
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-single-buildx
+      # - name: Cache Docker layers
+      #   uses: actions/cache@v3
+      #   with:
+      #     path: /tmp/.buildx-cache
+      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-single-buildx
 
       - name: Install the devcontainer CLI
         run: npm install -g @devcontainers/cli@0.49.0
@@ -207,11 +228,17 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo
+          mkdir -p /tmp/.cache/R/renv/cache
 
-      - name: Prepare the workspace in the dev container
+          devcontainer up \
+            --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
+            --workspace-folder ../sage-monorepo
+
+      - name: Prepare the workspace
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+            sudo chown -R vscode:vscode /home/vscode/.cache \
+            && . ./dev-env.sh \
             && workspace-install"
 
       - name: Lint the affected projects
