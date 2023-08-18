@@ -278,7 +278,7 @@ jobs:
       - name: Install Gradle packages
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            nx run-many --target=prepare-java --parallel=1"
+            && nx run-many --target=prepare-java --parallel=1"
 
       # - name: Lint the affected projects
       #   run: |
