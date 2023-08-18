@@ -1,1 +1,1 @@
-export * from './lib/org-profile.module';
+export * from './lib/org-profile.routes';

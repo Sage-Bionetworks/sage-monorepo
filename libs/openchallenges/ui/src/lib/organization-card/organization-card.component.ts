@@ -2,9 +2,15 @@ import { Component, Input, OnInit } from '@angular/core';
 import { OrganizationCard } from './organization-card';
 import { Avatar } from '../avatar/avatar';
 import { MOCK_MEMBERS, OrganizationMember } from './mock-members';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-organization-card',
+  standalone: true,
+  imports: [CommonModule, AvatarComponent, MatIconModule, RouterModule],
   templateUrl: './organization-card.component.html',
   styleUrls: ['./organization-card.component.scss'],
 })

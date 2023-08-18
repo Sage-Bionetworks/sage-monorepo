@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
-import { NgxTypedJsModule } from 'ngx-typed-js';
 
 import { StatisticsViewerComponent } from './statistics-viewer.component';
 
@@ -10,8 +9,7 @@ describe('StatisticsViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [StatisticsViewerComponent],
-      imports: [HttpClientModule, NgxTypedJsModule],
+      imports: [HttpClientModule, StatisticsViewerComponent],
     }).compileComponents();
   });
 

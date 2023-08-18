@@ -1,1 +1,1 @@
-export * from './lib/team.module';
+export * from './lib/team.routes';
