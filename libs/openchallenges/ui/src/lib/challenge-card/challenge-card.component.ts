@@ -71,7 +71,18 @@ export class ChallengeCardComponent implements OnInit {
 
   truncate(str: string, nchar: number) {
     if (str.length > nchar) {
-      return str.substring(0, nchar - 3) + '...';
+      const words = str.split(' ');
+      let truncated = '';
+
+      for (const word of words) {
+        if ((truncated + ' ' + word).length <= nchar - 3) {
+          truncated += ' ' + word;
+        } else {
+          break;
+        }
+      }
+
+      return truncated + '...';
     } else {
       return str;
     }
