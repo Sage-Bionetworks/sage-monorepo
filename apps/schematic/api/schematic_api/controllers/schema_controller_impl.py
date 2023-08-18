@@ -100,7 +100,7 @@ def list_node_dependencies(
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
 ) -> tuple[Union[NodesPage, BasicError], int]:
-    """Lists the components that the input component is dependent on
+    """Lists the attributes that the input attribute is dependent on
 
     Args:
         node_label (str): The label of the node to get dependencies for
@@ -112,7 +112,7 @@ def list_node_dependencies(
 
     Returns:
         tuple[Union[ComponentsPage, BasicError], int]: A tuple
-          The first item is either the components or an error object
+          The first item is either the attributes or an error object
           The second item is the response status
     """
 
