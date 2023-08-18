@@ -265,8 +265,8 @@ jobs:
 
       - name: Debug
         run: |
-        ls -al /tmp/.local/share/virtualenv
-        ls -al apps/schematic/api/.venv
+          ls -al /tmp/.local/share/virtualenv
+          ls -al apps/schematic/api/.venv
 
       # - name: Lint the affected projects
       #   run: |
