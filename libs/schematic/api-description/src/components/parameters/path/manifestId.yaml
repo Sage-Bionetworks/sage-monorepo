@@ -1,0 +1,6 @@
+name: manifestId
+in: path
+description: ID of a manifest
+required: true
+schema:
+  $ref: ../../schemas/ManifestId.yaml

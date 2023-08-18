@@ -35,7 +35,7 @@ paths:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
 
   /assetTypes/{assetType}/manifests/{manifestId}/json:
-    $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json
+    $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
 
   /nodes/{nodeLabel}/attributes:
     $ref: paths/nodes/@{nodeLabel}/attributes.yaml
