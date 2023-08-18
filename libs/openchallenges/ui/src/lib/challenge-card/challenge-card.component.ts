@@ -69,9 +69,9 @@ export class ChallengeCardComponent implements OnInit {
     }
   }
 
-  shorthand(str: string) {
-    if (str.length >= 80) {
-      return str.substring(0, 80) + '...';
+  truncate(str: string, nchar: number) {
+    if (str.length > nchar) {
+      return str.substring(0, nchar - 3) + '...';
     } else {
       return str;
     }

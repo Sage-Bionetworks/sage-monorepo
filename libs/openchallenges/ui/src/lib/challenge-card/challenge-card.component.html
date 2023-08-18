@@ -15,11 +15,13 @@
       {{ challenge.starredCount }}
     </div> -->
     <div class="card-body">
-      <p class="card-title">{{ challenge.name }}</p>
+      <p class="card-title">
+        {{ truncate(challenge.name, 60) }}
+      </p>
       <p class="card-subtitle" *ngIf="platform">
         {{ platform.name }}
       </p>
-      <p class="mat-caption">{{ shorthand(desc) }}</p>
+      <p class="mat-caption">{{ truncate(desc, 80) }}</p>
     </div>
     <div class="card-footer">
       <div class="difficulty-tag mat-small">
