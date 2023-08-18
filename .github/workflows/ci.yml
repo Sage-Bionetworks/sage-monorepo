@@ -195,13 +195,13 @@ jobs:
           path: '/tmp/.cache/pypoetry'
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      # - name: Set up venv cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       /tmp/.local/share/virtualenv
-      #       **/.venv
-      #     key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+      - name: Set up venv cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.local/share/virtualenv
+            **/.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
       # - name: Setup Gradle cache
       #   uses: actions/cache@v3
