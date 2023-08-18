@@ -94,6 +94,7 @@ jobs:
           mkdir -p /tmp/.cache/R/renv/cache
 
           devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --workspace-folder ../sage-monorepo
 
