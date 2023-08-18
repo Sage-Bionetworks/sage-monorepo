@@ -263,6 +263,10 @@ jobs:
             && ls -al ~/.local/share/virtualenv \
             && ls -al apps/schematic/api/.venv"
 
+      - run: |
+        ls -al /tmp/.local/share/virtualenv
+        ls -al apps/schematic/api/.venv
+
       # - name: Lint the affected projects
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
