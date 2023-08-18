@@ -263,7 +263,8 @@ jobs:
             && ls -al ~/.local/share/virtualenv \
             && ls -al apps/schematic/api/.venv"
 
-      - run: |
+      - name: Debug
+        run: |
         ls -al /tmp/.local/share/virtualenv
         ls -al apps/schematic/api/.venv
 
