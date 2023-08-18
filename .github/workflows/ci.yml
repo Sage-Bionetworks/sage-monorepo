@@ -253,7 +253,12 @@ jobs:
               /home/vscode/.cache \
               /home/vscode/.local \
             && . ./dev-env.sh \
-            && yarn nx run-many --target=prepare-python"
+            && yarn install --immutable"
+
+      - name: Install Python packages
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx run-many --target=prepare-python"
 
       # - name: Lint the affected projects
       #   run: |
