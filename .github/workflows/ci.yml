@@ -199,8 +199,8 @@ jobs:
         uses: actions/cache@v3
         with:
           path: |
-            '/tmp/.local/share/virtualenv'
-            '**/.venv'
+            /tmp/.local/share/virtualenv
+            **/.venv
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
       # - name: Setup Gradle cache
