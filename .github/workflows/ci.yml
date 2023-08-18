@@ -189,11 +189,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-renv-cache-
 
-      # - name: Set up Poetry cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: '/tmp/.cache/pypoetry'
-      #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+      - name: Set up Poetry cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/pypoetry'
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
       # - name: Set up venv cache
       #   uses: actions/cache@v3
