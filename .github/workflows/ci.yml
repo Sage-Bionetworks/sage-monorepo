@@ -258,7 +258,9 @@ jobs:
       - name: Install Python packages
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=prepare-python"
+            && nx run-many --target=prepare-python \
+            && ls -al ~/.local/share/virtualenv \
+            && ls -al apps/schematic/api/.venv"
 
       # - name: Lint the affected projects
       #   run: |
