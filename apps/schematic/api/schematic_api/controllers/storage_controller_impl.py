@@ -65,13 +65,18 @@ def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFra
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    downloader = ManifestDownload(store, manifest_id)
-    manifest_data = ManifestDownload.download_manifest(downloader, "manifest.csv")
-    manifest_path = manifest_data["path"]
-    manifest = pd.read_csv(manifest_path)
-    os.remove(manifest_path)
+    # This will be used after the synapse storage refactor
+    asset_type_object = get_asset_storage_class(  # pylint: disable=unused-variable
+        asset_type
+    )
+    store = SynapseStorage.login(access_token=access_token)
+    manifest_download = ManifestDownload(store, manifest_id)
+    manifest_data = ManifestDownload.download_manifest(
+        manifest_download, "manifest.csv"
+    )
+    manifest_local_file_path = manifest_data["path"]
+    manifest = pd.read_csv(manifest_local_file_path)
+    os.remove(manifest_local_file_path)
     return manifest
 
 
