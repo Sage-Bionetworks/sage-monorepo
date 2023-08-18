@@ -58,15 +58,15 @@ jobs:
             **/.venv
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
-      # - name: Setup Gradle cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       /root/.gradle/caches
-      #       /root/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.gradle/caches
+            /tmp/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
@@ -101,12 +101,17 @@ jobs:
           mkdir -p \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
-            /tmp/.local/share/virtualenv
+            /tmp/.local/share/virtualenv \
+            /tmp/.gradle/caches \
+            /tmp/.gradle/wrapper
 
           devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
             --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
+            --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
+            --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
             --workspace-folder ../sage-monorepo
 
       - name: Prepare the workspace
@@ -115,6 +120,7 @@ jobs:
             sudo chown -R vscode:vscode \
               /home/vscode/.cache \
               /home/vscode/.local \
+              /home/vscode/.gradle \
             && . ./dev-env.sh \
             && workspace-install"
 
@@ -216,15 +222,15 @@ jobs:
             **/.venv
           key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
-      # - name: Setup Gradle cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: |
-      #       /root/.gradle/caches
-      #       /root/.gradle/wrapper
-      #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-gradle-
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.gradle/caches
+            /tmp/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
@@ -252,12 +258,17 @@ jobs:
           mkdir -p \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
-            /tmp/.local/share/virtualenv
+            /tmp/.local/share/virtualenv \
+            /tmp/.gradle/caches \
+            /tmp/.gradle/wrapper
 
           devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
             --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
+            --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
+            --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
             --workspace-folder ../sage-monorepo
 
       - name: Prepare the workspace
@@ -266,6 +277,7 @@ jobs:
             sudo chown -R vscode:vscode \
               /home/vscode/.cache \
               /home/vscode/.local \
+              /home/vscode/.gradle \
             && . ./dev-env.sh \
             && workspace-install"
 
