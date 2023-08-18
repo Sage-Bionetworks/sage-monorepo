@@ -23,8 +23,7 @@
           <openchallenges-challenge-card
             *ngFor="let challenge of challenges"
             [challenge]="challenge"
-          >
-          </openchallenges-challenge-card>
+          />
         </div>
         <openchallenges-paginator
           [pageNumber]="pageNumber"
@@ -32,14 +31,13 @@
           [totalRecords]="totalChallengesCount"
           [itemsPerPage]="[12, 24, 36]"
           (pageChange)="onPageChange($event)"
-        ></openchallenges-paginator>
+        />
       </div>
       <div *ngSwitchCase="tabs['organizations']" class="card-group">
         <openchallenges-organization-card
           *ngFor="let organizationCard of organizationCards"
           [organizationCard]="organizationCard"
-        >
-        </openchallenges-organization-card>
+        />
       </div>
     </ng-container>
   </div>

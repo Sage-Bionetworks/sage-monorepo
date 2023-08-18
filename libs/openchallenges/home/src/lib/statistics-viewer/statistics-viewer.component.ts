@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
   ChallengeService,
@@ -6,10 +7,13 @@ import {
   ImageService,
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
+import { CountUpModule } from 'ngx-countup';
 import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
+  standalone: true,
+  imports: [CommonModule, CountUpModule],
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
 })
