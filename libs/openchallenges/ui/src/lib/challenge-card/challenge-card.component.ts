@@ -76,7 +76,10 @@ export class ChallengeCardComponent implements OnInit {
 
       for (const word of words) {
         if ((truncated + ' ' + word).length <= nchar - 3) {
-          truncated += ' ' + word;
+          // exclude special characters
+          if (!word.match(/\W/)) {
+            truncated += ' ' + word;
+          }
         } else {
           break;
         }
