@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,13 +14,14 @@ describe('OrganizationCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [OrganizationCardComponent],
       imports: [
         HttpClientModule,
+        RouterTestingModule,
         AvatarComponent,
         MatCardModule,
         MatDividerModule,
         MatIconModule,
+        OrganizationCardComponent,
       ],
     }).compileComponents();
   });

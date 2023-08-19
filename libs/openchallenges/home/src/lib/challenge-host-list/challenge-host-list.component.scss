@@ -7,7 +7,9 @@
 .section-title {
   margin-bottom: 42px;
 }
-
+.card-group {
+  justify-items: center;
+}
 #organizations {
   padding: 88px 0;
 
@@ -15,9 +17,4 @@
     margin-top: 18px;
     padding: 26px 40px;
   }
-}
-
-// CARDS
-.card-group {
-  justify-items: center;
 }

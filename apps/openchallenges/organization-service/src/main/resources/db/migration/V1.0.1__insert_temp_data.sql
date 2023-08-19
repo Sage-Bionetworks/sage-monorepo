@@ -22,8 +22,8 @@ VALUES (
     'logo/dream.png',
     'https://dreamchallenges.org',
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
-    '2023-06-23 00:00:00',
-    '2023-07-26 20:17:33',
+    '2023-08-04 07:33:09',
+    '2023-08-05 06:10:02',
     47
   ),
   (
@@ -37,7 +37,7 @@ VALUES (
     'The Critical Assessment of protein Function Annotation algorithms (CAFA) is an experiment designed to assess the performance of computational methods dedicated to predicting protein function, often using a time challenge. Briefly, CAFA organizers provide a large number of unannotated or incompletely annotated protein sequences. The predictors then predict the function of these proteins by associating them with Gene Ontology terms or Human Phenoytpe Ontology terms. Following the prediction deadline, there is a wait period of several months during which some proteins whose functions were unknown will receive experimental verification. Those proteins constitute the benchmark set, against which the methods are tested. Other data sources include experiments by wet lab collaborators and biocuration dedicated to CAFA.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:18',
-    1
+    2
   ),
   (
     7,
@@ -63,7 +63,7 @@ VALUES (
     'The Medical Image Computing and Computer Assisted Intervention Society (the MICCAI Society) is dedicated to the promotion, preservation and facilitation of research, education and practice in the field of medical image computing and computer assisted medical interventions including biomedical imaging and medical robotics. The Society achieves this aim through the organization and operation of annual high quality international conferences, workshops, tutorials and publications that promote and foster the exchange and dissemination of advanced knowledge, expertise and experience in the field produced by leading institutions and outstanding scientists, physicians and educators around the world. The MICCAI Society is committed to maintaining high academic standards and independence from any personal, political or commercial interests.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:24',
-    5
+    15
   ),
   (
     13,
@@ -76,7 +76,7 @@ VALUES (
     'A secure, collaborative, high-performance computing platform that builds a community of experts around the analysis of biological datasets in order to advance precision medicine.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:25',
-    16
+    17
   ),
   (
     15,
@@ -89,7 +89,7 @@ VALUES (
     'The National Institutes of Health (NIH), a part of the U.S. Department of Health and Human Services, is the nation''s medical research agency — making important discoveries that improve health and save lives.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:26',
-    7
+    9
   ),
   (
     16,
@@ -216,9 +216,9 @@ VALUES (
     'arthritis-internet-registry',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:13:35',
+    '2023-08-08 17:59:48',
     1
   ),
   (
@@ -336,7 +336,7 @@ VALUES (
     'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Booz Allen partners with public and private sector clients to solve their most difficult challenges through a combination of consulting, analytics, mission operations, technology, systems delivery, cybersecurity, engineering, and innovation expertise. \n\nWith international headquarters in McLean, Virginia, the firm employs more than 22,600 people globally and had revenue of $5.41 billion for the 12 months ended March 31, 2016.\n\nBooz Allen brings its pioneering work in advanced analytics—and the industry-leading expertise of its more than 600-member data science team—to transform our clients'' data into actions that keep them competitive in today''s data-driven economy. To learn about Booz Allen''s data science ...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:45',
-    11
+    12
   ),
   (
     35,
@@ -427,7 +427,7 @@ VALUES (
     'We seek to better understand the roots of disease and narrow the gap between new biological insights and impact for patients.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:51',
-    4
+    5
   ),
   (
     42,
@@ -502,9 +502,9 @@ VALUES (
     'celgene',
     'logo/celgene.jpg',
     'https://www.celgene.com',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:13:56',
+    '2023-08-08 17:58:26',
     3
   ),
   (
@@ -619,9 +619,9 @@ VALUES (
     'corrona',
     'logo/corrona.jpeg',
     'https://www.corrona.org',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:03',
+    '2023-08-08 17:58:48',
     1
   ),
   (
@@ -736,9 +736,9 @@ VALUES (
     'early-signal',
     '',
     'http://www.earlysignal.org',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:10',
+    '2023-08-08 17:58:54',
     1
   ),
   (
@@ -765,7 +765,7 @@ VALUES (
     'Lilly was founded in 1876 by Colonel Eli Lilly, a man committed to creating high-quality medicines that met real needs in an era of unreliable elixirs peddled by questionable characters. His charge to the generations of employees who have followed was this: "Take what you find here and make it better and better."  More than 145 years later, we remain committed to his vision through every aspect of our business and the people we serve starting with those who take our medicines, and extending to health care professionals, employees and the communities in which we live. ',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:11',
-    1
+    3
   ),
   (
     68,
@@ -869,7 +869,7 @@ VALUES (
     'The common principles and values that underlie life in the EU: freedom, democracy, equality and the rule of law, promoting peace and stability.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:16',
-    1
+    2
   ),
   (
     76,
@@ -1220,7 +1220,7 @@ VALUES (
     'Society membership reflects commitment toward the advancement of computational biology. The ISCB is an international non-profit organization whose members come from the global bioinformatics and computational biology communities. The ISCB serves its global membership by providing high-quality meetings, publications, and reports on methods and tools; by disseminating key information about bioinformatics resources and relevant news from related fields; and by actively facilitating training, education, employment, career development, and networking. We advocate and provide leadership for resources and policies in support of scientific endeavors and to benefit society at large.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:40',
-    1
+    2
   ),
   (
     103,
@@ -1246,7 +1246,7 @@ VALUES (
     'Iowa State is a large university with a small feel. Forge lifelong friendships and earn a degree that will take you anywhere.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:42',
-    1
+    2
   ),
   (
     106,
@@ -1272,7 +1272,7 @@ VALUES (
     'King''s College London is an internationally renowned university delivering exceptional education and world-leading research. We are dedicated to driving positive and sustainable change in society and realising our vision of making the world a better place. ',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:44',
-    1
+    2
   ),
   (
     108,
@@ -1427,8 +1427,8 @@ VALUES (
     'https://www.mit.edu/',
     'The MIT community is driven by a shared purpose: to make a better world through education, research, and innovation. We are fun and quirky, elite but not elitist, inventive and artistic, obsessed with numbers, and welcoming to talented people regardless of where they come from.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:14:54',
-    2
+    '2023-08-08 18:47:20',
+    3
   ),
   (
     120,
@@ -1519,7 +1519,7 @@ VALUES (
     'The Michael J. Fox Foundation is dedicated to finding a cure for Parkinson''s disease through an aggressively funded research agenda and to ensuring the development of improved therapies for those living with Parkinson''s today.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:00',
-    2
+    3
   ),
   (
     127,
@@ -1636,7 +1636,7 @@ VALUES (
     'The National Institute of General Medical Sciences (NIGMS) supports basic research that increases our understanding of biological processes and lays the foundation for advances in disease diagnosis, treatment, and prevention. NIGMS-funded scientists investigate how living systems work at a range of levels—from molecules and cells to tissues and organs—in research organisms, humans, and populations. Additionally, to ensure the vitality and continued productivity of the research enterprise, NIGMS provides leadership in training the next generation of scientists, enhancing the diversity of the scientific workforce, and developing research capacity throughout the country.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:07',
-    2
+    3
   ),
   (
     136,
@@ -1649,7 +1649,7 @@ VALUES (
     'The National Institute of Standards and Technology (NIST) was founded in 1901 and is now part of the U.S. Department of Commerce. NIST is one of the nation''s oldest physical science laboratories. Congress established the agency to remove a major challenge to U.S. industrial competitiveness at the time — a second-rate measurement infrastructure that lagged behind the capabilities of the United Kingdom, Germany and other economic rivals. From the smart electric power grid and electronic health records to atomic clocks, advanced nanomaterials and computer chips, innumerable products and services rely in some way on technology, measurement and standards provided by the National Institute of Standards and Technology.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:08',
-    2
+    3
   ),
   (
     137,
@@ -1740,7 +1740,7 @@ VALUES (
     'At Northeastern, experience is our essence and ethos. It''s what you gain when you make the world your classroom, your laboratory, and your platform to create change or grow your enterprise. Throughout our university network, experience draws you into society and compels you to solve its complex challenges. It makes you agile and able to reinvent yourself. To find ways of doing things differently, and better. And to seize opportunities as they unfold—anytime, anywhere.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:13',
-    1
+    2
   ),
   (
     144,
@@ -1753,7 +1753,7 @@ VALUES (
     'Northwestern is committed to excellent teaching, innovative research and the personal and intellectual growth of its students in a diverse academic community.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:14',
-    1
+    2
   ),
   (
     145,
@@ -1776,9 +1776,9 @@ VALUES (
     'numerate',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:16',
+    '2023-08-08 17:59:10',
     1
   ),
   (
@@ -1792,7 +1792,7 @@ VALUES (
     'NVIDIA pioneered accelerated computing to tackle challenges no one else can solve. Our work in AI and the metaverse is transforming the world''s largest industries and profoundly impacting society.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:16',
-    2
+    4
   ),
   (
     148,
@@ -1880,11 +1880,9 @@ VALUES (
     'prize4life',
     'logo/prize4life.jpeg',
     'http://www.prize4life.org',
-    'This organization may no longer exists or has been merged under another organization.
-========
-Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
+    'This organization may no longer exist or has been merged under another organization.\n========\nPrize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:26',
+    '2023-08-08 17:45:38',
     2
   ),
   (
@@ -1976,7 +1974,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Radboud university medical center specializes in patient care, scientific research, teaching and training. Our mission is to have a significant impact on health care. We aim to be pioneers in shaping the health care of the future. We do this in a person-centered and innovative way.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:31',
-    1
+    2
   ),
   (
     162,
@@ -1989,7 +1987,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world''s premier radiology forum, drawing approximately 55,000 attendees annually to McCormick Place in Chicago, and publishes two top peer-reviewed journals: *Radiology*, the highest-impact scientific journal in the field, and *RadioGraphics*, the only journal dedicated to continuing education in radiology. The Society is based in Oak Brook, Ill.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:33',
-    1
+    2
   ),
   (
     164,
@@ -2051,9 +2049,9 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'rosenberg-alzheimers-project',
     '',
     '',
-    'This organization may no longer exists or has been merged under another organization.',
+    'This organization may no longer exist or has been merged under another organization.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:15:37',
+    '2023-08-08 17:59:30',
     1
   ),
   (
@@ -2093,7 +2091,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine.  We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together across institutional boundaries to meaningfully address major medical research problems.  We incubate new ways for diverse groups of people to practice research together.  We advance our practices using an  integrated and iterative design cycle that plays out between our scientific teams and our core service teams.  As our innovations become norms, we develop them into robust core capabilities that can be put into practice across our portfolio of research programs.  This portfolio includes publicly funded programs that create data resources and knowledge bases, pre-competitive collaborations across industry partners, and federated networks of healthcare data providers. In turn, these projects provide an active pl...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:40',
-    42
+    43
   ),
   (
     172,
@@ -2197,7 +2195,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Stanford was founded almost 150 years ago on a bedrock of societal purpose. Our mission is to contribute to the world by educating students for lives of leadership and purposeful contribution; advancing fundamental knowledge and cultivating creativity; and accelerating solutions and amplifying their impact.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:46',
-    6
+    12
   ),
   (
     180,
@@ -2392,11 +2390,11 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'As a comprehensive university offering a wide range of high-quality educational opportunities, the University of Basel attracts students from Switzerland and the entire world, offering them outstanding studying conditions as they work towards their bachelor''s, master''s or PhD degrees. Today, the University of Basel has around 13,000 students from over a hundred nations, including 2,900 PhD students.  The University of Basel has seven faculties covering a wide spectrum of academic disciplines. At the same time, the university has positioned itself amidst the international competition in the form of five strategic focal areas: Life Sciences, Visual Studies, Nanosciences, Sustainability and Energy Research and European and Global Studies. In international rankings, the University of Basel is regularly placed among the 100 top universities in the world thanks to its research achievements.  The University of Basel has deep roots in the economically powerful and culturally rich Basel r...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:59',
-    2
+    3
   ),
   (
     195,
-    'University of California San Diego',
+    'University of California, San Diego',
     'UCSD',
     '',
     'ucsd',
@@ -2404,12 +2402,12 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://ucsd.edu/',
     'We make changemakers.  Recognized as one of the top 15 research universities worldwide, our culture of collaboration sparks discoveries that advance society and drive economic impact. Everything we do is dedicated to ensuring our students have the opportunity to become changemakers, equipped with the multidisciplinary tools needed to accelerate answers to our world''s most pressing issues.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:00',
-    2
+    '2023-08-08 18:48:47',
+    3
   ),
   (
     196,
-    'University of California San Francisco',
+    'University of California, San Francisco',
     'UCSF',
     '',
     'ucsf',
@@ -2417,12 +2415,12 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.ucsf.edu/',
     'At UC San Francisco, we are driven by the idea that when the best research, the best teaching and the best patient care converge, we can deliver breakthroughs that help heal the world.  Excellence is in our DNA. From genomics and immunology to specialty care for women and children, UCSF brings together the world''s leading experts in nearly every area of health. We are home to five Nobel laureates who have advanced the understanding of cancer, neurodegenerative diseases, aging and stem cells. Our hospitals and educational programs consistently rank among the best in the country, according to the latest surveys by U.S. News & World Report.   We are the leading university dedicated exclusively to the health sciences.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:01',
+    '2023-08-08 18:48:39',
     6
   ),
   (
     197,
-    'University of California Santa Cruz',
+    'University of California, Santa Cruz',
     'UCSC',
     '',
     'ucsc',
@@ -2430,8 +2428,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.ucsc.edu/',
     'An inspired, global, public research university leading at the intersection of innovation and justice.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:02',
-    5
+    '2023-08-08 18:48:44',
+    6
   ),
   (
     198,
@@ -2587,7 +2585,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The University of Maryland, College Park is the state''s flagship university and one of the nation''s preeminent public research universities. A global leader in research, entrepreneurship and innovation, the university is home to more than 40,700 students, 14,000 faculty and staff, and nearly 400,000 alumni all dedicated to the pursuit of Fearless Ideas. Located just outside Washington, D.C., we discover and share new knowledge every day through our renowned research enterprise and programs in academics, the arts and athletics. And we are committed to social entrepreneurship as the nation''s first “Do Good” campus.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:12',
-    2
+    3
   ),
   (
     210,
@@ -2613,7 +2611,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The nation''s first public university is at the heart of what''s next, preparing a diverse student body to become creators, explorers, innovators and leaders in North Carolina and throughout the world.  Carolina''s nationally recognized, innovative teaching, campus-wide spirit of inquiry and dedication to public service continue the legacy that began in 1795 when the University first opened its doors to students.  In Chapel Hill, students develop a voice for critical thought and the courage to guide change. They connect to the future they''re already shaping. Carolina is committed to access for all, providing life-changing opportunities such as the Carolina Covenant, which promises a debt-free education to low-income students.  In its third century – an era of groundbreaking study and research – UNC-Chapel Hill is harnessing the very best of our fast-changing world. We''re proud to advance knowledge for this and each generation to come.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:15',
-    3
+    4
   ),
   (
     212,
@@ -2639,7 +2637,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The University of Padua is one of Europe''s oldest and most prestigious seats of learning. As a multi-disciplinary institute of higher education, the University aims to provide its students with professional training and a solid cultural background. The qualification received from the University of Padua act as a symbol of the ambitious objectives respected and coveted by both students and employers alike.  Founded in 1222, Padua''s Studium Patavinum was a place of study that readily welcomed Italian students and scholars, as well as those from various European countries searching for cultural freedom and expression. This freedom continues to define and express the essence of the University through its motto as Universa universis patavina libertas.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:16',
-    1
+    2
   ),
   (
     214,
@@ -2665,7 +2663,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Penn''s academics are boosted by its inherent culture and ecosystem of innovation. You name it, if it''s cutting-edge, the University''s faculty—and students—have their hands in it. Grounded in the liberal arts and sciences and enriched by the integrated resources of four undergraduate and 12 graduate schools, Penn offers students an unparalleled education informed by inclusivity, intellectual rigor, research, and the impetus to create new knowledge to the benefit of individuals and communities around the world.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:17',
-    5
+    6
   ),
   (
     216,
@@ -2730,7 +2728,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'We are proud to be one of the world''s top research-intensive universities, bringing together top minds from every conceivable background and discipline to collaborate on the world''s most pressing challenges.  Our community is a catalyst for discovery, innovation and progress, creating knowledge and solutions that make a tangible difference around the globe. And we prepare our students for success through an outstanding global education rooted in excellence, inclusion and close-knit learning communities.  The ideas, innovations and contributions of more than 660,000 graduates advance U of T''s impact on communities across the globe.  Together, we continue to defy gravity by taking on what might seem unattainable today and generating the ideas and talent needed to build a more equitable, sustainable and prosperous future.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:21',
-    5
+    6
   ),
   (
     221,
@@ -2808,7 +2806,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'With its 28,000 enrolled students, the University of Zurich is Switzerland''s largest university. Founded in the year 1833, UZH was Europe''s first university to be established by a democratic political system. Made up of seven faculties covering some 100 different subject areas, the University offers a wide variety of Bachelor''s, Master''s and PhD programs.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:26',
-    3
+    4
   ),
   (
     227,
@@ -2873,7 +2871,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'VHA Innovation Ecosystem (VHA IE) is the catalyst for enabling the discovery and spread of mission-driven health care innovation that exceeds expectations, restores hope, and builds trust within the Veteran community. VHA IE leverages the collective power of innovation champions from across VA, academia, non-profit and industry to operationalize innovation in the Nation''s largest integrated health care system.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:31',
-    2
+    3
   ),
   (
     232,
@@ -3094,11 +3092,11 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'TUM has once again been named a University of Excellence and is thus the only technical university to continuously retain this status since 2006. The title is awarded as a part of the Excellence Strategy of the German federal and state governments, in strategic international support of German cutting-edge research.  We are using this funding to realize the future concept TUM Agenda 2030. We are expanding technically-oriented humanities and social sciences and are reorganizing previous internal structures to be more innovation-oriented: The constraining, discipline-based Faculty structure is being replaced by seven Schools which are linked to one another by integrative research institutes. In the sense of an "open marketplace of knowledge", we support talented individuals in all their diversity, at all levels and across substantive subject boundaries. We work in alliances with international partners to re-orient towards Europe as well as to the southern global hemisphere in order to...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:44',
-    1
+    2
   ),
   (
     249,
-    'Center for Devices and Radiological Health',
+    'FDA Center for Devices and Radiological Health',
     'CDRH',
     '',
     'cdrh',
@@ -3106,8 +3104,8 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://www.fda.gov/about-fda/fda-organization/center-devices-and-radiological-health',
     'In keeping with our mission, the Center for Devices and Radiological Health (CDRH) is responsible for protecting and promoting the public health.  We assure that patients and providers have timely and continued access to safe, effective, and high-quality medical devices and safe radiation-emitting products.  We provide consumers, patients, their caregivers, and providers with understandable and accessible science-based information about the products we oversee.  We facilitate medical device innovation by advancing regulatory science, providing industry with predictable, consistent, transparent, and efficient regulatory pathways, and assuring consumer confidence in devices marketed in the U.S.  We seek to continually improve our effectiveness in fulfilling our mission by planning strategically and regularly monitoring our progress.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:44',
-    1
+    '2023-08-10 21:36:27',
+    2
   ),
   (
     250,
@@ -3171,7 +3169,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://lacunafund.org/',
     'Lacuna Fund is the world’s first collaborative effort to provide data scientists, researchers, and social entrepreneurs in low- and middle-income contexts globally with the resources they need to produce labeled datasets that address urgent problems in their communities.',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:50',
+    '2023-08-04 22:03:25',
     1
   ),
   (
@@ -3184,7 +3182,827 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'https://mlcommons.org/en/',
     'The mission of MLCommons(R) is to accelerate machine learning innovation and increase its positive impact on society. Together with its 50+ founding Members and Affiliates, including startups, leading companies, academics, and non-profits from around the globe, MLCommons will help grow machine learning from a research field into a mature industry through benchmarks, public datasets and best practices.  Every major technological advance follows a similar trajectory towards universal adoption and impact. The arc from research to broad accessibility generally takes from 30-40 years: from early automobiles to the family car, from development of ARPANET to the mainstream World Wide Web, from the first cellular phones to an smartphone in every pocket. Each of these examples started with technological breakthroughs, but for decades was limited by expertise, access, and expense.  Machine learning is no different. ML and artificial intelligence have been around for decades, but even today t...',
     '2023-06-23 00:00:00',
-    '2023-07-26 20:16:50',
+    '2023-08-04 23:38:22',
+    1
+  ),
+  (
+    256,
+    'Harvard Medical School',
+    'HMS',
+    '',
+    'hms',
+    'logo/hms.jpg',
+    'https://hms.harvard.edu/',
+    'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They’ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
+    '2023-08-04 06:00:47',
+    '2023-08-04 23:38:09',
+    1
+  ),
+  (
+    257,
+    'Centre for Structural Systems Biology',
+    'CSSB',
+    'info@cssb-hamburg.de',
+    'cssb-hamburg',
+    '',
+    'https://www.cssb-hamburg.de/',
+    'CSSB is a joint initiative of nine research partners from Northern Germany, including three universities and six research institutes that devotes itself to infection biology research. ',
+    '2023-08-04 22:00:31',
+    '2023-08-04 22:05:08',
+    1
+  ),
+  (
+    258,
+    'UMC Groningen',
+    'UMCG',
+    '',
+    'umcg',
+    '',
+    'https://www.umcg.nl/',
+    'The University Medical Center Groningen (UMCG) is one of the largest hospitals in the Netherlands and is the largest employer in the Northern Netherlands. The more than 12,000 employees work together on care, research, training and education with the common goal: building the future of health.',
+    '2023-08-04 22:07:45',
+    '2023-08-04 22:09:44',
+    1
+  ),
+  (
+    259,
+    'Eindhoven University of Technology',
+    'TU/e',
+    '',
+    'tue',
+    '',
+    'https://www.tue.nl/en/',
+    'We educate students and advance knowledge in science & technology for the benefit of humanity. We integrate education and research to enable our students and scientists to become thought leaders and to design and achieve the unimaginable. In close collaboration with our public and private partners, we translate our basic research into meaningful solutions.',
+    '2023-08-04 22:12:40',
+    '2023-08-04 22:14:15',
+    1
+  ),
+  (
+    260,
+    'Wageningen University & Research',
+    'WUR',
+    '',
+    'wur',
+    '',
+    'https://www.wur.nl/en.htm',
+    '',
+    '2023-08-04 22:15:19',
+    '2023-08-04 22:15:58',
+    1
+  ),
+  (
+    261,
+    'UMC Utrecht',
+    '',
+    'researchoffice@umcutrecht.nl',
+    'umc-utrecht',
+    '',
+    'https://www.umcutrecht.nl/en/research',
+    'In the UMC Utrecht research is concentrated in six strategic programs with each a limited number of disease targets. Patient care is integrated in these programs. A relentless multidisciplinary approach guarantees patients benefit from the latest available expertise and innovative technological solutions.',
+    '2023-08-04 22:16:49',
+    '2023-08-04 22:19:36',
+    3
+  ),
+  (
+    262,
+    'Amsterdam UMC',
+    '',
+    '',
+    'amsterdam-university-medical-centers',
+    '',
+    'https://www.amsterdamumc.org/en.htm',
+    'Amsterdam UMC is a leading medical center that combines complex high-quality patient care, innovative scientific research, and education of the next generation health care professionals. We believe that health care practice, research and education belong together, with each shaping and informing the other.',
+    '2023-08-04 22:19:22',
+    '2023-08-04 22:20:09',
+    1
+  ),
+  (
+    263,
+    'Maastricht University',
+    'UM',
+    '',
+    'um',
+    '',
+    'https://www.maastrichtuniversity.nl/',
+    'Maastricht University (UM) is the most international university in the Netherlands and, with nearly 22,000 students and 4,400 employees, is still growing. The university distinguishes itself with its innovative education model, international character and multidisciplinary approach to research and education.',
+    '2023-08-04 22:24:47',
+    '2023-08-04 23:14:35',
+    1
+  ),
+  (
+    264,
+    'Delft University of Technology',
+    '',
+    '',
+    'tu-delft',
+    '',
+    'https://www.tudelft.nl/en/',
+    'Top education and research are at the heart of the oldest and largest technical university in the Netherlands. Our 8 faculties offer 16 bachelor''s and more than 30 master''s programmes. Our more than 25,000 students and 6,000 employees share a fascination for science, design and technology. Our common mission: impact for a better society.',
+    '2023-08-04 23:14:17',
+    '2023-08-04 23:15:52',
+    1
+  ),
+  (
+    265,
+    'alliance TU/e, WUR, UU, UMC Utrecht',
+    'EWUU',
+    'info@ewuu.nl',
+    'ewuu',
+    '',
+    'https://ewuu.nl/en/',
+    'In 2019 Eindhoven University of Technology, Wageningen University & Research, Utrecht University and University Medical Centre Utrecht decided to form an alliance and to work together.  The motto of this strategic collaboration is challenging future generations. Young researchers, lecturers and students are at the helm and work together right across disciplines. The challenges future generations will face are large but so are the possibilities for meeting those challenges. The institutions combine their expertise in order to contribute to social transitions in energy, sustainability, health and food.',
+    '2023-08-04 23:17:20',
+    '2023-08-04 23:34:13',
+    1
+  ),
+  (
+    266,
+    'Utrecht University',
+    'UU',
+    '',
+    'uu',
+    '',
+    'https://www.uu.nl/en',
+    'We are Utrecht University. The place for new collaborations and cross-pollination. Students, academic and administrative staff, policymakers, members of the public, professionals and business owners; you are invited to contribute to a better world.',
+    '2023-08-04 23:19:33',
+    '2023-08-04 23:35:18',
+    1
+  ),
+  (
+    267,
+    'Surgical Science',
+    '',
+    '',
+    'surgical-science',
+    '',
+    'https://surgicalscience.com/',
+    'Training without putting patients at risk. This is why we exist – to give surgeons an excellent platform to train in the fundamental technical skills before entering the operation room.  For over 20 years, we have been committed to providing state-of-the-art medical training simulators that focus on ease of use and validation.  The simple idea is to learn the practical techniques of instrument handling in a realistic but safe environment so that you can pay full attention to the patient when you begin the operation.',
+    '2023-08-04 23:51:56',
+    '2023-08-04 23:52:44',
+    1
+  ),
+  (
+    268,
+    'Wellcome/EPSRC Centre for Interventional and Surgical Sciences',
+    'WEISS',
+    '',
+    'weiss',
+    '',
+    'https://www.ucl.ac.uk/interventional-surgical-sciences',
+    'At the Wellcome/EPSRC Centre for Interventional and Surgical Sciences (WEISS), engineers, clinicians and scientists work together to develop technologies that enable safer and more effective treatments for patients across a wide range of conditions.   The Centre is based at Charles Bell House, a building that brings together researchers from a wide range of departments at UCL, including Medical Physics and Biomedical Engineering, Computer Science and Mechanical Engineering. These academic researchers work in partnership with clinical researchers from areas such as the UCL Division of Surgery & Interventional Sciences and leading hospitals.  At WEISS, research is being developed with a wide range of clinical applications in mind, including cardiovascular, paediatric, ophthalmic, neurological and urological surgical interventions. In particular, the Centre aims to advance engineering sciences in intraoperative imaging and sensing, data fusion and extraction, human-technology interfac...',
+    '2023-08-05 00:00:44',
+    '2023-08-05 00:01:47',
+    1
+  ),
+  (
+    269,
+    'Medtronic',
+    '',
+    '',
+    'medtronic',
+    '',
+    'https://www.medtronic.com/us-en/index.html',
+    'Health tech for a better future.  From AI to connected care and beyond, our technology is building a bridge to better health for more people.',
+    '2023-08-05 00:02:47',
+    '2023-08-05 00:03:26',
+    1
+  ),
+  (
+    270,
+    'King''s College Hospital',
+    'KCH',
+    '',
+    'kch',
+    '',
+    'https://www.kch.nhs.uk/',
+    'We are one of London’s largest and busiest teaching hospitals. We provide a strong profile of local hospital services for people living in the boroughs of Lambeth, Southwark, Lewisham, and Bromley. Our specialist services are also available to patients from a wider area. We providing nationally and internationally recognised treatment and care in liver disease and transplantation, neurosciences, haemato-oncology, and fetal medicine. Our vision is to be bold, and our new Trust values – Kind, Respectful Team – help ensure we bring a positive attitude to the way we interact with patients, relatives, and the many people who use our services.',
+    '2023-08-05 00:08:37',
+    '2023-08-05 00:09:46',
+    2
+  ),
+  (
+    271,
+    'Western University',
+    '',
+    '',
+    'western',
+    '',
+    'https://www.uwo.ca/index.html',
+    '',
+    '2023-08-05 00:10:52',
+    '2023-08-05 00:11:11',
+    1
+  ),
+  (
+    272,
+    'Robarts Research Institute',
+    '',
+    '',
+    'robarts',
+    '',
+    'https://www.robarts.ca/',
+    'Opened in 1986, Robarts Research Institute at Western University is a medical research facility in London, Ontario, with more than 600 people working to investigate some of the most debilitating diseases of our time, from heart disease and stroke to diabetes, Alzheimer’s and many forms of cancer. We believe we’ve got a winning formula to accelerate medical discovery: attract the brightest and best people, give them the freedom to think big and set the bar high. From our roots under the scientific leadership of renowned neurologist Dr. Henry Barnett - whose work with Aspirin as a preventive therapy for heart attack and stroke remains one of the most important developments in 20th century medicine - the Institute has applied that formula to become a national leader in biological, clinical and imaging research.',
+    '2023-08-05 00:12:27',
+    '2023-08-05 00:13:00',
+    1
+  ),
+  (
+    273,
+    'British Acoustic Neuroma Association',
+    'BANA',
+    '',
+    'bana-uk',
+    '',
+    'https://www.bana-uk.com/',
+    'BANA was formed in 1992 by a group of patients and their partners.  They were introduced to each other by ENT and Neurosurgeon Consultants from the Queen’s Medical Centre Hospital in Nottingham and from the very beginning, mutual support was their primary aim.  They also wanted to provide reliable information to those diagnosed and to promote research into Acoustic Neuromas and the effects associated with them. More than two decades on, these fledgling intentions remain the charitable objectives that drive the charity forward on behalf of all those affected.',
+    '2023-08-05 00:15:03',
+    '2023-08-05 00:16:46',
+    1
+  ),
+  (
+    274,
+    'Ninewells Hospital',
+    '',
+    '',
+    'ninewells-hospital',
+    '',
+    'https://www.nhstayside.scot.nhs.uk/GoingToHospital/OurPremisesA-Z/NinewellsHospital/index.htm',
+    '',
+    '2023-08-05 00:20:05',
+    '2023-08-05 00:20:45',
+    1
+  ),
+  (
+    275,
+    'UniProt',
+    '',
+    '',
+    'uniprot',
+    '',
+    'https://www.uniprot.org/',
+    'The Universal Protein Resource (UniProt) is a comprehensive resource for protein sequence and annotation data. The UniProt databases are the UniProt Knowledgebase (UniProtKB), the UniProt Reference Clusters (UniRef), and the UniProt Archive (UniParc). The UniProt consortium and host institutions EMBL-EBI, SIB and PIR are committed to the long-term preservation of the UniProt databases. ',
+    '2023-08-05 05:21:46',
+    '2023-08-05 05:23:45',
+    1
+  ),
+  (
+    276,
+    'Charing Cross Hospital',
+    '',
+    '',
+    'charing-cross-hospital',
+    '',
+    'https://www.imperial.nhs.uk/our-locations/charing-cross-hospital',
+    'Charing Cross Hospital provides a range of acute and specialist services, a 24/7 accident and emergency department and hosts the hyper acute stroke unit for the region. It is also a growing hub for integrated care in partnership with local GPs and community providers.',
+    '2023-08-05 05:27:03',
+    '2023-08-05 05:27:34',
+    1
+  ),
+  (
+    277,
+    'Elisabeth-TweeSteden Hospital',
+    'ETZ',
+    '',
+    'etz',
+    '',
+    'https://www.etz.nl/',
+    'The ETZ (Elisabeth-TweeSteden Hospital) is a top clinical teaching hospital and trauma center. With three locations in Tilburg and Waalwijk, ETZ is the hospital for all residents of the Central Brabant region, but also (far) beyond.',
+    '2023-08-05 05:28:21',
+    '2023-08-05 05:30:27',
+    1
+  ),
+  (
+    278,
+    'InVitro Cell Research',
+    'ICR',
+    '',
+    'icr',
+    '',
+    'https://invitrocellresearch.com/',
+    'Founded in 2015, InVitro Cell Research, LLC (ICR) is a privately funded company focused on regenerative and preventive personalized medicine. We are dedicated to discovering and developing interventions to slow and reverse biological aging and prevent major age-related diseases.  While our offices and labs in the greater New York City area offer over 15,000 square feet of state-of-the-art research space, our scientists set us apart and make us special. They help guide and define our mission. What is our mission?  Researching how to repair aging people, fast. ',
+    '2023-08-05 05:33:19',
+    '2023-08-05 05:34:04',
+    1
+  ),
+  (
+    279,
+    'AMP-PD',
+    'AMP-PD',
+    '',
+    'amp-pd',
+    '',
+    'https://www.amp-pd.org/',
+    'The Accelerating Medicines Partnership(R) (AMP(R)) program is a public-private partnership between the National Institutes of Health (NIH), multiple biopharmaceutical and life sciences companies, and non-profit organizations. Managed through the Foundation for the NIH (FNIH), AMP aims to identify and validate the most promising biological targets for therapeutics. Disease areas covered by AMP at the launch of this site include Alzheimer’s disease, type 2 diabetes, the autoimmune disorders of rheumatoid arthritis and systemic lupus erythematosus (lupus) and Parkinson’s disease. Additional disease areas are being evaluated for addition to AMP.',
+    '2023-08-05 05:39:55',
+    '2023-08-05 05:42:53',
+    1
+  ),
+  (
+    280,
+    'Vanderbilt University',
+    '',
+    '',
+    'vanderbilt',
+    '',
+    'https://www.vanderbilt.edu/',
+    'From its founding in 1873 as an institution devoted to “strengthening the ties which should exist between all sections of our common country,” Vanderbilt University has forged a tradition of academic excellence infused with a unique spirit of collaboration and collegiality. Our mission lies in the quest to bring out the best in humanity—pushing new ideas into the frontiers of discovery, challenging the limits of what’s possible and working diligently in the service of others. Vanderbilt’s closely connected park-like campus, set in the heart of the rapidly growing city of Nashville, Tennessee, is representative of the enduring bonds that unite us as One Vanderbilt community.',
+    '2023-08-07 20:28:32',
+    '2023-08-07 20:29:06',
+    1
+  ),
+  (
+    281,
+    'Basque Center On Cognition, Brain and Language',
+    'BCBL',
+    '',
+    'bcbl',
+    '',
+    'https://www.bcbl.eu/en',
+    'Our research aims to unravel the neurocognitive mechanisms involved in the acquisition, comprehension and production of language, with special emphasis on bilingualism and multilingualism. We study processes involved in normal child language acquisition and second language learning in adults, as well as learning disorders, language disorders, language-related effects of aging and neurodegeneration and language use in different social contexts.',
+    '2023-08-07 20:29:41',
+    '2023-08-07 20:30:41',
+    1
+  ),
+  (
+    282,
+    'Erasmus MC',
+    'EMC',
+    '',
+    'emc',
+    '',
+    'https://www.erasmusmc.nl/en/',
+    'We are Erasmus MC. Every day our staff, volunteers, and students work with dedication and commitment and are passionate about everything that we stand for.',
+    '2023-08-07 20:31:10',
+    '2023-08-07 20:31:47',
+    1
+  ),
+  (
+    283,
+    'Indiana University',
+    'IU',
+    '',
+    'iu',
+    '',
+    'https://www.iu.edu/index.html',
+    'IU is home to top-ranked business and music schools. We’re home to the world’s first school of philanthropy, the nation’s first school of informatics, and the country’s largest medical school. Our hundreds of academic programs are among the world’s best, and we’re always looking toward the horizon, thinking about what’s next. To better prepare our students for the careers of tomorrow, we’ve launched or reconfigured 10 schools in the last decade, and we’re constantly adding new academic programs, like IU Bloomington’s Intelligent Systems Engineering program and IU Online’s 100% virtual Master of Science in Educational Technology for Learning.',
+    '2023-08-08 17:26:11',
+    '2023-08-08 17:28:12',
+    2
+  ),
+  (
+    284,
+    'SciLifeLab',
+    '',
+    '',
+    'scilifelab',
+    '',
+    'https://www.scilifelab.se/',
+    'SciLifeLab, Science for Life Laboratory, is an institution for the advancement of molecular biosciences in Sweden. We are funded as a national research infrastructure by the Swedish government.
+Our organization leverages the unique strengths of individual researchers across Sweden into a focused resource for the life science community. We provide access for thousands of researchers to the cutting-edge instrumentation and deep scientific expertise necessary to be internationally competitive in bioscience research. This infrastructure is supported and developed by our research community, including internationally recognized experts in life science and technology. Our units and expertise create a unique environment for carrying out health and environmental research at the highest level. SciLifeLab started out in 2010 as a joint effort between four universities: Karolinska Institutet, KTH Royal Institute of Technology, Stockholm University and Uppsala University. Today, we support rese...',
+    '2023-08-08 17:26:35',
+    '2023-08-08 17:27:34',
+    1
+  ),
+  (
+    285,
+    'Uppsala University',
+    'UU',
+    '',
+    'uppsala',
+    '',
+    'https://www.uu.se/en',
+    'Uppsala University was founded in 1477. Today it is a strong, comprehensive research university ranked among the best in the world, with 50,000 students and close to 5,000 researchers.',
+    '2023-08-08 17:28:30',
+    '2023-08-08 17:29:20',
+    1
+  ),
+  (
+    286,
+    'Google',
+    '',
+    '',
+    'google',
+    '',
+    'https://about.google/',
+    'Our mission is to organize the world’s information and make it universally accessible and useful.',
+    '2023-08-08 17:29:33',
+    '2023-08-08 17:30:47',
+    2
+  ),
+  (
+    287,
+    'Precision Value & Health',
+    '',
+    '',
+    'precision-value-health',
+    '',
+    'https://www.precisionvaluehealth.com/',
+    'Across the commercialization continuum, Precision Value & Health teams are focused on transforming data for health and leveraging evidence and insights to tailor communications for every stakeholder. From payers to health systems, scientists to healthcare providers, and consumers to advocates, our results are designed to shift the trajectory and accelerate your success. Precision Value & Health’s teams include PRECISIONadvisors (global pricing and market access strategy), PRECISIONeffect (branding and launch experts), PRECISIONheor (evidence generation and strategy), PRECISIONscientia (medical communications), PRECISIONvalue (managed markets marketing), and PRECISIONxtract (data-driven solutions and engagement).',
+    '2023-08-08 17:37:16',
+    '2023-08-08 17:40:34',
+    1
+  ),
+  (
+    288,
+    'STLogics',
+    '',
+    '',
+    'stlogics',
+    '',
+    'https://www.stlogics.com/index.html',
+    'The STLogics Team has over 60 years of combined business experience to share.  This broad business savvy enables our team to provide mentorship to those seeking to enhance the velocity of their trajectory to success.  We can assist from small start-up initiatives to large corporations with our keen management skills and futuristic thinking capabilities.  If your organization desires growth optimization or is entertaining the thought of acquisition consultation or a merger, STLogics can propel your revolutionary vision to reality. STLogics Holding Company provides operational and strategic advice to our affiliates in an effort to enhance their effectiveness and growth. We simply support and nurture our family of companies to enable them to maximize service to their clients. Our goal is to expand and diversify over various verticals, thus allowing us to foster innovation and create optimal results for client needs.',
+    '2023-08-08 17:41:14',
+    '2023-08-08 17:41:34',
+    1
+  ),
+  (
+    289,
+    'Conference Ventures',
+    '',
+    '',
+    'conference-ventures',
+    '',
+    'http://conferenceventures.com/',
+    'This organization may no longer exist or has been merged under another organization.',
+    '2023-08-08 17:44:00',
+    '2023-08-08 17:59:39',
+    1
+  ),
+  (
+    290,
+    'Google Brain',
+    '',
+    '',
+    'google-brain',
+    '',
+    'https://research.google/teams/brain/',
+    'This organization may no longer exist or has been merged under another organization.',
+    '2023-08-08 17:56:04',
+    '2023-08-08 18:00:27',
+    1
+  ),
+  (
+    291,
+    'Princeton University',
+    '',
+    '',
+    'princeton',
+    '',
+    'https://www.princeton.edu/',
+    'Princeton is about people. Our University is enriched by the wide range of experiences and perspectives of our students, faculty, staff and alumni.',
+    '2023-08-08 18:02:09',
+    '2023-08-08 18:02:58',
+    1
+  ),
+  (
+    292,
+    'Prairie View A&M University',
+    'PVAMU',
+    '',
+    'pvamu',
+    '',
+    'https://www.pvamu.edu/',
+    'Welcome to Prairie View A&M University, home of the Panthers. Our HBCU, affectionately known as “The Hill,” is deeply rooted in culture & tradition and provides an undeniable educational experience to more than 9,000 diverse students on one of the most beautiful campuses in the state of Texas. Our award-winning faculty work diligently to create challenging and rewarding experiences that inspire you to dream big and soar to new heights. Are YOU ready to EXPERIENCE PVAMU?',
+    '2023-08-08 18:17:53',
+    '2023-08-08 18:26:36',
+    1
+  ),
+  (
+    293,
+    'University of California, Berkeley',
+    '',
+    '',
+    'berkeley',
+    '',
+    'https://www.berkeley.edu/',
+    'From a group of academic pioneers in 1868 to the Free Speech Movement in 1964, Berkeley is a place where the brightest minds from across the globe come together to explore, ask questions and improve the world.',
+    '2023-08-08 18:48:17',
+    '2023-08-08 18:51:02',
+    1
+  ),
+  (
+    294,
+    'NSF Center for Genetically Encoded Materials',
+    'C-GEM',
+    '',
+    'c-gem',
+    '',
+    'https://gem-net.net/',
+    'C-GEM is establishing a fundamentally new way to program chemical matter and transform the way scientists design and produce materials and medicines. Using computation and experiment, C-GEM is repurposing nature’s protein synthesizing machine–the ribosome and its associated translation factors–to biosynthesize genetically encoded, sequence-defined chemical polymers with unprecedented functions and activities. Our combined activities span the fields of chemical biology, synthetic biology, synthetic chemistry, structural biology, computational biology, and molecular biology, and are highly collaborative. To catalyze these efforts, C-GEM implemented GEM-NET, a sophisticated data management system to promote data sharing within and outside the team, and with industry, the NSF, and the public. By fostering innovation at the chemical-biology-materials frontier, C-GEM is establishing a diverse chemical workforce, perfecting the integration of research with training, and captivating scient...',
+    '2023-08-08 19:14:43',
+    '2023-08-08 19:38:06',
+    1
+  ),
+  (
+    295,
+    'Oregon State University',
+    'OSU',
+    '',
+    'oregon-state',
+    '',
+    'https://oregonstate.edu/',
+    'Oregon State University is a dynamic community of dreamers, doers, problem-solvers and change-makers. We don’t wait for challenges to present themselves — we seek them out and take them on. We welcome students, faculty and staff from every background and perspective into a community where everyone feels seen and heard. We have deep-rooted mindfulness for the natural world and all who depend on it, and together, we apply knowledge, tools and skills to build a better future for all.',
+    '2023-08-08 19:23:28',
+    '2023-08-08 19:37:53',
+    1
+  ),
+  (
+    296,
+    'Laboratory for Innovation Science at Harvard',
+    'LISH',
+    '',
+    'lish',
+    '',
+    'https://lish.harvard.edu/',
+    'The Laboratory for Innovation Science at Harvard (LISH) is spurring the development of a science of innovation through a systematic program of solving real-world innovation challenges while simultaneously conducting rigorous scientific research and analysis. LISH is a Harvard-wide research program led by faculty co-directors Karim Lakhani, Harvard Business School; Eva Guinan, Harvard Medical School; David Parkes, Harvard School of Engineering and Applied Sciences; and Kyle Myers, Harvard Business School; with support from the Institute for Quantitative Social Science. With our partners in both academia and industry, LISH conducts research on innovation within three areas of application:  Crowdsourcing & Open Innovation; Data Science & AI Development; and Science of Science;  addressing questions under three main research tracks: Incentives & Governance; Creativity & Problem-Solving; and Organization & Processes.',
+    '2023-08-08 19:24:59',
+    '2023-08-08 19:30:57',
+    1
+  ),
+  (
+    297,
+    'NIH LINCS Program',
+    'LINCS',
+    '',
+    'nih-lincs-program',
+    '',
+    'https://lincsproject.org/LINCS/',
+    'The LINCS project is based on the premise that disrupting any one of the many steps of a given biological process will cause related changes in the molecular and cellular characteristics, behavior, and/or function of the cell – the observable composite of which is known as the cellular phenotype. Observing how and when a cell’s phenotype is altered by specific stressors can provide clues about the underlying mechanisms involved in perturbation and, ultimately, disease.',
+    '2023-08-08 19:25:32',
+    '2023-08-08 19:37:57',
+    1
+  ),
+  (
+    298,
+    'Recursion',
+    '',
+    '',
+    'recursion',
+    '',
+    'https://www.recursion.com/',
+    'From our earliest days, our story was unlikely. We are a company started by two graduate students and a professor, headquartered in Salt Lake City, Utah. Our humble and unlikely beginnings are foundational to what we’ve built today.  We were underdogs, and felt that way.  Now we are leaders in this space, and we vow to stay hungry and focused on our mission. We are a biotechnology company scaling more like a technology company, and we are just getting started.',
+    '2023-08-08 19:41:20',
+    '2023-08-08 19:42:43',
+    1
+  ),
+  (
+    299,
+    'Google Cloud',
+    '',
+    '',
+    'google-cloud',
+    '',
+    'https://cloud.google.com/?hl=en',
+    'Google Cloud is widely recognized as a global leader in delivering a secure, open and intelligent enterprise cloud platform. Our technology is built on Google’s private network and is the product of nearly 20 years of innovation in security, network architecture, collaboration, artificial intelligence and open source software. We offer a simply engineered set of tools and unparalleled technology across Google Cloud Platform and G Suite that help bring people, insights and ideas together. Customers across more than 150 countries trust Google Cloud to modernize their computing environment for today’s digital world.',
+    '2023-08-08 19:43:02',
+    '2023-08-08 19:44:33',
+    1
+  ),
+  (
+    300,
+    'DoiT',
+    '',
+    '',
+    'doit',
+    '',
+    'https://www.doit.com/',
+    'You have the cloud and we have your back. For nearly a decade, we’ve been helping businesses build and scale cloud solutions with our world-class cloud engineering support. We help our customers with technical support and consulting on building and operating complex large-scale distributed systems, developing better machine learning models and setting up big data solutions using Google Cloud, Amazon AWS and Microsoft Azure.',
+    '2023-08-08 19:43:17',
+    '2023-08-08 19:44:51',
+    1
+  ),
+  (
+    301,
+    'Lambda',
+    '',
+    '',
+    'lambda',
+    '',
+    'https://lambdalabs.com/',
+    'Our workstations, servers, laptops, and cloud services power engineers and researchers at the forefront of human knowledge. Our customers include Intel, Microsoft, Amazon Research, Kaiser Permanente, MIT, Stanford, Harvard, Caltech, and the Department of Defense. With Lambda, you simply plug the system into the wall and get started making business and scientific breakthroughs.  That''s why the greatest companies and research labs in the world work with Lambda.',
+    '2023-08-08 19:43:31',
+    '2023-08-08 19:44:16',
+    1
+  ),
+  (
+    302,
+    'Center for the Study of Movement, Cognition, and Mobility',
+    'CMCM',
+    '',
+    'cmcm',
+    '',
+    'https://rnd.tasmc.org.il/laboratories/center-for-the-study-of-movement-cognition-and-mobility-prof-jeff-hausdorff/',
+    'As the baby boomers age, the number of adults who suffer from frequent falls, gait disorders, cognitive impairment, dementia, and other neurological diseases continues to increase dramatically. New understandings and therapeutic approaches are needed. Our research aims to improve the personalized treatment of age-related movement, cognition, and mobility disorders and to alleviate the burden associated with them.`',
+    '2023-08-08 19:54:16',
+    '2023-08-08 19:54:33',
+    1
+  ),
+  (
+    303,
+    'Research Group for Neurorehabilitation',
+    'eNRGy',
+    '',
+    'enrgy',
+    '',
+    'https://gbiomed.kuleuven.be/english/research/50000743/research/research-units/enrgy',
+    'The mission of the Neurorehabilitation Research Group (eNRGy) is to advance the evidence-base of neurorehabilitation of child and adult populations with acute and chronic neurological conditions. In doing so, our research activities tackle both fundamental and translational research questions aimed at increasing our understanding of neurobehavioral and neuromuscular mechanisms, relevant for innovation and refinement of rehabilitation interventions. The clinical challenge of eNRGy lies in addressing the complexity of the brain and its role in neuromotor function, including deficits in the motor, sensory, social and cognitive domain.',
+    '2023-08-08 19:55:53',
+    '2023-08-08 19:57:47',
+    1
+  ),
+  (
+    304,
+    'Hinda and Arthur Marcus Institute for Aging',
+    '',
+    '',
+    'marcus-institute',
+    '',
+    'https://www.marcusinstituteforaging.org/',
+    'Since 1966, the Hinda and Arthur Marcus Institute for Aging Research has challenged conventional wisdom to better understand how we age. The questions we ask - and the answers we uncover - directly impact standards of care and help seniors live more vital, meaningful lives. The Marcus Institute is one of the largest gerontological research facilities in a clinical setting in the U.S. Our decades-long relationship with Harvard Medical School attracts expert teaching staff and outstanding research fellows. Our research portfolio increased 90% from 2010 to 2022 and ranks us in the top 10% of institutions funded by the National Institutes of Health.',
+    '2023-08-08 19:59:31',
+    '2023-08-08 20:00:08',
+    1
+  ),
+  (
+    305,
+    'University Hospital Zurich',
+    'USZ',
+    '',
+    'usz',
+    '',
+    'https://www.usz.ch/en/',
+    'The University Hospital Zurich (USZ) is open to all patients every day and provides fundamental medical care and cutting-edge medicine in a central location in Zurich. We use our superior academic knowledge to treat a wide range of health issues, taking a personal touch and utilizing highly specialized and up-to-date research.',
+    '2023-08-09 22:21:15',
+    '2023-08-09 22:21:34',
+    1
+  ),
+  (
+    306,
+    'Zurich University of Applied Sciences',
+    'ZHAW',
+    '',
+    'zhaw',
+    '',
+    'https://www.zhaw.ch/en/university/',
+    'The ZHAW is one of the leading universities of applied sciences in Switzerland. It offers teaching, research, continuing education and other services that are both practice-oriented and science-based.  Research & development at the ZHAW focuses on key societal challenges, with a particular emphasis on energy and societal integration. With its expertise in sustainable development and digital transformation, the ZHAW imparts forward-looking knowledge and takes an active part in shaping the digital and ecological transformation. With locations in Winterthur, Zurich and Wädenswil, the ZHAW is firmly anchored in its region whilst collaborating with international partners.',
+    '2023-08-09 22:22:32',
+    '2023-08-09 22:22:57',
+    1
+  ),
+  (
+    307,
+    'Helmholtz Munich',
+    '',
+    '',
+    'helmholtz-munich',
+    '',
+    'https://www.helmholtz-munich.de/en',
+    'We are Helmholtz Munich. We discover breakthrough solutions for better health in a rapidly changing world. Our world is constantly changing. This impacts our health. Many widespread diseases such as diabetes, allergies and lung diseases are on the rise. Climate change is causing new diseases to emerge. We develop solutions for a healthier future. Our cutting-edge research is the springboard for medical innovations. Together with our partners, we accelerate the transfer from ideas to applications, from labs to startups, from science to society.',
+    '2023-08-09 22:23:10',
+    '2023-08-09 22:24:12',
+    1
+  ),
+  (
+    308,
+    'Imperial College London',
+    '',
+    '',
+    'imperial',
+    '',
+    'https://www.imperial.ac.uk/',
+    'Imperial is a global top ten university with a world-class reputation in science, engineering, business and medicine. Together, we are Imperial.',
+    '2023-08-09 22:24:26',
+    '2023-08-09 22:25:15',
+    1
+  ),
+  (
+    309,
+    'Geneva University Hospitals',
+    'HUG',
+    '',
+    'hug',
+    '',
+    'https://www.hug.ch/',
+    'The result of a centuries-old tradition of excellence in medicine and science, the HUG was created in 1995. Bringing together the eight Geneva public hospitals and, since July 1, 2016, two clinics (Joli-Mont and Crans-Montana), they represent the leading university hospital in Switzerland. They also have 30 outpatient consultations, spread throughout the canton of Geneva.',
+    '2023-08-09 22:26:11',
+    '2023-08-09 22:26:46',
+    1
+  ),
+  (
+    310,
+    'National University Hospital',
+    'NUH',
+    '',
+    'nuh',
+    '',
+    'https://www.nuh.com.sg/Pages/Home.aspx',
+    'The National University Hospital (NUH) is Singapore’s leading university hospital. While the hospital at Kent Ridge first received its patients on 24 June 1985, our legacy started from 1905, the date of the founding of what is today the NUS Yong Loo Lin School of Medicine. NUH is the principal teaching hospital of the medical school.  Our unique identity as a university hospital is a key attraction for healthcare professionals who aspire to do more than practise tertiary medical care. We offer an environment where research and teaching are an integral part of medicine, and continue to shape medicine and transform care for the community we care for.  We are an academic medical centre with over 1,200 beds, serving more than one million patients a year with over 50 medical, surgical and dental specialties. NUH is the only public and not-for-profit hospital in Singapore to provide trusted care for adults, women and children under one roof, including the only paediatric kidney and liver...',
+    '2023-08-09 22:27:16',
+    '2023-08-09 22:28:14',
+    1
+  ),
+  (
+    311,
+    'Princess Maxima Center for Pediatric Oncology',
+    '',
+    '',
+    'princess-maxima-center',
+    '',
+    'https://www.prinsesmaximacentrum.nl/en',
+    'When a child is seriously ill with cancer, only one thing comes first: cure. That is why at the Princess Máxima Center for pediatric oncology we work together every day in a groundbreaking and passionate way to improve the survival rate and quality of life of children with cancer. Now, and in the longer term. Because children still have a whole life ahead of them. The Princess Máxima Center is not an ordinary hospital, but a research hospital. All children with cancer in the Netherlands are treated here. This makes the Princess Máxima Center the largest pediatric cancer center in Europe. Over 450 researchers and 900 healthcare professionals work closely with Dutch and international hospitals on better treatments and new perspectives on cures. In this way, we give the child of today the very best care and take important steps to improve the chances of survival for the children who are not yet cured.',
+    '2023-08-09 22:29:04',
+    '2023-08-09 22:30:33',
+    1
+  ),
+  (
+    312,
+    'CHAIMELEON Consortium',
+    '',
+    '',
+    'chaimeleon',
+    '',
+    'https://chaimeleon.eu/#partners',
+    'The interdisciplinary CHAIMELEON consortium is made up of 18 partners from 9 countries:  Fundación para la Investigación del Hospital Universitario la Fe de la Comunidad Valenciana (ES), Universita di Pisa (IT), Universita Degli Studi di Roma la Sapienza (IT), Centro Hospitalar Universitário de Santo António (PT), ICCS Policlinico San Donato (IT), College des Enseignants de Radiologie (FR), Universiteit Masstricht (NL), Charité Universitätsmedizin Berlin (DE), Imperial College London (UK), Ben-Gurion University of the Negev (IL), Universitat Politècnica de Valencia (ES), GE Healthcare (DE), Quibim (ES), Medexprim (FR), Bahia (ES), Matical Innovation (ES), European Institute of Biomedical Imaging Research (AT), Universitat de Valencia (ES). It constitutes a pan-European ecosystem of knowledge, infrastructures, biobanks and technologies on oncology, AI/in-silico and cloud computing addressed to health. The CHAIMELON project also collaborates with other European projects and initiatives.',
+    '2023-08-09 22:48:43',
+    '2023-08-09 22:51:15',
+    1
+  ),
+  (
+    313,
+    'FDA Office of Digital Transformation',
+    'ODT',
+    '',
+    'odt',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-commissioner/office-digital-transformation',
+    'The Office of Digital Transformation (ODT) provides the vision and leadership in information technology (IT), data, and cybersecurity needed to advance FDA’s mission and strategic priorities. ODT is led by the Chief Information Officer and reports to the FDA Commissioner. ODT directs and coordinates enterprise strategic planning, policy, and resource management to ensure that Agency IT, data, and cybersecurity investments and activities provide maximum value to FDA. ODT is comprised of the Office of Information Management and Technology (OIMT), Office of Data, Analytics, and Research (ODAR), and the Office of Information Security (OIS), under the direction of the Chief Technology Officer (CTO), Chief Data Officer (CDO), and Chief Information Security Officer (CISO).   ODT is committed to delivering trusted technology and data solutions that enable FDA to reimagine the possible. Watch this video to learn more about our organization and how we are striving to make an impact at FDA. ',
+    '2023-08-10 21:37:33',
+    '2023-08-10 21:39:34',
+    2
+  ),
+  (
+    314,
+    'FDA Office of Minority Health and Health Equity',
+    'OMHHE',
+    '',
+    'omhhe',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-commissioner/office-minority-health-and-health-equity',
+    'The FDA Office of Minority Health and Health Equity (OMHHE) serves to promote and protect the health of diverse populations through research and communication of science that addresses health disparities.',
+    '2023-08-10 21:37:42',
+    '2023-08-10 21:40:30',
+    1
+  ),
+  (
+    315,
+    'FDA Office of Data, Analytics, and Research',
+    'ODAR',
+    '',
+    'odar',
+    'logo/fda.svg',
+    'https://www.fda.gov/about-fda/office-digital-transformation/office-data-analytics-and-research-odar',
+    'The Office of Data, Analytics, and Research (ODAR) manages and improves FDA’s ability to leverage data as a strategic asset by establishing enterprise data strategy and priorities. ',
+    '2023-08-10 21:37:44',
+    '2023-08-10 21:38:28',
+    2
+  ),
+  (
+    316,
+    'Medicines and Healthcare products Regulatory Agency',
+    'MHRA',
+    '',
+    'mhra',
+    '',
+    'https://www.gov.uk/government/organisations/medicines-and-healthcare-products-regulatory-agency',
+    'We are the regulator of medicines, medical devices and blood components for transfusion in the UK. We put patients first in everything we do, right across the lifecycle of the products we regulate. We rigorously use science and data to inform our decisions, enable medical innovation and to make sure that medicines and healthcare products available in the UK are safe and effective.',
+    '2023-08-10 22:10:11',
+    '2023-08-10 22:11:14',
+    1
+  ),
+  (
+    317,
+    'MDClone',
+    '',
+    '',
+    'mdclone',
+    '',
+    'https://www.mdclone.com/',
+    'MDClone is a technology firm focused on unlocking healthcare data and empowering exploration, discovery, and collaboration to improve patients'' health.  At MDClone, we are a growing startup with big aspirations. We are determined to make an impact on healthcare worldwide with tools, processes, and services focused on turning data into better outcomes. MDClone is focused on empowering healthcare institutions, enabling stronger and more secure relationships between healthcare providers and life science companies, and developing regional and global collaboration with privacy-enabled shared data sets.  ',
+    '2023-08-10 22:11:58',
+    '2023-08-10 22:12:33',
+    1
+  ),
+  (
+    318,
+    'Washington Business Dynamics',
+    'WBD',
+    '',
+    'wbd',
+    '',
+    'https://www.wbdynamics.com/',
+    'Since our founding, WBD has sought to be a management consulting provider of choice for the federal government and the private sector. We are privileged to count many of the world’s foremost institutions and organizations among our client list. We partnered with these organizations’ senior leaders and immediately began uncovering value. Our staff brings a superior analytic capability, time-tested best practices, and a logical approach to solve problems and position organizations for future success.',
+    '2023-08-10 22:12:50',
+    '2023-08-10 22:13:23',
     1
   );
 
@@ -3890,4 +4708,136 @@ VALUES (1, 1, 75, 'sponsor'),
   (690, 167, 98, 'sponsor'),
   (691, 167, 139, 'sponsor'),
   (692, 167, 254, 'sponsor'),
-  (693, 167, 255, 'sponsor');
+  (693, 167, 255, 'sponsor'),
+  (694, 169, 209, 'challenge_organizer'),
+  (695, 169, 195, 'challenge_organizer'),
+  (696, 169, 194, 'challenge_organizer'),
+  (697, 169, 257, 'challenge_organizer'),
+  (698, 169, 135, 'sponsor'),
+  (699, 170, 258, 'challenge_organizer'),
+  (700, 170, 258, 'data_contributor'),
+  (701, 170, 161, 'challenge_organizer'),
+  (702, 170, 161, 'data_contributor'),
+  (703, 170, 259, 'challenge_organizer'),
+  (704, 170, 260, 'challenge_organizer'),
+  (705, 170, 261, 'challenge_organizer'),
+  (706, 170, 261, 'data_contributor'),
+  (707, 170, 262, 'challenge_organizer'),
+  (708, 170, 263, 'challenge_organizer'),
+  (709, 170, 264, 'challenge_organizer'),
+  (710, 170, 265, 'sponsor'),
+  (711, 170, 260, 'sponsor'),
+  (712, 170, 266, 'sponsor'),
+  (713, 170, 261, 'sponsor'),
+  (714, 171, 267, 'challenge_organizer'),
+  (715, 171, 267, 'sponsor'),
+  (716, 171, 267, 'data_contributor'),
+  (717, 172, 269, 'sponsor'),
+  (718, 172, 268, 'challenge_organizer'),
+  (719, 173, 272, 'challenge_organizer'),
+  (720, 173, 271, 'challenge_organizer'),
+  (721, 173, 270, 'challenge_organizer'),
+  (722, 174, 273, 'sponsor'),
+  (723, 174, 107, 'challenge_organizer'),
+  (724, 174, 256, 'challenge_organizer'),
+  (725, 174, 270, 'challenge_organizer'),
+  (726, 174, 147, 'challenge_organizer'),
+  (727, 174, 215, 'challenge_organizer'),
+  (728, 174, 270, 'data_contributor'),
+  (729, 176, 104, 'challenge_organizer'),
+  (730, 176, 143, 'challenge_organizer'),
+  (731, 176, 213, 'challenge_organizer'),
+  (732, 176, 275, 'challenge_organizer'),
+  (733, 176, 102, 'challenge_organizer'),
+  (734, 174, 274, 'data_contributor'),
+  (735, 174, 276, 'data_contributor'),
+  (736, 174, 277, 'data_contributor'),
+  (737, 177, 162, 'challenge_organizer'),
+  (738, 176, 3, 'challenge_organizer'),
+  (739, 175, 278, 'challenge_organizer'),
+  (740, 179, 279, 'challenge_organizer'),
+  (741, 174, 12, 'sponsor'),
+  (742, 172, 12, 'sponsor'),
+  (743, 173, 12, 'sponsor'),
+  (744, 171, 12, 'sponsor'),
+  (745, 167, 12, 'sponsor'),
+  (746, 181, 12, 'sponsor'),
+  (747, 181, 280, 'challenge_organizer'),
+  (748, 181, 281, 'challenge_organizer'),
+  (749, 181, 211, 'challenge_organizer'),
+  (750, 181, 282, 'challenge_organizer'),
+  (751, 181, 171, 'challenge_organizer'),
+  (752, 182, 283, 'challenge_organizer'),
+  (753, 182, 284, 'challenge_organizer'),
+  (754, 182, 285, 'challenge_organizer'),
+  (755, 182, 67, 'challenge_organizer'),
+  (756, 182, 286, 'challenge_organizer'),
+  (757, 182, 12, 'sponsor'),
+  (758, 182, 15, 'sponsor'),
+  (759, 183, 283, 'challenge_organizer'),
+  (760, 183, 67, 'challenge_organizer'),
+  (761, 183, 287, 'challenge_organizer'),
+  (762, 183, 286, 'challenge_organizer'),
+  (763, 183, 288, 'challenge_organizer'),
+  (764, 183, 289, 'challenge_organizer'),
+  (765, 183, 12, 'sponsor'),
+  (766, 183, 15, 'sponsor'),
+  (767, 184, 290, 'challenge_organizer'),
+  (768, 184, 291, 'challenge_organizer'),
+  (769, 185, 179, 'challenge_organizer'),
+  (770, 186, 179, 'challenge_organizer'),
+  (771, 186, 292, 'challenge_organizer'),
+  (772, 187, 179, 'challenge_organizer'),
+  (773, 187, 119, 'challenge_organizer'),
+  (774, 188, 179, 'challenge_organizer'),
+  (775, 188, 293, 'challenge_organizer'),
+  (776, 189, 179, 'challenge_organizer'),
+  (777, 190, 197, 'challenge_organizer'),
+  (778, 191, 179, 'challenge_organizer'),
+  (779, 191, 294, 'challenge_organizer'),
+  (780, 191, 144, 'challenge_organizer'),
+  (781, 191, 295, 'challenge_organizer'),
+  (782, 192, 41, 'challenge_organizer'),
+  (783, 192, 296, 'challenge_organizer'),
+  (784, 192, 297, 'challenge_organizer'),
+  (785, 193, 298, 'challenge_organizer'),
+  (786, 193, 299, 'sponsor'),
+  (787, 193, 300, 'sponsor'),
+  (788, 193, 147, 'sponsor'),
+  (789, 193, 301, 'sponsor'),
+  (790, 194, 302, 'challenge_organizer'),
+  (791, 194, 302, 'data_contributor'),
+  (792, 194, 303, 'data_contributor'),
+  (793, 194, 304, 'data_contributor'),
+  (794, 194, 126, 'sponsor'),
+  (795, 195, 75, 'sponsor'),
+  (796, 195, 312, 'challenge_organizer'),
+  (797, 196, 12, 'sponsor'),
+  (798, 196, 226, 'challenge_organizer'),
+  (799, 196, 306, 'challenge_organizer'),
+  (800, 196, 307, 'challenge_organizer'),
+  (801, 196, 308, 'challenge_organizer'),
+  (802, 196, 248, 'challenge_organizer'),
+  (803, 196, 305, 'challenge_organizer'),
+  (804, 196, 309, 'challenge_organizer'),
+  (805, 196, 310, 'challenge_organizer'),
+  (806, 196, 220, 'challenge_organizer'),
+  (807, 196, 261, 'data_contributor'),
+  (808, 196, 311, 'data_contributor'),
+  (809, 197, 261, 'challenge_organizer'),
+  (810, 197, 261, 'data_contributor'),
+  (811, 197, 12, 'sponsor'),
+  (812, 196, 305, 'data_contributor'),
+  (813, 198, 13, 'challenge_organizer'),
+  (814, 198, 313, 'challenge_organizer'),
+  (815, 198, 314, 'challenge_organizer'),
+  (816, 198, 315, 'challenge_organizer'),
+  (817, 199, 231, 'challenge_organizer'),
+  (818, 199, 249, 'challenge_organizer'),
+  (819, 199, 313, 'challenge_organizer'),
+  (820, 199, 315, 'challenge_organizer'),
+  (821, 199, 136, 'challenge_organizer'),
+  (822, 199, 316, 'challenge_organizer'),
+  (823, 199, 34, 'challenge_organizer'),
+  (824, 199, 317, 'challenge_organizer'),
+  (825, 199, 318, 'challenge_organizer');

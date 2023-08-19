@@ -44,7 +44,7 @@
           [selectedValues]="selectedStatus"
           (selectionChange)="onStatusChange($event)"
           inputId="{{ statusFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
@@ -57,7 +57,7 @@
           [selectedValues]="selectedIncentives"
           (selectionChange)="onIncentivesChange($event)"
           inputId="{{ incentivesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <!-- <p-panel
@@ -73,7 +73,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onInputDataTypesChange($event)"
           (searchChange)="onInputDataTypeSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
+        />
       </p-panel>
       <p-divider></p-divider> -->
       <p-panel
@@ -89,7 +89,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onPlatformsChange($event)"
           (searchChange)="onPlatformSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
@@ -105,7 +105,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onOrganizationsChange($event)"
           (searchChange)="onOrganizationSearchChange($event)"
-        ></openchallenges-search-dropdown-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
@@ -149,7 +149,7 @@
           [selectedValues]="selectedSubmissionTypes"
           (selectionChange)="onSubmissionTypesChange($event)"
           inputId="{{ submissionTypesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
@@ -162,14 +162,13 @@
           [selectedValues]="selectedCategories"
           (selectionChange)="onCategoriesChange($event)"
           inputId="{{ categoriesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge">
-        </openchallenges-challenge-card>
+        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge"/>
       </div>
       <openchallenges-paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
@@ -177,7 +176,7 @@
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"
-      ></openchallenges-paginator>
+      />
     </div>
   </section>
 </main>
@@ -185,4 +184,4 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
-></openchallenges-footer>
+/>

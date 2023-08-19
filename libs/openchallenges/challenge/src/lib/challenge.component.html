@@ -1,11 +1,11 @@
 <main class="base mat-typography">
   <ng-container *ngIf="challenge$ | async as challenge">
     <section id="profile-top" class="row">
-      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"></openchallenges-avatar>
+      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"/>
       <div id="profile-details" class="col">
         <h2>
           {{ challenge.name }}
-          <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon>
+          <!-- <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon> -->
         </h2>
         <p class="username">@{{ challenge.slug }}</p>
         <div
@@ -20,7 +20,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-challenge-stats [loggedIn]="loggedIn"></openchallenges-challenge-stats>
+        <openchallenges-challenge-stats [loggedIn]="loggedIn"/>
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -65,23 +65,19 @@
           <openchallenges-challenge-overview
             *ngSwitchCase="tabs['overview']"
             [challenge]="challenge"
-          >
-          </openchallenges-challenge-overview>
+          />
           <openchallenges-challenge-organizers
             *ngSwitchCase="tabs['organizers']"
             [challenge]="challenge"
-          >
-          </openchallenges-challenge-organizers>
+          />
           <openchallenges-challenge-contributors
             *ngSwitchCase="tabs['contributors']"
             [challenge]="challenge"
-          >
-          </openchallenges-challenge-contributors>
+          />
           <!-- <openchallenges-challenge-stargazers
             *ngSwitchCase="tabs['stargazers']"
             [challenge]="challenge"
-          >
-          </openchallenges-challenge-stargazers> -->
+          /> -->
         </ng-container>
       </div>
     </section>
@@ -90,4 +86,4 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
-></openchallenges-footer>
+/>

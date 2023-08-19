@@ -155,13 +155,12 @@ Before moving on, some additional edits are required:
 
         ```ts
         ...
-        import { UiModule } from '@sagebionetworks/openchallenges/ui';
         import { RouterModule, Routes } from '@angular/router';
 
         const routes: Routes = [{ path: '', component: <component> }];
 
         @NgModule({
-          imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+          imports: [CommonModule, RouterModule.forChild(routes)],
           ...
         ```
 
@@ -180,14 +179,13 @@ Before moving on, some additional edits are required:
           ```ts
           import { NgModule } from '@angular/core';
           import { CommonModule } from '@angular/common';
-          import { UiModule } from '@sagebionetworks/openchallenges/ui';
           import { RouterModule, Routes } from '@angular/router';
           import { AwesomeLibComponent } from './awesome-lib.component';
 
           const routes: Routes = [{ path: '', component: AwesomeLibComponent }];
 
           @NgModule({
-            imports: [CommonModule, RouterModule.forChild(routes), UiModule],
+            imports: [CommonModule, RouterModule.forChild(routes)],
             declarations: [AwesomeLibComponent],
             exports: [AwesomeLibComponent],
           })
