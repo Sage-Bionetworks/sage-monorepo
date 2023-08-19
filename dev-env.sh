@@ -77,7 +77,6 @@ function openchallenges-infra {
   node dist/apps/openchallenges/infra/src/main.js "$@"
 }
 
-
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
@@ -94,7 +93,7 @@ function workspace-nx-cloud-help {
   printf "%s\n" \
     "" \
     "This workspace is not configured to use Nx Cloud. To configure it," \
-    "  - Run cp nx-cloud.env.example nx-cloud.env" \
+    "  - Run \`cp nx-cloud.env.example nx-cloud.env\`" \
     "  - Add Nx Cloud credentials to nx-cloud.env (contact thomas.schaffter@sagebionetworks.org)"
 }
 
