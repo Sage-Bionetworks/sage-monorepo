@@ -11,13 +11,6 @@ else # Other/fail
 fi
 export WORKSPACE_BUILD_PROCS
 
-bold=$(tput bold)
-italic=$(tput sitm)
-reset=$(tput sgr0)
-
-orange=$(tput setaf 166)
-
-
 # cd to the workspace directory
 function workspace-cd {
   cd $WORKSPACE_DIR
@@ -101,8 +94,8 @@ function workspace-nx-cloud-help {
   printf "%s\n" \
     "" \
     "This workspace is not configured to use Nx Cloud. To configure it," \
-    "  - Run ${bold}cp nx-cloud.env.example nx-cloud.env${reset}" \
-    "  - Add Nx Cloud credentials to ${italic}nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+    "  - Run cp nx-cloud.env.example nx-cloud.env" \
+    "  - Add Nx Cloud credentials to nx-cloud.env (contact thomas.schaffter@sagebionetworks.org)"
 }
 
 function workspace-welcome {
@@ -111,7 +104,7 @@ function workspace-welcome {
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
       "" \
-      "Run ${bold}workspace-install${reset} to install workspace tools like ${bold}nx${reset} and ${bold}jest${reset}."
+      "Run \`workspace-install\` to install workspace tools like nx and jest."
   fi
 
   if [ ! -f "nx-cloud.env" ]; then
