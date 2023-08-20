@@ -24,11 +24,7 @@
         "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -39,10 +35,7 @@
         "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
