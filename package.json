@@ -48,7 +48,6 @@
     "tslib": "2.4.1",
     "type-guards": "0.15.0",
     "validator": "13.7.0",
-    "winston": "3.8.2",
     "zone.js": "0.13.1"
   },
   "devDependencies": {
