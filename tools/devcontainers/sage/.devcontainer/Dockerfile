@@ -23,6 +23,8 @@ ARG rVersion="4.2.3"
 ARG trivyVersion="0.43.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
+# https://github.com/pnpm/pnpm/releases
+ARG pnpmVersion="8.6.12"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -67,6 +69,10 @@ RUN groupadd docker \
   # Install Yarn
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
+  # Instal pnpm
+  # && curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=${pnpmVersion} bash - \
+  && corepack enable pnpm \
+  && corepack prepare "pnpm@${pnpmVersion}" --activate \
   # Install @devcontainers/cli
   && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
   # Install act
@@ -137,7 +143,7 @@ USER $user
 # Install pyenv as the user
 RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
-## Install Python environments
+# Install Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install \
