@@ -24,7 +24,6 @@
   display: flex;
   align-items: center;
   flex: 1;
-  max-height: 50px;
   @include general.line-camp(2);
 }
 .status-tag {
