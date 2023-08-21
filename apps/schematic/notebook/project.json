@@ -11,7 +11,6 @@
         "cwd": "apps/schematic/notebook"
       }
     },
-
     "prepare-python": {
       "executor": "nx:run-commands",
       "options": {
@@ -22,32 +21,12 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "poetry run jupyter lab --config=jupyter_lab_config.py"
-        ],
+        "commands": ["poetry run jupyter lab --config=jupyter_lab_config.py"],
         "cwd": "apps/schematic/notebook"
       },
       "dependsOn": []
     }
-    // "serve-detach": {
-    //   "executor": "nx:run-commands",
-    //   "options": {
-    //     "command": "docker compose up -d",
-    //     "cwd": "apps/schematic/notebook"
-    //   },
-    //   "dependsOn": ["build-image", "prepare"]
-    // },
-    // "build-image": {
-    //   "executor": "@nx-tools/nx-container:build",
-    //   "options": {
-    //     "context": "apps/schematic/notebook",
-    //     "push": false,
-    //     "tags": ["sagebionetworks/schematic-notebook:latest"]
-    //   }
-    // }
   },
   "tags": ["type:app", "scope:client"],
-  "implicitDependencies": [
-    "schematic-api-client-python"
-  ]
+  "implicitDependencies": ["schematic-api-client-python"]
 }

@@ -1,7 +1,7 @@
 <main class="base mat-typography">
   <ng-container *ngIf="challenge$ | async as challenge">
     <section id="profile-top" class="row">
-      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"></openchallenges-avatar>
+      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"/>
       <div id="profile-details" class="col">
         <h2>
           {{ challenge.name }}
@@ -20,7 +20,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-challenge-stats [loggedIn]="loggedIn"></openchallenges-challenge-stats>
+        <openchallenges-challenge-stats [loggedIn]="loggedIn"/>
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -68,4 +68,4 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
-></openchallenges-footer>
+/>

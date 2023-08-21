@@ -1,5 +1,10 @@
 import { Component, OnInit, Renderer2 } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import {
+  ActivatedRoute,
+  ParamMap,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import {
   Account,
   AccountService,
@@ -22,15 +27,41 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { USER_PROFILE_TABS } from './user-profile-tabs';
-import { MOCK_USER, Avatar } from '@sagebionetworks/openchallenges/ui';
+import {
+  MOCK_USER,
+  Avatar,
+  FooterComponent,
+  AvatarComponent,
+} from '@sagebionetworks/openchallenges/ui';
 // import { MOCK_USER, MOCK_ORG } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { UserProfile } from './user-profile';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getUserProfileSeoData } from './user-profile-seo';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+// import { MatTabsModule } from '@angular/material/tabs';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { UserProfileChallengesComponent } from './user-profile-challenges/user-profile-challenges.component';
+import { UserProfileOverviewComponent } from './user-profile-overview/user-profile-overview.component';
+import { UserProfileStarredComponent } from './user-profile-starred/user-profile-starred.component';
+import { UserProfileStatsComponent } from './user-profile-stats/user-profile-stats.component';
 
 @Component({
   selector: 'openchallenges-user',
+  standalone: true,
+  imports: [
+    CommonModule,
+    MatTabsModule,
+    MatIconModule,
+    RouterModule,
+    UserProfileChallengesComponent,
+    UserProfileOverviewComponent,
+    UserProfileStarredComponent,
+    FooterComponent,
+    AvatarComponent,
+    UserProfileStatsComponent,
+  ],
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss'],
 })

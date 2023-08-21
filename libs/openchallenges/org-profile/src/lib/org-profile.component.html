@@ -5,7 +5,7 @@
         *ngIf="organizationAvatar$ | async as organizationAvatar"
         class="profile-pic"
         [avatar]="organizationAvatar"
-      ></openchallenges-avatar>
+      />
       <div id="profile-details" class="col">
         <h2>
           {{ org.name }}
@@ -18,7 +18,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-org-profile-stats [loggedIn]="loggedIn"></openchallenges-org-profile-stats>
+        <openchallenges-org-profile-stats [loggedIn]="loggedIn"/>
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -62,4 +62,4 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
-></openchallenges-footer>
+/>

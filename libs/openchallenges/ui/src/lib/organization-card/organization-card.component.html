@@ -1,7 +1,6 @@
 <div *ngIf="organizationCard">
   <div class="organization-card" [routerLink]="['/org', organizationCard.login]">
-    <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar">
-    </openchallenges-avatar>
+    <openchallenges-avatar class="organization-card-banner" [avatar]="organizationAvatar"/>
     <!-- <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
       {{ mockStars }}
@@ -15,8 +14,7 @@
             [name]="member.name"
             [src]="member.avatarUrl || ''"
             [size]="32"
-          >
-          </openchallenges-avatar>
+          />
         </div>
         <p class="mat-caption" *ngIf="otherMembersCount > 0">+ {{ otherMembersCount }} other members</p>
       </div>
