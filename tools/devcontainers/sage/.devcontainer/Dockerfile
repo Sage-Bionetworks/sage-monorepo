@@ -25,6 +25,8 @@ ARG trivyVersion="0.43.1"
 ARG renvVersion="1.0.0"
 # https://github.com/pnpm/pnpm/releases
 ARG pnpmVersion="8.6.12"
+# https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-cli
+ARG sonarScannerVersion="5.0.1.3006"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -114,7 +116,8 @@ RUN groupadd docker \
 # Setting up a UTF-8 locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
   && locale-gen
-ENV LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
 
 ARG user=vscode
 RUN useradd -m $user \
@@ -137,6 +140,18 @@ RUN useradd -m $user \
     "" | tee -a "/home/$user/.bashrc" \
   # Set the default version of Yarn
   && corepack prepare "yarn@${yarnVersion}" --activate
+
+# Install SonarScanner CLI
+ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
+ENV SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
+    SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
+    PATH=${SONAR_SCANNER_HOME}/bin:${PATH}
+RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${sonarScannerVersion}.zip --output sonar-scanner-cli.zip \
+  && unzip sonar-scanner-cli.zip \
+  && mv sonar-scanner-${sonarScannerVersion} ${SONAR_SCANNER_HOME} \
+  && mkdir -p "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache" \
+  && chown -R ${user}:${user} "${SONAR_SCANNER_HOME}" \
+  && chmod -R 777 "${SONAR_USER_HOME}"
 
 USER $user
 
