@@ -293,18 +293,18 @@ table {
 .card-footer {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   height: 50px;
   width: 100%;
   border-top: 1px solid #c4c4c4;
   justify-content: center;
   align-items: center;
+  gap: 6px;
 }
 .star-btn {
   position: absolute;
   top: 18px;
   right: 18px;
-  height: 32px;
+  // height: 32px;
   padding: 0 8px;
   display: flex;
   justify-content: center;
