@@ -91,5 +91,6 @@
     "json"
   ],
   "java.compile.nullAnalysis.mode": "disabled",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "git.ignoreLimitWarning": true
 }
