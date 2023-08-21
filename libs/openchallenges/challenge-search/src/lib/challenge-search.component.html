@@ -166,8 +166,8 @@
       </p-panel>
     </div>
     <div class="main col">
-      <h3>Results ({{ searchResultsCount }})</h3>
-      <div class="card-group">
+      <div class="card-group-content">
+        <h3>Results ({{ searchResultsCount }})</h3>
         <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge"/>
       </div>
       <openchallenges-paginator

@@ -37,7 +37,7 @@ em {
   max-width: 2000px;
   margin: auto;
   padding: 48px 32px;
-  gap: 36px;
+  gap: 48px;
 }
 
 // TEXT
@@ -184,7 +184,7 @@ em {
 }
 .profile-nav-group {
   margin: 18px;
-  padding: 48px 18px;
+  padding: 36px 18px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -251,11 +251,18 @@ table {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: $n;
 }
-.card-group {
+.card-group-content {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fill, 320px);
+  grid-gap: 14px 32px;
   padding: 16px 0;
+  justify-content: center;
+  justify-items: center;
+
+  > :not(openchallenges-challenge-card):not(openchallenges-organization-card):not(openchallenges-person-card) {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
 }
 .card-banner {
   width: 100%;
@@ -374,7 +381,7 @@ table {
     align-self: auto;
   }
   .profile-sidenav {
-    max-width: 320px;
+    max-width: 280px;
   }
 }
 @media only screen and (max-width: constants.$lg-breakpoint) {

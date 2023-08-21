@@ -1,9 +1,6 @@
-#members h3 {
-  margin-top: 14px;
-}
-
-.card-group {
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+.card-group-content {
+  grid-template-columns: repeat(auto-fill, 240px);
+  justify-content: start;
 }
 
 .text-grey {
