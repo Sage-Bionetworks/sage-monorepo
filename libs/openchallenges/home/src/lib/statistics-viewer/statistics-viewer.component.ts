@@ -7,6 +7,7 @@ import {
 import { EChartsOption } from 'echarts';
 import * as echarts from 'echarts';
 import { CountUpModule } from 'ngx-countup';
+import { HomeDataService } from '../home-data-service';
 // import { Observable, map } from 'rxjs';
 
 @Component({
@@ -29,7 +30,8 @@ export class StatisticsViewerComponent implements OnInit {
   constructor(
     // private organizationService: OrganizationService,
     // private imageService: ImageService
-    private challengeService: ChallengeService
+    private challengeService: ChallengeService,
+    private homeDataService: HomeDataService
   ) {}
 
   option!: EChartsOption;
@@ -37,34 +39,32 @@ export class StatisticsViewerComponent implements OnInit {
     const chartDom = document.getElementById('statistics')!;
     const myChart = echarts.init(chartDom);
 
-    this.challengeService
-      .listChallenges({ pageSize: 1000 })
-      .subscribe((page) => {
-        const dataByYear = this.processData(page.challenges);
+    this.homeDataService.getAllChallenges().subscribe((challenges) => {
+      const dataByYear = this.processData(challenges);
 
-        console.log(dataByYear);
-        this.option = {
-          title: {
-            text: 'Growth of Challenges',
-            left: 'center',
+      console.log(dataByYear);
+      this.option = {
+        title: {
+          text: 'Growth of Challenges',
+          left: 'center',
+        },
+        xAxis: {
+          type: 'category',
+          data: dataByYear.years,
+        },
+        yAxis: {
+          type: 'value',
+        },
+        series: [
+          {
+            data: dataByYear.cumulativeChallengeCounts,
+            type: 'line',
           },
-          xAxis: {
-            type: 'category',
-            data: dataByYear.years,
-          },
-          yAxis: {
-            type: 'value',
-          },
-          series: [
-            {
-              data: dataByYear.cumulativeChallengeCounts,
-              type: 'line',
-            },
-          ],
-        };
+        ],
+      };
 
-        this.option && myChart.setOption(this.option);
-      });
+      this.option && myChart.setOption(this.option);
+    });
 
     // this.challengeImg$ = this.imageService.getImage({
     //   objectKey: 'home-challenges.svg',
