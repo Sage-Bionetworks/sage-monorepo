@@ -244,6 +244,13 @@ table {
 }
 
 // CARDS
+@mixin line-camp($n) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $n;
+}
 .card-group {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -264,7 +271,11 @@ table {
   margin: 15px 0 !important;
   font-weight: 700 !important;
   line-height: 24px !important;
-  height: 48px;
+  min-height: 48px;
+  @include line-camp(2);
+}
+.mat-caption {
+  @include line-camp(2);
 }
 .card-body {
   width: 100%;

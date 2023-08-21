@@ -68,26 +68,4 @@ export class ChallengeCardComponent implements OnInit {
           });
     }
   }
-
-  truncate(str: string, nchar: number) {
-    if (str.length > nchar) {
-      const words = str.split(' ');
-      let truncated = '';
-
-      for (const word of words) {
-        if ((truncated + ' ' + word).length <= nchar - 3) {
-          // exclude special characters
-          if (!word.match(/\W/)) {
-            truncated += ' ' + word;
-          }
-        } else {
-          break;
-        }
-      }
-
-      return truncated + '...';
-    } else {
-      return str;
-    }
-  }
 }

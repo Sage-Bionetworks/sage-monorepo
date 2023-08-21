@@ -16,12 +16,12 @@
     </div> -->
     <div class="card-body">
       <p class="card-title">
-        {{ truncate(challenge.name, 60) }}
+        {{ challenge.name }}
       </p>
       <p class="card-subtitle" *ngIf="platform">
         {{ platform.name }}
       </p>
-      <p class="mat-caption">{{ truncate(desc, 80) }}</p>
+      <p class="mat-caption">{{ desc }}</p>
     </div>
     <div class="card-footer">
       <div class="difficulty-tag mat-small">
