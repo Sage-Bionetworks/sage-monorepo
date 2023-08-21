@@ -23,7 +23,7 @@
       "options": {
         "root": "apps/openchallenges/kaggle-to-kafka-service"
       },
-      "outputs": ["apps/openchallenges/kaggle-to-kafka-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {

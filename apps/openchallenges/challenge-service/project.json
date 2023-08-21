@@ -23,7 +23,7 @@
       "options": {
         "root": "apps/openchallenges/challenge-service"
       },
-      "outputs": ["apps/openchallenges/challenge-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {
@@ -47,10 +47,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew build --continuous",
-          "./gradlew bootRun"
-        ],
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
         "cwd": "apps/openchallenges/challenge-service",
         "parallel": true
       },
@@ -76,11 +73,7 @@
         "context": "apps/openchallenges/challenge-service",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-challenge-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
@@ -92,10 +85,7 @@
       "options": {
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-challenge-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -136,8 +126,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "openchallenges-app-config-data",
-    "shared-java-util"
-  ]
+  "implicitDependencies": ["openchallenges-app-config-data", "shared-java-util"]
 }
