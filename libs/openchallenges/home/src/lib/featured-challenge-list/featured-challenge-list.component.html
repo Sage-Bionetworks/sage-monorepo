@@ -4,7 +4,7 @@
       <h3 class="section-title">Featured Challenges</h3>
       Not sure where to start? Try one of the following featured challenges!
     </div>
-    <div class="card-group-content">
+    <div class="card-group">
       <openchallenges-challenge-card *ngFor="let challenge of (challenges$ | async)" [challenge]="challenge"/>
     </div>
   </div>

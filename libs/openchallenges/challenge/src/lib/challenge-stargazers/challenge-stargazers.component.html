@@ -1,9 +1,13 @@
-<main class="card-group-content">
-  <h3>Stargazers</h3>
-  <openchallenges-person-card
-    *ngFor="let stargazer of stargazers"
-    [name]="stargazer.name"
-    [avatarSize]="120"
-    [affiliation]="organizationCard.name"
-  />
+<main>
+  <div id="stargazers">
+    <h3>Stargazers</h3>
+    <div class="card-group">
+      <openchallenges-person-card
+        *ngFor="let stargazer of stargazers"
+        [name]="stargazer.name"
+        [avatarSize]="120"
+        [affiliation]="organizationCard.name"
+      />
+    </div>
+  </div>
 </main>
