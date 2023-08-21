@@ -28,13 +28,13 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - name: Set up Yarn cache
+      - name: Set up pnpm cache
         uses: actions/cache@v3
         with:
-          path: '**/.yarn/cache'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: '.pnpm-store'
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Set up Renv cache
         uses: actions/cache@v3
@@ -192,13 +192,13 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - name: Set up Yarn cache
+      - name: Set up pnpm cache
         uses: actions/cache@v3
         with:
-          path: '**/.yarn/cache'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: '.pnpm-store'
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Set up Renv cache
         uses: actions/cache@v3
