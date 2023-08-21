@@ -37,11 +37,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -52,10 +48,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -85,10 +78,7 @@
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "apps/schematic/api",
         "parallel": false
       }
@@ -134,7 +124,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "implicitDependencies": ["schematic-api-description"]
 }

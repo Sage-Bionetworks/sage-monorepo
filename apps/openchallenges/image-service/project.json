@@ -23,7 +23,7 @@
       "options": {
         "root": "apps/openchallenges/image-service"
       },
-      "outputs": ["apps/openchallenges/image-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {
@@ -83,11 +83,7 @@
         "context": "apps/openchallenges/image-service",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-image-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
@@ -99,10 +95,7 @@
         "context": "apps/openchallenges/image-service",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-image-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -143,8 +136,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "openchallenges-app-config-data",
-    "shared-java-util"
-  ]
+  "implicitDependencies": ["openchallenges-app-config-data", "shared-java-util"]
 }
