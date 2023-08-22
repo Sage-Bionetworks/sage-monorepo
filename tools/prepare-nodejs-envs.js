@@ -1,5 +1,5 @@
-// This script checks if the `yarn.lock` file has changed since the last git move. If it has
-// changed, then the command `yarn install --immutable` is executed.
+// This script checks if the `pnpm-lock.yaml` file has changed since the last git move. If it has
+// changed, then the command `pnpm install --frozen-lockfile` is executed.
 
 'use strict';
 
