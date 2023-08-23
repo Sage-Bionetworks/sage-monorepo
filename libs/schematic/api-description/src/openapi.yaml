@@ -48,3 +48,6 @@ paths:
 
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
+
+  /components/{componentLabel}/requirementsGraph:
+    $ref: paths/components/@{componentLabel}/requirementsGraph.yaml
