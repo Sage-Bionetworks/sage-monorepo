@@ -244,7 +244,7 @@ table {
 }
 
 // CARDS
-@mixin line-camp($max-lines) {
+@mixin line-clamp($max-lines) {
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -272,10 +272,10 @@ table {
   font-weight: 700 !important;
   line-height: 24px !important;
   min-height: 48px;
-  @include line-camp(2);
+  @include line-clamp(2);
 }
 .mat-caption {
-  @include line-camp(2);
+  @include line-clamp(2);
 }
 .card-body {
   width: 100%;
