@@ -234,8 +234,8 @@ paths:
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /nodes/{nodeDisplay}/nodeLabel:
     get:
-      description: Gets the label of the node
-      operationId: get_node_label
+      description: Gets the property label of the node
+      operationId: get_property_label
       parameters:
       - description: The display name of the node in a schema
         explode: false
@@ -267,7 +267,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodeLabel'
+                $ref: '#/components/schemas/PropertyLabel'
           description: Success
         "500":
           content:
@@ -276,7 +276,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets the label of the node
+      summary: Gets the property label of the node
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
@@ -795,6 +795,10 @@ components:
       description: Whether or not to use the more strict way of converting to camel
         case
       type: boolean
+    PropertyLabel:
+      description: The property label of a node in a schema
+      example: MolecularEntity
+      type: string
     ValidationRule:
       description: A validation rule.
       properties:

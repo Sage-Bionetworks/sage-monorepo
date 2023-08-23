@@ -149,9 +149,9 @@ paths:
     get:
       tags:
         - Schema
-      summary: Gets the label of the node
-      description: Gets the label of the node
-      operationId: getNodeLabel
+      summary: Gets the property label of the node
+      description: Gets the property label of the node
+      operationId: getPropertyLabel
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'
@@ -161,7 +161,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodeLabel'
+                $ref: '#/components/schemas/PropertyLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/validationRules:
@@ -452,6 +452,10 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
       default: true
+    PropertyLabel:
+      description: The property label of a node in a schema
+      type: string
+      example: MolecularEntity
     ValidationRule:
       type: object
       description: A validation rule.

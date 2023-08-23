@@ -3,9 +3,9 @@ parameters:
 get:
   tags:
     - Schema
-  summary: Gets the label of the node
-  description: Gets the label of the node
-  operationId: getNodeLabel
+  summary: Gets the property label of the node
+  description: Gets the property label of the node
+  operationId: getPropertyLabel
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
     - $ref: ../../../components/parameters/query/useStrictCamelCase.yaml
@@ -15,6 +15,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../components/schemas/NodeLabel.yaml
+            $ref: ../../../components/schemas/PropertyLabel.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml

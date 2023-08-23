@@ -12,24 +12,26 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-NODE_LABEL_URL = "/api/v1/nodes/node1/nodeLabel?schemaUrl=url1"
+PROPERTY_LABEL_URL = "/api/v1/nodes/node1/nodeLabel?schemaUrl=url1"
 NODE_ATTRIBUTES_URL = "/api/v1/nodes/node1/attributes?schemaUrl=url1"
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/node1/validationRules?schemaUrl=url1"
 NODE_DEPENDENCIES_URL = "/api/v1/nodes/node1/dependencies?schemaUrl=url1"
 
 
-class TestNodeLabel(BaseTestCase):
-    """Test case for node label endpoint"""
+class TestPropertyLabel(BaseTestCase):
+    """Test case for property label endpoint"""
 
     def test_success(self) -> None:
         """Test for successful result"""
 
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_label_from_schematic",
+            "get_property_label_from_schematic",
             return_value="label1",
         ) as mock_function:
-            response = self.client.open(NODE_LABEL_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROPERTY_LABEL_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -41,10 +43,12 @@ class TestNodeLabel(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_label_from_schematic",
+            "get_property_label_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(NODE_LABEL_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROPERTY_LABEL_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )

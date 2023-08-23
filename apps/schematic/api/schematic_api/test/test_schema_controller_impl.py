@@ -8,24 +8,24 @@ from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.nodes_page import NodesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
-    get_node_label,
+    get_property_label,
     list_node_attributes,
     list_node_validation_rules,
     list_node_dependencies,
 )
 
 
-class TestNodeLabel:
-    """Test case for get_node_label"""
+class TestPropertyLabel:
+    """Test case for get_property_label"""
 
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_label_from_schematic",
+            "get_property_label_from_schematic",
             return_value="label1",
         ):
-            result, status = get_node_label(
+            result, status = get_property_label(
                 node_display="display", schema_url="xxx", use_strict_camel_case=True
             )
             assert status == 200
@@ -35,10 +35,10 @@ class TestNodeLabel:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_label_from_schematic",
+            "get_property_label_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = get_node_label(
+            result, status = get_property_label(
                 node_display="display", schema_url="xxx", use_strict_camel_case=True
             )
             assert status == 500

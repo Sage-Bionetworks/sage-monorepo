@@ -13,10 +13,10 @@ from schematic_api.models.node import Node
 from schematic_api.controllers.utils import handle_exceptions
 
 
-def get_node_label_from_schematic(
+def get_property_label_from_schematic(
     node_display: str, schema_url: str, use_strict_camel_case: bool
 ) -> str:
-    """Gets the label of the node
+    """Gets the property label of the node
 
     Args:
         node_display(str): The display name of the node
@@ -35,10 +35,10 @@ def get_node_label_from_schematic(
 
 
 @handle_exceptions
-def get_node_label(
+def get_property_label(
     node_display: str, schema_url: str, use_strict_camel_case: bool
 ) -> tuple[Union[str, BasicError], int]:
-    """Gets the label of the node
+    """Gets the property label of the node
 
     Args:
         node_display(str): The display name of the node
@@ -51,7 +51,7 @@ def get_node_label(
           The first item is either the label or an error object
           The second item is the response status
     """
-    result: Union[str, BasicError] = get_node_label_from_schematic(
+    result: Union[str, BasicError] = get_property_label_from_schematic(
         node_display, schema_url, use_strict_camel_case
     )
     status = 200

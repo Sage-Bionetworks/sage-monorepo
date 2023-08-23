@@ -41,7 +41,7 @@ paths:
     $ref: paths/nodes/@{nodeLabel}/attributes.yaml
 
   /nodes/{nodeDisplay}/nodeLabel:
-    $ref: paths/nodes/@{nodeDisplay}/nodeLabel.yaml
+    $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
 
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml

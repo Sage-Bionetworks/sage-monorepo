@@ -12,10 +12,12 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
-def get_node_label(node_display, schema_url, use_strict_camel_case=None):  # noqa: E501
-    """Gets the label of the node
+def get_property_label(
+    node_display, schema_url, use_strict_camel_case=None
+):  # noqa: E501
+    """Gets the property label of the node
 
-    Gets the label of the node # noqa: E501
+    Gets the property label of the node # noqa: E501
 
     :param node_display: The display name of the node in a schema
     :type node_display: str
@@ -26,7 +28,7 @@ def get_node_label(node_display, schema_url, use_strict_camel_case=None):  # noq
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_label(
+    return schema_controller_impl.get_property_label(
         node_display, schema_url, use_strict_camel_case
     )
 
