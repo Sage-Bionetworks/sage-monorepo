@@ -3,7 +3,7 @@ description: A validation rule.
 properties:
   name:
     type: string
-    description: The name of the rule.
+    description: The name of the rule, along with the arguments for the given rule.
     example: list strict
 required:
   - name

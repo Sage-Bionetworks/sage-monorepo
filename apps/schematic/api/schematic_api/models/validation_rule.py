@@ -46,7 +46,7 @@ class ValidationRule(Model):
     def name(self):
         """Gets the name of this ValidationRule.
 
-        The name of the rule.  # noqa: E501
+        The name of the rule, along with the arguments for the given rule.  # noqa: E501
 
         :return: The name of this ValidationRule.
         :rtype: str
@@ -57,7 +57,7 @@ class ValidationRule(Model):
     def name(self, name):
         """Sets the name of this ValidationRule.
 
-        The name of the rule.  # noqa: E501
+        The name of the rule, along with the arguments for the given rule.  # noqa: E501
 
         :param name: The name of this ValidationRule.
         :type name: str
