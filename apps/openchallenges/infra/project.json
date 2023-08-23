@@ -30,7 +30,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/apps/openchallenges/infra"],
+      "outputs": ["{workspaceRoot}/coverage/apps/openchallenges/infra"],
       "options": {
         "jestConfig": "apps/openchallenges/infra/jest.config.ts",
         "passWithNoTests": true

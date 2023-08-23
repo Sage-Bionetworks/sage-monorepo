@@ -67,11 +67,7 @@
         "context": "apps/openchallenges/api-gateway",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-api-gateway"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
@@ -83,10 +79,7 @@
         "context": "apps/openchallenges/api-gateway",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-api-gateway"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -115,7 +108,5 @@
     }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "openchallenges-app-config-data"
-  ]
+  "implicitDependencies": ["openchallenges-app-config-data"]
 }

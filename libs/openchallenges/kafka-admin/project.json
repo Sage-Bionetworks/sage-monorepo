@@ -53,7 +53,5 @@
     }
   },
   "tags": ["type:library", "scope:openchallenges"],
-  "implicitDependencies": [
-    "openchallenges-app-config-data"
-  ]
+  "implicitDependencies": ["openchallenges-app-config-data"]
 }

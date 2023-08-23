@@ -6,8 +6,7 @@ import { SeoService } from './seo/seo.service';
 import { JsonLdService } from './seo/json-ld.service';
 
 @NgModule({
-  imports: [CommonModule],
-  declarations: [AppShellRenderDirective, AppShellNoRenderDirective],
+  imports: [CommonModule, AppShellRenderDirective, AppShellNoRenderDirective],
   providers: [JsonLdService, SeoService],
   exports: [AppShellRenderDirective, AppShellNoRenderDirective],
 })
