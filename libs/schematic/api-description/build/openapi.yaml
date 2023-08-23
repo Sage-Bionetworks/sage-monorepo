@@ -123,15 +123,15 @@ paths:
                 $ref: '#/components/schemas/NodesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/attributes:
+  /nodes/{nodeLabel}/nodeProperties:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
       tags:
         - Schema
-      summary: Gets attributes associated with a given node
-      description: Gets attributes associated with a given node
-      operationId: listNodeAttributes
+      summary: Gets properties associated with a given node
+      description: Gets properties associated with a given node
+      operationId: getNodeProperties
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -140,7 +140,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AttributesPage'
+                $ref: '#/components/schemas/NodePropertiesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/propertyLabel:
@@ -418,30 +418,30 @@ components:
             - nodes
       x-java-class-annotations:
         - '@lombok.Builder'
-    Attribute:
+    NodeProperty:
       type: object
-      description: An attribute from a component in a schema
+      description: A node property
       properties:
         name:
           type: string
-          description: The name of the attribute.
+          description: The name of the property
           example: molecularlyInteractsWith
       required:
         - name
-    AttributesPage:
+    NodePropertiesPage:
       type: object
-      description: A page of attributes.
+      description: A page of node properties.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
-            attributes:
-              description: A list of attributrs.
+            node_properties:
+              description: A list of node properties.
               type: array
               items:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/NodeProperty'
           required:
-            - attributes
+            - node_properties
       x-java-class-annotations:
         - '@lombok.Builder'
     NodeDisplay:

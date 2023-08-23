@@ -13,12 +13,12 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 PROPERTY_LABEL_URL = "/api/v1/nodes/node1/propertyLabel?schemaUrl=url1"
-NODE_ATTRIBUTES_URL = "/api/v1/nodes/node1/attributes?schemaUrl=url1"
+NODE_PROPERTIES_URL = "/api/v1/nodes/node1/nodeProperties?schemaUrl=url1"
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/node1/validationRules?schemaUrl=url1"
 NODE_DEPENDENCIES_URL = "/api/v1/nodes/node1/dependencies?schemaUrl=url1"
 
 
-class TestPropertyLabel(BaseTestCase):
+class TestGetPropertyLabel(BaseTestCase):
     """Test case for property label endpoint"""
 
     def test_success(self) -> None:
@@ -54,7 +54,7 @@ class TestPropertyLabel(BaseTestCase):
             )
 
 
-class TestNodeAttributes(BaseTestCase):
+class TestGetNodeProperties(BaseTestCase):
     """Test case for node attributes endpoint"""
 
     def test_success(self) -> None:
@@ -62,11 +62,11 @@ class TestNodeAttributes(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_attributes",
-            return_value=["attribute1", "attribute2"],
+            "get_node_properties_from_schematic",
+            return_value=["property1", "property2"],
         ) as mock_function:
             response = self.client.open(
-                NODE_ATTRIBUTES_URL, method="GET", headers=HEADERS
+                NODE_PROPERTIES_URL, method="GET", headers=HEADERS
             )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -80,21 +80,21 @@ class TestNodeAttributes(BaseTestCase):
             assert response.json["size"] == 100
             assert response.json["totalElements"] == 2
             assert response.json["totalPages"] == 1
-            attributes = response.json["attributes"]
-            assert len(attributes) == 2
-            attribute = attributes[0]
-            assert list(attribute.keys()) == ["name"]
-            assert attribute["name"] == "attribute1"
+            node_properties = response.json["node_properties"]
+            assert len(node_properties) == 2
+            node_property = node_properties[0]
+            assert list(node_property.keys()) == ["name"]
+            assert node_property["name"] == "property1"
 
     def test_500(self) -> None:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_attributes",
+            "get_node_properties_from_schematic",
             side_effect=TypeError,
         ):
             response = self.client.open(
-                NODE_ATTRIBUTES_URL, method="GET", headers=HEADERS
+                NODE_PROPERTIES_URL, method="GET", headers=HEADERS
             )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"

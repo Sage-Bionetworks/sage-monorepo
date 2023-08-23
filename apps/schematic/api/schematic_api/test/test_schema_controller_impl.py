@@ -3,19 +3,19 @@
 from unittest.mock import patch
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.attributes_page import AttributesPage
+from schematic_api.models.node_properties_page import NodePropertiesPage
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.nodes_page import NodesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
     get_property_label,
-    list_node_attributes,
+    get_node_properties,
     list_node_validation_rules,
     list_node_dependencies,
 )
 
 
-class TestPropertyLabel:
+class TestGetPropertyLabel:
     """Test case for get_property_label"""
 
     def test_success(self) -> None:
@@ -45,31 +45,31 @@ class TestPropertyLabel:
             assert isinstance(result, BasicError)
 
 
-class TestNodeAttributes:
-    """Test case for list_node_attributes"""
+class TestGetNodeProperties:
+    """Test case for get_node_properties"""
 
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_attributes",
-            return_value=["attribute1", "attribute2"],
+            "get_node_properties_from_schematic",
+            return_value=["property1", "property2"],
         ):
-            result, status = list_node_attributes(
+            result, status = get_node_properties(
                 node_label="label",
                 schema_url="xxx",
             )
             assert status == 200
-            assert isinstance(result, AttributesPage)
+            assert isinstance(result, NodePropertiesPage)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.schema_controller_impl,
-            "get_node_attributes",
+            "get_node_properties_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = list_node_attributes(
+            result, status = get_node_properties(
                 node_label="label",
                 schema_url="xxx",
             )

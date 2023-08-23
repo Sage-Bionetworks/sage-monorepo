@@ -37,8 +37,8 @@ paths:
   /nodes/{nodeLabel}/dependencies:
     $ref: paths/nodes/@{nodeLabel}/dependencies.yaml
 
-  /nodes/{nodeLabel}/attributes:
-    $ref: paths/nodes/@{nodeLabel}/attributes.yaml
+  /nodes/{nodeLabel}/nodeProperties:
+    $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
 
   /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml

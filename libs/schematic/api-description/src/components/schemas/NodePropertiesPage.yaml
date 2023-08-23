@@ -1,15 +1,15 @@
 type: object
-description: A page of attributes.
+description: A page of node properties.
 allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
-      attributes:
-        description: A list of attributrs.
+      node_properties:
+        description: A list of node properties.
         type: array
         items:
-          $ref: Attribute.yaml
+          $ref: NodeProperty.yaml
     required:
-      - attributes
+      - node_properties
 x-java-class-annotations:
   - '@lombok.Builder'

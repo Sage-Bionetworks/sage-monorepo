@@ -4,12 +4,27 @@ from typing import Dict
 from typing import Tuple
 from typing import Union
 
-from schematic_api.models.attributes_page import AttributesPage  # noqa: E501
 from schematic_api.models.basic_error import BasicError  # noqa: E501
+from schematic_api.models.node_properties_page import NodePropertiesPage  # noqa: E501
 from schematic_api.models.nodes_page import NodesPage  # noqa: E501
 from schematic_api.models.validation_rules_page import ValidationRulesPage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
+
+
+def get_node_properties(node_label, schema_url):  # noqa: E501
+    """Gets properties associated with a given node
+
+    Gets properties associated with a given node # noqa: E501
+
+    :param node_label: The label of the source node in a schema to get the dependencies of
+    :type node_label: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[NodePropertiesPage, Tuple[NodePropertiesPage, int], Tuple[NodePropertiesPage, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_node_properties(node_label, schema_url)
 
 
 def get_property_label(
@@ -31,21 +46,6 @@ def get_property_label(
     return schema_controller_impl.get_property_label(
         node_display, schema_url, use_strict_camel_case
     )
-
-
-def list_node_attributes(node_label, schema_url):  # noqa: E501
-    """Gets attributes associated with a given node
-
-    Gets attributes associated with a given node # noqa: E501
-
-    :param node_label: The label of the source node in a schema to get the dependencies of
-    :type node_label: str
-    :param schema_url: The URL of a schema in jsonld form
-    :type schema_url: str
-
-    :rtype: Union[AttributesPage, Tuple[AttributesPage, int], Tuple[AttributesPage, int, Dict[str, str]]
-    """
-    return schema_controller_impl.list_node_attributes(node_label, schema_url)
 
 
 def list_node_dependencies(

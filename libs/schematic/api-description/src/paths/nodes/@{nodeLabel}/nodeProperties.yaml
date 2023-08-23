@@ -3,9 +3,9 @@ parameters:
 get:
   tags:
     - Schema
-  summary: Gets attributes associated with a given node
-  description: Gets attributes associated with a given node
-  operationId: listNodeAttributes
+  summary: Gets properties associated with a given node
+  description: Gets properties associated with a given node
+  operationId: getNodeProperties
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:
@@ -14,6 +14,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../components/schemas/AttributesPage.yaml
+            $ref: ../../../components/schemas/NodePropertiesPage.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml
