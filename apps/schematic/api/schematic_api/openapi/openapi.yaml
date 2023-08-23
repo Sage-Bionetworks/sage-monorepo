@@ -282,7 +282,8 @@ paths:
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeDisplay}/validationRules:
     get:
-      description: Gets the validation rules associated with a given node
+      description: "Gets the validation rules, along with the arguments for each given\
+        \ rule associated with a given node"
       operationId: list_node_validation_rules
       parameters:
       - description: The display name of the node in a schema
@@ -315,7 +316,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets the validation rules associated with a given node
+      summary: "Gets the validation rules, along with the arguments for each given\
+        \ rule associated with a given node"
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
@@ -797,7 +799,8 @@ components:
       description: A validation rule.
       properties:
         name:
-          description: The name of the rule.
+          description: "The name of the rule, along with the arguments for the given\
+            \ rule."
           example: list strict
           title: name
           type: string

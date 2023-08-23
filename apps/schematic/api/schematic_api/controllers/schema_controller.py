@@ -70,9 +70,9 @@ def list_node_dependencies(
 
 
 def list_node_validation_rules(node_display, schema_url):  # noqa: E501
-    """Gets the validation rules associated with a given node
+    """Gets the validation rules, along with the arguments for each given rule associated with a given node
 
-    Gets the validation rules associated with a given node # noqa: E501
+    Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
 
     :param node_display: The display name of the node in a schema
     :type node_display: str

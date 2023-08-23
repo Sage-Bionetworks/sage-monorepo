@@ -170,8 +170,8 @@ paths:
     get:
       tags:
         - Schema
-      summary: Gets the validation rules associated with a given node
-      description: Gets the validation rules associated with a given node
+      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
       operationId: listNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
@@ -458,7 +458,7 @@ components:
       properties:
         name:
           type: string
-          description: The name of the rule.
+          description: The name of the rule, along with the arguments for the given rule.
           example: list strict
       required:
         - name
