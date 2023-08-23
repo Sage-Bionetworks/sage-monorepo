@@ -37,11 +37,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -52,10 +48,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -85,38 +78,51 @@
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "apps/schematic/api",
         "parallel": false
-      }
-    },
-    "lint-check": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry run black ./schematic_api --check --exclude '(models|test)'",
-        "cwd": "apps/schematic/api"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run black ./schematic_api --exclude '(models|test)'",
+        "commands": [
+          "poetry run black ./schematic_api --exclude 'models'",
+          "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+          "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py"
+        ],
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "lint-fix": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black ./schematic_api --exclude 'models'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "mypy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "pylint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run tox",
         "cwd": "apps/schematic/api"
       }
     }
-    // "test": {
-    //   "executor": "nx:run-commands",
-    //   "options": {
-    //     "command": "poetry run tox",
-    //     "cwd": "apps/schematic/api"
-    //   }
-    // }
   },
   "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "implicitDependencies": ["schematic-api-description"]
 }

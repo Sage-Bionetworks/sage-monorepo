@@ -1,0 +1,15 @@
+type: object
+description: A page of attributes.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      attributes:
+        description: A list of attributrs.
+        type: array
+        items:
+          $ref: Attribute.yaml
+    required:
+      - attributes
+x-java-class-annotations:
+  - '@lombok.Builder'

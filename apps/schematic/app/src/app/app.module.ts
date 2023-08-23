@@ -13,13 +13,14 @@ import { RouterModule } from '@angular/router';
 import { appRoutes } from './app.routes';
 
 @NgModule({
-  declarations: [AppComponent, NxWelcomeComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     RouterModule.forRoot(appRoutes, { initialNavigation: 'enabledBlocking' }),
     HttpClientModule,
     MatTableModule,
     SchematicApiModule,
+    NxWelcomeComponent,
   ],
   providers: [
     {

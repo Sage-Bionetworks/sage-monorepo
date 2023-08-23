@@ -29,25 +29,25 @@ that would be generated.
 
 Generators used in this workspace:
 
-| Project Type   | Generator Command                    |
-|----------------|--------------------------------------|
-| Angular app    | `nx g @nrwl/angular:app <project>`   |
-| React app      | `nx g @nrwl/react:app <project>`     |
-| TypeScript CLI | `nx generate @nrwl/js:app <project>` |
-| Angular lib    | `nx g @nrwl/angular:lib <project>`   |
+| Project Type   | Generator Command                  |
+| -------------- | ---------------------------------- |
+| Angular app    | `nx g @nx/angular:app <project>`   |
+| React app      | `nx g @nrwl/react:app <project>`   |
+| TypeScript CLI | `nx generate @nx/js:app <project>` |
+| Angular lib    | `nx g @nx/angular:lib <project>`   |
 
 Newly created projects are added to [workspace.json].
 
 ## Create an Angular component
 
-    nx g @nrwl/angular:component <component> --project <project>
+    nx g @nx/angular:component <component> --project <project>
 
 Example:
 
 Add a component named `header` to the library `web-ui`:
 
 ```console
-nx g @nrwl/angular:component header --project web-ui --dry-run
+nx g @nx/angular:component header --project web-ui --dry-run
 
 CREATE libs/web/ui/src/lib/header/header.component.scss
 CREATE libs/web/ui/src/lib/header/header.component.html
@@ -58,14 +58,14 @@ UPDATE libs/web/ui/src/lib/web-ui.module.ts
 
 ## Create an Angular service
 
-    nx g @nrwl/angular:service page-title --project web-data-access
+    nx g @nx/angular:service page-title --project web-data-access
 
 Example:
 
 Add a service named `page-title` to the library `web-data-access`:
 
 ```console
-nx g @nrwl/angular:service page-title --project web-data-access --dry-run
+nx g @nx/angular:service page-title --project web-data-access --dry-run
 
 CREATE libs/web/data-access/src/lib/page-title.service.spec.ts
 CREATE libs/web/data-access/src/lib/page-title.service.ts

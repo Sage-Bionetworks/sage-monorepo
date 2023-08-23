@@ -1,4 +1,6 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   ImageAspectRatio,
   ImageHeight,
@@ -9,13 +11,18 @@ import {
   OrganizationService,
   Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationCard } from '@sagebionetworks/openchallenges/ui';
+import {
+  OrganizationCard,
+  OrganizationCardComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { forkJoin, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
+  standalone: true,
+  imports: [CommonModule, MatButtonModule, OrganizationCardComponent],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })
@@ -50,7 +57,7 @@ export class ChallengeHostListComponent implements OnInit {
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
             Infinity
-          ) as unknown as Observable<(Image | undefined)[]>,
+          ),
         })
       ),
       switchMap(({ orgs, avatarUrls }) =>
@@ -64,24 +71,27 @@ export class ChallengeHostListComponent implements OnInit {
   }
 
   // TODO Avoid duplicated code (see org search component)
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of the image service.'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image | undefined
+    avatarUrl: Image
   ): OrganizationCard {
     return {
       acronym: org.acronym,

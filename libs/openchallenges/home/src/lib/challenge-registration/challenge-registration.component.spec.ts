@@ -9,8 +9,7 @@ describe('ChallengeRegistrationComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChallengeRegistrationComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, ChallengeRegistrationComponent],
     }).compileComponents();
   });
 

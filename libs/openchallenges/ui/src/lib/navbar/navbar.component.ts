@@ -3,9 +3,22 @@ import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
 import { NavbarSection } from './navbar-section';
+import { ButtonGithubComponent } from '../button-github/button-github.component';
+import { CommonModule } from '@angular/common';
+import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { RouterModule } from '@angular/router';
+import { UserButtonComponent } from '../user-button/user-button.component';
 
 @Component({
   selector: 'openchallenges-navbar',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatButtonModule,
+    ButtonGithubComponent,
+    UserButtonComponent,
+  ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
 })

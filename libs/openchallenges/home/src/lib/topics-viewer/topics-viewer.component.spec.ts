@@ -8,7 +8,7 @@ describe('TopicsViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TopicsViewerComponent],
+      imports: [TopicsViewerComponent],
     }).compileComponents();
   });
 

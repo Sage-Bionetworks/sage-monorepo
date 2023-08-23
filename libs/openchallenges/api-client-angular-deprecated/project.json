@@ -18,10 +18,11 @@
       }
     },
     "build": {
-      "executor": "@nrwl/angular:ng-packagr-lite",
+      "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/openchallenges/api-client-angular-deprecated"],
       "options": {
-        "project": "libs/openchallenges/api-client-angular-deprecated/ng-package.json"
+        "project": "libs/openchallenges/api-client-angular-deprecated/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": true
       },
       "configurations": {
         "production": {
@@ -34,7 +35,7 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/api-client-angular-deprecated"],
       "options": {
         "jestConfig": "libs/openchallenges/api-client-angular-deprecated/jest.config.ts",
@@ -42,13 +43,13 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/openchallenges/api-client-angular-deprecated/src/index.ts"]
       }
     },
     "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/openchallenges/api-client-angular-deprecated/src/index.ts"],
         "fix": true

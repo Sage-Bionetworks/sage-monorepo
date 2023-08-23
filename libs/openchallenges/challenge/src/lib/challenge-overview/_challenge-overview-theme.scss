@@ -10,6 +10,10 @@
   .created-updated-dates {
     color: mat.get-color-from-palette($figma, dl-color-default-navbardark);
   }
+
+  .text-grey {
+    color: rgba(black, 0.38);
+  }
 }
 
 @mixin typography($theme) {

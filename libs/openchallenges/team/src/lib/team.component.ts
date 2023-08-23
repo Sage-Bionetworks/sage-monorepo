@@ -1,18 +1,24 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-team',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FooterComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],
 })
 export class TeamComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
   public logo$: Observable<Image> | undefined;
   public thomas$: Observable<Image> | undefined;
   public rong$: Observable<Image> | undefined;
@@ -26,6 +32,7 @@ export class TeamComponent implements OnInit {
     private imageService: ImageService
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {

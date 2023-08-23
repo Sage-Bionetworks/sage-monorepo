@@ -9,7 +9,6 @@
   "prConcurrentLimit": 5,
   "ignorePaths": [
     "apps/api",
-    "apps/challenge-db-cli",
     "libs/api-client-angular-deprecated"
   ],
   "baseBranches": ["main"],

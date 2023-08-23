@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import {
   Challenge,
   ChallengePlatformService,
@@ -12,6 +15,8 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, RouterModule],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })

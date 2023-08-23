@@ -1,0 +1,6 @@
+name: schemaUrl
+in: query
+description: The URL of a schema in jsonld form
+required: true
+schema:
+  $ref: ../../schemas/SchemaUrl.yaml

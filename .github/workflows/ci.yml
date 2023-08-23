@@ -28,46 +28,50 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - name: Setup Node.js cache
-        id: cache-node
+      - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: '**/.yarn/cache'
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Setup poetry cache
-        id: cache-poetry
+      - name: Set up Renv cache
         uses: actions/cache@v3
         with:
-          path: ~/.local/share/virtualenvs
+          path: '/tmp/.cache/R/renv/cache'
+          key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-cache-
+
+      - name: Set up Poetry cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/pypoetry'
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Setup Gradle cache
+      - name: Set up venv cache
         uses: actions/cache@v3
         with:
           path: |
-            /root/.gradle/caches
-            /root/.gradle/wrapper
+            /tmp/.local/share/virtualenv
+            **/.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.gradle/caches
+            /tmp/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
+      #   with:
+      #     driver: docker
 
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
@@ -84,7 +88,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install the devcontainer CLI
+      - name: Install the Dev Container CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
@@ -94,12 +98,30 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo \
-            --mount type="bind,source=$HOME/.docker,target=/home/vscode/.docker"
+          mkdir -p \
+            /tmp/.cache/R/renv/cache \
+            /tmp/.cache/pypoetry \
+            /tmp/.local/share/virtualenv \
+            /tmp/.gradle/caches \
+            /tmp/.gradle/wrapper
 
-      - name: Prepare the workspace in the dev container
+          devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
+            --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
+            --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
+            --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
+            --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
+            --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
+            --workspace-folder ../sage-monorepo
+
+      - name: Prepare the workspace
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+            sudo chown -R vscode:vscode \
+              /home/vscode/.cache \
+              /home/vscode/.local \
+              /home/vscode/.gradle \
+            && . ./dev-env.sh \
             && workspace-install"
 
       - name: Lint the affected projects
@@ -122,10 +144,17 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - name: Publish the images of the affected projects
+      # - name: Publish the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=publish-and-remove-image --parallel=1"
+
+      - name: Publish the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=publish-and-remove-image --parallel=1"
+            && nx run-many --target=publish-and-remove-image \
+              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
+              --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
@@ -163,46 +192,50 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - name: Setup Node.js cache
-        id: cache-node
+      - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "dir=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
-      - uses: actions/cache@v3
-        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          path: '**/.yarn/cache'
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
-      - name: Setup poetry cache
-        id: cache-poetry
+      - name: Set up Renv cache
         uses: actions/cache@v3
         with:
-          path: ~/.local/share/virtualenvs
+          path: '/tmp/.cache/R/renv/cache'
+          key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-renv-cache-
+
+      - name: Set up Poetry cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/pypoetry'
           key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-      - name: Setup Gradle cache
+      - name: Set up venv cache
         uses: actions/cache@v3
         with:
           path: |
-            /root/.gradle/caches
-            /root/.gradle/wrapper
+            /tmp/.local/share/virtualenv
+            **/.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.gradle/caches
+            /tmp/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        with:
-          driver: docker
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v2
+      #   with:
+      #     driver: docker
 
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
@@ -212,7 +245,7 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-single-buildx
 
-      - name: Install the devcontainer CLI
+      - name: Install the Dev Container CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
       - name: Start the dev container
@@ -222,11 +255,30 @@ jobs:
           # host (i.e. outside the dev container).
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
-          devcontainer up --workspace-folder ../sage-monorepo
+          mkdir -p \
+            /tmp/.cache/R/renv/cache \
+            /tmp/.cache/pypoetry \
+            /tmp/.local/share/virtualenv \
+            /tmp/.gradle/caches \
+            /tmp/.gradle/wrapper
 
-      - name: Prepare the workspace in the dev container
+          devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
+            --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
+            --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
+            --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
+            --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
+            --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
+            --workspace-folder ../sage-monorepo
+
+      - name: Prepare the workspace
         run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+            sudo chown -R vscode:vscode \
+              /home/vscode/.cache \
+              /home/vscode/.local \
+              /home/vscode/.gradle \
+            && . ./dev-env.sh \
             && workspace-install"
 
       - name: Lint the affected projects
@@ -249,10 +301,17 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - name: Build the images of the affected projects
+      # - name: Build the images of the affected projects
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=build-and-remove-image --parallel=1"
+
+      - name: Build the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build-and-remove-image --parallel=1"
+            && nx run-many --target=build-and-remove-image \
+              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
+              --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer

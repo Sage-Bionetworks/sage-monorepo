@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -7,6 +8,8 @@ import {
 
 @Component({
   selector: 'openchallenges-org-profile-overview',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './org-profile-overview.component.html',
   styleUrls: ['./org-profile-overview.component.scss'],
 })

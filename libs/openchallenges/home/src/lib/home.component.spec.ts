@@ -11,8 +11,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, HomeComponent],
       providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
