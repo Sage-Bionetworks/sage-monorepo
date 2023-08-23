@@ -249,7 +249,7 @@ table {
   overflow: hidden;
   text-overflow: ellipsis;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: $n;
+  -webkit-line-clamp: $max-lines;
 }
 .card-group {
   display: grid;
