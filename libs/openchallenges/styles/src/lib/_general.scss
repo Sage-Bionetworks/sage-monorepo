@@ -244,9 +244,16 @@ table {
 }
 
 // CARDS
+@mixin line-clamp($max-lines) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $max-lines;
+}
 .card-group {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   padding: 16px 0;
 }
@@ -264,7 +271,11 @@ table {
   margin: 15px 0 !important;
   font-weight: 700 !important;
   line-height: 24px !important;
-  height: 2.5em;
+  min-height: 48px;
+  @include line-clamp(2);
+}
+.mat-caption {
+  @include line-clamp(2);
 }
 .card-body {
   width: 100%;
@@ -282,18 +293,18 @@ table {
 .card-footer {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   height: 50px;
   width: 100%;
   border-top: 1px solid #c4c4c4;
   justify-content: center;
   align-items: center;
+  gap: 6px;
 }
 .star-btn {
   position: absolute;
   top: 18px;
   right: 18px;
-  height: 32px;
+  // height: 32px;
   padding: 0 8px;
   display: flex;
   justify-content: center;
