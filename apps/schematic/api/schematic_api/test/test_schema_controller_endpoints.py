@@ -12,7 +12,7 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
-PROPERTY_LABEL_URL = "/api/v1/nodes/node1/nodeLabel?schemaUrl=url1"
+PROPERTY_LABEL_URL = "/api/v1/nodes/node1/propertyLabel?schemaUrl=url1"
 NODE_ATTRIBUTES_URL = "/api/v1/nodes/node1/attributes?schemaUrl=url1"
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/node1/validationRules?schemaUrl=url1"
 NODE_DEPENDENCIES_URL = "/api/v1/nodes/node1/dependencies?schemaUrl=url1"

@@ -143,7 +143,7 @@ paths:
                 $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/nodeLabel:
+  /nodes/{nodeDisplay}/propertyLabel:
     parameters:
       - $ref: '#/components/parameters/nodeDisplay'
     get:

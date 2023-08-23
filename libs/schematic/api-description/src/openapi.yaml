@@ -40,7 +40,7 @@ paths:
   /nodes/{nodeLabel}/attributes:
     $ref: paths/nodes/@{nodeLabel}/attributes.yaml
 
-  /nodes/{nodeDisplay}/nodeLabel:
+  /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
 
   /nodes/{nodeDisplay}/validationRules:

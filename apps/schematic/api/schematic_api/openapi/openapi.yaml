@@ -232,7 +232,7 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /nodes/{nodeDisplay}/nodeLabel:
+  /nodes/{nodeDisplay}/propertyLabel:
     get:
       description: Gets the property label of the node
       operationId: get_property_label
