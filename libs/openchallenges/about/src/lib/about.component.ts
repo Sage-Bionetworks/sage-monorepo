@@ -6,7 +6,7 @@ import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 @Component({
   selector: 'openchallenges-about',
   standalone: true,
-  imports: [FooterComponent, CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })

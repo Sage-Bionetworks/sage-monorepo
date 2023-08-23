@@ -9,8 +9,7 @@ describe('FeaturedChallengeListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [FeaturedChallengeListComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, FeaturedChallengeListComponent],
     }).compileComponents();
   });
 

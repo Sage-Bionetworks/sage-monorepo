@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import { AuthGuard } from './auth.guard';
-// import { KAuthGuard } from '@sagebionetworks/openchallenges/auth';
+
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   {
     path: 'home',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/home').then((m) => m.HomeModule),
+      import('@sagebionetworks/openchallenges/home').then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'about',
@@ -15,69 +16,56 @@ export const routes: Routes = [
       import('@sagebionetworks/openchallenges/about').then(
         (routes) => routes.routes
       ),
-    data: {},
   },
   {
     path: 'challenge',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge-search').then(
-        (m) => m.ChallengeSearchModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'org',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-search').then(
-        (m) => m.OrgSearchModule
-      ),
-  },
-  {
-    path: 'login',
-    loadChildren: () =>
-      import('@sagebionetworks/openchallenges/login').then(
-        (m) => m.LoginModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'signup',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/signup').then(
-        (m) => m.SignupModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'team',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/team').then((m) => m.TeamModule),
+      import('@sagebionetworks/openchallenges/team').then(
+        (routes) => routes.routes
+      ),
   },
   {
     path: 'not-found',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/not-found').then(
-        (m) => m.NotFoundModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'org/:orgLogin',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/org-profile').then(
-        (m) => m.OrgProfileModule
+        (routes) => routes.routes
       ),
   },
   {
     path: 'challenge/:challengeId',
     loadChildren: () =>
       import('@sagebionetworks/openchallenges/challenge').then(
-        (m) => m.ChallengeModule
+        (routes) => routes.routes
       ),
   },
-  // {
-  //   path: 'user/:userLogin',
-  //   loadChildren: () =>
-  //     import('@sagebionetworks/openchallenges/user-profile').then(
-  //       (m) => m.UserProfileModule
-  //     ),
-  // },
   {
     path: '**',
     redirectTo: '/not-found',

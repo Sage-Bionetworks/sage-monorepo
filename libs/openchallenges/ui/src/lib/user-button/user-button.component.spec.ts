@@ -14,13 +14,13 @@ describe('UserButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserButtonComponent],
       imports: [
         HttpClientModule,
         MatIconModule,
         MatMenuModule,
         MatDividerModule,
         AvatarComponent,
+        UserButtonComponent,
       ],
     }).compileComponents();
   });

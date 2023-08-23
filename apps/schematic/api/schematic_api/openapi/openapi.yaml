@@ -469,25 +469,6 @@ components:
       schema:
         $ref: '#/components/schemas/SchemaUrl'
       style: form
-    nodeDisplay:
-      description: The display name of the node in a schema
-      explode: false
-      in: path
-      name: nodeDisplay
-      required: true
-      schema:
-        $ref: '#/components/schemas/NodeDisplay'
-      style: simple
-    useStrictCamelCase:
-      description: Whether or not to use the more strict way of converting to camel
-        case
-      explode: true
-      in: query
-      name: useStrictCamelCase
-      required: false
-      schema:
-        $ref: '#/components/schemas/UseStrictCamelCase'
-      style: form
     returnDisplayNames:
       description: "Whether or not to return the display names of the component, otherwise\
         \ the label"
@@ -507,6 +488,25 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
+      style: form
+    nodeDisplay:
+      description: The display name of the node in a schema
+      explode: false
+      in: path
+      name: nodeDisplay
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeDisplay'
+      style: simple
+    useStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel
+        case
+      explode: true
+      in: query
+      name: useStrictCamelCase
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
       style: form
   responses:
     BadRequest:
@@ -730,36 +730,6 @@ components:
       description: The URL of a schema in jsonld form
       example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
       type: string
-    Attribute:
-      description: An attribute from a component in a schema
-      properties:
-        name:
-          description: The name of the attribute.
-          example: molecularlyInteractsWith
-          title: name
-          type: string
-      required:
-      - name
-      title: Attribute
-      type: object
-    AttributesPage:
-      allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/AttributesPage_allOf'
-      description: A page of attributes.
-      title: AttributesPage
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-    NodeDisplay:
-      description: The display name of a node in a schema
-      example: MolecularEntity
-      type: string
-    UseStrictCamelCase:
-      default: true
-      description: Whether or not to use the more strict way of converting to camel
-        case
-      type: boolean
     ReturnDisplayNames:
       default: true
       description: Whether or not to return the display names of the node otherwise
@@ -793,6 +763,36 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    Attribute:
+      description: An attribute from a component in a schema
+      properties:
+        name:
+          description: The name of the attribute.
+          example: molecularlyInteractsWith
+          title: name
+          type: string
+      required:
+      - name
+      title: Attribute
+      type: object
+    AttributesPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/AttributesPage_allOf'
+      description: A page of attributes.
+      title: AttributesPage
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    NodeDisplay:
+      description: The display name of a node in a schema
+      example: MolecularEntity
+      type: string
+    UseStrictCamelCase:
+      default: true
+      description: Whether or not to use the more strict way of converting to camel
+        case
+      type: boolean
     ValidationRule:
       description: A validation rule.
       properties:
@@ -855,19 +855,6 @@ components:
       title: ProjectsPage_allOf
       type: object
       example: null
-    AttributesPage_allOf:
-      properties:
-        attributes:
-          description: A list of attributrs.
-          items:
-            $ref: '#/components/schemas/Attribute'
-          title: attributes
-          type: array
-      required:
-      - attributes
-      title: AttributesPage_allOf
-      type: object
-      example: null
     NodesPage_allOf:
       properties:
         nodes:
@@ -879,6 +866,19 @@ components:
       required:
       - nodes
       title: NodesPage_allOf
+      type: object
+      example: null
+    AttributesPage_allOf:
+      properties:
+        attributes:
+          description: A list of attributrs.
+          items:
+            $ref: '#/components/schemas/Attribute'
+          title: attributes
+          type: array
+      required:
+      - attributes
+      title: AttributesPage_allOf
       type: object
       example: null
     ValidationRulesPage_allOf:

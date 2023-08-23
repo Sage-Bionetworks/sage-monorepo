@@ -10,12 +10,7 @@ import {
   NavbarSection,
 } from '@sagebionetworks/openchallenges/ui';
 import { APP_SECTIONS } from './app-sections';
-import {
-  KAuthService,
-  AuthService,
-} from '@sagebionetworks/openchallenges/auth';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { KeycloakService } from 'keycloak-angular';
+import { NavigationEnd, Router } from '@angular/router';
 import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 
@@ -37,10 +32,6 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private pageTitleService: PageTitleService,
-    private kauthService: KAuthService,
-    private authService: AuthService,
-    private keycloakService: KeycloakService,
-    private activatedRoute: ActivatedRoute,
     private gtmService: GoogleTagManagerService
   ) {}
 
@@ -55,10 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.gtmService.pushTag(gtmTag);
       }
     });
-
-    this.kauthService
-      .isLoggedIn()
-      .subscribe((isLoggedIn) => (this.isLoggedIn = isLoggedIn));
 
     // TODO Call getUserProfile() only if the user is logged in, other wise an error is generated
     // when the page is rendered with SSR.
@@ -76,17 +63,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   selectUserMenuItem(menuItem: MenuItem): void {
-    // TODO: DRY selected item, no not make comparison with string that way
-    if (menuItem.name === 'Log out') {
-      this.kauthService.logout();
-    } else if (menuItem.name === 'Profile') {
-      this.router.navigate(['/user', this.user?.login]);
-    }
-    // TODO: redirect to all tabs of profile when the rest of tabs components are created
+    console.log('Menu item selected', menuItem);
   }
 
   login(): void {
     console.log('Clicked on log In');
-    this.kauthService.login();
   }
 }

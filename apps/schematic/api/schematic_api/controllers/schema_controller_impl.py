@@ -185,6 +185,7 @@ def get_node_dependencies(
 
     Returns:
         list[str]: A list of node labels or display names
+
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
     return schema_generator.get_node_dependencies(

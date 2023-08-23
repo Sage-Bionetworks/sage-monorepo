@@ -8,8 +8,7 @@ describe('SponsorListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule],
-      declarations: [SponsorListComponent],
+      imports: [HttpClientModule, SponsorListComponent],
     }).compileComponents();
   });
 
