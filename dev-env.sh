@@ -97,6 +97,18 @@ function workspace-nx-cloud-help {
     "  - Add Nx Cloud credentials to nx-cloud.env (contact thomas.schaffter@sagebionetworks.org)"
 }
 
+# Utility function to get comparable semver values.
+# See https://apple.stackexchange.com/a/123408/11374
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+function check-vscode-version {
+  expected="1.82.0"
+  actual="$(code --version | head -n 1)"
+  if [ $(version $actual) -lt $(version "23.0.0") ]; then
+    echo "🌼 Please update VS Code to version >=${expected}"
+  fi
+}
+
 function workspace-welcome {
   echo "Welcome to Sage monorepo! 👋"
 
@@ -108,6 +120,11 @@ function workspace-welcome {
 
   if [ ! -f "nx-cloud.env" ]; then
     workspace-nx-cloud-help
+  fi
+
+  if command -v code &> /dev/null
+  then
+    check-vscode-version
   fi
 }
 
