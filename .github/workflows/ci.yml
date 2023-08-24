@@ -192,13 +192,13 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      # - name: Set up Yarn cache
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: '**/.yarn/cache'
-      #     key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-yarn-
+      - name: Set up Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: '**/.yarn/cache'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
       - name: Set up Renv cache
         uses: actions/cache@v3
@@ -275,6 +275,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
             sudo chown -R vscode:vscode \
+              .yarn/cache \
               /home/vscode/.cache \
               /home/vscode/.local \
               /home/vscode/.gradle \
