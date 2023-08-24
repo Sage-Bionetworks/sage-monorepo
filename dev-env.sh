@@ -105,7 +105,7 @@ function check-vscode-version {
   expected="1.81.1"
   actual="$(code --version | head -n 1)"
   if [ $(version $actual) -lt $(version $expected) ]; then
-    echo "🌼 Please update VS Code to version >=${expected}"
+    echo "🌼 Please update VS Code to version >=${expected}."
   fi
 }
 
