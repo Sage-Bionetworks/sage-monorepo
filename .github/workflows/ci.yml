@@ -284,7 +284,6 @@ jobs:
               /home/vscode/.cache \
               /home/vscode/.local \
               /home/vscode/.gradle \
-            && ls -al /workspaces/sage-monorepo/.yarn/cache \
             && . ./dev-env.sh \
             && workspace-install"
 
