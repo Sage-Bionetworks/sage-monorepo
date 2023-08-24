@@ -256,6 +256,7 @@ jobs:
           ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
 
           mkdir -p \
+            .yarn/cache \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
             /tmp/.local/share/virtualenv \
