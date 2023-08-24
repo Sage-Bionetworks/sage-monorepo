@@ -277,7 +277,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
             sudo chown -R vscode:vscode \
-              .yarn/cache \
+              /workspaces/sage-monorepo \
               /home/vscode/.cache \
               /home/vscode/.local \
               /home/vscode/.gradle \
