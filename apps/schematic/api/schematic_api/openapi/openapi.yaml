@@ -18,6 +18,79 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    get:
+      description: Gets the manifest in json form
+      operationId: get_dataset_manifest_json
+      parameters:
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: The Synapse ID of a dataset.
+        explode: false
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestJson'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets the manifest in json form
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     get:
       description: Gets all storage projects the current user has access to.
@@ -522,6 +595,15 @@ components:
       schema:
         $ref: '#/components/schemas/ManifestId'
       style: simple
+    datasetId:
+      description: The Synapse ID of a dataset.
+      explode: false
+      in: path
+      name: datasetId
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+      style: simple
     nodeLabel:
       description: The label of the source node in a schema to get the dependencies
         of
@@ -801,6 +883,10 @@ components:
     ManifestJson:
       description: A manifest in json format
       type: object
+    DatasetId:
+      description: A dataset ID.
+      example: syn28268700
+      type: string
     NodeLabel:
       description: The label of a node in a schema
       example: MolecularEntity

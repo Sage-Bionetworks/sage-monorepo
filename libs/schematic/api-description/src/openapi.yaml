@@ -37,6 +37,9 @@ paths:
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
 
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/manifestJson.yaml
+
   /nodes/{nodeLabel}/attributes:
     $ref: paths/nodes/@{nodeLabel}/attributes.yaml
 
@@ -48,6 +51,3 @@ paths:
 
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
-
-  /components/{componentLabel}/requirementsGraph:
-    $ref: paths/components/@{componentLabel}/requirementsGraph.yaml
