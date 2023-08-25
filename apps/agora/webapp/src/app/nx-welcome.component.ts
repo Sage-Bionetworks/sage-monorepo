@@ -16,9 +16,10 @@ import { CommonModule } from '@angular/common';
     <style>
       html {
         -webkit-text-size-adjust: 100%;
-        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-          'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-          'Segoe UI Symbol', 'Noto Color Emoji';
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+          'Noto Color Emoji';
         line-height: 1.5;
         tab-size: 4;
         scroll-behavior: smooth;
@@ -52,8 +53,8 @@ import { CommonModule } from '@angular/common';
         text-decoration: inherit;
       }
       pre {
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-          'Courier New', monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', 'Courier New', monospace;
       }
       svg {
         display: block;
@@ -67,8 +68,8 @@ import { CommonModule } from '@angular/common';
         background-color: rgba(55, 65, 81, 1);
         border-radius: 0.25rem;
         color: rgba(229, 231, 235, 1);
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
-          'Courier New', monospace;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          'Liberation Mono', 'Courier New', monospace;
         overflow: scroll;
         padding: 0.5rem 0.75rem;
       }
@@ -181,8 +182,9 @@ import { CommonModule } from '@angular/common';
         display: flex;
         margin-top: 1rem;
         padding: 1rem;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
         width: 100%;
@@ -190,8 +192,9 @@ import { CommonModule } from '@angular/common';
       .list-item-link svg:first-child {
         margin-right: 1rem;
         height: 1.5rem;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
         width: 1.5rem;
@@ -199,8 +202,9 @@ import { CommonModule } from '@angular/common';
       .list-item-link > span {
         flex-grow: 1;
         font-weight: 400;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
       }
@@ -211,8 +215,9 @@ import { CommonModule } from '@angular/common';
         font-size: 0.75rem;
         font-weight: 300;
         line-height: 1rem;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
       }
@@ -241,15 +246,17 @@ import { CommonModule } from '@angular/common';
         padding: 1.5rem 2rem;
         margin-bottom: 2rem;
         transition-duration: 300ms;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         align-items: center;
         display: flex;
       }
       .button-pill svg {
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
         flex-shrink: 0;
@@ -369,8 +376,9 @@ import { CommonModule } from '@angular/common';
         font-weight: 400;
         padding: 0.5rem;
         cursor: pointer;
-        transition-property: background-color, border-color, color, fill, stroke, opacity,
-          box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+        transition-property: background-color, border-color, color, fill, stroke,
+          opacity, box-shadow, transform, filter, backdrop-filter,
+          -webkit-backdrop-filter;
         transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
         transition-duration: 150ms;
       }
@@ -686,7 +694,10 @@ import { CommonModule } from '@angular/common';
               </svg>
               <span>
                 Install Nx Console for JetBrains
-                <span>Available for WebStorm, Intellij IDEA Ultimate and more!</span>
+                <span
+                  >Available for WebStorm, Intellij IDEA Ultimate and
+                  more!</span
+                >
               </span>
             </a>
             <div id="nx-cloud" class="rounded shadow">
@@ -713,9 +724,16 @@ import { CommonModule } from '@angular/common';
                   <span> Enable faster CI & better DX </span>
                 </h2>
               </div>
-              <p>You can activate distributed tasks executions and caching by running:</p>
+              <p>
+                You can activate distributed tasks executions and caching by
+                running:
+              </p>
               <pre>nx connect-to-nx-cloud</pre>
-              <a href="https://nx.app/?utm_source=nx-project" target="_blank" rel="noreferrer">
+              <a
+                href="https://nx.app/?utm_source=nx-project"
+                target="_blank"
+                rel="noreferrer"
+              >
                 What is Nx Cloud?
               </a>
             </div>
