@@ -94,6 +94,69 @@ paths:
                 $ref: '#/components/schemas/AttributesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentDisplay}/componentLabel:
+    parameters:
+      - $ref: '#/components/parameters/componentDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the label of the component
+      description: Gets the label of the component
+      operationId: getComponentLabel
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/useStrictCamelCase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentLabel'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/dependencies:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the immediate dependencies that are related to the given source node
+      description: Gets the immediate dependencies that are related to the given source node
+      operationId: listNodeDependencies
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/validationRules:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      operationId: listNodeValidationRules
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
@@ -312,6 +375,86 @@ components:
             - attributes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentDisplay:
+      description: The display name of a component in a schema
+      type: string
+      example: MolecularEntity
+    UseStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel case
+      type: boolean
+      default: true
+    NodeLabel:
+      description: The label of a node in a schema
+      type: string
+      example: MolecularEntity
+    ReturnDisplayNames:
+      description: Whether or not to return the display names of the node otherwise the label
+      type: boolean
+      default: true
+    ReturnOrderedBySchema:
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      type: boolean
+      default: true
+    Node:
+      type: object
+      description: A node of a schema.
+      properties:
+        name:
+          type: string
+          description: The name of the node.
+          example: Patient
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodesPage:
+      type: object
+      description: A page of nodes.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            nodes:
+              description: A list of nodes.
+              type: array
+              items:
+                $ref: '#/components/schemas/Node'
+          required:
+            - nodes
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodeDisplay:
+      description: The display name of a node in a schema
+      type: string
+      example: MolecularEntity
+    ValidationRule:
+      type: object
+      description: A validation rule.
+      properties:
+        name:
+          type: string
+          description: The name of the rule, along with the arguments for the given rule.
+          example: list strict
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ValidationRulesPage:
+      type: object
+      description: A page of validation rules.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            validation_rules:
+              description: A list of validation rules.
+              type: array
+              items:
+                $ref: '#/components/schemas/ValidationRule'
+          required:
+            - validation_rules
+      x-java-class-annotations:
+        - '@lombok.Builder'
     Project:
       type: object
       description: A project.
@@ -381,6 +524,47 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
+    componentDisplay:
+      name: componentDisplay
+      in: path
+      description: The display name of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentDisplay'
+    useStrictCamelCase:
+      name: useStrictCamelCase
+      in: query
+      description: Whether or not to use the more strict way of converting to camel case
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
+    nodeLabel:
+      name: nodeLabel
+      in: path
+      description: The label of the source node in a schema to get the dependencies of
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabel'
+    returnDisplayNames:
+      name: returnDisplayNames
+      in: query
+      description: Whether or not to return the display names of the component, otherwise the label
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnDisplayNames'
+    returnOrderedBySchema:
+      name: returnOrderedBySchema
+      in: query
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnOrderedBySchema'
+    nodeDisplay:
+      name: nodeDisplay
+      in: path
+      description: The display name of the node in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeDisplay'
   responses:
     BadRequest:
       description: Invalid request

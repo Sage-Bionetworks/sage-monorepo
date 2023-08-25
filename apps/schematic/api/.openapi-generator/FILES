@@ -18,10 +18,16 @@ schematic_api/models/datasets_page_all_of.py
 schematic_api/models/manifest.py
 schematic_api/models/manifests_page.py
 schematic_api/models/manifests_page_all_of.py
+schematic_api/models/node.py
+schematic_api/models/nodes_page.py
+schematic_api/models/nodes_page_all_of.py
 schematic_api/models/page_metadata.py
 schematic_api/models/project.py
 schematic_api/models/projects_page.py
 schematic_api/models/projects_page_all_of.py
+schematic_api/models/validation_rule.py
+schematic_api/models/validation_rules_page.py
+schematic_api/models/validation_rules_page_all_of.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
 schematic_api/typing_utils.py

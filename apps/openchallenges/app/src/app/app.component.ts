@@ -8,9 +8,10 @@ import {
   USER_MENU_ITEMS,
   MOCK_USER,
   NavbarSection,
+  NavbarComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { APP_SECTIONS } from './app-sections';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
@@ -19,6 +20,8 @@ import { HomeDataService } from '@sagebionetworks/openchallenges/home';
   selector: 'openchallenges-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  standalone: true,
+  imports: [NavbarComponent, RouterOutlet],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
