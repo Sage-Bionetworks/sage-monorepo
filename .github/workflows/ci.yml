@@ -31,7 +31,7 @@ jobs:
       - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
-          path: '**/.yarn/cache'
+          path: '/tmp/.yarn/cache'
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -68,11 +68,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-      #   with:
-      #     driver: docker
-
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
       #   with:
@@ -93,12 +88,8 @@ jobs:
 
       - name: Start the dev container
         run: |
-          # Update the dev container definition to use docker-outside-of-docker instead of
-          # docker-in-docker so that the images built inside the dev container are available to the
-          # host (i.e. outside the dev container).
-          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
-
           mkdir -p \
+            /tmp/.yarn/cache \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
             /tmp/.local/share/virtualenv \
@@ -106,7 +97,7 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
-            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
+            --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
             --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
@@ -118,6 +109,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
             sudo chown -R vscode:vscode \
+              /workspaces/sage-monorepo \
               /home/vscode/.cache \
               /home/vscode/.local \
               /home/vscode/.gradle \
@@ -149,10 +141,10 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=publish-and-remove-image --parallel=1"
 
-      - name: Publish the images of the SELECTED projects
+      - name: BUILDING the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-and-remove-image \
+            && nx run-many --target=build-and-remove-image \
               --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
@@ -195,7 +187,7 @@ jobs:
       - name: Set up Yarn cache
         uses: actions/cache@v3
         with:
-          path: '**/.yarn/cache'
+          path: '/tmp/.yarn/cache'
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
@@ -232,11 +224,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-      #   with:
-      #     driver: docker
-
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
       #   with:
@@ -250,12 +237,8 @@ jobs:
 
       - name: Start the dev container
         run: |
-          # Update the dev container definition to use docker-outside-of-docker instead of
-          # docker-in-docker so that the images built inside the dev container are available to the
-          # host (i.e. outside the dev container).
-          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
-
           mkdir -p \
+            /tmp/.yarn/cache \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
             /tmp/.local/share/virtualenv \
@@ -263,7 +246,7 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
-            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
+            --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
             --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
@@ -275,6 +258,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
             sudo chown -R vscode:vscode \
+              /workspaces/sage-monorepo \
               /home/vscode/.cache \
               /home/vscode/.local \
               /home/vscode/.gradle \

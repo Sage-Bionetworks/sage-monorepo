@@ -22,7 +22,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/exec@npm:^1.1.1":
+"@actions/exec@npm:1.1.1":
   version: 1.1.1
   resolution: "@actions/exec@npm:1.1.1"
   dependencies:
@@ -31,7 +31,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@actions/github@npm:^5.1.1":
+"@actions/github@npm:5.1.1":
   version: 5.1.1
   resolution: "@actions/github@npm:5.1.1"
   dependencies:
@@ -6201,60 +6201,68 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nx-tools/ci-context@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@nx-tools/ci-context@npm:4.0.3"
+"@nx-tools/ci-context@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@nx-tools/ci-context@npm:5.0.3"
   dependencies:
-    "@actions/github": ^5.1.1
-    "@nx-tools/core": 4.0.3
-    ci-info: ^3.5.0
-  checksum: 5389993612d3663b4e42348f06de7ec3c514659d2473ed6e10c8fb3b4a1a4b24adeca8e78375f649f3a602821d103f90ff8e6ba1a8394c5586742915d609c211
+    "@actions/github": 5.1.1
+    "@nx-tools/core": 5.0.3
+    "@octokit/openapi-types": 12.11.0
+    ci-info: 3.8.0
+    properties-file: 2.2.4
+  peerDependencies:
+    tslib: ^2.5.3
+  checksum: eabe1aa3b2618d547b0eddaed52592f3769c4ecf34bef19e1895f3d64eb79caac6a63de58375ce07d77804604999bec8e3cdbe055a9729937259e719d4005fef
   languageName: node
   linkType: hard
 
-"@nx-tools/container-metadata@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@nx-tools/container-metadata@npm:4.0.3"
+"@nx-tools/container-metadata@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@nx-tools/container-metadata@npm:5.0.3"
   dependencies:
-    "@nx-tools/ci-context": 4.0.3
-    "@nx-tools/core": 4.0.3
-    "@renovate/pep440": ^1.0.0
-    csv-parse: ^4.16.3
-    handlebars: ^4.7.7
-    moment: ^2.29.4
+    "@nx-tools/ci-context": 5.0.3
+    "@nx-tools/core": 5.0.3
+    "@renovate/pep440": 1.0.0
+    csv-parse: 5.4.0
+    handlebars: 4.7.7
+    moment-timezone: 0.5.43
+    semver: 7.5.4
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+    "@nx/devkit": ^16.0.0
     dotenv: ">=10.0.0"
-  checksum: 0290bca710d58494397a9ca37a418e3936b39cce9d34f22bf667a16a62d47d9058a08c653992511f08a27b43f8f984efe8b5c4575e521fe28b3410c7152fd6a8
+    tslib: ^2.5.3
+  checksum: 37c473bbc9a44a4f10c1ac4bef10152e35e0f99f36845e5075cab638b484a3a1a50c1fbfdd3fee90ccf5102663949fccfb4016f63e344bb35e37cd705040ed92
   languageName: node
   linkType: hard
 
-"@nx-tools/core@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@nx-tools/core@npm:4.0.3"
+"@nx-tools/core@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@nx-tools/core@npm:5.0.3"
   dependencies:
-    "@actions/exec": ^1.1.1
-    colorette: ^2.0.19
+    "@actions/exec": 1.1.1
+    chalk: 4.1.2
+    ci-info: 3.8.0
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
-  checksum: 7e4850f5ba0e71c669c9cd33f47160adb5627c743ccbed41f4a37f9af57e049c40431ac046a2345575de7c11716277f8eed7f8593a3d167dfee1c561231d7def
+    "@nx/devkit": ^16.0.0
+    tslib: ^2.5.3
+  checksum: a2cd8d7ce00b31fbc1c08ea5c10bc0a32f689254b812700895a6394cea0417e67fbd84a1741dc48023fb590acc8590e29e65492530bb80a44c9769d210a3ca19
   languageName: node
   linkType: hard
 
-"@nx-tools/nx-container@npm:4.0.3":
-  version: 4.0.3
-  resolution: "@nx-tools/nx-container@npm:4.0.3"
+"@nx-tools/nx-container@npm:5.0.3":
+  version: 5.0.3
+  resolution: "@nx-tools/nx-container@npm:5.0.3"
   dependencies:
-    "@nx-tools/core": 4.0.3
-    "@swc/helpers": ^0.4.12
-    csv-parse: ^4.16.3
-    handlebars: ^4.7.7
-    semver: ^7.3.8
-    tmp: ^0.2.1
+    "@nx-tools/core": 5.0.3
+    csv-parse: 5.4.0
+    handlebars: 4.7.7
+    semver: 7.5.4
+    tmp: 0.2.1
   peerDependencies:
-    "@nrwl/devkit": ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+    "@nx/devkit": ^16.0.0
     dotenv: ">=10.0.0"
-  checksum: 3b133c46f90570382e833d8904b89e82877eebb90ec1adaa2bd7fd032556562e5cd0329322e30048fb1a8aa508b3596c2d4b76a00fb7e177db515d160e724f82
+    tslib: ^2.5.3
+  checksum: df29925c19a8cc66e8d371c0a31ba8874c0e8794e9853c7ec1c3da3fef331da2230882340d48a868af7923ebf362add9f1f57d5cac2dbd640293a5e4a10fb338
   languageName: node
   linkType: hard
 
@@ -6807,7 +6815,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@octokit/openapi-types@npm:^12.11.0":
+"@octokit/openapi-types@npm:12.11.0, @octokit/openapi-types@npm:^12.11.0":
   version: 12.11.0
   resolution: "@octokit/openapi-types@npm:12.11.0"
   checksum: 8a7d4bd6288cc4085cabe0ca9af2b87c875c303af932cb138aa1b2290eb69d32407759ac23707bb02776466e671244a902e9857896903443a69aff4b6b2b0e3b
@@ -7227,7 +7235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@renovate/pep440@npm:^1.0.0":
+"@renovate/pep440@npm:1.0.0":
   version: 1.0.0
   resolution: "@renovate/pep440@npm:1.0.0"
   dependencies:
@@ -8077,15 +8085,6 @@ __metadata:
   dependencies:
     tslib: ^2.4.0
   checksum: 71e0e27234590435e4c62b97ef5e796f88e786841a38c7116a5e27a3eafa7b9ead7cdec5249b32165902076de78446945311c973e59bddf77c1e24f33a8f272a
-  languageName: node
-  linkType: hard
-
-"@swc/helpers@npm:^0.4.12":
-  version: 0.4.14
-  resolution: "@swc/helpers@npm:0.4.14"
-  dependencies:
-    tslib: ^2.4.0
-  checksum: 273fd3f3fc461a92f3790cc551ea054745c6d6959afbe1232e6d7aa1c722bbc114d308aab96bef5c78fc0303c85c7b472ef00e2253251cc89737f3b1af56e5a5
   languageName: node
   linkType: hard
 
@@ -11132,17 +11131,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ci-info@npm:3.8.0, ci-info@npm:^3.2.0, ci-info@npm:^3.3.2, ci-info@npm:^3.8.0":
+  version: 3.8.0
+  resolution: "ci-info@npm:3.8.0"
+  checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
+  languageName: node
+  linkType: hard
+
 "ci-info@npm:^2.0.0":
   version: 2.0.0
   resolution: "ci-info@npm:2.0.0"
   checksum: 3b374666a85ea3ca43fa49aa3a048d21c9b475c96eb13c133505d2324e7ae5efd6a454f41efe46a152269e9b6a00c9edbe63ec7fa1921957165aae16625acd67
-  languageName: node
-  linkType: hard
-
-"ci-info@npm:^3.2.0, ci-info@npm:^3.3.2, ci-info@npm:^3.5.0, ci-info@npm:^3.8.0":
-  version: 3.8.0
-  resolution: "ci-info@npm:3.8.0"
-  checksum: d0a4d3160497cae54294974a7246202244fff031b0a6ea20dd57b10ec510aa17399c41a1b0982142c105f3255aff2173e5c0dd7302ee1b2f28ba3debda375098
   languageName: node
   linkType: hard
 
@@ -12359,10 +12358,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"csv-parse@npm:^4.16.3":
-  version: 4.16.3
-  resolution: "csv-parse@npm:4.16.3"
-  checksum: 5ad7790fc31c32ca1623bad1a54906134ba44fa109e8dd2dfda440bf7e9fd93610d9076a78f45c872701bfafdf7f93c9b75500c09d7efd6611d863f1d45ec69f
+"csv-parse@npm:5.4.0":
+  version: 5.4.0
+  resolution: "csv-parse@npm:5.4.0"
+  checksum: e9c2f23953f628849c476adeb9f500e9c03fcfe98fea7b732366e3c2ed0b07a5e67f32ca12a0132db6eb71601c080b4935b5921296db3625a597e24caa16f633
   languageName: node
   linkType: hard
 
@@ -15974,7 +15973,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"handlebars@npm:^4.7.6, handlebars@npm:^4.7.7":
+"handlebars@npm:4.7.7, handlebars@npm:^4.7.6, handlebars@npm:^4.7.7":
   version: 4.7.7
   resolution: "handlebars@npm:4.7.7"
   dependencies:
@@ -20114,6 +20113,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"moment-timezone@npm:0.5.43":
+  version: 0.5.43
+  resolution: "moment-timezone@npm:0.5.43"
+  dependencies:
+    moment: ^2.29.4
+  checksum: 8075c897ed8a044f992ef26fe8cdbcad80caf974251db424cae157473cca03be2830de8c74d99341b76edae59f148c9d9d19c1c1d9363259085688ec1cf508d0
+  languageName: node
+  linkType: hard
+
 "moment@npm:^2.29.4":
   version: 2.29.4
   resolution: "moment@npm:2.29.4"
@@ -23114,6 +23122,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"properties-file@npm:2.2.4":
+  version: 2.2.4
+  resolution: "properties-file@npm:2.2.4"
+  checksum: 9d0124f28c41397dde71b64b94f2914afcee4bf994332863b33bcd9e2cd12dc63da06b8262c8a75da6c07dae45b881f51866025fd874b6bd37df766c7113e55c
+  languageName: node
+  linkType: hard
+
 "proxy-addr@npm:~2.0.7":
   version: 2.0.7
   resolution: "proxy-addr@npm:2.0.7"
@@ -24204,8 +24219,8 @@ __metadata:
     "@nguniversal/builders": 16.2.0
     "@nguniversal/express-engine": 16.2.0
     "@nrwl/js": 16.7.2
-    "@nx-tools/container-metadata": 4.0.3
-    "@nx-tools/nx-container": 4.0.3
+    "@nx-tools/container-metadata": 5.0.3
+    "@nx-tools/nx-container": 5.0.3
     "@nx/angular": 16.7.2
     "@nx/cypress": 16.7.2
     "@nx/devkit": 16.7.2
@@ -26176,21 +26191,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tmp@npm:0.2.1, tmp@npm:~0.2.1":
+  version: 0.2.1
+  resolution: "tmp@npm:0.2.1"
+  dependencies:
+    rimraf: ^3.0.0
+  checksum: 8b1214654182575124498c87ca986ac53dc76ff36e8f0e0b67139a8d221eaecfdec108c0e6ec54d76f49f1f72ab9325500b246f562b926f85bcdfca8bf35df9e
+  languageName: node
+  linkType: hard
+
 "tmp@npm:^0.0.33":
   version: 0.0.33
   resolution: "tmp@npm:0.0.33"
   dependencies:
     os-tmpdir: ~1.0.2
   checksum: 902d7aceb74453ea02abbf58c203f4a8fc1cead89b60b31e354f74ed5b3fb09ea817f94fb310f884a5d16987dd9fa5a735412a7c2dd088dd3d415aa819ae3a28
-  languageName: node
-  linkType: hard
-
-"tmp@npm:^0.2.1, tmp@npm:~0.2.1":
-  version: 0.2.1
-  resolution: "tmp@npm:0.2.1"
-  dependencies:
-    rimraf: ^3.0.0
-  checksum: 8b1214654182575124498c87ca986ac53dc76ff36e8f0e0b67139a8d221eaecfdec108c0e6ec54d76f49f1f72ab9325500b246f562b926f85bcdfca8bf35df9e
   languageName: node
   linkType: hard
 
