@@ -68,11 +68,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-      #   with:
-      #     driver: docker
-
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
       #   with:
@@ -93,11 +88,6 @@ jobs:
 
       - name: Start the dev container
         run: |
-          # Update the dev container definition to use docker-outside-of-docker instead of
-          # docker-in-docker so that the images built inside the dev container are available to the
-          # host (i.e. outside the dev container).
-          ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
-
           mkdir -p \
             /tmp/.yarn/cache \
             /tmp/.cache/R/renv/cache \
@@ -107,7 +97,6 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
-            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
@@ -235,11 +224,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v2
-      # with:
-      #   driver: docker
-
       # - name: Cache Docker layers
       #   uses: actions/cache@v3
       #   with:
@@ -253,11 +237,6 @@ jobs:
 
       - name: Start the dev container
         run: |
-          # Update the dev container definition to use docker-outside-of-docker instead of
-          # docker-in-docker so that the images built inside the dev container are available to the
-          # host (i.e. outside the dev container).
-          # ./tools/switch-devcontainer-to-docker-outside-of-docker.sh
-
           mkdir -p \
             /tmp/.yarn/cache \
             /tmp/.cache/R/renv/cache \
