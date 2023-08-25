@@ -14,7 +14,7 @@
   },
   "private": true,
   "dependencies": {
-    "@amcharts/amcharts5": "^5.4.4",
+    "@amcharts/amcharts5": "5.4.4",
     "@angular-architects/module-federation": "14.3.14",
     "@angular/animations": "16.2.1",
     "@angular/cdk": "16.2.1",

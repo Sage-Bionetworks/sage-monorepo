@@ -66,7 +66,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@amcharts/amcharts5@npm:^5.4.4":
+"@amcharts/amcharts5@npm:5.4.4":
   version: 5.4.4
   resolution: "@amcharts/amcharts5@npm:5.4.4"
   dependencies:
@@ -25434,7 +25434,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "sage-monorepo@workspace:."
   dependencies:
-    "@amcharts/amcharts5": ^5.4.4
+    "@amcharts/amcharts5": 5.4.4
     "@angular-architects/module-federation": 14.3.14
     "@angular-devkit/build-angular": 16.2.0
     "@angular-devkit/core": 16.2.0
