@@ -1,0 +1,3 @@
+description: The property label of a node in a schema
+type: string
+example: MolecularEntity
