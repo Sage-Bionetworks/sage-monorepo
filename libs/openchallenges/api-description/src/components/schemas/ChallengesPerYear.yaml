@@ -1,0 +1,14 @@
+type: object
+description: An object
+properties:
+  years:
+    type: array
+    items:
+      type: string
+  challengeCounts:
+    type: array
+    items:
+      type: integer
+required:
+  - years
+  - challengeCounts
