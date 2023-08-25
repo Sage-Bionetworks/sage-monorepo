@@ -14,7 +14,8 @@
 
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.3.1": {
-      "version": "20.10.24"
+      "version": "24.0.5",
+      "moby": false
     }
   },
 
