@@ -23,7 +23,7 @@
       "options": {
         "root": "apps/openchallenges/challenge-to-elasticsearch-service"
       },
-      "outputs": ["apps/openchallenges/challenge-to-elasticsearch-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {

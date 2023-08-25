@@ -23,11 +23,7 @@
         "context": "apps/openchallenges/mariadb",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-mariadb"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -38,10 +34,7 @@
         "context": "apps/openchallenges/mariadb",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-mariadb"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
