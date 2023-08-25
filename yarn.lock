@@ -6533,6 +6533,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nx/playwright@npm:16.7.2":
+  version: 16.7.2
+  resolution: "@nx/playwright@npm:16.7.2"
+  dependencies:
+    "@nx/devkit": 16.7.2
+    "@nx/linter": 16.7.2
+    tslib: ^2.3.0
+  peerDependencies:
+    "@playwright/test": ^1.36.0
+  peerDependenciesMeta:
+    "@playwright/test":
+      optional: true
+  checksum: 6997b180c94a494729579d820aac7f927763a785d845c4059671e75278e98f5f4c02d9c00a1eed2da4350901fa26b2703f69aecc995c05e0673d33bbc4c2e072
+  languageName: node
+  linkType: hard
+
 "@nx/plugin@npm:16.7.2":
   version: 16.7.2
   resolution: "@nx/plugin@npm:16.7.2"
@@ -7098,6 +7114,22 @@ __metadata:
   version: 0.11.0
   resolution: "@pkgjs/parseargs@npm:0.11.0"
   checksum: 6ad6a00fc4f2f2cfc6bff76fb1d88b8ee20bc0601e18ebb01b6d4be583733a860239a521a7fbca73b612e66705078809483549d2b18f370eb346c5155c8e4a0f
+  languageName: node
+  linkType: hard
+
+"@playwright/test@npm:^1.36.0":
+  version: 1.37.1
+  resolution: "@playwright/test@npm:1.37.1"
+  dependencies:
+    "@types/node": "*"
+    fsevents: 2.3.2
+    playwright-core: 1.37.1
+  dependenciesMeta:
+    fsevents:
+      optional: true
+  bin:
+    playwright: cli.js
+  checksum: b7038f29000289103c08b215eff7aabdda70cdc1375fa7dad0e81651be71086a1e2fc0e0e29dc70348037c366cf0cc69f762373fda34ba1a74aa1658741d9195
   languageName: node
   linkType: hard
 
@@ -14132,6 +14164,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-playwright@npm:^0.15.3":
+  version: 0.15.3
+  resolution: "eslint-plugin-playwright@npm:0.15.3"
+  peerDependencies:
+    eslint: ">=7"
+    eslint-plugin-jest: ">=25"
+  peerDependenciesMeta:
+    eslint-plugin-jest:
+      optional: true
+  checksum: 5dff7f1d8346dac41980197ce24f2629f09acc44b612c38a6859cb31d5dc29caa4d9a09fec0b10443bae7ebc4b79d4c926dca284707bae729469016ce9f1dbfc
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-prettier@npm:4.2.1":
   version: 4.2.1
   resolution: "eslint-plugin-prettier@npm:4.2.1"
@@ -15394,7 +15439,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
+"fsevents@npm:2.3.2, fsevents@npm:^2.3.2, fsevents@npm:~2.3.2":
   version: 2.3.2
   resolution: "fsevents@npm:2.3.2"
   dependencies:
@@ -15404,7 +15449,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
+"fsevents@patch:fsevents@2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
   resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
@@ -21943,6 +21988,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"playwright-core@npm:1.37.1":
+  version: 1.37.1
+  resolution: "playwright-core@npm:1.37.1"
+  bin:
+    playwright-core: cli.js
+  checksum: 69f818da2230057584140d5b3af7778a4f4a822b5b18d133abfc5d259128becb943c343a2ddf6b0635277a69f28983e83e2bc3fce23595ececb1e410475b6368
+  languageName: node
+  linkType: hard
+
 "pluralize@npm:^8.0.0":
   version: 8.0.0
   resolution: "pluralize@npm:8.0.0"
@@ -24229,11 +24283,13 @@ __metadata:
     "@nx/js": 16.7.2
     "@nx/linter": 16.7.2
     "@nx/node": 16.7.2
+    "@nx/playwright": 16.7.2
     "@nx/plugin": 16.7.2
     "@nx/web": 16.7.2
     "@nx/workspace": 16.7.2
     "@nxrocks/nx-spring-boot": 8.0.3
     "@openapitools/openapi-generator-cli": 2.5.2
+    "@playwright/test": ^1.36.0
     "@prettier/plugin-xml": 2.2.0
     "@probot/adapter-aws-lambda-serverless": 3.0.1
     "@redocly/cli": 1.0.0-beta.131
@@ -24270,6 +24326,7 @@ __metadata:
     eslint-plugin-jsx-a11y: 6.6.1
     eslint-plugin-n: 15.6.0
     eslint-plugin-node: 11.1.0
+    eslint-plugin-playwright: ^0.15.3
     eslint-plugin-prettier: 4.2.1
     eslint-plugin-promise: 6.1.1
     glob: 8.0.3
