@@ -112,3 +112,7 @@ GET {{basePath}}/challenges/1
 ### Get the contributions to the challenge with ID 1.
 
 GET {{basePath}}/challenges/1/contributions
+
+### Get the number of challenges started per year.
+
+GET {{basePath}}/challengeAnalytics/challengesPerYear
