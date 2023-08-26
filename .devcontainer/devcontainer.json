@@ -26,7 +26,6 @@
     },
     "vscode": {
       "extensions": [
-        "1000ch.svgo",
         "Angular.ng-template",
         "dbaeumer.vscode-eslint",
         "emeraldwalk.RunOnSave",
