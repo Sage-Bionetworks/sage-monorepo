@@ -884,6 +884,8 @@ components:
       - challengeCounts
       - years
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     ChallengeInputDataTypeSort:
       default: relevance
       description: What to sort results by.

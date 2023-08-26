@@ -15,7 +15,7 @@ import javax.validation.constraints.*;
 @Schema(name = "ChallengesPerYear", description = "An object")
 @JsonTypeName("ChallengesPerYear")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@lombok.Builder
 public class ChallengesPerYearDto {
 
   @JsonProperty("years")
