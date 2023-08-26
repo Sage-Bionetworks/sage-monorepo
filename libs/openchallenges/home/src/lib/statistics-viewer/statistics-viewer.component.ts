@@ -9,15 +9,17 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { CountUpModule } from 'ngx-countup';
 import { Observable, map } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
   standalone: true,
-  imports: [CommonModule, CountUpModule],
+  imports: [CommonModule, RouterModule, CountUpModule],
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent implements OnInit {
+  reanimateOnClick = false;
   challengeImg$: Observable<Image> | undefined;
   orgImg$: Observable<Image> | undefined;
   userImg$: Observable<Image> | undefined;
