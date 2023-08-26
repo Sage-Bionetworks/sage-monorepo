@@ -12,3 +12,5 @@ properties:
 required:
   - years
   - challengeCounts
+x-java-class-annotations:
+  - '@lombok.Builder'

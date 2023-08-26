@@ -760,6 +760,8 @@ components:
       required:
         - years
         - challengeCounts
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ChallengeInputDataTypeSort:
       description: What to sort results by.
       type: string
