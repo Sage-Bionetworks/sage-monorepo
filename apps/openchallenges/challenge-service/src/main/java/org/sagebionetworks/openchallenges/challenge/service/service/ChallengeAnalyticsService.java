@@ -1,6 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.service;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPerYearDto;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,8 @@ public class ChallengeAnalyticsService {
 
   @Transactional(readOnly = true)
   public ChallengesPerYearDto getChallengesPerYear() {
-
-    List<String> years = new ArrayList<String>();
-    List<Integer> challengeCounts = new ArrayList<Integer>();
+    List<String> years = Arrays.asList("2010", "2011");
+    List<Integer> challengeCounts = Arrays.asList(100, 200);
 
     return ChallengesPerYearDto.builder().years(years).challengeCounts(challengeCounts).build();
   }
