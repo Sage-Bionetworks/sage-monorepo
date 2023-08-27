@@ -10,6 +10,7 @@ plugins {
   id 'java'
   id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
+  id "org.sonarqube" version "4.3.0.3225"
 }
 
 repositories {
@@ -121,5 +122,13 @@ spotless {
     importOrder()
     removeUnusedImports()
     googleJavaFormat()
+  }
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "openchallenges-image-service")
+    property("sonar.organization", "tschaffter")
+    property("sonar.host.url", "https://sonarcloud.io")
   }
 }
