@@ -20,7 +20,7 @@ ARG poetryVersion="1.5.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.43.1"
+ARG trivyVersion="0.44.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
 # https://github.com/pnpm/pnpm/releases
