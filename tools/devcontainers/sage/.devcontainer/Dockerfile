@@ -14,7 +14,7 @@ ARG hyperfineVersion="1.17.0"
 # https://github.com/yarnpkg/berry
 ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.51.0"
+ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
 ARG poetryVersion="1.6.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
