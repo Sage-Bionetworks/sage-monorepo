@@ -10,6 +10,7 @@ plugins {
   id 'java'
   id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
+  id 'jacoco'
   id "org.sonarqube" version "4.3.0.3225"
 }
 
@@ -122,6 +123,12 @@ spotless {
     importOrder()
     removeUnusedImports()
     googleJavaFormat()
+  }
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
   }
 }
 
