@@ -8,11 +8,44 @@ from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.nodes_page import NodesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
+    get_node_is_required,
     get_property_label,
     get_node_properties,
     list_node_validation_rules,
     list_node_dependencies,
 )
+
+
+class TestGetNodeIsRequired:
+    """Test case for get_node_is_required"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_node_is_required_from_schematic",
+            return_value=True,
+        ):
+            result, status = get_node_is_required(
+                node_display="name",
+                schema_url="xxx",
+            )
+            assert status == 200
+            assert result
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_node_is_required_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_node_is_required(
+                node_display="name",
+                schema_url="xxx",
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
 
 
 class TestGetPropertyLabel:
