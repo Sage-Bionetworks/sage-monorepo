@@ -106,6 +106,8 @@ test {
   testLogging {
     events("passed", "skipped", "failed")
   }
+
+  finalizedBy jacocoTestReport
 }
 
 spotless {
