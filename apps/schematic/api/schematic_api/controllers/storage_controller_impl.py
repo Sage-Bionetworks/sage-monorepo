@@ -1,8 +1,10 @@
 """Implementation of all endpoints"""
+import os
 from typing import Optional, Union, Callable
-from flask import request  # type: ignore
 
-from schematic.store.synapse import SynapseStorage  # type: ignore
+from flask import request  # type: ignore
+import pandas as pd
+from schematic.store.synapse import SynapseStorage, ManifestDownload  # type: ignore
 from schematic import CONFIG  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
@@ -49,6 +51,54 @@ def get_asset_storage_class(asset_type: str) -> Callable:
         msg = f"{asset_type} is not an allowed value: [{list(asset_type_dict.keys())}]"
         raise ValueError(msg)
     return asset_type_object
+
+
+def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
+    """Downloads a manifest in and returns the path
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        manifest_id (str): The unique id for the manifest file
+
+    Returns:
+        pandas.DataFrame: The manifest
+    """
+    access_token = get_access_token()
+    # This will be used after the synapse storage refactor
+    asset_type_object = get_asset_storage_class(  # pylint: disable=unused-variable
+        asset_type
+    )
+    store = SynapseStorage.login(access_token=access_token)
+    manifest_download = ManifestDownload(store, manifest_id)
+    manifest_data = ManifestDownload.download_manifest(
+        manifest_download, "manifest.csv"
+    )
+    manifest_local_file_path = manifest_data["path"]
+    manifest = pd.read_csv(manifest_local_file_path)
+    os.remove(manifest_local_file_path)
+    return manifest
+
+
+@handle_exceptions
+def get_manifest_json(
+    asset_type: str, manifest_id: str
+) -> tuple[Union[str, BasicError], int]:
+    """Gets a manifest in json form
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        manifest_id (str): The unique id for the manifest file
+
+    Returns:
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the manifest or an error object
+          The second item is the response status
+    """
+    mainfest = get_manifest_from_schematic(asset_type, manifest_id)
+    result: Union[str, BasicError] = mainfest.to_json()
+    status = 200
+
+    return result, status
 
 
 def get_projects(asset_type: str) -> list[tuple[str, str]]:
