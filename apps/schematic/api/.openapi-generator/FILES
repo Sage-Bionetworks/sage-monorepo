@@ -25,6 +25,9 @@ schematic_api/models/page_metadata.py
 schematic_api/models/project.py
 schematic_api/models/projects_page.py
 schematic_api/models/projects_page_all_of.py
+schematic_api/models/relationship.py
+schematic_api/models/relationships_page.py
+schematic_api/models/relationships_page_all_of.py
 schematic_api/models/validation_rule.py
 schematic_api/models/validation_rules_page.py
 schematic_api/models/validation_rules_page_all_of.py

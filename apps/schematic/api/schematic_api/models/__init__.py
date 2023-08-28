@@ -21,6 +21,9 @@ from schematic_api.models.page_metadata import PageMetadata
 from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
 from schematic_api.models.projects_page_all_of import ProjectsPageAllOf
+from schematic_api.models.relationship import Relationship
+from schematic_api.models.relationships_page import RelationshipsPage
+from schematic_api.models.relationships_page_all_of import RelationshipsPageAllOf
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rules_page_all_of import ValidationRulesPageAllOf

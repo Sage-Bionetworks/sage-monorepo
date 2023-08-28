@@ -45,3 +45,6 @@ paths:
 
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
+
+  /relationships/{relationshipType}:
+    $ref: paths/relationships/@{relationshipType}/relationships.yaml
