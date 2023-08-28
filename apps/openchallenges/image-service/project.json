@@ -33,6 +33,13 @@
       },
       "dependsOn": ["^install"]
     },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew sonar",
+        "cwd": "{projectRoot}"
+      }
+    },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
