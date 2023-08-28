@@ -12,12 +12,83 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.datasets_page import DatasetsPage
 from schematic_api.models.projects_page import ProjectsPage
+from schematic_api.models.files_page import FilesPage
 import schematic_api.controllers.storage_controller_impl
 from schematic_api.controllers.storage_controller_impl import (
+    get_dataset_files,
     list_projects,
     list_storage_project_datasets,
     list_storage_project_manifests,
 )
+
+
+class TestGetDatasetFiles:
+    """Test case for get_dataset_files"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_files_from_schematic",
+            return_value=[("syn1", "name1"), ("syn2", "name2")],
+        ):
+            result, status = get_dataset_files(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 200
+            assert isinstance(result, FilesPage)
+
+    def test_no_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_files_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            result, status = get_dataset_files(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_bad_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_files_from_schematic",
+            side_effect=SynapseAuthenticationError,
+        ):
+            result, status = get_dataset_files(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_no_access_error(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_files_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            result, status = get_dataset_files(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 403
+            assert isinstance(result, BasicError)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_files_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_dataset_files(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
 
 
 class TestListProjects:
