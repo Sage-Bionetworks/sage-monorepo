@@ -54,7 +54,7 @@ def get_asset_storage_class(asset_type: str) -> Callable:
 
 
 def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
-    """Downloads a manifest in and returns the path
+    """Gets a manifest in pandas.Datframe format
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
