@@ -13,6 +13,23 @@ from schematic_api import util
 from schematic_api.controllers import storage_controller_impl
 
 
+def get_asset_view_json(asset_view_id, asset_type):  # noqa: E501
+    """Gets the asset view table in json form
+
+    Gets the asset view table in json form # noqa: E501
+
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+
+    :rtype: Union[object, Tuple[object, int], Tuple[object, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_asset_view_json(asset_view_id, asset_type)
+
+
 def list_projects(asset_view_id, asset_type):  # noqa: E501
     """Gets all storage projects the current user has access to.
 
