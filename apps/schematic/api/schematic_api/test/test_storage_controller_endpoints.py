@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 import unittest
 from unittest.mock import patch
+import pandas as pd
 
 from synapseclient.core.exceptions import SynapseNoCredentialsError  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
@@ -16,10 +17,73 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
+ASSET_VIEW_JSON_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/json"
 FILES_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/datasets/syn2/files"
 PROJECTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects"
 DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/datasets"
 MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/manifests"
+
+
+class TestGetAssetViewJson(BaseTestCase):
+    """Test case for asset view json endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            return_value=pd.DataFrame({"col1": [1, 2], "col2": [3, 4]}),
+        ):
+            response = self.client.open(
+                ASSET_VIEW_JSON_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            assert response.json == '{"col1":{"0":1,"1":2},"col2":{"0":3,"1":4}}'
+
+    def test_401(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            response = self.client.open(
+                ASSET_VIEW_JSON_URL, method="GET", headers=HEADERS
+            )
+            self.assert401(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_403(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            response = self.client.open(
+                ASSET_VIEW_JSON_URL, method="GET", headers=HEADERS
+            )
+            self.assert403(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                ASSET_VIEW_JSON_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestGetDatasetFiles(BaseTestCase):

@@ -25,7 +25,7 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:python", "package-manager:poetry"],
   "implicitDependencies": [
     "schematic-api-description"
   ]

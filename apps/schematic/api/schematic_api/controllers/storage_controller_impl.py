@@ -1,6 +1,7 @@
 """Implementation of all endpoints"""
 from typing import Optional, Union, Callable
 from flask import request  # type: ignore
+import pandas as pd
 
 from schematic.store.synapse import SynapseStorage  # type: ignore
 from schematic import CONFIG  # type: ignore
@@ -51,6 +52,44 @@ def get_asset_storage_class(asset_type: str) -> Callable:
         msg = f"{asset_type} is not an allowed value: [{list(asset_type_dict.keys())}]"
         raise ValueError(msg)
     return asset_type_object
+
+
+def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
+    """Gets the asset view in pandas.Dataframe form
+
+    Args:
+        asset_view_id (str): The d of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+
+     Returns:
+        pandas.DataFrame: The asset view
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    return store.getStorageFileviewTable()
+
+
+@handle_exceptions
+def get_asset_view_json(
+    asset_view_id: str, asset_type: str
+) -> tuple[Union[str, BasicError], int]:
+    """Gets the asset view in json form
+
+    Args:
+        asset_view_id (str): The d of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the fileview or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    asset_view = get_asset_view_from_schematic(asset_type)
+    result: Union[str, BasicError] = asset_view.to_json()
+    status = 200
+    return result, status
 
 
 def get_dataset_files_from_schematic(
