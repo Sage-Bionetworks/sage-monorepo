@@ -14,6 +14,8 @@ from schematic_api.models.manifest import Manifest
 from schematic_api.controllers.utils import handle_exceptions
 from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
+from schematic_api.models.file import File
+from schematic_api.models.files_page import FilesPage
 
 
 def get_access_token() -> Optional[str]:
@@ -87,6 +89,72 @@ def get_asset_view_json(
     asset_view = get_asset_view_from_schematic(asset_type)
     result: Union[str, BasicError] = asset_view.to_json()
     status = 200
+    return result, status
+
+
+def get_dataset_files_from_schematic(
+    dataset_id: str,
+    asset_type: str,
+    file_names: Optional[list[str]],
+    use_full_file_path: bool,
+) -> list[tuple[str, str]]:
+    """Gets a list of datasets from the project
+
+    Args:
+        project_id (str): The id for the project
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        list[tuple(str, str)]: A list of files in tuple form
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    return store.getFilesInStorageDataset(
+        datasetId=dataset_id, fileNames=file_names, fullpath=use_full_file_path
+    )
+
+
+@handle_exceptions
+def get_dataset_files(
+    dataset_id: str,
+    asset_view_id: str,
+    asset_type: str,
+    file_names: Optional[list[str]] = None,
+    use_full_file_path: bool = False,
+) -> tuple[Union[FilesPage, BasicError], int]:
+    """Attempts to get a list of files associated with a dataset
+
+    Args:
+        dataset_id (str): The Id for the dataset to get the files from
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        file_names (Optional[list[str]]): An optional list of file names to filter the output by
+        use_full_file_path: Whether or not to return the full file path of each file
+
+    Returns:
+        tuple[Union[FilesPage, BasicError], int]: A tuple
+          The first item is either the datasets or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    file_tuples = get_dataset_files_from_schematic(
+        dataset_id, asset_type, file_names, use_full_file_path
+    )
+    files = [File(id=item[0], name=item[1]) for item in file_tuples]
+
+    page = FilesPage(
+        number=0,
+        size=100,
+        total_elements=len(files),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        files=files,
+    )
+    result: Union[FilesPage, BasicError] = page
+    status = 200
+
     return result, status
 
 
