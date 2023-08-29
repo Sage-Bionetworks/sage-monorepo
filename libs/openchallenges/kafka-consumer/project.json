@@ -52,7 +52,7 @@
       }
     }
   },
-  "tags": ["type:library", "scope:openchallenges"],
+  "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-app-config-data",
     "openchallenges-kafka-admin",

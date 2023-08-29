@@ -5,6 +5,6 @@
   "sourceRoot": "libs/shared/typescript/themes/src",
   "prefix": "shared",
   "targets": {},
-  "tags": ["type:themes", "scope:shared"],
+  "tags": ["type:themes", "scope:shared", "language:typescript"],
   "implicitDependencies": []
 }

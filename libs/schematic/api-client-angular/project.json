@@ -56,6 +56,6 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:typescript"],
   "implicitDependencies": ["schematic-api-description"]
 }

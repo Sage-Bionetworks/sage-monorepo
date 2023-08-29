@@ -81,7 +81,7 @@
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-api-gateway",
     "openchallenges-keycloak",
