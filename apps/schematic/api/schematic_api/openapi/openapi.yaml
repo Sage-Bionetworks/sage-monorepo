@@ -18,6 +18,71 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
+    get:
+      description: Gets the asset view table in json form
+      operationId: get_asset_view_json
+      parameters:
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets the asset view table in json form
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     get:
       description: Gets all storage projects the current user has access to.
@@ -695,6 +760,9 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
     Project:
       description: A project.
       properties:
