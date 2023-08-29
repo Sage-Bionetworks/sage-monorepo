@@ -253,7 +253,7 @@
       }
     }
   },
-  "tags": ["type:app", "scope:client"],
+  "tags": ["type:app", "scope:client", "language:typescript"],
   "implicitDependencies": [
     "openchallenges-styles",
     "openchallenges-themes",

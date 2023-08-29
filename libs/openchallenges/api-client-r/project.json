@@ -53,7 +53,7 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:r", "package-manager:renv"],
   "implicitDependencies": [
     "openchallenges-api-description"
   ]
