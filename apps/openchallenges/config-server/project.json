@@ -119,6 +119,6 @@
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": ["openchallenges-app-config-data"]
 }
