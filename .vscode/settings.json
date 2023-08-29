@@ -5,7 +5,7 @@
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
   "python.linting.flake8Enabled": true,
-  "python.formatting.provider": "none",
+  "python.formatting.provider": "black",
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
@@ -15,8 +15,7 @@
   "python.formatting.blackArgs": [],
   "[python]": {
     "editor.formatOnSave": true,
-    "editor.tabSize": 4,
-    "editor.defaultFormatter": "ms-python.black-formatter"
+    "editor.tabSize": 4
   },
   "[json]": {
     "editor.tabSize": 2
