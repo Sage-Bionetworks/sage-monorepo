@@ -39,5 +39,5 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:shared"]
+  "tags": ["type:feature", "scope:shared", "language:java", "package-manager:gradle"]
 }
