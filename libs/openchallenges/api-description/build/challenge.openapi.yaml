@@ -15,10 +15,12 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
-  - name: ChallengePlatform
-    description: Operations about challenge platforms.
+  - name: ChallengeAnalytics
+    description: Operations about challenge analytics.
   - name: ChallengeInputDataType
     description: Operations about challenge input data types.
+  - name: ChallengePlatform
+    description: Operations about challenge platforms.
 paths:
   /challenges:
     get:
@@ -78,6 +80,22 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengeAnalytics/challengesPerYear:
+    get:
+      tags:
+        - ChallengeAnalytics
+      summary: Get the number of challenges started per year
+      description: Returns the number of challenges started per year
+      operationId: getChallengesPerYear
+      responses:
+        '200':
+          description: An object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPerYear'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
@@ -571,6 +589,23 @@ components:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
             - challengeContributions
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengesPerYear:
+      type: object
+      description: An object
+      properties:
+        years:
+          type: array
+          items:
+            type: string
+        challengeCounts:
+          type: array
+          items:
+            type: integer
+      required:
+        - years
+        - challengeCounts
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeInputDataTypeSort:
