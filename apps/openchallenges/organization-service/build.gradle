@@ -23,28 +23,28 @@ repositories {
   mavenLocal()
 }
 
-// testing {
-//   suites {
-//     test {
-//       useJUnitJupiter()
-//     }
+testing {
+  suites {
+    test {
+      useJUnitJupiter()
+    }
 
-//     integrationTest(JvmTestSuite) {
-//       sources {
-//         java {
-//           srcDirs = ['src/integrationTest/java']
-//         }
-//       }
-//       targets {
-//         all {
-//           testTask.configure {
-//             shouldRunAfter(test)
-//           }
-//         }
-//       }
-//     }
-//   }
-// }
+    integrationTest(JvmTestSuite) {
+      sources {
+        java {
+          srcDirs = ['src/integrationTest/java']
+        }
+      }
+      targets {
+        all {
+          testTask.configure {
+            shouldRunAfter(test)
+          }
+        }
+      }
+    }
+  }
+}
 
 dependencies {
   implementation "org.hibernate.search:hibernate-search-mapper-orm:${hibernateSearchVersion}"
