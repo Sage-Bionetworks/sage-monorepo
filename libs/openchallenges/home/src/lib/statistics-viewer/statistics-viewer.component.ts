@@ -1,14 +1,24 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import {
+  Challenge,
+  ChallengeService,
+  Image,
+  ImageHeight,
+  ImageService,
+  OrganizationService,
+} from '@sagebionetworks/openchallenges/api-client-angular';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
+import { CountUpModule } from 'ngx-countup';
+import { Observable, map } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule],
+  imports: [CommonModule, RouterModule, CountUpModule, NgxEchartsModule],
   providers: [
     {
       provide: NGX_ECHARTS_CONFIG,
@@ -19,14 +29,54 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent implements OnInit {
-  constructor(private homeDataService: HomeDataService) {}
+  constructor(
+    private homeDataService: HomeDataService,
+    private imageService: ImageService,
+    private challengeService: ChallengeService,
+    private organizationService: OrganizationService
+  ) {}
 
   chartOptions!: EChartsOption;
+  reanimateOnClick = false;
+  challengeImg$: Observable<Image> | undefined;
+  orgImg$: Observable<Image> | undefined;
+  userImg$: Observable<Image> | undefined;
 
+  private imgHeight = ImageHeight._140px;
+
+  challengeCount$: Observable<number> | undefined;
+  orgCount$: Observable<number> | undefined;
   ngOnInit() {
+    this.challengeImg$ = this.imageService.getImage({
+      objectKey: 'home-challenges.svg',
+      height: this.imgHeight,
+    });
+    this.orgImg$ = this.imageService.getImage({
+      objectKey: 'home-hosts.svg',
+      height: this.imgHeight,
+    });
+    this.userImg$ = this.imageService.getImage({
+      objectKey: 'home-users.svg',
+      height: this.imgHeight,
+    });
+
+    this.challengeCount$ = this.challengeService
+      .listChallenges({
+        pageNumber: 1,
+        pageSize: 1,
+      })
+      .pipe(map((page) => page.totalElements));
+
+    this.orgCount$ = this.organizationService
+      .listOrganizations({
+        pageNumber: 1,
+        pageSize: 1,
+      })
+      .pipe(map((page) => page.totalElements));
+
     this.homeDataService.getAllChallenges().subscribe((challenges) => {
       const dataByYear = this.processData(challenges);
-
+      console.log(dataByYear);
       this.chartOptions = {
         // title: {
         //   text: 'Growth of Challenges',
