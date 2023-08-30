@@ -9,7 +9,7 @@ fi
 PROJECT_KEY="$1"
 SOURCES="$2"
 
-echo "Scanning $PROJECT_KEY"
+echo "Project key: $PROJECT_KEY"
 echo "Sources: $SOURCES"
 
 sonar-scanner \
