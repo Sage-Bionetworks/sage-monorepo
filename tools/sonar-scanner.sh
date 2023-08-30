@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+if [ $# -lt 2 ]
+then
+  echo "The arguments <project_key> and <sources> must be provided."
+  exit 1
+fi
+
 PROJECT_KEY="$1"
 SOURCES="$2"
 
