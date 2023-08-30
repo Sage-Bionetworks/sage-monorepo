@@ -2,7 +2,7 @@
 
 if [ $# -lt 1 ]
 then
-  echo "The argument <project_key> and <sources> (optional) must be provided."
+  echo "The argument <project_key> must be specified."
   exit 1
 fi
 
