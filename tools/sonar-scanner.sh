@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 
-if [ $# -lt 2 ]
+if [ $# -lt 1 ]
 then
-  echo "The arguments <project_key> and <sources> must be provided."
+  echo "The argument <project_key> must be specified."
   exit 1
 fi
 
 PROJECT_KEY="$1"
-SOURCES="$2"
+SOURCES="${2:-$PWD}"
 
 echo "Project key: $PROJECT_KEY"
 echo "Sources: $SOURCES"

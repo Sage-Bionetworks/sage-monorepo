@@ -121,6 +121,13 @@
         "command": "poetry run tox",
         "cwd": "apps/schematic/api"
       }
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:python", "package-manager:poetry"],
