@@ -101,9 +101,12 @@ export class StatisticsViewerComponent implements OnInit {
         series: [
           {
             name: 'Total challenges',
-            data: dataByYear.challengeCountsPerYear,
+            data: dataByYear.cumulativeChallengeCounts,
             type: 'bar',
-            silent: true, // disable default clicking
+            // disable default clicking
+            silent: true,
+            // make bar plot rise from left to right instead of rising all together in the same time
+            animationDelay: (dataIndex: number) => dataIndex * 100,
           },
         ],
       };
@@ -112,10 +115,10 @@ export class StatisticsViewerComponent implements OnInit {
 
   private processData(challenges: Challenge[]): {
     years: string[];
-    challengeCountsPerYear: number[];
+    cumulativeChallengeCounts: number[];
   } {
     const dataByYear: { [year: string]: number } = {};
-    // const cumulativeChallengeCounts: number[] = [];
+    const cumulativeChallengeCounts: number[] = [];
     const filteredChallenges = challenges.filter(
       (challenge) => challenge.startDate !== null
     );
@@ -129,15 +132,15 @@ export class StatisticsViewerComponent implements OnInit {
     const years = Object.keys(dataByYear);
     years.sort(); // Sort years in ascending order
 
-    // let cumulativeSum = 0;
-    // years.forEach((year) => {
-    //   cumulativeSum += dataByYear[year];
-    //   cumulativeChallengeCounts.push(cumulativeSum);
-    // });
-    const challengeCountsPerYear = years.map((year) => dataByYear[year]);
+    let cumulativeSum = 0;
+    years.forEach((year) => {
+      cumulativeSum += dataByYear[year];
+      cumulativeChallengeCounts.push(cumulativeSum);
+    });
+    // const challengeCountsPerYear = years.map((year) => dataByYear[year]);
     return {
       years,
-      challengeCountsPerYear,
+      cumulativeChallengeCounts,
     };
   }
 }
