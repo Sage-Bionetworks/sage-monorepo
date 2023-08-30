@@ -26,9 +26,6 @@ testing {
     }
 
     integrationTest(JvmTestSuite) {
-      // dependencies {
-      //   implementation project
-      // }
       sources {
         java {
           srcDirs = ['src/integrationTest/java']
