@@ -81,6 +81,9 @@ export class StatisticsViewerComponent implements OnInit {
         title: {
           text: 'The Rise of Challenges',
           left: 'center',
+          textStyle: {
+            fontWeight: 'normal',
+          },
         },
         // tooltip: {
         //   trigger: 'axis',
@@ -103,6 +106,9 @@ export class StatisticsViewerComponent implements OnInit {
             name: 'Total challenges',
             data: dataByYear.cumulativeChallengeCounts,
             type: 'bar',
+            itemStyle: {
+              color: '#afa0fe',
+            },
             // disable default clicking
             silent: true,
             // make bar plot rise from left to right instead of rising all together in the same time
