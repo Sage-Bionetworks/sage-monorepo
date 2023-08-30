@@ -10,7 +10,6 @@ import {
   ChallengeService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { HomeDataService } from '../home-data-service';
-import * as echarts from 'echarts';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 
@@ -38,23 +37,58 @@ export class StatisticsViewerComponent implements OnInit {
   ngOnInit() {
     this.homeDataService.getAllChallenges().subscribe((challenges) => {
       const dataByYear = this.processData(challenges);
+      const challengeStatusData = this.calculateChallengeStatusCounts(
+        challenges,
+        dataByYear.years
+      );
 
+      console.log(challengeStatusData);
       this.chartOptions = {
         title: {
           text: 'Growth of Challenges',
           left: 'center',
         },
+        legend: {
+          data: [
+            'Active Challenges',
+            'Completed Challenges',
+            'Upcoming Challenges',
+          ],
+        },
         xAxis: {
           type: 'category',
           data: dataByYear.years,
         },
-        yAxis: {
-          type: 'value',
-        },
+        yAxis: [
+          {
+            type: 'value',
+            name: 'Cumulative Count',
+          },
+          {
+            type: 'value',
+            name: 'Active Count',
+          },
+        ],
         series: [
+          {
+            name: 'Active Challenges',
+            type: 'bar',
+            data: challengeStatusData.activeCounts,
+          },
+          {
+            name: 'Completed Challenges',
+            type: 'bar',
+            data: challengeStatusData.completedCounts,
+          },
+          {
+            name: 'Upcoming Challenges',
+            type: 'bar',
+            data: challengeStatusData.upcomingCounts,
+          },
           {
             data: dataByYear.cumulativeChallengeCounts,
             type: 'line',
+            yAxisIndex: 0,
           },
         ],
       };
@@ -90,6 +124,50 @@ export class StatisticsViewerComponent implements OnInit {
     return {
       years,
       cumulativeChallengeCounts,
+    };
+  }
+
+  private calculateChallengeStatusCounts(
+    challenges: Challenge[],
+    years: string[]
+  ): {
+    activeCounts: number[];
+    completedCounts: number[];
+    upcomingCounts: number[];
+  } {
+    const activeCounts: number[] = [];
+    const completedCounts: number[] = [];
+    const upcomingCounts: number[] = [];
+
+    years.forEach((year) => {
+      const yearNumber = parseInt(year, 10);
+      const activeChallenges = challenges.filter(
+        (challenge) =>
+          new Date(challenge.startDate as string).getFullYear() <= yearNumber &&
+          new Date(challenge.endDate as string).getFullYear() > yearNumber
+      ).length;
+
+      const completedChallenges = challenges.filter(
+        (challenge) =>
+          new Date(challenge.endDate as string).getFullYear() === yearNumber
+      ).length;
+
+      const upcomingChallenges = challenges.filter(
+        (challenge) =>
+          new Date(challenge.startDate as string).getFullYear() > yearNumber &&
+          new Date(challenge.startDate as string).getFullYear() <=
+            yearNumber + 1
+      ).length;
+
+      activeCounts.push(activeChallenges);
+      completedCounts.push(completedChallenges);
+      upcomingCounts.push(upcomingChallenges);
+    });
+
+    return {
+      activeCounts,
+      completedCounts,
+      upcomingCounts,
     };
   }
 }
