@@ -78,10 +78,10 @@ export class StatisticsViewerComponent implements OnInit {
       const dataByYear = this.processData(challenges);
       console.log(dataByYear);
       this.chartOptions = {
-        // title: {
-        //   text: 'Growth of Challenges',
-        //   left: 'center',
-        // },
+        title: {
+          text: 'The Rise of Challenges',
+          left: 'center',
+        },
         // tooltip: {
         //   trigger: 'axis',
         //   axisPointer: {
@@ -95,7 +95,7 @@ export class StatisticsViewerComponent implements OnInit {
         yAxis: [
           {
             type: 'value',
-            name: 'Count',
+            name: 'Challenges #',
           },
         ],
         series: [
