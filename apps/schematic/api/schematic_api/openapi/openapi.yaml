@@ -18,6 +18,161 @@ tags:
 - description: Operations about storages.
   name: Storage
 paths:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    get:
+      description: Gets all files associated with a dataset.
+      operationId: get_dataset_files
+      parameters:
+      - description: The ID of a dataset.
+        explode: false
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: A list of file names used to filter the output.
+        explode: true
+        in: query
+        name: fileNames
+        required: false
+        schema:
+          $ref: '#/components/schemas/FileNames'
+        style: form
+      - description: "Whether or not to return the full path of output, or just the\
+          \ basename."
+        explode: true
+        in: query
+        name: useFullFilePath
+        required: false
+        schema:
+          $ref: '#/components/schemas/UseFullFilePath'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets all files associated with a dataset.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
+    get:
+      description: Gets the asset view table in json form
+      operationId: get_asset_view_json
+      parameters:
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets the asset view table in json form
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     get:
       description: Gets all storage projects the current user has access to.
@@ -232,18 +387,18 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /components/{componentDisplay}/componentLabel:
+  /nodes/{nodeDisplay}/propertyLabel:
     get:
-      description: Gets the label of the component
-      operationId: get_component_label
+      description: Gets the property label of the node
+      operationId: get_property_label
       parameters:
-      - description: The display name of a component in a schema
+      - description: The display name of the node in a schema
         explode: false
         in: path
-        name: componentDisplay
+        name: nodeDisplay
         required: true
         schema:
-          $ref: '#/components/schemas/ComponentDisplay'
+          $ref: '#/components/schemas/NodeDisplay'
         style: simple
       - description: The URL of a schema in jsonld form
         explode: true
@@ -267,7 +422,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ComponentLabel'
+                $ref: '#/components/schemas/PropertyLabel'
           description: Success
         "500":
           content:
@@ -276,46 +431,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets the label of the component
-      tags:
-      - Schema
-      x-openapi-router-controller: schematic_api.controllers.schema_controller
-  /components/{componentLabel}/attributes:
-    get:
-      description: Gets attributes associated with a given component
-      operationId: list_component_attributes
-      parameters:
-      - description: The label of a component in a schema
-        explode: false
-        in: path
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: simple
-      - description: The URL of a schema in jsonld form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AttributesPage'
-          description: Success
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      summary: Gets attributes associated with a given component
+      summary: Gets the property label of the node
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
@@ -420,6 +536,46 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /nodes/{nodeLabel}/nodeProperties:
+    get:
+      description: Gets properties associated with a given node
+      operationId: get_node_properties
+      parameters:
+      - description: The label of the source node in a schema to get the dependencies
+          of
+        explode: false
+        in: path
+        name: nodeLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/NodeLabel'
+        style: simple
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePropertiesPage'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets properties associated with a given node
+      tags:
+      - Schema
+      x-openapi-router-controller: schematic_api.controllers.schema_controller
 components:
   parameters:
     projectId:
@@ -451,42 +607,33 @@ components:
       schema:
         $ref: '#/components/schemas/AssetType'
       style: simple
-    componentLabel:
-      description: The label of a component in a schema
+    datasetId:
+      description: The ID of a dataset.
       explode: false
       in: path
-      name: componentLabel
+      name: datasetId
       required: true
       schema:
-        $ref: '#/components/schemas/ComponentLabel'
+        $ref: '#/components/schemas/DatasetId'
       style: simple
-    schemaUrl:
-      description: The URL of a schema in jsonld form
+    fileNames:
+      description: A list of file names used to filter the output.
       explode: true
       in: query
-      name: schemaUrl
-      required: true
-      schema:
-        $ref: '#/components/schemas/SchemaUrl'
-      style: form
-    componentDisplay:
-      description: The display name of a component in a schema
-      explode: false
-      in: path
-      name: componentDisplay
-      required: true
-      schema:
-        $ref: '#/components/schemas/ComponentDisplay'
-      style: simple
-    useStrictCamelCase:
-      description: Whether or not to use the more strict way of converting to camel
-        case
-      explode: true
-      in: query
-      name: useStrictCamelCase
+      name: fileNames
       required: false
       schema:
-        $ref: '#/components/schemas/UseStrictCamelCase'
+        $ref: '#/components/schemas/FileNames'
+      style: form
+    useFullFilePath:
+      description: "Whether or not to return the full path of output, or just the\
+        \ basename."
+      explode: true
+      in: query
+      name: useFullFilePath
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseFullFilePath'
       style: form
     nodeLabel:
       description: The label of the source node in a schema to get the dependencies
@@ -498,6 +645,15 @@ components:
       schema:
         $ref: '#/components/schemas/NodeLabel'
       style: simple
+    schemaUrl:
+      description: The URL of a schema in jsonld form
+      explode: true
+      in: query
+      name: schemaUrl
+      required: true
+      schema:
+        $ref: '#/components/schemas/SchemaUrl'
+      style: form
     returnDisplayNames:
       description: "Whether or not to return the display names of the component, otherwise\
         \ the label"
@@ -527,6 +683,16 @@ components:
       schema:
         $ref: '#/components/schemas/NodeDisplay'
       style: simple
+    useStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel
+        case
+      explode: true
+      in: query
+      name: useStrictCamelCase
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
+      style: form
   responses:
     BadRequest:
       content:
@@ -712,47 +878,88 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
+    Project:
+      description: A project.
+      properties:
+        name:
+          description: The name of the project.
+          example: Example project
+          title: name
+          type: string
+        id:
+          description: The ID of the project.
+          example: Syn1
+          title: id
+          type: string
+      required:
+      - id
+      - name
+      title: Project
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    ProjectsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/ProjectsPage_allOf'
+      description: A page of projects.
+      title: ProjectsPage
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    DatasetId:
+      description: A dataset ID.
+      example: syn23643250
+      type: string
+    FileNames:
+      description: A list of file names.
+      items:
+        type: string
+      type: array
+    UseFullFilePath:
+      default: false
+      description: "Whether or not to return the full path of output, or just the\
+        \ basename."
+      type: boolean
+    File:
+      description: A file.
+      properties:
+        name:
+          description: The name of the file.
+          example: file.txt
+          title: name
+          type: string
+        id:
+          description: The ID of the file.
+          example: Syn1
+          title: id
+          type: string
+      required:
+      - id
+      - name
+      title: File
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    FilesPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/FilesPage_allOf'
+      description: A page of files.
+      title: FilesPage
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    NodeLabel:
+      description: The label of a node in a schema
       example: MolecularEntity
       type: string
     SchemaUrl:
       description: The URL of a schema in jsonld form
       example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
-      type: string
-    Attribute:
-      description: An attribute from a component in a schema
-      properties:
-        name:
-          description: The name of the attribute.
-          example: molecularlyInteractsWith
-          title: name
-          type: string
-      required:
-      - name
-      title: Attribute
-      type: object
-    AttributesPage:
-      allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/AttributesPage_allOf'
-      description: A page of attributes.
-      title: AttributesPage
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-    ComponentDisplay:
-      description: The display name of a component in a schema
-      example: MolecularEntity
-      type: string
-    UseStrictCamelCase:
-      default: true
-      description: Whether or not to use the more strict way of converting to camel
-        case
-      type: boolean
-    NodeLabel:
-      description: The label of a node in a schema
-      example: MolecularEntity
       type: string
     ReturnDisplayNames:
       default: true
@@ -787,8 +994,38 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    NodeProperty:
+      description: A node property
+      properties:
+        name:
+          description: The name of the property
+          example: molecularlyInteractsWith
+          title: name
+          type: string
+      required:
+      - name
+      title: NodeProperty
+      type: object
+    NodePropertiesPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/NodePropertiesPage_allOf'
+      description: A page of node properties.
+      title: NodePropertiesPage
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     NodeDisplay:
       description: The display name of a node in a schema
+      example: MolecularEntity
+      type: string
+    UseStrictCamelCase:
+      default: true
+      description: Whether or not to use the more strict way of converting to camel
+        case
+      type: boolean
+    PropertyLabel:
+      description: The property label of a node in a schema
       example: MolecularEntity
       type: string
     ValidationRule:
@@ -812,35 +1049,6 @@ components:
       - $ref: '#/components/schemas/ValidationRulesPage_allOf'
       description: A page of validation rules.
       title: ValidationRulesPage
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-    Project:
-      description: A project.
-      properties:
-        name:
-          description: The name of the project.
-          example: Example project
-          title: name
-          type: string
-        id:
-          description: The ID of the project.
-          example: Syn1
-          title: id
-          type: string
-      required:
-      - id
-      - name
-      title: Project
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-    ProjectsPage:
-      allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ProjectsPage_allOf'
-      description: A page of projects.
-      title: ProjectsPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -870,17 +1078,30 @@ components:
       title: ManifestsPage_allOf
       type: object
       example: null
-    AttributesPage_allOf:
+    ProjectsPage_allOf:
       properties:
-        attributes:
-          description: A list of attributrs.
+        projects:
+          description: A list of projects.
           items:
-            $ref: '#/components/schemas/Attribute'
-          title: attributes
+            $ref: '#/components/schemas/Project'
+          title: projects
           type: array
       required:
-      - attributes
-      title: AttributesPage_allOf
+      - projects
+      title: ProjectsPage_allOf
+      type: object
+      example: null
+    FilesPage_allOf:
+      properties:
+        files:
+          description: A list of files.
+          items:
+            $ref: '#/components/schemas/File'
+          title: files
+          type: array
+      required:
+      - files
+      title: FilesPage_allOf
       type: object
       example: null
     NodesPage_allOf:
@@ -896,6 +1117,19 @@ components:
       title: NodesPage_allOf
       type: object
       example: null
+    NodePropertiesPage_allOf:
+      properties:
+        node_properties:
+          description: A list of node properties.
+          items:
+            $ref: '#/components/schemas/NodeProperty'
+          title: node_properties
+          type: array
+      required:
+      - node_properties
+      title: NodePropertiesPage_allOf
+      type: object
+      example: null
     ValidationRulesPage_allOf:
       properties:
         validation_rules:
@@ -907,19 +1141,6 @@ components:
       required:
       - validation_rules
       title: ValidationRulesPage_allOf
-      type: object
-      example: null
-    ProjectsPage_allOf:
-      properties:
-        projects:
-          description: A list of projects.
-          items:
-            $ref: '#/components/schemas/Project'
-          title: projects
-          type: array
-      required:
-      - projects
-      title: ProjectsPage_allOf
       type: object
       example: null
   securitySchemes:

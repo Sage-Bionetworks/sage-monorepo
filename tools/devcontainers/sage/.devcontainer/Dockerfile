@@ -8,24 +8,24 @@ ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
 # https://github.com/nektos/act
-ARG actVersion="0.2.48"
+ARG actVersion="0.2.49"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.17.0"
 # https://github.com/yarnpkg/berry
 ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.49.0"
+ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.5.1"
+ARG poetryVersion="1.6.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.43.1"
+ARG trivyVersion="0.44.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="8.6.12"
-# https://docs.sonarcloud.io/advanced-setup/ci-based-analysis/sonarscanner-cli
+ARG pnpmVersion="8.7.0"
+# https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="5.0.1.3006"
 
 # Create the docker group so that we can assign it to the user.

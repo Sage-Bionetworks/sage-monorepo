@@ -1,5 +1,25 @@
 # OpenChallenges Image Service
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=coverage)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=duplicated_lines_density)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=bugs)](https://sonarcloud.io/summary/new_code?id=openchallenges-image-service)
+
 ## Overview
 
 This service manages images for the OpenChallenges app.

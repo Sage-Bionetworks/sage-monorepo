@@ -74,87 +74,31 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /components/{componentLabel}/attributes:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     parameters:
-      - $ref: '#/components/parameters/componentLabel'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
-        - Schema
-      summary: Gets attributes associated with a given component
-      description: Gets attributes associated with a given component
-      operationId: listComponentAttributes
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
+        - Storage
+      summary: Gets the asset view table in json form
+      description: Gets the asset view table in json form
+      operationId: getAssetViewJson
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AttributesPage'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /components/{componentDisplay}/componentLabel:
-    parameters:
-      - $ref: '#/components/parameters/componentDisplay'
-    get:
-      tags:
-        - Schema
-      summary: Gets the label of the component
-      description: Gets the label of the component
-      operationId: getComponentLabel
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/useStrictCamelCase'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ComponentLabel'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/dependencies:
-    parameters:
-      - $ref: '#/components/parameters/nodeLabel'
-    get:
-      tags:
-        - Schema
-      summary: Gets the immediate dependencies that are related to the given source node
-      description: Gets the immediate dependencies that are related to the given source node
-      operationId: listNodeDependencies
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/returnDisplayNames'
-        - $ref: '#/components/parameters/returnOrderedBySchema'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NodesPage'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/validationRules:
-    parameters:
-      - $ref: '#/components/parameters/nodeDisplay'
-    get:
-      tags:
-        - Schema
-      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: listNodeValidationRules
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationRulesPage'
+                $ref: '#/components/schemas/AssetViewJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
@@ -182,6 +126,120 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: getDatasetFiles
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/dependencies:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the immediate dependencies that are related to the given source node
+      description: Gets the immediate dependencies that are related to the given source node
+      operationId: listNodeDependencies
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/nodeProperties:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets properties associated with a given node
+      description: Gets properties associated with a given node
+      operationId: getNodeProperties
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePropertiesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/propertyLabel:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the property label of the node
+      description: Gets the property label of the node
+      operationId: getPropertyLabel
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/useStrictCamelCase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyLabel'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/validationRules:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      operationId: listNodeValidationRules
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -341,52 +399,96 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
+    Project:
+      type: object
+      description: A project.
+      properties:
+        name:
+          type: string
+          description: The name of the project.
+          example: Example project
+        id:
+          type: string
+          description: The ID of the project.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ProjectsPage:
+      type: object
+      description: A page of projects.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            projects:
+              description: A list of projects.
+              type: array
+              items:
+                $ref: '#/components/schemas/Project'
+          required:
+            - projects
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    FileNames:
+      description: A list of file names.
+      type: array
+      items:
+        type: string
+    UseFullFilePath:
+      description: Whether or not to return the full path of output, or just the basename.
+      type: boolean
+      default: false
+    File:
+      type: object
+      description: A file.
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: file.txt
+        id:
+          type: string
+          description: The ID of the file.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FilesPage:
+      type: object
+      description: A page of files.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            files:
+              description: A list of files.
+              type: array
+              items:
+                $ref: '#/components/schemas/File'
+          required:
+            - files
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodeLabel:
+      description: The label of a node in a schema
       type: string
       example: MolecularEntity
     SchemaUrl:
       description: The URL of a schema in jsonld form
       type: string
       example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
-    Attribute:
-      type: object
-      description: An attribute from a component in a schema
-      properties:
-        name:
-          type: string
-          description: The name of the attribute.
-          example: molecularlyInteractsWith
-      required:
-        - name
-    AttributesPage:
-      type: object
-      description: A page of attributes.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            attributes:
-              description: A list of attributrs.
-              type: array
-              items:
-                $ref: '#/components/schemas/Attribute'
-          required:
-            - attributes
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    ComponentDisplay:
-      description: The display name of a component in a schema
-      type: string
-      example: MolecularEntity
-    UseStrictCamelCase:
-      description: Whether or not to use the more strict way of converting to camel case
-      type: boolean
-      default: true
-    NodeLabel:
-      description: The label of a node in a schema
-      type: string
-      example: MolecularEntity
     ReturnDisplayNames:
       description: Whether or not to return the display names of the node otherwise the label
       type: boolean
@@ -423,8 +525,42 @@ components:
             - nodes
       x-java-class-annotations:
         - '@lombok.Builder'
+    NodeProperty:
+      type: object
+      description: A node property
+      properties:
+        name:
+          type: string
+          description: The name of the property
+          example: molecularlyInteractsWith
+      required:
+        - name
+    NodePropertiesPage:
+      type: object
+      description: A page of node properties.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            node_properties:
+              description: A list of node properties.
+              type: array
+              items:
+                $ref: '#/components/schemas/NodeProperty'
+          required:
+            - node_properties
+      x-java-class-annotations:
+        - '@lombok.Builder'
     NodeDisplay:
       description: The display name of a node in a schema
+      type: string
+      example: MolecularEntity
+    UseStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel case
+      type: boolean
+      default: true
+    PropertyLabel:
+      description: The property label of a node in a schema
       type: string
       example: MolecularEntity
     ValidationRule:
@@ -455,39 +591,6 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
-    Project:
-      type: object
-      description: A project.
-      properties:
-        name:
-          type: string
-          description: The name of the project.
-          example: Example project
-        id:
-          type: string
-          description: The ID of the project.
-          example: Syn1
-      required:
-        - name
-        - id
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    ProjectsPage:
-      type: object
-      description: A page of projects.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            projects:
-              description: A list of projects.
-              type: array
-              items:
-                $ref: '#/components/schemas/Project'
-          required:
-            - projects
-      x-java-class-annotations:
-        - '@lombok.Builder'
   parameters:
     projectId:
       name: projectId
@@ -510,33 +613,27 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
-    componentLabel:
-      name: componentLabel
+    datasetId:
+      name: datasetId
       in: path
-      description: The label of a component in a schema
+      description: The ID of a dataset.
       required: true
       schema:
-        $ref: '#/components/schemas/ComponentLabel'
-    schemaUrl:
-      name: schemaUrl
+        $ref: '#/components/schemas/DatasetId'
+    fileNames:
+      name: fileNames
+      description: A list of file names used to filter the output.
       in: query
-      description: The URL of a schema in jsonld form
-      required: true
+      required: false
       schema:
-        $ref: '#/components/schemas/SchemaUrl'
-    componentDisplay:
-      name: componentDisplay
-      in: path
-      description: The display name of a component in a schema
-      required: true
-      schema:
-        $ref: '#/components/schemas/ComponentDisplay'
-    useStrictCamelCase:
-      name: useStrictCamelCase
+        $ref: '#/components/schemas/FileNames'
+    useFullFilePath:
+      name: useFullFilePath
       in: query
-      description: Whether or not to use the more strict way of converting to camel case
+      description: Whether or not to return the full path of output, or just the basename.
+      required: false
       schema:
-        $ref: '#/components/schemas/UseStrictCamelCase'
+        $ref: '#/components/schemas/UseFullFilePath'
     nodeLabel:
       name: nodeLabel
       in: path
@@ -544,6 +641,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/NodeLabel'
+    schemaUrl:
+      name: schemaUrl
+      in: query
+      description: The URL of a schema in jsonld form
+      required: true
+      schema:
+        $ref: '#/components/schemas/SchemaUrl'
     returnDisplayNames:
       name: returnDisplayNames
       in: query
@@ -565,6 +669,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/NodeDisplay'
+    useStrictCamelCase:
+      name: useStrictCamelCase
+      in: query
+      description: Whether or not to use the more strict way of converting to camel case
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
   responses:
     BadRequest:
       description: Invalid request
