@@ -16,7 +16,7 @@
     "sonar": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName} src/",
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
         "cwd": "{projectRoot}"
       }
     },
