@@ -1,7 +1,12 @@
 <section id="statistics" class="mat-typography">
   <div class="container">
     <div id="chart-container">
-      <div echarts [options]="chartOptions" class="demo-chart"></div>
+      <!-- <div
+        echarts
+        [options]="chartOptions"
+        (chartLegendSelectChanged)="onLegndChange($event)"
+      ></div> -->
+      <div echarts [options]="chartOptions"></div>
     </div>
   </div>
 </section>

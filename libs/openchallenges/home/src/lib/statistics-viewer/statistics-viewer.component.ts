@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import {
   Challenge,
-  ChallengeService,
+  // ChallengeService,
+  // ChallengePlatform,
+  // ChallengePlatformService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
@@ -28,33 +30,47 @@ import { EChartsOption } from 'echarts';
 })
 export class StatisticsViewerComponent implements OnInit {
   constructor(
-    private challengeService: ChallengeService,
+    // private challengeService: ChallengeService,
+    // private challengePlatformService: ChallengePlatformService,
     private homeDataService: HomeDataService
   ) {}
 
   chartOptions!: EChartsOption;
+  // challenges!: Challenge[];
+  // challengePlatforms!: ChallengePlatform[];
+  // platformOptions: string[] = [];
 
   ngOnInit() {
-    this.homeDataService.getAllChallenges().subscribe((challenges) => {
-      const dataByYear = this.processData(challenges);
-      const challengeStatusData = this.calculateChallengeStatusCounts(
-        challenges,
-        dataByYear.years
-      );
+    // this.challengePlatformService
+    //   .listChallengePlatforms({})
+    //   .subscribe(
+    //     (platforms) =>
+    //       (this.platformOptions = platforms.challengePlatforms.map(
+    //         (platform) => platform.name
+    //       ))
+    //   );
 
-      console.log(challengeStatusData);
+    this.homeDataService.getAllChallenges().subscribe((challenges) => {
+      // this.challenges = challenges;
+      const dataByYear = this.processData(challenges);
+      // const challengeStatusData = this.calculateChallengeStatusCounts(
+      //   challenges,
+      //   dataByYear.years
+      // );
+
       this.chartOptions = {
         title: {
           text: 'Growth of Challenges',
           left: 'center',
         },
-        legend: {
-          data: [
-            'Active Challenges',
-            'Completed Challenges',
-            'Upcoming Challenges',
-          ],
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'cross',
+            axis: 'x',
+          },
         },
+        // legend: {},
         xAxis: {
           type: 'category',
           data: dataByYear.years,
@@ -62,33 +78,38 @@ export class StatisticsViewerComponent implements OnInit {
         yAxis: [
           {
             type: 'value',
-            name: 'Cumulative Count',
-          },
-          {
-            type: 'value',
-            name: 'Active Count',
+            name: 'Challenges Count',
           },
         ],
         series: [
+          // {
+          //   name: 'Active',
+          //   type: 'bar',
+          //   data: challengeStatusData.activeCounts,
+          //   itemStyle: {
+          //     color: '#71c663',
+          //   },
+          // },
+          // {
+          //   name: 'Completed',
+          //   type: 'bar',
+          //   data: challengeStatusData.completedCounts,
+          //   itemStyle: {
+          //     color: '#ffb6c1',
+          //   },
+          // },
+          // {
+          //   name: 'Upcoming',
+          //   type: 'bar',
+          //   data: challengeStatusData.upcomingCounts,
+          //   itemStyle: {
+          //     color: '#ffc56d',
+          //   },
+          // },
           {
-            name: 'Active Challenges',
-            type: 'bar',
-            data: challengeStatusData.activeCounts,
-          },
-          {
-            name: 'Completed Challenges',
-            type: 'bar',
-            data: challengeStatusData.completedCounts,
-          },
-          {
-            name: 'Upcoming Challenges',
-            type: 'bar',
-            data: challengeStatusData.upcomingCounts,
-          },
-          {
+            name: 'Total',
             data: dataByYear.cumulativeChallengeCounts,
-            type: 'line',
-            yAxisIndex: 0,
+            type: 'bar',
           },
         ],
       };
@@ -109,6 +130,10 @@ export class StatisticsViewerComponent implements OnInit {
       const startYear = new Date(challenge.startDate as string)
         .getFullYear()
         .toString();
+      console.log(
+        challenge.name + '     ' + new Date(challenge.startDate as string)
+      );
+      console.log(challenge.startDate);
       dataByYear[startYear] = (dataByYear[startYear] || 0) + 1;
     });
 
@@ -127,47 +152,51 @@ export class StatisticsViewerComponent implements OnInit {
     };
   }
 
-  private calculateChallengeStatusCounts(
-    challenges: Challenge[],
-    years: string[]
-  ): {
-    activeCounts: number[];
-    completedCounts: number[];
-    upcomingCounts: number[];
-  } {
-    const activeCounts: number[] = [];
-    const completedCounts: number[] = [];
-    const upcomingCounts: number[] = [];
+  // private calculateChallengeStatusCounts(
+  //   challenges: Challenge[],
+  //   years: string[]
+  // ): {
+  //   activeCounts: number[];
+  //   completedCounts: number[];
+  //   upcomingCounts: number[];
+  // } {
+  //   const activeCounts: number[] = [];
+  //   const completedCounts: number[] = [];
+  //   const upcomingCounts: number[] = [];
 
-    years.forEach((year) => {
-      const yearNumber = parseInt(year, 10);
-      const activeChallenges = challenges.filter(
-        (challenge) =>
-          new Date(challenge.startDate as string).getFullYear() <= yearNumber &&
-          new Date(challenge.endDate as string).getFullYear() > yearNumber
-      ).length;
+  //   years.forEach((year) => {
+  //     const yearNumber = parseInt(year, 10);
+  //     const activeChallenges = challenges.filter(
+  //       (challenge) =>
+  //         new Date(challenge.startDate as string).getFullYear() <= yearNumber &&
+  //         new Date(challenge.endDate as string).getFullYear() > yearNumber
+  //     ).length;
 
-      const completedChallenges = challenges.filter(
-        (challenge) =>
-          new Date(challenge.endDate as string).getFullYear() === yearNumber
-      ).length;
+  //     const completedChallenges = challenges.filter(
+  //       (challenge) =>
+  //         new Date(challenge.endDate as string).getFullYear() === yearNumber
+  //     ).length;
 
-      const upcomingChallenges = challenges.filter(
-        (challenge) =>
-          new Date(challenge.startDate as string).getFullYear() > yearNumber &&
-          new Date(challenge.startDate as string).getFullYear() <=
-            yearNumber + 1
-      ).length;
+  //     const upcomingChallenges = challenges.filter(
+  //       (challenge) =>
+  //         new Date(challenge.startDate as string).getFullYear() > yearNumber &&
+  //         new Date(challenge.startDate as string).getFullYear() <=
+  //           yearNumber + 1
+  //     ).length;
 
-      activeCounts.push(activeChallenges);
-      completedCounts.push(completedChallenges);
-      upcomingCounts.push(upcomingChallenges);
-    });
+  //     activeCounts.push(activeChallenges);
+  //     completedCounts.push(completedChallenges);
+  //     upcomingCounts.push(upcomingChallenges);
+  //   });
 
-    return {
-      activeCounts,
-      completedCounts,
-      upcomingCounts,
-    };
-  }
+  //   return {
+  //     activeCounts,
+  //     completedCounts,
+  //     upcomingCounts,
+  //   };
+  // }
+
+  // onLegndChange(event: any) {
+  //   console.log(event.name);
+  // }
 }
