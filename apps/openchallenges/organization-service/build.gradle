@@ -9,12 +9,12 @@ buildscript {
 
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id 'jacoco'
   id 'java'
   id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
   id "org.flywaydb.flyway" version "${flywaydbVersion}"
-  id 'jacoco'
   id "org.sonarqube" version "4.3.0.3225"
 }
 
