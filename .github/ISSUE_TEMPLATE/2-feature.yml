@@ -4,13 +4,17 @@ title: '[Feature] <title>'
 labels: ['type: feature']
 body:
   - type: dropdown
-    id: projects
+    id: products
     attributes:
-      label: What projects is this feature for?
+      label: What product(s) is this feature for?
       multiple: true
       options:
+        - Agora
         - OpenChallenges
+        - Sage Monorepo
         - Schematic
+        - Synapse
+        - Other
   - type: textarea
     attributes:
       label: Description

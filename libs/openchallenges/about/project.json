@@ -31,6 +31,6 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:openchallenges"],
+  "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
   "implicitDependencies": []
 }

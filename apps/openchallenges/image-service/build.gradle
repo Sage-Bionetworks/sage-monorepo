@@ -10,6 +10,8 @@ plugins {
   id 'java'
   id 'jvm-test-suite'
   id 'org.springframework.boot' version "${springBootVersion}"
+  id 'jacoco'
+  id "org.sonarqube" version "4.3.0.3225"
 }
 
 repositories {
@@ -24,9 +26,6 @@ testing {
     }
 
     integrationTest(JvmTestSuite) {
-      dependencies {
-        implementation project
-      }
       sources {
         java {
           srcDirs = ['src/integrationTest/java']
@@ -104,6 +103,8 @@ test {
   testLogging {
     events("passed", "skipped", "failed")
   }
+
+  finalizedBy jacocoTestReport
 }
 
 spotless {
@@ -121,5 +122,19 @@ spotless {
     importOrder()
     removeUnusedImports()
     googleJavaFormat()
+  }
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+  }
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "openchallenges-image-service")
+    property("sonar.organization", "sage-bionetworks")
+    property("sonar.host.url", "https://sonarcloud.io")
   }
 }

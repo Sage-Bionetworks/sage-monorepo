@@ -13,6 +13,13 @@
         "parallel": false
       }
     },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
@@ -253,7 +260,7 @@
       }
     }
   },
-  "tags": ["type:app", "scope:client"],
+  "tags": ["type:app", "scope:client", "language:typescript"],
   "implicitDependencies": [
     "openchallenges-styles",
     "openchallenges-themes",

@@ -4,13 +4,16 @@ title: '[Docs] <title>'
 labels: ['type: docs']
 body:
   - type: dropdown
-    id: projects
+    id: products
     attributes:
-      label: What projects is this documentation issue for?
+      label: What product(s) is this documentation issue for?
       multiple: true
       options:
+        - Agora
         - OpenChallenges
+        - Sage Monorepo
         - Schematic
+        - Synapse
         - Other
   - type: checkboxes
     attributes:
