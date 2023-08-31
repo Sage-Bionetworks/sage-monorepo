@@ -47,34 +47,34 @@ export class StatisticsViewerComponent implements OnInit {
   challengeCount$: Observable<number> | undefined;
   orgCount$: Observable<number> | undefined;
   ngOnInit() {
-    this.challengeImg$ = this.imageService.getImage({
-      objectKey: 'home-challenges.svg',
-      height: this.imgHeight,
-    });
-    this.orgImg$ = this.imageService.getImage({
-      objectKey: 'home-hosts.svg',
-      height: this.imgHeight,
-    });
-    this.userImg$ = this.imageService.getImage({
-      objectKey: 'home-users.svg',
-      height: this.imgHeight,
-    });
-
-    this.challengeCount$ = this.challengeService
-      .listChallenges({
-        pageNumber: 1,
-        pageSize: 1,
-      })
-      .pipe(map((page) => page.totalElements));
-
-    this.orgCount$ = this.organizationService
-      .listOrganizations({
-        pageNumber: 1,
-        pageSize: 1,
-      })
-      .pipe(map((page) => page.totalElements));
-
     this.homeDataService.getAllChallenges().subscribe((challenges) => {
+      this.challengeImg$ = this.imageService.getImage({
+        objectKey: 'home-challenges.svg',
+        height: this.imgHeight,
+      });
+      this.orgImg$ = this.imageService.getImage({
+        objectKey: 'home-hosts.svg',
+        height: this.imgHeight,
+      });
+      this.userImg$ = this.imageService.getImage({
+        objectKey: 'home-users.svg',
+        height: this.imgHeight,
+      });
+
+      this.challengeCount$ = this.challengeService
+        .listChallenges({
+          pageNumber: 1,
+          pageSize: 1,
+        })
+        .pipe(map((page) => page.totalElements));
+
+      this.orgCount$ = this.organizationService
+        .listOrganizations({
+          pageNumber: 1,
+          pageSize: 1,
+        })
+        .pipe(map((page) => page.totalElements));
+
       const dataByYear = this.processData(challenges);
       console.log(dataByYear);
       this.chartOptions = {
@@ -83,6 +83,7 @@ export class StatisticsViewerComponent implements OnInit {
           left: 'center',
           textStyle: {
             fontWeight: 'normal',
+            fontFamily: 'Lato, sans-serif',
           },
         },
         // tooltip: {
