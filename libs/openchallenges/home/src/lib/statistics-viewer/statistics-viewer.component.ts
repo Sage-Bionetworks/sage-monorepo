@@ -99,7 +99,7 @@ export class StatisticsViewerComponent implements OnInit {
         yAxis: [
           {
             type: 'value',
-            name: 'Challenges #',
+            name: 'Total Challenges Tracked',
           },
         ],
         series: [
