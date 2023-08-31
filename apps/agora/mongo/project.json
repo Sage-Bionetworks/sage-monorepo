@@ -1,0 +1,33 @@
+{
+  "name": "agora-mongo",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agora/mongo/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "shx cp -n .env.example .env",
+        "cwd": "apps/agora/mongo"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/agora/mongo"
+      },
+      "dependsOn": []
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/agora/mongo",
+        "push": false,
+        "tags": ["ghcr.io/sage-bionetworks/agora-mongo:local"]
+      }
+    }
+  },
+  "tags": ["type:db", "scope:backend"],
+  "implicitDependencies": []
+}
