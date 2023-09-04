@@ -4,11 +4,11 @@
   "sourceRoot": "apps/openchallenges/service-registry/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["shx cp -n .env.example .env"],
-        "cwd": "apps/openchallenges/service-registry"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "prepare-java": {
