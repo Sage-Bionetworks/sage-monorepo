@@ -42,6 +42,7 @@
         "humao.rest-client",
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
+        "ms-playwright.playwright",
         "ms-python.python",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
