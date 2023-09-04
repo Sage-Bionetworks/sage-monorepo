@@ -4575,18 +4575,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ibm-cloud/openapi-ruleset-utilities@npm:1.0.2":
-  version: 1.0.2
-  resolution: "@ibm-cloud/openapi-ruleset-utilities@npm:1.0.2"
-  checksum: 6c7a06cb459fca8b81df1801913fc86f7aeedfbeb54b4b65616430e342613011a81d1b894b183e837b2fb12c5b00dfe4a6f04044e0167c10b75b4faa393f73df
+"@ibm-cloud/openapi-ruleset-utilities@npm:1.2.1":
+  version: 1.2.1
+  resolution: "@ibm-cloud/openapi-ruleset-utilities@npm:1.2.1"
+  checksum: c77e357c5ef4582e5851aa396dafd937278e29f100a37bce45cbd4879662e2d50553190560b07ddfd9d27c0b707d6197a303740879c17939bf909b0e556b27c3
   languageName: node
   linkType: hard
 
-"@ibm-cloud/openapi-ruleset@npm:1.0.4":
-  version: 1.0.4
-  resolution: "@ibm-cloud/openapi-ruleset@npm:1.0.4"
+"@ibm-cloud/openapi-ruleset@npm:1.7.0":
+  version: 1.7.0
+  resolution: "@ibm-cloud/openapi-ruleset@npm:1.7.0"
   dependencies:
-    "@ibm-cloud/openapi-ruleset-utilities": 1.0.2
+    "@ibm-cloud/openapi-ruleset-utilities": 1.2.1
     "@stoplight/spectral-formats": ^1.5.0
     "@stoplight/spectral-functions": ^1.7.2
     "@stoplight/spectral-rulesets": ^1.16.0
@@ -4596,7 +4596,7 @@ __metadata:
     loglevel-plugin-prefix: 0.8.4
     minimatch: ^6.1.6
     validator: ^13.7.0
-  checksum: f6b0c3407801959dce1d0f874b68757ffe81ff19f6c8657501890ef5ebcfbfbeb13b90fedabdf15dae95abbcdb1ebe148733e230f8143772beea5de853b54a5b
+  checksum: 2fb02cb4c7f319c7b3ede1372a08f1d7947d35405730bb340de38065a265b86b6116150fbe4316c6358da60698a1c2ba978281c1e6b73ec16c07cccea41a167f
   languageName: node
   linkType: hard
 
@@ -7644,9 +7644,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stoplight/spectral-cli@npm:^6.6.0":
-  version: 6.10.0
-  resolution: "@stoplight/spectral-cli@npm:6.10.0"
+"@stoplight/spectral-cli@npm:^6.8.0":
+  version: 6.10.1
+  resolution: "@stoplight/spectral-cli@npm:6.10.1"
   dependencies:
     "@stoplight/json": ~3.21.0
     "@stoplight/path": 1.3.2
@@ -7669,7 +7669,7 @@ __metadata:
     yargs: 17.3.1
   bin:
     spectral: dist/index.js
-  checksum: f2d7feba90325f64540e19a236b1337c378a8944f76f6a6cb5171d00e83807d24270ee08dde6cf1448ebd036b18fa33c9a1332a1e14e955b8bdecf8aefb52036
+  checksum: 431c2ce1113d6977c586487b948649f2bc2462d72940ce40cb64421d848618adebc8b2ed4be4b82fa627d8e22e2ae56b2b5a68b79371a9fa4734acbcf9144c39
   languageName: node
   linkType: hard
 
@@ -12732,13 +12732,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "deepmerge@npm:2.2.1"
-  checksum: 284b71065079e66096229f735a9a0222463c9ca9ee9dda7d5e9a0545bf254906dbc7377e3499ca3b2212073672b1a430d80587993b43b87d8de17edc6af649a8
-  languageName: node
-  linkType: hard
-
 "deepmerge@npm:^4.2.2":
   version: 4.3.1
   resolution: "deepmerge@npm:4.3.1"
@@ -13908,7 +13901,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"escape-string-regexp@npm:^1.0.2, escape-string-regexp@npm:^1.0.4, escape-string-regexp@npm:^1.0.5":
+"escape-string-regexp@npm:^1.0.2, escape-string-regexp@npm:^1.0.5":
   version: 1.0.5
   resolution: "escape-string-regexp@npm:1.0.5"
   checksum: 6092fda75c63b110c706b6a9bfde8a612ad595b628f0bd2147eea1d3406723020810e591effc7db1da91d80a71a737a313567c5abb3813e8d9c71f4aa595b410
@@ -15222,13 +15215,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"format-util@npm:^1.0.3":
-  version: 1.0.5
-  resolution: "format-util@npm:1.0.5"
-  checksum: 0c8622e54ad899ca184ff0b4999e9ff9567965051bade140911209d60554c2ea4d43075763c1cf574d2f740966afe46469c9284357919505cdddf1a0b65ff85c
-  languageName: node
-  linkType: hard
-
 "formidable@npm:^2.0.1, formidable@npm:^2.1.2":
   version: 2.1.2
   resolution: "formidable@npm:2.1.2"
@@ -16449,33 +16435,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ibm-openapi-validator@npm:1.0.7":
-  version: 1.0.7
-  resolution: "ibm-openapi-validator@npm:1.0.7"
+"ibm-openapi-validator@npm:1.7.0":
+  version: 1.7.0
+  resolution: "ibm-openapi-validator@npm:1.7.0"
   dependencies:
-    "@ibm-cloud/openapi-ruleset": 1.0.4
-    "@stoplight/spectral-cli": ^6.6.0
+    "@ibm-cloud/openapi-ruleset": 1.7.0
+    "@stoplight/spectral-cli": ^6.8.0
     "@stoplight/spectral-core": ^1.18.0
     "@stoplight/spectral-parsers": ^1.0.2
     ajv: ^8.12.0
     chalk: ^4.1.1
     commander: ^10.0.0
-    deepmerge: ^2.2.1
     find-up: ^3.0.0
     globby: ^11.0.4
     js-yaml: ^3.14.1
     json-dup-key-validator: ^1.0.3
-    json-schema-ref-parser: ^5.1.3
-    jsonschema: ^1.4.0
     lodash: ^4.17.21
-    matcher: ^1.1.1
     pad: ^2.3.0
-    require-all: ^3.0.0
-    semver: ^5.7.1
-    yaml-js: ^0.2.3
+    semver: ^7.5.3
   bin:
     lint-openapi: src/cli-validator/index.js
-  checksum: d58f52e94c6d7ae9ec2c0b9572f65690a9777e419bd37b38245f8b79139aac4647c76b3db328cca8cd1c17d9a63a4d94e05f124a562bf52fff2083a5bb6fb996
+  checksum: ba23141e58bd13fd6283dd030d6dc87c104f3d923a2ff62114914df769fdb8e9a3c0403c05baca1094d64067e574cd009e6355069c3926f9773b41286828b5fb
   languageName: node
   linkType: hard
 
@@ -18073,7 +18053,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-yaml@npm:3.14.1, js-yaml@npm:^3.10.0, js-yaml@npm:^3.12.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.0, js-yaml@npm:^3.14.1":
+"js-yaml@npm:3.14.1, js-yaml@npm:^3.10.0, js-yaml@npm:^3.13.1, js-yaml@npm:^3.14.0, js-yaml@npm:^3.14.1":
   version: 3.14.1
   resolution: "js-yaml@npm:3.14.1"
   dependencies:
@@ -18505,18 +18485,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json-schema-ref-parser@npm:^5.1.3":
-  version: 5.1.3
-  resolution: "json-schema-ref-parser@npm:5.1.3"
-  dependencies:
-    call-me-maybe: ^1.0.1
-    debug: ^3.1.0
-    js-yaml: ^3.12.0
-    ono: ^4.0.6
-  checksum: abf28909b152cec5ae11196abf5eb7bf207895353470be958282515ffc00b5bb740be2e04c1859163ce18d4e1fd6a83a2231823603e159f8f0b9f639530e9341
-  languageName: node
-  linkType: hard
-
 "json-schema-traverse@npm:^0.4.1":
   version: 0.4.1
   resolution: "json-schema-traverse@npm:0.4.1"
@@ -18688,13 +18656,6 @@ __metadata:
   version: 5.0.1
   resolution: "jsonpointer@npm:5.0.1"
   checksum: 0b40f712900ad0c846681ea2db23b6684b9d5eedf55807b4708c656f5894b63507d0e28ae10aa1bddbea551241035afe62b6df0800fc94c2e2806a7f3adecd7c
-  languageName: node
-  linkType: hard
-
-"jsonschema@npm:^1.4.0":
-  version: 1.4.1
-  resolution: "jsonschema@npm:1.4.1"
-  checksum: 1ef02a6cd9bc32241ec86bbf1300bdbc3b5f2d8df6eb795517cf7d1cd9909e7beba1e54fdf73990fd66be98a182bda9add9607296b0cb00b1348212988e424b2
   languageName: node
   linkType: hard
 
@@ -19632,15 +19593,6 @@ __metadata:
   bin:
     marked: bin/marked.js
   checksum: 0db6817893952c3ec710eb9ceafb8468bf5ae38cb0f92b7b083baa13d70b19774674be04db5b817681fa7c5c6a088f61300815e4dd75a59696f4716ad69f6260
-  languageName: node
-  linkType: hard
-
-"matcher@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "matcher@npm:1.1.1"
-  dependencies:
-    escape-string-regexp: ^1.0.4
-  checksum: 77bc490253901bb7b07bd4a1b7418201336d57029aa1320e6ec951744baf3acf07e907d3ed33d76f0bb2e399783c2b3d28049d29b1971073bbe11523b6ad059b
   languageName: node
   linkType: hard
 
@@ -21155,15 +21107,6 @@ __metadata:
   dependencies:
     mimic-fn: ^2.1.0
   checksum: 2478859ef817fc5d4e9c2f9e5728512ddd1dbc9fb7829ad263765bb6d3b91ce699d6e2332eef6b7dff183c2f490bd3349f1666427eaba4469fba0ac38dfd0d34
-  languageName: node
-  linkType: hard
-
-"ono@npm:^4.0.6":
-  version: 4.0.11
-  resolution: "ono@npm:4.0.11"
-  dependencies:
-    format-util: ^1.0.3
-  checksum: fabfdddb2e5e9875098e628871c86daf2fe0d1cbbfcdcc33093f47911eb4c386444410bc2bd3f6af9ff484deed46c6f9d88c8d49107ddec5350a9b089b283dd6
   languageName: node
   linkType: hard
 
@@ -23769,13 +23712,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"require-all@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "require-all@npm:3.0.0"
-  checksum: f2d652d6bca4201bda1ff2f7d4f46a3edd136cc6fd81d38caff50eaa4669ae7ae459f32a06b0892e754bf0f7aae21fbe69172409dff1abd78be5c12cab750a01
-  languageName: node
-  linkType: hard
-
 "require-directory@npm:^2.1.1":
   version: 2.1.1
   resolution: "require-directory@npm:2.1.1"
@@ -24276,7 +24212,7 @@ __metadata:
     google-java-format: 1.1.0
     hint: 7.1.3
     husky: 8.0.2
-    ibm-openapi-validator: 1.0.7
+    ibm-openapi-validator: 1.7.0
     jest: 29.4.3
     jest-environment-jsdom: 29.4.3
     jest-preset-angular: 13.1.1
@@ -28057,13 +27993,6 @@ __metadata:
   version: 0.0.43
   resolution: "yaml-ast-parser@npm:0.0.43"
   checksum: fb5df4c067b6ccbd00953a46faf6ff27f0e290d623c712dc41f330251118f110e22cfd184bbff498bd969cbcda3cd27e0f9d0adb9e6d90eb60ccafc0d8e28077
-  languageName: node
-  linkType: hard
-
-"yaml-js@npm:^0.2.3":
-  version: 0.2.3
-  resolution: "yaml-js@npm:0.2.3"
-  checksum: 065bd2198c0a6aa8079ebd8b0c67eafc6cea6362743baaaa0ad4931a8922fcba9d2c8b8b9ff58872130c539ba4fdfee20bcc308bb1858c44bec4c66fb5bd40e6
   languageName: node
   linkType: hard
 
