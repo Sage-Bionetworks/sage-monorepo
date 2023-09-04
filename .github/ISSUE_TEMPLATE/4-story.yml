@@ -4,13 +4,17 @@ title: '[Story] <title>'
 labels: []
 body:
   - type: dropdown
-    id: projects
+    id: products
     attributes:
-      label: What projects is this story for?
+      label: What product(s) is this story for?
       multiple: true
       options:
+        - Agora
         - OpenChallenges
+        - Sage Monorepo
         - Schematic
+        - Synapse
+        - Other
   - type: textarea
     attributes:
       label: 'As a user, I want'
