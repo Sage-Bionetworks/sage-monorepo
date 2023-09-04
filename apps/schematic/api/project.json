@@ -4,11 +4,11 @@
   "sourceRoot": "apps/schematic/api/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/schematic/api"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "prepare-python": {

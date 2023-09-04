@@ -11,7 +11,7 @@ This component is based on [Thumbor S3 Docker].
 Run this command to prepare this project, including creating the config file `.env`.
 
 ```console
-nx prepare openchallenges-thumbor
+nx create-config openchallenges-thumbor
 ```
 
 > **Note** The task `prepare` does not overwrites the config file `.env` if it already exists.
