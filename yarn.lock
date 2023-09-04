@@ -24304,7 +24304,6 @@ __metadata:
     rxjs: 7.8.1
     serverless: 3.22.0
     serverless-plugin-typescript: 2.1.4
-    shx: 0.3.4
     smee-client: 1.2.3
     supertest: ^6.3.0
     ts-jest: 29.1.1
@@ -24821,7 +24820,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shelljs@npm:^0.8.3, shelljs@npm:^0.8.5":
+"shelljs@npm:^0.8.3":
   version: 0.8.5
   resolution: "shelljs@npm:0.8.5"
   dependencies:
@@ -24887,18 +24886,6 @@ __metadata:
     should-type-adaptors: ^1.0.1
     should-util: ^1.0.0
   checksum: 74bcc0eb85e0a63a88e501ff9ca3b53dbc6d1ee47823c029a18a4b14b3ef4e2561733e161033df720599d2153283470e9647fdcb1bbc78903960ffb0363239c4
-  languageName: node
-  linkType: hard
-
-"shx@npm:0.3.4":
-  version: 0.3.4
-  resolution: "shx@npm:0.3.4"
-  dependencies:
-    minimist: ^1.2.3
-    shelljs: ^0.8.5
-  bin:
-    shx: lib/cli.js
-  checksum: 0aa168bfddc11e3fe8943cce2e0d2d8514a560bd58cf2b835b4351ba03f46068f7d88286c2627f4b85604e81952154c43746369fb3f0d60df0e3b511f465e5b8
   languageName: node
   linkType: hard
 
