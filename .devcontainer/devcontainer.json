@@ -36,6 +36,7 @@
         "esbenp.prettier-vscode",
         "firsttris.vscode-jest-runner",
         "formulahendry.auto-rename-tag",
+        "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "Gruntfuggly.todo-tree",
         "humao.rest-client",
