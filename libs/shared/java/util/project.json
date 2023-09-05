@@ -4,11 +4,11 @@
   "sourceRoot": "libs/shared/java/util/src",
   "projectType": "library",
   "targets": {
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/shared/java/util"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {

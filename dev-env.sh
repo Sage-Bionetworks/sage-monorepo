@@ -21,12 +21,9 @@ export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
 function workspace-install {
   yarn install --immutable
-  # TODO: Find a more efficient way than looping through all the Java project to execute the same
-  # task (download gradle), enough though caching already helps.
   nx run-many --target=create-config
-  nx run-many --target=prepare-java --parallel=1
-  nx run-many --target=prepare-python
-  nx run-many --target=prepare-r
+  nx run-many --target=prepare --projects=tag:language:java --parallel=1
+  nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
 # Setup Python virtualenvs

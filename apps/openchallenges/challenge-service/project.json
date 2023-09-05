@@ -11,7 +11,7 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
