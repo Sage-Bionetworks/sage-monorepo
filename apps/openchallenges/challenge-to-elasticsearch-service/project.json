@@ -11,11 +11,11 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/challenge-to-elasticsearch-service"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
