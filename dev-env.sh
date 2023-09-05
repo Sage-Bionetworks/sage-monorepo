@@ -122,7 +122,10 @@ function workspace-welcome {
 }
 
 function workspace-docker-stop {
-  docker stop $(docker ps -q)
+  num_containers_running=$(docker ps -q | wc -l)
+  if [[ $num_containers_running -gt 0 ]]; then
+    docker stop $(docker ps -q)
+  fi
 }
 
 function workspace-initialize-env {
