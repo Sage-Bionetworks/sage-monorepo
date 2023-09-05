@@ -1,6 +1,6 @@
 // For each Python project in the workspace, this script checks if their dependencies, as defined in
-// their lock files, have changed since the last git operation. The Nx target `prepare-python` is
-// then run for all the projects that had their dependencies updated.
+// their lock files, have changed since the last git operation. The Nx target `prepare` is then run
+// for all the projects that had their dependencies updated.
 
 'use strict';
 
@@ -32,7 +32,7 @@ const hasPoetryProjectDefinitionChanged = (projectDir, changedFiles) => {
 
 // Installs the Python dependencies of the comma-separated list of projects.
 const installPythonDependencies = (projectNames) => {
-  spawn('nx', ['run-many', '--target=prepare-python', `--projects=${projectNames}`], {
+  spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
     stdio: 'inherit',
   }).on('exit', function (error) {
     if (error) {

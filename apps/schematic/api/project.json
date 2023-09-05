@@ -11,11 +11,11 @@
         "cwd": "{projectRoot}"
       }
     },
-    "prepare-python": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "./prepare-python.sh",
-        "cwd": "apps/schematic/api"
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
