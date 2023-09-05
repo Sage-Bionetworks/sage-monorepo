@@ -12,7 +12,7 @@
           "Rscript -e 'renv::restore()'",
           "wget -O openapi-generator-cli.jar https://oss.sonatype.org/content/repositories/snapshots/org/openapitools/openapi-generator-cli/7.0.0-SNAPSHOT/openapi-generator-cli-7.0.0-20230720.164703-191.jar"
         ],
-        "cwd": "libs/openchallenges/api-client-r"
+        "cwd": "{projectRoot}"
       }
     },
     "openapi-generate": {
