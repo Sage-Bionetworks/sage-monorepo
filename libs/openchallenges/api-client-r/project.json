@@ -5,7 +5,7 @@
   "projectType": "library",
   "prefix": "openchallenges",
   "targets": {
-    "prepare-r": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
