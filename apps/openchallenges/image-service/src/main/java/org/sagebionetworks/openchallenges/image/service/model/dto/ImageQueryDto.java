@@ -16,14 +16,20 @@ import javax.validation.constraints.*;
 // TODO Add x-java-class-annotations
 public class ImageQueryDto {
 
-  @JsonProperty("objectKey")
   private String objectKey;
 
-  @JsonProperty("height")
   private ImageHeightDto height = ImageHeightDto.ORIGINAL;
 
-  @JsonProperty("aspectRatio")
   private ImageAspectRatioDto aspectRatio = ImageAspectRatioDto.ORIGINAL;
+
+  public ImageQueryDto() {
+    super();
+  }
+
+  /** Constructor with only required parameters */
+  public ImageQueryDto(String objectKey) {
+    this.objectKey = objectKey;
+  }
 
   public ImageQueryDto objectKey(String objectKey) {
     this.objectKey = objectKey;
@@ -41,7 +47,8 @@ public class ImageQueryDto {
       name = "objectKey",
       example = "logo/dream.png",
       description = "The unique identifier of the image.",
-      required = true)
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("objectKey")
   public String getObjectKey() {
     return objectKey;
   }
@@ -61,7 +68,8 @@ public class ImageQueryDto {
    * @return height
    */
   @Valid
-  @Schema(name = "height", required = false)
+  @Schema(name = "height", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("height")
   public ImageHeightDto getHeight() {
     return height;
   }
@@ -81,7 +89,8 @@ public class ImageQueryDto {
    * @return aspectRatio
    */
   @Valid
-  @Schema(name = "aspectRatio", required = false)
+  @Schema(name = "aspectRatio", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("aspectRatio")
   public ImageAspectRatioDto getAspectRatio() {
     return aspectRatio;
   }
