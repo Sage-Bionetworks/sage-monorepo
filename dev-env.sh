@@ -26,6 +26,13 @@ function workspace-install {
   nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
+function workspace-install-affected {
+  yarn install --immutable
+  nx affected --target=create-config
+  nx affected --target=prepare --tag=language:java --parallel=1
+  nx affected --target=prepare --tag=language:python --tag=language:r
+}
+
 # Setup Python virtualenvs
 # function challenge-python {
 #   nx run-many --parallel --target=python
