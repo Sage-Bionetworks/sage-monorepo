@@ -4,11 +4,11 @@
   "sourceRoot": "apps/openchallenges-kafka/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/kafka"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "serve-detach": {

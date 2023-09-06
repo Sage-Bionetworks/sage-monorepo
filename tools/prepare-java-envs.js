@@ -1,5 +1,5 @@
 // For each Java project in the workspace, this script checks if their Gradle binary, as defined in
-// has changed since the last git operation. The Nx target `prepare-java` is then run for all the
+// has changed since the last git operation. The Nx target `prepare` is then run for all the
 // projects that must be updated.
 
 'use strict';
@@ -37,7 +37,7 @@ const hasGradleProjectDefinitionChanged = (projectDir, changedFiles) => {
 
 // Installs the Python dependencies of the comma-separated list of projects.
 const prepareJavaProject = (projectNames) => {
-  spawn('nx', ['run-many', '--target=prepare-java', `--projects=${projectNames}`], {
+  spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
     stdio: 'inherit',
   }).on('exit', function (error) {
     if (error) {

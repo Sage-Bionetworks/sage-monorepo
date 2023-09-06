@@ -10,7 +10,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SpringDocConfiguration {
 
-  @Bean
+  @Bean(
+      name =
+          "org.sagebionetworks.openchallenges.image.service.configuration.SpringDocConfiguration.apiInfo")
   OpenAPI apiInfo() {
     return new OpenAPI()
         .info(
@@ -25,7 +27,8 @@ public class SpringDocConfiguration {
                 .license(
                     new License()
                         .name("Apache 2.0")
-                        .url("https://github.com/Sage-Bionetworks/sage-monorepo"))
+                        .url(
+                            "https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt"))
                 .version("1.0.0"));
   }
 }

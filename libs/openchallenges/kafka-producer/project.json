@@ -4,11 +4,11 @@
   "sourceRoot": "libs/openchallenges/kafka-producer/src",
   "projectType": "library",
   "targets": {
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/openchallenges/kafka-producer"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -52,7 +52,7 @@
       }
     }
   },
-  "tags": ["type:library", "scope:openchallenges"],
+  "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-app-config-data",
     "openchallenges-kafka-admin",

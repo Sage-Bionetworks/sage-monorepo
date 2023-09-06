@@ -20,5 +20,5 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:shared"]
+  "tags": ["type:feature", "scope:shared", "language:typescript"]
 }

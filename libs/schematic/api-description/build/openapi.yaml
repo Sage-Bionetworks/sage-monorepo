@@ -74,6 +74,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets the asset view table in json form
+      description: Gets the asset view table in json form
+      operationId: getAssetViewJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
@@ -91,6 +118,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: getDatasetFiles
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -121,6 +179,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/isRequired:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets whether or not the node is required in the schema
+      description: Gets whether or not the node is required in the schema
+      operationId: getNodeIsRequired
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: Whether or not the node is required in the schema
+                type: boolean
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeLabel}/nodeProperties:
@@ -361,6 +440,9 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
     Project:
       type: object
       description: A project.
@@ -392,6 +474,52 @@ components:
                 $ref: '#/components/schemas/Project'
           required:
             - projects
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    FileNames:
+      description: A list of file names.
+      type: array
+      items:
+        type: string
+    UseFullFilePath:
+      description: Whether or not to return the full path of output, or just the basename.
+      type: boolean
+      default: false
+    File:
+      type: object
+      description: A file.
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: file.txt
+        id:
+          type: string
+          description: The ID of the file.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FilesPage:
+      type: object
+      description: A page of files.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            files:
+              description: A list of files.
+              type: array
+              items:
+                $ref: '#/components/schemas/File'
+          required:
+            - files
       x-java-class-annotations:
         - '@lombok.Builder'
     NodeLabel:
@@ -438,6 +566,10 @@ components:
             - nodes
       x-java-class-annotations:
         - '@lombok.Builder'
+    NodeDisplay:
+      description: The display name of a node in a schema
+      type: string
+      example: MolecularEntity
     NodeProperty:
       type: object
       description: A node property
@@ -464,10 +596,6 @@ components:
             - node_properties
       x-java-class-annotations:
         - '@lombok.Builder'
-    NodeDisplay:
-      description: The display name of a node in a schema
-      type: string
-      example: MolecularEntity
     UseStrictCamelCase:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
@@ -563,6 +691,27 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    datasetId:
+      name: datasetId
+      in: path
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    fileNames:
+      name: fileNames
+      description: A list of file names used to filter the output.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/FileNames'
+    useFullFilePath:
+      name: useFullFilePath
+      in: query
+      description: Whether or not to return the full path of output, or just the basename.
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseFullFilePath'
     nodeLabel:
       name: nodeLabel
       in: path

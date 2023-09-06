@@ -4,18 +4,18 @@
   "sourceRoot": "apps/openchallenges/image-service/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/image-service"
-      }
-    },
-    "prepare-java": {
-      "executor": "nx:run-commands",
-      "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/image-service"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -32,6 +32,14 @@
         "root": "apps/openchallenges/image-service"
       },
       "dependsOn": ["^install"]
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew sonar",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["test"]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
@@ -58,7 +66,7 @@
           "./gradlew build --continuous --exclude-task spotlessCheck --exclude-task test",
           "./gradlew bootRun"
         ],
-        "cwd": "apps/openchallenges/image-service",
+        "cwd": "{projectRoot}",
         "parallel": true
       },
       "dependsOn": ["^install"]
@@ -130,11 +138,11 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/openchallenges/image-service",
+        "cwd": "{projectRoot}",
         "parallel": false
       }
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": ["openchallenges-app-config-data", "shared-java-util"]
 }

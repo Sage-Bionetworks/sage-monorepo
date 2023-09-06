@@ -12,11 +12,65 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
+NODE_IS_REQUIRED_URL = "/api/v1/nodes/node1/isRequired?schemaUrl=url1"
 PROPERTY_LABEL_URL = "/api/v1/nodes/node1/propertyLabel?schemaUrl=url1"
 NODE_PROPERTIES_URL = "/api/v1/nodes/node1/nodeProperties?schemaUrl=url1"
 RELATIONSHIPS_URL = "/api/v1/relationships/type?schemaUrl=url1"
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/node1/validationRules?schemaUrl=url1"
 NODE_DEPENDENCIES_URL = "/api/v1/nodes/node1/dependencies?schemaUrl=url1"
+
+
+class TestGetComponentIsRequired(BaseTestCase):
+    """Test case for component is required endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_node_is_required_from_schematic",
+            return_value=True,
+        ) as mock_function:
+            response = self.client.open(
+                NODE_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("node1", "url1")
+            assert response.json
+
+    def test_success2(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_node_is_required_from_schematic",
+            return_value=False,
+        ) as mock_function:
+            response = self.client.open(
+                NODE_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("node1", "url1")
+            assert not response.json
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_node_is_required_from_schematic",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                NODE_IS_REQUIRED_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestGetPropertyLabel(BaseTestCase):

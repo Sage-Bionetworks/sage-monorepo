@@ -4,11 +4,11 @@
   "sourceRoot": "libs/openchallenges/kafka-admin/src",
   "projectType": "library",
   "targets": {
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/openchallenges/kafka-admin"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -52,6 +52,6 @@
       }
     }
   },
-  "tags": ["type:library", "scope:openchallenges"],
+  "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"],
   "implicitDependencies": ["openchallenges-app-config-data"]
 }

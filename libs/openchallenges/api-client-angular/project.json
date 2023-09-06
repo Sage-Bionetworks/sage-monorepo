@@ -52,6 +52,6 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:typescript"],
   "implicitDependencies": ["openchallenges-api-description"]
 }

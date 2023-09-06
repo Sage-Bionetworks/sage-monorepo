@@ -15,6 +15,46 @@ from schematic_api.models.relationship import Relationship
 from schematic_api.controllers.utils import handle_exceptions
 
 
+def get_node_is_required_from_schematic(
+    node_display: str,
+    schema_url: str,
+) -> bool:
+    """Gets whether or not the node is required by the schema
+
+    Args:
+        node_display(str): The display name of the node
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+       bool: Whether or no the node is required
+    """
+    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
+    return schema_generator.is_node_required(node_display)
+
+
+@handle_exceptions
+def get_node_is_required(
+    node_display: str,
+    schema_url: str,
+) -> tuple[Union[bool, BasicError], int]:
+    """Gets whether or not the node is required by the schema
+
+    Args:
+        node_display(str): The display name of the node
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+        tuple[Union[bool, BasicError], int]: A tuple
+          The first item is either whether or not the node is required or an error object
+          The second item is the response status
+    """
+    result: Union[bool, BasicError] = get_node_is_required_from_schematic(
+        node_display, schema_url
+    )
+    status = 200
+    return result, status
+
+
 def get_property_label_from_schematic(
     node_display: str, schema_url: str, use_strict_camel_case: bool
 ) -> str:
