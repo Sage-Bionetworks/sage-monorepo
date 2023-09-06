@@ -27,15 +27,15 @@ public interface ChallengeAnalyticsApi {
   }
 
   /**
-   * GET /challengeAnalytics/challengesPerYear : Get the number of challenges started per year
-   * Returns the number of challenges started per year
+   * GET /challengeAnalytics/challengesPerYear : Get the number of challenges tracked per year
+   * Returns the number of challenges tracked per year
    *
    * @return An object (status code 200) or The request cannot be fulfilled due to an unexpected
    *     server error (status code 500)
    */
   @Operation(
       operationId = "getChallengesPerYear",
-      summary = "Get the number of challenges started per year",
+      summary = "Get the number of challenges tracked per year",
       tags = {"ChallengeAnalytics"},
       responses = {
         @ApiResponse(

@@ -141,7 +141,7 @@ paths:
       - tag: ChallengeContribution
   /challengeAnalytics/challengesPerYear:
     get:
-      description: Returns the number of challenges started per year
+      description: Returns the number of challenges tracked per year
       operationId: getChallengesPerYear
       responses:
         "200":
@@ -157,7 +157,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Get the number of challenges started per year
+      summary: Get the number of challenges tracked per year
       tags:
       - ChallengeAnalytics
       x-accepts: application/json
@@ -825,6 +825,7 @@ components:
       - title
       type: object
       x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
