@@ -29,8 +29,8 @@ function workspace-install {
 function workspace-install-affected {
   yarn install --immutable
   nx affected --target=create-config
-  nx affected --target=prepare --tag=language:java --parallel=1
-  nx affected --target=prepare --tag=language:python --tag=language:r
+  nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
+  nx affected --target=prepare --exclude 'tag:language:java'
 }
 
 # Setup Python virtualenvs
