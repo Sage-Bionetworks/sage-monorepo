@@ -113,6 +113,6 @@ GET {{basePath}}/challenges/1
 
 GET {{basePath}}/challenges/1/contributions
 
-### Get the number of challenges started per year.
+### Get the number of challenges tracked per year.
 
 GET {{basePath}}/challengeAnalytics/challengesPerYear
