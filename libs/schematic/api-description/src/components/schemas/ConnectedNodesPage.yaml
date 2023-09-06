@@ -1,15 +1,15 @@
 type: object
-description: A page of relationships.
+description: A page of conncted nodes.
 allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
-      relationships:
-        description: A list of relationships
+      connected_nodes:
+        description: A list of conncted node pairs.
         type: array
         items:
-          $ref: Relationship.yaml
+          $ref: ConnectedNodes.yaml
     required:
-      - relationships
+      - connected_nodes
 x-java-class-annotations:
   - '@lombok.Builder'

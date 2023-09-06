@@ -263,24 +263,23 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /relationships/{relationshipType}:
-    parameters:
-      - $ref: '#/components/parameters/relationshipType'
+  /connectedNodes:
     get:
       tags:
         - Schema
       summary: Gets a subgraph containing all relationships of a given type
       description: Gets a subgraph containing all relationships of a given type
-      operationId: getRelationships
+      operationId: getConnectedNodes
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/relationshipType'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RelationshipsPage'
+                $ref: '#/components/schemas/ConnectedNodesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -636,37 +635,37 @@ components:
       description: A type of schema relationship
       type: string
       example: requiresDependency
-    Relationship:
+    ConnectedNodes:
       type: object
-      description: A schema relationship.
+      description: A pair of conncted nodes
       properties:
-        component1:
+        node1:
           type: string
-          description: The dsiaplay name of the first component in the relationship.
-          example: Component1
-        component2:
+          description: The disaplay name of the first node.
+          example: Node1
+        node2:
           type: string
-          description: The diaplay name of the second component in the relationship.
-          example: Component2
+          description: The display name of the second node.
+          example: Node2
       required:
-        - component1
-        - component2
+        - node1
+        - node2
       x-java-class-annotations:
         - '@lombok.Builder'
-    RelationshipsPage:
+    ConnectedNodesPage:
       type: object
-      description: A page of relationships.
+      description: A page of conncted nodes.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
-            relationships:
-              description: A list of relationships
+            connected_nodes:
+              description: A list of conncted node pairs.
               type: array
               items:
-                $ref: '#/components/schemas/Relationship'
+                $ref: '#/components/schemas/ConnectedNodes'
           required:
-            - relationships
+            - connected_nodes
       x-java-class-annotations:
         - '@lombok.Builder'
   parameters:
@@ -755,7 +754,7 @@ components:
         $ref: '#/components/schemas/UseStrictCamelCase'
     relationshipType:
       name: relationshipType
-      in: path
+      in: query
       description: Type of relationship in a schema, such as requiresDependency
       required: true
       schema:

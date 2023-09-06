@@ -1,5 +1,5 @@
 name: relationshipType
-in: path
+in: query
 description: Type of relationship in a schema, such as requiresDependency
 required: true
 schema:

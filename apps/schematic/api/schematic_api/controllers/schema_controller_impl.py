@@ -10,9 +10,71 @@ from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.nodes_page import NodesPage
 from schematic_api.models.node import Node
-from schematic_api.models.relationships_page import RelationshipsPage
-from schematic_api.models.relationship import Relationship
+from schematic_api.models.connected_nodes_page import ConnectedNodesPage
+from schematic_api.models.connected_nodes import ConnectedNodes
 from schematic_api.controllers.utils import handle_exceptions
+
+
+def get_connected_nodes_from_schematic(
+    relationship_type: str,
+    schema_url: str,
+) -> list[list[Any]]:
+    """Gets the relationships asked for
+
+    Args:
+        relationship_type (str): the type of relationship in the schema to get
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+        list[list[Any]]: A list of relationships
+    """
+    schema_explorer = SchemaExplorer()
+    schema_explorer.load_schema(schema_url)
+    schema_graph = schema_explorer.get_nx_schema()
+
+    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
+    relationship_subgraph = schema_generator.get_subgraph_by_edge_type(
+        schema_graph, relationship_type
+    )
+
+    return [list(edge) for edge in relationship_subgraph.edges]
+
+
+@handle_exceptions
+def get_connected_nodes(
+    relationship_type: str,
+    schema_url: str,
+) -> tuple[Union[ConnectedNodesPage, BasicError], int]:
+    """Lists the relationships asked for
+
+    Args:
+        relationship_type (str): the type of relationship in the schema to get
+        schema_url (str): The URL of the schema in json form
+
+    Returns:
+        tuple[Union[ConnectedNodesPage, BasicError], int: A tuple
+          The first item is either the conncted nodes or an error object
+          The second item is the response status
+    """
+    connected_nodes = [
+        ConnectedNodes(connected_nodes[0], connected_nodes[1])
+        for connected_nodes in get_connected_nodes_from_schematic(
+            relationship_type, schema_url
+        )
+    ]
+
+    page = ConnectedNodesPage(
+        number=0,
+        size=100,
+        total_elements=len(connected_nodes),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        connected_nodes=connected_nodes,
+    )
+    result: Union[ConnectedNodesPage, BasicError] = page
+    status = 200
+    return result, status
 
 
 def get_node_is_required_from_schematic(
@@ -152,68 +214,6 @@ def get_node_properties(
     result: Union[NodePropertiesPage, BasicError] = page
     status = 200
 
-    return result, status
-
-
-def get_relationships_from_schematic(
-    relationship_type: str,
-    schema_url: str,
-) -> list[list[Any]]:
-    """Gets the relationships asked for
-
-    Args:
-        relationship_type (str): the type of relationship in the schema to get
-        schema_url (str): The URL of the schema in jsonld form
-
-    Returns:
-        list[list[Any]]: A list of relationships
-    """
-    schema_explorer = SchemaExplorer()
-    schema_explorer.load_schema(schema_url)
-    schema_graph = schema_explorer.get_nx_schema()
-
-    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    relationship_subgraph = schema_generator.get_subgraph_by_edge_type(
-        schema_graph, relationship_type
-    )
-
-    return [list(edge) for edge in relationship_subgraph.edges]
-
-
-@handle_exceptions
-def get_relationships(
-    relationship_type: str,
-    schema_url: str,
-) -> tuple[Union[RelationshipsPage, BasicError], int]:
-    """Lists the relationships asked for
-
-    Args:
-        relationship_type (str): the type of relationship in the schema to get
-        schema_url (str): The URL of the schema in json form
-
-    Returns:
-        tuple[Union[RelationshipsPage, BasicError], int]: A tuple
-          The first item is either the relationships or an error object
-          The second item is the response status
-    """
-    relationships = [
-        Relationship(relationship[0], relationship[1])
-        for relationship in get_relationships_from_schematic(
-            relationship_type, schema_url
-        )
-    ]
-
-    page = RelationshipsPage(
-        number=0,
-        size=100,
-        total_elements=len(relationships),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        relationships=relationships,
-    )
-    result: Union[RelationshipsPage, BasicError] = page
-    status = 200
     return result, status
 
 

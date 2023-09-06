@@ -5,12 +5,27 @@ from typing import Tuple
 from typing import Union
 
 from schematic_api.models.basic_error import BasicError  # noqa: E501
+from schematic_api.models.connected_nodes_page import ConnectedNodesPage  # noqa: E501
 from schematic_api.models.node_properties_page import NodePropertiesPage  # noqa: E501
 from schematic_api.models.nodes_page import NodesPage  # noqa: E501
-from schematic_api.models.relationships_page import RelationshipsPage  # noqa: E501
 from schematic_api.models.validation_rules_page import ValidationRulesPage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
+
+
+def get_connected_nodes(schema_url, relationship_type):  # noqa: E501
+    """Gets a subgraph containing all relationships of a given type
+
+    Gets a subgraph containing all relationships of a given type # noqa: E501
+
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+    :param relationship_type: Type of relationship in a schema, such as requiresDependency
+    :type relationship_type: str
+
+    :rtype: Union[ConnectedNodesPage, Tuple[ConnectedNodesPage, int], Tuple[ConnectedNodesPage, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_connected_nodes(schema_url, relationship_type)
 
 
 def get_node_is_required(node_display, schema_url):  # noqa: E501
@@ -62,21 +77,6 @@ def get_property_label(
     return schema_controller_impl.get_property_label(
         node_display, schema_url, use_strict_camel_case
     )
-
-
-def get_relationships(relationship_type, schema_url):  # noqa: E501
-    """Gets a subgraph containing all relationships of a given type
-
-    Gets a subgraph containing all relationships of a given type # noqa: E501
-
-    :param relationship_type: Type of relationship in a schema, such as requiresDependency
-    :type relationship_type: str
-    :param schema_url: The URL of a schema in jsonld form
-    :type schema_url: str
-
-    :rtype: Union[RelationshipsPage, Tuple[RelationshipsPage, int], Tuple[RelationshipsPage, int, Dict[str, str]]
-    """
-    return schema_controller_impl.get_relationships(relationship_type, schema_url)
 
 
 def list_node_dependencies(
