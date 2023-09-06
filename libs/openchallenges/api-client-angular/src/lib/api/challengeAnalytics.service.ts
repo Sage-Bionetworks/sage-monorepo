@@ -94,8 +94,8 @@ export class ChallengeAnalyticsService {
     }
 
     /**
-     * Get the number of challenges started per year
-     * Returns the number of challenges started per year
+     * Get the number of challenges tracked per year
+     * Returns the number of challenges tracked per year
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
