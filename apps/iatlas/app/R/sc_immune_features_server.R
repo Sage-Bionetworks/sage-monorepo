@@ -5,7 +5,7 @@ sc_immune_features_server <- function(id, cohort_obj){
 
       ns <- session$ns
 
-      gsea_df <- shiny::reactive(read.delim("inst/tsv/sc_msk_gsea_norm.csv", sep = ","))
+      gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_gsea_norm.feather"))
 
       plot_function <- shiny::reactive({
         switch(
@@ -19,7 +19,7 @@ sc_immune_features_server <- function(id, cohort_obj){
         shiny::selectInput(
           ns("var1_surv"),
           "Select Feature",
-          colnames(gsea_df()),
+          unique(gsea_df()$feature_name),
           selected = "APM2"
         )
       })
@@ -41,51 +41,44 @@ sc_immune_features_server <- function(id, cohort_obj){
       df_selected <- shiny::reactive({
         shiny::req(gsea_df(), input$var1_surv)
         gsea_df() %>%
-          dplyr::select(X, input$var1_surv) %>%
-          tidyr::pivot_longer(- "X", names_to = "feature_name", values_to = "feature_value") %>%
-          tidyr::drop_na() %>%
-          dplyr::mutate(
-            "sample_name" = dplyr::if_else(
-              stringr::str_starts(.data$X, "HTA8"),
-              stringr::str_sub(X, 1, 11),
-              "sum"
-            ),
-            "group" = dplyr::if_else(
-              str_starts(.data$X, "HTA8"),
-              stringr::str_sub(X, 13),
-              X
-            )
-          )
-
+          dplyr::filter(feature_name == input$var1_surv)
       })
 
       group_colors <- shiny::reactive({
         shiny::req(df_selected())
 
-        RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2")
+        setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
       })
 
       output$dist_plots <- plotly::renderPlotly({
         shiny::req(df_selected())
 
-        plot_function()(df = df_selected(),
-                  x_col = "group",
-                  y_col = "feature_value",
-                  xlab = "group",
-                  ylab = input$var1_surv,
-                  #custom_data = as.character(dataset),
-                  fill_colors = group_colors(),
-                  #source = "p1",
-                  showlegend = F)  #%>%
-          #add_title_subplot_plotly(plot_title) %>%
-          # plotly::layout(
-          #   # xaxis = xform,
-          #   # margin = list(b = 10),
-          #   plot_bgcolor  = "rgb(250, 250, 250)"
-          # )
+        datasets <- unique(df_selected()$dataset)
+
+        all_plots <- purrr::map(.x = datasets,
+                                .f = function(x){
+                                  plot_function()(df =  dplyr::filter(df_selected(), dataset == x),
+                                                  x_col = "group",
+                                                  y_col = "feature_value",
+                                                  xlab = "group",
+                                                  ylab = input$var1_surv,
+                                                  custom_data = as.character(x),
+                                                  fill_colors = group_colors(),
+                                                  #source = "p1",
+                                                  showlegend = F)  %>%
+                                  add_title_subplot_plotly(x) %>%
+                                  plotly::layout(
+                                    # xaxis = xform,
+                                    margin = list(b = 10),
+                                    plot_bgcolor  = "rgb(250, 250, 250)"
+                                  )
+                                })
+
+        plotly::subplot(all_plots, nrows = 1, shareY = TRUE, titleX = TRUE, titleY= TRUE, margin = 0.1)
+
+
       })
-      # output$plot_text
-      # output$download_tbl
+
 
 
 
