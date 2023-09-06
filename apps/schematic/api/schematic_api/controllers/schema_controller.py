@@ -12,6 +12,21 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
+def get_node_is_required(node_display, schema_url):  # noqa: E501
+    """Gets whether or not the node is required in the schema
+
+    Gets whether or not the node is required in the schema # noqa: E501
+
+    :param node_display: The display name of the node in a schema
+    :type node_display: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_node_is_required(node_display, schema_url)
+
+
 def get_node_properties(node_label, schema_url):  # noqa: E501
     """Gets properties associated with a given node
 

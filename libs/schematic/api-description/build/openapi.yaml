@@ -208,6 +208,27 @@ paths:
                 $ref: '#/components/schemas/NodesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/isRequired:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets whether or not the node is required in the schema
+      description: Gets whether or not the node is required in the schema
+      operationId: getNodeIsRequired
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: Whether or not the node is required in the schema
+                type: boolean
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeLabel}/nodeProperties:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
@@ -559,6 +580,10 @@ components:
             - nodes
       x-java-class-annotations:
         - '@lombok.Builder'
+    NodeDisplay:
+      description: The display name of a node in a schema
+      type: string
+      example: MolecularEntity
     NodeProperty:
       type: object
       description: A node property
@@ -585,10 +610,6 @@ components:
             - node_properties
       x-java-class-annotations:
         - '@lombok.Builder'
-    NodeDisplay:
-      description: The display name of a node in a schema
-      type: string
-      example: MolecularEntity
     UseStrictCamelCase:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean

@@ -46,6 +46,9 @@ paths:
   /nodes/{nodeLabel}/dependencies:
     $ref: paths/nodes/@{nodeLabel}/dependencies.yaml
 
+  /nodes/{nodeDisplay}/isRequired:
+    $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
+
   /nodes/{nodeLabel}/nodeProperties:
     $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
 

@@ -4,18 +4,18 @@
   "sourceRoot": "apps/openchallenges/core-service/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/core-service"
-      }
-    },
-    "prepare-java": {
-      "executor": "nx:run-commands",
-      "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/core-service"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {

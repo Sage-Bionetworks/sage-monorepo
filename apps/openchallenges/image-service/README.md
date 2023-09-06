@@ -31,7 +31,7 @@ This service manages images for the OpenChallenges app.
 Run this command to prepare this project, including creating the config file `.env`.
 
 ```console
-nx prepare openchallenges-image-service
+nx create-config openchallenges-image-service
 ```
 
 > **Note** The task `prepare` does not overwrites the config file `.env` if it already exists.

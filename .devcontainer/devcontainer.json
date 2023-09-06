@@ -1,6 +1,6 @@
 {
   "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:15ec53e",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:0d98658",
 
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
@@ -14,8 +14,9 @@
   },
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.2.0": {
-      "version": "20.10.24"
+    "ghcr.io/devcontainers/features/docker-in-docker:2.4.0": {
+      "version": "24.0.5",
+      "moby": false
     }
   },
 
@@ -27,22 +28,27 @@
     },
     "vscode": {
       "extensions": [
-        "1000ch.svgo",
+        "alefragnani.Bookmarks",
         "Angular.ng-template",
         "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",
         "firsttris.vscode-jest-runner",
+        "formulahendry.auto-rename-tag",
+        "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "Gruntfuggly.todo-tree",
         "humao.rest-client",
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
+        "ms-playwright.playwright",
         "ms-python.python",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
         "mtxr.sqltools",
         "nrwl.angular-console",
+        "pranaygp.vscode-css-peek",
         "ritwickdey.LiveServer",
         "shengchen.vscode-checkstyle",
         "SonarSource.sonarlint-vscode",

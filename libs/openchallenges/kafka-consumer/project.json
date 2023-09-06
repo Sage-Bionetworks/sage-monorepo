@@ -4,11 +4,11 @@
   "sourceRoot": "libs/openchallenges/kafka-consumer/src",
   "projectType": "library",
   "targets": {
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/openchallenges/kafka-consumer"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {

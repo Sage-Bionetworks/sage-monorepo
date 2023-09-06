@@ -32,7 +32,7 @@ const hasRenvProjectDefinitionChanged = (projectDir, changedFiles) => {
 
 // Installs the R dependencies of the comma-separated list of projects.
 const prepareREnvironment = (projectNames) => {
-  spawn('nx', ['run-many', '--target=prepare-r', `--projects=${projectNames}`], {
+  spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
     stdio: 'inherit',
   }).on('exit', function (error) {
     if (error) {
