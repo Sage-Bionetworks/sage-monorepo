@@ -18,5 +18,9 @@ sc_module_ui <- function(id){
             title = "bubble plot",
             sc_bubbleplot_ui(ns("sc_bubbleplot"))
         ),
+        iatlas.modules::sectionBox(
+            title = "Immune Features",
+            sc_immune_features_ui(ns("sc_distribution"))
+        ),
     )
 }
