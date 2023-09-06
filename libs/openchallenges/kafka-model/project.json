@@ -4,11 +4,11 @@
   "sourceRoot": "libs/openchallenges/kafka-model/src",
   "projectType": "library",
   "targets": {
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "libs/openchallenges/kafka-model"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {

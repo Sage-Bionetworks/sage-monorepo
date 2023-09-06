@@ -1,0 +1,37 @@
+# Code Quality
+
+## Definitions
+
+| Name            | Description                              |
+|-----------------|------------------------------------------|
+| Project Name    | The name of the project in Sage Monorepo |
+| Quality Gate    | See [Sonar Metric Definitions]           |
+| Reliability     | See [Sonar Metric Definitions]           |
+| Maintainability | See [Sonar Metric Definitions]           |
+| Technical Debt  | See [Sonar Metric Definitions]           |
+| Coverage        | See [Sonar Metric Definitions]           |
+
+<!-- Links -->
+
+[Sonar Metric Definitions]: https://docs.sonarcloud.io/digging-deeper/metric-definitions/
+
+## Dashboard
+
+| Project Name | Quality Gate | Reliability | Maintainability | Technical Debt | Coverage |
+|--------------|--------------|-------------|-----------------|----------------|----------|
+| **OpenChallenges** ||
+| [openchallenges-app] | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-app&metric=alert_status) | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-app&metric=reliability_rating) | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-app&metric=sqale_rating) | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-app&metric=sqale_index) | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-app&metric=coverage) |
+| [openchallenges-challenge-service] | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-challenge-service&metric=alert_status) | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-challenge-service&metric=reliability_rating) | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-challenge-service&metric=sqale_rating) | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-challenge-service&metric=sqale_index) | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-challenge-service&metric=coverage) |
+| [openchallenges-image-service] | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=alert_status) | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=reliability_rating) | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=sqale_rating) | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=sqale_index) | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-image-service&metric=coverage) |
+| [openchallenges-organization-service] | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-organization-service&metric=alert_status) | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-organization-service&metric=reliability_rating) | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-organization-service&metric=sqale_rating) | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-organization-service&metric=sqale_index) | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=openchallenges-organization-service&metric=coverage) |
+| **Schematic** ||
+| [schematic-api] | ![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=schematic-api&metric=alert_status) | ![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=schematic-api&metric=reliability_rating) | ![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=schematic-api&metric=sqale_rating) | ![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=schematic-api&metric=sqale_index) | ![Coverage](https://sonarcloud.io/api/project_badges/measure?project=schematic-api&metric=coverage) |
+
+<!-- SonarCloud links -->
+
+[openchallenges-app]: https://sonarcloud.io/summary/overall?id=openchallenges-app
+[openchallenges-challenge-service]: https://sonarcloud.io/summary/overall?id=openchallenges-challenge-service
+[openchallenges-image-service]: https://sonarcloud.io/summary/overall?id=openchallenges-image-service
+[openchallenges-organization-service]: https://sonarcloud.io/summary/overall?id=openchallenges-organization-service
+
+[schematic-api]: https://sonarcloud.io/summary/overall?id=schematic-api

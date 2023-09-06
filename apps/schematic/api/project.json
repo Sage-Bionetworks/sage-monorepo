@@ -4,18 +4,18 @@
   "sourceRoot": "apps/schematic/api/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/schematic/api"
-      }
-    },
-    "prepare-python": {
-      "executor": "nx:run-commands",
-      "options": {
         "command": "./prepare-python.sh",
-        "cwd": "apps/schematic/api"
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -120,6 +120,13 @@
       "options": {
         "command": "poetry run tox",
         "cwd": "apps/schematic/api"
+      }
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "cwd": "{projectRoot}"
       }
     }
   },

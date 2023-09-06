@@ -19,7 +19,7 @@ OpenChallenges supports these data sources:
 Create the config files with:
 
 ```console
-nx prepare openchallenges-grafana
+nx create-config openchallenges-grafana
 ```
 
 The default config file (`.env` located in this project folder) can be used as-is.

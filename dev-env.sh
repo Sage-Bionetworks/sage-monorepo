@@ -21,16 +21,16 @@ export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
 function workspace-install {
   yarn install --immutable
-  # TODO: Find a more efficient way than looping through all the Java project to execute the same
-  # task (download gradle), enough though caching already helps.
-  nx run-many --target=prepare
-  nx run-many --target=prepare-java --parallel=1
-  nx run-many --target=prepare-python
-  nx run-many --target=prepare-r
+  nx run-many --target=create-config
+  nx run-many --target=prepare --projects=tag:language:java --parallel=1
+  nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
-function workspace-prepare {
-  nx run-many --parallel --target=prepare
+function workspace-install-affected {
+  yarn install --immutable
+  nx affected --target=create-config
+  nx affected --target=prepare --tag=language:java --parallel=1
+  nx affected --target=prepare --tag=language:python --tag=language:r
 }
 
 # Setup Python virtualenvs
@@ -129,7 +129,10 @@ function workspace-welcome {
 }
 
 function workspace-docker-stop {
-  docker stop $(docker ps -q)
+  num_containers_running=$(docker ps -q | wc -l)
+  if [[ $num_containers_running -gt 0 ]]; then
+    docker stop $(docker ps -q)
+  fi
 }
 
 function workspace-initialize-env {
