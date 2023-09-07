@@ -6,6 +6,13 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { HomeComponent } from './home.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
+// import ResizeObserver polyfill
+global.ResizeObserver = jest.fn(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
+
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
