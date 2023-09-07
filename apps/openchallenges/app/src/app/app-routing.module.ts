@@ -78,6 +78,7 @@ export const routes: Routes = [
       initialNavigation: 'enabledBlocking',
       // this is important to use "data:title" from any level
       // paramsInheritanceStrategy: 'always',
+      scrollPositionRestoration: 'top', // reset scroll position
     }),
   ],
   declarations: [],
