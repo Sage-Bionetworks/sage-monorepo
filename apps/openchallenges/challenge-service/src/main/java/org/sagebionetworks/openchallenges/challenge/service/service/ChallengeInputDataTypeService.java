@@ -31,8 +31,8 @@ public class ChallengeInputDataTypeService {
       new ChallengeInputDataTypeMapper();
 
   public ChallengeInputDataTypeService(
-    ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
-  this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+      ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
+    this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
   }
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
