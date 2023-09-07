@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
-  Challenge,
-  ChallengeService,
+  ChallengeAnalyticsService,
+  ChallengesPerYear,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable, map } from 'rxjs';
 
@@ -9,17 +9,17 @@ import { Observable, map } from 'rxjs';
   providedIn: 'root',
 })
 export class HomeDataService {
-  challenges$!: Observable<Challenge[]>;
+  challengesPerYear$!: Observable<ChallengesPerYear>;
 
-  constructor(private challengeService: ChallengeService) {}
+  constructor(private challengeAnalyticsService: ChallengeAnalyticsService) {}
 
-  fetchAllChallenges() {
-    this.challenges$ = this.challengeService
-      .listChallenges({ pageSize: 1000 })
-      .pipe(map((page) => page.challenges));
+  fetchChallengesPerYear() {
+    this.challengesPerYear$ = this.challengeAnalyticsService
+      .getChallengesPerYear()
+      .pipe(map((page) => page));
   }
 
-  getAllChallenges(): Observable<Challenge[]> {
-    return this.challenges$;
+  getChallengesPerYear(): Observable<ChallengesPerYear> {
+    return this.challengesPerYear$;
   }
 }

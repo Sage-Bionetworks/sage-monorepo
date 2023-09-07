@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import {
-  Challenge,
   ChallengeService,
   Image,
   ImageHeight,
@@ -74,80 +73,49 @@ export class StatisticsViewerComponent implements OnInit {
       })
       .pipe(map((page) => page.totalElements));
 
-    this.homeDataService.getAllChallenges().subscribe((challenges) => {
-      const dataByYear = this.processData(challenges);
-      console.log(dataByYear);
-      this.chartOptions = {
-        title: {
-          text: 'The Rise of Challenges',
-          left: 'center',
-          textStyle: {
-            fontWeight: 'normal',
-            fontFamily: 'Lato, sans-serif',
-          },
-        },
-        // tooltip: {
-        //   trigger: 'axis',
-        //   axisPointer: {
-        //     type: 'cross',
-        //   },
-        // },
-        xAxis: {
-          type: 'category',
-          data: dataByYear.years,
-        },
-        yAxis: [
-          {
-            type: 'value',
-            name: 'Total Challenges Tracked',
-          },
-        ],
-        series: [
-          {
-            name: 'Total challenges',
-            data: dataByYear.cumulativeChallengeCounts,
-            type: 'bar',
-            itemStyle: {
-              color: '#afa0fe',
+    // update plot's data
+    this.homeDataService.getChallengesPerYear().subscribe(
+      (res) =>
+        (this.chartOptions = {
+          title: {
+            text: 'The Rise of Challenges',
+            left: 'center',
+            textStyle: {
+              fontWeight: 'normal',
+              fontFamily: 'Lato, sans-serif',
             },
-            // disable default clicking
-            silent: true,
-            // make bar plot rise from left to right instead of rising all together in the same time
-            animationDelay: (dataIndex: number) => dataIndex * 100,
           },
-        ],
-      };
-    });
-  }
-
-  private processData(challenges: Challenge[]): {
-    years: string[];
-    cumulativeChallengeCounts: number[];
-  } {
-    const dataByYear: { [year: string]: number } = {};
-    const cumulativeChallengeCounts: number[] = [];
-    const filteredChallenges = challenges.filter(
-      (challenge) => challenge.startDate !== null
+          // tooltip: {
+          //   trigger: 'axis',
+          //   axisPointer: {
+          //     type: 'cross',
+          //   },
+          // },
+          xAxis: {
+            type: 'category',
+            data: res.years,
+          },
+          yAxis: [
+            {
+              type: 'value',
+              name: 'Total Challenges Tracked',
+            },
+          ],
+          series: [
+            {
+              name: 'Total challenges',
+              data: res.challengeCounts,
+              type: 'bar',
+              itemStyle: {
+                color: '#afa0fe',
+              },
+              // disable default clicking
+              silent: true,
+              // make bar plot rise from left to right instead of rising all together in the same time
+              animationDelay: (dataIndex: number) => dataIndex * 100,
+            },
+          ],
+        })
     );
-    filteredChallenges.forEach((challenge) => {
-      const startYear = new Date(challenge.startDate as string)
-        .getFullYear()
-        .toString();
-      dataByYear[startYear] = (dataByYear[startYear] || 0) + 1;
-    });
-
-    const years = Object.keys(dataByYear);
-    years.sort(); // Sort years in ascending order
-
-    let cumulativeSum = 0;
-    years.forEach((year) => {
-      cumulativeSum += dataByYear[year];
-      cumulativeChallengeCounts.push(cumulativeSum);
-    });
-    // const challengeCountsPerYear = years.map((year) => dataByYear[year]);
-    return {
-      years,
-      cumulativeChallengeCounts,
-    };
   }
 }
