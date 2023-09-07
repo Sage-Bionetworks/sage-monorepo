@@ -30,6 +30,11 @@ public class ChallengeInputDataTypeService {
   private ChallengeInputDataTypeMapper challengeInputDataTypeMapper =
       new ChallengeInputDataTypeMapper();
 
+  public ChallengeInputDataTypeService(
+    ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
+  this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+  }
+
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
   @Transactional(readOnly = true)
