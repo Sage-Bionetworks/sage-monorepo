@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChallengePlatformService {
 
   private ChallengePlatformRepository challengePlatformRepository;
-  
+
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
@@ -29,7 +29,7 @@ public class ChallengePlatformService {
   public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
     this.challengePlatformRepository = challengePlatformRepository;
   }
-  
+
   @Transactional(readOnly = true)
   public ChallengePlatformDto getChallengePlatform(String challengePlatformName) {
     ChallengePlatformEntity entity =
