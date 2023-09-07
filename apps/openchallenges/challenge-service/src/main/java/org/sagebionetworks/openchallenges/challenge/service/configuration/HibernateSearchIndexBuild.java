@@ -19,6 +19,7 @@ public class HibernateSearchIndexBuild implements ApplicationListener<Applicatio
   public HibernateSearchIndexBuild(EntityManager entityManager) {
     this.entityManager = entityManager;
   }
+
   @Override
   @Transactional
   public void onApplicationEvent(ApplicationReadyEvent event) {
