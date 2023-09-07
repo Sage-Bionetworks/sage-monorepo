@@ -19,14 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeInputDataTypeService {
 
-  // @Autowired private ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
-  private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
-
-  public ChallengeInputDataTypeService(
-      ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
-    this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
-  }
-
   private ChallengeInputDataTypeMapper challengeInputDataTypeMapper =
       new ChallengeInputDataTypeMapper();
 
