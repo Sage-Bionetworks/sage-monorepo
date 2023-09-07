@@ -62,7 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.pageTitleService.setTitle('OpenChallenges');
 
-    this.homeDataService.fetchChallengesPerYear();
+    this.homeDataService.setChallengesPerYear();
   }
 
   ngOnDestroy(): void {
