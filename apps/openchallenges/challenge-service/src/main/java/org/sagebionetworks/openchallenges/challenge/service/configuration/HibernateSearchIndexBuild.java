@@ -14,12 +14,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class HibernateSearchIndexBuild implements ApplicationListener<ApplicationReadyEvent> {
 
-  private final EntityManager entityManager;
+  private EntityManager entityManager;
 
   public HibernateSearchIndexBuild(EntityManager entityManager) {
     this.entityManager = entityManager;
   }
-
   @Override
   @Transactional
   public void onApplicationEvent(ApplicationReadyEvent event) {
