@@ -1,5 +1,7 @@
 export * from './challenge.service';
 import { ChallengeService } from './challenge.service';
+export * from './challengeAnalytics.service';
+import { ChallengeAnalyticsService } from './challengeAnalytics.service';
 export * from './challengeContribution.service';
 import { ChallengeContributionService } from './challengeContribution.service';
 export * from './challengeInputDataType.service';
@@ -12,4 +14,4 @@ export * from './organization.service';
 import { OrganizationService } from './organization.service';
 export * from './user.service';
 import { UserService } from './user.service';
-export const APIS = [ChallengeService, ChallengeContributionService, ChallengeInputDataTypeService, ChallengePlatformService, ImageService, OrganizationService, UserService];
+export const APIS = [ChallengeService, ChallengeAnalyticsService, ChallengeContributionService, ChallengeInputDataTypeService, ChallengePlatformService, ImageService, OrganizationService, UserService];

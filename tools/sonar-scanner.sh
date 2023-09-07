@@ -16,4 +16,5 @@ sonar-scanner \
   -Dsonar.organization=sage-bionetworks \
   -Dsonar.projectKey=$PROJECT_KEY \
   -Dsonar.sources=$SOURCES \
-  -Dsonar.host.url=https://sonarcloud.io
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.python.coverage.reportPaths=coverage.xml
