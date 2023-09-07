@@ -159,6 +159,33 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/manifests/{manifestId}/json:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/manifestId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in json form
+      description: Gets the manifest in json form
+      operationId: getManifestJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeLabel}/dependencies:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
@@ -502,6 +529,13 @@ components:
             - files
       x-java-class-annotations:
         - '@lombok.Builder'
+    ManifestId:
+      description: A manifest ID.
+      type: string
+      example: syn51078535
+    ManifestJson:
+      description: A manifest in json format
+      type: object
     NodeLabel:
       description: The label of a node in a schema
       type: string
@@ -655,6 +689,13 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/UseFullFilePath'
+    manifestId:
+      name: manifestId
+      in: path
+      description: ID of a manifest
+      required: true
+      schema:
+        $ref: '#/components/schemas/ManifestId'
     nodeLabel:
       name: nodeLabel
       in: path
