@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   ChallengeService,
   Image,
@@ -11,7 +11,7 @@ import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
-import { Observable, map } from 'rxjs';
+import { Observable, Subscription, map } from 'rxjs';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -27,13 +27,15 @@ import { RouterModule } from '@angular/router';
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
 })
-export class StatisticsViewerComponent implements OnInit {
+export class StatisticsViewerComponent implements OnInit, OnDestroy {
   constructor(
     private homeDataService: HomeDataService,
     private imageService: ImageService,
     private challengeService: ChallengeService,
     private organizationService: OrganizationService
   ) {}
+
+  private chartDataSubscription: Subscription | undefined;
 
   chartOptions!: EChartsOption;
   reanimateOnClick = false;
@@ -74,48 +76,56 @@ export class StatisticsViewerComponent implements OnInit {
       .pipe(map((page) => page.totalElements));
 
     // update plot's data
-    this.homeDataService.getChallengesPerYear().subscribe(
-      (res) =>
-        (this.chartOptions = {
-          title: {
-            text: 'The Rise of Challenges',
-            left: 'center',
-            textStyle: {
-              fontWeight: 'normal',
-              fontFamily: 'Lato, sans-serif',
-            },
-          },
-          // tooltip: {
-          //   trigger: 'axis',
-          //   axisPointer: {
-          //     type: 'cross',
-          //   },
-          // },
-          xAxis: {
-            type: 'category',
-            data: res.years,
-          },
-          yAxis: [
-            {
-              type: 'value',
-              name: 'Total Challenges Tracked',
-            },
-          ],
-          series: [
-            {
-              name: 'Total challenges',
-              data: res.challengeCounts,
-              type: 'bar',
-              itemStyle: {
-                color: '#afa0fe',
+    this.chartDataSubscription = this.homeDataService
+      .getChallengesPerYear()
+      .subscribe(
+        (res) =>
+          (this.chartOptions = {
+            title: {
+              text: 'The Rise of Challenges',
+              left: 'center',
+              textStyle: {
+                fontWeight: 'normal',
+                fontFamily: 'Lato, sans-serif',
               },
-              // disable default clicking
-              silent: true,
-              // make bar plot rise from left to right instead of rising all together in the same time
-              animationDelay: (dataIndex: number) => dataIndex * 100,
             },
-          ],
-        })
-    );
+            // tooltip: {
+            //   trigger: 'axis',
+            //   axisPointer: {
+            //     type: 'cross',
+            //   },
+            // },
+            xAxis: {
+              type: 'category',
+              data: res.years,
+            },
+            yAxis: [
+              {
+                type: 'value',
+                name: 'Total Challenges Tracked',
+              },
+            ],
+            series: [
+              {
+                name: 'Total challenges',
+                data: res.challengeCounts,
+                type: 'bar',
+                itemStyle: {
+                  color: '#afa0fe',
+                },
+                // disable default clicking
+                silent: true,
+                // make bar plot rise from left to right instead of rising all together in the same time
+                animationDelay: (dataIndex: number) => dataIndex * 100,
+              },
+            ],
+          })
+      );
+  }
+
+  ngOnDestroy() {
+    if (this.chartDataSubscription) {
+      this.chartDataSubscription.unsubscribe();
+    }
   }
 }
