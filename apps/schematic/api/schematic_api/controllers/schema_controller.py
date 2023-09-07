@@ -14,9 +14,9 @@ from schematic_api.controllers import schema_controller_impl
 
 
 def get_connected_nodes(schema_url, relationship_type):  # noqa: E501
-    """Gets a subgraph containing all relationships of a given type
+    """Gets a list of connected node pairs
 
-    Gets a subgraph containing all relationships of a given type # noqa: E501
+    Gets a list of connected node pairs # noqa: E501
 
     :param schema_url: The URL of a schema in jsonld form
     :type schema_url: str

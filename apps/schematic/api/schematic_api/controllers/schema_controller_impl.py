@@ -19,7 +19,7 @@ def get_connected_nodes_from_schematic(
     relationship_type: str,
     schema_url: str,
 ) -> list[list[Any]]:
-    """Gets the relationships asked for
+    """Gets a list of connected node pairs via the provide relationship
 
     Args:
         relationship_type (str): the type of relationship in the schema to get
@@ -45,7 +45,7 @@ def get_connected_nodes(
     relationship_type: str,
     schema_url: str,
 ) -> tuple[Union[ConnectedNodesPage, BasicError], int]:
-    """Lists the relationships asked for
+    """Gets a list of connected node pairs via the provide relationship
 
     Args:
         relationship_type (str): the type of relationship in the schema to get

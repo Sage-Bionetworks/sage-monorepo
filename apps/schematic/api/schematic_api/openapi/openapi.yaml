@@ -389,7 +389,7 @@ paths:
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /connectedNodes:
     get:
-      description: Gets a subgraph containing all relationships of a given type
+      description: Gets a list of connected node pairs
       operationId: get_connected_nodes
       parameters:
       - description: The URL of a schema in jsonld form
@@ -422,7 +422,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: Gets a subgraph containing all relationships of a given type
+      summary: Gets a list of connected node pairs
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
