@@ -81,14 +81,15 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) =>
           (this.chartOptions = {
-            title: {
-              text: 'The Rise of Challenges',
-              left: 'center',
-              textStyle: {
-                fontWeight: 'normal',
-                fontFamily: 'Lato, sans-serif',
-              },
+            textStyle: {
+              fontWeight: 'normal',
+              fontFamily: 'Lato, sans-serif',
+              color: '#000',
             },
+            // title: {
+            //   text: 'The Rise of Challenges',
+            //   left: 'center',
+            // },
             // tooltip: {
             //   trigger: 'axis',
             //   axisPointer: {
@@ -98,11 +99,17 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
             xAxis: {
               type: 'category',
               data: res.years,
+              axisLabel: { fontSize: '1em' },
             },
             yAxis: [
               {
                 type: 'value',
                 name: 'Total Challenges Tracked',
+                axisLabel: { fontSize: '1em' },
+                nameTextStyle: {
+                  fontSize: '1.1em',
+                  lineHeight: 56,
+                },
               },
             ],
             series: [
