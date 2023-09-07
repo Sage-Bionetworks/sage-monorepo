@@ -4,14 +4,14 @@
   "sourceRoot": "apps/openchallenges/image-service/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
+        "command": "cp -n .env.example .env",
         "cwd": "{projectRoot}"
       }
     },
-    "prepare-java": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["./gradlew --version 1> /dev/null"],

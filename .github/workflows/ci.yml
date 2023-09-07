@@ -115,7 +115,7 @@ jobs:
               /home/vscode/.local \
               /home/vscode/.gradle \
             && . ./dev-env.sh \
-            && workspace-install"
+            && workspace-install-affected"
 
       - name: Lint the affected projects
         run: |
@@ -269,7 +269,7 @@ jobs:
               /home/vscode/.local \
               /home/vscode/.gradle \
             && . ./dev-env.sh \
-            && workspace-install"
+            && workspace-install-affected"
 
       - name: Lint the affected projects
         run: |

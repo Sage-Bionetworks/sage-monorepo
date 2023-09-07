@@ -5,11 +5,11 @@
   "projectType": "library",
   "prefix": "schematic",
   "targets": {
-    "prepare-python": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "./prepare-python.sh",
-        "cwd": "libs/schematic/api-client-python"
+        "cwd": "{projectRoot}"
       }
     },
     "openapi-generate": {

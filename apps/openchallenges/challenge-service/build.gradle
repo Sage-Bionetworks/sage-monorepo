@@ -9,7 +9,9 @@ buildscript {
 
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id 'jacoco'
   id 'java'
+  id 'org.sonarqube' version "${sonarqubeVersion}"
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
   id "org.flywaydb.flyway" version "${flywaydbVersion}"
@@ -76,6 +78,36 @@ java {
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'
+}
+
+test {
+  testLogging.showStandardStreams = true
+
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+
+  failFast = true
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
+
+  finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+  }
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "${project.name}")
+    property("sonar.organization", "sage-bionetworks")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
 
 bootBuildImage {
