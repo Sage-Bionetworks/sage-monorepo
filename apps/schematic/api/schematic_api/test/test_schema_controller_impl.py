@@ -6,14 +6,48 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_properties_page import NodePropertiesPage
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.nodes_page import NodesPage
+from schematic_api.models.connected_nodes_page import ConnectedNodesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
     get_node_is_required,
     get_property_label,
     get_node_properties,
+    get_connected_nodes,
     list_node_validation_rules,
     list_node_dependencies,
 )
+
+
+class TestGetConnectedNodes:
+    """Tests forget_connected_nodes"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_connected_nodes_from_schematic",
+            return_value=[["node1", "node2"], ["node2", "node3"]],
+        ):
+            result, status = get_connected_nodes(
+                schema_url="xxx",
+                relationship_type="type",
+            )
+            assert status == 200
+            assert isinstance(result, ConnectedNodesPage)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_connected_nodes_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_connected_nodes(
+                schema_url="xxx",
+                relationship_type="type",
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
 
 
 class TestGetNodeIsRequired:
