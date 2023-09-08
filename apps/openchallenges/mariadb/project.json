@@ -14,8 +14,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-mariadb"
-      },
-      "dependsOn": []
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
