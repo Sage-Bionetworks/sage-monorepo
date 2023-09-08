@@ -58,6 +58,23 @@ def get_dataset_files(
     )
 
 
+def get_manifest_json(asset_type, manifest_id):  # noqa: E501
+    """Gets the manifest in json form
+
+    Gets the manifest in json form # noqa: E501
+
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param manifest_id: ID of a manifest
+    :type manifest_id: str
+
+    :rtype: Union[object, Tuple[object, int], Tuple[object, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_manifest_json(asset_type, manifest_id)
+
+
 def list_projects(asset_view_id, asset_type):  # noqa: E501
     """Gets all storage projects the current user has access to.
 

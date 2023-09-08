@@ -1,5 +1,5 @@
 """Implementation of all endpoints"""
-from typing import Union
+from typing import Union, Any
 
 from schematic.schemas.generator import SchemaGenerator, SchemaExplorer  # type: ignore
 
@@ -10,7 +10,111 @@ from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.nodes_page import NodesPage
 from schematic_api.models.node import Node
+from schematic_api.models.connected_nodes_page import ConnectedNodesPage
+from schematic_api.models.connected_nodes import ConnectedNodes
 from schematic_api.controllers.utils import handle_exceptions
+
+
+def get_connected_nodes_from_schematic(
+    relationship_type: str,
+    schema_url: str,
+) -> list[list[Any]]:
+    """Gets a list of connected node pairs via the provide relationship
+
+    Args:
+        relationship_type (str): the type of relationship in the schema to get
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+        list[list[Any]]: A list of relationships
+    """
+    schema_explorer = SchemaExplorer()
+    schema_explorer.load_schema(schema_url)
+    schema_graph = schema_explorer.get_nx_schema()
+
+    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
+    relationship_subgraph = schema_generator.get_subgraph_by_edge_type(
+        schema_graph, relationship_type
+    )
+
+    return [list(edge) for edge in relationship_subgraph.edges]
+
+
+@handle_exceptions
+def get_connected_nodes(
+    relationship_type: str,
+    schema_url: str,
+) -> tuple[Union[ConnectedNodesPage, BasicError], int]:
+    """Gets a list of connected node pairs via the provide relationship
+
+    Args:
+        relationship_type (str): the type of relationship in the schema to get
+        schema_url (str): The URL of the schema in json form
+
+    Returns:
+        tuple[Union[ConnectedNodesPage, BasicError], int: A tuple
+          The first item is either the conncted nodes or an error object
+          The second item is the response status
+    """
+    connected_nodes = [
+        ConnectedNodes(connected_nodes[0], connected_nodes[1])
+        for connected_nodes in get_connected_nodes_from_schematic(
+            relationship_type, schema_url
+        )
+    ]
+
+    page = ConnectedNodesPage(
+        number=0,
+        size=100,
+        total_elements=len(connected_nodes),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        connected_nodes=connected_nodes,
+    )
+    result: Union[ConnectedNodesPage, BasicError] = page
+    status = 200
+    return result, status
+
+
+def get_node_is_required_from_schematic(
+    node_display: str,
+    schema_url: str,
+) -> bool:
+    """Gets whether or not the node is required by the schema
+
+    Args:
+        node_display(str): The display name of the node
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+       bool: Whether or no the node is required
+    """
+    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
+    return schema_generator.is_node_required(node_display)
+
+
+@handle_exceptions
+def get_node_is_required(
+    node_display: str,
+    schema_url: str,
+) -> tuple[Union[bool, BasicError], int]:
+    """Gets whether or not the node is required by the schema
+
+    Args:
+        node_display(str): The display name of the node
+        schema_url (str): The URL of the schema in jsonld form
+
+    Returns:
+        tuple[Union[bool, BasicError], int]: A tuple
+          The first item is either whether or not the node is required or an error object
+          The second item is the response status
+    """
+    result: Union[bool, BasicError] = get_node_is_required_from_schematic(
+        node_display, schema_url
+    )
+    status = 200
+    return result, status
 
 
 def get_property_label_from_schematic(

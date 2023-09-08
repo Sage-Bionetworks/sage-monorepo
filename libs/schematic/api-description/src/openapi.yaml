@@ -40,8 +40,14 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/files.yaml
 
+  /assetTypes/{assetType}/manifests/{manifestId}/json:
+    $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
+
   /nodes/{nodeLabel}/dependencies:
     $ref: paths/nodes/@{nodeLabel}/dependencies.yaml
+
+  /nodes/{nodeDisplay}/isRequired:
+    $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
 
   /nodes/{nodeLabel}/nodeProperties:
     $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
@@ -51,3 +57,6 @@ paths:
 
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
+
+  /connectedNodes:
+    $ref: paths/connectedNodes.yaml

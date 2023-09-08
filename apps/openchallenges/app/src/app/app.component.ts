@@ -14,6 +14,7 @@ import { APP_SECTIONS } from './app-sections';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
+import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 
 @Component({
   selector: 'openchallenges-root',
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private pageTitleService: PageTitleService,
-    private gtmService: GoogleTagManagerService
+    private gtmService: GoogleTagManagerService,
+    private homeDataService: HomeDataService
   ) {}
 
   ngOnInit() {
@@ -59,6 +61,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.userAvatar.name = 'blank';
 
     this.pageTitleService.setTitle('OpenChallenges');
+
+    this.homeDataService.setChallengesPerYear();
   }
 
   ngOnDestroy(): void {

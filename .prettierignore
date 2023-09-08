@@ -5,3 +5,6 @@
 
 # Gradle build
 build
+
+# Angular
+.angular

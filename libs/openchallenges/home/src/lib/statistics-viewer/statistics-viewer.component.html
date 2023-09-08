@@ -1,46 +1,42 @@
 <section id="statistics" class="mat-typography">
-  <div class="container">
-    <h3 class="section-title">Current Landscape</h3>
-    <div class="row">
-      <div class="col text-center clickable" routerLink="/challenge">
+  <h3 class="section-title">Current Landscape</h3>
+  <div class="col container">
+    <div class="row metrics-container">
+      <div class="row text-center clickable" routerLink="/challenge">
         <img
           class="logo-icon"
           src="/openchallenges-assets/images/graphic-challenges.svg"
           alt="Number of challenges"
         />
-        <h2
-          *ngIf="challengeCount$ | async as challengeCount"
-          [countUp]="challengeCount"
-          [reanimateOnClick]="reanimateOnClick"
-        >
-          0
-        </h2>
-        <p>annotated challenges</p>
+        <div class="col metrics-text-box">
+          <h2
+            *ngIf="challengeCount$ | async as challengeCount"
+            [countUp]="challengeCount"
+            [reanimateOnClick]="reanimateOnClick"
+          >
+            0
+          </h2>
+          <p>annotated challenges</p>
+        </div>
       </div>
-      <div class="col text-center clickable" routerLink="/org">
+      <div class="row text-center clickable" routerLink="/org">
         <img
           class="logo-icon"
           src="/openchallenges-assets/images/graphic-hosts.svg"
           alt="Number of organizations & hosting societies"
         />
-        <h2
-          *ngIf="orgCount$ | async as orgCount"
-          [countUp]="orgCount"
-          [reanimateOnClick]="reanimateOnClick"
-        >
-          0
-        </h2>
-        <p>organizations & hosting societies</p>
+        <div class="col metrics-text-box">
+          <h2
+            *ngIf="orgCount$ | async as orgCount"
+            [countUp]="orgCount"
+            [reanimateOnClick]="reanimateOnClick"
+          >
+            0
+          </h2>
+          <p>organizations & hosting societies</p>
+        </div>
       </div>
-      <!-- <div class="col text-center">
-        <img
-          class="logo-icon"
-          src="/openchallenges-assets/images/graphic-users.svg"
-          alt="Number of users"
-        />
-        <h2 [countUp]="3">0</h2>
-        <p>registered users</p>
-      </div> -->
     </div>
+    <div echarts [options]="chartOptions"></div>
   </div>
 </section>

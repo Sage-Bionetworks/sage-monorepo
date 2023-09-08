@@ -1,5 +1,4 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -71,17 +70,3 @@ export const routes: Routes = [
     redirectTo: '/not-found',
   },
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      initialNavigation: 'enabledBlocking',
-      // this is important to use "data:title" from any level
-      // paramsInheritanceStrategy: 'always',
-    }),
-  ],
-  declarations: [],
-  providers: [],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}
