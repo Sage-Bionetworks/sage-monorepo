@@ -269,8 +269,8 @@ jobs:
             --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
             --workspace-folder ../sage-monorepo
 
-      - name: Login to GitHub Container Registry (inside dev container)
-        run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io
+      # - name: Login to GitHub Container Registry (inside dev container)
+      #   run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io
 
       - name: Prepare the workspace
         run: |
@@ -311,6 +311,7 @@ jobs:
       - name: PUBLISH the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
             && nx run-many --target=publish-and-remove-image \
               --projects=openchallenges-app \
               --parallel=1"
