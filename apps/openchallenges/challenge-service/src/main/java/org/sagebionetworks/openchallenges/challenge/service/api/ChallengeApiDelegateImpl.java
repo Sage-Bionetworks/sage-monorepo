@@ -1,29 +1,25 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
-import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import java.util.Optional;
+import javax.annotation.Generated;
+import javax.validation.constraints.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-@Component
-public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Controller
+@RequestMapping("${openapi.openChallengesChallengeREST.base-path:/v1}")
+public class ChallengeApiController implements ChallengeApi {
 
-  // @Autowired ChallengeService challengeService;
-  private final ChallengeService challengeService;
+  private final ChallengeApiDelegate delegate;
 
-  public ChallengeApiDelegateImpl(ChallengeService challengeService) {
-    this.challengeService = challengeService;
+  public ChallengeApiController(@Autowired(required = false) ChallengeApiDelegate delegate) {
+    this.delegate = Optional.ofNullable(delegate).orElse(new ChallengeApiDelegate() {});
   }
 
   @Override
-  public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
-    return ResponseEntity.ok(challengeService.getChallenge(challengeId));
-  }
-
-  @Override
-  public ResponseEntity<ChallengesPageDto> listChallenges(ChallengeSearchQueryDto query) {
-    return ResponseEntity.ok(challengeService.listChallenges(query));
+  public ChallengeApiDelegate getDelegate() {
+    return delegate;
   }
 }
