@@ -13,6 +13,8 @@ env:
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  DOCKER_USERNAME: ${{ github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   push:
@@ -238,12 +240,12 @@ jobs:
       #     restore-keys: |
       #       ${{ runner.os }}-single-buildx
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Login to GitHub Container Registry
+      #   uses: docker/login-action@v2
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${{ github.actor }}
+      #     password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install the Dev Container CLI
         run: npm install -g @devcontainers/cli@0.49.0
@@ -259,7 +261,6 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
-            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
@@ -267,6 +268,9 @@ jobs:
             --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
             --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
             --workspace-folder ../sage-monorepo
+
+      - name: Login to GitHub Container Registry (inside dev container)
+        run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
 
       - name: Prepare the workspace
         run: |
