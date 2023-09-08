@@ -11,10 +11,10 @@ public class ChallengeInputDataTypeApiDelegateImpl implements ChallengeInputData
 
   private final ChallengeInputDataTypeService challengeInputDataTypeService;
 
-  public ChallengeInputDataTypeApiDelegateImpl(ChallengeInputDataTypeService ) {
+  public ChallengeInputDataTypeApiDelegateImpl(
+      ChallengeInputDataTypeService challengeInputDataTypeService) {
     this.challengeInputDataTypeService = challengeInputDataTypeService;
   }
-
 
   @Override
   public ResponseEntity<ChallengeInputDataTypesPageDto> listChallengeInputDataTypes(
