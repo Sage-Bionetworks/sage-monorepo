@@ -76,13 +76,15 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/openchallenges/kaggle-to-kafka-service",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
+    "openchallenges-api-description",
     "openchallenges-app-config-data",
     "openchallenges-kafka-admin",
     "openchallenges-kafka-model",

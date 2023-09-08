@@ -78,10 +78,14 @@
     "openapi-generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
-        "cwd": "apps/schematic/api",
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES", 
+          "openapi-generator-cli generate"
+        ],
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     },
     "lint": {
       "executor": "nx:run-commands",
