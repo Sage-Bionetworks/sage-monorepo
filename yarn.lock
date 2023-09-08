@@ -13267,7 +13267,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"echarts@npm:^5.4.3":
+"echarts@npm:5.4.3":
   version: 5.4.3
   resolution: "echarts@npm:5.4.3"
   dependencies:
@@ -20387,7 +20387,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ngx-echarts@npm:^16.0.0":
+"ngx-echarts@npm:16.0.0":
   version: 16.0.0
   resolution: "ngx-echarts@npm:16.0.0"
   dependencies:
@@ -24274,7 +24274,7 @@ __metadata:
     core-js: 3.25.5
     coveralls: 3.1.1
     cypress: ^12.2.0
-    echarts: ^5.4.3
+    echarts: 5.4.3
     eslint: 8.46.0
     eslint-config-prettier: 8.5.0
     eslint-config-standard: 17.0.0
@@ -24303,7 +24303,7 @@ __metadata:
     ng-packagr: 16.2.0
     ngx-avatars: 1.5.0
     ngx-countup: 13.1.0
-    ngx-echarts: ^16.0.0
+    ngx-echarts: 16.0.0
     ngx-typed-js: 2.1.1
     nock: 13.2.9
     nodemon: 2.0.20
