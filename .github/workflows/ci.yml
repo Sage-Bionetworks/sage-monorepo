@@ -259,6 +259,7 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
+            --mount type=bind,source=$HOME/.docker,target=/home/vscode/.docker \
             --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
