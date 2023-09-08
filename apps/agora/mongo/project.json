@@ -4,11 +4,11 @@
   "sourceRoot": "apps/agora/mongo/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/agora/mongo"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -16,8 +16,7 @@
       "options": {
         "command": "docker compose up",
         "cwd": "apps/agora/mongo"
-      },
-      "dependsOn": []
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",

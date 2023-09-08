@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  agora-mongo:
+    image: ghcr.io/sage-bionetworks/agora-mongo:${AGORA_VERSION:-local}
+    container_name: agora-mongo
+    restart: always
+    env_file:
+      - ../../../apps/agora/mongo/.env
+    volumes:
+      - agora-mongo-data:/data/db
+    networks:
+      - agora
+    ports:
+      - '5306:5306'
+    deploy:
+      resources:
+        limits:
+          memory: 500M

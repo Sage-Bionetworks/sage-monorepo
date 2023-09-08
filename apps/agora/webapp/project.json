@@ -4,7 +4,7 @@
   "projectType": "application",
   "prefix": "sagebionetworks",
   "sourceRoot": "apps/agora/webapp/src",
-  "tags": [],
+  "tags": ["language:typescript"],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
