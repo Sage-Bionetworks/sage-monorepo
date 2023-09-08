@@ -23,7 +23,7 @@ public class ChallengeService {
   private final ChallengeRepository challengeRepository;
 
   public ChallengeService(ChallengeRepository challengeRepository) {
-    this.challengeRepository = challengeRepository;
+    this.challengeRepository = ChallengeRepository;
   }
 
   // @Autowired private ProducerService producerService;
