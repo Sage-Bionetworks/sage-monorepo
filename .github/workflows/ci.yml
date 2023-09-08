@@ -71,21 +71,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-single-buildx
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install the Dev Container CLI
         run: npm install -g @devcontainers/cli@0.49.0
 
@@ -149,25 +134,16 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=publish-and-remove-image --parallel=1"
 
-      - name: BUILDING the images of the SELECTED projects
+      - name: Publishing the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
             && nx run-many --target=build-and-remove-image \
               --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
       - name: Stop the dev container
         run: docker rm -f sage_devcontainer
-
-      # - run: yarn nx run-many --all --target=test --parallel --max-parallel=2
-      # TODO: Fix coverage error when no projects are affected
-      # - name: Merge coverage reports
-      #   run: yarn coverage:merge
-      # - name: Push coverage report to Coveralls
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
-      #     path-to-lcov: coverage/lcov.info
 
   pr:
     runs-on: ubuntu-latest
@@ -232,26 +208,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # - name: Cache Docker layers
-      #   uses: actions/cache@v3
-      #   with:
-      #     path: /tmp/.buildx-cache
-      #     key: ${{ runner.os }}-single-buildx-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-single-buildx
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Install the Dev Container CLI
         run: npm install -g @devcontainers/cli@0.49.0
-
-      - name: Show docker creds helper
-        run: ls -al /usr/local/bin/docker*
 
       - name: Start the dev container
         run: |
@@ -271,9 +229,6 @@ jobs:
             --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
             --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
             --workspace-folder ../sage-monorepo
-
-      # - name: Login to GitHub Container Registry (inside dev container)
-      #   run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io
 
       - name: Prepare the workspace
         run: |
@@ -315,7 +270,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=publish-and-remove-image \
-              --projects=openchallenges-app \
+            --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
       - name: Stop the dev container
