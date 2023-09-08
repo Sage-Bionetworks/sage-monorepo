@@ -266,10 +266,10 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=build-and-remove-image --parallel=1"
 
-      - name: PUBLISH the images of the SELECTED projects
+      - name: Building the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=publish-and-remove-image \
+            && nx run-many --target=build-and-remove-image \
             --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
