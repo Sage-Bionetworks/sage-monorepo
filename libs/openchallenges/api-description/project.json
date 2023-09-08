@@ -22,7 +22,7 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "openapi-merge-cli --config openapi-merge.yaml",
-        "cwd": "{projctRoot}"
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["build-individuals"]
     },
