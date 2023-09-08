@@ -13,7 +13,7 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
   private final ChallengePlatformService challengePlatformService;
 
   public ChallengePlatformApiDelegateImpl(ChallengePlatformService challengePlatformService) {
-    this.challengePlatformService = challengePlatformService;
+    this.challengePlatformService = challengePlatformService; 
   }
 
   @Override
