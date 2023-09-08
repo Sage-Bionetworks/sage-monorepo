@@ -10,7 +10,9 @@
     "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
     "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}",
-    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}"
+    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
+    "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
+    "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
 
   "features": {
