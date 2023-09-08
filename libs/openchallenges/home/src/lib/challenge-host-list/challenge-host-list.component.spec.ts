@@ -9,8 +9,7 @@ describe('ChallengeHostListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChallengeHostListComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, ChallengeHostListComponent],
     }).compileComponents();
   });
 

@@ -8,14 +8,27 @@ import {
 import { Tab } from '../tab.model';
 import { USER_PROFILE_STARRED_TABS } from './user-profile-starred-tabs';
 import {
+  ChallengeCardComponent,
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
+  OrganizationCardComponent,
+  PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
+import { CommonModule } from '@angular/common';
+import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'openchallenges-user-profile-starred',
+  standalone: true,
+  imports: [
+    CommonModule,
+    PaginatorModule,
+    OrganizationCardComponent,
+    PaginatorComponent,
+    ChallengeCardComponent,
+  ],
   templateUrl: './user-profile-starred.component.html',
   styleUrls: ['./user-profile-starred.component.scss'],
 })

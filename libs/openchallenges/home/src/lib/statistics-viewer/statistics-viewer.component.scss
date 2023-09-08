@@ -26,11 +26,20 @@ $screen-lg: 641px;
   background: #fff;
   padding: 88px 0;
 
+  .row {
+    justify-content: center;
+  }
+
   .col {
     align-items: center;
+    max-width: 400px;
 
     img {
       margin-bottom: 8px;
     }
   }
+}
+
+.clickable {
+  cursor: pointer;
 }

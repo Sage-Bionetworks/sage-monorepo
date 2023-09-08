@@ -244,16 +244,18 @@ table {
 }
 
 // CARDS
+@mixin line-clamp($max-lines) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $max-lines;
+}
 .card-group {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   padding: 16px 0;
-
-  & > * {
-    flex: 1 1 auto;
-  }
 }
 .card-banner {
   width: 100%;
@@ -269,7 +271,11 @@ table {
   margin: 15px 0 !important;
   font-weight: 700 !important;
   line-height: 24px !important;
-  height: 2.5em;
+  min-height: 48px;
+  @include line-clamp(2);
+}
+.mat-caption {
+  @include line-clamp(2);
 }
 .card-body {
   width: 100%;
@@ -287,18 +293,18 @@ table {
 .card-footer {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   height: 50px;
   width: 100%;
   border-top: 1px solid #c4c4c4;
   justify-content: center;
   align-items: center;
+  gap: 6px;
 }
 .star-btn {
   position: absolute;
   top: 18px;
   right: 18px;
-  height: 32px;
+  // height: 32px;
   padding: 0 8px;
   display: flex;
   justify-content: center;
@@ -316,10 +322,6 @@ table {
 @media screen and (max-width: constants.$md-breakpoint) {
   .content {
     flex-direction: column;
-  }
-  .card-group {
-    flex-direction: column;
-    align-items: center;
   }
 }
 @media screen and (min-width: constants.$md-breakpoint) {
@@ -378,5 +380,10 @@ table {
 @media only screen and (max-width: constants.$lg-breakpoint) {
   html {
     margin-top: constants.$navbar-height-tall;
+  }
+
+  .card-group {
+    grid-template-columns: 60%;
+    justify-content: center;
   }
 }

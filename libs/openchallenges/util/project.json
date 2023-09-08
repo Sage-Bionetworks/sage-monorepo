@@ -7,7 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["coverage/libs/openchallenges/util"],
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/util"],
       "options": {
         "jestConfig": "libs/openchallenges/util/jest.config.ts",
         "passWithNoTests": true
@@ -23,6 +23,6 @@
       }
     }
   },
-  "tags": ["type:util", "scope:openchallenges"],
+  "tags": ["type:util", "scope:openchallenges", "language:typescript"],
   "implicitDependencies": []
 }

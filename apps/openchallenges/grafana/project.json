@@ -4,14 +4,14 @@
   "sourceRoot": "apps/openchallenges-grafana/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "shx cp -n .env.example .env",
-          "shx cp -n tools/grafana-backup-tool/.env.example tools/grafana-backup-tool/.env"
+          "cp -n .env.example .env",
+          "cp -n tools/grafana-backup-tool/.env.example tools/grafana-backup-tool/.env"
         ],
-        "cwd": "apps/openchallenges/grafana"
+        "cwd": "{projectRoot}"
       }
     },
     "serve-detach": {
@@ -27,11 +27,7 @@
         "context": "apps/openchallenges/grafana",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-grafana"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -42,10 +38,7 @@
         "context": "apps/openchallenges/grafana",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-grafana"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },

@@ -8,21 +8,25 @@ ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
 # https://github.com/nektos/act
-ARG actVersion="0.2.48"
+ARG actVersion="0.2.49"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.17.0"
 # https://github.com/yarnpkg/berry
 ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.49.0"
+ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.5.1"
+ARG poetryVersion="1.6.1"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.43.1"
+ARG trivyVersion="0.44.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
+# https://github.com/pnpm/pnpm/releases
+ARG pnpmVersion="8.7.0"
+# https://github.com/SonarSource/sonar-scanner-cli/releases
+ARG sonarScannerVersion="5.0.1.3006"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -67,6 +71,10 @@ RUN groupadd docker \
   # Install Yarn
   && corepack enable yarn \
   && corepack prepare "yarn@${yarnVersion}" --activate \
+  # Instal pnpm
+  # && curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=${pnpmVersion} bash - \
+  && corepack enable pnpm \
+  && corepack prepare "pnpm@${pnpmVersion}" --activate \
   # Install @devcontainers/cli
   && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
   # Install act
@@ -108,7 +116,8 @@ RUN groupadd docker \
 # Setting up a UTF-8 locale
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
   && locale-gen
-ENV LANG=en_US.UTF-8
+ENV LANG=en_US.UTF-8 \
+    LC_ALL=en_US.UTF-8
 
 ARG user=vscode
 RUN useradd -m $user \
@@ -132,12 +141,24 @@ RUN useradd -m $user \
   # Set the default version of Yarn
   && corepack prepare "yarn@${yarnVersion}" --activate
 
+# Install SonarScanner CLI
+ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
+ENV SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
+    SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
+    PATH=${SONAR_SCANNER_HOME}/bin:${PATH}
+RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${sonarScannerVersion}.zip --output sonar-scanner-cli.zip \
+  && unzip sonar-scanner-cli.zip \
+  && mv sonar-scanner-${sonarScannerVersion} ${SONAR_SCANNER_HOME} \
+  && mkdir -p "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache" \
+  && chown -R ${user}:${user} "${SONAR_SCANNER_HOME}" \
+  && chmod -R 777 "${SONAR_USER_HOME}"
+
 USER $user
 
 # Install pyenv as the user
 RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
-## Install Python environments
+# Install Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install \

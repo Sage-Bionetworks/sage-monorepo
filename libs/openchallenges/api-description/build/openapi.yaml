@@ -688,6 +688,7 @@ components:
         - title
         - status
       x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
     ChallengeContributionRole:
       description: The nature of a challenge contribution.

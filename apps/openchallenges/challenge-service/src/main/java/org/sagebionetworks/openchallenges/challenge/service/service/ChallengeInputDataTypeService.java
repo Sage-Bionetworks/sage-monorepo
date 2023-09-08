@@ -9,7 +9,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeI
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeInputDataTypeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeInputDataTypeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeInputDataTypeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,10 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeInputDataTypeService {
 
-  @Autowired private ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
-
   private ChallengeInputDataTypeMapper challengeInputDataTypeMapper =
       new ChallengeInputDataTypeMapper();
+
+  public ChallengeInputDataTypeService(
+      ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
+    this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
+  }
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 

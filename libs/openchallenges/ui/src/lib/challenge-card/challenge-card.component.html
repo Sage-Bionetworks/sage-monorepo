@@ -10,20 +10,22 @@
       src="/openchallenges-assets/images/banner-default.svg"
       alt="{{ challenge.name }}"
     />
-    <div class="star-btn">
+    <!-- <div class="star-btn">
       <mat-icon aria-hidden="true" class="star-icon">star_outline</mat-icon>
       {{ challenge.starredCount }}
-    </div>
+    </div> -->
     <div class="card-body">
-      <p class="card-title">{{ challenge.name }}</p>
+      <p class="card-title">
+        {{ challenge.name }}
+      </p>
       <p class="card-subtitle" *ngIf="platform">
         {{ platform.name }}
       </p>
-      <p class="mat-caption">{{ shorthand(desc) }}</p>
+      <p class="mat-caption">{{ desc }}</p>
     </div>
     <div class="card-footer">
+      <mat-icon aria-hidden="true" class="card-icon">auto_awesome</mat-icon>
       <div class="difficulty-tag mat-small">
-        <mat-icon aria-hidden="true" class="card-icon">auto_awesome</mat-icon>
         {{ incentives }}
       </div>
       <div class="status-tag mat-small" [ngClass]="statusClass">

@@ -15,8 +15,16 @@ import javax.validation.constraints.*;
 @lombok.Builder
 public class ImageDto {
 
-  @JsonProperty("url")
   private String url;
+
+  public ImageDto() {
+    super();
+  }
+
+  /** Constructor with only required parameters */
+  public ImageDto(String url) {
+    this.url = url;
+  }
 
   public ImageDto url(String url) {
     this.url = url;
@@ -29,7 +37,11 @@ public class ImageDto {
    * @return url
    */
   @NotNull
-  @Schema(name = "url", example = "http://example.com/an-image.png", required = true)
+  @Schema(
+      name = "url",
+      example = "http://example.com/an-image.png",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("url")
   public String getUrl() {
     return url;
   }

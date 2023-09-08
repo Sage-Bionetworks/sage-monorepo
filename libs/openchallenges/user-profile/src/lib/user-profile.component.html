@@ -1,6 +1,6 @@
 <main class="base mat-typography" *ngIf="user$ | async as user">
   <section id="profile-top" class="row">
-    <openchallenges-avatar class="profile-pic" [avatar]="userAvatar"></openchallenges-avatar>
+    <openchallenges-avatar class="profile-pic" [avatar]="userAvatar"/>
     <div id="profile-details" class="col">
       <h2>
         Awesome User
@@ -13,14 +13,14 @@
   <section id="profile-stats" class="row">
     <div class="col fill-empty"></div>
     <div class="col">
-      <openchallenges-user-profile-stats [loggedIn]="loggedIn"></openchallenges-user-profile-stats>
+      <openchallenges-user-profile-stats [loggedIn]="loggedIn"/>
     </div>
   </section>
   <section id="profile-bottom" class="content">
     <div class="profile-sidenav col">
       <div class="profile-nav-group">
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'overview' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
@@ -28,7 +28,7 @@
           Biography
         </a>
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'challenges' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
@@ -36,7 +36,7 @@
           Challenges
         </a>
         <a
-        class="profile-nav-item"
+          class="profile-nav-item"
           routerLink="."
           [queryParams]="{ tab: 'starred' }"
           [ngClass]="{ 'active-tab': activeTab === tabs['starred'] }"
@@ -47,19 +47,19 @@
     </div>
     <div class="main col">
       <ng-container [ngSwitch]="activeTab">
-        <openchallenges-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user">
-        </openchallenges-user-profile-overview>
-        <openchallenges-user-profile-challenges *ngSwitchCase="tabs['challenges']" [user]="user">
-        </openchallenges-user-profile-challenges>
+        <openchallenges-user-profile-overview *ngSwitchCase="tabs['overview']" [user]="user"/>
+        <openchallenges-user-profile-challenges *ngSwitchCase="tabs['challenges']" [user]="user"/>
         <openchallenges-user-profile-starred
           *ngSwitchCase="tabs['starred']"
           [user]="user"
           [loggedIn]="loggedIn"
-        >
-        </openchallenges-user-profile-starred>
+        />
       </ng-container>
     </div>
   </section>
 </main>
 
-<openchallenges-footer [version]="appVersion"></openchallenges-footer>
+<openchallenges-footer
+  [appVersion]="appVersion"
+  [dataUpdatedOn]="dataUpdatedOn"
+/>

@@ -14,8 +14,12 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
+  CheckboxFilterComponent,
   FilterValue,
+  FooterComponent,
   OrganizationCard,
+  OrganizationCardComponent,
+  PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeContributionRolesFilter,
@@ -40,17 +44,44 @@ import {
   shareReplay,
   takeUntil,
 } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'openchallenges-org-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    DividerModule,
+    DropdownModule,
+    InputTextModule,
+    MatIconModule,
+    MatSnackBarModule,
+    RouterModule,
+    FormsModule,
+    PanelModule,
+    RadioButtonModule,
+    ReactiveFormsModule,
+    FooterComponent,
+    PaginatorComponent,
+    OrganizationCardComponent,
+    CheckboxFilterComponent,
+  ],
   templateUrl: './org-search.component.html',
   styleUrls: ['./org-search.component.scss'],
 })
 export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public appVersion: string;
+  public dataUpdatedOn: string;
 
   private query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
@@ -72,7 +103,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   sortedBy!: OrganizationSort;
 
   // set default values
-  defaultSortedBy = 'relevance';
+  defaultSortedBy: OrganizationSort = 'challenge_count';
   defaultPageNumber = 0;
   defaultPageSize = 24;
 
@@ -96,6 +127,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     private _snackBar: MatSnackBar
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
   }
 
   ngOnInit() {
@@ -106,14 +138,14 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       );
       this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'];
-      this.selectedPageSize = +params['pageSize'];
-      this.sortedBy = params['sort'];
+      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
+      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: OrganizationSearchQuery = {
-        pageNumber: this.selectedPageNumber || this.defaultPageNumber,
-        pageSize: this.selectedPageSize || this.defaultPageSize,
-        sort: this.sortedBy || this.defaultSortedBy,
+        pageNumber: this.selectedPageNumber,
+        pageSize: this.selectedPageSize,
+        sort: this.sortedBy,
         searchTerms: this.searchedTerms,
         challengeContributionRoles: this.selectedContributionRoles,
         categories: this.selectedCategories,
@@ -164,7 +196,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
             Infinity
-          ) as unknown as Observable<(Image | undefined)[]>,
+          ),
         })
       ),
       switchMap(({ orgs, avatarUrls }) =>
@@ -248,23 +280,26 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     });
   }
 
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of image service'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image | undefined
+    avatarUrl: Image
   ): OrganizationCard {
     return {
       acronym: org.acronym,
