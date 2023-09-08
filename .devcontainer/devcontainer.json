@@ -69,6 +69,7 @@
     3306,
     4200,
     4211,
+    5200,
     5432,
     5601,
     7010,
@@ -117,6 +118,10 @@
     },
     "5432": {
       "label": "openchallenges-postgres",
+      "onAutoForward": "silent"
+    },
+    "5200": {
+      "label": "agora-webapp",
       "onAutoForward": "silent"
     },
     "5601": {
