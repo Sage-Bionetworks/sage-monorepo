@@ -270,10 +270,7 @@ jobs:
             --workspace-folder ../sage-monorepo
 
       - name: Login to GitHub Container Registry (inside dev container)
-        run: echo $DOCKER_PASSWORD | docker login \
-          --username $DOCKER_USERNAME \
-          --password-stdin \
-          ghcr.io
+        run: echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io
 
       - name: Prepare the workspace
         run: |
