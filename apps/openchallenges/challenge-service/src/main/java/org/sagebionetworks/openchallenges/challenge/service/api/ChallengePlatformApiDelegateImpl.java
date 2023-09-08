@@ -4,14 +4,17 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengePlatformsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengePlatformService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDelegate {
 
-  @Autowired ChallengePlatformService challengePlatformService;
+  private final ChallengePlatformService challengePlatformService;
+
+  public ChallengePlatformApiDelegateImpl(ChallengePlatformService challengePlatformService) {
+    this.challengePlatformService = challengePlatformService; 
+  }
 
   @Override
   public ResponseEntity<ChallengePlatformDto> getChallengePlatform(String challengePlatformName) {

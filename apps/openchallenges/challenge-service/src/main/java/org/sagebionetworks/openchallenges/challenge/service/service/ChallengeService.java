@@ -10,7 +10,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.Challenges
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeService {
 
-  @Autowired private ChallengeRepository challengeRepository;
+  private final ChallengeRepository challengeRepository;
+
+  public ChallengeService(ChallengeRepository challengeRepository) {
+    this.challengeRepository = ChallengeRepository;
+  }
 
   // @Autowired private ProducerService producerService;
 
