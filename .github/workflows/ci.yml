@@ -142,7 +142,7 @@ jobs:
               --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
-      - name: Stop the dev container
+      - name: Remove the dev container
         run: docker rm -f sage_devcontainer
 
   pr:
@@ -273,5 +273,5 @@ jobs:
             --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
               --parallel=1"
 
-      - name: Stop the dev container
+      - name: Remove the dev container
         run: docker rm -f sage_devcontainer
