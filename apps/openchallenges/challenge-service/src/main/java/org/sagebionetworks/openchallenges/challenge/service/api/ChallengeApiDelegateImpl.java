@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
+import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeInputDataTypeService;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -10,9 +11,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
+  //@Autowired ChallengeService challengeService;
   private final ChallengeService challengeService;
 
-  public ChallengeApiDelegateImpl(ChallengeService challengeService) {
+  public ChallengeApiDelegateImpl(
+      ChallengeService challengeService) {
     this.challengeService = challengeService;
   }
 

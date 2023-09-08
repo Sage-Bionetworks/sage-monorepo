@@ -19,13 +19,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeInputDataTypeService {
 
-  private ChallengeInputDataTypeMapper challengeInputDataTypeMapper =
-      new ChallengeInputDataTypeMapper();
+  //@Autowired private ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
+  private final ChallengeInputDataTypeRepository challengeInputDataTypeRepository;
 
-  public ChallengeInputDataTypeService(
-      ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
+  public ChallengeInputDataTypeService(ChallengeInputDataTypeRepository challengeInputDataTypeRepository) {
     this.challengeInputDataTypeRepository = challengeInputDataTypeRepository;
   }
+
+  private ChallengeInputDataTypeMapper challengeInputDataTypeMapper =
+      new ChallengeInputDataTypeMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
 
