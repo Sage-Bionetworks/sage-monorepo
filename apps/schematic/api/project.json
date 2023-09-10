@@ -75,7 +75,7 @@
         "color": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],

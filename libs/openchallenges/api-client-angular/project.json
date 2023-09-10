@@ -43,7 +43,7 @@
         "fix": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],

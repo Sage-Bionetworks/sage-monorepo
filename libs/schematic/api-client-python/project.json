@@ -12,7 +12,7 @@
         "cwd": "{projectRoot}"
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
