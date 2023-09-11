@@ -51,9 +51,10 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/schematic/api-client-angular",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["language:typescript"],

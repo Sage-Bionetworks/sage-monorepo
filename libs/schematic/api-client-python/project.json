@@ -20,13 +20,12 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/schematic/api-client-python",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["language:python", "package-manager:poetry"],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "implicitDependencies": ["schematic-api-description"]
 }

@@ -9,26 +9,27 @@
       "options": {
         "commands": ["redocly bundle --output build/openapi.yaml src/openapi.yaml"],
         "parallel": true,
-        "cwd": "libs/synapse/api-description"
+        "cwd": "{projectRoot}"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
-        "cwd": "libs/synapse/api-description"
-      }
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["build"]
     },
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --write libs/synapse/api-description"
+        "command": "prettier --write {projectRoot}"
       }
     },
     "format-check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "prettier --check libs/synapse/api-description"
+        "command": "prettier --check {projectRoot}"
       }
     }
   },
