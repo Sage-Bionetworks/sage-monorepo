@@ -159,6 +159,56 @@ def get_dataset_files(
     return result, status
 
 
+def get_dataset_manifest_from_schematic(
+    asset_type: str, dataset_id: str
+) -> pd.DataFrame:
+    """Gets a manifest in pandas.Datframe format
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        manifest_id (str): The unique id for the manifest file
+        dataset_id (str): The id of the dataset the manifest is in
+
+    Returns:
+        pandas.DataFrame: The manifest
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    manifest_data = store.getDatasetManifest(
+        datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
+    )
+
+    manifest_local_file_path = manifest_data["path"]
+    manifest = pd.read_csv(manifest_local_file_path)
+    os.remove(manifest_local_file_path)
+    return manifest
+
+
+@handle_exceptions
+def get_dataset_manifest_json(
+    asset_type: str, asset_view_id: str, dataset_id: str
+) -> tuple[Union[str, BasicError], int]:
+    """Gets a manifest in json form
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        asset_view_id (str): The id of the asst view the dataset is in
+        dataset_id (str): The id of the dataset the manifest is in
+
+    Returns:
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the manifest or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    mainfest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
+    result: Union[str, BasicError] = mainfest.to_json()
+    status = 200
+
+    return result, status
+
+
 def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
     """Gets a manifest in pandas.Datframe format
 
