@@ -22,9 +22,10 @@
           "rm -fr src/lib/*",
           "java -jar openapi-generator-cli.jar generate -i ../api-description/build/openapi.yaml -g r"
         ],
-        "cwd": "libs/openchallenges/api-client-r",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -54,7 +55,5 @@
     }
   },
   "tags": ["language:r", "package-manager:renv"],
-  "implicitDependencies": [
-    "openchallenges-api-description"
-  ]
+  "implicitDependencies": ["openchallenges-api-description"]
 }

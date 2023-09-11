@@ -76,13 +76,15 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/openchallenges/user-service",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
+    "openchallenges-api-description",
     "openchallenges-api-gateway",
     "openchallenges-keycloak",
     "openchallenges-mariadb",

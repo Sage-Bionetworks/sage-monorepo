@@ -137,9 +137,14 @@
         ],
         "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
-  "implicitDependencies": ["openchallenges-app-config-data", "shared-java-util"]
+  "implicitDependencies": [
+    "openchallenges-api-description",
+    "openchallenges-app-config-data", 
+    "shared-java-util"
+  ]
 }
