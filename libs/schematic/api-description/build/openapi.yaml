@@ -101,6 +101,34 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/datasetId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in json form
+      description: Gets the manifest in json form
+      operationId: getDatasetManifestJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
@@ -469,6 +497,13 @@ components:
     AssetViewJson:
       description: An asset view in json format
       type: object
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    ManifestJson:
+      description: A manifest in json format
+      type: object
     Project:
       type: object
       description: A project.
@@ -502,10 +537,6 @@ components:
             - projects
       x-java-class-annotations:
         - '@lombok.Builder'
-    DatasetId:
-      description: A dataset ID.
-      type: string
-      example: syn23643250
     FileNames:
       description: A list of file names.
       type: array
@@ -552,9 +583,6 @@ components:
       description: A manifest ID.
       type: string
       example: syn51078535
-    ManifestJson:
-      description: A manifest in json format
-      type: object
     NodeLabel:
       description: The label of a node in a schema
       type: string
