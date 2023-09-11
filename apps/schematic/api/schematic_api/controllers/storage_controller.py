@@ -58,6 +58,27 @@ def get_dataset_files(
     )
 
 
+def get_dataset_manifest_json(asset_type, asset_view_id, dataset_id):  # noqa: E501
+    """Gets the manifest in json form
+
+    Gets the manifest in json form # noqa: E501
+
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+    :param dataset_id: The ID of a dataset.
+    :type dataset_id: str
+
+    :rtype: Union[object, Tuple[object, int], Tuple[object, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_dataset_manifest_json(
+        asset_type, asset_view_id, dataset_id
+    )
+
+
 def get_manifest_json(asset_type, manifest_id):  # noqa: E501
     """Gets the manifest in json form
 

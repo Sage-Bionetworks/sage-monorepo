@@ -34,6 +34,9 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml
 
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/manifestJson.yaml
+
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
 
