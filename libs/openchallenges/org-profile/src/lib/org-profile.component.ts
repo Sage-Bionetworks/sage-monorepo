@@ -68,6 +68,8 @@ import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
   account$!: Observable<Account | undefined>;
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
@@ -87,6 +89,8 @@ export class OrgProfileComponent implements OnInit {
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 
   ngOnInit(): void {
