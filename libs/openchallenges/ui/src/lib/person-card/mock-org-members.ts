@@ -1,6 +1,6 @@
-import { OrgMember } from './org-members';
+import { OrgMembership } from './org-membership';
 
-export const MOCK_ORG_MEMBERS: OrgMember[] = [
+export const MOCK_ORG_MEMBERS: OrgMembership[] = [
   {
     id: '',
     name: 'Awesome Admin',
@@ -29,18 +29,3 @@ export const MOCK_ORG_MEMBERS: OrgMember[] = [
     userId: '',
   },
 ];
-
-// export const MOCK_CHALLENGE_ORGANIZERS: ChallengeOrganizer[] = [
-//   {
-//     id: '',
-//     login: 'awesome-lead',
-//     name: 'Awesome Lead',
-//     roles: ['ChallengeLead'],
-//   },
-//   {
-//     id: '',
-//     name: 'Awesome Engineer',
-//     login: 'awesome-engineer',
-//     roles: ['InfrastructureLead'],
-//   },
-// ];

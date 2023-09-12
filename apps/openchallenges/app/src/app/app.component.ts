@@ -6,13 +6,11 @@ import {
   MenuItem,
   MOCK_AVATAR_32,
   USER_MENU_ITEMS,
-  MOCK_USER,
   NavbarSection,
   NavbarComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { APP_SECTIONS } from './app-sections';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 
@@ -27,7 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
   sections: { [key: string]: NavbarSection } = APP_SECTIONS;
   isLoggedIn = false;
-  user: User = MOCK_USER;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = USER_MENU_ITEMS;
 
