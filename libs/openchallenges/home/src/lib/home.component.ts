@@ -32,9 +32,13 @@ import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 export class HomeComponent {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 }
