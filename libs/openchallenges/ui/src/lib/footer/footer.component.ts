@@ -9,8 +9,8 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent {
-  @Input() appVersion = '';
-  @Input() dataUpdatedOn = '';
-  @Input() privacyPolicyUrl = '';
-  @Input() termsOfUseUrl = '';
+  @Input({ required: true }) appVersion = '';
+  @Input({ required: true }) dataUpdatedOn = '';
+  @Input({ required: true }) privacyPolicyUrl = '';
+  @Input({ required: true }) termsOfUseUrl = '';
 }
