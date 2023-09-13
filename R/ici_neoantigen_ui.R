@@ -10,6 +10,9 @@ ici_neoantigen_ui <- function(id){
       width = 12,
       p("Plot survival curves based on immune characteristics and identify variables associated with outcome.")
     ),
+    iatlas.modules::messageBox(
+      shiny::htmlOutput(ns("excluded_dataset"))
+    ),
     iatlas.modules::sectionBox(
       title = "Classes of Neoantigens",
       ici_neoantigen_classes_ui(ns("ici_neoantigen_classes"))

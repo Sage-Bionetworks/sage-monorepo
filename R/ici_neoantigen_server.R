@@ -16,6 +16,25 @@ ici_neoantigen_server <- function(
         setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
       })
 
+      # #adding warning for user of dataset selected in ICI Cohort Selection that doesn't have neoantigen data in iAtlas
+      output$excluded_dataset <- shiny::renderText({
+        if(any(!cohort_obj()$sample_tbl$sample_name %in% unique(count_df()$sample))){
+          absent_samples <- cohort_obj()$sample_tbl %>%
+            dplyr::filter(!sample_name %in% count_df()$sample) %>%
+            dplyr::group_by(dataset_name) %>%
+            dplyr::summarise(n_missing = dplyr::n_distinct(sample_name)) %>%
+            dplyr::mutate(text = glue::glue("<li>Dataset {dataset_displays()[dataset_name]} has {n_missing} samples not included in this module."))
+
+          paste(
+            "<ul><i> There are samples selected in ICI Cohort Selection that do not have neoantigen data present in this module: </i><br>",
+            paste(absent_samples$text, collapse = "</li>"),
+            "</ul>"
+          )
+        }else{
+          ""
+        }
+      })
+
       ici_neoantigen_classes_server(
         "ici_neoantigen_classes",
         cohort_obj,
