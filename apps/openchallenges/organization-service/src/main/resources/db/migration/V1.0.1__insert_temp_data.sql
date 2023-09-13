@@ -76,7 +76,7 @@ VALUES (
     'A secure, collaborative, high-performance computing platform that builds a community of experts around the analysis of biological datasets in order to advance precision medicine.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:25',
-    17
+    18
   ),
   (
     15,
