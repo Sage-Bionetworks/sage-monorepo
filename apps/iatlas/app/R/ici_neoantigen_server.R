@@ -53,6 +53,15 @@ ici_neoantigen_server <- function(
         top_mhc_df(),
         shiny::reactive(dataset_displays())
       )
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/neoantigen-prediction.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
     }
   )
 }

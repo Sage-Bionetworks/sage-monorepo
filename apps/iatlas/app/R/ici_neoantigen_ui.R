@@ -8,9 +8,11 @@ ici_neoantigen_ui <- function(id){
     ),
     iatlas.modules::textBox(
       width = 12,
-      p("Plot survival curves based on immune characteristics and identify variables associated with outcome.")
+      p("Explore the prevalence, variety and distribution of predicted neoantigens in iAtlas datasets."),
+      shiny::actionLink(ns("method_link"), "Click to view neoantigen prediction method description.")
     ),
     iatlas.modules::messageBox(
+      width = 12,
       shiny::htmlOutput(ns("excluded_dataset"))
     ),
     iatlas.modules::sectionBox(
