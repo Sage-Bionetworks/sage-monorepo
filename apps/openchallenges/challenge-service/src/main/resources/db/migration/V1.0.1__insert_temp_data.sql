@@ -98,6 +98,13 @@ VALUES (
     'Other',
     '',
     ''
+  ),
+  (
+    15,
+    'nightingale-os',
+    'Nightingale OS',
+    'logo/nightingale-os.png',
+    'https://app.nightingalescience.org/'
   );
 
 -- challenge_input_data_type
