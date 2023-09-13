@@ -4084,6 +4084,32 @@ Our organization leverages the unique strengths of individual researchers across
     '2023-09-13 00:36:41',
     '2023-09-13 00:37:01',
     1
+  ),
+  (
+    325,
+    'University of California, Santa Barbara',
+    'UCSB',
+    '',
+    'uc-santa-barbara',
+    '',
+    'https://www.ucsb.edu/',
+    'At UC Santa Barbara, we offer a dynamic environment that prizes academic inquiry and interpersonal connection to inspire scholarly ambition, creativity, and discoveries with wide-ranging impact. We’re inquisitive and curious, community-driven and globally-focused. Across our campus, you’ll find independent thinkers and consensus builders, Nobel Laureates and leaders chasing noble causes. But no matter how you define us, we are above all Gauchos — diverse in our pursuits, yet connected in our collective drive toward excellence. ',
+    '2023-09-13 16:57:59',
+    '2023-09-13 16:59:12',
+    2
+  ),
+  (
+    326,
+    'GSK',
+    '',
+    '',
+    'gsk',
+    '',
+    'https://www.gsk.com/en-gb/',
+    'We are a global biopharma company with a purpose to unite science, technology and talent to get ahead of disease together.  We aim to positively impact the health of 2.5 billion people by the end of 2030. Our bold ambitions for patients are reflected in new commitments to growth and a step-change in performance.  We are a company where outstanding people can thrive.',
+    '2023-09-13 17:17:03',
+    '2023-09-13 17:17:56',
+    2
   );
 
 -- organization_category data
@@ -4993,4 +5019,8 @@ VALUES (1, 1, 75, 'sponsor'),
   (895, 226, 93, 'challenge_organizer'),
   (896, 226, 242, 'challenge_organizer'),
   (897, 226, 93, 'data_contributor'),
-  (898, 226, 242, 'data_contributor');
+  (898, 226, 242, 'data_contributor'),
+  (899, 228, 325, 'challenge_organizer'),
+  (900, 229, 325, 'challenge_organizer'),
+  (901, 227, 326, 'challenge_organizer'),
+  (902, 230, 326, 'challenge_organizer');
