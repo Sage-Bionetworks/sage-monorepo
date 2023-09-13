@@ -24,7 +24,7 @@ VALUES (
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
     '2023-08-04 07:33:09',
     '2023-08-05 06:10:02',
-    67
+    71
   ),
   (
     3,
