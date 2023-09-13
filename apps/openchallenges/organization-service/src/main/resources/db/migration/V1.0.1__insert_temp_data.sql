@@ -69,7 +69,7 @@ VALUES (
     13,
     'precisionFDA',
     'pFDA',
-    '',
+    'PrecisionFDA@fda.hhs.gov',
     'pfda',
     'logo/precisionfda.png',
     'https://precision.fda.gov/challenges',
