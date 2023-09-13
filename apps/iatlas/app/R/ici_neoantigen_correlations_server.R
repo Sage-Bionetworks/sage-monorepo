@@ -76,7 +76,21 @@ ici_neoantigen_correlations_server <- function(
 
       output$plot <- plotly::renderPlotly({
         shiny::req(feature_data())
-        create_heatmap(as.matrix(feature_data()), "heatmap")
+        create_heatmap(as.matrix(feature_data()), "heatmap") %>%
+          plotly::layout(margin = list(
+                           t = 30,
+                           b = 10,
+                           pad = 1
+                         ))
+      })
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/neoantigen-correlation.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
       })
     }
   )

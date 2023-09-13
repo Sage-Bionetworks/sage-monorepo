@@ -7,11 +7,11 @@ ici_neoantigen_correlations_ui <- function(
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("Explore the correlation of frequency of neoantigen of a selected type with a selected class of immune features.")
+      p("Select a class of immune features and a type of neoantigen.
+      The selection will generate a heatmap summarizing the correlation between the frequency of neoantigens and immune features values, for each dataset and groups selected in ICI Cohort Selection.
+      Below the heatmap, we provide a summary of distribution of classes of neoantigens for each dataset and groups. For information about distributions of immune features, refer to the Immune Features module."),
+      shiny::actionLink(ns("method_link"), "Click to view the description of the method for computing the correlation.")
     ),
-    # iatlas.modules::heatmap_ui(
-    #   ns("heatmap")
-    # )
     iatlas.modules::optionsBox(
       width = 24,
       shiny::column(
@@ -29,7 +29,7 @@ ici_neoantigen_correlations_ui <- function(
     ),
     iatlas.modules::plotBox(
       width = 24,
-      plotly::plotlyOutput(ns("plot"), width = "100%", height = "600px") %>%
+      plotly::plotlyOutput(ns("plot"), width = "100%", height = "600") %>%
         shinycssloaders::withSpinner(.)
     )
   )
