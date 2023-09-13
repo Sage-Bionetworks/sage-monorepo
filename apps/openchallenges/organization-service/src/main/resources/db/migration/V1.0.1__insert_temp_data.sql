@@ -700,7 +700,7 @@ VALUES (
     'DNAnexus(R) has built the world''s most secure cloud platform and global network for scientific collaboration and accelerated discovery. We embrace challenges and partnership to tackle the world''s most exciting opportunities in human health.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:08',
-    10
+    11
   ),
   (
     63,
@@ -1880,7 +1880,9 @@ VALUES (
     'prize4life',
     'logo/prize4life.jpeg',
     'http://www.prize4life.org',
-    'This organization may no longer exist or has been merged under another organization.\n========\nPrize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
+    'This organization may no longer exist or has been merged under another organization.
+========
+Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
     '2023-06-23 00:00:00',
     '2023-08-08 17:45:38',
     2
@@ -4108,6 +4110,19 @@ Our organization leverages the unique strengths of individual researchers across
     '2023-09-13 17:17:03',
     '2023-09-13 17:17:56',
     2
+  ),
+  (
+    327,
+    'Carnegie Mellon University',
+    'CMU',
+    '',
+    'cmu',
+    '',
+    'https://www.cmu.edu/',
+    'Carnegie Mellon University challenges the curious and passionate to imagine and deliver work that matters.  A private, global research university, Carnegie Mellon stands among the world''s most renowned educational institutions, and sets its own course. Start the journey here.  Over the past 10 years, more than 400 startups linked to CMU have raised more than $7 billion in follow-on funding. Those investment numbers are especially high because of the sheer size of Pittsburgh’s growing autonomous vehicles cluster – including Uber, Aurora, Waymo and Motional – all of which are here because of their strong ties to CMU.  With cutting-edge brain science, path-breaking performances, innovative startups, driverless cars, big data, big ambitions, Nobel and Turing prizes, hands-on learning, and a whole lot of robots, CMU doesn''t imagine the future, we create it. ',
+    '2023-09-13 23:36:25',
+    '2023-09-13 23:37:36',
+    1
   );
 
 -- organization_category data
@@ -5022,4 +5037,7 @@ VALUES (1, 1, 75, 'sponsor'),
   (900, 2, 1, 'sponsor'),
   (901, 38, 1, 'sponsor'),
   (902, 49, 1, 'sponsor'),
-  (903, 58, 1, 'sponsor');
+  (903, 58, 1, 'sponsor'),
+  (904, 231, 13, 'challenge_organizer'),
+  (905, 232, 327, 'challenge_organizer'),
+  (906, 232, 62, 'challenge_organizer');

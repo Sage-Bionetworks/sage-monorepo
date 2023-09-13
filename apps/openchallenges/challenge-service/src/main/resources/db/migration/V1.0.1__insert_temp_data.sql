@@ -3816,6 +3816,38 @@ VALUES (
     '2022-03-31',
     '2023-09-13 17:20:30',
     '2023-09-13 17:26:20'
+  ),
+  (
+    231,
+    'hidden-treasures-warm-up',
+    'Hidden Treasures - Warm Up',
+    '',
+    'In the context of human genome sequencing, software pipelines typically involve a wide range of processing elements, including aligning sequencing reads to a reference genome and subsequently identifying variants (differences). One way of assessing the performance of such pipelines is by using well-characterized datasets such as Genome in a Bottle’s NA12878. However, because the existing NGS reference datasets are very limited and have been widely used to train/develop software pipelines, benchmarking of pipeline performance would ideally be done on samples with unknown variants.  This challenge will provide a unique opportunity for participants to investigate the accuracy of their pipelines by testing the ability to find in silico injected variants in FASTQ files from exome sequencing of reference cell lines. It will be a warm up for the community ahead of a more difficult in silico challenge to come in the fall. This challenge will provide users with a FASTQ file of a NA12878 se...',
+    'https://precision.fda.gov/challenges/1',
+    'completed',
+    'intermediate',
+    '6',
+    '',
+    '2017-07-17',
+    '2017-09-13',
+    '2023-09-13 23:31:39',
+    '2023-09-13 23:32:48'
+  ),
+  (
+    232,
+    'cmu-dnanexus-2023',
+    'Data management and graph extraction for large models in the biomedical space',
+    'Collaborative hackathon on the topic of data management and graph extraction...',
+    'This fall, CMU Libraries is hosting a hackathon in partnership with DNAnexus on the topic of data management and graph extraction for large models in the biomedical space. The hackathon will be held in person at CMU, October 19-21, 2023.  The hackathon is a collaborative, rather than competitive, event, with each team working on a dedicated part of the problem. The teams will be focused on the following topics: 1) Knowledge graph-based validation for variant (genomic) assertions; 2) Continuous monitoring for RLHF and flexible infrastructure for layering assertions with rollback; 3) Flexible tokenization of complex data types; 4) Assertion tracking in large models; 5) Column headers for data harmonization.  The outputs are often published as preprints or on the F1000 hackathon channel.  Contact Ben Busby (bbusby@dnanexus.com) with any questions about the hackathon or serving as a team lead.',
+    'https://library.cmu.edu/about/news/2023-08/hackathon-2023',
+    'upcoming',
+    'intermediate',
+    '14',
+    '',
+    '2023-10-19',
+    '2023-10-21',
+    '2023-09-13 23:32:59',
+    '2023-09-13 23:35:17'
   );
 
   -- challenge_organization_role data
@@ -4723,7 +4755,10 @@ VALUES (1, 1, 75, 'sponsor'),
   (900, 2, 1, 'sponsor'),
   (901, 38, 1, 'sponsor'),
   (902, 49, 1, 'sponsor'),
-  (903, 58, 1, 'sponsor');
+  (903, 58, 1, 'sponsor'),
+  (904, 231, 13, 'challenge_organizer'),
+  (905, 232, 327, 'challenge_organizer'),
+  (906, 232, 62, 'challenge_organizer');
 
 -- challenge_incentive data
 
