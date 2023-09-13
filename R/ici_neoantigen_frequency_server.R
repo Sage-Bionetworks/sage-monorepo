@@ -79,7 +79,7 @@ ici_neoantigen_frequency_server <- function(
 
       output$neoantigen_frequency_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = (length(all_plots())+1)%/%2, margin = 0.06, shareX = TRUE, shareY = TRUE)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())), margin = 0.6, shareX = FALSE, shareY = FALSE)
       })
 
       output$legend <-  DT:: renderDT({
@@ -130,13 +130,22 @@ ici_neoantigen_frequency_server <- function(
             dplyr::select(
               Dataset,
               Group = group_name,
-              n,
-              n_pat
+              "Freq" = n,
+              "# patients" = n_pat
             ),
           rownames = FALSE,
           caption = unique(clicked_point$ev),
           options = list(dom = 't')
         )
+      })
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/neoantigen-frequency.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
       })
     }
   )

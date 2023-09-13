@@ -7,7 +7,10 @@ ici_neoantigen_frequency_ui <- function(
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("The scatterplot shows the frequency of the top 1% most common combination of MHC, peptide, and gene and how many patients have this given combination.")
+      p("The scatterplot shows the frequency of the top 1% most common combinations of MHC, peptide, and gene and the number of patients
+        who have it. The points are colored based on the grouping criteria selected in the Cohort Selection module.
+        Click on any point for a table summarizing the frequency of the selection across all groups and selected datasets."),
+      shiny::actionLink(ns("method_link"), "Click to view the description of the method for this visualization."),
     ),
     iatlas.modules::optionsBox(
       width = 12,
@@ -25,7 +28,7 @@ ici_neoantigen_frequency_ui <- function(
         div(
           DT::DTOutput(ns("legend")),
           DT::DTOutput(ns("pmhc_tbl")),
-          style = "font-size: 75%"
+          style = "font-size: 70%"
         )
       )
     )

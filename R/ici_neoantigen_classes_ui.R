@@ -7,7 +7,7 @@ ici_neoantigen_classes_ui <- function(
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("Neoantigens can have differente sources. Here you can explore the frequency of neoantigens for each class.")
+      p("The bar plots below summarize the frequency of classes of neoantigen for each dataset and group.")
     ),
     iatlas.modules::plotBox(
       width = 12,
