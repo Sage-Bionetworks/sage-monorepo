@@ -24,7 +24,7 @@ VALUES (
     'Together, we share a vision to enable individuals and groups to collaborate openly so that the “wisdom of the crowd” provides the greatest impact on science and human health.',
     '2023-08-04 07:33:09',
     '2023-08-05 06:10:02',
-    47
+    67
   ),
   (
     3,
@@ -570,7 +570,7 @@ VALUES (
     'Columbia University is one of the world''s most important centers of research and at the same time a distinctive and distinguished learning environment for undergraduates and graduate students in many scholarly and professional fields. The University recognizes the importance of its location in New York City and seeks to link its research and teaching to the vast resources of a great metropolis. It seeks to attract a diverse and international faculty, staff, and student body, to support research and teaching on global issues, and to create academic relationships with many countries and regions. It expects all areas of the University to advance knowledge and learning at the highest level and to convey the products of its efforts to the world.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:59',
-    4
+    5
   ),
   (
     53,
@@ -648,7 +648,7 @@ VALUES (
     'Since its founding in 1947, Dana-Farber Cancer Institute in Boston, Massachusetts has been committed to providing adults and children with cancer with the best treatment available today while developing tomorrow''s cures through cutting-edge research. Read about our history, our breakthroughs, and the resources that help us support the health of our neighborhoods and communities.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:04',
-    4
+    5
   ),
   (
     59,
@@ -1103,7 +1103,7 @@ VALUES (
     'At IBM Research we live by the scientific method. It''s at the core of everything we do. We choose impact over market cycles, vision over vanity. We deeply believe that creative freedom, excellence, and integrity are essential to any breakthrough. We operate with a backbone. We don''t cut corners. We take responsibility for technology and its role in society. We make decisions with a conscience — for a future that we believe is worth living in. We recognize the immense power and potential of computing — not as a commodity, but as an agent of progress and connection.  This is the future, built right.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:30',
-    27
+    37
   ),
   (
     94,
@@ -1428,7 +1428,7 @@ VALUES (
     'The MIT community is driven by a shared purpose: to make a better world through education, research, and innovation. We are fun and quirky, elite but not elitist, inventive and artistic, obsessed with numbers, and welcoming to talented people regardless of where they come from.',
     '2023-06-23 00:00:00',
     '2023-08-08 18:47:20',
-    3
+    8
   ),
   (
     120,
@@ -1493,7 +1493,7 @@ VALUES (
     'The people of Memorial Sloan Kettering Cancer Center (MSK) are united by a singular mission: ending cancer for life. Our specialized care teams provide personalized, compassionate, expert care to patients of all ages. Informed by basic research done at our Sloan Kettering Institute, scientists across MSK collaborate to conduct innovative translational and clinical research that is driving a revolution in our understanding of cancer as a disease and improving the ability to prevent, diagnose, and treat it. MSK is dedicated to training the next generation of scientists and clinicians, who go on to pursue our mission at MSK and around the globe. One of the world''s most respected comprehensive centers devoted exclusively to cancer, we have been recognized as one of the top two cancer hospitals in the country by U.S. News & World Report for more than 30 years. ',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:58',
-    2
+    3
   ),
   (
     125,
@@ -1880,7 +1880,9 @@ VALUES (
     'prize4life',
     'logo/prize4life.jpeg',
     'http://www.prize4life.org',
-    'This organization may no longer exist or has been merged under another organization.\n========\nPrize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
+    'This organization may no longer exist or has been merged under another organization.
+========
+Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic Lateral Sclerosis (ALS, or Lou Gehrig''s Disease) using the leverage of large inducement prizes. Instead of recognizing historical accomplishments, Prize4Life has a simple formula for transformational change. We design and launch prizes that we believe are achievable in a 2-3 year timeframe and then recruit teams to compete for the prize purse. The first team to find and demonstrate the required breakthrough wins the prize.',
     '2023-06-23 00:00:00',
     '2023-08-08 17:45:38',
     2
@@ -2091,7 +2093,7 @@ VALUES (
     'Sage Bionetworks is a nonprofit health research organization that is speeding the translation of science into medicine.  We believe that high-quality, well-annotated data acts as the foundation of modern biomedical innovation. We dream of a world where people work together across institutional boundaries to meaningfully address major medical research problems.  We incubate new ways for diverse groups of people to practice research together.  We advance our practices using an  integrated and iterative design cycle that plays out between our scientific teams and our core service teams.  As our innovations become norms, we develop them into robust core capabilities that can be put into practice across our portfolio of research programs.  This portfolio includes publicly funded programs that create data resources and knowledge bases, pre-competitive collaborations across industry partners, and federated networks of healthcare data providers. In turn, these projects provide an active pl...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:40',
-    43
+    48
   ),
   (
     172,
@@ -2728,7 +2730,7 @@ VALUES (
     'We are proud to be one of the world''s top research-intensive universities, bringing together top minds from every conceivable background and discipline to collaborate on the world''s most pressing challenges.  Our community is a catalyst for discovery, innovation and progress, creating knowledge and solutions that make a tangible difference around the globe. And we prepare our students for success through an outstanding global education rooted in excellence, inclusion and close-knit learning communities.  The ideas, innovations and contributions of more than 660,000 graduates advance U of T''s impact on communities across the globe.  Together, we continue to defy gravity by taking on what might seem unattainable today and generating the ideas and talent needed to build a more equitable, sustainable and prosperous future.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:21',
-    6
+    8
   ),
   (
     221,
@@ -2910,7 +2912,7 @@ VALUES (
     'The Weizmann Institute of Science is one of the world''s leading multidisciplinary basic research institutions in the natural and exact sciences. It is located in Rehovot, Israel, just south of Tel Aviv. It was initially established as the Daniel Sieff Institute in 1934, by Israel and Rebecca Sieff of London in memory of their son Daniel. In 1949, it was renamed for Dr. Chaim Weizmann, the first President of the State of Israel and Founder of the Institute.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:33',
-    2
+    3
   ),
   (
     235,
@@ -3014,7 +3016,7 @@ VALUES (
     'Since its founding in 1701, Yale has been dedicated to expanding and sharing knowledge, inspiring innovation, and preserving cultural and scientific information for future generations. Yale’s reach is both local and international. It partners with its hometown of New Haven, Connecticut to strengthen the city’s community and economy. And it engages with people and institutions across the globe in the quest to promote cultural understanding, improve the human condition, delve more deeply into the secrets of the universe, and train the next generation of world leaders.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:40',
-    1
+    3
   ),
   (
     243,
@@ -3079,7 +3081,7 @@ VALUES (
     'Mayo Clinic is a nonprofit organization committed to clinical practice, education and research, providing expert, whole-person care to everyone who needs healing.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:43',
-    1
+    6
   ),
   (
     248,
@@ -3196,7 +3198,7 @@ VALUES (
     'Since the School was established in 1782, faculty members have improved human health by innovating in their roles as physicians, mentors and scholars. They’ve piloted educational models, developed new curricula to address emerging needs in health care, and produced thousands of leaders and compassionate caregivers who are shaping the fields of science and medicine throughout the world with their expertise and passion.',
     '2023-08-04 06:00:47',
     '2023-08-04 23:38:09',
-    1
+    6
   ),
   (
     257,
@@ -3898,7 +3900,7 @@ Our organization leverages the unique strengths of individual researchers across
     'https://www.nuh.com.sg/Pages/Home.aspx',
     'The National University Hospital (NUH) is Singapore’s leading university hospital. While the hospital at Kent Ridge first received its patients on 24 June 1985, our legacy started from 1905, the date of the founding of what is today the NUS Yong Loo Lin School of Medicine. NUH is the principal teaching hospital of the medical school.  Our unique identity as a university hospital is a key attraction for healthcare professionals who aspire to do more than practise tertiary medical care. We offer an environment where research and teaching are an integral part of medicine, and continue to shape medicine and transform care for the community we care for.  We are an academic medical centre with over 1,200 beds, serving more than one million patients a year with over 50 medical, surgical and dental specialties. NUH is the only public and not-for-profit hospital in Singapore to provide trusted care for adults, women and children under one roof, including the only paediatric kidney and liver...',
     '2023-08-09 22:27:16',
-    '2023-08-09 22:28:14',
+    '2023-09-13 00:06:26',
     1
   ),
   (
@@ -4918,4 +4920,77 @@ VALUES (1, 1, 75, 'sponsor'),
   (822, 199, 316, 'challenge_organizer'),
   (823, 199, 34, 'challenge_organizer'),
   (824, 199, 317, 'challenge_organizer'),
-  (825, 199, 318, 'challenge_organizer');
+  (825, 199, 318, 'challenge_organizer'),
+  (826, 206, 171, 'challenge_organizer'),
+  (827, 207, 171, 'challenge_organizer'),
+  (828, 208, 171, 'challenge_organizer'),
+  (829, 209, 171, 'challenge_organizer'),
+  (830, 210, 171, 'challenge_organizer'),
+  (831, 206, 319, 'data_contributor'),
+  (832, 207, 319, 'data_contributor'),
+  (833, 208, 319, 'data_contributor'),
+  (834, 209, 319, 'data_contributor'),
+  (835, 210, 319, 'data_contributor'),
+  (836, 206, 247, 'data_contributor'),
+  (837, 207, 247, 'data_contributor'),
+  (838, 208, 247, 'data_contributor'),
+  (839, 209, 247, 'data_contributor'),
+  (840, 210, 247, 'data_contributor'),
+  (841, 211, 1, 'sponsor'),
+  (842, 212, 1, 'sponsor'),
+  (843, 213, 1, 'sponsor'),
+  (844, 214, 1, 'sponsor'),
+  (845, 215, 1, 'sponsor'),
+  (846, 216, 1, 'sponsor'),
+  (847, 217, 1, 'sponsor'),
+  (848, 218, 1, 'sponsor'),
+  (849, 219, 1, 'sponsor'),
+  (850, 220, 1, 'sponsor'),
+  (851, 221, 1, 'sponsor'),
+  (852, 222, 1, 'sponsor'),
+  (853, 223, 1, 'sponsor'),
+  (854, 224, 1, 'sponsor'),
+  (855, 225, 1, 'sponsor'),
+  (856, 226, 1, 'sponsor'),
+  (857, 202, 1, 'sponsor'),
+  (858, 203, 1, 'sponsor'),
+  (859, 204, 1, 'sponsor'),
+  (860, 205, 1, 'sponsor'),
+  (861, 211, 52, 'data_contributor'),
+  (862, 212, 58, 'data_contributor'),
+  (863, 213, 320, 'data_contributor'),
+  (864, 214, 321, 'data_contributor'),
+  (865, 215, 124, 'data_contributor'),
+  (866, 216, 322, 'data_contributor'),
+  (867, 217, 256, 'data_contributor'),
+  (868, 217, 119, 'data_contributor'),
+  (869, 217, 93, 'challenge_organizer'),
+  (870, 218, 256, 'data_contributor'),
+  (871, 218, 119, 'data_contributor'),
+  (872, 218, 93, 'challenge_organizer'),
+  (873, 218, 256, 'challenge_organizer'),
+  (874, 218, 119, 'challenge_organizer'),
+  (875, 219, 220, 'data_contributor'),
+  (876, 219, 242, 'data_contributor'),
+  (877, 219, 93, 'challenge_organizer'),
+  (878, 220, 220, 'data_contributor'),
+  (879, 220, 93, 'challenge_organizer'),
+  (880, 220, 256, 'challenge_organizer'),
+  (881, 220, 119, 'challenge_organizer'),
+  (882, 221, 93, 'challenge_organizer'),
+  (883, 221, 256, 'challenge_organizer'),
+  (884, 221, 119, 'challenge_organizer'),
+  (885, 221, 323, 'challenge_organizer'),
+  (886, 221, 323, 'data_contributor'),
+  (887, 222, 234, 'data_contributor'),
+  (888, 222, 93, 'challenge_organizer'),
+  (889, 223, 93, 'challenge_organizer'),
+  (890, 223, 256, 'challenge_organizer'),
+  (891, 223, 119, 'challenge_organizer'),
+  (892, 224, 93, 'challenge_organizer'),
+  (893, 225, 324, 'challenge_organizer'),
+  (894, 225, 93, 'challenge_organizer'),
+  (895, 226, 93, 'challenge_organizer'),
+  (896, 226, 242, 'challenge_organizer'),
+  (897, 226, 93, 'data_contributor'),
+  (898, 226, 242, 'data_contributor');
