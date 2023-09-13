@@ -3748,19 +3748,67 @@ VALUES (
   ),
   (
     227,
-    'causalbench',
-    'CausalBench',
-    '',
-    'The CausalBench Challenge was an initiative to invite the machine learning community to advance the state of the art in constructing gene-gene interaction networks. These networks, derived from large-scale, real-world datasets of single cells under various perturbations, are crucial for understanding the causal mechanisms underlying disease biology. Using the framework provided by the CausalBench benchmark, participants were tasked with enhancing the capacity of the state of the art methods to leverage large-scale genetic perturbation data.',
-    '',
+    'causalbench-challenge',
+    'CausalBench Challenge',
+    'A machine learning contest for gene network inference from single-cell pertu...',
+    'Mapping gene–gene interactions in cellular systems is a fundamental step in early-stage drug discovery that helps generate hypotheses on what molecular mechanisms may effectively be targeted by potential future medicines. In the CausalBench Challenge, we invite the machine-learning community to advance the state-of-the-art in deriving gene–gene networks from large-scale real-world perturbational single-cell datasets to improve our ability to glean causal insights into disease-relevant biology.',
+    'https://www.gsk.ai/causalbench-challenge/',
     'completed',
     'intermediate',
     '14',
     'https://doi.org/10.48550/arXiv.2308.15395',
-    NULL,
-    NULL,
+    '2023-03-01',
+    '2023-04-21',
     '2023-09-13 0:41:58',
-    '2023-09-13 0:44:24'
+    '2023-09-13 17:26:24'
+  ),
+  (
+    228,
+    'iclr-computational-geometry-and-topology-challenge-2022',
+    'ICLR Computational Geometry & Topology Challenge 2022',
+    '',
+    'The purpose of this challenge is to foster reproducible research in geometric (deep) learning, by crowdsourcing the open-source implementation of learning algorithms on manifolds. Participants are asked to contribute code for a published/unpublished algorithm, following Scikit-Learn/Geomstats'' or pytorch''s APIs and computational primitives, benchmark it, and demonstrate its use in real-world scenarios.',
+    'https://github.com/geomstats/challenge-iclr-2022',
+    'completed',
+    'intermediate',
+    '14',
+    '',
+    NULL,
+    '2022-04-04',
+    '2023-09-13 16:54:06',
+    '2023-09-13 17:26:29'
+  ),
+  (
+    229,
+    'iclr-computational-geometry-and-topology-challenge-2021',
+    'ICLR Computational Geometry & Topology Challenge 2021',
+    '',
+    'The purpose of this challenge is to push forward the fields of computational differential geometry and topology, by creating the best data analysis, computational method, or numerical experiment relying on state-of-the-art geometric and topological Python packages.',
+    'https://github.com/geomstats/challenge-iclr-2021',
+    'completed',
+    'intermediate',
+    '14',
+    'https://doi.org/10.48550/arXiv.2108.09810',
+    NULL,
+    '2021-05-02',
+    '2023-09-13 17:02:12',
+    '2023-09-13 17:26:31'
+  ),
+  (
+    230,
+    'genedisco-challenge',
+    'GeneDisco Challenge',
+    '',
+    'The GeneDisco challenge is a machine learning community challenge for evaluating batch active learning algorithms for exploring the vast experimental design space in genetic perturbation experiments. Genetic perturbation experiments, using for example CRISPR technologies to perturb the genome, are a vital component of early-stage drug discovery, including target discovery and target validation. The GeneDisco challenge is organized in conjunction with the Machine Learning for Drug Discovery workshop at ICLR-22.',
+    'https://www.gsk.ai/genedisco-challenge/',
+    'completed',
+    'intermediate',
+    '14',
+    'https://doi.org/10.48550/arXiv.2110.11875',
+    '2022-01-31',
+    '2022-03-31',
+    '2023-09-13 17:20:30',
+    '2023-09-13 17:26:20'
   );
 
   -- challenge_organization_role data
@@ -4663,7 +4711,11 @@ VALUES (1, 1, 75, 'sponsor'),
   (895, 226, 93, 'challenge_organizer'),
   (896, 226, 242, 'challenge_organizer'),
   (897, 226, 93, 'data_contributor'),
-  (898, 226, 242, 'data_contributor');
+  (898, 226, 242, 'data_contributor'),
+  (899, 228, 325, 'challenge_organizer'),
+  (900, 229, 325, 'challenge_organizer'),
+  (901, 227, 326, 'challenge_organizer'),
+  (902, 230, 326, 'challenge_organizer');
 
 -- challenge_incentive data
 
@@ -4811,7 +4863,15 @@ VALUES (1, 'publication', 1),
   (141, 'publication', 207),
   (142, 'publication', 208),
   (143, 'publication', 209),
-  (144, 'publication', 210);
+  (144, 'publication', 210),
+  (145, 'monetary', 227),
+  (146, 'publication', 227),
+  (147, 'monetary', 228),
+  (148, 'publication', 228),
+  (149, 'monetary', 229),
+  (150, 'publication', 229),
+  (151, 'monetary', 230),
+  (152, 'publication', 230);
 
 -- challenge_submission_type data
 
@@ -5049,7 +5109,11 @@ VALUES (1, 'prediction_file', 1),
   (231, 'prediction_file', 223),
   (232, 'prediction_file', 224),
   (233, 'prediction_file', 225),
-  (234, 'prediction_file', 226);
+  (234, 'prediction_file', 226),
+  (235, 'container_image', 227),
+  (236, 'notebook', 228),
+  (237, 'notebook', 229),
+  (238, 'container_image', 230);
 
 -- challenge_star data
 
