@@ -1,6 +1,8 @@
 ici_neoantigen_correlations_server <- function(
   id,
-  cohort_obj
+  cohort_obj,
+  count_df,
+  dataset_displays
 ) {
   shiny::moduleServer(
     id,
@@ -8,16 +10,9 @@ ici_neoantigen_correlations_server <- function(
 
       ns <- session$ns
 
-      #get the count data for the samples in the cohort_obj
-      count_df <- shiny::reactive(iatlasGraphQLClient::query_feature_values(feature_classes = "Neoantigen"))
-
-      dataset_displays <- reactive({
-        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
-      })
-
       cohort_count <- shiny::reactive({
         cohort_patients <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(count_df(),  by = c("sample_name" = "sample")) %>%
+          dplyr::inner_join(count_df,  by = c("sample_name" = "sample")) %>%
           dplyr::select(sample_name, antigen_class = feature_name, antigen_class_display = feature_display, antigen_count = feature_value)
       })
 
@@ -38,7 +33,7 @@ ici_neoantigen_correlations_server <- function(
         shiny::selectInput(
           inputId  = ns("neoantigen_feature_choice"),
           label    = "Select or Search for Antigen Class",
-          choices  = unique(count_df()$feature_name)
+          choices  = unique(count_df$feature_name)
         )
       })
 
@@ -57,7 +52,7 @@ ici_neoantigen_correlations_server <- function(
       })
 
       feature_data <- shiny::reactive({
-        shiny::req( input$feature_class_choice)
+        shiny::req(input$feature_class_choice)
 
         cohort_count() %>%
           dplyr::filter(antigen_class == input$neoantigen_feature_choice) %>%
@@ -81,7 +76,6 @@ ici_neoantigen_correlations_server <- function(
 
       output$plot <- plotly::renderPlotly({
         shiny::req(feature_data())
-
         create_heatmap(as.matrix(feature_data()), "heatmap")
       })
     }

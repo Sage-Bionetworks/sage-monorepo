@@ -11,7 +11,8 @@ ici_neoantigen_classes_ui <- function(
     ),
     iatlas.modules::plotBox(
       width = 12,
-      shiny::uiOutput(ns("classes_plot"))
+      shiny::uiOutput(ns("classes_plot")) %>%
+        shinycssloaders::withSpinner(.)
     )
   )
 }

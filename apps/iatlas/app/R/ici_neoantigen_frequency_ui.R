@@ -17,7 +17,8 @@ ici_neoantigen_frequency_ui <- function(
       width = 12,
       shiny::column(
         width = 9,
-        shiny::uiOutput(ns("frequency_plot"))
+        shiny::uiOutput(ns("frequency_plot")) %>%
+          shinycssloaders::withSpinner(.)
       ),
       shiny::column(
         width = 3,

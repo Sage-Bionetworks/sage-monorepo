@@ -1,6 +1,8 @@
 ici_neoantigen_classes_server <- function(
   id,
-  cohort_obj
+  cohort_obj,
+  count_df,
+  dataset_displays
 ) {
   shiny::moduleServer(
     id,
@@ -8,23 +10,15 @@ ici_neoantigen_classes_server <- function(
 
       ns <- session$ns
 
-      #get the count data for the samples in the cohort_obj
-      count_df <- shiny::reactive(iatlasGraphQLClient::query_feature_values(feature_classes = "Neoantigen"))
-
-
       cohort_count <- shiny::reactive({
         cohort_patients <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(count_df(), by = c("sample_name" = "sample")) %>%
+          dplyr::inner_join(count_df, by = c("sample_name" = "sample")) %>%
           dplyr::mutate(ERROR = NA) %>%
           dplyr::group_by(dataset_name, group_name, feature_name) %>%
           dplyr::mutate(y = sum(feature_value)) %>%
           dplyr::mutate(text = paste("Neoantigen class: ", feature_name, "\n Group: ", group_name, "\n Count: ", y)) %>%
           dplyr::select(dataset_name, group_name, feature_name, y, ERROR, text) %>%
           dplyr::distinct()
-      })
-
-      dataset_displays <- reactive({
-        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
       })
 
       all_plots <- shiny::reactive({
@@ -45,7 +39,7 @@ ici_neoantigen_classes_server <- function(
                 color_col = "group_name",
                 label_col = "text",
                 title = "",
-                #source_name = "neo_plot",
+                source_name = "neo_class",
                 bar_colors = unique(cohort_obj()$plot_colors),
                 showlegend = FALSE
               ) %>%

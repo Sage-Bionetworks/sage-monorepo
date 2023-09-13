@@ -1,6 +1,8 @@
 ici_neoantigen_frequency_server <- function(
   id,
-  cohort_obj
+  cohort_obj,
+  top_mhc_df,
+  dataset_displays
 ) {
   shiny::moduleServer(
     id,
@@ -10,14 +12,10 @@ ici_neoantigen_frequency_server <- function(
 
       clicked_point <- shiny::reactiveValues(ev="")
 
-      top_mhc_df <- shiny::reactive({
-        iatlasGraphQLClient::query_neoantigens()
-      })
-
       output$gene_selection <- shiny::renderUI({
         shiny::selectInput(ns("gene"),
                            "Select Gene:",
-                           choices = c("All", unique(top_mhc_df()$gene_hgnc)),
+                           choices = c("All", unique(top_mhc_df$gene_hgnc)),
                            selected = "All")
       })
 
@@ -25,7 +23,7 @@ ici_neoantigen_frequency_server <- function(
         shiny::req(input$gene)
         df <- cohort_obj()$sample_tbl %>%
           dplyr::inner_join(iatlasGraphQLClient::query_sample_patients(), by = "sample_name") %>%
-          dplyr::inner_join(top_mhc_df(), by = c("patient_name" = "patient"))
+          dplyr::inner_join(top_mhc_df, by = c("patient_name" = "patient"))
 
         if(input$gene != "All") df <- dplyr::filter(df, gene_hgnc == input$gene)
 
@@ -34,10 +32,6 @@ ici_neoantigen_frequency_server <- function(
           dplyr::summarise(n = sum(freq_pmhc), n_pat= dplyr::n_distinct(patient_name)) %>%
           dplyr::mutate(text = paste0(pmhc, "\n Group: ", group_name)) %>%
           dplyr::mutate(highlight = ifelse(pmhc == clicked_point$ev, 1, 0)) #add flag to mark a point that was clicked by the user
-      })
-
-      dataset_displays <- reactive({
-        setNames(cohort_obj()$dataset_displays, cohort_obj()$dataset_names)
       })
 
       all_plots <- shiny::reactive({
