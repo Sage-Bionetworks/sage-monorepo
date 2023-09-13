@@ -9,14 +9,12 @@ ici_neoantigen_classes_server <- function(
       ns <- session$ns
 
       #get the count data for the samples in the cohort_obj
-      count_df <- arrow::read_feather("inst/feather/neoantigen_classes_count.feather")
+      count_df <- shiny::reactive(iatlasGraphQLClient::query_feature_values(feature_classes = "Neoantigen"))
 
 
       cohort_count <- shiny::reactive({
-        View(cohort_obj())
         cohort_patients <- cohort_obj()$sample_tbl %>%
-          dplyr::inner_join(iatlasGraphQLClient::query_sample_patients(), by = "sample_name") %>%
-          dplyr::inner_join(count_df, by = "patient_name") %>%
+          dplyr::inner_join(count_df(), by = c("sample_name" = "sample")) %>%
           dplyr::mutate(ERROR = NA) %>%
           dplyr::group_by(dataset_name, group_name, feature_name) %>%
           dplyr::mutate(y = sum(feature_value)) %>%
@@ -47,7 +45,7 @@ ici_neoantigen_classes_server <- function(
                 color_col = "group_name",
                 label_col = "text",
                 title = "",
-                source_name = "neo_plot",
+                #source_name = "neo_plot",
                 bar_colors = unique(cohort_obj()$plot_colors),
                 showlegend = FALSE
               ) %>%
