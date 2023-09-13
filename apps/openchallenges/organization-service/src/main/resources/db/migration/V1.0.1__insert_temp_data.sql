@@ -4004,6 +4004,84 @@ Our organization leverages the unique strengths of individual researchers across
     '2023-08-10 22:12:50',
     '2023-08-10 22:13:23',
     1
+  ),
+  (
+    319,
+    'Medical College of Wisconsin',
+    'MCW',
+    '',
+    'mcw',
+    'logo/medical-college-wisconsin-logo.svg',
+    'https://www.mcw.edu/',
+    'The Medical College of Wisconsin is a private medical school, pharmacy school, and graduate school of sciences headquartered in Milwaukee, Wisconsin. The school was established in 1893 and is the largest research center in eastern Wisconsin.',
+    '2023-09-09 01:40:31',
+    '2023-09-09 03:10:17',
+    5
+  ),
+  (
+    320,
+    'Boston University',
+    'BU',
+    '',
+    'bu',
+    '',
+    'https://www.bu.edu/',
+    'Boston University is no small operation. With over 36,000 students from more than 130 countries, over 10,000 faculty and staff, 17 schools and colleges and the Faculty of Computing & Data Sciences, and more than 300 programs of study, our three campuses are always humming, always in high gear. Get to know the people and teams that keep the University running smoothly.',
+    '2023-09-12 23:58:11',
+    '2023-09-12 23:58:49',
+    1
+  ),
+  (
+    321,
+    'Telethon Institute of Genetics and Medicine',
+    'TIGEM',
+    '',
+    'tigem',
+    '',
+    'https://www.tigem.it/',
+    'The Telethon Institute of Genetics and Medicine (TIGEM), a Telethon Foundation organization, was founded in 1994 as a leading European research center.  TIGEM is a Telethon Foundation research centre in Pozzuoli, Italy. TIGEM comprises several research groups and over 200 staff members, all dedicated to understanding the molecular mechanisms behind rare genetic diseases and developing novel treatments. These diseases, often overlooked by pharmaceutical industries, are most common in children and adolescents.  TIGEM’s research falls into three main themes: Cell Biology and Disease Mechanisms, Genomic Medicine, and Molecular Therapy. Our research is supported by a number of in-house highly specialised facilities, as well as significant international support in the form of funding and collaborative opportunities.',
+    '2023-09-13 00:01:07',
+    '2023-09-13 00:01:39',
+    1
+  ),
+  (
+    322,
+    'Genome Institute of Singapore',
+    'GIS',
+    '',
+    'gis',
+    '',
+    'https://www.a-star.edu.sg/gis',
+    'When the Genome Institute of Singapore (GIS) was established in 2000, the science of genomics was still in its infancy. Since then, genomics has proved its relevance to all aspects of biology and medicine. It is now possible to sequence entire populations and communities, resolve organs at the single-cell level, and develop treatments guided by genomic data. We are now able to edit genomes at will, synthesise chromosomes, and perform complex experiments in silico by harnessing the ever-growing reservoir of public-access data.  Importantly, while much has been done, much remains to be discovered as our knowledge of genomes, both human and non-human, remains incomplete. Through it all, GIS has maintained its leadership and relevance in genomic science by focusing on its three core strengths – asking the right biological questions, applying and developing cutting-edge technology platforms, and embracing multi-disciplinary team science. These core strengths have served us well, and wil...',
+    '2023-09-13 00:05:51',
+    '2023-09-13 00:06:34',
+    1
+  ),
+  (
+    323,
+    'University of Rostock',
+    '',
+    '',
+    'university-of-rostock',
+    '',
+    'https://www.uni-rostock.de/en/',
+    'Founded in 1419, the University of Rostock is the oldest in the Baltic Sea Region. True to the motto “Traditio et Innovatio”, the University of Rostock has constantly further developed. The multitude of new buildings represents the university’s modernity.',
+    '2023-09-13 00:22:55',
+    '2023-09-13 00:24:16',
+    1
+  ),
+  (
+    324,
+    'FlowCAP',
+    '',
+    '',
+    'flowcap',
+    '',
+    '',
+    'This organization may no longer exist or has been merged under another organization.',
+    '2023-09-13 00:36:41',
+    '2023-09-13 00:37:01',
+    1
   );
 
 -- organization_category data
