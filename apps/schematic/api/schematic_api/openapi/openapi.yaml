@@ -791,6 +791,230 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /submitManifestCsv:
+    post:
+      description: "Validates manifest in csv form, then submits it"
+      operationId: submit_manifest_csv
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The label of a component in a schema
+        explode: true
+        in: query
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: form
+      - description: "If True, validation suite will only run with in-house validation\
+          \ rule. If False, the Great Expectations suite will be utilized and all\
+          \ rules will be available."
+        explode: true
+        in: query
+        name: restrictRules
+        required: false
+        schema:
+          $ref: '#/components/schemas/RestrictRules'
+        style: form
+      requestBody:
+        content:
+          application/csv:
+            schema:
+              format: binary
+              type: string
+        description: .csv file
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: "Validates manifest in csv form, then submits it"
+      tags:
+      - Validation
+      x-openapi-router-controller: schematic_api.controllers.validation_controller
+  /submitManifestJson:
+    get:
+      description: "Validates a manifest in json form, then submits it in csv form"
+      operationId: submit_manifest_json
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The label of a component in a schema
+        explode: true
+        in: query
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: form
+      - description: "If True, validation suite will only run with in-house validation\
+          \ rule. If False, the Great Expectations suite will be utilized and all\
+          \ rules will be available."
+        explode: true
+        in: query
+        name: restrictRules
+        required: false
+        schema:
+          $ref: '#/components/schemas/RestrictRules'
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        description: A manifest in json form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: "Validates a manifest in json form, then submits it in csv form"
+      tags:
+      - Validation
+      x-openapi-router-controller: schematic_api.controllers.validation_controller
+  /validateManifestCsv:
+    post:
+      description: Validates a manifest in csv form
+      operationId: validate_manifest_csv
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The label of a component in a schema
+        explode: true
+        in: query
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: form
+      - description: "If True, validation suite will only run with in-house validation\
+          \ rule. If False, the Great Expectations suite will be utilized and all\
+          \ rules will be available."
+        explode: true
+        in: query
+        name: restrictRules
+        required: false
+        schema:
+          $ref: '#/components/schemas/RestrictRules'
+        style: form
+      requestBody:
+        content:
+          application/csv:
+            schema:
+              format: binary
+              type: string
+        description: .csv file
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Validates a manifest in csv form
+      tags:
+      - Validation
+      x-openapi-router-controller: schematic_api.controllers.validation_controller
+  /validateManifestJson:
+    post:
+      description: Validates a manifest in json form
+      operationId: validate_manifest_json
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The label of a component in a schema
+        explode: true
+        in: query
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: form
+      - description: "If True, validation suite will only run with in-house validation\
+          \ rule. If False, the Great Expectations suite will be utilized and all\
+          \ rules will be available."
+        explode: true
+        in: query
+        name: restrictRules
+        required: false
+        schema:
+          $ref: '#/components/schemas/RestrictRules'
+        style: form
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+        description: A manifest in json form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Validates a manifest in json form
+      tags:
+      - Validation
+      x-openapi-router-controller: schematic_api.controllers.validation_controller
 components:
   parameters:
     projectId:
@@ -925,6 +1149,26 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
+      style: form
+    componentLabel:
+      description: The label of a component in a schema
+      explode: true
+      in: query
+      name: componentLabel
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+      style: form
+    restrictRules:
+      description: "If True, validation suite will only run with in-house validation\
+        \ rule. If False, the Great Expectations suite will be utilized and all rules\
+        \ will be available."
+      explode: true
+      in: query
+      name: restrictRules
+      required: false
+      schema:
+        $ref: '#/components/schemas/RestrictRules'
       style: form
   responses:
     BadRequest:
@@ -1325,6 +1569,40 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      example: MolecularEntity
+      type: string
+    RestrictRules:
+      default: false
+      description: "If True, validation suite will only run with in-house validation\
+        \ rule. If False, the Great Expectations suite will be utilized and all rules\
+        \ will be available."
+      type: boolean
+    ManifestValidationResult:
+      description: The results of manifest validation
+      example:
+        warnings:
+        - warnings
+        - warnings
+        errors:
+        - errors
+        - errors
+      properties:
+        errors:
+          description: Any errors from validation
+          items:
+            type: string
+          title: errors
+          type: array
+        warnings:
+          description: Any warnings from validation
+          items:
+            type: string
+          title: warnings
+          type: array
+      title: ManifestValidationResult
+      type: object
     DatasetsPage_allOf:
       properties:
         datasets:

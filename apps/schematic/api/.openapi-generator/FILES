@@ -4,6 +4,7 @@ schematic_api/controllers/__init__.py
 schematic_api/controllers/schema_controller.py
 schematic_api/controllers/security_controller_.py
 schematic_api/controllers/storage_controller.py
+schematic_api/controllers/validation_controller.py
 schematic_api/encoder.py
 schematic_api/models/__init__.py
 schematic_api/models/asset_type.py
@@ -19,6 +20,7 @@ schematic_api/models/file.py
 schematic_api/models/files_page.py
 schematic_api/models/files_page_all_of.py
 schematic_api/models/manifest.py
+schematic_api/models/manifest_validation_result.py
 schematic_api/models/manifests_page.py
 schematic_api/models/manifests_page_all_of.py
 schematic_api/models/node.py

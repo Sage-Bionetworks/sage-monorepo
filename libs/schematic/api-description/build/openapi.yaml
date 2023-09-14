@@ -337,6 +337,114 @@ paths:
                 $ref: '#/components/schemas/ConnectedNodesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /validateManifestJson:
+    post:
+      tags:
+        - Validation
+      summary: Validates a manifest in json form
+      description: Validates a manifest in json form
+      requestBody:
+        description: A manifest in json form
+        content:
+          application/json:
+            schema:
+              type: object
+      operationId: validateManifestJson
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /validateManifestCsv:
+    post:
+      tags:
+        - Validation
+      summary: Validates a manifest in csv form
+      description: Validates a manifest in csv form
+      requestBody:
+        description: .csv file
+        content:
+          application/csv:
+            schema:
+              type: string
+              format: binary
+        required: true
+      operationId: validateManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /submitManifestJson:
+    get:
+      tags:
+        - Validation
+      summary: Validates a manifest in json form, then submits it in csv form
+      description: Validates a manifest in json form, then submits it in csv form
+      requestBody:
+        description: A manifest in json form
+        content:
+          application/json:
+            schema:
+              type: object
+      operationId: submitManifestJson
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /submitManifestCsv:
+    post:
+      tags:
+        - Validation
+      summary: Validates manifest in csv form, then submits it
+      description: Validates manifest in csv form, then submits it
+      requestBody:
+        description: .csv file
+        content:
+          application/csv:
+            schema:
+              type: string
+              format: binary
+        required: true
+      operationId: submitManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -730,6 +838,28 @@ components:
             - connected_nodes
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
+    RestrictRules:
+      description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
+      type: boolean
+      default: false
+    ManifestValidationResult:
+      type: object
+      description: The results of manifest validation
+      properties:
+        errors:
+          description: Any errors from validation
+          type: array
+          items:
+            type: string
+        warnings:
+          description: Any warnings from validation
+          type: array
+          items:
+            type: string
   parameters:
     projectId:
       name: projectId
@@ -828,6 +958,20 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
+    componentLabel:
+      name: componentLabel
+      in: query
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+    restrictRules:
+      name: restrictRules
+      in: query
+      description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
+      required: false
+      schema:
+        $ref: '#/components/schemas/RestrictRules'
   responses:
     BadRequest:
       description: Invalid request

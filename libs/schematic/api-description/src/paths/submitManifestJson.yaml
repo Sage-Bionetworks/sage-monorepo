@@ -1,0 +1,25 @@
+get:
+  tags:
+    - Validation
+  summary: Validates a manifest in json form, then submits it in csv form
+  description: Validates a manifest in json form, then submits it in csv form
+  requestBody:
+    description: A manifest in json form
+    content:
+      application/json:
+        schema:
+          type: object
+  operationId: submitManifestJson
+  parameters:
+    - $ref: ../components/parameters/query/schemaUrl.yaml
+    - $ref: ../components/parameters/query/componentLabel.yaml
+    - $ref: ../components/parameters/query/restrictRules.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/ManifestValidationResult.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

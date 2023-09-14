@@ -15,6 +15,7 @@ from schematic_api.models.file import File
 from schematic_api.models.files_page import FilesPage
 from schematic_api.models.files_page_all_of import FilesPageAllOf
 from schematic_api.models.manifest import Manifest
+from schematic_api.models.manifest_validation_result import ManifestValidationResult
 from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifests_page_all_of import ManifestsPageAllOf
 from schematic_api.models.node import Node
