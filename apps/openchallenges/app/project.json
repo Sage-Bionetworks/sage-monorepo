@@ -23,7 +23,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "apps/openchallenges/app/dist/apps/openchallenges/app/browser",
+        "outputPath": "apps/openchallenges/app/dist/apps/openchallenges/app/browser/browser",
         "index": "apps/openchallenges/app/src/index.html",
         "main": "apps/openchallenges/app/src/main.ts",
         "polyfills": "apps/openchallenges/app/src/polyfills.ts",
@@ -188,44 +188,28 @@
       }
     },
     "server": {
+      "dependsOn": ["build"],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
-        "outputPath": "dist/apps/openchallenges/app/server",
-        "main": "apps/openchallenges/app/src/ssr.server.ts",
-        "tsConfig": "apps/openchallenges/app/tsconfig.server.json"
+        "outputPath": "apps/openchallenges/app/dist/apps/openchallenges/app/browser/server",
+        "main": "apps/openchallenges/app/server.ts",
+        "tsConfig": "apps/openchallenges/app/tsconfig.server.json",
+        "inlineStyleLanguage": "scss"
       },
       "configurations": {
         "production": {
           "outputHashing": "media",
-          "fileReplacements": [
-            {
-              "replace": "src/environments/environment.ts",
-              "with": "src/environments/environment.prod.ts"
-            }
-          ]
+          "fileReplacements": []
         },
         "development": {
+          "buildOptimizer": false,
           "optimization": false,
           "sourceMap": true,
           "extractLicenses": false,
-          "buildOptimizer": false
+          "vendorChunk": true
         }
       },
-      "defaultConfiguration": "production",
-      "production": {
-        "outputHashing": "media",
-        "fileReplacements": [
-          {
-            "replace": "src/environments/environment.ts",
-            "with": "src/environments/environment.prod.ts"
-          }
-        ]
-      },
-      "development": {
-        "optimization": false,
-        "sourceMap": true,
-        "extractLicenses": false
-      }
+      "defaultConfiguration": "production"
     },
     "serve-ssr": {
       "executor": "@nguniversal/builders:ssr-dev-server",
@@ -244,13 +228,19 @@
     "prerender": {
       "executor": "@nguniversal/builders:prerender",
       "options": {
-        "browserTarget": "openchallenges-app:build:production",
-        "serverTarget": "openchallenges-app:server:production",
         "routes": ["/"]
       },
       "configurations": {
-        "production": {}
-      }
+        "development": {
+          "browserTarget": "openchallenges-app:build:development",
+          "serverTarget": "openchallenges-app:server:development"
+        },
+        "production": {
+          "browserTarget": "openchallenges-app:build:production",
+          "serverTarget": "openchallenges-app:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
     },
     "build-sitemap": {
       "executor": "nx:run-commands",
