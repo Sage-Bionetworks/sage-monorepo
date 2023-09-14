@@ -25,6 +25,9 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
+  /schematicVersion:
+    $ref: paths/schematicVersion.yaml
+
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
 
