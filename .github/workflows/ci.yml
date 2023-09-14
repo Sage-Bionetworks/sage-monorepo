@@ -139,7 +139,7 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
             && nx run-many --target=publish-and-remove-image \
-              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
+              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,openchallenges-api-gateway,schematic-api \
               --parallel=1"
 
       - name: Remove the dev container
@@ -270,7 +270,7 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx run-many --target=build-and-remove-image \
-            --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,schematic-api \
+            --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,openchallenges-api-gateway,schematic-api \
               --parallel=1"
 
       - name: Remove the dev container
