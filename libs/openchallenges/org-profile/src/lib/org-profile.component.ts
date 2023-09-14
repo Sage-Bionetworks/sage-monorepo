@@ -5,7 +5,6 @@ import {
   Router,
   RouterModule,
 } from '@angular/router';
-import { Account } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 import {
   catchError,
   forkJoin,
@@ -70,7 +69,7 @@ export class OrgProfileComponent implements OnInit {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
-  account$!: Observable<Account | undefined>;
+
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;

@@ -22,9 +22,6 @@
       "@sagebionetworks/openchallenges/api-client-angular": [
         "libs/openchallenges/api-client-angular/src/index.ts"
       ],
-      "@sagebionetworks/openchallenges/api-client-angular-deprecated": [
-        "libs/openchallenges/api-client-angular-deprecated/src/index.ts"
-      ],
       "@sagebionetworks/openchallenges/assets": ["libs/openchallenges/assets/src/index.ts"],
       "@sagebionetworks/openchallenges/auth": ["libs/openchallenges/auth/src/index.ts"],
       "@sagebionetworks/openchallenges/challenge": ["libs/openchallenges/challenge/src/index.ts"],
