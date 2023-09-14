@@ -9,7 +9,6 @@ import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { Challenge as DeprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 // import { startCase } from 'lodash';
 import { Observable } from 'rxjs';
 
@@ -22,8 +21,6 @@ import { Observable } from 'rxjs';
 })
 export class ChallengeCardComponent implements OnInit {
   @Input() challenge!: Challenge;
-  // TODO: remove the deprecatedChallenge when real Challenge has all required properties
-  @Input() deprecatedChallenge!: DeprecatedChallenge;
   banner$: Observable<Image> | undefined;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
