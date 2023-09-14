@@ -9,11 +9,11 @@ ici_neoantigen_ui <- function(id){
     iatlas.modules::textBox(
       width = 12,
       p("Explore the prevalence, variety and distribution of predicted neoantigens in iAtlas datasets."),
-      shiny::actionLink(ns("method_link"), "Click to view the description of the method for neoantigen prediction."),
       p("Check out our ",
         a(href="https://docs.google.com/presentation/d/1yQ1_twHL33bMEDRlsxf-Thz589uafOvrB8alMfOgzdE/edit?usp=sharing", "tutorial"),
         "and", a(href="https://github.com/CRI-iAtlas/iatlas-notebooks/tree/main/ici_models_notebooks", "Jupyter notebook"),
-        "reproducing the code run in this module.")
+        "reproducing the code run in this module."),
+      shiny::actionLink(ns("method_link"), "Click to view the description of the method for neoantigen prediction.")
     ),
     iatlas.modules::messageBox(
       width = 12,

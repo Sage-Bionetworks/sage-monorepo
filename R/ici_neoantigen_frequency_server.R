@@ -79,7 +79,7 @@ ici_neoantigen_frequency_server <- function(
 
       output$neoantigen_frequency_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
-        plotly::subplot(all_plots(), nrows = (length(all_plots())), margin = 0.6, shareX = FALSE, shareY = FALSE)
+        plotly::subplot(all_plots(), nrows = (length(all_plots())), margin = 0.06, shareX = FALSE, shareY = FALSE)
       })
 
       output$legend <-  DT:: renderDT({
