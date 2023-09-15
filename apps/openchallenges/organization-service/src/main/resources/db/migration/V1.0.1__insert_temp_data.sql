@@ -1249,6 +1249,19 @@ VALUES (
     2
   ),
   (
+    105,
+    'Kaggle',
+    '',
+    '',
+    'kaggle',
+    'logo/kaggle.png',
+    'https://www.kaggle.com/',
+    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kaggle.com/competitions), [publish an open dataset](https://www.kaggle.com/datasets), or [share code in our reproducible data science environment](https://www.kaggle.com/kernels). \n\nKaggle''s headquarters is located in San Francisco, but we have team members working from across the US and Australia. [Join our team](https://www.kaggle.com/careers) from wherever you call home.',
+    '2023-06-23 00:00:00',
+    '2023-09-15 16:54:08',
+    2
+  ),
+  (
     106,
     'Kaiser Permanente Washington Health Research Institute',
     'KPWHRI',
