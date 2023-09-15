@@ -1,4 +1,4 @@
-import { ApplicationConfig, APP_INITIALIZER } from '@angular/core';
+import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -19,10 +19,11 @@ import {
 import { routes } from './app.routes';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
-export const APP_BASE_URL_PROVIDER_INDEX = 0;
+export const APP_BASE_URL_PROVIDER_INDEX = 1;
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: APP_ID, useValue: 'openchallenges-app' },
     {
       // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
       provide: 'APP_BASE_URL',
@@ -43,7 +44,6 @@ export const appConfig: ApplicationConfig = {
     { provide: 'googleTagManagerId', useValue: 'GTM-NBR5XD8C' },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideClientHydration(),
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),
@@ -51,5 +51,6 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
       })
     ),
+    provideClientHydration(),
   ],
 };

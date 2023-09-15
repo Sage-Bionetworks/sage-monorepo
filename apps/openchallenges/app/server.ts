@@ -13,7 +13,7 @@ export function app(): express.Express {
   const server = express();
   const distFolder = join(
     process.cwd(),
-    'apps/openchallenges/app/dist/apps/openchallenges/app/browser/browser'
+    'dist/apps/openchallenges/app/browser'
   );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
