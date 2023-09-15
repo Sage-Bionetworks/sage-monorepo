@@ -105,6 +105,13 @@ VALUES (
     'Nightingale OS',
     'logo/nightingale-os.png',
     'https://app.nightingalescience.org/'
+  ),
+  (
+    16,
+    'evalai',
+    'EvalAI',
+    'logo/evalai.png',
+    'https://eval.ai/'
   );
 
 -- challenge_input_data_type
@@ -3762,12 +3769,12 @@ VALUES (
     'https://www.gsk.ai/causalbench-challenge/',
     'completed',
     'intermediate',
-    '14',
+    '16',
     'https://doi.org/10.48550/arXiv.2308.15395',
     '2023-03-01',
     '2023-04-21',
     '2023-09-13 0:41:58',
-    '2023-09-13 17:26:24'
+    '2023-09-15 16:01:07'
   ),
   (
     228,
@@ -3810,17 +3817,17 @@ VALUES (
     'https://www.gsk.ai/genedisco-challenge/',
     'completed',
     'intermediate',
-    '14',
+    '16',
     'https://doi.org/10.48550/arXiv.2110.11875',
     '2022-01-31',
     '2022-03-31',
     '2023-09-13 17:20:30',
-    '2023-09-13 17:26:20'
+    '2023-09-15 16:03:06'
   ),
   (
     231,
     'hidden-treasures-warm-up',
-    'Hidden Treasures - Warm Up',
+    'Hidden Treasures – Warm Up',
     '',
     'In the context of human genome sequencing, software pipelines typically involve a wide range of processing elements, including aligning sequencing reads to a reference genome and subsequently identifying variants (differences). One way of assessing the performance of such pipelines is by using well-characterized datasets such as Genome in a Bottle’s NA12878. However, because the existing NGS reference datasets are very limited and have been widely used to train/develop software pipelines, benchmarking of pipeline performance would ideally be done on samples with unknown variants.  This challenge will provide a unique opportunity for participants to investigate the accuracy of their pipelines by testing the ability to find in silico injected variants in FASTQ files from exome sequencing of reference cell lines. It will be a warm up for the community ahead of a more difficult in silico challenge to come in the fall. This challenge will provide users with a FASTQ file of a NA12878 se...',
     'https://precision.fda.gov/challenges/1',

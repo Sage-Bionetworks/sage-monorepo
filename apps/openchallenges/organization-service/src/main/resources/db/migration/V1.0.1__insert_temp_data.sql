@@ -4108,7 +4108,7 @@ Our organization leverages the unique strengths of individual researchers across
     'https://www.gsk.com/en-gb/',
     'We are a global biopharma company with a purpose to unite science, technology and talent to get ahead of disease together.  We aim to positively impact the health of 2.5 billion people by the end of 2030. Our bold ambitions for patients are reflected in new commitments to growth and a step-change in performance.  We are a company where outstanding people can thrive.',
     '2023-09-13 17:17:03',
-    '2023-09-13 17:17:56',
+    '2023-09-15 16:02:05',
     2
   ),
   (
