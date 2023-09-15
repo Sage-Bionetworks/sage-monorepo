@@ -19,7 +19,10 @@ import {
 } from '@angular/common/http';
 import { CountUpModule } from 'ngx-countup';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 import {
   BASE_PATH as API_CLIENT_BASE_PATH,
   ApiModule,
@@ -72,6 +75,7 @@ export const appConfig: ApplicationConfig = {
     { provide: 'googleTagManagerId', useValue: 'GTM-NBR5XD8C' },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
+    provideClientHydration(),
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),
