@@ -3827,7 +3827,7 @@ VALUES (
   (
     231,
     'hidden-treasures-warm-up',
-    'Hidden Treasures – Warm Up',
+    'Hidden Treasures - Warm Up',
     '',
     'In the context of human genome sequencing, software pipelines typically involve a wide range of processing elements, including aligning sequencing reads to a reference genome and subsequently identifying variants (differences). One way of assessing the performance of such pipelines is by using well-characterized datasets such as Genome in a Bottle’s NA12878. However, because the existing NGS reference datasets are very limited and have been widely used to train/develop software pipelines, benchmarking of pipeline performance would ideally be done on samples with unknown variants.  This challenge will provide a unique opportunity for participants to investigate the accuracy of their pipelines by testing the ability to find in silico injected variants in FASTQ files from exome sequencing of reference cell lines. It will be a warm up for the community ahead of a more difficult in silico challenge to come in the fall. This challenge will provide users with a FASTQ file of a NA12878 se...',
     'https://precision.fda.gov/challenges/1',
@@ -3838,7 +3838,7 @@ VALUES (
     '2017-07-17',
     '2017-09-13',
     '2023-09-13 23:31:39',
-    '2023-09-13 23:32:48'
+    '2023-09-15 16:45:51'
   ),
   (
     232,
@@ -4454,7 +4454,7 @@ VALUES (1, 1, 75, 'sponsor'),
   (592, 106, 178, 'sponsor'),
   (593, 107, 12, 'challenge_organizer'),
   (594, 107, 77, 'sponsor'),
-  (595, 124, 12, 'challenge_organizer'),
+  (595, 124, 12, 'sponsor'),
   (596, 124, 215, 'challenge_organizer'),
   (597, 124, 84, 'challenge_organizer'),
   (598, 124, 7, 'challenge_organizer'),
@@ -4765,7 +4765,22 @@ VALUES (1, 1, 75, 'sponsor'),
   (903, 58, 1, 'sponsor'),
   (904, 231, 13, 'challenge_organizer'),
   (905, 232, 327, 'challenge_organizer'),
-  (906, 232, 62, 'challenge_organizer');
+  (906, 232, 62, 'challenge_organizer'),
+  (907, 111, 34, 'challenge_organizer'),
+  (908, 113, 98, 'challenge_organizer'),
+  (909, 114, 105, 'challenge_organizer'),
+  (910, 116, 105, 'challenge_organizer'),
+  (911, 118, 12, 'sponsor'),
+  (912, 118, 328, 'sponsor'),
+  (913, 118, 286, 'sponsor'),
+  (914, 118, 161, 'challenge_organizer'),
+  (915, 118, 329, 'challenge_organizer'),
+  (916, 123, 225, 'challenge_organizer'),
+  (917, 124, 162, 'challenge_organizer'),
+  (918, 129, 92, 'challenge_organizer'),
+  (919, 131, 174, 'challenge_organizer'),
+  (920, 156, 162, 'challenge_organizer'),
+  (921, 178, 15, 'sponsor');
 
 -- challenge_incentive data
 
