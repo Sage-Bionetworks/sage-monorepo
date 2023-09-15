@@ -31,6 +31,9 @@ import {
 
 import { routes } from './app.routes';
 
+// This index is used to remove the corresponding provider in app.config.server.ts.
+export const APP_BASE_URL_PROVIDER_INDEX = 1;
+
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(
@@ -44,8 +47,9 @@ export const appConfig: ApplicationConfig = {
       SharedUtilModule
     ),
     {
+      // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
       provide: 'APP_BASE_URL',
-      useFactory: () => `.`,
+      useFactory: () => '.',
       deps: [],
     },
     {
