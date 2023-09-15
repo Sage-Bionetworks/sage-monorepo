@@ -105,6 +105,13 @@ VALUES (
     'Nightingale OS',
     'logo/nightingale-os.png',
     'https://app.nightingalescience.org/'
+  ),
+  (
+    16,
+    'evalai',
+    'EvalAI',
+    'logo/evalai.png',
+    'https://eval.ai/'
   );
 
 -- challenge_input_data_type
@@ -3762,12 +3769,12 @@ VALUES (
     'https://www.gsk.ai/causalbench-challenge/',
     'completed',
     'intermediate',
-    '14',
+    '16',
     'https://doi.org/10.48550/arXiv.2308.15395',
     '2023-03-01',
     '2023-04-21',
     '2023-09-13 0:41:58',
-    '2023-09-13 17:26:24'
+    '2023-09-15 16:01:07'
   ),
   (
     228,
@@ -3810,12 +3817,12 @@ VALUES (
     'https://www.gsk.ai/genedisco-challenge/',
     'completed',
     'intermediate',
-    '14',
+    '16',
     'https://doi.org/10.48550/arXiv.2110.11875',
     '2022-01-31',
     '2022-03-31',
     '2023-09-13 17:20:30',
-    '2023-09-13 17:26:20'
+    '2023-09-15 16:03:06'
   ),
   (
     231,
@@ -3831,7 +3838,7 @@ VALUES (
     '2017-07-17',
     '2017-09-13',
     '2023-09-13 23:31:39',
-    '2023-09-13 23:32:48'
+    '2023-09-15 16:45:51'
   ),
   (
     232,
@@ -4447,7 +4454,7 @@ VALUES (1, 1, 75, 'sponsor'),
   (592, 106, 178, 'sponsor'),
   (593, 107, 12, 'challenge_organizer'),
   (594, 107, 77, 'sponsor'),
-  (595, 124, 12, 'challenge_organizer'),
+  (595, 124, 12, 'sponsor'),
   (596, 124, 215, 'challenge_organizer'),
   (597, 124, 84, 'challenge_organizer'),
   (598, 124, 7, 'challenge_organizer'),
@@ -4758,7 +4765,22 @@ VALUES (1, 1, 75, 'sponsor'),
   (903, 58, 1, 'sponsor'),
   (904, 231, 13, 'challenge_organizer'),
   (905, 232, 327, 'challenge_organizer'),
-  (906, 232, 62, 'challenge_organizer');
+  (906, 232, 62, 'challenge_organizer'),
+  (907, 111, 34, 'challenge_organizer'),
+  (908, 113, 98, 'challenge_organizer'),
+  (909, 114, 105, 'challenge_organizer'),
+  (910, 116, 105, 'challenge_organizer'),
+  (911, 118, 12, 'sponsor'),
+  (912, 118, 328, 'sponsor'),
+  (913, 118, 286, 'sponsor'),
+  (914, 118, 161, 'challenge_organizer'),
+  (915, 118, 329, 'challenge_organizer'),
+  (916, 123, 225, 'challenge_organizer'),
+  (917, 124, 162, 'challenge_organizer'),
+  (918, 129, 92, 'challenge_organizer'),
+  (919, 131, 174, 'challenge_organizer'),
+  (920, 156, 162, 'challenge_organizer'),
+  (921, 178, 15, 'sponsor');
 
 -- challenge_incentive data
 
