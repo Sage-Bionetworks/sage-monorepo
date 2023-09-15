@@ -63,7 +63,7 @@ VALUES (
     'The Medical Image Computing and Computer Assisted Intervention Society (the MICCAI Society) is dedicated to the promotion, preservation and facilitation of research, education and practice in the field of medical image computing and computer assisted medical interventions including biomedical imaging and medical robotics. The Society achieves this aim through the organization and operation of annual high quality international conferences, workshops, tutorials and publications that promote and foster the exchange and dissemination of advanced knowledge, expertise and experience in the field produced by leading institutions and outstanding scientists, physicians and educators around the world. The MICCAI Society is committed to maintaining high academic standards and independence from any personal, political or commercial interests.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:24',
-    15
+    16
   ),
   (
     13,
@@ -89,7 +89,7 @@ VALUES (
     'The National Institutes of Health (NIH), a part of the U.S. Department of Health and Human Services, is the nation''s medical research agency — making important discoveries that improve health and save lives.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:26',
-    9
+    10
   ),
   (
     16,
@@ -336,7 +336,7 @@ VALUES (
     'Booz Allen Hamilton has been at the forefront of strategy and technology for more than 100 years. Today, the firm provides management and technology consulting and engineering services to leading Fortune 500 corporations, governments, and not-for-profits across the globe. Booz Allen partners with public and private sector clients to solve their most difficult challenges through a combination of consulting, analytics, mission operations, technology, systems delivery, cybersecurity, engineering, and innovation expertise. \n\nWith international headquarters in McLean, Virginia, the firm employs more than 22,600 people globally and had revenue of $5.41 billion for the 12 months ended March 31, 2016.\n\nBooz Allen brings its pioneering work in advanced analytics—and the industry-leading expertise of its more than 600-member data science team—to transform our clients'' data into actions that keep them competitive in today''s data-driven economy. To learn about Booz Allen''s data science ...',
     '2023-06-23 00:00:00',
     '2023-07-26 20:13:45',
-    12
+    13
   ),
   (
     35,
@@ -1090,7 +1090,7 @@ VALUES (
     'The Human Protein Atlas is a Swedish-based program initiated in 2003 with the aim to map the expression and spatial distribution of all human proteins in cells and tissues using an integration of various omics technologies, including antibody-based imaging, mass spectrometry-based proteomics, transcriptomics and systems biology. The data is freely available in the Protein Atlas database (www.proteinatlas.org) to allow scientists both in academia and industry to freely access the data for exploration of the human proteome with the mission to accelerate life science research and drug discovery.The database is used by over 200,000 users per month and nearly 10 publications per day use data from the Protein Atlas.\n\nThe image data in the challenge comes from the HPA Cell Atlas, led by Dr. Emma Lundberg.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:29',
-    0
+    1
   ),
   (
     93,
@@ -1168,7 +1168,7 @@ VALUES (
     'Intel(R) Software sits at the intersection of hardware, interoperability, and amazing customer experiences. We partner with the global technology ecosystem to make development EASY, OPEN, and SCALABLE so developers can do what they do best: deliver groundbreaking applications and end-to-end solutions on Intel technologies. Visit the Intel(r) Nervana(TM) AI Academy to gain access to tools, Intel optimized frameworks, libraries, technical experts and training, getting started guides, and more.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:37',
-    2
+    3
   ),
   (
     99,
@@ -1246,6 +1246,19 @@ VALUES (
     'Iowa State is a large university with a small feel. Forge lifelong friendships and earn a degree that will take you anywhere.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:14:42',
+    2
+  ),
+  (
+    105,
+    'Kaggle',
+    '',
+    '',
+    'kaggle',
+    'logo/kaggle.png',
+    'https://www.kaggle.com/',
+    'Kaggle is a community of data scientists and data enthusiasts. Our platform enables you to learn from and mentor each other on your personal, academic, and professional data science journeys. \n\nTo get involved, you can [enter a machine learning competition](https://www.kaggle.com/competitions), [publish an open dataset](https://www.kaggle.com/datasets), or [share code in our reproducible data science environment](https://www.kaggle.com/kernels). \n\nKaggle''s headquarters is located in San Francisco, but we have team members working from across the US and Australia. [Join our team](https://www.kaggle.com/careers) from wherever you call home.',
+    '2023-06-23 00:00:00',
+    '2023-09-15 16:54:08',
     2
   ),
   (
@@ -1976,7 +1989,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Radboud university medical center specializes in patient care, scientific research, teaching and training. Our mission is to have a significant impact on health care. We aim to be pioneers in shaping the health care of the future. We do this in a person-centered and innovative way.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:31',
-    2
+    3
   ),
   (
     162,
@@ -1989,7 +2002,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'The Radiological Society of North America (RSNA(R)) is an international society of radiologists, medical physicists and other medical professionals with more than 53,400 members from 136 countries across the globe. RSNA hosts the world''s premier radiology forum, drawing approximately 55,000 attendees annually to McCormick Place in Chicago, and publishes two top peer-reviewed journals: *Radiology*, the highest-impact scientific journal in the field, and *RadioGraphics*, the only journal dedicated to continuing education in radiology. The Society is based in Oak Brook, Ill.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:33',
-    2
+    3
   ),
   (
     164,
@@ -2132,7 +2145,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Sartorius AG is an international pharmaceutical and laboratory equipment supplier, covering the segments of Bioprocess Solutions and Lab Products & Services.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:15:42',
-    0
+    1
   ),
   (
     175,
@@ -2795,7 +2808,7 @@ Prize4Life seeks to create breakthroughs in effective treatments for Amyotrophic
     'Since its founding in 1848, this campus has been a catalyst for the extraordinary. As a public land-grant university and major research institution, our students, staff, and faculty engage in a world-class education while solving real-world problems. With public service — or as we call it, the Wisconsin Idea — as our guiding principle, Badgers are creating a better future for everyone.',
     '2023-06-23 00:00:00',
     '2023-07-26 20:16:26',
-    0
+    1
   ),
   (
     226,
@@ -3589,7 +3602,7 @@ Our organization leverages the unique strengths of individual researchers across
     'Our mission is to organize the world’s information and make it universally accessible and useful.',
     '2023-08-08 17:29:33',
     '2023-08-08 17:30:47',
-    2
+    3
   ),
   (
     287,
@@ -4108,7 +4121,7 @@ Our organization leverages the unique strengths of individual researchers across
     'https://www.gsk.com/en-gb/',
     'We are a global biopharma company with a purpose to unite science, technology and talent to get ahead of disease together.  We aim to positively impact the health of 2.5 billion people by the end of 2030. Our bold ambitions for patients are reflected in new commitments to growth and a step-change in performance.  We are a company where outstanding people can thrive.',
     '2023-09-13 17:17:03',
-    '2023-09-13 17:17:56',
+    '2023-09-15 16:02:05',
     2
   ),
   (
@@ -4122,6 +4135,32 @@ Our organization leverages the unique strengths of individual researchers across
     'Carnegie Mellon University challenges the curious and passionate to imagine and deliver work that matters.  A private, global research university, Carnegie Mellon stands among the world''s most renowned educational institutions, and sets its own course. Start the journey here.  Over the past 10 years, more than 400 startups linked to CMU have raised more than $7 billion in follow-on funding. Those investment numbers are especially high because of the sheer size of Pittsburgh’s growing autonomous vehicles cluster – including Uber, Aurora, Waymo and Motional – all of which are here because of their strong ties to CMU.  With cutting-edge brain science, path-breaking performances, innovative startups, driverless cars, big data, big ambitions, Nobel and Turing prizes, hands-on learning, and a whole lot of robots, CMU doesn''t imagine the future, we create it. ',
     '2023-09-13 23:36:25',
     '2023-09-13 23:37:36',
+    1
+  ),
+  (
+    328,
+    'ContextVision',
+    '',
+    '',
+    'contextvision',
+    '',
+    'https://www.contextvision.com/',
+    'Our cutting-edge technology helps doctors accurately interpret medical images, a crucial foundation for better diagnosis and treatment.  Healthcare providers worldwide face the same key challenge – a challenge that ContextVision is helping to solve: how to increase patient care while coping with limited resources. ContextVision provides intelligent technology that improves healthcare service and outcomes for more people.  The company specializes in image analysis and artificial intelligence.',
+    '2023-09-15 17:21:50',
+    '2023-09-15 17:22:34',
+    1
+  ),
+  (
+    329,
+    'Karolinska Institute',
+    'KI',
+    '',
+    'ki',
+    '',
+    'https://ki.se/en',
+    'Karolinska Institutet is one of the world’s leading medical universities. Our vision is to advance knowledge about life and strive towards better health for all. Karolinska Institutet accounts for the single largest share of all academic medical research conducted in Sweden and offers the country’s broadest range of education in medicine and health sciences. The Nobel Assembly at Karolinska Institutet selects the Nobel laureates in Physiology or Medicine.',
+    '2023-09-15 17:24:17',
+    '2023-09-15 17:53:16',
     1
   );
 
@@ -4729,7 +4768,7 @@ VALUES (1, 1, 75, 'sponsor'),
   (592, 106, 178, 'sponsor'),
   (593, 107, 12, 'challenge_organizer'),
   (594, 107, 77, 'sponsor'),
-  (595, 124, 12, 'challenge_organizer'),
+  (595, 124, 12, 'sponsor'),
   (596, 124, 215, 'challenge_organizer'),
   (597, 124, 84, 'challenge_organizer'),
   (598, 124, 7, 'challenge_organizer'),
@@ -5040,4 +5079,19 @@ VALUES (1, 1, 75, 'sponsor'),
   (903, 58, 1, 'sponsor'),
   (904, 231, 13, 'challenge_organizer'),
   (905, 232, 327, 'challenge_organizer'),
-  (906, 232, 62, 'challenge_organizer');
+  (906, 232, 62, 'challenge_organizer'),
+  (907, 111, 34, 'challenge_organizer'),
+  (908, 113, 98, 'challenge_organizer'),
+  (909, 114, 105, 'challenge_organizer'),
+  (910, 116, 105, 'challenge_organizer'),
+  (911, 118, 12, 'sponsor'),
+  (912, 118, 328, 'sponsor'),
+  (913, 118, 286, 'sponsor'),
+  (914, 118, 161, 'challenge_organizer'),
+  (915, 118, 329, 'challenge_organizer'),
+  (916, 123, 225, 'challenge_organizer'),
+  (917, 124, 162, 'challenge_organizer'),
+  (918, 129, 92, 'challenge_organizer'),
+  (919, 131, 174, 'challenge_organizer'),
+  (920, 156, 162, 'challenge_organizer'),
+  (921, 178, 15, 'sponsor');
