@@ -13,7 +13,7 @@ export function app(): express.Express {
   const server = express();
   const distFolder = join(
     process.cwd(),
-    'dist/apps/openchallenges/app/browser/browser'
+    'dist/apps/agora/webapp/browser/browser'
   );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
@@ -42,19 +42,9 @@ export function app(): express.Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
-    const protocol = req.protocol;
-    const host = req.get('host');
     res.render(indexHtml, {
       req,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        // The base URL enables the app to load the app config file during server-side rendering.
-        {
-          provide: 'APP_BASE_URL',
-          useFactory: () => `${protocol}://${host}`,
-          deps: [],
-        },
-      ],
+      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
     });
   });
 
