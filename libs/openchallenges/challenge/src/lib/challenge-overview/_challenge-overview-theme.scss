@@ -8,10 +8,10 @@
   $figma: map.get($config, 'figma');
 
   .created-updated-dates,
-  .created-updated-dates a {
+  .created-updated-dates a,
+  .read-more {
     color: mat.get-color-from-palette($figma, dl-color-default-navbardark);
   }
-
   .text-grey, 
   span.text-grey a {
     color: rgba(black, 0.38);
@@ -24,6 +24,9 @@
   }
   .created-updated-dates {
     font-style: italic !important;
+  }
+  .read-more {
+    font-size: 14px;
   }
 }
 
