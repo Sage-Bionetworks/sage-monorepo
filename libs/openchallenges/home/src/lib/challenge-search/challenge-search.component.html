@@ -20,9 +20,47 @@
       </p>
     </div>
     <div class="col-4">
-      <img src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges" />
+      <div class="row text-center clickable" routerLink="/challenge">
+        <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/graphic-challenges.svg"
+          alt="Number of challenges"
+        />
+        <div class="col metrics-text-box">
+          <h2
+            *ngIf="challengeCount$ | async as challengeCount"
+            [countUp]="challengeCount"
+            [reanimateOnClick]="reanimateOnClick"
+          >
+            0
+          </h2>
+          <p>annotated challenges</p>
+        </div>
+      </div>
+      <div class="row text-center clickable" routerLink="/org">
+        <img
+          class="logo-icon"
+          src="/openchallenges-assets/images/graphic-hosts.svg"
+          alt="Number of organizations & hosting societies"
+        />
+        <div class="col metrics-text-box">
+          <h2
+            *ngIf="orgCount$ | async as orgCount"
+            [countUp]="orgCount"
+            [reanimateOnClick]="reanimateOnClick"
+          >
+            0
+          </h2>
+          <p>organizations & hosting societies</p>
+        </div>
+      </div>
+      <!-- <img src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges" /> -->
     </div>
   </div>
+</section>
+<section id="plot">
+  <h3 class="section-title">Growing Trend of Challenges Tracked</h3>
+  <div class="container" echarts [options]="chartOptions"></div>
 </section>
 <section id="search-oc" class="mat-typography">
   <div class="container row">
