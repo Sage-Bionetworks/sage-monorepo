@@ -353,6 +353,7 @@ components:
       enum:
       - created
       - ending_soon
+      - random
       - recently_ended
       - recently_started
       - relevance
