@@ -9,7 +9,8 @@
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/schematic/api-client-angular"],
       "options": {
-        "project": "libs/schematic/api-client-angular/ng-package.json"
+        "project": "libs/schematic/api-client-angular/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": true
       },
       "configurations": {
         "production": {
@@ -42,7 +43,7 @@
         "fix": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -50,11 +51,12 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/schematic/api-client-angular",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [],
+  "tags": ["language:typescript"],
   "implicitDependencies": ["schematic-api-description"]
 }

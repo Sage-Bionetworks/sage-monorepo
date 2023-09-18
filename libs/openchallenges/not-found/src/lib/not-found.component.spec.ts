@@ -11,8 +11,7 @@ describe('NotFoundComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NotFoundComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, NotFoundComponent],
       providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();

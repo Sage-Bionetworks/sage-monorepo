@@ -1,1 +1,1 @@
-export * from './lib/challenge.module';
+export * from './lib/challenge.routes';

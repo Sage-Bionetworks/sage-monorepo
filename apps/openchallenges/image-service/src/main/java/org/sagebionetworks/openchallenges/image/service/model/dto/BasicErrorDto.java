@@ -12,20 +12,27 @@ import javax.validation.constraints.*;
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@lombok.AllArgsConstructor
 @lombok.Builder
 public class BasicErrorDto {
 
-  @JsonProperty("title")
   private String title;
 
-  @JsonProperty("status")
   private Integer status;
 
-  @JsonProperty("detail")
   private String detail;
 
-  @JsonProperty("type")
   private String type;
+
+  public BasicErrorDto() {
+    super();
+  }
+
+  /** Constructor with only required parameters */
+  public BasicErrorDto(String title, Integer status) {
+    this.title = title;
+    this.status = status;
+  }
 
   public BasicErrorDto title(String title) {
     this.title = title;
@@ -41,7 +48,8 @@ public class BasicErrorDto {
   @Schema(
       name = "title",
       description = "A human readable documentation for the problem type",
-      required = true)
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("title")
   public String getTitle() {
     return title;
   }
@@ -61,7 +69,11 @@ public class BasicErrorDto {
    * @return status
    */
   @NotNull
-  @Schema(name = "status", description = "The HTTP status code", required = true)
+  @Schema(
+      name = "status",
+      description = "The HTTP status code",
+      requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("status")
   public Integer getStatus() {
     return status;
   }
@@ -83,7 +95,8 @@ public class BasicErrorDto {
   @Schema(
       name = "detail",
       description = "A human readable explanation specific to this occurrence of the problem",
-      required = false)
+      requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("detail")
   public String getDetail() {
     return detail;
   }
@@ -105,7 +118,8 @@ public class BasicErrorDto {
   @Schema(
       name = "type",
       description = "An absolute URI that identifies the problem type",
-      required = false)
+      requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("type")
   public String getType() {
     return type;
   }

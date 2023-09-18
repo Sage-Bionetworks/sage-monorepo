@@ -4,18 +4,18 @@
   "sourceRoot": "apps/schematic/api/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/schematic/api"
-      }
-    },
-    "prepare-python": {
-      "executor": "nx:run-commands",
-      "options": {
         "command": "./prepare-python.sh",
-        "cwd": "apps/schematic/api"
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -37,11 +37,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -52,10 +48,7 @@
         "context": "apps/schematic/api",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -82,16 +75,17 @@
         "color": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "xargs rm -fr <.openapi-generator/FILES",
+          "xargs rm -fr <.openapi-generator/FILES", 
           "openapi-generator-cli generate"
         ],
-        "cwd": "apps/schematic/api",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -131,10 +125,15 @@
         "command": "poetry run tox",
         "cwd": "apps/schematic/api"
       }
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "cwd": "{projectRoot}"
+      }
     }
   },
-  "tags": ["type:service", "scope:backend"],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "tags": ["type:service", "scope:backend", "language:python", "package-manager:poetry"],
+  "implicitDependencies": ["schematic-api-description"]
 }

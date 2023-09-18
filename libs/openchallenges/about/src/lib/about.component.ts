@@ -6,16 +6,20 @@ import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 @Component({
   selector: 'openchallenges-about',
   standalone: true,
-  imports: [FooterComponent, CommonModule],
+  imports: [CommonModule, FooterComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })
 export class AboutComponent {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
 
   constructor(private readonly configService: ConfigService) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 }

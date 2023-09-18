@@ -4,19 +4,18 @@
   "sourceRoot": "apps/openchallenges-apex/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/apex"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/openchallenges/serve-detach.sh openchallenges-apex"
-      },
-      "dependsOn": []
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
@@ -24,11 +23,7 @@
         "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -39,10 +34,7 @@
         "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },

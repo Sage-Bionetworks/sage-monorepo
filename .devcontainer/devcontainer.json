@@ -1,6 +1,6 @@
 {
   "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:55645b0",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:0d98658",
 
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
@@ -9,12 +9,16 @@
     "NX_CLOUD_ENCRYPTION_KEY": "${localEnv:NX_CLOUD_ENCRYPTION_KEY}",
     "NX_CLOUD_ENV_NAME": "${localEnv:NX_CLOUD_ENV_NAME}",
     "NX_HEAD": "${localEnv:NX_HEAD}",
-    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}"
+    "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}",
+    "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
+    "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
+    "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
 
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.2.0": {
-      "version": "20.10.24"
+    "ghcr.io/devcontainers/features/docker-in-docker:2.4.0": {
+      "version": "24.0.5",
+      "moby": false
     }
   },
 
@@ -26,22 +30,27 @@
     },
     "vscode": {
       "extensions": [
-        "1000ch.svgo",
+        "alefragnani.Bookmarks",
         "Angular.ng-template",
         "dbaeumer.vscode-eslint",
+        "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",
         "firsttris.vscode-jest-runner",
+        "formulahendry.auto-rename-tag",
+        "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
         "Gruntfuggly.todo-tree",
         "humao.rest-client",
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
+        "ms-playwright.playwright",
         "ms-python.python",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
         "mtxr.sqltools",
         "nrwl.angular-console",
+        "pranaygp.vscode-css-peek",
         "ritwickdey.LiveServer",
         "shengchen.vscode-checkstyle",
         "SonarSource.sonarlint-vscode",
@@ -62,6 +71,8 @@
     3306,
     4200,
     4211,
+    5017,
+    5200,
     5432,
     5601,
     7010,
@@ -70,6 +81,7 @@
     7888,
     8010,
     8071,
+    8000,
     8080,
     8081,
     8082,
@@ -112,6 +124,14 @@
       "label": "openchallenges-postgres",
       "onAutoForward": "silent"
     },
+    "5017": {
+      "label": "agora-mongo",
+      "onAutoForward": "silent"
+    },
+    "5200": {
+      "label": "agora-web-app",
+      "onAutoForward": "silent"
+    },
     "5601": {
       "label": "openchallenges-opensearch-dashboards",
       "onAutoForward": "silent"
@@ -137,7 +157,7 @@
       "onAutoForward": "silent"
     },
     "8000": {
-      "label": "openchallenges-reverse-proxy",
+      "label": "openchallenges-apex",
       "onAutoForward": "silent"
     },
     "8010": {

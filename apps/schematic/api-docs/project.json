@@ -4,11 +4,11 @@
   "sourceRoot": "apps/schematic/api-docs/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/schematic/api-docs"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -37,11 +37,7 @@
         "context": "apps/schematic/api-docs",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api-docs"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -52,10 +48,7 @@
         "context": "apps/schematic/api-docs",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/schematic-api-docs"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -84,7 +77,5 @@
     }
   },
   "tags": ["type:docs", "scope:backend"],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "implicitDependencies": ["schematic-api-description"]
 }

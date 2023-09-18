@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Account } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   catchError,
   forkJoin,
@@ -13,7 +12,11 @@ import {
   throwError,
 } from 'rxjs';
 import { ORG_PROFILE_LINKS } from './org-profile-links';
-import { Avatar } from '@sagebionetworks/openchallenges/ui';
+import {
+  Avatar,
+  AvatarComponent,
+  FooterComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   ImageAspectRatio,
@@ -28,16 +31,39 @@ import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+// import { MatTabsModule } from '@angular/material/tabs';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
+import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
+import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
+import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
 
 @Component({
   selector: 'openchallenges-org-profile',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTabsModule,
+    MatIconModule,
+    OrgProfileOverviewComponent,
+    OrgProfileChallengesComponent,
+    OrgProfileMembersComponent,
+    OrgProfileStatsComponent,
+    AvatarComponent,
+    FooterComponent,
+  ],
   templateUrl: './org-profile.component.html',
   styleUrls: ['./org-profile.component.scss'],
 })
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
   public dataUpdatedOn: string;
-  account$!: Observable<Account | undefined>;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
+
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;
@@ -56,6 +82,8 @@ export class OrgProfileComponent implements OnInit {
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 
   ngOnInit(): void {

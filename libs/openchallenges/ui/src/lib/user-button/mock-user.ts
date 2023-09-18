@@ -1,7 +1,7 @@
-import { User } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { User } from './user';
 
 export const MOCK_USER: User = {
-  id: '',
+  id: 1,
   login: 'awesome-user',
   email: 'contact@example.org',
   name: 'Awesome User',

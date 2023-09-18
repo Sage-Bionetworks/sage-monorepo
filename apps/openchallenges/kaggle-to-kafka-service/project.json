@@ -4,18 +4,18 @@
   "sourceRoot": "apps/openchallenges/kaggle-to-kafka-service/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/kaggle-to-kafka-service"
-      }
-    },
-    "prepare-java": {
-      "executor": "nx:run-commands",
-      "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/kaggle-to-kafka-service"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -23,7 +23,7 @@
       "options": {
         "root": "apps/openchallenges/kaggle-to-kafka-service"
       },
-      "outputs": ["apps/openchallenges/kaggle-to-kafka-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {
@@ -68,7 +68,7 @@
       },
       "dependsOn": ["^install"]
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -76,13 +76,15 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/openchallenges/kaggle-to-kafka-service",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
+    "openchallenges-api-description",
     "openchallenges-app-config-data",
     "openchallenges-kafka-admin",
     "openchallenges-kafka-model",

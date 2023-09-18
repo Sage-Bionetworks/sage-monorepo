@@ -43,7 +43,7 @@
           [selectedValues]="selectedContributionRoles"
           (selectionChange)="onContributionRolesChange($event)"
           inputId="{{ contributionRolesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
@@ -56,7 +56,7 @@
           [selectedValues]="selectedCategories"
           (selectionChange)="onCategoriesChange($event)"
           inputId="{{ categoriesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
     </div>
     <div class="main col">
@@ -65,8 +65,7 @@
         <openchallenges-organization-card
           *ngFor="let organizationCard of organizationCards"
           [organizationCard]="organizationCard"
-        >
-        </openchallenges-organization-card>
+        />
       </div>
       <openchallenges-paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
@@ -74,7 +73,7 @@
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"
-      ></openchallenges-paginator>
+      />
     </div>
   </section>
 </main>
@@ -82,4 +81,6 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
-></openchallenges-footer>
+  [privacyPolicyUrl]="privacyPolicyUrl"
+  [termsOfUseUrl]="termsOfUseUrl"
+/>
