@@ -64,17 +64,24 @@
 </section>
 <section id="search-oc" class="mat-typography">
   <div class="container row">
-    <h3>Let us help find the perfect challenge for you!</h3>
-  </div>
-  <div class="container row">
-    <div class="search-field">
-      <input
-        type="text"
-        pInputText
-        [(ngModel)]="searchTerms"
-        (keydown.enter)="onSearch()"
-        placeholder="I'm looking for..."
-      />
+    <div class="col-2">
+      <img height="220" src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges" />
+    </div>
+    <div class="col-10">
+      <div class="row">
+        <h3>Let us help find the perfect challenge for you!</h3>
+      </div>
+      <div class="row">
+        <div class="search-field">
+          <input
+            type="text"
+            pInputText
+            [(ngModel)]="searchTerms"
+            (keydown.enter)="onSearch()"
+            placeholder="I'm looking for..."
+          />
+        </div>
+      </div>
     </div>
   </div>
 </section>
