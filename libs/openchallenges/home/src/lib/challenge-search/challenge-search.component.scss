@@ -61,6 +61,17 @@ a:active {
 
 @media only screen and (max-width: constants.$lg-breakpoint) {
   #landing {
+    .row {
+      justify-content: center;
+    }
+    img {
+      padding: 0;
+    }
+  }
+  #search-oc {
+    .container {
+      justify-content: center;
+    }
     img {
       display: none;
     }
