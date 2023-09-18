@@ -77,6 +77,10 @@ GET {{basePath}}/challenges?sort=recently_started
 
 GET {{basePath}}/challenges?sort=recently_ended
 
+### Get 5 random challenges
+
+GET {{basePath}}/challenges?sort=random&pageSize=5
+
 ### List the challenge platforms.
 
 GET {{basePath}}/challengePlatforms

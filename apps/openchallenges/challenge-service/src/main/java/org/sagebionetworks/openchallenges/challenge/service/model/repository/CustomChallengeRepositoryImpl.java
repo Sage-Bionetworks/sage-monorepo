@@ -324,6 +324,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case ENDING_SOON -> {
         return sf.field("end_date").order(orderWithDefaultAsc).toSort();
       }
+      case RANDOM -> {
+        return scoreSort;
+      }
       case RECENTLY_ENDED -> {
         return sf.field("end_date").order(orderWithDefaultDesc).toSort();
       }
