@@ -7,7 +7,7 @@ TODO
 ## Preparing
 
 ```console
-nx prepare openchallenges-keycloak
+nx create-config openchallenges-keycloak
 nx docker openchallenges-keycloak
 ```
 

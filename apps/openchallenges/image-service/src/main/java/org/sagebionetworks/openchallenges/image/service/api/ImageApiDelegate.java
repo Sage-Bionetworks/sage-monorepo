@@ -2,6 +2,7 @@ package org.sagebionetworks.openchallenges.image.service.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
+import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageDto;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 import org.springframework.http.HttpStatus;

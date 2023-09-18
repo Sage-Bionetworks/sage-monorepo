@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import {
   Challenge,
+  ChallengeContribution,
   ChallengeContributionService,
   Image,
   ImageAspectRatio,
@@ -10,12 +12,17 @@ import {
   Organization,
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { OrganizationCard } from '@sagebionetworks/openchallenges/ui';
+import {
+  OrganizationCard,
+  OrganizationCardComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
+  standalone: true,
+  imports: [CommonModule, OrganizationCardComponent],
   templateUrl: './challenge-contributors.component.html',
   styleUrls: ['./challenge-contributors.component.scss'],
 })
@@ -34,10 +41,11 @@ export class ChallengeContributorsComponent implements OnInit {
       .pipe(
         switchMap((page) =>
           forkJoinConcurrent(
-            page.challengeContributions.map((contribution) =>
-              this.organizationService.getOrganization(
-                contribution.organizationId.toString()
-              )
+            this.uniqueContributions(page.challengeContributions).map(
+              (contribution) =>
+                this.organizationService.getOrganization(
+                  contribution.organizationId.toString()
+                )
             ),
             Infinity
           )
@@ -61,6 +69,17 @@ export class ChallengeContributorsComponent implements OnInit {
         )
       )
       .subscribe((orgCards) => (this.organizationCards = orgCards));
+  }
+
+  private uniqueContributions(
+    contributions: ChallengeContribution[]
+  ): ChallengeContribution[] {
+    return contributions.filter(
+      (b, i) =>
+        contributions.findIndex(
+          (a) => a.organizationId === b.organizationId
+        ) === i
+    );
   }
 
   private sortOrgs(orgs: Organization[]): Organization[] {

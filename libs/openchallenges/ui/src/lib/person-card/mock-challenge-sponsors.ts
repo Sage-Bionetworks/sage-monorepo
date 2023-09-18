@@ -1,4 +1,4 @@
-import { ChallengeSponsor } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { ChallengeSponsor } from './challenge-sponsor';
 
 export const MOCK_CHALLENGE_SPONSORS: ChallengeSponsor[] = [
   {

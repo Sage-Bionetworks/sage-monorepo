@@ -1,12 +1,16 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   MOCK_PERSONS,
   MOCK_ORGANIZATION_CARDS,
+  PersonCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-challenge-stargazers',
+  standalone: true,
+  imports: [CommonModule, PersonCardComponent],
   templateUrl: './challenge-stargazers.component.html',
   styleUrls: ['./challenge-stargazers.component.scss'],
 })

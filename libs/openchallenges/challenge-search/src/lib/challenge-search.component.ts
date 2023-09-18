@@ -31,7 +31,15 @@ import {
   ChallengeCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { Filter, FilterValue } from '@sagebionetworks/openchallenges/ui';
+import {
+  ChallengeCardComponent,
+  CheckboxFilterComponent,
+  Filter,
+  FilterValue,
+  FooterComponent,
+  PaginatorComponent,
+  SearchDropdownFilterComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import {
   challengeStartYearRangeFilter,
   challengeStatusFilter,
@@ -61,16 +69,43 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { Calendar } from 'primeng/calendar';
-import { DatePipe } from '@angular/common';
+import { Calendar, CalendarModule } from 'primeng/calendar';
+import { CommonModule, DatePipe } from '@angular/common';
 import { union } from 'lodash';
 import { DateRange } from './date-range';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'openchallenges-challenge-search',
+  standalone: true,
+  imports: [
+    CalendarModule,
+    CommonModule,
+    DividerModule,
+    DropdownModule,
+    InputTextModule,
+    MatIconModule,
+    MatSnackBarModule,
+    RouterModule,
+    FormsModule,
+    PanelModule,
+    RadioButtonModule,
+    ReactiveFormsModule,
+    FooterComponent,
+    PaginatorComponent,
+    ChallengeCardComponent,
+    CheckboxFilterComponent,
+    SearchDropdownFilterComponent,
+  ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
@@ -79,6 +114,8 @@ export class ChallengeSearchComponent
 {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -160,6 +197,8 @@ export class ChallengeSearchComponent
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 
   ngOnInit() {

@@ -1,9 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterValue } from '../checkbox-filter/filter-value.model';
 import { Avatar } from '../avatar/avatar';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
+  standalone: true,
+  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })

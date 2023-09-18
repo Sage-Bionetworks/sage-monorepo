@@ -6,4 +6,7 @@
 /apps/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage 
 /libs/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage 
 
+/apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
+/libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
+
 /libs/shared/ @tschaffter

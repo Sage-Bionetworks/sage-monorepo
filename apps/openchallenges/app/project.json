@@ -5,12 +5,18 @@
   "sourceRoot": "apps/openchallenges/app/src",
   "prefix": "openchallenges",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/app",
-        "parallel": false
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
@@ -253,7 +259,7 @@
       }
     }
   },
-  "tags": ["type:app", "scope:client"],
+  "tags": ["type:app", "scope:client", "language:typescript"],
   "implicitDependencies": [
     "openchallenges-styles",
     "openchallenges-themes",

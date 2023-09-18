@@ -262,6 +262,7 @@ components:
         - title
         - status
       x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
   parameters:
     organizationSearchQuery:

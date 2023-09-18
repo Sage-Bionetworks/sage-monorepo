@@ -5,14 +5,14 @@
   "projectType": "library",
   "prefix": "schematic",
   "targets": {
-    "prepare-python": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "./prepare-python.sh",
-        "cwd": "libs/schematic/api-client-python"
+        "cwd": "{projectRoot}"
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -20,13 +20,12 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/schematic/api-client-python",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "tags": ["language:python", "package-manager:poetry"],
+  "implicitDependencies": ["schematic-api-description"]
 }

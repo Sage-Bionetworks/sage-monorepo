@@ -15,6 +15,7 @@ public class SecurityConfig {
         // ALLOWING REGISTER API FOR DIRECT ACCESS
         .pathMatchers("/api/v1/users/register").permitAll().pathMatchers("/api/v1/auth/login")
         .permitAll().pathMatchers("/actuator/health/readiness")
+        .permitAll().pathMatchers("/api/v1/challengeAnalytics/**")
         .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
         .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
         .permitAll().pathMatchers("/api/v1/challenges/**")

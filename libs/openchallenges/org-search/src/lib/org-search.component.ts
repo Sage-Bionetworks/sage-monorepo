@@ -14,8 +14,12 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
+  CheckboxFilterComponent,
   FilterValue,
+  FooterComponent,
   OrganizationCard,
+  OrganizationCardComponent,
+  PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
   challengeContributionRolesFilter,
@@ -40,18 +44,46 @@ import {
   shareReplay,
   takeUntil,
 } from 'rxjs/operators';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { DividerModule } from 'primeng/divider';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextModule } from 'primeng/inputtext';
+import { PanelModule } from 'primeng/panel';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @Component({
   selector: 'openchallenges-org-search',
+  standalone: true,
+  imports: [
+    CommonModule,
+    DividerModule,
+    DropdownModule,
+    InputTextModule,
+    MatIconModule,
+    MatSnackBarModule,
+    RouterModule,
+    FormsModule,
+    PanelModule,
+    RadioButtonModule,
+    ReactiveFormsModule,
+    FooterComponent,
+    PaginatorComponent,
+    OrganizationCardComponent,
+    CheckboxFilterComponent,
+  ],
   templateUrl: './org-search.component.html',
   styleUrls: ['./org-search.component.scss'],
 })
 export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
 
   private query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
@@ -98,6 +130,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 
   ngOnInit() {
