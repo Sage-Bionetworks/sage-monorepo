@@ -9,6 +9,10 @@
   #search-oc {
     background-color: mat.get-color-from-palette($primary, 900);
 
+    #landing,
+    #plot {
+      background-color: #F8F8F8;
+    }
     h3 {
       color: white;
     }
