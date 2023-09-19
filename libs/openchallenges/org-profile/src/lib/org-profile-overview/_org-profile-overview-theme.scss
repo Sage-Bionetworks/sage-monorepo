@@ -7,17 +7,9 @@
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
-
-  .text-grey {
-    color: rgba(black, 0.38);
-  }
 }
 
-@mixin typography($theme) {
-  .text-right {
-    font-weight: 600;
-  }
-}
+@mixin typography($theme) {}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
