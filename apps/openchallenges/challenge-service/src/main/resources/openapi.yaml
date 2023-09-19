@@ -446,6 +446,7 @@ components:
         sortSeed:
           description: The seed that initializes the random sorter.
           format: int32
+          maximum: 2147483647
           minimum: 0
           nullable: true
           type: integer

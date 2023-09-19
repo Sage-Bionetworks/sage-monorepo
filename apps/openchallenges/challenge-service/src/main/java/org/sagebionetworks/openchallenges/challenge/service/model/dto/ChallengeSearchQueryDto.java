@@ -147,11 +147,12 @@ public class ChallengeSearchQueryDto {
   }
 
   /**
-   * The seed that initializes the random sorter. minimum: 0
+   * The seed that initializes the random sorter. minimum: 0 maximum: 2147483647
    *
    * @return sortSeed
    */
   @Min(0)
+  @Max(2147483647)
   @Schema(
       name = "sortSeed",
       description = "The seed that initializes the random sorter.",
