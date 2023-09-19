@@ -443,6 +443,12 @@ components:
           type: integer
         sort:
           $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          format: int32
+          minimum: 0
+          nullable: true
+          type: integer
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
         difficulties:

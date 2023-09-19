@@ -15,6 +15,12 @@ properties:
     minimum: 1
   sort:
     $ref: ChallengeSort.yaml
+  sortSeed:
+    description: The seed that initializes the random sorter.
+    type: integer
+    format: int32
+    minimum: 0
+    nullable: true
   direction:
     $ref: ChallengeDirection.yaml
   difficulties:

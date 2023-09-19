@@ -1,10 +1,12 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.repository;
 
+import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
@@ -355,6 +357,26 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     switch (query.getSort()) {
       case ENDING_SOON -> {
         return pf.range().field("end_date").between(now, null).toPredicate();
+      }
+      case RANDOM -> {
+        Integer seed = query.getSortSeed();
+        if (seed == null) {
+          SecureRandom rand = new SecureRandom();
+          seed = rand.nextInt(Integer.MAX_VALUE);
+        }
+        return pf.extension(ElasticsearchExtension.get())
+            .fromJson(
+                "{"
+                    + "  \"function_score\": {"
+                    + "    \"random_score\": {"
+                    + "      \"seed\": "
+                    + seed
+                    + ","
+                    + "      \"field\": \"_seq_no\""
+                    + "    }"
+                    + "  }"
+                    + "}")
+            .toPredicate();
       }
       case RECENTLY_ENDED -> {
         return pf.range().field("end_date").between(null, now).toPredicate();

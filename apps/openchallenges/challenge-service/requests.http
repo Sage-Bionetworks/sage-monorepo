@@ -77,9 +77,13 @@ GET {{basePath}}/challenges?sort=recently_started
 
 GET {{basePath}}/challenges?sort=recently_ended
 
-### Get 5 random challenges
+### Get one random challenge
 
-GET {{basePath}}/challenges?sort=random&pageSize=5
+GET {{basePath}}/challenges?sort=random&pageSize=1
+
+### Get one random challenge with the seed value 10
+
+GET {{basePath}}/challenges?sort=random&sortSeed=10&pageSize=1
 
 ### List the challenge platforms.
 

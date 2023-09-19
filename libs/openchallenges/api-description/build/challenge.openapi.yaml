@@ -257,6 +257,12 @@ components:
           minimum: 1
         sort:
           $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          type: integer
+          format: int32
+          minimum: 0
+          nullable: true
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
