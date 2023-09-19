@@ -261,6 +261,9 @@ table {
 .created-updated-dates {
   font-style: italic !important;
 }
+.read-more {
+  text-underline-offset: 3px
+}
 
 // CARDS
 @mixin line-clamp($max-lines) {
