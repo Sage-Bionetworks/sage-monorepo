@@ -50,6 +50,13 @@ em {
 .text-right {
   text-align: right;
 }
+.text-grey, 
+span.text-grey a {
+  color: rgba(black, 0.38);
+}
+.text-right {
+  font-weight: 600;
+}
 
 // LOGO & DESIGN
 .logo-icon {
@@ -241,6 +248,18 @@ em {
 }
 table {
   border-spacing: 11px;
+}
+#bio div a mat-icon {
+  font-size: 15px;
+  vertical-align: middle;
+}
+.created-updated-dates,
+.created-updated-dates a,
+.read-more {
+  color: #1f3b8f;
+}
+.created-updated-dates {
+  font-style: italic !important;
 }
 
 // CARDS
