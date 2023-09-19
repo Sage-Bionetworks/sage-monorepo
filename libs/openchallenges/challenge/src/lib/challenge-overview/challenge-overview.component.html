@@ -1,9 +1,7 @@
 <main *ngIf="challenge">
   <div id="bio">
     <h3 class="top-section-title">Overview</h3>
-    <p>
-      {{ use_default(challenge.description) }}
-    </p>
+    <p>{{ use_default(challenge.description) }}</p>
     <div *ngIf="challenge.description.endsWith('...')">
       <a class="read-more" href="{{ challenge.websiteUrl }}"
         >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a>
