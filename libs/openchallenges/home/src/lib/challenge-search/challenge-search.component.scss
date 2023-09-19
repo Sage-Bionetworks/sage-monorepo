@@ -58,8 +58,11 @@ a:active {
     align-items: center;
   }
 }
+.clickable {
+  cursor: pointer;
+}
 
-@media only screen and (max-width: constants.$lg-breakpoint) {
+@media only screen and (max-width: constants.$md-breakpoint) {
   #landing {
     .row {
       justify-content: center;
