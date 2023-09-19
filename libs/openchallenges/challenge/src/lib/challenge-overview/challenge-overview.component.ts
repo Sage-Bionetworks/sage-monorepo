@@ -5,11 +5,12 @@ import {
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-challenge-overview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatIconModule],
   templateUrl: './challenge-overview.component.html',
   styleUrls: ['./challenge-overview.component.scss'],
 })
