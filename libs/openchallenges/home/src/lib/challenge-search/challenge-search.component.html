@@ -1,6 +1,6 @@
 <section id="landing" class="mat-typography">
   <div class="container row">
-    <div class="col-8">
+    <div class="col-12">
       <h1>
         I want to find challenges related to
         <ngx-typed-js
@@ -19,47 +19,46 @@
         organizers with standardized challenge event templates and intelligence.
       </p>
     </div>
-    <div class="col-4">
-      <div class="row text-center clickable" routerLink="/challenge">
-        <img
-          class="logo-icon"
-          src="/openchallenges-assets/images/graphic-challenges.svg"
-          alt="Number of challenges"
-        />
-        <div class="col metrics-text-box">
-          <h2
-            *ngIf="challengeCount$ | async as challengeCount"
-            [countUp]="challengeCount"
-            [reanimateOnClick]="reanimateOnClick"
-          >
-            0
-          </h2>
-          <p>annotated challenges</p>
-        </div>
-      </div>
-      <div class="row text-center clickable" routerLink="/org">
-        <img
-          class="logo-icon"
-          src="/openchallenges-assets/images/graphic-hosts.svg"
-          alt="Number of organizations & hosting societies"
-        />
-        <div class="col metrics-text-box">
-          <h2
-            *ngIf="orgCount$ | async as orgCount"
-            [countUp]="orgCount"
-            [reanimateOnClick]="reanimateOnClick"
-          >
-            0
-          </h2>
-          <p>organizations & hosting societies</p>
-        </div>
-      </div>
-      <!-- <img src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges" /> -->
+  </div>
+</section>
+<section id="metrics" class="container">
+  <div class="row text-center clickable" routerLink="/challenge">
+    <img
+      class="logo-icon"
+      src="/openchallenges-assets/images/graphic-challenges.svg"
+      alt="Number of challenges"
+    />
+    <div class="col metrics-text-box">
+      <h2
+        *ngIf="challengeCount$ | async as challengeCount"
+        [countUp]="challengeCount"
+        [reanimateOnClick]="reanimateOnClick"
+      >
+        0
+      </h2>
+      <p class="mat-body-strong">annotated challenges</p>
+    </div>
+  </div>
+  <div class="row text-center clickable" routerLink="/org">
+    <img
+      class="logo-icon"
+      src="/openchallenges-assets/images/graphic-hosts.svg"
+      alt="Number of organizations & hosting societies"
+    />
+    <div class="col metrics-text-box">
+      <h2
+        *ngIf="orgCount$ | async as orgCount"
+        [countUp]="orgCount"
+        [reanimateOnClick]="reanimateOnClick"
+      >
+        0
+      </h2>
+      <p class="mat-body-strong">organizations & hosting societies</p>
     </div>
   </div>
 </section>
 <section id="plot">
-  <h3 class="section-title">Tracked Challenges over the Years</h3>
+  <h3 class="section-title">Total Challenges Tracked</h3>
   <div class="container" echarts [options]="chartOptions"></div>
 </section>
 <section id="search-oc" class="mat-typography">
