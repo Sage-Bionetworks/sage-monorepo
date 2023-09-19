@@ -3,11 +3,11 @@
     <h3 class="top-section-title">Overview</h3>
     <p>
       {{ use_default(challenge.description) }}
-      <span *ngIf="challenge.description.endsWith('...')">
-        <a class="read-more" href="{{ challenge.websiteUrl }}"
-          >Continue reading <mat-icon aria-hidden="true">open_in_new</mat-icon></a>
-      </span>
     </p>
+    <div *ngIf="challenge.description.endsWith('...')">
+      <a class="read-more" href="{{ challenge.websiteUrl }}"
+        >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a>
+    </div>
   </div>
   <div id="details">
     <h3 class="section-title">Challenge Details</h3>
