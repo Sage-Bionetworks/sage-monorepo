@@ -74,7 +74,7 @@ data_info_server <- function(id){
           shiny::showModal(shiny::modalDialog(
             title = "Methods",
             shiny::includeMarkdown(paste0(
-              "markdown/methods/",
+              "inst/markdown/methods/",
               tag,
               ".markdown"
             )),
