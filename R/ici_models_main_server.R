@@ -88,7 +88,8 @@ ici_models_main_server <- function(
       output$num_transform <- shiny::renderUI({
         selected_pred <- training_obj()$predictors %>%
           dplyr::filter(feature_name %in% c(input$predictors_immunefeatures, input$predictors_biomarkers,input$predictors_gene)) %>%
-          dplyr::pull(feature_display)
+          dplyr::mutate(menu = purrr::set_names(feature_name, feature_display)) %>%
+          dplyr::pull(menu)
 
         shiny::validate(shiny::need(length(selected_pred)>0, "No numeric predictor was selected."))
         shiny::checkboxGroupInput(
