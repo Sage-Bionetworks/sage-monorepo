@@ -60,7 +60,7 @@
       "options": {
         "host": "127.0.0.1",
         "port": 5200,
-        "proxyConfig": "apps/openchallenges/app/src/proxy.conf.json"
+        "proxyConfig": "apps/agora/webapp/src/proxy.conf.json"
       }
     },
     "extract-i18n": {
@@ -124,7 +124,11 @@
           "serverTarget": "agora-webapp:server:production"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "host": "127.0.0.1",
+        "port": 5200
+      }
     },
     "prerender": {
       "executor": "@nguniversal/builders:prerender",
