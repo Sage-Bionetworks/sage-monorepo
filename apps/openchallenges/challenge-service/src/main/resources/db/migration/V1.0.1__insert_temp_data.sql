@@ -1,6 +1,6 @@
 -- challenge_platform data
 
-LOAD DATA INFILE 'platforms.csv' INTO TABLE challenge_platform
+LOAD DATA LOCAL INFILE 'platforms.csv' INTO TABLE challenge_platform
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\r\n'
   IGNORE 1 LINES;
