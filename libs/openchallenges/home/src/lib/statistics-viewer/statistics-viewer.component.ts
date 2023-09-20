@@ -130,6 +130,39 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
       );
   }
 
+  // this.challengeService
+  // .listChallenges({ pageSize: 1000 })
+  // .subscribe((page) => console.log(this.processData(page.challenges)));
+
+  // private processData(challenges: Challenge[]): {
+  //   years: string[];
+  //   cumulativeChallengeCounts: number[];
+  // } {
+  //   const dataByYear: { [year: string]: number } = {};
+  //   const cumulativeChallengeCounts: number[] = [];
+  //   const filteredChallenges = challenges.filter(
+  //     (challenge) => challenge.startDate !== null
+  //   );
+  //   filteredChallenges.forEach((challenge) => {
+  //     const startYear = new Date(challenge.startDate as string)
+  //       .getFullYear()
+  //       .toString();
+  //     dataByYear[startYear] = (dataByYear[startYear] || 0) + 1;
+  //   });
+
+  //   const years = Object.keys(dataByYear);
+  //   years.sort(); // Sort years in ascending order
+  //   let cumulativeSum = 0;
+  //   years.forEach((year) => {
+  //     cumulativeSum += dataByYear[year];
+  //     cumulativeChallengeCounts.push(cumulativeSum);
+  //   });
+  //   return {
+  //     years,
+  //     cumulativeChallengeCounts,
+  //   };
+  // }
+
   ngOnDestroy() {
     if (this.chartDataSubscription) {
       this.chartDataSubscription.unsubscribe();
