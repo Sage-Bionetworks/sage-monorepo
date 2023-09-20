@@ -13,6 +13,8 @@ public enum ChallengeSortDto {
 
   ENDING_SOON("ending_soon"),
 
+  RANDOM("random"),
+
   RECENTLY_ENDED("recently_ended"),
 
   RECENTLY_STARTED("recently_started"),
