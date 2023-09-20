@@ -804,13 +804,13 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
-      - description: The label of a component in a schema
+      - description: "A component in a schema, either the dsplay label or schema label"
         explode: true
         in: query
-        name: componentLabel
+        name: component
         required: true
         schema:
-          $ref: '#/components/schemas/ComponentLabel'
+          type: string
         style: form
       - description: "If True, validation suite will only run with in-house validation\
           \ rule. If False, the Great Expectations suite will be utilized and all\
@@ -821,6 +821,78 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The ID of a dataset.
+        explode: true
+        in: query
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: form
+      - description: file_and_entities will store the manifest as a csv and create
+          Synapse files for each row in the manifest. table_and_file will store the
+          manifest as a table and a csv on Synapse. file_only will store the manifest
+          as a csv only on Synapse. table_file_and_entities will perform the options
+          file_with_entites and table in combination.
+        explode: true
+        in: query
+        name: storageMethod
+        required: false
+        schema:
+          default: table_file_and_entities
+          enum:
+          - file_and_entities
+          - table_and_file
+          - file_only
+          - table_file_and_entities
+          type: string
+        style: form
+      - description: "If true, annotations with blank values will be hidden from a\
+          \ dataset's annotation list in Synaspe. If false, annotations with blank\
+          \ values will be displayed."
+        explode: true
+        in: query
+        name: hideBlanks
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: "replace will remove the rows and columns from the existing table\
+          \ and store the new rows and columns, preserving the name and synID. upsert\
+          \ will add the new rows to the table and preserve the exisitng rows and\
+          \ columns in the existing table."
+        explode: true
+        in: query
+        name: tableManipulationMethod
+        required: false
+        schema:
+          default: replace
+          enum:
+          - replace
+          - upsert
+          type: string
+        style: form
+      - description: "If true, store attributes using the schema label If false, store\
+          \ attributes using the display label"
+        explode: true
+        in: query
+        name: useSchemaLabel
+        required: false
+        schema:
+          default: true
+          type: boolean
         style: form
       requestBody:
         content:
@@ -835,7 +907,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestValidationResult'
+                $ref: '#/components/schemas/ManifestId'
           description: Success
         "500":
           content:
@@ -849,7 +921,7 @@ paths:
       - Validation
       x-openapi-router-controller: schematic_api.controllers.validation_controller
   /submitManifestJson:
-    get:
+    post:
       description: "Validates a manifest in json form, then submits it in csv form"
       operationId: submit_manifest_json
       parameters:
@@ -861,13 +933,13 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
-      - description: The label of a component in a schema
+      - description: "A component in a schema, either the dsplay label or schema label"
         explode: true
         in: query
-        name: componentLabel
+        name: component
         required: true
         schema:
-          $ref: '#/components/schemas/ComponentLabel'
+          type: string
         style: form
       - description: "If True, validation suite will only run with in-house validation\
           \ rule. If False, the Great Expectations suite will be utilized and all\
@@ -878,6 +950,78 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The ID of a dataset.
+        explode: true
+        in: query
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: form
+      - description: file_and_entities will store the manifest as a csv and create
+          Synapse files for each row in the manifest. table_and_file will store the
+          manifest as a table and a csv on Synapse. file_only will store the manifest
+          as a csv only on Synapse. table_file_and_entities will perform the options
+          file_with_entites and table in combination.
+        explode: true
+        in: query
+        name: storageMethod
+        required: false
+        schema:
+          default: table_file_and_entities
+          enum:
+          - file_and_entities
+          - table_and_file
+          - file_only
+          - table_file_and_entities
+          type: string
+        style: form
+      - description: "If true, annotations with blank values will be hidden from a\
+          \ dataset's annotation list in Synaspe. If false, annotations with blank\
+          \ values will be displayed."
+        explode: true
+        in: query
+        name: hideBlanks
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: "replace will remove the rows and columns from the existing table\
+          \ and store the new rows and columns, preserving the name and synID. upsert\
+          \ will add the new rows to the table and preserve the exisitng rows and\
+          \ columns in the existing table."
+        explode: true
+        in: query
+        name: tableManipulationMethod
+        required: false
+        schema:
+          default: replace
+          enum:
+          - replace
+          - upsert
+          type: string
+        style: form
+      - description: "If true, store attributes using the schema label If false, store\
+          \ attributes using the display label"
+        explode: true
+        in: query
+        name: useSchemaLabel
+        required: false
+        schema:
+          default: true
+          type: boolean
         style: form
       requestBody:
         content:
@@ -890,7 +1034,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestValidationResult'
+                $ref: '#/components/schemas/ManifestId'
           description: Success
         "500":
           content:
@@ -993,9 +1137,9 @@ paths:
         style: form
       requestBody:
         content:
-          application/json:
+          text/plain:
             schema:
-              type: object
+              type: string
         description: A manifest in json form
       responses:
         "200":
@@ -1169,6 +1313,93 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/RestrictRules'
+      style: form
+    component:
+      description: "A component in a schema, either the dsplay label or schema label"
+      explode: true
+      in: query
+      name: component
+      required: true
+      schema:
+        type: string
+      style: form
+    datasetIdQuery:
+      description: The ID of a dataset.
+      explode: true
+      in: query
+      name: datasetId
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+      style: form
+    storageMethod:
+      description: file_and_entities will store the manifest as a csv and create Synapse
+        files for each row in the manifest. table_and_file will store the manifest
+        as a table and a csv on Synapse. file_only will store the manifest as a csv
+        only on Synapse. table_file_and_entities will perform the options file_with_entites
+        and table in combination.
+      explode: true
+      in: query
+      name: storageMethod
+      required: false
+      schema:
+        default: table_file_and_entities
+        enum:
+        - file_and_entities
+        - table_and_file
+        - file_only
+        - table_file_and_entities
+        type: string
+      style: form
+    hideBlanks:
+      description: "If true, annotations with blank values will be hidden from a dataset's\
+        \ annotation list in Synaspe. If false, annotations with blank values will\
+        \ be displayed."
+      explode: true
+      in: query
+      name: hideBlanks
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    assetViewIdQuery:
+      description: ID of view listing all project data assets. E.g. for Synapse this
+        would be the Synapse ID of the fileview listing all data assets for a given
+        project
+      explode: true
+      in: query
+      name: assetViewId
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
+      style: form
+    tableManipulationMethod:
+      description: "replace will remove the rows and columns from the existing table\
+        \ and store the new rows and columns, preserving the name and synID. upsert\
+        \ will add the new rows to the table and preserve the exisitng rows and columns\
+        \ in the existing table."
+      explode: true
+      in: query
+      name: tableManipulationMethod
+      required: false
+      schema:
+        default: replace
+        enum:
+        - replace
+        - upsert
+        type: string
+      style: form
+    useSchemaLabel:
+      description: "If true, store attributes using the schema label If false, store\
+        \ attributes using the display label"
+      explode: true
+      in: query
+      name: useSchemaLabel
+      required: false
+      schema:
+        default: true
+        type: boolean
       style: form
   responses:
     BadRequest:

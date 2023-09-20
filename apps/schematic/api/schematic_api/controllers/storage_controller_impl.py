@@ -2,7 +2,7 @@
 import os
 from typing import Optional, Union, Callable, Any
 
-from flask import request  # type: ignore
+
 import pandas as pd
 from schematic.store.synapse import SynapseStorage, ManifestDownload, load_df  # type: ignore
 from schematic import CONFIG  # type: ignore
@@ -16,20 +16,7 @@ from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
 from schematic_api.models.file import File
 from schematic_api.models.files_page import FilesPage
-from schematic_api.controllers.utils import handle_exceptions
-
-
-def get_access_token() -> Optional[str]:
-    """Get access token from header"""
-    bearer_token = None
-    # Check if the Authorization header is present
-    if "Authorization" in request.headers:
-        auth_header = request.headers["Authorization"]
-
-        # Ensure the header starts with 'Bearer ' and retrieve the token
-        if auth_header.startswith("Bearer "):
-            bearer_token = auth_header.split(" ")[1]
-    return bearer_token
+from schematic_api.controllers.utils import handle_exceptions, get_access_token
 
 
 def get_asset_storage_class(asset_type: str) -> Callable:

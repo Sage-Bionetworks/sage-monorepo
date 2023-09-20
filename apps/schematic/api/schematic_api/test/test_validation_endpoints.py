@@ -34,7 +34,9 @@ class TestValidateManifestCsv(BaseTestCase):
         url = (
             f"{VALIDATE_MANIFEST_CSV_URL}?schemaUrl={SCHEMA_URL}&componentLabel=Patient"
         )
-        response = self.client.open(url, method="POST", headers=HEADERS, data={})
+        response = self.client.open(
+            url, method="POST", headers=HEADERS, data={"csv": "xxx"}
+        )
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
 

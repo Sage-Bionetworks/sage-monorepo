@@ -14,14 +14,20 @@ post:
   operationId: submitManifestCsv
   parameters:
     - $ref: ../components/parameters/query/schemaUrl.yaml
-    - $ref: ../components/parameters/query/componentLabel.yaml
+    - $ref: ../components/parameters/query/component.yaml
     - $ref: ../components/parameters/query/restrictRules.yaml
+    - $ref: ../components/parameters/query/datasetIdQuery.yaml
+    - $ref: ../components/parameters/query/storageMethod.yaml
+    - $ref: ../components/parameters/query/hideBlanks.yaml
+    - $ref: ../components/parameters/query/assetViewIdQuery.yaml
+    - $ref: ../components/parameters/query/tableManipulationMethod.yaml
+    - $ref: ../components/parameters/query/useSchemaLabel.yaml
   responses:
     '200':
       description: Success
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/ManifestValidationResult.yaml
+            $ref: ../components/schemas/ManifestId.yaml
     '500':
       $ref: ../components/responses/InternalServerError.yaml

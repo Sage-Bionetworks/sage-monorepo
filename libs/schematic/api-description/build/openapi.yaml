@@ -346,9 +346,9 @@ paths:
       requestBody:
         description: A manifest in json form
         content:
-          application/json:
+          text/plain:
             schema:
-              type: object
+              type: string
       operationId: validateManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
@@ -392,7 +392,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerError'
   /submitManifestJson:
-    get:
+    post:
       tags:
         - Validation
       summary: Validates a manifest in json form, then submits it in csv form
@@ -406,15 +406,21 @@ paths:
       operationId: submitManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/component'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/storageMethod'
+        - $ref: '#/components/parameters/hideBlanks'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/tableManipulationMethod'
+        - $ref: '#/components/parameters/useSchemaLabel'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestValidationResult'
+                $ref: '#/components/schemas/ManifestId'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /submitManifestCsv:
@@ -434,15 +440,21 @@ paths:
       operationId: submitManifestCsv
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/component'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/storageMethod'
+        - $ref: '#/components/parameters/hideBlanks'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/tableManipulationMethod'
+        - $ref: '#/components/parameters/useSchemaLabel'
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestValidationResult'
+                $ref: '#/components/schemas/ManifestId'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -972,6 +984,67 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/RestrictRules'
+    component:
+      name: component
+      in: query
+      description: A component in a schema, either the dsplay label or schema label
+      required: true
+      schema:
+        type: string
+    datasetIdQuery:
+      name: datasetId
+      in: query
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    storageMethod:
+      name: storageMethod
+      in: query
+      description: file_and_entities will store the manifest as a csv and create Synapse files for each row in the manifest. table_and_file will store the manifest as a table and a csv on Synapse. file_only will store the manifest as a csv only on Synapse. table_file_and_entities will perform the options file_with_entites and table in combination.
+      required: false
+      schema:
+        type: string
+        enum:
+          - file_and_entities
+          - table_and_file
+          - file_only
+          - table_file_and_entities
+        default: table_file_and_entities
+    hideBlanks:
+      name: hideBlanks
+      in: query
+      description: If true, annotations with blank values will be hidden from a dataset's annotation list in Synaspe. If false, annotations with blank values will be displayed.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    assetViewIdQuery:
+      name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
+    tableManipulationMethod:
+      name: tableManipulationMethod
+      in: query
+      description: replace will remove the rows and columns from the existing table and store the new rows and columns, preserving the name and synID. upsert will add the new rows to the table and preserve the exisitng rows and columns in the existing table.
+      required: false
+      schema:
+        type: string
+        enum:
+          - replace
+          - upsert
+        default: replace
+    useSchemaLabel:
+      name: useSchemaLabel
+      in: query
+      description: If true, store attributes using the schema label If false, store attributes using the display label
+      required: false
+      schema:
+        type: boolean
+        default: true
   responses:
     BadRequest:
       description: Invalid request
