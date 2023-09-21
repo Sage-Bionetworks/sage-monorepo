@@ -70,5 +70,6 @@ target/
 #secrets
 *secrets*
 
-#schematic downloaded manifests
+#schematic downloaded files
 manifests
+great_expectations
