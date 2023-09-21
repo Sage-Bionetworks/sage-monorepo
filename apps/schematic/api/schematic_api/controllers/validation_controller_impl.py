@@ -200,6 +200,36 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     return manifest_id
 
 
+def validate_manifest_with_schematic(
+    manifest_path: str, schema_url: str, component_label: str, restrict_rules: bool
+) -> tuple[list, list]:
+    """Validates a manifest csv file
+
+    Args:
+        manifest_path (str): The path to the manifest
+        schema_url (str): The url of the schema to validate the manifest against
+        component_label (str): The label of the component being validated
+        restrict_rules (bool): Weather or not to restrict the rules used
+
+    Returns:
+        tuple[list, list]: A tuple
+          The first item is a list of validation errors
+          The second item is a list of validation warnings
+    """
+    schema_path = download_schema_file_as_jsonld(schema_url)
+
+    metadata_model = MetadataModel(
+        inputMModelLocation=schema_path, inputMModelLocationType="local"
+    )
+
+    errors, warnings = metadata_model.validateModelManifest(
+        manifestPath=manifest_path,
+        rootNode=component_label,
+        restrict_rules=restrict_rules,
+    )
+    return errors, warnings
+
+
 @handle_exceptions
 def validate_manifest_csv(
     schema_url: str, component_label: str, body: bytes, restrict_rules: bool
@@ -210,7 +240,7 @@ def validate_manifest_csv(
         schema_url (str): The url of the schema to validate the manifest against
         component_label (str): The label of the component being validated
         body (bytes): The body of the request, a manifest csv in bytes form
-        restrict_rules (bool): Weather or nt to restrict the rules used
+        restrict_rules (bool): Weather or not to restrict the rules used
 
     Returns:
         tuple[Union[ManifestValidationResult, BasicError], int]: A tuple
@@ -218,16 +248,9 @@ def validate_manifest_csv(
           The second item is the status of the request
     """
     manifest_path = save_manifest_csv_string_as_csv(body)
-    schema_path = download_schema_file_as_jsonld(schema_url)
 
-    metadata_model = MetadataModel(
-        inputMModelLocation=schema_path, inputMModelLocationType="local"
-    )
-
-    errors, warnings = metadata_model.validateModelManifest(
-        manifestPath=manifest_path,
-        rootNode=component_label,
-        restrict_rules=restrict_rules,
+    errors, warnings = validate_manifest_with_schematic(
+        manifest_path, schema_url, component_label, restrict_rules
     )
 
     result: Union[ManifestValidationResult, BasicError] = ManifestValidationResult(
@@ -238,7 +261,10 @@ def validate_manifest_csv(
 
 @handle_exceptions
 def validate_manifest_json(
-    schema_url: str, component_label: str, body: Any, restrict_rules: bool
+    schema_url: str,
+    component_label: str,
+    restrict_rules: bool,
+    body: Any,
 ) -> tuple[Union[ManifestValidationResult, BasicError], int]:
     """Validates a manifest ins jsonstring form
 
@@ -246,7 +272,7 @@ def validate_manifest_json(
         schema_url (str): The url of the schema to validate the manifest against
         component_label (str): The label of the component being validated
         body (Any): The body of the request
-        restrict_rules (bool): Weather or nt to restrict the rules used
+        restrict_rules (bool): Weather or not to restrict the rules used
 
     Returns:
         tuple[Union[ManifestValidationResult, BasicError], int]: A tuple
@@ -254,16 +280,9 @@ def validate_manifest_json(
           The second item is the status of the request
     """
     manifest_path = save_manifest_json_string_as_csv(body)
-    schema_path = download_schema_file_as_jsonld(schema_url)
 
-    metadata_model = MetadataModel(
-        inputMModelLocation=schema_path, inputMModelLocationType="local"
-    )
-
-    errors, warnings = metadata_model.validateModelManifest(
-        manifestPath=manifest_path,
-        rootNode=component_label,
-        restrict_rules=restrict_rules,
+    errors, warnings = validate_manifest_with_schematic(
+        manifest_path, schema_url, component_label, restrict_rules
     )
 
     result: Union[ManifestValidationResult, BasicError] = ManifestValidationResult(

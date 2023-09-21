@@ -1,0 +1,39 @@
+{
+  "evaluation_parameters": {},
+  "meta": {
+    "active_batch_definition": {
+      "batch_identifiers": {
+        "default_identifier_name": "manifestID"
+      },
+      "data_asset_name": "Manifest",
+      "data_connector_name": "default_runtime_data_connector_name",
+      "datasource_name": "example_datasource"
+    },
+    "batch_markers": {
+      "ge_load_time": "20230921T173534.679344Z",
+      "pandas_data_fingerprint": "1fb3ae1f70ce15a7dc921a952ca8fc3a"
+    },
+    "batch_spec": {
+      "batch_data": "PandasDataFrame",
+      "data_asset_name": "Manifest"
+    },
+    "checkpoint_id": null,
+    "checkpoint_name": "manifest_checkpoint",
+    "expectation_suite_name": "Manifest_test_suite",
+    "great_expectations_version": "0.15.50",
+    "run_id": {
+      "run_name": null,
+      "run_time": "2023-09-21T17:35:34.676244+00:00"
+    },
+    "validation_id": null,
+    "validation_time": "20230921T173534.683544Z"
+  },
+  "results": [],
+  "statistics": {
+    "evaluated_expectations": 0,
+    "success_percent": null,
+    "successful_expectations": 0,
+    "unsuccessful_expectations": 0
+  },
+  "success": true
+}
