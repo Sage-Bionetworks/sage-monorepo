@@ -46,7 +46,7 @@ import { OrgProfileMembersComponent } from './org-profile-members/org-profile-me
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
 import { SeoService } from '@sagebionetworks/shared/util';
-import { orgProfileSeoData } from './org-profile-seo-data';
+import { seoData } from './org-profile-seo-data';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -138,8 +138,12 @@ export class OrgProfileComponent implements OnInit {
 
     this.subscriptions.push(activeTabSub);
 
-    // TODO needs to be moved to get access to dynamic data
-    this.seoService.setData(orgProfileSeoData(), this.renderer2);
+    forkJoin({
+      org: this.organization$,
+      avatar: this.organizationAvatar$,
+    }).subscribe(({ org, avatar }) => {
+      this.seoService.setData(seoData(org, avatar.src), this.renderer2);
+    });
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {

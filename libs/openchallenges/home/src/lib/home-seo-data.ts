@@ -1,6 +1,6 @@
 import { SeoData } from '@sagebionetworks/shared/util';
 
-export const homeSeoData = (): SeoData => {
+export const seoData = (): SeoData => {
   return new SeoData({
     title: 'OpenChallenges: A Centralized Hub for Biomedical Challenges',
     description:

@@ -10,7 +10,7 @@ import { FeaturedChallengeListComponent } from './featured-challenge-list/featur
 import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
 import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
 import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
-import { homeSeoData } from './home-seo-data';
+import { seoData } from './home-seo-data';
 
 @Component({
   selector: 'openchallenges-home',
@@ -45,6 +45,6 @@ export class HomeComponent {
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
 
-    this.seoService.setData(homeSeoData(), this.renderer2);
+    this.seoService.setData(seoData(), this.renderer2);
   }
 }
