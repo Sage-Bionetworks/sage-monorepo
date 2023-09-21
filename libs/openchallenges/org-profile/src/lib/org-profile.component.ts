@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import {
   ActivatedRoute,
   ParamMap,
@@ -45,6 +45,8 @@ import { OrgProfileChallengesComponent } from './org-profile-challenges/org-prof
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { orgProfileSeoData } from './org-profile-seo-data';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -84,7 +86,9 @@ export class OrgProfileComponent implements OnInit {
     private router: Router,
     private readonly configService: ConfigService,
     private organizationService: OrganizationService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -133,6 +137,9 @@ export class OrgProfileComponent implements OnInit {
       .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
+
+    // TODO needs to be moved to get access to dynamic data
+    this.seoService.setData(orgProfileSeoData(), this.renderer2);
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {

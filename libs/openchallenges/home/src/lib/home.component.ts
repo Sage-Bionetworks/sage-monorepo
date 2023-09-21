@@ -10,7 +10,7 @@ import { FeaturedChallengeListComponent } from './featured-challenge-list/featur
 import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
 import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
 import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
-import { homeSeoData } from './home-seo';
+import { homeSeoData } from './home-seo-data';
 
 @Component({
   selector: 'openchallenges-home',
