@@ -46,6 +46,5 @@ export class HomeComponent {
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
 
     this.seoService.setData(homeSeoData(), this.renderer2);
-    console.log(homeSeoData());
   }
 }

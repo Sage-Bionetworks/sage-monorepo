@@ -1,23 +1,21 @@
-import { MetaDefinition } from '@angular/platform-browser';
-import { SeoMetaType } from './seo-meta-type';
+import { SeoDataOptions } from './seo-data-options';
 
-/** The data that a page should provide for SEO and social media sites. */
-export interface SeoData {
+export class SeoData implements SeoDataOptions {
   title: string;
-  metas: {
-    [SeoMetaType.AUTHOR]: MetaDefinition;
-    [SeoMetaType.DESCRIPTION]: MetaDefinition;
-    [SeoMetaType.IMAGE]: MetaDefinition;
-    [SeoMetaType.PUBLISH_DATE]: MetaDefinition;
-    [SeoMetaType.TITLE]: MetaDefinition;
-    [SeoMetaType.TWITTER_CARD]: MetaDefinition;
-    [SeoMetaType.TWITTER_DESCRIPTION]: MetaDefinition;
-    [SeoMetaType.TWITTER_IMAGE_ALT]: MetaDefinition;
-    [SeoMetaType.TWITTER_IMAGE]: MetaDefinition;
-    [SeoMetaType.TWITTER_SITE]: MetaDefinition;
-    [SeoMetaType.TWITTER_TITLE]: MetaDefinition;
-    [SeoMetaType.TYPE]: MetaDefinition;
-    [SeoMetaType.URL]: MetaDefinition;
-  };
-  jsonLds?: any[];
+  description: string;
+  url: string;
+  imageUrl: string;
+  imageAlt: string;
+  publishDate: string;
+  jsonLds: object[];
+
+  constructor(options: SeoDataOptions) {
+    this.title = options.title;
+    this.description = options.description;
+    this.url = options.url;
+    this.imageUrl = options.imageUrl;
+    this.imageAlt = options.imageAlt;
+    this.publishDate = options.publishDate;
+    this.jsonLds = options.jsonLds;
+  }
 }
