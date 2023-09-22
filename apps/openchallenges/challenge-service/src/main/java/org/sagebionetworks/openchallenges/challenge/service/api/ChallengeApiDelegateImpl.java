@@ -11,7 +11,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
-  @Autowired ChallengeService challengeService;
+  //@Autowired ChallengeService challengeService;
+  private final ChallengeService challengeService;
+
+  public ChallengeApiDelegateImpl(ChallengeService challengeService) {
+    this.challengeService = challengeService;
+  }
 
   @Override
   public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
