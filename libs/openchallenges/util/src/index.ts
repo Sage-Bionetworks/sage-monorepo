@@ -1,3 +1,4 @@
+export * from './lib/default-seo-data';
 export * from './lib/fork-join-concurrent';
 export * from './lib/handle-http-error';
 export * from './lib/http-status-redirect';
