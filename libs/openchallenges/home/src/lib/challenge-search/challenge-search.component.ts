@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
   Image,
   ImageService,
@@ -6,7 +6,7 @@ import {
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformServer } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxTypedJsModule } from 'ngx-typed-js';
 import { InputTextModule } from 'primeng/inputtext';
@@ -26,9 +26,12 @@ export class ChallengeSearchComponent implements OnInit {
   constructor(
     private readonly configService: ConfigService,
     private router: Router,
-    private imageService: ImageService
+    private imageService: ImageService,
+    @Inject(PLATFORM_ID) private platformId: string
   ) {
-    this.isPlatformServer = this.configService.config.isPlatformServer;
+    // this.isPlatformServer = this.configService.config.isPlatformServer;
+    this.isPlatformServer = isPlatformServer(this.platformId);
+    console.log(`isPlatformServer: ${this.isPlatformServer}`);
   }
 
   ngOnInit() {
