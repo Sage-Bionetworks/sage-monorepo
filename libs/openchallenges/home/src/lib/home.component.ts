@@ -8,7 +8,6 @@ import { ChallengeRegistrationComponent } from './challenge-registration/challen
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
 import { FeaturedChallengeListComponent } from './featured-challenge-list/featured-challenge-list.component';
 import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
-// import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
 import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 
 @Component({
@@ -21,7 +20,6 @@ import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
     ChallengeSearchComponent,
     FeaturedChallengeListComponent,
     SponsorListComponent,
-    // StatisticsViewerComponent,
     TopicsViewerComponent,
     SharedUtilModule,
     FooterComponent,
