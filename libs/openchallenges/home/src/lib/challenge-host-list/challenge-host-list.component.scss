@@ -11,10 +11,13 @@
   justify-items: center;
 }
 #organizations {
-  padding: 88px 0;
+  padding: 88px 0 16px;
 
   .see-more {
     margin-top: 18px;
     padding: 26px 40px;
   }
+}
+#platforms {
+  padding-bottom: 88px;
 }
