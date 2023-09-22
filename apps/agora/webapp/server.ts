@@ -1,5 +1,4 @@
 import 'zone.js/dist/zone-node';
-// import 'reflect-metadata';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
@@ -7,12 +6,15 @@ import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
-import { AppServerModule } from './main.server';
+import bootstrap from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
-  const distFolder = join(process.cwd(), 'dist/apps/openchallenges/browser');
+  const distFolder = join(
+    process.cwd(),
+    'dist/apps/agora/webapp/browser/browser'
+  );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? 'index.original.html'
     : 'index';
@@ -21,7 +23,7 @@ export function app(): express.Express {
   server.engine(
     'html',
     ngExpressEngine({
-      bootstrap: AppServerModule,
+      bootstrap,
     })
   );
 
@@ -40,19 +42,9 @@ export function app(): express.Express {
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
-    const protocol = req.protocol;
-    const host = req.get('host');
     res.render(indexHtml, {
       req,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        // The base URL enables the app to load the app config file during server-side rendering.
-        {
-          provide: 'APP_BASE_URL',
-          useFactory: () => `${protocol}://${host}`,
-          deps: [],
-        },
-      ],
+      providers: [{ provide: APP_BASE_HREF, useValue: req.baseUrl }],
     });
   });
 
@@ -80,4 +72,4 @@ if (moduleFilename === __filename || moduleFilename.includes('iisnode')) {
   run();
 }
 
-export * from './main.server';
+export default bootstrap;
