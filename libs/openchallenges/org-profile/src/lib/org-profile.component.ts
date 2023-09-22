@@ -118,7 +118,7 @@ export class OrgProfileComponent implements OnInit {
       switchMap((org) =>
         forkJoin({
           org: of(org),
-          avatarUrl: this.getOrganizationAvatarUrl(org),
+          avatarUrl: this.getOrganizationImageUrl(org, ImageHeight._250px),
         })
       ),
       map(
@@ -129,6 +129,10 @@ export class OrgProfileComponent implements OnInit {
             size: 250,
           } as Avatar)
       )
+    );
+
+    const seoOrgImage$ = this.organization$.pipe(
+      switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px))
     );
 
     const activeTabSub = this.activatedRoute.queryParamMap
@@ -142,17 +146,20 @@ export class OrgProfileComponent implements OnInit {
 
     forkJoin({
       org: this.organization$,
-      avatar: this.organizationAvatar$,
-    }).subscribe(({ org, avatar }) => {
-      this.seoService.setData(getSeoData(org, avatar.src), this.renderer2);
+      image: seoOrgImage$,
+    }).subscribe(({ org, image }) => {
+      this.seoService.setData(getSeoData(org, image.url), this.renderer2);
     });
   }
 
-  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
+  private getOrganizationImageUrl(
+    org: Organization,
+    height: ImageHeight
+  ): Observable<Image> {
     return this.imageService
       .getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._250px,
+        height,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery)
       .pipe(
