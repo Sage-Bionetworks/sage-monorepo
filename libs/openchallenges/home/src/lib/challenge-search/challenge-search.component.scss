@@ -23,6 +23,10 @@ a:active {
   text-align: center;
   margin-bottom: 42px;
 }
+.plot-title {
+  text-align: center;
+  margin: 80px 0 -16px;
+}
 @media (min-width: constants.$sm-breakpoint) {
   .container{
     padding: 0 24px;
