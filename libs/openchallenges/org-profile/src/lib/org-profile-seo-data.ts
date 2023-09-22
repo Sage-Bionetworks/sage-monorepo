@@ -1,5 +1,6 @@
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
 import { SeoData } from '@sagebionetworks/shared/util';
+import { getSeoData as getHomeSeoData } from '@sagebionetworks/openchallenges/home';
 
 export const getSeoData = (
   org: Organization,
@@ -8,12 +9,11 @@ export const getSeoData = (
   return new SeoData({
     title: `${org.name} | OpenChallenges`,
     description: org.description,
-    url: 'https://openchallenges.io',
-    imageUrl:
-      imageUrl ??
-      'https://openchallenges.io/img/TOjdL9qUt-kphJRKO-iDvRV8KZE=/logo/OpenChallenges-icon.png',
-    imageAlt: `${org.name} logo`,
-    publishDate: '2023-09-20T00:00:00Z',
+    url: '',
+    imageUrl: imageUrl ?? getHomeSeoData().imageUrl,
+    imageAlt:
+      imageUrl !== undefined ? `${org.name} logo` : getHomeSeoData().imageAlt,
+    publishDate: '2023-09-20T00:00:00Z', // TODO use org updatedAt?
     jsonLds: [],
   });
 };
