@@ -1,7 +1,7 @@
 import { Organization } from '@sagebionetworks/openchallenges/api-client-angular';
 import { SeoData } from '@sagebionetworks/shared/util';
 
-export const seoData = (
+export const getSeoData = (
   org: Organization,
   imageUrl: string | undefined
 ): SeoData => {

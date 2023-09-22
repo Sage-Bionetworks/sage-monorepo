@@ -14,6 +14,7 @@ import {
   shareReplay,
   Subscription,
   switchMap,
+  take,
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
@@ -46,7 +47,7 @@ import { OrgProfileMembersComponent } from './org-profile-members/org-profile-me
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
 import { SeoService } from '@sagebionetworks/shared/util';
-import { seoData } from './org-profile-seo-data';
+import { getSeoData } from './org-profile-seo-data';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -109,7 +110,8 @@ export class OrgProfileComponent implements OnInit {
         } as HttpStatusRedirect);
         return throwError(() => error);
       }),
-      shareReplay(1)
+      shareReplay(1),
+      take(1)
     );
 
     this.organizationAvatar$ = this.organization$.pipe(
@@ -142,7 +144,7 @@ export class OrgProfileComponent implements OnInit {
       org: this.organization$,
       avatar: this.organizationAvatar$,
     }).subscribe(({ org, avatar }) => {
-      this.seoService.setData(seoData(org, avatar.src), this.renderer2);
+      this.seoService.setData(getSeoData(org, avatar.src), this.renderer2);
     });
   }
 
