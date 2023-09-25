@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { Observable, catchError, map, throwError } from 'rxjs';
 import {
   Challenge,
   ChallengeService,
@@ -8,7 +9,6 @@ import {
   ChallengeSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
-import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-random-challenge-list',
