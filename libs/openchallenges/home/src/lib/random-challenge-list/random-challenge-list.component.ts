@@ -31,11 +31,11 @@ export class RandomChallengeListComponent implements OnInit {
       sortSeed: Math.round(+new Date().setHours(0, 0, 0, 0) / 1000), // daily seed
     };
 
-    const challengesPage$ = this.challengeService.listChallenges(query).pipe(
+    this.challenges$ = this.challengeService.listChallenges(query).pipe(
       catchError((err) => {
         return throwError(() => new Error(err.message));
-      })
+      }),
+      map((page) => page.challenges)
     );
-    this.challenges$ = challengesPage$.pipe(map((page) => page.challenges));
   }
 }
