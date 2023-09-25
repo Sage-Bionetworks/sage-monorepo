@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
-        scrollPositionRestoration: 'top',
+        // scrollPositionRestoration: 'top',
       })
     ),
     provideClientHydration(),
