@@ -4,9 +4,10 @@ import {
   Challenge,
   ChallengeService,
   ChallengeSearchQuery,
+  ChallengeSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
-import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
+import { Observable, catchError, map, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-random-challenge-list',
@@ -21,16 +22,11 @@ export class RandomChallengeListComponent implements OnInit {
   constructor(private challengeService: ChallengeService) {}
 
   ngOnInit() {
-    const defaultQuery: ChallengeSearchQuery = {
-      pageNumber: 0,
-      pageSize: 3, // only display first 3 for now
-      searchTerms: '',
-      sort: 'recently_started',
-    };
-
     const query: ChallengeSearchQuery = {
-      ...defaultQuery,
-      categories: ['featured'],
+      pageNumber: 0,
+      pageSize: 3,
+      searchTerms: '',
+      sort: ChallengeSort.Random,
     };
 
     const challengesPage$ = this.challengeService.listChallenges(query).pipe(
@@ -38,14 +34,6 @@ export class RandomChallengeListComponent implements OnInit {
         return throwError(() => new Error(err.message));
       })
     );
-    this.challenges$ = challengesPage$.pipe(
-      switchMap((page) =>
-        // remove categories filter if no random challenges
-        page.challenges
-          ? of(page)
-          : this.challengeService.listChallenges(defaultQuery)
-      ),
-      map((page) => page.challenges)
-    );
+    this.challenges$ = challengesPage$.pipe(map((page) => page.challenges));
   }
 }
