@@ -1,0 +1,11 @@
+<section id="random-challenges" class="mat-typography cards">
+  <div class="container">
+    <div class="text-center">
+      <h3 class="section-title">Challenges of The Day</h3>
+      Not sure where to start? Try one of the following random daily challenges!
+    </div>
+    <div class="card-group">
+      <openchallenges-challenge-card *ngFor="let challenge of (challenges$ | async)" [challenge]="challenge"/>
+    </div>
+  </div>
+</section>
