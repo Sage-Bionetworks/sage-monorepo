@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import {
   Challenge,
   ChallengeService,
@@ -12,7 +13,7 @@ import { Observable, catchError, map, throwError } from 'rxjs';
 @Component({
   selector: 'openchallenges-random-challenge-list',
   standalone: true,
-  imports: [CommonModule, ChallengeCardComponent],
+  imports: [CommonModule, MatButtonModule, ChallengeCardComponent],
   templateUrl: './random-challenge-list.component.html',
   styleUrls: ['./random-challenge-list.component.scss'],
 })
