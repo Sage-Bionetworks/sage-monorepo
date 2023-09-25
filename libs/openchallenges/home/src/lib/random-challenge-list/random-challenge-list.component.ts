@@ -28,8 +28,7 @@ export class RandomChallengeListComponent implements OnInit {
       pageSize: 3,
       searchTerms: '',
       sort: ChallengeSort.Random,
-      // daily seed
-      sortSeed: Math.round(+new Date().setHours(0, 0, 0, 0) / 1000),
+      sortSeed: Math.round(+new Date().setHours(0, 0, 0, 0) / 1000), // daily seed
     };
 
     const challengesPage$ = this.challengeService.listChallenges(query).pipe(
