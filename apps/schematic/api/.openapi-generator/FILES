@@ -5,6 +5,7 @@ schematic_api/controllers/schema_controller.py
 schematic_api/controllers/security_controller_.py
 schematic_api/controllers/storage_controller.py
 schematic_api/controllers/validation_controller.py
+schematic_api/controllers/versions_controller.py
 schematic_api/encoder.py
 schematic_api/models/__init__.py
 schematic_api/models/asset_type.py

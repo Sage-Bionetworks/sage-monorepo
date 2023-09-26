@@ -1,4 +1,4 @@
-import { DateRange } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { DateRange } from './data-range';
 
 export interface FilterValue {
   /* The value of the filter. */

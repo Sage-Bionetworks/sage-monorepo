@@ -14,12 +14,8 @@
   </div>
   <openchallenges-challenge-search/>
   <openchallenges-statistics-viewer/>
-  <openchallenges-featured-challenge-list
-    *sageAppShellNoRender
-  />
-  <openchallenges-challenge-registration
-    *sageAppShellNoRender
-  />
+  <openchallenges-featured-challenge-list *sageAppShellNoRender/>
+  <openchallenges-challenge-registration *sageAppShellNoRender/>
   <openchallenges-challenge-host-list *sageAppShellNoRender/>
   <openchallenges-sponsor-list *sageAppShellNoRender/>
 </main>
@@ -27,4 +23,6 @@
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"
+  [privacyPolicyUrl]="privacyPolicyUrl"
+  [termsOfUseUrl]="termsOfUseUrl"
 />

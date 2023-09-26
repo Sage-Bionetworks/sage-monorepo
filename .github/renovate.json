@@ -8,8 +8,7 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "ignorePaths": [
-    "apps/api",
-    "libs/api-client-angular-deprecated"
+    "apps/api"
   ],
   "baseBranches": ["main"],
   "labels": ["bot", "dependencies"],

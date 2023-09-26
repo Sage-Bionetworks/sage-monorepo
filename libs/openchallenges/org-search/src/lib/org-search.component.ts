@@ -82,6 +82,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public appVersion: string;
   public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
 
   private query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
@@ -128,6 +130,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
   }
 
   ngOnInit() {

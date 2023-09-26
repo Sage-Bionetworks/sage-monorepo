@@ -3,7 +3,7 @@ FROM nginx:1.23.2-alpine
 
 RUN apk add --no-cache jq
 
-COPY dist/apps/openchallenges/app/browser /usr/share/nginx/html
+COPY dist/apps/openchallenges/app/browser/browser /usr/share/nginx/html
 COPY docker/nginx /etc/nginx/.
 COPY docker/10-envsubst-on-app-config-template.sh /docker-entrypoint.d/.
 
