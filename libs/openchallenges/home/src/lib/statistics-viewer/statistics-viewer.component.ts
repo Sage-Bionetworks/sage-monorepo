@@ -8,7 +8,7 @@ import {
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { HomeDataService } from '../home-data-service';
-// import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
+import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
 import { Observable, Subscription, map } from 'rxjs';
@@ -17,12 +17,12 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'openchallenges-statistics-viewer',
   standalone: true,
-  imports: [CommonModule, RouterModule, CountUpModule /* NgxEchartsModule */],
+  imports: [CommonModule, RouterModule, CountUpModule, NgxEchartsModule],
   providers: [
-    // {
-    //   provide: NGX_ECHARTS_CONFIG,
-    //   useFactory: () => ({ echarts: () => import('echarts') }),
-    // },
+    {
+      provide: NGX_ECHARTS_CONFIG,
+      useFactory: () => ({ echarts: () => import('echarts') }),
+    },
   ],
   templateUrl: './statistics-viewer.component.html',
   styleUrls: ['./statistics-viewer.component.scss'],
