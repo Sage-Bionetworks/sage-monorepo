@@ -2,6 +2,8 @@ FROM node:20.7.0
 
 WORKDIR /app
 COPY dist/apps/openchallenges/app/browser/server /app/
+
+# The path of the destination folder must be the same as the path specified in server.ts.
 COPY dist/apps/openchallenges/app/browser/browser /app/dist/apps/openchallenges/app/browser/browser
 
 EXPOSE 4200
