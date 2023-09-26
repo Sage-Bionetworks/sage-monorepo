@@ -400,9 +400,9 @@ paths:
       requestBody:
         description: A manifest in json form
         content:
-          application/json:
+          text/plain:
             schema:
-              type: object
+              type: string
       operationId: submitManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'

@@ -100,7 +100,7 @@ def submit_manifest_json(
     :param use_schema_label: If true, store attributes using the schema label If false, store attributes using the display label
     :type use_schema_label: bool
     :param body: A manifest in json form
-    :type body:
+    :type body: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """

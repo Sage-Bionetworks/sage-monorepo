@@ -66,29 +66,26 @@ def save_manifest_csv_string_as_csv(manifest_csv_string: bytes) -> str:
     return temp_path
 
 
-@handle_exceptions
-def submit_manifest_csv(  # pylint: disable=too-many-arguments
-    schema_url: str,
+def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
+    schema_path: str,
+    manifest_path: str,
     component: Optional[str],
     dataset_id: str,
-    asset_view_id: str,
-    body: bytes,
     restrict_rules: bool = False,
     storage_method: str = "table_file_and_entities",
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     use_schema_label: bool = True,
 ) -> str:
-    """Submits a manifest csv in bytes form
+    """Submits a manifest csv
 
     Args:
-        schema_url (str): The url to schema the component is in
+        schema_path (str): The path to a schema in jsonld form
+        manifest_path (str): The path to a manifest in csv form
         component (Optional[str]):
           The component, either schema label, or display label
           See use_schema_label
         dataset_id (str): The id of the dataset to submit the manifest to
-        asset_view_id (str): The id of the asset view the dataset is in
-        body (bytes): The body of the request, contains the manifest in bytes form
         restrict_rules (bool, optional):
           Whether or not to restrict rule to non- great expectations.
           Defaults to False.
@@ -107,12 +104,9 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
           Defaults to True.
 
     Returns:
-        str: The id of the submitted manifest.
+         str: The id of the manifest
     """
-    CONFIG.synapse_master_fileview_id = asset_view_id
     access_token = get_access_token()
-    manifest_path = save_manifest_csv_string_as_csv(body)
-    schema_path = download_schema_file_as_jsonld(schema_url)
     metadata_model = MetadataModel(
         inputMModelLocation=schema_path, inputMModelLocationType="local"
     )
@@ -129,8 +123,72 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
         table_manipulation=table_manipulation_method,
         use_schema_label=use_schema_label,
     )
-
     return manifest_id
+
+
+@handle_exceptions
+def submit_manifest_csv(  # pylint: disable=too-many-arguments
+    schema_url: str,
+    component: Optional[str],
+    dataset_id: str,
+    asset_view_id: str,
+    body: bytes,
+    restrict_rules: bool = False,
+    storage_method: str = "table_file_and_entities",
+    hide_blanks: bool = False,
+    table_manipulation_method: str = "replace",
+    use_schema_label: bool = True,
+) -> tuple[Union[str, BasicError], int]:
+    """Submits a manifest csv in bytes form
+
+     Args:
+         schema_url (str): The url to schema the component is in
+         component (Optional[str]):
+           The component, either schema label, or display label
+           See use_schema_label
+         dataset_id (str): The id of the dataset to submit the manifest to
+         asset_view_id (str): The id of the asset view the dataset is in
+         body (bytes): The body of the request, contains the manifest in bytes form
+         restrict_rules (bool, optional):
+           Whether or not to restrict rule to non- great expectations.
+           Defaults to False.
+         storage_method (str, optional):
+           Specify what will be updated.
+           Defaults to "table_file_and_entities".
+         hide_blanks (bool, optional):
+           Whether or not annotations with blank values will be hidden from a
+             datasets annotation list.
+           Defaults to False.
+         table_manipulation_method (str, optional):
+           Specify the way the manifest tables should be stored.
+           Defaults to "replace".
+         use_schema_label (bool, optional):
+           Whetehr or not the schema label will be used.
+           Defaults to True.
+
+    Returns:
+         tuple[Union[str, BasicError], int]: A tuple
+           The first item is either the id of the manifest or an error object
+           The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest_path = save_manifest_csv_string_as_csv(body)
+    schema_path = download_schema_file_as_jsonld(schema_url)
+
+    result: Union[str, BasicError] = submit_manifest_with_schematic(
+        schema_path=schema_path,
+        manifest_path=manifest_path,
+        component=component,
+        dataset_id=dataset_id,
+        restrict_rules=restrict_rules,
+        storage_method=storage_method,
+        hide_blanks=hide_blanks,
+        table_manipulation_method=table_manipulation_method,
+        use_schema_label=use_schema_label,
+    )
+
+    status = 200
+    return result, status
 
 
 @handle_exceptions
@@ -145,7 +203,7 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     use_schema_label: bool = True,
-) -> str:
+) -> tuple[Union[str, BasicError], int]:
     """Submits a manifest csv in bytes form
 
     Args:
@@ -174,30 +232,28 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
           Defaults to True.
 
     Returns:
-        str: The id of the submitted manifest.
+         tuple[Union[str, BasicError], int]: A tuple
+           The first item is either the id of the manifest or an error object
+           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
-    access_token = get_access_token()
     manifest_path = save_manifest_json_string_as_csv(body)
     schema_path = download_schema_file_as_jsonld(schema_url)
-    metadata_model = MetadataModel(
-        inputMModelLocation=schema_path, inputMModelLocationType="local"
-    )
 
-    manifest_id = metadata_model.submit_metadata_manifest(
-        path_to_json_ld=schema_path,
+    result: Union[str, BasicError] = submit_manifest_with_schematic(
+        schema_path=schema_path,
         manifest_path=manifest_path,
+        component=component,
         dataset_id=dataset_id,
-        validate_component=component,
-        access_token=access_token,
-        manifest_record_type=storage_method,
         restrict_rules=restrict_rules,
+        storage_method=storage_method,
         hide_blanks=hide_blanks,
-        table_manipulation=table_manipulation_method,
+        table_manipulation_method=table_manipulation_method,
         use_schema_label=use_schema_label,
     )
 
-    return manifest_id
+    status = 200
+    return result, status
 
 
 def validate_manifest_with_schematic(

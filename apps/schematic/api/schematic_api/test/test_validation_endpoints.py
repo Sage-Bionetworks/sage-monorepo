@@ -17,8 +17,177 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 
+SUBMIT_MANIFEST_CSV_URL = (
+    f"/api/v1/submitManifestCsv?schemaUrl={TEST_SCHEMA_URL}"
+    "&component=component&datasetId=syn1&assetViewId=syn2"
+)
+SUBMIT_MANIFEST_JSON_URL = (
+    f"/api/v1/submitManifestJson?schemaUrl={TEST_SCHEMA_URL}"
+    "&component=component&datasetId=syn1&assetViewId=syn2"
+)
 VALIDATE_MANIFEST_CSV_URL = "/api/v1/validateManifestCsv"
 VALIDATE_MANIFEST_JSON_URL = "/api/v1/validateManifestJson"
+
+
+class TestSubmitManifestCsv(BaseTestCase):
+    """Tests for submit manifest csv endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ):
+            body = csv_to_bytes(CORRECT_MANIFEST_PATH)
+            response = self.client.open(
+                SUBMIT_MANIFEST_CSV_URL, method="POST", headers=HEADERS, data=body
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            assert response.json == "syn1"
+
+    def test_argument_defaults(self) -> None:
+        """Test optional arguments"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ) as mock_function:
+            body = csv_to_bytes(CORRECT_MANIFEST_PATH)
+
+            self.client.open(
+                SUBMIT_MANIFEST_CSV_URL, method="POST", headers=HEADERS, data=body
+            )
+            arguments_dict = mock_function.call_args[1]
+            assert not arguments_dict["restrict_rules"]
+            assert not arguments_dict["hide_blanks"]
+            assert arguments_dict["use_schema_label"]
+            assert arguments_dict["storage_method"] == "table_file_and_entities"
+            assert arguments_dict["table_manipulation_method"] == "replace"
+
+    def test_arguments(self) -> None:
+        """Test optional arguments"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ) as mock_function:
+            body = csv_to_bytes(CORRECT_MANIFEST_PATH)
+            url = (
+                f"{SUBMIT_MANIFEST_CSV_URL}"
+                "&restrictRules=true&"
+                "hideBlanks=true"
+                "&useSchemaLabel=false"
+                "&storageMethod=file_only"
+                "&tableManipulationMethod=upsert"
+            )
+            self.client.open(url, method="POST", headers=HEADERS, data=body)
+            arguments_dict = mock_function.call_args[1]
+
+            assert arguments_dict["restrict_rules"]
+            assert arguments_dict["hide_blanks"]
+            assert not arguments_dict["use_schema_label"]
+            assert arguments_dict["storage_method"] == "file_only"
+            assert arguments_dict["table_manipulation_method"] == "upsert"
+
+    def test_500(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            side_effect=TypeError,
+        ):
+            body = csv_to_bytes(CORRECT_MANIFEST_PATH)
+            response = self.client.open(
+                SUBMIT_MANIFEST_CSV_URL, method="POST", headers=HEADERS, data=body
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestSubmitManifestJson(BaseTestCase):
+    """Tests for submit manifest json endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ):
+            body = csv_to_json_str(CORRECT_MANIFEST_PATH)
+            import logging
+
+            logging.warning(body)
+            response = self.client.open(
+                SUBMIT_MANIFEST_JSON_URL, method="POST", headers=HEADERS, data=body
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            assert response.json == "syn1"
+
+    def test_argument_defaults(self) -> None:
+        """Test optional arguments"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ) as mock_function:
+            body = csv_to_json_str(CORRECT_MANIFEST_PATH)
+
+            self.client.open(
+                SUBMIT_MANIFEST_JSON_URL, method="POST", headers=HEADERS, data=body
+            )
+            arguments_dict = mock_function.call_args[1]
+            assert not arguments_dict["restrict_rules"]
+            assert not arguments_dict["hide_blanks"]
+            assert arguments_dict["use_schema_label"]
+            assert arguments_dict["storage_method"] == "table_file_and_entities"
+            assert arguments_dict["table_manipulation_method"] == "replace"
+
+    def test_arguments(self) -> None:
+        """Test optional arguments"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            return_value="syn1",
+        ) as mock_function:
+            body = csv_to_json_str(CORRECT_MANIFEST_PATH)
+            url = (
+                f"{SUBMIT_MANIFEST_JSON_URL}"
+                "&restrictRules=true"
+                "&hideBlanks=true"
+                "&useSchemaLabel=false"
+                "&storageMethod=file_only"
+                "&tableManipulationMethod=upsert"
+            )
+            self.client.open(url, method="POST", headers=HEADERS, data=body)
+            arguments_dict = mock_function.call_args[1]
+
+            assert arguments_dict["restrict_rules"]
+            assert arguments_dict["hide_blanks"]
+            assert not arguments_dict["use_schema_label"]
+            assert arguments_dict["storage_method"] == "file_only"
+            assert arguments_dict["table_manipulation_method"] == "upsert"
+
+    def test_500(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.validation_controller_impl,
+            "submit_manifest_with_schematic",
+            side_effect=TypeError,
+        ):
+            body = csv_to_json_str(CORRECT_MANIFEST_PATH)
+            response = self.client.open(
+                SUBMIT_MANIFEST_JSON_URL, method="POST", headers=HEADERS, data=body
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestValidateManifestCsv(BaseTestCase):

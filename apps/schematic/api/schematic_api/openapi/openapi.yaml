@@ -1025,9 +1025,9 @@ paths:
         style: form
       requestBody:
         content:
-          application/json:
+          text/plain:
             schema:
-              type: object
+              type: string
         description: A manifest in json form
       responses:
         "200":
