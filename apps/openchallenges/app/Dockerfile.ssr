@@ -1,6 +1,6 @@
 FROM node:20.7.0-alpine
 
-RUN apk add --no-cache jq
+RUN apk add --no-cache curl jq
 
 WORKDIR /app
 COPY dist/apps/openchallenges/app/browser/server /app/
