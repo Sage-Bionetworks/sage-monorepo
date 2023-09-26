@@ -3,6 +3,7 @@ package org.sagebionetworks.openchallenges.challenge.service.configuration;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -41,6 +42,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
   }
 
+  @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     KeycloakAuthenticationProvider keycloakAuthenticationProvider =
         keycloakAuthenticationProvider();
