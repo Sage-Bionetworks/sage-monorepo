@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDelegate {
 
-  // @Autowired ChallengePlatformService challengePlatformService;
+
   private final ChallengePlatformService challengePlatformService;
 
   public ChallengePlatformApiDelegateImpl(ChallengePlatformService challengePlatformService) {
