@@ -2,7 +2,8 @@ FROM node:20.7.0
 
 WORKDIR /app
 COPY dist/apps/openchallenges/app/browser/server /app/
+COPY dist/apps/openchallenges/app/browser/browser /app/dist/apps/openchallenges/app/browser/browser
 
-EXPOSE 4201
+EXPOSE 4200
 
 CMD ["node", "main.js"]
