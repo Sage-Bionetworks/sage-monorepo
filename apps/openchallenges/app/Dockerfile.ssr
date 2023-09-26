@@ -1,10 +1,14 @@
-FROM node:20.7.0
+FROM node:20.7.0-alpine
+
+RUN apk add --no-cache jq
 
 WORKDIR /app
 COPY dist/apps/openchallenges/app/browser/server /app/
-
 # The path of the destination folder must be the same as the path specified in server.ts.
 COPY dist/apps/openchallenges/app/browser/browser /app/dist/apps/openchallenges/app/browser/browser
+
+HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=5s \
+  CMD curl --fail --silent "localhost:4200/health" | jq '.status' | grep UP || exit 1
 
 EXPOSE 4200
 
