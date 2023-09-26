@@ -119,9 +119,6 @@ class TestSubmitManifestJson(BaseTestCase):
             return_value="syn1",
         ):
             body = csv_to_json_str(CORRECT_MANIFEST_PATH)
-            import logging
-
-            logging.warning(body)
             response = self.client.open(
                 SUBMIT_MANIFEST_JSON_URL, method="POST", headers=HEADERS, data=body
             )

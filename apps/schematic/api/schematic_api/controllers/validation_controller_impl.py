@@ -197,12 +197,12 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     component: Optional[str],
     dataset_id: str,
     asset_view_id: str,
-    body: Any,
     restrict_rules: bool = False,
     storage_method: str = "table_file_and_entities",
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     use_schema_label: bool = True,
+    body: Any = None,
 ) -> tuple[Union[str, BasicError], int]:
     """Submits a manifest csv in bytes form
 
