@@ -10,7 +10,7 @@ VALUES (1, 'genomic', 'genomic'),
 
 LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/platforms.csv' INTO TABLE challenge_platform
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
-  LINES TERMINATED BY '\r\n'
+  LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
 -- challenge data
