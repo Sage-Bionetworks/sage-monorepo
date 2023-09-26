@@ -144,20 +144,20 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
-        "file": "apps/openchallenges/app/Dockerfile.csr",
+        "file": "apps/openchallenges/app/Dockerfile.ssr",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
           "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["server"]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
-        "file": "apps/openchallenges/app/Dockerfile.csr",
+        "file": "apps/openchallenges/app/Dockerfile.ssr",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
           "tags": ["type=edge,branch=main", "type=sha"]
