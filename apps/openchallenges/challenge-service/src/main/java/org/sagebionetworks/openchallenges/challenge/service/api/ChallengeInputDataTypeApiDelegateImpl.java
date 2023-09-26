@@ -11,10 +11,17 @@ public class ChallengeInputDataTypeApiDelegateImpl implements ChallengeInputData
 
   private final ChallengeInputDataTypeService challengeInputDataTypeService;
 
+<<<<<<< HEAD
   public ChallengeInputDataTypeApiDelegateImpl(ChallengeInputDataTypeService ) {
     this.challengeInputDataTypeService = challengeInputDataTypeService;
   }
 
+=======
+  public ChallengeInputDataTypeApiDelegateImpl(
+      ChallengeInputDataTypeService challengeInputDataTypeService) {
+    this.challengeInputDataTypeService = challengeInputDataTypeService;
+  }
+>>>>>>> bc05e00d (refactor: Update field to constructor injection in challenge-service app (#2108))
 
   @Override
   public ResponseEntity<ChallengeInputDataTypesPageDto> listChallengeInputDataTypes(
