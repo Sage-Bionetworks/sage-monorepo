@@ -2,7 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
-import { SeoService } from '@sagebionetworks/shared/util';
+import {
+  AppShellNoRenderDirective,
+  SeoService,
+} from '@sagebionetworks/shared/util';
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
 import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
@@ -11,6 +14,7 @@ import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
 import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
 import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 import { getSeoData } from './home-seo-data';
+import { RandomChallengeListComponent } from './random-challenge-list/random-challenge-list.component';
 
 @Component({
   selector: 'openchallenges-home',
@@ -21,10 +25,12 @@ import { getSeoData } from './home-seo-data';
     ChallengeRegistrationComponent,
     ChallengeSearchComponent,
     FeaturedChallengeListComponent,
+    RandomChallengeListComponent,
     SponsorListComponent,
     StatisticsViewerComponent,
     TopicsViewerComponent,
     FooterComponent,
+    AppShellNoRenderDirective,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
