@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengePlatformService {
 
-  private ChallengePlatformRepository challengePlatformRepository;
+  private final ChallengePlatformRepository challengePlatformRepository;
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
