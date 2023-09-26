@@ -1,7 +1,6 @@
 {
-  "environment": "dev",
+  "environment": "development",
   "apiUrl": "http://localhost:8082/api/v1",
   "appVersion": "1.0.0-alpha",
-  "dataUpdatedOn": "2023-08-xx",
-  "keycloakRealm": "test"
+  "dataUpdatedOn": "yyyy-mm-dd"
 }

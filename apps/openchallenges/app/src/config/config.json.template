@@ -2,6 +2,5 @@
   "environment": "${ENVIRONMENT}",
   "apiUrl": "${API_URL}",
   "appVersion": "${APP_VERSION}",
-  "dataUpdatedOn": "${DATA_UPDATED_ON}",
-  "keycloakRealm": "${KEYCLOAK_REALM}"
+  "dataUpdatedOn": "${DATA_UPDATED_ON}"
 }
