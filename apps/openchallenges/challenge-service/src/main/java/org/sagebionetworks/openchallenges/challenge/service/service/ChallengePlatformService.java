@@ -20,11 +20,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengePlatformService {
 
-  private ChallengePlatformRepository challengePlatformRepository;
+  private final ChallengePlatformRepository challengePlatformRepository;
 
   private ChallengePlatformMapper challengePlatformMapper = new ChallengePlatformMapper();
 
   private static final List<String> SEARCHABLE_FIELDS = Arrays.asList("name");
+
+  public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
+    this.challengePlatformRepository = challengePlatformRepository;
+  }
 
   public ChallengePlatformService(ChallengePlatformRepository challengePlatformRepository) {
     this.challengePlatformRepository = challengePlatformRepository;
