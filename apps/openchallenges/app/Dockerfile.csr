@@ -4,8 +4,8 @@ FROM nginx:1.23.2-alpine
 RUN apk add --no-cache jq
 
 COPY dist/apps/openchallenges/app/browser/browser /usr/share/nginx/html
-COPY docker/nginx /etc/nginx/.
-COPY docker/10-envsubst-on-app-config-template.sh /docker-entrypoint.d/.
+COPY apps/openchallenges/app/docker/nginx /etc/nginx/.
+COPY apps/openchallenges/app/docker/10-envsubst-on-app-config-template.sh /docker-entrypoint.d/.
 
 RUN chmod +x /docker-entrypoint.d/10-envsubst-on-app-config-template.sh
 
