@@ -1,7 +1,7 @@
 {
-  "environment": "${ENVIRONMENT}",
-  "apiUrl": "${API_URL}",
   "appVersion": "${APP_VERSION}",
+  "csrApiUrl": "${CSR_API_URL}",
   "dataUpdatedOn": "${DATA_UPDATED_ON}",
-  "keycloakRealm": "${KEYCLOAK_REALM}"
+  "environment": "${ENVIRONMENT}",
+  "ssrApiUrl": "${SSR_API_URL}"
 }

@@ -29,9 +29,7 @@ export class ChallengeSearchComponent implements OnInit {
     private imageService: ImageService,
     @Inject(PLATFORM_ID) private platformId: string
   ) {
-    // this.isPlatformServer = this.configService.config.isPlatformServer;
     this.isPlatformServer = isPlatformServer(this.platformId);
-    console.log(`isPlatformServer: ${this.isPlatformServer}`);
   }
 
   ngOnInit() {
