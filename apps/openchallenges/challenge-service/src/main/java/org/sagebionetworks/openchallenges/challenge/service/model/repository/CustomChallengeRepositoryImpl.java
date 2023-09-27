@@ -323,9 +323,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case CREATED -> {
         return createdSort;
       }
-      case ENDING_SOON -> {
-        return sf.field("end_date").order(orderWithDefaultAsc).toSort();
-      }
       case RANDOM -> {
         return scoreSort;
       }
@@ -343,6 +340,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       }
       case STARTING_SOON -> {
         return sf.field("start_date").order(orderWithDefaultAsc).toSort();
+      }
+      case ENDING_SOON -> {
+        return sf.field("end_date").order(orderWithDefaultAsc).toSort();
       }
       default -> {
         throw new BadRequestException(
