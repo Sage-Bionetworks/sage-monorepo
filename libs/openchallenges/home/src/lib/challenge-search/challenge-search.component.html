@@ -24,39 +24,62 @@
     </div>
   </div>
 </section>
-<section id="metrics" class="container">
-  <div class="row text-center clickable" routerLink="/challenge">
-    <img
-      class="logo-icon"
-      src="/openchallenges-assets/images/graphic-challenges.svg"
-      alt="Number of challenges"
-    />
-    <div class="col metrics-text-box">
-      <h2
-        *ngIf="challengeCount$ | async as challengeCount"
-        [countUp]="challengeCount"
-        [reanimateOnClick]="reanimateOnClick"
-      >
-        0
-      </h2>
-      <p class="mat-body-strong">annotated challenges</p>
+<section id="metrics" class="container-lg row">
+  <div class="col-4 text-center clickable" routerLink="/challenge">
+    <div class="row">
+      <img
+        class="logo-icon"
+        src="/openchallenges-assets/images/graphic-challenges.svg"
+        alt="Number of challenges"
+      />
+      <div class="metrics-text-box">
+        <h2
+          *ngIf="challengeCount$ | async as challengeCount"
+          [countUp]="challengeCount"
+          [reanimateOnClick]="reanimateOnClick"
+        >
+          0
+        </h2>
+        <p class="mat-body-strong">annotated challenges</p>
+      </div>
     </div>
   </div>
-  <div class="row text-center clickable" routerLink="/org">
-    <img
-      class="logo-icon"
-      src="/openchallenges-assets/images/graphic-hosts.svg"
-      alt="Number of organizations & hosting societies"
-    />
-    <div class="col metrics-text-box">
-      <h2
-        *ngIf="orgCount$ | async as orgCount"
-        [countUp]="orgCount"
-        [reanimateOnClick]="reanimateOnClick"
-      >
-        0
-      </h2>
-      <p class="mat-body-strong">organizations & hosting societies</p>
+  <div class="col-4 text-center clickable" routerLink="/org">
+    <div class="row">
+      <img
+        class="logo-icon"
+        src="/openchallenges-assets/images/graphic-hosts.svg"
+        alt="Number of organizations & hosting societies"
+      />
+      <div class="metrics-text-box">
+        <h2
+          *ngIf="orgCount$ | async as orgCount"
+          [countUp]="orgCount"
+          [reanimateOnClick]="reanimateOnClick"
+        >
+          0
+        </h2>
+        <p class="mat-body-strong">organizations & hosting<br/>societies</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-4 text-center clickable">
+    <div class="row">
+      <img
+        class="logo-icon"
+        src="/openchallenges-assets/images/graphic-platforms.svg"
+        alt="Number of platforms"
+      />
+      <div class="metrics-text-box">
+        <h2
+          *ngIf="orgCount$ | async as orgCount"
+          [countUp]="16"
+          [reanimateOnClick]="reanimateOnClick"
+        >
+          0
+        </h2>
+        <p class="mat-body-strong">platforms</p>
+      </div>
     </div>
   </div>
 </section>
