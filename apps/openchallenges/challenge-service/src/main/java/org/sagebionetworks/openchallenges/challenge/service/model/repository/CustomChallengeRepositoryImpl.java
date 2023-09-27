@@ -379,16 +379,32 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             .toPredicate();
       }
       case RECENTLY_ENDED -> {
-        return pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+        SearchPredicate datePredicate =
+            pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+        SearchPredicate statusPredicate =
+            pf.match().field("status").matching("completed").toPredicate();
+        return pf.bool(b -> b.must(datePredicate).must(statusPredicate)).toPredicate();
       }
       case RECENTLY_STARTED -> {
-        return pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+        SearchPredicate datePredicate =
+            pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+        SearchPredicate statusPredicate =
+            pf.match().field("status").matching("active").toPredicate();
+        return pf.bool(b -> b.must(datePredicate).must(statusPredicate)).toPredicate();
       }
       case STARTING_SOON -> {
-        return pf.range().field("start_date").between(now, nextQuater).toPredicate();
+        SearchPredicate datePredicate =
+            pf.range().field("start_date").between(now, nextQuater).toPredicate();
+        SearchPredicate statusPredicate =
+            pf.match().field("status").matching("upcoming").toPredicate();
+        return pf.bool(b -> b.must(datePredicate).must(statusPredicate)).toPredicate();
       }
       case ENDING_SOON -> {
-        return pf.range().field("end_date").between(now, nextQuater).toPredicate();
+        SearchPredicate datePredicate =
+            pf.range().field("end_date").between(now, nextQuater).toPredicate();
+        SearchPredicate statusPredicate =
+            pf.match().field("status").matching("active").toPredicate();
+        return pf.bool(b -> b.must(datePredicate).must(statusPredicate)).toPredicate();
       }
       default -> {
         return null;
