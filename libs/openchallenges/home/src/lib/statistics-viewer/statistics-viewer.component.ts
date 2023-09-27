@@ -1,17 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import {
-  ChallengeService,
-  Image,
-  ImageHeight,
-  ImageService,
-  OrganizationService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
-import { Observable, Subscription, map } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
 
 @Component({
@@ -28,53 +21,13 @@ import { RouterModule } from '@angular/router';
   styleUrls: ['./statistics-viewer.component.scss'],
 })
 export class StatisticsViewerComponent implements OnInit, OnDestroy {
-  constructor(
-    private homeDataService: HomeDataService,
-    private imageService: ImageService,
-    private challengeService: ChallengeService,
-    private organizationService: OrganizationService
-  ) {}
+  constructor(private homeDataService: HomeDataService) {}
 
   private chartDataSubscription: Subscription | undefined;
 
   chartOptions!: EChartsOption;
-  reanimateOnClick = false;
-  challengeImg$: Observable<Image> | undefined;
-  orgImg$: Observable<Image> | undefined;
-  userImg$: Observable<Image> | undefined;
 
-  private imgHeight = ImageHeight._140px;
-
-  challengeCount$: Observable<number> | undefined;
-  orgCount$: Observable<number> | undefined;
   ngOnInit() {
-    this.challengeImg$ = this.imageService.getImage({
-      objectKey: 'home-challenges.svg',
-      height: this.imgHeight,
-    });
-    this.orgImg$ = this.imageService.getImage({
-      objectKey: 'home-hosts.svg',
-      height: this.imgHeight,
-    });
-    this.userImg$ = this.imageService.getImage({
-      objectKey: 'home-users.svg',
-      height: this.imgHeight,
-    });
-
-    this.challengeCount$ = this.challengeService
-      .listChallenges({
-        pageNumber: 1,
-        pageSize: 1,
-      })
-      .pipe(map((page) => page.totalElements));
-
-    this.orgCount$ = this.organizationService
-      .listOrganizations({
-        pageNumber: 1,
-        pageSize: 1,
-      })
-      .pipe(map((page) => page.totalElements));
-
     // update plot's data
     this.chartDataSubscription = this.homeDataService
       .getChallengesPerYear()
