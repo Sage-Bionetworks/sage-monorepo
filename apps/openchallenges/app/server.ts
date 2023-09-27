@@ -40,6 +40,9 @@ export function app(): express.Express {
     })
   );
 
+  // Health endpoint used by the container
+  server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
+
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
     const protocol = req.protocol;
