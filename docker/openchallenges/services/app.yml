@@ -11,10 +11,10 @@ services:
       - '4200:4200'
     env_file:
       - ../../../apps/openchallenges/app/.env
-    deploy:
-      resources:
-        limits:
-          memory: 200M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M
     depends_on:
       openchallenges-api-gateway:
         condition: service_healthy
