@@ -1,6 +1,7 @@
 {
-  "environment": "development",
-  "apiUrl": "http://localhost:8082/api/v1",
   "appVersion": "1.0.0-alpha",
-  "dataUpdatedOn": "yyyy-mm-dd"
+  "csrApiUrl": "http://localhost:8082/api/v1",
+  "dataUpdatedOn": "yyyy-mm-dd",
+  "environment": "development",
+  "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1"
 }

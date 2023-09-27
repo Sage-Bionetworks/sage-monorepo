@@ -1,6 +1,7 @@
 {
-  "environment": "${ENVIRONMENT}",
-  "apiUrl": "${API_URL}",
   "appVersion": "${APP_VERSION}",
-  "dataUpdatedOn": "${DATA_UPDATED_ON}"
+  "csrApiUrl": "${CSR_API_URL}",
+  "dataUpdatedOn": "${DATA_UPDATED_ON}",
+  "environment": "${ENVIRONMENT}",
+  "ssrApiUrl": "${SSR_API_URL}"
 }
