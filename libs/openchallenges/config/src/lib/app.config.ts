@@ -10,7 +10,8 @@ export enum Environment {
 
 export interface AppConfig {
   environment: Environment;
-  apiUrl: string;
+  ssrApiUrl: string;
+  csrApiUrl: string;
   appVersion: string;
   dataUpdatedOn: string;
   keycloakRealm: string;

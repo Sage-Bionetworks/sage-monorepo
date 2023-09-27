@@ -38,7 +38,10 @@ export const appConfig: ApplicationConfig = {
     },
     {
       provide: API_CLIENT_BASE_PATH,
-      useFactory: (configService: ConfigService) => configService.config.apiUrl,
+      useFactory: (configService: ConfigService) =>
+        configService.config.isPlatformServer
+          ? configService.config.ssrApiUrl
+          : configService.config.csrApiUrl,
       deps: [ConfigService],
     },
     { provide: 'googleTagManagerId', useValue: 'GTM-NBR5XD8C' },
