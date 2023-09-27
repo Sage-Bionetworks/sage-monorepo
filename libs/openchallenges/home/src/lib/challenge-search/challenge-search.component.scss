@@ -48,13 +48,28 @@ a:active {
     padding-left: 60px;
   }
 }
+#metrics,
 #search-oc {
   text-align: center;
   padding: 128px 0;
 }
+.clickable {
+  cursor: pointer;
+}
 
-@media only screen and (max-width: constants.$lg-breakpoint) {
+@media only screen and (max-width: constants.$md-breakpoint) {
   #landing {
+    .row {
+      justify-content: center;
+    }
+    img {
+      padding: 0;
+    }
+  }
+  #search-oc {
+    .container {
+      justify-content: center;
+    }
     img {
       display: none;
     }

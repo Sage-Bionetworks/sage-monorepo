@@ -104,7 +104,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
             yAxis: [
               {
                 type: 'value',
-                name: 'Total Challenges Tracked',
+                name: '',
                 axisLabel: { fontSize: '1em' },
                 nameTextStyle: {
                   fontSize: '1.1em',
