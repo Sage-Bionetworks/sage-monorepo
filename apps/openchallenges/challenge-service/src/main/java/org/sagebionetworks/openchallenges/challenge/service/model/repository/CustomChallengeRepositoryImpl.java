@@ -354,10 +354,10 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   private SearchPredicate getSearchSortPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
     LocalDate now = LocalDate.now();
+    LocalDate lastQuarter = now.minusMonths(3);
+    LocalDate nextQuater = now.plusMonths(3);
+
     switch (query.getSort()) {
-      case ENDING_SOON -> {
-        return pf.range().field("end_date").between(now, null).toPredicate();
-      }
       case RANDOM -> {
         Integer seed = query.getSortSeed();
         if (seed == null) {
@@ -379,13 +379,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             .toPredicate();
       }
       case RECENTLY_ENDED -> {
-        return pf.range().field("end_date").between(null, now).toPredicate();
+        return pf.range().field("end_date").between(lastQuarter, now).toPredicate();
       }
       case RECENTLY_STARTED -> {
-        return pf.range().field("start_date").between(null, now).toPredicate();
+        return pf.range().field("start_date").between(lastQuarter, now).toPredicate();
       }
       case STARTING_SOON -> {
-        return pf.range().field("start_date").between(now, null).toPredicate();
+        return pf.range().field("start_date").between(now, nextQuater).toPredicate();
+      }
+      case ENDING_SOON -> {
+        return pf.range().field("end_date").between(now, nextQuater).toPredicate();
       }
       default -> {
         return null;
