@@ -412,7 +412,7 @@ paths:
     post:
       tags:
         - Validation
-      summary: Validates a manifest in json form, then submits it in csv form
+      summary: Validates a manifest in json form, then submits it
       description: Validates a manifest in json form, then submits it in csv form
       requestBody:
         description: A manifest in json form

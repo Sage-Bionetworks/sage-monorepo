@@ -77,7 +77,7 @@ def submit_manifest_json(
     use_schema_label=None,
     body=None,
 ):  # noqa: E501
-    """Validates a manifest in json form, then submits it in csv form
+    """Validates a manifest in json form, then submits it
 
     Validates a manifest in json form, then submits it in csv form # noqa: E501
 

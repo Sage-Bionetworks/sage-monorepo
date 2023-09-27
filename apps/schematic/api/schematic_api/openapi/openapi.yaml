@@ -1067,7 +1067,7 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: "Validates a manifest in json form, then submits it in csv form"
+      summary: "Validates a manifest in json form, then submits it"
       tags:
       - Validation
       x-openapi-router-controller: schematic_api.controllers.validation_controller
