@@ -144,7 +144,6 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
-        "file": "apps/openchallenges/app/Dockerfile.ssr",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
           "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
@@ -157,7 +156,6 @@
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
-        "file": "apps/openchallenges/app/Dockerfile.ssr",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
           "tags": ["type=edge,branch=main", "type=sha"]
