@@ -21,7 +21,7 @@ a:active {
 }
 .container-lg {
   display: flex;
-  max-width: 1560px;
+  max-width: 1460px;
   width: 100%;
   margin: 0 auto;
   padding: 0 16px;
@@ -50,7 +50,6 @@ a:active {
 // SECTION: landing
 #landing {
   height: 100%;
-  
   padding: 140px 64px 72px;
   background-color: #F8F8F8;
 
@@ -59,13 +58,17 @@ a:active {
     padding-left: 60px;
   }
 }
-#metrics,
 #search-oc {
   text-align: center;
   padding: 128px 0;
 }
-#metrics img {
-  padding-right: 21px ;
+#metrics {
+  text-align: center;
+  padding: 28px 0;
+
+  img {
+    padding-right: 21px ;
+  }
 }
 .clickable {
   cursor: pointer;
