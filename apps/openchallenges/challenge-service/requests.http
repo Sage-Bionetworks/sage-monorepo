@@ -68,7 +68,7 @@ GET {{basePath}}/challenges?categories=ending_soon
 
 GET {{basePath}}/challenges?categories=recently_started
 
-### List the challenges that is categorized as recently ended .
+### List the challenges that are categorized as recently ended.
 
 GET {{basePath}}/challenges?categories=recently_ended
 
