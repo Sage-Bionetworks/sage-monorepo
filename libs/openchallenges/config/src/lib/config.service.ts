@@ -17,8 +17,16 @@ export class ConfigService {
   ) {}
 
   async loadConfig(): Promise<void> {
+    let browserRoot = '.';
+    if (isPlatformServer(this.platformId)) {
+      browserRoot = 'http://localhost:4200';
+    }
+
+    console.log(`base URL: ${this.baseUrl}`);
+    console.log(`is server platform: ${isPlatformServer(this.platformId)}`);
+    // const configFolder = `dist/apps/openchallenges/app/browser/browser/config`;
     const appConfig$ = this.http.get<AppConfig>(
-      `${this.baseUrl}/config/config.json`
+      `${browserRoot}/config/config.json`
     );
     try {
       const config = await lastValueFrom(appConfig$);
