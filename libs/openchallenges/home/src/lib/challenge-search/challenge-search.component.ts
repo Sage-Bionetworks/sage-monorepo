@@ -7,7 +7,7 @@ import {
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable, map } from 'rxjs';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { CommonModule, isPlatformServer } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +24,7 @@ import { CountUpModule } from 'ngx-countup';
     NgxTypedJsModule,
     InputTextModule,
     CountUpModule,
+    RouterModule,
   ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
