@@ -258,8 +258,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
 
     LocalDate now = LocalDate.now();
-    LocalDate lastQuarter = now.minusMonths(3);
-    LocalDate nextQuarter = now.plusMonths(3);
+    LocalDate threeMonthsAgo = now.minusMonths(3);
+    LocalDate threeMonthsLater = now.plusMonths(3);
 
     return pf.bool(
             b -> {
@@ -271,23 +271,23 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                 switch (category) {
                   case RECENTLY_STARTED -> {
                     datePredicate =
-                        pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+                        pf.range().field("start_date").between(threeMonthsAgo, now).toPredicate();
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   case RECENTLY_ENDED -> {
                     datePredicate =
-                        pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+                        pf.range().field("end_date").between(threeMonthsAgo, now).toPredicate();
                     statusPredicate =
                         pf.match().field("status").matching("completed").toPredicate();
                   }
                   case STARTING_SOON -> {
                     datePredicate =
-                        pf.range().field("start_date").between(now, nextQuarter).toPredicate();
+                        pf.range().field("start_date").between(now, threeMonthsLater).toPredicate();
                     statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
                   }
                   case ENDING_SOON -> {
                     datePredicate =
-                        pf.range().field("end_date").between(now, nextQuarter).toPredicate();
+                        pf.range().field("end_date").between(now, threeMonthsLater).toPredicate();
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   default -> {
