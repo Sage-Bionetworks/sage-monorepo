@@ -258,8 +258,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
 
     LocalDate now = LocalDate.now();
+    LocalDate oneMonthLater = now.plusMonths(1);
     LocalDate threeMonthsAgo = now.minusMonths(3);
-    LocalDate threeMonthsLater = now.plusMonths(3);
 
     return pf.bool(
             b -> {
@@ -282,12 +282,12 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                   }
                   case STARTING_SOON -> {
                     datePredicate =
-                        pf.range().field("start_date").between(now, threeMonthsLater).toPredicate();
+                        pf.range().field("start_date").between(now, oneMonthLater).toPredicate();
                     statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
                   }
                   case ENDING_SOON -> {
                     datePredicate =
-                        pf.range().field("end_date").between(now, threeMonthsLater).toPredicate();
+                        pf.range().field("end_date").between(now, oneMonthLater).toPredicate();
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   default -> {
