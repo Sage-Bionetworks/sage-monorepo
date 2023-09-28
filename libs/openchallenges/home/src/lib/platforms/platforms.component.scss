@@ -1,3 +1,16 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
 #platforms {
   padding: 26px 0 88px;
+
+  img {
+    margin: 0 auto;
+    padding: 8px 0;
+  }
+}
+
+@media only screen and (max-width: constants.$lg-breakpoint) {
+  #platforms img {
+    width: 100%;
+  }
 }
