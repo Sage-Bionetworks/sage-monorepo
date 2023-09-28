@@ -11,6 +11,7 @@ import { ChallengeRegistrationComponent } from './challenge-registration/challen
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
 import { FeaturedChallengeListComponent } from './featured-challenge-list/featured-challenge-list.component';
 import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
+import { PlatformsComponent } from './platforms/platforms.component';
 import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
 import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 import { getSeoData } from './home-seo-data';
@@ -27,6 +28,7 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
     FeaturedChallengeListComponent,
     RandomChallengeListComponent,
     SponsorListComponent,
+    PlatformsComponent,
     StatisticsViewerComponent,
     TopicsViewerComponent,
     FooterComponent,
