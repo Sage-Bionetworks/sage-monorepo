@@ -3,7 +3,7 @@
 from unittest.mock import patch
 
 from schematic_api.test import BaseTestCase
-import schematic_api.controllers.validation_controller_impl
+import schematic_api.controllers.manifest_validation_controller_impl
 from .conftest import (
     TEST_SCHEMA_URL,
     CORRECT_MANIFEST_PATH,
@@ -35,7 +35,7 @@ class TestSubmitManifestCsv(BaseTestCase):
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ):
@@ -51,7 +51,7 @@ class TestSubmitManifestCsv(BaseTestCase):
     def test_argument_defaults(self) -> None:
         """Test optional arguments"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ) as mock_function:
@@ -70,7 +70,7 @@ class TestSubmitManifestCsv(BaseTestCase):
     def test_arguments(self) -> None:
         """Test optional arguments"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ) as mock_function:
@@ -95,7 +95,7 @@ class TestSubmitManifestCsv(BaseTestCase):
     def test_500(self) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             side_effect=TypeError,
         ):
@@ -114,7 +114,7 @@ class TestSubmitManifestJson(BaseTestCase):
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ):
@@ -130,7 +130,7 @@ class TestSubmitManifestJson(BaseTestCase):
     def test_argument_defaults(self) -> None:
         """Test optional arguments"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ) as mock_function:
@@ -149,7 +149,7 @@ class TestSubmitManifestJson(BaseTestCase):
     def test_arguments(self) -> None:
         """Test optional arguments"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ) as mock_function:
@@ -174,7 +174,7 @@ class TestSubmitManifestJson(BaseTestCase):
     def test_500(self) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             side_effect=TypeError,
         ):
@@ -202,7 +202,7 @@ class TestValidateManifestCsv(BaseTestCase):
     def test_restrict_rules(self) -> None:
         """Test for the restrict rules argument"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "validate_manifest_with_schematic",
             return_value=([], []),
         ) as mock_function:
@@ -219,7 +219,7 @@ class TestValidateManifestCsv(BaseTestCase):
     def test_500(self) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "save_manifest_csv_string_as_csv",
             side_effect=TypeError,
         ):
@@ -245,7 +245,7 @@ class TestValidateManifestJson(BaseTestCase):
     def test_restrict_rules(self) -> None:
         """Test for the restrict rules argument"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "validate_manifest_with_schematic",
             return_value=([], []),
         ) as mock_function:
@@ -265,7 +265,7 @@ class TestValidateManifestJson(BaseTestCase):
     def test_500(self) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "save_manifest_json_string_as_csv",
             side_effect=TypeError,
         ):

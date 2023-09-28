@@ -1,4 +1,4 @@
-"""Implementation of validation endpoints"""
+"""Implementation of manifest validation endpoints"""
 import tempfile
 import os
 import io

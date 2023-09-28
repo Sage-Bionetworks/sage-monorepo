@@ -1,6 +1,6 @@
 post:
   tags:
-    - Validation
+    - ManifestValidation
   summary: Validates manifest in csv form, then submits it
   description: Validates manifest in csv form, then submits it
   requestBody:

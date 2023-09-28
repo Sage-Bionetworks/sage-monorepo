@@ -9,7 +9,7 @@ from schematic_api.models.manifest_validation_result import (
     ManifestValidationResult,
 )  # noqa: E501
 from schematic_api import util
-from schematic_api.controllers import validation_controller_impl
+from schematic_api.controllers import manifest_validation_controller_impl
 
 
 def submit_manifest_csv(
@@ -51,7 +51,7 @@ def submit_manifest_csv(
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return validation_controller_impl.submit_manifest_csv(
+    return manifest_validation_controller_impl.submit_manifest_csv(
         schema_url,
         component,
         dataset_id,
@@ -104,7 +104,7 @@ def submit_manifest_json(
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return validation_controller_impl.submit_manifest_json(
+    return manifest_validation_controller_impl.submit_manifest_json(
         schema_url,
         component,
         dataset_id,
@@ -136,7 +136,7 @@ def validate_manifest_csv(
 
     :rtype: Union[ManifestValidationResult, Tuple[ManifestValidationResult, int], Tuple[ManifestValidationResult, int, Dict[str, str]]
     """
-    return validation_controller_impl.validate_manifest_csv(
+    return manifest_validation_controller_impl.validate_manifest_csv(
         schema_url, component_label, body, restrict_rules
     )
 
@@ -159,6 +159,6 @@ def validate_manifest_json(
 
     :rtype: Union[ManifestValidationResult, Tuple[ManifestValidationResult, int], Tuple[ManifestValidationResult, int, Dict[str, str]]
     """
-    return validation_controller_impl.validate_manifest_json(
+    return manifest_validation_controller_impl.validate_manifest_json(
         schema_url, component_label, restrict_rules, body
     )

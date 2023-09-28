@@ -942,8 +942,8 @@ paths:
             error
       summary: "Validates manifest in csv form, then submits it"
       tags:
-      - Validation
-      x-openapi-router-controller: schematic_api.controllers.validation_controller
+      - ManifestValidation
+      x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /submitManifestJson:
     post:
       description: "Validates a manifest in json form, then submits it in csv form"
@@ -1069,8 +1069,8 @@ paths:
             error
       summary: "Validates a manifest in json form, then submits it"
       tags:
-      - Validation
-      x-openapi-router-controller: schematic_api.controllers.validation_controller
+      - ManifestValidation
+      x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /validateManifestCsv:
     post:
       description: Validates a manifest in csv form
@@ -1126,8 +1126,8 @@ paths:
             error
       summary: Validates a manifest in csv form
       tags:
-      - Validation
-      x-openapi-router-controller: schematic_api.controllers.validation_controller
+      - ManifestValidation
+      x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /validateManifestJson:
     post:
       description: Validates a manifest in json form
@@ -1181,8 +1181,8 @@ paths:
             error
       summary: Validates a manifest in json form
       tags:
-      - Validation
-      x-openapi-router-controller: schematic_api.controllers.validation_controller
+      - ManifestValidation
+      x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
 components:
   parameters:
     projectId:

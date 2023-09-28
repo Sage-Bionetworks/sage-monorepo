@@ -3,9 +3,9 @@
 from unittest.mock import patch
 
 from schematic_api.models.basic_error import BasicError
-import schematic_api.controllers.validation_controller_impl
+import schematic_api.controllers.manifest_validation_controller_impl
 from schematic_api.models.manifest_validation_result import ManifestValidationResult
-from schematic_api.controllers.validation_controller_impl import (
+from schematic_api.controllers.manifest_validation_controller_impl import (
     submit_manifest_json,
     submit_manifest_csv,
     validate_manifest_csv,
@@ -20,7 +20,7 @@ class TestSubmitManifestCsv:
     def test_success(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ):
@@ -39,7 +39,7 @@ class TestSubmitManifestCsv:
     def test_500(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             side_effect=TypeError,
         ):
@@ -62,7 +62,7 @@ class TestSubmitManifestJson:
     def test_success(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for successful result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             return_value="syn1",
         ):
@@ -81,7 +81,7 @@ class TestSubmitManifestJson:
     def test_500(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "submit_manifest_with_schematic",
             side_effect=TypeError,
         ):
@@ -139,7 +139,7 @@ class TestValidateManifestCsv:
     def test_500(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "save_manifest_csv_string_as_csv",
             side_effect=TypeError,
         ):
@@ -196,7 +196,7 @@ class TestValidateManifestJson:
     def test_500(self, correct_manifest_path: str, test_schema_url: str) -> None:
         """Test for 500 result"""
         with patch.object(
-            schematic_api.controllers.validation_controller_impl,
+            schematic_api.controllers.manifest_validation_controller_impl,
             "save_manifest_json_string_as_csv",
             side_effect=TypeError,
         ):
