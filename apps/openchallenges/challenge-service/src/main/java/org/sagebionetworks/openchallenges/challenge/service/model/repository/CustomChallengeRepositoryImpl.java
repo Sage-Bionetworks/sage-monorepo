@@ -271,34 +271,30 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                 switch (category) {
                   case RECENTLY_STARTED -> {
                     datePredicate =
-                        pf.range().field("end_date").between(lastQuarter, now).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("completed").toPredicate();
+                      pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("completed").toPredicate();
                   }
                   case RECENTLY_ENDED -> {
                     datePredicate =
-                        pf.range().field("start_date").between(lastQuarter, now).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("active").toPredicate();
+                      pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   case STARTING_SOON -> {
                     datePredicate =
-                        pf.range().field("start_date").between(now, nextQuarter).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("upcoming").toPredicate();
+                      pf.range().field("start_date").between(now, nextQuarter).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
                   }
                   case ENDING_SOON -> {
                     datePredicate =
-                        pf.range().field("end_date").between(now, nextQuarter).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("active").toPredicate();
+                      pf.range().field("end_date").between(now, nextQuarter).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   default -> {
                     b.should(pf.match().field("categories.category").matching(category.toString()));
                     return;
                   }
                 }
-                
+
                 if (datePredicate != null && statusPredicate != null) {
                   b.should(
                     pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
