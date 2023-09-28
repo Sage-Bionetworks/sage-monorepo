@@ -285,20 +285,24 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    return this.imageService
-      .getImage({
-        objectKey: org.avatarKey,
-        height: ImageHeight._140px,
-        aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery)
-      .pipe(
-        catchError(() => {
-          console.error(
-            'Unable to get the image url. Please check the logs of image service'
-          );
-          return of({ url: '' });
-        })
-      );
+    if (org.avatarKey) {
+      return this.imageService
+        .getImage({
+          objectKey: org.avatarKey,
+          height: ImageHeight._32px,
+          aspectRatio: ImageAspectRatio._11,
+        } as ImageQuery)
+        .pipe(
+          catchError(() => {
+            console.error(
+              'Unable to get the image url. Please check the logs of the image service.'
+            );
+            return of({ url: '' });
+          })
+        );
+    } else {
+      return of({ url: '' });
+    }
   }
 
   private getOrganizationCard(
