@@ -88,24 +88,20 @@ export class ChallengeContributorsComponent implements OnInit {
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    if (org.avatarKey) {
-      return this.imageService
-        .getImage({
-          objectKey: org.avatarKey,
-          height: ImageHeight._32px,
-          aspectRatio: ImageAspectRatio._11,
-        } as ImageQuery)
-        .pipe(
-          catchError(() => {
-            console.error(
-              'Unable to get the image url. Please check the logs of the image service.'
-            );
-            return of({ url: '' });
-          })
-        );
-    } else {
-      return of({ url: '' });
-    }
+    return this.imageService
+      .getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._140px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of the image service.'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 
   // TODO Avoid duplicated code (see org search component)
