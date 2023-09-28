@@ -18,6 +18,10 @@ a:active {
   width: 100%;
   margin: 0 auto;
   padding: 0 16px;
+
+  .row {
+    justify-content: center;
+  }
 }
 @media (min-width: constants.$sm-breakpoint) {
   .container{
@@ -39,7 +43,6 @@ a:active {
 // SECTION: landing
 #landing {
   height: 100%;
-  
   padding: 140px 64px 72px;
   background-color: #F8F8F8;
 
@@ -52,11 +55,30 @@ a:active {
   text-align: center;
   padding: 128px 0;
 }
+#metrics {
+  text-align: center;
+  padding: 28px 0;
+
+  img {
+    padding-right: 21px ;
+  }
+}
+.clickable {
+  cursor: pointer;
+}
 
 @media only screen and (max-width: constants.$lg-breakpoint) {
   #landing {
+    .row {
+      justify-content: center;
+    }
     img {
       display: none;
+    }
+  }
+  #search-oc {
+    .container {
+      justify-content: center;
     }
   }
 }
