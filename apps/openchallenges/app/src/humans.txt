@@ -18,8 +18,5 @@ Contact: https://github.com/chepyle
 Director: James Eddy
 Contact: https://github.com/jaeddy
 
-Program Manager: Abby Wall
-Contact: https://github.com/abbywall
-
 /* SITE */
 Last update: 2023/05/26

@@ -31,6 +31,10 @@ export interface ChallengeSearchQuery {
      */
     pageSize?: number;
     sort?: ChallengeSort;
+    /**
+     * The seed that initializes the random sorter.
+     */
+    sortSeed?: number | null;
     direction?: ChallengeDirection | null;
     /**
      * An array of challenge difficulty levels used to filter the results.

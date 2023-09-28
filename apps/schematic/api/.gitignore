@@ -70,5 +70,9 @@ target/
 #secrets
 *secrets*
 
-#schematic downloaded manifests
+#schematic downloaded files
 manifests
+great_expectations
+
+#integration tests
+schematic_api/test/test_integration.py
