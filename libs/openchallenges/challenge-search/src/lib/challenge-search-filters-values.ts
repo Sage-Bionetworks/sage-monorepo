@@ -125,6 +125,22 @@ export const challengeCategoriesFilterValues: FilterValue[] = [
     value: 'featured',
     label: 'Featured',
   },
+  {
+    value: 'starting_soon',
+    label: 'Starting Soon',
+  },
+  {
+    value: 'ending_soon',
+    label: 'Closing Soon',
+  },
+  {
+    value: 'recently_started',
+    label: 'Recently Launched',
+  },
+  {
+    value: 'recently_ended',
+    label: 'Recently Completed',
+  },
 ];
 
 export const challengeOrganizationsFilterValues: FilterValue[] = [];
@@ -137,23 +153,7 @@ export const challengeSortFilterValues: FilterValue[] = [
     label: 'Relevance',
   },
   {
-    value: 'starting_soon',
-    label: 'Starting Soon',
-  },
-  {
-    value: 'ending_soon',
-    label: 'Closing Soon',
-  },
-  {
     value: 'starred',
     label: 'Most Starred',
-  },
-  {
-    value: 'recently_started',
-    label: 'Recently Launched',
-  },
-  {
-    value: 'recently_ended',
-    label: 'Recently Completed',
   },
 ];
