@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
-import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
 
 @Component({
   selector: 'openchallenges-google-tag-manager',
