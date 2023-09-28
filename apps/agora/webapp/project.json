@@ -10,7 +10,7 @@
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/agora/webapp",
+        "outputPath": "dist/apps/agora/webapp/browser/browser",
         "index": "apps/agora/webapp/src/index.html",
         "main": "apps/agora/webapp/src/main.ts",
         "polyfills": ["zone.js"],
@@ -60,7 +60,7 @@
       "options": {
         "host": "127.0.0.1",
         "port": 5200,
-        "proxyConfig": "apps/openchallenges/app/src/proxy.conf.json"
+        "proxyConfig": "apps/agora/webapp/src/proxy.conf.json"
       }
     },
     "extract-i18n": {
@@ -89,6 +89,63 @@
           "codeCoverage": true
         }
       }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/agora/webapp/browser/server",
+        "main": "apps/agora/webapp/server.ts",
+        "tsConfig": "apps/agora/webapp/tsconfig.server.json"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nguniversal/builders:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "agora-webapp:build:development",
+          "serverTarget": "agora-webapp:server:development"
+        },
+        "production": {
+          "browserTarget": "agora-webapp:build:production",
+          "serverTarget": "agora-webapp:server:production"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "host": "127.0.0.1",
+        "port": 5200
+      }
+    },
+    "prerender": {
+      "executor": "@nguniversal/builders:prerender",
+      "options": {
+        "routes": ["/"]
+      },
+      "configurations": {
+        "development": {
+          "browserTarget": "agora-webapp:build:development",
+          "serverTarget": "agora-webapp:server:development"
+        },
+        "production": {
+          "browserTarget": "agora-webapp:build:production",
+          "serverTarget": "agora-webapp:server:production"
+        }
+      },
+      "defaultConfiguration": "production"
     }
   }
 }

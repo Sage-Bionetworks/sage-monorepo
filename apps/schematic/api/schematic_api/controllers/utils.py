@@ -1,5 +1,6 @@
-from typing import Callable, Union, Any
+from typing import Callable, Union, Any, Optional
 
+from flask import request  # type: ignore
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
     SynapseAuthenticationError,
@@ -7,6 +8,19 @@ from synapseclient.core.exceptions import (  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
+
+
+def get_access_token() -> Optional[str]:
+    """Get access token from header"""
+    bearer_token = None
+    # Check if the Authorization header is present
+    if "Authorization" in request.headers:
+        auth_header = request.headers["Authorization"]
+
+        # Ensure the header starts with 'Bearer ' and retrieve the token
+        if auth_header.startswith("Bearer "):
+            bearer_token = auth_header.split(" ")[1]
+    return bearer_token
 
 
 def handle_exceptions(endpoint_function: Callable) -> Callable:

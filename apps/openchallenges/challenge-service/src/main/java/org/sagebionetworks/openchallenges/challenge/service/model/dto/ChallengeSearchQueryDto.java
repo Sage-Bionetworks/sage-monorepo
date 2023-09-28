@@ -29,6 +29,9 @@ public class ChallengeSearchQueryDto {
   @JsonProperty("sort")
   private ChallengeSortDto sort = ChallengeSortDto.RELEVANCE;
 
+  @JsonProperty("sortSeed")
+  private Integer sortSeed = null;
+
   @JsonProperty("direction")
   private ChallengeDirectionDto direction = null;
 
@@ -136,6 +139,30 @@ public class ChallengeSearchQueryDto {
 
   public void setSort(ChallengeSortDto sort) {
     this.sort = sort;
+  }
+
+  public ChallengeSearchQueryDto sortSeed(Integer sortSeed) {
+    this.sortSeed = sortSeed;
+    return this;
+  }
+
+  /**
+   * The seed that initializes the random sorter. minimum: 0 maximum: 2147483647
+   *
+   * @return sortSeed
+   */
+  @Min(0)
+  @Max(2147483647)
+  @Schema(
+      name = "sortSeed",
+      description = "The seed that initializes the random sorter.",
+      required = false)
+  public Integer getSortSeed() {
+    return sortSeed;
+  }
+
+  public void setSortSeed(Integer sortSeed) {
+    this.sortSeed = sortSeed;
   }
 
   public ChallengeSearchQueryDto direction(ChallengeDirectionDto direction) {
@@ -487,6 +514,7 @@ public class ChallengeSearchQueryDto {
     return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, challengeSearchQuery.pageSize)
         && Objects.equals(this.sort, challengeSearchQuery.sort)
+        && Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed)
         && Objects.equals(this.direction, challengeSearchQuery.direction)
         && Objects.equals(this.difficulties, challengeSearchQuery.difficulties)
         && Objects.equals(this.incentives, challengeSearchQuery.incentives)
@@ -507,6 +535,7 @@ public class ChallengeSearchQueryDto {
         pageNumber,
         pageSize,
         sort,
+        sortSeed,
         direction,
         difficulties,
         incentives,
@@ -528,6 +557,7 @@ public class ChallengeSearchQueryDto {
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    sortSeed: ").append(toIndentedString(sortSeed)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    difficulties: ").append(toIndentedString(difficulties)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");

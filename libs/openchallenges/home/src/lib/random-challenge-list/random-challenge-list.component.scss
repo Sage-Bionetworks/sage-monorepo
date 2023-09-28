@@ -1,0 +1,20 @@
+.container {
+  max-width: 1128px;
+  width: 100%;
+  margin: 0 auto;
+}
+.section-title {
+  margin-bottom: 42px;
+}
+.card-group {
+  justify-items: center;
+}
+// SECTION: featured
+#random-challenges {
+  padding: 64px 0;
+
+  .see-more {
+    margin-top: 18px;
+    padding: 26px 40px;
+  }
+}

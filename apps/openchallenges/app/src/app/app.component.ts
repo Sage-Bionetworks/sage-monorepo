@@ -10,16 +10,18 @@ import {
   NavbarComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { APP_SECTIONS } from './app-sections';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { GoogleTagManagerService } from 'angular-google-tag-manager';
+import { RouterOutlet } from '@angular/router';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
+import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
+import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'openchallenges-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [NavbarComponent, RouterOutlet],
+  imports: [NavbarComponent, RouterOutlet, NgIf, GoogleTagManagerComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
@@ -27,28 +29,20 @@ export class AppComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = USER_MENU_ITEMS;
+  readonly useGoogleTagManager: boolean;
 
   private subscriptions: Subscription[] = [];
 
   constructor(
-    private router: Router,
     private pageTitleService: PageTitleService,
-    private gtmService: GoogleTagManagerService,
-    private homeDataService: HomeDataService
-  ) {}
+    private homeDataService: HomeDataService,
+    private configService: ConfigService
+  ) {
+    this.useGoogleTagManager =
+      this.configService.config.googleTagManagerId.length > 0;
+  }
 
   ngOnInit() {
-    this.router.events.forEach((event) => {
-      if (event instanceof NavigationEnd) {
-        const gtmTag = {
-          event: 'page',
-          pageName: event.url,
-        };
-
-        this.gtmService.pushTag(gtmTag);
-      }
-    });
-
     // TODO Call getUserProfile() only if the user is logged in, other wise an error is generated
     // when the page is rendered with SSR.
     // https://github.com/Sage-Bionetworks/sage-monorepo/issues/880#issuecomment-1318955348

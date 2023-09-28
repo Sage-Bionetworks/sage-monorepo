@@ -14,13 +14,72 @@
         </ngx-typed-js>
       </h1>
       <p class="mat-body-strong">
-        OpenChallenges is a centralized hub for biomedical challenges and more. It empowers
-        participants with the most up-to-date information about relevant challenges, while providing
-        organizers with standardized challenge event templates and intelligence.
+        OpenChallenges (OC) is a centralized hub for biomedical challenges and more.
+      </p>
+      <p class="mat-body-strong">
+        OC empowers participants with the most up-to-date information about relevant challenges,
+        while providing organizers with standardized challenge event templates and intelligence.
       </p>
     </div>
     <div class="col-4">
-      <img src="/openchallenges-assets/images/graphic-search.svg" alt="Search OpenChallenges" />
+      <img
+        height="420px"
+        src="/openchallenges-assets/images/graphic-search-v2.svg"
+        alt="Search OpenChallenges"
+      />
+    </div>
+  </div>
+</section>
+<section id="metrics" class="container row">
+  <div class="col-4 text-center clickable" routerLink="/challenge">
+    <img
+      class="logo-icon"
+      src="/openchallenges-assets/images/graphic-challenges.svg"
+      alt="Number of challenges"
+    />
+    <div class="metrics-text-box">
+      <h2
+        *ngIf="challengeCount$ | async as challengeCount"
+        [countUp]="challengeCount"
+        [reanimateOnClick]="reanimateOnClick"
+      >
+        0
+      </h2>
+      <p class="mat-body-strong">annotated challenges</p>
+    </div>
+  </div>
+  <div class="col-4 text-center clickable" routerLink="/org">
+    <img
+      class="logo-icon"
+      src="/openchallenges-assets/images/graphic-hosts.svg"
+      alt="Number of organizations & hosting societies"
+    />
+    <div class="metrics-text-box">
+      <h2
+        *ngIf="orgCount$ | async as orgCount"
+        [countUp]="orgCount"
+        [reanimateOnClick]="reanimateOnClick"
+      >
+        0
+      </h2>
+      <p class="mat-body-strong">organizations & hosting<br/>societies</p>
+  </div>
+  </div>
+  <div class="col-4 text-center">
+    <img
+      class="logo-icon"
+      src="/openchallenges-assets/images/graphic-platforms.svg"
+      alt="Number of platforms"
+    />
+    <div class="metrics-text-box">
+      <h2
+        *ngIf="orgCount$ | async as orgCount"
+        [countUp]="16"
+        [reanimateOnClick]="reanimateOnClick"
+      >
+        0
+      </h2>
+      <p class="mat-body-strong">platforms</p>
     </div>
   </div>
 </section>
