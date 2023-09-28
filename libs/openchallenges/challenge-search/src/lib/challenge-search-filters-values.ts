@@ -154,7 +154,7 @@ export const challengeSortFilterValues: FilterValue[] = [
   },
   {
     value: 'start_date',
-    label: 'Newest',
+    label: 'Start Date',
   },
   {
     value: 'starred',

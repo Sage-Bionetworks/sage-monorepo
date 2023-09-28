@@ -109,6 +109,19 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
+        header="{{ categoriesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="categoriesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="categoriesFilter.values"
+          [selectedValues]="selectedCategories"
+          (selectionChange)="onCategoriesChange($event)"
+          inputId="{{ categoriesFilter.query }}"
+        />
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
@@ -149,19 +162,6 @@
           [selectedValues]="selectedSubmissionTypes"
           (selectionChange)="onSubmissionTypesChange($event)"
           inputId="{{ submissionTypesFilter.query }}"
-        />
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
-        header="{{ categoriesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="categoriesFilter.collapsed"
-      >
-        <openchallenges-checkbox-filter
-          [values]="categoriesFilter.values"
-          [selectedValues]="selectedCategories"
-          (selectionChange)="onCategoriesChange($event)"
-          inputId="{{ categoriesFilter.query }}"
         />
       </p-panel>
     </div>
