@@ -271,22 +271,23 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                 switch (category) {
                   case RECENTLY_STARTED -> {
                     datePredicate =
-                      pf.range().field("end_date").between(lastQuarter, now).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("completed").toPredicate();
+                        pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+                    statusPredicate =
+                        pf.match().field("status").matching("completed").toPredicate();
                   }
                   case RECENTLY_ENDED -> {
                     datePredicate =
-                      pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+                        pf.range().field("start_date").between(lastQuarter, now).toPredicate();
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   case STARTING_SOON -> {
                     datePredicate =
-                      pf.range().field("start_date").between(now, nextQuarter).toPredicate();
+                        pf.range().field("start_date").between(now, nextQuarter).toPredicate();
                     statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
                   }
                   case ENDING_SOON -> {
                     datePredicate =
-                      pf.range().field("end_date").between(now, nextQuarter).toPredicate();
+                        pf.range().field("end_date").between(now, nextQuarter).toPredicate();
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   default -> {
@@ -297,9 +298,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
                 if (datePredicate != null && statusPredicate != null) {
                   b.should(
-                    pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                        .toPredicate()
-                  );
+                      pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                          .toPredicate());
                 }
               }
             })
