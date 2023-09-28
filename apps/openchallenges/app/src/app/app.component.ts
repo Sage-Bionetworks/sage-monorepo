@@ -38,7 +38,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private homeDataService: HomeDataService,
     private configService: ConfigService
   ) {
-    console.log(`GTM ID: ${this.configService.config.googleTagManagerId}`);
     this.useGoogleTagManager =
       this.configService.config.googleTagManagerId.length > 0;
   }

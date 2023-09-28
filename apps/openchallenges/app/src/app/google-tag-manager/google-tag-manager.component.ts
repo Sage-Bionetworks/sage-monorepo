@@ -1,8 +1,7 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { GoogleTagManagerService } from 'angular-google-tag-manager';
-import { googleTagManagerIdFactory } from './google-tag-manager-id.factory';
+import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 
 @Component({
@@ -10,11 +9,9 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
   template: '',
   standalone: true,
   providers: [
-    {
-      provide: 'googleTagManagerId',
-      useFactory: googleTagManagerIdFactory,
-      deps: [ConfigService],
-    },
+    googleTagManagerIdProvider,
+    // GoogleTagManagerService has been evaluated before we defined the GTM ID. That is why we
+    // redefine it below so that its initialization get access to the GTM ID.
     {
       provide: GoogleTagManagerService,
       useClass: GoogleTagManagerService,
@@ -23,27 +20,19 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 })
 export class GoogleTagManagerComponent implements OnInit {
   constructor(
-    @Inject(PLATFORM_ID) private readonly platformId: object,
     private router: Router,
-    @Inject('googleTagManagerId') private googleTagManagerId: string,
-    private gtmService: GoogleTagManagerService
-  ) {
-    console.log(`constructor: ${googleTagManagerId}`);
-  }
+    private gtmService: GoogleTagManagerService,
+    private configService: ConfigService
+  ) {}
 
   ngOnInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (!this.configService.config.isPlatformServer) {
       this.router.events.forEach((event) => {
         if (event instanceof NavigationEnd) {
           const gtmTag = {
             event: 'page',
             pageName: event.url,
           };
-          // const gtmConfig = this.gtmService.googleTagManagerConfiguration.get();
-          // gtmConfig.id = this.googleTagManagerId;
-          // this.gtmService.googleTagManagerConfiguration.set(gtmConfig);
-
-          // this.gtmService.googleTagManagerId = this.googleTagManagerId;
           this.gtmService.pushTag(gtmTag);
         }
       });
