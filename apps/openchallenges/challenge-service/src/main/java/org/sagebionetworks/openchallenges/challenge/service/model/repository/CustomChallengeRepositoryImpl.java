@@ -271,14 +271,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                 switch (category) {
                   case RECENTLY_STARTED -> {
                     datePredicate =
-                        pf.range().field("end_date").between(lastQuarter, now).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("completed").toPredicate();
+                        pf.range().field("start_date").between(lastQuarter, now).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   case RECENTLY_ENDED -> {
                     datePredicate =
-                        pf.range().field("start_date").between(lastQuarter, now).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                        pf.range().field("end_date").between(lastQuarter, now).toPredicate();
+                    statusPredicate =
+                        pf.match().field("status").matching("completed").toPredicate();
                   }
                   case STARTING_SOON -> {
                     datePredicate =
