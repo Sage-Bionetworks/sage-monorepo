@@ -352,13 +352,9 @@ components:
       description: What to sort results by.
       enum:
       - created
-      - ending_soon
       - random
-      - recently_ended
-      - recently_started
       - relevance
       - starred
-      - starting_soon
       type: string
     ChallengeDirection:
       description: The direction to sort the results by.
@@ -424,6 +420,10 @@ components:
       description: The category of the challenge.
       enum:
       - featured
+      - starting_soon
+      - ending_soon
+      - recently_started
+      - recently_ended
       example: featured
       type: string
     ChallengeSearchQuery:

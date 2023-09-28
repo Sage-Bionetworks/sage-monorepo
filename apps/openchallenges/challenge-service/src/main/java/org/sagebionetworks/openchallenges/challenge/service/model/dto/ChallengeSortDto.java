@@ -11,19 +11,11 @@ import javax.validation.constraints.*;
 public enum ChallengeSortDto {
   CREATED("created"),
 
-  ENDING_SOON("ending_soon"),
-
   RANDOM("random"),
-
-  RECENTLY_ENDED("recently_ended"),
-
-  RECENTLY_STARTED("recently_started"),
 
   RELEVANCE("relevance"),
 
-  STARRED("starred"),
-
-  STARTING_SOON("starting_soon");
+  STARRED("starred");
 
   private String value;
 

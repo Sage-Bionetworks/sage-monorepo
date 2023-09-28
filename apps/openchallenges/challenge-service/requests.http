@@ -53,29 +53,26 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 GET {{basePath}}/challenges?inputDataTypes=genomic
 
 
-### List the challenge that categorized as featured
+### List the challenge that is categorized as featured
 
 GET {{basePath}}/challenges?categories=featured
+
+### List the challenges that is categorized as starting soon .
+
+GET {{basePath}}/challenges?categories=starting_soon
+
+### List the challenges that is categorized as ending soon.
+GET {{basePath}}/challenges?categories=ending_soon
+
+### List the challenges that is categorized as recently started.
+GET {{basePath}}/challenges?categories=recently_started
+
+### List the challenges that is categorized as recently ended .
+GET {{basePath}}/challenges?categories=recently_ended
 
 ### Sort the challenges by their starred count in desc order
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
-
-### Sort the challenges by how soon they start.
-
-GET {{basePath}}/challenges?sort=starting_soon
-
-### Sort the challenges by how soon they end.
-
-GET {{basePath}}/challenges?sort=ending_soon
-
-### Sort the challenges by how recently they have started.
-
-GET {{basePath}}/challenges?sort=recently_started
-
-### Sort the challenges by how recently they have ended.
-
-GET {{basePath}}/challenges?sort=recently_ended
 
 ### Get one random challenge
 
