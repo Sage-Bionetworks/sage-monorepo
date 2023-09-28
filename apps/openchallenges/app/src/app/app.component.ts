@@ -12,14 +12,16 @@ import {
 import { APP_SECTIONS } from './app-sections';
 import { RouterOutlet } from '@angular/router';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
-import { GoogleTagManagerComponent } from './google-tag-manager.component';
+import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
+import { ConfigService } from '@sagebionetworks/openchallenges/config';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'openchallenges-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [NavbarComponent, RouterOutlet, GoogleTagManagerComponent],
+  imports: [NavbarComponent, RouterOutlet, NgIf, GoogleTagManagerComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';
@@ -27,13 +29,19 @@ export class AppComponent implements OnInit, OnDestroy {
   isLoggedIn = false;
   userAvatar: Avatar = MOCK_AVATAR_32;
   userMenuItems: MenuItem[] = USER_MENU_ITEMS;
+  readonly useGoogleTagManager: boolean;
 
   private subscriptions: Subscription[] = [];
 
   constructor(
     private pageTitleService: PageTitleService,
-    private homeDataService: HomeDataService
-  ) {}
+    private homeDataService: HomeDataService,
+    private configService: ConfigService
+  ) {
+    console.log(`GTM ID: ${this.configService.config.googleTagManagerId}`);
+    this.useGoogleTagManager =
+      this.configService.config.googleTagManagerId.length > 0;
+  }
 
   ngOnInit() {
     // TODO Call getUserProfile() only if the user is logged in, other wise an error is generated

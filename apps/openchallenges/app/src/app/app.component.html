@@ -9,7 +9,7 @@
   (logInClicked)="login()"
 />
 
-<openchallenges-google-tag-manager />
+<openchallenges-google-tag-manager *ngIf="useGoogleTagManager" />
 <div class="container">
   <router-outlet></router-outlet>
 </div>

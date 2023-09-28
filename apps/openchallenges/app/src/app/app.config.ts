@@ -44,14 +44,6 @@ export const appConfig: ApplicationConfig = {
           : configService.config.csrApiUrl,
       deps: [ConfigService],
     },
-    {
-      provide: 'googleTagManagerId',
-      useFactory: (configService: ConfigService) => {
-        console.log(`gtm ID: ${configService.config.googleTagManagerId}`);
-        return configService.config.googleTagManagerId;
-      },
-      deps: [ConfigService],
-    },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
