@@ -319,6 +319,8 @@ components:
         - random
         - relevance
         - starred
+        - start_date
+        - end_date
     ChallengeDirection:
       description: The direction to sort the results by.
       type: string

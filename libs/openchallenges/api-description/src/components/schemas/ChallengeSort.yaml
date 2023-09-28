@@ -6,3 +6,5 @@ enum:
   - random
   - relevance
   - starred
+  - start_date
+  - end_date

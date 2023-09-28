@@ -15,7 +15,11 @@ public enum ChallengeSortDto {
 
   RELEVANCE("relevance"),
 
-  STARRED("starred");
+  STARRED("starred"),
+
+  START_DATE("start_date"),
+
+  END_DATE("end_date");
 
   private String value;
 
