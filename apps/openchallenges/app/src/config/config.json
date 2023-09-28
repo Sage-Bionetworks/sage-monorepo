@@ -3,5 +3,6 @@
   "csrApiUrl": "http://localhost:8082/api/v1",
   "dataUpdatedOn": "yyyy-mm-dd",
   "environment": "development",
+  "googleTagManagerId": "",
   "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1"
 }

@@ -44,7 +44,6 @@ export const appConfig: ApplicationConfig = {
           : configService.config.csrApiUrl,
       deps: [ConfigService],
     },
-    { provide: 'googleTagManagerId', useValue: 'GTM-NBR5XD8C' },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
