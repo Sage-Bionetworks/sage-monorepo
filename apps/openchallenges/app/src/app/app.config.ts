@@ -9,7 +9,6 @@ import {
   provideHttpClient,
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideClientHydration } from '@angular/platform-browser';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   configFactory,
@@ -53,6 +52,5 @@ export const appConfig: ApplicationConfig = {
         // scrollPositionRestoration: 'top',
       })
     ),
-    provideClientHydration(),
   ],
 };
