@@ -17,7 +17,6 @@ export class ConfigService {
   ) {}
 
   async loadConfig(): Promise<void> {
-    console.log(`app port: ${this.port}`);
     // The location of the browser folder, which includes the config folder, depends on whether the
     // present code is run in the browser and by the node server. We could use the request received
     // by the node server (SSR) and get the host and port, but this does not work when the port is
