@@ -2,10 +2,7 @@
   <div class="container text-center">
     <h3 class="section-title">Platforms</h3>
     <div class="row">
-      <img
-        src="/openchallenges-assets/images/platforms.svg"
-        alt="Platforms on OpenChallenges"
-      />
+      <img [src]="(platforms$ | async)?.url" alt="Platforms on OpenChallenges" />
     </div>
   </div>
 </section>
