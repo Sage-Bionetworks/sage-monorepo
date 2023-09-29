@@ -8,6 +8,11 @@ import { join } from 'path';
 
 import bootstrap from './src/main.server';
 
+// that process port comes from the above builder utils
+// About setting a constant value: https://github.com/angular/universal/issues/1628
+const PORT = process.env['PORT'] || '4200';
+console.log(`server.ts: ${PORT}`);
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -54,7 +59,13 @@ export function app(): express.Express {
         // The base URL enables the app to load the app config file during server-side rendering.
         {
           provide: 'APP_BASE_URL',
+          // the format of ${host} is `host:port`
           useFactory: () => `${protocol}://${host}`,
+          deps: [],
+        },
+        {
+          provide: 'APP_PORT',
+          useValue: PORT,
           deps: [],
         },
       ],
@@ -65,12 +76,10 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4200;
-
   // Start up the Node server
   const server = app();
-  server.listen(port, () => {
-    console.log(`Node Express server listening on http://localhost:${port}`);
+  server.listen(PORT, () => {
+    console.log(`Node Express server listening on http://localhost:${PORT}`);
   });
 }
 
