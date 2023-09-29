@@ -28,7 +28,7 @@ import { Observable, catchError, forkJoin, map, of, switchMap } from 'rxjs';
 })
 export class ChallengeContributorsComponent implements OnInit {
   @Input() challenge!: Challenge;
-  organizationCards!: OrganizationCard[];
+  organizationCards: OrganizationCard[] = [];
   constructor(
     private challengeContributionService: ChallengeContributionService,
     private organizationService: OrganizationService,
