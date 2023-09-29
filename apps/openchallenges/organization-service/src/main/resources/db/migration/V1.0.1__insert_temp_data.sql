@@ -6,10 +6,10 @@ LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/organizations.csv' INTO T
 
 
 -- organization_category data
--- INSERT INTO organization_category (id, organization_id, category)
--- VALUES (1, 1, 'featured'),
---   (2, 12, 'featured'),
---   (3, 13, 'featured');
+INSERT INTO organization_category (id, organization_id, category)
+VALUES (1, 1, 'featured'),
+  (2, 12, 'featured'),
+  (3, 13, 'featured');
 
 
 -- contributor_roles data
