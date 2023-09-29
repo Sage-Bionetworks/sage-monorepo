@@ -36,6 +36,7 @@ import {
   Observable,
   forkJoin,
   tap,
+  iif,
 } from 'rxjs';
 import {
   catchError,
@@ -285,20 +286,22 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    return this.imageService
-      .getImage({
+    return iif(
+      () => !!org.avatarKey,
+      this.imageService.getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery)
-      .pipe(
-        catchError(() => {
-          console.error(
-            'Unable to get the image url. Please check the logs of image service'
-          );
-          return of({ url: '' });
-        })
-      );
+      } as ImageQuery),
+      of({ url: '' })
+    ).pipe(
+      catchError(() => {
+        console.error(
+          'Unable to get the image url. Please check the logs of the image service.'
+        );
+        return of({ url: '' });
+      })
+    );
   }
 
   private getOrganizationCard(
