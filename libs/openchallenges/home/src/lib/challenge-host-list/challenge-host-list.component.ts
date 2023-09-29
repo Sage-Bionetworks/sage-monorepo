@@ -76,7 +76,7 @@ export class ChallengeHostListComponent implements OnInit {
       () => !!org.avatarKey,
       this.imageService.getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._32px,
+        height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery),
       of({ url: '' })
