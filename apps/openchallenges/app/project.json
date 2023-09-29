@@ -220,9 +220,6 @@
           "serverTarget": "openchallenges-app:server:production"
         }
       },
-      "options": {
-        "port": 4201
-      },
       "defaultConfiguration": "development"
     },
     "prerender": {
