@@ -166,13 +166,11 @@ components:
       default: relevance
       enum:
         - created
-        - ending_soon
         - random
-        - recently_ended
-        - recently_started
         - relevance
         - starred
-        - starting_soon
+        - start_date
+        - end_date
     ChallengeDirection:
       description: The direction to sort the results by.
       type: string
@@ -238,6 +236,10 @@ components:
       type: string
       enum:
         - featured
+        - starting_soon
+        - ending_soon
+        - recently_started
+        - recently_ended
       example: featured
     ChallengeSearchQuery:
       type: object
