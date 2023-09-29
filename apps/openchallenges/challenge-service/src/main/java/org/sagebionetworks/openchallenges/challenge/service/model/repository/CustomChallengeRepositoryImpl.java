@@ -256,10 +256,51 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    */
   private SearchPredicate getCategoriesPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+
+    LocalDate now = LocalDate.now();
+    LocalDate oneMonthLater = now.plusMonths(1);
+    LocalDate threeMonthsAgo = now.minusMonths(3);
+
     return pf.bool(
             b -> {
               for (ChallengeCategoryDto category : query.getCategories()) {
-                b.should(pf.match().field("categories.category").matching(category.toString()));
+
+                SearchPredicate datePredicate;
+                SearchPredicate statusPredicate;
+
+                switch (category) {
+                  case RECENTLY_STARTED -> {
+                    datePredicate =
+                        pf.range().field("start_date").between(threeMonthsAgo, now).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                  }
+                  case RECENTLY_ENDED -> {
+                    datePredicate =
+                        pf.range().field("end_date").between(threeMonthsAgo, now).toPredicate();
+                    statusPredicate =
+                        pf.match().field("status").matching("completed").toPredicate();
+                  }
+                  case STARTING_SOON -> {
+                    datePredicate =
+                        pf.range().field("start_date").between(now, oneMonthLater).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
+                  }
+                  case ENDING_SOON -> {
+                    datePredicate =
+                        pf.range().field("end_date").between(now, oneMonthLater).toPredicate();
+                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                  }
+                  default -> {
+                    b.should(pf.match().field("categories.category").matching(category.toString()));
+                    return;
+                  }
+                }
+
+                if (datePredicate != null && statusPredicate != null) {
+                  b.should(
+                      pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                          .toPredicate());
+                }
               }
             })
         .toPredicate();
@@ -323,16 +364,13 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       case CREATED -> {
         return createdSort;
       }
-      case ENDING_SOON -> {
-        return sf.field("end_date").order(orderWithDefaultAsc).toSort();
-      }
       case RANDOM -> {
         return scoreSort;
       }
-      case RECENTLY_ENDED -> {
+      case START_DATE -> {
         return sf.field("end_date").order(orderWithDefaultDesc).toSort();
       }
-      case RECENTLY_STARTED -> {
+      case END_DATE -> {
         return sf.field("start_date").order(orderWithDefaultDesc).toSort();
       }
       case RELEVANCE -> {
@@ -340,9 +378,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       }
       case STARRED -> {
         return sf.field("starred_count").order(orderWithDefaultDesc).toSort();
-      }
-      case STARTING_SOON -> {
-        return sf.field("start_date").order(orderWithDefaultAsc).toSort();
       }
       default -> {
         throw new BadRequestException(
@@ -353,11 +388,8 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
   private SearchPredicate getSearchSortPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    LocalDate now = LocalDate.now();
+
     switch (query.getSort()) {
-      case ENDING_SOON -> {
-        return pf.range().field("end_date").between(now, null).toPredicate();
-      }
       case RANDOM -> {
         Integer seed = query.getSortSeed();
         if (seed == null) {
@@ -377,15 +409,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                     + "  }"
                     + "}")
             .toPredicate();
-      }
-      case RECENTLY_ENDED -> {
-        return pf.range().field("end_date").between(null, now).toPredicate();
-      }
-      case RECENTLY_STARTED -> {
-        return pf.range().field("start_date").between(null, now).toPredicate();
-      }
-      case STARTING_SOON -> {
-        return pf.range().field("start_date").between(now, null).toPredicate();
       }
       default -> {
         return null;

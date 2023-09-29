@@ -35,6 +35,19 @@
   <section id="bottom" class="content">
     <div class="facets">
       <p-panel
+      header="{{ incentivesFilter.label }}"
+      [toggleable]="true"
+      [collapsed]="incentivesFilter.collapsed"
+    >
+      <openchallenges-checkbox-filter
+        [values]="incentivesFilter.values"
+        [selectedValues]="selectedIncentives"
+        (selectionChange)="onIncentivesChange($event)"
+        inputId="{{ incentivesFilter.query }}"
+      />
+    </p-panel>
+    <p-divider></p-divider>
+      <p-panel
         header="{{ statusFilter.label }}"
         [toggleable]="true"
         [collapsed]="statusFilter.collapsed"
@@ -48,18 +61,18 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ incentivesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="incentivesFilter.collapsed"
-      >
-        <openchallenges-checkbox-filter
-          [values]="incentivesFilter.values"
-          [selectedValues]="selectedIncentives"
-          (selectionChange)="onIncentivesChange($event)"
-          inputId="{{ incentivesFilter.query }}"
-        />
-      </p-panel>
-      <p-divider></p-divider>
+      header="{{ categoriesFilter.label }}"
+      [toggleable]="true"
+      [collapsed]="categoriesFilter.collapsed"
+    >
+      <openchallenges-checkbox-filter
+        [values]="categoriesFilter.values"
+        [selectedValues]="selectedCategories"
+        (selectionChange)="onCategoriesChange($event)"
+        inputId="{{ categoriesFilter.query }}"
+      />
+    </p-panel>
+    <p-divider></p-divider>
       <!-- <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
@@ -149,19 +162,6 @@
           [selectedValues]="selectedSubmissionTypes"
           (selectionChange)="onSubmissionTypesChange($event)"
           inputId="{{ submissionTypesFilter.query }}"
-        />
-      </p-panel>
-      <p-divider></p-divider>
-      <p-panel
-        header="{{ categoriesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="categoriesFilter.collapsed"
-      >
-        <openchallenges-checkbox-filter
-          [values]="categoriesFilter.values"
-          [selectedValues]="selectedCategories"
-          (selectionChange)="onCategoriesChange($event)"
-          inputId="{{ categoriesFilter.query }}"
         />
       </p-panel>
     </div>
