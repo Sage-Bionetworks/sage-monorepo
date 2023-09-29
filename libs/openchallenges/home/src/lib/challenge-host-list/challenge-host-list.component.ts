@@ -16,7 +16,7 @@ import {
   OrganizationCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
-import { forkJoin, Observable, of, throwError } from 'rxjs';
+import { forkJoin, iif, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
@@ -72,24 +72,22 @@ export class ChallengeHostListComponent implements OnInit {
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    if (org.avatarKey) {
-      return this.imageService
-        .getImage({
-          objectKey: org.avatarKey,
-          height: ImageHeight._32px,
-          aspectRatio: ImageAspectRatio._11,
-        } as ImageQuery)
-        .pipe(
-          catchError(() => {
-            console.error(
-              'Unable to get the image url. Please check the logs of the image service.'
-            );
-            return of({ url: '' });
-          })
+    return iif(
+      () => !!org.avatarKey,
+      this.imageService.getImage({
+        objectKey: org.avatarKey,
+        height: ImageHeight._32px,
+        aspectRatio: ImageAspectRatio._11,
+      } as ImageQuery),
+      of({ url: '' })
+    ).pipe(
+      catchError(() => {
+        console.error(
+          'Unable to get the image url. Please check the logs of the image service.'
         );
-    } else {
-      return of({ url: '' });
-    }
+        return of({ url: '' });
+      })
+    );
   }
 
   // TODO Avoid duplicated code (see org search component)
