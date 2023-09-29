@@ -11,7 +11,7 @@ import bootstrap from './src/main.server';
 // that process port comes from the above builder utils
 // About setting a constant value: https://github.com/angular/universal/issues/1628
 const PORT = process.env['PORT'] || '4200';
-console.log(`server.ts: ${PORT}`);
+// console.log(`server.ts: ${PORT}`);
 
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
