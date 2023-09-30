@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import {
   ActivatedRoute,
   ParamMap,
@@ -38,6 +38,8 @@ import { ChallengeOverviewComponent } from './challenge-overview/challenge-overv
 import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getSeoData } from './challenge-seo-data';
 
 @Component({
   selector: 'openchallenges-challenge',
@@ -78,7 +80,9 @@ export class ChallengeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private challengeService: ChallengeService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -110,6 +114,8 @@ export class ChallengeComponent implements OnInit {
         src: challenge.avatarUrl || '',
         size: 250,
       };
+
+      this.seoService.setData(getSeoData(challenge), this.renderer2);
 
       // this.progressValue =
       //   challenge.startDate && challenge.endDate
