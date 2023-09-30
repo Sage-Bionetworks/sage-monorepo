@@ -40,7 +40,6 @@ export class TeamComponent implements OnInit {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
-
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
