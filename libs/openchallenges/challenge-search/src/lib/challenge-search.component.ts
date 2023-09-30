@@ -3,6 +3,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import {
@@ -84,6 +85,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getSeoData } from './challenge-search-seo-data';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -194,12 +197,15 @@ export class ChallengeSearchComponent
     private organizationService: OrganizationService,
     private imageService: ImageService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.seoService.setData(getSeoData(), this.renderer2);
   }
 
   ngOnInit() {

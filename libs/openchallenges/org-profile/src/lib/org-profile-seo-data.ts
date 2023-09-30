@@ -10,18 +10,15 @@ export const getSeoData = (
   imageUrl: string | undefined
 ): SeoData => {
   const defaultSeoData = getDefaultSeoData();
-
-  return new SeoData({
+  // shallow merge
+  return Object.assign(defaultSeoData, {
     title: `${org.name} | OpenChallenges`,
     description: org.description,
-    url: '',
     imageUrl:
       imageUrl !== undefined
         ? optimizeImageUrlForSeo(imageUrl)
         : defaultSeoData.imageUrl,
     imageAlt:
       imageUrl !== undefined ? `${org.name} logo` : defaultSeoData.imageAlt,
-    publishDate: '2023-09-20T00:00:00Z', // TODO use org updatedAt?
-    jsonLds: [],
-  });
+  } as SeoData);
 };
