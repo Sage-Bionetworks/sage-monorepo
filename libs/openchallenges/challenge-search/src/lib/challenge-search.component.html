@@ -52,7 +52,7 @@
         [toggleable]="true"
         [collapsed]="statusFilter.collapsed"
       >
-        <openchallenges-checkbox-filter sageDisableScrollPositionRestoration
+        <openchallenges-checkbox-filter
           [values]="statusFilter.values"
           [selectedValues]="selectedStatus"
           (selectionChange)="onStatusChange($event)"
