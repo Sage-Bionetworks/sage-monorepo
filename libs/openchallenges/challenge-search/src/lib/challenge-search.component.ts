@@ -3,6 +3,7 @@ import {
   Component,
   OnDestroy,
   OnInit,
+  Renderer2,
   ViewChild,
 } from '@angular/core';
 import {
@@ -56,6 +57,7 @@ import {
   Observable,
   Subject,
   forkJoin,
+  iif,
   map,
   of,
   switchMap,
@@ -83,6 +85,8 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getSeoData } from './challenge-search-seo-data';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -193,12 +197,15 @@ export class ChallengeSearchComponent
     private organizationService: OrganizationService,
     private imageService: ImageService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.seoService.setData(getSeoData(), this.renderer2);
   }
 
   ngOnInit() {
@@ -579,19 +586,21 @@ export class ChallengeSearchComponent
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    return this.imageService
-      .getImage({
+    return iif(
+      () => !!org.avatarKey,
+      this.imageService.getImage({
         objectKey: org.avatarKey,
         height: ImageHeight._32px,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery)
-      .pipe(
-        catchError(() => {
-          console.error(
-            'Unable to get the image url. Please check the logs of the image service.'
-          );
-          return of({ url: '' });
-        })
-      );
+      } as ImageQuery),
+      of({ url: '' })
+    ).pipe(
+      catchError(() => {
+        console.error(
+          'Unable to get the image url. Please check the logs of the image service.'
+        );
+        return of({ url: '' });
+      })
+    );
   }
 }

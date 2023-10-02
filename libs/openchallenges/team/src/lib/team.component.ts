@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   Image,
@@ -7,7 +7,9 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { Observable } from 'rxjs';
+import { getSeoData } from './team-seo-data';
 
 @Component({
   selector: 'openchallenges-team',
@@ -27,16 +29,18 @@ export class TeamComponent implements OnInit {
   public verena$: Observable<Image> | undefined;
   public maria$: Observable<Image> | undefined;
   public jake$: Observable<Image> | undefined;
-  public amy$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.seoService.setData(getSeoData(), this.renderer2);
   }
 
   ngOnInit() {
@@ -57,9 +61,6 @@ export class TeamComponent implements OnInit {
     });
     this.jake$ = this.imageService.getImage({
       objectKey: 'team/jake.png',
-    });
-    this.amy$ = this.imageService.getImage({
-      objectKey: 'team/amy.png',
     });
   }
 }
