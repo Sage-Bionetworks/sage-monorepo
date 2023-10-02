@@ -85,7 +85,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { SeoService } from '@sagebionetworks/shared/util';
+import {
+  DisableScrollPositionRestorationDirective,
+  SeoService,
+} from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 
 @Component({
@@ -109,6 +112,7 @@ import { getSeoData } from './challenge-search-seo-data';
     ChallengeCardComponent,
     CheckboxFilterComponent,
     SearchDropdownFilterComponent,
+    DisableScrollPositionRestorationDirective,
   ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
