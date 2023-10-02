@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Renderer2 } from '@angular/core';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
+import { getSeoData } from './about-seo-data';
+import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'openchallenges-about',
@@ -16,10 +18,15 @@ export class AboutComponent {
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
+  ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.seoService.setData(getSeoData(), this.renderer2);
   }
 }

@@ -1,7 +1,8 @@
 {
-  "environment": "${ENVIRONMENT}",
-  "apiUrl": "${API_URL}",
   "appVersion": "${APP_VERSION}",
+  "csrApiUrl": "${CSR_API_URL}",
   "dataUpdatedOn": "${DATA_UPDATED_ON}",
-  "keycloakRealm": "${KEYCLOAK_REALM}"
+  "environment": "${ENVIRONMENT}",
+  "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
+  "ssrApiUrl": "${SSR_API_URL}"
 }

@@ -1,3 +1,5 @@
+SET GLOBAL local_infile = 'ON';
+
 create database challenge_service;
 create database organization_service;
 create database user_service;

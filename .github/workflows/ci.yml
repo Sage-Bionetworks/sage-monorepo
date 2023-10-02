@@ -112,7 +112,7 @@ jobs:
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build"
+            && nx affected --target=build,server"
 
       - name: Test the affected projects (unit)
         run: |
@@ -249,7 +249,7 @@ jobs:
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build"
+            && nx affected --target=build,server"
 
       - name: Test the affected projects (unit)
         run: |

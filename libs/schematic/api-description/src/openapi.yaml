@@ -25,6 +25,9 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
+  /schematicVersion:
+    $ref: paths/schematicVersion.yaml
+
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
 
@@ -63,3 +66,15 @@ paths:
 
   /connectedNodes:
     $ref: paths/connectedNodes.yaml
+
+  /validateManifestJson:
+    $ref: paths/validateManifestJson.yaml
+
+  /validateManifestCsv:
+    $ref: paths/validateManifestCsv.yaml
+
+  /submitManifestJson:
+    $ref: paths/submitManifestJson.yaml
+
+  /submitManifestCsv:
+    $ref: paths/submitManifestCsv.yaml

@@ -9,13 +9,15 @@ export enum Environment {
 /* eslint-enable no-unused-vars */
 
 export interface AppConfig {
-  environment: Environment;
-  apiUrl: string;
   appVersion: string;
+  csrApiUrl: string;
   dataUpdatedOn: string;
-  keycloakRealm: string;
+  environment: Environment;
+  googleTagManagerId: string;
   isPlatformServer: boolean;
+  keycloakRealm: string;
   privacyPolicyUrl: string;
+  ssrApiUrl: string;
   termsOfUseUrl: string;
 }
 

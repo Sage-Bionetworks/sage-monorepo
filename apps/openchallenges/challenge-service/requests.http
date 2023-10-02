@@ -52,30 +52,45 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
 GET {{basePath}}/challenges?inputDataTypes=genomic
 
-
-### List the challenge that categorized as featured
+### List the challenge that is categorized as featured
 
 GET {{basePath}}/challenges?categories=featured
+
+### List the challenges that are categorized as starting soon.
+
+GET {{basePath}}/challenges?categories=starting_soon
+
+### List the challenges that are categorized as ending soon.
+
+GET {{basePath}}/challenges?categories=ending_soon
+
+### List the challenges that are categorized as recently started.
+
+GET {{basePath}}/challenges?categories=recently_started
+
+### List the challenges that are categorized as recently ended.
+
+GET {{basePath}}/challenges?categories=recently_ended
 
 ### Sort the challenges by their starred count in desc order
 
 GET {{basePath}}/challenges?sort=starred&direction=desc
 
-### Sort the challenges by how soon they start.
+### Sort the challenges by start date (desc by default)
 
-GET {{basePath}}/challenges?sort=starting_soon
+GET {{basePath}}/challenges?sort=start_date
 
-### Sort the challenges by how soon they end.
+### Sort the challenges by end date (desc by default)
 
-GET {{basePath}}/challenges?sort=ending_soon
+GET {{basePath}}/challenges?sort=end_date
 
-### Sort the challenges by how recently they have started.
+### Get one random challenge
 
-GET {{basePath}}/challenges?sort=recently_started
+GET {{basePath}}/challenges?sort=random&pageSize=1
 
-### Sort the challenges by how recently they have ended.
+### Get one random challenge with the seed value 10
 
-GET {{basePath}}/challenges?sort=recently_ended
+GET {{basePath}}/challenges?sort=random&sortSeed=10&pageSize=1
 
 ### List the challenge platforms.
 

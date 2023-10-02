@@ -352,12 +352,11 @@ components:
       description: What to sort results by.
       enum:
       - created
-      - ending_soon
-      - recently_ended
-      - recently_started
+      - random
       - relevance
       - starred
-      - starting_soon
+      - start_date
+      - end_date
       type: string
     ChallengeDirection:
       description: The direction to sort the results by.
@@ -423,6 +422,10 @@ components:
       description: The category of the challenge.
       enum:
       - featured
+      - starting_soon
+      - ending_soon
+      - recently_started
+      - recently_ended
       example: featured
       type: string
     ChallengeSearchQuery:
@@ -442,6 +445,13 @@ components:
           type: integer
         sort:
           $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          type: integer
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
