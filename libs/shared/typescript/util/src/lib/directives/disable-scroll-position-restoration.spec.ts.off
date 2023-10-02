@@ -1,0 +1,8 @@
+import { DisableScrollPositionRestorationDirective } from './disable-scroll-position-restoration.directive';
+
+describe('DisableScrollPositionRestorationDirective', () => {
+  it('should create an instance', () => {
+    const directive = new DisableScrollPositionRestorationDirective();
+    expect(directive).toBeTruthy();
+  });
+});

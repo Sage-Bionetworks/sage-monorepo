@@ -490,12 +490,18 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        status: this.collapseParam(selected),
-      },
-    });
+    const currentScrollPosition = window.scrollY;
+    this.router
+      .navigate([], {
+        queryParamsHandling: 'merge',
+        queryParams: {
+          status: this.collapseParam(selected),
+        },
+      })
+      .then(() => {
+        // After the route change is complete, restore the scroll position
+        window.scrollTo(0, currentScrollPosition);
+      });
   }
 
   onSubmissionTypesChange(selected: string[]): void {
