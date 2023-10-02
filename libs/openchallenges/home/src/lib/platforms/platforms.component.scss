@@ -1,0 +1,12 @@
+@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+
+#platforms {
+  max-width: 1210px;
+  margin: 0 auto;
+  padding: 68px 0 88px;
+
+  img {
+    width: 100%;
+    padding: 15px 8px 0;
+  }
+}
