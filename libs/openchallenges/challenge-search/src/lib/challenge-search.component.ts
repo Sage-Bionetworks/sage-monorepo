@@ -77,10 +77,7 @@ import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {
-  CustomScrollRestoration,
-  forkJoinConcurrent,
-} from '@sagebionetworks/openchallenges/util';
+import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -88,7 +85,10 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import { SeoService } from '@sagebionetworks/shared/util';
+import {
+  CustomScrollRestoreDirective,
+  SeoService,
+} from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 
 @Component({
@@ -112,6 +112,7 @@ import { getSeoData } from './challenge-search-seo-data';
     ChallengeCardComponent,
     CheckboxFilterComponent,
     SearchDropdownFilterComponent,
+    CustomScrollRestoreDirective,
   ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
@@ -202,8 +203,7 @@ export class ChallengeSearchComponent
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
-    private renderer2: Renderer2,
-    private customScrollRestoration: CustomScrollRestoration
+    private renderer2: Renderer2 // private customScrollRestoration: CustomScrollRestoration
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -490,7 +490,6 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
-    this.customScrollRestoration.previousPosition();
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {
