@@ -97,6 +97,7 @@ import { getSeoData } from './challenge-search-seo-data';
   imports: [
     CalendarModule,
     CommonModule,
+    CustomScrollRestoreDirective,
     DividerModule,
     DropdownModule,
     InputTextModule,
@@ -112,7 +113,6 @@ import { getSeoData } from './challenge-search-seo-data';
     ChallengeCardComponent,
     CheckboxFilterComponent,
     SearchDropdownFilterComponent,
-    CustomScrollRestoreDirective,
   ],
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
