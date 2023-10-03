@@ -17,21 +17,19 @@ import { filter } from 'rxjs';
   standalone: true,
 })
 export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
+  private scrollX = 0;
   private scrollY = 0;
   private currentBaseUrl!: string;
 
   constructor(
     private router: Router,
     private viewportScroller: ViewportScroller
-  ) {
-    window.addEventListener('scroll', () => {
-      this.scrollY = window.scrollY;
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     // Capture the initial scroll position and the current base URL
     window.addEventListener('scroll', () => {
+      this.scrollX = window.scrollX;
       this.scrollY = window.scrollY;
     });
 
@@ -51,7 +49,7 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
           this.viewportScroller.scrollToAnchor(e.anchor);
         } else if (e.routerEvent.url.split('?')[0] === this.currentBaseUrl) {
           // same page navigation
-          this.viewportScroller.scrollToPosition([0, this.scrollY]);
+          this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
         } else {
           // forward navigation
           this.viewportScroller.scrollToPosition([0, 0]);
