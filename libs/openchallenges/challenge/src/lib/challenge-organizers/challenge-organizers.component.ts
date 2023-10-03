@@ -15,7 +15,7 @@ import {
   styleUrls: ['./challenge-organizers.component.scss'],
 })
 export class ChallengeOrganizersComponent {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   // TODO: Replace with challenge's organizers
   organizers = MOCK_CHALLENGE_ORGANIZERS;
   organizationCard = MOCK_ORGANIZATION_CARDS[0];

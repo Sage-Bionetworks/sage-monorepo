@@ -15,6 +15,6 @@
 //   styleUrls: ['./user-profile-overview.component.scss'],
 // })
 // export class UserProfileOverviewComponent {
-//   @Input() user!: User;
+//   @Input({ required: true }) user!: User;
 //   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 // }

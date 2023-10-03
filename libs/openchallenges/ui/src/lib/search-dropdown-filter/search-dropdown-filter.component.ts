@@ -14,11 +14,11 @@ import { MultiSelectModule } from 'primeng/multiselect';
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
 export class SearchDropdownFilterComponent implements OnInit {
-  @Input() values!: FilterValue[];
-  @Input() selectedValues!: any[];
-  @Input() placeholder = 'Search items';
-  @Input() showAvatar!: boolean | undefined;
-  @Input() filterByApiClient!: boolean | undefined;
+  @Input({ required: true }) values!: FilterValue[];
+  @Input({ required: true }) selectedValues!: any[];
+  @Input({ required: true }) placeholder = 'Search items';
+  @Input({ required: true }) showAvatar!: boolean | undefined;
+  @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
 

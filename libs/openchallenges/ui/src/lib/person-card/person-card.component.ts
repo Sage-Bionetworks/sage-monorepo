@@ -12,13 +12,13 @@ import { AvatarComponent } from '../avatar/avatar.component';
   styleUrls: ['./person-card.component.scss'],
 })
 export class PersonCardComponent implements OnInit {
-  @Input() name!: string;
-  @Input() username!: string;
-  @Input() affiliation!: string | null | undefined;
-  @Input() avatarUrl!: string | null | undefined;
-  @Input() avatarSize = 120;
-  @Input() role!: string | null | undefined;
-  @Input() addChips = false;
+  @Input({ required: true }) name!: string;
+  @Input({ required: false }) username!: string;
+  @Input({ required: true }) affiliation!: string | null | undefined;
+  @Input({ required: false }) avatarUrl!: string | null | undefined;
+  @Input({ required: true }) avatarSize = 120;
+  @Input({ required: false }) role!: string | null | undefined;
+  @Input({ required: false }) addChips = false;
 
   avatar!: Avatar;
 

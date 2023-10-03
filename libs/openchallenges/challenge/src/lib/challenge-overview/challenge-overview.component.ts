@@ -15,7 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./challenge-overview.component.scss'],
 })
 export class ChallengeOverviewComponent {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
 

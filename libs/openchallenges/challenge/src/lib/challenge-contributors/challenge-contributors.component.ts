@@ -35,7 +35,7 @@ import {
   styleUrls: ['./challenge-contributors.component.scss'],
 })
 export class ChallengeContributorsComponent implements OnInit {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = [];
   constructor(
     private challengeContributionService: ChallengeContributionService,

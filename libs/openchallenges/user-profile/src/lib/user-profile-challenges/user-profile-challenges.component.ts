@@ -30,7 +30,7 @@
 //   styleUrls: ['./user-profile-challenges.component.scss'],
 // })
 // export class UserProfileChallengesComponent {
-//   @Input() user!: User;
+//   @Input({ required: true }) user!: User;
 //   challenges: Challenge[] = [];
 //   pageNumber = 0;
 //   pageSize = 12;
