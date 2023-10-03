@@ -26,8 +26,8 @@ import { AvatarComponent } from '../avatar/avatar.component';
   styleUrls: ['./user-button.component.scss'],
 })
 export class UserButtonComponent {
-  @Input() avatar: Avatar = EMPTY_AVATAR;
-  @Input() menuItems: MenuItem[] = [];
+  @Input({ required: true }) avatar: Avatar = EMPTY_AVATAR;
+  @Input({ required: true }) menuItems: MenuItem[] = [];
   @Output() menuItemSelected = new EventEmitter<MenuItem>();
 
   selectMenuItem(menuItem: MenuItem) {

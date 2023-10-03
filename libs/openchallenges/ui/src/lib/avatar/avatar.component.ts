@@ -10,14 +10,14 @@ import { Avatar } from './avatar';
   styleUrls: ['./avatar.component.scss'],
 })
 export class AvatarComponent {
-  @Input() name = '';
-  @Input() src = '';
-  @Input() size = 32;
-  @Input() value = '';
+  @Input({ required: false }) name = '';
+  @Input({ required: false }) src = '';
+  @Input({ required: false }) size = 32;
+  @Input({ required: false }) value = '';
   // ngx-avatars uses this value internally when generating the initials from `name`
   initialsSize = 1;
 
-  @Input() set avatar(avatar: Avatar) {
+  @Input({ required: false }) set avatar(avatar: Avatar) {
     if (avatar) {
       // Here we change the default ngx-avatars priority from name > value to value > name
       if (avatar.value) {

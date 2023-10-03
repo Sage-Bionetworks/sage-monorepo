@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./challenge-card.component.scss'],
 })
 export class ChallengeCardComponent implements OnInit {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   banner$: Observable<Image> | undefined;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;

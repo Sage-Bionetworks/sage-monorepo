@@ -33,8 +33,8 @@
 //   styleUrls: ['./user-profile-starred.component.scss'],
 // })
 // export class UserProfileStarredComponent implements OnInit {
-//   @Input() user!: User;
-//   @Input() loggedIn!: boolean;
+//   @Input({ required: true }) user!: User;
+//   @Input({ required: true }) loggedIn!: boolean;
 //   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 //   stars: Challenge[] = [];
 //   starred!: boolean;
