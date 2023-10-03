@@ -77,7 +77,10 @@ import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import {
+  CustomScrollRestoration,
+  forkJoinConcurrent,
+} from '@sagebionetworks/openchallenges/util';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -199,7 +202,8 @@ export class ChallengeSearchComponent
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private customScrollRestoration: CustomScrollRestoration
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -486,6 +490,7 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
+    this.customScrollRestoration.previousPosition();
     this.router.navigate([], {
       queryParamsHandling: 'merge',
       queryParams: {

@@ -49,6 +49,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
+        anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       })
       // withDebugTracing()
