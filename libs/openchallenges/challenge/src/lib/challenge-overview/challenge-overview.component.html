@@ -4,7 +4,8 @@
     <p>{{ use_default(challenge.description) }}</p>
     <div *ngIf="challenge.description.endsWith('...')">
       <a class="read-more" href="{{ challenge.websiteUrl }}"
-        >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a>
+        >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a
+      >
     </div>
   </div>
   <div id="details">
@@ -13,11 +14,15 @@
       <tbody>
         <tr>
           <td class="text-right">Start Date</td>
-          <td>{{ challenge.startDate }}</td>
+          <td [ngClass]="{ 'text-grey': challenge.startDate === null }">
+            {{ use_default(challenge.startDate) }}
+          </td>
         </tr>
         <tr>
           <td class="text-right">End Date</td>
-          <td>{{ challenge.endDate }}</td>
+          <td [ngClass]="{ 'text-grey': challenge.endDate === null }">
+            {{ use_default(challenge.endDate) }}
+          </td>
         </tr>
         <tr>
           <td class="text-right">Status</td>

@@ -19,8 +19,8 @@ export class ChallengeOverviewComponent {
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
 
-  use_default(str: string) {
-    return str === '' ? 'Not available' : str;
+  use_default(str: string | null | undefined) {
+    return str === '' || str == null ? 'Not available' : str;
   }
 
   prettify(camel: string | undefined) {
