@@ -20,10 +20,15 @@ ici_neoantigen_server <- function(
       output$excluded_dataset <- shiny::renderText({
         if(any(!cohort_obj()$sample_tbl$sample_name %in% unique(count_df()$sample))){
           absent_samples <- cohort_obj()$sample_tbl %>%
-            dplyr::filter(!sample_name %in% count_df()$sample) %>%
+            dplyr::mutate(flag = dplyr::if_else(
+              sample_name %in% count_df()$sample,
+              1,
+              0
+            )) %>%
             dplyr::group_by(dataset_name) %>%
-            dplyr::summarise(n_missing = dplyr::n_distinct(sample_name)) %>%
-            dplyr::mutate(text = glue::glue("<li>Dataset {dataset_displays()[dataset_name]} has {n_missing} samples not included in this module."))
+            dplyr::summarise(total_samples = dplyr::n_distinct(sample_name),
+                             n_included = sum(flag)) %>%
+            dplyr::mutate(text = glue::glue("<li>Dataset {dataset_displays()[dataset_name]} has {n_included} samples from a total of {total_samples} included in this module."))
 
           paste(
             "<ul><i> There are samples selected in ICI Cohort Selection that do not have neoantigen data present in this module: </i><br>",
