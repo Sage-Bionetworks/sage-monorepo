@@ -2,7 +2,8 @@ ici_neoantigen_classes_server <- function(
   id,
   cohort_obj,
   count_df,
-  dataset_displays
+  dataset_displays,
+  legend_plot
 ) {
   shiny::moduleServer(
     id,
@@ -55,6 +56,8 @@ ici_neoantigen_classes_server <- function(
 
         plotly::plotlyOutput(ns("neoantigen_classes_plot"), height = box_height)
       })
+
+      output$legend <-  DT:: renderDT(legend_plot())
 
       output$neoantigen_classes_plot <- plotly::renderPlotly({
         shiny::req(all_plots())
