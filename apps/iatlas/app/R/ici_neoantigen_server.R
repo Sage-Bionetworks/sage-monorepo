@@ -35,11 +35,38 @@ ici_neoantigen_server <- function(
         }
       })
 
+      plot_legend <- shiny::reactive({
+        tbl <- dplyr::distinct(
+          data.frame(
+            b = cohort_obj()$plot_colors,
+            a = names(cohort_obj()$plot_colors)
+          ))
+
+        DT::datatable(
+          tbl,
+          rownames = FALSE,
+          class = "",
+          callback = DT::JS("$('table.dataTable.no-footer').css('border-bottom', 'none');"),
+          options = list(
+            dom = 't',
+            lengthChange = FALSE,
+            headerCallback = DT::JS(
+              "function(thead, data, start, end, display){",
+              "  $(thead).remove();",
+              "}")
+          )
+        ) %>%
+          DT::formatStyle('b', backgroundColor = DT::styleEqual(tbl$b, tbl$b)) %>%
+          DT::formatStyle('b', color = DT::styleEqual(tbl$b, tbl$b))
+
+      })
+
       ici_neoantigen_classes_server(
         "ici_neoantigen_classes",
         cohort_obj,
         count_df(),
-        shiny::reactive(dataset_displays())
+        shiny::reactive(dataset_displays()),
+        shiny::reactive(plot_legend())
       )
       ici_neoantigen_correlations_server(
         "ici_neoantigen_correlations",
@@ -51,7 +78,8 @@ ici_neoantigen_server <- function(
         "ici_neoantigen_frequency",
         cohort_obj,
         top_mhc_df(),
-        shiny::reactive(dataset_displays())
+        shiny::reactive(dataset_displays()),
+        shiny::reactive(plot_legend())
       )
 
       observeEvent(input$method_link,{

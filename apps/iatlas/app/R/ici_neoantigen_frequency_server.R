@@ -2,7 +2,8 @@ ici_neoantigen_frequency_server <- function(
   id,
   cohort_obj,
   top_mhc_df,
-  dataset_displays
+  dataset_displays,
+  legend_plot
 ) {
   shiny::moduleServer(
     id,
@@ -82,28 +83,7 @@ ici_neoantigen_frequency_server <- function(
         plotly::subplot(all_plots(), nrows = (length(all_plots())), margin = 0.08, shareX = FALSE, shareY = FALSE, titleX = TRUE, titleY = TRUE)
       })
 
-      output$legend <-  DT:: renderDT({
-        tbl <- dplyr::distinct(
-          data.frame(
-            b = cohort_obj()$plot_colors,
-            a = names(cohort_obj()$plot_colors)
-          ))
-
-        DT::datatable(
-          tbl,
-          rownames = FALSE,
-          options = list(
-            dom = 't',
-            headerCallback = DT::JS(
-              "function(thead, data, start, end, display){",
-              "  $(thead).remove();",
-              "}")
-          )
-        ) %>%
-          DT::formatStyle('b', backgroundColor = DT::styleEqual(tbl$b, tbl$b)) %>%
-          DT::formatStyle('b', color = DT::styleEqual(tbl$b, tbl$b))
-      })
-
+      output$legend <-  DT:: renderDT(legend_plot())
 
       #adding interactivity to select a point from the plot and render table with data for all groups
       observe({
