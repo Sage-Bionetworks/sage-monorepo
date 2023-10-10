@@ -1,4 +1,4 @@
-FROM docker.elastic.co/kibana/kibana:7.17.8
+FROM docker.elastic.co/kibana/kibana:8.10.2
 
 COPY docker-healthcheck /usr/local/bin/
 

@@ -12,6 +12,7 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+      - xpack.security.enabled=false
     networks:
       - openchallenges
     ports:
@@ -41,6 +42,7 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+      - xpack.security.enabled=false
     networks:
       - openchallenges
     ulimits:
@@ -63,6 +65,7 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+      - xpack.security.enabled=false
     networks:
       - openchallenges
     ulimits:

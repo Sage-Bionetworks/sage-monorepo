@@ -1,4 +1,4 @@
-FROM docker.elastic.co/elasticsearch/elasticsearch:7.17.8
+FROM docker.elastic.co/elasticsearch/elasticsearch:8.10.2
 
 COPY docker-healthcheck /usr/local/bin/
 
