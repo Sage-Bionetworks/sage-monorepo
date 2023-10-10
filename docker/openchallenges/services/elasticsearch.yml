@@ -1,6 +1,25 @@
 version: '3.8'
 
 services:
+  openchallenges-elasticsearch-setup:
+    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-elasticsearch-setup
+    working_dir: /usr/share/elasticsearch
+    command: >
+      bash -c '
+        if [[ ! -f /certs/bundle.zip ]]; then
+          bin/elasticsearch-certutil cert --silent --pem --in config/certificates/instances.yml -out /certs/bundle.zip;
+          unzip /certs/bundle.zip -d /certs; 
+        fi;
+        # chown -R 1000:0 /certs
+        chown -R root:root /certs;
+        find . -type d -exec chmod 750 \{\} \;;
+        find . -type f -exec chmod 640 \{\} \;;
+      '
+    volumes:
+      - ../../../apps/openchallenges/elasticsearch/config/certificates:/usr/share/elasticsearch/config/certificates
+      - openchallenges-elasticsearch-certs:/certs
+
   openchallenges-elasticsearch:
     image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-elasticsearch
@@ -12,12 +31,26 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch/openchallenges-elasticsearch.key
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch/openchallenges-elasticsearch.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch/openchallenges-elasticsearch.crt
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch/openchallenges-elasticsearch.key
+      - xpack.security.audit.enabled=true
+      - ELASTIC_PASSWORD=changeme
     networks:
       - openchallenges
     ports:
       - '9200:9200'
+    volumes:
+      - openchallenges-elasticsearch-certs:/usr/share/elasticsearch/config/certs
     ulimits:
+      # Disable swapping
       memlock:
         soft: -1
         hard: -1
@@ -27,9 +60,9 @@ services:
           memory: 2G
     depends_on:
       openchallenges-elasticsearch-node-2:
-        condition: service_healthy
+        condition: service_started
       openchallenges-elasticsearch-node-3:
-        condition: service_healthy
+        condition: service_started
 
   openchallenges-elasticsearch-node-2:
     image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
@@ -42,10 +75,23 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.key
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.crt
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.key
+      - xpack.security.audit.enabled=true
     networks:
       - openchallenges
+    volumes:
+      - openchallenges-elasticsearch-certs:/usr/share/elasticsearch/config/certs
     ulimits:
+      # Disable swapping
       memlock:
         soft: -1
         hard: -1
@@ -65,10 +111,23 @@ services:
       - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
-      - xpack.security.enabled=false
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.key
+      - xpack.security.http.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.http.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=/usr/share/elasticsearch/config/certs/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.crt
+      - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.key
+      - xpack.security.audit.enabled=true
     networks:
       - openchallenges
+    volumes:
+      - openchallenges-elasticsearch-certs:/usr/share/elasticsearch/config/certs
     ulimits:
+      # Disable swapping
       memlock:
         soft: -1
         hard: -1

@@ -1,0 +1,21 @@
+instances:
+  - name: openchallenges-elasticsearch
+    dns:
+      - openchallenges-elasticsearch
+      - localhost
+    ip:
+      - 127.0.0.1
+
+  - name: openchallenges-elasticsearch-node-2
+    dns:
+      - openchallenges-elasticsearch-node-2
+      - localhost
+    ip:
+      - 127.0.0.1
+
+  - name: openchallenges-elasticsearch-node-3
+    dns:
+      - openchallenges-elasticsearch-node-3
+      - localhost
+    ip:
+      - 127.0.0.1

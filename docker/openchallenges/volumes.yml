@@ -1,14 +1,17 @@
 version: '3.8'
 
 volumes:
-  openchallenges-prometheus-data:
-    name: openchallenges-prometheus-data
+  openchallenges-elasticsearch-certs:
+    name: openchallenges-elasticsearch-certs
 
   openchallenges-grafana-data:
     name: openchallenges-grafana-data
 
   openchallenges-kibana-data:
     name: openchallenges-kibana-data
+
+  openchallenges-prometheus-data:
+    name: openchallenges-prometheus-data
 
   openchallenges-thumbor-data:
     name: openchallenges-thumbor-data
