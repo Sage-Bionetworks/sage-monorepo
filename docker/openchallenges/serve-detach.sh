@@ -12,6 +12,7 @@ args=(
   --file docker/openchallenges/services/grafana.yml
   --file docker/openchallenges/services/image-service.yml
   --file docker/openchallenges/services/kafka.yml
+  --file docker/openchallenges/services/kibana.yml
   --file docker/openchallenges/services/mariadb.yml
   --file docker/openchallenges/services/mysqld-exporter.yml
   --file docker/openchallenges/services/organization-service.yml
