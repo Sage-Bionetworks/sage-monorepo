@@ -74,7 +74,6 @@
     5017,
     5200,
     5432,
-    5601,
     7010,
     7080,
     7200,
@@ -93,6 +92,7 @@
     8091,
     8092,
     8200,
+    8601,
     8787,
     8888,
     8889,
@@ -130,10 +130,6 @@
     },
     "5200": {
       "label": "agora-web-app",
-      "onAutoForward": "silent"
-    },
-    "5601": {
-      "label": "openchallenges-opensearch-dashboards",
       "onAutoForward": "silent"
     },
     "6787": {
@@ -210,6 +206,10 @@
     },
     "8200": {
       "label": "openchallenges-vault",
+      "onAutoForward": "silent"
+    },
+    "8601": {
+      "label": "openchallenges-kibana",
       "onAutoForward": "silent"
     },
     "8787": {
