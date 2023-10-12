@@ -27,13 +27,12 @@
     padding: 26px 40px !important;
   }
 }
-@media screen and (max-width: constants.$sm-breakpoint) {
+@media screen and (max-width: constants.$lg-breakpoint) {
   .side-img {
-    width: 50px;
+    width: 240px;
   }
-}
-@media screen and (max-width: constants.$md-breakpoint) {
-  .side-img {
-    width: 400px;
+  #organizer-cta .btn-block {
+    padding: 36px 40px !important;
+    text-align: center;
   }
 }

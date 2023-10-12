@@ -60,7 +60,8 @@ a:active {
   padding: 28px 0;
 
   img {
-    padding-right: 21px ;
+    margin: 0 auto;
+    padding: 21px 0 4px;
   }
 }
 .clickable {
@@ -74,6 +75,15 @@ a:active {
     }
     img {
       display: none;
+    }
+  }
+  #metrics {
+    .mat-body-strong {
+      font-size: 16px;
+      line-height: 20px;
+    }
+    h2 {
+      font-size: 34px;
     }
   }
   #search-oc {
