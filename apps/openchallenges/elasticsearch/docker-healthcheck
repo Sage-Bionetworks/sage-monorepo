@@ -2,9 +2,17 @@
 # See https://github.com/docker-library/healthcheck/blob/master/elasticsearch/docker-healthcheck
 set -eo pipefail
 
-host="$(hostname --ip-address || echo '127.0.0.1')"
+host="127.0.0.1"
+port=9200
 
-if health="$(curl --cacert /usr/share/elasticsearch/config/certs/ca/ca.crt -fsSL "http://$host:9200/_cat/health?h=status")"; then
+# Authentication
+username="elastic"
+password=$ELASTIC_PASSWORD
+token=$(echo -n "$username:$password" | openssl base64)
+
+if health="$(curl -H "Authorization: Basic $token" \
+		--cacert /usr/share/elasticsearch/config/certs/ca/ca.crt \
+		-fsSL "https://$host:$port/_cat/health?h=status")"; then
 	health="$(echo "$health" | sed -r 's/^[[:space:]]+|[[:space:]]+$//g')" # trim whitespace (otherwise we'll have "green")
 	if [ "$health" = 'green' ] || [ "$health" = 'yellow' ]; then
 		exit 0

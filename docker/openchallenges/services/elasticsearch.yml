@@ -80,6 +80,8 @@ services:
         limits:
           memory: 2G
     depends_on:
+      openchallenges-elasticsearch-setup:
+        condition: service_started
       openchallenges-elasticsearch-node-2:
         condition: service_started
       openchallenges-elasticsearch-node-3:
@@ -107,6 +109,7 @@ services:
       - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.crt
       - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-2/openchallenges-elasticsearch-node-2.key
       - xpack.security.audit.enabled=true
+      - ELASTIC_PASSWORD=changeme
     networks:
       - openchallenges
     volumes:
@@ -120,6 +123,9 @@ services:
       resources:
         limits:
           memory: 2G
+    depends_on:
+      openchallenges-elasticsearch-setup:
+        condition: service_started
 
   openchallenges-elasticsearch-node-3:
     image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
@@ -143,6 +149,7 @@ services:
       - xpack.security.transport.ssl.certificate=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.crt
       - xpack.security.transport.ssl.key=/usr/share/elasticsearch/config/certs/openchallenges-elasticsearch-node-3/openchallenges-elasticsearch-node-3.key
       - xpack.security.audit.enabled=true
+      - ELASTIC_PASSWORD=changeme
     networks:
       - openchallenges
     volumes:
@@ -156,3 +163,6 @@ services:
       resources:
         limits:
           memory: 2G
+    depends_on:
+      openchallenges-elasticsearch-setup:
+        condition: service_started
