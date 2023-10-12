@@ -18,7 +18,7 @@ export class OrgProfileOverviewComponent {
   @Input({ required: true }) organization!: Organization;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 
-  use_default(str: string | undefined) {
-    return str === '' ? 'Not available' : str;
+  useNaIfEmpty(str: string | undefined) {
+    return str || 'Not available';
   }
 }
