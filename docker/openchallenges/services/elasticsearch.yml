@@ -4,41 +4,16 @@ services:
   openchallenges-elasticsearch-setup:
     image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
     container_name: openchallenges-elasticsearch-setup
+    environment:
+      - ELASTIC_PASSWORD=changeme
+      - KIBANA_PASSWORD=changeme
     user: root
-    command: >
-      bash -c '
-        if [ ! -f /certs/ca.zip ]; then
-          echo "Creating CA";
-          bin/elasticsearch-certutil ca --silent --pem -out /certs/ca.zip;
-          unzip /certs/ca.zip -d /certs;
-        fi;
-        if [ ! -f /certs/certs.zip ]; then
-          echo "Creating certs";
-          bin/elasticsearch-certutil cert --silent --pem -out /certs/certs.zip --in config/certs/instances.yml --ca-cert /certs/ca/ca.crt --ca-key /certs/ca/ca.key;
-          unzip /certs/certs.zip -d /certs;
-        fi;
-        echo "Setting file permissions"
-        chown -R root:root /certs;
-        find /certs -type d -exec chmod 750 \{\} \;;
-        find /certs -type f -exec chmod 640 \{\} \;;
-        #echo "Waiting for Elasticsearch availability";
-        #until curl -s --cacert config/certs/ca/ca.crt https://esnode1:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
-        #echo "Setting kibana_system password";
-        #until curl -s -X POST --cacert config/certs/ca/ca.crt -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" https://esnode1:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
-        #echo "Good to go!";
-      '
+    command: bash setup/setup.sh
+    networks:
+      - openchallenges
     volumes:
       - ../../../apps/openchallenges/elasticsearch/config/certs:/usr/share/elasticsearch/config/certs
-      - openchallenges-elasticsearch-certs:/certs
-
-  openchallenges-es-test:
-    image: ubuntu:latest
-    container_name: openchallenges-es-test
-    command: tail -F anything
-    depends_on:
-      openchallenges-elasticsearch-setup:
-        condition: service_started
-    volumes:
+      - ../../../apps/openchallenges/elasticsearch/setup:/usr/share/elasticsearch/setup
       - openchallenges-elasticsearch-certs:/certs
 
   openchallenges-elasticsearch:
