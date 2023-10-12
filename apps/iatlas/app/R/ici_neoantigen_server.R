@@ -87,7 +87,7 @@ ici_neoantigen_server <- function(
         shiny::reactive(plot_legend())
       )
 
-      observeEvent(input$method_link,{
+      shiny::observeEvent(input$method_link,{
         shiny::showModal(modalDialog(
           title = "Method",
           includeMarkdown("inst/markdown/methods/neoantigen-prediction.markdown"),

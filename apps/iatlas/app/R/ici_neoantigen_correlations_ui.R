@@ -29,8 +29,12 @@ ici_neoantigen_correlations_ui <- function(
     ),
     iatlas.modules::plotBox(
       width = 24,
-      plotly::plotlyOutput(ns("plot"), width = "100%", height = "600") %>%
+      plotly::plotlyOutput(ns("cor_plot"), width = "100%", height = "600") %>%
         shinycssloaders::withSpinner(.)
+    ),
+    iatlas.modules::plotBox(
+      width = 24,
+      plotly::plotlyOutput(ns("scatter_plot"), width = "100%", height = "300")
     )
   )
 }

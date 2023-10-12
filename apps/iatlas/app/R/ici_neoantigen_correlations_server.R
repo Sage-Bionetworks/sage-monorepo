@@ -33,7 +33,8 @@ ici_neoantigen_correlations_server <- function(
         shiny::selectInput(
           inputId  = ns("neoantigen_feature_choice"),
           label    = "Select or Search for Antigen Class",
-          choices  = unique(count_df$feature_name)
+          choices  = unique(count_df$feature_name),
+          selected = "Self-Antigen"
         )
       })
 
@@ -60,7 +61,14 @@ ici_neoantigen_correlations_server <- function(
           dplyr::select(-c(dataset_name, dataset_display)) %>%
           dplyr::distinct() %>%
           dplyr::inner_join(cohort_obj()$sample_tbl, by = "sample_name") %>%
-          dplyr::mutate(x_axis = paste(group_name, unname(dataset_displays()[dataset_name]), sep = "\n")) %>%
+          dplyr::mutate(x_axis = paste(group_name, unname(dataset_displays()[dataset_name]), sep = " - "))
+      })
+
+      correlation_data <- shiny::reactive({
+        shiny::req(feature_data())
+        shiny::validate(shiny::need(nrow(feature_data()) != 0, "There is no neoantigen in the selected class."))
+
+        feature_data() %>%
           dplyr::group_by(x_axis, feature_display) %>%
           dplyr::summarise(COR = stats::cor(
             feature_value,
@@ -74,14 +82,53 @@ ici_neoantigen_correlations_server <- function(
 
       })
 
-      output$plot <- plotly::renderPlotly({
-        shiny::req(feature_data())
-        create_heatmap(as.matrix(feature_data()), "heatmap") %>%
+      output$cor_plot <- plotly::renderPlotly({
+        shiny::req(correlation_data())
+
+        create_heatmap(as.matrix(correlation_data()), "heatmap") %>%
           plotly::layout(margin = list(
                            t = 30,
                            b = 10,
                            pad = 1
                          ))
+      })
+
+      values <- shiny::reactiveValues(selected_group = NULL)
+
+      shiny::observeEvent(plotly::event_data(event = "plotly_click",
+                                             source = "heatmap"), {
+
+        clicked <- plotly::event_data(event = "plotly_click",
+                              source = "heatmap")
+
+        if (!is.null(clicked)) {
+          values$selected_group <- clicked$x
+          values$selected_feature <- clicked$y
+        }
+
+      })
+
+      output$scatter_plot <- plotly::renderPlotly({
+        shiny::req(feature_data())
+        shiny::validate(shiny::need(values$selected_group, message = "Click on heatmap for scatterplot"))
+
+        x <- feature_data() %>%
+          dplyr::filter(feature_display == values$selected_feature) %>%
+          dplyr::filter(x_axis == values$selected_group) %>%
+          dplyr::mutate(text = paste("Count", input$neoantigen_feature_choice, ": ", antigen_count, "\n",
+                                     values$selected_feature, ": ", feature_value))
+
+          create_scatterplot(
+            x,
+            x_col = "feature_value",
+            y_col = "antigen_count",
+            xlab = values$selected_feature,
+            ylab = paste("Count", input$neoantigen_feature_choice),
+            title = paste(input$neoantigen_feature_choice, "x", values$selected_feature, "\n for", values$selected_group),
+            color_col = "group_color",
+            label_col = "text",
+            show_legend = FALSE
+          )
       })
 
       observeEvent(input$method_link,{

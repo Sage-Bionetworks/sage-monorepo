@@ -8,7 +8,8 @@ ici_neoantigen_ui <- function(id){
     ),
     iatlas.modules::textBox(
       width = 12,
-      p("Explore the prevalence, variety and distribution of predicted neoantigens in iAtlas datasets."),
+      p("Explore the prevalence, variety and distribution of predicted neoantigens in iAtlas datasets. Neoantigen prediction was performed using the Landscape of Effective Neoantigens Software (LENS) workflow",
+      a(href="https://academic.oup.com/bioinformatics/article/39/6/btad322/7162685", "(Vensko 2023).")),
       p("Check out our ",
         a(href="https://docs.google.com/presentation/d/1yQ1_twHL33bMEDRlsxf-Thz589uafOvrB8alMfOgzdE/edit?usp=sharing", "tutorial"),
         "and", a(href="https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/ici_neoantigen.ipynb", "Jupyter notebook"),
@@ -20,13 +21,13 @@ ici_neoantigen_ui <- function(id){
       shiny::htmlOutput(ns("excluded_dataset"))
     ),
     iatlas.modules::sectionBox(
-      title = "Correlations",
-      ici_neoantigen_correlations_ui(ns("ici_neoantigen_correlations")),
-      ici_neoantigen_classes_ui(ns("ici_neoantigen_classes"))
+      title = "Classes of Neoantigens",
+      ici_neoantigen_classes_ui(ns("ici_neoantigen_classes")),
     ),
-    # iatlas.modules::sectionBox(
-    #   title = "Classes of Neoantigens",
-    # ),
+    iatlas.modules::sectionBox(
+      title = "Correlations",
+      ici_neoantigen_correlations_ui(ns("ici_neoantigen_correlations"))
+    ),
     iatlas.modules::sectionBox(
       title = "Frequency of peptides",
       ici_neoantigen_frequency_ui(ns("ici_neoantigen_frequency"))
