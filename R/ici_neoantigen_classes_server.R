@@ -63,6 +63,15 @@ ici_neoantigen_classes_server <- function(
         shiny::req(all_plots())
         plotly::subplot(all_plots(), nrows = (length(all_plots())+2)%/%3, margin = c(0.02, 0.02, 0.1, 0.1))
       })
+
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/neoantigen-classes.markdown"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
     }
   )
 }

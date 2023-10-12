@@ -7,7 +7,8 @@ ici_neoantigen_classes_ui <- function(
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      p("The bar plots below summarize the frequency of classes of neoantigen for each dataset and group.")
+      shiny::p("The bar plots below summarize the frequency of classes of neoantigen for each dataset and group."),
+      shiny::actionLink(ns("method_link"), "Click to view the description about classes of neoantigens.")
     ),
   iatlas.modules::plotBox(
     width = 12,
