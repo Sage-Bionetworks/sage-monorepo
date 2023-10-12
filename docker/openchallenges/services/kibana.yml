@@ -12,7 +12,8 @@ services:
     ports:
       - '8601:5601'
     volumes:
-      - ../../../apps/openchallenges/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      # - ../../../apps/openchallenges/kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
+      - openchallenges-elasticsearch-certs:/usr/share/kibana/config/certs
       - openchallenges-kibana-data:/usr/share/kibana/data
     deploy:
       resources:
