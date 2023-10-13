@@ -19,7 +19,7 @@ export class ChallengeOverviewComponent {
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
 
-  useNaIfEmpty(str: string | null | undefined) {
+  useNaIfFalsey(str: string | null | undefined) {
     return str || 'Not available';
   }
 
