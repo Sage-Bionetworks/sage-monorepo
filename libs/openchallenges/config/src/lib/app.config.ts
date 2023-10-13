@@ -19,6 +19,7 @@ export interface AppConfig {
   privacyPolicyUrl: string;
   ssrApiUrl: string;
   termsOfUseUrl: string;
+  apiDocsUrl: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
