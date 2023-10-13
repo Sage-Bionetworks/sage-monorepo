@@ -20,7 +20,7 @@ export class ChallengeOverviewComponent {
   // mockTopics = ['breast', 'cancer'];
 
   useNaIfEmpty(str: string | null | undefined) {
-    return str ?? 'Not available';
+    return str || 'Not available';
   }
 
   prettify(camel: string | undefined) {
