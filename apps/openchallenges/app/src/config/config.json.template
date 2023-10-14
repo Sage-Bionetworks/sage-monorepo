@@ -5,4 +5,5 @@
   "environment": "${ENVIRONMENT}",
   "googleTagManagerId": "${GOOGLE_TAG_MANAGER_ID}",
   "ssrApiUrl": "${SSR_API_URL}"
+  "apiDocsUrl": "${API_DOCS_URL}"
 }

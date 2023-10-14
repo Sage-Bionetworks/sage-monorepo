@@ -23,6 +23,7 @@ export class TeamComponent implements OnInit {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
   public logo$: Observable<Image> | undefined;
   public thomas$: Observable<Image> | undefined;
   public rong$: Observable<Image> | undefined;
@@ -40,6 +41,7 @@ export class TeamComponent implements OnInit {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
