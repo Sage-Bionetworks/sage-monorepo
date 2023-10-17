@@ -7,7 +7,7 @@ readme = "README.md"
 packages = []
 
 [tool.poetry.dependencies]
-python = "3.9.2"
+python = "3.10.12"
 kaggle = "1.5.12"
 
 [tool.poetry.group.dev.dependencies]
