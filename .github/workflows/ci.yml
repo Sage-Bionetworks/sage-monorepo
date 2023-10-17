@@ -23,6 +23,9 @@ jobs:
     # env:
     #   NX_BRANCH: main
     steps:
+      - name: Show storage space
+        run: df -h
+
       - uses: actions/checkout@v3
         name: Checkout [${{ github.ref_name }}]
         with:
@@ -129,6 +132,9 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=sonar"
 
+      - name: Show storage space
+        run: df -h
+
       # - name: Publish the images of the affected projects
       #   run: |
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
@@ -159,6 +165,9 @@ jobs:
           || !startsWith(github.head_ref, 'renovate/')
         )
     steps:
+      - name: Show storage space
+        run: df -h
+
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -266,7 +275,7 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=build-and-remove-image --parallel=1"
 
-      - name: Check storage space
+      - name: Show storage space
         run: df -h
 
       - name: Building the images of the SELECTED projects
