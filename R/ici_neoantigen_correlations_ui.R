@@ -9,7 +9,7 @@ ici_neoantigen_correlations_ui <- function(
       width = 24,
       p("Select a class of immune features and a type of neoantigen.
       The selection will generate a heatmap summarizing the correlation between the frequency of neoantigens and immune features values, for each dataset and groups selected in ICI Cohort Selection.
-      Below the heatmap, we provide a summary of distribution of classes of neoantigens for each dataset and groups. For information about distributions of immune features, refer to the Immune Features module."),
+       Click on the heatmap for a scatter plot with the immune features values and the frequency of neoantigen origin for the selected dataset and group. For information about distributions of immune features, refer to the Immune Features module."),
       shiny::actionLink(ns("method_link"), "Click to view the description of the method for computing the correlation.")
     ),
     iatlas.modules::optionsBox(
