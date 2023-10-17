@@ -474,6 +474,45 @@ paths:
                 $ref: '#/components/schemas/ManifestId'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /tangledTreeLayers:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree node layers to display for a given data model and figure type
+      description: Get tangled tree node layers to display for a given data model and figure type
+      operationId: getTangledTreeLayers
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeLayers'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /tangledTreeText:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      operationId: getTangledTreeText
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+        - $ref: '#/components/parameters/textFormat'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeText'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -889,6 +928,12 @@ components:
           type: array
           items:
             type: string
+    TangledTreeLayers:
+      description: Tangled tree node layers to display for a given data model
+      type: object
+    TangledTreeText:
+      description: Tangled tree plain or higlighted text to display for a given data model
+      type: object
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1087,3 +1132,25 @@ components:
       schema:
         type: boolean
         default: true
+    figureType:
+      name: figureType
+      in: query
+      description: Figure type to generate.
+      required: false
+      schema:
+        type: string
+        enum:
+          - component
+          - dependency
+        default: component
+    textFormat:
+      name: textFormat
+      in: query
+      description: Text formatting type.
+      required: false
+      schema:
+        type: string
+        enum:
+          - plain
+          - highlighted
+        default: plain

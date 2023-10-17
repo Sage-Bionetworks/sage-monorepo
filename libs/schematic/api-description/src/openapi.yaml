@@ -78,3 +78,9 @@ paths:
 
   /submitManifestCsv:
     $ref: paths/submitManifestCsv.yaml
+
+  /tangledTreeLayers:
+    $ref: paths/tangledTreeLayers.yaml
+
+  /tangledTreeText:
+    $ref: paths/tangledTreeText.yaml
