@@ -18,7 +18,7 @@ env:
 
 jobs:
   push:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     if: ${{ github.event_name != 'pull_request' }}
     # env:
     #   NX_BRANCH: main
