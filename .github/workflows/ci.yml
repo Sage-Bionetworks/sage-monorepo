@@ -239,27 +239,27 @@ jobs:
               /home/vscode/.local \
               /home/vscode/.gradle \
             && . ./dev-env.sh \
-            && workspace-install-affected"
+            && workspace-install"
 
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=lint"
+            && nx run-many --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=build,server"
+            && nx run-many --target=build,server"
 
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test"
+            && nx run-many --target=test"
 
       - name: Test the affected projects (integration)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=integration-test"
+            && nx run-many --target=integration-test"
 
       # - name: Build the images of the affected projects
       #   run: |
