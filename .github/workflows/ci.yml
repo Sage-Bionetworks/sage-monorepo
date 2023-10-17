@@ -266,6 +266,9 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=build-and-remove-image --parallel=1"
 
+      - name: Check storage space
+        run: df -h
+
       - name: Building the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
