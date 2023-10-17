@@ -1,20 +1,30 @@
 [tool.poetry]
-name = "schematic-client"
-version = "0.1.0"
-description = "Schematic REST API client"
-authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
+name = "openchallenges_client"
+version = "1.0.0"
+description = "OpenChallenges REST API"
+authors = ["Support <team@openapitools.org>"]
+license = "Apache 2.0"
 readme = "README.md"
-packages = [{include = "schematic_client"}]
+repository = "https://github.com/GIT_USER_ID/GIT_REPO_ID"
+keywords = ["OpenAPI", "OpenAPI-Generator", "OpenChallenges REST API"]
+include = ["openchallenges_client/py.typed"]
 
 [tool.poetry.dependencies]
-python = "3.9.2"
-python-dateutil = "2.8.2"
-urllib3 = "1.26.13"
+python = "^3.7"
 
+urllib3 = ">= 1.25.3"
+python-dateutil = ">=2.8.2"
+pydantic = "^1.10.5, <2"
+aenum = ">=3.1.11"
 
-[tool.poetry.group.test.dependencies]
-pytest-cov = "4.0.0"
+[tool.poetry.dev-dependencies]
+pytest = ">=7.2.1"
+tox = ">=3.9.0"
+flake8 = ">=4.0.0"
 
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.pylint.'MESSAGES CONTROL']
+extension-pkg-whitelist = "pydantic"
