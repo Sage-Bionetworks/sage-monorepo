@@ -9,6 +9,7 @@ packages = []
 [tool.poetry.dependencies]
 python = "3.10.12"
 kaggle = "1.5.12"
+openchallenges-client = {path = "../../../libs/openchallenges/api-client-python"}
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "3.5.2"
