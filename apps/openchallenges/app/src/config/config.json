@@ -4,5 +4,6 @@
   "dataUpdatedOn": "yyyy-mm-dd",
   "environment": "development",
   "googleTagManagerId": "",
-  "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1"
+  "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1",
+  "apiDocsUrl": "http://localhost:8000/api-docs"
 }

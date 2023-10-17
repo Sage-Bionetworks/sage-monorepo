@@ -120,6 +120,7 @@ export class ChallengeSearchComponent
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -205,6 +206,7 @@ export class ChallengeSearchComponent
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 

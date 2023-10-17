@@ -17,6 +17,7 @@ export class AboutComponent {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
 
   constructor(
     private readonly configService: ConfigService,
@@ -27,6 +28,7 @@ export class AboutComponent {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 }
