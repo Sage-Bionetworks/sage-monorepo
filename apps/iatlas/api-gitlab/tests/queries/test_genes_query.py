@@ -114,6 +114,7 @@ def rnaseq_query(common_query_builder):
         {
             items{
                 entrez
+                hgnc
                 samples {
                     rnaSeqExpr
                     name
@@ -532,6 +533,7 @@ def test_genes_query_with_entrez_and_minRnaSeqExpr(client, rnaseq_query, entrez_
         assert type(sample['name']) is str
         assert type(sample['rnaSeqExpr']) is float
         assert sample['rnaSeqExpr'] >= min_rna_seq_expr
+
 
 def test_genes_nanostring_query_with_gene_and_sample(client, nanostring_query, nanostring_entrez_id, nanostring_sample):
     response = client.post(

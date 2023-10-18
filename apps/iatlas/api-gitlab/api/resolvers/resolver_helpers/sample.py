@@ -47,6 +47,21 @@ def build_sample_graphql_response(prefix='sample_'):
             return(dict)
     return(f)
 
+def build_gene_expression_graphql_response(prefix='sample_'):
+
+    def f(sample):
+        if not sample:
+            return None
+        else:
+            result_dict = {
+                'id': get_value(sample, prefix + 'id'),
+                'name': get_value(sample, prefix + 'name')
+            }
+            result_dict['rnaSeqExpr'] = get_value(sample, prefix + 'gene_rna_seq_expr')
+            result_dict['nanostringExpr'] = get_value(sample, prefix + 'gene_nanostring_expr')
+            return(result_dict)
+    return(f)
+
 
 def build_sample_mutation_join_condition(sample_to_mutation_model, sample_model, mutation_status, mutation_id=None, status=None):
     join_condition = build_join_condition(sample_to_mutation_model.sample_id, sample_model.id,

@@ -18,8 +18,12 @@ def name():
 def unit():
     return 'Fraction'
 
+@pytest.fixture(scope='module')
+def method_tag():
+    return 'CIBERSORT'
 
-def test_Feature_with_relations(app, display, name, unit):
+
+def test_Feature_with_relations(app, display, name, unit, method_tag):
     relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
     query = return_feature_query(*relationships_to_join)
@@ -33,8 +37,8 @@ def test_Feature_with_relations(app, display, name, unit):
     assert result.name == name
     assert result.display == display
     assert result.unit == unit
+    assert result.method_tag == method_tag
     assert type(result.feature_class) ==  str
-    assert type(result.method_tag) ==  str
     assert type(result.germline_category) is str or NoneType
     assert type(result.germline_module) is str or NoneType
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
