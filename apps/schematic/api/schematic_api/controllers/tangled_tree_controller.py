@@ -19,7 +19,7 @@ def get_tangled_tree_layers(schema_url, figure_type=None):  # noqa: E501
     :param figure_type: Figure type to generate.
     :type figure_type: str
 
-    :rtype: Union[object, Tuple[object, int], Tuple[object, int, Dict[str, str]]
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     return tangled_tree_controller_impl.get_tangled_tree_layers(schema_url, figure_type)
 

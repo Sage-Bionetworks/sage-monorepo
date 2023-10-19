@@ -930,7 +930,7 @@ components:
             type: string
     TangledTreeLayers:
       description: Tangled tree node layers to display for a given data model
-      type: object
+      type: string
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object

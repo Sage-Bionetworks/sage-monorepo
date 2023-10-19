@@ -1,2 +1,2 @@
 description: Tangled tree node layers to display for a given data model
-type: object
+type: string
