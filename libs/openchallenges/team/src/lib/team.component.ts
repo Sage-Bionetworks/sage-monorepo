@@ -29,6 +29,7 @@ export class TeamComponent implements OnInit {
   public rong$: Observable<Image> | undefined;
   public verena$: Observable<Image> | undefined;
   public maria$: Observable<Image> | undefined;
+  public gaia$: Observable<Image> | undefined;
   public jake$: Observable<Image> | undefined;
 
   constructor(
@@ -60,6 +61,9 @@ export class TeamComponent implements OnInit {
     });
     this.maria$ = this.imageService.getImage({
       objectKey: 'team/maria.png',
+    });
+    this.gaia$ = this.imageService.getImage({
+      objectKey: 'team/gaia.jpg',
     });
     this.jake$ = this.imageService.getImage({
       objectKey: 'team/jake.png',
