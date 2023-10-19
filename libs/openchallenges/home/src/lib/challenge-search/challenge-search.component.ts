@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
 import {
+  ChallengePlatformService,
   ChallengeService,
   Image,
   ImageHeight,
@@ -36,6 +37,7 @@ export class ChallengeSearchComponent implements OnInit {
   searchTerms!: string | undefined;
   challengeCount$: Observable<number> | undefined;
   orgCount$: Observable<number> | undefined;
+  platformCount$: Observable<number> | undefined;
   reanimateOnClick = false;
   challengeImg$: Observable<Image> | undefined;
   orgImg$: Observable<Image> | undefined;
@@ -46,6 +48,7 @@ export class ChallengeSearchComponent implements OnInit {
     private router: Router,
     private imageService: ImageService,
     private challengeService: ChallengeService,
+    private challengePlatformService: ChallengePlatformService,
     private organizationService: OrganizationService,
     @Inject(PLATFORM_ID) private platformId: string
   ) {
@@ -77,6 +80,12 @@ export class ChallengeSearchComponent implements OnInit {
       .pipe(map((page) => page.totalElements));
     this.orgCount$ = this.organizationService
       .listOrganizations({
+        pageNumber: 1,
+        pageSize: 1,
+      })
+      .pipe(map((page) => page.totalElements));
+    this.platformCount$ = this.challengePlatformService
+      .listChallengePlatforms({
         pageNumber: 1,
         pageSize: 1,
       })
