@@ -32,10 +32,10 @@ class Challenge(BaseModel):
     A challenge
     """
     id: StrictInt = Field(..., description="The unique identifier of the challenge.")
-    slug: constr(strict=True, max_length=60, min_length=3) = Field(..., description="The slug of the challenge.")
-    name: constr(strict=True, max_length=60, min_length=3) = Field(..., description="The name of the challenge.")
+    slug: constr(strict=True, max_length=255, min_length=3) = Field(..., description="The slug of the challenge.")
+    name: constr(strict=True, max_length=255, min_length=3) = Field(..., description="The name of the challenge.")
     headline: Optional[constr(strict=True, max_length=80, min_length=0)] = Field(None, description="The headline of the challenge.")
-    description: constr(strict=True, max_length=280, min_length=0) = Field(..., description="The description of the challenge.")
+    description: constr(strict=True, max_length=1000, min_length=0) = Field(..., description="The description of the challenge.")
     doi: Optional[StrictStr] = None
     status: ChallengeStatus = Field(...)
     difficulty: ChallengeDifficulty = Field(...)
