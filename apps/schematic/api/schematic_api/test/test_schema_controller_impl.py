@@ -9,13 +9,35 @@ from schematic_api.models.nodes_page import NodesPage
 from schematic_api.models.connected_nodes_page import ConnectedNodesPage
 import schematic_api.controllers.schema_controller_impl
 from schematic_api.controllers.schema_controller_impl import (
+    get_component,
     get_node_is_required,
     get_property_label,
+    get_schema_attributes,
     get_node_properties,
     get_connected_nodes,
     list_node_validation_rules,
     list_node_dependencies,
 )
+
+
+class TestGetComponent:
+    """Tests get_component"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_component(
+            component_label="Patient", schema_url=test_schema_url
+        )
+        assert status == 200
+        assert isinstance(result, str)
+
+    def test_internal_error(self, test_schema_url: str) -> None:
+        """Test for 500 result"""
+        result, status = get_component(
+            component_label="not_a_component", schema_url=test_schema_url
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
 
 
 class TestGetConnectedNodes:
@@ -110,6 +132,24 @@ class TestGetPropertyLabel:
             )
             assert status == 500
             assert isinstance(result, BasicError)
+
+
+class TestGetSchemaAttributes:
+    """Tests geget_schema_attributes"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_schema_attributes(schema_url=test_schema_url)
+        assert status == 200
+        assert isinstance(result, str)
+
+    def test_internal_error(
+        self,
+    ) -> None:
+        """Test for 500 result"""
+        result, status = get_schema_attributes(schema_url="not_a_url")
+        assert status == 500
+        assert isinstance(result, BasicError)
 
 
 class TestGetNodeProperties:

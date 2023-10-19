@@ -335,6 +335,47 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      operationId: getComponent
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/includeIndex'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The component as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /schemaAttributes:
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      operationId: getSchemaAttributes
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The schema as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /connectedNodes:
     get:
       tags:
@@ -369,7 +410,7 @@ paths:
       operationId: validateManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -397,7 +438,7 @@ paths:
       operationId: validateManifestCsv
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -869,6 +910,10 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
     RelationshipType:
       description: A type of schema relationship
       type: string
@@ -906,10 +951,6 @@ components:
             - connected_nodes
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
-      type: string
-      example: MolecularEntity
     RestrictRules:
       description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
       type: boolean
@@ -1050,6 +1091,21 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       schema:
         $ref: '#/components/schemas/UseStrictCamelCase'
+    componentLabel:
+      name: componentLabel
+      in: path
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+    includeIndex:
+      name: includeIndex
+      in: query
+      description: Whether to include the indexes of the dataframe in the returned JSON string.
+      required: false
+      schema:
+        type: boolean
+        default: false
     relationshipType:
       name: relationshipType
       in: query
@@ -1057,7 +1113,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
-    componentLabel:
+    componentLabelQuery:
       name: componentLabel
       in: query
       description: The label of a component in a schema

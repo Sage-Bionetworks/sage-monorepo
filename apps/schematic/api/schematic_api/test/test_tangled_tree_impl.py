@@ -33,16 +33,18 @@ class TestGetTangledTreeText:
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = get_tangled_tree_text(
+        res = get_tangled_tree_text(
             schema_url=test_schema_url, figure_type="component", text_format="plain"
         )
+        (result, status) = res  # pylint: disable=unpacking-non-sequence
         assert status == 200
         assert isinstance(result, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = get_tangled_tree_text(
+        res = get_tangled_tree_text(
             schema_url="not_a_url", figure_type="component", text_format="plain"
         )
+        (result, status) = res  # pylint: disable=unpacking-non-sequence
         assert status == 500
         assert isinstance(result, BasicError)

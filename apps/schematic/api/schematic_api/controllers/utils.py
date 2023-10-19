@@ -66,6 +66,48 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
     return func
 
 
+def handle_endpoint_status(endpoint_function: Callable) -> Callable:
+    """
+    This is designed to be used as a decorator for endpoint functions.
+    The endpoint function is called in a try block, and then various
+      Synapse and Schematic exceptions are handled and returned as the
+      BasicError object.
+
+    Args:
+        f (Callable): A function that calls the input function
+    """
+
+    def func(*args: Any, **kwargs: Any) -> tuple[Union[Any, BasicError], int]:
+        try:
+            result: Union[Any, BasicError] = endpoint_function(*args, **kwargs)
+            status = 200
+            return result, status
+
+        except SynapseNoCredentialsError as error:
+            status = 401
+            result = BasicError(
+                "Missing or invalid Synapse credentials error", status, str(error)
+            )
+            return result, status
+
+        except SynapseAuthenticationError as error:
+            status = 401
+            result = BasicError("Forbidden Synapse access error", status, str(error))
+            return result, status
+
+        except AccessCredentialsError as error:
+            status = 403
+            result = BasicError("Synapse entity access error", status, str(error))
+            return result, status
+
+        except Exception as error:  # pylint: disable=broad-exception-caught
+            status = 500
+            result = BasicError("Internal error", status, str(error))
+            return result, status
+
+    return func
+
+
 def download_schema_file_as_jsonld(schema_url: str) -> str:
     """Downloads a schema and saves it as temp file
 
