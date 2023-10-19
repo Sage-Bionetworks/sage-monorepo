@@ -1,11 +1,2 @@
 openchallenges-challenge-service:
   welcome-message: 'Welcome to the challenge service (local config).'
-
-spring:
-  flyway:
-    placeholders:
-      db_platforms_csv_path: 'src/main/resources/db/platforms.csv'
-      db_challenges_csv_path: 'src/main/resources/db/challenges.csv'
-      db_contribution_roles_csv_path: 'src/main/resources/db/contribution_roles.csv'
-      db_incentives_csv_path: 'src/main/resources/db/incentives.csv'
-      db_submission_types_csv_path: 'src/main/resources/db/submission_types.csv'
