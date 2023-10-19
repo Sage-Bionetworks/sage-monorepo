@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,6 @@ public class ChallengeIncentiveEntity {
 
   @Column(nullable = false)
   @GenericField()
-  @Pattern(regexp = "monetary|publication|speaking_engagement|other")
   private String name;
 
   @ManyToOne(fetch = FetchType.LAZY)

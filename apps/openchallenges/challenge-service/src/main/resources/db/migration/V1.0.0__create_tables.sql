@@ -75,7 +75,8 @@ CREATE TABLE `challenge_incentive`
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
-    CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
+    CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`),
+    CONSTRAINT check_name CHECK (`name` in ('monetary', 'publication', 'speaking_engagement', 'other'))
 );
 
 -- challenge_submission_type definition
