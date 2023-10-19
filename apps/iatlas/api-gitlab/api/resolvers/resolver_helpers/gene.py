@@ -6,7 +6,7 @@ from api.db_models import Cohort, CohortToSample, CohortToGene, Gene, GeneToSamp
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries, fetch_page
-from .sample import build_sample_graphql_response
+from .sample import build_sample_graphql_response, build_gene_expression_graphql_response
 
 
 simple_gene_request_fields = {
@@ -67,9 +67,9 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
             'superCategory': get_value(gene, prefix + 'super_category'),
             'therapyType': get_value(gene, prefix + 'therapy_type'),
             'geneTypes': gene_types,
-            'publications': map(build_publication_graphql_response, publications),
-            'samples': map(build_sample_graphql_response(), samples)
+            'publications': map(build_publication_graphql_response, publications)
         }
+        result_dict['samples'] = map(build_gene_expression_graphql_response(), samples)
         return result_dict
     return f
 

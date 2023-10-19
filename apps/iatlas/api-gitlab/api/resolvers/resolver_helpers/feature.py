@@ -83,7 +83,7 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
         'id': feature_1.id.label('feature_id'),
         'class': feature_1.feature_class.label('feature_class'),
         'display': feature_1.display.label('feature_display'),
-        'methodTag': feature_1.order.label('feature_method_tag'),
+        'methodTag': feature_1.method_tag.label('feature_method_tag'),
         'name': feature_1.name.label('feature_name'),
         'order': feature_1.order.label('feature_order'),
         'germlineModule': feature_1.germline_module.label('feature_germline_module'),
