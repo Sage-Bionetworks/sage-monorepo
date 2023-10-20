@@ -410,7 +410,7 @@ def test_driverResults_query_with_passed_data_set_feature_mutation_code_entrez_a
         assert result['mutation']['gene']['entrez'] == gene_entrez
         assert result['mutation']['gene']['hgnc'] == gene_hgnc
         assert result['mutation']['mutationCode'] == mutation_code
-        assert result['mutation']['mutationType']['name'] == 'driver mutation'
+        assert result['mutation']['mutationType']['name'] == 'driver_mutation'
         assert result['mutation']['mutationType']['display'] == 'Driver Mutation'
 
 
@@ -434,7 +434,7 @@ def test_driverResults_query_with_passed_data_set_feature_tag_and_mutation(clien
         assert result['mutation']['gene']['entrez'] == gene_entrez
         assert result['mutation']['gene']['hgnc'] == gene_hgnc
         assert result['mutation']['mutationCode'] == mutation_code
-        assert result['mutation']['mutationType']['name'] == 'driver mutation'
+        assert result['mutation']['mutationType']['name'] == 'driver_mutation'
         assert result['mutation']['mutationType']['display'] == 'Driver Mutation'
 
 

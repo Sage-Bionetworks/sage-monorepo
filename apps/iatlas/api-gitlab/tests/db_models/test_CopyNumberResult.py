@@ -53,7 +53,7 @@ def test_CopyNumberResult_with_relations(app, data_set_id, entrez_id, gene_id, c
         assert result.tag.name == cnr_tag
         assert result.gene_id == gene_id
         assert result.dataset_id == data_set_id
-        assert type(result.feature_id) is int
+        assert type(result.feature_id) is str
         assert result.direction in direction_enum.enums
         assert type(result.mean_normal) is float or NoneType
         assert type(result.mean_cnv) is float or NoneType
@@ -76,10 +76,10 @@ def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, cnr_tag_id, cn
         assert type(result.feature) is NoneType
         assert type(result.gene) is NoneType
         assert type(result.tag) is NoneType
-        assert type(result.dataset_id) is int
-        assert type(result.feature_id) is int
+        assert type(result.dataset_id) is str
+        assert type(result.feature_id) is str
         assert result.gene_id == gene_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert result.direction in direction_enum.enums
         assert type(result.mean_normal) is float or NoneType
         assert type(result.mean_cnv) is float or NoneType
