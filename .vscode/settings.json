@@ -4,7 +4,6 @@
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
   "python.linting.enabled": true,
   "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true,
   "python.formatting.provider": "black",
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
