@@ -9,6 +9,7 @@
   },
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
+    "black-formatter.importStrategy": "fromEnvironment",
     "editor.formatOnSave": true,
     "editor.tabSize": 4
   },
