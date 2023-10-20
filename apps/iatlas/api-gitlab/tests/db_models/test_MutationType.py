@@ -6,7 +6,7 @@ from api.db_models import MutationType
 
 @pytest.fixture(scope='module')
 def mutation_type_name():
-    return 'driver mutation'
+    return 'driver_mutation'
 
 
 def test_MutationType_with_relations(app, mutation_type_name):

@@ -37,7 +37,7 @@ def dr_mutation():
 
 @pytest.fixture(scope='module')
 def mutation_type_name():
-    return 'driver mutation'
+    return 'driver_mutation'
 
 
 @pytest.fixture(scope='module')
