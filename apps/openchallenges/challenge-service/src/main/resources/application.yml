@@ -18,3 +18,4 @@ spring:
       db_incentives_csv_path: ${DB_INCENTIVES_CSV_PATH:src/main/resources/db/incentives.csv}
       db_submission_types_csv_path: ${DB_SUBMISSION_TYPES_CSV_PATH:src/main/resources/db/submission_types.csv}
       db_edam_annotations_csv_path: ${DB_EDAM_ANNOTATIONS_CSV_PATH:src/main/resources/db/edam_annotations.csv}
+      db_challenge_data_edam_csv_path: ${DB_CHALLENGE_DATA_EDAM_CSV_PATH:src/main/resources/db/challenge_data_edam.csv}

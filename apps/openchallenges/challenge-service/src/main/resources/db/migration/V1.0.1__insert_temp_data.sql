@@ -46,12 +46,11 @@ LOAD DATA LOCAL INFILE '${db_edam_annotations_csv_path}' INTO TABLE challenge_da
   IGNORE 1 LINES;
 
 
--- challenge_x_challenge_input_data_type definition
-INSERT INTO challenge_x_challenge_input_data_type (id, challenge_id, challenge_input_data_type_id)
-VALUES ('1', 1, 1),
-  ('2', 2, 1),
-  ('3', 1, 2),
-  ('4', 4, 4);
+-- challenge_input_data_annot
+LOAD DATA LOCAL INFILE '${db_challenge_data_edam_csv_path}' INTO TABLE challenge_input_data_annot
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
 
 
 -- challenge_category data
