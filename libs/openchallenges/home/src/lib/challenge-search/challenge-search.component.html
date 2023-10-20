@@ -31,7 +31,7 @@
   </div>
 </section>
 <section id="metrics" class="container row">
-  <div class="col-4 text-center clickable" routerLink="/challenge">
+  <div class="col text-center clickable" routerLink="/challenge">
     <img
       class="logo-icon"
       src="/openchallenges-assets/images/graphic-challenges.svg"
@@ -48,7 +48,7 @@
       <p class="mat-body-strong">annotated challenges</p>
     </div>
   </div>
-  <div class="col-4 text-center clickable" routerLink="/org">
+  <div class="col text-center clickable" routerLink="/org">
     <img
       class="logo-icon"
       src="/openchallenges-assets/images/graphic-hosts.svg"
@@ -62,10 +62,10 @@
       >
         0
       </h2>
-      <p class="mat-body-strong">organizations & hosting<br/>societies</p>
+      <p class="mat-body-strong">organizations & hosting<br />societies</p>
+    </div>
   </div>
-  </div>
-  <div class="col-4 text-center">
+  <div class="col text-center">
     <img
       class="logo-icon"
       src="/openchallenges-assets/images/graphic-platforms.svg"
@@ -73,8 +73,8 @@
     />
     <div class="metrics-text-box">
       <h2
-        *ngIf="orgCount$ | async as orgCount"
-        [countUp]="16"
+        *ngIf="platformCount$ | async as platformCount"
+        [countUp]="platformCount"
         [reanimateOnClick]="reanimateOnClick"
       >
         0

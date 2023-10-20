@@ -10,6 +10,6 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
   styleUrls: ['./button-github.component.scss'],
 })
 export class ButtonGithubComponent {
-  @Input() label = 'GitHub';
-  @Input() href = 'https://github.com';
+  @Input({ required: true }) label = 'GitHub';
+  @Input({ required: true }) href = 'https://github.com';
 }

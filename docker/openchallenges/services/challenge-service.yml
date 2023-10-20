@@ -7,6 +7,12 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/challenge-service/.env
+    environment:
+      - DB_PLATFORMS_CSV_PATH=/workspace/BOOT-INF/classes/db/platforms.csv
+      - DB_CHALLENGES_CSV_PATH=/workspace/BOOT-INF/classes/db/challenges.csv
+      - DB_CONTRIBUTION_ROLES_CSV_PATH=/workspace/BOOT-INF/classes/db/contribution_roles.csv
+      - DB_INCENTIVES_CSV_PATH=/workspace/BOOT-INF/classes/db/incentives.csv
+      - DB_SUBMISSION_TYPES_CSV_PATH=/workspace/BOOT-INF/classes/db/submission_types.csv
     networks:
       - openchallenges
     ports:

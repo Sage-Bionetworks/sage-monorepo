@@ -14,6 +14,6 @@ import {
   styleUrls: ['./org-profile-members.component.scss'],
 })
 export class OrgProfileMembersComponent {
-  @Input() organization!: Organization;
+  @Input({ required: true }) organization!: Organization;
   members = MOCK_ORG_MEMBERS;
 }

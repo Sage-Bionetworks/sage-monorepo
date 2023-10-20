@@ -15,7 +15,7 @@ import {
   styleUrls: ['./challenge-stargazers.component.scss'],
 })
 export class ChallengeStargazersComponent {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   stargazers = MOCK_PERSONS;
   organizationCard = MOCK_ORGANIZATION_CARDS[0];
 }

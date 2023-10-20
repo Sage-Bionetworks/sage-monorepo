@@ -15,10 +15,10 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./org-profile-overview.component.scss'],
 })
 export class OrgProfileOverviewComponent {
-  @Input() organization!: Organization;
+  @Input({ required: true }) organization!: Organization;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
 
-  use_default(str: string | undefined) {
-    return str === '' ? 'Not available' : str;
+  useNaIfFalsey(str: string | undefined) {
+    return str || 'Not available';
   }
 }

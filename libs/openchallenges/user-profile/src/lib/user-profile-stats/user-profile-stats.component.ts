@@ -7,5 +7,5 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./user-profile-stats.component.scss'],
 })
 export class UserProfileStatsComponent {
-  @Input() loggedIn = false;
+  @Input({ required: true }) loggedIn = false;
 }

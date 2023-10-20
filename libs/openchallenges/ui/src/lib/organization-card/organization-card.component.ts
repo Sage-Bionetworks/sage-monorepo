@@ -15,9 +15,9 @@ import { AvatarComponent } from '../avatar/avatar.component';
   styleUrls: ['./organization-card.component.scss'],
 })
 export class OrganizationCardComponent implements OnInit {
-  @Input() organizationCard!: OrganizationCard;
-  @Input() showMember = false;
-  @Input() stars = 0;
+  @Input({ required: true }) organizationCard!: OrganizationCard;
+  @Input({ required: false }) showMember = false;
+  @Input({ required: false }) stars = 0;
   organizationAvatar!: Avatar;
   organizationMembers!: OrganizationMember[];
 

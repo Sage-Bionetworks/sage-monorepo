@@ -1,32 +1,32 @@
 -- challenge_platform data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/platforms.csv' INTO TABLE challenge_platform
+LOAD DATA LOCAL INFILE '${db_platforms_csv_path}' INTO TABLE challenge_platform
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
 -- challenge data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/challenges.csv' INTO TABLE challenge
+LOAD DATA LOCAL INFILE '${db_challenges_csv_path}' INTO TABLE challenge
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
 
 -- challenge_organization_role data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/contribution_roles.csv' INTO TABLE challenge_contribution
+LOAD DATA LOCAL INFILE '${db_contribution_roles_csv_path}' INTO TABLE challenge_contribution
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
 
 -- challenge_incentive data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/incentives.csv' INTO TABLE challenge_incentive
+LOAD DATA LOCAL INFILE '${db_incentives_csv_path}' INTO TABLE challenge_incentive
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
 
 -- challenge_submission_type data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/submission_types.csv' INTO TABLE challenge_submission_type
+LOAD DATA LOCAL INFILE '${db_submission_types_csv_path}' INTO TABLE challenge_submission_type
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;

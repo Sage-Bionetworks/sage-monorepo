@@ -23,17 +23,17 @@ import { UserButtonComponent } from '../user-button/user-button.component';
   styleUrls: ['./navbar.component.scss'],
 })
 export class NavbarComponent {
-  @Input() title = 'Awesome App';
-  @Input() isLoggedIn = false;
-  @Input() userAvatar: Avatar = EMPTY_AVATAR;
-  @Input() userMenuItems: MenuItem[] = [];
+  @Input({ required: true }) title = 'Awesome App';
+  @Input({ required: true }) isLoggedIn = false;
+  @Input({ required: true }) userAvatar: Avatar = EMPTY_AVATAR;
+  @Input({ required: true }) userMenuItems: MenuItem[] = [];
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
   @Output() logInClicked = new EventEmitter<boolean>();
 
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
 
-  @Input()
+  @Input({ required: true })
   public set sections(s: { [key: string]: NavbarSection }) {
     this._sections = s;
     this.sectionsKeys = Object.keys(s);

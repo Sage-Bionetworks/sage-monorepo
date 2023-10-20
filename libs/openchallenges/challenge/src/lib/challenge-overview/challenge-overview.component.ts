@@ -15,12 +15,12 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./challenge-overview.component.scss'],
 })
 export class ChallengeOverviewComponent {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
 
-  use_default(str: string) {
-    return str === '' ? 'Not available' : str;
+  useNaIfFalsey(str: string | null | undefined) {
+    return str || 'Not available';
   }
 
   prettify(camel: string | undefined) {

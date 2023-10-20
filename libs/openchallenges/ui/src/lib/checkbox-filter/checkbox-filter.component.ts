@@ -12,9 +12,9 @@ import { CheckboxModule } from 'primeng/checkbox';
   styleUrls: ['./checkbox-filter.component.scss'],
 })
 export class CheckboxFilterComponent {
-  @Input() values!: FilterValue[];
-  @Input() selectedValues!: string[];
-  @Input() inputId!: string;
+  @Input({ required: true }) values!: FilterValue[];
+  @Input({ required: true }) selectedValues!: string[];
+  @Input({ required: true }) inputId!: string;
   @Output() selectionChange = new EventEmitter<string[]>();
 
   onChange(selected: string[]): void {

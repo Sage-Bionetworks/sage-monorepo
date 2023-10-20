@@ -97,6 +97,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
 
   private query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
@@ -147,6 +148,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 

@@ -69,6 +69,7 @@ export class ChallengeComponent implements OnInit {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
 
   challenge$!: Observable<Challenge>;
   loggedIn = false;
@@ -92,6 +93,7 @@ export class ChallengeComponent implements OnInit {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
   }
 
   ngOnInit(): void {

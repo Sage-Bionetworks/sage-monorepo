@@ -76,6 +76,7 @@ export class OrgProfileComponent implements OnInit {
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
+  public apiDocsUrl: string;
 
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
@@ -99,6 +100,7 @@ export class OrgProfileComponent implements OnInit {
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
   }
 
   ngOnInit(): void {

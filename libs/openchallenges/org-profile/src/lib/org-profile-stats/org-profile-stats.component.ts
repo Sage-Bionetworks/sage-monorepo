@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./org-profile-stats.component.scss'],
 })
 export class OrgProfileStatsComponent implements OnInit {
-  @Input() loggedIn = false;
+  @Input({ required: true }) loggedIn = false;
   organization$!: Observable<Organization>;
   mockMembers!: number;
 
