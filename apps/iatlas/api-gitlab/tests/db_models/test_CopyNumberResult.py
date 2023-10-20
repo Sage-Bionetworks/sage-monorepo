@@ -79,7 +79,7 @@ def test_CopyNumberResult_no_relations(app, data_set_id, gene_id, cnr_tag_id, cn
         assert type(result.dataset_id) is str
         assert type(result.feature_id) is str
         assert result.gene_id == gene_id
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert result.direction in direction_enum.enums
         assert type(result.mean_normal) is float or NoneType
         assert type(result.mean_cnv) is float or NoneType
