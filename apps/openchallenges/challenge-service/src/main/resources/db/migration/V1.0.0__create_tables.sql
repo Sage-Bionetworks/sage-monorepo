@@ -12,13 +12,14 @@ CREATE TABLE `challenge_platform`
     PRIMARY KEY (`id`)
 );
 
--- challenge_input_data_type definition
+-- challenge_data_edam definition
 
-CREATE TABLE `challenge_input_data_type`
+CREATE TABLE `challenge_data_edam`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `slug`                  varchar(255) NOT NULL UNIQUE,
+    `edam_id`               varchar(80) NOT NULL UNIQUE,
     `name`                  varchar(255) NOT NULL UNIQUE,
+    `subclass_of`           varchar(255),
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)

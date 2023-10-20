@@ -39,12 +39,11 @@ VALUES (1, 1, 1),
   (3, 1, 2);
 
 
--- challenge_input_data_type
-INSERT INTO challenge_input_data_type (id, slug, name)
-VALUES (1, 'genomic', 'genomic'),
-  (2, 'proteomic', 'proteomic'),
-  (3, 'gene-expression', 'gene expression'),
-  (4, 'metabolomic', 'metabolomic');
+-- challenge_data_edam
+LOAD DATA LOCAL INFILE '${db_edam_annotations_csv_path}' INTO TABLE challenge_data_edam
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
 
 
 -- challenge_x_challenge_input_data_type definition
