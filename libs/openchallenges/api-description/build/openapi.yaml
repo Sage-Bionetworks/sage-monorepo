@@ -544,6 +544,12 @@ components:
       minLength: 0
       maxLength: 280
       example: This is an example description of the challenge.
+    ChallengeOperation:
+      description: The EDAM operation class of the challenge.
+      type: string
+      maxLength: 80
+      pattern: ^$|^operation_\d+$
+      example: operation_0004
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
@@ -625,6 +631,8 @@ components:
           $ref: '#/components/schemas/ChallengeDescription'
         doi:
           type: string
+        operation:
+          $ref: '#/components/schemas/ChallengeOperation'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:

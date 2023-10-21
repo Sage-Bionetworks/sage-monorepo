@@ -13,6 +13,8 @@ properties:
     $ref: ChallengeDescription.yaml
   doi:
     type: string
+  operation:
+    $ref: ChallengeOperation.yaml
   status:
     $ref: ChallengeStatus.yaml
   difficulty:
