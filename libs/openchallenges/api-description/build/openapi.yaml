@@ -573,26 +573,51 @@ components:
       type: integer
       format: int64
       example: 1
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
+    EdamId:
+      description: >-
+        The prefix Internationalized Resource Identifier (IRI) of the EDAM
+        ontology term.
       type: string
       minLength: 3
-      maxLength: 50
-      example: gene expression
+      maxLength: 80
+      example: data_1916
+    EdamName:
+      description: The preferred name/label of the EDAM ontology term.
+      type: string
+      minLength: 3
+      maxLength: 255
+      example: Alignment
+    EdamSubclassOf:
+      description: The parent EDAM ID(s) of the EDAM ontology term.
+      type: string
+      minLength: 3
+      maxLength: 255
+      example: data_0006
     SimpleChallengeInputDataType:
       type: object
-      description: A simple challenge input data type.
+      description: A challenge EDAM annotation.
       properties:
         id:
           $ref: '#/components/schemas/ChallengeInputDataTypeId'
-        slug:
-          $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
+        edamId:
+          $ref: '#/components/schemas/EdamId'
         name:
-          $ref: '#/components/schemas/ChallengeInputDataTypeName'
+          $ref: '#/components/schemas/EdamName'
+        subclassOf:
+          $ref: '#/components/schemas/EdamSubclassOf'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-07-04T22:19:11Z'
+        updatedAt:
+          type: string
+          format: date-time
       required:
         - id
-        - slug
+        - edamId
         - name
+        - createdAt
+        - updatedAt
       x-java-class-annotations:
         - '@lombok.Builder'
         - '@lombok.NoArgsConstructor'
@@ -813,14 +838,16 @@ components:
           example: genomic
     ChallengeInputDataType:
       type: object
-      description: A challenge input data type.
+      description: A challenge EDAM annotation.
       properties:
         id:
           $ref: '#/components/schemas/ChallengeInputDataTypeId'
-        slug:
-          $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
+        edamId:
+          $ref: '#/components/schemas/EdamId'
         name:
-          $ref: '#/components/schemas/ChallengeInputDataTypeName'
+          $ref: '#/components/schemas/EdamName'
+        subclassOf:
+          $ref: '#/components/schemas/EdamSubclassOf'
         createdAt:
           type: string
           format: date-time
@@ -828,10 +855,9 @@ components:
         updatedAt:
           type: string
           format: date-time
-          example: '2022-07-04T22:19:11Z'
       required:
         - id
-        - slug
+        - edamId
         - name
         - createdAt
         - updatedAt

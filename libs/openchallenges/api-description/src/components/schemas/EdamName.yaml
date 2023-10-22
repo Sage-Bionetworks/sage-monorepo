@@ -1,0 +1,5 @@
+description: The preferred name/label of the EDAM ontology term.
+type: string
+minLength: 3
+maxLength: 255
+example: Alignment

@@ -1,12 +1,14 @@
 type: object
-description: A challenge input data type.
+description: A challenge EDAM annotation.
 properties:
   id:
     $ref: ChallengeInputDataTypeId.yaml
-  slug:
-    $ref: ChallengeInputDataTypeSlug.yaml
+  edamId:
+    $ref: EdamId.yaml
   name:
-    $ref: ChallengeInputDataTypeName.yaml
+    $ref: EdamName.yaml
+  subclassOf:
+    $ref: EdamSubclassOf.yaml
   createdAt:
     type: string
     format: date-time
@@ -14,10 +16,9 @@ properties:
   updatedAt:
     type: string
     format: date-time
-    example: '2022-07-04T22:19:11Z'
 required:
   - id
-  - slug
+  - edamId
   - name
   - createdAt
   - updatedAt

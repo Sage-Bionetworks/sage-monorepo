@@ -1,16 +1,27 @@
 type: object
-description: A simple challenge input data type.
+description: A challenge EDAM annotation.
 properties:
   id:
     $ref: ChallengeInputDataTypeId.yaml
-  slug:
-    $ref: ChallengeInputDataTypeSlug.yaml
+  edamId:
+    $ref: EdamId.yaml
   name:
-    $ref: ChallengeInputDataTypeName.yaml
+    $ref: EdamName.yaml
+  subclassOf:
+    $ref: EdamSubclassOf.yaml
+  createdAt:
+    type: string
+    format: date-time
+    example: '2022-07-04T22:19:11Z'
+  updatedAt:
+    type: string
+    format: date-time
 required:
   - id
-  - slug
+  - edamId
   - name
+  - createdAt
+  - updatedAt
 x-java-class-annotations:
   - '@lombok.Builder'
   - '@lombok.NoArgsConstructor'
