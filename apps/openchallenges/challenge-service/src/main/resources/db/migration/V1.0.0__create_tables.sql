@@ -12,13 +12,14 @@ CREATE TABLE `challenge_platform`
     PRIMARY KEY (`id`)
 );
 
--- challenge_input_data_type definition
+-- challenge_data_edam definition
 
-CREATE TABLE `challenge_input_data_type`
+CREATE TABLE `edam_ontology_term`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `slug`                  varchar(255) NOT NULL UNIQUE,
+    `edam_id`               varchar(80) NOT NULL UNIQUE,
     `name`                  varchar(255) NOT NULL UNIQUE,
+    `subclass_of`           varchar(255),
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -91,18 +92,17 @@ CREATE TABLE `challenge_submission_type`
     CONSTRAINT unique_item UNIQUE (`name`, `challenge_id`)
 );
 
--- challenge_x_challenge_input_data_type definition
+-- challenge_input_data_annotation definition
 
-CREATE TABLE `challenge_x_challenge_input_data_type`
+CREATE TABLE `challenge_input_data_annotation`
 (
-    `id`                              int NOT NULL AUTO_INCREMENT,
-    `challenge_id`                    bigint(20) NOT NULL,
-    `challenge_input_data_type_id`    int NOT NULL,
-    `created_at`                      DATETIME DEFAULT CURRENT_TIMESTAMP,
+    `id`                     int NOT NULL AUTO_INCREMENT,
+    `challenge_id`           bigint(20) NOT NULL,
+    `edam_id`                varchar(80) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
-    FOREIGN KEY (`challenge_input_data_type_id`) REFERENCES challenge_input_data_type(`id`),
-    CONSTRAINT unique_item UNIQUE (`challenge_id`, `challenge_input_data_type_id`)
+    FOREIGN KEY (`edam_id`) REFERENCES edam_ontology_term(`edam_id`),
+    CONSTRAINT unique_item UNIQUE (`challenge_id`, `edam_id`)
 );
 
 -- challenge_star definition

@@ -41,20 +41,19 @@ VALUES (1, 1, 1),
   (3, 1, 2);
 
 
--- challenge_input_data_type
-INSERT INTO challenge_input_data_type (id, slug, name)
-VALUES (1, 'genomic', 'genomic'),
-  (2, 'proteomic', 'proteomic'),
-  (3, 'gene-expression', 'gene expression'),
-  (4, 'metabolomic', 'metabolomic');
+-- edam_ontology_term data
+
+LOAD DATA LOCAL INFILE '${db_edam_terms_csv_path}' INTO TABLE edam_ontology_term
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
 
 
--- challenge_x_challenge_input_data_type definition
-INSERT INTO challenge_x_challenge_input_data_type (id, challenge_id, challenge_input_data_type_id)
-VALUES ('1', 1, 1),
-  ('2', 2, 1),
-  ('3', 1, 2),
-  ('4', 4, 4);
+-- challenge_input_data_annotation
+LOAD DATA LOCAL INFILE '${db_challenge_data_edam_csv_path}' INTO TABLE challenge_input_data_annotation
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
 
 
 -- challenge_category data
