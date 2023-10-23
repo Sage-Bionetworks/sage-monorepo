@@ -1,7 +1,6 @@
 import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
 import {
   provideRouter,
-  withDebugTracing,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withRouterConfig,
@@ -56,8 +55,7 @@ export const appConfig: ApplicationConfig = {
       }),
       withRouterConfig({
         onSameUrlNavigation: 'ignore',
-      }),
-      withDebugTracing()
+      })
     ),
   ],
 };

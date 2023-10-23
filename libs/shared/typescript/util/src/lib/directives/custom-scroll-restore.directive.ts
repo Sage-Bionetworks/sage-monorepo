@@ -56,7 +56,7 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
           // same page navigation
           this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
         } else {
-          // forward navigation
+          // forward navigation - restore scroll position to top
           this.viewportScroller.scrollToPosition([0, 0]);
         }
       });
