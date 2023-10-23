@@ -2,8 +2,6 @@ import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
-  withInMemoryScrolling,
-  withRouterConfig,
 } from '@angular/router';
 import {
   withInterceptorsFromDi,
@@ -46,16 +44,6 @@ export const appConfig: ApplicationConfig = {
     },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
-    provideRouter(
-      routes,
-      withEnabledBlockingInitialNavigation(),
-      withInMemoryScrolling({
-        // anchorScrolling: 'enabled',
-        // scrollPositionRestoration: 'enabled',
-      }),
-      withRouterConfig({
-        onSameUrlNavigation: 'ignore',
-      })
-    ),
+    provideRouter(routes, withEnabledBlockingInitialNavigation()),
   ],
 };
