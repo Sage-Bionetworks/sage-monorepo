@@ -16,8 +16,7 @@ import { combineLatest, filter, pairwise } from 'rxjs';
   providedIn: 'root',
 })
 export class CustomScrollRestorationService {
-  private scrollX = 0;
-  private scrollY = 0;
+  private currentScrollPos: [number, number] = [0, 0];
 
   constructor(
     private router: Router,
@@ -26,12 +25,7 @@ export class CustomScrollRestorationService {
 
   scrollPositionRestoration(): void {
     // Capture the current scroll position
-    if (typeof window !== `undefined`) {
-      window.addEventListener('scroll', () => {
-        this.scrollX = window.scrollX;
-        this.scrollY = window.scrollY;
-      });
-    }
+    this.currentScrollPos = this.viewportScroller.getScrollPosition();
 
     const routesRecognized$ = this.router.events.pipe(
       filter(
@@ -62,7 +56,7 @@ export class CustomScrollRestorationService {
           previousUrl.split('?')[0] === currentUrl.split('?')[0]
         ) {
           // param navigation excluding exact the same full url
-          this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
+          this.viewportScroller.scrollToPosition(this.currentScrollPos);
         } else {
           // forward navigation / same url navigation - restore scroll position to top
           this.viewportScroller.scrollToPosition([0, 0]);
