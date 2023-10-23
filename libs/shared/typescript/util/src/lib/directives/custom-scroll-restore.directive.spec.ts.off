@@ -1,8 +1,0 @@
-import { CustomScrollRestoreDirective } from './custom-scroll-restore.directive';
-
-describe('CustomScrollRestoreDirective', () => {
-  it('should create an instance', () => {
-    const directive = new CustomScrollRestoreDirective();
-    expect(directive).toBeTruthy();
-  });
-});

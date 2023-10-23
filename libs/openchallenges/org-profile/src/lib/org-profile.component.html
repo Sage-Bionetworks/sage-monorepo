@@ -1,4 +1,4 @@
-<main sageCustomScrollRestore class="base mat-typography">
+<main class="base mat-typography">
   <ng-container *ngIf="organization$ | async as org">
     <section id="profile-top" class="row">
       <openchallenges-avatar
@@ -18,7 +18,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-org-profile-stats [loggedIn]="loggedIn"/>
+        <openchallenges-org-profile-stats [loggedIn]="loggedIn" />
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -60,7 +60,10 @@
             *ngSwitchCase="tabs['challenges']"
             [organization]="org"
           />
-          <openchallenges-org-profile-members *ngSwitchCase="tabs['members']" [organization]="org"/>
+          <openchallenges-org-profile-members
+            *ngSwitchCase="tabs['members']"
+            [organization]="org"
+          />
         </ng-container>
       </div>
     </section>

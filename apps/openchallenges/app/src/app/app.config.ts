@@ -51,10 +51,10 @@ export const appConfig: ApplicationConfig = {
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         // anchorScrolling: 'enabled',
-        scrollPositionRestoration: 'enabled',
+        // scrollPositionRestoration: 'enabled',
       }),
       withRouterConfig({
-        onSameUrlNavigation: 'reload',
+        onSameUrlNavigation: 'ignore',
       })
     ),
   ],

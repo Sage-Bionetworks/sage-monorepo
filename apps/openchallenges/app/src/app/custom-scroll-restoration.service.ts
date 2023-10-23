@@ -1,10 +1,10 @@
 import { ViewportScroller } from '@angular/common';
-import { AfterViewInit, Directive, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Event, Router, RoutesRecognized, Scroll } from '@angular/router';
 import { combineLatest, filter, pairwise } from 'rxjs';
 
 /**
- * A directive for restoring scroll positions based on the method of navigation.
+ * A service for restoring scroll positions based on the method of navigation.
  * It helps preserve the user's scroll position during various types of navigation actions.
  * - Backward navigation: Scrolls to the previous position.
  * - Anchor navigation: Scrolls to a specified anchor.
@@ -12,29 +12,25 @@ import { combineLatest, filter, pairwise } from 'rxjs';
  * - Forward navigation/Same url navigation: Scrolls to the top of the page.
  */
 
-@Directive({
-  selector: '[sageCustomScrollRestore]',
-  standalone: true,
+@Injectable({
+  providedIn: 'root',
 })
-export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
+export class CustomScrollRestorationService {
   private scrollX = 0;
   private scrollY = 0;
-  private previousUrl!: string;
 
   constructor(
     private router: Router,
     private viewportScroller: ViewportScroller
   ) {}
 
-  ngOnInit(): void {
+  scrollPositionRestoration(): void {
     // Capture the current scroll position
     window.addEventListener('scroll', () => {
       this.scrollX = window.scrollX;
       this.scrollY = window.scrollY;
     });
-  }
 
-  ngAfterViewInit(): void {
     const routesRecognized$ = this.router.events.pipe(
       filter(
         (e: Event): e is RoutesRecognized => e instanceof RoutesRecognized
@@ -52,7 +48,7 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
         const previousUrl = routeEvents[0].urlAfterRedirects;
         const currentUrl = routeEvents[1].urlAfterRedirects;
         const isSamePageUrl = previousUrl === currentUrl;
-        console.log(1);
+
         if (scrollEvent.position) {
           // backward navigation
           this.viewportScroller.scrollToPosition(scrollEvent.position);

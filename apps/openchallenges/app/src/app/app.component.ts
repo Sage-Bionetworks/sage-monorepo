@@ -14,7 +14,8 @@ import { RouterOutlet } from '@angular/router';
 import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import { NgIf } from '@angular/common';
+import { NgIf, ViewportScroller } from '@angular/common';
+import { CustomScrollRestorationService } from './custom-scroll-restoration.service';
 
 @Component({
   selector: 'openchallenges-root',
@@ -36,7 +37,9 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private pageTitleService: PageTitleService,
     private homeDataService: HomeDataService,
-    private configService: ConfigService
+    private configService: ConfigService,
+    private viewportScroller: ViewportScroller,
+    private customScrollRestorationService: CustomScrollRestorationService
   ) {
     this.useGoogleTagManager =
       this.configService.config.googleTagManagerId.length > 0;
@@ -54,6 +57,9 @@ export class AppComponent implements OnInit, OnDestroy {
     this.pageTitleService.setTitle('OpenChallenges');
 
     this.homeDataService.setChallengesPerYear();
+    // overwrite the app's scroll restoration
+    this.viewportScroller.setHistoryScrollRestoration('manual');
+    this.customScrollRestorationService.scrollPositionRestoration();
   }
 
   ngOnDestroy(): void {

@@ -1,4 +1,4 @@
-<main sageCustomScrollRestore class="base mat-typography">
+<main class="base mat-typography">
   <section id="search-top">
     <div id="title" class="row">
       <div class="col col-10">
@@ -35,18 +35,18 @@
   <section id="bottom" class="content">
     <div class="facets">
       <p-panel
-      header="{{ incentivesFilter.label }}"
-      [toggleable]="true"
-      [collapsed]="incentivesFilter.collapsed"
-    >
-      <openchallenges-checkbox-filter
-        [values]="incentivesFilter.values"
-        [selectedValues]="selectedIncentives"
-        (selectionChange)="onIncentivesChange($event)"
-        inputId="{{ incentivesFilter.query }}"
-      />
-    </p-panel>
-    <p-divider></p-divider>
+        header="{{ incentivesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="incentivesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="incentivesFilter.values"
+          [selectedValues]="selectedIncentives"
+          (selectionChange)="onIncentivesChange($event)"
+          inputId="{{ incentivesFilter.query }}"
+        />
+      </p-panel>
+      <p-divider></p-divider>
       <p-panel
         header="{{ statusFilter.label }}"
         [toggleable]="true"
@@ -61,18 +61,18 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-      header="{{ categoriesFilter.label }}"
-      [toggleable]="true"
-      [collapsed]="categoriesFilter.collapsed"
-    >
-      <openchallenges-checkbox-filter
-        [values]="categoriesFilter.values"
-        [selectedValues]="selectedCategories"
-        (selectionChange)="onCategoriesChange($event)"
-        inputId="{{ categoriesFilter.query }}"
-      />
-    </p-panel>
-    <p-divider></p-divider>
+        header="{{ categoriesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="categoriesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="categoriesFilter.values"
+          [selectedValues]="selectedCategories"
+          (selectionChange)="onCategoriesChange($event)"
+          inputId="{{ categoriesFilter.query }}"
+        />
+      </p-panel>
+      <p-divider></p-divider>
       <!-- <p-panel
         header="{{ inputDataTypesFilter.label }}"
         [toggleable]="true"
@@ -168,7 +168,10 @@
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
-        <openchallenges-challenge-card *ngFor="let challenge of challenges" [challenge]="challenge"/>
+        <openchallenges-challenge-card
+          *ngFor="let challenge of challenges"
+          [challenge]="challenge"
+        />
       </div>
       <openchallenges-paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
