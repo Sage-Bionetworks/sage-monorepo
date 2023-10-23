@@ -1,7 +1,14 @@
 import { ViewportScroller } from '@angular/common';
 import { AfterViewInit, Directive, OnInit } from '@angular/core';
-import { Event, NavigationStart, Router, Scroll } from '@angular/router';
-import { filter, tap } from 'rxjs';
+import {
+  Event,
+  NavigationStart,
+  Router,
+  RouterEvent,
+  RoutesRecognized,
+  Scroll,
+} from '@angular/router';
+import { Observable, combineLatest, filter, pairwise, tap } from 'rxjs';
 
 /**
  * A directive for restoring scroll positions based on the method of navigation.
@@ -19,7 +26,7 @@ import { filter, tap } from 'rxjs';
 export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
   private scrollX = 0;
   private scrollY = 0;
-  private samePageNavigation = false;
+  private previousUrl!: string;
 
   constructor(
     private router: Router,
@@ -36,29 +43,56 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     // Listen to router events to determine the appropriate scroll restoration method.
-    this.router.events
-      .pipe(
-        tap((e) => {
-          if (e instanceof NavigationStart) {
-            this.samePageNavigation = e.navigationTrigger === 'imperative';
-          }
-        }),
-        filter((e: Event): e is Scroll => e instanceof Scroll)
-      )
-      .subscribe((e) => {
-        if (e.position) {
+    const routesRecognized$ = this.router.events.pipe(
+      filter(
+        (e: Event): e is RoutesRecognized => e instanceof RoutesRecognized
+      ),
+      pairwise()
+    );
+
+    const scroll$ = this.router.events.pipe(
+      filter((e: Event): e is Scroll => e instanceof Scroll)
+    );
+
+    combineLatest([routesRecognized$, scroll$]).subscribe(
+      ([routeEvents, scrollEvent]) => {
+        const previousUrl = routeEvents[0].urlAfterRedirects;
+        const currentUrl = routeEvents[1].urlAfterRedirects;
+
+        if (scrollEvent.position) {
           // backward navigation
-          this.viewportScroller.scrollToPosition(e.position);
-        } else if (e.anchor) {
+          this.viewportScroller.scrollToPosition(scrollEvent.position);
+        } else if (scrollEvent.anchor) {
           // anchor navigation
-          this.viewportScroller.scrollToAnchor(e.anchor);
-        } else if (this.samePageNavigation) {
+          this.viewportScroller.scrollToAnchor(scrollEvent.anchor);
+        } else if (previousUrl.split('?')[0] === currentUrl.split('?')[0]) {
           // same page navigation
           this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
         } else {
           // forward navigation - restore scroll position to top
           this.viewportScroller.scrollToPosition([0, 0]);
         }
-      });
+      }
+    );
+
+    // this.router.events
+    //   .pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
+    //   .subscribe((e) => {
+    //     if (e.position) {
+    //       // backward navigation
+    //       this.viewportScroller.scrollToPosition(e.position);
+    //     } else if (e.anchor) {
+    //       // anchor navigation
+    //       this.viewportScroller.scrollToAnchor(e.anchor);
+    //     } else if (
+    //       this.previousUrl.split('?')[0] === e.routerEvent.url.split('?')[0]
+    //     ) {
+    //       // same page navigation
+    //       this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
+    //     } else {
+    //       // forward navigation - restore scroll position to top
+    //       this.viewportScroller.scrollToPosition([0, 0]);
+    //     }
+    //   });
   }
 }
