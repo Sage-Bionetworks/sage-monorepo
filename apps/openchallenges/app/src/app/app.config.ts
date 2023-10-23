@@ -54,7 +54,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
       withRouterConfig({
-        onSameUrlNavigation: 'ignore',
+        onSameUrlNavigation: 'reload',
       })
     ),
   ],
