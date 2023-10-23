@@ -1,8 +1,10 @@
 import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
 import {
   provideRouter,
+  withDebugTracing,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
+  withRouterConfig,
 } from '@angular/router';
 import {
   withInterceptorsFromDi,
@@ -49,10 +51,13 @@ export const appConfig: ApplicationConfig = {
       routes,
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
-        anchorScrolling: 'enabled',
+        // anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
-      })
-      // withDebugTracing()
+      }),
+      withRouterConfig({
+        onSameUrlNavigation: 'ignore',
+      }),
+      withDebugTracing()
     ),
   ],
 };

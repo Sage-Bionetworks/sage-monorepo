@@ -1,7 +1,7 @@
 import { ViewportScroller } from '@angular/common';
 import { AfterViewInit, Directive, OnInit } from '@angular/core';
-import { Event, Router, Scroll } from '@angular/router';
-import { filter } from 'rxjs';
+import { Event, NavigationStart, Router, Scroll } from '@angular/router';
+import { filter, tap } from 'rxjs';
 
 /**
  * A directive for restoring scroll positions based on the method of navigation.
@@ -19,7 +19,7 @@ import { filter } from 'rxjs';
 export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
   private scrollX = 0;
   private scrollY = 0;
-  private currentBaseUrl!: string;
+  private samePageNavigation = false;
 
   constructor(
     private router: Router,
@@ -27,19 +27,24 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // Capture the initial scroll position and the current base URL
+    // Capture the current scroll position
     window.addEventListener('scroll', () => {
       this.scrollX = window.scrollX;
       this.scrollY = window.scrollY;
     });
-
-    this.currentBaseUrl = this.router.url.split('?')[0];
   }
 
   ngAfterViewInit(): void {
     // Listen to router events to determine the appropriate scroll restoration method.
     this.router.events
-      .pipe(filter((e: Event): e is Scroll => e instanceof Scroll))
+      .pipe(
+        tap((e) => {
+          if (e instanceof NavigationStart) {
+            this.samePageNavigation = e.navigationTrigger === 'imperative';
+          }
+        }),
+        filter((e: Event): e is Scroll => e instanceof Scroll)
+      )
       .subscribe((e) => {
         if (e.position) {
           // backward navigation
@@ -47,7 +52,7 @@ export class CustomScrollRestoreDirective implements OnInit, AfterViewInit {
         } else if (e.anchor) {
           // anchor navigation
           this.viewportScroller.scrollToAnchor(e.anchor);
-        } else if (e.routerEvent.url.split('?')[0] === this.currentBaseUrl) {
+        } else if (this.samePageNavigation) {
           // same page navigation
           this.viewportScroller.scrollToPosition([this.scrollX, this.scrollY]);
         } else {
