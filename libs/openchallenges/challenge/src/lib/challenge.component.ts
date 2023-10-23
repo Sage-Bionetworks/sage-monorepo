@@ -38,10 +38,7 @@ import { ChallengeOverviewComponent } from './challenge-overview/challenge-overv
 import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
 import { CommonModule } from '@angular/common';
-import {
-  CustomScrollRestoreDirective,
-  SeoService,
-} from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-seo-data';
 
 @Component({
@@ -49,7 +46,6 @@ import { getSeoData } from './challenge-seo-data';
   standalone: true,
   imports: [
     CommonModule,
-    CustomScrollRestoreDirective,
     RouterModule,
     MatTabsModule,
     MatIconModule,

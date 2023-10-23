@@ -85,10 +85,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
-import {
-  CustomScrollRestoreDirective,
-  SeoService,
-} from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 
 @Component({
@@ -97,7 +94,6 @@ import { getSeoData } from './challenge-search-seo-data';
   imports: [
     CalendarModule,
     CommonModule,
-    CustomScrollRestoreDirective,
     DividerModule,
     DropdownModule,
     InputTextModule,

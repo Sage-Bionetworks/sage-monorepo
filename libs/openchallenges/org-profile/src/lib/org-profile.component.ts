@@ -46,10 +46,7 @@ import { OrgProfileChallengesComponent } from './org-profile-challenges/org-prof
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
 import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
-import {
-  CustomScrollRestoreDirective,
-  SeoService,
-} from '@sagebionetworks/shared/util';
+import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './org-profile-seo-data';
 
 @Component({
@@ -57,7 +54,6 @@ import { getSeoData } from './org-profile-seo-data';
   standalone: true,
   imports: [
     CommonModule,
-    CustomScrollRestoreDirective,
     RouterModule,
     MatTabsModule,
     MatIconModule,
