@@ -26,10 +26,12 @@ export class CustomScrollRestorationService {
 
   scrollPositionRestoration(): void {
     // Capture the current scroll position
-    window.addEventListener('scroll', () => {
-      this.scrollX = window.scrollX;
-      this.scrollY = window.scrollY;
-    });
+    if (typeof window !== `undefined`) {
+      window.addEventListener('scroll', () => {
+        this.scrollX = window.scrollX;
+        this.scrollY = window.scrollY;
+      });
+    }
 
     const routesRecognized$ = this.router.events.pipe(
       filter(
