@@ -11,4 +11,3 @@ eval "$(pyenv init -)"
 pyenv local $PYTHON_VERSION
 poetry env use $PYTHON_VERSION
 poetry install --with dev
-# poetry install --with prod,dev

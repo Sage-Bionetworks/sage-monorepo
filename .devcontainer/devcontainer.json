@@ -46,6 +46,7 @@
         "mongodb.mongodb-vscode",
         "ms-playwright.playwright",
         "ms-python.python",
+        "ms-toolsai.jupyter",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
         "mtxr.sqltools",
