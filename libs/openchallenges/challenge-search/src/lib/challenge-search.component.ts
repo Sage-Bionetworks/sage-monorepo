@@ -72,7 +72,7 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Calendar, CalendarModule } from 'primeng/calendar';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -87,6 +87,7 @@ import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -200,7 +201,8 @@ export class ChallengeSearchComponent
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private _location: Location
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -428,6 +430,27 @@ export class ChallengeSearchComponent
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
+
+    // this.query.subscribe((query) => {
+    //   const params = new HttpParams();
+    //   if (query.incentives) {
+    //     const value = this.collapseParam(
+    //       query.incentives.map((incentive) => incentive.toString())
+    //     );
+    //     if (value) {
+    //       params.append('incentive', value);
+    //     }
+    //   }
+    //   if (query.status) {
+    //     const value = this.collapseParam(
+    //       query.status.map((status) => status.toString())
+    //     );
+    //     if (value) {
+    //       params.append('status', value);
+    //     }
+    //   }
+    //   this._location.replaceState(location.pathname, params.toString());
+    // });
   }
 
   ngOnDestroy(): void {
@@ -488,12 +511,15 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        status: this.collapseParam(selected),
-      },
-    });
+    const paramName = 'status';
+    let params = new HttpParams().delete(paramName);
+    if (selected.length > 0) {
+      params = new HttpParams().append(
+        paramName,
+        this.collapseParam(selected) ?? ''
+      );
+    }
+    this._location.replaceState(location.pathname, params.toString());
   }
 
   onSubmissionTypesChange(selected: string[]): void {
@@ -506,12 +532,15 @@ export class ChallengeSearchComponent
   }
 
   onIncentivesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        incentives: this.collapseParam(selected),
-      },
-    });
+    const paramName = 'incentive';
+    let params = new HttpParams().delete(paramName);
+    if (selected.length > 0) {
+      params = new HttpParams().append(
+        paramName,
+        this.collapseParam(selected) ?? ''
+      );
+    }
+    this._location.replaceState(location.pathname, params.toString());
   }
 
   onPlatformsChange(selected: string[]): void {
@@ -529,6 +558,7 @@ export class ChallengeSearchComponent
 
   onCategoriesChange(selected: string[]): void {
     this.router.navigate([], {
+      relativeTo: this.activatedRoute,
       queryParamsHandling: 'merge',
       queryParams: {
         categories: this.collapseParam(selected),
