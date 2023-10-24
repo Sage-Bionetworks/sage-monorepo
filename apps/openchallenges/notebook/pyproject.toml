@@ -7,8 +7,11 @@ readme = "README.md"
 packages = []
 
 [tool.poetry.dependencies]
-python = "3.9.2"
+python = "3.10.12"
 kaggle = "1.5.12"
+openchallenges-client = {path = "../../../libs/openchallenges/api-client-python"}
+openai = "0.28.1"
+python-dotenv = "1.0.0"
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "3.5.2"

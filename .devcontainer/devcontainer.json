@@ -47,6 +47,7 @@
         "ms-playwright.playwright",
         "ms-python.black-formatter",
         "ms-python.python",
+        "ms-toolsai.jupyter",
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
         "mtxr.sqltools",
