@@ -45,6 +45,7 @@
         "mhutchie.git-graph",
         "mongodb.mongodb-vscode",
         "ms-playwright.playwright",
+        "ms-python.black-formatter",
         "ms-python.python",
         "ms-toolsai.jupyter",
         "mtxr.sqltools-driver-mysql",
