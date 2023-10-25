@@ -186,7 +186,9 @@ def get_dataset_manifest_from_schematic(
 
 @handle_exceptions
 def get_dataset_manifest_json(
-    asset_type: str, dataset_id: str, asset_view_id: str, 
+    asset_type: str,
+    dataset_id: str,
+    asset_view_id: str,
 ) -> tuple[Union[str, BasicError], int]:
     """Gets a manifest in json form
 

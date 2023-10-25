@@ -23,8 +23,12 @@ DATASET_MANIFEST_JSON_URL = (
 )
 MANIFEST_JSON_URL = "/api/v1/assetTypes/synapse/manifests/syn1/json"
 PROJECTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects"
-PROJECT_DATASETS_URL = "/api/v1/assetTypes/synapse/projects/syn2/datasets?assetViewId=syn1"
-PROJECT_MANIFESTS_URL = "/api/v1/assetTypes/synapse/projects/syn2/manifests?assetViewId=syn1"
+PROJECT_DATASETS_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/datasets?assetViewId=syn1"
+)
+PROJECT_MANIFESTS_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/manifests?assetViewId=syn1"
+)
 
 
 class TestGetAssetViewJson(BaseTestCase):
@@ -100,7 +104,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            response = self.client.open(DATASET_FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -126,7 +132,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ) as mock_function:
-            response = self.client.open(DATASET_FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -177,7 +185,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(DATASET_FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -189,7 +199,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(DATASET_FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -201,7 +213,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(DATASET_FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -408,7 +422,9 @@ class TestGetProjectDatasets(BaseTestCase):
             "get_project_datasets_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            response = self.client.open(PROJECT_DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -433,7 +449,9 @@ class TestGetProjectDatasets(BaseTestCase):
             "get_project_datasets_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(PROJECT_DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -445,7 +463,9 @@ class TestGetProjectDatasets(BaseTestCase):
             "get_project_datasets_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(PROJECT_DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -457,7 +477,9 @@ class TestGetProjectDatasets(BaseTestCase):
             "get_project_datasets_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(PROJECT_DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -474,7 +496,9 @@ class TestGetProjectManifests(BaseTestCase):
             "get_project_manifests_from_schematic",
             return_value=EXAMPLE_MANIFEST_METADATA,
         ):
-            response = self.client.open(PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -508,7 +532,9 @@ class TestGetProjectManifests(BaseTestCase):
             "get_project_manifests_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -520,7 +546,9 @@ class TestGetProjectManifests(BaseTestCase):
             "get_project_manifests_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -532,7 +560,9 @@ class TestGetProjectManifests(BaseTestCase):
             "get_project_manifests_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
