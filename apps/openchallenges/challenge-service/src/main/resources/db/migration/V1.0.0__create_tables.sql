@@ -17,9 +17,9 @@ CREATE TABLE `challenge_platform`
 CREATE TABLE `edam_ontology_term`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `edam_id`               varchar(80) NOT NULL UNIQUE,
-    `name`                  varchar(255) NOT NULL UNIQUE,
-    `subclass_of`           varchar(255),
+    `edam_id`               varchar(16) NOT NULL UNIQUE,
+    `name`                  varchar(80) NOT NULL UNIQUE,
+    `subclass_of`           varchar(60),
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
@@ -98,7 +98,7 @@ CREATE TABLE `challenge_input_data_annotation`
 (
     `id`                     int NOT NULL AUTO_INCREMENT,
     `challenge_id`           bigint(20) NOT NULL,
-    `edam_id`                varchar(80) NOT NULL,
+    `edam_id`                varchar(16) NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     FOREIGN KEY (`edam_id`) REFERENCES edam_ontology_term(`edam_id`),

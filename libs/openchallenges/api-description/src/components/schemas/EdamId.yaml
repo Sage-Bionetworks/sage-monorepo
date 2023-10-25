@@ -1,5 +1,5 @@
 description: The prefix Internationalized Resource Identifier (IRI) of the EDAM ontology term.
 type: string
 minLength: 3
-maxLength: 80
+maxLength: 16
 example: data_1916
