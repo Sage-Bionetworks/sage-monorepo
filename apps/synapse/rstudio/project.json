@@ -4,11 +4,11 @@
   "sourceRoot": "apps/synapse/rstudio/src",
   "projectType": "application",
   "targets": {
-    "prepare": {
+    "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/synapse/rstudio"
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
       }
     },
     "build-image": {
@@ -17,11 +17,7 @@
         "context": "apps/synapse/rstudio",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/synapse-rstudio"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -32,10 +28,7 @@
         "context": "apps/synapse/rstudio",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/synapse-rstudio"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },

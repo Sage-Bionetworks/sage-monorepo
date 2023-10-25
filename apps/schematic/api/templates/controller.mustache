@@ -111,6 +111,6 @@ def {{operationId}}({{#allParams}}{{paramName}}{{^required}}=None{{/required}}{{
             {{/items}}
         {{/isMap}}
     {{/allParams}}
-    return {{#lambda.snakecase}}{{baseName}}{{/lambda.snakecase}}_controller_impl.{{operationId}}({{#allParams}}{{paramName}}{{^required}}{{/required}}{{#hasMore}}, {{/hasMore}}{{/allParams}})
+    return {{#lambda.snakecase}}{{baseName}}{{/lambda.snakecase}}_controller_impl.{{operationId}}({{#allParams}}{{paramName}}{{^-last}}, {{/-last}}{{/allParams}})
 {{/operation}}
 {{/operations}}

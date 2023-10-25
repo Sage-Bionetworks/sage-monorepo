@@ -1,0 +1,6 @@
+name: datasetId
+in: query
+description: The ID of a dataset.
+required: true
+schema:
+  $ref: ../../schemas/DatasetId.yaml

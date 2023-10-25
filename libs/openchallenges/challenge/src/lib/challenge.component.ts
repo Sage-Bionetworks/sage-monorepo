@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import {
+  ActivatedRoute,
+  ParamMap,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import {
   Challenge,
   ChallengeService,
@@ -15,20 +20,53 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
-import { Avatar } from '@sagebionetworks/openchallenges/ui';
+import {
+  Avatar,
+  AvatarComponent,
+  FooterComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatIconModule } from '@angular/material/icon';
+import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
+import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-organizers.component';
+import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
+import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
+import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
+import { CommonModule } from '@angular/common';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getSeoData } from './challenge-seo-data';
 
 @Component({
   selector: 'openchallenges-challenge',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTabsModule,
+    MatIconModule,
+    ChallengeOverviewComponent,
+    ChallengeOrganizersComponent,
+    ChallengeContributorsComponent,
+    ChallengeStargazersComponent,
+    ChallengeStatsComponent,
+    AvatarComponent,
+    FooterComponent,
+  ],
   templateUrl: './challenge.component.html',
   styleUrls: ['./challenge.component.scss'],
 })
 export class ChallengeComponent implements OnInit {
   public appVersion: string;
+  public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
+  public apiDocsUrl: string;
+
   challenge$!: Observable<Challenge>;
   loggedIn = false;
   // progressValue = 0;
@@ -43,9 +81,15 @@ export class ChallengeComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private challengeService: ChallengeService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
   }
 
   ngOnInit(): void {
@@ -72,6 +116,8 @@ export class ChallengeComponent implements OnInit {
         src: challenge.avatarUrl || '',
         size: 250,
       };
+
+      this.seoService.setData(getSeoData(challenge), this.renderer2);
 
       // this.progressValue =
       //   challenge.startDate && challenge.endDate

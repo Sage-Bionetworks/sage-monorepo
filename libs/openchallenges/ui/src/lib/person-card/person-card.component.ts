@@ -1,19 +1,24 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Avatar } from '../avatar/avatar';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-person-card',
+  standalone: true,
+  imports: [CommonModule, AvatarComponent, MatIconModule],
   templateUrl: './person-card.component.html',
   styleUrls: ['./person-card.component.scss'],
 })
 export class PersonCardComponent implements OnInit {
-  @Input() name!: string;
-  @Input() username!: string;
-  @Input() affiliation!: string | null | undefined;
-  @Input() avatarUrl!: string | null | undefined;
-  @Input() avatarSize = 120;
-  @Input() role!: string | null | undefined;
-  @Input() addChips = false;
+  @Input({ required: true }) name!: string;
+  @Input({ required: false }) username!: string;
+  @Input({ required: true }) affiliation!: string | null | undefined;
+  @Input({ required: false }) avatarUrl!: string | null | undefined;
+  @Input({ required: true }) avatarSize = 120;
+  @Input({ required: false }) role!: string | null | undefined;
+  @Input({ required: false }) addChips = false;
 
   avatar!: Avatar;
 

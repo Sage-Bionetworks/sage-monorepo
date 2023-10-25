@@ -25,8 +25,56 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/projects/{projectId}/datasets:
-    $ref: paths/storages/projects/@{projectId}/datasets.yaml
+  /schematicVersion:
+    $ref: paths/schematicVersion.yaml
 
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
-    $ref: paths/storages/asset-views/@{assetView}/projects/@{projectId}/manifests.yaml
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/manifestJson.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
+
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/files.yaml
+
+  /assetTypes/{assetType}/manifests/{manifestId}/json:
+    $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
+
+  /nodes/{nodeLabel}/dependencies:
+    $ref: paths/nodes/@{nodeLabel}/dependencies.yaml
+
+  /nodes/{nodeDisplay}/isRequired:
+    $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
+
+  /nodes/{nodeLabel}/nodeProperties:
+    $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
+
+  /nodes/{nodeDisplay}/propertyLabel:
+    $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
+
+  /nodes/{nodeDisplay}/validationRules:
+    $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
+
+  /connectedNodes:
+    $ref: paths/connectedNodes.yaml
+
+  /validateManifestJson:
+    $ref: paths/validateManifestJson.yaml
+
+  /validateManifestCsv:
+    $ref: paths/validateManifestCsv.yaml
+
+  /submitManifestJson:
+    $ref: paths/submitManifestJson.yaml
+
+  /submitManifestCsv:
+    $ref: paths/submitManifestCsv.yaml

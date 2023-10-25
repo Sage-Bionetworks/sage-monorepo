@@ -1,3 +1,5 @@
+.scannerwork
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -64,3 +66,13 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+
+#secrets
+*secrets*
+
+#schematic downloaded files
+manifests
+great_expectations
+
+#integration tests
+schematic_api/test/test_integration.py

@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Account } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
+import { Component, OnInit, Renderer2 } from '@angular/core';
+import {
+  ActivatedRoute,
+  ParamMap,
+  Router,
+  RouterModule,
+} from '@angular/router';
 import {
   catchError,
   forkJoin,
@@ -10,11 +14,16 @@ import {
   shareReplay,
   Subscription,
   switchMap,
+  take,
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
-import { Avatar } from '@sagebionetworks/openchallenges/ui';
+import {
+  Avatar,
+  AvatarComponent,
+  FooterComponent,
+} from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   ImageAspectRatio,
@@ -29,15 +38,42 @@ import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+// import { MatTabsModule } from '@angular/material/tabs';
+import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
+import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
+import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
+import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
+import { SeoService } from '@sagebionetworks/shared/util';
+import { getSeoData } from './org-profile-seo-data';
 
 @Component({
   selector: 'openchallenges-org-profile',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatTabsModule,
+    MatIconModule,
+    OrgProfileOverviewComponent,
+    OrgProfileChallengesComponent,
+    OrgProfileMembersComponent,
+    OrgProfileStatsComponent,
+    AvatarComponent,
+    FooterComponent,
+  ],
   templateUrl: './org-profile.component.html',
   styleUrls: ['./org-profile.component.scss'],
 })
 export class OrgProfileComponent implements OnInit {
   public appVersion: string;
-  account$!: Observable<Account | undefined>;
+  public dataUpdatedOn: string;
+  public privacyPolicyUrl: string;
+  public termsOfUseUrl: string;
+  public apiDocsUrl: string;
+
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;
@@ -52,9 +88,15 @@ export class OrgProfileComponent implements OnInit {
     private router: Router,
     private readonly configService: ConfigService,
     private organizationService: OrganizationService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private seoService: SeoService,
+    private renderer2: Renderer2
   ) {
     this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
   }
 
   ngOnInit(): void {
@@ -70,14 +112,15 @@ export class OrgProfileComponent implements OnInit {
         } as HttpStatusRedirect);
         return throwError(() => error);
       }),
-      shareReplay(1)
+      shareReplay(1),
+      take(1)
     );
 
     this.organizationAvatar$ = this.organization$.pipe(
       switchMap((org) =>
         forkJoin({
           org: of(org),
-          avatarUrl: this.getOrganizationAvatarUrl(org),
+          avatarUrl: this.getOrganizationImageUrl(org, ImageHeight._250px),
         })
       ),
       map(
@@ -90,6 +133,10 @@ export class OrgProfileComponent implements OnInit {
       )
     );
 
+    const seoOrgImage$ = this.organization$.pipe(
+      switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px))
+    );
+
     const activeTabSub = this.activatedRoute.queryParamMap
       .pipe(
         map((params: ParamMap) => params.get('tab')),
@@ -98,19 +145,32 @@ export class OrgProfileComponent implements OnInit {
       .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
+
+    forkJoin({
+      org: this.organization$,
+      image: seoOrgImage$,
+    }).subscribe(({ org, image }) => {
+      this.seoService.setData(getSeoData(org, image.url), this.renderer2);
+    });
   }
 
-  private getOrganizationAvatarUrl(
-    org: Organization
-  ): Observable<Image | undefined> {
-    if (org.avatarKey && org.avatarKey.length > 0) {
-      return this.imageService.getImage({
+  private getOrganizationImageUrl(
+    org: Organization,
+    height: ImageHeight
+  ): Observable<Image> {
+    return this.imageService
+      .getImage({
         objectKey: org.avatarKey,
-        height: ImageHeight._250px,
+        height,
         aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery);
-    } else {
-      return of(undefined);
-    }
+      } as ImageQuery)
+      .pipe(
+        catchError(() => {
+          console.error(
+            'Unable to get the image url. Please check the logs of the image service.'
+          );
+          return of({ url: '' });
+        })
+      );
   }
 }

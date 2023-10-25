@@ -15,10 +15,12 @@ servers:
 tags:
   - name: Challenge
     description: Operations about challenges.
-  - name: ChallengePlatform
-    description: Operations about challenge platforms.
+  - name: ChallengeAnalytics
+    description: Operations about challenge analytics.
   - name: ChallengeInputDataType
     description: Operations about challenge input data types.
+  - name: ChallengePlatform
+    description: Operations about challenge platforms.
   - name: Image
     description: Operations about images
   - name: Organization
@@ -84,6 +86,22 @@ paths:
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /challengeAnalytics/challengesPerYear:
+    get:
+      tags:
+        - ChallengeAnalytics
+      summary: Get the number of challenges tracked per year
+      description: Returns the number of challenges tracked per year
+      operationId: getChallengesPerYear
+      responses:
+        '200':
+          description: An object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPerYear'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /challengeInputDataTypes:
@@ -298,12 +316,11 @@ components:
       default: relevance
       enum:
         - created
-        - ending_soon
-        - recently_ended
-        - recently_started
+        - random
         - relevance
         - starred
-        - starting_soon
+        - start_date
+        - end_date
     ChallengeDirection:
       description: The direction to sort the results by.
       type: string
@@ -369,6 +386,10 @@ components:
       type: string
       enum:
         - featured
+        - starting_soon
+        - ending_soon
+        - recently_started
+        - recently_ended
       example: featured
     ChallengeSearchQuery:
       type: object
@@ -388,6 +409,13 @@ components:
           minimum: 1
         sort:
           $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          nullable: true
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
@@ -496,14 +524,14 @@ components:
       description: The slug of the challenge.
       type: string
       minLength: 3
-      maxLength: 60
+      maxLength: 255
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: awesome-challenge
     ChallengeName:
       description: The name of the challenge.
       type: string
       minLength: 3
-      maxLength: 60
+      maxLength: 255
     ChallengeHeadline:
       description: The headline of the challenge.
       type: string
@@ -514,7 +542,7 @@ components:
       description: The description of the challenge.
       type: string
       minLength: 0
-      maxLength: 280
+      maxLength: 1000
       example: This is an example description of the challenge.
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
@@ -688,6 +716,7 @@ components:
         - title
         - status
       x-java-class-annotations:
+        - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
@@ -725,6 +754,23 @@ components:
                 $ref: '#/components/schemas/ChallengeContribution'
           required:
             - challengeContributions
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ChallengesPerYear:
+      type: object
+      description: An object
+      properties:
+        years:
+          type: array
+          items:
+            type: string
+        challengeCounts:
+          type: array
+          items:
+            type: integer
+      required:
+        - years
+        - challengeCounts
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeInputDataTypeSort:

@@ -1,22 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-challenge-overview',
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   templateUrl: './challenge-overview.component.html',
   styleUrls: ['./challenge-overview.component.scss'],
 })
 export class ChallengeOverviewComponent {
-  @Input() challenge!: Challenge;
+  @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
   // mockTopics = ['breast', 'cancer'];
 
-  use_default(str: string) {
-    return str === '' ? 'Not available' : str;
+  useNaIfFalsey(str: string | null | undefined) {
+    return str || 'Not available';
   }
 
   prettify(camel: string | undefined) {

@@ -6,7 +6,7 @@
   "prefix": "openchallenges",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/signup"],
       "options": {
         "jestConfig": "libs/openchallenges/signup/jest.config.ts",
@@ -14,7 +14,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "libs/openchallenges/signup/src/**/*.ts",
@@ -23,6 +23,6 @@
       }
     }
   },
-  "tags": ["type:feature", "scope:openchallenges"],
+  "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
   "implicitDependencies": []
 }

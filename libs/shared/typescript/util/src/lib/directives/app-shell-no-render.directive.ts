@@ -14,6 +14,7 @@ import {
  */
 @Directive({
   selector: '[sageAppShellNoRender]',
+  standalone: true,
 })
 export class AppShellNoRenderDirective implements OnInit {
   constructor(

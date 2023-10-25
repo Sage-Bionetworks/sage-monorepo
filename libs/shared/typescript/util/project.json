@@ -1,11 +1,12 @@
 {
   "name": "shared-typescript-util",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/typescript/util/src",
   "prefix": "sage",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/util"],
       "options": {
         "jestConfig": "libs/shared/typescript/util/jest.config.ts",
@@ -13,12 +14,15 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["libs/shared/typescript/util/**/*.ts", "libs/shared/typescript/util/**/*.html"]
+        "lintFilePatterns": [
+          "libs/shared/typescript/util/**/*.ts",
+          "libs/shared/typescript/util/**/*.html"
+        ]
       }
     }
   },
-  "tags": ["type:util", "scope:shared"],
+  "tags": ["type:util", "scope:shared", "language:typescript"],
   "implicitDependencies": []
 }

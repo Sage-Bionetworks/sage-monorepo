@@ -1,4 +1,7 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 import {
   Challenge,
   ChallengePlatformService,
@@ -6,19 +9,18 @@ import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { Challenge as DeprecatedChallenge } from '@sagebionetworks/openchallenges/api-client-angular-deprecated';
 // import { startCase } from 'lodash';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
+  standalone: true,
+  imports: [CommonModule, MatIconModule, RouterModule],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })
 export class ChallengeCardComponent implements OnInit {
-  @Input() challenge!: Challenge;
-  // TODO: remove the deprecatedChallenge when real Challenge has all required properties
-  @Input() deprecatedChallenge!: DeprecatedChallenge;
+  @Input({ required: true }) challenge!: Challenge;
   banner$: Observable<Image> | undefined;
   platform!: SimpleChallengePlatform;
   status!: string | undefined;
@@ -61,14 +63,6 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
-    }
-  }
-
-  shorthand(str: string) {
-    if (str.length >= 80) {
-      return str.substring(0, 80) + '...';
-    } else {
-      return str;
     }
   }
 }

@@ -1,6 +1,9 @@
 AUTHORS.md
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ApiUtil.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeAnalyticsApi.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeAnalyticsApiController.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeAnalyticsApiDelegate.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeApi.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeApiController.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengeApiDelegate.java
@@ -40,6 +43,7 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/Cha
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeStatusDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeSubmissionTypeDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPageDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPerYearDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/SimpleChallengeInputDataTypeDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/SimpleChallengePlatformDto.java

@@ -3,8 +3,9 @@
 
 # Install the Node.js dependencies.
 # rm -rf node_modules && yarn install --immutable
-node tools/check-nodejs-dependencies.js post-merge
-node tools/check-java-environments.js
-node tools/check-python-dependencies.js
+node tools/prepare-nodejs-envs.js
+node tools/prepare-java-envs.js
+node tools/prepare-python-envs.js
+node tools/prepare-r-envs.js
 # node tools/check-container-images.js
 node tools/check-devcontainer-version.js

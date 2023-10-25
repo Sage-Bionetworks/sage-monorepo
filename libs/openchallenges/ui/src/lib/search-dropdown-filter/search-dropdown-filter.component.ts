@@ -1,18 +1,24 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FilterValue } from '../checkbox-filter/filter-value.model';
 import { Avatar } from '../avatar/avatar';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
+  standalone: true,
+  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
 export class SearchDropdownFilterComponent implements OnInit {
-  @Input() values!: FilterValue[];
-  @Input() selectedValues!: any[];
-  @Input() placeholder = 'Search items';
-  @Input() showAvatar!: boolean | undefined;
-  @Input() filterByApiClient!: boolean | undefined;
+  @Input({ required: true }) values!: FilterValue[];
+  @Input({ required: true }) selectedValues!: any[];
+  @Input({ required: true }) placeholder = 'Search items';
+  @Input({ required: true }) showAvatar!: boolean | undefined;
+  @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
 

@@ -18,9 +18,28 @@ tags:
   - name: Storage
     description: Operations about storages.
 paths:
-  /storages/projects/{projectId}/datasets:
+  /schematicVersion:
+    get:
+      tags:
+        - Versions
+      summary: Gets the version of the schematic library currently used by the API
+      description: Gets the version of the schematic library currently used by the API
+      operationId: getSchematicVersion
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                example: v21.1.1
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
     parameters:
       - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -34,14 +53,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /storages/asset-views/{assetView}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
     parameters:
       - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetView'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
@@ -59,8 +85,393 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/json:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets the asset view table in json form
+      description: Gets the asset view table in json form
+      operationId: getAssetViewJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AssetViewJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/datasetId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in json form
+      description: Gets the manifest in json form
+      operationId: getDatasetManifestJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all storage projects the current user has access to.
+      description: Gets all storage projects the current user has access to.
+      operationId: listProjects
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectsPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: getDatasetFiles
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilesPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/manifests/{manifestId}/json:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/manifestId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in json form
+      description: Gets the manifest in json form
+      operationId: getManifestJson
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/dependencies:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the immediate dependencies that are related to the given source node
+      description: Gets the immediate dependencies that are related to the given source node
+      operationId: listNodeDependencies
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/isRequired:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets whether or not the node is required in the schema
+      description: Gets whether or not the node is required in the schema
+      operationId: getNodeIsRequired
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: Whether or not the node is required in the schema
+                type: boolean
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/nodeProperties:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets properties associated with a given node
+      description: Gets properties associated with a given node
+      operationId: getNodeProperties
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePropertiesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/propertyLabel:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the property label of the node
+      description: Gets the property label of the node
+      operationId: getPropertyLabel
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/useStrictCamelCase'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PropertyLabel'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/validationRules:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      operationId: listNodeValidationRules
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /connectedNodes:
+    get:
+      tags:
+        - Schema
+      summary: Gets a list of connected node pairs
+      description: Gets a list of connected node pairs
+      operationId: getConnectedNodes
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/relationshipType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedNodesPage'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /validateManifestJson:
+    post:
+      tags:
+        - ManifestValidation
+      summary: Validates a manifest in json form
+      description: Validates a manifest in json form
+      requestBody:
+        description: A manifest in json form
+        content:
+          text/plain:
+            schema:
+              type: string
+      operationId: validateManifestJson
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /validateManifestCsv:
+    post:
+      tags:
+        - ManifestValidation
+      summary: Validates a manifest in csv form
+      description: Validates a manifest in csv form
+      requestBody:
+        description: .csv file
+        content:
+          application/csv:
+            schema:
+              type: string
+              format: binary
+        required: true
+      operationId: validateManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/restrictRules'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestValidationResult'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /submitManifestJson:
+    post:
+      tags:
+        - ManifestValidation
+      summary: Validates a manifest in json form, then submits it
+      description: Validates a manifest in json form, then submits it in csv form
+      requestBody:
+        description: A manifest in json form
+        content:
+          text/plain:
+            schema:
+              type: string
+      operationId: submitManifestJson
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/component'
+        - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/storageMethod'
+        - $ref: '#/components/parameters/hideBlanks'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/tableManipulationMethod'
+        - $ref: '#/components/parameters/useSchemaLabel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestId'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /submitManifestCsv:
+    post:
+      tags:
+        - ManifestValidation
+      summary: Validates manifest in csv form, then submits it
+      description: Validates manifest in csv form, then submits it
+      requestBody:
+        description: .csv file
+        content:
+          application/csv:
+            schema:
+              type: string
+              format: binary
+        required: true
+      operationId: submitManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/component'
+        - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/storageMethod'
+        - $ref: '#/components/parameters/hideBlanks'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/tableManipulationMethod'
+        - $ref: '#/components/parameters/useSchemaLabel'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestId'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -70,10 +481,41 @@ components:
       scheme: bearer
       bearerFormat: JWT
   schemas:
+    BasicError:
+      type: object
+      description: Problem details (tools.ietf.org/html/rfc7807)
+      properties:
+        title:
+          type: string
+          description: A human readable documentation for the problem type
+        status:
+          type: integer
+          description: The HTTP status code
+        detail:
+          type: string
+          description: A human readable explanation specific to this occurrence of the problem
+        type:
+          type: string
+          description: An absolute URI that identifies the problem type
+      required:
+        - title
+        - status
+      x-java-class-annotations:
+        - '@lombok.Builder'
     ProjectId:
-      description: A Synapse project ID.
+      description: A project ID.
       type: string
       example: syn26251192
+    AssetViewId:
+      description: An asset view ID.
+      type: string
+      example: syn23643253
+    AssetType:
+      description: A type of asset.
+      type: string
+      example: synapse
+      enum:
+        - synapse
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -121,8 +563,13 @@ components:
           type: string
           description: The name of the dataset.
           example: Example dataset
+        id:
+          type: string
+          description: The ID of the dataset.
+          example: Syn1
       required:
         - name
+        - id
       x-java-class-annotations:
         - '@lombok.Builder'
     DatasetsPage:
@@ -141,35 +588,33 @@ components:
             - datasets
       x-java-class-annotations:
         - '@lombok.Builder'
-    BasicError:
-      type: object
-      description: Problem details (tools.ietf.org/html/rfc7807)
-      properties:
-        title:
-          type: string
-          description: A human readable documentation for the problem type
-        status:
-          type: integer
-          description: The HTTP status code
-        detail:
-          type: string
-          description: A human readable explanation specific to this occurrence of the problem
-        type:
-          type: string
-          description: An absolute URI that identifies the problem type
-      required:
-        - title
-        - status
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    AssetView:
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project.
-      type: string
-      example: syn23643253
     Manifest:
-      description: A manifest ID object
-      type: string
-      example: syn26251389
+      type: object
+      description: A manifest object
+      properties:
+        name:
+          type: string
+          description: The name of the manifest file.
+          example: synapse_storage_manifest.csv
+        id:
+          type: string
+          description: The id of the manifest file.
+          example: syn1
+        datasetName:
+          type: string
+          description: The name of the dataset the manifest belongs to.
+          example: dataset_X
+        datasetId:
+          type: string
+          description: The id of the dataset the manifest belongs to.
+          example: syn2
+        componentName:
+          type: string
+          description: The name of the component the manifest is of.
+          example: patient
+      required:
+        - name
+        - id
     ManifestsPage:
       type: object
       description: A page of manifests.
@@ -186,28 +631,265 @@ components:
             - manifests
       x-java-class-annotations:
         - '@lombok.Builder'
-  parameters:
-    projectId:
-      name: projectId
-      in: path
-      description: The Synapse ID of a storage project.
-      required: true
-      schema:
-        $ref: '#/components/schemas/ProjectId'
-    assetView:
-      name: assetView
-      in: path
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-      required: true
-      schema:
-        $ref: '#/components/schemas/AssetView'
+    AssetViewJson:
+      description: An asset view in json format
+      type: object
+    DatasetId:
+      description: A dataset ID.
+      type: string
+      example: syn23643250
+    ManifestJson:
+      description: A manifest in json format
+      type: object
+    Project:
+      type: object
+      description: A project.
+      properties:
+        name:
+          type: string
+          description: The name of the project.
+          example: Example project
+        id:
+          type: string
+          description: The ID of the project.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ProjectsPage:
+      type: object
+      description: A page of projects.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            projects:
+              description: A list of projects.
+              type: array
+              items:
+                $ref: '#/components/schemas/Project'
+          required:
+            - projects
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FileNames:
+      description: A list of file names.
+      type: array
+      items:
+        type: string
+    UseFullFilePath:
+      description: Whether or not to return the full path of output, or just the basename.
+      type: boolean
+      default: false
+    File:
+      type: object
+      description: A file.
+      properties:
+        name:
+          type: string
+          description: The name of the file.
+          example: file.txt
+        id:
+          type: string
+          description: The ID of the file.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    FilesPage:
+      type: object
+      description: A page of files.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            files:
+              description: A list of files.
+              type: array
+              items:
+                $ref: '#/components/schemas/File'
+          required:
+            - files
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ManifestId:
+      description: A manifest ID.
+      type: string
+      example: syn51078535
+    NodeLabel:
+      description: The label of a node in a schema
+      type: string
+      example: MolecularEntity
+    SchemaUrl:
+      description: The URL of a schema in jsonld form
+      type: string
+      example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
+    ReturnDisplayNames:
+      description: Whether or not to return the display names of the node otherwise the label
+      type: boolean
+      default: true
+    ReturnOrderedBySchema:
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      type: boolean
+      default: true
+    Node:
+      type: object
+      description: A node of a schema.
+      properties:
+        name:
+          type: string
+          description: The name of the node.
+          example: Patient
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodesPage:
+      type: object
+      description: A page of nodes.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            nodes:
+              description: A list of nodes.
+              type: array
+              items:
+                $ref: '#/components/schemas/Node'
+          required:
+            - nodes
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    NodeDisplay:
+      description: The display name of a node in a schema
+      type: string
+      example: MolecularEntity
+    NodeProperty:
+      type: object
+      description: A node property
+      properties:
+        name:
+          type: string
+          description: The name of the property
+          example: molecularlyInteractsWith
+      required:
+        - name
+    NodePropertiesPage:
+      type: object
+      description: A page of node properties.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            node_properties:
+              description: A list of node properties.
+              type: array
+              items:
+                $ref: '#/components/schemas/NodeProperty'
+          required:
+            - node_properties
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    UseStrictCamelCase:
+      description: Whether or not to use the more strict way of converting to camel case
+      type: boolean
+      default: true
+    PropertyLabel:
+      description: The property label of a node in a schema
+      type: string
+      example: MolecularEntity
+    ValidationRule:
+      type: object
+      description: A validation rule.
+      properties:
+        name:
+          type: string
+          description: The name of the rule, along with the arguments for the given rule.
+          example: list strict
+      required:
+        - name
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ValidationRulesPage:
+      type: object
+      description: A page of validation rules.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            validation_rules:
+              description: A list of validation rules.
+              type: array
+              items:
+                $ref: '#/components/schemas/ValidationRule'
+          required:
+            - validation_rules
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    RelationshipType:
+      description: A type of schema relationship
+      type: string
+      example: requiresDependency
+    ConnectedNodes:
+      type: object
+      description: A pair of conncted nodes
+      properties:
+        node1:
+          type: string
+          description: The disaplay name of the first node.
+          example: Node1
+        node2:
+          type: string
+          description: The display name of the second node.
+          example: Node2
+      required:
+        - node1
+        - node2
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ConnectedNodesPage:
+      type: object
+      description: A page of conncted nodes.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            connected_nodes:
+              description: A list of conncted node pairs.
+              type: array
+              items:
+                $ref: '#/components/schemas/ConnectedNodes'
+          required:
+            - connected_nodes
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
+    RestrictRules:
+      description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
+      type: boolean
+      default: false
+    ManifestValidationResult:
+      type: object
+      description: The results of manifest validation
+      properties:
+        errors:
+          description: Any errors from validation
+          type: array
+          items:
+            type: string
+        warnings:
+          description: Any warnings from validation
+          type: array
+          items:
+            type: string
   responses:
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/problem+json:
-          schema:
-            $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
       content:
@@ -226,3 +908,182 @@ components:
         application/problem+json:
           schema:
             $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+  parameters:
+    projectId:
+      name: projectId
+      in: path
+      description: The Synapse ID of a storage project.
+      required: true
+      schema:
+        $ref: '#/components/schemas/ProjectId'
+    assetViewId:
+      name: assetViewId
+      in: path
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
+    assetType:
+      name: assetType
+      in: path
+      description: Type of asset, such as Synapse
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetType'
+    datasetId:
+      name: datasetId
+      in: path
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    fileNames:
+      name: fileNames
+      description: A list of file names used to filter the output.
+      in: query
+      required: false
+      schema:
+        $ref: '#/components/schemas/FileNames'
+    useFullFilePath:
+      name: useFullFilePath
+      in: query
+      description: Whether or not to return the full path of output, or just the basename.
+      required: false
+      schema:
+        $ref: '#/components/schemas/UseFullFilePath'
+    manifestId:
+      name: manifestId
+      in: path
+      description: ID of a manifest
+      required: true
+      schema:
+        $ref: '#/components/schemas/ManifestId'
+    nodeLabel:
+      name: nodeLabel
+      in: path
+      description: The label of the source node in a schema to get the dependencies of
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabel'
+    schemaUrl:
+      name: schemaUrl
+      in: query
+      description: The URL of a schema in jsonld form
+      required: true
+      schema:
+        $ref: '#/components/schemas/SchemaUrl'
+    returnDisplayNames:
+      name: returnDisplayNames
+      in: query
+      description: Whether or not to return the display names of the component, otherwise the label
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnDisplayNames'
+    returnOrderedBySchema:
+      name: returnOrderedBySchema
+      in: query
+      description: Whether or not to order the components by their order in the schema, otherwise random
+      required: false
+      schema:
+        $ref: '#/components/schemas/ReturnOrderedBySchema'
+    nodeDisplay:
+      name: nodeDisplay
+      in: path
+      description: The display name of the node in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeDisplay'
+    useStrictCamelCase:
+      name: useStrictCamelCase
+      in: query
+      description: Whether or not to use the more strict way of converting to camel case
+      schema:
+        $ref: '#/components/schemas/UseStrictCamelCase'
+    relationshipType:
+      name: relationshipType
+      in: query
+      description: Type of relationship in a schema, such as requiresDependency
+      required: true
+      schema:
+        $ref: '#/components/schemas/RelationshipType'
+    componentLabel:
+      name: componentLabel
+      in: query
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+    restrictRules:
+      name: restrictRules
+      in: query
+      description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
+      required: false
+      schema:
+        $ref: '#/components/schemas/RestrictRules'
+    component:
+      name: component
+      in: query
+      description: A component in a schema, either the dsplay label or schema label
+      required: true
+      schema:
+        type: string
+    datasetIdQuery:
+      name: datasetId
+      in: query
+      description: The ID of a dataset.
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetId'
+    storageMethod:
+      name: storageMethod
+      in: query
+      description: file_and_entities will store the manifest as a csv and create Synapse files for each row in the manifest. table_and_file will store the manifest as a table and a csv on Synapse. file_only will store the manifest as a csv only on Synapse. table_file_and_entities will perform the options file_with_entites and table in combination.
+      required: false
+      schema:
+        type: string
+        enum:
+          - file_and_entities
+          - table_and_file
+          - file_only
+          - table_file_and_entities
+        default: table_file_and_entities
+    hideBlanks:
+      name: hideBlanks
+      in: query
+      description: If true, annotations with blank values will be hidden from a dataset's annotation list in Synaspe. If false, annotations with blank values will be displayed.
+      required: false
+      schema:
+        type: boolean
+        default: false
+    assetViewIdQuery:
+      name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
+    tableManipulationMethod:
+      name: tableManipulationMethod
+      in: query
+      description: replace will remove the rows and columns from the existing table and store the new rows and columns, preserving the name and synID. upsert will add the new rows to the table and preserve the exisitng rows and columns in the existing table.
+      required: false
+      schema:
+        type: string
+        enum:
+          - replace
+          - upsert
+        default: replace
+    useSchemaLabel:
+      name: useSchemaLabel
+      in: query
+      description: If true, store attributes using the schema label If false, store attributes using the display label
+      required: false
+      schema:
+        type: boolean
+        default: true

@@ -8,9 +8,7 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
   "ignorePaths": [
-    "apps/api",
-    "apps/challenge-db-cli",
-    "libs/api-client-angular-deprecated"
+    "apps/api"
   ],
   "baseBranches": ["main"],
   "labels": ["bot", "dependencies"],

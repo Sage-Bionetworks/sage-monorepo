@@ -9,14 +9,18 @@ import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-org-profile-stats',
+  standalone: true,
+  imports: [CommonModule, MatIconModule],
   templateUrl: './org-profile-stats.component.html',
   styleUrls: ['./org-profile-stats.component.scss'],
 })
 export class OrgProfileStatsComponent implements OnInit {
-  @Input() loggedIn = false;
+  @Input({ required: true }) loggedIn = false;
   organization$!: Observable<Organization>;
   mockMembers!: number;
 
@@ -46,7 +50,6 @@ export class OrgProfileStatsComponent implements OnInit {
   shorthand(n: number | undefined) {
     if (n) {
       return Intl.NumberFormat('en-US', {
-        notation: 'compact',
         maximumFractionDigits: 1,
       }).format(n);
     } else {

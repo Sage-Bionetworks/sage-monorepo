@@ -3,9 +3,8 @@ type: string
 default: relevance
 enum:
   - created
-  - ending_soon
-  - recently_ended
-  - recently_started
+  - random
   - relevance
   - starred
-  - starting_soon
+  - start_date
+  - end_date

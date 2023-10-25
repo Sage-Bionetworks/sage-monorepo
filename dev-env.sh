@@ -11,13 +11,6 @@ else # Other/fail
 fi
 export WORKSPACE_BUILD_PROCS
 
-bold=$(tput bold)
-italic=$(tput sitm)
-reset=$(tput sgr0)
-
-orange=$(tput setaf 166)
-
-
 # cd to the workspace directory
 function workspace-cd {
   cd $WORKSPACE_DIR
@@ -28,16 +21,16 @@ export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
 function workspace-install {
   yarn install --immutable
-  # TODO: Find a more efficient way than looping through all the Java project to execute the same
-  # task (download gradle), enough though caching already helps.
-  nx run-many --target=prepare
-  nx run-many --target=prepare-java --parallel=1
-  nx run-many --target=prepare-python
-  nx run-many --target=prepare-r
+  nx run-many --target=create-config
+  nx run-many --target=prepare --projects=tag:language:java --parallel=1
+  nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
-function workspace-prepare {
-  nx run-many --parallel --target=prepare
+function workspace-install-affected {
+  yarn install --immutable
+  nx affected --target=create-config
+  nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
+  nx affected --target=prepare --exclude 'tag:language:java'
 }
 
 # Setup Python virtualenvs
@@ -80,14 +73,9 @@ function workspace-graph {
   nx graph
 }
 
-function openchallenges-db-cli {
-  node dist/apps/openchallenges/db-cli/src/index.js "$@"
-}
-
 function openchallenges-infra {
   node dist/apps/openchallenges/infra/src/main.js "$@"
 }
-
 
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
@@ -101,16 +89,24 @@ function synapse-build-images {
   nx run-many --target=build-image --projects=synapse-* --parallel=3
 }
 
-# function challenge-seed-db {
-#   node dist/apps/challenge-db-cli/src/index.js seed "$WORKSPACE_DIR/apps/challenge-db-cli/data/seeds/production/"
-# }
-
 function workspace-nx-cloud-help {
   printf "%s\n" \
     "" \
     "This workspace is not configured to use Nx Cloud. To configure it," \
-    "  - Run ${bold}cp nx-cloud.env.example nx-cloud.env${reset}" \
-    "  - Add Nx Cloud credentials to ${italic}nx-cloud.env${reset} (contact thomas.schaffter@sagebionetworks.org)"
+    "  - Run \`cp nx-cloud.env.example nx-cloud.env\`" \
+    "  - Add Nx Cloud credentials to nx-cloud.env (contact thomas.schaffter@sagebionetworks.org)"
+}
+
+# Utility function to get comparable semver values.
+# See https://apple.stackexchange.com/a/123408/11374
+function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
+
+function check-vscode-version {
+  expected="1.81.1"
+  actual="$(code --version | head -n 1)"
+  if [ $(version $actual) -lt $(version $expected) ]; then
+    echo "📦 Please update VS Code (${actual}) to version ${expected} or above."
+  fi
 }
 
 function workspace-welcome {
@@ -119,16 +115,24 @@ function workspace-welcome {
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
       "" \
-      "Run ${bold}workspace-install${reset} to install workspace tools like ${bold}nx${reset} and ${bold}jest${reset}."
+      "Run \`workspace-install\` to install workspace tools like nx and jest."
   fi
 
   if [ ! -f "nx-cloud.env" ]; then
     workspace-nx-cloud-help
   fi
+
+  if command -v code &> /dev/null
+  then
+    check-vscode-version
+  fi
 }
 
 function workspace-docker-stop {
-  docker stop $(docker ps -q)
+  num_containers_running=$(docker ps -q | wc -l)
+  if [[ $num_containers_running -gt 0 ]]; then
+    docker stop $(docker ps -q)
+  fi
 }
 
 function workspace-initialize-env {
@@ -137,4 +141,8 @@ function workspace-initialize-env {
   if [ -f "./tools/configure-hostnames.sh" ]; then
     sudo ./tools/configure-hostnames.sh
   fi
+
+  # Needed to run ES containers
+  # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/1899
+  sudo sysctl -w vm.max_map_count=262144 1> /dev/null
 }

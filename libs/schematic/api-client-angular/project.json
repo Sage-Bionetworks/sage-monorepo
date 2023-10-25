@@ -6,10 +6,11 @@
   "prefix": "schematic",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:ng-packagr-lite",
+      "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/schematic/api-client-angular"],
       "options": {
-        "project": "libs/schematic/api-client-angular/ng-package.json"
+        "project": "libs/schematic/api-client-angular/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": true
       },
       "configurations": {
         "production": {
@@ -22,7 +23,7 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/schematic/api-client-angular"],
       "options": {
         "jestConfig": "libs/schematic/api-client-angular/jest.config.ts",
@@ -30,19 +31,19 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/schematic/api-client-angular/src/index.ts"]
       }
     },
     "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/schematic/api-client-angular/src/index.ts"],
         "fix": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -50,13 +51,12 @@
           "openapi-generator-cli generate",
           "echo 'TODO Format generated code'"
         ],
-        "cwd": "libs/schematic/api-client-angular",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [],
-  "implicitDependencies": [
-    "schematic-api-description"
-  ]
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["schematic-api-description"]
 }

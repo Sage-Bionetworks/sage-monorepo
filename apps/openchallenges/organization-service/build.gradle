@@ -9,10 +9,12 @@ buildscript {
 
 plugins {
   id 'com.diffplug.spotless' version "${spotlessVersion}"
+  id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+  id 'jacoco'
   id 'java'
+  id 'org.flywaydb.flyway' version "${flywaydbVersion}"
+  id 'org.sonarqube' version "${sonarqubeVersion}"
   id 'org.springframework.boot' version "${springBootVersion}"
-  id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
-  id "org.flywaydb.flyway" version "${flywaydbVersion}"
 }
 
 repositories {
@@ -73,6 +75,39 @@ tasks.withType(JavaCompile) {
 
 bootBuildImage {
   imageName = "ghcr.io/sage-bionetworks/${project.name}-base:local"
+}
+
+test {
+  // This instruction makes the test fail
+	// useJUnitPlatform()
+
+  testLogging.showStandardStreams = true
+
+  beforeTest { descriptor ->
+     logger.lifecycle("Running test: " + descriptor)
+  }
+
+  failFast = true
+
+  testLogging {
+    events("passed", "skipped", "failed")
+  }
+
+  finalizedBy jacocoTestReport
+}
+
+jacocoTestReport {
+  reports {
+    xml.required = true
+  }
+}
+
+sonar {
+  properties {
+    property("sonar.projectKey", "openchallenges-organization-service")
+    property("sonar.organization", "sage-bionetworks")
+    property("sonar.host.url", "https://sonarcloud.io")
+  }
 }
 
 spotless {

@@ -43,21 +43,21 @@
           [selectedValues]="selectedContributionRoles"
           (selectionChange)="onContributionRolesChange($event)"
           inputId="{{ contributionRolesFilter.query }}"
-        ></openchallenges-checkbox-filter>
+        />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-      header="{{categoriesFilter.label }}"
-      [toggleable]="true"
-      [collapsed]="categoriesFilter.collapsed"
-    >
-      <openchallenges-checkbox-filter
-        [values]="categoriesFilter.values"
-        [selectedValues]="selectedCategories"
-        (selectionChange)="onCategoriesChange($event)"
-        inputId="{{ categoriesFilter.query }}"
-      ></openchallenges-checkbox-filter>
-    </p-panel>
+        header="{{ categoriesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="categoriesFilter.collapsed"
+      >
+        <openchallenges-checkbox-filter
+          [values]="categoriesFilter.values"
+          [selectedValues]="selectedCategories"
+          (selectionChange)="onCategoriesChange($event)"
+          inputId="{{ categoriesFilter.query }}"
+        />
+      </p-panel>
     </div>
     <div class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
@@ -65,8 +65,7 @@
         <openchallenges-organization-card
           *ngFor="let organizationCard of organizationCards"
           [organizationCard]="organizationCard"
-        >
-        </openchallenges-organization-card>
+        />
       </div>
       <openchallenges-paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
@@ -74,9 +73,15 @@
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onPageChange($event)"
-      ></openchallenges-paginator>
+      />
     </div>
   </section>
 </main>
 
-<openchallenges-footer [version]="appVersion"></openchallenges-footer>
+<openchallenges-footer
+  [appVersion]="appVersion"
+  [dataUpdatedOn]="dataUpdatedOn"
+  [privacyPolicyUrl]="privacyPolicyUrl"
+  [termsOfUseUrl]="termsOfUseUrl"
+  [apiDocsUrl]="apiDocsUrl"
+/>

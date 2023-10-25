@@ -17,6 +17,7 @@ import { KeyPair } from '@cdktf/provider-aws/lib/key-pair';
 import { PreviewInstanceConfig } from './preview-instance/preview-instance-config';
 import { PreviewInstance } from './preview-instance/preview-instance';
 import { PreviewInstanceAlb } from './preview-instance-alb/preview-instance-alb';
+import { OpenChallengesDevDns } from './dns/openchallenges-dev-dns';
 
 export class OpenChallengesPreviewStack extends SageStack {
   constructor(scope: Construct, id: string) {
@@ -105,6 +106,9 @@ export class OpenChallengesPreviewStack extends SageStack {
       network.vpc.id,
       previewInstance.instance.privateIp
     );
+
+    // The DNS configuration
+    const dns = new OpenChallengesDevDns(this, 'dns', previewInstanceAlb.lb);
 
     // Add tags to every resource defined within this stack.
     Aspects.of(this).add(

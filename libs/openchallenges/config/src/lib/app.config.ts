@@ -9,13 +9,17 @@ export enum Environment {
 /* eslint-enable no-unused-vars */
 
 export interface AppConfig {
-  environment: Environment;
-  apiUrl: string;
   appVersion: string;
-  keycloakRealm: string;
+  csrApiUrl: string;
+  dataUpdatedOn: string;
+  environment: Environment;
+  googleTagManagerId: string;
   isPlatformServer: boolean;
+  keycloakRealm: string;
   privacyPolicyUrl: string;
+  ssrApiUrl: string;
   termsOfUseUrl: string;
+  apiDocsUrl: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;

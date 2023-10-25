@@ -1,0 +1,22 @@
+<main>
+  <div id="contributors">
+    <h3>Contributors</h3>
+    <p>
+      List of organizations whose contributions made possible the challenge. Contributions can range
+      from planning and organizing the challenge to contributing data and providing technical
+      support.
+    </p>
+    <ng-container *ngIf="organizationCards!.length > 0; else na_text">
+      <div class="card-group">
+        <openchallenges-organization-card
+          *ngFor="let organizationCard of organizationCards"
+          [organizationCard]="organizationCard"
+          [showMember]="false"
+        />
+      </div>
+    </ng-container>
+    <ng-template #na_text>
+      <h4 class="text-grey">Not available</h4>
+    </ng-template>
+  </div>
+</main>

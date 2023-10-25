@@ -6,10 +6,11 @@
   "prefix": "openchallenges",
   "targets": {
     "build": {
-      "executor": "@nrwl/angular:ng-packagr-lite",
+      "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/openchallenges/api-client-angular"],
       "options": {
-        "project": "libs/openchallenges/api-client-angular/ng-package.json"
+        "project": "libs/openchallenges/api-client-angular/ng-package.json",
+        "updateBuildableProjectDepsInPackageJson": true
       },
       "configurations": {
         "production": {
@@ -22,7 +23,7 @@
       "defaultConfiguration": "production"
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/api-client-angular"],
       "options": {
         "jestConfig": "libs/openchallenges/api-client-angular/jest.config.ts",
@@ -30,32 +31,31 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/openchallenges/api-client-angular/src/index.ts"]
       }
     },
     "lint-fix": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/openchallenges/api-client-angular/src/index.ts"],
         "fix": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "rm -fr src/lib/*",
+          "rm -fr src/lib/*", 
           "openapi-generator-cli generate"
         ],
-        "cwd": "libs/openchallenges/api-client-angular",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [],
-  "implicitDependencies": [
-    "openchallenges-api-description"
-  ]
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["openchallenges-api-description"]
 }

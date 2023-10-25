@@ -9,8 +9,8 @@ export const CHALLENGE_TABS: { [key: string]: Tab } = {
     name: 'Organizers',
     visible: true,
   },
-  sponsors: {
-    name: 'Sponsors',
+  contributors: {
+    name: 'Contributors',
     visible: true,
   },
   stargazers: {

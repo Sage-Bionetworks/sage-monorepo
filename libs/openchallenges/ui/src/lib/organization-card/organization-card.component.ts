@@ -1,21 +1,28 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { OrganizationCard } from './organization-card';
-// import * as internal from 'stream';
 import { Avatar } from '../avatar/avatar';
+import { MOCK_MEMBERS, OrganizationMember } from './mock-members';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
+import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-organization-card',
+  standalone: true,
+  imports: [CommonModule, AvatarComponent, MatIconModule, RouterModule],
   templateUrl: './organization-card.component.html',
   styleUrls: ['./organization-card.component.scss'],
 })
 export class OrganizationCardComponent implements OnInit {
-  @Input() organizationCard!: OrganizationCard;
-  // @Input() personAvatarSize = 36;
+  @Input({ required: true }) organizationCard!: OrganizationCard;
+  @Input({ required: false }) showMember = false;
+  @Input({ required: false }) stars = 0;
   organizationAvatar!: Avatar;
-  avatar!: Avatar;
-  mockStars!: number;
-  mockMembers!: Avatar[];
-  otherMembers!: number;
+  organizationMembers!: OrganizationMember[];
+
+  mockStars = 2;
+  otherMembersCount!: number;
   challengesSupported: number | undefined;
 
   ngOnInit(): void {
@@ -23,7 +30,7 @@ export class OrganizationCardComponent implements OnInit {
       this.organizationAvatar = {
         name: this.organizationCard.name,
         src: this.organizationCard.avatarUrl,
-        size: 140,
+        size: 160,
       };
     }
 
@@ -34,42 +41,10 @@ export class OrganizationCardComponent implements OnInit {
           : undefined;
     }
 
-    // TODO: replace mock items with organization properties
-    this.mockStars = 2;
-    this.mockMembers = [
-      // {
-      //   name: 'Awesome User',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-      // {
-      //   name: 'Jane Doe',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-      // {
-      //   name: 'John Smith',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-      // {
-      //   name: 'Ash Ketchum',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-      // {
-      //   name: 'Misty',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-      // {
-      //   name: 'Brock',
-      //   src: '',
-      //   size: this.personAvatarSize,
-      // },
-    ];
-
-    this.otherMembers =
-      this.mockMembers.length > 4 ? this.mockMembers.length - 4 : 0;
+    // TODO: retrieve stars from org object
+    this.stars = this.mockStars;
+    // TODO: retrieve members from org object
+    this.organizationMembers = MOCK_MEMBERS;
+    this.otherMembersCount = Math.max(this.organizationMembers.length - 4, 0);
   }
 }

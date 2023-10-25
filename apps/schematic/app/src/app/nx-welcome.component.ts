@@ -3,8 +3,8 @@ import { Component, ViewEncapsulation } from '@angular/core';
 /* eslint-disable */
 
 @Component({
-  selector: 'sagebionetworks-nx-welcome',
-  template: `
+    selector: 'sagebionetworks-nx-welcome',
+    template: `
     <!--
      * * * * * * * * * * * * * * * * * * * * * * * * * * * *
      This is a starter component and can be deleted.
@@ -750,10 +750,10 @@ import { Component, ViewEncapsulation } from '@angular/core';
               Add UI library
             </summary>
             <pre><span># Generate UI lib</span>
-nx g @nrwl/angular:lib ui
+nx g @nx/angular:lib ui
 
 <span># Add a component</span>
-nx g @nrwl/angular:component button --project ui</pre>
+nx g @nx/angular:component button --project ui</pre>
           </details>
           <details>
             <summary>
@@ -821,7 +821,8 @@ nx affected:e2e</pre>
       </div>
     </div>
   `,
-  styles: [],
-  encapsulation: ViewEncapsulation.None,
+    styles: [],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
 })
 export class NxWelcomeComponent {}

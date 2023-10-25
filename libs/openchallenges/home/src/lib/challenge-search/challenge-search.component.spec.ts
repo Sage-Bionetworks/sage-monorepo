@@ -1,7 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { ChallengeSearchComponent } from './challenge-search.component';
 
 describe('ChallengeSearchComponent', () => {
@@ -10,8 +10,11 @@ describe('ChallengeSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ChallengeSearchComponent],
-      imports: [HttpClientModule],
+      imports: [
+        HttpClientModule,
+        ChallengeSearchComponent,
+        RouterTestingModule,
+      ],
       providers: [ConfigService],
     }).compileComponents();
   });

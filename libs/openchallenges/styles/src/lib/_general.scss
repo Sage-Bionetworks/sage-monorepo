@@ -50,6 +50,13 @@ em {
 .text-right {
   text-align: right;
 }
+.text-grey, 
+span.text-grey a {
+  color: rgba(black, 0.38);
+}
+.text-right {
+  font-weight: 600;
+}
 
 // LOGO & DESIGN
 .logo-icon {
@@ -125,9 +132,9 @@ em {
   white-space: nowrap;
 }
 .facets {
-  padding: 48px 21px;
+  padding: 24px 16px;
   height: 100%;
-  min-width: 320px;
+  min-width: 280px;
   display: flex;
   align-items: flex-start;
   flex-direction: column;
@@ -242,14 +249,35 @@ em {
 table {
   border-spacing: 11px;
 }
+#bio div a mat-icon {
+  font-size: 15px;
+  vertical-align: middle;
+}
+.created-updated-dates,
+.created-updated-dates a,
+.read-more {
+  color: #1f3b8f;
+}
+.created-updated-dates {
+  font-style: italic !important;
+}
+.read-more {
+  text-underline-offset: 3px
+}
 
 // CARDS
+@mixin line-clamp($max-lines) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $max-lines;
+}
 .card-group {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
-  padding: 28px 0;
+  padding: 16px 0;
 }
 .card-banner {
   width: 100%;
@@ -265,6 +293,11 @@ table {
   margin: 15px 0 !important;
   font-weight: 700 !important;
   line-height: 24px !important;
+  min-height: 48px;
+  @include line-clamp(2);
+}
+.mat-caption {
+  @include line-clamp(2);
 }
 .card-body {
   width: 100%;
@@ -282,18 +315,18 @@ table {
 .card-footer {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
   height: 50px;
   width: 100%;
   border-top: 1px solid #c4c4c4;
   justify-content: center;
   align-items: center;
+  gap: 6px;
 }
 .star-btn {
   position: absolute;
   top: 18px;
   right: 18px;
-  height: 32px;
+  // height: 32px;
   padding: 0 8px;
   display: flex;
   justify-content: center;
@@ -311,10 +344,6 @@ table {
 @media screen and (max-width: constants.$md-breakpoint) {
   .content {
     flex-direction: column;
-  }
-  .card-group {
-    flex-direction: column;
-    align-items: center;
   }
 }
 @media screen and (min-width: constants.$md-breakpoint) {
@@ -373,5 +402,10 @@ table {
 @media only screen and (max-width: constants.$lg-breakpoint) {
   html {
     margin-top: constants.$navbar-height-tall;
+  }
+
+  .card-group {
+    grid-template-columns: 60%;
+    justify-content: center;
   }
 }

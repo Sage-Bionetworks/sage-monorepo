@@ -4,6 +4,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 
 import { HomeComponent } from './home.component';
+import { RouterTestingModule } from '@angular/router/testing';
+
+// import ResizeObserver polyfill
+global.ResizeObserver = jest.fn(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
@@ -11,8 +19,7 @@ describe('HomeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [HomeComponent],
-      imports: [HttpClientModule],
+      imports: [HttpClientModule, RouterTestingModule, HomeComponent],
       providers: [ConfigService],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();

@@ -15,10 +15,12 @@ servers:
 tags:
 - description: Operations about challenges.
   name: Challenge
-- description: Operations about challenge platforms.
-  name: ChallengePlatform
+- description: Operations about challenge analytics.
+  name: ChallengeAnalytics
 - description: Operations about challenge input data types.
   name: ChallengeInputDataType
+- description: Operations about challenge platforms.
+  name: ChallengePlatform
 paths:
   /challenges:
     get:
@@ -137,6 +139,30 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: ChallengeContribution
+  /challengeAnalytics/challengesPerYear:
+    get:
+      description: Returns the number of challenges tracked per year
+      operationId: getChallengesPerYear
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChallengesPerYear'
+          description: An object
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Get the number of challenges tracked per year
+      tags:
+      - ChallengeAnalytics
+      x-accepts: application/json
+      x-tags:
+      - tag: ChallengeAnalytics
   /challengeInputDataTypes:
     get:
       description: List challenge input data types
@@ -326,12 +352,11 @@ components:
       description: What to sort results by.
       enum:
       - created
-      - ending_soon
-      - recently_ended
-      - recently_started
+      - random
       - relevance
       - starred
-      - starting_soon
+      - start_date
+      - end_date
       type: string
     ChallengeDirection:
       description: The direction to sort the results by.
@@ -397,6 +422,10 @@ components:
       description: The category of the challenge.
       enum:
       - featured
+      - starting_soon
+      - ending_soon
+      - recently_started
+      - recently_ended
       example: featured
       type: string
     ChallengeSearchQuery:
@@ -416,6 +445,13 @@ components:
           type: integer
         sort:
           $ref: '#/components/schemas/ChallengeSort'
+        sortSeed:
+          description: The seed that initializes the random sorter.
+          format: int32
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          type: integer
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
         difficulties:
@@ -799,6 +835,7 @@ components:
       - title
       type: object
       x-java-class-annotations:
+      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
@@ -833,6 +870,30 @@ components:
       - $ref: '#/components/schemas/PageMetadata'
       - $ref: '#/components/schemas/ChallengeContributionsPage_allOf'
       description: A page of challenge challenge contributions.
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    ChallengesPerYear:
+      description: An object
+      example:
+        challengeCounts:
+        - 0
+        - 0
+        years:
+        - years
+        - years
+      properties:
+        years:
+          items:
+            type: string
+          type: array
+        challengeCounts:
+          items:
+            type: integer
+          type: array
+      required:
+      - challengeCounts
+      - years
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'

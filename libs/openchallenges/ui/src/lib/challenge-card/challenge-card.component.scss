@@ -1,8 +1,9 @@
-@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+@use 'libs/openchallenges/styles/src/lib/constants' as constants;
+@use 'libs/openchallenges/styles/src/lib/general' as general;
 
 .challenge-card {
   width: 320px;
-  min-height: 360px;
+  min-height: 350px;
   padding: 12px 12px 4px;
   display: flex;
   position: relative;
@@ -12,8 +13,7 @@
   cursor: pointer;
 }
 .card-body {
-  min-height: 190px;
-  max-height: 190px;
+  min-height: 160px;
 }
 .card-banner {
   height: 100%;
@@ -24,15 +24,15 @@
   display: flex;
   align-items: center;
   flex: 1;
-  height: 24px;
+  @include general.line-clamp(2);
 }
 .status-tag {
   max-width: 110px;
+  margin-left: 6px;
   padding: 4px 0;
   display: flex;
   flex-direction: column;
   flex-basis: 100%;
-  flex: 1;
   box-sizing: border-box;
   align-items: center;
   justify-content: center;

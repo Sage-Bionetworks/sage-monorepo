@@ -2,18 +2,14 @@
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
-  "python.linting.enabled": true,
-  "python.linting.pylintEnabled": false,
-  "python.linting.flake8Enabled": true,
-  "python.formatting.provider": "black",
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    // "source.fixAll": false,
     "source.fixAll.eslint": true
   },
-  "python.formatting.blackArgs": [],
+  "black-formatter.importStrategy": "fromEnvironment",
   "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.tabSize": 4
   },
@@ -56,7 +52,7 @@
   //     }
   //   ]
   // },
-  "eslint.workingDirectories": ["./apps/challenge-db-cli", "."],
+  "eslint.workingDirectories": ["."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {

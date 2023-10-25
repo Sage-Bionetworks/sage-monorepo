@@ -2,20 +2,19 @@
   "name": "openchallenges-util",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "root": "libs/openchallenges/util",
   "sourceRoot": "libs/openchallenges/util/src",
   "prefix": "openchallenges",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/openchallenges/util"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/util"],
       "options": {
         "jestConfig": "libs/openchallenges/util/jest.config.ts",
         "passWithNoTests": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "libs/openchallenges/util/src/**/*.ts",
@@ -24,6 +23,6 @@
       }
     }
   },
-  "tags": ["type:util", "scope:openchallenges"],
+  "tags": ["type:util", "scope:openchallenges", "language:typescript"],
   "implicitDependencies": []
 }

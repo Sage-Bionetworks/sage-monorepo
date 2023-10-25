@@ -4,44 +4,59 @@
   "sourceRoot": "apps/openchallenges/organization-service/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "shx cp -n .env.example .env",
-        "cwd": "apps/openchallenges/organization-service"
-      }
-    },
-    "prepare-java": {
-      "executor": "nx:run-commands",
-      "options": {
         "commands": ["./gradlew --version 1> /dev/null"],
-        "cwd": "apps/openchallenges/organization-service"
+        "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "@nxrocks/nx-spring-boot:build",
       "options": {
-        "root": "apps/openchallenges/organization-service"
+        "root": "{projectRoot}"
       },
-      "outputs": ["apps/openchallenges/organization-service"],
+      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
+    },
+    "test": {
+      "executor": "@nxrocks/nx-spring-boot:test",
+      "options": {
+        "root": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
+    },
+    "sonar": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew sonar",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["test"]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",
       "options": {
-        "root": "apps/openchallenges/organization-service"
+        "root": "{projectRoot}"
       }
     },
     "format": {
       "executor": "@nxrocks/nx-spring-boot:format",
       "options": {
-        "root": "apps/openchallenges/organization-service"
+        "root": "{projectRoot}"
       }
     },
     "format-check": {
       "executor": "@nxrocks/nx-spring-boot:check-format",
       "options": {
-        "root": "apps/openchallenges/organization-service"
+        "root": "{projectRoot}"
       }
     },
     "serve": {
@@ -51,7 +66,7 @@
           "./gradlew build --continuous --exclude-task spotlessCheck",
           "./gradlew bootRun"
         ],
-        "cwd": "apps/openchallenges/organization-service",
+        "cwd": "{projectRoot}",
         "parallel": true
       },
       "dependsOn": ["^install"]
@@ -59,28 +74,24 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-organization-service"
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
       },
       "dependsOn": []
     },
     "build-image-base": {
       "executor": "@nxrocks/nx-spring-boot:build-image",
       "options": {
-        "root": "apps/openchallenges/organization-service"
+        "root": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/organization-service",
+        "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-organization-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
@@ -89,13 +100,10 @@
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/organization-service",
+        "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-organization-service"],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
@@ -104,25 +112,25 @@
     "publish-and-remove-image": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-organization-service:* --quiet) --force"
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/{projectName}:* --quiet) --force"
       },
       "dependsOn": ["publish-image"]
     },
     "build-and-remove-image": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-organization-service:* --quiet) --force"
+        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/{projectName}:* --quiet) --force"
       },
       "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-organization-service:local --quiet",
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
         "color": true
       }
     },
-    "openapi-generate": {
+    "generate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
@@ -130,14 +138,16 @@
           "openapi-generator-cli generate",
           "./gradlew spotlessApply"
         ],
-        "cwd": "apps/openchallenges/organization-service",
+        "cwd": "{projectRoot}",
         "parallel": false
-      }
+      },
+      "dependsOn": ["^build"]
     }
   },
-  "tags": ["type:service", "scope:backend"],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
-    "openchallenges-app-config-data",
+    "openchallenges-api-description",
+    "openchallenges-app-config-data", 
     "shared-java-util"
   ]
 }

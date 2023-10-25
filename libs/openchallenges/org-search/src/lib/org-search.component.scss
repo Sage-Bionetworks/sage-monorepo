@@ -15,6 +15,9 @@
 ::ng-deep .p-dropdown {
   width: 14rem;
 }
+::ng-deep p-multiselect .p-multiselect-panel.p-component {
+  min-width: 320px;
+}
 ::ng-deep .p-field-checkbox {
   margin-bottom: 8px;
 

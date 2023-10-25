@@ -9,7 +9,8 @@ import { Construct } from 'constructs';
 export class PreviewInstanceAlb extends Construct {
   lb: Alb;
   targetGroup: LbTargetGroup;
-  listener: LbListener;
+  httpsListener: LbListener;
+  httpListener: LbListener;
 
   constructor(
     scope: Construct,
@@ -54,14 +55,38 @@ export class PreviewInstanceAlb extends Construct {
       tags: { Name: `${nameTagPrefix}-preview-instance-tg` },
     });
 
-    this.listener = new LbListener(this, 'preview_instance_alb_http_80', {
+    this.httpsListener = new LbListener(
+      this,
+      'preview_instance_alb_https_443',
+      {
+        loadBalancerArn: this.lb.arn,
+        port: 443,
+        protocol: 'HTTPS',
+        certificateArn:
+          'arn:aws:acm:us-east-1:384625883722:certificate/c1d8b793-66d1-41eb-bddf-3cfedbad6a72',
+
+        defaultAction: [
+          {
+            type: 'forward',
+            targetGroupArn: this.targetGroup.arn,
+          },
+        ],
+      }
+    );
+
+    this.httpListener = new LbListener(this, 'preview_instance_alb_http_80', {
       loadBalancerArn: this.lb.arn,
       port: 80,
       protocol: 'HTTP',
 
       defaultAction: [
         {
-          type: 'forward',
+          type: 'redirect',
+          redirect: {
+            port: '443',
+            protocol: 'HTTPS',
+            statusCode: 'HTTP_301',
+          },
           targetGroupArn: this.targetGroup.arn,
         },
       ],
