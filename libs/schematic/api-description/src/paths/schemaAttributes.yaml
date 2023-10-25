@@ -1,0 +1,18 @@
+get:
+  tags:
+    - Schema
+  summary: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+  description: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+  operationId: getSchemaAttributes
+  parameters:
+    - $ref: ../components/parameters/query/schemaUrl.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            description: The schema as a json string
+            type: string
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

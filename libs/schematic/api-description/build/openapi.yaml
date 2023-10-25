@@ -338,6 +338,47 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      operationId: getComponent
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/includeIndex'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The component as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /schemaAttributes:
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      operationId: getSchemaAttributes
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The schema as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /connectedNodes:
     get:
       tags:
@@ -372,7 +413,7 @@ paths:
       operationId: validateManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -400,7 +441,7 @@ paths:
       operationId: validateManifestCsv
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -475,6 +516,45 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestId'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /tangledTreeLayers:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree node layers to display for a given data model and figure type
+      description: Get tangled tree node layers to display for a given data model and figure type
+      operationId: getTangledTreeLayers
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeLayers'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /tangledTreeText:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      operationId: getTangledTreeText
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+        - $ref: '#/components/parameters/textFormat'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeText'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -833,6 +913,10 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
     RelationshipType:
       description: A type of schema relationship
       type: string
@@ -870,10 +954,6 @@ components:
             - connected_nodes
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
-      type: string
-      example: MolecularEntity
     RestrictRules:
       description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
       type: boolean
@@ -892,6 +972,12 @@ components:
           type: array
           items:
             type: string
+    TangledTreeLayers:
+      description: Tangled tree node layers to display for a given data model
+      type: string
+    TangledTreeText:
+      description: Tangled tree plain or higlighted text to display for a given data model
+      type: object
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1015,6 +1101,21 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       schema:
         $ref: '#/components/schemas/UseStrictCamelCase'
+    componentLabel:
+      name: componentLabel
+      in: path
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+    includeIndex:
+      name: includeIndex
+      in: query
+      description: Whether to include the indexes of the dataframe in the returned JSON string.
+      required: false
+      schema:
+        type: boolean
+        default: false
     relationshipType:
       name: relationshipType
       in: query
@@ -1022,7 +1123,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
-    componentLabel:
+    componentLabelQuery:
       name: componentLabel
       in: query
       description: The label of a component in a schema
@@ -1090,3 +1191,25 @@ components:
       schema:
         type: boolean
         default: true
+    figureType:
+      name: figureType
+      in: query
+      description: Figure type to generate.
+      required: false
+      schema:
+        type: string
+        enum:
+          - component
+          - dependency
+        default: component
+    textFormat:
+      name: textFormat
+      in: query
+      description: Text formatting type.
+      required: false
+      schema:
+        type: string
+        enum:
+          - plain
+          - highlighted
+        default: plain

@@ -13,6 +13,25 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
+def get_component(component_label, schema_url, include_index=None):  # noqa: E501
+    """Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+
+    Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String). # noqa: E501
+
+    :param component_label: The label of a component in a schema
+    :type component_label: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+    :param include_index: Whether to include the indexes of the dataframe in the returned JSON string.
+    :type include_index: bool
+
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_component(
+        component_label, schema_url, include_index
+    )
+
+
 def get_connected_nodes(schema_url, relationship_type):  # noqa: E501
     """Gets a list of connected node pairs
 
@@ -77,6 +96,19 @@ def get_property_label(
     return schema_controller_impl.get_property_label(
         node_display, schema_url, use_strict_camel_case
     )
+
+
+def get_schema_attributes(schema_url):  # noqa: E501
+    """Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+
+    Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String). # noqa: E501
+
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_schema_attributes(schema_url)
 
 
 def list_node_dependencies(
