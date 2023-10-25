@@ -72,8 +72,8 @@ import {
   tap,
 } from 'rxjs/operators';
 import { Calendar, CalendarModule } from 'primeng/calendar';
-import { CommonModule, DatePipe } from '@angular/common';
-import { union } from 'lodash';
+import { CommonModule, DatePipe, Location } from '@angular/common';
+import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -87,6 +87,7 @@ import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -200,7 +201,8 @@ export class ChallengeSearchComponent
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private _location: Location
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -488,21 +490,31 @@ export class ChallengeSearchComponent
   }
 
   onStatusChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        status: this.collapseParam(selected),
-      },
+    const paramName = 'status';
+    let params = new HttpParams().delete(paramName);
+    if (selected.length > 0) {
+      params = new HttpParams().append(
+        paramName,
+        this.collapseParam(selected) ?? ''
+      );
+    }
+    this._location.replaceState(location.pathname, params.toString());
+    const newQuery = assign(this.query.getValue(), {
+      [paramName]: selected,
     });
+    this.query.next(newQuery);
   }
 
   onSubmissionTypesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        submissionTypes: this.collapseParam(selected),
-      },
-    });
+    const paramName = 'submissionTypes';
+    let params = new HttpParams().delete(paramName);
+    if (selected.length > 0) {
+      params = new HttpParams().append(
+        paramName,
+        this.collapseParam(selected) ?? ''
+      );
+    }
+    this._location.replaceState(location.pathname, params.toString());
   }
 
   onIncentivesChange(selected: string[]): void {
