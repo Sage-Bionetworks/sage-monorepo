@@ -12,12 +12,64 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": "Bearer xxx",
 }
+
+COMPONENT_URL = "/api/v1/components/componentLabel/"
 CONNECTED_NODES_URL = "/api/v1/connectedNodes?schemaUrl=url1&relationshipType=type"
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/node1/isRequired?schemaUrl=url1"
 PROPERTY_LABEL_URL = "/api/v1/nodes/node1/propertyLabel?schemaUrl=url1"
+SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes"
 NODE_PROPERTIES_URL = "/api/v1/nodes/node1/nodeProperties?schemaUrl=url1"
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/node1/validationRules?schemaUrl=url1"
 NODE_DEPENDENCIES_URL = "/api/v1/nodes/node1/dependencies?schemaUrl=url1"
+
+
+class TestGetComponent(BaseTestCase):
+    """Test case for component endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component",
+            return_value="xxx",
+        ) as mock_function:
+            url = f"{COMPONENT_URL}?schemaUrl=url"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_once_with("componentLabel", "url", False)
+            assert response.json == "xxx"
+
+    def test_parameters(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component",
+            return_value="xxx",
+        ) as mock_function:
+            url = f"{COMPONENT_URL}?schemaUrl=url2&includeIndex=True"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_once_with("componentLabel", "url2", True)
+            assert response.json == "xxx"
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_component",
+            side_effect=TypeError,
+        ):
+            url = f"{COMPONENT_URL}?schemaUrl=url"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
 
 
 class TestGetConnectedNodes(BaseTestCase):
@@ -152,6 +204,57 @@ class TestGetPropertyLabel(BaseTestCase):
             response = self.client.open(
                 PROPERTY_LABEL_URL, method="GET", headers=HEADERS
             )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestGetSchemaAttributes(BaseTestCase):
+    """Test case for schema attributes endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_schema_attributes",
+            return_value="xxx",
+        ) as mock_function:
+            url = f"{SCHEMA_ATTRIBUTES_URL}?schemaUrl=url"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("url")
+            assert response.json == "xxx"
+
+    def test_parameters(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_schema_attributes",
+            return_value="xxx",
+        ) as mock_function:
+            url = f"{SCHEMA_ATTRIBUTES_URL}?schemaUrl=url2"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+            mock_function.assert_called_once_with("url2")
+            assert response.json == "xxx"
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.schema_controller_impl,
+            "get_schema_attributes",
+            side_effect=TypeError,
+        ):
+            url = f"{SCHEMA_ATTRIBUTES_URL}?schemaUrl=url"
+            response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
