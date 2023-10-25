@@ -162,7 +162,7 @@
         [pageSize]="selectedPageSize || defaultPageSize"
         [totalRecords]="searchResultsCount"
         [itemsPerPage]="[12, 24, 36, 48]"
-        (pageChange)="onPageChange($event)"
+        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows,})"
       />
     </div>
   </section>
