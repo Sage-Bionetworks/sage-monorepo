@@ -1,5 +1,5 @@
 description: The EDAM operation class of the challenge.
 type: string
-maxLength: 80
+maxLength: 16
 pattern: '^$|^operation_\d+$'
 example: operation_0004

@@ -39,7 +39,7 @@ CREATE TABLE `challenge`
     `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
     `doi`                   varchar(80),
-    `operation`             varchar(80),
+    `operation`             varchar(16),
     `start_date`            DATE,
     `end_date`              DATE,
     -- `email`                 varchar(255) DEFAULT NULL,
