@@ -402,11 +402,7 @@ export class ChallengeSearchComponent
         takeUntil(this.destroy)
       )
       .subscribe((searched) => {
-        const searchedTerms = searched === '' ? undefined : searched;
-        this.router.navigate([], {
-          queryParamsHandling: 'merge',
-          queryParams: { searchTerms: searchedTerms },
-        });
+        this.onParamChange('searchTerms', searched);
       });
 
     this.query
@@ -435,16 +431,6 @@ export class ChallengeSearchComponent
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();
-  }
-
-  splitParam(activeParam: string | undefined, by = ','): any[] {
-    return activeParam ? activeParam.split(by) : [];
-  }
-
-  collapseParam(selectedParam: any, by = ','): string | undefined {
-    return selectedParam.length === 0
-      ? undefined
-      : this.splitParam(selectedParam.toString()).join(by);
   }
 
   onSearchChange(): void {
@@ -534,7 +520,7 @@ export class ChallengeSearchComponent
     });
   }
 
-  onParamChange(paramName: string, selected: string[]): void {
+  onParamChange(paramName: string, selected: string[] | string): void {
     let params = new HttpParams().delete(paramName);
     if (selected.length > 0) {
       params = new HttpParams().append(
@@ -547,6 +533,16 @@ export class ChallengeSearchComponent
       [paramName]: selected,
     });
     this.query.next(newQuery);
+  }
+
+  splitParam(activeParam: string | undefined, by = ','): any[] {
+    return activeParam ? activeParam.split(by) : [];
+  }
+
+  collapseParam(selectedParam: any, by = ','): string | undefined {
+    return selectedParam.length === 0
+      ? undefined
+      : this.splitParam(selectedParam.toString()).join(by);
   }
 
   openSnackBar(message: string) {
