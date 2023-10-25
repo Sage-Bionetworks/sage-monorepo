@@ -579,19 +579,20 @@ components:
         ontology term.
       type: string
       minLength: 3
-      maxLength: 80
+      maxLength: 16
       example: data_1916
     EdamName:
       description: The preferred name/label of the EDAM ontology term.
       type: string
       minLength: 3
-      maxLength: 255
+      maxLength: 80
       example: Alignment
     EdamSubclassOf:
       description: The parent EDAM ID(s) of the EDAM ontology term.
       type: string
       minLength: 3
-      maxLength: 255
+      maxLength: 60
+      nullable: true
       example: data_0006
     SimpleChallengeInputDataType:
       type: object
