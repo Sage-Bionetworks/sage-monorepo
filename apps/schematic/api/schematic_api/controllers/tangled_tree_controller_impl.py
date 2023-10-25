@@ -1,19 +1,20 @@
 """Tangled tree controllers"""
 
-from typing import Literal
+from typing import Literal, Union
 
 from schematic.visualization.tangled_tree import TangledTree  # type: ignore
 
+from schematic_api.models.basic_error import BasicError
 from schematic_api.controllers.utils import (
-    handle_endpoint_status,
+    handle_exceptions,
     download_schema_file_as_jsonld,
 )
 
 
-@handle_endpoint_status
+@handle_exceptions
 def get_tangled_tree_layers(
     schema_url: str, figure_type: Literal["component", "dependency"] = "component"
-) -> str:
+) -> tuple[Union[str, BasicError], int]:
     """Gets layers for a tangled tree visualization.
 
     Args:
@@ -21,8 +22,9 @@ def get_tangled_tree_layers(
         figure_type (Literal["component", "dependency"]): Figure type to generate.
 
     Returns:
-        str: A json in string form that represents the layers for a single
-            tangled tree
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the layers or an error object
+          The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
     tangled_tree = TangledTree(schema_path, figure_type)
@@ -34,15 +36,18 @@ def get_tangled_tree_layers(
     layers_list: list[str] = tangled_tree.get_tangled_tree_layers(save_file=False)
     if len(layers_list) == 0:
         raise ValueError("TangledTree.get_tangled_tree_layers() returned an empty list")
-    return layers_list[0]
+    result: Union[str, BasicError] = layers_list[0]
+    status = 200
+
+    return result, status
 
 
-@handle_endpoint_status
+@handle_exceptions
 def get_tangled_tree_text(
     schema_url: str,
     figure_type: Literal["component", "dependency"] = "component",
     text_format: Literal["plain", "highlighted"] = "plain",
-) -> str:
+) -> tuple[Union[str, BasicError], int]:
     """Gets text for a tangled tree visualization.
 
     Args:
@@ -52,8 +57,15 @@ def get_tangled_tree_text(
           rendering to return
 
       Returns:
-        str: A csv in string form
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the text or an error object
+          The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
     tangled_tree = TangledTree(schema_path, figure_type)
-    return tangled_tree.get_text_for_tangled_tree(text_format, save_file=False)
+    result: Union[str, BasicError] = tangled_tree.get_text_for_tangled_tree(
+        text_format, save_file=False
+    )
+    status = 200
+
+    return result, status

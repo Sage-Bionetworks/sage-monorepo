@@ -15,15 +15,14 @@ from schematic_api.models.connected_nodes_page import ConnectedNodesPage
 from schematic_api.models.connected_nodes import ConnectedNodes
 from schematic_api.controllers.utils import (
     handle_exceptions,
-    handle_endpoint_status,
     download_schema_file_as_jsonld,
 )
 
 
-@handle_endpoint_status
+@handle_exceptions
 def get_component(
     component_label: str, schema_url: str, include_index: bool = False
-) -> str:
+) -> tuple[Union[str, BasicError], int]:
     """
     Get all the attributes associated with a specific data model component formatted as a
     dataframe (stored as a JSON String).
@@ -34,13 +33,17 @@ def get_component(
         include_index (bool): Whether to include the indexes of the dataframe
 
     Returns:
-        str: The component
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the component or an error object
+          The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
     explorer = AttributesExplorer(schema_path)
-    return explorer.parse_component_attributes(
+    result: Union[str, BasicError] = explorer.parse_component_attributes(
         component=component_label, save_file=False, include_index=include_index
     )
+    status = 200
+    return result, status
 
 
 def get_connected_nodes_from_schematic(
@@ -190,8 +193,8 @@ def get_property_label(
     return result, status
 
 
-@handle_endpoint_status
-def get_schema_attributes(schema_url: str) -> str:
+@handle_exceptions
+def get_schema_attributes(schema_url: str) -> tuple[Union[str, BasicError], int]:
     """
     Get all the attributes associated with a data model formatted as a dataframe
     (stored as a JSON String).
@@ -200,11 +203,15 @@ def get_schema_attributes(schema_url: str) -> str:
         schema_url (str): The URL of the schema in json form
 
     Returns:
-        str: The schema
+        tuple[Union[str, BasicError], int]: A tuple
+          The first item is either the sttraibutes or an error object
+          The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
     explorer = AttributesExplorer(schema_path)
-    return explorer.parse_attributes(save_file=False)
+    result: Union[str, BasicError] = explorer.parse_attributes(save_file=False)
+    status = 200
+    return result, status
 
 
 def get_node_properties_from_schematic(
