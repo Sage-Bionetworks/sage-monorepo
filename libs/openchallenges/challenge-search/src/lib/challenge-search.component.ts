@@ -489,43 +489,6 @@ export class ChallengeSearchComponent
     }
   }
 
-  onStatusChange(selected: string[]): void {
-    const paramName = 'status';
-    let params = new HttpParams().delete(paramName);
-    if (selected.length > 0) {
-      params = new HttpParams().append(
-        paramName,
-        this.collapseParam(selected) ?? ''
-      );
-    }
-    this._location.replaceState(location.pathname, params.toString());
-    const newQuery = assign(this.query.getValue(), {
-      [paramName]: selected,
-    });
-    this.query.next(newQuery);
-  }
-
-  onSubmissionTypesChange(selected: string[]): void {
-    const paramName = 'submissionTypes';
-    let params = new HttpParams().delete(paramName);
-    if (selected.length > 0) {
-      params = new HttpParams().append(
-        paramName,
-        this.collapseParam(selected) ?? ''
-      );
-    }
-    this._location.replaceState(location.pathname, params.toString());
-  }
-
-  onIncentivesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        incentives: this.collapseParam(selected),
-      },
-    });
-  }
-
   onPlatformsChange(selected: string[]): void {
     this.router.navigate([], {
       queryParamsHandling: 'merge',
@@ -537,28 +500,6 @@ export class ChallengeSearchComponent
 
   onPlatformSearchChange(searched: string): void {
     this.platformSearchTerms.next(searched);
-  }
-
-  onCategoriesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        categories: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onInputDataTypesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        inputDataTypes: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onInputDataTypeSearchChange(searched: string): void {
-    this.inputDataTypeSearchTerms.next(searched);
   }
 
   onOrganizationsChange(selected: number[]): void {
@@ -591,6 +532,21 @@ export class ChallengeSearchComponent
         pageSize: event.rows,
       },
     });
+  }
+
+  onParamChange(paramName: string, selected: string[]): void {
+    let params = new HttpParams().delete(paramName);
+    if (selected.length > 0) {
+      params = new HttpParams().append(
+        paramName,
+        this.collapseParam(selected) ?? ''
+      );
+    }
+    this._location.replaceState(location.pathname, params.toString());
+    const newQuery = assign(this.query.getValue(), {
+      [paramName]: selected,
+    });
+    this.query.next(newQuery);
   }
 
   openSnackBar(message: string) {
