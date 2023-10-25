@@ -524,14 +524,14 @@ components:
       description: The slug of the challenge.
       type: string
       minLength: 3
-      maxLength: 60
+      maxLength: 255
       pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
       example: awesome-challenge
     ChallengeName:
       description: The name of the challenge.
       type: string
       minLength: 3
-      maxLength: 60
+      maxLength: 255
     ChallengeHeadline:
       description: The headline of the challenge.
       type: string
@@ -542,7 +542,7 @@ components:
       description: The description of the challenge.
       type: string
       minLength: 0
-      maxLength: 280
+      maxLength: 1000
       example: This is an example description of the challenge.
     ChallengeOperation:
       description: The EDAM operation class of the challenge.

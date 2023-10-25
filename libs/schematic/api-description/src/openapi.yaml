@@ -64,6 +64,12 @@ paths:
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
 
+  /components/{componentLabel}/:
+    $ref: paths/components/@{componentLabel}/component.yaml
+
+  /schemaAttributes:
+    $ref: paths/schemaAttributes.yaml
+
   /connectedNodes:
     $ref: paths/connectedNodes.yaml
 
@@ -78,3 +84,9 @@ paths:
 
   /submitManifestCsv:
     $ref: paths/submitManifestCsv.yaml
+
+  /tangledTreeLayers:
+    $ref: paths/tangledTreeLayers.yaml
+
+  /tangledTreeText:
+    $ref: paths/tangledTreeText.yaml
