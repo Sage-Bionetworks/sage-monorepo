@@ -395,8 +395,9 @@ components:
     ChallengeOperation:
       description: The EDAM operation class of the challenge.
       type: string
-      maxLength: 80
+      maxLength: 16
       pattern: ^$|^operation_\d+$
+      nullable: true
       example: operation_0004
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
