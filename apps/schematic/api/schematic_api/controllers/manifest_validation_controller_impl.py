@@ -3,8 +3,6 @@ import tempfile
 import os
 import io
 import json
-import urllib.request
-import shutil
 from typing import Union, Any, Optional
 
 import pandas as pd
@@ -13,24 +11,11 @@ from schematic.models.metadata import MetadataModel  # type: ignore
 
 from schematic_api.models.manifest_validation_result import ManifestValidationResult
 from schematic_api.models.basic_error import BasicError
-from schematic_api.controllers.utils import handle_exceptions, get_access_token
-
-
-def download_schema_file_as_jsonld(schema_url: str) -> str:
-    """Downloads a schema and saves it as temp file
-
-    Args:
-        schema_url (str): The URL of the schema
-
-    Returns:
-        str: The path fo the schema jsonld file
-    """
-    with urllib.request.urlopen(schema_url) as response:
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=".model.jsonld"
-        ) as tmp_file:
-            shutil.copyfileobj(response, tmp_file)
-            return tmp_file.name
+from schematic_api.controllers.utils import (
+    handle_exceptions,
+    get_access_token,
+    download_schema_file_as_jsonld,
+)
 
 
 def save_manifest_json_string_as_csv(manifest_json_string: str) -> str:
