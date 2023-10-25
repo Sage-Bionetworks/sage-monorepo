@@ -27,7 +27,7 @@
           optionLabel="label"
           optionValue="value"
           scrollHeight="unset"
-          (onChange)="onParamChange('sort', sortedBy)"
+          (onChange)="onParamChange({ sort: sortedBy })"
         ></p-dropdown>
       </div>
     </div>
@@ -40,9 +40,9 @@
         [collapsed]="incentivesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="incentivesFilter.values"
-          [selectedValues]="selectedIncentives"
-          (selectionChange)="onParamChange('incentives', $event)"
+          [options]="incentivesFilter.options"
+          [selectedOptions]="selectedIncentives"
+          (selectionChange)="onParamChange({ incentives: $event })"
           inputId="{{ incentivesFilter.query }}"
         />
       </p-panel>
@@ -53,9 +53,9 @@
         [collapsed]="statusFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="statusFilter.values"
-          [selectedValues]="selectedStatus"
-          (selectionChange)="onParamChange('status', $event)"
+          [options]="statusFilter.options"
+          [selectedOptions]="selectedStatus"
+          (selectionChange)="onParamChange({ status: $event })"
           inputId="{{ statusFilter.query }}"
         />
       </p-panel>
@@ -66,9 +66,9 @@
         [collapsed]="categoriesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="categoriesFilter.values"
-          [selectedValues]="selectedCategories"
-          (selectionChange)="onParamChange('categories', $event)"
+          [options]="categoriesFilter.options"
+          [selectedOptions]="selectedCategories"
+          (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
         />
       </p-panel>
@@ -79,12 +79,12 @@
         [collapsed]="platformsFilter.collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [values]="platformsFilter.values"
-          [selectedValues]="selectedPlatforms"
+          [options]="platformsFilter.options"
+          [selectedOptions]="selectedPlatforms"
           placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
           [showAvatar]="platformsFilter.showAvatar"
           [filterByApiClient]="true"
-          (selectionChange)="onParamChange('platforms', $event)"
+          (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
         />
       </p-panel>
@@ -95,12 +95,12 @@
         [collapsed]="organizationsFilter.collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [values]="organizationsFilter.values"
-          [selectedValues]="selectedOrgs"
+          [options]="organizationsFilter.options"
+          [selectedOptions]="selectedOrgs"
           placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
           [showAvatar]="organizationsFilter.showAvatar"
           [filterByApiClient]="true"
-          (selectionChange)="onParamChange('organizations', $event)"
+          (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
         />
       </p-panel>
@@ -110,7 +110,7 @@
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"
       >
-        <div *ngFor="let year of startYearRangeFilter.values" class="year-btn-group">
+        <div *ngFor="let year of startYearRangeFilter.options" class="year-btn-group">
           <p-radioButton
             [inputId]="year.label!"
             [value]="year.value"
@@ -142,9 +142,9 @@
         [collapsed]="submissionTypesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="submissionTypesFilter.values"
-          [selectedValues]="selectedSubmissionTypes"
-          (selectionChange)="onParamChange('submissionTypes', $event)"
+          [options]="submissionTypesFilter.options"
+          [selectedOptions]="selectedSubmissionTypes"
+          (selectionChange)="onParamChange({ submissionTypes: $event })"
           inputId="{{ submissionTypesFilter.query }}"
         />
       </p-panel>

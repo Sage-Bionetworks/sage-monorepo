@@ -21,17 +21,17 @@ import {
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   CheckboxFilterComponent,
-  FilterValue,
+  Filter,
   FooterComponent,
   OrganizationCard,
   OrganizationCardComponent,
   PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeContributionRolesFilter,
-  organizationCategoriesFilter,
-} from './org-search-filters';
-import { organizationSortFilterValues } from './org-search-filters-values';
+  challengeContributionRolesFilterPanel,
+  organizationCategoriesFilterPanel,
+} from './org-search-filter-panels';
+import { organizationSortFilter } from './org-search-filters';
 import {
   BehaviorSubject,
   Subject,
@@ -120,11 +120,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   defaultPageSize = 24;
 
   // define filters
-  sortFilters: FilterValue[] = organizationSortFilterValues;
+  sortFilters: Filter[] = organizationSortFilter;
 
   // checkbox filters
-  contributionRolesFilter = challengeContributionRolesFilter;
-  categoriesFilter = organizationCategoriesFilter;
+  contributionRolesFilter = challengeContributionRolesFilterPanel;
+  categoriesFilter = organizationCategoriesFilterPanel;
 
   // define selected filter values
   selectedContributionRoles!: ChallengeContributionRole[];

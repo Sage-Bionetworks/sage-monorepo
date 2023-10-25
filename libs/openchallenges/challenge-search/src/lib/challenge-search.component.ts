@@ -36,22 +36,23 @@ import {
   ChallengeCardComponent,
   CheckboxFilterComponent,
   Filter,
+  FilterPanel,
   FilterValue,
   FooterComponent,
   PaginatorComponent,
   SearchDropdownFilterComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeStartYearRangeFilter,
-  challengeStatusFilter,
-  challengeSubmissionTypesFilter,
-  challengeInputDataTypesFilter,
-  challengeIncentivesFilter,
-  challengePlatformsFilter,
-  challengeOrganizationsFilter,
-  challengeCategoriesFilter,
-} from './challenge-search-filters';
-import { challengeSortFilterValues } from './challenge-search-filters-values';
+  challengeStartYearRangeFilterPanel,
+  challengeStatusFilterPanel,
+  challengeSubmissionTypesFilterPanel,
+  challengeInputDataTypesFilterPanel,
+  challengeIncentivesFilterPanel,
+  challengePlatformsFilterPanel,
+  challengeOrganizationsFilterPanel,
+  challengeCategoriesFilterPanel,
+} from './challenge-search-filter-panels';
+import { challengeSortFilter } from './challenge-search-filters';
 import {
   BehaviorSubject,
   Observable,
@@ -176,19 +177,19 @@ export class ChallengeSearchComponent
   defaultPageSize = 24;
 
   // define filters
-  sortFilters: FilterValue[] = challengeSortFilterValues;
-  startYearRangeFilter: Filter = challengeStartYearRangeFilter;
+  sortFilters: Filter[] = challengeSortFilter;
+  startYearRangeFilter: FilterPanel = challengeStartYearRangeFilterPanel;
 
   // checkbox filters
-  statusFilter = challengeStatusFilter;
-  submissionTypesFilter = challengeSubmissionTypesFilter;
-  incentivesFilter = challengeIncentivesFilter;
-  categoriesFilter = challengeCategoriesFilter;
+  statusFilter = challengeStatusFilterPanel;
+  submissionTypesFilter = challengeSubmissionTypesFilterPanel;
+  incentivesFilter = challengeIncentivesFilterPanel;
+  categoriesFilter = challengeCategoriesFilterPanel;
 
   // dropdown filters
-  platformsFilter = challengePlatformsFilter;
-  inputDataTypesFilter = challengeInputDataTypesFilter;
-  organizationsFilter = challengeOrganizationsFilter;
+  platformsFilter = challengePlatformsFilterPanel;
+  inputDataTypesFilter = challengeInputDataTypesFilterPanel;
+  organizationsFilter = challengeOrganizationsFilterPanel;
 
   // define selected filter values
   selectedStatus!: ChallengeStatus[];
@@ -313,15 +314,15 @@ export class ChallengeSearchComponent
           value: platform.slug,
           label: platform.name,
           active: false,
-        })) as FilterValue[];
+        })) as Filter[];
 
-        const selectedPlatformValues = searchedPlatforms.filter((value) =>
-          this.selectedPlatforms.includes(value.value as string)
+        const selectedPlatformValues = searchedPlatforms.filter((option) =>
+          this.selectedPlatforms.includes(option.value as string)
         );
-        this.platformsFilter.values = union(
+        this.platformsFilter.options = union(
           searchedPlatforms,
           selectedPlatformValues
-        ) as FilterValue[];
+        ) as Filter[];
       });
 
     // update input data type filter values
@@ -348,15 +349,16 @@ export class ChallengeSearchComponent
             label: dataType.name,
             active: false,
           })
-        ) as FilterValue[];
+        ) as Filter[];
 
         const selectedInputDataTypesValues = searchedInputDataTypes.filter(
-          (value) => this.selectedInputDataTypes.includes(value.value as string)
+          (option) =>
+            this.selectedInputDataTypes.includes(option.value as string)
         );
-        this.inputDataTypesFilter.values = union(
+        this.inputDataTypesFilter.options = union(
           searchedInputDataTypes,
           selectedInputDataTypesValues
-        ) as FilterValue[];
+        ) as Filter[];
       });
 
     // update organization filter values
@@ -390,15 +392,15 @@ export class ChallengeSearchComponent
           label: org.name,
           avatarUrl: avatarUrls[index]?.url,
           active: false,
-        })) as FilterValue[];
+        })) as Filter[];
 
-        const selectedOrgValues = searchedOrgs.filter((value) =>
-          this.selectedOrgs.includes(value.value as number)
+        const selectedOrgValues = searchedOrgs.filter((option) =>
+          this.selectedOrgs.includes(option.value as number)
         );
-        this.organizationsFilter.values = union(
+        this.organizationsFilter.options = union(
           searchedOrgs,
           selectedOrgValues
-        ) as FilterValue[];
+        ) as Filter[];
       });
   }
 
@@ -411,7 +413,7 @@ export class ChallengeSearchComponent
         takeUntil(this.destroy)
       )
       .subscribe((searched) => {
-        this.onParamChange('searchTerms', searched);
+        this.onParamChange({ organizations: searched });
       });
 
     this.query
@@ -499,18 +501,15 @@ export class ChallengeSearchComponent
     });
   }
 
-  onParamChange(paramName: string, selected: string[] | string): void {
-    let params = new HttpParams().delete(paramName);
-    if (selected.length > 0) {
-      params = new HttpParams().append(
-        paramName,
-        this.collapseParam(selected) ?? ''
-      );
-    }
+  onParamChange(filteredQuery: any): void {
+    // update params of URL
+    const params = Object.entries(filteredQuery)
+      .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
+      .reduce((obj, [key, value]) => obj.append(key, value), new HttpParams());
     this._location.replaceState(location.pathname, params.toString());
-    const newQuery = assign(this.query.getValue(), {
-      [paramName]: selected,
-    });
+
+    // update query to trigger API call
+    const newQuery = assign(this.query.getValue(), filteredQuery);
     this.query.next(newQuery);
   }
 
@@ -535,10 +534,10 @@ export class ChallengeSearchComponent
     return activeParam ? activeParam.split(by) : [];
   }
 
-  collapseParam(selectedParam: any, by = ','): string | undefined {
-    return selectedParam.length === 0
-      ? undefined
-      : this.splitParam(selectedParam.toString()).join(by);
+  collapseParam(selectedParam: FilterValue | FilterValue[], by = ','): string {
+    return Array.isArray(selectedParam)
+      ? selectedParam.map((item) => item?.toString()).join(by)
+      : (selectedParam as string) ?? '';
   }
 
   openSnackBar(message: string) {
