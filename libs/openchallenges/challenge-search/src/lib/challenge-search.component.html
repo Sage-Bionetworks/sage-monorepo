@@ -14,7 +14,7 @@
             type="text"
             pInputText
             [(ngModel)]="searchedTerms"
-            (input)="onSearchChange()"
+            (input)="onSearchChange('challenges', searchedTerms)"
             placeholder="Search challenges"
           />
         </span>
@@ -73,22 +73,6 @@
         />
       </p-panel>
       <p-divider></p-divider>
-      <!-- <p-panel
-        header="{{ inputDataTypesFilter.label }}"
-        [toggleable]="true"
-        [collapsed]="inputDataTypesFilter.collapsed"
-      >
-        <openchallenges-search-dropdown-filter
-          [values]="inputDataTypesFilter.values"
-          [selectedValues]="selectedInputDataTypes"
-          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="inputDataTypesFilter.showAvatar"
-          [filterByApiClient]="true"
-          (selectionChange)="onInputDataTypesChange($event)"
-          (searchChange)="onInputDataTypeSearchChange($event)"
-        />
-      </p-panel>
-      <p-divider></p-divider> -->
       <p-panel
         header="{{ platformsFilter.label }}"
         [toggleable]="true"
@@ -100,8 +84,8 @@
           placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
           [showAvatar]="platformsFilter.showAvatar"
           [filterByApiClient]="true"
-          (selectionChange)="onPlatformsChange($event)"
-          (searchChange)="onPlatformSearchChange($event)"
+          (selectionChange)="onParamChange('platforms', $event)"
+          (searchChange)="onSearchChange('platforms', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -116,8 +100,8 @@
           placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
           [showAvatar]="organizationsFilter.showAvatar"
           [filterByApiClient]="true"
-          (selectionChange)="onOrganizationsChange($event)"
-          (searchChange)="onOrganizationSearchChange($event)"
+          (selectionChange)="onParamChange('organizations', $event)"
+          (searchChange)="onSearchChange('organizations', $event)"
         />
       </p-panel>
       <p-divider></p-divider>

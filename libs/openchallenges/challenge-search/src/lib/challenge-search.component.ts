@@ -128,9 +128,18 @@ export class ChallengeSearchComponent
     new BehaviorSubject<ChallengeSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
-  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
-    ''
-  );
+  private allSearchTerms = new BehaviorSubject<{
+    challenge: string;
+    platform: string;
+    organization: string;
+  }>({
+    challenge: '',
+    platform: '',
+    organization: '',
+  });
+
+  private challengeSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
 
   private platformSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
@@ -394,7 +403,7 @@ export class ChallengeSearchComponent
   }
 
   ngAfterContentInit(): void {
-    this.searchTerms
+    this.challengeSearchTerms
       .pipe(
         skip(1),
         debounceTime(400),
@@ -431,10 +440,6 @@ export class ChallengeSearchComponent
   ngOnDestroy(): void {
     this.destroy.next();
     this.destroy.complete();
-  }
-
-  onSearchChange(): void {
-    this.searchTerms.next(this.searchedTerms);
   }
 
   onYearChange(): void {
@@ -475,32 +480,6 @@ export class ChallengeSearchComponent
     }
   }
 
-  onPlatformsChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        platforms: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onPlatformSearchChange(searched: string): void {
-    this.platformSearchTerms.next(searched);
-  }
-
-  onOrganizationsChange(selected: number[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        organizations: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onOrganizationSearchChange(searched: string): void {
-    this.organizationSearchTerms.next(searched);
-  }
-
   onSortChange(): void {
     this.router.navigate([], {
       queryParamsHandling: 'merge',
@@ -533,6 +512,23 @@ export class ChallengeSearchComponent
       [paramName]: selected,
     });
     this.query.next(newQuery);
+  }
+
+  onSearchChange(
+    searchType: 'challenges' | 'platforms' | 'organizations',
+    searched: string
+  ): void {
+    switch (searchType) {
+      case 'challenges':
+        this.challengeSearchTerms.next(searched);
+        break;
+      case 'platforms':
+        this.platformSearchTerms.next(searched);
+        break;
+      case 'organizations':
+        this.organizationSearchTerms.next(searched);
+        break;
+    }
   }
 
   splitParam(activeParam: string | undefined, by = ','): any[] {
