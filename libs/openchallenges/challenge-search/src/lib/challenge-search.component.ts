@@ -450,12 +450,9 @@ export class ChallengeSearchComponent
     this.isCustomYear = (this.selectedYear as string) === 'custom';
     if (!this.isCustomYear) {
       const yearRange = this.selectedYear as DateRange | undefined;
-      this.router.navigate([], {
-        queryParamsHandling: 'merge',
-        queryParams: {
-          minStartDate: yearRange?.start ? yearRange.start : undefined,
-          maxStartDate: yearRange?.end ? yearRange.end : undefined,
-        },
+      this.onParamChange({
+        minStartDate: yearRange?.start ? yearRange.start : undefined,
+        maxStartDate: yearRange?.end ? yearRange.end : undefined,
       });
 
       // reset custom range
@@ -466,39 +463,11 @@ export class ChallengeSearchComponent
   onCalendarChange(): void {
     this.isCustomYear = true;
     if (this.calendar) {
-      this.router.navigate([], {
-        queryParamsHandling: 'merge',
-        queryParams: {
-          minStartDate: this.datePipe.transform(
-            this.calendar.value[0],
-            'yyyy-MM-dd'
-          ),
-          maxStartDate: this.datePipe.transform(
-            this.calendar.value[1],
-            'yyyy-MM-dd'
-          ),
-        },
+      this.onParamChange({
+        minStartDate: this.dateToFormat(this.calendar.value[0]),
+        maxStartDate: this.dateToFormat(this.calendar.value[1]),
       });
     }
-  }
-
-  onSortChange(): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        sort: this.sortedBy,
-      },
-    });
-  }
-
-  onPageChange(event: any) {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        pageNumber: event.page,
-        pageSize: event.rows,
-      },
-    });
   }
 
   onParamChange(filteredQuery: any): void {
@@ -528,6 +497,10 @@ export class ChallengeSearchComponent
         this.organizationSearchTerms.next(searched);
         break;
     }
+  }
+
+  dateToFormat(date: Date, format?: 'yyyy-MM-dd'): string | null {
+    return this.datePipe.transform(date, format);
   }
 
   splitParam(activeParam: string | undefined, by = ','): any[] {
