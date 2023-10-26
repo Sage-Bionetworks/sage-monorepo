@@ -78,8 +78,9 @@ export class ChallengeCardComponent implements OnInit {
     }
   }
 
-  calcTimeDiff(date: string | null | undefined) {
-    if (!date) {
+  calcTimeDiff(date: string) {
+    const pattern = /\d{4}-\d{2}-\d{2}/;
+    if (!pattern.test(date)) {
       return '';
     }
     const refDate: any = new Date(date + ' 00:00:00');
