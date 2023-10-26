@@ -10,25 +10,10 @@ import {
   Challenge,
   ChallengeService,
   ChallengeSearchQuery,
-  ChallengePlatformService,
-  ChallengePlatformSearchQuery,
-  ChallengeInputDataTypeService,
-  ChallengeInputDataTypeSearchQuery,
-  ImageService,
-  OrganizationService,
-  OrganizationSearchQuery,
-  Organization,
-  Image,
-  ImageQuery,
-  ImageHeight,
-  ImageAspectRatio,
   ChallengeSort,
   ChallengeStatus,
   ChallengeSubmissionType,
   ChallengeIncentive,
-  ChallengePlatformSort,
-  ChallengeInputDataTypeSort,
-  OrganizationSort,
   ChallengeCategory,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -53,17 +38,7 @@ import {
   challengeCategoriesFilterPanel,
 } from './challenge-search-filter-panels';
 import { challengeSortFilter } from './challenge-search-filters';
-import {
-  BehaviorSubject,
-  Observable,
-  Subject,
-  forkJoin,
-  iif,
-  map,
-  of,
-  switchMap,
-  throwError,
-} from 'rxjs';
+import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
 import {
   catchError,
   debounceTime,
@@ -77,8 +52,7 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 import { assign, union } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -89,6 +63,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
+import { ChallengeSearchDataService } from './challenge-search-data.service';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -128,27 +103,7 @@ export class ChallengeSearchComponent
   private query: BehaviorSubject<ChallengeSearchQuery> =
     new BehaviorSubject<ChallengeSearchQuery>({});
 
-  // set a default behaviorSubject to trigger searchTearm's changes
-  private allSearchTerms = new BehaviorSubject<{
-    challenge: string;
-    platform: string;
-    organization: string;
-  }>({
-    challenge: '',
-    platform: '',
-    organization: '',
-  });
-
   private challengeSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
-
-  private platformSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
-
-  private inputDataTypeSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
-
-  private organizationSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
@@ -202,12 +157,8 @@ export class ChallengeSearchComponent
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private router: Router,
     private challengeService: ChallengeService,
-    private challengePlatformService: ChallengePlatformService,
-    private challengeInputDataTypeService: ChallengeInputDataTypeService,
-    private organizationService: OrganizationService,
-    private imageService: ImageService,
+    private challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
@@ -228,23 +179,15 @@ export class ChallengeSearchComponent
       this.selectedMinStartDate = params['minStartDate'];
       this.selectedMaxStartDate = params['maxStartDate'];
 
-      const isDateDefined = params['minStartDate'] || params['maxStartDate'];
-
-      if (isDateDefined) {
+      if (params['minStartDate'] || params['maxStartDate']) {
         if (this.refreshed) {
           // display custom range only once with defined date query after refreshing
           this.selectedYear = 'custom';
           this.isCustomYear = true;
-          const yearRange = [
-            params['minStartDate']
-              ? new Date(params['minStartDate'])
-              : undefined,
-            params['maxStartDate']
-              ? new Date(params['maxStartDate'])
-              : undefined,
+          this.customMonthRange = [
+            new Date(params['minStartDate']),
+            new Date(params['maxStartDate']),
           ];
-
-          this.customMonthRange = yearRange as Date[];
           this.refreshed = false;
         }
       } else {
@@ -262,7 +205,6 @@ export class ChallengeSearchComponent
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
-
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
       this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
@@ -293,114 +235,39 @@ export class ChallengeSearchComponent
       .subscribe((page) => (this.totalChallengesCount = page.totalElements));
 
     // update platform filter values
-    this.platformSearchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-        switchMap((searchTerm: string) => {
-          const sortedBy: ChallengePlatformSort = 'name';
-          const platformQuery: ChallengePlatformSearchQuery = {
-            searchTerms: searchTerm,
-            sort: sortedBy,
-          };
-          return this.challengePlatformService.listChallengePlatforms(
-            platformQuery
-          );
-        })
-      )
-      .subscribe((page) => {
-        const searchedPlatforms = page.challengePlatforms.map((platform) => ({
-          value: platform.slug,
-          label: platform.name,
-          active: false,
-        })) as Filter[];
-
-        const selectedPlatformValues = searchedPlatforms.filter((option) =>
+    this.challengeSearchDataService
+      .searchPlatforms()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        const selectedPlatformValues = options.filter((option) =>
           this.selectedPlatforms.includes(option.value as string)
         );
-        this.platformsFilter.options = union(
-          searchedPlatforms,
-          selectedPlatformValues
-        ) as Filter[];
+        this.platformsFilter.options = union(options, selectedPlatformValues);
       });
 
     // update input data type filter values
-    this.inputDataTypeSearchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-        switchMap((searchTerm: string) => {
-          const sortedBy: ChallengeInputDataTypeSort = 'name';
-          const inputDataTypeQuery: ChallengeInputDataTypeSearchQuery = {
-            searchTerms: searchTerm,
-            sort: sortedBy,
-          };
-          return this.challengeInputDataTypeService.listChallengeInputDataTypes(
-            inputDataTypeQuery
-          );
-        })
-      )
-      .subscribe((page) => {
-        const searchedInputDataTypes = page.challengeInputDataTypes.map(
-          (dataType) => ({
-            value: dataType.slug,
-            label: dataType.name,
-            active: false,
-          })
-        ) as Filter[];
-
-        const selectedInputDataTypesValues = searchedInputDataTypes.filter(
-          (option) =>
-            this.selectedInputDataTypes.includes(option.value as string)
+    this.challengeSearchDataService
+      .searchOriganizations()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        const selectedInputDataTypesValues = options.filter((option) =>
+          this.selectedInputDataTypes.includes(option.value as string)
         );
         this.inputDataTypesFilter.options = union(
-          searchedInputDataTypes,
+          options,
           selectedInputDataTypesValues
-        ) as Filter[];
+        );
       });
 
     // update organization filter values
-    this.organizationSearchTerms
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-        switchMap((searchTerm: string) => {
-          const sortBy: OrganizationSort = 'name';
-          const orgQuery: OrganizationSearchQuery = {
-            searchTerms: searchTerm,
-            sort: sortBy,
-          };
-          return this.organizationService.listOrganizations(orgQuery);
-        }),
-        map((page) => page.organizations),
-        switchMap((orgs) =>
-          forkJoin({
-            orgs: of(orgs),
-            avatarUrls: forkJoinConcurrent(
-              orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-              Infinity
-            ),
-          })
-        )
-      )
-      .subscribe(({ orgs, avatarUrls }) => {
-        const searchedOrgs = orgs.map((org, index) => ({
-          value: org.id,
-          label: org.name,
-          avatarUrl: avatarUrls[index]?.url,
-          active: false,
-        })) as Filter[];
-
-        const selectedOrgValues = searchedOrgs.filter((option) =>
+    this.challengeSearchDataService
+      .searchOriganizations()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        const selectedOrgValues = options.filter((option) =>
           this.selectedOrgs.includes(option.value as number)
         );
-        this.organizationsFilter.options = union(
-          searchedOrgs,
-          selectedOrgValues
-        ) as Filter[];
+        this.organizationsFilter.options = union(options, selectedOrgValues);
       });
   }
 
@@ -413,7 +280,7 @@ export class ChallengeSearchComponent
         takeUntil(this.destroy)
       )
       .subscribe((searched) => {
-        this.onParamChange({ organizations: searched });
+        this.onParamChange({ searchTerms: searched });
       });
 
     this.query
@@ -491,10 +358,10 @@ export class ChallengeSearchComponent
         this.challengeSearchTerms.next(searched);
         break;
       case 'platforms':
-        this.platformSearchTerms.next(searched);
+        this.challengeSearchDataService.setPlatformSearchTerms(searched);
         break;
       case 'organizations':
-        this.organizationSearchTerms.next(searched);
+        this.challengeSearchDataService.setOriganizationSearchTerms(searched);
         break;
     }
   }
@@ -517,24 +384,5 @@ export class ChallengeSearchComponent
     this._snackBar.open(message, undefined, {
       duration: 30000,
     });
-  }
-
-  private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
-    return iif(
-      () => !!org.avatarKey,
-      this.imageService.getImage({
-        objectKey: org.avatarKey,
-        height: ImageHeight._32px,
-        aspectRatio: ImageAspectRatio._11,
-      } as ImageQuery),
-      of({ url: '' })
-    ).pipe(
-      catchError(() => {
-        console.error(
-          'Unable to get the image url. Please check the logs of the image service.'
-        );
-        return of({ url: '' });
-      })
-    );
   }
 }
