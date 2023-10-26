@@ -27,12 +27,13 @@
       <p class="mat-caption">{{ desc }}</p>
     </div>
     <div class="card-footer">
-      <mat-icon aria-hidden="true" class="card-icon">auto_awesome</mat-icon>
+      <mat-icon aria-hidden="true" class="card-icon">emoji_events</mat-icon>
       <div class="difficulty-tag mat-small">
         {{ incentives }}
       </div>
-      <div class="status-tag mat-small" [ngClass]="statusClass">
-        {{ status }}
+      <div class="platform-tag mat-small">
+        <mat-icon aria-hidden="true" class="card-icon">location_on</mat-icon>
+        {{ platform.name }}
       </div>
     </div>
   </div>

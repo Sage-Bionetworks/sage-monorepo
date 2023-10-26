@@ -35,17 +35,10 @@
   flex: 1;
   @include general.line-clamp(2);
 }
-.status-tag {
+.platform-tag {
   max-width: 110px;
-  margin-left: 6px;
-  padding: 4px 0;
+  padding-right: 8px;
   display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  box-sizing: border-box;
   align-items: center;
-  justify-content: center;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: constants.$dl-radius-radius-radius16;
+  justify-content: flex-start;
 }
