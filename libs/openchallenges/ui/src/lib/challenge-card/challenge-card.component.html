@@ -18,9 +18,12 @@
       <p class="card-title">
         {{ challenge.name }}
       </p>
-      <p class="card-subtitle" *ngIf="platform">
-        {{ platform.name }}
-      </p>
+      <div class="card-status">
+        <div><span [ngClass]="statusClass">•</span> {{ status | titlecase }}</div>
+        <div class="mat-small">
+          {{ time_info }}
+        </div>
+      </div>
       <p class="mat-caption">{{ desc }}</p>
     </div>
     <div class="card-footer">
