@@ -27,6 +27,7 @@ export class ChallengeCardComponent implements OnInit {
   desc!: string;
   incentives!: string;
   statusClass!: string;
+  time_info!: string | number;
   // difficulty!: string | undefined;
 
   constructor(
@@ -63,6 +64,45 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
+      if (this.challenge.endDate && this.status === 'completed') {
+        this.time_info = `Ended ${this.calcTimeDiff(
+          this.challenge.endDate
+        )} ago`;
+      } else if (this.challenge.endDate && this.status === 'active') {
+        this.time_info = `Ends in ${this.calcTimeDiff(this.challenge.endDate)}`;
+      } else if (this.challenge.startDate && this.status === 'upcoming') {
+        this.time_info = `Starts in ${this.calcTimeDiff(
+          this.challenge.startDate
+        )}`;
+      }
     }
+  }
+
+  calcTimeDiff(date: string | null | undefined) {
+    if (!date) {
+      return '';
+    }
+    const refDate: any = new Date(date + ' 00:00:00');
+    const now: any = new Date();
+    const diffMs = Math.abs(refDate - now);
+
+    // Calculate the time difference in years, months, weeks, days, and hours.
+    const timeDiff = {
+      year: Math.floor(diffMs / 31_556_952_000),
+      month: Math.floor(diffMs / 2_629_746_000),
+      week: Math.floor(diffMs / 604_800_000),
+      day: Math.floor(diffMs / 86_400_000),
+      hour: Math.floor(diffMs / 3_600_000),
+    };
+
+    // Find the largest unit of time and return in human-readable format.
+    let timeDiffString = '';
+    for (const [unit, value] of Object.entries(timeDiff)) {
+      if (value > 0) {
+        timeDiffString = `${value} ${unit}` + (value > 1 ? 's' : '');
+        break;
+      }
+    }
+    return timeDiffString;
   }
 }
