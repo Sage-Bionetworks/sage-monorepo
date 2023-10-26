@@ -1,4 +1,7 @@
 from typing import Callable, Union, Any, Optional
+import urllib.request
+import shutil
+import tempfile
 
 from flask import request  # type: ignore
 from synapseclient.core.exceptions import (  # type: ignore
@@ -61,3 +64,20 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
             return res, status
 
     return func
+
+
+def download_schema_file_as_jsonld(schema_url: str) -> str:
+    """Downloads a schema and saves it as temp file
+
+    Args:
+        schema_url (str): The URL of the schema
+
+    Returns:
+        str: The path fo the schema jsonld file
+    """
+    with urllib.request.urlopen(schema_url) as response:
+        with tempfile.NamedTemporaryFile(
+            delete=False, suffix=".model.jsonld"
+        ) as tmp_file:
+            shutil.copyfileobj(response, tmp_file)
+            return tmp_file.name

@@ -1,5 +1,5 @@
 -- organization data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/organizations.csv' INTO TABLE organization
+LOAD DATA LOCAL INFILE '${db_organizations_csv_path}' INTO TABLE organization
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
@@ -13,7 +13,7 @@ VALUES (1, 1, 'featured'),
 
 
 -- contributor_roles data
-LOAD DATA LOCAL INFILE '/workspace/BOOT-INF/classes/db/contribution_roles.csv' INTO TABLE challenge_contribution
+LOAD DATA LOCAL INFILE '${db_contribution_roles_csv_path}' INTO TABLE challenge_contribution
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
