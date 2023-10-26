@@ -24,24 +24,15 @@
     border-color: transparent;
     color: map.get($figma, dl-color-default-primary1);
   }
-  .status-tag {
-    border-color: map.get($figma, dl-color-default-primary2);
-    background-color: map.get($figma, dl-color-default-hover1);
-    color: #000;
-
-    &.active {
-      border-color: #71c663;
-      background-color: #d0fedd;
+  .card-status{
+    .active {
+      color: #71c663;
     }
-
-    &.completed {
-      border-color: #ffb6c1;
-      background-color: #ffdde2;
+    .completed {
+      color: #ffb6c1;
     }
-
-    &.upcoming {
-      border-color: #ffc56d;
-      background-color: #fff1bf;
+    .upcoming {
+      color: #ffc56d;
     }
   }
 }

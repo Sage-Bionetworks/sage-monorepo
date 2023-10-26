@@ -18,6 +18,15 @@
 .card-banner {
   height: 100%;
 }
+.card-status {
+  margin: 8px 0 12px;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-start;
+}
 
 // FOOTER
 .difficulty-tag {
