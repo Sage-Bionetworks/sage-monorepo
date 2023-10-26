@@ -339,13 +339,16 @@ export class ChallengeSearchComponent
 
   onParamChange(filteredQuery: any): void {
     // update params of URL
+    const currentParams = new HttpParams({
+      fromString: this._location.path().split('?')[1] ?? '',
+    });
     const params = Object.entries(filteredQuery)
       .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
-      .filter((pair) => pair !== null)
       .reduce(
-        // update updated params, but ignore param if empty string
-        (obj, [key, value]) => (value !== '' ? obj.append(key, value) : obj),
-        new HttpParams()
+        // update with new param, or delete the param if empty string
+        (params, [key, value]) =>
+          value !== '' ? params.set(key, value) : params.delete(key),
+        currentParams
       );
     this._location.replaceState(location.pathname, params.toString());
 

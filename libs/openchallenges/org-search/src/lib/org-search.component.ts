@@ -279,9 +279,17 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   onParamChange(filteredQuery: any): void {
     // update params of URL
+    const currentParams = new HttpParams({
+      fromString: this._location.path().split('?')[1] ?? '',
+    });
     const params = Object.entries(filteredQuery)
       .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
-      .reduce((obj, [key, value]) => obj.append(key, value), new HttpParams());
+      .reduce(
+        // update with new param, or delete the param if empty string
+        (params, [key, value]) =>
+          value !== '' ? params.set(key, value) : params.delete(key),
+        currentParams
+      );
     this._location.replaceState(location.pathname, params.toString());
 
     // update query to trigger API call
