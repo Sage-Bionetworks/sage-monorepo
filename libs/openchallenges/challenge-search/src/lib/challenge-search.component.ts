@@ -318,8 +318,8 @@ export class ChallengeSearchComponent
     if (!this.isCustomYear) {
       const yearRange = this.selectedYear as DateRange | undefined;
       this.onParamChange({
-        minStartDate: yearRange?.start ? yearRange.start : undefined,
-        maxStartDate: yearRange?.end ? yearRange.end : undefined,
+        minStartDate: yearRange?.start,
+        maxStartDate: yearRange?.end,
       });
 
       // reset custom range
@@ -341,7 +341,12 @@ export class ChallengeSearchComponent
     // update params of URL
     const params = Object.entries(filteredQuery)
       .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
-      .reduce((obj, [key, value]) => obj.append(key, value), new HttpParams());
+      .filter((pair) => pair !== null)
+      .reduce(
+        // update updated params, but ignore param if empty string
+        (obj, [key, value]) => (value !== '' ? obj.append(key, value) : obj),
+        new HttpParams()
+      );
     this._location.replaceState(location.pathname, params.toString());
 
     // update query to trigger API call
