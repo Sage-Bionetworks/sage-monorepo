@@ -31,6 +31,7 @@ export class TeamComponent implements OnInit {
   public maria$: Observable<Image> | undefined;
   public gaia$: Observable<Image> | undefined;
   public jake$: Observable<Image> | undefined;
+  public sage$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -67,6 +68,9 @@ export class TeamComponent implements OnInit {
     });
     this.jake$ = this.imageService.getImage({
       objectKey: 'team/jake.png',
+    });
+    this.sage$ = this.imageService.getImage({
+      objectKey: 'logo/sage-bionetworks-alt.svg',
     });
   }
 }
