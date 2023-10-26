@@ -16,13 +16,14 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
-  .star-icon {
-    border-color: transparent;
-    color: map.get($figma, dl-color-default-primary1);
-  }
+  .star-icon,
   .card-icon {
     border-color: transparent;
     color: map.get($figma, dl-color-default-primary1);
+  }
+  .card-icon-alt {
+    border-color: transparent;
+    color: map.get($figma, dl-color-default-darkaccent1);
   }
   .card-status{
     .active {
