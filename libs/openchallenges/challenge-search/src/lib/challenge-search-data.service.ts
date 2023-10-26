@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, forkJoin, iif, Observable, of, Subject } from 'rxjs';
+import { BehaviorSubject, forkJoin, iif, Observable, of } from 'rxjs';
 import {
   catchError,
   debounceTime,
   distinctUntilChanged,
   map,
   switchMap,
-  takeUntil,
 } from 'rxjs/operators';
 import {
   ChallengePlatformSearchQuery,
@@ -35,8 +34,6 @@ export class ChallengeSearchDataService {
   private organizationSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
-  private destroy = new Subject<void>();
-
   constructor(
     private challengePlatformService: ChallengePlatformService,
     private organizationService: OrganizationService,
@@ -55,7 +52,6 @@ export class ChallengeSearchDataService {
     return this.platformSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      takeUntil(this.destroy),
       switchMap((searchTerm: string) => {
         const sortedBy: ChallengePlatformSort = 'name';
         const platformQuery: ChallengePlatformSearchQuery = {
@@ -80,7 +76,6 @@ export class ChallengeSearchDataService {
     return this.organizationSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      // takeUntil(this.destroy),
       switchMap((searchTerm: string) => {
         const sortBy: OrganizationSort = 'name';
         const orgQuery: OrganizationSearchQuery = {
