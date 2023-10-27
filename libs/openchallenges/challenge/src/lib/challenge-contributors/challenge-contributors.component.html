@@ -6,42 +6,48 @@
       from planning and organizing the challenge to contributing data and providing technical
       support.
     </p>
-    <p class="mat-body-strong"><strong>Challenge Organizers</strong></p>
-    <ng-container *ngIf="organizationCards!.length > 0; else no_org">
-      <div class="card-group">
+    <div id="contributor-organizer">
+      <p class="mat-body-strong"><strong>Challenge Organizers</strong></p>
+      <ng-container *ngIf="organizationCards!.length > 0; else no_org">
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let organizationCard of organizationCards"
+            [organizationCard]="organizationCard"
+            [showMember]="false"
+          />
+        </div>
+      </ng-container>
+      <ng-template #no_org>
+        <h4 class="text-grey">Not available</h4>
+      </ng-template>
+    </div>
+    <div id="contributor-data">
+      <p class="mat-body-strong"><strong>Data Contributors</strong></p>
+      <ng-container *ngIf="dataContributorCards!.length > 0; else no_data">
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let organizationCard of dataContributorCards"
+            [organizationCard]="organizationCard"
+            [showMember]="false"
+          />
+        </div>
+      </ng-container>
+      <ng-template #no_data>
+        <h4 class="text-grey">Not available</h4>
+      </ng-template>
+    </div>
+    <div id="contributor-sponsor">
+      <p class="mat-body-strong"><strong>Sponsors</strong></p>
+      <ng-container *ngIf="sponsorCards!.length > 0; else no_sponsor">
         <openchallenges-organization-card
-          *ngFor="let organizationCard of organizationCards"
-          [organizationCard]="organizationCard"
-          [showMember]="false"
-        />
-      </div>
-    </ng-container>
-    <ng-template #no_org>
-      <h4 class="text-grey">Not available</h4>
-    </ng-template>
-    <p class="mat-body-strong"><strong>Data Contributors</strong></p>
-    <ng-container *ngIf="dataContributorCards!.length > 0; else no_data">
-      <div class="card-group">
-        <openchallenges-organization-card
-          *ngFor="let organizationCard of dataContributorCards"
-          [organizationCard]="organizationCard"
-          [showMember]="false"
-        />
-      </div>
-    </ng-container>
-    <ng-template #no_data>
-      <h4 class="text-grey">Not available</h4>
-    </ng-template>
-    <p class="mat-body-strong"><strong>Sponsors</strong></p>
-    <ng-container *ngIf="sponsorCards!.length > 0; else no_sponsor">
-      <openchallenges-organization-card
-          *ngFor="let organizationCard of sponsorCards"
-          [organizationCard]="organizationCard"
-          [showMember]="false"
-        />
-    </ng-container>
-    <ng-template #no_sponsor>
-      <h4 class="text-grey">Not available</h4>
-    </ng-template>
+            *ngFor="let organizationCard of sponsorCards"
+            [organizationCard]="organizationCard"
+            [showMember]="false"
+          />
+      </ng-container>
+      <ng-template #no_sponsor>
+        <h4 class="text-grey">Not available</h4>
+      </ng-template>
+    </div>
   </div>
 </main>
