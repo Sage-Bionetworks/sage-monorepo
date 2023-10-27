@@ -37,6 +37,8 @@ import {
 export class ChallengeContributorsComponent implements OnInit {
   @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = [];
+  dataContributorCards: OrganizationCard[] = [];
+  sponsorCards: OrganizationCard[] = [];
   constructor(
     private challengeContributionService: ChallengeContributionService,
     private organizationService: OrganizationService,
