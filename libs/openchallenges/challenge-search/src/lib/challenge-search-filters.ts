@@ -1,3 +1,11 @@
+import {
+  ChallengeCategory,
+  ChallengeDifficulty,
+  ChallengeIncentive,
+  ChallengeSort,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+} from '@sagebionetworks/openchallenges/api-client-angular';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
 
 const thisYear = new Date().getFullYear();
@@ -50,68 +58,68 @@ export const challengeStartYearRangeFilter: Filter[] = [
 
 export const challengeStatusFilter: Filter[] = [
   {
-    value: 'active',
+    value: ChallengeStatus.Active,
     label: 'Active',
   },
   {
-    value: 'upcoming',
+    value: ChallengeStatus.Upcoming,
     label: 'Upcoming',
   },
   {
-    value: 'completed',
+    value: ChallengeStatus.Completed,
     label: 'Completed',
   },
 ];
 
 export const challengeDifficultyFilter: Filter[] = [
   {
-    value: 'good_for_beginners',
+    value: ChallengeDifficulty.GoodForBeginners,
     label: 'Good For Beginners',
   },
   {
-    value: 'intermediate',
+    value: ChallengeDifficulty.Intermediate,
     label: 'Intermediate',
   },
   {
-    value: 'advanced',
+    value: ChallengeDifficulty.Advanced,
     label: 'Advanced',
   },
 ];
 
 export const challengeSubmissionTypesFilter: Filter[] = [
   {
-    value: 'container_image',
+    value: ChallengeSubmissionType.ContainerImage,
     label: 'Container Image',
   },
   {
-    value: 'prediction_file',
+    value: ChallengeSubmissionType.PredictionFile,
     label: 'Prediction File',
   },
   {
-    value: 'notebook',
+    value: ChallengeSubmissionType.Notebook,
     label: 'Notebook',
   },
   {
-    value: 'other',
+    value: ChallengeSubmissionType.Other,
     label: 'Other',
   },
 ];
 
 export const challengeIncentivesFilter: Filter[] = [
   {
-    value: 'monetary',
+    value: ChallengeIncentive.Monetary,
     label: 'Monetary',
   },
   {
-    value: 'publication',
+    value: ChallengeIncentive.Publication,
     label: 'Publication',
   },
   {
-    value: 'speaking_engagement',
+    value: ChallengeIncentive.SpeakingEngagement,
     label: 'Speaking Engagement',
   },
   {
-    value: 'other',
+    value: ChallengeIncentive.Other,
     label: 'Other',
   },
 ];
@@ -122,23 +130,23 @@ export const challengeInputDataTypesFilter: Filter[] = [];
 
 export const challengeCategoriesFilter: Filter[] = [
   {
-    value: 'featured',
+    value: ChallengeCategory.Featured,
     label: 'Featured',
   },
   {
-    value: 'starting_soon',
+    value: ChallengeCategory.StartingSoon,
     label: 'Starting Soon',
   },
   {
-    value: 'ending_soon',
+    value: ChallengeCategory.EndingSoon,
     label: 'Closing Soon',
   },
   {
-    value: 'recently_started',
+    value: ChallengeCategory.RecentlyStarted,
     label: 'Recently Launched',
   },
   {
-    value: 'recently_ended',
+    value: ChallengeCategory.RecentlyEnded,
     label: 'Recently Completed',
   },
 ];
@@ -149,15 +157,15 @@ export const challengeOrganizersFilter: Filter[] = [];
 
 export const challengeSortFilter: Filter[] = [
   {
-    value: 'relevance',
+    value: ChallengeSort.Relevance,
     label: 'Relevance',
   },
   {
-    value: 'start_date',
+    value: ChallengeSort.StartDate,
     label: 'Start Date',
   },
   {
-    value: 'starred',
+    value: ChallengeSort.Starred,
     label: 'Most Starred',
   },
 ];
