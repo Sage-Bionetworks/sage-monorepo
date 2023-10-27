@@ -21,6 +21,7 @@ import {
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   CheckboxFilterComponent,
+  Filter,
   FilterValue,
   FooterComponent,
   OrganizationCard,
@@ -28,10 +29,10 @@ import {
   PaginatorComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeContributionRolesFilter,
-  organizationCategoriesFilter,
-} from './org-search-filters';
-import { organizationSortFilterValues } from './org-search-filters-values';
+  challengeContributionRolesFilterPanel,
+  organizationCategoriesFilterPanel,
+} from './org-search-filter-panels';
+import { organizationSortFilter } from './org-search-filters';
 import {
   BehaviorSubject,
   Subject,
@@ -54,7 +55,7 @@ import {
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -64,6 +65,8 @@ import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './org-search-seo-data';
+import { HttpParams } from '@angular/common/http';
+import { assign } from 'lodash';
 
 @Component({
   selector: 'openchallenges-org-search',
@@ -120,11 +123,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   defaultPageSize = 24;
 
   // define filters
-  sortFilters: FilterValue[] = organizationSortFilterValues;
+  sortFilters: Filter[] = organizationSortFilter;
 
   // checkbox filters
-  contributionRolesFilter = challengeContributionRolesFilter;
-  categoriesFilter = organizationCategoriesFilter;
+  contributionRolesFilter = challengeContributionRolesFilterPanel;
+  categoriesFilter = organizationCategoriesFilterPanel;
 
   // define selected filter values
   selectedContributionRoles!: ChallengeContributionRole[];
@@ -138,7 +141,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private _location: Location
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -182,11 +186,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.searchTerms
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
       .subscribe((searched) => {
-        const searchedTerms = searched === '' ? undefined : searched;
-        this.router.navigate([], {
-          queryParamsHandling: 'merge',
-          queryParams: { searchTerms: searchedTerms },
-        });
+        this.onParamChange({ searchTerms: searched });
       });
 
     const orgPage$ = this.query.pipe(
@@ -240,62 +240,9 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.destroy.complete();
   }
 
-  splitParam(activeParam: string | undefined, by = ','): any[] {
-    return activeParam ? activeParam.split(by) : [];
-  }
-
-  collapseParam(selectedParam: any, by = ','): string | undefined {
-    return selectedParam.length === 0
-      ? undefined
-      : this.splitParam(selectedParam.toString()).join(by);
-  }
-
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
     this.searchTerms.next(this.searchedTerms);
-  }
-
-  onContributionRolesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        contributionRoles: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onCategoriesChange(selected: string[]): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        categories: this.collapseParam(selected),
-      },
-    });
-  }
-
-  onSortChange(): void {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        sort: this.sortedBy,
-      },
-    });
-  }
-
-  onPageChange(event: any) {
-    this.router.navigate([], {
-      queryParamsHandling: 'merge',
-      queryParams: {
-        pageNumber: event.page,
-        pageSize: event.rows,
-      },
-    });
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, undefined, {
-      duration: 30000,
-    });
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
@@ -328,5 +275,41 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       login: org.login,
       name: org.name,
     } as OrganizationCard;
+  }
+
+  onParamChange(filteredQuery: any): void {
+    // update params of URL
+    const currentParams = new HttpParams({
+      fromString: this._location.path().split('?')[1] ?? '',
+    });
+    const params = Object.entries(filteredQuery)
+      .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
+      .reduce(
+        // update with new param, or delete the param if empty string
+        (params, [key, value]) =>
+          value !== '' ? params.set(key, value) : params.delete(key),
+        currentParams
+      );
+    this._location.replaceState(location.pathname, params.toString());
+
+    // update query to trigger API call
+    const newQuery = assign(this.query.getValue(), filteredQuery);
+    this.query.next(newQuery);
+  }
+
+  splitParam(activeParam: string | undefined, by = ','): any[] {
+    return activeParam ? activeParam.split(by) : [];
+  }
+
+  collapseParam(selectedParam: FilterValue | FilterValue[], by = ','): string {
+    return Array.isArray(selectedParam)
+      ? selectedParam.map((item) => item?.toString()).join(by)
+      : (selectedParam as string) ?? '';
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, undefined, {
+      duration: 30000,
+    });
   }
 }
