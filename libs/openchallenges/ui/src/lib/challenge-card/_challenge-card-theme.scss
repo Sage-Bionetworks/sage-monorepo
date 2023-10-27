@@ -21,19 +21,15 @@
     border-color: transparent;
     color: map.get($figma, dl-color-default-primary1);
   }
-  .card-icon-alt {
-    border-color: transparent;
-    color: map.get($figma, dl-color-default-darkaccent1);
-  }
   .card-status{
     .active {
-      color: #71c663;
+      color: #24A658;
     }
     .completed {
-      color: #ffb6c1;
+      color: #FA6D6D;
     }
     .upcoming {
-      color: #ffc56d;
+      color: #F8B146;
     }
   }
 }
