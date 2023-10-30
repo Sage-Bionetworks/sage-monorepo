@@ -35,10 +35,3 @@
   flex: 1;
   @include general.line-clamp(2);
 }
-.platform-tag {
-  max-width: 115px;
-  padding-right: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}

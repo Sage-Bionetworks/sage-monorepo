@@ -4,8 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
 import {
   Challenge,
-  ChallengePlatformService,
-  SimpleChallengePlatform,
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
@@ -22,7 +20,6 @@ import { Observable } from 'rxjs';
 export class ChallengeCardComponent implements OnInit {
   @Input({ required: true }) challenge!: Challenge;
   banner$: Observable<Image> | undefined;
-  platform!: SimpleChallengePlatform;
   status!: string | undefined;
   desc!: string;
   incentives!: string;
@@ -30,10 +27,7 @@ export class ChallengeCardComponent implements OnInit {
   time_info!: string | number;
   // difficulty!: string | undefined;
 
-  constructor(
-    private challengePlatformService: ChallengePlatformService,
-    private imageService: ImageService
-  ) {}
+  constructor(private imageService: ImageService) {}
 
   ngOnInit(): void {
     if (this.challenge) {
@@ -42,7 +36,6 @@ export class ChallengeCardComponent implements OnInit {
       // this.difficulty = this.challenge.difficulty
       //   ? startCase(this.challenge.difficulty.replace('-', ''))
       //   : undefined;
-      this.platform = this.challenge.platform;
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;
@@ -65,9 +58,10 @@ export class ChallengeCardComponent implements OnInit {
             objectKey: 'banner-default.svg',
           });
       if (this.challenge.endDate && this.status === 'completed') {
-        this.time_info = `Ended ${this.calcTimeDiff(
-          this.challenge.endDate
-        )} ago`;
+        const timeSince = this.calcTimeDiff(this.challenge.endDate);
+        if (timeSince) {
+          this.time_info = `Ended ${timeSince} ago`;
+        }
       } else if (this.challenge.endDate && this.status === 'active') {
         this.time_info = `Ends in ${this.calcTimeDiff(this.challenge.endDate)}`;
       } else if (this.challenge.startDate && this.status === 'upcoming') {
@@ -89,7 +83,6 @@ export class ChallengeCardComponent implements OnInit {
 
     // Calculate the time difference in years, months, weeks, days, and hours.
     const timeDiff = {
-      year: Math.floor(diffMs / 31_556_952_000),
       month: Math.floor(diffMs / 2_629_746_000),
       week: Math.floor(diffMs / 604_800_000),
       day: Math.floor(diffMs / 86_400_000),
@@ -99,7 +92,9 @@ export class ChallengeCardComponent implements OnInit {
     // Find the largest unit of time and return in human-readable format.
     let timeDiffString = '';
     for (const [unit, value] of Object.entries(timeDiff)) {
-      if (value > 0) {
+      if (unit === 'month' && value > 3) {
+        break;
+      } else if (value > 0) {
         timeDiffString = `${value} ${unit}` + (value > 1 ? 's' : '');
         break;
       }

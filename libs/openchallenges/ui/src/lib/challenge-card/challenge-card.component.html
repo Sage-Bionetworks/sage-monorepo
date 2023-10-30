@@ -19,7 +19,7 @@
         {{ challenge.name }}
       </p>
       <div class="card-status">
-        <div><span [ngClass]="statusClass">{{ status | titlecase }}</span></div>
+        <div><span [ngClass]="statusClass">●</span> {{ status | titlecase }}</div>
         <div class="mat-small">
           {{ time_info }}
         </div>
@@ -30,10 +30,6 @@
       <mat-icon aria-hidden="true" class="card-icon">emoji_events</mat-icon>
       <div class="difficulty-tag mat-small">
         {{ incentives }}
-      </div>
-      <div class="platform-tag mat-small">
-        <mat-icon aria-hidden="true" class="card-icon">location_on</mat-icon>
-        {{ platform.name }}
       </div>
     </div>
   </div>
