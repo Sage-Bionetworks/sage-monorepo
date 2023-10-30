@@ -23,18 +23,22 @@
   }
   .card-status{
     .active {
-      color: #24A658;
+      color: #71C663;
     }
     .completed {
-      color: #FA6D6D;
+      color: map.get($figma, dl-color-default-primary1)
     }
     .upcoming {
-      color: #F8B146;
+      color: #FFC56D;
     }
   }
 }
 
-@mixin typography($theme) { }
+@mixin typography($theme) {
+  .card-status span {
+    font-size: 21px;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
