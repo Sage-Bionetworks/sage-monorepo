@@ -10,6 +10,6 @@ import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/lega
   styleUrls: ['./discord-button.component.scss'],
 })
 export class DiscordButtonComponent {
-  @Input({ required: false }) label = 'Discord';
+  @Input({ required: false }) label = 'Join us on Discord';
   @Input({ required: false }) href = 'https://discord.gg/6PGt7nkcwG';
 }
