@@ -16,8 +16,6 @@ import { Observable } from 'rxjs';
 })
 export class SponsorListComponent implements OnInit {
   itcr$: Observable<Image> | undefined;
-  aws$: Observable<Image> | undefined;
-  sage$: Observable<Image> | undefined;
   readonly height = ImageHeight._140px;
 
   constructor(private imageService: ImageService) {}
@@ -25,10 +23,6 @@ export class SponsorListComponent implements OnInit {
   ngOnInit() {
     this.itcr$ = this.imageService.getImage({
       objectKey: 'logo/nci-itcr-alt.svg',
-      height: this.height,
-    });
-    this.sage$ = this.imageService.getImage({
-      objectKey: 'logo/sage-bionetworks-alt.svg',
       height: this.height,
     });
   }
