@@ -13,7 +13,9 @@
   padding: 8px 16px;
   box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
 
-  > .mat-button {
+  > .mat-mdc-button {
+    padding: 0 16px !important;
+
     &:last-child {
       margin-left: auto;
     }

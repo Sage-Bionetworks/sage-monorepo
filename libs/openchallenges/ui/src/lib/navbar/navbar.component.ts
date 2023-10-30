@@ -5,7 +5,7 @@ import { MenuItem } from '../user-button/menu-item';
 import { NavbarSection } from './navbar-section';
 import { ButtonGithubComponent } from '../button-github/button-github.component';
 import { CommonModule } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { UserButtonComponent } from '../user-button/user-button.component';
 

@@ -41,6 +41,5 @@ $theme: map.deep-merge(
 @include mat.button-theme($theme);
 @include mat.legacy-button-theme($theme);
 
-
 // Include the theme mixins for other components you use here.
 @include openchallenges.theme($theme);
