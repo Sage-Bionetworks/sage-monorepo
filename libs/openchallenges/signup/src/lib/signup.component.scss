@@ -8,7 +8,7 @@ main {
 }
 .register-container {
   min-width: 320px;
-  max-width: 440px;
+  max-width: 460px;
   width: 100%
 }
 .title {
@@ -25,10 +25,14 @@ main {
   display: flex;
   flex-direction: column;
 }
+::ng-deep .mat-mdc-text-field-wrapper {
+  align-items: center !important;
+}
 mat-form-field.new-username,
 mat-form-field.new-password,
 mat-form-field.new-email {
   height: 70px;
+  margin-bottom: 16px;
 }
 input.mat-input-element {
   padding: 10px 0;
@@ -38,7 +42,6 @@ input.mat-input-element {
   flex-direction: column;
   text-align: center;
 }
-
 .alternative {
   margin-top: 68px;
   display: flex;
