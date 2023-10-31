@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import com.squareup.pollexor.Thumbor;
 import com.squareup.pollexor.ThumborUrlBuilder;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;im
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -34,7 +34,7 @@ class ImageServiceTest {
     query.setObjectKey("image.png");
 
     // when an image is requested from the image service
-    ThumborUrlBuilder builder = mock(ThumborUrlBuilder.class);
+    ImageQueryDto builder = mock(ThumborUrlBuilder.class);
 
     when(thumbor.buildImage(query.getObjectKey())).thenReturn(builder); // why is it needed?
     when(builder.toUrl()).thenReturn(expectedUrl);
@@ -43,4 +43,5 @@ class ImageServiceTest {
     // then
     assertThat(actual.getUrl()).isEqualTo(expectedUrl);
   }
+
 }
