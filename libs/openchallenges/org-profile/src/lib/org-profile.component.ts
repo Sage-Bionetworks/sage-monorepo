@@ -40,8 +40,6 @@ import {
 } from '@sagebionetworks/openchallenges/util';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-// import { MatTabsModule } from '@angular/material/tabs';
-import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
 import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-overview.component';
@@ -55,7 +53,6 @@ import { getSeoData } from './org-profile-seo-data';
   imports: [
     CommonModule,
     RouterModule,
-    MatTabsModule,
     MatIconModule,
     OrgProfileOverviewComponent,
     OrgProfileChallengesComponent,

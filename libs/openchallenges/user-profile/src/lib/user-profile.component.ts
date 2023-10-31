@@ -41,7 +41,7 @@
 // import { CommonModule } from '@angular/common';
 // import { MatIconModule } from '@angular/material/icon';
 // // import { MatTabsModule } from '@angular/material/tabs';
-// import { MatLegacyTabsModule as MatTabsModule } from '@angular/material/legacy-tabs';
+// import {  MatTabsModule } from '@angular/material/tabs';
 // import { UserProfileChallengesComponent } from './user-profile-challenges/user-profile-challenges.component';
 // import { UserProfileOverviewComponent } from './user-profile-overview/user-profile-overview.component';
 // import { UserProfileStarredComponent } from './user-profile-starred/user-profile-starred.component';
