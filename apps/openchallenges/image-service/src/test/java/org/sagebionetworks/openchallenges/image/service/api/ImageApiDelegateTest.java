@@ -1,16 +1,15 @@
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.sagebionetworks.openchallenges.image.service.ImageService;
 
-import static org.junit.Assert.assertNotNull;
-
 @RunWith(MockitoJUnitRunner.class)
 public class ImageApiDelegateTest {
 
-  @Mock
-  private ImageService imageService;
+  @Mock private ImageService imageService;
 
   @Test
   void ImageApiDelegate_ShouldHaveInjectedImageServiceDependency() {
