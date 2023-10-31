@@ -14,7 +14,8 @@
     "editor.tabSize": 4
   },
   "[json]": {
-    "editor.tabSize": 2
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
   },
   // "[typescript]": {
   //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
