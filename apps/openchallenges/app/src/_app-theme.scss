@@ -6,7 +6,6 @@
 
 @include mat.typography-hierarchy(fonts.$lato);
 @include mat.core();
-@include mat.legacy-core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.define-palette(palettes.$accent-purple-palette, 400);
@@ -35,11 +34,9 @@ $theme: map.deep-merge(
 
 // Emit theme-dependent styles for common features used across multiple components.
 @include mat.core-theme($theme);
-@include mat.legacy-core-theme($theme);
 
 // Emit styles for MatButton based on `$theme`.
 @include mat.button-theme($theme);
-@include mat.legacy-button-theme($theme);
 
 // Include the theme mixins for other components you use here.
 @include openchallenges.theme($theme);
