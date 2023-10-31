@@ -1,19 +1,22 @@
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
-import java.io.IOException;
-import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.sagebionetworks.openchallenges.image.service.api.ApiUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.NativeWebRequest;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
 public class ApiUtilTest {
 
-  @Mock private NativeWebRequest nativeWebRequest;
+  @Mock
+  private NativeWebRequest nativeWebRequest;
 
   @Test
-  void SetExampleResponse_ShouldReturnExpectedResponse() throws IOException {
+  public void SetExampleResponse_ShouldReturnExpectedResponse() throws IOException {
     // Create a mock NativeWebRequest
     nativeWebRequest = new MockNativeWebRequest();
 
@@ -25,8 +28,8 @@ public class ApiUtilTest {
     String contentType = "application/json";
     String example = "{\"key\": \"value\"}";
 
-    // Call the setExampleResponse method
-    ApiUtil.setExampleResponse(nativeWebRequest, contentType, example);
+    // Call the SetExampleResponse_ShouldReturnExpectedResponse method
+    ApiUtil.SetExampleResponse_ShouldReturnExpectedResponse(nativeWebRequest, contentType, example);
 
     // Verify the response
     assertEquals(contentType, mockResponse.getHeader("Content-Type"));
@@ -53,5 +56,6 @@ public class ApiUtilTest {
     public String[] getHeaderValues(String name) {
       return new String[0];
     }
+
   }
 }

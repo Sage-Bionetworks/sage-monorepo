@@ -1,11 +1,12 @@
-import static org.junit.Assert.assertEquals;
-
 import org.junit.Test;
+import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
+
+import static org.junit.Assert.assertEquals;
 
 public class ImageAspectRatioDtoTest {
 
   @Test
-  void GetValueShouldGetSpecifiedNumericCombination() {
+  public void GetValueShouldGetSpecifiedNumericCombination() {
     // Test the getValue() method for each enum value
     assertEquals("original", ImageAspectRatioDto.ORIGINAL.getValue());
     assertEquals("16_9", ImageAspectRatioDto._16_9.getValue());
@@ -15,7 +16,7 @@ public class ImageAspectRatioDtoTest {
   }
 
   @Test
-  void FromValueShouldEqualExpectedValue() {
+  public void FromValueShouldEqualExpectedValue() {
     // Test the fromValue() method for each enum value
     assertEquals(ImageAspectRatioDto.ORIGINAL, ImageAspectRatioDto.fromValue("original"));
     assertEquals(ImageAspectRatioDto._16_9, ImageAspectRatioDto.fromValue("16_9"));
@@ -25,7 +26,7 @@ public class ImageAspectRatioDtoTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  void testFromShouldReturnInvalidValue() {
+  public void testFromShouldReturnInvalidValue() {
     // Test the fromValue() method with an invalid value
     ImageAspectRatioDto.fromValue("invalid_value");
   }
