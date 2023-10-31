@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
+import { MatButtonModule } from '@angular/material/button';
 import { UserButtonComponent } from '../user-button/user-button.component';
 import { DiscordButtonComponent } from '../discord-button/discord-button.component';
 import { NavbarSection } from './navbar-section';

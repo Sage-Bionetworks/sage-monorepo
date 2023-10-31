@@ -1,6 +1,6 @@
 .user-button {
   height: 100%;
-  width:200px;
+  width: 200px;
   margin: 3px;
   padding: 5px 3px;
 
@@ -17,16 +17,16 @@
   width: 100%
 }
 
-button.mat-menu-item {
+button.mat-mdc-menu-item {
   padding-right: 122px;
 }
 
 @media only screen and (max-width: 855px) {
   .user-button {
-    width:100%;
+    width: 100%;
     div {
       justify-content: center;
-      span{
+      span {
         padding-left: 8px;
       }
     }

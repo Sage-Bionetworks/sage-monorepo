@@ -1,11 +1,9 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/openchallenges/themes/src/fonts' as fonts;
 @use 'libs/openchallenges/themes/src/palettes' as palettes;
 @use 'libs/openchallenges/themes/src/index' as openchallenges;
 
-@include mat.legacy-typography-hierarchy(fonts.$fira);
-@include mat.legacy-core();
+@include mat.core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.define-palette(palettes.$accent-purple-palette, 400);
@@ -15,9 +13,6 @@ $theme: mat.define-light-theme(
     color: (
       primary: $primary,
       accent: $accent,
-    ),
-    typography: (
-      fira: fonts.$fira,
     ),
   )
 );
@@ -29,17 +24,13 @@ $theme: map.deep-merge(
     color: (
       figma: palettes.$figma-collection,
     ),
+    density: 0,
   )
 );
 
 // Emit theme-dependent styles for common features used across multiple
 // components.
-@include mat.legacy-core-theme($theme);
-
-// Emit styles for MatButton based on `$theme`.
-// @include mat.legacy-button-theme($theme);
-// @include mat.legacy-progress-spinner-theme($theme);
-// @include mat.legacy-button-typography(fonts.$fira);
+@include mat.core-theme($theme);
 
 // Include the theme mixins for other components you use here.
 // @include openchallenges.theme($theme);
