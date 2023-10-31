@@ -1,19 +1,17 @@
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import javax.servlet.http.HttpServletResponse;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.sagebionetworks.openchallenges.image.service.api.ApiUtil;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.web.context.request.NativeWebRequest;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
-
 public class ApiUtilTest {
 
-  @Mock
-  private NativeWebRequest nativeWebRequest;
+  @Mock private NativeWebRequest nativeWebRequest;
 
   @Test
   public void SetExampleResponse_ShouldReturnExpectedResponse() throws IOException {
@@ -56,6 +54,5 @@ public class ApiUtilTest {
     public String[] getHeaderValues(String name) {
       return new String[0];
     }
-
   }
 }

@@ -18,7 +18,8 @@ public class ImageApiTest {
   @Test
   public void testGetImage() {
     // Create an instance of ImageApi
-    ImageApi imageApi = new ImageApi() {
+    ImageApi imageApi =
+        new ImageApi() {
           @Override
           public ImageApiDelegate getDelegate() {
             return delegate;

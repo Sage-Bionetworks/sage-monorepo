@@ -1,7 +1,7 @@
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 import org.sagebionetworks.openchallenges.image.service.model.dto.ImageAspectRatioDto;
-
-import static org.junit.Assert.assertEquals;
 
 public class ImageAspectRatioDtoTest {
 
