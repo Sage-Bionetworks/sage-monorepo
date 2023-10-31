@@ -1,19 +1,16 @@
 @use '@angular/material' as mat;
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
 
-$fira: mat.define-typography-config(
-  $font-family: "'Fira Sans', sans-serif",
-);
 
 $lato: mat.define-typography-config(
-  $headline-5: mat.define-typography-level(46px, 56px, 700, "'Lato', sans-serif"),
-  $headline-6: mat.define-typography-level(40px, 50px, 700, "'Lato', sans-serif"),
-  $subtitle-1: mat.define-typography-level(28px, 38px, 700, "'Lato', sans-serif", -0.1px),
-  $subtitle-2: mat.define-typography-level(18px, 30px, 400, "'Lato', sans-serif", -0.1px),
-  $body-1: mat.define-typography-level(21px, 36px, 400, "'Lato', sans-serif", -0.1px),
-  $body-2: mat.define-typography-level(16px, 26px, 400, "'Lato', sans-serif"),
-  $caption: mat.define-typography-level(14px, 21px, 400, "'Lato', sans-serif"),
-  $button: mat.define-typography-level(16px, 18px, 400, "'Lato', sans-serif"),
+  $font-family: "'Lato', sans-serif",
+  $headline-5: mat.define-typography-level(46px, 56px, 700),
+  $headline-6: mat.define-typography-level(40px, 50px, 700),
+  $subtitle-1: mat.define-typography-level(28px, 38px, 700, $letter-spacing: -0.1px),
+  $subtitle-2: mat.define-typography-level(20px, 32px, 400, $letter-spacing: -0.1px),
+  $body-1: mat.define-typography-level(21px, 36px, 400, $letter-spacing: -0.1px),
+  $body-2: mat.define-typography-level(16px, 26px, 400),
+  $caption: mat.define-typography-level(14px, 21px, 400),
+  $button: mat.define-typography-level(16px, 18px, 700),
 );

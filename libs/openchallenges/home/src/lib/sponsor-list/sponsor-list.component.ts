@@ -15,20 +15,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./sponsor-list.component.scss'],
 })
 export class SponsorListComponent implements OnInit {
-  itcr$: Observable<Image> | undefined;
-  aws$: Observable<Image> | undefined;
-  sage$: Observable<Image> | undefined;
+  itcrImage$: Observable<Image> | undefined;
   readonly height = ImageHeight._140px;
 
   constructor(private imageService: ImageService) {}
 
   ngOnInit() {
-    this.itcr$ = this.imageService.getImage({
+    this.itcrImage$ = this.imageService.getImage({
       objectKey: 'logo/nci-itcr-alt.svg',
-      height: this.height,
-    });
-    this.sage$ = this.imageService.getImage({
-      objectKey: 'logo/sage-bionetworks-alt.svg',
       height: this.height,
     });
   }

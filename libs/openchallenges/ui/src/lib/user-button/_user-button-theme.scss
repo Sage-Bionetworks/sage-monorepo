@@ -9,27 +9,27 @@
   $warn: map.get($config, 'warn');
 
   .user-button {
-    background-color: mat.get-color-from-palette($accent, 300);
+    background-color: mat.get-color-from-palette($accent, 300) !important;
+    color: white !important;
   }
 
   .user-dropdown {
-    background-color: #fff;
+    background-color: #fff !important;
   }
 
-  button.mat-menu-item{
-    background-color: #fff;
-    transition: 0.3s;
+  button.mat-mdc-menu-item{
+    background-color: #fff !important;
+    transition: 0.3s !important;
   }
 
-  button.mat-menu-item:hover {
-    background-color: mat.get-color-from-palette($primary, 100);;
+  button.mat-mdc-menu-item:hover {
+    background-color: mat.get-color-from-palette($primary, 100) !important;
   }
 }
 
 @mixin typography($theme) {
-  button.mat-menu-item{
-    font-size: 15px;
-    font-family: 'Lato';
+  button.mat-mdc-menu-item{
+    font-size: 15px !important;
   }
 }
 
