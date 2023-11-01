@@ -161,7 +161,6 @@
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
         [totalRecords]="searchResultsCount"
-        [itemsPerPage]="[12, 24, 36, 48]"
         (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows,})"
       />
     </div>
