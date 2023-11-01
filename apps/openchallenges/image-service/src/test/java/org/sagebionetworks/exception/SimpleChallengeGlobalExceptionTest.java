@@ -1,9 +1,10 @@
 package org.sagebionetworks.openchallenges.challenge.service.exception;
 
-import org.sagebionetworks.openchallenges.image.service.exception.SimpleChallengeGlobalException;
 import static org.assertj.core.api.Assertions.assertThat;
-import org.springframework.http.HttpStatus;
+
 import org.junit.jupiter.api.Test;
+import org.sagebionetworks.openchallenges.image.service.exception.SimpleChallengeGlobalException;
+import org.springframework.http.HttpStatus;
 
 public class SimpleChallengeGlobalExceptionTest {
 
@@ -26,7 +27,8 @@ public class SimpleChallengeGlobalExceptionTest {
     String detail = "Exception detail message";
 
     // Create an instance of SimpleChallengeGlobalException using the all-args constructor
-    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(type, title, status, detail);
+    SimpleChallengeGlobalException exception =
+        new SimpleChallengeGlobalException(type, title, status, detail);
 
     // Verify the exception details
     assertThat(exception.getType()).isEqualTo(type);
@@ -41,7 +43,8 @@ public class SimpleChallengeGlobalExceptionTest {
     String detail = "Exception detail message";
 
     // Create an instance of SimpleChallengeGlobalException using the all-args constructor
-    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(type, title, status, detail);
+    SimpleChallengeGlobalException exception =
+        new SimpleChallengeGlobalException(type, title, status, detail);
 
     // Verify the exception details
     assertThat(exception.getTitle()).isEqualTo(title);
@@ -56,10 +59,10 @@ public class SimpleChallengeGlobalExceptionTest {
     String detail = "Exception detail message";
 
     // Create an instance of SimpleChallengeGlobalException using the all-args constructor
-    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(type, title, status, detail);
+    SimpleChallengeGlobalException exception =
+        new SimpleChallengeGlobalException(type, title, status, detail);
 
     // Verify the exception details
     assertThat(exception.getStatus()).isEqualTo(status);
   }
-
 }
