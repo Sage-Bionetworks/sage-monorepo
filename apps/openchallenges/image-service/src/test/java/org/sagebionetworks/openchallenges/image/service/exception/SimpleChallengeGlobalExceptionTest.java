@@ -1,5 +1,6 @@
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+// import org.junit.Assert;
+// import static org.junit.Assert.assertEquals;
+// import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 import org.sagebionetworks.openchallenges.image.service.exception.SimpleChallengeGlobalException;

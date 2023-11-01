@@ -34,7 +34,7 @@ class ImageServiceTest {
     query.setObjectKey("image.png");
 
     // when an image is requested from the image service
-    ImageQueryDto builder = mock(ThumborUrlBuilder.class);
+    ThumborUrlBuilder builder = mock(ThumborUrlBuilder.class);
 
     when(thumbor.buildImage(query.getObjectKey())).thenReturn(builder); // why is it needed?
     when(builder.toUrl()).thenReturn(expectedUrl);
