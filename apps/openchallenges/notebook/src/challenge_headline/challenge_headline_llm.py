@@ -22,26 +22,19 @@ challenges = []
 with openchallenges_client.ApiClient(configuration) as api_client:
     api_instance = challenge_api.ChallengeApi(api_client)
 
-    query = openchallenges_client.ChallengeSearchQuery(page_number=1, page_size=1000)
-    pprint(query)
+    # IMPORTANT: The auto-generated API client does not support object for query params
+    query = openchallenges_client.ChallengeSearchQuery(page_number=0, page_size=1000)
 
     try:
         # Get the first page of the list of challenges
         page = api_instance.list_challenges(query)
-        pprint(page.size)
         challenges.extend(page.challenges)
     except openchallenges_client.ApiException as e:
         print("Exception when calling ChallengeApi->list_challenges: %s\n" % e)
 
-# Sort challenge by ID
-# challenges.sort(key=lambda challenge: challenge.id, reverse=False)
-# pprint(challenges[:2])
+# Sort challenge by ID in ascending order
+challenges.sort(key=lambda challenge: challenge.id, reverse=False)
 
-print(len(challenges))
-
-import sys
-
-sys.exit()
 
 # GENERATE THE HEADLINES WITH AWS BEDROCK
 
@@ -125,7 +118,7 @@ def process_challenge(challenge):
     return obj
 
 
-challenge_headlines = list(map(process_challenge, challenges[:2]))
+challenge_headlines = list(map(process_challenge, challenges))
 
 
 # SAVE OUTPUT TO FILE
