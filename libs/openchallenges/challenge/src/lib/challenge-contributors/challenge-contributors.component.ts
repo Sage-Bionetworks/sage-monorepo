@@ -3,6 +3,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import {
   Challenge,
   ChallengeContribution,
+  // ChallengeContributionRole,
   ChallengeContributionService,
   Image,
   ImageAspectRatio,
@@ -16,16 +17,21 @@ import {
   OrganizationCard,
   OrganizationCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
-import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+// import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import {
   Observable,
   catchError,
-  forkJoin,
+  // forkJoin,
   iif,
-  map,
+  // map,
   of,
-  switchMap,
+  // switchMap,
 } from 'rxjs';
+
+// type Contribution = {
+//   organization: Organization;
+//   role: ChallengeContributionRole;
+// };
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
@@ -39,47 +45,71 @@ export class ChallengeContributorsComponent implements OnInit {
   organizationCards: OrganizationCard[] = [];
   dataContributorCards: OrganizationCard[] = [];
   sponsorCards: OrganizationCard[] = [];
+
   constructor(
     private challengeContributionService: ChallengeContributionService,
     private organizationService: OrganizationService,
     private imageService: ImageService
   ) {}
 
-  ngOnInit() {
-    this.challengeContributionService
-      .listChallengeContributions(this.challenge.id)
-      .pipe(
-        switchMap((page) =>
-          forkJoinConcurrent(
-            this.uniqueContributions(page.challengeContributions).map(
-              (contribution) =>
-                this.organizationService.getOrganization(
-                  contribution.organizationId.toString()
-                )
-            ),
-            Infinity
-          )
-        ),
-        map((orgs: Organization[]) => this.sortOrgs(orgs)),
-        switchMap((orgs) =>
-          forkJoin({
-            orgs: of(orgs),
-            avatarUrls: forkJoinConcurrent(
-              orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-              Infinity
-            ),
-          })
-        ),
-        switchMap(({ orgs, avatarUrls }) =>
-          of(
-            orgs.map((org, index) =>
-              this.getOrganizationCard(org, avatarUrls[index])
-            )
-          )
-        )
-      )
-      .subscribe((orgCards) => (this.organizationCards = orgCards));
-  }
+  // async ngOnInit() {
+  // const contributions: ChallengeContribution[] =
+  //   await this.challengeContributionService
+  //     .listChallengeContributions(this.challenge.id)
+  //     .pipe(map((page) => page.challengeContributions));
+  // .pipe(
+  //   switchMap((page) =>
+  //     forkJoinConcurrent(
+  //       page.challengeContributions.map((c) => ({
+  //         organization: this.organizationService.getOrganization(
+  //           c.organizationId.toString()
+  //         ),
+  //         role: c.role
+  //       }))
+  //       this.uniqueContributions(page.challengeContributions).map(
+  //         (contribution) =>
+  //           this.organizationService.getOrganization(
+  //             contribution.organizationId.toString()
+  //           )
+  //       ),
+  //       Infinity
+  //     )
+  //   )
+  // );
+  // this.challengeContributionService
+  //   .listChallengeContributions(this.challenge.id)
+  //   .pipe(
+  //     switchMap((page) =>
+  //       forkJoinConcurrent(
+  //         this.uniqueContributions(page.challengeContributions).map(
+  //           (contribution) =>
+  //             this.organizationService.getOrganization(
+  //               contribution.organizationId.toString()
+  //             )
+  //         ),
+  //         Infinity
+  //       )
+  //     ),
+  //     map((orgs: Organization[]) => this.sortOrgs(orgs)),
+  //     switchMap((orgs) =>
+  //       forkJoin({
+  //         orgs: of(orgs),
+  //         avatarUrls: forkJoinConcurrent(
+  //           orgs.map((org) => this.getOrganizationAvatarUrl(org)),
+  //           Infinity
+  //         ),
+  //       })
+  //     ),
+  //     switchMap(({ orgs, avatarUrls }) =>
+  //       of(
+  //         orgs.map((org, index) =>
+  //           this.getOrganizationCard(org, avatarUrls[index])
+  //         )
+  //       )
+  //     )
+  //   )
+  //   .subscribe((orgCards) => (this.organizationCards = orgCards));
+  // }
 
   private uniqueContributions(
     contributions: ChallengeContribution[]
