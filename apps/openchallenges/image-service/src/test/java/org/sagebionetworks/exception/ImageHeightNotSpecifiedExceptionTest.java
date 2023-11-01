@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class ImageHeightNotSpecifiedExceptionTest {
 
   @Test
-  public void ConstructorTypeShouldMatch() {
+  public void ImageHeightNotSpecifiedException_ConstructorTypeShouldMatch() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -19,7 +19,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void ConstructorTitle_Match() {
+  public void ImageHeightNotSpecifiedException_ConstructorTitle_Match() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -32,7 +32,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void ConstructorStatusMatch() {
+  public void ImageHeightNotSpecifiedException_ConstructorStatusMatch() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -45,7 +45,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void ConstructorDetailMatch() {
+  public void ImageHeightNotSpecifiedException_ConstructorDetailMatch() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
