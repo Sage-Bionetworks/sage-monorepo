@@ -12,6 +12,8 @@
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.tabSize": 4
+    // This settings still works even if VS Code does not recognize it.
+    // "notebook.formatOnSave.enabled": true
   },
   "[json][jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",

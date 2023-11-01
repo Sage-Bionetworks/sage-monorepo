@@ -1,0 +1,28 @@
+[
+  {
+    "id": 279,
+    "slug": "niddk-central-repository-data-centric-challenge",
+    "name": "NIDDK Central Repository Data-Centric Challenge",
+    "headline": "Enhancing NIDDK datasets for future Artificial Intelligence (AI) applications.",
+    "headline_alternatives": [
+      "1. Challenge Seeks AI Solutions to Standardize NIDDK Data",
+      "2. Data Challenge Aims to Ready NIDDK Data for AI Discovery  ",
+      "3. Making NIDDK Data AI-Ready Via Data Standardization Challenge",
+      "4. Challenge Invites AI to Standardize NIDDK Data for Reuse",
+      "5. Data Challenge Seeks AI Tools to Improve NIDDK Data Reuse"
+    ]
+  },
+  {
+    "id": 278,
+    "slug": "qbi-hackathon",
+    "name": "QBI hackathon",
+    "headline": "A 48-hour event connecting the Bay Area developer community with scientists ...",
+    "headline_alternatives": [
+      "1. Hackathon connects developers and scientists to advance biomedical research ",
+      "2. 48-hour hackathon applies AI to biomedical data ",
+      "3. Developers and scientists collaborate on biomedical challenges",
+      "4. Hackathon pushes science ahead with latest algorithms ",
+      "5. Event connects Bay Area developers and scientists"
+    ]
+  }
+]
