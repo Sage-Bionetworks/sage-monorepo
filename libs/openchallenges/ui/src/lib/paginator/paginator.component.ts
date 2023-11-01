@@ -14,7 +14,8 @@ export class PaginatorComponent implements OnInit {
   @Input({ required: false }) pageLinkSize = 5;
   @Input({ required: true }) pageSize = 0; // number of rows to display in new page
   @Input({ required: true }) totalRecords = 0;
-  @Input({ required: true }) itemsPerPage!: number[];
+  @Input({ required: false }) itemsPerPage!: number[];
+
   @Output() pageChange = new EventEmitter();
 
   itemIndex = 0; // index of the first item in the new page
