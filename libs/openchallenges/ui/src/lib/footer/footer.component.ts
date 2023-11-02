@@ -5,11 +5,12 @@ import {
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-footer',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
