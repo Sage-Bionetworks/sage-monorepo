@@ -1,7 +1,7 @@
 <main class="base mat-typography">
   <ng-container *ngIf="challenge$ | async as challenge">
     <section id="profile-top" class="row">
-      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"/>
+      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar" />
       <div id="profile-details" class="col">
         <h2>
           {{ challenge.name }}
@@ -20,7 +20,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-challenge-stats [loggedIn]="loggedIn"/>
+        <openchallenges-challenge-stats [loggedIn]="loggedIn" />
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -37,18 +37,18 @@
           <a
             class="profile-nav-item"
             routerLink="."
-            [queryParams]="{ tab: 'organizers' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-          >
-            Organizers
-          </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
             [queryParams]="{ tab: 'contributors' }"
             [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
           >
             Contributors
+          </a>
+          <a
+            class="profile-nav-item"
+            routerLink="."
+            [queryParams]="{ tab: 'organizers' }"
+            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
+          >
+            Organizers
           </a>
           <!-- <a
             class="profile-nav-item"
@@ -66,12 +66,12 @@
             *ngSwitchCase="tabs['overview']"
             [challenge]="challenge"
           />
-          <openchallenges-challenge-organizers
-            *ngSwitchCase="tabs['organizers']"
-            [challenge]="challenge"
-          />
           <openchallenges-challenge-contributors
             *ngSwitchCase="tabs['contributors']"
+            [challenge]="challenge"
+          />
+          <openchallenges-challenge-organizers
+            *ngSwitchCase="tabs['organizers']"
             [challenge]="challenge"
           />
           <!-- <openchallenges-challenge-stargazers
