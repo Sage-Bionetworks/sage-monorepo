@@ -31,10 +31,9 @@
     </div>
     <div class="col-4 app-info">
       <ul>
+        <li><img height="55px" [src]="(sageLogo$ | async)?.url" alt="Sage Bionetworks"/></li>
         <li>App version: {{ appVersion }}</li>
         <li>Data updated on: {{ dataUpdatedOn }}</li>
-        <li>Code licensed under Apache License 2.0</li>
-        <li>Documentation licensed under CC-BY 4.0</li>
       </ul>
     </div>
   </div>
