@@ -46,9 +46,6 @@
         "libs/openchallenges/user-profile/src/index.ts"
       ],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
-      "@sagebionetworks/schematic/api-client-angular": [
-        "libs/schematic/api-client-angular/src/index.ts"
-      ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"

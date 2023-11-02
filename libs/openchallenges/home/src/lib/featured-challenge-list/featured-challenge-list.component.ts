@@ -4,6 +4,8 @@ import {
   Challenge,
   ChallengeService,
   ChallengeSearchQuery,
+  ChallengeCategory,
+  ChallengeSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
@@ -25,12 +27,12 @@ export class FeaturedChallengeListComponent implements OnInit {
       pageNumber: 0,
       pageSize: 3, // only display first 3 for now
       searchTerms: '',
-      sort: 'recently_started',
+      sort: ChallengeSort.StartDate,
     };
 
     const query: ChallengeSearchQuery = {
       ...defaultQuery,
-      categories: ['featured'],
+      categories: [ChallengeCategory.Featured],
     };
 
     const challengesPage$ = this.challengeService.listChallenges(query).pipe(

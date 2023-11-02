@@ -6,6 +6,7 @@
 @use './lib/organization-card/organization-card-theme' as organization-card;
 @use './lib/paginator/paginator-theme' as paginator;
 @use './lib/person-card/person-card-theme' as person-card;
+@use './lib/discord-button/discord-button-theme' as discord-button;
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
@@ -16,4 +17,5 @@
   @include organization-card.theme($theme);
   @include paginator.theme($theme);
   @include person-card.theme($theme);
+  @include discord-button.theme($theme);
 }
