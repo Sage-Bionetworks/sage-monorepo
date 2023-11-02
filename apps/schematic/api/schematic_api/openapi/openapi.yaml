@@ -1717,7 +1717,7 @@ components:
       example: syn26251192
       type: string
     AssetType:
-      description: A type of asset.
+      description: "Type of asset store, such as Synapse"
       enum:
       - synapse
       example: synapse
