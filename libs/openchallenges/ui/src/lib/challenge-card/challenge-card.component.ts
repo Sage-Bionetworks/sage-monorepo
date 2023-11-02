@@ -58,7 +58,7 @@ export class ChallengeCardComponent implements OnInit {
             objectKey: 'banner-default.svg',
           });
       if (this.challenge.endDate && this.status === 'completed') {
-        const timeSince = this.calcTimeDiff(this.challenge.endDate);
+        const timeSince = this.calcTimeDiff(this.challenge.endDate, true);
         if (timeSince) {
           this.time_info = `Ended ${timeSince} ago`;
         }
@@ -72,7 +72,7 @@ export class ChallengeCardComponent implements OnInit {
     }
   }
 
-  calcTimeDiff(date: string) {
+  calcTimeDiff(date: string, hideFarDates = false) {
     const pattern = /\d{4}-\d{2}-\d{2}/;
     if (!pattern.test(date)) {
       return '';
@@ -92,7 +92,7 @@ export class ChallengeCardComponent implements OnInit {
     // Find the largest unit of time and return in human-readable format.
     let timeDiffString = '';
     for (const [unit, value] of Object.entries(timeDiff)) {
-      if (unit === 'month' && value > 3) {
+      if (hideFarDates && unit === 'month' && value > 3) {
         break;
       } else if (value > 0) {
         timeDiffString = `${value} ${unit}` + (value > 1 ? 's' : '');
