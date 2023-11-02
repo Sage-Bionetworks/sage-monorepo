@@ -19,6 +19,9 @@
   height: 100%;
 }
 .card-status {
+  div:first-child {
+    margin-right: 5px;
+  }
   min-height: 58px;
   display: flex;
   flex-direction: column;
