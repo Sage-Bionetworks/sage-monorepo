@@ -6,12 +6,12 @@
       from planning and organizing the challenge to contributing data and providing technical
       support.
     </p>
-    <!-- <div id="contributor-organizer">
+    <div id="contributor-organizer">
       <p class="mat-body-strong"><strong>Challenge Organizers</strong></p>
-      <ng-container *ngIf="(organizerCardBundles$ | async)!.length > 0; else no_org">
+      <ng-container *ngIf="organizerCardBundles.length > 0; else no_org">
         <div class="card-group">
           <openchallenges-organization-card
-            *ngFor="let bundle of organizerCardBundles$ | async"
+            *ngFor="let bundle of organizerCardBundles"
             [organizationCard]="bundle.card"
             [showMember]="false"
           />
@@ -20,13 +20,13 @@
       <ng-template #no_org>
         <h4 class="text-grey">Not available</h4>
       </ng-template>
-    </div> -->
-    <!-- <div id="contributor-data">
+    </div>
+    <div id="contributor-data">
       <p class="mat-body-strong"><strong>Data Contributors</strong></p>
-      <ng-container *ngIf="(dataContributorCardBundles$ | async)!.length > 0; else no_data">
+      <ng-container *ngIf="dataContributorCardBundles.length > 0; else no_data">
         <div class="card-group">
           <openchallenges-organization-card
-            *ngFor="let bundle of dataContributorCardBundles$ | async"
+            *ngFor="let bundle of dataContributorCardBundles"
             [organizationCard]="bundle.card"
             [showMember]="false"
           />
@@ -35,12 +35,12 @@
       <ng-template #no_data>
         <h4 class="text-grey">Not available</h4>
       </ng-template>
-    </div> -->
-    <!-- <div id="contributor-sponsor">
+    </div>
+    <div id="contributor-sponsor">
       <p class="mat-body-strong"><strong>Sponsors</strong></p>
-      <ng-container *ngIf="(sponsorCardBundles$ | async)!.length > 0; else no_sponsor">
+      <ng-container *ngIf="sponsorCardBundles.length > 0; else no_sponsor">
         <openchallenges-organization-card
-          *ngFor="let bundle of sponsorCardBundles$ | async"
+          *ngFor="let bundle of sponsorCardBundles"
           [organizationCard]="bundle.card"
           [showMember]="false"
         />
@@ -48,6 +48,6 @@
       <ng-template #no_sponsor>
         <h4 class="text-grey">Not available</h4>
       </ng-template>
-    </div> -->
+    </div>
   </div>
 </main>
