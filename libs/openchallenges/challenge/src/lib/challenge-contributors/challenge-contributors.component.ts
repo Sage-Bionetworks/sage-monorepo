@@ -29,6 +29,7 @@ import {
   OrganizationCardComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
+import { orderBy } from 'lodash';
 
 type ContributionCardBundle = {
   card: OrganizationCard;
@@ -142,7 +143,9 @@ export class ChallengeContributorsComponent implements OnInit {
     role: ChallengeContributionRole
   ): Observable<ContributionCardBundle[]> {
     return bundles$.pipe(
-      map((bundle) => bundle.filter((b) => b.role === role))
+      map((bundles) => bundles.filter((b) => b.role === role)),
+      // order orgs by the number of challenges they have contributed to
+      map((bundles) => orderBy(bundles, ['card.challengeCount'], ['desc']))
     );
   }
 
