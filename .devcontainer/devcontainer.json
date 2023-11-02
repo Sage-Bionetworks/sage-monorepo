@@ -51,6 +51,7 @@
         "mtxr.sqltools-driver-mysql",
         "mtxr.sqltools-driver-pg",
         "mtxr.sqltools",
+        "njpwerner.autodocstring",
         "nrwl.angular-console",
         "pranaygp.vscode-css-peek",
         "ritwickdey.LiveServer",

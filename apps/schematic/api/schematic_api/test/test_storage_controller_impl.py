@@ -20,9 +20,9 @@ from schematic_api.controllers.storage_controller_impl import (
     get_manifest_json,
     get_asset_view_json,
     get_dataset_files,
-    list_projects,
-    list_storage_project_datasets,
-    list_storage_project_manifests,
+    get_projects,
+    get_project_datasets,
+    get_project_manifests,
 )
 
 
@@ -292,17 +292,17 @@ class TestGetManifestJson:
             assert isinstance(result, BasicError)
 
 
-class TestListProjects:
+class TestGetProjects:
     """Test case for list_projects"""
 
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            result, status = list_projects(asset_view_id="syn1", asset_type="synapse")
+            result, status = get_projects(asset_view_id="syn1", asset_type="synapse")
             assert status == 200
             assert isinstance(result, ProjectsPage)
 
@@ -310,10 +310,10 @@ class TestListProjects:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            result, status = list_projects(asset_view_id="syn1", asset_type="synapse")
+            result, status = get_projects(asset_view_id="syn1", asset_type="synapse")
             assert status == 401
             assert isinstance(result, BasicError)
 
@@ -321,10 +321,10 @@ class TestListProjects:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=SynapseAuthenticationError,
         ):
-            result, status = list_projects(asset_view_id="syn1", asset_type="synapse")
+            result, status = get_projects(asset_view_id="syn1", asset_type="synapse")
             assert status == 401
             assert isinstance(result, BasicError)
 
@@ -332,10 +332,10 @@ class TestListProjects:
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            result, status = list_projects(asset_view_id="syn1", asset_type="synapse")
+            result, status = get_projects(asset_view_id="syn1", asset_type="synapse")
             assert status == 403
             assert isinstance(result, BasicError)
 
@@ -343,25 +343,25 @@ class TestListProjects:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = list_projects(asset_view_id="syn1", asset_type="synapse")
+            result, status = get_projects(asset_view_id="syn1", asset_type="synapse")
             assert status == 500
             assert isinstance(result, BasicError)
 
 
-class TestListStorageProjectDatasets:
+class TestGetProjectDatasets:
     """Test case for list_storage_project_datasets"""
 
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            result, status = list_storage_project_datasets(
+            result, status = get_project_datasets(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
@@ -371,10 +371,10 @@ class TestListStorageProjectDatasets:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            result, status = list_storage_project_datasets(
+            result, status = get_project_datasets(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -384,10 +384,10 @@ class TestListStorageProjectDatasets:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=SynapseAuthenticationError,
         ):
-            result, status = list_storage_project_datasets(
+            result, status = get_project_datasets(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -397,10 +397,10 @@ class TestListStorageProjectDatasets:
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            result, status = list_storage_project_datasets(
+            result, status = get_project_datasets(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
@@ -410,27 +410,27 @@ class TestListStorageProjectDatasets:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = list_storage_project_datasets(
+            result, status = get_project_datasets(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500
             assert isinstance(result, BasicError)
 
 
-class TestListStorageProjectManifests:
+class TestGetProjectManifests:
     """Test case for list_storage_project_manifests"""
 
     def test_success(self, example_manifest_metadata: list) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             return_value=example_manifest_metadata,
         ):
-            result, status = list_storage_project_manifests(
+            result, status = get_project_manifests(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
@@ -440,10 +440,10 @@ class TestListStorageProjectManifests:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            result, status = list_storage_project_manifests(
+            result, status = get_project_manifests(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -453,10 +453,10 @@ class TestListStorageProjectManifests:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=SynapseAuthenticationError,
         ):
-            result, status = list_storage_project_manifests(
+            result, status = get_project_manifests(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -466,10 +466,10 @@ class TestListStorageProjectManifests:
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            result, status = list_storage_project_manifests(
+            result, status = get_project_manifests(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
@@ -479,10 +479,10 @@ class TestListStorageProjectManifests:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = list_storage_project_manifests(
+            result, status = get_project_manifests(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500
