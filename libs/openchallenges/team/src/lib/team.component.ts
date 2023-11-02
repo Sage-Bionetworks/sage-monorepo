@@ -52,13 +52,13 @@ export class TeamComponent implements OnInit {
       objectKey: 'openchallenges-icon.svg',
     });
     this.thomas$ = this.imageService.getImage({
-      objectKey: 'team/thomas.png',
+      objectKey: 'team/thomas_new.jpeg',
     });
     this.rong$ = this.imageService.getImage({
-      objectKey: 'team/rong.png',
+      objectKey: 'team/rong_new.jpeg',
     });
     this.verena$ = this.imageService.getImage({
-      objectKey: 'team/verena.png',
+      objectKey: 'team/verena_new.jpeg',
     });
     this.maria$ = this.imageService.getImage({
       objectKey: 'team/maria.png',
@@ -67,7 +67,7 @@ export class TeamComponent implements OnInit {
       objectKey: 'team/gaia.jpg',
     });
     this.jake$ = this.imageService.getImage({
-      objectKey: 'team/jake.png',
+      objectKey: 'team/jake_new.jpeg',
     });
     this.sage$ = this.imageService.getImage({
       objectKey: 'logo/sage-bionetworks-alt.svg',
