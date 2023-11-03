@@ -3,7 +3,6 @@ package org.sagebionetworks.openchallenges.image.service.exception;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 
 public class BadRequestExceptionTest {
 

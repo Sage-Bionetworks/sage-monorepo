@@ -1,14 +1,11 @@
 package org.sagebionetworks.openchallenges.image.service.exception;
 
-
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.sagebionetworks.openchallenges.image.service.exception.ErrorConstants;
-import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
-
 import static org.assertj.core.api.Assertions.assertThat;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 @ExtendWith(MockitoExtension.class)
 public class ErrorConstantsTest {
@@ -23,7 +20,5 @@ public class ErrorConstantsTest {
     assertThat(constant.getType()).isEqualTo("IMAGE-SERVICE-1000");
     assertThat(constant.getTitle()).isEqualTo("Image height not found");
     assertThat(constant.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST);
-    
   }
-
 }
