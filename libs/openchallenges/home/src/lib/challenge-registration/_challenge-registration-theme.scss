@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
@@ -13,10 +12,10 @@
 
     .btn-block {
       color: white;
-      background-color:  mat.get-color-from-palette($accent);
+      background-color: mat.get-color-from-palette($accent);
     }
     .btn-block:hover {
-      background-color:  mat.get-color-from-palette($accent, 500);
+      background-color: mat.get-color-from-palette($accent, 500);
     }
   }
 }
