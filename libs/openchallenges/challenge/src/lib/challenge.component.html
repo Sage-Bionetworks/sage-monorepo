@@ -28,21 +28,21 @@
         <div class="profile-nav-group">
           <a
             class="profile-nav-item"
-            (click)="updateTab(tabs['overview'])"
+            (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
           >
             Overview
           </a>
           <a
             class="profile-nav-item"
-            (click)="updateTab(tabs['contributors'])"
+            (click)="updateTab('contributors')"
             [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
           >
             Contributors
           </a>
           <a
             class="profile-nav-item"
-            (click)="updateTab(tabs['organizers'])"
+            (click)="updateTab('organizers')"
             [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
           >
             Organizers

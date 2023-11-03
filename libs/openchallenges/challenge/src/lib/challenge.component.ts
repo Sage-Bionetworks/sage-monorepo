@@ -11,6 +11,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   catchError,
+  combineLatest,
   map,
   Observable,
   of,
@@ -19,7 +20,7 @@ import {
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
-import { CHALLENGE_TABS } from './challenge-tabs';
+import { CHALLENGE_TABS, ChallengeTabKey } from './challenge-tabs';
 import {
   Avatar,
   AvatarComponent,
@@ -74,7 +75,6 @@ export class ChallengeComponent implements OnInit {
   // remainDays!: number | undefined;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
-  tabKeys: string[] = Object.keys(this.tabs);
   activeTab!: Tab;
   private subscriptions: Subscription[] = [];
 
@@ -99,10 +99,6 @@ export class ChallengeComponent implements OnInit {
       switchMap((params) =>
         this.challengeService.getChallenge(params['challengeId'])
       ),
-      switchMap((challenge) => {
-        this.router.navigate(['/challenge', challenge.id, challenge.slug]);
-        return of(challenge);
-      }),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
           404: '/not-found',
@@ -110,6 +106,22 @@ export class ChallengeComponent implements OnInit {
         } as HttpStatusRedirect);
         return throwError(() => error);
       })
+    );
+
+    const activeTabKey$: Observable<string> =
+      this.activatedRoute.queryParams.pipe(
+        map((params) =>
+          Object.keys(this.tabs).includes(params['tab'])
+            ? params['tab']
+            : 'overview'
+        )
+      );
+
+    combineLatest([this.challenge$, activeTabKey$]).subscribe(
+      ([challenge, activeTabKey]) => {
+        const newPath = `/challenge/${challenge.id}/${challenge.slug}`;
+        this.updateTab(activeTabKey, newPath);
+      }
     );
 
     this.challenge$.subscribe((challenge) => {
@@ -135,24 +147,27 @@ export class ChallengeComponent implements OnInit {
       //   : undefined;
     });
 
-    const activeTabSub = this.activatedRoute.queryParamMap
-      .pipe(
-        map((params: ParamMap) => params.get('tab')),
-        map((key) => (key === null ? 'overview' : key))
-      )
-      .subscribe((key) => (this.activeTab = this.tabs[key]));
+    // const activeTabSub = this.activatedRoute.queryParamMap
+    //   .pipe(
+    //     map((params: ParamMap) => params.get('tab')),
+    //     map((key) => (key === null ? 'overview' : key))
+    //   )
+    //   .subscribe((key) => (this.activeTab = this.tabs[key]));
 
-    this.subscriptions.push(activeTabSub);
+    // this.subscriptions.push(activeTabSub);
   }
 
-  updateTab(activeTab: Tab) {
-    this.activeTab = activeTab;
-    const queryParams = { tab: activeTab.name };
+  updateTab(activeTabKey: string, path?: string) {
+    // update tab param in the url
+    const queryParams = { tab: activeTabKey };
     const newParam = new HttpParams({
       fromObject: queryParams,
     });
-    console.log(location.pathname);
-    this._location.replaceState(location.pathname, newParam.toString());
+    const newPath = path ?? location.pathname;
+    this._location.replaceState(newPath, newParam.toString());
+
+    // switch tab to active tab
+    this.activeTab = this.tabs[activeTabKey];
   }
 
   // calcDays(startDate: string, endDate: string): number {
