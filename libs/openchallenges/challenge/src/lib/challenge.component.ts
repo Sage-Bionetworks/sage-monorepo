@@ -9,8 +9,10 @@ import {
   combineLatest,
   map,
   Observable,
+  shareReplay,
   Subscription,
   switchMap,
+  take,
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
@@ -97,7 +99,9 @@ export class ChallengeComponent implements OnInit, OnDestroy {
           400: '/challenge',
         } as HttpStatusRedirect);
         return throwError(() => error);
-      })
+      }),
+      shareReplay(1),
+      take(1)
     );
 
     this.challenge$.subscribe((challenge) => {
@@ -119,10 +123,11 @@ export class ChallengeComponent implements OnInit, OnDestroy {
         )
       );
 
-    const combineSub = combineLatest([
-      this.challenge$,
-      activeTabKey$,
-    ]).subscribe(([challenge, activeTabKey]) => {
+    const combineSub = combineLatest({
+      challenge: this.challenge$,
+      activeTabKey: activeTabKey$,
+    }).subscribe(({ challenge, activeTabKey }) => {
+      // add slug in url and active param if any
       const newPath = `/challenge/${challenge.id}/${challenge.slug}`;
       this.updateTab(activeTabKey, newPath);
     });
