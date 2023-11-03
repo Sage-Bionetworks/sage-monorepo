@@ -3,6 +3,8 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   Image,
+  ImageAspectRatio,
+  ImageHeight,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -48,29 +50,25 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logo$ = this.imageService.getImage({
-      objectKey: 'openchallenges-icon.svg',
-    });
-    this.thomas$ = this.imageService.getImage({
-      objectKey: 'team/tschaffter.jpeg',
-    });
-    this.rong$ = this.imageService.getImage({
-      objectKey: 'team/rchai.jpeg',
-    });
-    this.verena$ = this.imageService.getImage({
-      objectKey: 'team/vchung.png',
-    });
-    this.maria$ = this.imageService.getImage({
-      objectKey: 'team/mdiaz.png',
-    });
-    this.gaia$ = this.imageService.getImage({
-      objectKey: 'team/gandreoletti.jpeg',
-    });
-    this.jake$ = this.imageService.getImage({
-      objectKey: 'team/jalbrecht.jpeg',
-    });
-    this.sage$ = this.imageService.getImage({
-      objectKey: 'logo/sage-bionetworks-alt.svg',
+    this.logo$ = this.getTeamImage('openchallenges-icon.svg');
+    this.thomas$ = this.getTeamImage('team/tschaffter.jpeg', '500px', '1_1');
+    this.rong$ = this.getTeamImage('team/rchai.jpeg', '500px', '1_1');
+    this.verena$ = this.getTeamImage('team/vchung.png', '500px', '1_1');
+    this.maria$ = this.getTeamImage('team/mdiaz.png', '500px', '1_1');
+    this.gaia$ = this.getTeamImage('team/gandreoletti.jpeg', '500px', '1_1');
+    this.jake$ = this.getTeamImage('team/jalbrecht.jpeg', '500px', '1_1');
+    this.sage$ = this.getTeamImage('logo/sage-bionetworks-alt.svg');
+  }
+
+  private getTeamImage(
+    path: string,
+    height: ImageHeight = 'original',
+    ratio: ImageAspectRatio = 'original'
+  ): Observable<Image> {
+    return this.imageService.getImage({
+      objectKey: path,
+      height,
+      aspectRatio: ratio,
     });
   }
 }
