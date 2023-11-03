@@ -106,8 +106,8 @@ def get_dataset_files_from_schematic(
 @handle_exceptions
 def get_dataset_files(
     dataset_id: str,
-    asset_view_id: str,
     asset_type: str,
+    asset_view_id: str,
     file_names: Optional[list[str]] = None,
     use_full_file_path: bool = False,
 ) -> tuple[Union[FilesPage, BasicError], int]:
@@ -186,7 +186,9 @@ def get_dataset_manifest_from_schematic(
 
 @handle_exceptions
 def get_dataset_manifest_json(
-    asset_type: str, asset_view_id: str, dataset_id: str
+    asset_type: str,
+    dataset_id: str,
+    asset_view_id: str,
 ) -> tuple[Union[str, BasicError], int]:
     """Gets a manifest in json form
 
@@ -253,57 +255,9 @@ def get_manifest_json(
     return result, status
 
 
-def get_projects(asset_type: str) -> list[tuple[str, str]]:
-    """Gets a list of projects
-
-    Args:
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        list[tuple(str, str)]: A list of projects in tuple form
-    """
-    access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getStorageProjects()
-
-
-@handle_exceptions
-def list_projects(
-    asset_view_id: str, asset_type: str
-) -> tuple[Union[ProjectsPage, BasicError], int]:
-    """Attempts to get a list of projects the user has access to
-
-    Args:
-        asset_view_id (str): The id for the asset view of the project
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        tuple[Union[ProjectsPage, BasicError], int]: A tuple
-          The first item is either the projects or an error object
-          The second item is the response status
-    """
-
-    CONFIG.synapse_master_fileview_id = asset_view_id
-    project_tuples = get_projects(asset_type)
-    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
-
-    page = ProjectsPage(
-        number=0,
-        size=100,
-        total_elements=len(projects),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        projects=projects,
-    )
-    result: Union[ProjectsPage, BasicError] = page
-    status = 200
-
-    return result, status
-
-
-def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, str]]:
+def get_project_datasets_from_schematic(
+    project_id: str, asset_type: str
+) -> list[tuple[str, str]]:
     """Gets a list of datasets from the project
 
     Args:
@@ -320,8 +274,8 @@ def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, st
 
 
 @handle_exceptions
-def list_storage_project_datasets(
-    project_id: str, asset_view_id: str, asset_type: str
+def get_project_datasets(
+    project_id: str, asset_type: str, asset_view_id: str
 ) -> tuple[Union[DatasetsPage, BasicError], int]:
     """Attempts to get a list of datasets from a Synapse project
 
@@ -337,7 +291,7 @@ def list_storage_project_datasets(
     """
 
     CONFIG.synapse_master_fileview_id = asset_view_id
-    dataset_tuples = get_project_datasets(project_id, asset_type)
+    dataset_tuples = get_project_datasets_from_schematic(project_id, asset_type)
     datasets = [Dataset(id=item[0], name=item[1]) for item in dataset_tuples]
 
     page = DatasetsPage(
@@ -355,7 +309,7 @@ def list_storage_project_datasets(
     return result, status
 
 
-def get_project_manifests(
+def get_project_manifests_from_schematic(
     project_id: str, asset_type: str
 ) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
     """Gets a list of manifests from the project
@@ -374,8 +328,8 @@ def get_project_manifests(
 
 
 @handle_exceptions
-def list_storage_project_manifests(
-    project_id: str, asset_view_id: str, asset_type: str
+def get_project_manifests(
+    project_id: str, asset_type: str, asset_view_id: str
 ) -> tuple[Union[ManifestsPage, BasicError], int]:
     """Attempts to get a list of manifests from a Synapse project
 
@@ -391,7 +345,7 @@ def list_storage_project_manifests(
     """
     # load config
     CONFIG.synapse_master_fileview_id = asset_view_id
-    project_manifests = get_project_manifests(project_id, asset_type)
+    project_manifests = get_project_manifests_from_schematic(project_id, asset_type)
     manifests = [
         Manifest(
             name=item[1][1],
@@ -413,6 +367,56 @@ def list_storage_project_manifests(
         manifests=manifests,
     )
     result: Union[ManifestsPage, BasicError] = page
+    status = 200
+
+    return result, status
+
+
+def get_projects_from_schematic(asset_type: str) -> list[tuple[str, str]]:
+    """Gets a list of projects
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        list[tuple(str, str)]: A list of projects in tuple form
+    """
+    access_token = get_access_token()
+    asset_type_object = get_asset_storage_class(asset_type)
+    store = asset_type_object(access_token=access_token)
+    return store.getStorageProjects()
+
+
+@handle_exceptions
+def get_projects(
+    asset_view_id: str, asset_type: str
+) -> tuple[Union[ProjectsPage, BasicError], int]:
+    """Attempts to get a list of projects the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[Union[ProjectsPage, BasicError], int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_tuples = get_projects_from_schematic(asset_type)
+    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
+
+    page = ProjectsPage(
+        number=0,
+        size=100,
+        total_elements=len(projects),
+        total_pages=1,
+        has_next=False,
+        has_previous=False,
+        projects=projects,
+    )
+    result: Union[ProjectsPage, BasicError] = page
     status = 200
 
     return result, status
