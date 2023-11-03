@@ -17,14 +17,18 @@ HEADERS = {
 }
 
 ASSET_VIEW_JSON_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/json"
-FILES_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/datasets/syn2/files"
-MANIFEST_JSON_URL = "/api/v1/assetTypes/synapse/manifests/syn1/json"
+DATASET_FILES_URL = "/api/v1/assetTypes/synapse/datasets/syn2/files?assetViewId=syn1"
 DATASET_MANIFEST_JSON_URL = (
-    "/api/v1/assetTypes/synapse/assetViews/syn1/datasets/syn2/manifestJson"
+    "/api/v1/assetTypes/synapse/datasets/syn2/manifestJson?assetViewId=syn1"
 )
+MANIFEST_JSON_URL = "/api/v1/assetTypes/synapse/manifests/syn1/json"
 PROJECTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects"
-DATASETS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/datasets"
-MANIFESTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects/syn2/manifests"
+PROJECT_DATASETS_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/datasets?assetViewId=syn1"
+)
+PROJECT_MANIFESTS_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/manifests?assetViewId=syn1"
+)
 
 
 class TestGetAssetViewJson(BaseTestCase):
@@ -100,7 +104,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -126,20 +132,22 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ) as mock_function:
-            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", None, False)
 
-            url = f"{FILES_URL}?fileNames=file.text"
+            url = f"{DATASET_FILES_URL}&fileNames=file.text"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", ["file.text"], False)
 
-            url = f"{FILES_URL}?fileNames=file.text&fileNames=file2.text"
+            url = f"{DATASET_FILES_URL}&fileNames=file.text&fileNames=file2.text"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -156,14 +164,14 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ) as mock_function:
-            url = f"{FILES_URL}?useFullFilePath=true"
+            url = f"{DATASET_FILES_URL}&useFullFilePath=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", None, True)
 
-            url = f"{FILES_URL}?useFullFilePath=false"
+            url = f"{DATASET_FILES_URL}&useFullFilePath=false"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -177,7 +185,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -189,7 +199,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -201,7 +213,9 @@ class TestGetDatasetFiles(BaseTestCase):
             "get_dataset_files_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(FILES_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                DATASET_FILES_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -331,7 +345,7 @@ class TestGetManifestJson(BaseTestCase):
             )
 
 
-class TestProjects(BaseTestCase):
+class TestGetProjects(BaseTestCase):
     """Test case for projects endpoint"""
 
     def test_success(self) -> None:
@@ -339,7 +353,7 @@ class TestProjects(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
             response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
@@ -364,7 +378,7 @@ class TestProjects(BaseTestCase):
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
             response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
@@ -376,7 +390,7 @@ class TestProjects(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
             response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
@@ -388,7 +402,7 @@ class TestProjects(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects",
+            "get_projects_from_schematic",
             side_effect=TypeError,
         ):
             response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
@@ -397,7 +411,7 @@ class TestProjects(BaseTestCase):
             )
 
 
-class TestDatasets(BaseTestCase):
+class TestGetProjectDatasets(BaseTestCase):
     """Test case for datasets endpoint"""
 
     def test_success(self) -> None:
@@ -405,10 +419,12 @@ class TestDatasets(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             return_value=[("syn1", "name1"), ("syn2", "name2")],
         ):
-            response = self.client.open(DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -430,10 +446,12 @@ class TestDatasets(BaseTestCase):
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -442,10 +460,12 @@ class TestDatasets(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -454,16 +474,18 @@ class TestDatasets(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_datasets",
+            "get_project_datasets_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(DATASETS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_DATASETS_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
 
 
-class TestManifests(BaseTestCase):
+class TestGetProjectManifests(BaseTestCase):
     """Test case for manifests endpoint"""
 
     def test_success(self) -> None:
@@ -471,10 +493,12 @@ class TestManifests(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             return_value=EXAMPLE_MANIFEST_METADATA,
         ):
-            response = self.client.open(MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -505,10 +529,12 @@ class TestManifests(BaseTestCase):
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -517,10 +543,12 @@ class TestManifests(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -529,10 +557,12 @@ class TestManifests(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests",
+            "get_project_manifests_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(MANIFESTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
