@@ -62,12 +62,12 @@ export class TeamComponent implements OnInit {
       objectKey: 'logo/sage-bionetworks-alt.svg',
     });
 
-    this.thomasAvatar$ = this.getAvatarImage('team/tschaffter.jpeg');
-    this.verenaAvatar$ = this.getAvatarImage('team/vchung.png');
-    this.rongAvatar$ = this.getAvatarImage('team/rchai.jpeg');
-    this.mariaAvatar$ = this.getAvatarImage('team/mdiaz.png');
-    this.gaiaAvatar$ = this.getAvatarImage('team/gandreoletti.jpeg');
-    this.jakeAvatar$ = this.getAvatarImage('team/jalbrecht.jpeg');
+    this.thomasAvatar$ = this.getAvatarImage('team/thomas_schaffter_v3.jpg');
+    this.verenaAvatar$ = this.getAvatarImage('team/verena_chung.jpg');
+    this.rongAvatar$ = this.getAvatarImage('team/rong_chai.jpg');
+    this.mariaAvatar$ = this.getAvatarImage('team/maria.png');
+    this.gaiaAvatar$ = this.getAvatarImage('team/gaia_andreoletti.jpg');
+    this.jakeAvatar$ = this.getAvatarImage('team/jake_albrecht.jpg');
   }
 
   private getAvatarImage(objectKey: string): Observable<Image> {
