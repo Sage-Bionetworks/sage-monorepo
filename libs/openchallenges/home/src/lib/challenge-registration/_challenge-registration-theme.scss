@@ -12,6 +12,7 @@
     color: white;
 
     .btn-block {
+      color: white;
       background-color:  mat.get-color-from-palette($accent);
     }
     .btn-block:hover {
