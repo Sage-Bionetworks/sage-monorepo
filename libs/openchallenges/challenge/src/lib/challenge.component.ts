@@ -37,9 +37,10 @@ import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-o
 import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
 import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-seo-data';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'openchallenges-challenge',
@@ -83,7 +84,8 @@ export class ChallengeComponent implements OnInit {
     private challengeService: ChallengeService,
     private readonly configService: ConfigService,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private _location: Location
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -141,6 +143,16 @@ export class ChallengeComponent implements OnInit {
       .subscribe((key) => (this.activeTab = this.tabs[key]));
 
     this.subscriptions.push(activeTabSub);
+  }
+
+  updateTab(activeTab: Tab) {
+    this.activeTab = activeTab;
+    const queryParams = { tab: activeTab.name };
+    const newParam = new HttpParams({
+      fromObject: queryParams,
+    });
+    console.log(location.pathname);
+    this._location.replaceState(location.pathname, newParam.toString());
   }
 
   // calcDays(startDate: string, endDate: string): number {
