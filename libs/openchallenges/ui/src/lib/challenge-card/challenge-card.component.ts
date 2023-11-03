@@ -72,10 +72,10 @@ export class ChallengeCardComponent implements OnInit {
     }
   }
 
-  calcTimeDiff(date: string, hideFarDates = false) {
+  calcTimeDiff(date: string, hideFarDates = false): string | never {
     const pattern = /\d{4}-\d{2}-\d{2}/;
     if (!pattern.test(date)) {
-      return '';
+      throw Error(`${date} does not match the schema: ${pattern}`);
     }
     const refDate: any = new Date(date + ' 00:00:00');
     const now: any = new Date();
