@@ -148,7 +148,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
     const newPath = path ?? location.pathname;
     this._location.replaceState(newPath, newParam.toString());
 
-    // switch tab to active tab
+    // update active tab
     this.activeTab = this.tabs[activeTabKey];
   }
 }
