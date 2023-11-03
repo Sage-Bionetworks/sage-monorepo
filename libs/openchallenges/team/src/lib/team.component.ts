@@ -58,7 +58,7 @@ export class TeamComponent implements OnInit {
       objectKey: 'team/rchai.jpeg',
     });
     this.verena$ = this.imageService.getImage({
-      objectKey: 'team/vchung.jpeg',
+      objectKey: 'team/vchung.png',
     });
     this.maria$ = this.imageService.getImage({
       objectKey: 'team/mdiaz.png',
