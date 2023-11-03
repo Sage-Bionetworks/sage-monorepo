@@ -73,7 +73,7 @@ export class ChallengeCardComponent implements OnInit {
           )}`;
         }
       } catch (error: unknown) {
-        console.log(e);
+        console.log(error);
       }
     }
   }
