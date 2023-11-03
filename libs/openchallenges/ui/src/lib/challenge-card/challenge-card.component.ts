@@ -57,25 +57,31 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
-      if (this.challenge.endDate && this.status === 'completed') {
-        const timeSince = this.calcTimeDiff(this.challenge.endDate);
-        if (timeSince) {
-          this.time_info = `Ended ${timeSince} ago`;
+      try {
+        if (this.challenge.endDate && this.status === 'completed') {
+          const timeSince = this.calcTimeDiff(this.challenge.endDate, true);
+          if (timeSince) {
+            this.time_info = `Ended ${timeSince} ago`;
+          }
+        } else if (this.challenge.endDate && this.status === 'active') {
+          this.time_info = `Ends in ${this.calcTimeDiff(
+            this.challenge.endDate
+          )}`;
+        } else if (this.challenge.startDate && this.status === 'upcoming') {
+          this.time_info = `Starts in ${this.calcTimeDiff(
+            this.challenge.startDate
+          )}`;
         }
-      } else if (this.challenge.endDate && this.status === 'active') {
-        this.time_info = `Ends in ${this.calcTimeDiff(this.challenge.endDate)}`;
-      } else if (this.challenge.startDate && this.status === 'upcoming') {
-        this.time_info = `Starts in ${this.calcTimeDiff(
-          this.challenge.startDate
-        )}`;
+      } catch (error: unknown) {
+        console.log(error);
       }
     }
   }
 
-  calcTimeDiff(date: string) {
+  calcTimeDiff(date: string, hideFarDates = false): string | never {
     const pattern = /\d{4}-\d{2}-\d{2}/;
     if (!pattern.test(date)) {
-      return '';
+      throw Error(`${date} does not match the schema: ${pattern}`);
     }
     const refDate: any = new Date(date + ' 00:00:00');
     const now: any = new Date();
@@ -92,7 +98,7 @@ export class ChallengeCardComponent implements OnInit {
     // Find the largest unit of time and return in human-readable format.
     let timeDiffString = '';
     for (const [unit, value] of Object.entries(timeDiff)) {
-      if (unit === 'month' && value > 3) {
+      if (hideFarDates && unit === 'month' && value > 3) {
         break;
       } else if (value > 0) {
         timeDiffString = `${value} ${unit}` + (value > 1 ? 's' : '');
