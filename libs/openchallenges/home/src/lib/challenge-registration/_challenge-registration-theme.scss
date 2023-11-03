@@ -21,7 +21,11 @@
   }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) {
+  #organizer-cta .btn-block {
+    text-transform: uppercase;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
