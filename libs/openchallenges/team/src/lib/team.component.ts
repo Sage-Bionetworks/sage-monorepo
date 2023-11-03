@@ -26,14 +26,19 @@ export class TeamComponent implements OnInit {
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
-  public logo$: Observable<Image> | undefined;
-  public thomas$: Observable<Image> | undefined;
-  public rong$: Observable<Image> | undefined;
-  public verena$: Observable<Image> | undefined;
-  public maria$: Observable<Image> | undefined;
-  public gaia$: Observable<Image> | undefined;
-  public jake$: Observable<Image> | undefined;
-  public sage$: Observable<Image> | undefined;
+
+  public avatarImageHeight: ImageHeight = ImageHeight._500px;
+  public avatarImageAspectRatio: ImageAspectRatio = ImageAspectRatio._11;
+
+  public ocLogo$: Observable<Image> | undefined;
+  public sageLogo$: Observable<Image> | undefined;
+
+  public thomasAvatar$: Observable<Image> | undefined;
+  public rongAvatar$: Observable<Image> | undefined;
+  public verenaAvatar$: Observable<Image> | undefined;
+  public mariaAvatar$: Observable<Image> | undefined;
+  public gaiaAvatar$: Observable<Image> | undefined;
+  public jakeAvatar$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -50,25 +55,26 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logo$ = this.getTeamImage('openchallenges-icon.svg');
-    this.thomas$ = this.getTeamImage('team/tschaffter.jpeg', '500px', '1_1');
-    this.rong$ = this.getTeamImage('team/rchai.jpeg', '500px', '1_1');
-    this.verena$ = this.getTeamImage('team/vchung.png', '500px', '1_1');
-    this.maria$ = this.getTeamImage('team/mdiaz.png', '500px', '1_1');
-    this.gaia$ = this.getTeamImage('team/gandreoletti.jpeg', '500px', '1_1');
-    this.jake$ = this.getTeamImage('team/jalbrecht.jpeg', '500px', '1_1');
-    this.sage$ = this.getTeamImage('logo/sage-bionetworks-alt.svg');
+    this.ocLogo$ = this.imageService.getImage({
+      objectKey: 'openchallenges-icon.svg',
+    });
+    this.sageLogo$ = this.imageService.getImage({
+      objectKey: 'logo/sage-bionetworks-alt.svg',
+    });
+
+    this.thomasAvatar$ = this.getAvatarImage('team/tschaffter.jpeg');
+    this.verenaAvatar$ = this.getAvatarImage('team/vchung.png');
+    this.rongAvatar$ = this.getAvatarImage('team/rchai.jpeg');
+    this.mariaAvatar$ = this.getAvatarImage('team/mdiaz.png');
+    this.gaiaAvatar$ = this.getAvatarImage('team/gandreoletti.jpeg');
+    this.jakeAvatar$ = this.getAvatarImage('team/jalbrecht.jpeg');
   }
 
-  private getTeamImage(
-    path: string,
-    height: ImageHeight = 'original',
-    ratio: ImageAspectRatio = 'original'
-  ): Observable<Image> {
+  private getAvatarImage(objectKey: string): Observable<Image> {
     return this.imageService.getImage({
-      objectKey: path,
-      height,
-      aspectRatio: ratio,
+      objectKey,
+      height: ImageHeight._500px,
+      aspectRatio: ImageAspectRatio._11,
     });
   }
 }
