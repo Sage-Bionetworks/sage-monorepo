@@ -1,10 +1,5 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  ActivatedRoute,
-  ParamMap,
-  Router,
-  RouterModule,
-} from '@angular/router';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   Challenge,
   ChallengeService,
@@ -14,13 +9,12 @@ import {
   combineLatest,
   map,
   Observable,
-  of,
   Subscription,
   switchMap,
   throwError,
 } from 'rxjs';
 import { Tab } from './tab.model';
-import { CHALLENGE_TABS, ChallengeTabKey } from './challenge-tabs';
+import { CHALLENGE_TABS } from './challenge-tabs';
 import {
   Avatar,
   AvatarComponent,
@@ -62,7 +56,7 @@ import { HttpParams } from '@angular/common/http';
   templateUrl: './challenge.component.html',
   styleUrls: ['./challenge.component.scss'],
 })
-export class ChallengeComponent implements OnInit {
+export class ChallengeComponent implements OnInit, OnDestroy {
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -76,7 +70,7 @@ export class ChallengeComponent implements OnInit {
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   activeTab!: Tab;
-  private subscriptions: Subscription[] = [];
+  private subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -117,12 +111,13 @@ export class ChallengeComponent implements OnInit {
         )
       );
 
-    combineLatest([this.challenge$, activeTabKey$]).subscribe(
-      ([challenge, activeTabKey]) => {
-        const newPath = `/challenge/${challenge.id}/${challenge.slug}`;
-        this.updateTab(activeTabKey, newPath);
-      }
-    );
+    const combineSub = combineLatest([
+      this.challenge$,
+      activeTabKey$,
+    ]).subscribe(([challenge, activeTabKey]) => {
+      const newPath = `/challenge/${challenge.id}/${challenge.slug}`;
+      this.updateTab(activeTabKey, newPath);
+    });
 
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
@@ -154,7 +149,12 @@ export class ChallengeComponent implements OnInit {
     //   )
     //   .subscribe((key) => (this.activeTab = this.tabs[key]));
 
-    // this.subscriptions.push(activeTabSub);
+    this.subscriptions.add(combineSub);
+  }
+
+  ngOnDestroy(): void {
+    // Unsubscribe from all subscriptions
+    this.subscriptions.unsubscribe();
   }
 
   updateTab(activeTabKey: string, path?: string) {
