@@ -65,8 +65,6 @@ export class ChallengeComponent implements OnInit, OnDestroy {
 
   challenge$!: Observable<Challenge>;
   loggedIn = false;
-  // progressValue = 0;
-  // remainDays!: number | undefined;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   activeTab!: Tab;
@@ -102,6 +100,16 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       })
     );
 
+    this.challenge$.subscribe((challenge) => {
+      this.challengeAvatar = {
+        name: challenge.name,
+        src: challenge.avatarUrl ?? '',
+        size: 250,
+      };
+
+      this.seoService.setData(getSeoData(challenge), this.renderer2);
+    });
+
     const activeTabKey$: Observable<string> =
       this.activatedRoute.queryParams.pipe(
         map((params) =>
@@ -119,41 +127,10 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       this.updateTab(activeTabKey, newPath);
     });
 
-    this.challenge$.subscribe((challenge) => {
-      this.challengeAvatar = {
-        name: challenge.name,
-        src: challenge.avatarUrl || '',
-        size: 250,
-      };
-
-      this.seoService.setData(getSeoData(challenge), this.renderer2);
-
-      // this.progressValue =
-      //   challenge.startDate && challenge.endDate
-      //     ? this.calcProgress(
-      //         new Date().toUTCString(),
-      //         challenge.startDate,
-      //         challenge.endDate
-      //       )
-      //     : 0;
-
-      // this.remainDays = challenge.endDate
-      //   ? this.calcDays(new Date().toUTCString(), challenge.endDate)
-      //   : undefined;
-    });
-
-    // const activeTabSub = this.activatedRoute.queryParamMap
-    //   .pipe(
-    //     map((params: ParamMap) => params.get('tab')),
-    //     map((key) => (key === null ? 'overview' : key))
-    //   )
-    //   .subscribe((key) => (this.activeTab = this.tabs[key]));
-
     this.subscriptions.add(combineSub);
   }
 
   ngOnDestroy(): void {
-    // Unsubscribe from all subscriptions
     this.subscriptions.unsubscribe();
   }
 
@@ -169,16 +146,4 @@ export class ChallengeComponent implements OnInit, OnDestroy {
     // switch tab to active tab
     this.activeTab = this.tabs[activeTabKey];
   }
-
-  // calcDays(startDate: string, endDate: string): number {
-  //   const timeDiff = +new Date(endDate) - +new Date(startDate);
-  //   return Math.round(timeDiff / (1000 * 60 * 60 * 24));
-  // }
-
-  // calcProgress(today: string, startDate: string, endDate: string): number {
-  //   return (
-  //     (this.calcDays(startDate, today) / this.calcDays(startDate, endDate)) *
-  //     100
-  //   );
-  // }
 }
