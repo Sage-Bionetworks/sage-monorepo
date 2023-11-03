@@ -57,17 +57,23 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
-      if (this.challenge.endDate && this.status === 'completed') {
-        const timeSince = this.calcTimeDiff(this.challenge.endDate, true);
-        if (timeSince) {
-          this.time_info = `Ended ${timeSince} ago`;
+      try {
+        if (this.challenge.endDate && this.status === 'completed') {
+          const timeSince = this.calcTimeDiff(this.challenge.endDate, true);
+          if (timeSince) {
+            this.time_info = `Ended ${timeSince} ago`;
+          }
+        } else if (this.challenge.endDate && this.status === 'active') {
+          this.time_info = `Ends in ${this.calcTimeDiff(
+            this.challenge.endDate
+          )}`;
+        } else if (this.challenge.startDate && this.status === 'upcoming') {
+          this.time_info = `Starts in ${this.calcTimeDiff(
+            this.challenge.startDate
+          )}`;
         }
-      } else if (this.challenge.endDate && this.status === 'active') {
-        this.time_info = `Ends in ${this.calcTimeDiff(this.challenge.endDate)}`;
-      } else if (this.challenge.startDate && this.status === 'upcoming') {
-        this.time_info = `Starts in ${this.calcTimeDiff(
-          this.challenge.startDate
-        )}`;
+      } catch (e: unknown) {
+        console.log(e);
       }
     }
   }
