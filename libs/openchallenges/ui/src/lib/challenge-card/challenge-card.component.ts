@@ -72,7 +72,7 @@ export class ChallengeCardComponent implements OnInit {
             this.challenge.startDate
           )}`;
         }
-      } catch (e: unknown) {
+      } catch (error: unknown) {
         console.log(e);
       }
     }
