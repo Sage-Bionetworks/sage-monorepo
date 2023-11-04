@@ -1,6 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
-import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -12,8 +11,9 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./challenge-stats.component.scss'],
 })
 export class ChallengeStatsComponent implements OnInit {
+  @Input({ required: true }) challenge: Challenge | undefined = undefined;
   @Input({ required: true }) loggedIn = false;
-  challenge$!: Observable<Challenge>;
+
   mockViews!: number;
   mockStargazers!: number;
 
