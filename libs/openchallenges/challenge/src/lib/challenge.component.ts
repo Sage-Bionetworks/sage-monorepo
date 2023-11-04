@@ -70,7 +70,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
   activeTab!: Tab;
-  private subscriptions = new Subscription();
+  private subscription = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -132,11 +132,11 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       this.updateTab(activeTabKey, newPath);
     });
 
-    this.subscriptions.add(combineSub);
+    this.subscription.add(combineSub);
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   updateTab(activeTabKey: string, path?: string) {

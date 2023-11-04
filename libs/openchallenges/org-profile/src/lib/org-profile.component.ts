@@ -73,7 +73,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
   loggedIn = true;
   tabs = ORG_PROFILE_TABS;
   activeTab!: Tab;
-  private subscriptions = new Subscription();
+  private subscription = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -148,11 +148,11 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
       this.updateTab(activeTabKey); // add active param if any
     });
 
-    this.subscriptions.add(combineSub);
+    this.subscription.add(combineSub);
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
   private getOrganizationImageUrl(
