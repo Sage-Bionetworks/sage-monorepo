@@ -11,7 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./challenge-stats.component.scss'],
 })
 export class ChallengeStatsComponent implements OnInit {
-  @Input({ required: true }) challenge: Challenge | undefined = undefined;
+  @Input({ required: true }) challenge: Challenge | undefined;
   @Input({ required: true }) loggedIn = false;
 
   mockViews!: number;
