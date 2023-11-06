@@ -368,10 +368,10 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
         return scoreSort;
       }
       case START_DATE -> {
-        return sf.field("end_date").order(orderWithDefaultDesc).toSort();
+        return sf.field("start_date").order(orderWithDefaultDesc).toSort();
       }
       case END_DATE -> {
-        return sf.field("start_date").order(orderWithDefaultDesc).toSort();
+        return sf.field("end_date").order(orderWithDefaultDesc).toSort();
       }
       case RELEVANCE -> {
         return relevanceSort;
