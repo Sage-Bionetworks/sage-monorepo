@@ -1,12 +1,8 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import {
-  ActivatedRoute,
-  ParamMap,
-  Router,
-  RouterModule,
-} from '@angular/router';
+import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   catchError,
+  combineLatest,
   forkJoin,
   map,
   Observable,
@@ -38,7 +34,7 @@ import {
   HttpStatusRedirect,
   handleHttpError,
 } from '@sagebionetworks/openchallenges/util';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
 import { OrgProfileMembersComponent } from './org-profile-members/org-profile-members.component';
@@ -46,6 +42,7 @@ import { OrgProfileOverviewComponent } from './org-profile-overview/org-profile-
 import { OrgProfileStatsComponent } from './org-profile-stats/org-profile-stats.component';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './org-profile-seo-data';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'openchallenges-org-profile',
@@ -64,7 +61,7 @@ import { getSeoData } from './org-profile-seo-data';
   templateUrl: './org-profile.component.html',
   styleUrls: ['./org-profile.component.scss'],
 })
-export class OrgProfileComponent implements OnInit {
+export class OrgProfileComponent implements OnInit, OnDestroy {
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -74,11 +71,9 @@ export class OrgProfileComponent implements OnInit {
   organization$!: Observable<Organization>;
   organizationAvatar$!: Observable<Avatar>;
   loggedIn = true;
-  // organizationAvatar!: Avatar;
   tabs = ORG_PROFILE_TABS;
-  tabKeys: string[] = Object.keys(this.tabs);
   activeTab!: Tab;
-  private subscriptions: Subscription[] = [];
+  private subscription = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -87,7 +82,8 @@ export class OrgProfileComponent implements OnInit {
     private organizationService: OrganizationService,
     private imageService: ImageService,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
+    private _location: Location
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -134,21 +130,29 @@ export class OrgProfileComponent implements OnInit {
       switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px))
     );
 
-    const activeTabSub = this.activatedRoute.queryParamMap
-      .pipe(
-        map((params: ParamMap) => params.get('tab')),
-        map((key) => (key === null ? 'overview' : key))
-      )
-      .subscribe((key) => (this.activeTab = this.tabs[key]));
+    const activeTabKey$: Observable<string> =
+      this.activatedRoute.queryParams.pipe(
+        map((params) =>
+          Object.keys(this.tabs).includes(params['tab'])
+            ? params['tab']
+            : 'overview'
+        )
+      );
 
-    this.subscriptions.push(activeTabSub);
-
-    forkJoin({
+    const combineSub = combineLatest({
       org: this.organization$,
       image: seoOrgImage$,
-    }).subscribe(({ org, image }) => {
+      activeTabKey: activeTabKey$,
+    }).subscribe(({ org, image, activeTabKey }) => {
       this.seoService.setData(getSeoData(org, image.url), this.renderer2);
+      this.updateTab(activeTabKey); // add active param if any
     });
+
+    this.subscription.add(combineSub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private getOrganizationImageUrl(
@@ -169,5 +173,18 @@ export class OrgProfileComponent implements OnInit {
           return of({ url: '' });
         })
       );
+  }
+
+  updateTab(activeTabKey: string, path?: string) {
+    // update tab param in the url
+    const queryParams = { tab: activeTabKey };
+    const newParam = new HttpParams({
+      fromObject: queryParams,
+    });
+    const newPath = path ?? location.pathname;
+    this._location.replaceState(newPath, newParam.toString());
+
+    // update active tab
+    this.activeTab = this.tabs[activeTabKey];
   }
 }

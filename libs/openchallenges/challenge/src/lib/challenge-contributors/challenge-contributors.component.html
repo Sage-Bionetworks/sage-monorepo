@@ -39,11 +39,13 @@
     <div id="contributor-sponsor">
       <p class="mat-body-strong"><strong>Sponsors</strong></p>
       <ng-container *ngIf="sponsorCardBundles.length > 0; else no_sponsor">
-        <openchallenges-organization-card
-          *ngFor="let bundle of sponsorCardBundles"
-          [organizationCard]="bundle.card"
-          [showMember]="false"
-        />
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let bundle of sponsorCardBundles"
+            [organizationCard]="bundle.card"
+            [showMember]="false"
+          />
+        </div>
       </ng-container>
       <ng-template #no_sponsor>
         <p class="text-grey">Not available</p>
