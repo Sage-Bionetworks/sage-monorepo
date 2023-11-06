@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class BadRequestExceptionTest {
 
   @Test
-  public void BadRequestException_ConstructorTypeShouldMatch() {
+  public void badRequestException_ShouldReturnType_WhenTypeKeyIsPassed() {
     // Set up the input detail
     String detail = "Errordetail";
 
@@ -19,7 +19,7 @@ public class BadRequestExceptionTest {
   }
 
   @Test
-  public void BadRequestException_ConstructorStatusShouldMatch() {
+  public void badRequestException_ShouldReturnStatus_WhenStatusKeyIsPassed() {
     // Set up the input detail
     String detail = "Errordetail";
 
@@ -31,7 +31,7 @@ public class BadRequestExceptionTest {
   }
 
   @Test
-  public void BadRequestException_ConstructorDetailShouldMatch() {
+  public void badRequestException_ShouldReturnDetail_WhenDetailKeyIsPassed() {
     // Set up the input detail
     String detail = "Errordetail";
 

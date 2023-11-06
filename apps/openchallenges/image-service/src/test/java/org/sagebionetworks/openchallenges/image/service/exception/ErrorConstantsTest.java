@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 public class ErrorConstantsTest {
 
   @Test
-  public void ErrorConstants_ShouldReturnErrorsWhenHeightNotGiven() {
+  public void errorConstants_ShouldReturnErrors_WhenErrorConstantsKeyIsPassed() {
 
     // Get the ImageHeightNotSpecified error constant
     ErrorConstants constant = ErrorConstants.IMAGE_HEIGHT_NOT_SPECIFIED;

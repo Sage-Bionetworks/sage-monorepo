@@ -24,7 +24,7 @@ public class ImageApiDelegateImplTest {
   }
 
   @Test
-  public void HttpStatusReturnsAsExpectedforGetImage() {
+  public void getImage_ShouldReturnHttpStatus_WhenImageDtoKeyIsPassed() {
     // Create a sample ImageQueryDto
     ImageQueryDto queryDto = new ImageQueryDto();
 
@@ -42,7 +42,7 @@ public class ImageApiDelegateImplTest {
   }
 
   @Test
-  public void BodyofGetImageReturnsCorrectValue() {
+  public void getImage_ShouldReturnBody_WhenImageDtoKeyIsPassed() {
     // Create a sample ImageQueryDto
     ImageQueryDto queryDto = new ImageQueryDto();
 

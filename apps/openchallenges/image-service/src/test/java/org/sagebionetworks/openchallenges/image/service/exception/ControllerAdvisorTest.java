@@ -26,7 +26,7 @@ public class ControllerAdvisorTest {
   @InjectMocks private ControllerAdvisor controllerAdvisor;
 
   @Test
-  public void testBindExceptionBindingResult() {
+  public void bindException_ShouldReturnResult_WhenMockErrorIsPassed() {
     MockitoAnnotations.openMocks(this);
 
     // Create a mock FieldError
