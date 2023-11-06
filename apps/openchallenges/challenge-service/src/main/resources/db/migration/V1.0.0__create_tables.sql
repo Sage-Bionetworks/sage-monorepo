@@ -31,7 +31,7 @@ CREATE TABLE `challenge`
     `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
     `slug`                  varchar(255) NOT NULL,
     `name`                  varchar(255) DEFAULT NULL,
-    `headline`              varchar(80),
+    `headline`              varchar(120),
     `description`           varchar(1000) NOT NULL,
     `avatar_url`            varchar(255),
     `website_url`           varchar(255) NOT NULL,
