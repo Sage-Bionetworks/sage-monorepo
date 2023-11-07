@@ -104,6 +104,10 @@ test {
     events("passed", "skipped", "failed")
   }
 
+  jacoco {
+    excludes = ["**/openchallenges/image/service/model/dto/**"]
+  }
+
   finalizedBy jacocoTestReport
 }
 
