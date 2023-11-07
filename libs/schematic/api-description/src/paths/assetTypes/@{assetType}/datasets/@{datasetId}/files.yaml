@@ -11,6 +11,8 @@ get:
     - $ref: ../../../../../components/parameters/query/fileNames.yaml
     - $ref: ../../../../../components/parameters/query/useFullFilePath.yaml
     - $ref: ../../../../../components/parameters/query/assetViewIdQuery.yaml
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

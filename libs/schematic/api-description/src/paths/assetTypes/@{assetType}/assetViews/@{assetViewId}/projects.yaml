@@ -7,6 +7,8 @@ get:
   summary: Gets all storage projects the current user has access to.
   description: Gets all storage projects the current user has access to.
   operationId: getProjects
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

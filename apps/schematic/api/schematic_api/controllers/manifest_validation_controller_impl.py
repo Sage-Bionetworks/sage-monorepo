@@ -96,19 +96,24 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         inputMModelLocation=schema_path, inputMModelLocationType="local"
     )
 
-    manifest_id = metadata_model.submit_metadata_manifest(
+    # The typing for this method has several issues:
+    # validate_component: str = None should be Optional[str]
+    # access_token: str = None should be Optional[str]
+    # -> string: should be -> str
+    # Mypy is currenty ignoring these lines
+    manifest_id: str = metadata_model.submit_metadata_manifest(
         path_to_json_ld=schema_path,
         manifest_path=manifest_path,
         dataset_id=dataset_id,
-        validate_component=component,
-        access_token=access_token,
+        validate_component=component,  # type: ignore
+        access_token=access_token,  # type: ignore
         manifest_record_type=storage_method,
         restrict_rules=restrict_rules,
         hide_blanks=hide_blanks,
         table_manipulation=table_manipulation_method,
         use_schema_label=use_schema_label,
     )
-    return manifest_id
+    return manifest_id  # type: ignore
 
 
 @handle_exceptions
@@ -258,17 +263,22 @@ def validate_manifest_with_schematic(
           The second item is a list of validation warnings
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
+    access_token = get_access_token()
 
     metadata_model = MetadataModel(
         inputMModelLocation=schema_path, inputMModelLocationType="local"
     )
 
-    errors, warnings = metadata_model.validateModelManifest(
+    # The typing for this method has some incorrect typing
+    # access_token: str = None should be Optional[str]
+    # -> List[str]: should be tuple[list, list]
+    result: tuple[list, list] = metadata_model.validateModelManifest(  # type: ignore
         manifestPath=manifest_path,
         rootNode=component_label,
         restrict_rules=restrict_rules,
+        access_token=access_token,  # type: ignore
     )
-    return errors, warnings
+    return result
 
 
 @handle_exceptions
