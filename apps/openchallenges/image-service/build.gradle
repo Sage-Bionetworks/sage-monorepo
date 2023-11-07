@@ -104,10 +104,6 @@ test {
     events("passed", "skipped", "failed")
   }
 
-  jacoco {
-    excludes = ["**/openchallenges/image/service/model/dto/**"]
-  }
-
   finalizedBy jacocoTestReport
 }
 
@@ -132,6 +128,23 @@ spotless {
 jacocoTestReport {
   reports {
     xml.required = true
+  }
+
+  afterEvaluate {
+    classDirectories.setFrom(files(classDirectories.files.collect {
+        fileTree(dir: it, exclude: [
+            '**/api/*Api.*',
+            '**/api/*ApiController.*',
+            '**/api/*ApiDelegate.*',
+            '**/api/ApiUtil.*',
+            '**/configuration/EnumConverterConfiguration.*',
+            '**/configuration/HomeController.*',
+            '**/configuration/SpringDocConfiguration.*',
+            '**/model/dto/**',
+            '**/RFC3339DateFormat.*'
+          ]
+        )
+    }))
   }
 }
 
