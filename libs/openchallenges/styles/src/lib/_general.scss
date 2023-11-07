@@ -281,7 +281,6 @@ table {
 }
 .card-banner {
   width: 100%;
-  height: 130px;
   display: flex;
   align-items: flex-start;
 }
@@ -297,7 +296,7 @@ table {
   @include line-clamp(2);
 }
 .mat-caption {
-  @include line-clamp(2);
+  @include line-clamp(3);
 }
 .card-body {
   width: 100%;
