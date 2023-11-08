@@ -4,18 +4,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.http.HttpStatus;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-
 
 @SpringJUnitConfig
 @WebMvcTest(ControllerAdvisor.class)
@@ -50,7 +49,8 @@ public class ControllerAdvisorTest {
     // Create a mock BindingResult
     BindingResult bindingResult = new BindException(new Object(), "objectName");
     bindingResult.addError(fieldError);
-    BindingResult handleBindException = new HandleBindException(bindException, header, status, webRequest);
+    BindingResult handleBindException =
+        new HandleBindException(bindException, header, status, webRequest);
 
     // // Set up the mock BindException to return the mock BindingResult
     when(bindException.getBindingResult()).thenReturn(bindingResult);
