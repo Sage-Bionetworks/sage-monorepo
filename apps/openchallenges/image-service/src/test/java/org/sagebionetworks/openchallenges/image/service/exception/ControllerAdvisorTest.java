@@ -19,7 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 public class ControllerAdvisorTest {
 
   @Test
-  public void testHandleBindException() {
+  public void HandleBindException_ShouldReturnStatusAndBody_WhenBothArePassed() {
     // Create a sample BindException
     BindException bindException = mock(BindException.class);
     BindingResult bindingResult = mock(BindingResult.class);
