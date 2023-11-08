@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class ImageHeightNotSpecifiedExceptionTest {
 
   @Test
-  public void imageHeightNotSpecifiedException_ShouldReturnType_WhenTypeKeyIsPassed() {
+  public void ImageHeightNotSpecifiedException_ShouldReturnType_WhenTypeKeyIsPassed() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -19,7 +19,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void imageHeightNotSpecifiedException_ShouldReturnTitle_WhenTitleKeyIsPassed() {
+  public void ImageHeightNotSpecifiedException_ShouldReturnTitle_WhenTitleKeyIsPassed() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -32,7 +32,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void imageHeightNotSpecifiedException_ShouldReturnStatus_WhenStatusKeyIsPassed() {
+  public void ImageHeightNotSpecifiedException_ShouldReturnStatus_WhenStatusKeyIsPassed() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
@@ -45,7 +45,7 @@ public class ImageHeightNotSpecifiedExceptionTest {
   }
 
   @Test
-  public void imageHeightNotSpecifiedException_ShouldReturnException_WhenExceptionKeyIsPassed() {
+  public void ImageHeightNotSpecifiedException_ShouldReturnException_WhenExceptionKeyIsPassed() {
     // Define the exception detail
     String detail = "Image height is not specified";
 
