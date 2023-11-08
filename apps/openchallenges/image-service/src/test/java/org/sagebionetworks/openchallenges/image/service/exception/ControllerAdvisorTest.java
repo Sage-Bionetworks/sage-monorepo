@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpStatus;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -14,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+
 
 @SpringJUnitConfig
 @WebMvcTest(ControllerAdvisor.class)
@@ -26,8 +28,13 @@ public class ControllerAdvisorTest {
   @InjectMocks private ControllerAdvisor controllerAdvisor;
 
   @Test
-  public void bindException_ShouldReturnResult_WhenMockErrorIsPassed() {
+  public void bindException_ShouldReturnResultAndException_WhenMockErrorIsPassed() {
     MockitoAnnotations.openMocks(this);
+
+    String bindException = "There is an error";
+    String header = "Exception header";
+    String status = HttpStatus.BAD_REQUEST;
+    String webRequest = "Exception web request";
 
     // Create a mock FieldError
     FieldError fieldError =
@@ -43,10 +50,13 @@ public class ControllerAdvisorTest {
     // Create a mock BindingResult
     BindingResult bindingResult = new BindException(new Object(), "objectName");
     bindingResult.addError(fieldError);
+    BindingResult handleBindException = new HandleBindException(bindException, header, status, webRequest);
 
     // // Set up the mock BindException to return the mock BindingResult
     when(bindException.getBindingResult()).thenReturn(bindingResult);
+    when(bindException.handleBindException()).thenReturn(handleBindException);
 
     assertThat(bindException.getBindingResult()).isEqualTo(bindingResult);
+    assertThat(bindException.handleBindException()).isEqualTo(handleBindException.get(0));
   }
 }
