@@ -30,7 +30,7 @@ public class ControllerAdvisorTest {
   public void bindException_ShouldReturnResultAndException_WhenMockErrorIsPassed() {
     MockitoAnnotations.openMocks(this);
 
-    String bindException = "There is an error";
+    //String bindException = "There is an error";
     String header = "Exception header";
     String status = HttpStatus.BAD_REQUEST;
     String webRequest = "Exception web request";
