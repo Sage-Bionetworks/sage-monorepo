@@ -84,7 +84,7 @@ def get_connected_nodes(
 
     Returns:
         tuple[Union[ConnectedNodesPage, BasicError], int: A tuple
-          The first item is either the conncted nodes or an error object
+          The first item is either the connected nodes or an error object
           The second item is the response status
     """
     connected_nodes = [
@@ -283,7 +283,7 @@ def get_node_validation_rules(
         list[str]: A list of validation_rules of the node
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    return schema_generator.get_node_validation_rules(node_display)
+    return schema_generator.get_node_validation_rules(node_display)  # type: ignore
 
 
 @handle_exceptions
