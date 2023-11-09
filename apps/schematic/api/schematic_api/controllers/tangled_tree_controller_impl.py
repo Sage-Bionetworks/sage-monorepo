@@ -33,7 +33,7 @@ def get_tangled_tree_layers(
     # The API should output just the string.
     # TangledTree.get_tangled_tree_layers() will likely get changed in the future to return
     # just a string.
-    layers_list: list[str] = tangled_tree.get_tangled_tree_layers(save_file=False)
+    layers_list: list[str] = tangled_tree.get_tangled_tree_layers(save_file=False)  # type: ignore
     if len(layers_list) == 0:
         raise ValueError("TangledTree.get_tangled_tree_layers() returned an empty list")
     result: Union[str, BasicError] = layers_list[0]
@@ -63,7 +63,7 @@ def get_tangled_tree_text(
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
     tangled_tree = TangledTree(schema_path, figure_type)
-    result: Union[str, BasicError] = tangled_tree.get_text_for_tangled_tree(
+    result: Union[str, BasicError] = tangled_tree.get_text_for_tangled_tree(  # type: ignore
         text_format, save_file=False
     )
     status = 200
