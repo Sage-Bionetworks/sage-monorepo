@@ -1,0 +1,27 @@
+openchallenges-organization-service:
+  welcome-message: 'Welcome to the organization service (test)'
+
+spring:
+  application:
+    name: openchallenges-organization-service
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+  datasource:
+    url: jdbc:h2:mem:challenge
+    username: openchallenges
+    password: changeme
+  flyway:
+    enabled: false
+  jpa:
+    properties:
+      hibernate:
+        search:
+          enabled: false
+  autoconfigure:
+    # Stop hibernate search from sniffing the nodes of a non-existent local elastic search server
+    exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
