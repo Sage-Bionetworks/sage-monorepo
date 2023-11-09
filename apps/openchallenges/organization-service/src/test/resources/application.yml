@@ -1,0 +1,15 @@
+openchallenges-organization-service:
+  welcome-message: 'Welcome to the organization service.'
+
+spring:
+  application:
+    name: openchallenges-organization-service
+  profiles:
+    active: test
+  cloud:
+    config:
+      enabled: false
+    discovery:
+      enabled: false
+  datasource:
+    url: jdbc:h2:mem:challenge
