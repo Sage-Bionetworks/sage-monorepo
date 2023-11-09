@@ -5,6 +5,7 @@ schematic_api/controllers/manifest_validation_controller.py
 schematic_api/controllers/schema_controller.py
 schematic_api/controllers/security_controller_.py
 schematic_api/controllers/storage_controller.py
+schematic_api/controllers/tangled_tree_controller.py
 schematic_api/controllers/versions_controller.py
 schematic_api/encoder.py
 schematic_api/models/__init__.py
@@ -39,6 +40,5 @@ schematic_api/models/validation_rules_page.py
 schematic_api/models/validation_rules_page_all_of.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
-schematic_api/test/test_manifest_validation_controller.py
 schematic_api/typing_utils.py
 schematic_api/util.py

@@ -10,6 +10,8 @@ import {
   OrganizationSearchQuery,
   OrganizationService,
   Image,
+  OrganizationCategory,
+  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   OrganizationCard,
@@ -38,9 +40,9 @@ export class ChallengeHostListComponent implements OnInit {
     const query: OrganizationSearchQuery = {
       pageNumber: 0,
       pageSize: 4,
-      categories: ['featured'],
+      categories: [OrganizationCategory.Featured],
       searchTerms: '',
-      sort: 'challenge_count',
+      sort: OrganizationSort.ChallengeCount,
     };
 
     const orgPage$ = this.organizationService.listOrganizations(query).pipe(

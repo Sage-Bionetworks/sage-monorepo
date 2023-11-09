@@ -1,26 +1,26 @@
 <main class="base mat-typography">
   <ng-container *ngIf="challenge$ | async as challenge">
     <section id="profile-top" class="row">
-      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar"/>
+      <openchallenges-avatar class="profile-pic" [avatar]="challengeAvatar" />
       <div id="profile-details" class="col">
         <h2>
           {{ challenge.name }}
           <!-- <mat-icon aria-hidden="true" class="verified">verified_outline</mat-icon> -->
         </h2>
-        <p class="username">@{{ challenge.slug }}</p>
+        <p class="mat-body-strong username">@{{ challenge.slug }}</p>
         <div
           class="profile-type"
           *ngIf="challenge.status"
           [ngClass]="['status', challenge.status ? challenge.status : '']"
         >
-          {{ challenge.status }}
+          {{ challenge.status | titlecase }}
         </div>
       </div>
     </section>
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-challenge-stats [loggedIn]="loggedIn"/>
+        <openchallenges-challenge-stats [challenge]="challenge" [loggedIn]="loggedIn" />
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -28,27 +28,24 @@
         <div class="profile-nav-group">
           <a
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'overview' }"
+            (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
           >
             Overview
           </a>
           <a
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'organizers' }"
-            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
-          >
-            Organizers
-          </a>
-          <a
-            class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'contributors' }"
+            (click)="updateTab('contributors')"
             [ngClass]="{ 'active-tab': activeTab === tabs['contributors'] }"
           >
             Contributors
+          </a>
+          <a
+            class="profile-nav-item"
+            (click)="updateTab('organizers')"
+            [ngClass]="{ 'active-tab': activeTab === tabs['organizers'] }"
+          >
+            Organizers
           </a>
           <!-- <a
             class="profile-nav-item"
@@ -66,12 +63,12 @@
             *ngSwitchCase="tabs['overview']"
             [challenge]="challenge"
           />
-          <openchallenges-challenge-organizers
-            *ngSwitchCase="tabs['organizers']"
-            [challenge]="challenge"
-          />
           <openchallenges-challenge-contributors
             *ngSwitchCase="tabs['contributors']"
+            [challenge]="challenge"
+          />
+          <openchallenges-challenge-organizers
+            *ngSwitchCase="tabs['organizers']"
             [challenge]="challenge"
           />
           <!-- <openchallenges-challenge-stargazers

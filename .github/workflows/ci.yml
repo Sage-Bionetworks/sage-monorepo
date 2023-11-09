@@ -23,9 +23,6 @@ jobs:
     # env:
     #   NX_BRANCH: main
     steps:
-      - name: Show storage space usage
-        run: df -h
-
       - uses: actions/checkout@v3
         name: Checkout [${{ github.ref_name }}]
         with:
@@ -132,21 +129,11 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=sonar"
 
-      - name: Show storage space usage
-        run: df -h
-
-      # - name: Publish the images of the affected projects
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=publish-and-remove-image --parallel=1"
-
       - name: Publishing the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
-            && nx run-many --target=publish-and-remove-image \
-              --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,openchallenges-api-gateway,schematic-api \
-              --parallel=1"
+            && nx affected --target=publish-image"
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer
@@ -165,9 +152,6 @@ jobs:
           || !startsWith(github.head_ref, 'renovate/')
         )
     steps:
-      - name: Show storage space usage
-        run: df -h
-
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
@@ -253,37 +237,27 @@ jobs:
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=lint"
+            && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build,server"
+            && nx affected --target=build,server"
 
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=test"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=integration-test"
-
-      # - name: Build the images of the affected projects
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=build-and-remove-image --parallel=1"
-
-      - name: Show storage space usage
-        run: df -h
+            && nx affected --target=integration-test"
 
       - name: Building the images of the SELECTED projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-and-remove-image \
-            --projects=openchallenges-app,openchallenges-challenge-service,openchallenges-organization-service,openchallenges-image-service,openchallenges-api-gateway,schematic-api \
-              --parallel=1"
+            && nx affected --target=build-image"
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  openchallenges-notebook:
+    image: ghcr.io/sage-bionetworks/openchallenges-notebook:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-notebook
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/notebook/.env
+    networks:
+      - openchallenges
+    ports:
+      - '8888:8888'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 500M

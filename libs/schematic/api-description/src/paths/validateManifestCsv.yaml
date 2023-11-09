@@ -14,7 +14,7 @@ post:
   operationId: validateManifestCsv
   parameters:
     - $ref: ../components/parameters/query/schemaUrl.yaml
-    - $ref: ../components/parameters/query/componentLabel.yaml
+    - $ref: ../components/parameters/query/componentLabelQuery.yaml
     - $ref: ../components/parameters/query/restrictRules.yaml
   responses:
     '200':

@@ -28,23 +28,23 @@ paths:
   /schematicVersion:
     $ref: paths/schematicVersion.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
+  /assetTypes/{assetType}/projects/{projectId}/datasets:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasets.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
+  /assetTypes/{assetType}/projects/{projectId}/manifests:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifests.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/manifestJson.yaml
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/manifestJson.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/files.yaml
+  /assetTypes/{assetType}/datasets/{datasetId}/files:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/files.yaml
 
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
@@ -64,6 +64,12 @@ paths:
   /nodes/{nodeDisplay}/validationRules:
     $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
 
+  /components/{componentLabel}/:
+    $ref: paths/components/@{componentLabel}/component.yaml
+
+  /schemaAttributes:
+    $ref: paths/schemaAttributes.yaml
+
   /connectedNodes:
     $ref: paths/connectedNodes.yaml
 
@@ -78,3 +84,9 @@ paths:
 
   /submitManifestCsv:
     $ref: paths/submitManifestCsv.yaml
+
+  /tangledTreeLayers:
+    $ref: paths/tangledTreeLayers.yaml
+
+  /tangledTreeText:
+    $ref: paths/tangledTreeText.yaml

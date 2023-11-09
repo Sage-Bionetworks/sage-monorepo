@@ -6,7 +6,7 @@ get:
     - Storage
   summary: Gets all storage projects the current user has access to.
   description: Gets all storage projects the current user has access to.
-  operationId: listProjects
+  operationId: getProjects
   responses:
     '200':
       description: Success

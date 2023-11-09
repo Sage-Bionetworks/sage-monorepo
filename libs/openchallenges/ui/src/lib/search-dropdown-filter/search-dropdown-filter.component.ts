@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { FilterValue } from '../checkbox-filter/filter-value.model';
+import { Filter } from '../checkbox-filter/filter.model';
 import { Avatar } from '../avatar/avatar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +14,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
 export class SearchDropdownFilterComponent implements OnInit {
-  @Input({ required: true }) values!: FilterValue[];
-  @Input({ required: true }) selectedValues!: any[];
+  @Input({ required: true }) options!: Filter[];
+  @Input({ required: true }) selectedOptions!: any[];
   @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
@@ -48,15 +48,15 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.searchChange.emit(this.searchTerm);
   }
 
-  onChange(selected: any[]): void {
+  onChange(selected: string[] | number[]): void {
     // this filter will emit as string anyways
     this.selectionChange.emit(selected);
   }
 
-  getAvatar(value: FilterValue): Avatar {
+  getAvatar(option: Filter): Avatar {
     return {
-      name: value.label || '',
-      src: value.avatarUrl ? value.avatarUrl : '',
+      name: option.label ?? '',
+      src: option.avatarUrl ? option.avatarUrl : '',
       size: 32,
     };
   }

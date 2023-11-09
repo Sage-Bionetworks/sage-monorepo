@@ -7,14 +7,15 @@
     />
     <h2>Meet Our Team</h2>
     <p class="mat-body-strong">
-      We're smart, we're hard-working, and we love <em>a good challenge</em>.
+      OpenChallenges is made by a team of engineers and scientists at Sage Bionetworks.
     </p>
+    <img height="80px" [src]="(sageLogo$ | async)?.url" alt="Sage Bionetworks" />
   </div>
   <div class="member-group">
     <div class="member-card">
-      <img class="member-pic" [src]="(thomas$ | async)?.url" alt="Thomas Schaffter" />
+      <img class="member-pic" [src]="(thomasAvatar$ | async)?.url" alt="Thomas Schaffter" />
       <h3 class="card-name">Thomas Schaffter</h3>
-      <p class="card-roles">Product owner, Architect, Lead full stack engineer</p>
+      <p class="card-roles">Product owner, Architect, Lead full-stack engineer</p>
       <div>
         <a href="https://www.linkedin.com/in/tschaffter/" rel="noopener" target="_blank"
           ><img class="social-media-logo" src="assets/images/linkedin-logo.svg" alt="LinkedIn"
@@ -25,7 +26,7 @@
       </div>
     </div>
     <div class="member-card">
-      <img class="member-pic" [src]="(verena$ | async)?.url" alt="Verena Chung" />
+      <img class="member-pic" [src]="(verenaAvatar$ | async)?.url" alt="Verena Chung" />
       <h3 class="card-name">Verena Chung</h3>
       <p class="card-roles">Frontend engineer</p>
       <div>
@@ -38,9 +39,9 @@
       </div>
     </div>
     <div class="member-card">
-      <img class="member-pic" [src]="(rong$ | async)?.url" alt="Rong Chai" />
+      <img class="member-pic" [src]="(rongAvatar$ | async)?.url" alt="Rong Chai" />
       <h3 class="card-name">Rong Chai</h3>
-      <p class="card-roles">Full stack engineer</p>
+      <p class="card-roles">Full-stack engineer</p>
       <div>
         <a href="https://www.linkedin.com/in/rongrong-chai/" rel="noopener" target="_blank"
           ><img class="social-media-logo" src="assets/images/linkedin-logo.svg" alt="LinkedIn"
@@ -53,7 +54,7 @@
   </div>
   <div class="member-group">
     <div class="member-card">
-      <img class="member-pic" [src]="(maria$ | async)?.url" alt="Maria Diaz" />
+      <img class="member-pic" [src]="(mariaAvatar$ | async)?.url" alt="Maria Diaz" />
       <h3 class="card-name">Maria Diaz</h3>
       <p class="card-roles">Backend engineer</p>
       <div>
@@ -63,7 +64,23 @@
       </div>
     </div>
     <div class="member-card">
-      <img class="member-pic" [src]="(jake$ | async)?.url" alt="Jake Albrecht" />
+      <img class="member-pic" [src]="(gaiaAvatar$ | async)?.url" alt="Gaia Andreoletti" />
+      <h3 class="card-name">Gaia Andreoletti</h3>
+      <p class="card-roles">Research scientist</p>
+      <div>
+        <a
+          href="https://www.linkedin.com/in/gaia-andreoletti-33932520/"
+          rel="noopener"
+          target="_blank"
+          ><img class="social-media-logo" src="assets/images/linkedin-logo.svg" alt="LinkedIn"
+        /></a>
+        <a href="https://github.com/gaiaandreoletti" rel="noopener" target="_blank"
+          ><img class="social-media-logo" src="assets/images/github-logo.svg" alt="GitHub"
+        /></a>
+      </div>
+    </div>
+    <div class="member-card">
+      <img class="member-pic" [src]="(jakeAvatar$ | async)?.url" alt="Jake Albrecht" />
       <h3 class="card-name">Jake Albrecht</h3>
       <p class="card-roles">Director</p>
       <div>
@@ -75,6 +92,10 @@
         /></a>
       </div>
     </div>
+  </div>
+  <div class="kudos mat-body-strong">
+    And a special thank you to our <strong>Design</strong> and <strong>Governance</strong> teams at
+    Sage!
   </div>
 </main>
 <openchallenges-footer

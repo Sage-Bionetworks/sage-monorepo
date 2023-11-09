@@ -35,17 +35,18 @@ paths:
                 example: v21.1.1
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/projects/{projectId}/datasets:
     parameters:
       - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetViewId'
       - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
       summary: Gets all datasets in folder under a given storage project that the current user has access to.
       description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: listStorageProjectDatasets
+      operationId: getProjectDatasets
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
       responses:
         '200':
           description: Success
@@ -63,17 +64,18 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/projects/{projectId}/manifests:
     parameters:
       - $ref: '#/components/parameters/projectId'
-      - $ref: '#/components/parameters/assetViewId'
       - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
       summary: Gets all manifests in a project folder that users have access to
       description: Gets all manifests in a project folder that the current user has access to.
-      operationId: listStorageProjectManifests
+      operationId: getProjectManifests
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
       responses:
         '200':
           description: Success
@@ -118,10 +120,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
     parameters:
       - $ref: '#/components/parameters/assetType'
-      - $ref: '#/components/parameters/assetViewId'
       - $ref: '#/components/parameters/datasetId'
     get:
       tags:
@@ -129,6 +130,8 @@ paths:
       summary: Gets the manifest in json form
       description: Gets the manifest in json form
       operationId: getDatasetManifestJson
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
       responses:
         '200':
           description: Success
@@ -155,7 +158,7 @@ paths:
         - Storage
       summary: Gets all storage projects the current user has access to.
       description: Gets all storage projects the current user has access to.
-      operationId: listProjects
+      operationId: getProjects
       responses:
         '200':
           description: Success
@@ -173,10 +176,9 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
+  /assetTypes/{assetType}/datasets/{datasetId}/files:
     parameters:
       - $ref: '#/components/parameters/datasetId'
-      - $ref: '#/components/parameters/assetViewId'
       - $ref: '#/components/parameters/assetType'
     get:
       tags:
@@ -187,6 +189,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/fileNames'
         - $ref: '#/components/parameters/useFullFilePath'
+        - $ref: '#/components/parameters/assetViewIdQuery'
       responses:
         '200':
           description: Success
@@ -335,6 +338,47 @@ paths:
                 $ref: '#/components/schemas/ValidationRulesPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
+      operationId: getComponent
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/includeIndex'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The component as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /schemaAttributes:
+    get:
+      tags:
+        - Schema
+      summary: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      description: Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
+      operationId: getSchemaAttributes
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                description: The schema as a json string
+                type: string
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /connectedNodes:
     get:
       tags:
@@ -369,7 +413,7 @@ paths:
       operationId: validateManifestJson
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -397,7 +441,7 @@ paths:
       operationId: validateManifestCsv
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/componentLabel'
+        - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
       responses:
         '200':
@@ -474,6 +518,45 @@ paths:
                 $ref: '#/components/schemas/ManifestId'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /tangledTreeLayers:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree node layers to display for a given data model and figure type
+      description: Get tangled tree node layers to display for a given data model and figure type
+      operationId: getTangledTreeLayers
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeLayers'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /tangledTreeText:
+    get:
+      tags:
+        - TangledTree
+      summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      operationId: getTangledTreeText
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/figureType'
+        - $ref: '#/components/parameters/textFormat'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TangledTreeText'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -506,16 +589,16 @@ components:
       description: A project ID.
       type: string
       example: syn26251192
-    AssetViewId:
-      description: An asset view ID.
-      type: string
-      example: syn23643253
     AssetType:
-      description: A type of asset.
+      description: Type of asset store, such as Synapse
       type: string
       example: synapse
       enum:
         - synapse
+    AssetViewId:
+      description: An asset view ID.
+      type: string
+      example: syn23643253
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -830,6 +913,10 @@ components:
             - validation_rules
       x-java-class-annotations:
         - '@lombok.Builder'
+    ComponentLabel:
+      description: The label of a component in a schema
+      type: string
+      example: MolecularEntity
     RelationshipType:
       description: A type of schema relationship
       type: string
@@ -867,10 +954,6 @@ components:
             - connected_nodes
       x-java-class-annotations:
         - '@lombok.Builder'
-    ComponentLabel:
-      description: The label of a component in a schema
-      type: string
-      example: MolecularEntity
     RestrictRules:
       description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
       type: boolean
@@ -889,6 +972,12 @@ components:
           type: array
           items:
             type: string
+    TangledTreeLayers:
+      description: Tangled tree node layers to display for a given data model
+      type: string
+    TangledTreeText:
+      description: Tangled tree plain or higlighted text to display for a given data model
+      type: object
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -922,13 +1011,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ProjectId'
-    assetViewId:
-      name: assetViewId
-      in: path
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-      required: true
-      schema:
-        $ref: '#/components/schemas/AssetViewId'
     assetType:
       name: assetType
       in: path
@@ -936,6 +1018,20 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetType'
+    assetViewIdQuery:
+      name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
+    assetViewId:
+      name: assetViewId
+      in: path
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: true
+      schema:
+        $ref: '#/components/schemas/AssetViewId'
     datasetId:
       name: datasetId
       in: path
@@ -1005,6 +1101,21 @@ components:
       description: Whether or not to use the more strict way of converting to camel case
       schema:
         $ref: '#/components/schemas/UseStrictCamelCase'
+    componentLabel:
+      name: componentLabel
+      in: path
+      description: The label of a component in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/ComponentLabel'
+    includeIndex:
+      name: includeIndex
+      in: query
+      description: Whether to include the indexes of the dataframe in the returned JSON string.
+      required: false
+      schema:
+        type: boolean
+        default: false
     relationshipType:
       name: relationshipType
       in: query
@@ -1012,7 +1123,7 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
-    componentLabel:
+    componentLabelQuery:
       name: componentLabel
       in: query
       description: The label of a component in a schema
@@ -1061,13 +1172,6 @@ components:
       schema:
         type: boolean
         default: false
-    assetViewIdQuery:
-      name: assetViewId
-      in: query
-      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-      required: true
-      schema:
-        $ref: '#/components/schemas/AssetViewId'
     tableManipulationMethod:
       name: tableManipulationMethod
       in: query
@@ -1087,3 +1191,25 @@ components:
       schema:
         type: boolean
         default: true
+    figureType:
+      name: figureType
+      in: query
+      description: Figure type to generate.
+      required: false
+      schema:
+        type: string
+        enum:
+          - component
+          - dependency
+        default: component
+    textFormat:
+      name: textFormat
+      in: query
+      description: Text formatting type.
+      required: false
+      schema:
+        type: string
+        enum:
+          - plain
+          - highlighted
+        default: plain

@@ -19,22 +19,20 @@
   align-items: center;
 }
 .member-pic {
+  width: 240px;
   height: 240px;
-  padding: 12px 0 22px;
+  margin: 12px 0 22px;
   -moz-border-radius: 50%;
   -webkit-border-radius: 505;
   border-radius: 50%;
 }
-
-.description {
-  padding-bottom: 180px;
+.kudos {
+  padding-top: 42px;
 }
-
 .card-roles {
   width: 200px;
   flex-grow: 1;
 }
-
 .social-media-logo {
   height: 32px;
   margin: 0 12px 2px 0;
