@@ -29,7 +29,7 @@ public class GlobalExceptionHandlerTest {
   }
 
   @Test
-  public void GlobalExceptionHandler_ShouldFunction_WhenCalled() {
+  public void HandleGlobalException_ShouldFunction_WhenCalled() {
     // Create a sample Exception
     // Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
