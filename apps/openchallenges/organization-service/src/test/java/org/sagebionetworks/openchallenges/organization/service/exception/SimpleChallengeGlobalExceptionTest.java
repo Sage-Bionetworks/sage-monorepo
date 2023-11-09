@@ -2,10 +2,7 @@ package org.sagebionetworks.openchallenges.organization.service.exception;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Locale;
 import org.junit.jupiter.api.Test;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.BasicErrorDto;
-import org.sagebionetworks.openchallenges.organization.service.exception.SimpleChallengeGlobalException;
 import org.springframework.http.HttpStatus;
 
 public class SimpleChallengeGlobalExceptionTest {
@@ -72,9 +69,7 @@ public class SimpleChallengeGlobalExceptionTest {
   public void SimpleChallengeGlobalException_ShouldFunction_WhenCalledUsingNoArgsConstructor() {
 
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
-    SimpleChallengeGlobalException exception =
-        new SimpleChallengeGlobalException();
-
+    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
   }
 
   @Test
@@ -86,14 +81,12 @@ public class SimpleChallengeGlobalExceptionTest {
     String detail = "Exception detail message";
 
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
-    SimpleChallengeGlobalException exception =
-        new SimpleChallengeGlobalException();
-    
-    //Create args for the exception
+    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
+
+    // Create args for the exception
     exception.setType(type);
     exception.setTitle(title);
     exception.setStatus(status);
     exception.setDetail(detail);
-
   }
 }
