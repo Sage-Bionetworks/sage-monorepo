@@ -11,7 +11,6 @@ public class BadRequestExceptionTest {
     // Set up the input detail
     String detail = "Errordetail";
 
-
     // Create an instance of BadRequestException
     BadRequestException exception = new BadRequestException(detail);
 
