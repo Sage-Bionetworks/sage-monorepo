@@ -74,7 +74,6 @@ public class OrganizationServiceTest {
     assertThrows(NullPointerException.class, () -> organizationService.listOrganizations(query));
     assertThrows(
         OrganizationNotFoundException.class, () -> organizationService.getOrganization(altId));
-    // assertThat(result.getOrganizations().size()).isEqualTo(1);
     assertThat(organizationEntityPage.getNumber()).isEqualTo(0);
     assertThat(organizationEntityPage.getSize()).isEqualTo(10);
     assertThat(organizationEntityPage.getTotalElements()).isEqualTo(1L);
