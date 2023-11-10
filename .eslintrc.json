@@ -29,6 +29,7 @@
         "dot-notation": "off",
         "no-useless-constructor": "off",
         "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-non-null-assertion": "error",
         "prettier/prettier": [
           "error",
           {
