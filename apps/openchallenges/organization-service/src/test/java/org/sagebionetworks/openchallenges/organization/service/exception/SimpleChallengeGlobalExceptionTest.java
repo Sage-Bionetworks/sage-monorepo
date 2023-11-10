@@ -23,7 +23,7 @@ public class SimpleChallengeGlobalExceptionTest {
     assertThat(exception.getStatus()).isEqualTo(status);
     assertThat(exception.getTitle()).isEqualTo(title);
     assertThat(exception.getType()).isEqualTo(type);
-    assertThat(exception.getMessage()).isEqualTo(details);
+    assertThat(exception.getMessage()).isEqualTo(detail);
   }
 
   @Test
