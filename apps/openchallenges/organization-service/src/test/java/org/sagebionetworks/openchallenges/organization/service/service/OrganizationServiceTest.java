@@ -16,7 +16,6 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
-import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 // import java.time.format.DateTimeFormatter;
@@ -63,7 +62,7 @@ public class OrganizationServiceTest {
 
     // Create query to pass to list organizations
     OrganizationSearchQueryDto query = new OrganizationSearchQueryDto();
-    
+
     Page<OrganizationEntity> organizationEntityPage = mock(Page.class);
     List<OrganizationEntity> organizationEntities =
         Collections.singletonList(new OrganizationEntity());
