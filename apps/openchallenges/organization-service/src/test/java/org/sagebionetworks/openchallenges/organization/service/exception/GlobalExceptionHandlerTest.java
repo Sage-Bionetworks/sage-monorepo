@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class GlobalExceptionHandlerTest {
 
   @Test
-  public void HandleException_ShouldReturnStatus_WhenExceptionAndLocalePassed() {
+  public void GlobalExceptionHandler_ShouldReturnStatus_WhenExceptionAndLocalePassed() {
     // Create a sample Exception
     Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
