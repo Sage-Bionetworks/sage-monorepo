@@ -14,7 +14,7 @@ public class SimpleChallengeGlobalExceptionTest {
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(details);
 
     // Verify the exception details
-    
+
   }
 
   @Test
