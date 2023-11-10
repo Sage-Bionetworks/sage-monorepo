@@ -38,6 +38,18 @@ public class OrganizationServiceTest {
     String altId = "75";
 
     OrganizationEntity organizationEntity = new OrganizationEntity();
+    organizationEntity.setId(345L);
+    organizationEntity.setName("test1");
+    organizationEntity.setEmail("test1@gm.com");
+    organizationEntity.setLogin("test1");
+    organizationEntity.setAvatarKey("ava1");
+    organizationEntity.setWebsiteUrl("website1");
+    organizationEntity.setChallengeCount(2);
+    organizationEntity.setChallengeContributions(null);
+    organizationEntity.setDescription("desc1");
+    organizationEntity.setCreatedAt(null);
+    organizationEntity.setUpdatedAt(null);
+    organizationEntity.setAcronym("aca1");
 
     // Call the findByIdOrLogin method
     Optional<OrganizationEntity> entityResult = organizationRepository.findByIdOrLogin(id, login);
