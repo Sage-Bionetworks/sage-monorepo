@@ -3,8 +3,8 @@ package org.sagebionetworks.openchallenges.organization.service.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -16,8 +16,10 @@ import org.sagebionetworks.openchallenges.organization.service.exception.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
+import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
+// import java.time.format.DateTimeFormatter;
 
 @DataJpaTest
 public class OrganizationServiceTest {
@@ -47,9 +49,13 @@ public class OrganizationServiceTest {
     organizationEntity.setChallengeCount(2);
     organizationEntity.setChallengeContributions(null);
     organizationEntity.setDescription("desc1");
-    organizationEntity.setCreatedAt(null);
-    organizationEntity.setUpdatedAt(null);
+    // organizationEntity.setCreatedAt(DateTime.parse(DateTime.parse("2023-11-10T11:23:51.670704")));
+    // organizationEntity.setUpdatedAt(DateTime.parse(DateTime.parse("2023-11-10T11:23:51.670704")));
     organizationEntity.setAcronym("aca1");
+
+    OrganizationEntity organizationEntity2 = new OrganizationEntity();
+    //organizationEntity2(456L, "s1", "s4", "test2", "s2", "test2@gm.com", 5, null, null, "site2", 2,null,null,"aca2");
+
 
     // Call the findByIdOrLogin method
     Optional<OrganizationEntity> entityResult = organizationRepository.findByIdOrLogin(id, login);
@@ -80,5 +86,18 @@ public class OrganizationServiceTest {
     assertThat(organizationEntityPage.getTotalPages()).isEqualTo(1);
     assertThat(organizationEntityPage.hasNext()).isEqualTo(false);
     assertThat(organizationEntityPage.hasPrevious()).isEqualTo(false);
+
+    assertThat(organizationEntity.getId()).isEqualTo(345L);
+    assertThat(organizationEntity.getName()).isEqualTo("test1");
+    assertThat(organizationEntity.getEmail()).isEqualTo("test1@gm.com");
+    assertThat(organizationEntity.getLogin()).isEqualTo("test1");
+    assertThat(organizationEntity.getAvatarKey()).isEqualTo("ava1");
+    assertThat(organizationEntity.getWebsiteUrl()).isEqualTo("website1");
+    assertThat(organizationEntity.getChallengeCount()).isEqualTo(2);
+    assertThat(organizationEntity.getChallengeContributions()).isEqualTo(null);
+    assertThat(organizationEntity.getDescription()).isEqualTo("desc1");
+    // assertThat(organizationEntity.getCreatedAt()).isEqualTo(DateTime.parse("2023-11-10T11:23:51.670704"));
+    // assertThat(organizationEntity.getUpdatedAt()).isEqualTo(DateTime.parse("2023-11-10T11:23:51.670704"));
+    assertThat(organizationEntity.getAcronym()).isEqualTo("aca1");
   }
 }
