@@ -3,8 +3,8 @@ package org.sagebionetworks.openchallenges.organization.service.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
+import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
+
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
@@ -25,6 +28,7 @@ import org.springframework.data.domain.Page;
 public class OrganizationServiceTest {
   @Mock private OrganizationRepository organizationRepository;
   private OrganizationService organizationService;
+  private OrganizationMapper organizationMapper;
 
   @BeforeEach
   public void setup() {
@@ -53,9 +57,10 @@ public class OrganizationServiceTest {
     // organizationEntity.setUpdatedAt(DateTime.parse(DateTime.parse("2023-11-10T11:23:51.670704")));
     organizationEntity.setAcronym("aca1");
 
-    OrganizationEntity organizationEntity2 = new OrganizationEntity();
-    //organizationEntity2(456L, "s1", "s4", "test2", "s2", "test2@gm.com", 5, null, null, "site2", 2,null,null,"aca2");
 
+    OrganizationEntity organizationEntity2 = new OrganizationEntity();
+    // organizationEntity2(456L, "s1", "s4", "test2", "s2", "test2@gm.com", 5, null, null, "site2",
+    // 2,null,null,"aca2");
 
     // Call the findByIdOrLogin method
     Optional<OrganizationEntity> entityResult = organizationRepository.findByIdOrLogin(id, login);
@@ -73,8 +78,9 @@ public class OrganizationServiceTest {
     when(organizationEntityPage.getTotalPages()).thenReturn(1);
     when(organizationEntityPage.hasNext()).thenReturn(false);
     when(organizationEntityPage.hasPrevious()).thenReturn(false);
-
+    
     // call methods and assert results match
+    
     assertThrows(
         OrganizationNotFoundException.class, () -> organizationService.getOrganization(login));
     assertThrows(NullPointerException.class, () -> organizationService.listOrganizations(query));
