@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class InvalidOrganizationExceptionTest {
 
   @Test
-  public void InvalidOrganizationException_ShouldReturnDetail_WhenDetailKeyIsPassed() {
+  public void InvalidOrganizationException_ShouldReturnExceptionConstructors_WhenKeyIsPassed() {
     // Set up the input detail
     String detail = "Errordetail";
 
@@ -16,5 +16,7 @@ public class InvalidOrganizationExceptionTest {
 
     // Verify the properties of the exception
     assertThat(exception.getDetail()).isEqualTo(detail);
+    assertThat(exception.getType()).isEqualTo(ErrorConstants.BAD_REQUEST.getType());
+    assertThat(exception.getStatus()).isEqualTo(ErrorConstants.BAD_REQUEST.getStatus());
   }
 }
