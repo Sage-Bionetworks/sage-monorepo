@@ -20,9 +20,9 @@ public class ChallengeAnalyticsService {
     Integer undatedChallengeCounts = 50;
 
     return ChallengesPerYearDto.builder()
-      .years(years)
-      .challengeCounts(challengeCounts)
-      .undatedChallengeCounts(undatedChallengeCounts)
-      .build();
+        .years(years)
+        .challengeCounts(challengeCounts)
+        .undatedChallengeCounts(undatedChallengeCounts)
+        .build();
   }
 }
