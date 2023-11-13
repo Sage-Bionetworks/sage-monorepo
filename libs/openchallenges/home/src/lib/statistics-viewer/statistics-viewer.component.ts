@@ -83,13 +83,15 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
               },
             ],
             graphic:
-              this.undatedChallengeCounts > 0
+              res.undatedChallengeCounts > 0
                 ? {
                     elements: [
                       {
                         type: 'text',
                         style: {
-                          text: `*An additional ${this.undatedChallengeCounts} challenges without start dates are not displayed in the plot`,
+                          text:
+                            `*An additional ${res.undatedChallengeCounts} challenges ` +
+                            `without start dates are not displayed in the plot`,
                           fill: '#888',
                         },
                         left: 'center',
