@@ -768,9 +768,14 @@ components:
           type: array
           items:
             type: integer
+        undatedChallengeCounts:
+          type: integer
+          default: 0
+          example: 0
       required:
         - years
         - challengeCounts
+        - undatedChallengeCounts
       x-java-class-annotations:
         - '@lombok.Builder'
     ChallengeInputDataTypeSort:

@@ -26,6 +26,9 @@ public class ChallengesPerYearDto {
   @Valid
   private List<Integer> challengeCounts = new ArrayList<>();
 
+  @JsonProperty("undatedChallengeCounts")
+  private Integer undatedChallengeCounts = 0;
+
   public ChallengesPerYearDto years(List<String> years) {
     this.years = years;
     return this;
@@ -82,6 +85,26 @@ public class ChallengesPerYearDto {
     this.challengeCounts = challengeCounts;
   }
 
+  public ChallengesPerYearDto undatedChallengeCounts(Integer undatedChallengeCounts) {
+    this.undatedChallengeCounts = undatedChallengeCounts;
+    return this;
+  }
+
+  /**
+   * Get undatedChallengeCounts
+   *
+   * @return undatedChallengeCounts
+   */
+  @NotNull
+  @Schema(name = "undatedChallengeCounts", example = "0", required = true)
+  public Integer getUndatedChallengeCounts() {
+    return undatedChallengeCounts;
+  }
+
+  public void setUndatedChallengeCounts(Integer undatedChallengeCounts) {
+    this.undatedChallengeCounts = undatedChallengeCounts;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -92,12 +115,13 @@ public class ChallengesPerYearDto {
     }
     ChallengesPerYearDto challengesPerYear = (ChallengesPerYearDto) o;
     return Objects.equals(this.years, challengesPerYear.years)
-        && Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts);
+        && Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts)
+        && Objects.equals(this.undatedChallengeCounts, challengesPerYear.undatedChallengeCounts);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(years, challengeCounts);
+    return Objects.hash(years, challengeCounts, undatedChallengeCounts);
   }
 
   @Override
@@ -106,6 +130,9 @@ public class ChallengesPerYearDto {
     sb.append("class ChallengesPerYearDto {\n");
     sb.append("    years: ").append(toIndentedString(years)).append("\n");
     sb.append("    challengeCounts: ").append(toIndentedString(challengeCounts)).append("\n");
+    sb.append("    undatedChallengeCounts: ")
+        .append(toIndentedString(undatedChallengeCounts))
+        .append("\n");
     sb.append("}");
     return sb.toString();
   }
