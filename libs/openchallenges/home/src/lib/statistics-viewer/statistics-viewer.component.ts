@@ -27,6 +27,8 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
 
   chartOptions!: EChartsOption;
 
+  undatedChallengeCounts = 0;
+
   ngOnInit() {
     // update plot's data
     this.chartDataSubscription = this.homeDataService
@@ -75,10 +77,27 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 },
                 // disable default clicking
                 silent: true,
-                // make bar plot rise from left to right instead of rising all together in the same time
+                // make bar plot rise from left to right
+                // instead of rising all together in the same time
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
+            graphic:
+              this.undatedChallengeCounts > 0
+                ? {
+                    elements: [
+                      {
+                        type: 'text',
+                        style: {
+                          text: `*An additional ${this.undatedChallengeCounts} challenges without start dates are not displayed in the plot`,
+                          fill: '#888',
+                        },
+                        left: 'center',
+                        bottom: 5,
+                      },
+                    ],
+                  }
+                : undefined,
           })
       );
   }
