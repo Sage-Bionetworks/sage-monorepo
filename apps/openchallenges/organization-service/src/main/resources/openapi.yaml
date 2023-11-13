@@ -369,7 +369,7 @@ components:
       - title
       type: object
       x-java-class-annotations:
-      # - '@lombok.AllArgsConstructor'
+      - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
     OrganizationsPage_allOf:
       properties:
