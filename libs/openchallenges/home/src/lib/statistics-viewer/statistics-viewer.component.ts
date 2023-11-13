@@ -27,8 +27,6 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
 
   chartOptions!: EChartsOption;
 
-  undatedChallengeCounts = 0;
-
   ngOnInit() {
     // update plot's data
     this.chartDataSubscription = this.homeDataService
@@ -82,24 +80,23 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
-            graphic:
-              res.undatedChallengeCounts > 0
-                ? {
-                    elements: [
-                      {
-                        type: 'text',
-                        style: {
-                          text:
-                            `*An additional ${res.undatedChallengeCounts} challenges ` +
-                            `without start dates are not displayed in the plot`,
-                          fill: '#888',
-                        },
-                        left: 'center',
-                        bottom: 5,
+            graphic: res.undatedChallengeCount
+              ? {
+                  elements: [
+                    {
+                      type: 'text',
+                      style: {
+                        text:
+                          `*An additional ${res.undatedChallengeCount} challenges ` +
+                          `without start dates are not displayed in the plot`,
+                        fill: '#888',
                       },
-                    ],
-                  }
-                : undefined,
+                      left: 'center',
+                      bottom: 5,
+                    },
+                  ],
+                }
+              : undefined,
           })
       );
   }

@@ -26,8 +26,8 @@ public class ChallengesPerYearDto {
   @Valid
   private List<Integer> challengeCounts = new ArrayList<>();
 
-  @JsonProperty("undatedChallengeCounts")
-  private Integer undatedChallengeCounts = 0;
+  @JsonProperty("undatedChallengeCount")
+  private Integer undatedChallengeCount = 0;
 
   public ChallengesPerYearDto years(List<String> years) {
     this.years = years;
@@ -85,24 +85,24 @@ public class ChallengesPerYearDto {
     this.challengeCounts = challengeCounts;
   }
 
-  public ChallengesPerYearDto undatedChallengeCounts(Integer undatedChallengeCounts) {
-    this.undatedChallengeCounts = undatedChallengeCounts;
+  public ChallengesPerYearDto undatedChallengeCount(Integer undatedChallengeCount) {
+    this.undatedChallengeCount = undatedChallengeCount;
     return this;
   }
 
   /**
-   * Get undatedChallengeCounts
+   * Get undatedChallengeCount
    *
-   * @return undatedChallengeCounts
+   * @return undatedChallengeCount
    */
   @NotNull
-  @Schema(name = "undatedChallengeCounts", example = "0", required = true)
-  public Integer getUndatedChallengeCounts() {
-    return undatedChallengeCounts;
+  @Schema(name = "undatedChallengeCount", example = "0", required = true)
+  public Integer getUndatedChallengeCount() {
+    return undatedChallengeCount;
   }
 
-  public void setUndatedChallengeCounts(Integer undatedChallengeCounts) {
-    this.undatedChallengeCounts = undatedChallengeCounts;
+  public void setUndatedChallengeCount(Integer undatedChallengeCount) {
+    this.undatedChallengeCount = undatedChallengeCount;
   }
 
   @Override
@@ -116,12 +116,12 @@ public class ChallengesPerYearDto {
     ChallengesPerYearDto challengesPerYear = (ChallengesPerYearDto) o;
     return Objects.equals(this.years, challengesPerYear.years)
         && Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts)
-        && Objects.equals(this.undatedChallengeCounts, challengesPerYear.undatedChallengeCounts);
+        && Objects.equals(this.undatedChallengeCount, challengesPerYear.undatedChallengeCount);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(years, challengeCounts, undatedChallengeCounts);
+    return Objects.hash(years, challengeCounts, undatedChallengeCount);
   }
 
   @Override
@@ -130,8 +130,8 @@ public class ChallengesPerYearDto {
     sb.append("class ChallengesPerYearDto {\n");
     sb.append("    years: ").append(toIndentedString(years)).append("\n");
     sb.append("    challengeCounts: ").append(toIndentedString(challengeCounts)).append("\n");
-    sb.append("    undatedChallengeCounts: ")
-        .append(toIndentedString(undatedChallengeCounts))
+    sb.append("    undatedChallengeCount: ")
+        .append(toIndentedString(undatedChallengeCount))
         .append("\n");
     sb.append("}");
     return sb.toString();

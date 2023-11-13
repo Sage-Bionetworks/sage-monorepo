@@ -9,13 +9,13 @@ properties:
     type: array
     items:
       type: integer
-  undatedChallengeCounts:
+  undatedChallengeCount:
     type: integer
     default: 0
     example: 0
 required:
   - years
   - challengeCounts
-  - undatedChallengeCounts
+  - undatedChallengeCount
 x-java-class-annotations:
   - '@lombok.Builder'

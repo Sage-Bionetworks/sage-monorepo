@@ -876,7 +876,7 @@ components:
     ChallengesPerYear:
       description: An object
       example:
-        undatedChallengeCounts: 0
+        undatedChallengeCount: 0
         challengeCounts:
         - 0
         - 0
@@ -892,13 +892,13 @@ components:
           items:
             type: integer
           type: array
-        undatedChallengeCounts:
+        undatedChallengeCount:
           default: 0
           example: 0
           type: integer
       required:
       - challengeCounts
-      - undatedChallengeCounts
+      - undatedChallengeCount
       - years
       type: object
       x-java-class-annotations:

@@ -17,6 +17,6 @@
 export interface ChallengesPerYear { 
     years: Array<string>;
     challengeCounts: Array<number>;
-    undatedChallengeCounts: number;
+    undatedChallengeCount: number;
 }
 
