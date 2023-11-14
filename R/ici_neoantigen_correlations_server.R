@@ -90,7 +90,9 @@ ici_neoantigen_correlations_server <- function(
                            t = 30,
                            b = 10,
                            pad = 1
-                         ))
+                         ),
+                         xaxis = list(tickangle = 45))
+
       })
 
       values <- shiny::reactiveValues(selected_group = NULL)
@@ -118,6 +120,8 @@ ici_neoantigen_correlations_server <- function(
           dplyr::mutate(text = paste("Count", input$neoantigen_feature_choice, ": ", antigen_count, "\n",
                                      values$selected_feature, ": ", feature_value))
 
+        lm_zero=lm(antigen_count~feature_value, data = x)
+
           create_scatterplot(
             x,
             x_col = "feature_value",
@@ -128,7 +132,8 @@ ici_neoantigen_correlations_server <- function(
             color_col = "group_color",
             label_col = "text",
             show_legend = FALSE
-          )
+          ) %>%
+          plotly::add_lines(x =~feature_value, y = fitted(lm_zero),line = list(color = 'black',dash="dot", alpha = 0.5))
       })
 
       observeEvent(input$method_link,{
