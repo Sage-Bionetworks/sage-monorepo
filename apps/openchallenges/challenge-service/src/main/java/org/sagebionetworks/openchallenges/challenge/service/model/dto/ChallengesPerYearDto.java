@@ -91,11 +91,12 @@ public class ChallengesPerYearDto {
   }
 
   /**
-   * Get undatedChallengeCount
+   * Get undatedChallengeCount minimum: 0
    *
    * @return undatedChallengeCount
    */
   @NotNull
+  @Min(0)
   @Schema(name = "undatedChallengeCount", example = "0", required = true)
   public Integer getUndatedChallengeCount() {
     return undatedChallengeCount;

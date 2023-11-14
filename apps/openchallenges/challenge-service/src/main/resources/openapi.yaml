@@ -895,6 +895,7 @@ components:
         undatedChallengeCount:
           default: 0
           example: 0
+          minimum: 0
           type: integer
       required:
       - challengeCounts

@@ -12,6 +12,7 @@ properties:
   undatedChallengeCount:
     type: integer
     default: 0
+    minimum: 0
     example: 0
 required:
   - years
