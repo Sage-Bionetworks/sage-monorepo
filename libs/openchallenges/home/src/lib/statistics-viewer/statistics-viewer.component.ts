@@ -26,7 +26,6 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
   private chartDataSubscription: Subscription | undefined;
 
   chartOptions!: EChartsOption;
-  undatedChallengeCount = 0;
 
   ngOnInit() {
     // update plot's data

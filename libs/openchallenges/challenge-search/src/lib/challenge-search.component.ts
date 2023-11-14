@@ -235,9 +235,8 @@ export class ChallengeSearchComponent
       .subscribe((page) => {
         this.totalChallengesCount = page.totalElements;
 
-        const num = page.challenges.filter((c) => c.startDate !== null).length;
-        // const res = this.processData(page.challenges);
-        console.log(num);
+        // const num = page.challenges.filter((c) => c.startDate !== null).length;
+        // console.log(num);
       });
 
     // update platform filter values
