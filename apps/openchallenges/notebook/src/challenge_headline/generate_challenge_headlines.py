@@ -121,7 +121,7 @@ def process_challenge(challenge):
     return obj
 
 
-challenge_headlines = list(map(process_challenge, challenges[:5]))
+challenge_headlines = list(map(process_challenge, challenges))
 
 
 # SAVE OUTPUT TO FILE

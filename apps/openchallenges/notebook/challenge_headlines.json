@@ -12,11 +12,11 @@
     "name": "Breast Cancer Prognosis",
     "headline": "Predict breast cancer survival from clinical and genomic data for Breast Can...",
     "headline_alternatives": [
-      "1. Assess models predicting breast cancer survival from tumor and molecular data (79 characters)",
-      "2. Evaluate breast cancer prognosis predictions from clinical and genomic profiles (78 characters)",
-      "3. Test computational models forecasting breast cancer patient survival (76 characters) ",
-      "4. Can models accurately predict breast cancer prognosis from tumor/gene data? (79 characters)",
-      "5. Judging accuracy of breast cancer survival predictions from patient data (79 characters)"
+      "1. Assess models predicting breast cancer survival using clinical & molecular data (77 characters)",
+      "2. Evaluate breast cancer prognosis models with clinical and genomic profiles (79 characters)",
+      "3. Test accuracy of models predicting breast cancer outcomes with tumor data (76 characters) ",
+      "4. Benchmark computational models for breast cancer patient survival rates (79 characters)",
+      "5. Assessing breast cancer prognosis predictions using tumor and gene data (80 characters)"
     ]
   },
   {
@@ -39,11 +39,2633 @@
     "name": "NIEHS-NCATS-UNC Toxicogenetics",
     "headline": "Predicting cytotoxicity from genomic and chemical data for NIEHS-NCATS-UNC T...",
     "headline_alternatives": [
-      "1. Predict cytotoxicity from genomic and chemical data",
-      "2. Model cytotoxicity responses to toxicants using genetics",
-      "3. Forecast cytotoxic effects of drugs with AI models  ",
-      "4. Estimate cytotoxicity in cell lines via compound structures",
-      "5. AI to predict cytotoxicity from genomes and chemicals"
+      "1. Predict cytotoxicity from genomic profiles and chemical structures (78 characters)",
+      "2. Model cytotoxicity in cell lines using genetics and chemical attributes (77 characters)",
+      "3. Forecast cytotoxic effects of compounds via genomic and structural data (78 characters) ",
+      "4. Estimate cytotoxicity in cell lines from genetics and chemistry (66 characters)",
+      "5. Predict variability in chemical toxicity using genomic and structural features (79 characters)"
     ]
+  },
+  {
+    "id": 6,
+    "slug": "whole-cell-parameter-estimation",
+    "name": "Whole-Cell Parameter Estimation",
+    "headline": "Seeking innovative parameter estimation methods for large models for Whole-C...",
+    "headline_alternatives": [
+      "1. Seeking innovative parameter estimation for large models (56 characters)",
+      "2. Developing optimization for parameter estimation of large models (65 characters)",
+      "3. Form teams to estimate parameters of heterogeneous models (65 characters) ",
+      "4. Compare approaches to estimate parameters of complex models (66 characters)",
+      "5. Explore methods to select informative experiments for models (69 characters)"
+    ]
+  },
+  {
+    "id": 7,
+    "slug": "hpn-dream-breast-cancer-network-inference",
+    "name": "HPN-DREAM Breast Cancer Network Inference",
+    "headline": "Inferring causal signaling networks in breast cancer for HPN-DREAM Breast Ca...",
+    "headline_alternatives": [
+      "1. Infer breast cancer signaling networks from perturbation data (65 characters)",
+      "2. Predict phosphorylation dynamics in breast cancer cells (54 characters)",
+      "3. Advance network inference in breast cancer with perturbation data (79 characters) ",
+      "4. Infer causal signaling networks in breast cancer (44 characters)",
+      "5. Use perturbation data to model breast cancer cell signaling (61 characters)"
+    ]
+  },
+  {
+    "id": 8,
+    "slug": "rheumatoid-arthritis-responder",
+    "name": "Rheumatoid Arthritis Responder",
+    "headline": "Unlocking Anti-TNF Response Predictors: A Crowdsourced Breakthrough in RA Th...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 9,
+    "slug": "icgc-tcga-dream-mutation-calling",
+    "name": "ICGC-TCGA DREAM Mutation Calling",
+    "headline": "Crowdsourcing Challenge Seeks to Improve Cancer Mutation Detection for ICGC-...",
+    "headline_alternatives": [
+      "1. ICGC & TCGA launch challenge to improve cancer mutation detection in genomes (79 characters)",
+      "2. Crowdsourcing better methods for finding cancer mutations in genomes (76 characters) ",
+      "3. Open challenge seeks improved approaches for identifying cancer mutations (69 characters)",
+      "4. Dream challenge aims to advance cancer mutation identification from genomes (78 characters)",
+      "5. ICGC & TCGA partner on open challenge to boost cancer mutation calling (79 characters)"
+    ]
+  },
+  {
+    "id": 10,
+    "slug": "acute-myeloid-leukemia-outcome-prediction",
+    "name": "Acute Myeloid Leukemia Outcome Prediction",
+    "headline": "Uncover drivers of AML using clinical and proteomic data for Acute Myeloid L...",
+    "headline_alternatives": [
+      "1. Uncover drivers of AML using rich clinical and protein dataset (76 characters)",
+      "2. Interpret unique AML dataset to predict outcomes and tailor therapy (79 characters)",
+      "3. Access rich AML data to uncover drivers and predict patient outcomes (77 characters) ",
+      "4. Help predict AML outcomes using clinical and protein data (63 characters)",
+      "5. Uncover AML drivers using clinical, genetic and protein data (69 characters)"
+    ]
+  },
+  {
+    "id": 11,
+    "slug": "broad-dream-gene-essentiality-prediction",
+    "name": "Broad-DREAM Gene Essentiality Prediction",
+    "headline": "Crowdsourcing Models to Predict Cancer Cell Gene Dependencies for Broad-DREA...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 12,
+    "slug": "alzheimers-disease-big-data",
+    "name": "Alzheimer's Disease Big Data",
+    "headline": "Seeking Accurate Predictive Biomarkers for Alzheimer's Diagnosis for Alzheim...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 13,
+    "slug": "olfaction-prediction",
+    "name": "Olfaction Prediction",
+    "headline": "Predicting smell from molecule features for Olfaction Prediction",
+    "headline_alternatives": [
+      "1. Predicting how molecules smell from features",
+      "2. Linking molecular features to odor perception",
+      "3. Accelerating fragrance design through smell prediction ",
+      "4. Models to predict smell from molecule structure",
+      "5. Connecting molecular properties to olfactory perception"
+    ]
+  },
+  {
+    "id": 14,
+    "slug": "prostate-cancer",
+    "name": "Prostate Cancer",
+    "headline": "Predict survival of docetaxel treatment in mCRPC patients for Prostate Cancer",
+    "headline_alternatives": [
+      "1. Predict survival, toxicity for docetaxel mCRPC treatment",
+      "2. Improve prognostic modeling for mCRPC patients on docetaxel  ",
+      "3. Benchmark models predicting mCRPC survival on docetaxel",
+      "4. Models to predict mCRPC survival, toxicity with docetaxel   ",
+      "5. Establish benchmarks for mCRPC prognosis on docetaxel"
+    ]
+  },
+  {
+    "id": 15,
+    "slug": "als-stratification-prize4life",
+    "name": "ALS Stratification Prize4Life",
+    "headline": "Advancing ALS Treatment: Predicting Disease Progression and Survival with Data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 16,
+    "slug": "astrazeneca-sanger-drug-combination-prediction",
+    "name": "AstraZeneca-Sanger Drug Combination Prediction",
+    "headline": "Predict effective drug combinations using genomic data for AstraZeneca-Sange...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 17,
+    "slug": "smc-dna-meta",
+    "name": "SMC-DNA Meta",
+    "headline": "Seeking Most Accurate Somatic Mutation Detection Pipeline for SMC-DNA Meta",
+    "headline_alternatives": [
+      "1. Identify best meta-pipeline for detecting cancer mutations (49 characters)",
+      "2. Establish state-of-the-art somatic mutation detection from callers (77 characters) ",
+      "3. Determine most accurate approach to identify cancer mutations (56 characters)",
+      "4. Assess complementarity of mutation calling algorithms for cancer (77 characters)  ",
+      "5. Benchmark mutation detection pipelines to advance cancer genomics (79 characters)"
+    ]
+  },
+  {
+    "id": 18,
+    "slug": "smc-het",
+    "name": "SMC-Het",
+    "headline": "Crowdsourcing Challenge to Improve Tumor Subclonal Reconstruction for SMC-Het",
+    "headline_alternatives": [
+      "1. Crowdsourcing challenge to improve subclonal reconstruction in tumours (77 characters)",
+      "2. Challenge seeks better quantification of tumour heterogeneity (76 characters) ",
+      "3. Open competition to advance tumour subclonal reconstruction (79 characters)",
+      "4. Dream challenge for improving tumour heterogeneity analysis (79 characters)",
+      "5. ICGC & TCGA launch contest to quantify tumour subclones (79 characters)"
+    ]
+  },
+  {
+    "id": 19,
+    "slug": "respiratory-viral",
+    "name": "Respiratory Viral",
+    "headline": "Unraveling Viral Susceptibility: Early Predictors of Respiratory Infection a...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 20,
+    "slug": "disease-module-identification",
+    "name": "Disease Module Identification",
+    "headline": "Crowdsourcing challenge to find disease modules in genomic networks for Dise...",
+    "headline_alternatives": [
+      "1. Crowdsourcing challenge to identify disease modules in genomic networks (79 characters)",
+      "2. Open challenge to find disease modules in genomic networks (63 characters) ",
+      "3. DREAM challenge to assess module ID methods on disease networks (79 characters)",
+      "4. Community effort to find novel disease modules in genomic networks (76 characters) ",
+      "5. DREAM challenge leverages crowds to find disease modules in networks (79 characters)"
+    ]
+  },
+  {
+    "id": 21,
+    "slug": "encode",
+    "name": "ENCODE",
+    "headline": "Predict transcription factor binding sites from limited data for ENCODE",
+    "headline_alternatives": [
+      "1. Predict TF binding sites from limited ChIP-seq data",
+      "2. Computational methods to expand TF binding site knowledge ",
+      "3. Improve TF binding site prediction with incomplete data",
+      "4. Fill knowledge gaps in TF binding landscapes ",
+      "5. Accurately predict TF binding without full experiments"
+    ]
+  },
+  {
+    "id": 22,
+    "slug": "idea",
+    "name": "Idea",
+    "headline": "Fostering Collaborative Solutions in Health: The DREAM Idea Challenge",
+    "headline_alternatives": [
+      "1. DREAM Challenge connects modelers, experimentalists to solve health questions (79 characters)",
+      "2. DREAM Idea Challenge enables modeler-experimentalist collaborations (76 characters)",
+      "3. DREAM Challenge builds wall of models to improve human health (79 characters) ",
+      "4. DREAM Idea Challenge shapes solutions to health through collaboration (78 characters)",
+      "5. DREAM Challenge fosters modeler-experimentalist partnerships for health (79 characters)"
+    ]
+  },
+  {
+    "id": 23,
+    "slug": "smc-rna",
+    "name": "SMC-RNA",
+    "headline": "Crowdsourcing Challenge Seeks to Improve Cancer Mutation Detection from RNA ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 24,
+    "slug": "digital-mammography-dream-challenge",
+    "name": "Digital Mammography DREAM Challenge",
+    "headline": "Improve mammography prediction to detect breast cancer early for Digital Mam...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 25,
+    "slug": "multiple-myeloma",
+    "name": "Multiple Myeloma",
+    "headline": "Develop precise risk model for myeloma patients for Multiple Myeloma",
+    "headline_alternatives": []
+  },
+  {
+    "id": 26,
+    "slug": "ga4gh-dream-workflow-execution",
+    "name": "GA4GH-DREAM Workflow Execution",
+    "headline": "Develop technologies to enable distributed genomic data analysis for GA4GH-D...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 27,
+    "slug": "parkinsons-disease-digital-biomarker",
+    "name": "Parkinson's Disease Digital Biomarker",
+    "headline": "Benchmarking methods to develop Parkinson's digital signatures from sensor d...",
+    "headline_alternatives": [
+      "1. Extract features from sensor data to predict Parkinson's pathology",
+      "2. Benchmark methods to process sensor data for Parkinson's biomarkers ",
+      "3. Develop digital signatures of Parkinson's from raw sensor data",
+      "4. Assess algorithms extracting predictive features from motor task data ",
+      "5. Evaluate approaches to extract Parkinson's biomarkers from sensor time series"
+    ]
+  },
+  {
+    "id": 28,
+    "slug": "nci-cptac-proteogenomics",
+    "name": "NCI-CPTAC Proteogenomics",
+    "headline": "Develop tools to extract insights from cancer proteomics data for NCI-CPTAC ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 29,
+    "slug": "multi-targeting-drug",
+    "name": "Multi-Targeting Drug",
+    "headline": "Seeking Generalizable Methods to Predict Multi-Target Compound Binding for M...",
+    "headline_alternatives": [
+      "1. Predict compounds binding to targets, avoiding anti-targets (79 characters)",
+      "2. Develop generalizable multi-target binding prediction methods (77 characters) ",
+      "3. Incentivize multi-target binding prediction model development (79 characters)",
+      "4. Predict compounds binding specific targets, avoiding other binding (77 characters)  ",
+      "5. Develop reusable methods to predict selective compound binding (78 characters)"
+    ]
+  },
+  {
+    "id": 30,
+    "slug": "single-cell-transcriptomics",
+    "name": "Single Cell Transcriptomics",
+    "headline": "Reconstructing Cell Locations in Drosophila Embryo from Transcripts for Sing...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 31,
+    "slug": "idg-drug-kinase-binding",
+    "name": "IDG Drug-Kinase Binding",
+    "headline": "Challenge seeks machine learning for drug-kinase binding prediction for IDG ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 32,
+    "slug": "malaria",
+    "name": "Malaria",
+    "headline": "Predict malaria drug resistance from parasite gene expression for Malaria",
+    "headline_alternatives": []
+  },
+  {
+    "id": 33,
+    "slug": "preterm-birth-prediction-transcriptomics",
+    "name": "Preterm Birth Prediction - Transcriptomics",
+    "headline": "Developing Accurate, Inexpensive Molecular Clock to Determine Gestational Ag...",
+    "headline_alternatives": [
+      "1. Developing accurate, low-cost molecular clock to establish pregnancy timeline",
+      "2. Creating prediction models for gestational age from blood samples  ",
+      "3. Identifying women at risk of preterm birth and other complications",
+      "4. Improving pregnancy care through better assessment of gestational age",
+      "5. Using gene expression to establish molecular clock for pregnancy"
+    ]
+  },
+  {
+    "id": 34,
+    "slug": "single-cell-signaling-in-breast-cancer",
+    "name": "Single-Cell Signaling in Breast Cancer",
+    "headline": "Exploring heterogeneous signaling in single cancer cells for Single-Cell Sig...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 35,
+    "slug": "ehr-dream-challenge-patient-mortality-prediction",
+    "name": "EHR DREAM Challenge: Patient Mortality Prediction",
+    "headline": "New tools to reconstruct cell lineages from CRISPR mutations for EHR DREAM C...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 36,
+    "slug": "allen-institute-cell-lineage-reconstruction",
+    "name": "Allen Institute Cell Lineage Reconstruction",
+    "headline": "New tools enable reconstructing complex cell lineages at single-cell resolut...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 37,
+    "slug": "tumor-deconvolution",
+    "name": "Tumor Deconvolution",
+    "headline": "Assess computational methods to deconvolve bulk tumor data into immune compo...",
+    "headline_alternatives": [
+      "1. Assess computational methods to deconvolve bulk tumor data into immune components (77 characters)",
+      "2. Evaluate algorithms for deconvolving bulk tumor data into individual cell types (79 characters)",
+      "3. Test computational deconvolution of bulk tumor data into specific immune cells (69 characters) ",
+      "4. Assess deconvolution methods on bulk tumor data to quantify infiltration (71 characters)",
+      "5. Evaluate computational infiltration analysis from bulk tumor profiling (66 characters)"
+    ]
+  },
+  {
+    "id": 38,
+    "slug": "ctd2-pancancer-drug-activity",
+    "name": "CTD2 Pancancer Drug Activity",
+    "headline": "Benchmark algorithms predicting drug targets from gene data for CTD2 Pancanc...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 39,
+    "slug": "ctd2-beataml",
+    "name": "CTD2 BeatAML",
+    "headline": "Seeking New Drug Targets for Precision AML Treatment for CTD2 BeatAML",
+    "headline_alternatives": []
+  },
+  {
+    "id": 40,
+    "slug": "metadata-automation",
+    "name": "Metadata Automation",
+    "headline": "Semi-Automating Metadata Annotation for Enhanced Data Sharing in Cancer Research",
+    "headline_alternatives": [
+      "1. Develop tools to semi-automate metadata annotation for cancer data sharing (76 characters)",
+      "2. Semi-automate metadata annotation to enable cancer data transformations (72 characters)",
+      "3. Create tools to annotate metadata to share cancer research data (65 characters) ",
+      "4. Build semi-automated tools for metadata annotation of cancer data (69 characters)",
+      "5. Develop semi-automated annotation tools to transform cancer data (71 characters)"
+    ]
+  },
+  {
+    "id": 41,
+    "slug": "automated-scoring-of-radiographic-joint-damage",
+    "name": "Automated Scoring of Radiographic Joint Damage",
+    "headline": "Develop automated method to quantify rheumatoid arthritis joint damage for A...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 42,
+    "slug": "beat-pd",
+    "name": "BEAT-PD",
+    "headline": "Develop mobile sensors to remotely monitor Parkinson's disease for BEAT-PD",
+    "headline_alternatives": []
+  },
+  {
+    "id": 43,
+    "slug": "ctd2-pancancer-chemosensitivity",
+    "name": "CTD2 Pancancer Chemosensitivity",
+    "headline": "Predict drug sensitivity from cell line gene expression for CTD2 Pancancer C...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 44,
+    "slug": "ehr-dream-challenge-covid-19",
+    "name": "EHR DREAM Challenge: COVID-19",
+    "headline": "Develop tools to predict COVID-19 risk without sharing data for EHR DREAM Ch...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 45,
+    "slug": "anti-pd1-response-prediction",
+    "name": "Anti-PD1 Response Prediction",
+    "headline": "Predicting lung cancer response to immuno-oncology therapy",
+    "headline_alternatives": [
+      "1. Develop models predicting lung cancer response to I-O therapy (79 characters)",
+      "2. Gain insights on improving I-O therapy response prediction in lung cancer (78 characters) ",
+      "3. Leverage data to predict lung cancer patient response to I-O treatment (76 characters)",
+      "4. Improve prediction of I-O therapy benefit for lung cancer patients (58 characters)",
+      "5. Predictive modeling of lung cancer response to immuno-oncology therapy (79 characters)"
+    ]
+  },
+  {
+    "id": 46,
+    "slug": "brats-2021-challenge",
+    "name": "BraTS 2021 Challenge",
+    "headline": "Developing ML methods to analyze brain tumor MRI scans",
+    "headline_alternatives": [
+      "1. ML methods to analyze brain tumor MRI scans (49 characters)",
+      "2. Assessing ML for segmenting glioblastoma in MRI (56 characters) ",
+      "3. Evaluating ML segmentation of brain tumors (49 characters)",
+      "4. BraTS challenge tests ML for glioblastoma MRI analysis (63 characters)",
+      "5. Can ML improve glioblastoma tumor detection in MRI? (59 characters)"
+    ]
+  },
+  {
+    "id": 47,
+    "slug": "cancer-data-registry-nlp",
+    "name": "Cancer Data Registry NLP",
+    "headline": "Predicting lung cancer response to immuno-oncology therapy",
+    "headline_alternatives": [
+      "1. Unlock hidden clinical data with NLP for research",
+      "2. Develop NLP to tap unstructured EHR data for trials ",
+      "3. Improve clinical trial matching with NLP algorithms",
+      "4. Evaluate NLP methods to access PHI-sensitive data  ",
+      "5. Advance NLP solutions to leverage clinical text data"
+    ]
+  },
+  {
+    "id": 48,
+    "slug": "barda-community-challenge-pediatric-covid-19-data-challenge",
+    "name": "BARDA Community Challenge - Pediatric COVID-19 Data Challenge",
+    "headline": "Models to predict severe COVID-19 in children sought",
+    "headline_alternatives": []
+  },
+  {
+    "id": 49,
+    "slug": "brats-continuous-evaluation",
+    "name": "BraTS Continuous Evaluation",
+    "headline": "Seeking Innovations To Improve Brain Tumor Diagnosis And Treatment",
+    "headline_alternatives": []
+  },
+  {
+    "id": 50,
+    "slug": "fets-2022",
+    "name": "FeTS 2022",
+    "headline": "Federated Learning Challenge 2022: Advancing Brain Tumor Segmentation Algorithms",
+    "headline_alternatives": []
+  },
+  {
+    "id": 51,
+    "slug": "random-promotor",
+    "name": "Random Promotor",
+    "headline": "Deciphering Gene Regulation: Training Models to Predict Gene Expression Patterns",
+    "headline_alternatives": []
+  },
+  {
+    "id": 52,
+    "slug": "preterm-birth-prediction-microbiome",
+    "name": "Preterm Birth Prediction - Microbiome",
+    "headline": "Seeking Innovations To Improve Brain Tumor Diagnosis And Treatment",
+    "headline_alternatives": [
+      "1. Predicting preterm births to reduce infant mortality",
+      "2. Identifying preterm birth risks for timely treatment ",
+      "3. Forecasting preterm deliveries to improve infant health",
+      "4. Detecting high preterm birth risk for preventative care",
+      "5. Estimating preterm likelihood to administer proper care"
+    ]
+  },
+  {
+    "id": 53,
+    "slug": "finrisk",
+    "name": "FINRISK - Heart Failure and Microbiome",
+    "headline": "FINRISK - Heart Failure and Microbiome: (No headline provided)",
+    "headline_alternatives": []
+  },
+  {
+    "id": 54,
+    "slug": "scrna-seq-and-scatac-seq-data-analysis",
+    "name": "scRNA-seq and scATAC-seq Data Analysis",
+    "headline": "Assess computational methods for scRNA-seq and scATAC-seq analysis",
+    "headline_alternatives": []
+  },
+  {
+    "id": 55,
+    "slug": "cough-diagnostic-algorithm-for-tuberculosis",
+    "name": "COugh Diagnostic Algorithm for Tuberculosis",
+    "headline": "Assess computational methods for scRNA-seq and scATAC-seq analysis",
+    "headline_alternatives": []
+  },
+  {
+    "id": 56,
+    "slug": "nih-long-covid-computational-challenge",
+    "name": "NIH Long COVID Computational Challenge",
+    "headline": "Understanding Prevalence and Outcomes of Post-COVID Syndrome",
+    "headline_alternatives": [
+      "1. Seeking analytics to understand prevalence and outcomes of long COVID symptoms (79 characters)",
+      "2. Can advanced analytics extract insights on long COVID from complex health data? (76 characters) ",
+      "3. Harnessing analytics to characterize long COVID syndrome prevalence and duration (77 characters)",
+      "4. Using analytics to elucidate long COVID symptoms, outcomes, and heterogeneity (74 characters)",
+      "5. Applying advanced analytics to unravel long COVID prevalence, symptoms, and outcomes (79 characters)"
+    ]
+  },
+  {
+    "id": 57,
+    "slug": "bridge2ai",
+    "name": "Bridge2AI",
+    "headline": "What makes a good color palette?",
+    "headline_alternatives": []
+  },
+  {
+    "id": 58,
+    "slug": "rare-x-open-data-science",
+    "name": "RARE-X Open Data Science",
+    "headline": "Unlocking rare disease mysteries through open science collaboration",
+    "headline_alternatives": []
+  },
+  {
+    "id": 59,
+    "slug": "cagi5-regulation-saturation",
+    "name": "CAGI5: Regulation saturation",
+    "headline": "Predicting effects of variants in disease-linked enhancers and promoters",
+    "headline_alternatives": []
+  },
+  {
+    "id": 60,
+    "slug": "cagi5-calm1",
+    "name": "CAGI5: CALM1",
+    "headline": "Predicting effects of calmodulin variants on yeast growth",
+    "headline_alternatives": []
+  },
+  {
+    "id": 61,
+    "slug": "cagi5-pcm1",
+    "name": "CAGI5: PCM1",
+    "headline": "Assessing PCM1 variants' impact on zebrafish ventricle",
+    "headline_alternatives": [
+      "1. Assessing PCM1 variants' impact on zebrafish brain ventricle size",
+      "2. Do PCM1 mutations linked to schizophrenia affect zebrafish ventricles?",
+      "3. Testing if PCM1 variants alter zebrafish ventricular area ",
+      "4. Evaluating zebrafish ventricles with PCM1 mutations tied to schizophrenia",
+      "5. Can PCM1 variants' effects on zebrafish predict schizophrenia risk?"
+    ]
+  },
+  {
+    "id": 62,
+    "slug": "cagi5-frataxin",
+    "name": "CAGI5: Frataxin",
+    "headline": "Unveiling Protein Stability: Predicting \u0394\u0394GH20 for Frataxin Variants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 63,
+    "slug": "cagi5-tpmt",
+    "name": "CAGI5: TPMT and p10",
+    "headline": "Cracking the Code: Predicting TPMT and PTEN Protein Stability Variants",
+    "headline_alternatives": [
+      "1. Predict effect of PTEN/TPMT mutations on protein stability",
+      "2. Assess PTEN/TPMT variant stability using multiplexed profiling ",
+      "3. Quantify protein stability changes from PTEN/TPMT mutation library",
+      "4. Model impacts of genetic variants on PTEN and TPMT stability",
+      "5. Estimate protein abundance changes from fusion assay on mutants"
+    ]
+  },
+  {
+    "id": 64,
+    "slug": "cagi5-annotate-all-missense",
+    "name": "CAGI5: Annotate all nonsynonymous variants",
+    "headline": "Annotate all nonsynonymous variants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 65,
+    "slug": "cagi5-gaa",
+    "name": "CAGI5: GAA",
+    "headline": "Predict enzyme activity of GAA mutants in Pompe disease",
+    "headline_alternatives": []
+  },
+  {
+    "id": 66,
+    "slug": "cagi5-chek2",
+    "name": "CAGI5: CHEK2",
+    "headline": "Estimate CHEK2 gene variant probabilities in Latino breast cancer cases",
+    "headline_alternatives": [
+      "1. Estimate CHEK2 variant probabilities in Latino breast cancer cases (78 characters)",
+      "2. Predict CHEK2 variant probabilities from Latino breast cancer cohort (77 characters) ",
+      "3. Calculate probabilities of CHEK2 variants in Latino breast cancer (76 characters)",
+      "4. Model CHEK2 variant probabilities in Latina breast cancer cases (79 characters)",
+      "5. Estimate likelihood of CHEK2 variants in Latina breast cancer patients (79 characters)"
+    ]
+  },
+  {
+    "id": 67,
+    "slug": "cagi5-enigma",
+    "name": "CAGI5: ENIGMA",
+    "headline": "Predicting cancer risk from BRCA1/2 gene variants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 68,
+    "slug": "cagi5-mapsy",
+    "name": "CAGI5: MaPSy",
+    "headline": "Predicting the Impact of Genetic Variants on Splicing Mechanisms",
+    "headline_alternatives": []
+  },
+  {
+    "id": 69,
+    "slug": "cagi5-vex-seq",
+    "name": "CAGI5: Vex-seq",
+    "headline": "Predict splicing changes from variants in globin gene",
+    "headline_alternatives": []
+  },
+  {
+    "id": 70,
+    "slug": "cagi5-sickkids5",
+    "name": "CAGI5: SickKids clinical genomes",
+    "headline": "Predict genetic disorders from 30 child genomes and phenotypes.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 71,
+    "slug": "cagi5-intellectual-disability",
+    "name": "CAGI5: ID Panel",
+    "headline": "Predict phenotypes and variants from gene panel sequences",
+    "headline_alternatives": []
+  },
+  {
+    "id": 72,
+    "slug": "cagi5-clotting-disease",
+    "name": "CAGI5: Clotting disease exomes",
+    "headline": "Predicting venous thromboembolism risk in African Americans",
+    "headline_alternatives": []
+  },
+  {
+    "id": 73,
+    "slug": "cagi6-sickkids",
+    "name": "CAGI6: SickKids clinical genomes and transcriptomes",
+    "headline": "Identify genes causing rare diseases using transcriptomics",
+    "headline_alternatives": []
+  },
+  {
+    "id": 74,
+    "slug": "cagi6-cam",
+    "name": "CAGI6: CaM",
+    "headline": "Predicting the Impact of Point Mutations on Calmodulin Stability",
+    "headline_alternatives": []
+  },
+  {
+    "id": 75,
+    "slug": "cami-ii",
+    "name": "CAMI II",
+    "headline": "Assembling and Classifying Microbial Genomes in Complex Samples",
+    "headline_alternatives": [
+      "1. CAMI II challenges for genome and taxonomic binning of environmental data",
+      "2. CAMI II: Assembling and analyzing multi-sample microbiome data ",
+      "3. CAMI II: Binning genomes and profiling taxa from diverse environments",
+      "4. CAMI II offers microbiome analysis challenges on clinical, marine samples",
+      "5. CAMI II challenges: genome assembly, binning genomes and taxa "
+    ]
+  },
+  {
+    "id": 76,
+    "slug": "camda18-metasub-forensics",
+    "name": "CAMDA18-MetaSUB Forensics",
+    "headline": "Building a metagenomic map of mass-transit systems globally",
+    "headline_alternatives": [
+      "1. Building a metagenomic map of mass transit systems across the globe (79 characters)",
+      "2. Analyzing metagenomic data from global city sampling days (76 characters)",
+      "3. Multi-city forensic analyses using metagenomic data from mass transit (78 characters) ",
+      "4. Longitudinal study of microbes in mass transit systems worldwide (77 characters)",
+      "5. Metagenomic mapping of microbes in public spaces globally over time (78 characters)"
+    ]
+  },
+  {
+    "id": 77,
+    "slug": "camda18-cmap-drug-safety",
+    "name": "CAMDA18-CMap Drug Safety",
+    "headline": "Predicting drug toxicity using cell-based gene expression data",
+    "headline_alternatives": []
+  },
+  {
+    "id": 78,
+    "slug": "camda18-cancer-data-integration",
+    "name": "CAMDA18-Cancer Data Integration",
+    "headline": "Unify data integration approaches for breast cancer and neuroblastoma",
+    "headline_alternatives": [
+      "1. Unify data integration to beat state of art in breast and neuroblastoma",
+      "2. Improve breast and neuroblastoma outcomes via data integration  ",
+      "3. Data integration to advance breast cancer and neuroblastoma care",
+      "4. Integrate data to outperform current methods in breast and neuroblastoma  ",
+      "5. Data integration to match state of art in breast cancer and neuroblastoma"
+    ]
+  },
+  {
+    "id": 79,
+    "slug": "cafa-4",
+    "name": "CAFA 4",
+    "headline": "Assessing algorithms for predicting protein function",
+    "headline_alternatives": [
+      "1. Assessing algorithms for predicting protein function from sequences (58 characters)",
+      "2. Evaluating automated methods to predict protein function (53 characters)",
+      "3. Benchmarking protein function prediction algorithms (56 characters) ",
+      "4. Critical test of computational protein annotation methods (63 characters)",
+      "5. Testing algorithms that computationally assign functions to proteins (63 characters)"
+    ]
+  },
+  {
+    "id": 80,
+    "slug": "casp13",
+    "name": "CASP13",
+    "headline": "CASP assesses protein structure prediction methods",
+    "headline_alternatives": [
+      "1. CASP tests progress in predicting protein structures from sequences (78 characters)",
+      "2. CASP12 drew protein structure models for 82 targets from 100 groups (77 characters) ",
+      "3. Every 2 years, CASP assesses progress in modeling protein structures (65 characters)",
+      "4. CASP community experiment benchmarks protein structure prediction (56 characters)",
+      "5. 50,000 models on 82 targets submitted for CASP12 protein challenge (79 characters)"
+    ]
+  },
+  {
+    "id": 81,
+    "slug": "casp14",
+    "name": "CASP14",
+    "headline": "Assessing progress in protein structure prediction",
+    "headline_alternatives": [
+      "1. CASP tests progress in predicting protein structure from sequence (73 characters)",
+      "2. CASP14 drew 100 groups to model 90 protein targets (66 characters) ",
+      "3. Every 2 years CASP assesses protein structure prediction methods (69 characters)",
+      "4. CASP community experiment benchmarks protein modeling techniques (76 characters)",
+      "5. 67,000 models on 90 targets in recent CASP protein structure challenge (79 characters)"
+    ]
+  },
+  {
+    "id": 82,
+    "slug": "cfsan-pathogen-detection",
+    "name": "CFSAN Pathogen Detection",
+    "headline": "Rapidly Identify Food Sources of Outbreaks",
+    "headline_alternatives": []
+  },
+  {
+    "id": 83,
+    "slug": "cdrh-biothreat",
+    "name": "CDRH Biothreat",
+    "headline": "Identifying infectious diseases from clinical samples using sequencing techn...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 84,
+    "slug": "multi-omics-enabled-sample-mislabeling-correction",
+    "name": "Multi-omics Enabled Sample Mislabeling Correction",
+    "headline": "Multi-omics Enabled Sample Mislabeling Correction: (No headline provided)",
+    "headline_alternatives": []
+  },
+  {
+    "id": 85,
+    "slug": "biocompute-object-app-a-thon",
+    "name": "BioCompute Object App-a-thon",
+    "headline": "Seeking Standards for Reproducible Bioinformatics Analysis",
+    "headline_alternatives": []
+  },
+  {
+    "id": 86,
+    "slug": "brain-cancer-predictive-modeling-and-biomarker-discovery",
+    "name": "Brain Cancer Predictive Modeling and Biomarker Discovery",
+    "headline": "Seeking novel biomarkers to advance precision medicine for brain tumors",
+    "headline_alternatives": [
+      "1. Seeking novel biomarkers for glioma prognosis and treatment (76 characters)",
+      "2. Advancing precision medicine for brain tumors via new biomarkers (79 characters)",
+      "3. Identifying multi-omics markers to improve brain tumor outcomes (71 characters) ",
+      "4. Can new biomarkers advance precision medicine for gliomas? (63 characters)",
+      "5. Calling for innovative glioma biomarkers to enable precision care (79 characters)"
+    ]
+  },
+  {
+    "id": 87,
+    "slug": "gaining-new-insights-by-detecting-adverse-event-anomalies",
+    "name": "Gaining New Insights by Detecting Adverse Event Anomalies",
+    "headline": "Seeking Algorithms to Detect Adverse Events in FDA Data",
+    "headline_alternatives": []
+  },
+  {
+    "id": 88,
+    "slug": "calling-variants-in-difficult-to-map-regions",
+    "name": "Calling Variants in Difficult-to-Map Regions",
+    "headline": "Precision Benchmarking: Evaluating Variant Calling in Complex Genomic Regions",
+    "headline_alternatives": []
+  },
+  {
+    "id": 89,
+    "slug": "vha-innovation-ecosystem-and-covid-19-risk-factor-modeling",
+    "name": "VHA Innovation Ecosystem and COVID-19 Risk Factor Modeling",
+    "headline": "AI for COVID-19: Predicting Health Outcomes in the Veteran Population",
+    "headline_alternatives": []
+  },
+  {
+    "id": 90,
+    "slug": "covid-19-precision-immunology-app-a-thon",
+    "name": "COVID-19 Precision Immunology App-a-thon",
+    "headline": "Seeking insights on COVID-19 pathophysiology to enable effective strategies.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 91,
+    "slug": "smarter-food-safety-low-cost-tech-enabled-traceability",
+    "name": "Smarter Food Safety Low Cost Tech-Enabled Traceability",
+    "headline": "Seeking Affordable Tech Solutions for Food Traceability",
+    "headline_alternatives": []
+  },
+  {
+    "id": 92,
+    "slug": "tumor-mutational-burden-tmb-challenge-phase-1",
+    "name": "Tumor Mutational Burden (TMB) Challenge Phase 1",
+    "headline": "Standardizing Tumor Mutational Burden (TMB) Calculation in Cancer Research",
+    "headline_alternatives": []
+  },
+  {
+    "id": 93,
+    "slug": "kits21",
+    "name": "Kidney and Kidney Tumor Segmentation",
+    "headline": "Contest Seeks Best Kidney Tumor Segmentation System",
+    "headline_alternatives": []
+  },
+  {
+    "id": 94,
+    "slug": "realnoisemri",
+    "name": "Real Noise MRI",
+    "headline": "Developing fast MRI techniques without fully sampled data",
+    "headline_alternatives": [
+      "1. Develop fast MRI techniques without relying on fully sampled data",
+      "2. Improve MRI speed without using fully sampled images as ground truth ",
+      "3. Fast MRI acquisition through innovative methods not needing full data",
+      "4. Speed up MRI sans full k-space data as benchmark for undersampling",
+      "5. Faster MRI sans complete Fourier data as reference for undersampling"
+    ]
+  },
+  {
+    "id": 95,
+    "slug": "deep-generative-model-challenge-for-da-in-surgery",
+    "name": "Deep Generative Model Challenge for DA in Surgery",
+    "headline": "Challenge aims to adapt algorithms from simulation to mitral valve surgery",
+    "headline_alternatives": []
+  },
+  {
+    "id": 96,
+    "slug": "aimdatathon",
+    "name": "AIM Datathon 2020",
+    "headline": "AIM Datathon 2020: \"Join the AI in Medicine (AIM) Datathon 2020\"",
+    "headline_alternatives": []
+  },
+  {
+    "id": 97,
+    "slug": "opc-recurrence",
+    "name": "Oropharynx Cancer (OPC) Radiomics Challenge :: Local Recurrence Prediction",
+    "headline": "Determine from CT data whether a tumor will be controlled by definitive radi...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 98,
+    "slug": "oropharynx-radiomics-hpv",
+    "name": "Oropharynx Cancer (OPC) Radiomics Challenge :: Human Papilloma Virus (HPV) Status Prediction",
+    "headline": "Human Papilloma Virus (HPV) Status Prediction: \"Predict from CT data the HPV...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 99,
+    "slug": "data-science-bowl-2017",
+    "name": "Data Science Bowl 2017",
+    "headline": "\"Can you improve lung cancer detection?\"",
+    "headline_alternatives": []
+  },
+  {
+    "id": 100,
+    "slug": "predict-impact-of-air-quality-on-death-rates",
+    "name": "Predict impact of air quality on mortality rates",
+    "headline": "\"Predict CVD and cancer caused mortality rates in England using air quality ...",
+    "headline_alternatives": [
+      "1. Predict mortality in England from air quality data (34 characters)",
+      "2. Forecast CVD and cancer deaths using air monitoring (43 characters) ",
+      "3. Model England mortality rates with Copernicus air data (49 characters)",
+      "4. Estimate CVD and cancer mortality in England from air quality (56 characters)",
+      "5. Use Copernicus air monitoring to predict CVD and cancer deaths (59 characters)"
+    ]
+  },
+  {
+    "id": 101,
+    "slug": "intel-mobileodt-cervical-cancer-screening",
+    "name": "Intel & MobileODT Cervical Cancer Screening",
+    "headline": "\"Which cancer treatment will be most effective?\"",
+    "headline_alternatives": []
+  },
+  {
+    "id": 102,
+    "slug": "msk-redefining-cancer-treatment",
+    "name": "Personalized Medicine-Redefining Cancer Treatment",
+    "headline": "Predict the effect of Genetic Variants to enable Personalized Medicine",
+    "headline_alternatives": [
+      "1. Predicting Genetic Variants for Personalized Medicine (34 characters)",
+      "2. Enabling Personalized Medicine Through Genetic Analysis (43 characters)",
+      "3. Genetic Variant Effects Key to Personalized Care (34 characters) ",
+      "4. Unlocking Personalized Medicine with Genetic Predictions (43 characters)",
+      "5. Predicting Variants to Customize Medical Treatments (44 characters)"
+    ]
+  },
+  {
+    "id": 103,
+    "slug": "mubravo",
+    "name": "Predicting Cancer Diagnosis",
+    "headline": "Bravo's machine learning competition!",
+    "headline_alternatives": [
+      "1. ML competition hosted by Bravo",
+      "2. Bravo hosts machine learning contest ",
+      "3. Bravo challenges ML experts in new contest",
+      "4. Bravo seeks top ML solutions in competition",
+      "5. Bravo competition for best machine learning"
+    ]
+  },
+  {
+    "id": 104,
+    "slug": "histopathologic-cancer-detection",
+    "name": "Histopathologic Cancer Detection",
+    "headline": "Identify metastatic tissue in histopathologic scans of lymph node sections",
+    "headline_alternatives": []
+  },
+  {
+    "id": 105,
+    "slug": "tjml1920-decision-trees",
+    "name": "TJML 2019-20 Breast Cancer Detection Competition",
+    "headline": "Use a decision tree to identify malignant breast cancer tumors",
+    "headline_alternatives": []
+  },
+  {
+    "id": 106,
+    "slug": "prostate-cancer-grade-assessment",
+    "name": "Prostate cANcer graDe Assessment (PANDA) Challenge",
+    "headline": "Prostate cancer diagnosis using the Gleason grading system",
+    "headline_alternatives": [
+      "1. Gleason grading for prostate cancer diagnosis (34 characters)",
+      "2. Using Gleason system to grade prostate tumors (43 characters)",
+      "3. Grading prostate cancers with Gleason system (44 characters) ",
+      "4. Gleason grading to diagnose prostate cancer (41 characters)",
+      "5. Diagnose prostate cancer with Gleason grading (45 characters)"
+    ]
+  },
+  {
+    "id": 107,
+    "slug": "breast-cancer",
+    "name": "Breast Cancer",
+    "headline": "Use cell nuclei categories to predict breast cancer tumor.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 108,
+    "slug": "breast-cancer-detection",
+    "name": "Breast Cancer Detection",
+    "headline": "breast cancer detection",
+    "headline_alternatives": []
+  },
+  {
+    "id": 109,
+    "slug": "hrpred",
+    "name": "Prediction of High Risk Patients",
+    "headline": "Classification of high and low risk cancer patients",
+    "headline_alternatives": []
+  },
+  {
+    "id": 110,
+    "slug": "ml4moleng-cancer",
+    "name": "MIT ML4MolEng-Predicting Cancer Progression",
+    "headline": "MIT 3.100, 10.402, 20.301 In class ML competition (Spring 2021)",
+    "headline_alternatives": [
+      "1. MIT classes compete in machine learning contest",
+      "2. MIT students battle in ML competition ",
+      "3. MIT classes face off in in-class ML contest",
+      "4. MIT classes hold ML competition during semester ",
+      "5. MIT students compete in machine learning challenge"
+    ]
+  },
+  {
+    "id": 111,
+    "slug": "uw-madison-gi-tract-image-segmentation",
+    "name": "UW-Madison GI Tract Image Segmentation",
+    "headline": "Track healthy organs in medical scans to improve cancer treatment",
+    "headline_alternatives": [
+      "1. Tracking organs in scans to boost cancer care",
+      "2. Scanning organs to enhance cancer treatment ",
+      "3. Organ tracking in scans improves cancer therapy",
+      "4. Monitoring organs via imaging aids cancer treatment",
+      "5. Organ imaging analysis boosts cancer treatments"
+    ]
+  },
+  {
+    "id": 112,
+    "slug": "rsna-miccai-brain-tumor-radiogenomic-classification",
+    "name": "RSNA-MICCAI Brain Tumor Radiogenomic Classification",
+    "headline": "Predict the status of a genetic biomarker important for brain cancer treatment",
+    "headline_alternatives": [
+      "1. BraTS challenge tests brain tumor segmentation methods (56 characters)",
+      "2. BraTS evaluates glioblastoma segmentation and classification (56 characters)",
+      "3. BraTS challenge focuses on brain tumor segmentation, prediction (59 characters) ",
+      "4. BraTS tests MRI-based brain tumor segmentation, MGMT prediction (65 characters)",
+      "5. BraTS challenge evaluates segmentation, classification of brain tumors (63 characters)"
+    ]
+  },
+  {
+    "id": 113,
+    "slug": "breastcancer",
+    "name": "Breast Cancer - Beginners ML",
+    "headline": "Beginners hands-on experience with ML basics",
+    "headline_alternatives": [
+      "1. Learn ML basics hands-on as a beginner (34 characters)",
+      "2. Hands-on ML for beginners to gain experience (43 characters) ",
+      "3. Beginners: Get hands-on with ML fundamentals (44 characters)",
+      "4. Hands-on ML basics for beginners' first experience (51 characters)",
+      "5. Beginners: Gain hands-on experience with ML basics (54 characters)"
+    ]
+  },
+  {
+    "id": 114,
+    "slug": "ml-olympiad-health-and-education",
+    "name": "ML Olympiad -Let's Fight lung cancer",
+    "headline": "Use your ML expertise to help us step another step toward defeating cancer...",
+    "headline_alternatives": [
+      "1. Join the fight against cancer with ML",
+      "2. Help defeat cancer with your ML skills ",
+      "3. ML experts: lend your skills to beat cancer",
+      "4. Can your ML help us defeat cancer?",
+      "5. Calling all ML experts - help us beat cancer"
+    ]
+  },
+  {
+    "id": 115,
+    "slug": "cs98-22-dl-task1",
+    "name": "CS98X-22-DL-Task1",
+    "headline": "This competition is related to Task 1 in coursework-breast cancer classification",
+    "headline_alternatives": [
+      "1. Breast cancer classification challenge via machine learning",
+      "2. Using AI to classify breast cancer from medical images ",
+      "3. Applying deep learning to breast cancer diagnosis",
+      "4. Automated breast cancer detection through image classification",
+      "5. Machine learning for breast cancer diagnosis from scans"
+    ]
+  },
+  {
+    "id": 116,
+    "slug": "parasitedetection-iiitb2019",
+    "name": "Parasite detection",
+    "headline": "Detect if cell image has parasite or is uninfected",
+    "headline_alternatives": []
+  },
+  {
+    "id": 117,
+    "slug": "hpa-single-cell-image-classification",
+    "name": "Human Protein Atlas -Single Cell Classification",
+    "headline": "Find individual human cell differences in microscope images",
+    "headline_alternatives": []
+  },
+  {
+    "id": 118,
+    "slug": "stem-cell-predcition",
+    "name": "Stem Cell Predcition",
+    "headline": "Classify stem and non-stem cells using RNA-seq data",
+    "headline_alternatives": []
+  },
+  {
+    "id": 119,
+    "slug": "sartorius-cell-instance-segmentation",
+    "name": "Sartorius - Cell Instance Segmentation",
+    "headline": "Detect single neuronal cells in microscopy images",
+    "headline_alternatives": [
+      "1. Segment neuronal cells in microscopy images to aid neuroresearch",
+      "2. Delineate distinct objects in cell images to quantify neurological data  ",
+      "3. Detect and segment neuronal cells to enable neurobiology research",
+      "4. Identify neuronal cells in images to study neurological disorders",
+      "5. Segment cell images to measure effects of diseases and treatments"
+    ]
+  },
+  {
+    "id": 120,
+    "slug": "pvelad",
+    "name": "Photovoltaic cell anomaly detection",
+    "headline": "Photovoltaic cell anomaly detection",
+    "headline_alternatives": [
+      "1. Hebei U and Beihang U Host AI Competition",
+      "2. Hebei and Beihang Universities Host AI Challenge ",
+      "3. AIHebut and NAVE Groups Host AI Competition",
+      "4. Hebei U and Beihang U Host AI Challenge",
+      "5. Universities Host AI Competition for Research Groups"
+    ]
+  },
+  {
+    "id": 121,
+    "slug": "blood-mnist",
+    "name": "Blood-MNIST",
+    "headline": "Classifying blood cell types using Weights and Biases",
+    "headline_alternatives": [
+      "1. Classify Blood Cells with Weights and Biases (34 characters)",
+      "2. Using Weights and Biases for Blood Cell Classification (49 characters) ",
+      "3. Blood Cell Type Classification via Weights and Biases (56 characters)",
+      "4. Weights and Biases to Classify Blood Cell Types (51 characters) ",
+      "5. Classifying Blood Cells with W&B Machine Learning (56 characters)"
+    ]
+  },
+  {
+    "id": 122,
+    "slug": "insilicomolhack",
+    "name": "MolHack",
+    "headline": "Apply deep learning to speedup drug validation",
+    "headline_alternatives": [
+      "1. Deep learning to accelerate drug validation",
+      "2. Using deep learning for faster drug validation ",
+      "3. Applying deep learning to hasten drug validation",
+      "4. Deep learning speeds up drug validation process",
+      "5. Leveraging deep learning to expedite drug validation"
+    ]
+  },
+  {
+    "id": 123,
+    "slug": "codata2019challenge",
+    "name": "Cell Response Classification",
+    "headline": "From recorded timeseries of many cells in a well, predict which drug treatme...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 124,
+    "slug": "drug-solubility-challenge",
+    "name": "Drug solubility challenge",
+    "headline": "Crucial Role of Solubility in Drug Formulation for Optimal Efficacy",
+    "headline_alternatives": [
+      "1. Improving drug solubility for optimal pharmacological response (54 characters)",
+      "2. Enhancing solubility to achieve desired drug concentrations (56 characters) ",
+      "3. Optimizing drug solubility for anticipated pharmacological effects (63 characters)",
+      "4. Solubility key to reaching target drug concentrations (49 characters)",
+      "5. Tuning solubility to get right drug levels for effects (56 characters)"
+    ]
+  },
+  {
+    "id": 125,
+    "slug": "kinase-inhibition-challenge",
+    "name": "Kinase inhibition challenge",
+    "headline": "Unlocking the Therapeutic Potential of Protein Kinases: Big Data Insights",
+    "headline_alternatives": []
+  },
+  {
+    "id": 126,
+    "slug": "ai-drug-discovery",
+    "name": "AI Drug Discovery Workshop and Coding Challenge",
+    "headline": "Fostering Core AI Programming Proficiency for Drug Discovery Advancements",
+    "headline_alternatives": [
+      "1. Honing AI skills for drug discovery (24 characters)",
+      "2. Building AI programming for drug R&D (32 characters)",
+      "3. Developing AI abilities for pharma innovation (39 characters) ",
+      "4. Advancing AI competencies in pharmaceuticals (43 characters)",
+      "5. Mastering AI coding fundamentals for new drugs (47 characters)"
+    ]
+  },
+  {
+    "id": 127,
+    "slug": "protein-compound-affinity",
+    "name": "Structure-free protein-ligand affinity prediction - Task 1 Fitting",
+    "headline": "Developing new AI models for drug discovery, main portal (Task-1 fitting)",
+    "headline_alternatives": [
+      "1. New AI models to advance drug discovery (34 characters)",
+      "2. Developing AI to accelerate pharmaceutical innovations (51 characters) ",
+      "3. Creating AI systems for faster drug development (44 characters)",
+      "4. AI models to enhance drug discovery process (41 characters)",
+      "5. Leveraging AI to discover new medicines faster (44 characters)"
+    ]
+  },
+  {
+    "id": 128,
+    "slug": "cisc873-dm-f21-a5",
+    "name": "CISC873-DM-F21-A5",
+    "headline": "Anti-Cancer Drug Activity Prediction",
+    "headline_alternatives": [
+      "1. Predicting Anti-Cancer Drug Potency with AI (34 characters)",
+      "2. AI to Forecast Anti-Cancer Drug Efficacy (32 characters) ",
+      "3. Using AI to Predict Anti-Cancer Drug Activity (40 characters)",
+      "4. AI Model Predicts Best Anti-Cancer Drugs (31 characters)  ",
+      "5. AI Helps Identify Most Effective Anti-Cancer Drugs (45 characters)"
+    ]
+  },
+  {
+    "id": 129,
+    "slug": "pro-lig-aff-task2-mse",
+    "name": "Structure-free protein-ligand affinity prediction - Task 2 Fitting",
+    "headline": "Developing new AI models for drug discovery (Task-2 fitting)",
+    "headline_alternatives": []
+  },
+  {
+    "id": 130,
+    "slug": "pro-lig-aff-task1-pearsonr",
+    "name": "Structure-free protein-ligand affinity prediction - Task 1 Ranking",
+    "headline": "Developing new AI models for drug discovery (Task-1 ranking)",
+    "headline_alternatives": [
+      "1. New AI models to aid drug discovery (21 characters)",
+      "2. Applying AI to accelerate drug discovery (34 characters) ",
+      "3. Developing AI models to rank drug candidates (41 characters)",
+      "4. Using AI for faster, better drug discovery (38 characters)",
+      "5. AI models to improve drug candidate identification (49 characters)"
+    ]
+  },
+  {
+    "id": 131,
+    "slug": "pro-lig-aff-task2-pearsonr",
+    "name": "Structure-free protein-ligand affinity prediction - Task 2 Ranking",
+    "headline": "Developing new AI models for drug discovery (Task-2 ranking)",
+    "headline_alternatives": [
+      "1. Creating AI to Rank Drug Candidates (14 chars)",
+      "2. AI Models to Prioritize Drug Leads (24 chars)",
+      "3. AI for Ranking Potential New Drugs (25 chars) ",
+      "4. Develop AI to Identify Top Drug Candidates (33 chars)",
+      "5. Building AI to Rank Drug Discovery Results (34 chars)"
+    ]
+  },
+  {
+    "id": 132,
+    "slug": "pro-lig-aff-task3-spearmanr",
+    "name": "Structure-free protein-ligand affinity prediction - Task 3 Ranking",
+    "headline": "Developing new AI models for drug discovery (Task-3 ranking)",
+    "headline_alternatives": []
+  },
+  {
+    "id": 133,
+    "slug": "hhp",
+    "name": "Heritage Health Prize",
+    "headline": "Identify patients who will be admitted to a hospital within the next year us...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 134,
+    "slug": "pf2012",
+    "name": "Practice Fusion Analyze This! 2012 - Prediction Challenge",
+    "headline": "Delve into Electronic Health Records: Propose Innovative Predictive Modeling...",
+    "headline_alternatives": [
+      "1. Predict disease risks from electronic health records (53 characters)",
+      "2. Mine electronic records for impactful modeling ideas (56 characters) ",
+      "3. Discover predictive signals in patient data (44 characters)",
+      "4. Electronic health records: a trove for predictive modeling (56 characters)",
+      "5. Ideate modeling competitions using patient records (49 characters)"
+    ]
+  },
+  {
+    "id": 135,
+    "slug": "pf2012-at",
+    "name": "Practice Fusion Analyze This! 2012 - Open Challenge",
+    "headline": "Delve into Electronic Health Records: Propose Innovative Predictive Modeling...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 136,
+    "slug": "seizure-detection",
+    "name": "UPenn and Mayo Clinic's Seizure Detection Challenge",
+    "headline": "Detect seizures in intracranial EEG recordings",
+    "headline_alternatives": [
+      "1. Detecting seizures from brain recordings (34 characters)",
+      "2. Identifying seizures in EEG data (32 characters) ",
+      "3. Seizure detection using intracranial EEG (34 characters)",
+      "4. Finding seizures in brain activity recordings (39 characters)",
+      "5. Automatically detect seizures from EEG (31 characters)"
+    ]
+  },
+  {
+    "id": 137,
+    "slug": "seizure-prediction",
+    "name": "American Epilepsy Society Seizure Prediction Challenge",
+    "headline": "Predict seizures in intracranial EEG recordings",
+    "headline_alternatives": []
+  },
+  {
+    "id": 138,
+    "slug": "deephealth-1",
+    "name": "Deep Health - alcohol",
+    "headline": "Find Correlations and patterns with Medical data",
+    "headline_alternatives": [
+      "1. Uncover Insights in Medical Data",
+      "2. Discover Patterns in Health Records  ",
+      "3. Medical Data Analysis to Find Links",
+      "4. Seeking Correlations in Patient Info",
+      "5. Analyze Medical Data for Connections"
+    ]
+  },
+  {
+    "id": 139,
+    "slug": "deep-health-3",
+    "name": "Deep Health - Diabetes 2",
+    "headline": "Deep Health Hackathon: Predicting Future Diabetes Occurrences Challenge",
+    "headline_alternatives": []
+  },
+  {
+    "id": 140,
+    "slug": "d012554-2021",
+    "name": "D012554 - 2021",
+    "headline": "Classify the health of a fetus using CTG data",
+    "headline_alternatives": [
+      "1. Predict fetal health from CTG readings (34 characters)",
+      "2. Classify fetal health using CTG data (32 characters) ",
+      "3. Assess fetal wellbeing with CTG analysis (38 characters)",
+      "4. Determine fetal condition from cardiotocography (56 characters)",
+      "5. Categorize fetus health through CTG data (39 characters)"
+    ]
+  },
+  {
+    "id": 141,
+    "slug": "idao-2022-bootcamp-insomnia",
+    "name": "IDAO 2022. ML Bootcamp - Insomnia",
+    "headline": "Predict sleep disorder on given human health data",
+    "headline_alternatives": [
+      "1. Predicting sleep disorders from health data (34 characters)",
+      "2. Using health data to forecast sleep disorders (43 characters)",
+      "3. Can health info predict sleep problems? (34 characters) ",
+      "4. Sleep disorder prediction via health analytics (43 characters)",
+      "5. Forecasting sleep disorders with human data (44 characters)"
+    ]
+  },
+  {
+    "id": 142,
+    "slug": "tweet-mental-health-classification",
+    "name": "Tweet Mental Health Classification",
+    "headline": "Build Models to classify tweets to determine mental health",
+    "headline_alternatives": [
+      "1. Build Models to Classify Tweets for Mental Health (56 characters)",
+      "2. Classifying Tweets to Determine Mental Health (49 characters) ",
+      "3. Modeling Tweets to Assess Mental Health Status (51 characters)",
+      "4. Develop Models for Mental Health Detection via Tweets (63 characters)",
+      "5. Using Tweet Classification to Gauge Mental Health (59 characters)"
+    ]
+  },
+  {
+    "id": 143,
+    "slug": "ml-olympiad-good-health-and-well-being",
+    "name": "ML Olympiad - GOOD HEALTH AND WELL BEING",
+    "headline": "Use your ML expertise to classify if a patient has heart disease or not",
+    "headline_alternatives": [
+      "1. ML to Diagnose Heart Disease (25 characters)",
+      "2. AI for Heart Disease Detection (32 characters) ",
+      "3. Classify Heart Disease with ML (34 characters)",
+      "4. Detecting Heart Disease with AI (38 characters)",
+      "5. ML Model Predicts Heart Disease (38 characters)"
+    ]
+  },
+  {
+    "id": 144,
+    "slug": "rsna-breast-cancer-detection",
+    "name": "RSNA Screening Mammography Breast Cancer Detection",
+    "headline": "Find breast cancers in screening mammograms",
+    "headline_alternatives": []
+  },
+  {
+    "id": 145,
+    "slug": "biocreative-vii-text-mining-drug-and-chemical-protein-interactions-drugprot",
+    "name": "BioCreative VII: Text mining drug and chemical-protein interactions (DrugProt)",
+    "headline": "Develop systems to extract drug-gene relations from text",
+    "headline_alternatives": [
+      "1. Develop systems to extract drug-gene relations from text (79 characters)",
+      "2. Automatically detect relations between drugs and proteins in text (78 characters) ",
+      "3. Build models to identify drug-protein interactions in literature (77 characters)",
+      "4. Extract and characterize drug-gene relations from biomedical text (78 characters)",
+      "5. Promote extraction of drug-protein relations to enable drug discovery (79 characters)"
+    ]
+  },
+  {
+    "id": 146,
+    "slug": "extended-literature-ai-for-drug-induced-liver-injury",
+    "name": "Extended Literature AI for Drug Induced Liver Injury",
+    "headline": "Develop ML tools to analyze drug texts for liver injury data",
+    "headline_alternatives": []
+  },
+  {
+    "id": 147,
+    "slug": "anti-microbial-resistance-forensics",
+    "name": "Anti-Microbial Resistance Forensics",
+    "headline": "Classifying Bacteriophages to Understand Microbial Evolution",
+    "headline_alternatives": [
+      "1. Develop new methods to classify and analyze bacteriophages' role in AMR spread (78 characters)",
+      "2. Understand how bacteriophages enable microbial evolution and antibiotic resistance (77 characters) ",
+      "3. Study correlation between phages and AMR to assess treatment potential (69 characters)",
+      "4. Improve phage classification amidst contradictory antibiotic replacement role (79 characters) ",
+      "5. Apply advanced algorithms to precisely describe bacteriophage capabilities (69 characters)"
+    ]
+  },
+  {
+    "id": 148,
+    "slug": "disease-maps-to-modelling-covid-19",
+    "name": "Disease Maps to Modelling COVID-19",
+    "headline": "Disease Maps COVID-19 Challenge: Enhancing Drug Repurposing with Omic Data",
+    "headline_alternatives": [
+      "1. Model COVID-19 mechanisms to find drug repurposing candidates (79 characters)",
+      "2. Leverage expert maps and data to expand COVID-19 knowledge (76 characters) ",
+      "3. Combine maps and data to understand COVID-19 and repurpose drugs (79 characters)",
+      "4. Use detailed maps to model COVID-19 and suggest drug repurposing (78 characters)",
+      "5. Expand biological knowledge of COVID-19 infection via modeling (76 characters)"
+    ]
+  },
+  {
+    "id": 149,
+    "slug": "crowdsourced-evaluation-of-inchi-based-tautomer-identification",
+    "name": "Crowdsourced Evaluation of InChI-based Tautomer Identification",
+    "headline": "Crowdsourced Evaluation of InChI-Based Tautomer Identification Challenge",
+    "headline_alternatives": []
+  },
+  {
+    "id": 150,
+    "slug": "nctr-indel-calling-from-oncopanel-sequencing-challenge-phase-2",
+    "name": "NCTR Indel Calling from Oncopanel Sequencing Challenge Phase 2",
+    "headline": "NCTR Indel Calling from Oncopanel Sequencing Data Challenge",
+    "headline_alternatives": [
+      "1. Develop standards for oncopanel sequencing quality control (77 characters)",
+      "2. Benchmark oncopanels with reference sample from FDA's SEQC2 project (79 characters) ",
+      "3. Assess analytical performance of oncopanels using SEQC2 reference sample (76 characters)",
+      "4. Establish quality metrics for clinical oncopanel sequencing (69 characters)",
+      "5. Standardize analysis protocols for oncopanel sequencing data (61 characters)"
+    ]
+  },
+  {
+    "id": 151,
+    "slug": "nctr-indel-calling-from-oncopanel-sequencing-data-challenge-phase-1",
+    "name": "NCTR Indel Calling from Oncopanel Sequencing Data Challenge Phase 1",
+    "headline": "NCTR Indel Calling from Oncopanel Sequencing Data Challenge",
+    "headline_alternatives": [
+      "1. Develop standards for oncopanel sequencing quality control (69 characters)",
+      "2. Benchmark oncopanels with reference sample from FDA's SEQC2 project (77 characters) ",
+      "3. Assess analytical performance of oncopanels using SEQC2 reference sample (76 characters)",
+      "4. Establish quality metrics for oncopanel sequencing in precision oncology (77 characters)",
+      "5. Create protocols for fit-for-purpose use of oncopanel NGS data (69 characters)"
+    ]
+  },
+  {
+    "id": 152,
+    "slug": "vha-innovation-ecosystem-and-precisionfda-covid-19-risk-factor-modeling-challenge-phase-2",
+    "name": "VHA Innovation Ecosystem and precisionFDA COVID-19 Risk Factor Modeling Challenge Phase 2",
+    "headline": "The focus of Phase 2 was to validate the top performing models on two additi...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 153,
+    "slug": "tumor-mutational-burden-tmb-challenge-phase-2",
+    "name": "Tumor Mutational Burden (TMB) Challenge Phase 2",
+    "headline": "The goal of the Friends of Cancer Research and precisionFDA Tumor Mutational...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 154,
+    "slug": "predicting-gene-expression-using-millions-of-random-promoter-sequences",
+    "name": "Predicting Gene Expression Using Millions of Random Promoter Sequences",
+    "headline": "Decoding gene expression regulation to understand disease.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 155,
+    "slug": "brats-2023",
+    "name": "BraTS 2023",
+    "headline": "Benchmarking brain tumor segmentation with expanded dataset.",
+    "headline_alternatives": [
+      "1. BraTS challenge focuses on benchmarking brain tumor segmentation with expanded dataset. (79 characters)",
+      "2. BraTS challenge expands brain tumor dataset to advance segmentation. (56 characters) ",
+      "3. BraTS seeks to advance brain tumor segmentation with larger dataset. (59 characters)",
+      "4. BraTS challenge grows dataset to boost brain tumor segmentation. (59 characters)",
+      "5. BraTS challenge expands dataset to advance brain tumor delineation. (63 characters)"
+    ]
+  },
+  {
+    "id": 156,
+    "slug": "cagi7",
+    "name": "CAGI7",
+    "headline": "The seventh round of CAGI.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 157,
+    "slug": "casp15",
+    "name": "CASP15",
+    "headline": "Establish the state-of-art in modeling proteins and protein complexes.",
+    "headline_alternatives": [
+      "1. CASP15 updates categories to advance deep learning for protein structures (76 characters)",
+      "2. CASP15 strengthens protein modeling with new categories, deep learning focus (79 characters) ",
+      "3. CASP15 evolves protein modeling categories to boost deep learning impact (76 characters)",
+      "4. CASP15 adds categories to drive deep learning advances in protein structures (79 characters)",
+      "5. CASP15 shifts categories to maximize deep learning insights for proteins (77 characters)"
+    ]
+  },
+  {
+    "id": 158,
+    "slug": "synthrad2023",
+    "name": "SynthRAD2023",
+    "headline": "Synthesizing computed tomography for radiotherapy.",
+    "headline_alternatives": [
+      "1. Platform to evaluate and compare sCT generation methods (79 characters)",
+      "2. Public benchmark for sCT generation algorithms (56 characters) ",
+      "3. First platform to evaluate sCT generation methods (59 characters)",
+      "4. Challenge to compare sCT generation algorithms (49 characters)",
+      "5. Public metrics to evaluate sCT generation methods (59 characters)"
+    ]
+  },
+  {
+    "id": 159,
+    "slug": "synthetic-data-for-instrument-segmentation-in-surgery-syn-iss",
+    "name": "Synthetic Data for Instrument Segmentation in Surgery (Syn-ISS)",
+    "headline": "Challenging Machine Learning in Surgical Instrument Segmentation with Synthe...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 160,
+    "slug": "pitvis",
+    "name": "PitVis",
+    "headline": "Surgical workflow and instrument recognition in endonasal surgery.",
+    "headline_alternatives": [
+      "1. Guiding surgeons to remove pituitary tumors in tight spaces",
+      "2. Assisting surgeons with computer guidance for pituitary surgery  ",
+      "3. Improving outcomes in complex pituitary tumor removal",
+      "4. Computer-assisted intervention for challenging pituitary surgeries",
+      "5. Enhancing surgical technique for pituitary tumor treatment"
+    ]
+  },
+  {
+    "id": 161,
+    "slug": "mvseg2023",
+    "name": "MVSEG2023",
+    "headline": "Automatically segment mitral valve leaflets from single frame 3D trans-esoph...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 162,
+    "slug": "crossmoda23",
+    "name": "crossMoDA23",
+    "headline": "This challenge proposes is the third edition of the first medical imaging be...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 163,
+    "slug": "icr-identify-age-related-conditions",
+    "name": "ICR - Identifying Age-Related Conditions",
+    "headline": "Use Machine Learning to detect conditions with measurements of anonymous cha...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 164,
+    "slug": "cafa-5-protein-function-prediction",
+    "name": "CAFA 5: Protein Function Prediction",
+    "headline": "Predict the biological function of a protein.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 165,
+    "slug": "rsna-2023-abdominal-trauma-detection",
+    "name": "RSNA 2023 Abdominal Trauma Detection",
+    "headline": "Detect and classify traumatic abdominal injuries.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 166,
+    "slug": "hubmap-hacking-the-human-vasculature",
+    "name": "HuBMAP: Hacking the Human Vasculature",
+    "headline": "Segment instances of microvascular structures from healthy human kidney tiss...",
+    "headline_alternatives": [
+      "1. Segment microvascular structures in kidney histology images (56 characters)",
+      "2. Model to identify capillaries, arterioles, venules in tissues (56 characters)",
+      "3. Automate segmentation of blood vessels in kidney slides (51 characters) ",
+      "4. Improve understanding of microvasculature in tissues (51 characters)",
+      "5. Segment capillaries, arterioles, venules in kidney images (59 characters)"
+    ]
+  },
+  {
+    "id": 167,
+    "slug": "amp-parkinsons-disease-progression-prediction",
+    "name": "AMP(R)-Parkinson's Disease Progression Prediction",
+    "headline": "Use protein and peptide data measurements from Parkinson's Disease patients ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 168,
+    "slug": "open-problems-multimodal",
+    "name": "Open Problems -Multimodal Single-Cell Integration",
+    "headline": "Predict how DNA, RNA & protein measurements co-vary in single cells.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 169,
+    "slug": "multi-atlas-labeling-beyond-the-cranial-vault",
+    "name": "Multi-Atlas Labeling Beyond the Cranial Vault",
+    "headline": "Innovative Multi-Atlas Labeling for Soft Tissue Segmentation on Clinical CT",
+    "headline_alternatives": []
+  },
+  {
+    "id": 170,
+    "slug": "hubmap-organ-segmentation",
+    "name": "HuBMAP + HPA: Hacking the Human Body",
+    "headline": "Segment multi-organ functional tissue units.",
+    "headline_alternatives": [
+      "1. Segment functional tissue units in human organs to understand cell relationships (79 characters)",
+      "2. Identify tissue units across organs to reveal cell organization insights (79 characters)",
+      "3. Segment tissue images to map cell relationships and advance research (78 characters) ",
+      "4. Map functional tissue units across organs to unlock cell organization (77 characters)",
+      "5. Segment tissue images to construct atlas revealing cell relationships (78 characters)"
+    ]
+  },
+  {
+    "id": 171,
+    "slug": "hubmap-kidney-segmentation",
+    "name": "HuBMAP: Hacking the Kidney",
+    "headline": "Identify glomeruli in human kidney tissue images.",
+    "headline_alternatives": [
+      "1. Map kidney at single cell level, detect functional tissue units",
+      "2. Identify functional tissue units in human kidney to understand cell relationships ",
+      "3. Build tools to map kidney and identify cell blocks affecting health",
+      "4. Detect functional tissue units in kidney to advance cell atlas ",
+      "5. Identify cell blocks in kidney images to understand impact on human health"
+    ]
+  },
+  {
+    "id": 172,
+    "slug": "ventilator-pressure-prediction",
+    "name": "Google Brain: Ventilator Pressure Prediction",
+    "headline": "Simulate a ventilator connected to a sedated patient's lung.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 173,
+    "slug": "stanford-covid-vaccine",
+    "name": "OpenVaccine - COVID-19 mRNA Vaccine Degradation Prediction",
+    "headline": "Urgent need to bring the COVID-19 vaccine to mass production.",
+    "headline_alternatives": [
+      "1. Predict RNA degradation rates to aid COVID vaccine design (79 characters)",
+      "2. Model RNA degradation for COVID vaccine mRNAs (52 characters) ",
+      "3. Leverage data science for RNA degradation prediction (56 characters)",
+      "4. Develop models of RNA degradation rates (34 characters)",
+      "5. Predict mRNA vaccine degradation with machine learning (56 characters)"
+    ]
+  },
+  {
+    "id": 174,
+    "slug": "openvaccine",
+    "name": "OpenVaccine",
+    "headline": "A research initiative aimed at developing innovative design principles for R...",
+    "headline_alternatives": [
+      "1. Seeking more stable mRNA vaccines to enable worldwide access",
+      "2. Can you design a more stable mRNA vaccine? ",
+      "3. Help create fridge-stable mRNA vaccines for global use",
+      "4. Improve mRNA vaccine stability for worldwide immunization",
+      "5. Enhance mRNA vaccines: 2x-10x more stable formulations wanted"
+    ]
+  },
+  {
+    "id": 175,
+    "slug": "opentb",
+    "name": "OpenTB",
+    "headline": "We aim to gain fundamental insights into the ribosome's RNA sequence-folding.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 176,
+    "slug": "opencrispr",
+    "name": "OpenCRISPR",
+    "headline": "Can you improve the algorithm that classifies drugs based on their biologica...",
+    "headline_alternatives": [
+      "1. Develop small molecule switches to control CRISPR gene editing (76 characters)",
+      "2. Create on/off switches for CRISPR to enable safe gene editing (77 characters) ",
+      "3. Enable turning CRISPR on/off with small molecules for safe use (76 characters)",
+      "4. Design small molecule switches to control CRISPR activity (63 characters)",
+      "5. Develop safe, controllable CRISPR gene editing using small molecules (78 characters)"
+    ]
+  },
+  {
+    "id": 177,
+    "slug": "openknot",
+    "name": "OpenKnot",
+    "headline": "CellSignal - Disentangling biological signal from experimental noise in cell...",
+    "headline_alternatives": [
+      "1. Understanding folding pathways and dynamics of RNA pseudoknots (76 characters)",
+      "2. Elucidating structure and function of crucial RNA pseudoknots (59 characters) ",
+      "3. Investigating role of RNA pseudoknots in gene regulation (52 characters)",
+      "4. Analyzing viral replication mechanisms of RNA pseudoknots (56 characters)",
+      "5. Exploring enzymatic activity and catalysis by RNA pseudoknots (59 characters)"
+    ]
+  },
+  {
+    "id": 178,
+    "slug": "openaso",
+    "name": "OpenASO",
+    "headline": "Event detection from wearable sensor data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 179,
+    "slug": "openribosome",
+    "name": "OpenRibosome",
+    "headline": "AI competition seeks cancer diagnosis and treatment solutions.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 180,
+    "slug": "lish-moa",
+    "name": "Mechanisms of Action (MoA) Prediction",
+    "headline": "Segmenting Cerebral Arteries from 3D Angiography Images.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 181,
+    "slug": "recursion-cellular-image-classification",
+    "name": "Recursion Cellular Image Classification",
+    "headline": "Challenge compares Circle of Willis classification methods.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 182,
+    "slug": "tlvmc-parkinsons-freezing-gait-prediction",
+    "name": "Parkinson's Freezing of Gait Prediction",
+    "headline": "The US Food and Drug Administration (FDA) calls on stakeholders, including t...",
+    "headline_alternatives": [
+      "1. Detect freezing of gait in Parkinson's using wearable sensor data (77 characters)",
+      "2. Machine learning to detect freezing of gait from sensor data (63 characters) ",
+      "3. Improve understanding of freezing in Parkinson's with ML (63 characters)",
+      "4. ML model to detect freezing episodes in Parkinson's (63 characters)",
+      "5. Wearable sensors to monitor freezing of gait in Parkinson's (79 characters)"
+    ]
+  },
+  {
+    "id": 183,
+    "slug": "chaimeleon",
+    "name": "CHAIMELEON Open Challenges",
+    "headline": "The Veterans Health Administration Innovation Ecosystem, the Digital Health ...",
+    "headline_alternatives": [
+      "1. CHAIMELEON challenges train AI to answer cancer questions (56 characters)",
+      "2. Competition refines AI for cancer diagnosis and treatment (54 characters) ",
+      "3. CHAIMELEON: AI collaboration to advance cancer care (56 characters)",
+      "4. Developing trustworthy AI for cancer prognosis and outcomes (66 characters)",
+      "5. Advancing cancer AI - CHAIMELEON open competition (49 characters)"
+    ]
+  },
+  {
+    "id": 184,
+    "slug": "topcow23",
+    "name": "Topology-Aware Anatomical Segmentation of the Circle of Willis for CTA and MRA",
+    "headline": "Predicting High Risk Breast Cancer - a Nightingale OS & AHLI data challenge.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 185,
+    "slug": "circle-of-willis-intracranial-artery-classification-and-quantification-challenge-2023",
+    "name": "Circle of Willis Intracranial Artery Classification and Quantification Challenge 2023",
+    "headline": "Predicting High Risk Breast Cancer - a Nightingale OS & AHLI data challenge.",
+    "headline_alternatives": [
+      "1. Challenge compares methods for CoW classification and quantification (77 characters)",
+      "2. CoW challenge: Classify configuration, quantify diameters and angles (79 characters)",
+      "3. CoW challenge: Compare methods for classification and measurement (65 characters) ",
+      "4. Challenge to evaluate CoW configuration classification and measurement (79 characters)",
+      "5. Comparing methods for CoW configuration classification and measurement (79 characters)"
+    ]
+  },
+  {
+    "id": 186,
+    "slug": "making-sense-of-electronic-health-record-ehr-race-and-ethnicity-data",
+    "name": "Making Sense of Electronic Health Record (EHR) Race and Ethnicity Data",
+    "headline": "Predicting the connectivity and properties of in-silico networks.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 187,
+    "slug": "the-veterans-cardiac-health-and-ai-model-predictions-v-champs",
+    "name": "The Veterans Cardiac Health and AI Model Predictions (V-CHAMPS)",
+    "headline": "The goal of the in silico challenges is the reverse engineering of gene netw...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 188,
+    "slug": "predicting-high-risk-breast-cancer-phase-1",
+    "name": "Predicting High Risk Breast Cancer - Phase 1",
+    "headline": "The goal of the in silico network challenge is to reverse engineer gene regu...",
+    "headline_alternatives": [
+      "1. Developing algorithms to predict harmful breast cancers, reduce overtreatment (76 characters)",
+      "2. Reducing invasive breast cancer procedures via AI analysis of biopsies (73 characters)",
+      "3. Algorithms to identify harmful breast cancers, limit unnecessary treatment (78 characters) ",
+      "4. Using AI to analyze biopsies, identify aggressive breast cancers (63 characters)",
+      "5. Harnessing AI to reduce invasive procedures for harmless breast cancers (77 characters)"
+    ]
+  },
+  {
+    "id": 189,
+    "slug": "predicting-high-risk-breast-cancer-phase-2",
+    "name": "Predicting High Risk Breast Cancer - Phase 2",
+    "headline": "The goal of this Network Inference Challenge is to reverse engineer gene reg...",
+    "headline_alternatives": [
+      "1. AI to identify harmful breast cancers, reduce unnecessary procedures (79 characters)",
+      "2. Algorithms to predict metastatic potential, limit overtreatment (78 characters) ",
+      "3. Using AI on biopsies to distinguish harmful vs harmless cancers (76 characters)",
+      "4. Reducing invasive breast cancer procedures via AI analysis (71 characters)  ",
+      "5. Can AI identify truly dangerous breast cancers? (43 characters)"
+    ]
+  },
+  {
+    "id": 190,
+    "slug": "dream-2-in-silico-network-inference",
+    "name": "DREAM 2 - In Silico Network Inference",
+    "headline": "Identify dates in clinical notes.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 191,
+    "slug": "dream-3-in-silico-network-challenge",
+    "name": "DREAM 3 - In Silico Network Challenge",
+    "headline": "Identify person names in clinical notes.",
+    "headline_alternatives": [
+      "1. Reverse engineer gene networks from steady state & time series data (76 characters)",
+      "2. Predict directed unsigned network topology from in silico gene datasets (79 characters) ",
+      "3. Reconstruct gene networks through reverse engineering of in silico data (77 characters)",
+      "4. Uncover gene network topology from steady state & time series gene data (79 characters)",
+      "5. Infer directed gene network models from simulated steady state & time series data (79 characters)"
+    ]
+  },
+  {
+    "id": 192,
+    "slug": "dream-4-in-silico-network-challenge",
+    "name": "DREAM 4 - In Silico Network Challenge",
+    "headline": "Identify location information in clinical notes.",
+    "headline_alternatives": [
+      "1. Reverse engineer gene networks from simulated data (34 characters)",
+      "2. Infer gene regulation networks from in silico data (43 characters) ",
+      "3. Reconstruct gene networks from steady-state and time-series data (59 characters)",
+      "4. Uncover network structure from simulated gene expression data (59 characters)",
+      "5. Predict network response to novel perturbations from provided data (65 characters)"
+    ]
+  },
+  {
+    "id": 193,
+    "slug": "dream-5-network-inference-challenge",
+    "name": "DREAM 5 - Network Inference Challenge",
+    "headline": "Identify contact information in clinical notes.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 194,
+    "slug": "nlp-sandbox-date-annotation",
+    "name": "NLP Sandbox Date Annotation",
+    "headline": "Identify identifiers in clinical notes.",
+    "headline_alternatives": [
+      "1. Extract dates from clinical notes using NLP",
+      "2. Identify dates in clinical notes with a date annotator ",
+      "3. Build a date extractor for clinical notes",
+      "4. Develop an NLP model to find dates in notes",
+      "5. Annotate dates in clinical text using Sandbox"
+    ]
+  },
+  {
+    "id": 195,
+    "slug": "nlp-sandbox-person-name-annotation",
+    "name": "NLP Sandbox Person Name Annotation",
+    "headline": "Predict BCL6 transcriptomic targets from biological data.",
+    "headline_alternatives": [
+      "1. Predict person names in clinical notes (22 characters)",
+      "2. Annotate person names in clinical text (27 characters) ",
+      "3. Identify person names from clinical notes (32 characters)",
+      "4. Extract person names from clinical documents (37 characters)",
+      "5. Find and label person names in medical records (44 characters)"
+    ]
+  },
+  {
+    "id": 196,
+    "slug": "nlp-sandbox-location-annotation",
+    "name": "NLP Sandbox Location Annotation",
+    "headline": "Predict a protein-protein interaction network of 47 proteins.",
+    "headline_alternatives": [
+      "1. Predict locations in clinical notes (16 characters)",
+      "2. Annotate locations from clinical notes (24 characters) ",
+      "3. Extract locations from clinical text (23 characters)",
+      "4. Identify locations mentioned in notes (26 characters)",
+      "5. Generate location annotations for notes (34 characters)"
+    ]
+  },
+  {
+    "id": 197,
+    "slug": "nlp-sandbox-contact-annotation",
+    "name": "NLP Sandbox Contact Annotation",
+    "headline": "Reconstruct genome-scale networks from microarray data.",
+    "headline_alternatives": [
+      "1. Predict contact annotations in clinical notes (34 characters)",
+      "2. Annotate contacts found in clinical notes (38 characters) ",
+      "3. Identify contacts in clinical notes with NLP (43 characters)",
+      "4. Contact annotation of clinical notes using NLP (50 characters) ",
+      "5. Predict contacts in clinical notes with an NLP annotator (56 characters)"
+    ]
+  },
+  {
+    "id": 198,
+    "slug": "nlp-sandbox-id-annotation",
+    "name": "NLP Sandbox ID Annotation",
+    "headline": "Inferring five-gene networks from synthetic data.",
+    "headline_alternatives": [
+      "1. Predict patient IDs in clinical notes (34 characters)",
+      "2. Annotate clinical notes with patient IDs (39 characters) ",
+      "3. Identify patient IDs in unstructured clinical text (45 characters)",
+      "4. Extract patient identifiers from clinical narratives (56 characters)",
+      "5. Automatically tag patient IDs in doctor's notes (56 characters)"
+    ]
+  },
+  {
+    "id": 199,
+    "slug": "dream-2-bcl6-transcriptomic-target-prediction",
+    "name": "DREAM 2 - BCL6 Transcriptomic Target Prediction",
+    "headline": "Inferring signaling cascade dynamics from flow cytometry data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 200,
+    "slug": "dream-2-protein-protein-interaction-network-inference",
+    "name": "DREAM 2 - Protein-Protein Interaction Network Inference",
+    "headline": "Predicting gene expression from gene datasets.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 201,
+    "slug": "dream-2-genome-scale-network-inference",
+    "name": "DREAM 2 - Genome-Scale Network Inference",
+    "headline": "Cell-type specific high-throughput experimental data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 202,
+    "slug": "dream-2-synthetic-five-gene-network-inference",
+    "name": "DREAM 2 - Synthetic Five-Gene Network Inference",
+    "headline": "Predict missing protein concentrations from a large corpus of measurements.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 203,
+    "slug": "dream-3-signaling-cascade-identification",
+    "name": "DREAM 3 - Signaling Cascade Identification",
+    "headline": "Predict binding specificity of peptide-antibody interactions.",
+    "headline_alternatives": [
+      "1. Inferring signaling cascade dynamics from flow cytometry data (76 characters)",
+      "2. Analyzing signaling cascade topology with incomplete data (77 characters)",
+      "3. Exploring signaling cascade interactions with flow cytometry (77 characters) ",
+      "4. Inferring signaling cascade dynamics and topology (69 characters)",
+      "5. Analyzing signaling cascade properties from flow data (79 characters)"
+    ]
+  },
+  {
+    "id": 204,
+    "slug": "dream-3-gene-expression-prediction",
+    "name": "DREAM 3 - Gene Expression Prediction",
+    "headline": "Predict binding intensities for transcription factors from motifs.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 205,
+    "slug": "dream-4-predictive-signaling-network-modelling",
+    "name": "DREAM 4 - Predictive Signaling Network Modelling",
+    "headline": "Predict the binding specificity of peptide-antibody interactions.",
+    "headline_alternatives": [
+      "1. Create cell-type model of signaling using HepG2 data",
+      "2. Leverage prior knowledge to build HepG2 signaling model ",
+      "3. Build interpretable HepG2 signaling network consistent with data",
+      "4. Can existing signaling knowledge explain HepG2 protein activity?",
+      "5. Evaluate agreement between signaling knowledge and HepG2 data"
+    ]
+  },
+  {
+    "id": 206,
+    "slug": "dream-3-signaling-response-prediction",
+    "name": "DREAM 3 - Signaling Response Prediction",
+    "headline": "Predict gene expression levels from promoter sequences in eukaryotes.",
+    "headline_alternatives": [
+      "1. Predicting cell signaling response in liver cells with phospho-protein and cytokine data (79 characters)",
+      "2. Modeling phospho-protein and cytokine dynamics in normal and cancer liver cells (77 characters) ",
+      "3. Analyzing stimulation effects on signaling in hepatocytes using multi-omics data (79 characters)",
+      "4. Mapping signaling networks in liver cells using phospho-protein and cytokine data (76 characters)",
+      "5. Integrating intracellular and extracellular data to understand liver cell signaling (79 characters)"
+    ]
+  },
+  {
+    "id": 207,
+    "slug": "dream-4-peptide-recognition-domain-prd-specificity-prediction",
+    "name": "DREAM 4 - Peptide Recognition Domain (PRD) Specificity Prediction",
+    "headline": "Predict disease phenotypes and infer gene networks from systems genetics data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 208,
+    "slug": "dream-5-transcription-factor-dna-motif-recognition-challenge",
+    "name": "DREAM 5 - Transcription-Factor, DNA-Motif Recognition Challenge",
+    "headline": "Challenge to estimate model parameters.",
+    "headline_alternatives": [
+      "1. Predict signal intensities for transcription factors binding DNA",
+      "2. Model transcription factor binding to genomic DNA sequences",
+      "3. Infer transcription factor binding motifs from genomic sequences",
+      "4. Quantify transcription factor binding specificities",
+      "5. Estimate transcription factor affinities from sequence motifs"
+    ]
+  },
+  {
+    "id": 209,
+    "slug": "dream-5-epitope-antibody-recognition-ear-challenge",
+    "name": "DREAM 5 - Epitope-Antibody Recognition (EAR) Challenge",
+    "headline": "The goal of this challenge is to diagnose Acute Myeloid Leukemia from patien...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 210,
+    "slug": "dream-gene-expression-prediction-challenge",
+    "name": "DREAM Gene Expression Prediction Challenge",
+    "headline": "Assess accuracy of mRNA-seq alternative splicing reconstruction.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 211,
+    "slug": "dream-5-systems-genetics-challenge",
+    "name": "DREAM 5 - Systems Genetics Challenge",
+    "headline": "A machine learning contest for gene network inference from single-cell pertu...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 212,
+    "slug": "dream-6-estimation-of-model-parameters-challenge",
+    "name": "DREAM 6 - Estimation of Model Parameters Challenge",
+    "headline": "The challenge related to computational geometry and topology for ICLR 2022.",
+    "headline_alternatives": [
+      "1. Estimate parameters and predict outcomes for gene regulation models (79 characters)",
+      "2. Apply optimization to accurately parameterize gene network models (79 characters)",
+      "3. Select informative experiments to parameterize gene regulation models (78 characters) ",
+      "4. Develop methods to predict gene network model perturbations (74 characters)",
+      "5. Optimize estimation of kinetic parameters in gene networks (77 characters)"
+    ]
+  },
+  {
+    "id": 213,
+    "slug": "dream-6-flowcap2-molecular-classification-of-acute-myeloid-leukemia-challenge",
+    "name": "DREAM 6 - FlowCAP2 Molecular Classification of Acute Myeloid Leukemia Challenge",
+    "headline": "Automating Identification of Cell Populations in Flow Cytometry Data",
+    "headline_alternatives": []
+  },
+  {
+    "id": 214,
+    "slug": "dream-6-alternative-splicing-challenge",
+    "name": "DREAM 6 - Alternative Splicing Challenge",
+    "headline": "Compare mRNA-seq methods on primate and rhino transcripts",
+    "headline_alternatives": [
+      "1. Assess accuracy of mRNA-seq transcript reconstruction vs long reads",
+      "2. Compare mRNA-seq to long reads for transcriptome analysis in stem cells ",
+      "3. Evaluate mRNA-seq transcript reconstruction on rhino, mandrill cells",
+      "4. mRNA-seq vs long reads for transcriptomes of stem cells and fibroblasts",
+      "5. Test mRNA-seq transcript reconstruction against long reads across species"
+    ]
+  },
+  {
+    "id": 215,
+    "slug": "causalbench-challenge",
+    "name": "CausalBench Challenge",
+    "headline": "Deriving gene-gene networks to improve causal disease insights",
+    "headline_alternatives": [
+      "1. Mapping gene interactions to advance drug discovery (34 characters)",
+      "2. Deriving gene networks from single-cell data (32 characters) ",
+      "3. Advancing gene network inference for drug discovery (43 characters)",
+      "4. Improving causal insights into biology via gene networks (49 characters)",
+      "5. Machine learning to map gene interactions for drug discovery (56 characters)"
+    ]
+  },
+  {
+    "id": 216,
+    "slug": "iclr-computational-geometry-and-topology-challenge-2022",
+    "name": "ICLR Computational Geometry & Topology Challenge 2022",
+    "headline": "Fostering Geometric Learning: Crowdsourced Algorithms for Reproducible Deep ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 217,
+    "slug": "iclr-computational-geometry-and-topology-challenge-2021",
+    "name": "ICLR Computational Geometry & Topology Challenge 2021",
+    "headline": "Advancing computational geometry and topology with Python",
+    "headline_alternatives": []
+  },
+  {
+    "id": 218,
+    "slug": "genedisco-challenge",
+    "name": "GeneDisco Challenge",
+    "headline": "Exploring experimental design with active learning for genetics",
+    "headline_alternatives": []
+  },
+  {
+    "id": 219,
+    "slug": "hidden-treasures-warm-up",
+    "name": "Hidden Treasures: Warm Up",
+    "headline": "Assess genome sequencing software accuracy with unknown variants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 220,
+    "slug": "data-management-and-graph-extraction-for-large-models-in-the-biomedical-space",
+    "name": "Data management and graph extraction for large models in the biomedical space",
+    "headline": "CMU Libraries & DNAnexus Data Management Hackathon: Advancing Biomedical Kno...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 221,
+    "slug": "cagi2-asthma-twins",
+    "name": "CAGI2: Asthma discordant monozygotic twins",
+    "headline": "Identify genetic differences between asthmatic and healthy twins",
+    "headline_alternatives": [
+      "1. Identify genomic differences between asthmatic and healthy twins with DNA and RNA data (79 characters)",
+      "2. Find genetic causes for asthma discordance in identical twins (77 characters) ",
+      "3. Use genomic and transcriptomic data to understand asthma in twins (65 characters)",
+      "4. Asthma discordance in twins: genetic factors from genome and RNA sequencing (79 characters)",
+      "5. Asthma genetics: genome and transcriptome comparison of asthmatic vs healthy twins (78 characters)"
+    ]
+  },
+  {
+    "id": 222,
+    "slug": "cagi4-bipolar",
+    "name": "CAGI4: Bipolar disorder",
+    "headline": "Predicting bipolar disorder from exome data",
+    "headline_alternatives": [
+      "1. Predicting bipolar disorder from exome data (34 characters)",
+      "2. Identifying bipolar disorder using exome sequencing (49 characters) ",
+      "3. Detecting bipolar disorder with exome data (41 characters)",
+      "4. Classifying bipolar disorder from exomes (41 characters)",
+      "5. Diagnosing bipolar disorder through exome analysis (55 characters)"
+    ]
+  },
+  {
+    "id": 223,
+    "slug": "cagi3-brca",
+    "name": "CAGI3: BRCA1 & BRCA2",
+    "headline": "Assess hereditary cancer risk via BRCA gene analysis",
+    "headline_alternatives": [
+      "1. Develop open access BRCA1/2 mutation test to assess cancer risk (56 characters)",
+      "2. Create non-proprietary hereditary breast/ovarian cancer test (54 characters)  ",
+      "3. New open access test for BRCA mutations and cancer risk (51 characters)",
+      "4. Open source alternative to proprietary BRCA1/2 cancer test (56 characters)",
+      "5. Non-proprietary test to identify BRCA mutations linked to cancer (63 characters)"
+    ]
+  },
+  {
+    "id": 224,
+    "slug": "cagi2-breast-cancer-pkg",
+    "name": "CAGI2: Breast cancer pharmacogenomics",
+    "headline": "Exploring CHEK2 as a candidate gene for cancer susceptibility",
+    "headline_alternatives": [
+      "1. Studying CHEK2 as a cancer susceptibility gene (50 characters)",
+      "2. Examining CHEK2's role in DNA repair and cell cycle regulation (59 characters)",
+      "3. Investigating CHEK2 interactions with BRCA1/TP53 in cancer risk (66 characters) ",
+      "4. Can CHEK2 mutations explain increased cancer susceptibility? (63 characters)",
+      "5. Evaluating CHEK2's function in genome integrity maintenance (63 characters)"
+    ]
+  },
+  {
+    "id": 225,
+    "slug": "cagi4-2eqtl",
+    "name": "CAGI4: eQTL causal SNPs",
+    "headline": "Identify regulatory variants causing gene expression differences",
+    "headline_alternatives": []
+  },
+  {
+    "id": 226,
+    "slug": "cagi1-cbs",
+    "name": "CAGI1: CBS",
+    "headline": "Seeking to understand CBS enzyme function in cysteine production",
+    "headline_alternatives": [
+      "1. Enzyme for cysteine production requires B6 and heme (50 characters)",
+      "2. CBS deficiency causes rare sulfur amino acid disorder (56 characters) ",
+      "3. Studying cofactor dependence of cysteine synthase enzyme (56 characters)",
+      "4. Understanding CBS enzyme function in cysteine biosynthesis (63 characters) ",
+      "5. Modeling effects of CBS mutations in cysteine metabolism (63 characters)"
+    ]
+  },
+  {
+    "id": 227,
+    "slug": "cagi2-cbs",
+    "name": "CAGI2: CBS",
+    "headline": "Developing treatment for homocystinuria caused by CBS deficiency",
+    "headline_alternatives": [
+      "1. Developing treatment for homocystinuria caused by CBS enzyme deficiency (79 characters)",
+      "2. Targeting CBS enzyme requiring B6 & heme to treat homocystinuria (77 characters) ",
+      "3. Treating recessive disease homocystinuria by restoring CBS function (76 characters)",
+      "4. Restoring vitamin-dependent CBS enzyme to treat homocystinuria (74 characters) ",
+      "5. Fixing defective CBS enzyme needing B6 & heme to treat homocystinuria (79 characters)"
+    ]
+  },
+  {
+    "id": 228,
+    "slug": "cagi1-chek2",
+    "name": "CAGI1: CHEK2",
+    "headline": "Variants in the ATM & CHEK2 genes are associated with breast cancer.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 229,
+    "slug": "cagi3-fch",
+    "name": "CAGI3: FCH",
+    "headline": "Seeking to understand genetic basis of common hyperlipidemia disorder",
+    "headline_alternatives": [
+      "1. Identify genetic basis of common hyperlipidemia disorder FCH (76 characters)",
+      "2. Discover genes linked to elevated cholesterol in FCH patients (79 characters) ",
+      "3. Uncover genetic factors contributing to high triglycerides, LDL in FCH (78 characters)",
+      "4. Find genetic variants associated with increased CAD risk in FCH (76 characters)",
+      "5. Determine genetic causes of variable lipid levels in familial hyperlipidemia (79 characters)"
+    ]
+  },
+  {
+    "id": 230,
+    "slug": "cagi3-ha",
+    "name": "CAGI3: HA",
+    "headline": "Raising HDL levels to reduce heart disease risk",
+    "headline_alternatives": [
+      "1. Raising HDL levels to reduce heart disease risk in hypoalphalipoproteinemia (78 characters)",
+      "2. Treating low HDL & APOA1 levels in hypoalphalipoproteinemia patients (77 characters) ",
+      "3. Developing new therapies to increase HDL in hypoalphalipoproteinemia (79 characters)",
+      "4. Targeting low HDL as a risk factor for heart disease in hypoalphalipoproteinemia (79 characters)  ",
+      "5. Improving HDL & APOA1 to lower coronary disease risk in hypoalphalipoproteinemia (78 characters)"
+    ]
+  },
+  {
+    "id": 231,
+    "slug": "cagi2-croshn-s",
+    "name": "CAGI2: Crohn's disease",
+    "headline": "Seeking genes linked to Crohn's, an inflammatory bowel disease",
+    "headline_alternatives": [
+      "1. Seeking genetic causes of Crohn's, an inflammatory bowel disease (78 characters)",
+      "2. Understanding the genetics behind Crohn's disease and GI inflammation (76 characters) ",
+      "3. Investigating the complex genetics of Crohn's disease (44 characters)",
+      "4. Identifying genetic factors in Crohn's disease pathology (56 characters) ",
+      "5. Elucidating the genetics of chronic inflammation in Crohn's disease (63 characters)"
+    ]
+  },
+  {
+    "id": 232,
+    "slug": "cagi3-crohn-s",
+    "name": "CAGI3: Crohn's disease",
+    "headline": "Understanding the genetics behind Crohn's disease",
+    "headline_alternatives": []
+  },
+  {
+    "id": 233,
+    "slug": "cagi4-chron-s-exome",
+    "name": "CAGI4: Crohn's exomes",
+    "headline": "Seeking to understand genetic basis of Crohn's bowel disease",
+    "headline_alternatives": [
+      "1. Seeking genetic causes of Crohn's disease, an inflammatory bowel disorder (77 characters)",
+      "2. Understanding the genetics behind Crohn's disease, a chronic inflammatory bowel disease (76 characters) ",
+      "3. Investigating the complex genetics of Crohn's disease, an inflammatory bowel disorder (75 characters)",
+      "4. Studying the genetics of Crohn's, an inflammatory bowel disease with chronic inflammation (79 characters) ",
+      "5. Exploring the genetic factors in Crohn's disease, a relapsing inflammatory bowel disorder (79 characters)"
+    ]
+  },
+  {
+    "id": 234,
+    "slug": "cagi4-hopkins",
+    "name": "CAGI4: Hopkins clinical panel",
+    "headline": "Exonic sequences of 83 genes linked to 14 diseases analyzed",
+    "headline_alternatives": [
+      "1. Hopkins challenge: Classify exonic sequences into 14 disease types",
+      "2. Hopkins DNA challenge: Categorize 83 gene exonic sequences ",
+      "3. Hopkins exome challenge: Assign sequences to one of 14 diseases",
+      "4. Classify 83 Hopkins gene exonic sequences into diseases",
+      "5. Categorize Hopkins exonic sequences into one of 14 diseases"
+    ]
+  },
+  {
+    "id": 235,
+    "slug": "cagi2-mouse-exomes",
+    "name": "CAGI2: Mouse exomes",
+    "headline": "Predict causative variants from exome sequencing data.",
+    "headline_alternatives": []
+  },
+  {
+    "id": 236,
+    "slug": "cagi3-mrn-mre11",
+    "name": "CAGI3: MRE11",
+    "headline": "Genomes are subject to constant threat by damaging agents that generate DNA",
+    "headline_alternatives": []
+  },
+  {
+    "id": 237,
+    "slug": "cagi4-naglu",
+    "name": "CAGI4: NAGLU",
+    "headline": "Predicting enzymatic activity of NAGLU mutants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 238,
+    "slug": "cagi4-npm-alk",
+    "name": "CAGI4: NPM: ALK",
+    "headline": "Predicting kinase activity of NPM-ALK fusion mutants",
+    "headline_alternatives": [
+      "1. Predict kinase activity and binding of NPM-ALK mutants (78 characters)",
+      "2. Assess impact of mutations on NPM-ALK kinase and binding (77 characters) ",
+      "3. Model effects of NPM-ALK mutations on activity and binding (79 characters)",
+      "4. Quantify NPM-ALK mutant kinase activity and Hsp90 binding (79 characters)",
+      "5. Forecast NPM-ALK mutant kinase function from sequence changes (79 characters)"
+    ]
+  },
+  {
+    "id": 239,
+    "slug": "cagi3-mrn-nbs1",
+    "name": "CAGI3: NBS1",
+    "headline": "Predicting Pathogenicity of Rare MRE11 and NBS1 Variants",
+    "headline_alternatives": []
+  },
+  {
+    "id": 240,
+    "slug": "cagi3-p16",
+    "name": "CAGI3: p16",
+    "headline": "Assessing p16 protein variants' effects on cell growth",
+    "headline_alternatives": []
+  },
+  {
+    "id": 241,
+    "slug": "cagi2-p53",
+    "name": "CAGI2: p53 reactivation",
+    "headline": "Predictors are asked to submit predictions on the effect of the cancer rescue...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 242,
+    "slug": "cagi1-pgp",
+    "name": "CAGI1: PGP",
+    "headline": "CAGI Challenges Utilizing Public Genomic and Phenotypic Data Resources",
+    "headline_alternatives": []
+  },
+  {
+    "id": 243,
+    "slug": "cagi2-pgp",
+    "name": "CAGI2: PGP",
+    "headline": "CAGI Challenges Utilizing Public Genomic and Phenotypic Data Resources",
+    "headline_alternatives": []
+  },
+  {
+    "id": 244,
+    "slug": "cagi3-pgp",
+    "name": "CAGI3: PGP",
+    "headline": "CAGI Challenges Utilizing Public Genomic and Phenotypic Data Resources",
+    "headline_alternatives": [
+      "1. Participants share full data to enable CAGI analysis (52 characters)",
+      "2. CAGI challenges based on participants' shared sequence data (56 characters) ",
+      "3. Participants publicly share data for CAGI challenge analysis (55 characters)",
+      "4. CAGI challenges utilize participants' shared sequence data (57 characters)",
+      "5. Participants make data public for CAGI challenge analysis (59 characters)"
+    ]
+  },
+  {
+    "id": 245,
+    "slug": "cagi4-pgp",
+    "name": "CAGI4: PGP",
+    "headline": "CAGI Challenges Utilizing Public Genomic and Phenotypic Data Resources",
+    "headline_alternatives": []
+  },
+  {
+    "id": 246,
+    "slug": "cagi4-pyruvate-kinase",
+    "name": "CAGI4: Pyruvate kinase",
+    "headline": "Predicting mutation impacts on pyruvate kinase activity and regulation",
+    "headline_alternatives": []
+  },
+  {
+    "id": 247,
+    "slug": "cagi2-rad50",
+    "name": "CAGI2: RAD50",
+    "headline": "Assessing RAD50 variants for breast cancer risk",
+    "headline_alternatives": [
+      "1. Identifying RAD50 variants associated with breast cancer risk (54 characters)",
+      "2. Assessing RAD50 variants for breast cancer susceptibility (59 characters)",
+      "3. Evaluating RAD50 gene variants in breast cancer cases and controls (71 characters) ",
+      "4. Determining if RAD50 variants confer intermediate breast cancer risk (79 characters)",
+      "5. Can RAD50 gene variants help predict breast cancer susceptibility? (76 characters)"
+    ]
+  },
+  {
+    "id": 248,
+    "slug": "cagi2-risksnps",
+    "name": "CAGI2: riskSNPs",
+    "headline": "Exploring molecular mechanisms linking SNPs to disease risk",
+    "headline_alternatives": []
+  },
+  {
+    "id": 249,
+    "slug": "cagi3-risksnps",
+    "name": "CAGI3: riskSNPs",
+    "headline": "Exploring molecular mechanisms linking SNPs to disease risk",
+    "headline_alternatives": []
+  },
+  {
+    "id": 250,
+    "slug": "cagi2-nav1-5",
+    "name": "CAGI2: SCN5A",
+    "headline": "Predictors are asked to submit predictions on the effect of the mutants on t...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 251,
+    "slug": "cagi2-mr-1",
+    "name": "CAGI2: Shewanella oneidensis strain MR-1",
+    "headline": "Shewanella oneidensis strain MR-1 (formerly known as S. putrefaciens) is a m...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 252,
+    "slug": "cagi3-mr-1",
+    "name": "CAGI3: Shewanella oneidensis strain MR-1",
+    "headline": "Shewanella oneidensis strain MR-1 (formerly known as S. putrefaciens) is a m...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 253,
+    "slug": "cagi4-sickkids",
+    "name": "CAGI4: SickKids",
+    "headline": "The challenge presented here is to use computational methods to match each g...",
+    "headline_alternatives": [
+      "1. Predict phenotypes from genome sequences of kids with disorders (79 characters)",
+      "2. Match genome sequences to clinical descriptions for 25 children (77 characters) ",
+      "3. Identify variants predicting genetic disorders from sequences (76 characters)",
+      "4. Infer phenotypes and disease risk from genomic data (74 characters)",
+      "5. Predict traits and disease predispositions from genomes (78 characters)"
+    ]
+  },
+  {
+    "id": 254,
+    "slug": "cagi4-sumo-ligase",
+    "name": "CAGI4: SUMO ligase",
+    "headline": "Participants are asked to submit predictions of the effect of the variants o...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 255,
+    "slug": "cagi3-splicing",
+    "name": "CAGI3: TP53 splicing",
+    "headline": "With the provided data, determine which disease-causing mutations in the TP5...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 256,
+    "slug": "cagi4-warfarin",
+    "name": "CAGI4: Warfarin exomes",
+    "headline": "With the provided exome data and clinical covariates, predict the therapeuti...",
+    "headline_alternatives": [
+      "1. Improve warfarin dosing to reduce adverse events",
+      "2. Seek better warfarin dosing for fewer patient hospitalizations",
+      "3. Find optimal warfarin doses despite high variability  ",
+      "4. Reduce warfarin's adverse events via personalized dosing",
+      "5. Develop improved warfarin dosing given high usage"
+    ]
+  },
+  {
+    "id": 257,
+    "slug": "cagi6-calmodulin",
+    "name": "CAGI6: Calmodulin",
+    "headline": "Participants were asked to submit predictions for the competitive growth sco...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 258,
+    "slug": "cagi2-splicing",
+    "name": "CAGI2: splicing",
+    "headline": "Predictors are asked to compare exons from wild type and disease-associated ...",
+    "headline_alternatives": [
+      "1. Developing methods to improve accuracy of pre-mRNA splicing",
+      "2. Improving understanding of spliceosome assembly for splicing regulation ",
+      "3. Elucidating mechanisms regulating spliceosome assembly on pre-mRNAs",
+      "4. Characterizing spliceosome dynamics during pre-mRNA splicing",
+      "5. Analyzing spliceosome assembly on nascent pre-mRNA introns"
+    ]
+  },
+  {
+    "id": 259,
+    "slug": "cagi6-lc-arsa",
+    "name": "CAGI6: ARSA",
+    "headline": "Predicting the effect of naturally occurring missense mutations on enzymatic...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 260,
+    "slug": "predict-hits-for-the-wdr-domain-of-lrrk2",
+    "name": "CACHE1: Predict Hits for The WDR Domain of LRRK2",
+    "headline": "Finding ligands targeting the central cavity of the WD-40 repeat (WDR) domai...",
+    "headline_alternatives": [
+      "1. Find hits targeting LRRK2 WD40 domain for Parkinson's (56 characters)",
+      "2. Discover compounds binding LRRK2 WDR to treat Parkinson's (64 characters) ",
+      "3. Seek ligands for LRRK2 WD40 to modulate Parkinson's risk (65 characters)",
+      "4. Target LRRK2 WD40 repeats to impact Parkinson's pathogenesis (79 characters) ",
+      "5. Identify small molecules binding LRRK2 WDR domain for Parkinson's (76 characters)"
+    ]
+  },
+  {
+    "id": 261,
+    "slug": "finding-ligands-targeting-the-conserved-rna-binding-site-of-sars-cov-2-nsp13",
+    "name": "CACHE2: Finding Ligands Targeting The Conserved RNA Binding Site of SARS-CoV-2 NSP13",
+    "headline": "Finding ligands targeting the conserved RNA binding site of SARS-CoV-2 NSP13...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 262,
+    "slug": "finding-ligands-targeting-the-macrodomain-of-sars-cov-2-nsp3",
+    "name": "CACHE3: Finding ligands targeting the macrodomain of SARS-CoV-2 Nsp3",
+    "headline": "Studying the macrodomain of Severe acute respiratory syndrome coronavirus 2 ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 263,
+    "slug": "finding-ligands-targeting-the-tkb-domain-of-cblb",
+    "name": "CACHE4: Finding ligands targeting the TKB domain of CBLB",
+    "headline": "Investigating the TKB domain of CBLB, a protein involved in cancer and immun...",
+    "headline_alternatives": [
+      "1. Predict novel compounds binding CBLB TKB domain (76 characters)",
+      "2. Discover new chemical templates binding CBLB protein (69 characters)",
+      "3. Find compounds binding CBLB below 30 micromolar KD (63 characters) ",
+      "4. Model binding of novel ligands to CBLB TKB domain (65 characters)",
+      "5. Predict tight-binding compounds for closed CBLB conformation (79 characters)"
+    ]
+  },
+  {
+    "id": 264,
+    "slug": "rare-disease-ai-hackathon",
+    "name": "Rare Disease AI Hackathon",
+    "headline": "Researchers and medical experts are invited to collaborate on our patient ca...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 265,
+    "slug": "cometh-benchmark",
+    "name": "COMETH Benchmark",
+    "headline": "Quantify tumor heterogeneity\u2014how many cell types are present and in which pr...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 266,
+    "slug": "the-miccai-2014-machine-learning-challenge",
+    "name": "The MICCAI 2014 Machine Learning Challenge",
+    "headline": "Predicting Binary and Continuous Phenotypes from Structural Brain MRI Data i...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 267,
+    "slug": "cagi6-annotate-all-missense",
+    "name": "CAGI6: Annotate All Missense",
+    "headline": "Predictors are asked to predict the functional effect of every coding single...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 268,
+    "slug": "cagi6-hmbs",
+    "name": "CAGI6: HMBS",
+    "headline": "Participants are asked to submit predictions of the fitness score for each o...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 269,
+    "slug": "cagi6-id-panel",
+    "name": "CAGI6: Intellectual Disability Panel",
+    "headline": "In this challenge, predictors are asked to analyze the sequence data for the...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 270,
+    "slug": "cagi6-mapk1",
+    "name": "CAGI6: MAPK1",
+    "headline": "For each variant, participants are asked to predict the \u0394\u0394G(H2O) value for t...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 271,
+    "slug": "cagi6-mapk3",
+    "name": "CAGI6: MAPK3",
+    "headline": "For each variant, participants are asked to predict the \u0394\u0394G(H2O) value for t...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 272,
+    "slug": "cagi6-mthfr",
+    "name": "CAGI6: MTHFR",
+    "headline": "Participants are asked to submit predictions of the fitness score for each m...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 273,
+    "slug": "cagi6-prs",
+    "name": "CAGI6: Polygenic Risk Scores",
+    "headline": "Participants will be expected to provide a fully trained prediction model th...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 274,
+    "slug": "cagi6-rgp",
+    "name": "CAGI6: Rare Genomes Project",
+    "headline": "The prediction challenge involves approximately 30 families. The prediction ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 275,
+    "slug": "cagi6-invitae",
+    "name": "CAGI6: Sherloc clinical classification",
+    "headline": "Over 122,000 coding (missense, silent, frameshift, stop gained, in-frame cod...",
+    "headline_alternatives": [
+      "1. Predict pathogenicity of 122,000 variants for submission to ClinVar by Invitae (79 characters)",
+      "2. Classify 122,000 variants by predicted pathogenicity before submission to ClinVar (79 characters) ",
+      "3. Assess clinical utility of 122,000 variant interpretations before ClinVar submission (78 characters)",
+      "4. Interpret pathogenicity of 122,000 variants spanning clinical effects for ClinVar (79 characters)",
+      "5. Predict effects of 122,000 uncharacterized variants for Invitae's ClinVar submission (80 characters)"
+    ]
+  },
+  {
+    "id": 276,
+    "slug": "cagi6-splicing-vus",
+    "name": "CAGI6: Splicing VUS",
+    "headline": "Predict whether the experimentally validated variants of unknown significanc...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 277,
+    "slug": "cagi6-stk11",
+    "name": "CAGI6: STK11",
+    "headline": "Participants are asked to submit predictions on the impact of the variants l...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 278,
+    "slug": "qbi-hackathon",
+    "name": "QBI hackathon",
+    "headline": "A 48-hour event connecting the Bay Area developer community with scientists ...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 279,
+    "slug": "niddk-central-repository-data-centric-challenge",
+    "name": "NIDDK Central Repository Data-Centric Challenge",
+    "headline": "Enhancing NIDDK datasets for future Artificial Intelligence (AI) application...",
+    "headline_alternatives": []
+  },
+  {
+    "id": 280,
+    "slug": "stanford-ribonanza-rna-folding",
+    "name": "Stanford Ribonanza RNA Folding",
+    "headline": "Pioneering RNA Science: A Path to Programmable Medicine and Scientific Break...",
+    "headline_alternatives": [
+      "1. Harnessing RNA to cure disease and fight climate change",
+      "2. Understanding RNA structure to enable programmable medicine ",
+      "3. Data science key to unraveling RNA for new medicines",
+      "4. Decoding RNA structure for disease cures and biotech advances",
+      "5. RNA manipulation through data science for medicine and biotech"
+    ]
+  },
+  {
+    "id": 281,
+    "slug": "uls23",
+    "name": "Universal Lesion Segmentation '23 Challenge",
+    "headline": "Revolutionizing Lesion Segmentation: Advancements, Challenges, and a Univers...",
+    "headline_alternatives": []
   }
 ]
