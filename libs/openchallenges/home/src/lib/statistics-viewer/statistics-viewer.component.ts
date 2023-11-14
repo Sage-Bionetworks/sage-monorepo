@@ -89,7 +89,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                       style: {
                         text:
                           `*An additional ${res.undatedChallengeCount} challenges ` +
-                          `without start dates are not displayed in the plot`,
+                          `without known start dates are not displayed.`,
                         fill: '#888',
                         fontSize: '1em',
                       },
