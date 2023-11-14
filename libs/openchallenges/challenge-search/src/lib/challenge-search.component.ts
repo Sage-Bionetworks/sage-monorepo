@@ -231,7 +231,7 @@ export class ChallengeSearchComponent
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({ pageSize: 1000 })
+      .listChallenges({ pageSize: 1, pageNumber: 0 })
       .subscribe((page) => {
         this.totalChallengesCount = page.totalElements;
 
