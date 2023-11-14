@@ -26,6 +26,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
   private chartDataSubscription: Subscription | undefined;
 
   chartOptions!: EChartsOption;
+  undatedChallengeCount = 0;
 
   ngOnInit() {
     // update plot's data
@@ -90,8 +91,9 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                           `*An additional ${res.undatedChallengeCount} challenges ` +
                           `without start dates are not displayed in the plot`,
                         fill: '#888',
+                        fontSize: '1em',
                       },
-                      left: 'center',
+                      left: '25%',
                       bottom: 5,
                     },
                   ],
