@@ -6,8 +6,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
-security:
-  - bearerAuth: []
 info:
   title: Schematic REST API
   version: 0.1.0
