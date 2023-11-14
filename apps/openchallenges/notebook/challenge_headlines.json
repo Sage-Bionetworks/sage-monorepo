@@ -11,7 +11,13 @@
     "slug": "breast-cancer-prognosis",
     "name": "Breast Cancer Prognosis",
     "headline": "Predict breast cancer survival from clinical and genomic data for Breast Can...",
-    "headline_alternatives": []
+    "headline_alternatives": [
+      "1. Assess models predicting breast cancer survival from tumor and molecular data (79 characters)",
+      "2. Evaluate breast cancer prognosis predictions from clinical and genomic profiles (78 characters)",
+      "3. Test computational models forecasting breast cancer patient survival (76 characters) ",
+      "4. Can models accurately predict breast cancer prognosis from tumor/gene data? (79 characters)",
+      "5. Judging accuracy of breast cancer survival predictions from patient data (79 characters)"
+    ]
   },
   {
     "id": 3,
@@ -25,166 +31,19 @@
     "slug": "drug-sensitivity-and-drug-synergy-prediction",
     "name": "Drug Sensitivity and Drug Synergy Prediction",
     "headline": "Revolutionizing Cancer Therapeutics: Predicting Drug Sensitivity in Human Ce...",
-    "headline_alternatives": [
-      "1. Seeking computational methods to predict chemotherapeutic response from cancer cell line data (98 characters)",
-      "2. Develop models predicting drug response in cancer using cell line genomic profiles (93 characters) ",
-      "3. Improve cancer treatment by modeling drug sensitivity from cell line data (84 characters)",
-      "4. Identify chemotherapeutic response using computational analysis of cell lines (95 characters)",
-      "5. Create new ways to predict best cancer drugs from cell line experiments (97 characters)"
-    ]
+    "headline_alternatives": []
   },
   {
     "id": 5,
     "slug": "niehs-ncats-unc-toxicogenetics",
     "name": "NIEHS-NCATS-UNC Toxicogenetics",
     "headline": "Predicting cytotoxicity from genomic and chemical data for NIEHS-NCATS-UNC T...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 6,
-    "slug": "whole-cell-parameter-estimation",
-    "name": "Whole-Cell Parameter Estimation",
-    "headline": "Seeking innovative parameter estimation methods for large models for Whole-C...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 7,
-    "slug": "hpn-dream-breast-cancer-network-inference",
-    "name": "HPN-DREAM Breast Cancer Network Inference",
-    "headline": "Inferring causal signaling networks in breast cancer for HPN-DREAM Breast Ca...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 8,
-    "slug": "rheumatoid-arthritis-responder",
-    "name": "Rheumatoid Arthritis Responder",
-    "headline": "Unlocking Anti-TNF Response Predictors: A Crowdsourced Breakthrough in RA Th...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 9,
-    "slug": "icgc-tcga-dream-mutation-calling",
-    "name": "ICGC-TCGA DREAM Mutation Calling",
-    "headline": "Crowdsourcing Challenge Seeks to Improve Cancer Mutation Detection for ICGC-...",
     "headline_alternatives": [
-      "1. Global contest to advance cancer mutation detection in genome sequences. (100 characters)",
-      "2. International competition to improve identification of cancer mutations from DNA data. (99 characters) ",
-      "3. Worldwide effort to enhance techniques for finding cancer mutations in genomes. (97 characters)",
-      "4. Open challenge to progress methods for detecting genomic changes linked to cancer. (95 characters)",
-      "5. Crowdsourced contest pushing innovation in cancer genomics analysis methods. (99 characters)"
-    ]
-  },
-  {
-    "id": 10,
-    "slug": "acute-myeloid-leukemia-outcome-prediction",
-    "name": "Acute Myeloid Leukemia Outcome Prediction",
-    "headline": "Uncover drivers of AML using clinical and proteomic data for Acute Myeloid L...",
-    "headline_alternatives": [
-      "1. Uncover drivers of AML using clinical, genomic, and proteomic data for 271 AML patients. (99 characters)",
-      "2. Interpret rich AML dataset to predict outcomes and tailor therapies for leukemia patients. (91 characters)",
-      "3. Leverage clinical, mutation, and protein data to understand AML biology and improve patient care. (99 characters) ",
-      "4. Analyze proteomic profiles of 271 AML patients to uncover disease drivers and inform treatment. (99 characters)",
-      "5. Harness multi-omics AML data to accelerate leukemia drug development and precision medicine. (97 characters)"
-    ]
-  },
-  {
-    "id": 11,
-    "slug": "broad-dream-gene-essentiality-prediction",
-    "name": "Broad-DREAM Gene Essentiality Prediction",
-    "headline": "Crowdsourcing Models to Predict Cancer Cell Gene Dependencies for Broad-DREA...",
-    "headline_alternatives": [
-      "1. Crowdsourcing models to predict essential cancer genes from cell features (82 characters)",
-      "2. Inferring cancer cell gene dependencies from genomic biomarkers (76 characters)",
-      "3. Modeling cancer cell viability using gene expression and mutations (71 characters) ",
-      "4. Predicting essential genes in cancer cells via crowdsourcing (69 characters)",
-      "5. Crowd-based models to find key cancer genes and biomarkers (69 characters)"
-    ]
-  },
-  {
-    "id": 12,
-    "slug": "alzheimers-disease-big-data",
-    "name": "Alzheimer's Disease Big Data",
-    "headline": "Seeking Accurate Predictive Biomarkers for Alzheimer's Diagnosis for Alzheim...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 13,
-    "slug": "olfaction-prediction",
-    "name": "Olfaction Prediction",
-    "headline": "Predicting smell from molecule features for Olfaction Prediction",
-    "headline_alternatives": [
-      "1. Predicting odor from molecular features to understand smell perception (82 characters)",
-      "2. Linking molecular properties to odor for fragrance design breakthroughs (91 characters)",
-      "3. Modeling how molecules' features relate to smell to advance fragrance creation (99 characters) ",
-      "4. Connecting chemical qualities to odor perception, accelerating fragrance development (93 characters)",
-      "5. Understanding smell from molecules, enabling faster fragrance ingredient discovery (97 characters)"
-    ]
-  },
-  {
-    "id": 14,
-    "slug": "prostate-cancer",
-    "name": "Prostate Cancer",
-    "headline": "Predict survival of docetaxel treatment in mCRPC patients for Prostate Cancer",
-    "headline_alternatives": []
-  },
-  {
-    "id": 15,
-    "slug": "als-stratification-prize4life",
-    "name": "ALS Stratification Prize4Life",
-    "headline": "Advancing ALS Treatment: Predicting Disease Progression and Survival with Data.",
-    "headline_alternatives": []
-  },
-  {
-    "id": 16,
-    "slug": "astrazeneca-sanger-drug-combination-prediction",
-    "name": "AstraZeneca-Sanger Drug Combination Prediction",
-    "headline": "Predict effective drug combinations using genomic data for AstraZeneca-Sange...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 17,
-    "slug": "smc-dna-meta",
-    "name": "SMC-DNA Meta",
-    "headline": "Seeking Most Accurate Somatic Mutation Detection Pipeline for SMC-DNA Meta",
-    "headline_alternatives": [
-      "1. Seeking most accurate pipeline for detecting cancer mutations from callers",
-      "2. Establishing state-of-the-art in somatic mutation detection from predictors ",
-      "3. Identifying best meta-pipeline for somatic mutation calls from variants",
-      "4. Understanding complementarity of algorithms for cancer mutation detection",
-      "5. Highlighting advantages and deficiencies of somatic mutation callers"
-    ]
-  },
-  {
-    "id": 18,
-    "slug": "smc-het",
-    "name": "SMC-Het",
-    "headline": "Crowdsourcing Challenge to Improve Tumor Subclonal Reconstruction for SMC-Het",
-    "headline_alternatives": [
-      "1. Crowdsourcing challenge to improve subclonal reconstruction from tumor sequencing data. (99 characters)",
-      "2. Open challenge to advance quantification and genotyping of tumor subclones. (87 characters)",
-      "3. International effort to enhance tumor heterogeneity profiling from sequencing. (97 characters)",
-      "4. Collaborative challenge to progress tumor subclonal reconstruction methods. (97 characters) ",
-      "5. Crowdsourcing tumor heterogeneity profiling through subclonal reconstruction. (99 characters)"
-    ]
-  },
-  {
-    "id": 19,
-    "slug": "respiratory-viral",
-    "name": "Respiratory Viral",
-    "headline": "Unraveling Viral Susceptibility: Early Predictors of Respiratory Infection a...",
-    "headline_alternatives": []
-  },
-  {
-    "id": 20,
-    "slug": "disease-module-identification",
-    "name": "Disease Module Identification",
-    "headline": "Crowdsourcing challenge to find disease modules in genomic networks for Dise...",
-    "headline_alternatives": [
-      "1. Assessing module identification methods on genomic networks to find disease pathways (84 characters)",
-      "2. Discovering novel modules and pathways in genomic networks related to complex diseases (91 characters)",
-      "3. Leveraging crowdsourcing to identify disease modules in genomic networks (88 characters) ",
-      "4. Community effort to evaluate module identification in genomic networks for disease (93 characters)",
-      "5. Finding disease pathways by assessing module identification methods on genomic networks (97 characters)"
+      "1. Predict cytotoxicity from genomic and chemical data",
+      "2. Model cytotoxicity responses to toxicants using genetics",
+      "3. Forecast cytotoxic effects of drugs with AI models  ",
+      "4. Estimate cytotoxicity in cell lines via compound structures",
+      "5. AI to predict cytotoxicity from genomes and chemicals"
     ]
   }
 ]

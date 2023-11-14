@@ -80,11 +80,11 @@ textgen_llm = Bedrock(
 
 def generate_challenge_headlines(text, num_headlines):
     prompt = (
-        f"Please generate {num_headlines} headlines that have less than 100 characters from the "
-        "following challenge description. The headlines must summarize the goal of the challenge. "
-        "The headlines must not include the name of the challenge. "
-        "The headlines must reads naturally and effectively communicates the topic of the page "
-        "content. "
+        f"Please generate {num_headlines} headlines that have less than 80 characters from the "
+        "following challenge description. "
+        "The headlines must summarize the goal of the challenge. "
+        # "The headlines must not include the name of the challenge. "
+        "The headlines must reads naturally. "
         f"Description: \n{text}"
     )
     response = Bedrock(
@@ -121,7 +121,7 @@ def process_challenge(challenge):
     return obj
 
 
-challenge_headlines = list(map(process_challenge, challenges[:20]))
+challenge_headlines = list(map(process_challenge, challenges[:5]))
 
 
 # SAVE OUTPUT TO FILE
