@@ -13,7 +13,7 @@ The portal is built entirely in **R** and **Shiny** using the **RStudio** develo
 
 ### Requirements
 
-- R: https://www.r-project.org/ - v4.0+
+- R: https://www.r-project.org/ - v4.2+
 
 - RStudio: https://rstudio.com/products/rstudio/download
 
