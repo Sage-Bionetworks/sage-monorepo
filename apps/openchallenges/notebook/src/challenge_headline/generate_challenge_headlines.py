@@ -84,7 +84,7 @@ def generate_challenge_headlines(text, num_headlines):
         "following challenge description. "
         "The headlines must summarize the goal of the challenge. "
         # "The headlines must not include the name of the challenge. "
-        "The headlines must reads naturally. "
+        "The headlines must read naturally. "
         f"Description: \n{text}"
     )
     response = Bedrock(
