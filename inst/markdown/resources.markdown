@@ -70,7 +70,7 @@ Workflows for characterization of immune environment in cancer
 + [Upadhaya et al. Immuno-oncology drug development forges on despite COVID-19. Nat Rev Drug Discov. 2020 Nov;19(11):751-752](https://www.nature.com/articles/d41573-020-00166-1)
 
 ## Organizations
-Organizations contributing to iAtlas
+Organizations contributing to CRI iAtlas
 
 + **Cancer Research Institute:** http://cancerresearch.org
 + **Sage Bionetworks:** http://www.sagebionetworks.org
