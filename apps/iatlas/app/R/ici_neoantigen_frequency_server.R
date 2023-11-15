@@ -56,8 +56,8 @@ ici_neoantigen_frequency_server <- function(
                                  plot.margin = unit(c(1, 0.5, 0, 0), "cm")
                                )+
                                labs(
-                                 y = "Number of patients with pMHC",
-                                 x = "Frequency of pMHC")
+                                 y = "Number of patients with peptide-MHC",
+                                 x = "Peptide-MHCs ordered by frequency")
 
 
             if(sum(dataset_df$highlight) != 0) p <- p + geom_point(data=subset(dataset_df, highlight==1), color="black", shape = "diamond", size=4)
