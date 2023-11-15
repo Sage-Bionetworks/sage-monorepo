@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class InvalidOrganizationExceptionTest {
 
   @Test
-  public void InvalidOrganizationException_ShouldReturnExceptionObject_WhenDetailIsPassed() {
+  public void InvalidOrganizationException_ShouldReturnExceptionObject_WhenDetailKeyIsPassed() {
     // Set up the input detail
     String detail = "Errordetail";
 
