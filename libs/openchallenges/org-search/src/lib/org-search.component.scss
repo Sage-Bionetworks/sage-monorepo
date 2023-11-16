@@ -1,3 +1,5 @@
+@use 'libs/openchallenges/styles/src/lib/constants';
+
 #title {
   padding: 70px 0 32px;
   align-items: center;
@@ -38,4 +40,13 @@
 ::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
   padding-top: 0;
   padding-bottom: 0;
+}
+::ng-deep .p-multiselect.p-component {
+  max-width: 200px;
+}
+
+@media screen and (max-width: constants.$md-breakpoint) {
+  ::ng-deep .p-multiselect.p-component {
+    max-width: none;
+  }
 }
