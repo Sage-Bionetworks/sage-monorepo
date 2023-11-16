@@ -14,10 +14,10 @@ public class ChallengeAnalyticsService {
     List<String> years =
         Arrays.asList(
             "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017",
-            "2018", "2019", "2020", "2021", "2022", "2023");
+            "2018", "2019", "2020", "2021", "2022", "2023", "2024");
     List<Integer> challengeCounts =
-        Arrays.asList(5, 8, 12, 16, 21, 27, 31, 38, 45, 54, 80, 91, 110, 129, 177, 203, 226);
-    Integer undatedChallengeCount = 50;
+        Arrays.asList(6, 9, 13, 17, 23, 29, 34, 41, 49, 59, 86, 97, 116, 135, 183, 242, 301, 302);
+    Integer undatedChallengeCount = 160;
 
     return ChallengesPerYearDto.builder()
         .years(years)
