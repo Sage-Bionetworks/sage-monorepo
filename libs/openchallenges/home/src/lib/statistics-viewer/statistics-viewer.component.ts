@@ -87,7 +87,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                       type: 'text',
                       style: {
                         text:
-                          `*The OC database includes additional ${res.undatedChallengeCount} challenges ` +
+                          `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
                           `without known start dates.`,
                         fill: '#888',
                         fontSize: '1em',
