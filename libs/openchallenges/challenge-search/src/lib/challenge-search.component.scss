@@ -45,9 +45,12 @@
   padding-top: 0;
   padding-bottom: 0;
 }
+::ng-deep .p-multiselect.p-component {
+  max-width: 200px;
+}
 
-@media screen and (min-width: constants.$md-breakpoint) {
+@media screen and (max-width: constants.$md-breakpoint) {
   ::ng-deep .p-multiselect.p-component {
-    max-width: 200px;
+    max-width: none;
   }
 }
