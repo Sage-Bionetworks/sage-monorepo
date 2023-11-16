@@ -7,6 +7,8 @@ get:
   summary: Gets the asset view table in json form
   description: Gets the asset view table in json form
   operationId: getAssetViewJson
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

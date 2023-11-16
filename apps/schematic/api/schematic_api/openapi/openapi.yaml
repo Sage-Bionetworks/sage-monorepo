@@ -12,8 +12,6 @@ info:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
 - url: http://localhost/api/v1
-security:
-- bearerAuth: []
 tags:
 - description: Operations about storages.
   name: Storage
@@ -79,6 +77,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets the asset view table in json form
       tags:
       - Storage
@@ -144,6 +144,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets all storage projects the current user has access to.
       tags:
       - Storage
@@ -234,6 +236,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets all files associated with a dataset.
       tags:
       - Storage
@@ -307,6 +311,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets the manifest in json form
       tags:
       - Storage
@@ -370,6 +376,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets the manifest in json form
       tags:
       - Storage
@@ -444,6 +452,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets all datasets in folder under a given storage project that the
         current user has access to.
       tags:
@@ -519,6 +529,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Gets all manifests in a project folder that users have access to
       tags:
       - Storage
@@ -1026,6 +1038,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: "Validates manifest in csv form, then submits it"
       tags:
       - ManifestValidation
@@ -1153,6 +1167,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: "Validates a manifest in json form, then submits it"
       tags:
       - ManifestValidation
@@ -1312,6 +1328,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Validates a manifest in csv form
       tags:
       - ManifestValidation

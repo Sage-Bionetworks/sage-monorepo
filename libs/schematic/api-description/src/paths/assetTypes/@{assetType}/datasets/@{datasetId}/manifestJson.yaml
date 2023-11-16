@@ -9,6 +9,8 @@ get:
   operationId: getDatasetManifestJson
   parameters:
     - $ref: ../../../../../components/parameters/query/assetViewIdQuery.yaml
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

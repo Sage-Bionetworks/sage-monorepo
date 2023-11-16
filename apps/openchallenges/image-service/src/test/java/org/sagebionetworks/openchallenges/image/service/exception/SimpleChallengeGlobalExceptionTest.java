@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 public class SimpleChallengeGlobalExceptionTest {
 
   @Test
-  public void SimpleChallengeGlobalException_ConstructorDetailsShouldMatch() {
+  public void SimpleChallengeGlobalException_ShouldReturnMessage_WhenMessageKeyIsPassed() {
     // Create an instance of SimpleChallengeGlobalException using the constructor with details
     String details = "Something went wrong";
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(details);
@@ -19,7 +19,7 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ConstructorTypeShouldMatch() {
+  public void SimpleChallengeGlobalException_ShouldReturnType_WhenTypeKeyIsPassed() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";
@@ -35,7 +35,7 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ConstructorTitleShouldMatch() {
+  public void SimpleChallengeGlobalException_ShouldReturnTitle_WhenTitleKeyIsPassed() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";
@@ -51,7 +51,7 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ConstructorStatusShouldMatch() {
+  public void SimpleChallengeGlobalException_ShouldReturnStatus_WhenStatusKeyIsPassed() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";

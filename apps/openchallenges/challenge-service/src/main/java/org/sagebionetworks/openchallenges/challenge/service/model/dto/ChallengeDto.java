@@ -121,7 +121,7 @@ public class ChallengeDto {
    */
   @NotNull
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 60)
+  @Size(min = 3, max = 255)
   @Schema(
       name = "slug",
       example = "awesome-challenge",
@@ -146,7 +146,7 @@ public class ChallengeDto {
    * @return name
    */
   @NotNull
-  @Size(min = 3, max = 60)
+  @Size(min = 3, max = 255)
   @Schema(name = "name", description = "The name of the challenge.", required = true)
   public String getName() {
     return name;
@@ -191,7 +191,7 @@ public class ChallengeDto {
    * @return description
    */
   @NotNull
-  @Size(min = 0, max = 280)
+  @Size(min = 0, max = 1000)
   @Schema(
       name = "description",
       example = "This is an example description of the challenge.",
