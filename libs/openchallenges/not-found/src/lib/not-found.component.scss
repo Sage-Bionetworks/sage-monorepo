@@ -10,6 +10,9 @@
   align-items: center;
   min-height: calc(100vh - constants.$navbar-height);
 }
+.err-message {
+  padding-top:100px;
+}
 .btn-group {
   margin-top: 48px;
 
