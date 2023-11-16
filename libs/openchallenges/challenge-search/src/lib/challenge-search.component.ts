@@ -231,8 +231,13 @@ export class ChallengeSearchComponent
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({})
-      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
+      .listChallenges({ pageSize: 1, pageNumber: 0 })
+      .subscribe((page) => {
+        this.totalChallengesCount = page.totalElements;
+
+        // const num = page.challenges.filter((c) => c.startDate !== null).length;
+        // console.log(num);
+      });
 
     // update platform filter values
     this.challengeSearchDataService
