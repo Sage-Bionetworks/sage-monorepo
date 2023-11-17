@@ -18,5 +18,6 @@ public class InvalidOrganizationExceptionTest {
     assertThat(exception.getDetail()).isEqualTo(detail);
     assertThat(exception.getType()).isEqualTo(ErrorConstants.ENTITY_NOT_FOUND.getType());
     assertThat(exception.getStatus()).isEqualTo(ErrorConstants.ENTITY_NOT_FOUND.getStatus());
+    assertThat(exception.getTitle()).isEqualTo(ErrorConstants.ENTITY_NOT_FOUND.getTitle());
   }
 }

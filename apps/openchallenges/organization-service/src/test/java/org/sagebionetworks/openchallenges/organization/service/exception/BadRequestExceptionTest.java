@@ -18,5 +18,6 @@ public class BadRequestExceptionTest {
     assertThat(exception.getStatus()).isEqualTo(ErrorConstants.BAD_REQUEST.getStatus());
     assertThat(exception.getDetail()).isEqualTo(detail);
     assertThat(exception.getType()).isEqualTo(ErrorConstants.BAD_REQUEST.getType());
+    assertThat(exception.getTitle()).isEqualTo(ErrorConstants.BAD_REQUEST.getTitle());
   }
 }
