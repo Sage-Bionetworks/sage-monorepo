@@ -31,75 +31,71 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
     // update plot's data
     this.chartDataSubscription = this.homeDataService
       .getChallengesPerYear()
-      .subscribe(
-        (res) =>
-          (this.chartOptions = {
-            textStyle: {
-              fontWeight: 'normal',
-              fontFamily: 'Lato, sans-serif',
-              color: '#000',
-            },
-            // title: {
-            //   text: 'The Rise of Challenges',
-            //   left: 'center',
-            // },
-            // tooltip: {
-            //   trigger: 'axis',
-            //   axisPointer: {
-            //     type: 'cross',
-            //   },
-            // },
-            xAxis: {
-              type: 'category',
-              data: res.years,
+      .subscribe((res) => {
+        const currentYear = new Date().getFullYear();
+        const futureYearIndex = res.years.findIndex(
+          (year) => +year > currentYear
+        );
+        res.years.splice(futureYearIndex);
+        res.challengeCounts.splice(futureYearIndex);
+
+        this.chartOptions = {
+          textStyle: {
+            fontWeight: 'normal',
+            fontFamily: 'Lato, sans-serif',
+            color: '#000',
+          },
+          xAxis: {
+            type: 'category',
+            data: res.years,
+            axisLabel: { fontSize: '1em' },
+          },
+          yAxis: [
+            {
+              type: 'value',
+              name: '',
               axisLabel: { fontSize: '1em' },
+              nameTextStyle: {
+                fontSize: '1.1em',
+                lineHeight: 56,
+              },
             },
-            yAxis: [
-              {
-                type: 'value',
-                name: '',
-                axisLabel: { fontSize: '1em' },
-                nameTextStyle: {
-                  fontSize: '1.1em',
-                  lineHeight: 56,
-                },
+          ],
+          series: [
+            {
+              name: 'Total challenges',
+              data: res.challengeCounts,
+              type: 'bar',
+              itemStyle: {
+                color: '#afa0fe',
               },
-            ],
-            series: [
-              {
-                name: 'Total challenges',
-                data: res.challengeCounts,
-                type: 'bar',
-                itemStyle: {
-                  color: '#afa0fe',
-                },
-                // disable default clicking
-                silent: true,
-                // make bar plot rise from left to right
-                // instead of rising all together in the same time
-                animationDelay: (dataIndex: number) => dataIndex * 100,
-              },
-            ],
-            graphic: res.undatedChallengeCount
-              ? {
-                  elements: [
-                    {
-                      type: 'text',
-                      style: {
-                        text:
-                          `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
-                          `without known start dates.`,
-                        fill: '#888',
-                        fontSize: '1em',
-                      },
-                      left: '25%',
-                      bottom: 5,
+              // disable default clicking
+              silent: true,
+              // make bar plot rise from left to right
+              // instead of rising all together in the same time
+              animationDelay: (dataIndex: number) => dataIndex * 100,
+            },
+          ],
+          graphic: res.undatedChallengeCount
+            ? {
+                elements: [
+                  {
+                    type: 'text',
+                    style: {
+                      text:
+                        `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
+                        `without known start dates.`,
+                      fill: '#888',
+                      fontSize: '1em',
                     },
-                  ],
-                }
-              : undefined,
-          })
-      );
+                    left: '25%',
+                    bottom: 5,
+                  },
+                ],
+              }
+            : undefined,
+        };
+      });
   }
 
   // this.challengeService
