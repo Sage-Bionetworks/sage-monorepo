@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { HomeDataService } from '../home-data-service';
 import { NgxEchartsModule, NGX_ECHARTS_CONFIG } from 'ngx-echarts';
-import { EChartsOption, SeriesOption } from 'echarts';
+import { EChartsOption } from 'echarts';
 import { CountUpModule } from 'ngx-countup';
 import { Subscription } from 'rxjs';
 import { RouterModule } from '@angular/router';
@@ -31,124 +31,75 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
     // update plot's data
     this.chartDataSubscription = this.homeDataService
       .getChallengesPerYear()
-      .subscribe((res) => {
-        this.chartOptions = {
-          textStyle: {
-            fontWeight: 'normal',
-            fontFamily: 'Lato, sans-serif',
-            color: '#000',
-          },
-          // title: {
-          //   text: 'The Rise of Challenges',
-          //   left: 'center',
-          // },
-          // tooltip: {
-          //   trigger: 'axis',
-          //   axisPointer: {
-          //     type: 'cross',
-          //   },
-          // },
-          xAxis: {
-            type: 'category',
-            data: res.years,
-            axisLabel: { fontSize: '1em' },
-          },
-          yAxis: [
-            {
-              type: 'value',
-              name: '',
+      .subscribe(
+        (res) =>
+          (this.chartOptions = {
+            textStyle: {
+              fontWeight: 'normal',
+              fontFamily: 'Lato, sans-serif',
+              color: '#000',
+            },
+            // title: {
+            //   text: 'The Rise of Challenges',
+            //   left: 'center',
+            // },
+            // tooltip: {
+            //   trigger: 'axis',
+            //   axisPointer: {
+            //     type: 'cross',
+            //   },
+            // },
+            xAxis: {
+              type: 'category',
+              data: res.years,
               axisLabel: { fontSize: '1em' },
-              nameTextStyle: {
-                fontSize: '1.1em',
-                lineHeight: 56,
-              },
             },
-          ],
-          series: [
-            {
-              name: 'Total challenges',
-              data: res.challengeCounts.map((count, index) => ({
-                value: count,
-                itemStyle:
-                  +res.years[index] >= 2024
-                    ? {
-                        color: '#afa0fe',
-                        borderType: 'dashed',
-                        borderWidth: 2,
-                        borderColor: '#afa0fe',
-                        opacity: 0.3,
-                      }
-                    : {
-                        color: '#afa0fe',
-                      },
-              })),
-              type: 'bar',
-              itemStyle: {
-                color: '#afa0fe',
-              },
-              // disable default clicking
-              silent: true,
-              // make bar plot rise from left to right
-              // instead of rising all together in the same time
-              animationDelay: (dataIndex: number) => dataIndex * 100,
-            },
-          ],
-          graphic: res.undatedChallengeCount
-            ? {
-                elements: [
-                  {
-                    type: 'text',
-                    style: {
-                      text:
-                        `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
-                        `without known start dates.`,
-                      fill: '#888',
-                      fontSize: '1em',
-                    },
-                    left: '25%',
-                    bottom: 5,
-                  },
-                ],
-              }
-            : undefined,
-        };
-
-        const delayFor2023 = res.years.indexOf('2023') * 100;
-        setTimeout(() => {
-          const updatedSeries = (
-            Array.isArray(this.chartOptions.series)
-              ? [...this.chartOptions.series]
-              : [this.chartOptions.series || {}]
-          ) as SeriesOption[];
-
-          // Check if the first series exists and is a bar series before adding markPoint
-          if (updatedSeries[0] && updatedSeries[0].type === 'bar') {
-            updatedSeries[0].markPoint = {
-              symbol: 'pin',
-              symbolSize: 14,
-              symbolOffset: [0, '-25%'],
-              label: {
-                show: true,
-                position: 'top',
-                formatter: '{b}',
-                fontSize: '1em',
-              },
-              data: [
-                {
-                  name: 'OC launched',
-                  xAxis: '2023',
-                  yAxis: res.challengeCounts[res.years.indexOf('2023')],
+            yAxis: [
+              {
+                type: 'value',
+                name: '',
+                axisLabel: { fontSize: '1em' },
+                nameTextStyle: {
+                  fontSize: '1.1em',
+                  lineHeight: 56,
                 },
-              ],
-              itemStyle: {
-                color: 'red',
               },
-              silent: true,
-            };
-          }
-          this.chartOptions = { ...this.chartOptions, series: updatedSeries };
-        }, delayFor2023);
-      });
+            ],
+            series: [
+              {
+                name: 'Total challenges',
+                data: res.challengeCounts,
+                type: 'bar',
+                itemStyle: {
+                  color: '#afa0fe',
+                },
+                // disable default clicking
+                silent: true,
+                // make bar plot rise from left to right
+                // instead of rising all together in the same time
+                animationDelay: (dataIndex: number) => dataIndex * 100,
+              },
+            ],
+            graphic: res.undatedChallengeCount
+              ? {
+                  elements: [
+                    {
+                      type: 'text',
+                      style: {
+                        text:
+                          `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
+                          `without known start dates.`,
+                        fill: '#888',
+                        fontSize: '1em',
+                      },
+                      left: '25%',
+                      bottom: 5,
+                    },
+                  ],
+                }
+              : undefined,
+          })
+      );
   }
 
   // this.challengeService
