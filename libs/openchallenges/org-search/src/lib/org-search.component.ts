@@ -278,6 +278,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onParamChange(filteredQuery: any): void {
+    // reset pagination settings when filters change
+    if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
+      filteredQuery.pageNumber = this.defaultPageNumber;
+      filteredQuery.pageSize = this.defaultPageSize;
+    }
     // update params of URL
     const currentParams = new HttpParams({
       fromString: this._location.path().split('?')[1] ?? '',

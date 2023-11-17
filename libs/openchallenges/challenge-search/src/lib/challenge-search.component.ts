@@ -343,6 +343,10 @@ export class ChallengeSearchComponent
   }
 
   onParamChange(filteredQuery: any): void {
+    if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
+      filteredQuery.pageNumber = this.defaultPageNumber;
+      filteredQuery.pageSize = this.defaultPageSize;
+    }
     // update params of URL
     const currentParams = new HttpParams({
       fromString: this._location.path().split('?')[1] ?? '',
