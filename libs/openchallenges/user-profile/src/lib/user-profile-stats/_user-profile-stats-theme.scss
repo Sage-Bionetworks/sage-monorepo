@@ -7,18 +7,6 @@
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
-  $shadow: rgba(196, 196, 196, 1);
-  $light-bg: white;
-
-  .stat-item {
-    border-color: $shadow;
-    background-color: $light-bg;
-  }
-  .action-btn {
-    color: white;
-    border-color: transparent;
-    background-color: map.get($figma, dl-color-default-secondary1);
-  }
 }
 
 @mixin typography($theme) { 
