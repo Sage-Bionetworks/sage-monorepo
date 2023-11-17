@@ -70,24 +70,24 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
-            graphic: res.undatedChallengeCount
-              ? {
-                  elements: [
-                    {
-                      type: 'text',
-                      style: {
-                        text:
-                          `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
-                          `without known start dates.`,
-                        fill: '#888',
-                        fontSize: '1em',
-                      },
-                      left: '25%',
-                      bottom: 5,
-                    },
-                  ],
-                }
-              : undefined,
+            // graphic: res.undatedChallengeCount
+            //   ? {
+            //       elements: [
+            //         {
+            //           type: 'text',
+            //           style: {
+            //             text:
+            //               `*The OC database includes an additional ${res.undatedChallengeCount} challenges ` +
+            //               `without known start dates.`,
+            //             fill: '#888',
+            //             fontSize: '1em',
+            //           },
+            //           left: '25%',
+            //           bottom: 5,
+            //         },
+            //       ],
+            //     }
+            //   : undefined,
           })
       );
   }
