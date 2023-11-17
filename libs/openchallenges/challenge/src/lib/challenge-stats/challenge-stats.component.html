@@ -17,13 +17,23 @@
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon>
     Edit
   </a>
-  <a
-    target="_blank"
-    href="{{ challenge.websiteUrl }}"
-    class="stat-item action-btn"
-    *ngIf="!loggedIn"
-  >
-    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
-    Go to Website
-  </a>
+  <div [ngSwitch]="!!challenge.websiteUrl" *ngIf="!loggedIn">
+    <a
+      class="stat-item action-btn"
+      *ngSwitchCase="true"
+      href="{{ challenge.websiteUrl }}"
+      target="_blank"
+      title="Go to challenge page on {{
+        challenge.platform.name === 'Other' ? 'platform' : challenge.platform.name
+      }}"
+      rel="noopener noreferrer"
+    >
+      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+      Go to Website
+    </a>
+    <div class="stat-item disabled-btn" *ngSwitchCase="false">
+      <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
+      Website Not Found
+    </div>
+  </div>
 </div>
