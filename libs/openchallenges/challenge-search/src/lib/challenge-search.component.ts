@@ -343,9 +343,12 @@ export class ChallengeSearchComponent
   }
 
   onParamChange(filteredQuery: any): void {
+    // reset pagination settings when filters change
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
+      this.selectedPageNumber = this.defaultPageNumber;
+      this.selectedPageSize = this.defaultPageSize;
     }
     // update params of URL
     const currentParams = new HttpParams({
