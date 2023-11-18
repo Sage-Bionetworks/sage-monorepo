@@ -10,8 +10,8 @@ public class SimpleChallengeGlobalExceptionTest {
   @Test
   public void SimpleChallengeGlobalException_ShouldReturnMessage_WhenMessageKeyIsPassed() {
     // Create an instance of SimpleChallengeGlobalException using the constructor with details
-    String details = "Something went wrong";
-    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(details);
+    String message = "Something went wrong";
+    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(message);
 
     // Verify the exception details
 
@@ -40,7 +40,9 @@ public class SimpleChallengeGlobalExceptionTest {
 
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
-  }
+    assertNotNull(exception);
+
+}
 
   @Test
   public void SimpleChallengeGlobalException_ShouldSetArgs_WhenArgsPassed() {
