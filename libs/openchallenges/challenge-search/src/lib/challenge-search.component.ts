@@ -356,7 +356,16 @@ export class ChallengeSearchComponent
       fromString: this._location.path().split('?')[1] ?? '',
     });
     const params = Object.entries(filteredQuery)
-      .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
+      .map(([key, value]) => {
+        // avoid adding pageNumber and pageSize to the params if they are default
+        if (
+          (key === 'pageNumber' && value === this.defaultPageNumber) ||
+          (key === 'pageSize' && value === this.defaultPageSize)
+        ) {
+          return [key, ''];
+        }
+        return [key, this.collapseParam(value as FilterValue)];
+      })
       .reduce(
         // update with new param, or delete the param if empty string
         (params, [key, value]) =>
