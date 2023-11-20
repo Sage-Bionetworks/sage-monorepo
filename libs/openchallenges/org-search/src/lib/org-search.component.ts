@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
 import {
   OrganizationService,
@@ -121,6 +122,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   defaultSortedBy: OrganizationSort = 'challenge_count';
   defaultPageNumber = 0;
   defaultPageSize = 24;
+  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = organizationSortFilter;
@@ -282,8 +284,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
-      this.selectedPageNumber = this.defaultPageNumber;
-      this.selectedPageSize = this.defaultPageSize;
+      // this.selectedPageSize = this.defaultPageSize;
+      this.paginator.resetPage();
     }
     // update params of URL
     const currentParams = new HttpParams({

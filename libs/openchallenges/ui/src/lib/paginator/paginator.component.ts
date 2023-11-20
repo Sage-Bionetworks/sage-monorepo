@@ -4,8 +4,6 @@ import {
   Input,
   Output,
   EventEmitter,
-  OnInit,
-  OnChanges,
   ViewChild,
 } from '@angular/core';
 import {
@@ -20,7 +18,7 @@ import {
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss'],
 })
-export class PaginatorComponent implements OnInit, OnChanges {
+export class PaginatorComponent {
   @Input({ required: true }) pageNumber = 0; // index of the new page
   @Input({ required: false }) pageLinkSize = 5;
   @Input({ required: true }) pageSize = 0; // number of rows to display in new page
@@ -30,23 +28,18 @@ export class PaginatorComponent implements OnInit, OnChanges {
   @Output() pageChange = new EventEmitter();
 
   itemIndex = 0; // index of the first item in the new page
-  isManualReset = false; // set to prevent duplicate calls in onPageChange when using changePage
 
-  ngOnInit(): void {
-    this.itemIndex = this.pageNumber * this.pageSize;
-  }
-
-  ngOnChanges() {
-    this.isManualReset = true;
-    this.itemIndex = this.pageNumber * this.pageSize;
-    this.paginator.changePage(this.itemIndex);
-  }
+  // change itemIndex's value will not dynamically trigger selection updates - seems a primeng issue
+  // ngOnInit(): void {
+  //   this.itemIndex = this.pageNumber * this.pageSize;
+  // }
 
   onPageChange(event: any): void {
-    if (this.isManualReset) {
-      this.isManualReset = false;
-    } else {
-      this.pageChange.emit(event);
-    }
+    this.pageChange.emit(event);
+  }
+
+  // Reset paginator to first page
+  resetPage(): void {
+    this.paginator.changePage(0);
   }
 }
