@@ -7,18 +7,22 @@
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
   $figma: map.get($config, 'figma');
+
+  #statistics {
+    .caption {
+      font-size: #888;
+    }
+  }
 }
 
 @mixin typography($theme) {
-  .action-btn,
-  .disabled-btn {
-    font-size: 21px;
-    text-decoration: none;
-  }
-  .stat-item > h4 {
-    line-height: 0.5;
+  #statistics {
+    .caption {
+      font-size: 1em;
+    }
   }
 }
+
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);
   @if $color-config != null {
