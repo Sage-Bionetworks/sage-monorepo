@@ -51,7 +51,8 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ShouldSetArgs_WhenNoArgsConstructorExceptionPassedArgsKeys() {
+  public void
+      SimpleChallengeGlobalException_ShouldSetArgs_WhenNoArgsConstructorExceptionPassedArgsKeys() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";
