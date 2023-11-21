@@ -13,7 +13,7 @@ public class GlobalExceptionHandlerTest {
   @Test
   public void
       GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
-    
+
     // Create a sample Exception
     Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
