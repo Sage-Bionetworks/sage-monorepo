@@ -15,7 +15,6 @@ public class SimpleChallengeGlobalExceptionTest {
 
     // Verify the exception details
     assertThat(exception.getMessage()).isEqualTo(message);
-
   }
 
   @Test
@@ -38,7 +37,8 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ShouldReturnNullArgs_WhenCalledUsingNoArgsConstructor() {
+  public void
+      SimpleChallengeGlobalException_ShouldReturnNullArgs_WhenCalledUsingNoArgsConstructor() {
 
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
