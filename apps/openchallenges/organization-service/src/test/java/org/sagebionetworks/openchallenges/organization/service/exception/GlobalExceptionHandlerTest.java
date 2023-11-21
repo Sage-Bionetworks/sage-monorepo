@@ -11,11 +11,12 @@ import org.springframework.http.ResponseEntity;
 public class GlobalExceptionHandlerTest {
 
   @Test
-  public void GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
+  public void
+      GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
+    
     // Create a sample Exception
     Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
-    String details = "Something went wrong";
 
     // Create the GlobalExceptionHandler instance
     GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
@@ -24,13 +25,14 @@ public class GlobalExceptionHandlerTest {
     ResponseEntity<BasicErrorDto> responseEntity =
         exceptionHandler.handleException(exception, locale);
 
-    // Verify the response
+    // Verify the Response Entity matches the Internal Server Error Code
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Test
-  public void GlobalExceptionHandler_ShouldReturnStatusOfSimpleChallengeGlobalExceptionResponseEntityObject_WhenArgsPassedToSimpleChallengeGlobalException() {
-    
+  public void
+      GlobalExceptionHandler_ShouldReturnStatusCodeOfSimpleChallengeGlobalExceptionResponseEntityObject_WhenArgsPassedToSimpleChallengeGlobalException() {
+
     // Create a sample Exception
     Locale locale = Locale.getDefault();
 
@@ -51,7 +53,8 @@ public class GlobalExceptionHandlerTest {
     ResponseEntity<BasicErrorDto> responseEntity =
         exceptionHandler.handleGlobalException(exception, locale);
 
-    //confirm that the status code that was set was retrieved and applied to the Response Entity object
+    // confirm that the status code that was set was retrieved and applied to the Response Entity
+    // object
     assertThat(responseEntity.getStatusCode()).isEqualTo(exception.getStatus());
   }
 }
