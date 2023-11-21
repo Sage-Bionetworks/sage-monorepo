@@ -43,6 +43,7 @@ public class SimpleChallengeGlobalExceptionTest {
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
 
+    //confirm that not passing args leads to null arguments
     assertThat(exception.getTitle()).isNull();
     assertThat(exception.getType()).isNull();
     assertThat(exception.getStatus()).isNull();
@@ -65,5 +66,11 @@ public class SimpleChallengeGlobalExceptionTest {
     exception.setTitle(title);
     exception.setStatus(status);
     exception.setDetail(detail);
+
+    //confirm that the args were passed
+    assertThat(exception.getType()).isEqualTo(type);
+    assertThat(exception.getTitle()).isEqualTo(title);
+    assertThat(exception.getStatus()).isEqualTo(status);
+    assertThat(exception.getDetail()).isEqualTo(detail);
   }
 }
