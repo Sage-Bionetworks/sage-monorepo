@@ -43,10 +43,10 @@ public class SimpleChallengeGlobalExceptionTest {
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
 
-    assertThat(exception.getTitle()).isEqualTo(null);
-    assertThat(exception.getType()).isEqualTo(null);
-    assertThat(exception.getStatus()).isEqualTo(null);
-    assertThat(exception.getDetail()).isEqualTo(null);
+    assertThat(exception.getTitle()).isNull();
+    assertThat(exception.getType()).isNull();
+    assertThat(exception.getStatus()).isNull();
+    assertThat(exception.getDetail()).isNull();
   }
 
   @Test
