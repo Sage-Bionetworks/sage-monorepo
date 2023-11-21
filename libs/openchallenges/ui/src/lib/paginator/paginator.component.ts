@@ -21,8 +21,8 @@ import {
 export class PaginatorComponent {
   @Input({ required: true }) pageNumber = 0; // index of the new page
   @Input({ required: false }) pageLinkSize = 5;
-  @Input({ required: true }) pageSize = 0; // number of rows to display in new page
-  @Input({ required: true }) totalRecords = 0;
+  @Input({ required: true }) pageSize = 0; // number of items to display in new page
+  @Input({ required: true }) totalElements = 0;
   @Input({ required: false }) itemsPerPage!: number[];
   @ViewChild('paginator', { static: false }) paginator!: Paginator;
   @Output() pageChange = new EventEmitter();
@@ -39,7 +39,7 @@ export class PaginatorComponent {
   }
 
   // Reset paginator to first page
-  resetPage(): void {
+  resetPageNumber(): void {
     this.paginator.changePage(0);
   }
 }

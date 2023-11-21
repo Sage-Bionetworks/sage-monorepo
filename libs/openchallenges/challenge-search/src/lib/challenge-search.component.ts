@@ -349,7 +349,7 @@ export class ChallengeSearchComponent
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
       // this.selectedPageSize = this.defaultPageSize;
-      this.paginator.resetPage();
+      this.paginator.resetPageNumber();
     }
     // update params of URL
     const currentParams = new HttpParams({
