@@ -14,11 +14,12 @@ public class SimpleChallengeGlobalExceptionTest {
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(message);
 
     // Verify the exception details
+    assertThat(exception.getMessage()).isEqualTo(message);
 
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ShouldReturnStatus_WhenStatusKeyIsPassed() {
+  public void SimpleChallengeGlobalException_ShouldReturnStatusTypeTitleDetail_WhenArgsPassed() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";
@@ -33,14 +34,19 @@ public class SimpleChallengeGlobalExceptionTest {
     assertThat(exception.getStatus()).isEqualTo(status);
     assertThat(exception.getTitle()).isEqualTo(title);
     assertThat(exception.getType()).isEqualTo(type);
+    assertThat(exception.getDetail()).isEqualTo(detail);
   }
 
   @Test
-  public void SimpleChallengeGlobalException_ShouldFunction_WhenCalledUsingNoArgsConstructor() {
+  public void SimpleChallengeGlobalException_ShouldReturnNullArgs_WhenCalledUsingNoArgsConstructor() {
 
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
-    assertNotNull(exception);
+
+    assertThat(exception.getTitle()).isEqualTo(null);
+    assertThat(exception.getType()).isEqualTo(null);
+    assertThat(exception.getStatus()).isEqualTo(null);
+    assertThat(exception.getDetail()).isEqualTo(null);
   }
 
   @Test
