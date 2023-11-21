@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class GlobalExceptionHandlerTest {
 
   @Test
-  public void GlobalExceptionHandler_ShouldReturnStatus_WhenExceptionAndLocalePassed() {
+  public void GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
     // Create a sample Exception
     Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
@@ -29,11 +29,11 @@ public class GlobalExceptionHandlerTest {
   }
 
   @Test
-  public void HandleGlobalException_ShouldFunction_WhenCalled() {
+  public void GlobalExceptionHandler_ShouldReturnStatusOfSimpleChallengeGlobalExceptionResponseEntityObject_WhenArgsPassedToSimpleChallengeGlobalException() {
+    
     // Create a sample Exception
-    // Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
-    // String details = "Something went wrong";
+
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";
@@ -50,5 +50,8 @@ public class GlobalExceptionHandlerTest {
     // Call handleGlobalException
     ResponseEntity<BasicErrorDto> responseEntity =
         exceptionHandler.handleGlobalException(exception, locale);
+
+    //confirm that the status code that was set was retrieved and applied to the Response Entity object
+    assertThat(responseEntity.getStatusCode()).isEqualTo(exception.getStatus());
   }
 }
