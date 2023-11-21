@@ -34,7 +34,7 @@ public interface ChallengeAnalyticsApiDelegate {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
-                      "{ \"challengeCounts\" : [ 0, 0 ], \"years\" : [ \"years\", \"years\" ] }";
+                      "{ \"undatedChallengeCount\" : 0, \"challengeCounts\" : [ 0, 0 ], \"years\" : [ \"years\", \"years\" ] }";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }

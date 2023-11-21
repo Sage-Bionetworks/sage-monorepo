@@ -158,9 +158,10 @@
         />
       </div>
       <openchallenges-paginator
+        #paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
-        [totalRecords]="searchResultsCount"
+        [totalElements]="searchResultsCount"
         (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows,})"
       />
     </div>
