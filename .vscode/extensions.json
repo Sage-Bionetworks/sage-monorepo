@@ -1,4 +1,3 @@
 {
-  // Extensions should be defined in `.devcontainer/devcontainer.json` instead of here.
-  "recommendations": []
+  "recommendations": ["ms-playwright.playwright"]
 }
