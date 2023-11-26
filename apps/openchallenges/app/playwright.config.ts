@@ -25,9 +25,32 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+    {
+      name: 'webkit',
+      use: { ...devices['Desktop Safari'] },
+    },
+    /* Test against mobile viewports. */
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
+    /* Test against branded browsers. */
+    // When Google Chrome and/or Microsoft Edge are installed in the dev container, Playwright will
+    // use one of them to open the HTML report. These browsers are slow to open and respond because
+    // they are emulated. It is recommended to now use them in combination with the HTML report. By
+    // default, when Chrome and Edge are not installed, the HTML report opens in the native browser
+    // of the developer, which is much faster.
     // {
-    //   name: 'webkit',
-    //   use: { ...devices['Desktop Safari'] },
+    //   name: 'Google Chrome', use: { ...devices['Desktop Chrome'], channel: 'chrome' }, // or
+    //   'chrome-beta'
+    // },
+    // {
+    //   name: 'Microsoft Edge', use: { ...devices['Desktop Edge'], channel: 'msedge' }, // or
+    //   'msedge-dev'
     // },
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
