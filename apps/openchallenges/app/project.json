@@ -230,6 +230,13 @@
       "options": {
         "command": "node tools/generate-sitemap.js http://localhost:4200 apps/openchallenges/app/src/sitemap.xml"
       }
+    },
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/apps/openchallenges/app"],
+      "options": {
+        "config": "apps/openchallenges/app/playwright.config.ts"
+      }
     }
   },
   "tags": ["type:app", "scope:client", "language:typescript"],
