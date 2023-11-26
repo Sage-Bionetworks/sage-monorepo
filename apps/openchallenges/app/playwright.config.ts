@@ -66,6 +66,6 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,
   },
-  reporter: [['line'], ['html', { open: 'always' }]],
+  reporter: [['line'], ['html', { open: 'never' }]],
   // reporter: process.env.CI ? 'html' : 'line',
 });
