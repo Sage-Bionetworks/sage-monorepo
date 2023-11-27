@@ -8,6 +8,7 @@ explorepage_ui <- function(){
 
   ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
   cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
+  sc_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "scRNA")
   tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
   # sidebar ----
@@ -20,6 +21,7 @@ explorepage_ui <- function(){
 
   ici_module_menu_items   <- create_menu_subitems(ici_modules_tbl)
   cg_module_menu_items    <- create_menu_subitems(cg_modules_tbl)
+  sc_module_menu_items  <- create_menu_subitems(sc_modules_tbl)
   tool_module_menu_items  <- create_menu_subitems(tool_modules_tbl)
 
   sidebar <- shinydashboard::dashboardSidebar(
@@ -51,6 +53,12 @@ explorepage_ui <- function(){
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
         cg_module_menu_items
+      ),
+      shinydashboard::menuItem(
+        text = "Single Cell Modules",
+        icon = shiny::icon("chart-bar"),
+        startExpanded = TRUE,
+        sc_module_menu_items
       ),
       shinydashboard::menuItem(
         text = "iAtlas tools",

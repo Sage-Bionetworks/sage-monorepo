@@ -12,12 +12,6 @@ sc_module_server <- function(id, cohort_obj){
         "sc_umap",
         cohort_obj
       )
-
-      sc_immune_features_server(
-        "sc_distribution",
-        cohort_obj
-      )
-
     }
   )
 }
