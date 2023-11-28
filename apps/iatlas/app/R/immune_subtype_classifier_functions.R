@@ -6,51 +6,25 @@
 
 library(ImmuneSubtypeClassifier)
 
-# this function computes scores given some expression data.
-classifySubtype <- function(fileinfo, sepflag) {
+readNewDataTable <- function(fileinfo, sepflag) {
 
-  print(fileinfo)
-  print(sepflag)
-
-  if (is.null(fileinfo)) {
-    print("HERE")
-    fileinfo <- list(
-      name = 'ebpp_test1_1to20.tsv',
-      size = 1,
-      type = 'text/csv',
-      datapath = 'data/ebpp_test1_1to20.tsv'
-    )
+  if(is.null(fileinfo)) {
+    fileinfo <- list(name='ebpp_test1_1to20.tsv',  size=1, type='text/csv', datapath='inst/tsv/ebpp_test1_1to20.tsv')
   }
 
-  print(fileinfo)
-
-  #if (fileinfo$type == 'text/csv') {
-  #  s1 <- ','
-  #} else if (fileinfo$type == 'text/tab-separated-values') {
-  #  s1 <- '\t'
-  #} else {
-  #  s1 <- '\t'
-  #}
-  #``
-
-  print("Reading Data")
-
-  #newdata <- read_csv('data/ivy20.csv')
-  newdata <- utils::read.table(
-    file = fileinfo$datapath,
-    sep = sepflag,
-    header = T,
-    stringsAsFactors = F
-  )
-
-  print("new data")
-  print(dim(newdata))
+  newdata <- read.table(file=fileinfo$datapath, sep=sepflag, header=T, stringsAsFactors = F)
 
   newX <- as.matrix(newdata[,-1])
   rownames(newX) <- as.character(newdata[,1])
 
+  newX
+}
+
+# this function computes scores given some expression data.
+classifySubtype <- function(newdata) {
+
   # make cluster calls using the models.
-  calls <- ImmuneSubtypeClassifier::callEnsemble(X = newX, geneids = 'symbol')
+  calls <- ImmuneSubtypeClassifier::callEnsemble(X = newdata, geneids = 'symbol')
 
   print(utils::head(calls))
 
