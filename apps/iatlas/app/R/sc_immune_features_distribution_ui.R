@@ -41,7 +41,11 @@ sc_immune_features_distribution_ui <- function(id){
           shiny::selectInput(
             ns("reorder_method_choice"),
             "Reorder Function",
-            choices = c("None" = "None", "Median", "Mean", "Max", "Min"),
+            choices = c("None" = "trace",
+                        "Median" = "median ascending",
+                        "Mean" = "mean ascending",
+                        "Max" = "max ascending",
+                        "Min" = "min ascending"),
             selected = "None"
           )
         )

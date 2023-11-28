@@ -118,7 +118,10 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
                                                   showlegend = F)  %>%
                                     add_title_subplot_plotly(x) %>%
                                     plotly::layout(
-                                      # xaxis = xform,
+                                      xaxis = list(automargin = TRUE,
+                                                   tickangle = 80,
+                                                   categoryorder = input$reorder_method_choice
+                                      ),
                                       margin = list(b = 10),
                                       plot_bgcolor  = "rgb(250, 250, 250)"
                                     )
