@@ -68,32 +68,41 @@ immune_subtype_classifier_ui <- function(id) {
           width = 12,
           shiny::column(
             width = 2,
-            shiny::radioButtons(ns("sepa"), "File Separator",
-                                choices = c(Tab = "\t", Comma = ","), selected = "\t")
+            shiny:: radioButtons(ns("sepa"), "File Separator",
+                         choices = c(Tab = "\t", Comma = ","), selected = "\t")
           ),
 
           shiny::column(
             width = 4,
             shiny::fileInput(ns("expr_file_pred"), "Choose file. Leave blank for example run.",
-                             multiple = FALSE,
-                             accept = c("text/csv",
-                                        "text/comma-separated-values,text/plain",
-                                        ".csv",
-                                        ".csv.gz",
-                                        "text/tsv",
-                                        "text/comma-separated-values,text/plain",
-                                        ".tsv",
-                                        ".tsv.gz"),
-                             placeholder = 'data/ebpp_test1_1to20.tsv')
+                      multiple = FALSE,
+                      accept = c("text/csv",
+                                 "text/comma-separated-values,text/plain",
+                                 ".csv",
+                                 ".csv.gz",
+                                 "text/tsv",
+                                 "text/comma-separated-values,text/plain",
+                                 ".tsv",
+                                 ".tsv.gz"),
+                      placeholder = 'data/ebpp_test1_1to20.tsv')
           ),
 
           shiny::column(
             width = 3,
             shiny::actionButton(ns("subtypeGObutton"), "GO")
+          ),
+          shiny::column(
+            width = 3,
+            shiny::downloadLink(ns("genelist"), "Download list of genes required by the classifier.")
           )
         )
       ),
-
+      shiny::fluidRow(
+        iatlas.modules::plotBox(
+          width=12,
+          htmlOutput(ns('geneMatchCnt'))
+        )
+      ),
       shiny::fluidRow(
         iatlas.modules::plotBox(
           width = 12,
@@ -103,20 +112,36 @@ immune_subtype_classifier_ui <- function(id) {
       )
     ),
 
-    # Immunomodulator annotations section ----
+    # Main results
     iatlas.modules::sectionBox(
       title = "Subtype Classification Table",
       iatlas.modules::messageBox(
         width = 12,
-        shiny::p("The table shows the results of subtype classification. Use the Search box in the upper right to find a sample of interest.")
+        p("The table shows the results of subtype classification. Use the Search box in the upper right to find a sample of interest.")
       ),
       shiny::fluidRow(
         iatlas.modules::tableBox(
           width = 12,
-          shiny::div(style = "overflow-x: scroll",
-                     DT::dataTableOutput(ns("subtypetable")) %>%
-                       shinycssloaders::withSpinner(.)
-          )
+          DT::dataTableOutput(ns("subtypetable")) %>%
+            shinycssloaders::withSpinner(),
+          shiny::downloadButton(ns('download_calls'), 'Download')
+        )
+      )
+    ),
+
+    # Any missing genes table
+    iatlas.modules::sectionBox(
+      title = "Missing genes from upload",
+      iatlas.modules::messageBox(
+        width = 12,
+        p("The table shows any missing genes.")
+      ),
+      shiny::fluidRow(
+        iatlas.modules::tableBox(
+          width = 12,
+          DT::dataTableOutput(ns("missinggenetable")) %>%
+            shinycssloaders::withSpinner(),
+          shiny::downloadButton(ns('download_missing'), 'Download')
         )
       )
     )
