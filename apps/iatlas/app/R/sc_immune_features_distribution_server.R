@@ -182,10 +182,41 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
         content = function(con) readr::write_csv(test_summary_table(), con)
       )
 
+      drilldown_df <- reactive({
+        shiny::req(df_selected())
 
+        eventdata <- plotly::event_data("plotly_click", source = "distPlots")
+        shiny::validate(need(!is.null(eventdata), "Click plot above"))
 
+        clicked_group <- gsub("<br />", "\n", eventdata$x[[1]])
+        clicked_dataset <- eventdata$customdata[[1]]
 
+        current_groups <- df_selected() %>%
+          dplyr::filter(dataset_name == clicked_dataset) %>%
+          dplyr::select(group) %>%
+          unique
 
+        shiny::validate(
+          shiny::need(clicked_group %in% current_groups$group, "Click plot above"))
+
+        df_selected() %>%
+          dplyr::filter(dataset_name == clicked_dataset & group == clicked_group)
+      })
+
+      output$drilldown_plot <- plotly::renderPlotly({
+        shiny::req(drilldown_df())
+        create_histogram(
+          df = drilldown_df(),
+          x_col = "y",
+          title = paste(get_plot_title(unique(drilldown_df()$dataset_name), dataset_displays()), unique(drilldown_df()$group), sep = "\n"),
+          x_lab = varible_plot_label()
+        )
+      })
+
+      output$download_hist <- downloadHandler(
+        filename = function() stringr::str_c("drilldown-", Sys.Date(), ".csv"),
+        content = function(con) readr::write_csv(drilldown_df(), con)
+      )
     }
   )
 }
