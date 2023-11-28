@@ -5,8 +5,6 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
 
       ns <- session$ns
 
-      gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_gsea_norm.feather"))
-
       plot_function <- shiny::reactive({
         switch(
           input$plot_type,
