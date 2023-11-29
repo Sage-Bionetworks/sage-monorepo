@@ -90,6 +90,46 @@ def common_query(common_query_builder):
     }""")
 
 
+@pytest.fixture(scope='module')
+def genes_query(common_query_builder):
+    return common_query_builder(
+    """{
+         items{
+            label
+            name
+            score
+            x
+            y
+            tags {
+                characteristics
+                color
+                name
+                longDisplay
+                order
+                shortDisplay
+                type
+            }
+            gene {
+                entrez
+                hgnc
+                friendlyName
+            }
+        }
+        paging {
+            type
+            pages
+            total
+            page
+            limit
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+        }
+        error
+    }""")
+
+
 def test_nodes_query_with_passed_data_set(client, common_query, data_set):
     response = client.post(
         '/api', json={'query': common_query, 'variables': {'dataSet': [data_set]}})
