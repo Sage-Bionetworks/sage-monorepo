@@ -47,12 +47,6 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
       })
 
 
-      group_colors <- shiny::reactive({
-        shiny::req(df_selected())
-
-        setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
-      })
-
       varible_display_name <- shiny::reactive({
         input$var1_surv
         # convert_value_between_columns(input_value = input$var1_surv,
@@ -98,6 +92,11 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
       dataset_displays <- reactive({
         names_datasets <- unique(df_selected()$dataset_name)
         setNames(names_datasets, names_datasets)
+      })
+
+      group_colors <- shiny::reactive({
+        shiny::req(df_selected())
+        setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
       })
 
       output$dist_plots <- plotly::renderPlotly({
