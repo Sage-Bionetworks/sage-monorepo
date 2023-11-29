@@ -358,12 +358,14 @@ type Query {
     minScore: Float
     "A list of tag names associated with the nodes that are also associated with the 'network' tag to filter by"
     network: [String!]
-    "All returned nodes will have this many tags exactly"
-    nTags: Int
     "A list of tag names related to the data set associated with the nodes to filter by"
     related: [String!]
     "A list of tag names associated with the nodes to filter by"
-    tag: [String!]
+    tag1: [String!]
+    "A list of secondary tag names associated with the nodes to filter by"
+    tag2: [String!]
+    "The number of tags the node should have, either 1 or 2"
+    nTags: Int
   ): NodeResult
 
   """

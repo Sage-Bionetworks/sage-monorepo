@@ -8,10 +8,10 @@ class CohortToGene(Base):
 
     id = db.Column(db.String, primary_key=True)
 
-    cohort_id = db.Column(db.Integer, db.ForeignKey(
+    cohort_id = db.Column(db.String, db.ForeignKey(
         'cohorts.id'), primary_key=True)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey(
+    gene_id = db.Column(db.String, db.ForeignKey(
         'genes.id'), primary_key=True)
 
     cohort = db.relationship('Cohort', backref=orm.backref(

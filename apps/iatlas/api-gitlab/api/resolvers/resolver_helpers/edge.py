@@ -73,4 +73,7 @@ def build_edge_request(requested, node_1_requested, node_2_requested, distinct=F
             node_2.id, edge_1.node_2_id, node_2.name, node_end)
         query = query.join(node_2, and_(*node_start_join_condition))
 
+    import logging
+    logging.warning(query)
+
     return get_pagination_queries(query, paging, distinct, cursor_field=edge_1.id)

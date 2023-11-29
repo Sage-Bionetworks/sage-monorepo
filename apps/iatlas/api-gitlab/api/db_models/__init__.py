@@ -27,7 +27,6 @@ from .mutation import Mutation
 from .mutation_type import MutationType
 from .neoantigen import Neoantigen
 from .node import Node
-from .node_to_tag import NodeToTag
 from .patient import Patient
 from .publication import Publication
 from .publication_to_gene_to_gene_set import PublicationToGeneToGeneSet

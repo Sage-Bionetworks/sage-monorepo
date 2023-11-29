@@ -9,13 +9,13 @@ class GermlineGwasResult(Base):
     p_value = db.Column(db.Numeric, nullable=True)
     maf = db.Column(db.Numeric, nullable=True)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
-    snp_id = db.Column(db.Integer, db.ForeignKey(
+    snp_id = db.Column(db.String, db.ForeignKey(
         'snps.id'), nullable=False)
 
     data_set = db.relationship(

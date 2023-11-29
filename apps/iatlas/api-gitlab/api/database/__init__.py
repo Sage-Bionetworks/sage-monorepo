@@ -15,7 +15,6 @@ from .gene_to_sample_queries import *
 from .gene_to_gene_set_queries import *
 from .mutation_queries import *
 from .node_queries import *
-from .node_to_tag_queries import *
 from .patient_queries import *
 from .publication_queries import *
 from .publication_to_gene_to_gene_set_queries import *

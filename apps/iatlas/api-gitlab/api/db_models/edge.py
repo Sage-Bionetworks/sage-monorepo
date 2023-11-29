@@ -8,10 +8,10 @@ class Edge(Base):
     id = db.Column(db.String, primary_key=True)
 
     node_1_id = db.Column(
-        db.Integer, db.ForeignKey('nodes.id'), nullable=False)
+        db.String, db.ForeignKey('nodes.id'), nullable=False)
 
     node_2_id = db.Column(
-        db.Integer, db.ForeignKey('nodes.id'), nullable=False)
+        db.String, db.ForeignKey('nodes.id'), nullable=False)
 
     label = db.Column(db.String, nullable=True)
     name = db.Column(db.String, nullable=False)

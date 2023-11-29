@@ -8,10 +8,10 @@ class CohortToSample(Base):
 
     id = db.Column(db.String, primary_key=True)
 
-    cohort_id = db.Column(db.Integer, db.ForeignKey(
+    cohort_id = db.Column(db.String, db.ForeignKey(
         'cohorts.id'), primary_key=True)
 
-    sample_id = db.Column(db.Integer, db.ForeignKey(
+    sample_id = db.Column(db.String, db.ForeignKey(
         'samples.id'), primary_key=True)
 
     cohorts_to_samples_tag_id = db.Column(db.Integer, db.ForeignKey(

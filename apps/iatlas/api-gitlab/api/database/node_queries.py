@@ -4,7 +4,7 @@ from .database_helpers import build_general_query
 
 related_fields = [
     'data_sets', 'edges_primary', 'edges_secondary',
-    'feature', 'gene', 'node_tag_assoc', 'tags']
+    'feature', 'gene', 'tag1', 'tag2']
 
 core_fields = ['id', 'dataset_id', 'feature_id',
                'gene_id', 'name', 'network', 'label', 'score', 'x', 'y']

@@ -13,16 +13,16 @@ class DriverResult(Base):
     n_wildtype = db.Column(db.Integer, nullable=True)
     n_mutants = db.Column(db.Integer, nullable=True)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
-    mutation_id = db.Column(db.Integer, db.ForeignKey(
+    mutation_id = db.Column(db.String, db.ForeignKey(
         'mutations.id'), nullable=False)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+    tag_id = db.Column(db.String, db.ForeignKey('tags.id'), nullable=False)
 
     data_set = db.relationship(
         'Dataset', backref=orm.backref('driver_results', uselist=True, lazy='noload'),

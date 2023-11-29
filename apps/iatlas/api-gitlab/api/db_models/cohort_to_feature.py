@@ -8,10 +8,10 @@ class CohortToFeature(Base):
 
     id = db.Column(db.String, primary_key=True)
 
-    cohort_id = db.Column(db.Integer, db.ForeignKey(
+    cohort_id = db.Column(db.String, db.ForeignKey(
         'cohorts.id'), primary_key=True)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), primary_key=True)
 
     cohort = db.relationship('Cohort', backref=orm.backref(
