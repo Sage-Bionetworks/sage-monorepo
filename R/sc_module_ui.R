@@ -13,10 +13,6 @@ sc_module_ui <- function(id){
         iatlas.modules::sectionBox(
             title = "UMAP",
             sc_umap_ui(ns("sc_umap"))
-        ),
-        iatlas.modules::sectionBox(
-            title = "bubble plot",
-            sc_bubbleplot_ui(ns("sc_bubbleplot"))
-        ),
+        )
     )
 }
