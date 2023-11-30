@@ -7,10 +7,10 @@ class DatasetToSample(Base):
     __tablename__ = 'datasets_to_samples'
 
     dataset_id = db.Column(
-        db.Integer, db.ForeignKey('datasets.id'), primary_key=True)
+        db.String, db.ForeignKey('datasets.id'), primary_key=True)
 
     sample_id = db.Column(
-        db.Integer, db.ForeignKey('samples.id'), nullable=False)
+        db.String, db.ForeignKey('samples.id'), nullable=False)
 
     data_sets = db.relationship('Dataset', backref=orm.backref(
         'dataset_sample_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')

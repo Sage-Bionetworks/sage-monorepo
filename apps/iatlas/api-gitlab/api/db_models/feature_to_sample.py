@@ -9,10 +9,10 @@ class FeatureToSample(Base):
     id = db.Column(db.String, primary_key=True)
     feature_to_sample_value = db.Column(db.Numeric, nullable=True)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), primary_key=True)
 
-    sample_id = db.Column(db.Integer, db.ForeignKey(
+    sample_id = db.Column(db.String, db.ForeignKey(
         'samples.id'), primary_key=True)
 
     features = db.relationship('Feature', backref=orm.backref(

@@ -17,9 +17,6 @@ class Tag(Base):
     data_sets = db.relationship(
         'Dataset', lazy='noload', uselist=True, secondary='datasets_to_tags')
 
-    nodes = db.relationship(
-        'Node', lazy='noload', uselist=True, secondary='nodes_to_tags')
-
     publications = db.relationship(
         'Publication', lazy='noload', uselist=True, secondary='tags_to_publications')
 

@@ -14,15 +14,15 @@ class CopyNumberResult(Base):
     log10_p_value = db.Column(db.Numeric, nullable=True)
     t_stat = db.Column(db.Numeric, nullable=True)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
+    gene_id = db.Column(db.String, db.ForeignKey('genes.id'), nullable=False)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+    tag_id = db.Column(db.String, db.ForeignKey('tags.id'), nullable=False)
 
     data_set = db.relationship('Dataset', backref=orm.backref(
         'copy_number_results', uselist=True, lazy='noload'), uselist=False, lazy='noload')

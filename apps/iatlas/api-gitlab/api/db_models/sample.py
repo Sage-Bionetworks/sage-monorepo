@@ -9,7 +9,7 @@ class Sample(Base):
     name = db.Column(db.String, nullable=False)
 
     patient_id = db.Column(
-        db.Integer, db.ForeignKey('patients.id'), nullable=True)
+        db.String, db.ForeignKey('patients.id'), nullable=True)
 
     data_sets = db.relationship(
         "Dataset", secondary='datasets_to_samples', uselist=True, lazy='noload')

@@ -8,10 +8,10 @@ class Mutation(Base):
     name = db.Column(db.String, nullable=False)
     mutation_code = db.Column(db.String, nullable=False)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
+    gene_id = db.Column(db.String, db.ForeignKey('genes.id'), nullable=False)
 
     mutation_type_id = db.Column(
-        db.Integer, db.ForeignKey('mutation_types.id'), nullable=True)
+        db.String, db.ForeignKey('mutation_types.id'), nullable=True)
 
     gene = db.relationship(
         "Gene", backref=orm.backref('mutations', uselist=True, lazy='noload'),

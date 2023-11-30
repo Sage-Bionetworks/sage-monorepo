@@ -37,8 +37,6 @@ def test_Tag_no_relations(app, tag_name):
     assert result.tags == []
     assert result.copy_number_results == []
     assert result.driver_results == []
-    assert result.node_tag_assoc == []
-    assert result.nodes == []
     assert type(result.id) is str
     assert result.name == tag_name
     assert type(result.description) is str
@@ -104,41 +102,15 @@ def test_Tag_with_driver_results(app, tag_name):
     for driver_result in result.driver_results[0:2]:
         assert driver_result.tag_id == result.id
 
-
-def test_Tag_with_nodes(app, tag_name):
-    query = return_tag_query('nodes')
-    result = query.filter_by(name=tag_name).one_or_none()
-
-    assert result
-    assert isinstance(result.nodes, list)
-    assert len(result.nodes) > 0
-    # Don't need to iterate through every result.
-    for node in result.nodes[0:2]:
-        assert type(node.name) is str
-
-
 def test_Tag_with_publications(app, tag_with_publication):
     query = return_tag_query('publications')
     result = query.filter_by(name=tag_with_publication).one_or_none()
 
     assert result
-    assert isinstance(result.nodes, list)
     assert len(result.publications) > 0
     # Don't need to iterate through every result.
     for publication in result.publications[0:2]:
         assert type(publication.title) is str
-
-
-def test_Tag_with_node_tag_assoc(app, tag_name):
-    query = return_tag_query('node_tag_assoc')
-    result = query.filter_by(name=tag_name).one_or_none()
-
-    assert result
-    assert isinstance(result.node_tag_assoc, list)
-    assert len(result.node_tag_assoc) > 0
-    # Don't need to iterate through every result.
-    for node_tag_rel in result.node_tag_assoc[0:2]:
-        assert node_tag_rel.tag_id == result.id
 
 
 def test_Tag_with_related_tags(app, tag_name):

@@ -36,8 +36,7 @@ def test_Node_with_relations(app, node_entrez_id, node_gene_id):
             assert result.node_feature.id == result.node_feature_id
         assert result.edges_primary == []
         assert result.edges_secondary == []
-        assert result.node_tag_assoc == []
-        assert result.tags == []
+        assert type(result.tag1) is NoneType
         assert result.node_gene_id == node_gene_id
         assert type(result.node_feature_id) is NoneType
         assert type(result.name) is str
@@ -49,17 +48,6 @@ def test_Node_with_relations(app, node_entrez_id, node_gene_id):
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
-
-
-def test_Node_with_node_tag_assoc(app, node_gene_id):
-    query = return_node_query('node_tag_assoc')
-    result = query.filter_by(node_gene_id=node_gene_id).first()
-
-    if result.node_tag_assoc:
-        assert isinstance(result.node_tag_assoc, list)
-        # Don't need to iterate through every result.
-        for node_tag_rel in result.node_tag_assoc[0:2]:
-            assert node_tag_rel.node_id == result.id
 
 
 def test_Node_with_edges_primary(app, node_gene_id):
@@ -85,14 +73,14 @@ def test_Node_with_edges_secondary(app, node_gene_id):
 
 
 def test_Node_with_tags(app, node_gene_id):
-    query = return_node_query('tags')
-    result = query.filter_by(node_gene_id=node_gene_id).first()
+    query = return_node_query('tag1', 'tag2')
+    result = query.filter_by(name="TCGA_extracellular_network_C1:ACC_2").first()
 
-    if result.tags:
-        assert isinstance(result.tags, list)
-        # Don't need to iterate through every result.
-        for tag in result.tags[0:2]:
-            assert type(tag.name) is str
+    tag1 = result.tag1
+    assert tag1.name == 'C1'
+
+    tag2 = result.tag2
+    assert tag2.name == 'ACC'
 
 
 def test_Node_no_relations(app, node_gene_id):
@@ -105,8 +93,7 @@ def test_Node_no_relations(app, node_gene_id):
         assert type(result.feature) is NoneType
         assert result.edges_primary == []
         assert result.edges_secondary == []
-        assert result.node_tag_assoc == []
-        assert result.tags == []
+        assert type(result.tag1) is NoneType
         assert type(result.id) is str
         assert type(result.dataset_id) is str
         assert result.node_gene_id == node_gene_id

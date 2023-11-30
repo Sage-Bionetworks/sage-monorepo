@@ -14,18 +14,18 @@ class Colocalization(Base):
     splice_loc = db.Column(db.String, nullable=True)
     link = db.Column(db.String, nullable=False)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    coloc_dataset_id = db.Column(db.Integer, db.ForeignKey(
+    coloc_dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey('genes.id'), nullable=False)
+    gene_id = db.Column(db.String, db.ForeignKey('genes.id'), nullable=False)
 
-    snp_id = db.Column(db.Integer, db.ForeignKey('snps.id'), nullable=False)
+    snp_id = db.Column(db.String, db.ForeignKey('snps.id'), nullable=False)
 
     data_set = db.relationship(
         'Dataset', backref=orm.backref('colocalizations_primary', uselist=True, lazy='noload'),

@@ -71,13 +71,13 @@ def build_tag_graphql_response(requested=[], sample_requested=[], publications_r
 
 def get_tag_column_labels(requested, tag, prefix='tag_', add_id=False):
     mapping = {
-        'characteristics': tag.description.label('tag_characteristics'),
-        'color': tag.color.label('tag_color'),
-        'longDisplay': tag.long_display.label('tag_long_display'),
-        'name': tag.name.label('tag_name'),
-        'order': tag.order.label('tag_order'),
-        'shortDisplay': tag.short_display.label('tag_short_display'),
-        'type': tag.tag_type.label('tag_type'),
+        'characteristics': tag.description.label(prefix + 'characteristics'),
+        'color': tag.color.label(prefix + 'color'),
+        'longDisplay': tag.long_display.label(prefix + 'long_display'),
+        'name': tag.name.label(prefix + 'name'),
+        'order': tag.order.label(prefix + 'order'),
+        'shortDisplay': tag.short_display.label(prefix + 'short_display'),
+        'type': tag.tag_type.label(prefix + 'type'),
     }
     labels = get_selected(requested, mapping)
 

@@ -53,9 +53,10 @@ def common_query_builder():
             $maxScore: Float
             $minScore: Float
             $network: [String!]
-            $nTags: Int
             $related: [String!]
-            $tag: [String!]
+            $tag1: [String!]
+            $tag2: [String!]
+            $nTags: Int
         ) {
             nodes(
                 paging: $paging
@@ -68,9 +69,10 @@ def common_query_builder():
                 maxScore: $maxScore
                 minScore: $minScore
                 network: $network
-                nTags: $nTags
                 related: $related
-                tag: $tag
+                tag1: $tag1
+                tag2: $tag2
+                nTags: $nTags
             )""" + query_fields + "}"
     return f
 
@@ -341,10 +343,10 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
                                         y
                                         network
                                         feature { name }
-                                        tags { name }
+                                        tag1 { name }
                                     }
                                 }""")
-    num = 100
+    num = 200
     response = client.post('/api', json={'query': query,
                                          'variables': {
                                              'network': [network],
@@ -359,20 +361,15 @@ def test_nodes_query_with_passed_network(client, common_query_builder, network):
     assert len(results) == num
     for result in results[0:2]:
         feature = result['feature']
-        tags = result['tags']
         assert result['network'] == network
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['score']) is float or NoneType
         assert type(result['x']) is float or NoneType
         assert type(result['y']) is float or NoneType
+        assert type(result['tag1']['name']) is str
         if feature:
             assert type(feature['name']) is str
-        assert isinstance(tags, list)
-        assert len(tags) > 0
-        for tag in tags[0:2]:
-            assert type(tag['name']) is str
-            assert tag['name'] != network
 
 
 def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, network, tag):
@@ -385,14 +382,14 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
                                         y
                                         network
                                         gene { entrez }
-                                        tags { name }
+                                        tag1 { name }
                                     }
                                 }""")
     num = 1000
     response = client.post('/api', json={'query': query,
                                          'variables': {
                                              'network': [network],
-                                             'tag': [tag],
+                                             'tag1': [tag],
                                              'paging': {'first': num}
                                          }
                                          })
@@ -404,8 +401,8 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
     assert len(results) > 0
     for result in results[0:2]:
         gene = result['gene']
-        tags = result['tags']
         assert result['network'] == network
+        assert result['tag1']['name'] == tag
         assert type(result['label']) is str or NoneType
         assert type(result['name']) is str
         assert type(result['score']) is float or NoneType
@@ -413,9 +410,6 @@ def test_nodes_query_with_passed_network_and_tag(client, common_query_builder, n
         assert type(result['y']) is float or NoneType
         if gene:
             assert type(gene['entrez']) is int
-        assert isinstance(tags, list)
-        assert len(tags) > 0
-        assert any(current_tag['name'] == tag for current_tag in tags)
 
 
 def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
@@ -423,7 +417,7 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
                                     items {
                                         label
                                         name
-                                        tags {
+                                        tag1 {
                                             name
                                             characteristics
                                             color
@@ -435,7 +429,7 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
     num = 100
     response = client.post('/api', json={
         'query': query,
-        'variables': {'tag': [tag], 'paging': {'first': num}}
+        'variables': {'tag1': [tag], 'paging': {'first': num}}
     })
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
@@ -444,12 +438,8 @@ def test_nodes_query_with_passed_tag(client, common_query_builder, tag):
     assert isinstance(results, list)
     assert len(results) == num
     for result in results[0:2]:
-        tags = result['tags']
-        assert type(result['label']) is str or NoneType
-        assert type(result['name']) is str
-        assert isinstance(tags, list)
-        assert len(tags) > 0
-        assert any(current_tag['name'] == tag for current_tag in tags)
+        tag1 = result['tag1']
+        assert tag1['name'] == tag
 
 
 def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, node_entrez_id, tag):
@@ -457,43 +447,14 @@ def test_nodes_query_with_passed_tag_and_entrez(client, common_query_builder, no
                                     items {
                                         name
                                         gene { entrez }
-                                        tags { name }
+                                        tag1 { name }
                                     }
                                 }""")
-    response = client.post('/api', json={'query': query,
-                                         'variables': {'entrez': [node_entrez_id], 'tag': [tag]}})
-    json_data = json.loads(response.data)
-    page = json_data['data']['nodes']
-    results = page['items']
-
-    assert isinstance(results, list)
-    assert len(results) > 0
-    for result in results[0:2]:
-        gene = result['gene']
-        tags = result['tags']
-        assert type(result['name']) is str
-        assert gene['entrez'] == node_entrez_id
-        assert isinstance(tags, list)
-        assert len(tags) > 0
-        assert any(current_tag['name'] == tag for current_tag in tags)
-
-
-def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, node_feature, tag):
-    query = common_query_builder(""" {
-        items {
-            name
-            feature { name }
-            tags { name }
-        }
-    } """)
     response = client.post(
         '/api',
         json={
             'query': query,
-            'variables': {
-                'feature': [node_feature],
-                'tag': [tag]
-            }
+            'variables': {'entrez': [node_entrez_id], 'tag1': [tag]}
         }
     )
     json_data = json.loads(response.data)
@@ -503,13 +464,73 @@ def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, n
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
+        gene = result['gene']
+        assert gene['entrez'] == node_entrez_id
+        tag1 = result['tag1']
+        assert tag1['name'] == tag
+
+
+def test_nodes_query_with_passed_tag_and_feature(client, common_query_builder, node_feature, tag):
+    query = common_query_builder(""" {
+        items {
+            name
+            feature { name }
+            tag1 { name }
+        }
+    } """)
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'feature': [node_feature],
+                'tag1': [tag]
+            }
+        }
+
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
         feature = result['feature']
-        tags = result['tags']
-        assert type(result['name']) is str
         assert feature['name'] == node_feature
-        assert isinstance(tags, list)
-        assert len(tags) > 0
-        assert any(current_tag['name'] == tag for current_tag in tags)
+        tag1 = result['tag1']
+        assert tag1['name'] == tag
+
+
+def test_nodes_query_with_passed_tag1_and_tag2(client, common_query_builder, node_feature, tag):
+    query = common_query_builder(""" {
+        items {
+            name
+            tag1 { name }
+            tag2 { name }
+        }
+    } """)
+
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'tag1': ['C3'],
+                'tag2': ['ACC']
+            }
+        }
+    )
+
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    assert isinstance(results, list)
+    assert len(results) > 0
+    for result in results[0:2]:
+        assert result['tag1']['name'] == 'C3'
+        assert result['tag2']['name'] == 'ACC'
 
 
 def test_nodes_query_with_passed_maxScore(client, common_query_builder, max_score):
@@ -608,97 +629,58 @@ def test_nodes_query_with_no_arguments(client, common_query_builder):
         assert type(current_data_set['name']) is str
 
 
-def test_nodes_query_with_n_tags1(client, common_query_builder):
-    n_tags = 1
-    query = common_query_builder("""{
-                                    items {
-                                        label
-                                        name
-                                        tags {
-                                            name
-                                            characteristics
-                                            color
-                                            longDisplay
-                                            shortDisplay
-                                        }
-                                    }
-                                }""")
-    num = 100
-    response = client.post('/api', json={
-        'query': query,
-        'variables': {'nTags': n_tags, 'paging': {'first': num}}
-    })
+def test_nodes_query_with_ntags(client, common_query_builder):
+    query = common_query_builder(""" {
+        items {
+            name
+            tag1 { name }
+            tag2 { name }
+        }
+    } """)
+
+    response = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'dataSet': ['PCAWG'],
+                'entrez': [4909],
+                'tag1': ['C3'],
+                'nTags': 1
+            }
+        }
+    )
+
     json_data = json.loads(response.data)
     page = json_data['data']['nodes']
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == num
-    for result in results:
-        tags = result['tags']
-        assert type(result['label']) is str or NoneType
-        assert type(result['name']) is str
-        assert isinstance(tags, list)
-        assert len(tags) == n_tags
+    assert len(results) == 1
+    result = results[0]
+    assert result['name'] == 'PCAWG_extracellular_network_C3_4909'
+    assert result['tag1']['name'] == 'C3'
+    assert result['tag2'] is None
 
+    response2 = client.post(
+        '/api',
+        json={
+            'query': query,
+            'variables': {
+                'tag1': ['C3'],
+                'tag2': ['BLCA'],
+                'entrez': [651],
+            }
+        }
+    )
 
-def test_nodes_query_with_n_tags2(client, common_query_builder):
-    n_tags = 2
-    query = common_query_builder("""{
-                                    items {
-                                        label
-                                        name
-                                        tags {
-                                            name
-                                            characteristics
-                                            color
-                                            longDisplay
-                                            shortDisplay
-                                        }
-                                    }
-                                }""")
-    num = 100
-    response = client.post('/api', json={
-        'query': query,
-        'variables': {'nTags': n_tags, 'paging': {'first': num}}
-    })
-    json_data = json.loads(response.data)
-    page = json_data['data']['nodes']
-    results = page['items']
+    json_data2 = json.loads(response2.data)
+    page2 = json_data2['data']['nodes']
+    results2 = page2['items']
 
-    assert isinstance(results, list)
-    assert len(results) == num
-    for result in results:
-        tags = result['tags']
-        assert type(result['label']) is str or NoneType
-        assert type(result['name']) is str
-        assert isinstance(tags, list)
-        assert len(tags) == n_tags
-
-
-def test_nodes_query_with_n_tags3(client, common_query_builder):
-    n_tags = 3
-    query = common_query_builder("""{
-                                    items {
-                                        label
-                                        name
-                                        tags {
-                                            name
-                                            characteristics
-                                            color
-                                            longDisplay
-                                            shortDisplay
-                                        }
-                                    }
-                                }""")
-    num = 100
-    response = client.post('/api', json={
-        'query': query,
-        'variables': {'nTags': n_tags, 'paging': {'first': num}}
-    })
-    json_data = json.loads(response.data)
-    page = json_data['data']['nodes']
-    results = page['items']
-
-    assert isinstance(results, list)
-    assert len(results) == 0
+    assert isinstance(results2, list)
+    assert len(results2) == 1
+    result2 = results2[0]
+    assert result2['name'] == 'TCGA_extracellular_network_C3:BLCA_651'
+    assert result2['tag1']['name'] == 'C3'
+    assert result2['tag2']['name'] == 'BLCA'
