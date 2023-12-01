@@ -27,6 +27,23 @@ RUN pip install poetry \
   && poetry install --with prod --no-root --no-interaction --no-ansi \
   && pip cache purge
 
+
+WORKDIR /var/www/
+# create user group www-data
+# and create www-data as a user
+RUN usermod -aG www-data www-data
+# change the group ownership of /var/www, /opt/app recursively to www-data
+# /opt/apt folder is relevant for storing manifests when executing endpoints
+# such as /assetTypes/{assetTypes}/projects/{projectId}/manifests
+RUN chgrp -R www-data /var/www /opt/app
+
+# add write permission for group for folder /var/www, opt/app recursively
+RUN chmod -R g+w /var/www /opt/app
+# make sure that all folders created under /var/www are owned by /var/www, opt/app
+RUN find /var/www /opt/app -type d -exec chmod 2775 {} \;   
+# find all files in /var/www, opt/app and add read and write permission for owner and group
+RUN find /var/www /opt/app -type f -exec chmod ug+rw {} \;
+
 WORKDIR /
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
