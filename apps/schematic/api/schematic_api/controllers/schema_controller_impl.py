@@ -73,8 +73,8 @@ def get_connected_nodes_from_schematic(
 
 @handle_exceptions
 def get_connected_nodes(
-    relationship_type: str,
     schema_url: str,
+    relationship_type: str,
 ) -> tuple[Union[ConnectedNodesPage, BasicError], int]:
     """Gets a list of connected node pairs via the provide relationship
 
