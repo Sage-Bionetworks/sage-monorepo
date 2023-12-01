@@ -14,7 +14,10 @@ $xxl-breakpoint: 1400px;
   margin: 0 auto;
   padding-left: 24px;
   padding-right: 24px;
-  gap: 32px;
+  align-items: center;
+}
+#timeline-plot {
+  width: 100%;
 }
 .section-title {
   text-align: center;
@@ -27,6 +30,10 @@ $xxl-breakpoint: 1400px;
   .row {
     flex-wrap: nowrap;
     width: unset;
+  }
+
+  .caption {
+    margin-top: -14px;
   }
 }
 .metrics-container {

@@ -560,13 +560,13 @@ components:
     ChallengeSlug:
       description: The slug of the challenge.
       example: awesome-challenge
-      maxLength: 60
+      maxLength: 255
       minLength: 3
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       type: string
     ChallengeName:
       description: The name of the challenge.
-      maxLength: 60
+      maxLength: 255
       minLength: 3
       type: string
     ChallengeHeadline:
@@ -578,7 +578,7 @@ components:
     ChallengeDescription:
       description: The description of the challenge.
       example: This is an example description of the challenge.
-      maxLength: 280
+      maxLength: 1000
       minLength: 0
       type: string
     ChallengePlatformId:
@@ -721,13 +721,13 @@ components:
         slug:
           description: The slug of the challenge.
           example: awesome-challenge
-          maxLength: 60
+          maxLength: 255
           minLength: 3
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
           description: The name of the challenge.
-          maxLength: 60
+          maxLength: 255
           minLength: 3
           type: string
         headline:
@@ -739,7 +739,7 @@ components:
         description:
           description: The description of the challenge.
           example: This is an example description of the challenge.
-          maxLength: 280
+          maxLength: 1000
           minLength: 0
           type: string
         doi:
@@ -876,6 +876,7 @@ components:
     ChallengesPerYear:
       description: An object
       example:
+        undatedChallengeCount: 0
         challengeCounts:
         - 0
         - 0
@@ -891,8 +892,14 @@ components:
           items:
             type: integer
           type: array
+        undatedChallengeCount:
+          default: 0
+          example: 0
+          minimum: 0
+          type: integer
       required:
       - challengeCounts
+      - undatedChallengeCount
       - years
       type: object
       x-java-class-annotations:

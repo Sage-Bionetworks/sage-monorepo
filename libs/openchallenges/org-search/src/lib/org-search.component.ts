@@ -4,6 +4,7 @@ import {
   OnDestroy,
   OnInit,
   Renderer2,
+  ViewChild,
 } from '@angular/core';
 import {
   OrganizationService,
@@ -121,6 +122,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   defaultSortedBy: OrganizationSort = 'challenge_count';
   defaultPageNumber = 0;
   defaultPageSize = 24;
+  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = organizationSortFilter;
@@ -278,12 +280,28 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   onParamChange(filteredQuery: any): void {
+    // reset pagination settings when filters change
+    if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
+      filteredQuery.pageNumber = this.defaultPageNumber;
+      filteredQuery.pageSize = this.defaultPageSize;
+      // this.selectedPageSize = this.defaultPageSize;
+      this.paginator.resetPageNumber();
+    }
     // update params of URL
     const currentParams = new HttpParams({
       fromString: this._location.path().split('?')[1] ?? '',
     });
     const params = Object.entries(filteredQuery)
-      .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
+      .map(([key, value]) => {
+        // avoid adding pageNumber and pageSize to the params if they are default
+        if (
+          (key === 'pageNumber' && value === this.defaultPageNumber) ||
+          (key === 'pageSize' && value === this.defaultPageSize)
+        ) {
+          return [key, ''];
+        }
+        return [key, this.collapseParam(value as FilterValue)];
+      })
       .reduce(
         // update with new param, or delete the param if empty string
         (params, [key, value]) =>

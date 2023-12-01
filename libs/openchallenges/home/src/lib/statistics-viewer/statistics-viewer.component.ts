@@ -39,16 +39,6 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
               fontFamily: 'Lato, sans-serif',
               color: '#000',
             },
-            // title: {
-            //   text: 'The Rise of Challenges',
-            //   left: 'center',
-            // },
-            // tooltip: {
-            //   trigger: 'axis',
-            //   axisPointer: {
-            //     type: 'cross',
-            //   },
-            // },
             xAxis: {
               type: 'category',
               data: res.years,
@@ -75,7 +65,8 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 },
                 // disable default clicking
                 silent: true,
-                // make bar plot rise from left to right instead of rising all together in the same time
+                // make bar plot rise from left to right
+                // instead of rising all together in the same time
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
