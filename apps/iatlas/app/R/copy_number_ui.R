@@ -8,9 +8,8 @@ copy_number_ui <- function(id){
         ),
         iatlas.modules::textBox(
             width = 12,
-            paste0(
-                "Explore statistical associations between immune readouts ",
-                "and copy number variations."
+            shiny::p("Explore statistical associations between immune readouts and copy number variations."),
+            shiny::p( "Please note: As this module relies heavily on pre-computation, it is not currently compatible with user-defined custom sample groups in Cohort Selection."
             )
         ),
         iatlas.modules::sectionBox(
