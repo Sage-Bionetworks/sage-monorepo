@@ -1,7 +1,8 @@
-"""Integration tests"""
+"""Tests for endpoints that use Synapse without mocking the Synapse client"""
 
 import json
 
+import pytest
 import yaml
 import pandas as pd
 
@@ -28,6 +29,7 @@ HEADERS = {
 }
 
 
+@pytest.mark.synapse
 class TestValidationEndpoints(BaseTestCase):
     """Integration tests"""
 
@@ -60,6 +62,7 @@ class TestValidationEndpoints(BaseTestCase):
         assert isinstance(response.json, str)
 
 
+@pytest.mark.synapse
 class TestStorageEndpoints(BaseTestCase):
     """Integration tests"""
 
