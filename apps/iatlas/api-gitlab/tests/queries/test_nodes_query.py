@@ -708,7 +708,7 @@ def test_tag1_no_ntags(client, common_query_builder):
     response = client.post('/api', json={
         'query': query,
         'variables': {
-            'tag1': ['C1'],reddit eco
+            'tag1': ['C1'],
             'dataSet': ['TCGA'],
             'entrez': [2],
             'network': "Extracellular Network"

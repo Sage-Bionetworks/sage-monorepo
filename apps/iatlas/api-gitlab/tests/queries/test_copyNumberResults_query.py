@@ -269,7 +269,7 @@ def test_copyNumberResults_missing_pagination(client, common_query_builder):
     page = json_data['data']['copyNumberResults']
     items = page['items']
 
-    assert len(items) == Paging.MAX_LIMIT
+    assert len(items) == 10000
 
 
 def test_copyNumberResults_query_with_passed_data_set(client, common_query_builder, test_cnr):
