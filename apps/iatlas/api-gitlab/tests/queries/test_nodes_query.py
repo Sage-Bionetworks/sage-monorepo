@@ -684,3 +684,42 @@ def test_nodes_query_with_ntags(client, common_query_builder):
     assert result2['name'] == 'TCGA_extracellular_network_C3:BLCA_651'
     assert result2['tag1']['name'] == 'C3'
     assert result2['tag2']['name'] == 'BLCA'
+
+def test_tag1_no_ntags(client, common_query_builder):
+    query = common_query_builder("""{
+                                    items {
+                                        name
+                                        network
+                                        dataSet {
+                                            name
+                                        }
+                                        gene{
+                                            entrez
+                                        }
+                                        tag1 {
+                                            name
+                                        }
+                                        tag2 {
+                                            name
+                                        }
+                                    }
+                                }""")
+
+    response = client.post('/api', json={
+        'query': query,
+        'variables': {
+            'tag1': ['C1'],
+            'dataSet': ['TCGA'],
+            'entrez': [2],
+            'network': "Extracellular Network"
+        }
+    })
+    json_data = json.loads(response.data)
+    page = json_data['data']['nodes']
+    results = page['items']
+
+    for result in results:
+        assert result['tag1']['name'] == "C1"
+        assert result['dataSet']['name'] == "TCGA"
+        assert result['gene']['entrez'] == 2
+        assert result['network'] == "Extracellular Network"
