@@ -182,7 +182,7 @@ def build_node_request(
     if network:
         query = query.filter(node_1.network.in_(network))
 
-    if tag1 or 'tag1' in requested:
+    if tag1 or tag_requested1:
         is_outer = not bool(tag1)
         tag_join_condition = build_join_condition(
             tag_1.id,
@@ -193,7 +193,7 @@ def build_node_request(
         query = query.join(tag_1, and_(
             *tag_join_condition), isouter=is_outer)
 
-    if n_tags or tag2 or 'tag2' in requested:
+    if n_tags or tag2 or tag_requested1:
         if tag2:
             tag_join_condition = build_join_condition(
                 tag_2.id,
