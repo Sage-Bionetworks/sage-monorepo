@@ -25,36 +25,36 @@ public class OrganizationMapperTest {
 
     OrganizationEntity entity = mapper.convertToEntity(organizationDto);
 
-    Long retrievedId = entity.getId();
-    String retrievedName = entity.getName();
-    String retrievedEmail = entity.getEmail();
-    String retrievedLogin = entity.getLogin();
-    String retrievedAvatarKey = entity.getAvatarKey();
-    String retrievedWebsiteUrl = entity.getWebsiteUrl();
-    Integer retrievedChallengeCount = entity.getChallengeCount();
-    String retrievedDescription = entity.getDescription();
-    String retrievedAcronym = entity.getAcronym();
+    Long actualId = entity.getId();
+    String actualName = entity.getName();
+    String actualEmail = entity.getEmail();
+    String actualLogin = entity.getLogin();
+    String actualAvatarKey = entity.getAvatarKey();
+    String actualWebsiteUrl = entity.getWebsiteUrl();
+    Integer actualChallengeCount = entity.getChallengeCount();
+    String actualDescription = entity.getDescription();
+    String actualAcronym = entity.getAcronym();
 
-    Long retrievedId2 = organizationDto.getId();
-    String retrievedName2 = organizationDto.getName();
-    String retrievedEmail2 = organizationDto.getEmail();
-    String retrievedLogin2 = organizationDto.getLogin();
-    String retrievedAvatarKey2 = organizationDto.getAvatarKey();
-    String retrievedWebsiteUrl2 = organizationDto.getWebsiteUrl();
-    Integer retrievedChallengeCount2 = organizationDto.getChallengeCount();
-    String retrievedDescription2 = organizationDto.getDescription();
-    String retrievedAcronym2 = organizationDto.getAcronym();
+    Long actualId2 = organizationDto.getId();
+    String actualName2 = organizationDto.getName();
+    String actualEmail2 = organizationDto.getEmail();
+    String actualLogin2 = organizationDto.getLogin();
+    String actualAvatarKey2 = organizationDto.getAvatarKey();
+    String actualWebsiteUrl2 = organizationDto.getWebsiteUrl();
+    Integer actualChallengeCount2 = organizationDto.getChallengeCount();
+    String actualDescription2 = organizationDto.getDescription();
+    String actualAcronym2 = organizationDto.getAcronym();
 
     // verify the entity properties were copied
-    Assertions.assertEquals(retrievedId, retrievedId2);
-    Assertions.assertEquals(retrievedName, retrievedName2);
-    Assertions.assertEquals(retrievedEmail, retrievedEmail2);
-    Assertions.assertEquals(retrievedLogin, retrievedLogin2);
-    Assertions.assertEquals(retrievedAvatarKey, retrievedAvatarKey2);
-    Assertions.assertEquals(retrievedWebsiteUrl, retrievedWebsiteUrl2);
-    Assertions.assertEquals(retrievedChallengeCount, retrievedChallengeCount2);
-    Assertions.assertEquals(retrievedDescription, retrievedDescription2);
-    Assertions.assertEquals(retrievedAcronym, retrievedAcronym2);
+    Assertions.assertEquals(actualId, actualId2);
+    Assertions.assertEquals(actualName, actualName2);
+    Assertions.assertEquals(actualEmail, actualEmail2);
+    Assertions.assertEquals(actualLogin, actualLogin2);
+    Assertions.assertEquals(actualAvatarKey, actualAvatarKey2);
+    Assertions.assertEquals(actualWebsiteUrl, actualWebsiteUrl2);
+    Assertions.assertEquals(actualChallengeCount, actualChallengeCount2);
+    Assertions.assertEquals(actualDescription, actualDescription2);
+    Assertions.assertEquals(actualAcronym, actualAcronym2);
   }
 
   @Test
@@ -77,35 +77,35 @@ public class OrganizationMapperTest {
 
     OrganizationDto organizationDto = mapper.convertToDto(entity);
 
-    Long retrievedId = organizationDto.getId();
-    String retrievedName = organizationDto.getName();
-    String retrievedEmail = organizationDto.getEmail();
-    String retrievedLogin = organizationDto.getLogin();
-    String retrievedAvatarKey = organizationDto.getAvatarKey();
-    String retrievedWebsiteUrl = organizationDto.getWebsiteUrl();
-    Integer retrievedChallengeCount = organizationDto.getChallengeCount();
-    String retrievedDescription = organizationDto.getDescription();
-    String retrievedAcronym = organizationDto.getAcronym();
+    Long actualId = organizationDto.getId();
+    String actualName = organizationDto.getName();
+    String actualEmail = organizationDto.getEmail();
+    String actualLogin = organizationDto.getLogin();
+    String actualAvatarKey = organizationDto.getAvatarKey();
+    String actualWebsiteUrl = organizationDto.getWebsiteUrl();
+    Integer actualChallengeCount = organizationDto.getChallengeCount();
+    String actualDescription = organizationDto.getDescription();
+    String actualAcronym = organizationDto.getAcronym();
 
-    Long retrievedId2 = entity.getId();
-    String retrievedName2 = entity.getName();
-    String retrievedEmail2 = entity.getEmail();
-    String retrievedLogin2 = entity.getLogin();
-    String retrievedAvatarKey2 = entity.getAvatarKey();
-    String retrievedWebsiteUrl2 = entity.getWebsiteUrl();
-    Integer retrievedChallengeCount2 = entity.getChallengeCount();
-    String retrievedDescription2 = entity.getDescription();
-    String retrievedAcronym2 = entity.getAcronym();
+    Long actualId2 = entity.getId();
+    String actualName2 = entity.getName();
+    String actualEmail2 = entity.getEmail();
+    String actualLogin2 = entity.getLogin();
+    String actualAvatarKey2 = entity.getAvatarKey();
+    String actualWebsiteUrl2 = entity.getWebsiteUrl();
+    Integer actualChallengeCount2 = entity.getChallengeCount();
+    String actualDescription2 = entity.getDescription();
+    String actualAcronym2 = entity.getAcronym();
 
     // verify the dto properties were copied
-    Assertions.assertEquals(retrievedId, retrievedId2);
-    Assertions.assertEquals(retrievedName, retrievedName2);
-    Assertions.assertEquals(retrievedEmail, retrievedEmail2);
-    Assertions.assertEquals(retrievedLogin, retrievedLogin2);
-    Assertions.assertEquals(retrievedAvatarKey, retrievedAvatarKey2);
-    Assertions.assertEquals(retrievedWebsiteUrl, retrievedWebsiteUrl2);
-    Assertions.assertEquals(retrievedChallengeCount, retrievedChallengeCount2);
-    Assertions.assertEquals(retrievedDescription, retrievedDescription2);
-    Assertions.assertEquals(retrievedAcronym, retrievedAcronym2);
+    Assertions.assertEquals(actualId, actualId2);
+    Assertions.assertEquals(actualName, actualName2);
+    Assertions.assertEquals(actualEmail, actualEmail2);
+    Assertions.assertEquals(actualLogin, actualLogin2);
+    Assertions.assertEquals(actualAvatarKey, actualAvatarKey2);
+    Assertions.assertEquals(actualWebsiteUrl, actualWebsiteUrl2);
+    Assertions.assertEquals(actualChallengeCount, actualChallengeCount2);
+    Assertions.assertEquals(actualDescription, actualDescription2);
+    Assertions.assertEquals(actualAcronym, actualAcronym2);
   }
 }
