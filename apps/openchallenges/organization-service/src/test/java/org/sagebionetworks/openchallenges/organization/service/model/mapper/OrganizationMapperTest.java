@@ -34,7 +34,8 @@ public class OrganizationMapperTest {
     Assertions.assertThat(organizationEntity.getLogin()).isEqualTo(user.getLogin());
     Assertions.assertThat(organizationEntity.getAvatarKey()).isEqualTo(user.getAvatarKey());
     Assertions.assertThat(organizationEntity.getWebsiteUrl()).isEqualTo(user.getWebsiteUrl());
-    Assertions.assertThat(organizationEntity.getChallengeCount()).isEqualTo(user.getChallengeCount());
+    Assertions.assertThat(organizationEntity.getChallengeCount())
+        .isEqualTo(user.getChallengeCount());
     Assertions.assertThat(organizationEntity.getAcronym()).isEqualTo(user.getAcronym());
   }
 
@@ -66,7 +67,8 @@ public class OrganizationMapperTest {
     Assertions.assertThat(user.getLogin()).isEqualTo(organizationEntity.getLogin());
     Assertions.assertThat(user.getAvatarKey()).isEqualTo(organizationEntity.getAvatarKey());
     Assertions.assertThat(user.getWebsiteUrl()).isEqualTo(organizationEntity.getWebsiteUrl());
-    Assertions.assertThat(user.getChallengeCount()).isEqualTo(organizationEntity.getChallengeCount());
+    Assertions.assertThat(user.getChallengeCount())
+        .isEqualTo(organizationEntity.getChallengeCount());
     Assertions.assertThat(user.getAcronym()).isEqualTo(organizationEntity.getAcronym());
   }
 }
