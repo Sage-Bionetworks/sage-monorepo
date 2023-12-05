@@ -162,8 +162,14 @@ RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
 
 USER $user
 
-# Install pyenv as the user
-RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
+# Install browsers used for e2e testing with Playwright
+# Note: The version of Playwright should be the same as the one used by your project (package.json)
+RUN npx playwright@${playwrightVersion} install --with-deps \
+    chromium \
+    firefox \
+    webkit \
+  # Install pyenv as the user
+  && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
 # Install Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
@@ -172,12 +178,5 @@ RUN pyenv install \
   3.9.2 \
   3.10.6 \
   3.11.0
-
-# Install browsers used for e2e testing with Playwright
-# Note: The version of Playwright should be the same as the one used by your project (package.json)
-RUN npx playwright@${playwrightVersion} install --with-deps \
-  chromium \
-  firefox \
-  webkit
 
 CMD ["bash"]
