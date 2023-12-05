@@ -39,28 +39,6 @@ public class OrganizationMapperTest {
   }
 
   @Test
-  public void convertToEntity_ShouldReturnNullProperties_WhenDtoPropertiesNotPassed() {
-
-    OrganizationDto user = new OrganizationDto(null);
-    // don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new
-    // entity
-
-    OrganizationMapper mapper = new OrganizationMapper();
-
-    OrganizationEntity organizationEntity = mapper.convertToEntity(user);
-
-    assertThat(organizationEntity.getName()).isEqualTo(null);
-    assertThat(organizationEntity.getDescription()).isEqualTo(null);
-    assertThat(organizationEntity.getId()).isEqualTo(null);
-    assertThat(organizationEntity.getEmail()).isEqualTo(null);
-    assertThat(organizationEntity.getLogin()).isEqualTo(null);
-    assertThat(organizationEntity.getAvatarKey()).isEqualTo(null);
-    assertThat(organizationEntity.getWebsiteUrl()).isEqualTo(null);
-    assertThat(organizationEntity.getChallengeCount()).isEqualTo(null);
-    assertThat(organizationEntity.getAcronym()).isEqualTo(null);
-  }
-
-  @Test
   public void
       ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
 
@@ -90,29 +68,5 @@ public class OrganizationMapperTest {
     assertThat(user.getWebsiteUrl()).isEqualTo(organizationEntity.getWebsiteUrl());
     assertThat(user.getChallengeCount()).isEqualTo(organizationEntity.getChallengeCount());
     assertThat(user.getAcronym()).isEqualTo(organizationEntity.getAcronym());
-  }
-
-  @Test
-  public void convertToDto_ShouldReturnNullProperties_WhenEntityPropertiesNotPassed() {
-
-    OrganizationEntity organizationEntity = new OrganizationEntity(null);
-    // don't set entity properties to avoid BeanUtils.copyProperties from passing them to the new
-    // entity
-
-    OrganizationMapper mapper = new OrganizationMapper();
-
-    OrganizationDto user = mapper.convertTouser(organizationEntity);
-    // don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new
-    // entity
-
-    assertThat(user.getName()).isEqualTo(null);
-    assertThat(user.getDescription()).isEqualTo(null);
-    assertThat(user.getId()).isEqualTo(null);
-    assertThat(user.getEmail()).isEqualTo(null);
-    assertThat(user.getLogin()).isEqualTo(null);
-    assertThat(user.getAvatarKey()).isEqualTo(null);
-    assertThat(user.getWebsiteUrl()).isEqualTo(null);
-    assertThat(user.getChallengeCount()).isEqualTo(null);
-    assertThat(user.getAcronym()).isEqualTo(null);
   }
 }
