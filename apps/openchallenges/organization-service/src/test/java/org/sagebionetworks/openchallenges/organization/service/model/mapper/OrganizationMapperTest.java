@@ -26,7 +26,7 @@ public class OrganizationMapperTest {
     OrganizationEntity organizationEntity = mapper.convertToEntity(user);
     OrganizationEntity entityMirror = new OrganizationEntity("");
 
-    //verify the entity properties were copied
+    // verify the entity properties were copied
     assertThat(OrganizationEntity.getName()).isEqualTo(user.getName());
     assertThat(OrganizationEntity.getDescription()).isEqualTo(user.getDescription());
     assertThat(OrganizationEntity.getId()).isEqualTo(user.getId());
@@ -80,7 +80,7 @@ public class OrganizationMapperTest {
 
     OrganizationDto user = mapper.convertToDto(entity);
 
-    //verify the dto properties were copied
+    // verify the dto properties were copied
     assertThat(user.getName()).isEqualTo(organizationEntity.getName());
     assertThat(user.getDescription()).isEqualTo(organizationEntity.getDescription());
     assertThat(user.getId()).isEqualTo(organizationEntity.getId());
