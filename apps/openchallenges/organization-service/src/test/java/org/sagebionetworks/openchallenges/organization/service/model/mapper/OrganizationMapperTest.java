@@ -1,8 +1,5 @@
 package org.sagebionetworks.openchallenges.organization.service.model.mapper;
 
-import java.time.OffsetDateTime;
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
@@ -49,15 +46,15 @@ public class OrganizationMapperTest {
     String retrievedAcronym2 = user.getAcronym();
 
     // verify the entity properties were copied
-    Assertions.assertEquals(retrievedId,retrievedId2);
-    Assertions.assertEquals(retrievedName,retrievedName2);
-    Assertions.assertEquals(retrievedEmail,retrievedEmail2);
-    Assertions.assertEquals(retrievedLogin,retrievedLogin2);
-    Assertions.assertEquals(retrievedAvatarKey,retrievedAvatarKey2);
-    Assertions.assertEquals(retrievedWebsiteUrl,retrievedWebsiteUrl2);
-    Assertions.assertEquals(retrievedChallengeCount,retrievedChallengeCount2);
-    Assertions.assertEquals(retrievedDescription,retrievedDescription2);
-    Assertions.assertEquals(retrievedAcronym,retrievedAcronym2);
+    Assertions.assertEquals(retrievedId, retrievedId2);
+    Assertions.assertEquals(retrievedName, retrievedName2);
+    Assertions.assertEquals(retrievedEmail, retrievedEmail2);
+    Assertions.assertEquals(retrievedLogin, retrievedLogin2);
+    Assertions.assertEquals(retrievedAvatarKey, retrievedAvatarKey2);
+    Assertions.assertEquals(retrievedWebsiteUrl, retrievedWebsiteUrl2);
+    Assertions.assertEquals(retrievedChallengeCount, retrievedChallengeCount2);
+    Assertions.assertEquals(retrievedDescription, retrievedDescription2);
+    Assertions.assertEquals(retrievedAcronym, retrievedAcronym2);
   }
 
   @Test
@@ -75,7 +72,6 @@ public class OrganizationMapperTest {
     organizationEntity.setWebsiteUrl("url");
     organizationEntity.setChallengeCount(7);
     organizationEntity.setAcronym(null);
-    
 
     OrganizationMapper mapper = new OrganizationMapper();
 
@@ -101,17 +97,15 @@ public class OrganizationMapperTest {
     String retrievedDescription2 = organizationEntity.getDescription();
     String retrievedAcronym2 = organizationEntity.getAcronym();
 
-    
-    
     // verify the dto properties were copied
-    Assertions.assertEquals(retrievedId,retrievedId2);
-    Assertions.assertEquals(retrievedName,retrievedName2);
-    Assertions.assertEquals(retrievedEmail,retrievedEmail2);
-    Assertions.assertEquals(retrievedLogin,retrievedLogin2);
-    Assertions.assertEquals(retrievedAvatarKey,retrievedAvatarKey2);
-    Assertions.assertEquals(retrievedWebsiteUrl,retrievedWebsiteUrl2);
-    Assertions.assertEquals(retrievedChallengeCount,retrievedChallengeCount2);
-    Assertions.assertEquals(retrievedDescription,retrievedDescription2);
-    Assertions.assertEquals(retrievedAcronym,retrievedAcronym2);
+    Assertions.assertEquals(retrievedId, retrievedId2);
+    Assertions.assertEquals(retrievedName, retrievedName2);
+    Assertions.assertEquals(retrievedEmail, retrievedEmail2);
+    Assertions.assertEquals(retrievedLogin, retrievedLogin2);
+    Assertions.assertEquals(retrievedAvatarKey, retrievedAvatarKey2);
+    Assertions.assertEquals(retrievedWebsiteUrl, retrievedWebsiteUrl2);
+    Assertions.assertEquals(retrievedChallengeCount, retrievedChallengeCount2);
+    Assertions.assertEquals(retrievedDescription, retrievedDescription2);
+    Assertions.assertEquals(retrievedAcronym, retrievedAcronym2);
   }
 }
