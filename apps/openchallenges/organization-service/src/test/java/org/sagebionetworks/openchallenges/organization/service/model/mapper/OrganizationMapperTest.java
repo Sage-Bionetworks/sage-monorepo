@@ -1,6 +1,6 @@
 package org.sagebionetworks.openchallenges.organization.service.model.mapper;
 
-import org.junit.jupiter.api.Assertions.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
@@ -24,7 +24,6 @@ public class OrganizationMapperTest {
     OrganizationMapper mapper = new OrganizationMapper();
 
     OrganizationEntity organizationEntity = mapper.convertToEntity(user);
-    OrganizationEntity entityMirror = new OrganizationEntity("");
 
     // verify the entity properties were copied
     Assertions.assertThat(organizationEntity.getName()).isEqualTo(user.getName());
