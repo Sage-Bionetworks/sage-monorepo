@@ -10,7 +10,7 @@ from .resolver_helpers import (
     simple_patient_request_fields
 )
 
-from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
+from .resolver_helpers.paging_utils import paginate, create_paging, paging_fields
 
 
 def resolve_neoantigens(
@@ -36,7 +36,9 @@ def resolve_neoantigens(
         child_node='gene'
     )
 
-    paging = paging if paging else Paging.DEFAULT
+    max_items = 10000
+
+    paging = create_paging(paging, max_items)
 
     query, count_query = build_neoantigen_request(
         requested,
