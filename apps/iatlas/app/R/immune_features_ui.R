@@ -9,7 +9,10 @@ immune_features_ui <- function(id) {
       shiny::p(paste0(
         "This module allows you to see how immune readouts vary ",
         "across your groups, and how they relate to one another."
-      ))
+      )),
+      shiny::p("Check out our ",
+               a(href="https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/immune_feature_trends.ipynb", "Jupyter notebook"),
+               "reproducing the code run in this module.")
     ),
     iatlas.modules::sectionBox(
       title = "Distributions",

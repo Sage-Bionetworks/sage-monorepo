@@ -8,7 +8,10 @@ immune_subtype_classifier_ui <- function(id) {
 
     iatlas.modules::textBox(
       width = 12,
-      shiny::p("Upload gene expression* and classify immune subtypes.")
+      shiny::p("Upload gene expression* and classify immune subtypes."),
+      shiny::p("Check out our ",
+               a(href="https://docs.google.com/presentation/d/1QB0fisbZGZ2u6LNpuC8NcyLCNc1o_llaXRIy8XW3vp8/edit?usp=sharing", "tutorial"),
+               "about this tool.")
     ),
 
     # Immunomodulator distributions section ----
