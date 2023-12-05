@@ -1,6 +1,6 @@
 {
   "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:0d98658",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:be08406",
 
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
@@ -24,9 +24,7 @@
 
   "customizations": {
     "codespaces": {
-      "openFiles": [
-        "README.md"
-      ]
+      "openFiles": ["README.md"]
     },
     "vscode": {
       "extensions": [
@@ -36,7 +34,6 @@
         "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",
-        "firsttris.vscode-jest-runner",
         "formulahendry.auto-rename-tag",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
@@ -53,6 +50,7 @@
         "mtxr.sqltools",
         "njpwerner.autodocstring",
         "nrwl.angular-console",
+        "Orta.vscode-jest",
         "pranaygp.vscode-css-peek",
         "ritwickdey.LiveServer",
         "shengchen.vscode-checkstyle",
@@ -70,40 +68,9 @@
   },
 
   "forwardPorts": [
-    3000,
-    3306,
-    4200,
-    4211,
-    5017,
-    5200,
-    5432,
-    5601,
-    7010,
-    7080,
-    7200,
-    7888,
-    8010,
-    8071,
-    8000,
-    8080,
-    8081,
-    8082,
-    8083,
-    8084,
-    8085,
-    8086,
-    8090,
-    8091,
-    8092,
-    8200,
-    8787,
-    8888,
-    8889,
-    9090,
-    9104,
-    9200,
-    9411,
-    27017
+    3000, 3306, 4200, 4211, 5017, 5200, 5432, 5601, 7010, 7080, 7200, 7888, 8010, 8071, 8000, 8080,
+    8081, 8082, 8083, 8084, 8085, 8086, 8090, 8091, 8092, 8200, 8787, 8888, 8889, 9090, 9104, 9200,
+    9411, 27017
   ],
 
   "portsAttributes": {
@@ -249,7 +216,7 @@
     }
   },
 
-	"remoteUser": "vscode",
+  "remoteUser": "vscode",
   "shutdownAction": "stopContainer",
   "runArgs": ["--name", "sage_devcontainer"]
 }
