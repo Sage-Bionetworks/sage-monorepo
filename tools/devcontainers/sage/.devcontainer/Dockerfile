@@ -54,7 +54,7 @@ RUN groupadd docker \
       | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
     && NODE_MAJOR=18 \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
-      | sudo tee /etc/apt/sources.list.d/nodesource.list \
+      | tee /etc/apt/sources.list.d/nodesource.list \
   # Add GitHub CLI repository
   && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
