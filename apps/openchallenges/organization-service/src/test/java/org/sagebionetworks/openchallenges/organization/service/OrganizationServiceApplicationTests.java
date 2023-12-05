@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class OrganizationServiceApplicationTests {
 
-  // prepare the context for the unit tests
   @Test
   void contextLoads() {}
 }
