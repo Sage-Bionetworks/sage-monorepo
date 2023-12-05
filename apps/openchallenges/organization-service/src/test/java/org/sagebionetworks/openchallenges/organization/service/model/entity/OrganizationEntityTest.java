@@ -138,7 +138,6 @@ public class OrganizationEntityTest {
     OffsetDateTime createdAt = OffsetDateTime.now();
     OffsetDateTime updatedAt = OffsetDateTime.now();
 
-    // OrganizationDto organizationEntity = new OrganizationDto();
     OrganizationEntity organizationEntity = new OrganizationEntity();
 
     organizationEntity.setId(1L);
@@ -173,7 +172,7 @@ public class OrganizationEntityTest {
   }
 
   @Test
-  public void EqualsObject_ShouldReturn() {
+  public void EqualsObject_ShouldReturnBoolean_WhenPassedTwoObjects() {
 
     OffsetDateTime createdAt = OffsetDateTime.now();
     OffsetDateTime updatedAt = OffsetDateTime.now();
