@@ -176,8 +176,8 @@ RUN pyenv install \
 # Install browsers used for e2e testing with Playwright
 # Note: The version of Playwright should be the same as the one used by your project (package.json)
 RUN npx playwright@${playwrightVersion} install --with-deps \
-  firefox \
   chromium \
+  firefox \
   webkit
 
 CMD ["bash"]
