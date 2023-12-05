@@ -155,6 +155,10 @@ RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
 
 USER $user
 
+# Install browsers used for e2e testing with Playwright
+RUN npm install @playwright/test@1.40.1 \
+  && npx playwright@1.40.1 install --with-deps firefox chromium webkit
+
 # Install pyenv as the user
 RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
