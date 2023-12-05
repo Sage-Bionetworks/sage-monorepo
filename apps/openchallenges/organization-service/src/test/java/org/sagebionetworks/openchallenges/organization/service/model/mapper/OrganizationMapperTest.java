@@ -7,10 +7,9 @@ import org.sagebionetworks.openchallenges.organization.service.model.entity.Orga
 
 public class OrganizationMapperTest {
   @Test
-  public void
-      ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
+  public void ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
 
-    //create new Dto with properties to be copied to organization entity
+    // create new Dto with properties to be copied to organization entity
     OrganizationDto dto = new OrganizationDto();
     dto.setName("Test Organization");
     dto.setDescription("This is a test organization");
@@ -35,35 +34,33 @@ public class OrganizationMapperTest {
     assertThat(entity.getWebsiteUrl()).isEqualTo(dto.getWebsiteUrl());
     assertThat(entity.getChallengeCount()).isEqualTo(dto.getChallengeCount());
     assertThat(entity.getAcronym()).isEqualTo(dto.getAcronym());
+  }
 
+  @Test
+  public void convertToEntity_ShouldReturnNullProperties_WhenDtoPropertiesNotPassed() {
 
+    OrganizationDto dto = new OrganizationDto(null);
+    // don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new
+    // entity
+
+    OrganizationMapper mapper = new OrganizationMapper();
+
+    OrganizationEntity entity = mapper.convertToEntity(dto);
+
+    assertThat(entity.getName()).isEqualTo(null);
+    assertThat(entity.getDescription()).isEqualTo(null);
+    assertThat(entity.getId()).isEqualTo(null);
+    assertThat(entity.getEmail()).isEqualTo(null);
+    assertThat(entity.getLogin()).isEqualTo(null);
+    assertThat(entity.getAvatarKey()).isEqualTo(null);
+    assertThat(entity.getWebsiteUrl()).isEqualTo(null);
+    assertThat(entity.getChallengeCount()).isEqualTo(null);
+    assertThat(entity.getAcronym()).isEqualTo(null);
   }
 
   @Test
   public void
-    convertToEntity_ShouldReturnNullProperties_WhenDtoPropertiesNotPassed() {
-      
-      OrganizationDto dto = new OrganizationDto(null);
-      //don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new entity
-
-      OrganizationMapper mapper = new OrganizationMapper();
-
-      OrganizationEntity entity = mapper.convertToEntity(dto);
-
-      assertThat(entity.getName()).isEqualTo(null);
-      assertThat(entity.getDescription()).isEqualTo(null);
-      assertThat(entity.getId()).isEqualTo(null);
-      assertThat(entity.getEmail()).isEqualTo(null);
-      assertThat(entity.getLogin()).isEqualTo(null);
-      assertThat(entity.getAvatarKey()).isEqualTo(null);
-      assertThat(entity.getWebsiteUrl()).isEqualTo(null);
-      assertThat(entity.getChallengeCount()).isEqualTo(null);
-      assertThat(entity.getAcronym()).isEqualTo(null);
- 
-  }
-
-  @Test
-  public void ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
+      ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
 
     OrganizationEntity entity = new OrganizationEntity();
     entity.setName("Test Organization");
@@ -92,26 +89,26 @@ public class OrganizationMapperTest {
   }
 
   @Test
-  public void
-    convertToDto_ShouldReturnNullProperties_WhenEntityPropertiesNotPassed() {
-      
-      OrganizationEntity entity = new OrganizationEntity(null);
-      //don't set entity properties to avoid BeanUtils.copyProperties from passing them to the new entity
+  public void convertToDto_ShouldReturnNullProperties_WhenEntityPropertiesNotPassed() {
 
-      OrganizationMapper mapper = new OrganizationMapper();
+    OrganizationEntity entity = new OrganizationEntity(null);
+    // don't set entity properties to avoid BeanUtils.copyProperties from passing them to the new
+    // entity
 
-      OrganizationDto dto = mapper.convertToDto(entity);
-      //don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new entity
+    OrganizationMapper mapper = new OrganizationMapper();
 
-      assertThat(dto.getName()).isEqualTo(null);
-      assertThat(dto.getDescription()).isEqualTo(null);
-      assertThat(dto.getId()).isEqualTo(null);
-      assertThat(dto.getEmail()).isEqualTo(null);
-      assertThat(dto.getLogin()).isEqualTo(null);
-      assertThat(dto.getAvatarKey()).isEqualTo(null);
-      assertThat(dto.getWebsiteUrl()).isEqualTo(null);
-      assertThat(dto.getChallengeCount()).isEqualTo(null);
-      assertThat(dto.getAcronym()).isEqualTo(null);
- 
+    OrganizationDto dto = mapper.convertToDto(entity);
+    // don't set dto properties to avoid BeanUtils.copyProperties from passing them to the new
+    // entity
+
+    assertThat(dto.getName()).isEqualTo(null);
+    assertThat(dto.getDescription()).isEqualTo(null);
+    assertThat(dto.getId()).isEqualTo(null);
+    assertThat(dto.getEmail()).isEqualTo(null);
+    assertThat(dto.getLogin()).isEqualTo(null);
+    assertThat(dto.getAvatarKey()).isEqualTo(null);
+    assertThat(dto.getWebsiteUrl()).isEqualTo(null);
+    assertThat(dto.getChallengeCount()).isEqualTo(null);
+    assertThat(dto.getAcronym()).isEqualTo(null);
   }
 }
