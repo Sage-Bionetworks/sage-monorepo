@@ -10,40 +10,40 @@ public class OrganizationMapperTest {
   public void ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
 
     // create new Dto with properties to be copied to organization entity
-    OrganizationDto user = new OrganizationDto();
-    user.setName("Test Organization");
-    user.setDescription("This is a test organization");
-    user.setId(4599L);
-    user.setEmail("testemail@test.edu");
-    user.setLogin("login");
-    user.setAvatarKey("avatar Key");
-    user.setWebsiteUrl("url");
-    user.setChallengeCount(7);
-    user.setAcronym(null);
+    OrganizationDto organizationDto = new OrganizationDto();
+    organizationDto.setName("Test Organization");
+    organizationDto.setDescription("This is a test organization");
+    organizationDto.setId(4599L);
+    organizationDto.setEmail("testemail@test.edu");
+    organizationDto.setLogin("login");
+    organizationDto.setAvatarKey("avatar Key");
+    organizationDto.setWebsiteUrl("url");
+    organizationDto.setChallengeCount(7);
+    organizationDto.setAcronym(null);
 
     OrganizationMapper mapper = new OrganizationMapper();
 
-    OrganizationEntity organizationEntity = mapper.convertToEntity(user);
+    OrganizationEntity entity = mapper.convertToEntity(organizationDto);
 
-    Long retrievedId = organizationEntity.getId();
-    String retrievedName = organizationEntity.getName();
-    String retrievedEmail = organizationEntity.getEmail();
-    String retrievedLogin = organizationEntity.getLogin();
-    String retrievedAvatarKey = organizationEntity.getAvatarKey();
-    String retrievedWebsiteUrl = organizationEntity.getWebsiteUrl();
-    Integer retrievedChallengeCount = organizationEntity.getChallengeCount();
-    String retrievedDescription = organizationEntity.getDescription();
-    String retrievedAcronym = organizationEntity.getAcronym();
+    Long retrievedId = entity.getId();
+    String retrievedName = entity.getName();
+    String retrievedEmail = entity.getEmail();
+    String retrievedLogin = entity.getLogin();
+    String retrievedAvatarKey = entity.getAvatarKey();
+    String retrievedWebsiteUrl = entity.getWebsiteUrl();
+    Integer retrievedChallengeCount = entity.getChallengeCount();
+    String retrievedDescription = entity.getDescription();
+    String retrievedAcronym = entity.getAcronym();
 
-    Long retrievedId2 = user.getId();
-    String retrievedName2 = user.getName();
-    String retrievedEmail2 = user.getEmail();
-    String retrievedLogin2 = user.getLogin();
-    String retrievedAvatarKey2 = user.getAvatarKey();
-    String retrievedWebsiteUrl2 = user.getWebsiteUrl();
-    Integer retrievedChallengeCount2 = user.getChallengeCount();
-    String retrievedDescription2 = user.getDescription();
-    String retrievedAcronym2 = user.getAcronym();
+    Long retrievedId2 = organizationDto.getId();
+    String retrievedName2 = organizationDto.getName();
+    String retrievedEmail2 = organizationDto.getEmail();
+    String retrievedLogin2 = organizationDto.getLogin();
+    String retrievedAvatarKey2 = organizationDto.getAvatarKey();
+    String retrievedWebsiteUrl2 = organizationDto.getWebsiteUrl();
+    Integer retrievedChallengeCount2 = organizationDto.getChallengeCount();
+    String retrievedDescription2 = organizationDto.getDescription();
+    String retrievedAcronym2 = organizationDto.getAcronym();
 
     // verify the entity properties were copied
     Assertions.assertEquals(retrievedId, retrievedId2);
@@ -61,41 +61,41 @@ public class OrganizationMapperTest {
   public void
       ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
 
-    OrganizationEntity organizationEntity = new OrganizationEntity();
+    OrganizationEntity entity = new OrganizationEntity();
 
-    organizationEntity.setName("Test Organization");
-    organizationEntity.setDescription("This is a test organization");
-    organizationEntity.setId(4599L);
-    organizationEntity.setEmail("testemail@test.edu");
-    organizationEntity.setLogin("login");
-    organizationEntity.setAvatarKey("avatar Key");
-    organizationEntity.setWebsiteUrl("url");
-    organizationEntity.setChallengeCount(7);
-    organizationEntity.setAcronym(null);
+    entity.setName("Test Organization");
+    entity.setDescription("This is a test organization");
+    entity.setId(4599L);
+    entity.setEmail("testemail@test.edu");
+    entity.setLogin("login");
+    entity.setAvatarKey("avatar Key");
+    entity.setWebsiteUrl("url");
+    entity.setChallengeCount(7);
+    entity.setAcronym(null);
 
     OrganizationMapper mapper = new OrganizationMapper();
 
-    OrganizationDto user = mapper.convertToDto(organizationEntity);
+    OrganizationDto organizationDto = mapper.convertToDto(entity);
 
-    Long retrievedId = user.getId();
-    String retrievedName = user.getName();
-    String retrievedEmail = user.getEmail();
-    String retrievedLogin = user.getLogin();
-    String retrievedAvatarKey = user.getAvatarKey();
-    String retrievedWebsiteUrl = user.getWebsiteUrl();
-    Integer retrievedChallengeCount = user.getChallengeCount();
-    String retrievedDescription = user.getDescription();
-    String retrievedAcronym = user.getAcronym();
+    Long retrievedId = organizationDto.getId();
+    String retrievedName = organizationDto.getName();
+    String retrievedEmail = organizationDto.getEmail();
+    String retrievedLogin = organizationDto.getLogin();
+    String retrievedAvatarKey = organizationDto.getAvatarKey();
+    String retrievedWebsiteUrl = organizationDto.getWebsiteUrl();
+    Integer retrievedChallengeCount = organizationDto.getChallengeCount();
+    String retrievedDescription = organizationDto.getDescription();
+    String retrievedAcronym = organizationDto.getAcronym();
 
-    Long retrievedId2 = organizationEntity.getId();
-    String retrievedName2 = organizationEntity.getName();
-    String retrievedEmail2 = organizationEntity.getEmail();
-    String retrievedLogin2 = organizationEntity.getLogin();
-    String retrievedAvatarKey2 = organizationEntity.getAvatarKey();
-    String retrievedWebsiteUrl2 = organizationEntity.getWebsiteUrl();
-    Integer retrievedChallengeCount2 = organizationEntity.getChallengeCount();
-    String retrievedDescription2 = organizationEntity.getDescription();
-    String retrievedAcronym2 = organizationEntity.getAcronym();
+    Long retrievedId2 = entity.getId();
+    String retrievedName2 = entity.getName();
+    String retrievedEmail2 = entity.getEmail();
+    String retrievedLogin2 = entity.getLogin();
+    String retrievedAvatarKey2 = entity.getAvatarKey();
+    String retrievedWebsiteUrl2 = entity.getWebsiteUrl();
+    Integer retrievedChallengeCount2 = entity.getChallengeCount();
+    String retrievedDescription2 = entity.getDescription();
+    String retrievedAcronym2 = entity.getAcronym();
 
     // verify the dto properties were copied
     Assertions.assertEquals(retrievedId, retrievedId2);
