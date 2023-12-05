@@ -11,12 +11,8 @@ sc_immunomodulators_ui <- function(id){
       p("This module allows you to see how immunomodulators are expressed in single-cell RNA-seq datasets.")
     ),
     iatlas.modules::sectionBox(
-      title = "bubble plot",
-      sc_bubbleplot_ui(ns("sc_bubbleplot"))
-    ),
-
-    iatlas.modules::sectionBox(
       title = "Distributions",
+      sc_bubbleplot_ui(ns("sc_bubbleplot")),
       iatlas.modules::messageBox(
         width = 12,
         shiny::p("Distribution of gene expression for pseudobulk single-cell RNA-seq")
