@@ -1,6 +1,6 @@
 package org.sagebionetworks.openchallenges.organization.service.model.mapper;
 
-import org.junit.jupiter.api.Assertions.assertThat;
+import org.junit.jupiter.api.Assertions.Assertions;
 import org.junit.jupiter.api.Test;
 import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
@@ -27,15 +27,15 @@ public class OrganizationMapperTest {
     OrganizationEntity entityMirror = new OrganizationEntity("");
 
     // verify the entity properties were copied
-    assertThat(organizationEntity.getName()).isEqualTo(user.getName());
-    assertThat(organizationEntity.getDescription()).isEqualTo(user.getDescription());
-    assertThat(organizationEntity.getId()).isEqualTo(user.getId());
-    assertThat(organizationEntity.getEmail()).isEqualTo(user.getEmail());
-    assertThat(organizationEntity.getLogin()).isEqualTo(user.getLogin());
-    assertThat(organizationEntity.getAvatarKey()).isEqualTo(user.getAvatarKey());
-    assertThat(organizationEntity.getWebsiteUrl()).isEqualTo(user.getWebsiteUrl());
-    assertThat(organizationEntity.getChallengeCount()).isEqualTo(user.getChallengeCount());
-    assertThat(organizationEntity.getAcronym()).isEqualTo(user.getAcronym());
+    Assertions.assertThat(organizationEntity.getName()).isEqualTo(user.getName());
+    Assertions.assertThat(organizationEntity.getDescription()).isEqualTo(user.getDescription());
+    Assertions.assertThat(organizationEntity.getId()).isEqualTo(user.getId());
+    Assertions.assertThat(organizationEntity.getEmail()).isEqualTo(user.getEmail());
+    Assertions.assertThat(organizationEntity.getLogin()).isEqualTo(user.getLogin());
+    Assertions.assertThat(organizationEntity.getAvatarKey()).isEqualTo(user.getAvatarKey());
+    Assertions.assertThat(organizationEntity.getWebsiteUrl()).isEqualTo(user.getWebsiteUrl());
+    Assertions.assertThat(organizationEntity.getChallengeCount()).isEqualTo(user.getChallengeCount());
+    Assertions.assertThat(organizationEntity.getAcronym()).isEqualTo(user.getAcronym());
   }
 
   @Test
@@ -59,14 +59,14 @@ public class OrganizationMapperTest {
     OrganizationDto user = mapper.convertToDto(entity);
 
     // verify the dto properties were copied
-    assertThat(user.getName()).isEqualTo(organizationEntity.getName());
-    assertThat(user.getDescription()).isEqualTo(organizationEntity.getDescription());
-    assertThat(user.getId()).isEqualTo(organizationEntity.getId());
-    assertThat(user.getEmail()).isEqualTo(organizationEntity.getEmail());
-    assertThat(user.getLogin()).isEqualTo(organizationEntity.getLogin());
-    assertThat(user.getAvatarKey()).isEqualTo(organizationEntity.getAvatarKey());
-    assertThat(user.getWebsiteUrl()).isEqualTo(organizationEntity.getWebsiteUrl());
-    assertThat(user.getChallengeCount()).isEqualTo(organizationEntity.getChallengeCount());
-    assertThat(user.getAcronym()).isEqualTo(organizationEntity.getAcronym());
+    Assertions.assertThat(user.getName()).isEqualTo(organizationEntity.getName());
+    Assertions.assertThat(user.getDescription()).isEqualTo(organizationEntity.getDescription());
+    Assertions.assertThat(user.getId()).isEqualTo(organizationEntity.getId());
+    Assertions.assertThat(user.getEmail()).isEqualTo(organizationEntity.getEmail());
+    Assertions.assertThat(user.getLogin()).isEqualTo(organizationEntity.getLogin());
+    Assertions.assertThat(user.getAvatarKey()).isEqualTo(organizationEntity.getAvatarKey());
+    Assertions.assertThat(user.getWebsiteUrl()).isEqualTo(organizationEntity.getWebsiteUrl());
+    Assertions.assertThat(user.getChallengeCount()).isEqualTo(organizationEntity.getChallengeCount());
+    Assertions.assertThat(user.getAcronym()).isEqualTo(organizationEntity.getAcronym());
   }
 }
