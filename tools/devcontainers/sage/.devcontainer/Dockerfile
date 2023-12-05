@@ -23,6 +23,8 @@ ARG rVersion="4.2.3"
 ARG trivyVersion="0.44.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
+# https://www.npmjs.com/package/playwright
+ARG playwrightVersion="1.40.1"
 # https://github.com/pnpm/pnpm/releases
 ARG pnpmVersion="8.7.0"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
@@ -47,7 +49,12 @@ RUN groupadd docker \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev \
   # Add Node.js repository
-  && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+  && mkdir -p /etc/apt/keyrings \
+    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+      | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && NODE_MAJOR=18 \
+    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
+      | sudo tee /etc/apt/sources.list.d/nodesource.list \
   # Add GitHub CLI repository
   && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
       gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -155,10 +162,6 @@ RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
 
 USER $user
 
-# Install browsers used for e2e testing with Playwright
-RUN npm install @playwright/test@1.40.1 \
-  && npx playwright@1.40.1 install --with-deps firefox chromium webkit
-
 # Install pyenv as the user
 RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
@@ -169,5 +172,9 @@ RUN pyenv install \
   3.9.2 \
   3.10.6 \
   3.11.0
+
+# Install browsers used for e2e testing with Playwright
+# Note: The version of Playwright should be the same as the one used by your project (package.json)
+RUN npx playwright@${playwrightVersion} install --with-deps firefox chromium webkit
 
 CMD ["bash"]
