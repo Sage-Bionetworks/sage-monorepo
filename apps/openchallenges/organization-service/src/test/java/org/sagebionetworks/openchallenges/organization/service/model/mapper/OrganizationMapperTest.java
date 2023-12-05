@@ -27,15 +27,15 @@ public class OrganizationMapperTest {
     OrganizationEntity entityMirror = new OrganizationEntity("");
 
     // verify the entity properties were copied
-    assertThat(OrganizationEntity.getName()).isEqualTo(user.getName());
-    assertThat(OrganizationEntity.getDescription()).isEqualTo(user.getDescription());
-    assertThat(OrganizationEntity.getId()).isEqualTo(user.getId());
-    assertThat(OrganizationEntity.getEmail()).isEqualTo(user.getEmail());
-    assertThat(OrganizationEntity.getLogin()).isEqualTo(user.getLogin());
-    assertThat(OrganizationEntity.getAvatarKey()).isEqualTo(user.getAvatarKey());
-    assertThat(OrganizationEntity.getWebsiteUrl()).isEqualTo(user.getWebsiteUrl());
-    assertThat(OrganizationEntity.getChallengeCount()).isEqualTo(user.getChallengeCount());
-    assertThat(OrganizationEntity.getAcronym()).isEqualTo(user.getAcronym());
+    assertThat(organizationEntity.getName()).isEqualTo(user.getName());
+    assertThat(organizationEntity.getDescription()).isEqualTo(user.getDescription());
+    assertThat(organizationEntity.getId()).isEqualTo(user.getId());
+    assertThat(organizationEntity.getEmail()).isEqualTo(user.getEmail());
+    assertThat(organizationEntity.getLogin()).isEqualTo(user.getLogin());
+    assertThat(organizationEntity.getAvatarKey()).isEqualTo(user.getAvatarKey());
+    assertThat(organizationEntity.getWebsiteUrl()).isEqualTo(user.getWebsiteUrl());
+    assertThat(organizationEntity.getChallengeCount()).isEqualTo(user.getChallengeCount());
+    assertThat(organizationEntity.getAcronym()).isEqualTo(user.getAcronym());
   }
 
   @Test
