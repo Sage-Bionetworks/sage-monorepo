@@ -12,7 +12,7 @@ sc_bubbleplot_ui <- function(id){
         width = 3,
         iatlas.modules::optionsBox(
           width=24,
-          shiny::uiOutput(ns("select_cells")),
+          #shiny::uiOutput(ns("select_cells")),
           shiny::selectizeInput(
             ns("genes"),
             label = "Select or Search for genes",
