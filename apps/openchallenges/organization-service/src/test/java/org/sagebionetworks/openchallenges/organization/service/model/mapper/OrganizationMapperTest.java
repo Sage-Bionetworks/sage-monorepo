@@ -75,7 +75,7 @@ public class OrganizationMapperTest {
 
     OrganizationMapper mapper = new OrganizationMapper();
 
-    OrganizationDto user = mapper.convertToDto(entity);
+    OrganizationDto user = mapper.convertToDto(organizationEntity);
 
     Long retrievedId = user.getId();
     String retrievedName = user.getName();
