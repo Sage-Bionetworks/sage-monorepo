@@ -55,7 +55,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
         #                               to_column = "display")
       })
 
-      varible_plot_label <- reactive({
+      varible_plot_label <- shiny::reactive({
         switch(
           input$scale_method,
           "None" = varible_display_name(),
@@ -89,7 +89,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
           build_distribution_io_df(., "feature_value", input$scale_method)
       })
 
-      dataset_displays <- reactive({
+      dataset_displays <- shiny::reactive({
         names_datasets <- unique(df_selected()$dataset_name)
         setNames(names_datasets, names_datasets)
       })
