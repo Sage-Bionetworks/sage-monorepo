@@ -5,26 +5,42 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeAll;
 
 public class OrganizationEntityTest {
-
+  
+  private static Long id;
+  private static String name;
+  private static String email;
+  private static String login;
+  private static String avatarKey;
+  private static String websiteUrl;
+  private static Integer challengeCount;
+  private static String description;
+  private static OffsetDateTime createdAt;
+  private static OffsetDateTime updatedAt;
+  private static String acronym;
+  
+  @BeforeAll
+  public static void setup() {
+    id = 1L;
+    name = "Test Organization";
+    email = "test@example.com";
+    login = "testorg";
+    avatarKey = "avatarKey";
+    websiteUrl = "https://example.com";
+    challengeCount = 5;
+    description = "Test description";
+    createdAt = OffsetDateTime.now();
+    updatedAt = OffsetDateTime.now();
+    acronym = "TO";
+  }
+  
   @Test
   public void
       OrganizationEntityBuilderArguments_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuilt() {
 
-    Long id = 1L;
-    String name = "Test Organization";
-    String email = "test@example.com";
-    String login = "testorg";
-    String avatarKey = "avatarKey";
-    String websiteUrl = "https://example.com";
-    Integer challengeCount = 5;
-    String description = "Test description";
-    OffsetDateTime createdAt = OffsetDateTime.now();
-    OffsetDateTime updatedAt = OffsetDateTime.now();
-    String acronym = "TO";
-
-    OrganizationEntity organizationEntity =
+    OrganizationEntity entity =
         OrganizationEntity.builder()
             .id(id)
             .name(name)
@@ -40,130 +56,116 @@ public class OrganizationEntityTest {
             .updatedAt(updatedAt)
             .acronym(acronym)
             .build();
-    Long retrievedId = organizationEntity.getId();
-    String retrievedName = organizationEntity.getName();
-    String retrievedEmail = organizationEntity.getEmail();
-    String retrievedLogin = organizationEntity.getLogin();
-    String retrievedAvatarKey = organizationEntity.getAvatarKey();
-    String retrievedWebsiteUrl = organizationEntity.getWebsiteUrl();
-    Integer retrievedChallengeCount = organizationEntity.getChallengeCount();
-    List<OrganizationCategoryEntity> retrievedCategories = organizationEntity.getCategories();
-    List<ChallengeContributionEntity> retrievedChallengeContributions =
-        organizationEntity.getChallengeContributions();
-    String retrievedDescription = organizationEntity.getDescription();
-    OffsetDateTime retrievedCreatedAt = organizationEntity.getCreatedAt();
-    OffsetDateTime retrievedUpdatedAt = organizationEntity.getUpdatedAt();
-    String retrievedAcronym = organizationEntity.getAcronym();
 
-    Assertions.assertEquals(id, retrievedId);
-    Assertions.assertEquals(name, retrievedName);
-    Assertions.assertEquals(email, retrievedEmail);
-    Assertions.assertEquals(login, retrievedLogin);
-    Assertions.assertEquals(avatarKey, retrievedAvatarKey);
-    Assertions.assertEquals(websiteUrl, retrievedWebsiteUrl);
-    Assertions.assertEquals(challengeCount, retrievedChallengeCount);
-    Assertions.assertEquals(Collections.emptyList(), retrievedCategories);
-    Assertions.assertEquals(Collections.emptyList(), retrievedChallengeContributions);
-    Assertions.assertEquals(description, retrievedDescription);
-    Assertions.assertEquals(createdAt, retrievedCreatedAt);
-    Assertions.assertEquals(updatedAt, retrievedUpdatedAt);
-    Assertions.assertEquals(acronym, retrievedAcronym);
+    Long actualId = entity.getId();
+    String actualName = entity.getName();
+    String actualEmail = entity.getEmail();
+    String actualLogin = entity.getLogin();
+    String actualAvatarKey = entity.getAvatarKey();
+    String actualWebsiteUrl = entity.getWebsiteUrl();
+    Integer actualChallengeCount = entity.getChallengeCount();
+    List<OrganizationCategoryEntity> actualCategories = entity.getCategories();
+    List<ChallengeContributionEntity> actualChallengeContributions =
+        entity.getChallengeContributions();
+    String actualDescription = entity.getDescription();
+    OffsetDateTime actualCreatedAt = entity.getCreatedAt();
+    OffsetDateTime actualUpdatedAt = entity.getUpdatedAt();
+    String actualAcronym = entity.getAcronym();
+    
+    Assertions.assertEquals(id, actualId);
+    Assertions.assertEquals(name, actualName);
+    Assertions.assertEquals(email, actualEmail);
+    Assertions.assertEquals(login, actualLogin);
+    Assertions.assertEquals(avatarKey, actualAvatarKey);
+    Assertions.assertEquals(websiteUrl, actualWebsiteUrl);
+    Assertions.assertEquals(challengeCount, actualChallengeCount);
+    Assertions.assertEquals(Collections.emptyList(), actualCategories);
+    Assertions.assertEquals(Collections.emptyList(), actualChallengeContributions);
+    Assertions.assertEquals(description, actualDescription);
+    Assertions.assertEquals(createdAt, actualCreatedAt);
+    Assertions.assertEquals(updatedAt, actualUpdatedAt);
+    Assertions.assertEquals(acronym, actualAcronym);
   }
 
   @Test
   public void
       OrganizationEntityMethodsToSetArguments_ShouldReturnArguments_WhenOrganizationEntityArgumentsPassed() {
+ 
+    OrganizationEntity entity = new OrganizationEntity();
 
-    OrganizationEntity organizationEntity = new OrganizationEntity();
+    entity.setAcronym(acronym);
+    entity.setAvatarKey(avatarKey);
+    entity.setChallengeCount(challengeCount);
+    entity.setCreatedAt(createdAt);
+    entity.setDescription(description);
+    entity.setEmail(email);
+    entity.setId(id);
+    entity.setLogin(login);
+    entity.setName(name);
+    entity.setUpdatedAt(updatedAt);
+    entity.setWebsiteUrl(websiteUrl);
+    entity.setCategories(Collections.emptyList());
+    entity.setChallengeContributions(Collections.emptyList());
 
-    Long id = 1L;
-    String name = "Test Organization";
-    String email = "test@example.com";
-    String login = "testorg";
-    String avatarKey = "avatarKey";
-    String websiteUrl = "https://example.com";
-    Integer challengeCount = 5;
-    String description = "Test description";
-    OffsetDateTime createdAt = OffsetDateTime.now();
-    OffsetDateTime updatedAt = OffsetDateTime.now();
-    String acronym = "TO";
+    Long actualId = entity.getId();
+    String actualName = entity.getName();
+    String actualEmail = entity.getEmail();
+    String actualLogin = entity.getLogin();
+    String actualAvatarKey = entity.getAvatarKey();
+    String actualWebsiteUrl = entity.getWebsiteUrl();
+    Integer actualChallengeCount = entity.getChallengeCount();
+    List<OrganizationCategoryEntity> actualCategories = entity.getCategories();
+    List<ChallengeContributionEntity> actualChallengeContributions =
+        entity.getChallengeContributions();
+    String actualDescription = entity.getDescription();
+    OffsetDateTime actualCreatedAt = entity.getCreatedAt();
+    OffsetDateTime actualUpdatedAt = entity.getUpdatedAt();
+    String actualAcronym = entity.getAcronym();
 
-    organizationEntity.setAcronym(acronym);
-    organizationEntity.setAvatarKey(avatarKey);
-    organizationEntity.setChallengeCount(challengeCount);
-    organizationEntity.setCreatedAt(createdAt);
-    organizationEntity.setDescription(description);
-    organizationEntity.setEmail(email);
-    organizationEntity.setId(id);
-    organizationEntity.setLogin(login);
-    organizationEntity.setName(name);
-    organizationEntity.setUpdatedAt(updatedAt);
-    organizationEntity.setWebsiteUrl(websiteUrl);
-    organizationEntity.setCategories(Collections.emptyList());
-    organizationEntity.setChallengeContributions(Collections.emptyList());
-
-    Long retrievedId = organizationEntity.getId();
-    String retrievedName = organizationEntity.getName();
-    String retrievedEmail = organizationEntity.getEmail();
-    String retrievedLogin = organizationEntity.getLogin();
-    String retrievedAvatarKey = organizationEntity.getAvatarKey();
-    String retrievedWebsiteUrl = organizationEntity.getWebsiteUrl();
-    Integer retrievedChallengeCount = organizationEntity.getChallengeCount();
-    List<OrganizationCategoryEntity> retrievedCategories = organizationEntity.getCategories();
-    List<ChallengeContributionEntity> retrievedChallengeContributions =
-        organizationEntity.getChallengeContributions();
-    String retrievedDescription = organizationEntity.getDescription();
-    OffsetDateTime retrievedCreatedAt = organizationEntity.getCreatedAt();
-    OffsetDateTime retrievedUpdatedAt = organizationEntity.getUpdatedAt();
-    String retrievedAcronym = organizationEntity.getAcronym();
-
-    Assertions.assertEquals(id, retrievedId);
-    Assertions.assertEquals(name, retrievedName);
-    Assertions.assertEquals(email, retrievedEmail);
-    Assertions.assertEquals(login, retrievedLogin);
-    Assertions.assertEquals(avatarKey, retrievedAvatarKey);
-    Assertions.assertEquals(websiteUrl, retrievedWebsiteUrl);
-    Assertions.assertEquals(challengeCount, retrievedChallengeCount);
-    Assertions.assertEquals(Collections.emptyList(), retrievedCategories);
-    Assertions.assertEquals(Collections.emptyList(), retrievedChallengeContributions);
-    Assertions.assertEquals(description, retrievedDescription);
-    Assertions.assertEquals(createdAt, retrievedCreatedAt);
-    Assertions.assertEquals(updatedAt, retrievedUpdatedAt);
-    Assertions.assertEquals(acronym, retrievedAcronym);
+    Assertions.assertEquals(id, actualId);
+    Assertions.assertEquals(name, actualName);
+    Assertions.assertEquals(email, actualEmail);
+    Assertions.assertEquals(login, actualLogin);
+    Assertions.assertEquals(avatarKey, actualAvatarKey);
+    Assertions.assertEquals(websiteUrl, actualWebsiteUrl);
+    Assertions.assertEquals(challengeCount, actualChallengeCount);
+    Assertions.assertEquals(Collections.emptyList(), actualCategories);
+    Assertions.assertEquals(Collections.emptyList(), actualChallengeContributions);
+    Assertions.assertEquals(description, actualDescription);
+    Assertions.assertEquals(createdAt, actualCreatedAt);
+    Assertions.assertEquals(updatedAt, actualUpdatedAt);
+    Assertions.assertEquals(acronym, actualAcronym);
   }
 
   @Test
   public void HashCode_ShouldBuildHashCodeOfArgumentsForOrganizationEntity_WhenArgumentsPassed() {
 
-    OffsetDateTime createdAt = OffsetDateTime.now();
-    OffsetDateTime updatedAt = OffsetDateTime.now();
-
     OrganizationEntity organizationEntity = new OrganizationEntity();
 
-    organizationEntity.setId(1L);
-    organizationEntity.setName("Test Organization");
-    organizationEntity.setEmail("test@example.com");
-    organizationEntity.setLogin("testorg");
-    organizationEntity.setDescription("Test description");
-    organizationEntity.setAvatarKey("avatarKey");
-    organizationEntity.setWebsiteUrl("https://example.com");
-    organizationEntity.setChallengeCount(5);
+    organizationEntity.setId(id);
+    organizationEntity.setName(name);
+    organizationEntity.setEmail(email);
+    organizationEntity.setLogin(login);
+    organizationEntity.setDescription(description);
+    organizationEntity.setAvatarKey(avatarKey);
+    organizationEntity.setWebsiteUrl(websiteUrl);
+    organizationEntity.setChallengeCount(challengeCount);
     organizationEntity.setCreatedAt(createdAt);
     organizationEntity.setUpdatedAt(updatedAt);
-    organizationEntity.setAcronym("TO");
+    organizationEntity.setAcronym(acronym);
 
     OrganizationEntity organizationEntity2 = new OrganizationEntity();
-    organizationEntity2.setId(1L);
-    organizationEntity2.setName("Test Organization");
-    organizationEntity2.setEmail("test@example.com");
-    organizationEntity2.setLogin("testorg");
-    organizationEntity2.setDescription("Test description");
-    organizationEntity2.setAvatarKey("avatarKey");
-    organizationEntity2.setWebsiteUrl("https://example.com");
-    organizationEntity2.setChallengeCount(5);
+    organizationEntity2.setId(id);
+    organizationEntity2.setName(name);
+    organizationEntity2.setEmail(email);
+    organizationEntity2.setLogin(login);
+    organizationEntity2.setDescription(description);
+    organizationEntity2.setAvatarKey(avatarKey);
+    organizationEntity2.setWebsiteUrl(websiteUrl);
+    organizationEntity2.setChallengeCount(challengeCount);
     organizationEntity2.setCreatedAt(createdAt);
     organizationEntity2.setUpdatedAt(updatedAt);
-    organizationEntity2.setAcronym("TO");
+    organizationEntity2.setAcronym(acronym);
 
     int hashCode1 = organizationEntity.hashCode();
     int hashCode2 = organizationEntity2.hashCode();
@@ -174,34 +176,34 @@ public class OrganizationEntityTest {
   @Test
   public void EqualsObject_ShouldReturnBoolean_WhenPassedTwoObjects() {
 
-    OffsetDateTime createdAt = OffsetDateTime.now();
-    OffsetDateTime updatedAt = OffsetDateTime.now();
+    // OffsetDateTime createdAt = OffsetDateTime.now();
+    // OffsetDateTime updatedAt = OffsetDateTime.now();
 
     OrganizationEntity organizationEntity = new OrganizationEntity();
-    organizationEntity.setId(1L);
-    organizationEntity.setName("Test Organization");
-    organizationEntity.setEmail("test@example.com");
-    organizationEntity.setLogin("testorg");
-    organizationEntity.setDescription("Test description");
-    organizationEntity.setAvatarKey("avatarKey");
-    organizationEntity.setWebsiteUrl("https://example.com");
+    organizationEntity.setId(id);
+    organizationEntity.setName(name);
+    organizationEntity.setEmail(email);
+    organizationEntity.setLogin(login);
+    organizationEntity.setDescription(description);
+    organizationEntity.setAvatarKey(avatarKey);
+    organizationEntity.setWebsiteUrl(websiteUrl);
+    organizationEntity.setChallengeCount(challengeCount);
     organizationEntity.setCreatedAt(createdAt);
     organizationEntity.setUpdatedAt(updatedAt);
-    organizationEntity.setChallengeCount(5);
-    organizationEntity.setAcronym("TO");
+    organizationEntity.setAcronym(acronym);
 
     OrganizationEntity organizationEntity2 = new OrganizationEntity();
-    organizationEntity2.setId(1L);
-    organizationEntity2.setName("Test Organization");
-    organizationEntity2.setEmail("test@example.com");
-    organizationEntity2.setLogin("testorg");
-    organizationEntity2.setDescription("Test description");
-    organizationEntity2.setAvatarKey("avatarKey");
-    organizationEntity2.setWebsiteUrl("https://example.com");
-    organizationEntity2.setChallengeCount(5);
+    organizationEntity2.setId(id);
+    organizationEntity2.setName(name);
+    organizationEntity2.setEmail(email);
+    organizationEntity2.setLogin(login);
+    organizationEntity2.setDescription(description);
+    organizationEntity2.setAvatarKey(avatarKey);
+    organizationEntity2.setWebsiteUrl(websiteUrl);
+    organizationEntity2.setChallengeCount(challengeCount);
     organizationEntity2.setCreatedAt(createdAt);
     organizationEntity2.setUpdatedAt(updatedAt);
-    organizationEntity2.setAcronym("TO");
+    organizationEntity2.setAcronym(acronym);
 
     OrganizationEntity organizationEntity3 = new OrganizationEntity();
     organizationEntity3.setId(2L);
