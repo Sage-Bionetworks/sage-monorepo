@@ -2,6 +2,7 @@ description: The category of the challenge.
 type: string
 enum:
   - featured
+  - benchmark
   - starting_soon
   - ending_soon
   - recently_started
