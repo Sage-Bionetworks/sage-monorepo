@@ -124,7 +124,7 @@ CREATE TABLE `challenge_category`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
     `challenge_id`          bigint(20) NOT NULL,
-    `category`              ENUM('featured'),
+    `category`              ENUM('featured', 'benchmark'),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
     CONSTRAINT unique_item UNIQUE (`id`)
