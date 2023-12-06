@@ -348,10 +348,21 @@ components:
     ChallengePlatformSlug:
       description: The slug of the challenge platform.
       type: string
-      minLength: 3
-      maxLength: 30
-      pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
-      example: example-challenge-platform
+      enum:
+        - synapse
+        - cami
+        - grand-challenge
+        - precision-fda
+        - kaggle
+        - codalab
+        - codabench
+        - eterna
+        - nightingale-os
+        - evalai
+        - cache
+        - cameo
+        - drivendata
+      example: synapse
     OrganizationId:
       description: The unique identifier of an organization
       type: integer
@@ -552,8 +563,21 @@ components:
     ChallengePlatformName:
       description: The name of the challenge platform.
       type: string
-      minLength: 3
-      maxLength: 30
+      enum:
+        - Synapse
+        - CAMI
+        - Grand Challenge
+        - precisionFDA
+        - Kaggle
+        - CodaLab
+        - CodaBench
+        - Eterna
+        - Nightingale OS
+        - EvalAI
+        - CACHE
+        - CAMEO
+        - DrivenData
+      example: Synapse
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform.
