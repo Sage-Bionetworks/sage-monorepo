@@ -10,20 +10,20 @@ public class OrganizationMapperTest {
   public void ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
 
     // create new Dto with properties to be copied to organization entity
-    OrganizationDto dTo = new OrganizationDto();
-    dTo.setName("Test Organization");
-    dTo.setDescription("This is a test organization");
-    dTo.setId(4599L);
-    dTo.setEmail("testemail@test.edu");
-    dTo.setLogin("login");
-    dTo.setAvatarKey("avatar Key");
-    dTo.setWebsiteUrl("url");
-    dTo.setChallengeCount(7);
-    dTo.setAcronym(null);
+    OrganizationDto dto = new OrganizationDto();
+    dto.setName("Test Organization");
+    dto.setDescription("This is a test organization");
+    dto.setId(4599L);
+    dto.setEmail("testemail@test.edu");
+    dto.setLogin("login");
+    dto.setAvatarKey("avatar Key");
+    dto.setWebsiteUrl("url");
+    dto.setChallengeCount(7);
+    dto.setAcronym(null);
 
     OrganizationMapper mapper = new OrganizationMapper();
 
-    OrganizationEntity entity = mapper.convertToEntity(dTo);
+    OrganizationEntity entity = mapper.convertToEntity(dto);
 
     Long actualId = entity.getId();
     String actualName = entity.getName();
@@ -35,15 +35,15 @@ public class OrganizationMapperTest {
     String actualDescription = entity.getDescription();
     String actualAcronym = entity.getAcronym();
 
-    Long actualId2 = dTo.getId();
-    String actualName2 = dTo.getName();
-    String actualEmail2 = dTo.getEmail();
-    String actualLogin2 = dTo.getLogin();
-    String actualAvatarKey2 = dTo.getAvatarKey();
-    String actualWebsiteUrl2 = dTo.getWebsiteUrl();
-    Integer actualChallengeCount2 = dTo.getChallengeCount();
-    String actualDescription2 = dTo.getDescription();
-    String actualAcronym2 = dTo.getAcronym();
+    Long actualId2 = dto.getId();
+    String actualName2 = dto.getName();
+    String actualEmail2 = dto.getEmail();
+    String actualLogin2 = dto.getLogin();
+    String actualAvatarKey2 = dto.getAvatarKey();
+    String actualWebsiteUrl2 = dto.getWebsiteUrl();
+    Integer actualChallengeCount2 = dto.getChallengeCount();
+    String actualDescription2 = dto.getDescription();
+    String actualAcronym2 = dto.getAcronym();
 
     // verify the entity properties were copied
     Assertions.assertEquals(actualId, actualId2);
@@ -75,17 +75,17 @@ public class OrganizationMapperTest {
 
     OrganizationMapper mapper = new OrganizationMapper();
 
-    OrganizationDto dTo = mapper.convertToDto(entity);
+    OrganizationDto dto = mapper.convertToDto(entity);
 
-    Long actualId = dTo.getId();
-    String actualName = dTo.getName();
-    String actualEmail = dTo.getEmail();
-    String actualLogin = dTo.getLogin();
-    String actualAvatarKey = dTo.getAvatarKey();
-    String actualWebsiteUrl = dTo.getWebsiteUrl();
-    Integer actualChallengeCount = dTo.getChallengeCount();
-    String actualDescription = dTo.getDescription();
-    String actualAcronym = dTo.getAcronym();
+    Long actualId = dto.getId();
+    String actualName = dto.getName();
+    String actualEmail = dto.getEmail();
+    String actualLogin = dto.getLogin();
+    String actualAvatarKey = dto.getAvatarKey();
+    String actualWebsiteUrl = dto.getWebsiteUrl();
+    Integer actualChallengeCount = dto.getChallengeCount();
+    String actualDescription = dto.getDescription();
+    String actualAcronym = dto.getAcronym();
 
     Long actualId2 = entity.getId();
     String actualName2 = entity.getName();

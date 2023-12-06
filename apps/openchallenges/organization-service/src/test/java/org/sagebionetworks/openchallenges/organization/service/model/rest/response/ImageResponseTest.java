@@ -13,9 +13,9 @@ public class ImageResponseTest {
 
     // Set the url
     imageResponse.setUrl(imageUrl);
-    String retrievedUrl = imageResponse.getUrl();
+    String actualUrl = imageResponse.getUrl();
 
-    // Confirm that the same image url was retrieved that was set
-    Assertions.assertEquals(imageUrl, retrievedUrl);
+    // Confirm that the same image url was actual that was set
+    Assertions.assertEquals(imageUrl, actualUrl);
   }
 }
