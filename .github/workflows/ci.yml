@@ -129,7 +129,7 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=sonar"
 
-      - name: Publishing the images of the SELECTED projects
+      - name: Publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
@@ -237,24 +237,24 @@ jobs:
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=lint"
+            && nx affected --target=lint"
 
       - name: Build the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build,server"
+            && nx affected --target=build,server"
 
       - name: Test the affected projects (unit)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=test"
+            && nx affected --target=test"
 
       - name: Test the affected projects (integration)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=integration-test"
+            && nx affected --target=integration-test"
 
-      - name: Building the images of the SELECTED projects
+      - name: Build the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=build-image"

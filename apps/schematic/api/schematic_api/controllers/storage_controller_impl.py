@@ -42,7 +42,9 @@ def get_asset_storage_class(asset_type: str) -> Callable:
     return asset_type_object
 
 
-def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
+def get_asset_view_from_schematic(
+    asset_type: str,  # pylint: disable=unused-argument
+) -> pd.DataFrame:
     """Gets the asset view in pandas.Dataframe form
 
     Args:
@@ -53,8 +55,7 @@ def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
         pandas.DataFrame: The asset view
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
     return store.getStorageFileviewTable()
 
 
@@ -82,7 +83,7 @@ def get_asset_view_json(
 
 def get_dataset_files_from_schematic(
     dataset_id: str,
-    asset_type: str,
+    asset_type: str,  # pylint: disable=unused-argument
     file_names: Optional[list[str]],
     use_full_file_path: bool,
 ) -> list[tuple[str, str]]:
@@ -96,10 +97,11 @@ def get_dataset_files_from_schematic(
         list[tuple(str, str)]: A list of files in tuple form
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
     return store.getFilesInStorageDataset(
-        datasetId=dataset_id, fileNames=file_names, fullpath=use_full_file_path
+        datasetId=dataset_id,
+        fileNames=file_names,  # type: ignore
+        fullpath=use_full_file_path,
     )
 
 
@@ -163,9 +165,9 @@ def load_manifest_from_synapse_metadata(manifest_data: Any) -> pd.DataFrame:
 
 
 def get_dataset_manifest_from_schematic(
-    asset_type: str, dataset_id: str
+    asset_type: str, dataset_id: str  # pylint: disable=unused-argument
 ) -> pd.DataFrame:
-    """Gets a manifest in pandas.Datframe format
+    """Gets a manifest in pandas.Dataframe format
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
@@ -176,8 +178,7 @@ def get_dataset_manifest_from_schematic(
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
     manifest_data = store.getDatasetManifest(
         datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
     )
@@ -203,15 +204,17 @@ def get_dataset_manifest_json(
           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
-    mainfest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
-    result: Union[str, BasicError] = mainfest.to_json()
+    manifest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
+    result: Union[str, BasicError] = manifest.to_json()
     status = 200
 
     return result, status
 
 
-def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
-    """Gets a manifest in pandas.Datframe format
+def get_manifest_from_schematic(
+    asset_type: str, manifest_id: str  # pylint: disable=unused-argument
+) -> pd.DataFrame:
+    """Gets a manifest in pandas.Dataframe format
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
@@ -221,10 +224,6 @@ def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFra
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    # This will be used after the synapse storage refactor
-    asset_type_object = get_asset_storage_class(  # pylint: disable=unused-variable
-        asset_type
-    )
     store = SynapseStorage.login(access_token=access_token)
     manifest_download = ManifestDownload(store, manifest_id)
     manifest_data = ManifestDownload.download_manifest(
@@ -248,15 +247,15 @@ def get_manifest_json(
           The first item is either the manifest or an error object
           The second item is the response status
     """
-    mainfest = get_manifest_from_schematic(asset_type, manifest_id)
-    result: Union[str, BasicError] = mainfest.to_json()
+    manifest = get_manifest_from_schematic(asset_type, manifest_id)
+    result: Union[str, BasicError] = manifest.to_json()
     status = 200
 
     return result, status
 
 
 def get_project_datasets_from_schematic(
-    project_id: str, asset_type: str
+    project_id: str, asset_type: str  # pylint: disable=unused-argument
 ) -> list[tuple[str, str]]:
     """Gets a list of datasets from the project
 
@@ -268,9 +267,8 @@ def get_project_datasets_from_schematic(
         list[tuple(str, str)]: A list of datasets in tuple form
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getStorageDatasetsInProject(projectId=project_id)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    return store.getStorageDatasetsInProject(projectId=project_id)  # type: ignore
 
 
 @handle_exceptions
@@ -310,7 +308,8 @@ def get_project_datasets(
 
 
 def get_project_manifests_from_schematic(
-    project_id: str, asset_type: str
+    project_id: str,
+    asset_type: str,  # pylint: disable=unused-argument
 ) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
     """Gets a list of manifests from the project
 
@@ -322,9 +321,8 @@ def get_project_manifests_from_schematic(
         list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]: A list of manifests
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getProjectManifests(projectId=project_id)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    return store.getProjectManifests(projectId=project_id)  # type: ignore
 
 
 @handle_exceptions
@@ -372,7 +370,9 @@ def get_project_manifests(
     return result, status
 
 
-def get_projects_from_schematic(asset_type: str) -> list[tuple[str, str]]:
+def get_projects_from_schematic(
+    asset_type: str,  # pylint: disable=unused-argument
+) -> list[tuple[str, str]]:
     """Gets a list of projects
 
     Args:
@@ -382,9 +382,8 @@ def get_projects_from_schematic(asset_type: str) -> list[tuple[str, str]]:
         list[tuple(str, str)]: A list of projects in tuple form
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getStorageProjects()
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    return store.getStorageProjects()  # type: ignore
 
 
 @handle_exceptions

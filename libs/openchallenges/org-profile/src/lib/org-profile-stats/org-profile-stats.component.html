@@ -16,12 +16,25 @@
   <!-- <div class="stat-item action-btn" *ngIf="loggedIn">
     <mat-icon aria-hidden="true" class="stats-card-icon">edit</mat-icon> Edit Profile
   </div> -->
-  <a target="_blank" href="{{ org.websiteUrl }}" class="stat-item action-btn" *ngIf="loggedIn">
-    <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
-    Go to Website
-  </a>
   <a href="#" class="stat-item action-btn" *ngIf="!loggedIn">
     <mat-icon aria-hidden="true" class="stats-card-icon">plus</mat-icon>
     Request to Join
   </a>
+  <div [ngSwitch]="!!org.websiteUrl" *ngIf="loggedIn">
+    <a
+      class="stat-item action-btn"
+      *ngSwitchCase="true"
+      href="{{ org.websiteUrl }}"
+      target="_blank"
+      title="Go to organization main website"
+      rel="noopener noreferrer"
+    >
+      <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>
+      Go to Website
+    </a>
+    <div class="stat-item disabled-btn" *ngSwitchCase="false">
+      <mat-icon aria-hidden="true" class="stats-card-icon">link_off</mat-icon>
+      Website Not Found
+    </div>
+  </div>
 </div>

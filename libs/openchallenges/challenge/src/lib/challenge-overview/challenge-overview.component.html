@@ -51,7 +51,7 @@
         </tr>
         <tr>
           <td class="text-right">Submission Type</td>
-          <td>
+          <td *ngIf="challenge.inputDataTypes && challenge.submissionTypes.length > 0; else na_subs">
             <span
               nowrap
               *ngFor="let submissionType of challenge.submissionTypes; let isLast = last"
@@ -59,6 +59,9 @@
               {{ prettify(submissionType) }}{{ isLast ? '' : ', ' }}</span
             >
           </td>
+          <ng-template #na_subs>
+            <td><span class="text-grey">Not available</span></td>
+          </ng-template>
         </tr>
         <tr>
           <td class="text-right">Data Type(s)</td>

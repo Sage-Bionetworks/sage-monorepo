@@ -40,3 +40,9 @@ $theme: map.deep-merge(
 
 // Include the theme mixins for other components you use here.
 @include openchallenges.theme($theme);
+
+:root {
+  --color-btn-primary: #39bde7;
+  --color-btn-disabled: #EBEBE4;
+  --color-btn-shadow: rgba(196, 196, 196, 1);
+}

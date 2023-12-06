@@ -12,6 +12,7 @@ import javax.validation.constraints.*;
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@lombok.AllArgsConstructor
 @lombok.Builder
 public class BasicErrorDto {
 

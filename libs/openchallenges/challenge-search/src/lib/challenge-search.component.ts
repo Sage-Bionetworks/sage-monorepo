@@ -130,6 +130,7 @@ export class ChallengeSearchComponent
   defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
+  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = challengeSortFilter;
@@ -231,8 +232,13 @@ export class ChallengeSearchComponent
 
     // update the total number of challenges in database with empty query
     this.challengeService
-      .listChallenges({})
-      .subscribe((page) => (this.totalChallengesCount = page.totalElements));
+      .listChallenges({ pageSize: 1, pageNumber: 0 })
+      .subscribe((page) => {
+        this.totalChallengesCount = page.totalElements;
+
+        // const num = page.challenges.filter((c) => c.startDate !== null).length;
+        // console.log(num);
+      });
 
     // update platform filter values
     this.challengeSearchDataService
@@ -338,12 +344,28 @@ export class ChallengeSearchComponent
   }
 
   onParamChange(filteredQuery: any): void {
+    // reset pagination settings when filters change
+    if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
+      filteredQuery.pageNumber = this.defaultPageNumber;
+      filteredQuery.pageSize = this.defaultPageSize;
+      // this.selectedPageSize = this.defaultPageSize;
+      this.paginator.resetPageNumber();
+    }
     // update params of URL
     const currentParams = new HttpParams({
       fromString: this._location.path().split('?')[1] ?? '',
     });
     const params = Object.entries(filteredQuery)
-      .map(([key, value]) => [key, this.collapseParam(value as FilterValue)])
+      .map(([key, value]) => {
+        // avoid adding pageNumber and pageSize to the params if they are default
+        if (
+          (key === 'pageNumber' && value === this.defaultPageNumber) ||
+          (key === 'pageSize' && value === this.defaultPageSize)
+        ) {
+          return [key, ''];
+        }
+        return [key, this.collapseParam(value as FilterValue)];
+      })
       .reduce(
         // update with new param, or delete the param if empty string
         (params, [key, value]) =>
