@@ -502,7 +502,9 @@ components:
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
-          $ref: '#/components/schemas/SimpleChallengePlatform'
+          allOf:
+            - $ref: '#/components/schemas/SimpleChallengePlatform'
+          nullable: true
         websiteUrl:
           type: string
           format: url
