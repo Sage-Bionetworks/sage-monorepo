@@ -3,6 +3,7 @@ from typing import Callable, Union, Any, Optional
 import urllib.request
 import shutil
 import tempfile
+from urllib.error import HTTPError
 
 from flask import request  # type: ignore
 from synapseclient.core.exceptions import (  # type: ignore
@@ -58,6 +59,11 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
             status = 403
             res = BasicError("Synapse entity access error", status, str(error))
             return res, status
+        
+        except InvalidSchemaURL as error:
+            status = 404
+            res = BasicError("Invalid URL", status, str(error))
+            return res, status
 
         except Exception as error:  # pylint: disable=broad-exception-caught
             status = 500
@@ -67,18 +73,49 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
     return func
 
 
+class InvalidSchemaURL(Exception):
+    """Raised when a provided url for a schema is incorrect"""
+
+    def __init__(self, message: str, url: str):
+        """
+        Args:
+            message (str): The error message
+            url (str): The provided incorrect URL
+        """
+        self.message = message
+        self.url = url
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return f"{self.message}: {self.url}"
+    
+
 def download_schema_file_as_jsonld(schema_url: str) -> str:
     """Downloads a schema and saves it as temp file
 
     Args:
         schema_url (str): The URL of the schema
 
+    Raises:
+        InvalidSchemaURL: When the schema url doesn't exist or is badly formatted
+
     Returns:
         str: The path fo the schema jsonld file
     """
-    with urllib.request.urlopen(schema_url) as response:
-        with tempfile.NamedTemporaryFile(
-            delete=False, suffix=".model.jsonld"
-        ) as tmp_file:
-            shutil.copyfileobj(response, tmp_file)
-            return tmp_file.name
+    try:
+        with urllib.request.urlopen(schema_url) as response:
+            with tempfile.NamedTemporaryFile(
+                delete=False, suffix=".model.jsonld"
+            ) as tmp_file:
+                shutil.copyfileobj(response, tmp_file)
+                return tmp_file.name
+    except ValueError as error:
+        # checks for specific ValueError where the url isn't correctly formatted
+        if str(error).startswith("unknown url type"):
+            raise InvalidSchemaURL("The provided URL is incorrect", schema_url) from error
+        # reraises the ValueError if it isn't the specific type above
+        else:
+            raise
+    except HTTPError as error:
+        raise InvalidSchemaURL("The provided URL could not be found", schema_url) from error
+
