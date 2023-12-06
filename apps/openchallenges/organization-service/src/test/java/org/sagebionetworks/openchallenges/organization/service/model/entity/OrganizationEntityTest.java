@@ -4,11 +4,11 @@ import java.time.OffsetDateTime;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 public class OrganizationEntityTest {
-  
+
   private static Long id;
   private static String name;
   private static String email;
@@ -20,7 +20,7 @@ public class OrganizationEntityTest {
   private static OffsetDateTime createdAt;
   private static OffsetDateTime updatedAt;
   private static String acronym;
-  
+
   @BeforeAll
   public static void setup() {
     id = 1L;
@@ -35,7 +35,7 @@ public class OrganizationEntityTest {
     updatedAt = OffsetDateTime.now();
     acronym = "TO";
   }
-  
+
   @Test
   public void
       OrganizationEntityBuilderArguments_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuilt() {
@@ -71,7 +71,7 @@ public class OrganizationEntityTest {
     OffsetDateTime actualCreatedAt = entity.getCreatedAt();
     OffsetDateTime actualUpdatedAt = entity.getUpdatedAt();
     String actualAcronym = entity.getAcronym();
-    
+
     Assertions.assertEquals(id, actualId);
     Assertions.assertEquals(name, actualName);
     Assertions.assertEquals(email, actualEmail);
@@ -90,7 +90,7 @@ public class OrganizationEntityTest {
   @Test
   public void
       OrganizationEntityMethodsToSetArguments_ShouldReturnArguments_WhenOrganizationEntityArgumentsPassed() {
- 
+
     OrganizationEntity entity = new OrganizationEntity();
 
     entity.setAcronym(acronym);
