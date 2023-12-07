@@ -59,7 +59,7 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
             status = 403
             res = BasicError("Synapse entity access error", status, str(error))
             return res, status
-        
+
         except InvalidSchemaURL as error:
             status = 404
             res = BasicError("Invalid URL", status, str(error))
@@ -88,7 +88,7 @@ class InvalidSchemaURL(Exception):
 
     def __str__(self) -> str:
         return f"{self.message}: {self.url}"
-    
+
 
 def download_schema_file_as_jsonld(schema_url: str) -> str:
     """Downloads a schema and saves it as temp file
@@ -112,10 +112,13 @@ def download_schema_file_as_jsonld(schema_url: str) -> str:
     except ValueError as error:
         # checks for specific ValueError where the url isn't correctly formatted
         if str(error).startswith("unknown url type"):
-            raise InvalidSchemaURL("The provided URL is incorrect", schema_url) from error
+            raise InvalidSchemaURL(
+                "The provided URL is incorrectly formatted", schema_url
+            ) from error
         # reraises the ValueError if it isn't the specific type above
         else:
             raise
     except HTTPError as error:
-        raise InvalidSchemaURL("The provided URL could not be found", schema_url) from error
-
+        raise InvalidSchemaURL(
+            "The provided URL could not be found", schema_url
+        ) from error
