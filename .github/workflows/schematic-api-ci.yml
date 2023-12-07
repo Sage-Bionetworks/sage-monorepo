@@ -243,10 +243,10 @@ jobs:
           import yaml
           dict = {
             "synapse_token": "${{secrets.SCHEMATIC_SYNAPSE_TOKEN}}",
-            "test_project": "${{SCHEMATIC_TEST_PROJECT}}",
-            "test_dataset": "${{SCHEMATIC_TEST_DATASET}}",
-            "test_manifest": "${{SCHEMATIC_TEST_MANIFEST}}",
-            "test_asset_view": "${{SCHEMATIC_TEST_ASSET_VIEW}}",
+            "test_project": "${{secrets.SCHEMATIC_TEST_PROJECT}}",
+            "test_dataset": "${{secrets.SCHEMATIC_TEST_DATASET}}",
+            "test_manifest": "${{secrets.SCHEMATIC_TEST_MANIFEST}}",
+            "test_asset_view": "${{secrets.SCHEMATIC_TEST_ASSET_VIEW}}",
           }
           with open('apps/schematic/api/schematic_api/test/data/synapse_config.yaml', 'w') as file:
               yaml.dump(dict, file)
