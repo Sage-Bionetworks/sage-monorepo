@@ -63,6 +63,8 @@ properties:
     description: The number of times the challenge has been starred by users.
     type: integer
     default: 0
+    minimum: 0
+    example: 100
   createdAt:
     type: string
     format: date-time
