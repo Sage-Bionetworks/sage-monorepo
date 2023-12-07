@@ -4,6 +4,7 @@ properties:
   id:
     $ref: OrganizationId.yaml
   name:
+    description: The name of the organization.
     type: string
     example: Example organization
   email:
@@ -17,9 +18,7 @@ properties:
     type: string
     example: logo/dream.png
   websiteUrl:
-    type: string
-    format: url
-    example: https://example.com
+    $ref: Url.yaml
   challengeCount:
     description: The number of challenges involving this organization.
     type: integer
@@ -27,15 +26,12 @@ properties:
     default: 0
     example: 10
   createdAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
+    $ref: CreationDatetime.yaml
   updatedAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
+    $ref: ModifiedDatetime.yaml
   acronym:
     type: string
+    maxLength: 10
     example: 'OC'
 required:
   - id

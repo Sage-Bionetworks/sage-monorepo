@@ -521,7 +521,7 @@ components:
       format: int64
       example: 1
     ChallengeSlug:
-      description: The slug of the challenge.
+      description: The unique slug of the challenge.
       type: string
       minLength: 3
       maxLength: 255
@@ -544,6 +544,12 @@ components:
       minLength: 0
       maxLength: 1000
       example: This is an example description of the challenge.
+    ChallengeDoi:
+      description: The DOI of the challenge.
+      type: string
+      format: url
+      maxLength: 120
+      example: 'https://doi.org/123/abc'
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
@@ -568,6 +574,12 @@ components:
         - id
         - slug
         - name
+    Url:
+      description: A URL to the website or image.
+      type: string
+      format: url
+      maxLength: 500
+      example: 'https://openchallenges.io'
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
       type: integer
@@ -609,6 +621,16 @@ components:
       format: date
       nullable: true
       example: '2017-07-21'
+    CreationDatetime:
+      description: Datetime when metadata was added to the OC database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
+    ModifiedDatetime:
+      description: Datetime when metadata was last modified in the OC database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
     Challenge:
       type: object
       description: A challenge
@@ -624,7 +646,7 @@ components:
         description:
           $ref: '#/components/schemas/ChallengeDescription'
         doi:
-          type: string
+          $ref: '#/components/schemas/ChallengeDoi'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         difficulty:
@@ -632,11 +654,9 @@ components:
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:
-          type: string
-          format: url
+          $ref: '#/components/schemas/Url'
         avatarUrl:
-          type: string
-          format: url
+          $ref: '#/components/schemas/Url'
         incentives:
           type: array
           items:
@@ -657,14 +677,12 @@ components:
           description: The number of times the challenge has been starred by users.
           type: integer
           default: 0
+          minimum: 0
+          example: 100
         createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/CreationDatetime'
         updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/ModifiedDatetime'
       required:
         - id
         - slug
@@ -1058,7 +1076,7 @@ components:
       format: email
       example: john.smith@example.com
     OrganizationLogin:
-      description: The login of an organization
+      description: The unique login of an organization.
       type: string
       minLength: 2
       maxLength: 64
@@ -1071,6 +1089,7 @@ components:
         id:
           $ref: '#/components/schemas/OrganizationId'
         name:
+          description: The name of the organization.
           type: string
           example: Example organization
         email:
@@ -1084,24 +1103,20 @@ components:
           type: string
           example: logo/dream.png
         websiteUrl:
-          type: string
-          format: url
-          example: 'https://example.com'
+          $ref: '#/components/schemas/Url'
         challengeCount:
+          description: The number of challenges involving this organization.
           type: integer
-          format: int32
           minimum: 0
+          default: 0
           example: 10
         createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/CreationDatetime'
         updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/ModifiedDatetime'
         acronym:
           type: string
+          maxLength: 10
           example: OC
       required:
         - id
