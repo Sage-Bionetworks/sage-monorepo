@@ -30,6 +30,7 @@ HEADERS = {
 
 
 @pytest.mark.synapse
+@pytest.mark.secrets
 class TestValidationEndpoints(BaseTestCase):
     """Integration tests"""
 
@@ -63,6 +64,7 @@ class TestValidationEndpoints(BaseTestCase):
 
 
 @pytest.mark.synapse
+@pytest.mark.secrets
 class TestStorageEndpoints(BaseTestCase):
     """Integration tests"""
 
