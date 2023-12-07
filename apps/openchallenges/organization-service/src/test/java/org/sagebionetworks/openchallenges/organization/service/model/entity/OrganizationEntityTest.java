@@ -140,35 +140,35 @@ public class OrganizationEntityTest {
   @Test
   public void HashCode_ShouldBuildHashCodeOfArgumentsForOrganizationEntity_WhenArgumentsPassed() {
 
-    OrganizationEntity organizationEntity = new OrganizationEntity();
+    OrganizationEntity entity = new OrganizationEntity();
 
-    organizationEntity.setId(id);
-    organizationEntity.setName(name);
-    organizationEntity.setEmail(email);
-    organizationEntity.setLogin(login);
-    organizationEntity.setDescription(description);
-    organizationEntity.setAvatarKey(avatarKey);
-    organizationEntity.setWebsiteUrl(websiteUrl);
-    organizationEntity.setChallengeCount(challengeCount);
-    organizationEntity.setCreatedAt(createdAt);
-    organizationEntity.setUpdatedAt(updatedAt);
-    organizationEntity.setAcronym(acronym);
+    entity.setId(id);
+    entity.setName(name);
+    entity.setEmail(email);
+    entity.setLogin(login);
+    entity.setDescription(description);
+    entity.setAvatarKey(avatarKey);
+    entity.setWebsiteUrl(websiteUrl);
+    entity.setChallengeCount(challengeCount);
+    entity.setCreatedAt(createdAt);
+    entity.setUpdatedAt(updatedAt);
+    entity.setAcronym(acronym);
 
-    OrganizationEntity organizationEntity2 = new OrganizationEntity();
-    organizationEntity2.setId(id);
-    organizationEntity2.setName(name);
-    organizationEntity2.setEmail(email);
-    organizationEntity2.setLogin(login);
-    organizationEntity2.setDescription(description);
-    organizationEntity2.setAvatarKey(avatarKey);
-    organizationEntity2.setWebsiteUrl(websiteUrl);
-    organizationEntity2.setChallengeCount(challengeCount);
-    organizationEntity2.setCreatedAt(createdAt);
-    organizationEntity2.setUpdatedAt(updatedAt);
-    organizationEntity2.setAcronym(acronym);
+    OrganizationEntity entity2 = new OrganizationEntity();
+    entity2.setId(id);
+    entity2.setName(name);
+    entity2.setEmail(email);
+    entity2.setLogin(login);
+    entity2.setDescription(description);
+    entity2.setAvatarKey(avatarKey);
+    entity2.setWebsiteUrl(websiteUrl);
+    entity2.setChallengeCount(challengeCount);
+    entity2.setCreatedAt(createdAt);
+    entity2.setUpdatedAt(updatedAt);
+    entity2.setAcronym(acronym);
 
-    int hashCode1 = organizationEntity.hashCode();
-    int hashCode2 = organizationEntity2.hashCode();
+    int hashCode1 = entity.hashCode();
+    int hashCode2 = entity2.hashCode();
 
     Assertions.assertEquals(hashCode1, hashCode2);
   }
@@ -176,51 +176,49 @@ public class OrganizationEntityTest {
   @Test
   public void EqualsObject_ShouldReturnBoolean_WhenPassedTwoObjects() {
 
-    // OffsetDateTime createdAt = OffsetDateTime.now();
-    // OffsetDateTime updatedAt = OffsetDateTime.now();
+    OrganizationEntity entity = new OrganizationEntity();
 
-    OrganizationEntity organizationEntity = new OrganizationEntity();
-    organizationEntity.setId(id);
-    organizationEntity.setName(name);
-    organizationEntity.setEmail(email);
-    organizationEntity.setLogin(login);
-    organizationEntity.setDescription(description);
-    organizationEntity.setAvatarKey(avatarKey);
-    organizationEntity.setWebsiteUrl(websiteUrl);
-    organizationEntity.setChallengeCount(challengeCount);
-    organizationEntity.setCreatedAt(createdAt);
-    organizationEntity.setUpdatedAt(updatedAt);
-    organizationEntity.setAcronym(acronym);
+    entity.setId(id);
+    entity.setName(name);
+    entity.setEmail(email);
+    entity.setLogin(login);
+    entity.setDescription(description);
+    entity.setAvatarKey(avatarKey);
+    entity.setWebsiteUrl(websiteUrl);
+    entity.setChallengeCount(challengeCount);
+    entity.setCreatedAt(createdAt);
+    entity.setUpdatedAt(updatedAt);
+    entity.setAcronym(acronym);
 
-    OrganizationEntity organizationEntity2 = new OrganizationEntity();
-    organizationEntity2.setId(id);
-    organizationEntity2.setName(name);
-    organizationEntity2.setEmail(email);
-    organizationEntity2.setLogin(login);
-    organizationEntity2.setDescription(description);
-    organizationEntity2.setAvatarKey(avatarKey);
-    organizationEntity2.setWebsiteUrl(websiteUrl);
-    organizationEntity2.setChallengeCount(challengeCount);
-    organizationEntity2.setCreatedAt(createdAt);
-    organizationEntity2.setUpdatedAt(updatedAt);
-    organizationEntity2.setAcronym(acronym);
+    OrganizationEntity entity2 = new OrganizationEntity();
+    entity2.setId(id);
+    entity2.setName(name);
+    entity2.setEmail(email);
+    entity2.setLogin(login);
+    entity2.setDescription(description);
+    entity2.setAvatarKey(avatarKey);
+    entity2.setWebsiteUrl(websiteUrl);
+    entity2.setChallengeCount(challengeCount);
+    entity2.setCreatedAt(createdAt);
+    entity2.setUpdatedAt(updatedAt);
+    entity2.setAcronym(acronym);
 
-    OrganizationEntity organizationEntity3 = new OrganizationEntity();
-    organizationEntity3.setId(2L);
-    organizationEntity3.setName("Another Organization");
-    organizationEntity3.setEmail("another@example.com");
-    organizationEntity3.setLogin("anotherorg");
-    organizationEntity3.setDescription("Another description");
-    organizationEntity3.setAvatarKey("anotherAvatarKey");
-    organizationEntity3.setWebsiteUrl("https://another-example.com");
-    organizationEntity3.setChallengeCount(10);
-    organizationEntity3.setCreatedAt(createdAt);
-    organizationEntity3.setUpdatedAt(updatedAt);
-    organizationEntity3.setAcronym("AO");
+    OrganizationEntity entity3 = new OrganizationEntity();
+    entity3.setId(2L);
+    entity3.setName("Another Organization");
+    entity3.setEmail("another@example.com");
+    entity3.setLogin("anotherorg");
+    entity3.setDescription("Another description");
+    entity3.setAvatarKey("anotherAvatarKey");
+    entity3.setWebsiteUrl("https://another-example.com");
+    entity3.setChallengeCount(10);
+    entity3.setCreatedAt(createdAt);
+    entity3.setUpdatedAt(updatedAt);
+    entity3.setAcronym("AO");
 
-    boolean equals1 = organizationEntity.equals(organizationEntity2);
-    boolean equals2 = organizationEntity2.equals(organizationEntity);
-    boolean equals3 = organizationEntity.equals(organizationEntity3);
+    boolean equals1 = entity.equals(entity2);
+    boolean equals2 = entity2.equals(entity);
+    boolean equals3 = entity.equals(entity3);
 
     Assertions.assertTrue(equals1);
     Assertions.assertTrue(equals2);
