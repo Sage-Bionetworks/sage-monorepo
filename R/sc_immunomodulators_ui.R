@@ -12,13 +12,19 @@ sc_immunomodulators_ui <- function(id){
     ),
     iatlas.modules::sectionBox(
       title = "Distributions",
-      sc_bubbleplot_ui(ns("sc_bubbleplot")),
-      iatlas.modules::messageBox(
-        width = 12,
-        shiny::p("Distribution of gene expression for pseudobulk single-cell RNA-seq")
-        #   shiny::includeMarkdown("inst/markdown/ici_immunefeatures.markdown")
+      shiny::column(
+        width = 6,
+        sc_bubbleplot_ui(ns("sc_bubbleplot")),
       ),
-      sc_immune_features_distribution_ui(ns("sc_immunomodulators_distribution"))
+      shiny::column(
+        width = 6,
+        iatlas.modules::messageBox(
+          width = 12,
+          shiny::p("Distribution of gene expression for pseudobulk single-cell RNA-seq")
+          #   shiny::includeMarkdown("inst/markdown/ici_immunefeatures.markdown")
+        ),
+        sc_immune_features_distribution_ui(ns("sc_immunomodulators_distribution"))
+      )
     )
   )
 }

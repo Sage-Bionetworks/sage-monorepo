@@ -51,7 +51,10 @@ sc_bubbleplot_server <- function(
           ggplot2::theme_minimal() +
           ggplot2::ylab("Gene Symbol") +
           ggplot2::xlab("Cell type") +
-          ggplot2::theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))+
+          ggplot2::theme(strip.text = ggplot2::element_text(size = 12),
+                         axis.text.x = ggplot2::element_text(size = 10, angle = 315, hjust = 1, vjust = 0.5),
+                         title = ggplot2::element_text(size = 12),
+                         panel.spacing.y = unit(3, "lines"))+
           ggplot2::facet_wrap(~dataset, ncol = 1)
       }
 
@@ -60,7 +63,11 @@ sc_bubbleplot_server <- function(
         shiny::req(plot_df())
         datasets <- unique(plot_df()$dataset)
 
-        plotly::ggplotly(bubble_plot_ggplot(plot_df()), tooltip = "show_text")
+        plotly::ggplotly(bubble_plot_ggplot(plot_df()), tooltip = "show_text")%>%
+          plotly::layout(
+            font = list(
+              family = "Roboto, Open Sans, sans-serif")
+          )
 
         # all_plots <- purrr::map(.x = datasets,
         #                         .f = function(x){
