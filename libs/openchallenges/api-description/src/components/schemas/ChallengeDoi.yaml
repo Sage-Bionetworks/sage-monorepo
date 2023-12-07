@@ -2,4 +2,5 @@ description: The DOI of the challenge.
 type: string
 format: url
 maxLength: 120
+nullable: true
 example: https://doi.org/123/abc

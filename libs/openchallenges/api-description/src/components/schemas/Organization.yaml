@@ -12,7 +12,9 @@ properties:
   login:
     $ref: OrganizationLogin.yaml
   description:
+    description: A description of the organization.
     type: string
+    nullable: true
     example: A description of the organization.
   avatarKey:
     type: string
@@ -30,6 +32,7 @@ properties:
   updatedAt:
     $ref: ModifiedDatetime.yaml
   acronym:
+    description: An acronym of the organization.
     type: string
     maxLength: 10
     example: 'OC'
@@ -38,7 +41,5 @@ required:
   - name
   - email
   - login
-  - description
-  - websiteUrl
   - createdAt
   - updatedAt

@@ -69,9 +69,7 @@ required:
   - id
   - slug
   - name
-  - description
   - status
-  - platform
   - incentives
   - submissionTypes
   - starredCount

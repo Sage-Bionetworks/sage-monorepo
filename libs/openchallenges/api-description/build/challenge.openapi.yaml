@@ -399,6 +399,7 @@ components:
       type: string
       format: url
       maxLength: 120
+      nullable: true
       example: https://doi.org/123/abc
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
@@ -539,9 +540,7 @@ components:
         - id
         - slug
         - name
-        - description
         - status
-        - platform
         - incentives
         - submissionTypes
         - starredCount

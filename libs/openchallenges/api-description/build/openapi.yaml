@@ -551,6 +551,7 @@ components:
       type: string
       format: url
       maxLength: 120
+      nullable: true
       example: 'https://doi.org/123/abc'
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
@@ -691,9 +692,7 @@ components:
         - id
         - slug
         - name
-        - description
         - status
-        - platform
         - incentives
         - submissionTypes
         - starredCount
@@ -1100,7 +1099,9 @@ components:
         login:
           $ref: '#/components/schemas/OrganizationLogin'
         description:
+          description: A description of the organization.
           type: string
+          nullable: true
           example: A description of the organization.
         avatarKey:
           type: string
@@ -1118,6 +1119,7 @@ components:
         updatedAt:
           $ref: '#/components/schemas/ModifiedDatetime'
         acronym:
+          description: An acronym of the organization.
           type: string
           maxLength: 10
           example: OC
@@ -1126,8 +1128,6 @@ components:
         - name
         - email
         - login
-        - description
-        - websiteUrl
         - createdAt
         - updatedAt
     OrganizationsPage:
