@@ -109,7 +109,14 @@
         "cwd": "apps/schematic/api"
       }
     },
-    "e2e-test": {
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest -m 'secrets'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test-all": {
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run pytest",

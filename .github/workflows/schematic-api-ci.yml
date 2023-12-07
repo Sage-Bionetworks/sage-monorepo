@@ -252,15 +252,10 @@ jobs:
               yaml.dump(dict, file)
         shell: python
 
-      - name: Test the affected projects (unit)
+      - name: Test the affected projects (all)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=test"
-
-      - name: Test the affected projects (end-to-end)
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=e2e-test"
+            && nx affected --target=test-all"
 
       - name: Build the images of the affected projects
         run: |
