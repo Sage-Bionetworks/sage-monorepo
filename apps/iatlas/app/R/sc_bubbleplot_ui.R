@@ -7,9 +7,9 @@ sc_bubbleplot_ui <- function(id){
       width = 24,
       shiny::p("See the percentage of cells from a given type that have counts for selected genes with average expression values.")
     ),
-    shiny::fluidRow(
-      shiny::column(
-        width = 3,
+    shiny::verticalLayout(
+      # shiny::column(
+        #width = 3,
         iatlas.modules::optionsBox(
           width=24,
           #shiny::uiOutput(ns("select_cells")),
@@ -19,15 +19,15 @@ sc_bubbleplot_ui <- function(id){
             choices = NULL,
             multiple = TRUE
           )
-        )
+        #)
       ),
-      shiny::column(
-        width = 9,
+      # shiny::column(
+      #   width = 9,
         iatlas.modules::plotBox(
           width=24,
           plotly::plotlyOutput(ns("bubble_plot"))
         )
-      )
+      # )
     )
   )
 }
