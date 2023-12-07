@@ -17,10 +17,6 @@
           <td class="text-right">Acronym</td>
           <td [ngClass]="{ 'text-grey': org.acronym === '' }">{{ useNaIfFalsey(org.acronym) }}</td>
         </tr>
-        <tr>
-          <td class="text-right">Contact Email</td>
-          <td [ngClass]="{ 'text-grey': org.email === '' }">{{ useNaIfFalsey(org.email) }}</td>
-        </tr>
       </tbody>
     </table>
   </div>

@@ -166,11 +166,6 @@ components:
       type: integer
       format: int64
       example: 1
-    Email:
-      description: An email address.
-      type: string
-      format: email
-      example: john.smith@example.com
     OrganizationLogin:
       description: The unique login of an organization.
       type: string
@@ -205,8 +200,6 @@ components:
           description: The name of the organization.
           type: string
           example: Example organization
-        email:
-          $ref: '#/components/schemas/Email'
         login:
           $ref: '#/components/schemas/OrganizationLogin'
         description:
@@ -237,7 +230,6 @@ components:
       required:
         - id
         - name
-        - email
         - login
         - createdAt
         - updatedAt

@@ -1072,11 +1072,6 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: data provider
-    Email:
-      description: An email address.
-      type: string
-      format: email
-      example: john.smith@example.com
     OrganizationLogin:
       description: The unique login of an organization.
       type: string
@@ -1094,8 +1089,6 @@ components:
           description: The name of the organization.
           type: string
           example: Example organization
-        email:
-          $ref: '#/components/schemas/Email'
         login:
           $ref: '#/components/schemas/OrganizationLogin'
         description:
@@ -1126,7 +1119,6 @@ components:
       required:
         - id
         - name
-        - email
         - login
         - createdAt
         - updatedAt
@@ -1146,6 +1138,11 @@ components:
             - organizations
       x-java-class-annotations:
         - '@lombok.Builder'
+    Email:
+      description: An email address.
+      type: string
+      format: email
+      example: john.smith@example.com
     UserCreateRequest:
       type: object
       description: The information required to create a user account

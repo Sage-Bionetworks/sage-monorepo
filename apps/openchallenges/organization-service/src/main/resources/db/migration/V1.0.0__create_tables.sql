@@ -3,7 +3,6 @@
 CREATE TABLE `organization` (
   `id`                    bigint(20) NOT NULL AUTO_INCREMENT,
   `name`                  varchar(255) NOT NULL,
-  `email` varchar(255) NOT NULL,
   `login`                 varchar(64) NOT NULL UNIQUE,
   `avatar_key`            varchar(255) DEFAULT NULL,
   `website_url`           varchar(500) DEFAULT NULL,

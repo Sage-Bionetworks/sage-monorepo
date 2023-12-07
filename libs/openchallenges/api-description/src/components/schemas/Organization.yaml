@@ -7,8 +7,6 @@ properties:
     description: The name of the organization.
     type: string
     example: Example organization
-  email:
-    $ref: Email.yaml
   login:
     $ref: OrganizationLogin.yaml
   description:
@@ -39,7 +37,6 @@ properties:
 required:
   - id
   - name
-  - email
   - login
   - createdAt
   - updatedAt
