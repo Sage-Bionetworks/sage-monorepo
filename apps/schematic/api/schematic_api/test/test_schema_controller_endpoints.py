@@ -38,11 +38,11 @@ class TestGetComponent(BaseTestCase):
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         assert isinstance(response.json, str)
 
-    def test_500(self) -> None:
-        """Test for 500 result"""
+    def test_404(self) -> None:
+        """Test for 404 result"""
         url = f"{COMPONENT_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+        self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
 class TestGetConnectedNodes(BaseTestCase):
@@ -113,11 +113,11 @@ class TestGetSchemaAttributes(BaseTestCase):
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         assert isinstance(response.json, str)
 
-    def test_500(self) -> None:
-        """Test for 500 result"""
+    def test_404(self) -> None:
+        """Test for 404 result"""
         url = f"{SCHEMA_ATTRIBUTES_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+        self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
 class TestGetNodeProperties(BaseTestCase):

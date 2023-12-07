@@ -112,12 +112,12 @@ class TestGetSchemaAttributes:
         assert status == 200
         assert isinstance(result, str)
 
-    def test_internal_error(
+    def test_404_error(
         self,
     ) -> None:
-        """Test for 500 result"""
+        """Test for 404 result"""
         result, status = get_schema_attributes(schema_url="not_a_url")
-        assert status == 500
+        assert status == 404
         assert isinstance(result, BasicError)
 
 
