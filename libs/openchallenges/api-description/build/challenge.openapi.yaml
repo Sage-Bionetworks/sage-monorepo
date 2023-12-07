@@ -385,12 +385,14 @@ components:
       type: string
       minLength: 0
       maxLength: 80
+      nullable: true
       example: Example challenge headline
     ChallengeDescription:
       description: The description of the challenge.
       type: string
       minLength: 0
       maxLength: 1000
+      nullable: true
       example: This is an example description of the challenge.
     ChallengeDoi:
       description: The DOI of the challenge.
@@ -418,6 +420,7 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSlug'
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
+      nullable: true
       required:
         - id
         - slug
@@ -427,6 +430,7 @@ components:
       type: string
       format: url
       maxLength: 500
+      nullable: true
       example: https://openchallenges.io
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
@@ -537,7 +541,6 @@ components:
         - name
         - description
         - status
-        - difficulty
         - platform
         - incentives
         - submissionTypes

@@ -71,7 +71,6 @@ required:
   - name
   - description
   - status
-  - difficulty
   - platform
   - incentives
   - submissionTypes

@@ -183,6 +183,7 @@ components:
       type: string
       format: url
       maxLength: 500
+      nullable: true
       example: https://openchallenges.io
     CreationDatetime:
       description: Datetime when metadata was added to the OC database.
