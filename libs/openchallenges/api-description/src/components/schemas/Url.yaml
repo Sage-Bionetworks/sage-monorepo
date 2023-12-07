@@ -1,0 +1,5 @@
+description: A URL to the website or image.
+type: string
+format: url
+maxLength: 500
+example: https://openchallenges.io

@@ -1,0 +1,5 @@
+description: The DOI of the challenge.
+type: string
+format: url
+maxLength: 120
+example: https://doi.org/123/abc
