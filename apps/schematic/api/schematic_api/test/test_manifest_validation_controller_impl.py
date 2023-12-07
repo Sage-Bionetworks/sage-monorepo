@@ -1,6 +1,7 @@
 """Tests for validation endpoint functions"""
 
 from unittest.mock import patch
+import pytest 
 
 from schematic_api.models.basic_error import BasicError
 import schematic_api.controllers.manifest_validation_controller_impl
@@ -55,7 +56,7 @@ class TestSubmitManifestCsv:
             assert status == 500
             assert isinstance(result, BasicError)
 
-
+@pytest.mark.unit
 class TestSubmitManifestJson:
     """Tests submit_manifest_"""
 
@@ -97,7 +98,7 @@ class TestSubmitManifestJson:
             assert status == 500
             assert isinstance(result, BasicError)
 
-
+@pytest.mark.unit
 class TestValidateManifestCsv:
     """Tests validate_manifest_csv"""
 
@@ -164,7 +165,7 @@ class TestValidateManifestCsv:
             assert status == 500
             assert isinstance(result, BasicError)
 
-
+@pytest.mark.unit
 class TestValidateManifestJson:
     """Tests validate_manifest_json"""
 

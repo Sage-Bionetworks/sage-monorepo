@@ -105,14 +105,14 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run pytest -m 'not secrets'",
+        "command": "poetry run pytest -m unit",
         "cwd": "apps/schematic/api"
       }
     },
     "e2e-test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run pytest -m secrets",
+        "command": "poetry run pytest",
         "cwd": "apps/schematic/api"
       }
     },
