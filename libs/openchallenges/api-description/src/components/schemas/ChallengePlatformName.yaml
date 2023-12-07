@@ -1,17 +1,4 @@
 description: The name of the challenge platform.
 type: string
-enum:
-  - Synapse
-  - CAMI
-  - Grand Challenge
-  - precisionFDA
-  - Kaggle
-  - CodaLab
-  - CodaBench
-  - Eterna
-  - Nightingale OS
-  - EvalAI
-  - CACHE
-  - CAMEO
-  - DrivenData
-example: Synapse
+minLength: 3
+maxLength: 30

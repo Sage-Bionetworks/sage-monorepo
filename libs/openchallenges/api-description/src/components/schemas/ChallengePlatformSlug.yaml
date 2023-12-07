@@ -1,17 +1,6 @@
 description: The slug of the challenge platform.
 type: string
-enum:
-  - synapse
-  - cami
-  - grand-challenge
-  - precision-fda
-  - kaggle
-  - codalab
-  - codabench
-  - eterna
-  - nightingale-os
-  - evalai
-  - cache
-  - cameo
-  - drivendata
-example: synapse
+minLength: 3
+maxLength: 30
+pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
+example: example-challenge-platform
