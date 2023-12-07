@@ -58,7 +58,6 @@ required:
   - name
   - description
   - status
-#   - description
 # example:
 #   name: awesome-challenge
 #   displayName: Awesome Challenge

@@ -69,6 +69,7 @@ required:
   - id
   - slug
   - name
+  - description
   - status
   - incentives
   - submissionTypes

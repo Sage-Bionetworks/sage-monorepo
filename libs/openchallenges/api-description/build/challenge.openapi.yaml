@@ -392,7 +392,6 @@ components:
       type: string
       minLength: 0
       maxLength: 1000
-      nullable: true
       example: This is an example description of the challenge.
     ChallengeDoi:
       description: The DOI of the challenge.
@@ -540,6 +539,7 @@ components:
         - id
         - slug
         - name
+        - description
         - status
         - incentives
         - submissionTypes

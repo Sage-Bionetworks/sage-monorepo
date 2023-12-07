@@ -31,7 +31,7 @@ CREATE TABLE `challenge`
     `slug`                  varchar(255) NOT NULL UNIQUE,
     `name`                  varchar(255) NOT NULL,
     `headline`              varchar(80),
-    `description`           varchar(1000),
+    `description`           varchar(1000) NOT NULL,
     `avatar_url`            varchar(500),
     `website_url`           varchar(500),
     `status`                ENUM('upcoming', 'active', 'completed'),
