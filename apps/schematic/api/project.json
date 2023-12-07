@@ -105,7 +105,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run pytest -m unit",
+        "command": "poetry run pytest -m 'not secrets'",
         "cwd": "apps/schematic/api"
       }
     },

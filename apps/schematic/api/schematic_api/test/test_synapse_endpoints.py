@@ -1,6 +1,7 @@
 """Tests for endpoints that use Synapse without mocking the Synapse client"""
 
 import json
+import os
 
 import pytest
 import yaml
@@ -14,14 +15,21 @@ from .conftest import (
     csv_to_json_str,
 )
 
-with open("schematic_api/test/data/synapse_config.yaml", "r", encoding="utf-8") as file:
-    secrets = yaml.safe_load(file)
-    SYNAPSE_TOKEN = secrets["synapse_token"]
-    TEST_DATASET = secrets["test_dataset"]
-    TEST_MANIFEST = secrets["test_manifest"]
-    TEST_ASSET_VIEW = secrets["test_asset_view"]
-    TEST_PROJECT = secrets["test_project"]
+SECRETS_FILE = "schematic_api/test/data/synapse_config.yaml"
+EXAMPLE_SECRETS_FILE = "schematic_api/test/data/synapse_config_example.yaml"
 
+if os.path.exists(SECRETS_FILE):
+    with open(SECRETS_FILE, "r", encoding="utf-8") as file:
+        secrets = yaml.safe_load(file)
+else:
+    with open(EXAMPLE_SECRETS_FILE, "r", encoding="utf-8") as file:
+        secrets = yaml.safe_load(file)
+
+SYNAPSE_TOKEN = secrets["synapse_token"]
+TEST_DATASET = secrets["test_dataset"]
+TEST_MANIFEST = secrets["test_manifest"]
+TEST_ASSET_VIEW = secrets["test_asset_view"]
+TEST_PROJECT = secrets["test_project"]
 
 HEADERS = {
     "Accept": "application/json",
