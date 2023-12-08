@@ -240,6 +240,17 @@ jobs:
       - name: create synapse config
         run: |
           import yaml
+          secrets = [
+              secrets.SCHEMATIC_SYNAPSE_TOKEN,
+              secrets.SCHEMATIC_TEST_PROJECT,
+              secrets.SCHEMATIC_TEST_DATASET,
+              secrets.SCHEMATIC_TEST_MANIFEST,
+              secrets.SCHEMATIC_TEST_ASSET_VIEW
+          ]
+          for secret in secrets:
+              assert secret is not None
+              assert isinstance(sercret, str)
+              assert len(secret) > 0
           dict = {
             "synapse_token": "${{secrets.SCHEMATIC_SYNAPSE_TOKEN}}",
             "test_project": "${{secrets.SCHEMATIC_TEST_PROJECT}}",
