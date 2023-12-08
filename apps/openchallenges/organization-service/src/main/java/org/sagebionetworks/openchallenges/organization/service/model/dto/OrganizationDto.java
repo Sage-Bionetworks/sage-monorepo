@@ -24,7 +24,6 @@ public class OrganizationDto {
   @JsonProperty("name")
   private String name;
 
-
   @JsonProperty("login")
   private String login;
 
