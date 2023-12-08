@@ -7,37 +7,36 @@ sc_umap_ui <- function(id){
       width = 24,
       shiny::p("UMAP")
     ),
-    shiny::fluidRow(
+    iatlas.modules::optionsBox(
+      width=24,
       shiny::column(
-        width = 3,
-        iatlas.modules::optionsBox(
-          width=24,
-          shiny::selectInput(
-            ns("color"),
-            label = "Color by",
-            choices = c("cell_type", "type", "gene"),
-            selected = "cell_type",
-            multiple = FALSE
+        width = 6,
+        shiny::selectInput(
+          ns("color"),
+          label = "Color by",
+          choices = c("cell_type", "type", "gene"),
+          selected = "cell_type",
+          multiple = FALSE
+        )
+        ),
+      shiny::column(
+        width = 6,
+        parameter_tabs <- tabsetPanel(
+          id = ns("params"),
+          type = "hidden",
+          tabPanel("normal",
+                   shiny::p("")
           ),
-          parameter_tabs <- tabsetPanel(
-            id = ns("params"),
-            type = "hidden",
-            tabPanel("normal",
-                     shiny::p("")
-            ),
-            tabPanel("gene",
-                     shiny::uiOutput(ns("select_gene"))
-            )
+          tabPanel("gene",
+                   shiny::uiOutput(ns("select_gene"))
           )
         )
-      ),
-      shiny::column(
-        width = 9,
-        iatlas.modules::plotBox(
-          width=24,
-          plotly::plotlyOutput(ns("umap_plot"))
-        )
       )
+    ),
+    iatlas.modules::plotBox(
+      width=24,
+      plotly::plotlyOutput(ns("umap_plot"),
+                           height = 800)
     )
   )
 }
