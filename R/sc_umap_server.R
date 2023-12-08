@@ -49,7 +49,11 @@ sc_umap_server <- function(
                                         x = ~ umap_1, y = ~ umap_2,
                                         type = "scatter", color = ~(dplyr::filter(color_criteria(), dataset == x))[[input$color]], mode = "markers"
                                       )%>%
-                                    add_title_subplot_plotly(x)
+                                    add_title_subplot_plotly(x)%>%
+                                    plotly::layout(
+                                      margin = list(b = 10, t = 70),
+                                      plot_bgcolor  = "rgb(250, 250, 250)"
+                                    )
                                 })
         plotly::subplot(all_plots, nrows = length(datasets), shareX = FALSE, titleX = FALSE, titleY= FALSE, margin = 0.1)
 
