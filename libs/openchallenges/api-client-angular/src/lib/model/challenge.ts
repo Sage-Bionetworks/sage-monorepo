@@ -43,7 +43,6 @@ export interface Challenge {
     description: string;
     doi?: string;
     status: ChallengeStatus;
-    difficulty: ChallengeDifficulty;
     platform: SimpleChallengePlatform;
     websiteUrl?: string;
     avatarUrl?: string;

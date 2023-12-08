@@ -24,8 +24,6 @@ public class OrganizationDto {
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("email")
-  private String email;
 
   @JsonProperty("login")
   private String login;
@@ -95,31 +93,6 @@ public class OrganizationDto {
 
   public void setName(String name) {
     this.name = name;
-  }
-
-  public OrganizationDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-  /**
-   * An email address.
-   *
-   * @return email
-   */
-  @NotNull
-  @Email
-  @Schema(
-      name = "email",
-      example = "john.smith@example.com",
-      description = "An email address.",
-      required = true)
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
   }
 
   public OrganizationDto login(String login) {
@@ -299,7 +272,6 @@ public class OrganizationDto {
     OrganizationDto organization = (OrganizationDto) o;
     return Objects.equals(this.id, organization.id)
         && Objects.equals(this.name, organization.name)
-        && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
         && Objects.equals(this.avatarKey, organization.avatarKey)
@@ -315,7 +287,6 @@ public class OrganizationDto {
     return Objects.hash(
         id,
         name,
-        email,
         login,
         description,
         avatarKey,
@@ -332,7 +303,6 @@ public class OrganizationDto {
     sb.append("class OrganizationDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");

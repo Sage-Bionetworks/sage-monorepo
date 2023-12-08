@@ -42,9 +42,6 @@ public class ChallengeDto {
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
-  @JsonProperty("difficulty")
-  private ChallengeDifficultyDto difficulty;
-
   @JsonProperty("platform")
   private SimpleChallengePlatformDto platform;
 
@@ -243,27 +240,6 @@ public class ChallengeDto {
 
   public void setStatus(ChallengeStatusDto status) {
     this.status = status;
-  }
-
-  public ChallengeDto difficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   *
-   * @return difficulty
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "difficulty", required = true)
-  public ChallengeDifficultyDto getDifficulty() {
-    return difficulty;
-  }
-
-  public void setDifficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
   }
 
   public ChallengeDto platform(SimpleChallengePlatformDto platform) {
@@ -540,7 +516,6 @@ public class ChallengeDto {
         && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.doi, challenge.doi)
         && Objects.equals(this.status, challenge.status)
-        && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.websiteUrl, challenge.websiteUrl)
         && Objects.equals(this.avatarUrl, challenge.avatarUrl)
@@ -564,7 +539,6 @@ public class ChallengeDto {
         description,
         doi,
         status,
-        difficulty,
         platform,
         websiteUrl,
         avatarUrl,
@@ -589,7 +563,6 @@ public class ChallengeDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");

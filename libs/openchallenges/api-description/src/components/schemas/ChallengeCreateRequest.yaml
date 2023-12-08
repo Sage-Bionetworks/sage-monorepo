@@ -27,8 +27,6 @@ properties:
   #   platformId:
   #     $ref: ChallengePlatformId.yaml
   #     nullable: true
-  difficulty:
-    $ref: ChallengeDifficulty.yaml
 #   submissionTypes:
 #     type: array
 #     items:

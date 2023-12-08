@@ -328,14 +328,6 @@ components:
       enum:
         - asc
         - desc
-    ChallengeDifficulty:
-      description: The difficulty level of a challenge.
-      type: string
-      enum:
-        - good_for_beginners
-        - intermediate
-        - advanced
-      example: intermediate
     ChallengeIncentive:
       description: The incentive type of the challenge.
       type: string
@@ -418,11 +410,6 @@ components:
           nullable: true
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
-        difficulties:
-          description: An array of challenge difficulty levels used to filter the results.
-          type: array
-          items:
-            $ref: '#/components/schemas/ChallengeDifficulty'
         incentives:
           description: An array of challenge incentive types used to filter the results.
           type: array
@@ -653,8 +640,6 @@ components:
           $ref: '#/components/schemas/ChallengeDoi'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
-        difficulty:
-          $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:

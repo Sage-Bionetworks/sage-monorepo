@@ -24,10 +24,6 @@ GET {{basePath}}/challenges?status=active,upcoming
 
 GET {{basePath}}/challenges?platforms=synapse
 
-### List the challenges with intermediate difficulty.
-
-GET {{basePath}}/challenges?difficulties=intermediate
-
 ### List the challenges with a container image submissions.
 
 GET {{basePath}}/challenges?submissionTypes=container_image

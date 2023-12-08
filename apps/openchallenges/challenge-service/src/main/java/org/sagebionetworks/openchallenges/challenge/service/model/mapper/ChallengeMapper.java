@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.mapper;
 
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
@@ -30,7 +29,6 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes");
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
-      dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
       dto.submissionTypes(
           entity.getSubmissionTypes().stream()

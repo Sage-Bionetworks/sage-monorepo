@@ -35,7 +35,6 @@ CREATE TABLE `challenge`
     `avatar_url`            varchar(500),
     `website_url`           varchar(500),
     `status`                ENUM('upcoming', 'active', 'completed'),
-    `difficulty`            ENUM('good_for_beginners', 'intermediate', 'advanced'),
     `platform_id`           int,
     `doi`                   varchar(120),
     `start_date`            DATE,

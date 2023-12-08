@@ -365,14 +365,6 @@ components:
       - desc
       nullable: true
       type: string
-    ChallengeDifficulty:
-      description: The difficulty level of a challenge.
-      enum:
-      - good_for_beginners
-      - intermediate
-      - advanced
-      example: intermediate
-      type: string
     ChallengeIncentive:
       description: The incentive type of the challenge.
       enum:
@@ -454,12 +446,6 @@ components:
           type: integer
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
-        difficulties:
-          description: An array of challenge difficulty levels used to filter the
-            results.
-          items:
-            $ref: '#/components/schemas/ChallengeDifficulty'
-          type: array
         incentives:
           description: An array of challenge incentive types used to filter the results.
           items:
@@ -688,7 +674,6 @@ components:
           id: 1
           slug: example-challenge-platform
         starredCount: 0
-        difficulty: intermediate
         createdAt: 2022-07-04T22:19:11Z
         incentives:
         - publication
@@ -746,8 +731,6 @@ components:
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
-        difficulty:
-          $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:
@@ -795,7 +778,6 @@ components:
       required:
       - createdAt
       - description
-      - difficulty
       - id
       - incentives
       - name
