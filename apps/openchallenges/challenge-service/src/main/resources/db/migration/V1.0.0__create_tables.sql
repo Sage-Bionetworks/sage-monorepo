@@ -42,7 +42,8 @@ CREATE TABLE `challenge`
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`platform_id`) REFERENCES challenge_platform(`id`)
+    FOREIGN KEY (`platform_id`) REFERENCES challenge_platform(`id`),
+    CONSTRAINT slug_check CHECK (char_length(`slug`) >= 3 and `slug` REGEXP '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
 
