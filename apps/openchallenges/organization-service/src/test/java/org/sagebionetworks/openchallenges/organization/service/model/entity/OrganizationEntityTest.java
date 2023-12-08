@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.organization.service.model.entity;
 
 import java.time.OffsetDateTime;
 import java.util.Collections;
-import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -118,7 +117,8 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(websiteUrl, entityFromConstructor.getWebsiteUrl());
     Assertions.assertEquals(challengeCount, entityFromConstructor.getChallengeCount());
     Assertions.assertEquals(Collections.emptyList(), entityFromConstructor.getCategories());
-    Assertions.assertEquals(Collections.emptyList(), entityFromConstructor.getChallengeContributions());
+    Assertions.assertEquals(
+        Collections.emptyList(), entityFromConstructor.getChallengeContributions());
     Assertions.assertEquals(description, entityFromConstructor.getDescription());
     Assertions.assertEquals(createdAt, entityFromConstructor.getCreatedAt());
     Assertions.assertEquals(updatedAt, entityFromConstructor.getUpdatedAt());
