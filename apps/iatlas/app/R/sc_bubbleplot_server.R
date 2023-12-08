@@ -10,17 +10,6 @@ sc_bubbleplot_server <- function(
 
       bubble_df <- shiny::reactive(arrow::read_feather("inst/feather/bubble_plot_df.feather"))
 
-      # output$select_cells <- shiny::renderUI({
-      #   shiny::req(bubble_df())
-      #   shiny::selectizeInput(
-      #     ns("cells"),
-      #     label = "Select cells",
-      #     choices = unique(bubble_df()$cell_type),
-      #     selected = c("B cell"),
-      #     multiple = TRUE
-      #   )
-      # })
-
       shiny::observe({
         # shiny::req(bubble_df())
         shiny::updateSelectizeInput(
@@ -63,29 +52,13 @@ sc_bubbleplot_server <- function(
         shiny::req(plot_df())
         datasets <- unique(plot_df()$dataset)
 
-        plotly::ggplotly(bubble_plot_ggplot(plot_df()), tooltip = "show_text")%>%
+        plotly::ggplotly(bubble_plot_ggplot(plot_df()), tooltip = "show_text", source = "bubbleplot")%>%
           plotly::layout(
             font = list(
               family = "Roboto, Open Sans, sans-serif")
           )
-
-        # all_plots <- purrr::map(.x = datasets,
-        #                         .f = function(x){
-        #                             create_scatterplot(
-        #                               df = dplyr::filter(plot_df(), dataset == x),
-        #                               x_col = "cell_type",
-        #                               y_col = "gene",
-        #                               color_col = "avg",
-        #                               size_col = "perc_expr",
-        #                               label_col = "text",
-        #                               xlab = "Gene Symbol",
-        #                               ylab = "Cell type"
-        #                             ) %>%
-        #                             add_title_subplot_plotly(x)
-        #                          })
-        #
-        # plotly::subplot(all_plots, nrows = 1, shareY = TRUE, titleX = TRUE, titleY= TRUE, margin = 0.1)
       })
+
 
     }
   )

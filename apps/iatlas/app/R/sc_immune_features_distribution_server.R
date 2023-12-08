@@ -1,4 +1,4 @@
-sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
+sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feature_op){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -17,8 +17,8 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df){
         shiny::selectInput(
           ns("var1_surv"),
           "Select Feature",
-          unique(gsea_df()$feature_name),
-          selected = "APM2"
+          feature_op(), #unique(gsea_df()$feature_name),
+          # selected = "APM2"
         )
       })
 
