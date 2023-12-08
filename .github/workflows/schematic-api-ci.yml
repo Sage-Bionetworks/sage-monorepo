@@ -249,7 +249,7 @@ jobs:
           ]
           for secret in secrets:
               assert secret is not None
-              assert isinstance(sercret, str)
+              assert isinstance(secret, str)
               assert len(secret) > 0
           dict = {
             "synapse_token": "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
