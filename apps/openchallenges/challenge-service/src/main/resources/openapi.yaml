@@ -544,7 +544,7 @@ components:
       format: int64
       type: integer
     ChallengeSlug:
-      description: The slug of the challenge.
+      description: The unique slug of the challenge.
       example: awesome-challenge
       maxLength: 255
       minLength: 3
@@ -560,12 +560,20 @@ components:
       example: Example challenge headline
       maxLength: 80
       minLength: 0
+      nullable: true
       type: string
     ChallengeDescription:
       description: The description of the challenge.
       example: This is an example description of the challenge.
       maxLength: 1000
       minLength: 0
+      type: string
+    ChallengeDoi:
+      description: The DOI of the challenge.
+      example: https://doi.org/123/abc
+      format: url
+      maxLength: 120
+      nullable: true
       type: string
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
@@ -583,6 +591,7 @@ components:
         name: name
         id: 1
         slug: example-challenge-platform
+      nullable: true
       properties:
         id:
           description: The unique identifier of a challenge platform.
@@ -606,6 +615,13 @@ components:
       - name
       - slug
       type: object
+    Url:
+      description: A URL to the website or image.
+      example: https://openchallenges.io
+      format: url
+      maxLength: 500
+      nullable: true
+      type: string
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
       example: 1
@@ -663,17 +679,27 @@ components:
       format: date
       nullable: true
       type: string
+    CreationDatetime:
+      description: Datetime when metadata was added to the OC database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
+    ModifiedDatetime:
+      description: Datetime when metadata was last modified in the OC database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
     Challenge:
       description: A challenge
       example:
-        avatarUrl: http://example.com/aeiou
+        avatarUrl: https://openchallenges.io
         endDate: 2017-07-21T00:00:00.000+00:00
         description: This is an example description of the challenge.
         platform:
           name: name
           id: 1
           slug: example-challenge-platform
-        starredCount: 0
+        starredCount: 100
         createdAt: 2022-07-04T22:19:11Z
         incentives:
         - publication
@@ -681,13 +707,13 @@ components:
         submissionTypes:
         - container_image
         - container_image
-        websiteUrl: http://example.com/aeiou
+        websiteUrl: https://openchallenges.io
         name: name
         id: 1
         headline: Example challenge headline
         slug: awesome-challenge
         startDate: 2017-07-21T00:00:00.000+00:00
-        doi: doi
+        doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
         - name: gene expression
@@ -704,7 +730,7 @@ components:
           format: int64
           type: integer
         slug:
-          description: The slug of the challenge.
+          description: The unique slug of the challenge.
           example: awesome-challenge
           maxLength: 255
           minLength: 3
@@ -720,6 +746,7 @@ components:
           example: Example challenge headline
           maxLength: 80
           minLength: 0
+          nullable: true
           type: string
         description:
           description: The description of the challenge.
@@ -728,16 +755,29 @@ components:
           minLength: 0
           type: string
         doi:
+          description: The DOI of the challenge.
+          example: https://doi.org/123/abc
+          format: url
+          maxLength: 120
+          nullable: true
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
           format: url
+          maxLength: 500
+          nullable: true
           type: string
         avatarUrl:
+          description: A URL to the website or image.
+          example: https://openchallenges.io
           format: url
+          maxLength: 500
+          nullable: true
           type: string
         incentives:
           items:
@@ -766,12 +806,16 @@ components:
         starredCount:
           default: 0
           description: The number of times the challenge has been starred by users.
+          example: 100
+          minimum: 0
           type: integer
         createdAt:
+          description: Datetime when metadata was added to the OC database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
         updatedAt:
+          description: Datetime when metadata was last modified in the OC database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
@@ -781,7 +825,6 @@ components:
       - id
       - incentives
       - name
-      - platform
       - slug
       - starredCount
       - status
