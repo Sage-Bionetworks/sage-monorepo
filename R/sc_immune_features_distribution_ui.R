@@ -9,10 +9,6 @@ sc_immune_features_distribution_ui <- function(id){
           width = 3,
           shiny::uiOutput(ns("feature_op"))
         ),
-        # column(
-        #   width = 3,
-        #   shiny:: uiOutput(ns("group2"))
-        # ),
         column(
           width = 2,
           shiny::selectInput(

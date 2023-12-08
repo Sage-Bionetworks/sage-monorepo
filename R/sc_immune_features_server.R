@@ -10,7 +10,8 @@ sc_immune_features_server <- function(id, cohort_obj){
       sc_immune_features_distribution_server(
         "sc_immune_features_distribution",
         cohort_obj,
-        gsea_df
+        gsea_df,
+        feature_op = shiny::reactive(unique(gsea_df()$feature_name))
       )
 
 
