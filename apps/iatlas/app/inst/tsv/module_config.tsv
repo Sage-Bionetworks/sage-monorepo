@@ -17,6 +17,6 @@ Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Mode
 Immune Features	ici_immune_features	ici	See how immune readouts vary across groups and ICI datasets.	none
 Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
 Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.	none
-Single cell	sc_module	scRNA	See scRNA seq data.	none
+UMAP	sc_module	scRNA	See scRNA seq data.	none
 Immune Features	sc_immune_features	scRNA	See how immune readouts in pseudobulk single cell RNA seq datasets.	none
 Immunomodulators	sc_immunomodulators	scRNA	xplore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
