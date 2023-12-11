@@ -1,5 +1,5 @@
 sc_umap_ui <- function(id){
-#TODO: fix duplicated legend; add links to HTAN; add gene info for Vanderbilt
+#TODO: add links to HTAN; add gene info for Vanderbilt
 #TODO: incorporate clinical annotation (especially response to treatment)
 
   ns <- shiny::NS(id)
@@ -16,7 +16,7 @@ sc_umap_ui <- function(id){
         shiny::selectInput(
           ns("color"),
           label = "Color by",
-          choices = c("cell_type", "type", "gene"),
+          choices = c("Cell Type"="cell_type", "Type" = "type", "Gene Symbol" = "gene"),
           selected = "cell_type",
           multiple = FALSE
         )
@@ -37,8 +37,19 @@ sc_umap_ui <- function(id){
     ),
     iatlas.modules::plotBox(
       width=24,
-      plotly::plotlyOutput(ns("umap_plot"),
-                           height = 800)
+      shiny::column(
+        width = 10,
+        plotly::plotlyOutput(ns("umap_plot"),
+                             height = 800) %>%
+          shinycssloaders::withSpinner(.)
+      ),
+      shiny::column(
+        width = 2,
+        div(
+          DT::DTOutput(ns("legend")),
+          style = "font-size: 70%"
+        )
+      )
     )
   )
 }
