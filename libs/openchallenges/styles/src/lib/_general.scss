@@ -422,7 +422,7 @@ table {
 }
 @media only screen and (max-width: constants.$lg-breakpoint) {
   html {
-    margin-top: constants.$navbar-height-tall;
+    margin-top: constants.$navbar-height;
   }
 
   .card-group {

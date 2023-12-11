@@ -21,11 +21,9 @@
     }
   }
 }
-
 .flex-spacer {
   flex-grow: 1;
 }
-
 .logo {
   height: 36px;
   vertical-align: middle;
@@ -36,13 +34,7 @@
     width: 100%;
     align-self: center;
   }
-  .sage-navbar {
-    height: constants.$navbar-height-tall;
-  }
   .flex-spacer {
     flex-grow: 0;
-  }
-  .test {
-    width: 100%;
   }
 }
