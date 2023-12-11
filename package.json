@@ -16,7 +16,7 @@
   "dependencies": {
     "@angular-architects/module-federation": "14.3.14",
     "@angular/animations": "16.2.1",
-    "@angular/cdk": "16.2.1",
+    "@angular/cdk": "^17.0.3",
     "@angular/common": "16.2.1",
     "@angular/compiler": "16.2.1",
     "@angular/core": "16.2.1",
@@ -27,6 +27,7 @@
     "@angular/platform-server": "16.2.1",
     "@angular/router": "16.2.1",
     "@cdktf/provider-aws": "14.0.2",
+    "@ngbracket/ngx-layout": "^17.0.0",
     "@nguniversal/express-engine": "16.2.0",
     "@swc/helpers": "0.5.1",
     "@types/commander": "^2.12.2",
