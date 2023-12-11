@@ -4,10 +4,13 @@ import { RouterModule } from '@angular/router';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
+import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { UserButtonComponent } from '../user-button/user-button.component';
 import { DiscordButtonComponent } from '../discord-button/discord-button.component';
 import { NavbarSection } from './navbar-section';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 @Component({
   selector: 'openchallenges-navbar',
@@ -18,6 +21,9 @@ import { NavbarSection } from './navbar-section';
     MatButtonModule,
     UserButtonComponent,
     DiscordButtonComponent,
+    MatIconModule,
+    MatToolbarModule,
+    FlexLayoutModule,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
@@ -29,6 +35,7 @@ export class NavbarComponent {
   @Input({ required: true }) userMenuItems: MenuItem[] = [];
   @Output() userMenuItemSelected = new EventEmitter<MenuItem>();
   @Output() logInClicked = new EventEmitter<boolean>();
+  @Output() sidenavToggle = new EventEmitter();
 
   private _sections: { [key: string]: NavbarSection } = {};
   sectionsKeys: string[] = [];
@@ -46,4 +53,8 @@ export class NavbarComponent {
   selectUserMenuItem(menuItem: MenuItem) {
     this.userMenuItemSelected.emit(menuItem);
   }
+
+  public onToggleSidenav = () => {
+    this.sidenavToggle.emit();
+  };
 }

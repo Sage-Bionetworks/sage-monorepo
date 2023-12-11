@@ -1,30 +1,37 @@
-<!-- TODO: figure out if the <nav> should go inside of a <header> element. -->
-<nav class="sage-navbar" aria-label="Top Toolbar">
-  <a mat-button routerLink="/" aria-label="Home">
-    <img
-      class="logo"
-      src="/openchallenges-assets/images/openchallenges-color.svg"
-      alt="OpenChallenges"
-    />
-  </a>
-
-  <a mat-button class="navbar-item" *ngFor="let key of sectionsKeys" [routerLink]="key"
-    >{{ sections[key].name }}
-  </a>
-
-  <div class="flex-spacer"></div>
-
-  <a mat-button class="navbar-item" routerLink="/team">Meet Our Team</a>
-  <openchallenges-discord-button />
-
-  <!-- <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
-    Log In
-  </a> -->
-  <!-- *ngIf="isLoggedIn" -->
-  <!-- <openchallenges-user-button
-    class="test"
-    [avatar]="userAvatar"
-    [menuItems]="userMenuItems"
-    (menuItemSelected)="selectUserMenuItem($event)"
-  /> -->
+<nav aria-label="Navbar">
+  <mat-toolbar class="sage-navbar">
+    <a mat-button routerLink="/" aria-label="Home">
+      <img
+        class="logo"
+        src="/openchallenges-assets/images/openchallenges-color.svg"
+        alt="OpenChallenges"
+      />
+    </a>
+    <div fxFlex fxLayout fxLayoutAlign="end" fxHide.gt-sm>
+      <button mat-icon-button (click)="onToggleSidenav()">
+        <mat-icon aria-hidden="true">menu</mat-icon>
+      </button>
+    </div>
+    <div fxFlex fxLayout fxLayoutAlign="start" fxHide.lt-md>
+      <a mat-button *ngFor="let key of sectionsKeys" [routerLink]="key"
+        >{{ sections[key].name }}
+      </a>
+    </div>
+  
+    <div fxFlex fxLayout fxLayoutAlign="end" fxHide.lt-md>
+      <a mat-button class="navbar-item" routerLink="/team">Meet Our Team</a>
+      <openchallenges-discord-button />
+    </div>
+  </mat-toolbar>
 </nav>
+
+<!-- <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
+  Log In
+</a> -->
+<!-- *ngIf="isLoggedIn" -->
+<!-- <openchallenges-user-button
+  class="test"
+  [avatar]="userAvatar"
+  [menuItems]="userMenuItems"
+  (menuItemSelected)="selectUserMenuItem($event)"
+/> -->
