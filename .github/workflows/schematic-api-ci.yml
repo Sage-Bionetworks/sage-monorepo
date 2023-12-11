@@ -241,7 +241,7 @@ jobs:
         run: |
           import yaml
           secrets = {
-              "synapse_token: "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
+              "synapse_token": "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
               "test_project": "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
               "test_dataset": "${{ secrets.SCHEMATIC_TEST_DATASET }}",
               "test_manifest": "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
