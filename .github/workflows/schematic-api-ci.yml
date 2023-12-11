@@ -240,26 +240,20 @@ jobs:
       - name: create synapse config
         run: |
           import yaml
-          secrets = [
-              "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
-              "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
-              "${{ secrets.SCHEMATIC_TEST_DATASET }}",
-              "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
-              "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}",
-          ]
-          for secret in secrets:
+          secrets = {
+              "synapse_token: "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
+              "test_project": "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
+              "test_dataset": "${{ secrets.SCHEMATIC_TEST_DATASET }}",
+              "test_manifest": "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
+              "test_asset_view": "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}",
+          }
+          for key, secret in secrets.items():
+              print(key)
               assert secret is not None
               assert isinstance(secret, str)
               assert len(secret) > 0
-          dict = {
-            "synapse_token": "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
-            "test_project": "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
-            "test_dataset": "${{ secrets.SCHEMATIC_TEST_DATASET }}",
-            "test_manifest": "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
-            "test_asset_view": "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}",
-          }
           with open('apps/schematic/api/schematic_api/test/data/synapse_config.yaml', 'w') as file:
-              yaml.dump(dict, file)
+              yaml.dump(secrets, file)
         shell: python
 
       - name: Test the affected projects (all)
