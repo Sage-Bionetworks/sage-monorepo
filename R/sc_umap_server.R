@@ -28,16 +28,22 @@ sc_umap_server <- function(
       color_criteria <- shiny::reactive({
         shiny::req(umap_df(), input$color)
 
-        if (input$color %in% c("cell_type", "type")) return(dplyr::select(umap_df(), input$color, dataset))
+        if (input$color %in% c("cell_type", "type")) return(dplyr::select(umap_df(), "group" = input$color, dataset))
         else{
           shiny::req(input$gene)
           return(gene_df()[[input$gene]])
         }
       })
 
+      group_colors <- shiny::reactive({
+        shiny::req(umap_df(), color_criteria())
+        group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(color_criteria()$group))
+        setNames(group_colors, unique(color_criteria()$group))
+      })
+
 
       output$umap_plot <- plotly::renderPlotly({
-        shiny::req(umap_df(), color_criteria())
+        shiny::req(umap_df(),color_criteria(), group_colors())
 
         datasets <- unique(umap_df()$dataset)
 
@@ -46,8 +52,13 @@ sc_umap_server <- function(
                                     umap_df() %>%
                                       dplyr::filter(dataset == x) %>%
                                       plotly::plot_ly(
-                                        x = ~ umap_1, y = ~ umap_2,
-                                        type = "scatter", color = ~(dplyr::filter(color_criteria(), dataset == x))[[input$color]], mode = "markers"
+                                        x = ~ umap_1,
+                                        y = ~ umap_2,
+                                        type = "scatter",
+                                        color = ~(dplyr::filter(color_criteria(), dataset == x))$group,
+                                        colors = group_colors(),
+                                        mode = "markers",
+                                        showlegend = FALSE
                                       )%>%
                                     add_title_subplot_plotly(x)%>%
                                     plotly::layout(
@@ -58,6 +69,35 @@ sc_umap_server <- function(
         plotly::subplot(all_plots, nrows = length(datasets), shareX = FALSE, titleX = FALSE, titleY= FALSE, margin = 0.1)
 
       })
+
+
+      plot_legend <- shiny::reactive({
+        tbl <- dplyr::distinct(
+          data.frame(
+            b = group_colors(),
+            a = names(group_colors())
+          ))
+
+        DT::datatable(
+          tbl,
+          rownames = FALSE,
+          class = "",
+          callback = DT::JS("$('table.dataTable.no-footer').css('border-bottom', 'none');"),
+          options = list(
+            dom = 't',
+            lengthChange = FALSE,
+            headerCallback = DT::JS(
+              "function(thead, data, start, end, display){",
+              "  $(thead).remove();",
+              "}")
+          )
+        ) %>%
+          DT::formatStyle('b', backgroundColor = DT::styleEqual(tbl$b, tbl$b)) %>%
+          DT::formatStyle('b', color = DT::styleEqual(tbl$b, tbl$b))
+
+      })
+
+      output$legend <- DT::renderDT(plot_legend())
 
     }
   )
