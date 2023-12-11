@@ -19,6 +19,6 @@ CORS(app.app, resources={r"/api/*": {"origins": "*"}})
 def main():
     app.run(port=80, debug=False)
 
-    
+
 if __name__ == "__main__":
     main()
