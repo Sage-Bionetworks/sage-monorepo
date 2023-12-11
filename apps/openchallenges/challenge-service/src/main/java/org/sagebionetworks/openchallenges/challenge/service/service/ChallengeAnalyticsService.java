@@ -17,7 +17,7 @@ public class ChallengeAnalyticsService {
             "2018", "2019", "2020", "2021", "2022", "2023");
     List<Integer> challengeCounts =
         Arrays.asList(6, 9, 13, 17, 23, 29, 34, 41, 49, 59, 86, 97, 116, 135, 183, 242, 302);
-    Integer undatedChallengeCount = 160;
+    Integer undatedChallengeCount = 171;
 
     // int currentYear = Year.now().getValue();
     // years.removeIf(year -> Integer.parseInt(year) > currentYear);
