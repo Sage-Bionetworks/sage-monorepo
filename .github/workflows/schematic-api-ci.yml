@@ -237,20 +237,14 @@ jobs:
             && nx affected --target=build,server"
 
       - name: create synapse config
-        env:
-          SYNAPSE_TOKEN: "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}"
-          TEST_PROJECT: "${{ secrets.SCHEMATIC_TEST_PROJECT }}"
-          TEST_DATASET: "${{ secrets.SCHEMATIC_TEST_DATASET }}"
-          TEST_MANIFEST: "${{ secrets.SCHEMATIC_TEST_MANIFEST }}"
-          TEST_ASSET_VIEW: "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}"
         run: |
           import yaml
           secrets = {
-              "synapse_token": SYNAPSE_TOKEN,
-              "test_project": TEST_PROJECT,
-              "test_dataset": TEST_DATASET,
-              "test_manifest": TEST_MANIFEST,
-              "test_asset_view": TEST_ASSET_VIEW
+              "synapse_token": "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
+              "test_project": "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
+              "test_dataset": "${{ secrets.SCHEMATIC_TEST_DATASET }}",
+              "test_manifest": "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
+              "test_asset_view": "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}"
           }
           for key, secret in secrets.items():
               print(key)
