@@ -1,41 +1,69 @@
-FROM python:3.10.12-slim-buster
+FROM tiangolo/uwsgi-nginx-flask:python3.10
 
-ENV APP_DIR=/opt/app
+# add version tag as a build argument
+ARG TAG
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+# add label 
+LABEL maintainer="Milen Nikolov, Andrew Lamb, Mialy DeFelice, Gianna Jordan, Lingling Peng"
 
-# hadolint ignore=DL3008
-RUN apt-get update -qq -y \
-    && apt-get install --no-install-recommends -qq -y \
-        build-essential \
-        gosu \
-        libpcre3 \
-        libpcre3-dev \
-        python3-dev \
-    && apt-get -y autoclean \
-    && apt-get -y autoremove \
-    && rm -rf /var/lib/apt/lists/*
+# the environment variables defined here are the default
+# and can be overwritten by docker run -e VARIABLE = XX
+# or can be overwritten by .env when using docker compose
+ENV PYTHONFAULTHANDLER=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONHASHSEED=random \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=on \
+    PIP_DEFAULT_TIMEOUT=200 \
+    POETRY_VERSION=1.3.0 \
+    APP_PARENT_DIR=/app \ 
+    NGINX_CONFIG=/etc/nginx/conf.d \
+    APP_DIR=/app/app \
+    ROOT=/ \
+    UWSGI_INI=/app/uwsgi.ini \ 
+    NGINX_WORKER_PROCESSES=1 \
+    VERSION=$TAG
 
-WORKDIR ${APP_DIR}
-COPY schematic_api schematic_api/
-COPY pyproject.toml poetry.lock uwsgi.ini ./
+# run open ssl and generate certificate
+RUN apt update && \
+    apt-get install openssl && \
+    openssl req -x509 -nodes -days 365 \
+    -subj  "/C=CA/ST=QC/O=Company" \
+    -newkey rsa:2048 -keyout /etc/ssl/private/localhost.key \
+    -out /etc/ssl/certs/localhost.crt;
 
+# add dhparam.pem
+# dhparam.pem was used in ssl-params.conf
+RUN openssl dhparam -out /etc/ssl/dhparam.pem 4096
+
+# copy config nginx files that handle encryption
+WORKDIR ${NGINX_CONFIG}
+COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./redirect.conf ./
+
+# copy to use custom uwsgi.ini and a custom prestart script
+# the prestart script ensures us to run container as user www-data
+WORKDIR /app
+COPY ./uwsgi.ini ./
+# COPY ./docker-entrypoint.sh ./prestart.sh
+RUN rm -rf ${APP_PARENT_DIR}/prestart.sh
+
+# copy files relevant for schematic apis
+WORKDIR /app/app
+COPY  schematic_api ./schematic_api
+COPY pyproject.toml poetry.lock ./
+
+# install dependencies
 RUN pip install poetry \
   && poetry config --local virtualenvs.create false \
   && poetry run pip install "cython<3.0.0" \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
-  && poetry install --with prod --no-root --no-interaction --no-ansi \
-  && pip cache purge
+  && poetry install --with prod --no-root --no-interaction --no-ansi
 
-WORKDIR /
-COPY docker-entrypoint.sh ./
-RUN chmod +x docker-entrypoint.sh
+# make any users able to read, write /root
+# this is temporarily here to ensure that .synapseCache folder can be created
+RUN chmod -R 777 /root
 
-EXPOSE 7080
+WORKDIR ${APP_DIR}
 
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# Run server in development mode
-# CMD ["python", "-m", "openapi_server"]
-# Run server in production mode
-CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":7080"]
+# Expose ports
+EXPOSE 443
