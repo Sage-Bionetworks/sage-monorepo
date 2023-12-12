@@ -5,6 +5,9 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       ns <- session$ns
 
+      #TODO: change this when data is in cohort_obj
+      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+
       plot_function <- shiny::reactive({
         switch(
           input$plot_type,
@@ -113,7 +116,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                                                   fill_colors = group_colors(),
                                                   #source = "p1",
                                                   showlegend = F)  %>%
-                                    add_title_subplot_plotly(x) %>%
+                                    add_title_subplot_plotly(dataset_display()[[x]])%>%
                                     plotly::layout(
                                       xaxis = list(automargin = TRUE,
                                                    tickangle = 80,
