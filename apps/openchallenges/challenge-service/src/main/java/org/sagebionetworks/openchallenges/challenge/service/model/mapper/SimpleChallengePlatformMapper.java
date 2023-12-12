@@ -20,6 +20,9 @@ public class SimpleChallengePlatformMapper
   @Override
   public SimpleChallengePlatformDto convertToDto(
       SimpleChallengePlatformEntity entity, Object... args) {
+    if (entity == null) {
+      return null;
+    }
     SimpleChallengePlatformDto dto = new SimpleChallengePlatformDto();
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto);

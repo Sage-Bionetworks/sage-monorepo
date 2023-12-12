@@ -32,6 +32,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setDifficulty(ChallengeDifficultyDto.fromValue(entity.getDifficulty()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      // dto.setPlatform(null);
       dto.submissionTypes(
           entity.getSubmissionTypes().stream()
               .map(o -> ChallengeSubmissionTypeDto.fromValue(o.getName()))
