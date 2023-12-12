@@ -1,4 +1,4 @@
-<main class="base mat-typography">
+<div class="base">
   <ng-container *ngIf="organization$ | async as org">
     <section id="profile-top" class="row">
       <openchallenges-avatar
@@ -65,7 +65,7 @@
       </div>
     </section>
   </ng-container>
-</main>
+</div>
 <openchallenges-footer
   [appVersion]="appVersion"
   [dataUpdatedOn]="dataUpdatedOn"

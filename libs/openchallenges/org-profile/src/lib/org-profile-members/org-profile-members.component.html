@@ -1,18 +1,16 @@
-<main>
-  <div id="members">
-    <h3>Members</h3>
-    <ng-container *ngIf="members.length > 0; else na_text">
-      <div class="card-group">
-        <openchallenges-person-card
-          *ngFor="let member of members"
-          [name]="member.name"
-          [avatarSize]="120"
-          [affiliation]="organization.name"
-        />
-      </div>
-    </ng-container>
-    <ng-template #na_text>
-      <h4 class="text-grey">Not available</h4>
-    </ng-template>
-  </div>
-</main>
+<div id="members">
+  <h3>Members</h3>
+  <ng-container *ngIf="members.length > 0; else na_text">
+    <div class="card-group">
+      <openchallenges-person-card
+        *ngFor="let member of members"
+        [name]="member.name"
+        [avatarSize]="120"
+        [affiliation]="organization.name"
+      />
+    </div>
+  </ng-container>
+  <ng-template #na_text>
+    <h4 class="text-grey">Not available</h4>
+  </ng-template>
+</div>
