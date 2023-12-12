@@ -18,9 +18,7 @@ properties:
   difficulty:
     $ref: ChallengeDifficulty.yaml
   platform:
-    allOf:
-      - $ref: SimpleChallengePlatform.yaml
-    nullable: true
+    $ref: SimpleChallengePlatform.yaml
   websiteUrl:
     type: string
     format: url

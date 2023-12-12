@@ -72,6 +72,7 @@ public class ChallengeService {
                 () ->
                     new ChallengeNotFoundException(
                         String.format("The challenge with ID %d does not exist.", challengeId)));
+    log.debug("challenge entity: {}", challengeEntity);
     ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
     return challenge;
   }

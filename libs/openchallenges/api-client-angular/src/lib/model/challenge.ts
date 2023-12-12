@@ -44,7 +44,7 @@ export interface Challenge {
     doi?: string;
     status: ChallengeStatus;
     difficulty: ChallengeDifficulty;
-    platform: SimpleChallengePlatform;
+    platform?: SimpleChallengePlatform;
     websiteUrl?: string;
     avatarUrl?: string;
     incentives: Array<ChallengeIncentive>;

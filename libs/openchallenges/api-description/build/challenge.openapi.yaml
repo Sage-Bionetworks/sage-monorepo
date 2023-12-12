@@ -478,9 +478,7 @@ components:
         difficulty:
           $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
-          allOf:
-            - $ref: '#/components/schemas/SimpleChallengePlatform'
-          nullable: true
+          $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:
           type: string
           format: url

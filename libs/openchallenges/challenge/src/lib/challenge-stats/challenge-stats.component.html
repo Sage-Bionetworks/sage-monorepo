@@ -21,11 +21,9 @@
     <a
       class="stat-item action-btn"
       *ngSwitchCase="true"
-      href="{{ challenge.websiteUrl }}"
+      [href]="challenge.websiteUrl"
       target="_blank"
-      title="Go to challenge page on {{
-        challenge.platform.name === 'Other' ? 'platform' : challenge.platform.name
-      }}"
+      title="Go to Website"
       rel="noopener noreferrer"
     >
       <mat-icon aria-hidden="true" class="stats-card-icon">open_in_new</mat-icon>

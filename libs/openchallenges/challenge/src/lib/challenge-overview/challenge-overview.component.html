@@ -30,8 +30,8 @@
         </tr>
         <tr>
           <td class="text-right">Platform</td>
-          <td [ngClass]="{ 'text-grey': challenge.platform.name === '' }">
-            {{ useNaIfFalsey(challenge.platform.name) }}
+          <td [ngClass]="{ 'text-grey': challenge.platform?.name === undefined }">
+            {{ useNaIfFalsey(challenge.platform?.name) }}
           </td>
         </tr>
         <tr>
@@ -51,7 +51,9 @@
         </tr>
         <tr>
           <td class="text-right">Submission Type</td>
-          <td *ngIf="challenge.inputDataTypes && challenge.submissionTypes.length > 0; else na_subs">
+          <td
+            *ngIf="challenge.inputDataTypes && challenge.submissionTypes.length > 0; else na_subs"
+          >
             <span
               nowrap
               *ngFor="let submissionType of challenge.submissionTypes; let isLast = last"
@@ -107,6 +109,7 @@
       href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{
         challenge.id
       }}&entry.1040159972={{ challenge.slug }}"
+      rel="noopener"
       target="_blank"
       >Suggest an edit here!</a
     >
