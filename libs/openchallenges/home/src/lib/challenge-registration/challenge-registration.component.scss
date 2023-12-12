@@ -15,9 +15,6 @@
 .section-title {
   margin-bottom: 42px;
 }
-.side-img {
-  width: 500px;
-}
 
 // SECTION: organizers call-to-action
 #organizer-cta {
@@ -28,9 +25,6 @@
   }
 }
 @media screen and (max-width: constants.$lg-breakpoint) {
-  .side-img {
-    width: 240px;
-  }
   #organizer-cta .btn-block {
     padding: 36px 40px !important;
     text-align: center;

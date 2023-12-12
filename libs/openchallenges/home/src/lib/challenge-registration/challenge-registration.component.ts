@@ -6,11 +6,12 @@ import {
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 @Component({
   selector: 'openchallenges-challenge-registration',
   standalone: true,
-  imports: [CommonModule, MatButtonModule],
+  imports: [CommonModule, MatButtonModule, FlexLayoutModule],
   templateUrl: './challenge-registration.component.html',
   styleUrls: ['./challenge-registration.component.scss'],
 })
