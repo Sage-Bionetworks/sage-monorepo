@@ -949,7 +949,7 @@
     },
     "dplyr": {
       "Package": "dplyr",
-      "Version": "1.1.3",
+      "Version": "1.1.4",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
@@ -968,7 +968,7 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "e85ffbebaad5f70e1a2e2ef4302b4949"
+      "Hash": "fedd9d00c2944ff00a0e2696ccf048ec"
     },
     "e1071": {
       "Package": "e1071",
@@ -1622,9 +1622,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
-      "RemoteRef": "master",
-      "RemoteSha": "cd14597b1a18b59d9e82955f4c5ede3552800468",
-      "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
+      "RemoteRef": "0.6.2",
+      "RemoteSha": "ee605615679cd369e5b7aa3f04f52474faa75c10",
       "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
       "Requirements": [
         "DT",
@@ -1650,18 +1649,18 @@
         "viridis",
         "viridisLite"
       ],
-      "Hash": "53d54ed955d2a6fa6e49ce4081ad2aad"
+      "Hash": "a7ac2f513aed0cf376c3ca1d00379c26"
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",
-      "Version": "0.2.0",
+      "Version": "0.2.2",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
-      "RemoteRef": "develop",
-      "RemoteSha": "2114433c3abc3453bdcc6521c3a07ab58bdc84ad",
+      "RemoteRef": "0.2.3",
+      "RemoteSha": "ff8b2e63fe0de7d7d1c72abb09a79adeb2ea5878",
       "Requirements": [
         "assertthat",
         "dplyr",
@@ -1675,7 +1674,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "4a3e8cbe9e389d42b4d170cf77efd6ca"
+      "Hash": "eacfbfbc241029a3cced29cd237c4c47"
     },
     "igvShiny": {
       "Package": "igvShiny",

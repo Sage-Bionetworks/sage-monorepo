@@ -9,6 +9,9 @@ sc_immunomodulators_server <- function(id, cohort_obj){
 
       bubble_df <- shiny::reactive(arrow::read_feather("inst/feather/bubble_plot_df.feather"))
 
+      #TODO: change this when data is in cohort_obj
+      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+
       shiny::observe({
         # shiny::req(bubble_df())
         shiny::updateSelectizeInput(
@@ -26,7 +29,8 @@ sc_immunomodulators_server <- function(id, cohort_obj){
           dplyr::mutate(show_text = paste(
             paste0("% cells with expression for gene: ", round(perc_expr, 3)*100, "%"),
             paste("Average value:", round(avg, 3)), sep = "\n"
-          ))
+          ),
+          dataset_display = dataset_display()[dataset])
       })
 
       bubble_plot_ggplot <- function(df){
@@ -39,7 +43,7 @@ sc_immunomodulators_server <- function(id, cohort_obj){
           ggplot2::theme_minimal() +
           ggplot2::ylab("Gene Symbol") +
           ggplot2::xlab("Cell type") +
-          ggplot2::facet_wrap(~dataset, ncol = 1)+
+          ggplot2::facet_wrap(~dataset_display, ncol = 1)+
           ggplot2::theme(strip.text = ggplot2::element_text(size = 12),
                          axis.text.x = ggplot2::element_text(size = 10, angle = 315, hjust = 1, vjust = 0.5),
                          title = ggplot2::element_text(size = 12),

@@ -11,6 +11,9 @@ sc_umap_server <- function(
       umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_umap.feather"))
       gene_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_genes.feather"))
 
+      #TODO: change this when data is in cohort_obj
+      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+
       observeEvent(input$color, {
         if(input$color == "gene") updateTabsetPanel(inputId = "params", selected = "gene")
         if(input$color %in% c("cell_type", "type")) updateTabsetPanel(inputId = "params", selected = "normal")
@@ -60,7 +63,7 @@ sc_umap_server <- function(
                                         mode = "markers",
                                         showlegend = FALSE
                                       )%>%
-                                    add_title_subplot_plotly(x)%>%
+                                    add_title_subplot_plotly(dataset_display()[[x]])%>%
                                     plotly::layout(
                                       margin = list(b = 10, t = 70),
                                       plot_bgcolor  = "rgb(250, 250, 250)"
