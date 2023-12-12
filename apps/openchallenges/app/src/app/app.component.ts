@@ -15,13 +15,20 @@ import { HomeDataService } from '@sagebionetworks/openchallenges/home';
 import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manager.component';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { NgIf } from '@angular/common';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'openchallenges-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [NavbarComponent, RouterOutlet, NgIf, GoogleTagManagerComponent],
+  imports: [
+    NavbarComponent,
+    RouterOutlet,
+    NgIf,
+    GoogleTagManagerComponent,
+    MatSidenavModule,
+  ],
 })
 export class AppComponent implements OnInit, OnDestroy {
   title = 'OpenChallenges';

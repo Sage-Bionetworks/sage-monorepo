@@ -8,7 +8,15 @@
   [userMenuItems]="userMenuItems"
   (userMenuItemSelected)="selectUserMenuItem($event)"
   (logInClicked)="login()"
+  (sidenavToggle)="sidenav.toggle()"
 />
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<mat-sidenav-container>
+  <mat-sidenav #sidenav role="navigation">
+
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <main class="container mat-typography">
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
