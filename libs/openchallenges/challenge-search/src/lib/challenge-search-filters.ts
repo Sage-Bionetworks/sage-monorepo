@@ -134,6 +134,14 @@ export const challengeCategoriesFilter: Filter[] = [
     label: 'Featured',
   },
   {
+    value: ChallengeCategory.Benchmark,
+    label: 'Continuous Benchmark',
+  },
+  {
+    value: ChallengeCategory.Hackathon,
+    label: 'Hackathon',
+  },
+  {
     value: ChallengeCategory.StartingSoon,
     label: 'Starting Soon',
   },

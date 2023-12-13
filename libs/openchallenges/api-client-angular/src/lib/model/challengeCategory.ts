@@ -21,6 +21,8 @@ export const ChallengeCategory = {
     StartingSoon: 'starting_soon' as ChallengeCategory,
     EndingSoon: 'ending_soon' as ChallengeCategory,
     RecentlyStarted: 'recently_started' as ChallengeCategory,
-    RecentlyEnded: 'recently_ended' as ChallengeCategory
+    RecentlyEnded: 'recently_ended' as ChallengeCategory,
+    Benchmark: 'benchmark' as ChallengeCategory,
+    Hackathon: 'hackathon' as ChallengeCategory,
 };
 
