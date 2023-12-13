@@ -8,6 +8,7 @@ import {
   USER_MENU_ITEMS,
   NavbarSection,
   NavbarComponent,
+  SidenavComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import { APP_SECTIONS } from './app-sections';
 import { RouterOutlet } from '@angular/router';
@@ -16,6 +17,7 @@ import { GoogleTagManagerComponent } from './google-tag-manager/google-tag-manag
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { NgIf } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { FlexLayoutModule } from '@ngbracket/ngx-layout';
 
 @Component({
   selector: 'openchallenges-root',
@@ -28,6 +30,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     NgIf,
     GoogleTagManagerComponent,
     MatSidenavModule,
+    SidenavComponent,
+    FlexLayoutModule,
   ],
 })
 export class AppComponent implements OnInit, OnDestroy {

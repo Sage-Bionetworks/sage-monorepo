@@ -24,3 +24,4 @@ export * from './lib/search-dropdown-filter/search-dropdown-filter.component';
 export * from './lib/user-button/menu-item';
 // export * from './lib/user-button/mock-user';
 export * from './lib/user-button/user-menu-items';
+export * from './lib/sidenav/sidenav.component';

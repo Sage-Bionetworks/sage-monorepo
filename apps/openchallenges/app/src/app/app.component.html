@@ -11,8 +11,11 @@
   (sidenavToggle)="sidenav.toggle()"
 />
 <mat-sidenav-container>
-  <mat-sidenav #sidenav role="navigation">
-
+  <mat-sidenav #sidenav role="navigation" fxHide.gt-sm>
+    <openchallenges-sidenav 
+      [sections]="sections"
+      (sidenavClose)="sidenav.close()">
+    </openchallenges-sidenav>
   </mat-sidenav>
   <mat-sidenav-content>
     <main class="container mat-typography">

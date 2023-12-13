@@ -7,6 +7,7 @@
 @use './lib/paginator/paginator-theme' as paginator;
 @use './lib/person-card/person-card-theme' as person-card;
 @use './lib/discord-button/discord-button-theme' as discord-button;
+@use './lib/sidenav/sidenav-theme' as sidenav;
 
 @mixin theme($theme) {
   @include button-github.theme($theme);
@@ -18,4 +19,5 @@
   @include paginator.theme($theme);
   @include person-card.theme($theme);
   @include discord-button.theme($theme);
+  @include sidenav.theme($theme);
 }
