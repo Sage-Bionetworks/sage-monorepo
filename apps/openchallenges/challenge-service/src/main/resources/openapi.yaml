@@ -597,6 +597,7 @@ components:
         name: name
         id: 1
         slug: example-challenge-platform
+      nullable: true
       properties:
         id:
           description: The unique identifier of a challenge platform.

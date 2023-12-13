@@ -46,7 +46,7 @@ public class ChallengeDto {
   private ChallengeDifficultyDto difficulty;
 
   @JsonProperty("platform")
-  private SimpleChallengePlatformDto platform;
+  private SimpleChallengePlatformDto platform = null;
 
   @JsonProperty("websiteUrl")
   private String websiteUrl;

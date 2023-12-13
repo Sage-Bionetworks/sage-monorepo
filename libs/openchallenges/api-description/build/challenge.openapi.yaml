@@ -405,6 +405,7 @@ components:
     SimpleChallengePlatform:
       type: object
       description: A simple challenge platform.
+      nullable: true
       properties:
         id:
           $ref: '#/components/schemas/ChallengePlatformId'
