@@ -1,36 +1,46 @@
-# Do not change the 'definitions' section unless you know what you're doing
-definitions:
-  synapse_config: ".synapseConfig"
-  service_acct_creds: "schematic_service_account_creds.json"
+# This is an example config for Schematic.
+# All listed values are those that are the default if a config is not used.
+# Save this as config.yml, this will be gitignored.
+# Remove any fields in the config you don't want to change
+# If you remove all fields from a section, the entire section should be removed including the header.
+# Change the values of any fields you do want to change
 
-synapse:
-  master_fileview: 'syn23643253'
-  manifest_folder: 'manifests'
-  manifest_basename: 'synapse_storage_manifest' 
-  service_acct_creds: 'syn25171627'
 
+# This describes where assets such as manifests are stored
+asset_store:
+  # This is when assets are stored in a synapse project
+  synapse:
+    # Synapse ID of the file view listing all project data assets.
+    # master_fileview_id: "syn23643253"
+    master_fileview_id: "syn52854554"
+    # Path to the synapse config file, either absolute or relative to this file
+    config: ".synapseConfig"
+    # Base name that manifest files will be saved as
+    manifest_basename: "synapse_storage_manifest"
+
+# This describes information about manifests as it relates to generation and validation
 manifest:
-  # if making many manifests, just include name prefix
-  title: 'example'
-  # to make all manifests enter only 'all manifests'
-  data_type: 
-    - 'Biospecimen'
-    - 'Patient'
+  # Location where manifests will saved to
+  manifest_folder: "manifests"
+  # Title or title prefix given to generated manifest(s)
+  title: "example"
+  # Data types of manifests to be generated or data type (singular) to validate manifest against
+  data_type:
+    - "Biospecimen"
+    - "Patient"
 
+# Describes the location of your schema
 model:
-  input:
-    location: 'tests/data/example.model.jsonld'
-    file_type: 'local'
+  # Location of your schema jsonld, it must be a path relative to this file or absolute
+  location: "tests/data/example.model.jsonld"
 
-style:
-  google_manifest:
-    req_bg_color:
-      red: 0.9215
-      green: 0.9725
-      blue: 0.9803
-    opt_bg_color:
-      red: 1.0
-      green: 1.0
-      blue: 0.9019
-    master_template_id: '1LYS5qE4nV9jzcYw5sXwCza25slDfRA1CIg3cs-hCdpU'
-    strict_validation: true
+# This section is for using google sheets with Schematic
+google_sheets:
+  # The Synapse id of the Google service account credentials.
+  service_acct_creds_synapse_id: "syn25171627"
+  # Path to the synapse config file, either absolute or relative to this file
+  service_acct_creds: "schematic_service_account_creds.json"
+  # When doing google sheet validation (regex match) with the validation rules.
+  #   true is alerting the user and not allowing entry of bad values.
+  #   false is warning but allowing the entry on to the sheet.
+  strict_validation: true
