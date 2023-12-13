@@ -24,6 +24,7 @@ jobs:
           scopes: |
             agora
             common
+            iatlas
             openchallenges
             sage-monorepo
             schematic
