@@ -8,33 +8,22 @@ import org.junit.jupiter.api.Test;
 
 public class OrganizationEntityTest {
 
-  private static Long id;
-  private static String name;
-  private static String email;
-  private static String login;
-  private static String avatarKey;
-  private static String websiteUrl;
-  private static Integer challengeCount;
-  private static String description;
-  private static OffsetDateTime createdAt;
-  private static OffsetDateTime updatedAt;
-  private static String acronym;
-  private static OrganizationEntity entityFromConstructor;
-  private static OrganizationEntity entityFromConstructor2;
+  private Long id = 1L;
+  private String name = "Test Organization";
+  private String email = "test@example.com";
+  private String login = "testorg";
+  private String avatarKey = "avatarKey";
+  private String websiteUrl = "https://example.com";
+  private Integer challengeCount = 5;
+  private String description = "Test description";
+  private OffsetDateTime createdAt = OffsetDateTime.now();
+  private OffsetDateTime updatedAt = OffsetDateTime.now();
+  private String acronym = "TO";
+  private OrganizationEntity entityFromConstructor;
+  private OrganizationEntity entityFromConstructor2;
 
   @BeforeEach
   public void setup() {
-    id = 1L;
-    name = "Test Organization";
-    email = "test@example.com";
-    login = "testorg";
-    avatarKey = "avatarKey";
-    websiteUrl = "https://example.com";
-    challengeCount = 5;
-    description = "Test description";
-    createdAt = OffsetDateTime.now();
-    updatedAt = OffsetDateTime.now();
-    acronym = "TO";
 
     entityFromConstructor = new OrganizationEntity();
 
