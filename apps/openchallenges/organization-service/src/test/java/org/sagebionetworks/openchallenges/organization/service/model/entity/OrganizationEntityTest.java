@@ -95,8 +95,7 @@ public class OrganizationEntityTest {
   }
 
   @Test
-  public void
-      OrganizationEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
+  public void OrganizationEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
 
     Assertions.assertEquals(id, entityFromConstructor.getId());
     Assertions.assertEquals(name, entityFromConstructor.getName());
