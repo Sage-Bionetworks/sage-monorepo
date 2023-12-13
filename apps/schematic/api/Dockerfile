@@ -59,9 +59,13 @@ RUN pip install poetry \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
   && poetry install --with prod --no-root --no-interaction --no-ansi
 
-# make any users able to read, write /root
-# this is temporarily here to ensure that .synapseCache folder can be created
-RUN chmod -R 777 /root
+# Update file permission 
+RUN mkdir /root/.synapseCache
+RUN mkdir /app/app/manifests
+# temporary here to ensure .synapseCache is not empty
+RUN echo "This is a test file." > /root/.synapseCache/test.txt
+# temporary here until we move .synapseCache to a different path
+RUN chmod -R 777 /root /app
 
 WORKDIR ${APP_DIR}
 
