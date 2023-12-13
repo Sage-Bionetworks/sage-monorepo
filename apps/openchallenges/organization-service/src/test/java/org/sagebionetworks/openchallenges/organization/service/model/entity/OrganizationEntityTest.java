@@ -60,7 +60,7 @@ public class OrganizationEntityTest {
 
   @Test
   public void
-      OrganizationEntityBuilderArguments_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuilt() {
+      OrganizationEntity_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuiltWithClassBuilder() {
 
     OrganizationEntity entity =
         OrganizationEntity.builder()
@@ -96,7 +96,7 @@ public class OrganizationEntityTest {
 
   @Test
   public void
-      OrganizationEntityMethodsToSetArguments_ShouldReturnArguments_WhenOrganizationEntityArgumentsPassed() {
+      OrganizationEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
 
     Assertions.assertEquals(id, entityFromConstructor.getId());
     Assertions.assertEquals(name, entityFromConstructor.getName());
@@ -115,7 +115,7 @@ public class OrganizationEntityTest {
   }
 
   @Test
-  public void HashCode_ShouldBuildHashCodeOfArgumentsForOrganizationEntity_WhenArgumentsPassed() {
+  public void HashCode_ShouldBuildHashCodeOfOrganizationEntity_WhenArgumentsPassed() {
 
     int hashCode1 = entityFromConstructor.hashCode();
     int hashCode2 = entityFromConstructor2.hashCode();
