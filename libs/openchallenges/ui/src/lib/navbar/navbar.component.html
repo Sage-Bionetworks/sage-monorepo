@@ -8,16 +8,16 @@
       />
     </a>
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.gt-sm>
-      <button mat-icon-button type="button" (click)="onToggleSidenav()">
+      <button mat-icon-button type="button" aria-label="Sidenav" (click)="onToggleSidenav()">
         <mat-icon aria-hidden="true">menu</mat-icon>
       </button>
     </div>
     <div fxFlex fxLayout fxLayoutAlign="start" fxHide.lt-md>
-      <a mat-button *ngFor="let key of sectionsKeys" [routerLink]="key"
+      <a mat-button class="navbar-item" *ngFor="let key of sectionsKeys" [routerLink]="key"
         >{{ sections[key].name }}
       </a>
     </div>
-  
+
     <div fxFlex fxLayout fxLayoutAlign="end" fxHide.lt-md>
       <a mat-button class="navbar-item" routerLink="/team">Meet Our Team</a>
       <openchallenges-discord-button />
@@ -25,7 +25,9 @@
   </mat-toolbar>
 </nav>
 
-<!-- <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
+<!-- 
+TODO: add back in once we implement userservice
+  <a mat-button class="navbar-item" *ngIf="!isLoggedIn" routerLink="/login" aria-label="Log In">
   Log In
 </a> -->
 <!-- *ngIf="isLoggedIn" -->
