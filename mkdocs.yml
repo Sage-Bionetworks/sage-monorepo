@@ -33,6 +33,7 @@ theme:
       info: octicons/info-16
   features:
     - content.code.copy
+    - navigation.tabs
     - navigation.footer
     - navigation.sections
     - search.highlight
@@ -44,6 +45,7 @@ plugins:
 - search
 - mkdocstrings
 - autorefs
+- termynal
 
 markdown_extensions:
   - admonition
