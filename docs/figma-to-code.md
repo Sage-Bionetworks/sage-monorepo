@@ -1,16 +1,8 @@
-# Figma to Code
-
-## Overview
-
 Often times, it can be quite time-consuming to go from design concepts to code. With the Challenge
 Registry, we hope to alleviate this hurdle by utilizing TeleportHQ's Figma-to-code capability.
 [TeleportHQ] is an online collaborative platform meant for front-end development, in which a static
 website can either be built from scratch, or, in our case, from pre-defined components and frames
 created in Figma.
-
-## Development workflow
-
-TODO
 
 ## Requirements
 

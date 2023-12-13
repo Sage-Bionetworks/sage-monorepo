@@ -5,8 +5,6 @@
 
 ---
 
-## Documentation
-
 Get started with Sage Monorepo, learn the fundamentals and explore advanced topics.
 
 - [Overview of Sage Monorepo]
@@ -31,19 +29,17 @@ with VS Code. This option is suitable if you want to explore the content of Sage
 cloning. For more information on contributing and/or our Forking Workflow, see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
+<!-- termynal -->
 ```console
-git clone --filter=blob:none <fork url>
+$ git clone --filter=blob:none <fork url>
+---> 100%
+Resolving deltas: 100% (...), done.
 ```
 
 Then open your fork repo inside our dev container using these instructions:
 
 - [Developing inside a Container](./docs/devcontainer.md)
 - [Develop on a remote host](./docs/develop-on-a-remote-host.md) (optional)
-
-
-## Quick Start
-
-Please refer to the Quick Start section of the [Overview of Sage Monorepo].
 
 ## Ecosystem
 
@@ -52,30 +48,6 @@ Please refer to the Quick Start section of the [Overview of Sage Monorepo].
 - Python
 - R
 
-## Contributing
-
-### Contributing Guidelines
-
-Read through our [contributing guidelines][contributing] to learn about our submission process,
-coding rules and more.
-
-### Want to Help?
-
-Want to report a bug, contribute some code, or improve documentation? Excellent! Read up on our
-guidelines for [contributing][contributing] and then check out one of our issues labeled as
-<kbd>[help wanted](https://github.com/Sage-Bionetworks/sage-monorepo/labels/help%20wanted)</kbd> or
-<kbd>[good first
-issue](https://github.com/Sage-Bionetworks/sage-monorepo/labels/good%20first%20issue)</kbd>.
-
-### Code of Conduct
-
-Help us keep Sage Monorepo open and inclusive. Please read and follow our [Code of Conduct].
-
-## Community
-
-Join the conversation and help the community.
-
-- TODO: Add Slack or Discord
 
 ## Projects
 

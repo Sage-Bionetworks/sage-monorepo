@@ -1,7 +1,3 @@
-# Angular Universal
-
-## Introduction
-
 The article [Angular Universal: a Complete Practical Guide] offers an excellent introduction to
 Angular Universal, server-side rendering (SSR) and search engine optimization (SEO).
 
