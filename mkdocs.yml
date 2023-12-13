@@ -56,6 +56,7 @@ theme:
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
+  logo: images/sage.png
   icon:
     admonition:
       note: octicons/tag-16
