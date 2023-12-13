@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "schematic_api"}]
 
 [tool.poetry.dependencies]
-python = "3.10.12"
+python = "3.10.13"
 connexion = {version = "2.14.1", extras = ["swagger-ui"]}
 swagger-ui-bundle = "0.0.9"
 python-dateutil = "2.8.2"
