@@ -1,0 +1,12 @@
+<mat-list class="mat-typography">
+  <mat-list-item class="sidenav-item" *ngFor="let key of sectionsKeys">
+    <a (click)="onSidenavClose()" [routerLink]="key">{{ sections[key].name }}</a>
+  </mat-list-item>
+  <mat-list-item class="sidenav-item">
+    <a (click)="onSidenavClose()" routerLink="/team">Meet Our Team</a>
+  </mat-list-item>
+  <hr>
+  <mat-list-item>
+    <openchallenges-discord-button />
+  </mat-list-item>
+</mat-list>

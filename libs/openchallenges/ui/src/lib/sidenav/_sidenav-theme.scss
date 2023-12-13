@@ -1,0 +1,37 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  $config: mat.get-color-config($theme);
+  $primary: map.get($config, 'primary');
+  $accent: map.get($config, 'accent');
+  $warn: map.get($config, 'warn');
+
+  .sidenav-item a {
+    color: white;
+  }
+  .sidenav-item a:hover,
+  .sidenav-item a:active {
+    color: lightgrey;
+  }
+}
+
+@mixin typography($theme) {
+  $typography-config: mat.get-typography-config($theme);
+
+  .sidenav-item a {
+    text-decoration: none;
+  }
+}
+
+@mixin theme($theme) {
+  $color-config: mat.get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}
