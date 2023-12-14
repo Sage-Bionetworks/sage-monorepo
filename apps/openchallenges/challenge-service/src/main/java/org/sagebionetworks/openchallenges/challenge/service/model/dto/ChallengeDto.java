@@ -46,7 +46,7 @@ public class ChallengeDto {
   private ChallengeDifficultyDto difficulty;
 
   @JsonProperty("platform")
-  private SimpleChallengePlatformDto platform;
+  private SimpleChallengePlatformDto platform = null;
 
   @JsonProperty("websiteUrl")
   private String websiteUrl;
@@ -276,9 +276,8 @@ public class ChallengeDto {
    *
    * @return platform
    */
-  @NotNull
   @Valid
-  @Schema(name = "platform", required = true)
+  @Schema(name = "platform", required = false)
   public SimpleChallengePlatformDto getPlatform() {
     return platform;
   }

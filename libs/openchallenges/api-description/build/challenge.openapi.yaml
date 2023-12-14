@@ -416,6 +416,7 @@ components:
         - id
         - slug
         - name
+      nullable: true
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
       type: integer
@@ -520,7 +521,6 @@ components:
         - description
         - status
         - difficulty
-        - platform
         - incentives
         - submissionTypes
         - starredCount

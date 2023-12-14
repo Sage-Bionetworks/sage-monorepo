@@ -80,7 +80,7 @@ public class ChallengeEntity {
   private String difficulty;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "platform_id", nullable = false)
+  @JoinColumn(name = "platform_id", nullable = true)
   @IndexedEmbedded(includePaths = {"slug", "name"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
