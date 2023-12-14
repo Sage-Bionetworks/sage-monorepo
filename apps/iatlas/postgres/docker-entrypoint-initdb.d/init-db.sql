@@ -1,4 +1,4 @@
--- keycloak
-CREATE USER keycloak WITH ENCRYPTED PASSWORD 'changeme';
-CREATE DATABASE keycloak;
-GRANT ALL PRIVILEGES ON DATABASE keycloak TO keycloak;
+-- iatlas
+CREATE USER iatlas WITH ENCRYPTED PASSWORD 'changeme';
+CREATE DATABASE iatlas;
+GRANT ALL PRIVILEGES ON DATABASE iatlas TO iatlas;
