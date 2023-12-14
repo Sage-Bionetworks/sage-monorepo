@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <td class="text-right">Platform</td>
-          <td [ngClass]="{ 'text-grey': challenge.platform?.name === undefined }">
+          <td [ngClass]="{ 'text-grey': challenge.platform?.name === (undefined || null) }">
             {{ useNaIfFalsey(challenge.platform?.name) }}
           </td>
         </tr>
