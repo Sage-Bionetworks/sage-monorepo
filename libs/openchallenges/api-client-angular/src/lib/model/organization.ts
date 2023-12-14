@@ -19,21 +19,38 @@ export interface Organization {
      * The unique identifier of an organization
      */
     id: number;
+    /**
+     * The name of the organization.
+     */
     name: string;
     /**
-     * An email address.
-     */
-    email: string;
-    /**
-     * The login of an organization
+     * The unique login of an organization.
      */
     login: string;
-    description: string;
+    /**
+     * A description of the organization.
+     */
+    description?: string | null;
     avatarKey?: string;
-    websiteUrl: string;
+    /**
+     * A URL to the website or image.
+     */
+    websiteUrl?: string | null;
+    /**
+     * The number of challenges involving this organization.
+     */
     challengeCount?: number;
+    /**
+     * Datetime when metadata was added to the OC database.
+     */
     createdAt: string;
+    /**
+     * Datetime when metadata was last modified in the OC database.
+     */
     updatedAt: string;
+    /**
+     * An acronym of the organization.
+     */
     acronym?: string;
 }
 
