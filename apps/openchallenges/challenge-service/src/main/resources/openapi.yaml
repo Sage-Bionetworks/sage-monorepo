@@ -800,7 +800,6 @@ components:
       - id
       - incentives
       - name
-      - platform
       - slug
       - starredCount
       - status

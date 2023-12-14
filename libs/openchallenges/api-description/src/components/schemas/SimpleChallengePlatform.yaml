@@ -1,6 +1,5 @@
 type: object
 description: A simple challenge platform.
-nullable: true
 properties:
   id:
     $ref: ChallengePlatformId.yaml
@@ -12,3 +11,4 @@ required:
   - id
   - slug
   - name
+nullable: true

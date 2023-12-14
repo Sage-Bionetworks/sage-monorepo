@@ -78,7 +78,6 @@ required:
   - description
   - status
   - difficulty
-  - platform
   - incentives
   - submissionTypes
   - starredCount

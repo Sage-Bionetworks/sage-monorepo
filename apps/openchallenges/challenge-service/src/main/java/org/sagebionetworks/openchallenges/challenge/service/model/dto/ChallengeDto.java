@@ -276,9 +276,8 @@ public class ChallengeDto {
    *
    * @return platform
    */
-  @NotNull
   @Valid
-  @Schema(name = "platform", required = true)
+  @Schema(name = "platform", required = false)
   public SimpleChallengePlatformDto getPlatform() {
     return platform;
   }
