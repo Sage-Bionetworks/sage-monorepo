@@ -1,0 +1,30 @@
+default:
+  database:
+    host:     localhost
+    port:     5432
+    user:     postgres
+    password: docker
+
+test:
+  database:
+    name:     iatlas_test
+
+dev:
+  database:
+    name:     iatlas_dev
+
+staging:
+  database:
+    name:     xxx
+    host:     xxx
+    port:     5432
+    user:     xxx
+    password: xxx
+
+prod:
+  database:
+    name:     xxx
+    host:     xxx
+    port:     5432
+    user:     xxx
+    password: xxx
