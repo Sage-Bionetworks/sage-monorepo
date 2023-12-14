@@ -12,4 +12,3 @@ required:
   - id
   - slug
   - name
-nullable: true
