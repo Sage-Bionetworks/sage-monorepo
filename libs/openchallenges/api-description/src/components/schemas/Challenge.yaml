@@ -60,7 +60,7 @@ properties:
     minimum: 0
     example: 100
   createdAt:
-    $ref: CreationDatetime.yaml
+    $ref: CreatedDatetime.yaml
   updatedAt:
     $ref: ModifiedDatetime.yaml
 required:

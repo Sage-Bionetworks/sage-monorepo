@@ -26,7 +26,7 @@ properties:
     default: 0
     example: 10
   createdAt:
-    $ref: CreationDatetime.yaml
+    $ref: CreatedDatetime.yaml
   updatedAt:
     $ref: ModifiedDatetime.yaml
   acronym:
