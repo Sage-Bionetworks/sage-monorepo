@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   iatlas-postgres:
@@ -7,21 +7,13 @@ services:
     env_file:
       - .env
     volumes:
-      - iatlas-postgres:/var/lib/postgresql/data
+      - iatlas-postgres-data:/var/lib/postgresql/data
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - iatlas
     ports:
-      - "2432:5432"
+      - '2432:5432'
     deploy:
       resources:
         limits:
           memory: 500M
-
-volumes:
-  iatlas-postgres:
-    name: iatlas-postgres
-
-networks:
-  iatlas:
-    name: iatlas
