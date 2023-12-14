@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  iatlas-postgres:
+    image: ghcr.io/sage-bionetworks/iatlas-postgres:${IATLAS_VERSION:-local}
+    container_name: iatlas-postgres
+    restart: always
+    env_file:
+      - ../../../apps/iatlas/postgres/.env
+    volumes:
+      - iatlas-postgres-data:/var/lib/postgresql/data
+      - ../../../apps/iatlas/postgres/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    networks:
+      - iatlas
+    ports:
+      - '2432:5432'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
