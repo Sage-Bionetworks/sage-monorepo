@@ -220,7 +220,7 @@ public class OrganizationDto {
   }
 
   /**
-   * Datetime when metadata was added to the OC database.
+   * Datetime when the object was added to the database.
    *
    * @return createdAt
    */
@@ -229,7 +229,7 @@ public class OrganizationDto {
   @Schema(
       name = "createdAt",
       example = "2022-07-04T22:19:11Z",
-      description = "Datetime when metadata was added to the OC database.",
+      description = "Datetime when the object was added to the database.",
       required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
@@ -245,7 +245,7 @@ public class OrganizationDto {
   }
 
   /**
-   * Datetime when metadata was last modified in the OC database.
+   * Datetime when the object was last modified in the database.
    *
    * @return updatedAt
    */
@@ -254,7 +254,7 @@ public class OrganizationDto {
   @Schema(
       name = "updatedAt",
       example = "2022-07-04T22:19:11Z",
-      description = "Datetime when metadata was last modified in the OC database.",
+      description = "Datetime when the object was last modified in the database.",
       required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;

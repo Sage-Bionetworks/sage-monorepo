@@ -679,13 +679,13 @@ components:
       format: date
       nullable: true
       type: string
-    CreatedDatetime:
-      description: Datetime when metadata was added to the OC database.
+    CreatedDateTime:
+      description: Datetime when the object was added to the database.
       example: 2022-07-04T22:19:11Z
       format: date-time
       type: string
-    ModifiedDatetime:
-      description: Datetime when metadata was last modified in the OC database.
+    UpdatedDateTime:
+      description: Datetime when the object was last modified in the database.
       example: 2022-07-04T22:19:11Z
       format: date-time
       type: string
@@ -810,12 +810,12 @@ components:
           minimum: 0
           type: integer
         createdAt:
-          description: Datetime when metadata was added to the OC database.
+          description: Datetime when the object was added to the database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
         updatedAt:
-          description: Datetime when metadata was last modified in the OC database.
+          description: Datetime when the object was last modified in the database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string

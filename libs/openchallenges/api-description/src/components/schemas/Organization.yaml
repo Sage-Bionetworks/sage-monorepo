@@ -26,9 +26,9 @@ properties:
     default: 0
     example: 10
   createdAt:
-    $ref: CreatedDatetime.yaml
+    $ref: CreatedDateTime.yaml
   updatedAt:
-    $ref: ModifiedDatetime.yaml
+    $ref: UpdatedDateTime.yaml
   acronym:
     description: An acronym of the organization.
     type: string
