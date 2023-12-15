@@ -36,16 +36,13 @@ RUN apt update && \
 # dhparam.pem was used in ssl-params.conf
 RUN openssl dhparam -out /etc/ssl/dhparam.pem 4096
 
-# copy config nginx files that handle encryption
+# copy all nginx config files
 WORKDIR ${NGINX_CONFIG}
 COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./redirect.conf ./
 
-# copy to use custom uwsgi.ini and a custom prestart script
-# the prestart script ensures us to run container as user www-data
+# copy to use custom uwsgi.ini
 WORKDIR /app
 COPY ./uwsgi.ini ./
-# COPY ./docker-entrypoint.sh ./prestart.sh
-RUN rm -rf ${APP_PARENT_DIR}/prestart.sh
 
 # copy files relevant for schematic apis
 WORKDIR /app/app
