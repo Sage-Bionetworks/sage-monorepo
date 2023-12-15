@@ -5,24 +5,24 @@ from . import Base
 
 class DriverResult(Base):
     __tablename__ = 'driver_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     fold_change = db.Column(db.Numeric, nullable=True)
     log10_p_value = db.Column(db.Numeric, nullable=True)
     log10_fold_change = db.Column(db.Numeric, nullable=True)
-    n_wt = db.Column(db.Integer, nullable=True)
-    n_mut = db.Column(db.Integer, nullable=True)
+    n_wildtype = db.Column(db.Integer, nullable=True)
+    n_mutants = db.Column(db.Integer, nullable=True)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
-    mutation_id = db.Column(db.Integer, db.ForeignKey(
+    mutation_id = db.Column(db.String, db.ForeignKey(
         'mutations.id'), nullable=False)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+    tag_id = db.Column(db.String, db.ForeignKey('tags.id'), nullable=False)
 
     data_set = db.relationship(
         'Dataset', backref=orm.backref('driver_results', uselist=True, lazy='noload'),

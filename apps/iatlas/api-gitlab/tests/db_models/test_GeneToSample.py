@@ -5,25 +5,25 @@ from api.database import return_gene_to_sample_query
 
 
 @pytest.fixture(scope='module')
-def gs_entrez(test_db):
+def gs_entrez_id(test_db):
     return 1
 
 
 @pytest.fixture(scope='module')
-def gs_gene_id(test_db, gs_entrez):
+def gs_gene_id(test_db, gs_entrez_id):
     from api.db_models import Gene
     (id, ) = test_db.session.query(Gene.id).filter_by(
-        entrez=gs_entrez).one_or_none()
+        entrez_id=gs_entrez_id).one_or_none()
     return id
 
 
 @pytest.fixture(scope='module')
 def nanostring_sample():
-    return "Prins_GBM_2019-SK08-ar-A07"
+    return "Chen_CanDisc_2016-c08-ar-c08_pre"
 
 @pytest.fixture(scope='module')
-def nanostring_entrez():
-    return 259
+def nanostring_entrez_id():
+    return 933
 
 @pytest.fixture(scope='module')
 def nanostring_sample_id(test_db, nanostring_sample):
@@ -33,15 +33,15 @@ def nanostring_sample_id(test_db, nanostring_sample):
     return id
 
 @pytest.fixture(scope='module')
-def nanostring_gene_id(test_db, nanostring_entrez):
+def nanostring_gene_id(test_db, nanostring_entrez_id):
     from api.db_models import Gene
     (id, ) = test_db.session.query(Gene.id).filter_by(
-        entrez=nanostring_entrez).one_or_none()
+        entrez_id=nanostring_entrez_id).one_or_none()
     return id
 
 
 
-def test_GeneToSample_with_relations(app, gs_entrez, gs_gene_id):
+def test_GeneToSample_with_relations(app, gs_entrez_id, gs_gene_id):
     string_representation_list = []
     separator = ', '
     relationships_to_join = ['gene', 'sample']
@@ -53,7 +53,7 @@ def test_GeneToSample_with_relations(app, gs_entrez, gs_gene_id):
     for result in results:
         string_representation = '<GeneToSample %r>' % gs_gene_id
         string_representation_list.append(string_representation)
-        assert result.gene.entrez == gs_entrez
+        assert result.gene.entrez_id == gs_entrez_id
         assert type(result.sample.name) is str
         assert result.gene_id == gs_gene_id
         assert type(result.sample_id) is int
@@ -87,8 +87,8 @@ def test_GeneToSample_nanostring(app, nanostring_sample_id, nanostring_gene_id):
     for result in results:
         assert result.gene_id == nanostring_gene_id
         assert result.sample_id == nanostring_sample_id
-        assert type(result.rna_seq_expr) is float or NoneType
-        assert type(result.nanostring_expr) is Decimal
+        assert type(result.rna_seq_expression) is float or NoneType
+        assert type(result.nanostring_expression) is Decimal
 
 
 

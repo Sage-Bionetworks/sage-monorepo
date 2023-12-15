@@ -31,7 +31,8 @@ The GraphiQL playground interface should open automatically in your browser.
 
 **Note:** If you get _'Version in "./docker-compose.yml" is unsupported.'_, please update your version of Docker Desktop.
 
-**Optional:** If you choose to use VS Code, you can use the [Remote-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to develop from within the container itself. Using this approach, you don't need to install Python or any dependencies (besides Docker and VS Code itself) as everything is already installed inside the container. There is a volume mapped to your user .ssh folder so that your ssh keys are available inside the container as well as your user .gitconfig file. The user folder inside the container is also mapped to a volume so that it persists between starts and stops of the container. This means you may create a .bash_profile or similar for yourself within the container and it will persist between container starts and stops.
+**Optional:** If you choose to use VS Code, you can use the [Dev-Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) extension to develop from within the container itself. Using this approach, you don't need to install Python or any dependencies (besides Docker and VS Code itself) as everything is already installed inside the container. There is a volume mapped to your user .ssh folder so that your ssh keys are available inside the container as well as your user .gitconfig file. The user folder inside the container is also mapped to a volume so that it persists between starts and stops of the container. This means you may create a .bash_profile or similar for yourself within the container and it will persist between container starts and stops.
+
 
 The following command will stop the server and container:
 
@@ -46,6 +47,10 @@ Restart the container with the following command:
 ```
 
 If there are changes made to the container or image, first, stop the container `./stop.sh`, then rebuild it and restarted it with `./start.sh --build` or `./start.sh -b`.
+
+Remote into iatlas-dev container.
+
+Open the workspace by file -> Open workspace from file -> /project/iatlas-api.code-workspace
 
 ### Non-Dockerized
 
@@ -68,6 +73,8 @@ Start the app with the following called from the root of the project. (Please no
 A simple way to get PostgreSQL running locally is to use Docker. Here is a simple Dockerized PostgreSQL server with pgAdmin:
 
 ["postgres_docker" on Github](https://github.com/generalui/postgres_docker)
+
+
 
 #### Linux ONLY
 

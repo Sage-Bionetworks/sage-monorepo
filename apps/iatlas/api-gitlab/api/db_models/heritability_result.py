@@ -5,17 +5,17 @@ from . import Base
 
 class HeritabilityResult(Base):
     __tablename__ = 'heritability_results'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     p_value = db.Column(db.Numeric, nullable=True)
     fdr = db.Column(db.Numeric, nullable=True)
     variance = db.Column(db.Numeric, nullable=True)
     se = db.Column(db.Numeric, nullable=True)
     cluster = db.Column(db.String, nullable=False)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    feature_id = db.Column(db.Integer, db.ForeignKey(
+    feature_id = db.Column(db.String, db.ForeignKey(
         'features.id'), nullable=False)
 
     data_set = db.relationship(

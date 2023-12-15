@@ -4,73 +4,59 @@ from api.database import return_gene_query
 from api.db_models import Gene
 
 
-def test_Gene_with_relations(app, entrez, hgnc):
+def test_Gene_with_relations(app, entrez_id, hgnc_id):
     relationships_to_join = ['gene_family',
                              'gene_function',
-                             'gene_types',
+                             'gene_sets',
                              'immune_checkpoint',
-                             'pathway',
+                             'gene_pathway',
                              'samples',
                              'super_category',
                              'therapy_type']
 
     query = return_gene_query(*relationships_to_join)
-    result = query.filter_by(entrez=entrez).one_or_none()
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
-    if result.gene_family:
-        assert result.gene_family.id == result.gene_family_id
-    if result.gene_function:
-        assert result.gene_function.id == result.gene_function_id
-    assert result.gene_type_assoc == []
-    if result.gene_types:
-        assert isinstance(result.gene_types, list)
-        # Don't need to iterate through every result.
-        for gene_type in result.gene_types[0:2]:
-            assert type(gene_type.name) is str
-    if result.immune_checkpoint:
-        assert result.immune_checkpoint.id == result.immune_checkpoint_id
-    if result.pathway:
-        assert result.pathway.id == result.pathway_id
+    #assert result.gene_set_assoc == []
+    if result.gene_sets:
+        assert isinstance(result.gene_sets, list)
+        for gene_set in result.gene_sets[0:2]:
+            assert type(gene_set.name) is str
     if result.samples:
         assert isinstance(result.samples, list)
         for sample in result.samples:
             assert type(sample.name) is str
-    if result.super_category:
-        assert result.super_category.id == result.super_cat_id
-    if result.therapy_type:
-        assert result.therapy_type.id == result.therapy_type_id
-    assert result.entrez == entrez
-    assert result.hgnc == hgnc
+    assert result.entrez_id == entrez_id
+    assert result.hgnc_id == hgnc_id
     assert type(result.description) is str or NoneType
-    assert type(result.gene_family_id) is int or NoneType
-    assert type(result.gene_function_id) is int or NoneType
-    assert type(result.immune_checkpoint_id) is int or NoneType
+    assert type(result.gene_family) is str or NoneType
+    assert type(result.gene_function) is str or NoneType
+    assert type(result.immune_checkpoint) is str or NoneType
     assert type(result.io_landscape_name) is str or NoneType
-    assert type(result.pathway_id) is int or NoneType
-    assert type(result.super_cat_id) is int or NoneType
-    assert type(result.therapy_type_id) is int or NoneType
-    assert repr(result) == '<Gene %r>' % entrez
+    assert type(result.gene_pathway) is str or NoneType
+    assert type(result.super_category) is str or NoneType
+    assert type(result.therapy_type) is str or NoneType
+    assert repr(result) == '<Gene %r>' % entrez_id
 
 
-def test_Gene_with_publications(app, entrez, hgnc):
+def test_Gene_with_publications(app, entrez_id, hgnc_id):
     query = return_gene_query('publications')
-    result = query.filter_by(entrez=entrez).one_or_none()
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
-    assert result.gene_type_assoc == []
+    assert result.gene_set_assoc == []
     assert isinstance(result.publications, list)
-    # Don't need to iterate through every result.
     for publication in result.publications[0:2]:
         assert type(publication.pubmed_id) is int
-    assert result.entrez == entrez
-    assert result.hgnc == hgnc
-    assert repr(result) == '<Gene %r>' % entrez
+    assert result.entrez_id == entrez_id
+    assert result.hgnc_id == hgnc_id
+    assert repr(result) == '<Gene %r>' % entrez_id
 
 
-def test_Gene_with_copy_number_results(app, entrez):
+def test_Gene_with_copy_number_results(app, entrez_id):
     query = return_gene_query('copy_number_results')
-    result = query.filter_by(entrez=entrez).one_or_none()
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
     assert isinstance(result.copy_number_results, list)
@@ -79,9 +65,9 @@ def test_Gene_with_copy_number_results(app, entrez):
         assert copy_number_result.gene_id == result.id
 
 
-def test_Gene_with_gene_sample_assoc(app, entrez):
+def test_Gene_with_gene_sample_assoc(app, entrez_id):
     query = return_gene_query('gene_sample_assoc')
-    result = query.filter_by(entrez=entrez).one_or_none()
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
     assert isinstance(result.gene_sample_assoc, list)
@@ -90,62 +76,56 @@ def test_Gene_with_gene_sample_assoc(app, entrez):
         assert gene_sample_rel.gene_id == result.id
 
 
-def test_Gene_with_gene_type_assoc(app, entrez):
-    query = return_gene_query('gene_type_assoc')
-    result = query.filter_by(entrez=entrez).one_or_none()
+def test_Gene_with_gene_set_assoc(app, entrez_id):
+    query = return_gene_query('gene_set_assoc')
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
-    assert isinstance(result.gene_type_assoc, list)
+    assert isinstance(result.gene_set_assoc, list)
     # Don't need to iterate through every result.
-    for gene_type_rel in result.gene_type_assoc[0:2]:
-        assert gene_type_rel.gene_id == result.id
+    for gene_set_rel in result.gene_set_assoc[0:2]:
+        assert gene_set_rel.gene_id == result.id
 
 
-def test_Gene_with_publication_gene_gene_type_assoc(app, entrez):
-    query = return_gene_query('publication_gene_gene_type_assoc')
-    result = query.filter_by(entrez=entrez).one_or_none()
+def test_Gene_with_publication_gene_gene_set_assoc(app, entrez_id):
+    query = return_gene_query('publication_gene_gene_set_assoc')
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
-    assert isinstance(result.publication_gene_gene_type_assoc, list)
+    assert isinstance(result.publication_gene_gene_set_assoc, list)
     # Don't need to iterate through every result.
-    for publication_gene_gene_type_rel in result.publication_gene_gene_type_assoc[0:2]:
-        assert publication_gene_gene_type_rel.gene_id == result.id
+    for publication_gene_gene_set_rel in result.publication_gene_gene_set_assoc[0:2]:
+        assert publication_gene_gene_set_rel.gene_id == result.id
 
 
-def test_Gene_no_relations(app, entrez, hgnc):
+def test_Gene_no_relations(app, entrez_id, hgnc_id):
     query = return_gene_query()
-    result = query.filter_by(entrez=entrez).one_or_none()
+    result = query.filter_by(entrez_id=entrez_id).one_or_none()
 
     assert result
     assert result.copy_number_results == []
     assert result.gene_sample_assoc == []
-    assert type(result.gene_family) is NoneType
-    assert type(result.gene_function) is NoneType
-    assert result.gene_types == []
-    assert type(result.immune_checkpoint) is NoneType
-    assert type(result.pathway) is NoneType
+    assert result.gene_sets == []
     assert result.samples == []
-    assert type(result.super_category) is NoneType
-    assert type(result.therapy_type) is NoneType
-    assert result.entrez == entrez
-    assert result.hgnc == hgnc
+    assert result.entrez_id == entrez_id
+    assert result.hgnc_id == hgnc_id
     assert type(result.description) is str or NoneType
-    assert type(result.gene_family_id) is int or NoneType
-    assert type(result.gene_function_id) is int or NoneType
-    assert type(result.immune_checkpoint_id) is int or NoneType
+    assert type(result.gene_family) is str or NoneType
+    assert type(result.gene_function) is str or NoneType
+    assert type(result.immune_checkpoint) is str or NoneType
     assert type(result.io_landscape_name) is str or NoneType
-    assert type(result.pathway_id) is int or NoneType
-    assert type(result.super_cat_id) is int or NoneType
-    assert type(result.therapy_type_id) is int or NoneType
+    assert type(result.gene_pathway) is str or NoneType
+    assert type(result.super_category) is str or NoneType
+    assert type(result.therapy_type) is str or NoneType
 
 
 def test_Gene_io_target(app):
 
-    query = return_gene_query('pathway', 'therapy_type')
-    result = query.filter_by(entrez=55).one_or_none()
+    query = return_gene_query('gene_pathway', 'therapy_type')
+    result = query.filter_by(entrez_id=55).one_or_none()
 
-    assert type(result.pathway_id) is int
-    assert result.pathway.name == 'Innate Immune System'
+    assert type(result.gene_pathway) is str
+    assert result.gene_pathway == 'Innate Immune System'
 
-    assert type(result.therapy_type_id) is int
-    assert result.therapy_type.name == 'Targeted by Other Immuno-Oncology Therapy Type'
+    assert type(result.therapy_type) is str
+    assert result.therapy_type == 'Targeted by Other Immuno-Oncology Therapy Type'

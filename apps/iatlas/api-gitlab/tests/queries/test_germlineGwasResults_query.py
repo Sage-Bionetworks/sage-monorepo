@@ -6,6 +6,17 @@ from api.database import return_germline_gwas_result_query
 
 
 @pytest.fixture(scope='module')
+def test_ggr():
+    return {
+        "dataset": "TCGA",
+        "feature": "Module3_IFN_score",
+        "snp": "3:133016759:C:G",
+        "germline_category": "Expression Signature",
+        "germline_module": "IFN Response"
+    }
+
+
+@pytest.fixture(scope='module')
 def ggr_feature():
     return 'Cell_Proportion_B_Cells_Memory_Binary_MedianLowHigh'
 
@@ -28,7 +39,7 @@ def ggr_snp():
 @pytest.fixture(scope='module')
 def ggr_max_p_value():
     # return 0.000000000000712
-    return 1.0e-26
+    return 9.9e-8
 
 
 @pytest.fixture(scope='module')
@@ -126,7 +137,6 @@ def test_germlineGwasResults_cursor_pagination_first(client, common_query_builde
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_germlineGwasResults_cursor_pagination_last(client, common_query_builder):
@@ -151,7 +161,6 @@ def test_germlineGwasResults_cursor_pagination_last(client, common_query_builder
         '/api', json={'query': query, 'variables': {
             'paging': {
                 'last': num,
-                'before': to_cursor_hash(1000)
             }
         }})
     json_data = json.loads(response.data)
@@ -188,11 +197,11 @@ def test_germlineGwasResults_cursor_distinct_pagination(client, common_query):
     assert page_num == page['paging']['page']
 
 
-def test_germlineGwasResults_query_with_passed_dataset_snp_and_feature(client, common_query, data_set, ggr_snp, ggr_feature):
+def test_germlineGwasResults_query_with_passed_dataset_snp_and_feature(client, common_query, test_ggr):
     response = client.post('/api', json={'query': common_query, 'variables': {
-        'dataSet': [data_set],
-        'feature': [ggr_feature],
-        'snp': [ggr_snp]
+        'dataSet': [test_ggr["dataset"]],
+        'feature': [test_ggr["feature"]],
+        'snp': [test_ggr["snp"]]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['germlineGwasResults']
@@ -200,9 +209,9 @@ def test_germlineGwasResults_query_with_passed_dataset_snp_and_feature(client, c
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        assert result['dataSet']['name'] == data_set
-        assert result['feature']['name'] == ggr_feature
-        assert result['snp']['name'] == ggr_snp
+        assert result['dataSet']['name'] == test_ggr["dataset"]
+        assert result['feature']['name'] == test_ggr["feature"]
+        assert result['snp']['name'] == test_ggr["snp"]
 
 
 def test_germlineGwasResults_query_with_passed_min_p_value(client, common_query_builder, ggr_min_p_value):
@@ -265,9 +274,9 @@ def test_germlineGwasResults_query_with_no_arguments(client, common_query_builde
         assert type(germline_gwas_result['pValue']) is float or NoneType
 
 
-def test_germlineGwasResults_query_with_germline_fetaure(client, common_query, ggr_feature, ggr_germline_module, ggr_germline_category):
+def test_germlineGwasResults_query_with_germline_fetaure(client, common_query, test_ggr):
     response = client.post('/api', json={'query': common_query, 'variables': {
-        'feature': [ggr_feature]
+        'feature': [test_ggr["feature"]]
     }})
     json_data = json.loads(response.data)
     page = json_data['data']['germlineGwasResults']
@@ -275,6 +284,6 @@ def test_germlineGwasResults_query_with_germline_fetaure(client, common_query, g
     assert isinstance(results, list)
     assert len(results) > 1
     for result in results:
-        assert result['feature']['name'] == ggr_feature
-        assert result['feature']['germlineCategory'] == ggr_germline_category
-        assert result['feature']['germlineModule'] == ggr_germline_module
+        assert result['feature']['name'] == test_ggr["feature"]
+        assert result['feature']['germlineCategory'] == test_ggr["germline_category"]
+        assert result['feature']['germlineModule'] == test_ggr["germline_module"]

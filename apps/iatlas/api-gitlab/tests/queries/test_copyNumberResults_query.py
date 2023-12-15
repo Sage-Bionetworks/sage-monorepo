@@ -79,18 +79,14 @@ query CopyNumberResults(
 
 
 @pytest.fixture(scope='module')
-def cnr_feature():
-    return 'frac_altered'
-
-
-@pytest.fixture(scope='module')
-def cnr_tag_name():
-    return 'BLCA'
-
-
-@pytest.fixture(scope='module')
-def direction():
-    return 'Amp'
+def test_cnr():
+    return {
+        "dataset": "TCGA",
+        "tag": "C1",
+        "entrez_id": 55303,
+        "feature": "Subclonal_genome_fraction",
+        "direction": "Amp"
+    }
 
 
 @pytest.fixture(scope='module')
@@ -198,7 +194,6 @@ def test_copyNumberResults_cursor_pagination_first(client, common_query_builder)
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_copyNumberResults_cursor_pagination_last(client, common_query_builder):
@@ -268,17 +263,16 @@ def test_copyNumberResults_missing_pagination(client, common_query_builder):
     query = common_query_builder("""{ items { pValue } }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': ['TCGA'],
-            'tag': ['C1']
+            'dataSet': ['TCGA']
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
     items = page['items']
 
-    assert len(items) == Paging.MAX_LIMIT
+    assert len(items) == 10000
 
 
-def test_copyNumberResults_query_with_passed_data_set(client, common_query_builder, data_set, entrez, cnr_feature):
+def test_copyNumberResults_query_with_passed_data_set(client, common_query_builder, test_cnr):
     query = common_query_builder("""{
             paging {
                 total
@@ -294,9 +288,9 @@ def test_copyNumberResults_query_with_passed_data_set(client, common_query_build
     response = client.post(
         '/api', json={'query': query, 'variables': {
             'paging': {'first': 10},
-            'dataSet': [data_set],
-            'entrez': [entrez],
-            'cnr_feature': [cnr_feature]
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
+            'cnr_feature': [test_cnr["feature"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -313,20 +307,20 @@ def test_copyNumberResults_query_with_passed_data_set(client, common_query_build
     assert len(items) > 0
     for item in items[0:2]:
         current_data_set = item['dataSet']
-        assert current_data_set['name'] == data_set
+        assert current_data_set['name'] == test_cnr["dataset"]
 
 
-def test_copyNumberResults_query_with_passed_related(client, common_query_builder, data_set, entrez, min_t_stat, cnr_tag_name, related):
+def test_copyNumberResults_query_with_passed_related(client, common_query_builder, test_cnr, min_t_stat, related):
     query = common_query_builder("""{
             items { tStat }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minTStat': min_t_stat,
             'related': ['does_not_exist'],
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -337,11 +331,11 @@ def test_copyNumberResults_query_with_passed_related(client, common_query_builde
 
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minTStat': min_t_stat,
             'related': [related],
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -353,7 +347,7 @@ def test_copyNumberResults_query_with_passed_related(client, common_query_builde
         assert result['tStat'] >= min_t_stat
 
 
-def test_copyNumberResults_query_with_passed_entrez(client, common_query_builder, data_set, entrez, cnr_feature):
+def test_copyNumberResults_query_with_passed_entrez(client, common_query_builder, test_cnr):
     query = common_query_builder("""{
             items {
                 gene { entrez }
@@ -361,9 +355,9 @@ def test_copyNumberResults_query_with_passed_entrez(client, common_query_builder
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
-            'feature': [cnr_feature]
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
+            'feature': [test_cnr["feature"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -373,10 +367,10 @@ def test_copyNumberResults_query_with_passed_entrez(client, common_query_builder
     assert len(results) > 0
     for result in results[0:2]:
         gene = result['gene']
-        assert gene['entrez'] == entrez
+        assert gene['entrez'] == test_cnr["entrez_id"]
 
 
-def test_copyNumberResults_query_with_passed_features(client, common_query_builder, data_set, entrez, cnr_feature):
+def test_copyNumberResults_query_with_passed_features(client, common_query_builder, test_cnr):
     query = common_query_builder("""{
             items {
                 feature { name }
@@ -384,9 +378,9 @@ def test_copyNumberResults_query_with_passed_features(client, common_query_build
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
-            'feature': [cnr_feature]
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
+            'feature': [test_cnr["feature"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -396,10 +390,10 @@ def test_copyNumberResults_query_with_passed_features(client, common_query_build
     assert len(results) > 0
     for result in results[0:2]:
         feature = result['feature']
-        assert feature['name'] == cnr_feature
+        assert feature['name'] == test_cnr["feature"]
 
 
-def test_copyNumberResults_query_with_passed_tag(client, common_query_builder, data_set, cnr_feature, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_tag(client, common_query_builder, test_cnr):
     query = common_query_builder("""{
             items {
                 tag { name }
@@ -407,9 +401,9 @@ def test_copyNumberResults_query_with_passed_tag(client, common_query_builder, d
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'feature': [cnr_feature],
-            'tag': [cnr_tag_name],
+            'dataSet': [test_cnr["dataset"]],
+            'feature': [test_cnr["feature"]],
+            'tag': [test_cnr["tag"]],
             'paging': {'first': 100000}
         }})
     json_data = json.loads(response.data)
@@ -420,19 +414,19 @@ def test_copyNumberResults_query_with_passed_tag(client, common_query_builder, d
     assert len(results) > 0
     for result in results[0:2]:
         tag = result['tag']
-        assert tag['name'] == cnr_tag_name
+        assert tag['name'] == test_cnr["tag"]
 
 
-def test_copyNumberResults_query_with_passed_direction(client, common_query_builder, data_set, direction, entrez, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_direction(client, common_query_builder, test_cnr):
     query = common_query_builder("""{
             items { direction }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'direction': direction,
-            'entrez': [entrez],
-            'tag': [cnr_tag_name]
+            'dataSet': [test_cnr["dataset"]],
+            'direction': test_cnr["direction"],
+            'entrez': [test_cnr["entrez_id"]],
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -441,19 +435,19 @@ def test_copyNumberResults_query_with_passed_direction(client, common_query_buil
     assert isinstance(results, list)
     assert len(results) > 0
     for result in results[0:2]:
-        assert result['direction'] == direction
+        assert result['direction'] == test_cnr["direction"]
 
 
-def test_copyNumberResults_query_with_passed_min_p_value(client, common_query_builder, data_set, entrez, min_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_p_value(client, common_query_builder, test_cnr, min_p_value):
     query = common_query_builder("""{
             items { pValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minPValue': min_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -465,17 +459,17 @@ def test_copyNumberResults_query_with_passed_min_p_value(client, common_query_bu
         assert result['pValue'] >= min_p_value
 
 
-def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(client, common_query_builder, data_set, entrez, min_log10_p_value, min_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(client, common_query_builder, test_cnr, min_log10_p_value, min_p_value):
     query = common_query_builder("""{
             items { pValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minLog10PValue': min_log10_p_value,
             'minPValue': min_p_value,
-            'tag': [cnr_tag_name],
+            'tag': [test_cnr["tag"]],
             'paging': {'first': 10000}
         }})
     json_data = json.loads(response.data)
@@ -488,16 +482,16 @@ def test_copyNumberResults_query_with_passed_min_p_value_and_min_log10_p_value(c
         assert result['pValue'] >= min_p_value
 
 
-def test_copyNumberResults_query_with_passed_max_p_value(client, common_query_builder, data_set, entrez, max_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_max_p_value(client, common_query_builder, test_cnr, max_p_value):
     query = common_query_builder("""{
             items { pValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'maxPValue': max_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -509,17 +503,17 @@ def test_copyNumberResults_query_with_passed_max_p_value(client, common_query_bu
         assert result['pValue'] <= max_p_value
 
 
-def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(client, common_query_builder, data_set, entrez, max_log10_p_value, max_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(client, common_query_builder, test_cnr, max_log10_p_value, max_p_value):
     query = common_query_builder("""{
             items { pValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'maxLog10PValue': max_log10_p_value,
             'maxPValue': max_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -531,16 +525,16 @@ def test_copyNumberResults_query_with_passed_max_p_value_and_max_log10_p_value(c
         assert result['pValue'] <= max_p_value
 
 
-def test_copyNumberResults_query_with_passed_min_log10_p_value(client, common_query_builder, data_set, entrez, min_log10_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_log10_p_value(client, common_query_builder, test_cnr, min_log10_p_value):
     query = common_query_builder("""{
             items { log10PValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minLog10PValue': min_log10_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -552,16 +546,16 @@ def test_copyNumberResults_query_with_passed_min_log10_p_value(client, common_qu
         assert result['log10PValue'] >= min_log10_p_value
 
 
-def test_copyNumberResults_query_with_passed_max_log10_p_value(client, common_query_builder, data_set, entrez, max_log10_p_value, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_max_log10_p_value(client, common_query_builder, test_cnr, max_log10_p_value):
     query = common_query_builder("""{
             items { log10PValue }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'maxLog10PValue': max_log10_p_value,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -573,16 +567,16 @@ def test_copyNumberResults_query_with_passed_max_log10_p_value(client, common_qu
         assert result['log10PValue'] <= max_log10_p_value
 
 
-def test_copyNumberResults_query_with_passed_min_mean_normal(client, common_query_builder, data_set, entrez, min_mean_normal, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_mean_normal(client, common_query_builder, test_cnr, min_mean_normal):
     query = common_query_builder("""{
             items { meanNormal }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minMeanNormal': min_mean_normal,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -594,16 +588,16 @@ def test_copyNumberResults_query_with_passed_min_mean_normal(client, common_quer
         assert result['meanNormal'] >= min_mean_normal
 
 
-def test_copyNumberResults_query_with_passed_min_mean_cnv(client, common_query_builder, data_set, entrez, min_mean_cnv, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_mean_cnv(client, common_query_builder, test_cnr, min_mean_cnv):
     query = common_query_builder("""{
             items { meanCnv }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minMeanCnv': min_mean_cnv,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']
@@ -615,16 +609,16 @@ def test_copyNumberResults_query_with_passed_min_mean_cnv(client, common_query_b
         assert result['meanCnv'] >= min_mean_cnv
 
 
-def test_copyNumberResults_query_with_passed_min_t_stat(client, common_query_builder, data_set, entrez, min_t_stat, cnr_tag_name):
+def test_copyNumberResults_query_with_passed_min_t_stat(client, common_query_builder, test_cnr, min_t_stat):
     query = common_query_builder("""{
             items { tStat }
         }""")
     response = client.post(
         '/api', json={'query': query, 'variables': {
-            'dataSet': [data_set],
-            'entrez': [entrez],
+            'dataSet': [test_cnr["dataset"]],
+            'entrez': [test_cnr["entrez_id"]],
             'minTStat': min_t_stat,
-            'tag': [cnr_tag_name]
+            'tag': [test_cnr["tag"]]
         }})
     json_data = json.loads(response.data)
     page = json_data['data']['copyNumberResults']

@@ -113,7 +113,6 @@ def test_rareVariantPathwayAssociation_cursor_pagination_first(client, common_qu
     assert paging['hasPreviousPage'] == False
     assert start == items[0]['id']
     assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_rareVariantPathwayAssociation_cursor_pagination_last(client, common_query_builder):

@@ -58,7 +58,7 @@ def build_data_set_request(requested, data_set=None, sample=None, data_set_type=
     core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
 
     core = get_selected(requested, core_field_mapping)
@@ -84,7 +84,7 @@ def build_data_set_request(requested, data_set=None, sample=None, data_set_type=
         query = query.filter(data_set_1.name.in_(data_set))
 
     if data_set_type:
-        query = query.filter(data_set_1.data_set_type.in_(data_set_type))
+        query = query.filter(data_set_1.dataset_type.in_(data_set_type))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=data_set_1.id)
 

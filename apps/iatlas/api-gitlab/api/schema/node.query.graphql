@@ -22,8 +22,10 @@ type Node implements BaseNode {
   gene: SimpleGene
   "The feature related to the node."
   feature: SimpleFeature
-  "A list of the tags related to the node. (This will NOT include tags that are tagged 'network')."
-  tags: [SimpleTag!]!
+  "The tag associated with the node"
+  tag1: SimpleTag
+  "The secondary tag associated with the node if it is stratified"
+  tag2: SimpleTag
 }
 
 type NodeResult implements BaseResult {

@@ -252,19 +252,13 @@ def test_tags_cursor_pagination_first(client, paging_query):
     page = json_data['data']['tags']
     items = page['items']
     paging = page['paging']
-    import logging
-    logger = logging.getLogger('test tag')
-    logger.info(items)
-    logger.info(paging)
 
     start = from_cursor_hash(paging['startCursor'])
     end = from_cursor_hash(paging['endCursor'])
     assert len(items) == num
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
+    assert type(items[0]['id']) is str
 
 
 def test_tags_cursor_pagination_last(client, paging_query):
@@ -352,7 +346,7 @@ def test_tags_query_with_data_set(client, common_query, data_set):
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) == 6
+    assert len(results) == 3
     for result in results:
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
@@ -389,13 +383,14 @@ def test_tags_query_with_tag_type(client, common_query, tag_type):
         assert result['type'] == tag_type
 
 
-def test_tags_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcga_tag_cohort_samples):
+def test_tags_query_with_samples(client, samples_query):
     response = client.post(
         '/api',
         json={
             'query': samples_query,
             'variables': {
-                'cohort': [tcga_tag_cohort_name]
+                'tag': ["C1"],
+                'cohort': ["TCGA_Immune_Subtype"],
             }
         }
     )
@@ -404,23 +399,21 @@ def test_tags_query_with_cohort(client, samples_query, tcga_tag_cohort_name, tcg
     results = page['items']
 
     assert isinstance(results, list)
-    assert len(results) > 1
-    for result in results[0:3]:
+    assert len(results) == 1
+    for result in results:
+        assert result['name'] == "C1"
         assert type(result['characteristics']) is str or NoneType
         assert type(result['color']) is str or NoneType
         assert type(result['longDisplay']) is str or NoneType
         assert type(result['shortDisplay']) is str or NoneType
-        assert type(result['name']) is str
-        samples = result['samples']
-        assert 'sampleCount' not in result
-        assert isinstance(samples, list)
-        assert len(samples) > 0
-        for sample in samples:
+        assert type(result['order']) is int or NoneType
+        assert isinstance(result['samples'], list)
+        assert len(result['samples']) > 1
+        for sample in result['samples']:
             assert type(sample['name']) is str
-            assert sample['name'] in tcga_tag_cohort_samples
 
 
-def test_tags_query_with_cohort2(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
+def test_tags_query_with_cohort(client, full_query, pcawg_cohort_name, pcawg_cohort_samples):
     response = client.post(
         '/api',
         json={
@@ -485,44 +478,6 @@ def test_tags_query_with_related(client, related_query, related):
             assert type(tag['shortDisplay']) is str or NoneType
             assert type(tag['name']) is str
             assert tag['name'] == related
-            assert type(tag['order']) is int or NoneType
-            assert tag['type'] == 'parent_group'
-
-
-def test_tags_query_with_related2(client, related_query, related2):
-    response = client.post(
-        '/api',
-        json={
-            'query': related_query,
-            'variables': {
-                'related': [related2]
-            }
-        }
-    )
-    json_data = json.loads(response.data)
-    page = json_data['data']['tags']
-    results = page['items']
-
-    assert isinstance(results, list)
-    assert len(results) == 3
-
-    for result in results:
-        assert type(result['characteristics']) is str or NoneType
-        assert type(result['color']) is str or NoneType
-        assert type(result['longDisplay']) is str or NoneType
-        assert type(result['shortDisplay']) is str or NoneType
-        assert type(result['name']) is str
-        assert type(result['order']) is int or NoneType
-        assert result['type'] == 'group'
-        assert result['name'] in ["male", "female", "na_gender"]
-        tags = result['related']
-        assert isinstance(tags, list)
-        for tag in tags:
-            assert type(tag['characteristics']) is str or NoneType
-            assert type(tag['color']) is str or NoneType
-            assert type(tag['longDisplay']) is str or NoneType
-            assert type(tag['shortDisplay']) is str or NoneType
-            assert type(tag['name']) is str
             assert type(tag['order']) is int or NoneType
             assert tag['type'] == 'parent_group'
 

@@ -46,8 +46,10 @@ def build_patient_graphql_response(requested=dict(), slide_requested=dict(), sam
     return f
 
 
-def build_patient_request(requested, distinct=False, paging=None, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
-                          race=None, max_weight=None, min_weight=None, sample=None, slide=None):
+def build_patient_request(
+    requested, distinct=False, paging=None, max_age_at_diagnosis=None, min_age_at_diagnosis=None, barcode=None, data_set=None, ethnicity=None, gender=None, max_height=None, min_height=None,
+    race=None, max_weight=None, min_weight=None, sample=None, slide=None
+):
     """
     Builds a SQL query.
     """
@@ -59,7 +61,7 @@ def build_patient_request(requested, distinct=False, paging=None, max_age_at_dia
 
     core_field_mapping = {
         'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
-        'barcode': patient_1.barcode.label('patient_barcode'),
+        'barcode': patient_1.name.label('patient_barcode'),
         'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
         'gender': patient_1.gender.label('patient_gender'),
         'height': patient_1.height.label('patient_height'),
@@ -74,7 +76,7 @@ def build_patient_request(requested, distinct=False, paging=None, max_age_at_dia
     query = query.select_from(patient_1)
 
     if barcode:
-        query = query.filter(patient_1.barcode.in_(barcode))
+        query = query.filter(patient_1.name.in_(barcode))
 
     if max_age_at_diagnosis:
         query = query.filter(patient_1.age_at_diagnosis <=
@@ -133,7 +135,7 @@ def build_patient_request(requested, distinct=False, paging=None, max_age_at_dia
     order = []
     append_to_order = order.append
     if 'barcode' in requested:
-        append_to_order(patient_1.barcode)
+        append_to_order(patient_1.name)
     if 'ageAtDiagnosis' in requested:
         append_to_order(patient_1.age_at_diagnosis)
     if 'gender' in requested:
@@ -173,14 +175,7 @@ def get_samples(id, requested, sample=None):
             append_to_order(sample_1.name)
 
         query = query.order_by(*order) if order else query
-
-        import logging
-        logger = logging.getLogger("patient response")
-        logger.info(query)
-
-        x = query.all()
-        logger.info(x)
-        return(x)
+        return query.all()
 
     return []
 

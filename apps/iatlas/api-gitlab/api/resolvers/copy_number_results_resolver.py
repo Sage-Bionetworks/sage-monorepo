@@ -1,5 +1,5 @@
 from .resolver_helpers import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields, feature_request_fields, gene_request_fields, get_requested, get_selection_set, simple_data_set_request_fields, simple_tag_request_fields
-from .resolver_helpers.paging_utils import paginate, Paging, paging_fields
+from .resolver_helpers.paging_utils import paginate, Paging, paging_fields, create_paging
 
 
 def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distinct=False, entrez=None, feature=None, maxPValue=None,
@@ -23,7 +23,9 @@ def resolve_copy_number_results(_obj, info, dataSet=None, direction=None, distin
     tag_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=simple_tag_request_fields, child_node='tag')
 
-    paging = paging if paging else Paging.DEFAULT
+    max_items = 10000
+
+    paging = create_paging(paging, max_items)
 
     query, count_query = build_copy_number_result_request(
         requested, data_set_requested, feature_requested, gene_requested, tag_requested,

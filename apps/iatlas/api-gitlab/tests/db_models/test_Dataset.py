@@ -59,6 +59,6 @@ def test_dataset_no_relations(app, data_set):
 
     assert result.dataset_sample_assoc == []
     assert result.samples == []
-    assert type(result.id) is int
+    assert type(result.id) is str
     assert result.name == data_set
     assert type(result.display) is str or NoneType

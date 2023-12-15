@@ -6,15 +6,15 @@ from . import Base
 class GeneToSample(Base):
     __tablename__ = 'genes_to_samples'
 
-    gene_id = db.Column(db.Integer, db.ForeignKey(
+    gene_id = db.Column(db.String, db.ForeignKey(
         'genes.id'), primary_key=True)
 
-    sample_id = db.Column(db.Integer, db.ForeignKey(
+    sample_id = db.Column(db.String, db.ForeignKey(
         'samples.id'), primary_key=True)
 
-    rna_seq_expr = db.Column(db.Numeric, nullable=True)
+    rna_seq_expression = db.Column(db.Numeric, nullable=True)
 
-    nanostring_expr = db.Column(db.Numeric, nullable=True)
+    nanostring_expression = db.Column(db.Numeric, nullable=True)
 
     gene = db.relationship('Gene', backref=orm.backref(
         'gene_sample_assoc', uselist=True, lazy='noload'), uselist=False, lazy='noload')

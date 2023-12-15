@@ -1,8 +1,9 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import (Dataset, DatasetToSample, Feature, FeatureClass, FeatureToSample,
-                           Patient, Sample)
+from api.db_models import (
+    Dataset, DatasetToSample, Feature, FeatureToSample, Patient, Sample
+)
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
@@ -44,6 +45,21 @@ def build_sample_graphql_response(prefix='sample_'):
                 'tag': build_tag_graphql_response()(sample) if has_tag_fields(sample) else None
             }
             return(dict)
+    return(f)
+
+def build_gene_expression_graphql_response(prefix='sample_'):
+
+    def f(sample):
+        if not sample:
+            return None
+        else:
+            result_dict = {
+                'id': get_value(sample, prefix + 'id'),
+                'name': get_value(sample, prefix + 'name')
+            }
+            result_dict['rnaSeqExpr'] = get_value(sample, prefix + 'gene_rna_seq_expr')
+            result_dict['nanostringExpr'] = get_value(sample, prefix + 'gene_nanostring_expr')
+            return(result_dict)
     return(f)
 
 
@@ -97,7 +113,7 @@ def build_sample_request(
     }
     patient_core_field_mapping = {
         'ageAtDiagnosis': patient_1.age_at_diagnosis.label('patient_age_at_diagnosis'),
-        'barcode': patient_1.barcode.label('patient_barcode'),
+        'barcode': patient_1.name.label('patient_barcode'),
         'ethnicity': patient_1.ethnicity.label('patient_ethnicity'),
         'gender': patient_1.gender.label('patient_gender'),
         'height': patient_1.height.label('patient_height'),
@@ -119,7 +135,7 @@ def build_sample_request(
         is_outer = not has_patient_filters
 
         patient_join_condition = build_join_condition(
-            sample_1.patient_id, patient_1.id, patient_1.barcode, patient)
+            sample_1.patient_id, patient_1.id, patient_1.name, patient)
 
         if bool(max_age_at_diagnosis):
             patient_join_condition.append(

@@ -5,13 +5,13 @@ from . import Base
 
 class Cohort(Base):
     __tablename__ = 'cohorts'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
 
-    dataset_id = db.Column(db.Integer, db.ForeignKey(
+    dataset_id = db.Column(db.String, db.ForeignKey(
         'datasets.id'), nullable=False)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey('tags.id'), nullable=False)
+    cohort_tag_id = db.Column(db.String, db.ForeignKey('tags.id'), nullable=False)
 
     data_set = db.relationship(
         'Dataset', backref=orm.backref('cohorts', uselist=True, lazy='noload'),

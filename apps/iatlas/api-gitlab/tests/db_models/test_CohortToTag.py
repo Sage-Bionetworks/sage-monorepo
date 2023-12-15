@@ -7,8 +7,8 @@ def test_CohortToTag_no_relations():
 
     assert isinstance(results, list)
     for result in results:
-        assert type(result.tag_id) is int
-        assert type(result.cohort_id) is int
+        assert type(result.tag_id) is str
+        assert type(result.cohort_id) is str
 
 
 def test_CohortToTag_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id):
@@ -24,7 +24,7 @@ def test_CohortToTag_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id):
         id = result.id
         string_representation = '<CohortToTag %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert result.cohort_id == tcga_tag_cohort_id
         assert result.cohort.name == tcga_tag_cohort_name
         assert type(result.tag.name) is str
@@ -47,7 +47,7 @@ def test_CohortToTag_with_clinical_cohort(pcawg_cohort_name, pcawg_cohort_id):
         id = result.id
         string_representation = '<CohortToTag %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.tag_id) is int
+        assert type(result.tag_id) is str
         assert result.cohort_id == pcawg_cohort_id
         assert result.cohort.name == pcawg_cohort_name
         assert type(result.tag.name) is str

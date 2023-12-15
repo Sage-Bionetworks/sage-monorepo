@@ -6,12 +6,12 @@ from . import Base
 class CohortToGene(Base):
     __tablename__ = 'cohorts_to_genes'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
 
-    cohort_id = db.Column(db.Integer, db.ForeignKey(
+    cohort_id = db.Column(db.String, db.ForeignKey(
         'cohorts.id'), primary_key=True)
 
-    gene_id = db.Column(db.Integer, db.ForeignKey(
+    gene_id = db.Column(db.String, db.ForeignKey(
         'genes.id'), primary_key=True)
 
     cohort = db.relationship('Cohort', backref=orm.backref(

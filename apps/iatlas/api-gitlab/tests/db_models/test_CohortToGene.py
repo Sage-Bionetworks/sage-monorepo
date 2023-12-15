@@ -9,8 +9,8 @@ def test_CohortToGene_no_relations():
 
     assert isinstance(results, list)
     for result in results:
-        assert type(result.gene_id) is int
-        assert type(result.cohort_id) is int
+        assert type(result.gene_id) is str
+        assert type(result.cohort_id) is str
 
 
 def test_CohortToGene_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id):
@@ -26,10 +26,10 @@ def test_CohortToGene_with_tag_cohort(tcga_tag_cohort_name, tcga_tag_cohort_id):
         id = result.id
         string_representation = '<CohortToGene %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.gene_id) is int
+        assert type(result.gene_id) is str
         assert result.cohort_id == tcga_tag_cohort_id
         assert result.cohort.name == tcga_tag_cohort_name
-        assert type(result.gene.hgnc) is str
+        assert type(result.gene.hgnc_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -49,10 +49,10 @@ def test_CohortToGene_with_clinical_cohort(pcawg_cohort_name, pcawg_cohort_id):
         id = result.id
         string_representation = '<CohortToGene %r>' % id
         string_representation_list.append(string_representation)
-        assert type(result.gene_id) is int
+        assert type(result.gene_id) is str
         assert result.cohort_id == pcawg_cohort_id
         assert result.cohort.name == pcawg_cohort_name
-        assert type(result.gene.hgnc) is str
+        assert type(result.gene.hgnc_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'

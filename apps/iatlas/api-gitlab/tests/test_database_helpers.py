@@ -3,7 +3,7 @@ from sqlalchemy import orm
 from sqlalchemy.dialects import postgresql
 from api.database.database_helpers import (
     build_general_query, build_option_args, build_query_args)
-from api.db_models import Base, Feature
+from api.db_models import Base, Gene
 from api import db
 
 
@@ -16,11 +16,11 @@ class MockModel(Base):
 
 
 def test_build_general_query(db_session):
-    model = Feature
+    model = Gene
     query_arg_1 = 'id'
-    query_arg_2 = 'name'
+    query_arg_2 = 'entrez_id'
     accepted_query_args = [query_arg_1, query_arg_2]
-    option_value_1 = 'feature_class'
+    option_value_1 = 'gene_sets'
     accepted_option_args = [option_value_1]
     test_1 = build_general_query(
         model, args=[query_arg_1,

@@ -6,28 +6,18 @@ from api.enums import unit_enum
 
 class Feature(Base):
     __tablename__ = 'features'
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
     name = db.Column(db.String, nullable=False)
     display = db.Column(db.String, nullable=True)
     order = db.Column(db.Integer, nullable=True)
     unit = db.Column(unit_enum, nullable=True)
     germline_category = db.Column(db.String, nullable=True)
     germline_module = db.Column(db.String, nullable=True)
-
-    class_id = db.Column(db.Integer, db.ForeignKey(
-        'classes.id'), nullable=False)
-
-    method_tag_id = db.Column(
-        db.Integer, db.ForeignKey('method_tags.id'), nullable=True)
-
-    feature_class = db.relationship("FeatureClass", backref=orm.backref(
-        'features', uselist=True, lazy='noload'), uselist=False, lazy='noload')
-
-    method_tag = db.relationship("MethodTag", backref=orm.backref(
-        'features', uselist=True, lazy='noload'), uselist=False, lazy='noload')
+    feature_class = db.Column(db.String, nullable=False)
+    method_tag = db.Column(db.String, nullable=False)
 
     samples = db.relationship(
-        "Sample", secondary='features_to_samples2', uselist=True, lazy='noload')
+        "Sample", secondary='features_to_samples', uselist=True, lazy='noload')
 
     def __repr__(self):
         return '<Feature %r>' % self.name

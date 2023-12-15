@@ -6,6 +6,7 @@
     "language": "en",
     // words - list of words to be always considered correct
     "words": [
+        "backref",
         "barcodes",
         "dockerized",
         "entrez",
@@ -13,8 +14,15 @@
         "groupby",
         "hgnc",
         "immunomodulator",
+        "isnot",
         "itertools",
-        "pytest"
+        "Neoantigen",
+        "neoantigens",
+        "noload",
+        "pytest",
+        "sqlalchemy",
+        "TCGA",
+        "uselist"
     ],
     // flagWords - list of words to be always considered incorrect
     // This is useful for offensive words and common spelling errors.

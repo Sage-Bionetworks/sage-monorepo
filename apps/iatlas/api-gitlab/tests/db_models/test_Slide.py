@@ -13,7 +13,7 @@ def test_Slide_with_relations(app, slide):
     assert result.patient.id == result.patient_id
     assert result.name == slide
     assert type(result.description) is str or NoneType
-    assert type(result.patient_id) is int
+    assert type(result.patient_id) is str
     assert repr(result) == '<Slide %r>' % slide
 
 
@@ -25,4 +25,4 @@ def test_Slide_no_relations(app, slide):
     assert type(result.patient) is NoneType
     assert result.name == slide
     assert type(result.description) is str or NoneType
-    assert type(result.patient_id) is int
+    assert type(result.patient_id) is str

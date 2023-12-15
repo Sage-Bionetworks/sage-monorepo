@@ -5,7 +5,7 @@ from api.database import return_heritability_result_query
 
 @pytest.fixture(scope='module')
 def hr_feature(test_db):
-    return 'Attractors_G_CD3E'
+    return 'BCR_Richness'
 
 
 @pytest.fixture(scope='module')

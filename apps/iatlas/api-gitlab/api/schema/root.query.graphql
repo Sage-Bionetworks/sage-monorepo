@@ -200,22 +200,6 @@ type Query {
   ): Feature!
 
   """
-  The "geneFamilies" query
-  """
-  geneFamilies(
-    "A list of names of the gene families to look up."
-    name: [String!]
-  ): [GeneFamily!]
-
-  """
-  The "geneTypes" query
-  """
-  geneFunctions(
-    "A list of names of the gene functions to look up."
-    name: [String!]
-  ): [GeneFunction!]
-
-  """
   The "genes" query
 
   If no arguments are passed, this will return all genes.
@@ -296,22 +280,6 @@ type Query {
   ): HeritabilityResult!
 
   """
-  The "ImmuneCheckpoints" query
-  """
-  immuneCheckpoints(
-    "A list of names of the immune checkpoints to look up."
-    name: [String!]
-  ): [ImmuneCheckpoint!]
-
-  """
-  The "methodTags" query
-  """
-  methodTags(
-    "A list of names of the method tags to look up."
-    name: [String!]
-  ): [MethodTag!]!
-
-  """
   The "mutations" type
 
   If no arguments are passed, this will return all mutations.
@@ -345,6 +313,26 @@ type Query {
   mutationTypes: [MutationType!]!
 
   """
+  The "neoantigens" type
+
+  If no arguments are passed, this will return all neoantigens.
+  """
+  neoantigens(
+    "An instance of PagingInput (see PagingInput)"
+    paging: PagingInput
+    "A boolean specifying whether or not duplicates should be filtered out. Default is false. Set to 'true' only when necessary, as it negatively impacts performance."
+    distinct: Boolean
+    "A unique id for the neoantigen. PLEASE NOTE: this ID should not be relied on, it may change as the database changes."
+    id: ID
+    "A list of phmhcs to filter by."
+    pmhc: [String!]
+    "A list of gene entrez ids associated with the neoantigens to filter by."
+    entrez: [Int!]
+    "A list of patient names associated with the neoantigens to filter by."
+    patient: [String!]
+  ): Neoantigen!
+
+  """
   The "nodes" query
 
   If no arguments are passed, this will return all nodes (please note, there will be a LOT of results).
@@ -370,12 +358,14 @@ type Query {
     minScore: Float
     "A list of tag names associated with the nodes that are also associated with the 'network' tag to filter by"
     network: [String!]
-    "All returned nodes will have this many tags exactly"
-    nTags: Int
     "A list of tag names related to the data set associated with the nodes to filter by"
     related: [String!]
     "A list of tag names associated with the nodes to filter by"
-    tag: [String!]
+    tag1: [String!]
+    "A list of secondary tag names associated with the nodes to filter by"
+    tag2: [String!]
+    "The number of tags the node should have, either 1 or 2"
+    nTags: Int
   ): NodeResult
 
   """
@@ -419,14 +409,6 @@ type Query {
   ): Patient!
 
   """
-  The "Pathways" query
-  """
-  pathways(
-    "A list of names of the pathways to look up."
-    name: [String!]
-  ): [Pathway!]
-
-   """
   The "rareVariantPathwayAssociation" query
 
   If no arguments are passed, this will return all rare variant pathway associations.
@@ -547,14 +529,6 @@ type Query {
   ): Snp!
 
   """
-  The "superCategories" query
-  """
-  superCategories(
-    "A list of names of the super categories to look up."
-    name: [String!]
-  ): [SuperCategory!]!
-
-  """
   The "tags" query
   """
   tags(
@@ -575,14 +549,6 @@ type Query {
     "A list of tag types: 'group' or 'parent_group' or 'meta_group' or 'network'"
     type: [TagTypeEnum!]
   ): Tag!
-
-  """
-  The "therapyTypes" query\
-  """
-  therapyTypes(
-    "A list of names of the therapy types to look up."
-    name: [String!]
-  ): [TherapyType!]!
 
   """
   A simple test query that is independent of the database.

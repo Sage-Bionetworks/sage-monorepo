@@ -2,7 +2,7 @@ from itertools import groupby
 from sqlalchemy import and_, func
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, Feature, FeatureClass, Gene, GeneToType, GeneType, Node, NodeToTag, Tag
+from api.db_models import Dataset, DatasetToTag, Feature, Gene, GeneToGeneSet, GeneSet, Node, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
@@ -40,7 +40,7 @@ def get_node_column_labels(requested, node, prefix='node_', add_id=False):
     return(labels)
 
 
-def build_node_graphql_response(requested=[], tag_requested=[], prefix='node_'):
+def build_node_graphql_response(requested=[], prefix='node_'):
     from .data_set import build_data_set_graphql_response
     from .feature import build_feature_graphql_response
     from .gene import build_gene_graphql_response
@@ -50,9 +50,9 @@ def build_node_graphql_response(requested=[], tag_requested=[], prefix='node_'):
         if not node:
             return None
         else:
-
             node_id = get_value(node, 'id')
-            tags = get_tags(node_id, requested, tag_requested)
+            has_tag1 = get_value(node, 'tag_1_name')
+            has_tag2 = get_value(node, 'tag_2_name')
             has_feature = get_value(node, 'feature_name') or get_value(
                 node, 'feature_display') or get_value(node, 'feature_order') or get_value(node, 'feature_unit')
             has_gene = get_value(node, 'gene_entrez') or get_value(node, 'gene_hgnc') or get_value(
@@ -68,13 +68,35 @@ def build_node_graphql_response(requested=[], tag_requested=[], prefix='node_'):
                 'dataSet': build_data_set_graphql_response()(node),
                 'feature': build_feature_graphql_response()(node) if has_feature else None,
                 'gene': build_gene_graphql_response()(node) if has_gene else None,
-                'tags': map(build_tag_graphql_response(), tags),
+                'tag1': build_tag_graphql_response(prefix='tag_1_')(node) if has_tag1 else None,
+                'tag2': build_tag_graphql_response(prefix='tag_2_')(node) if has_tag2 else None,
             }
             return(dict)
     return(f)
 
 
-def build_node_request(requested, data_set_requested, feature_requested, gene_requested, data_set=None, distinct=False, entrez=None, feature=None, feature_class=None, gene_type=None, max_score=None, min_score=None, network=None, n_tags=None, paging=None, related=None, tag=None):
+def build_node_request(
+    requested,
+    data_set_requested,
+    feature_requested,
+    gene_requested,
+    tag_requested1,
+    tag_requested2,
+    data_set=None,
+    distinct=False,
+    entrez=None,
+    feature=None,
+    feature_class=None,
+    gene_type=None,
+    max_score=None,
+    min_score=None,
+    network=None,
+    paging=None,
+    related=None,
+    tag1=None,
+    tag2=None,
+    n_tags=None
+    ):
     '''
     Builds a SQL request.
 
@@ -103,22 +125,26 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
             `before` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'last'
             `after` - an integer, when performing CURSOR paging: the CURSOR to be used in tandem with 'first'
         `related` - a list of strings, tag names related to data sets
-        `tag` - a list of strings, tag names
+        `tag1` - a list of strings, tag names
+        `tag2` - a list of strings, tag names
+        `n_tags` - the number of tags the node should have
     '''
+    from .tag import get_tag_column_labels
+
     sess = db.session
 
     data_set_1 = aliased(Dataset, name='d')
     feature_1 = aliased(Feature, name='f')
     gene_1 = aliased(Gene, name='g')
     node_1 = aliased(Node, name='n')
-    node_to_tag_1 = aliased(NodeToTag, name='ntt1')
-    tag_1 = aliased(Tag, name="t")
-    node_to_tag_2 = aliased(NodeToTag, name='ntt2')
+    tag_1 = aliased(Tag, name="t1")
+    tag_2 = aliased(Tag, name="t2")
+
 
     data_set_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
 
     feature_field_mapping = {
@@ -129,8 +155,8 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     }
 
     gene_field_mapping = {
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'entrez': gene_1.entrez_id.label('gene_entrez'),
+        'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
         'description': gene_1.description.label('gene_description'),
         'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name')
@@ -140,9 +166,11 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     data_set_core = get_selected(data_set_requested, data_set_field_mapping)
     feature_core = get_selected(feature_requested, feature_field_mapping)
     gene_core = get_selected(gene_requested, gene_field_mapping)
+    tag_core1 = get_tag_column_labels(tag_requested1, tag_1, prefix='tag_1_')
+    tag_core2 = get_tag_column_labels(tag_requested2, tag_2, prefix='tag_2_')
 
     query = sess.query(
-        *[*node_core, *data_set_core, *feature_core, *gene_core])
+        *[*node_core, *data_set_core, *feature_core, *gene_core, *tag_core1, *tag_core2])
     query = query.select_from(node_1)
 
     if max_score:
@@ -154,33 +182,40 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     if network:
         query = query.filter(node_1.network.in_(network))
 
-    if tag:
+    if tag1 or tag_requested1:
+        is_outer = not bool(tag1)
+        tag_join_condition = build_join_condition(
+            tag_1.id,
+            node_1.tag_1_id,
+            filter_column=tag_1.name,
+            filter_list=tag1
+        )
+        query = query.join(tag_1, and_(
+            *tag_join_condition), isouter=is_outer)
 
-        tag_subquery1 = sess.query(node_to_tag_1.node_id)
-
-        node_to_tag_join_condition = build_join_condition(
-            node_to_tag_1.tag_id, tag_1.id, tag_1.name, tag)
-
-        tag_subquery1 = tag_subquery1.join(
-            tag_1, and_(*node_to_tag_join_condition))
-
-        query = query.filter(
-            node_1.id.in_(tag_subquery1))
-
-    if n_tags:
-
-        tag_subquery2 = sess.query(
-            node_to_tag_2.node_id)
-        tag_subquery2 = tag_subquery2.group_by(node_to_tag_2.node_id)
-        tag_subquery2 = tag_subquery2.having(
-            func.count(node_to_tag_2.tag_id) == n_tags)
-
-        import logging
-        logger = logging.getLogger("node request")
-        logger.info(tag_subquery2)
-
-        query = query.filter(
-            node_1.id.in_(tag_subquery2))
+    if n_tags or tag2 or tag_requested1:
+        if tag2:
+            tag_join_condition = build_join_condition(
+                tag_2.id,
+                node_1.tag_2_id,
+                filter_column=tag_2.name,
+                filter_list=tag2
+            )
+            query = query.join(
+                tag_2,
+                and_( *tag_join_condition),
+                isouter=False
+            )
+        else:
+            tag_join_condition = build_join_condition(
+                tag_2.id,
+                node_1.tag_2_id,
+            )
+            query = query.join(tag_2, and_(*tag_join_condition), isouter=True)
+        if n_tags == 1:
+            query = query.filter(tag_2.id.is_(None))
+        if n_tags == 2:
+            query = query.filter(tag_2.id.isnot(None))
 
     if data_set or related or 'dataSet' in requested:
         data_set_join_condition = build_join_condition(
@@ -202,51 +237,24 @@ def build_node_request(requested, data_set_requested, feature_requested, gene_re
     if feature or 'feature' in requested or feature_class:
         is_outer = not bool(feature)
         feature_join_condition = build_join_condition(
-            feature_1.id, node_1.feature_id, feature_1.name, feature)
+            feature_1.id, node_1.node_feature_id, feature_1.name, feature)
         query = query.join(feature_1, and_(
             *feature_join_condition), isouter=is_outer)
 
         if feature_class:
-            feature_class_1 = aliased(FeatureClass, name='fc')
-            feature_class_join_condition = build_join_condition(
-                feature_class_1.id, feature_1.class_id, feature_class_1.name, feature_class)
-            query = query.join(
-                feature_class_1, and_(*feature_class_join_condition))
+            query = query.filter(feature_1.feature_class.in_(feature_class))
 
     if entrez or 'gene' in requested or gene_type:
         is_outer = not bool(entrez)
         gene_join_condition = build_join_condition(
-            gene_1.id, node_1.gene_id, gene_1.entrez, entrez)
+            gene_1.id, node_1.node_gene_id, gene_1.entrez_id, entrez)
         query = query.join(gene_1, and_(
             *gene_join_condition), isouter=is_outer)
 
         if gene_type:
-            gene_type_1 = aliased(GeneType, name='gt')
-            gene_to_type_1 = aliased(GeneToType, name='ggt')
+            gene_type_1 = aliased(GeneSet, name='gt')
+            gene_to_type_1 = aliased(GeneToGeneSet, name='ggt')
             query = query.join(gene_to_type_1, and_(
-                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
+                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.gene_set_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=node_1.id)
-
-
-def get_tags(node_id, requested, tag_requested):
-    if 'tags' in requested:
-        from .tag import get_tag_column_labels
-
-        sess = db.session
-        tag_1 = aliased(Tag, name='t')
-        node_to_tag_1 = aliased(NodeToTag, name='ntt1')
-        core = get_tag_column_labels(tag_requested, tag_1)
-
-        query = sess.query(*core)
-        query = query.select_from(tag_1)
-
-        node_to_tag_join_condition = build_join_condition(
-            tag_1.id, node_to_tag_1.tag_id, node_to_tag_1.node_id, [node_id])
-
-        query = query.join(node_to_tag_1, and_(*node_to_tag_join_condition))
-        tags = query.distinct().all()
-        return tags
-
-    else:
-        return []

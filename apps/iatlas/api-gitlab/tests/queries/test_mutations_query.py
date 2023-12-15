@@ -26,7 +26,6 @@ def mutation_status():
     return 'Mut'
 
 
-# Sample id 1904
 @pytest.fixture(scope='module')
 def sample_name():
     return 'TCGA-38-7271'
@@ -35,6 +34,10 @@ def sample_name():
 @pytest.fixture(scope='module')
 def dr_mutation():
     return 'ABL1:(NS)'
+
+@pytest.fixture(scope='module')
+def mutation_type_name():
+    return 'driver_mutation'
 
 
 @pytest.fixture(scope='module')
@@ -155,9 +158,6 @@ def test_mutations_cursor_pagination_first_without_samples(client, common_query_
     assert len(items) == requested_n
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[requested_n - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_mutationscursor_pagination_first_with_samples(client, common_query_builder):
@@ -194,9 +194,6 @@ def test_mutationscursor_pagination_first_with_samples(client, common_query_buil
     assert len(items) == max_n
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[max_n - 1]['id']
-    assert int(end) - int(start) > 0
 
 
 def test_cursor_pagination_last(client, common_query_builder):
@@ -234,8 +231,6 @@ def test_cursor_pagination_last(client, common_query_builder):
     assert len(items) == num
     assert paging['hasNextPage'] == False
     assert paging['hasPreviousPage'] == True
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
 
 
 def test_mutations_query_with_mutation_name(client, common_query, dr_mutation):
@@ -284,9 +279,9 @@ def test_mutations_query_with_mutationCode(client, common_query, mutation_code):
         assert mutation['mutationCode'] == mutation_code
 
 
-def test_mutations_query_with_mutationType(client, common_query, mutation_type):
+def test_mutations_query_with_mutationType(client, common_query, mutation_type_name):
     response = client.post(
-        '/api', json={'query': common_query, 'variables': {'mutationType': [mutation_type]}})
+        '/api', json={'query': common_query, 'variables': {'mutationType': [mutation_type_name]}})
     json_data = json.loads(response.data)
     mutations = json_data['data']['mutations']
     page = mutations['items']
@@ -294,7 +289,7 @@ def test_mutations_query_with_mutationType(client, common_query, mutation_type):
     assert isinstance(page, list)
     assert len(page) > 0
     for mutation in page[0:2]:
-        assert mutation['mutationType']['name'] == mutation_type
+        assert mutation['mutationType']['name'] == mutation_type_name
 
 
 def test_mutations_query_with_sample(client, samples_query, sample_name):

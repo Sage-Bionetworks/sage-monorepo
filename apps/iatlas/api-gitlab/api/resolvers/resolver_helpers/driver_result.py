@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationCode, Tag, MutationType
+from api.db_models import Dataset, DatasetToTag, DriverResult, Feature, Gene, Mutation, MutationType, Tag
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
 
@@ -81,7 +81,6 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
     driver_result_1 = aliased(DriverResult, name='dr')
     gene_1 = aliased(Gene, name='g')
     mutation_1 = aliased(Mutation, name='m')
-    mutation_code_1 = aliased(MutationCode, name='mc')
     mutation_type_1 = aliased(MutationType, name='mt')
     tag_1 = aliased(Tag, name='t')
     feature_1 = aliased(Feature, name='f')
@@ -93,13 +92,13 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         'foldChange': driver_result_1.fold_change.label('fold_change'),
         'log10PValue': driver_result_1.log10_p_value.label('log10_p_value'),
         'log10FoldChange': driver_result_1.log10_fold_change.label('log10_fold_change'),
-        'numWildTypes': driver_result_1.n_wt.label('n_wt'),
-        'numMutants': driver_result_1.n_mut.label('n_mut')
+        'numWildTypes': driver_result_1.n_wildtype.label('n_wt'),
+        'numMutants': driver_result_1.n_mutants.label('n_mut')
     }
     data_set_core_field_mapping = {
         'display': data_set_1.display.label('data_set_display'),
         'name': data_set_1.name.label('data_set_name'),
-        'type': data_set_1.data_set_type.label('data_set_type')
+        'type': data_set_1.dataset_type.label('data_set_type')
     }
     feature_core_field_mapping = {
         'display': feature_1.display.label('feature_display'),
@@ -113,7 +112,8 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
     core |= get_selected(feature_requested, feature_core_field_mapping)
     core |= get_tag_column_labels(tag_requested, tag_1)
     core |= get_mutation_column_labels(
-        mutation_requested, mutation_1, mutation_code_1)
+        mutation_requested, mutation_1
+    )
     core |= get_simple_gene_column_labels(mutation_gene_requested, gene_1)
     core |= get_mutation_type_column_labels(
         mutation_type_requested, mutation_type_1)
@@ -146,10 +146,10 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         query = query.filter(driver_result_1.p_value >= min_p_value)
 
     if min_n_mut or min_n_mut == 0:
-        query = query.filter(driver_result_1.n_mut >= min_n_mut)
+        query = query.filter(driver_result_1.n_mutants >= min_n_mut)
 
     if min_n_wt or min_n_wt == 0:
-        query = query.filter(driver_result_1.n_wt >= min_n_wt)
+        query = query.filter(driver_result_1.n_wildtype >= min_n_wt)
 
     if 'dataSet' in requested or data_set or related:
         is_outer = not bool(data_set)
@@ -191,7 +191,8 @@ def build_driver_result_request(requested, data_set_requested, feature_requested
         query = query.join(mutation_1, and_(
             *mutation_join_condition), isouter=is_outer)
 
-    query = build_simple_mutation_request(query, mutation_requested, mutation_1, gene_1, mutation_code_1,
-                                          mutation_type_1, entrez=entrez, mutation_code=mutation_code)
+    query = build_simple_mutation_request(
+        query, mutation_requested, mutation_1, gene_1, mutation_type_1, entrez=entrez, mutation_code=mutation_code
+    )
 
     return get_pagination_queries(query, paging, distinct, cursor_field=driver_result_1.id)

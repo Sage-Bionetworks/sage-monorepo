@@ -32,7 +32,7 @@ def test_Edge_with_relations(app, node_1, node_1_id):
         assert result.node_1.name == node_1
         assert result.node_2.id == result.node_2_id
         assert result.node_1_id == node_1_id
-        assert type(result.node_2_id) is int
+        assert type(result.node_2_id) is str
         assert type(result.name) is str
         assert type(result.label) is str or NoneType
         assert type(result.score) is float or NoneType
@@ -50,7 +50,7 @@ def test_Edge_no_relations(app, node_1_id):
         assert type(result.node_1) is NoneType
         assert type(result.node_2) is NoneType
         assert result.node_1_id == node_1_id
-        assert type(result.node_2_id) is int
+        assert type(result.node_2_id) is str
         assert type(result.name) is str
         assert type(result.label) is str or NoneType
         assert type(result.score) is float or NoneType

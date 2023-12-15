@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Feature, FeatureClass, FeatureToSample, MethodTag, Sample, Cohort, CohortToSample, CohortToFeature
+from api.db_models import Feature, FeatureToSample, Sample, Cohort, CohortToSample, CohortToFeature
 from .sample import build_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
@@ -74,18 +74,16 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
     has_min_max = 'valueMax' in requested or 'valueMin' in requested
 
     feature_1 = aliased(Feature, name='f')
-    feature_class_1 = aliased(FeatureClass, name='fc')
     feature_to_sample_1 = aliased(FeatureToSample, name='fts')
-    method_tag_1 = aliased(MethodTag, name='mt')
     sample_1 = aliased(Sample, name='s')
     cohort_1 = aliased(Cohort, name='c')
     cohort_to_feature_1 = aliased(CohortToFeature, name='ctf')
 
     core_field_mapping = {
         'id': feature_1.id.label('feature_id'),
-        'class': feature_class_1.name.label('feature_class'),
+        'class': feature_1.feature_class.label('feature_class'),
         'display': feature_1.display.label('feature_display'),
-        'methodTag': method_tag_1.name.label('feature_method_tag'),
+        'methodTag': feature_1.method_tag.label('feature_method_tag'),
         'name': feature_1.name.label('feature_name'),
         'order': feature_1.order.label('feature_order'),
         'germlineModule': feature_1.germline_module.label('feature_germline_module'),
@@ -102,29 +100,19 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
     if feature:
         query = query.filter(feature_1.name.in_(feature))
 
-    if feature_class or 'class' in requested:
-        is_outer = not bool(feature_class)
-        feature_class_join_condition = build_join_condition(
-            feature_class_1.id, feature_1.class_id, filter_column=feature_class_1.name, filter_list=feature_class)
-        query = query.join(feature_class_1, and_(
-            *feature_class_join_condition), isouter=is_outer)
-
-    if 'methodTag' in requested:
-        method_tag_join_condition = build_join_condition(
-            method_tag_1.id, feature_1.method_tag_id)
-        query = query.join(method_tag_1, and_(
-            *method_tag_join_condition), isouter=True)
+    if feature_class:
+        query = query.filter(feature_1.feature_class.in_(feature_class))
 
     if has_min_max or sample:
         feature_to_sample_subquery = sess.query(feature_to_sample_1.feature_id)
 
         if max_value:
             feature_to_sample_subquery = feature_to_sample_subquery.filter(
-                feature_to_sample_1.value <= max_value)
+                feature_to_sample_1.feature_to_sample_value <= max_value)
 
         if min_value:
             feature_to_sample_subquery = feature_to_sample_subquery.filter(
-                feature_to_sample_1.value >= min_value)
+                feature_to_sample_1.feature_to_sample_value >= min_value)
 
         if sample:
 
@@ -152,7 +140,7 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
         order = []
         append_to_order = order.append
         if 'class' in requested:
-            append_to_order(feature_class_1.name)
+            append_to_order(feature_1.feature_class)
         if 'order' in requested:
             append_to_order(feature_1.order)
         if 'display' in requested:
@@ -186,7 +174,7 @@ def get_samples(feature_id, requested, sample_requested, max_value=None, min_val
             'id'), feature_to_sample_1.feature_id.label('feature_id')}
 
         if has_max_min or 'value' in sample_requested:
-            sample_core |= {feature_to_sample_1.value.label(
+            sample_core |= {feature_to_sample_1.feature_to_sample_value.label(
                 'sample_feature_value')}
 
         sample_query = sess.query(*sample_core)
@@ -200,11 +188,11 @@ def get_samples(feature_id, requested, sample_requested, max_value=None, min_val
 
         if max_value:
             feature_sample_join_condition.append(
-                feature_to_sample_1.value <= max_value)
+                feature_to_sample_1.feature_to_sample_value <= max_value)
 
         if min_value:
             feature_sample_join_condition.append(
-                feature_to_sample_1.value >= min_value)
+                feature_to_sample_1.feature_to_sample_value >= min_value)
 
         sample_query = sample_query.join(
             feature_to_sample_1, and_(*feature_sample_join_condition))

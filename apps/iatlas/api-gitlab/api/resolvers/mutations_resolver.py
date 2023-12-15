@@ -36,3 +36,4 @@ def resolve_mutations(_obj, info, cohort=None, distinct=False, entrez=None, muta
     res = paginate(query, count_query, paging, distinct,
                    response_function, pagination_requested)
     return(res)
+

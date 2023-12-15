@@ -65,7 +65,7 @@ def test_Sample_with_genes(app, sample):
     assert len(result.genes) > 0
     # Don't need to iterate through every result.
     for gene in result.genes[0:2]:
-        assert type(gene.entrez) is int
+        assert type(gene.entrez_id) is int
 
 
 def test_Sample_with_gene_sample_assoc(app, sample):
@@ -91,7 +91,7 @@ def test_Sample_with_mutations(app, sample):
     assert len(result.mutations) > 0
     # Don't need to iterate through every result.
     for mutation in result.mutations[0:2]:
-        assert type(mutation.id) is int
+        assert type(mutation.id) is str
 
 
 def test_Sample_with_patient(app, sample):
@@ -150,6 +150,6 @@ def test_Sample_no_relations(app, sample):
     assert result.mutations == []
     assert type(result.patient) is NoneType
     assert result.tags == []
-    assert type(result.id) is int
+    assert type(result.id) is str
     assert result.name == sample
-    assert type(result.patient_id) is int or NoneType
+    assert type(result.patient_id) is str or NoneType

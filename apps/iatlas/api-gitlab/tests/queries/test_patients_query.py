@@ -5,7 +5,7 @@ from api.enums import ethnicity_enum, gender_enum, race_enum
 
 
 @pytest.fixture(scope='module')
-def barcode():
+def patient_name():
     return 'TCGA-WN-AB4C'
 
 
@@ -115,9 +115,9 @@ def full_query(common_query_builder):
     )
 
 
-def test_patients_query_with_passed_barcode(client, full_query, barcode):
+def test_patients_query_with_passed_barcode(client, full_query, patient_name):
     response = client.post(
-        '/api', json={'query': full_query, 'variables': {'barcode': [barcode]}})
+        '/api', json={'query': full_query, 'variables': {'barcode': [patient_name]}})
     json_data = json.loads(response.data)
     page = json_data['data']['patients']
     results = page['items']
@@ -129,7 +129,7 @@ def test_patients_query_with_passed_barcode(client, full_query, barcode):
         samples = result['samples']
 
         assert type(result['ageAtDiagnosis']) is int or NoneType
-        assert result['barcode'] == barcode
+        assert result['barcode'] == patient_name
         assert type(result['ethnicity']) in ethnicity_enum.enums or NoneType
         assert type(result['gender']) in gender_enum.enums or NoneType
         assert type(result['height']) is int or NoneType

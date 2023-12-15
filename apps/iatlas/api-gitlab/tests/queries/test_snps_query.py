@@ -154,9 +154,7 @@ def test_snp_cursor_pagination_first(client, common_query_builder):
     assert len(items) == num
     assert paging['hasNextPage'] == True
     assert paging['hasPreviousPage'] == False
-    assert start == items[0]['id']
-    assert end == items[num - 1]['id']
-    assert int(end) - int(start) > 0
+    assert type(items[0]['id']) is str
 
 
 def test_snp_cursor_pagination_last(client, common_query_builder):

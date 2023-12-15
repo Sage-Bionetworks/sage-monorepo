@@ -6,12 +6,12 @@ from . import Base
 class CohortToTag(Base):
     __tablename__ = 'cohorts_to_tags'
 
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.String, primary_key=True)
 
-    cohort_id = db.Column(db.Integer, db.ForeignKey(
+    cohort_id = db.Column(db.String, db.ForeignKey(
         'cohorts.id'), primary_key=True)
 
-    tag_id = db.Column(db.Integer, db.ForeignKey(
+    tag_id = db.Column(db.String, db.ForeignKey(
         'tags.id'), primary_key=True)
 
     cohort = db.relationship('Cohort', backref=orm.backref(

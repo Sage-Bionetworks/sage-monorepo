@@ -14,9 +14,6 @@ edge_request_fields = {'label',
 
 def build_edge_graphql_response(edge):
     from .node import build_node_graphql_response
-    import logging
-    logger = logging.getLogger('node response')
-    logger.info(edge)
     dict = {
         'id': get_value(edge, 'id'),
         'label': get_value(edge, 'label'),
@@ -25,7 +22,6 @@ def build_edge_graphql_response(edge):
         'node1': build_node_graphql_response(prefix='node1_')(edge),
         'node2': build_node_graphql_response(prefix='node2_')(edge)
     }
-    logger.info(dict)
     return(dict)
 
 
@@ -76,5 +72,8 @@ def build_edge_request(requested, node_1_requested, node_2_requested, distinct=F
         node_start_join_condition = build_join_condition(
             node_2.id, edge_1.node_2_id, node_2.name, node_end)
         query = query.join(node_2, and_(*node_start_join_condition))
+
+    import logging
+    logging.warning(query)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=edge_1.id)

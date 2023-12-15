@@ -7,10 +7,10 @@ class DatasetToTag(Base):
     __tablename__ = 'datasets_to_tags'
 
     dataset_id = db.Column(
-        db.Integer, db.ForeignKey('datasets.id'), primary_key=True)
+        db.String, db.ForeignKey('datasets.id'), primary_key=True)
 
     tag_id = db.Column(
-        db.Integer, db.ForeignKey('tags.id'), nullable=False)
+        db.String, db.ForeignKey('tags.id'), nullable=False)
 
     data_sets = db.relationship('Dataset', backref=orm.backref(
         'dataset_tag_assoc', uselist=True, lazy='noload'), uselist=True, lazy='noload')

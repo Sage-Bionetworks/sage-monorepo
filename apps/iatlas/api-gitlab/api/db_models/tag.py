@@ -7,18 +7,15 @@ class Tag(Base):
     __tablename__ = 'tags'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    characteristics = db.Column(db.String, nullable=True)
+    description = db.Column(db.String, nullable=True)
     color = db.Column(db.String, nullable=True)
     long_display = db.Column(db.String, nullable=True)
     short_display = db.Column(db.String, nullable=True)
-    type = db.Column(tag_type_enum, nullable=False)
+    tag_type = db.Column(tag_type_enum, nullable=False)
     order = db.Column(db.Integer, nullable=True)
 
     data_sets = db.relationship(
         'Dataset', lazy='noload', uselist=True, secondary='datasets_to_tags')
-
-    nodes = db.relationship(
-        'Node', lazy='noload', uselist=True, secondary='nodes_to_tags')
 
     publications = db.relationship(
         'Publication', lazy='noload', uselist=True, secondary='tags_to_publications')
@@ -28,7 +25,7 @@ class Tag(Base):
         secondary='tags_to_tags', back_populates='tags', uselist=True)
 
     samples = db.relationship(
-        'Sample', lazy='noload', uselist=True, secondary='samples_to_tags2')
+        'Sample', lazy='noload', uselist=True, secondary='samples_to_tags')
 
     tags = db.relationship(
         'Tag', foreign_keys='TagToTag.related_tag_id', lazy='noload',

@@ -18,17 +18,17 @@ def name():
 def unit():
     return 'Fraction'
 
+@pytest.fixture(scope='module')
+def method_tag():
+    return 'CIBERSORT'
 
-def test_Feature_with_relations(app, display, name, unit):
+
+def test_Feature_with_relations(app, display, name, unit, method_tag):
     relationships_to_join = ['feature_class', 'method_tag', 'samples']
 
     query = return_feature_query(*relationships_to_join)
     result = query.filter_by(name=name).first()
 
-    if result.feature_class:
-        assert type(result.feature_class.name) is str
-    if result.method_tag:
-        assert type(result.method_tag.name) is str
     if result.samples:
         assert isinstance(result.samples, list)
         # Don't need to iterate through every result.
@@ -37,11 +37,11 @@ def test_Feature_with_relations(app, display, name, unit):
     assert result.name == name
     assert result.display == display
     assert result.unit == unit
+    assert result.method_tag == method_tag
+    assert type(result.feature_class) ==  str
     assert type(result.germline_category) is str or NoneType
     assert type(result.germline_module) is str or NoneType
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
-    assert type(result.class_id) is int or NoneType
-    assert type(result.method_tag_id) is int or NoneType
     assert repr(result) == '<Feature %r>' % name
 
 
@@ -82,8 +82,8 @@ def test_Feature_no_relations(app, display, name):
     query = return_feature_query()
     result = query.filter_by(name=name).first()
 
-    assert type(result.feature_class) is NoneType
-    assert type(result.method_tag) is NoneType
+    assert type(result.feature_class) is str or NoneType
+    assert type(result.method_tag) is str or NoneType
     assert result.samples == []
     assert result.copy_number_results == []
     assert result.driver_results == []
@@ -93,19 +93,3 @@ def test_Feature_no_relations(app, display, name):
     assert type(result.germline_category) is str or NoneType
     assert type(result.germline_module) is str or NoneType
     assert result.unit in unit_enum.enums or type(result.unit) is NoneType
-    assert type(result.class_id) is int or NoneType
-    assert type(result.method_tag_id) is int or NoneType
-
-
-def test_Feature_has_clinical_features(app, feature3, feature3_id, feature3_class):
-    query = return_feature_query('feature_class')
-    result = query.filter_by(name=feature3).first()
-
-    assert type(result.class_id) is int
-    assert type(result.id) is int
-    assert type(result.feature_class.name) is str
-    assert type(result.name) is str
-
-    assert result.id == feature3_id
-    assert result.feature_class.name == feature3_class
-    assert result.name == feature3

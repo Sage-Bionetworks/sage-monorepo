@@ -2,11 +2,11 @@ from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from itertools import groupby
 from api import db
-from api.db_models import Cohort, CohortToSample, CohortToGene, Gene, GeneFamily, GeneFunction, GeneToSample, GeneToType, GeneType, ImmuneCheckpoint, Pathway, Publication, PublicationToGeneToGeneType, SuperCategory, Sample, TherapyType
+from api.db_models import Cohort, CohortToSample, CohortToGene, Gene, GeneToSample, GeneToGeneSet, GeneSet, Publication, PublicationToGeneToGeneSet, Sample
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
 from .paging_utils import get_pagination_queries, fetch_page
-from .sample import build_sample_graphql_response
+from .sample import build_sample_graphql_response, build_gene_expression_graphql_response
 
 
 simple_gene_request_fields = {
@@ -32,8 +32,8 @@ gene_request_fields = simple_gene_request_fields.union({
 
 def get_simple_gene_column_labels(requested, gene):
     mapping = {
-        'entrez': gene.entrez.label('gene_entrez'),
-        'hgnc': gene.hgnc.label('gene_hgnc'),
+        'entrez': gene.entrez_id.label('gene_entrez'),
+        'hgnc': gene.hgnc_id.label('gene_hgnc'),
         'description': gene.description.label('gene_description'),
         'friendlyName': gene.friendly_name.label('gene_friendly_name'),
         'ioLandscapeName': gene.io_landscape_name.label('gene_io_landscape_name')
@@ -53,10 +53,10 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
         publications = get_publications(id, requested, publications_requested)
         samples = get_samples(id, requested, sample_requested,
                               cohort, sample, max_rna_seq_expr, min_rna_seq_expr)
-        return {
+        result_dict = {
             'id': id,
-            'entrez': get_value(gene, prefix + 'entrez'),
-            'hgnc': get_value(gene, prefix + 'hgnc'),
+            'entrez': get_value(gene, prefix + 'entrez') or get_value(gene, prefix + 'entrez_id'),
+            'hgnc': get_value(gene, prefix + 'hgnc') or get_value(gene, prefix + 'hgnc_id'),
             'description': get_value(gene, prefix + 'description'),
             'friendlyName': get_value(gene, prefix + 'friendly_name'),
             'ioLandscapeName': get_value(gene, prefix + 'io_landscape_name'),
@@ -67,9 +67,10 @@ def build_gene_graphql_response(requested=[], gene_types_requested=[], publicati
             'superCategory': get_value(gene, prefix + 'super_category'),
             'therapyType': get_value(gene, prefix + 'therapy_type'),
             'geneTypes': gene_types,
-            'publications': map(build_publication_graphql_response, publications),
-            'samples': map(build_sample_graphql_response(), samples)
+            'publications': map(build_publication_graphql_response, publications)
         }
+        result_dict['samples'] = map(build_gene_expression_graphql_response(), samples)
+        return result_dict
     return f
 
 
@@ -78,7 +79,7 @@ def build_pub_gene_gene_type_join_condition(gene_ids, gene_type, pub_gene_gene_t
         pub_gene_gene_type_model.publication_id, pub_model.id, pub_gene_gene_type_model.gene_id, gene_ids)
 
     if gene_type:
-        gene_type_1 = aliased(GeneType, name='gt')
+        gene_type_1 = aliased(GeneSet, name='gt')
         gene_type_subquery = db.session.query(gene_type_1.id).filter(
             gene_type_1.name.in_(gene_type))
         join_condition.append(
@@ -122,32 +123,26 @@ def build_gene_request(requested, distinct=False, paging=None, entrez=None, gene
     sess = db.session
 
     gene_1 = aliased(Gene, name='g')
-    gene_family_1 = aliased(GeneFamily, name='gf')
-    gene_function_1 = aliased(GeneFunction, name='gfn')
     gene_to_sample_1 = aliased(GeneToSample, name='gts')
-    gene_to_type_1 = aliased(GeneToType, name='ggt')
-    gene_type_1 = aliased(GeneType, name='gt')
-    immune_checkpoint_1 = aliased(ImmuneCheckpoint, name='ic')
-    pathway_1 = aliased(Pathway, name='py')
+    gene_to_type_1 = aliased(GeneToGeneSet, name='ggt')
+    gene_type_1 = aliased(GeneSet, name='gt')
     sample_1 = aliased(Sample, name='s')
-    super_category_1 = aliased(SuperCategory, name='sc')
-    therapy_type_1 = aliased(TherapyType, name='tht')
     cohort_1 = aliased(Cohort, name='c')
     cohort_to_gene_1 = aliased(CohortToGene, name='ctg')
 
     core_field_mapping = {
         'id': gene_1.id.label('gene_id'),
-        'entrez': gene_1.entrez.label('gene_entrez'),
-        'hgnc': gene_1.hgnc.label('gene_hgnc'),
+        'entrez': gene_1.entrez_id.label('gene_entrez'),
+        'hgnc': gene_1.hgnc_id.label('gene_hgnc'),
         'description': gene_1.description.label('gene_description'),
         'friendlyName': gene_1.friendly_name.label('gene_friendly_name'),
         'ioLandscapeName': gene_1.io_landscape_name.label('gene_io_landscape_name'),
-        'geneFamily': gene_family_1.name.label('gene_family'),
-        'geneFunction': gene_function_1.name.label('gene_function'),
-        'immuneCheckpoint': immune_checkpoint_1.name.label('gene_immune_checkpoint'),
-        'pathway': pathway_1.name.label('gene_pathway'),
-        'superCategory': super_category_1.name.label('gene_super_category'),
-        'therapyType': therapy_type_1.name.label('gene_therapy_type')
+        'geneFamily': gene_1.gene_family.label('gene_family'),
+        'geneFunction': gene_1.gene_function.label('gene_function'),
+        'immuneCheckpoint': gene_1.immune_checkpoint.label('gene_immune_checkpoint'),
+        'pathway': gene_1.gene_pathway.label('gene_pathway'),
+        'superCategory': gene_1.super_category.label('gene_super_category'),
+        'therapyType': gene_1.therapy_type.label('gene_therapy_type')
     }
 
     core = get_selected(requested, core_field_mapping)
@@ -157,64 +152,46 @@ def build_gene_request(requested, distinct=False, paging=None, entrez=None, gene
     query = query.select_from(gene_1)
 
     if entrez:
-        query = query.filter(gene_1.entrez.in_(entrez))
+        query = query.filter(gene_1.entrez_id.in_(entrez))
 
     if gene_type:
-        query = query.join(gene_to_type_1, and_(
-            gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.type_id.in_(sess.query(gene_type_1.id).filter(gene_type_1.name.in_(gene_type)))))
+        query = query.join(
+            gene_to_type_1, and_(
+                gene_to_type_1.gene_id == gene_1.id, gene_to_type_1.gene_set_id.in_(
+                    sess.query(gene_type_1.id).filter(
+                        gene_type_1.name.in_(gene_type))
+                )
+            )
+        )
 
-    if 'geneFamily' in requested or gene_family:
-        is_outer = not bool(gene_family)
-        gene_family_join_condition = build_join_condition(
-            gene_family_1.id, gene_1.gene_family_id, filter_column=gene_family_1.name, filter_list=gene_family)
-        query = query.join(gene_family_1, and_(
-            *gene_family_join_condition), isouter=is_outer)
+    if gene_family:
+        query = query.filter(gene_1.gene_family.in_(gene_family))
 
-    if 'geneFunction' in requested or gene_function:
-        is_outer = not bool(gene_function)
-        gene_function_join_condition = build_join_condition(
-            gene_function_1.id, gene_1.gene_function_id, filter_column=gene_function_1.name, filter_list=gene_function)
-        query = query.join(gene_function_1, and_(
-            *gene_function_join_condition), isouter=is_outer)
+    if gene_function:
+        query = query.filter(gene_1.gene_function.in_(gene_function))
 
-    if 'immuneCheckpoint' in requested or immune_checkpoint:
-        is_outer = not bool(immune_checkpoint)
-        immune_checkpoint_join_condition = build_join_condition(
-            immune_checkpoint_1.id, gene_1.immune_checkpoint_id, filter_column=immune_checkpoint_1.name, filter_list=immune_checkpoint)
-        query = query.join(immune_checkpoint_1, and_(
-            *immune_checkpoint_join_condition), isouter=is_outer)
+    if immune_checkpoint:
+        query = query.filter(gene_1.immune_checkpoint.in_(immune_checkpoint))
 
-    if 'pathway' in requested or pathway:
-        is_outer = not bool(pathway)
-        pathway_join_condition = build_join_condition(
-            pathway_1.id, gene_1.pathway_id, filter_column=pathway_1.name, filter_list=pathway)
-        query = query.join(pathway_1, and_(
-            *pathway_join_condition), isouter=is_outer)
+    if pathway:
+        query = query.filter(gene_1.pathway.in_(pathway))
 
-    if 'superCategory' in requested or super_category:
-        is_outer = not bool(super_category)
-        super_category_join_condition = build_join_condition(
-            super_category_1.id, gene_1.super_cat_id, filter_column=super_category_1.name, filter_list=super_category)
-        query = query.join(super_category_1, and_(
-            *super_category_join_condition), isouter=is_outer)
+    if super_category:
+        query = query.filter(gene_1.super_category.in_(super_category))
 
-    if 'therapyType' in requested or therapy_type:
-        is_outer = not bool(therapy_type)
-        therapy_type_join_condition = build_join_condition(
-            therapy_type_1.id, gene_1.therapy_type_id, filter_column=therapy_type_1.name, filter_list=therapy_type)
-        query = query.join(therapy_type_1, and_(
-            *therapy_type_join_condition), isouter=is_outer)
+    if therapy_type:
+        query = query.filter(gene_1.therapy_type.in_(therapy_type))
 
     if max_rna_seq_expr or min_rna_seq_expr or sample:
         gene_to_sample_subquery = sess.query(gene_to_sample_1.gene_id)
 
         if max_rna_seq_expr:
             gene_to_sample_subquery = gene_to_sample_subquery.filter(
-                gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr)
+                gene_to_sample_1.rna_seq_expression <= max_rna_seq_expr)
 
         if min_rna_seq_expr:
             gene_to_sample_subquery = gene_to_sample_subquery.filter(
-                gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr)
+                gene_to_sample_1.rna_seq_expression >= min_rna_seq_expr)
 
         if sample:
 
@@ -255,8 +232,8 @@ def get_samples(id, requested, sample_requested, cohort=None, sample=None, max_r
 
     core_field_mapping = {
         'name': sample_1.name.label('sample_name'),
-        'rnaSeqExpr': gene_to_sample_1.rna_seq_expr.label('sample_gene_rna_seq_expr'),
-        'nanostringExpr': gene_to_sample_1.nanostring_expr.label('sample_gene_nanostring_expr')
+        'rnaSeqExpr': gene_to_sample_1.rna_seq_expression.label('sample_gene_rna_seq_expr'),
+        'nanostringExpr': gene_to_sample_1.nanostring_expression.label('sample_gene_nanostring_expr')
     }
 
     core = get_selected(sample_requested, core_field_mapping)
@@ -277,11 +254,11 @@ def get_samples(id, requested, sample_requested, cohort=None, sample=None, max_r
 
     if max_rna_seq_expr:
         query = query.filter(
-            gene_to_sample_1.rna_seq_expr <= max_rna_seq_expr)
+            gene_to_sample_1.rna_seq_expression <= max_rna_seq_expr)
 
     if min_rna_seq_expr:
         query = query.filter(
-            gene_to_sample_1.rna_seq_expr >= min_rna_seq_expr)
+            gene_to_sample_1.rna_seq_expression >= min_rna_seq_expr)
 
     query = query.join(
         gene_to_sample_1, and_(*gene_sample_join_condition))
@@ -308,8 +285,8 @@ def get_gene_types(gene_id, requested, gene_types_requested, gene_type=None):
 
     sess = db.session
 
-    gene_type_1 = aliased(GeneType, name='gt')
-    gene_to_gene_type_1 = aliased(GeneToType, name='ggt')
+    gene_type_1 = aliased(GeneSet, name='gt')
+    gene_to_gene_type_1 = aliased(GeneToGeneSet, name='ggt')
 
     core_field_mapping = {
         'name': gene_type_1.name.label('name'),
@@ -326,7 +303,7 @@ def get_gene_types(gene_id, requested, gene_types_requested, gene_type=None):
     gene_type_query = gene_type_query.select_from(gene_type_1)
 
     gene_gene_type_join_condition = build_join_condition(
-        gene_to_gene_type_1.type_id, gene_type_1.id, gene_to_gene_type_1.gene_id, [gene_id])
+        gene_to_gene_type_1.gene_set_id, gene_type_1.id, gene_to_gene_type_1.gene_id, [gene_id])
 
     if gene_type:
         gene_gene_type_join_condition.append(
@@ -356,13 +333,13 @@ def get_publications(gene_id, requested, publications_requested):
     sess = db.session
 
     pub_1 = aliased(Publication, name='p')
-    pub_gene_gene_type_1 = aliased(PublicationToGeneToGeneType, name='pggt')
+    pub_gene_gene_type_1 = aliased(PublicationToGeneToGeneSet, name='pggt')
 
     core_field_mapping = {
         'doId': pub_1.do_id.label('do_id'),
         'firstAuthorLastName': pub_1.first_author_last_name.label('first_author_last_name'),
         'journal': pub_1.journal.label('journal'),
-        'name': pub_1.name.label('name'),
+        'name': pub_1.title.label('name'),
         'pubmedId': pub_1.pubmed_id.label('pubmed_id'),
         'title': pub_1.title.label('title'),
         'year': pub_1.year.label('year')
