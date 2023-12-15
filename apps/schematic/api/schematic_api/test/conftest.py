@@ -8,7 +8,7 @@ import pandas as pd
 def csv_to_bytes(path: str) -> str:
     """reads in a csv file and returns as bytes"""
     dataframe = pd.read_csv(path)
-    csv_string = dataframe.to_csv(line_terminator="\r\n", index=False)
+    csv_string = dataframe.to_csv(lineterminator="\r\n", index=False)
     return bytes(csv_string, encoding="utf-8")
 
 
