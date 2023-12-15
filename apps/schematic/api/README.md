@@ -37,6 +37,10 @@ tox
 ```
 
 ## Running with Docker
+Get into the right dir
+```
+cd apps/schematic/api
+```
 
 To run the server on a Docker container, please execute the following from the root directory:
 
@@ -45,5 +49,7 @@ To run the server on a Docker container, please execute the following from the r
 docker build -t schematic_api .
 
 # starting up a container
-docker run -p 8080:8080 schematic_api
+docker run -p 7080:7080 schematic_api
 ```
+Should then be able to visit `http://localhost:7080/api/v1/ui/#/`
+
