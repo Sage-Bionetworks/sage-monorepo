@@ -3,7 +3,7 @@
     <div class="col">
       <h3>Overview</h3>
       <p>{{ useNaIfFalsey(org.description) }}</p>
-      <div *ngIf="org.description.endsWith('...')">
+      <div *ngIf="org.description?.endsWith('...')">
         <a class="read-more" href="{{ org.websiteUrl }}"
           >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a>
       </div>
@@ -16,10 +16,6 @@
         <tr>
           <td class="text-right">Acronym</td>
           <td [ngClass]="{ 'text-grey': org.acronym === '' }">{{ useNaIfFalsey(org.acronym) }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">Contact Email</td>
-          <td [ngClass]="{ 'text-grey': org.email === '' }">{{ useNaIfFalsey(org.email) }}</td>
         </tr>
       </tbody>
     </table>

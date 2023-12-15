@@ -166,18 +166,30 @@ components:
       type: integer
       format: int64
       example: 1
-    Email:
-      description: An email address.
-      type: string
-      format: email
-      example: john.smith@example.com
     OrganizationLogin:
-      description: The login of an organization
+      description: The unique login of an organization.
       type: string
       minLength: 2
       maxLength: 64
       pattern: ^[a-z0-9]+(?:-[a-z0-9]+)*$
       example: example-org
+    Url:
+      description: A URL to the website or image.
+      type: string
+      format: url
+      maxLength: 500
+      nullable: true
+      example: https://openchallenges.io
+    CreatedDatetime:
+      description: Datetime when metadata was added to the OC database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
+    ModifiedDatetime:
+      description: Datetime when metadata was last modified in the OC database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
     Organization:
       type: object
       description: An organization
@@ -185,45 +197,40 @@ components:
         id:
           $ref: '#/components/schemas/OrganizationId'
         name:
+          description: The name of the organization.
           type: string
           example: Example organization
-        email:
-          $ref: '#/components/schemas/Email'
         login:
           $ref: '#/components/schemas/OrganizationLogin'
         description:
+          description: A description of the organization.
           type: string
+          nullable: true
           example: A description of the organization.
         avatarKey:
           type: string
           example: logo/dream.png
         websiteUrl:
-          type: string
-          format: url
-          example: https://example.com
+          $ref: '#/components/schemas/Url'
         challengeCount:
+          description: The number of challenges involving this organization.
           type: integer
-          format: int32
           minimum: 0
+          default: 0
           example: 10
         createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/CreatedDatetime'
         updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/ModifiedDatetime'
         acronym:
+          description: An acronym of the organization.
           type: string
+          maxLength: 10
           example: OC
       required:
         - id
         - name
-        - email
         - login
-        - description
-        - websiteUrl
         - createdAt
         - updatedAt
     OrganizationsPage:

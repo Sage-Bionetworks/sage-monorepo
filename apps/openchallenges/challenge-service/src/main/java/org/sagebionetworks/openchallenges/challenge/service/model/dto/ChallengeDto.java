@@ -31,28 +31,25 @@ public class ChallengeDto {
   private String name;
 
   @JsonProperty("headline")
-  private String headline;
+  private String headline = null;
 
   @JsonProperty("description")
   private String description;
 
   @JsonProperty("doi")
-  private String doi;
+  private String doi = null;
 
   @JsonProperty("status")
   private ChallengeStatusDto status;
-
-  @JsonProperty("difficulty")
-  private ChallengeDifficultyDto difficulty;
 
   @JsonProperty("platform")
   private SimpleChallengePlatformDto platform = null;
 
   @JsonProperty("websiteUrl")
-  private String websiteUrl;
+  private String websiteUrl = null;
 
   @JsonProperty("avatarUrl")
-  private String avatarUrl;
+  private String avatarUrl = null;
 
   @JsonProperty("incentives")
   @Valid
@@ -115,7 +112,7 @@ public class ChallengeDto {
   }
 
   /**
-   * The slug of the challenge.
+   * The unique slug of the challenge.
    *
    * @return slug
    */
@@ -125,7 +122,7 @@ public class ChallengeDto {
   @Schema(
       name = "slug",
       example = "awesome-challenge",
-      description = "The slug of the challenge.",
+      description = "The unique slug of the challenge.",
       required = true)
   public String getSlug() {
     return slug;
@@ -211,11 +208,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get doi
+   * The DOI of the challenge.
    *
    * @return doi
    */
-  @Schema(name = "doi", required = false)
+  @Size(max = 120)
+  @Schema(
+      name = "doi",
+      example = "https://doi.org/123/abc",
+      description = "The DOI of the challenge.",
+      required = false)
   public String getDoi() {
     return doi;
   }
@@ -245,27 +247,6 @@ public class ChallengeDto {
     this.status = status;
   }
 
-  public ChallengeDto difficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   *
-   * @return difficulty
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "difficulty", required = true)
-  public ChallengeDifficultyDto getDifficulty() {
-    return difficulty;
-  }
-
-  public void setDifficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-  }
-
   public ChallengeDto platform(SimpleChallengePlatformDto platform) {
     this.platform = platform;
     return this;
@@ -292,11 +273,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get websiteUrl
+   * A URL to the website or image.
    *
    * @return websiteUrl
    */
-  @Schema(name = "websiteUrl", required = false)
+  @Size(max = 500)
+  @Schema(
+      name = "websiteUrl",
+      example = "https://openchallenges.io",
+      description = "A URL to the website or image.",
+      required = false)
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -311,11 +297,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get avatarUrl
+   * A URL to the website or image.
    *
    * @return avatarUrl
    */
-  @Schema(name = "avatarUrl", required = false)
+  @Size(max = 500)
+  @Schema(
+      name = "avatarUrl",
+      example = "https://openchallenges.io",
+      description = "A URL to the website or image.",
+      required = false)
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -464,13 +455,15 @@ public class ChallengeDto {
   }
 
   /**
-   * The number of times the challenge has been starred by users.
+   * The number of times the challenge has been starred by users. minimum: 0
    *
    * @return starredCount
    */
   @NotNull
+  @Min(0)
   @Schema(
       name = "starredCount",
+      example = "100",
       description = "The number of times the challenge has been starred by users.",
       required = true)
   public Integer getStarredCount() {
@@ -487,13 +480,17 @@ public class ChallengeDto {
   }
 
   /**
-   * Get createdAt
+   * Datetime when metadata was added to the OC database.
    *
    * @return createdAt
    */
   @NotNull
   @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "createdAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when metadata was added to the OC database.",
+      required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -508,13 +505,17 @@ public class ChallengeDto {
   }
 
   /**
-   * Get updatedAt
+   * Datetime when metadata was last modified in the OC database.
    *
    * @return updatedAt
    */
   @NotNull
   @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "updatedAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when metadata was last modified in the OC database.",
+      required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -539,7 +540,6 @@ public class ChallengeDto {
         && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.doi, challenge.doi)
         && Objects.equals(this.status, challenge.status)
-        && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.websiteUrl, challenge.websiteUrl)
         && Objects.equals(this.avatarUrl, challenge.avatarUrl)
@@ -563,7 +563,6 @@ public class ChallengeDto {
         description,
         doi,
         status,
-        difficulty,
         platform,
         websiteUrl,
         avatarUrl,
@@ -588,7 +587,6 @@ public class ChallengeDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");

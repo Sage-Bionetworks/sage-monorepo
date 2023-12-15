@@ -12,19 +12,17 @@ properties:
   description:
     $ref: ChallengeDescription.yaml
   doi:
-    type: string
+    # type: array
+    # items:
+    $ref: ChallengeDoi.yaml
   status:
     $ref: ChallengeStatus.yaml
-  difficulty:
-    $ref: ChallengeDifficulty.yaml
   platform:
     $ref: SimpleChallengePlatform.yaml
   websiteUrl:
-    type: string
-    format: url
+    $ref: Url.yaml
   avatarUrl:
-    type: string
-    format: url
+    $ref: Url.yaml
   incentives:
     type: array
     items:
@@ -37,12 +35,8 @@ properties:
     type: array
     items:
       $ref: SimpleChallengeInputDataType.yaml
-  #   fullName:
-  #     type: string
   #   ownerId:
   #     $ref: AccountId.yaml
-  #   readmeId:
-  #     $ref: ChallengeReadmeId.yaml
   #   featured:
   #     description: Whether the challenge is featured
   #     type: boolean
@@ -63,21 +57,18 @@ properties:
     description: The number of times the challenge has been starred by users.
     type: integer
     default: 0
+    minimum: 0
+    example: 100
   createdAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
+    $ref: CreatedDatetime.yaml
   updatedAt:
-    type: string
-    format: date-time
-    example: '2022-07-04T22:19:11Z'
+    $ref: ModifiedDatetime.yaml
 required:
   - id
   - slug
   - name
   - description
   - status
-  - difficulty
   - incentives
   - submissionTypes
   - starredCount

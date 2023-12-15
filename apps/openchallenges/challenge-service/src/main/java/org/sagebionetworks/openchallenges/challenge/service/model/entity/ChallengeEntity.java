@@ -75,10 +75,6 @@ public class ChallengeEntity {
   @GenericField()
   private String status;
 
-  @Column(nullable = false)
-  @GenericField()
-  private String difficulty;
-
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "platform_id", nullable = true)
   @IndexedEmbedded(includePaths = {"slug", "name"})

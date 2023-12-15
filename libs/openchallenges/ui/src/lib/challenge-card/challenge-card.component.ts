@@ -25,7 +25,6 @@ export class ChallengeCardComponent implements OnInit {
   incentives!: string;
   statusClass!: string;
   time_info!: string | number;
-  // difficulty!: string | undefined;
 
   constructor(private imageService: ImageService) {}
 
@@ -33,9 +32,6 @@ export class ChallengeCardComponent implements OnInit {
     if (this.challenge) {
       this.status = this.challenge.status ? this.challenge.status : 'No Status';
       this.statusClass = this.challenge.status || '';
-      // this.difficulty = this.challenge.difficulty
-      //   ? startCase(this.challenge.difficulty.replace('-', ''))
-      //   : undefined;
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;

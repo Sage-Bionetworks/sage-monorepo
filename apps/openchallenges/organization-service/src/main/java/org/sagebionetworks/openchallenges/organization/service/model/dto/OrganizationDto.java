@@ -24,23 +24,20 @@ public class OrganizationDto {
   @JsonProperty("name")
   private String name;
 
-  @JsonProperty("email")
-  private String email;
-
   @JsonProperty("login")
   private String login;
 
   @JsonProperty("description")
-  private String description;
+  private String description = null;
 
   @JsonProperty("avatarKey")
   private String avatarKey;
 
   @JsonProperty("websiteUrl")
-  private String websiteUrl;
+  private String websiteUrl = null;
 
   @JsonProperty("challengeCount")
-  private Integer challengeCount;
+  private Integer challengeCount = 0;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -83,12 +80,16 @@ public class OrganizationDto {
   }
 
   /**
-   * Get name
+   * The name of the organization.
    *
    * @return name
    */
   @NotNull
-  @Schema(name = "name", example = "Example organization", required = true)
+  @Schema(
+      name = "name",
+      example = "Example organization",
+      description = "The name of the organization.",
+      required = true)
   public String getName() {
     return name;
   }
@@ -97,38 +98,13 @@ public class OrganizationDto {
     this.name = name;
   }
 
-  public OrganizationDto email(String email) {
-    this.email = email;
-    return this;
-  }
-
-  /**
-   * An email address.
-   *
-   * @return email
-   */
-  @NotNull
-  @Email
-  @Schema(
-      name = "email",
-      example = "john.smith@example.com",
-      description = "An email address.",
-      required = true)
-  public String getEmail() {
-    return email;
-  }
-
-  public void setEmail(String email) {
-    this.email = email;
-  }
-
   public OrganizationDto login(String login) {
     this.login = login;
     return this;
   }
 
   /**
-   * The login of an organization
+   * The unique login of an organization.
    *
    * @return login
    */
@@ -138,7 +114,7 @@ public class OrganizationDto {
   @Schema(
       name = "login",
       example = "example-org",
-      description = "The login of an organization",
+      description = "The unique login of an organization.",
       required = true)
   public String getLogin() {
     return login;
@@ -154,12 +130,15 @@ public class OrganizationDto {
   }
 
   /**
-   * Get description
+   * A description of the organization.
    *
    * @return description
    */
-  @NotNull
-  @Schema(name = "description", example = "A description of the organization.", required = true)
+  @Schema(
+      name = "description",
+      example = "A description of the organization.",
+      description = "A description of the organization.",
+      required = false)
   public String getDescription() {
     return description;
   }
@@ -193,12 +172,16 @@ public class OrganizationDto {
   }
 
   /**
-   * Get websiteUrl
+   * A URL to the website or image.
    *
    * @return websiteUrl
    */
-  @NotNull
-  @Schema(name = "websiteUrl", example = "https://example.com", required = true)
+  @Size(max = 500)
+  @Schema(
+      name = "websiteUrl",
+      example = "https://openchallenges.io",
+      description = "A URL to the website or image.",
+      required = false)
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -213,12 +196,16 @@ public class OrganizationDto {
   }
 
   /**
-   * Get challengeCount minimum: 0
+   * The number of challenges involving this organization. minimum: 0
    *
    * @return challengeCount
    */
   @Min(0)
-  @Schema(name = "challengeCount", example = "10", required = false)
+  @Schema(
+      name = "challengeCount",
+      example = "10",
+      description = "The number of challenges involving this organization.",
+      required = false)
   public Integer getChallengeCount() {
     return challengeCount;
   }
@@ -233,13 +220,17 @@ public class OrganizationDto {
   }
 
   /**
-   * Get createdAt
+   * Datetime when metadata was added to the OC database.
    *
    * @return createdAt
    */
   @NotNull
   @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "createdAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when metadata was added to the OC database.",
+      required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -254,13 +245,17 @@ public class OrganizationDto {
   }
 
   /**
-   * Get updatedAt
+   * Datetime when metadata was last modified in the OC database.
    *
    * @return updatedAt
    */
   @NotNull
   @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "updatedAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when metadata was last modified in the OC database.",
+      required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -275,11 +270,16 @@ public class OrganizationDto {
   }
 
   /**
-   * Get acronym
+   * An acronym of the organization.
    *
    * @return acronym
    */
-  @Schema(name = "acronym", example = "OC", required = false)
+  @Size(max = 10)
+  @Schema(
+      name = "acronym",
+      example = "OC",
+      description = "An acronym of the organization.",
+      required = false)
   public String getAcronym() {
     return acronym;
   }
@@ -299,7 +299,6 @@ public class OrganizationDto {
     OrganizationDto organization = (OrganizationDto) o;
     return Objects.equals(this.id, organization.id)
         && Objects.equals(this.name, organization.name)
-        && Objects.equals(this.email, organization.email)
         && Objects.equals(this.login, organization.login)
         && Objects.equals(this.description, organization.description)
         && Objects.equals(this.avatarKey, organization.avatarKey)
@@ -315,7 +314,6 @@ public class OrganizationDto {
     return Objects.hash(
         id,
         name,
-        email,
         login,
         description,
         avatarKey,
@@ -332,7 +330,6 @@ public class OrganizationDto {
     sb.append("class OrganizationDto {\n");
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
-    sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    login: ").append(toIndentedString(login)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    avatarKey: ").append(toIndentedString(avatarKey)).append("\n");

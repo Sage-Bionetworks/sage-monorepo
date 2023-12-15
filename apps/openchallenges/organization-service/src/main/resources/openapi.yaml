@@ -257,31 +257,42 @@ components:
       example: 1
       format: int64
       type: integer
-    Email:
-      description: An email address.
-      example: john.smith@example.com
-      format: email
-      type: string
     OrganizationLogin:
-      description: The login of an organization
+      description: The unique login of an organization.
       example: example-org
       maxLength: 64
       minLength: 2
       pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      type: string
+    Url:
+      description: A URL to the website or image.
+      example: https://openchallenges.io
+      format: url
+      maxLength: 500
+      nullable: true
+      type: string
+    CreatedDatetime:
+      description: Datetime when metadata was added to the OC database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
+      type: string
+    ModifiedDatetime:
+      description: Datetime when metadata was last modified in the OC database.
+      example: 2022-07-04T22:19:11Z
+      format: date-time
       type: string
     Organization:
       description: An organization
       example:
         createdAt: 2022-07-04T22:19:11Z
         avatarKey: logo/dream.png
-        websiteUrl: https://example.com
+        websiteUrl: https://openchallenges.io
         acronym: OC
         name: Example organization
         description: A description of the organization.
         id: 1
         challengeCount: 10
         login: example-org
-        email: john.smith@example.com
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -290,55 +301,58 @@ components:
           format: int64
           type: integer
         name:
+          description: The name of the organization.
           example: Example organization
           type: string
-        email:
-          description: An email address.
-          example: john.smith@example.com
-          format: email
-          type: string
         login:
-          description: The login of an organization
+          description: The unique login of an organization.
           example: example-org
           maxLength: 64
           minLength: 2
           pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         description:
+          description: A description of the organization.
           example: A description of the organization.
+          nullable: true
           type: string
         avatarKey:
           example: logo/dream.png
           type: string
         websiteUrl:
-          example: https://example.com
+          description: A URL to the website or image.
+          example: https://openchallenges.io
           format: url
+          maxLength: 500
+          nullable: true
           type: string
         challengeCount:
+          default: 0
+          description: The number of challenges involving this organization.
           example: 10
-          format: int32
           minimum: 0
           type: integer
         createdAt:
+          description: Datetime when metadata was added to the OC database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
         updatedAt:
+          description: Datetime when metadata was last modified in the OC database.
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
         acronym:
+          description: An acronym of the organization.
           example: OC
+          maxLength: 10
           type: string
       required:
       - createdAt
-      - description
-      - email
       - id
       - login
       - name
       - updatedAt
-      - websiteUrl
       type: object
     OrganizationsPage:
       allOf:
