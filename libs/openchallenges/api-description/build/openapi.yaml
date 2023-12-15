@@ -612,7 +612,7 @@ components:
       format: date
       nullable: true
       example: '2017-07-21'
-    CreationDatetime:
+    CreatedDatetime:
       description: Datetime when metadata was added to the OC database.
       type: string
       format: date-time
@@ -669,7 +669,7 @@ components:
           minimum: 0
           example: 100
         createdAt:
-          $ref: '#/components/schemas/CreationDatetime'
+          $ref: '#/components/schemas/CreatedDatetime'
         updatedAt:
           $ref: '#/components/schemas/ModifiedDatetime'
       required:
@@ -1093,7 +1093,7 @@ components:
           default: 0
           example: 10
         createdAt:
-          $ref: '#/components/schemas/CreationDatetime'
+          $ref: '#/components/schemas/CreatedDatetime'
         updatedAt:
           $ref: '#/components/schemas/ModifiedDatetime'
         acronym:

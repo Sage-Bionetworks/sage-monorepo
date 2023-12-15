@@ -180,7 +180,7 @@ components:
       maxLength: 500
       nullable: true
       example: https://openchallenges.io
-    CreationDatetime:
+    CreatedDatetime:
       description: Datetime when metadata was added to the OC database.
       type: string
       format: date-time
@@ -219,7 +219,7 @@ components:
           default: 0
           example: 10
         createdAt:
-          $ref: '#/components/schemas/CreationDatetime'
+          $ref: '#/components/schemas/CreatedDatetime'
         updatedAt:
           $ref: '#/components/schemas/ModifiedDatetime'
         acronym:

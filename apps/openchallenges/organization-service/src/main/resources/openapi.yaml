@@ -271,7 +271,7 @@ components:
       maxLength: 500
       nullable: true
       type: string
-    CreationDatetime:
+    CreatedDatetime:
       description: Datetime when metadata was added to the OC database.
       example: 2022-07-04T22:19:11Z
       format: date-time

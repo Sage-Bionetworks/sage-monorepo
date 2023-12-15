@@ -1,7 +1,3 @@
-# Developing inside a Container
-
-## Overview
-
 This document describes how to configure and develop in the dev container specified by this
 repository. The goal is to provide developers with the same development environment that is mainly
 isolated from their host. This method promotes reproducibility and remove the need to install
