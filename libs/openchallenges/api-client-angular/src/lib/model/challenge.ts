@@ -70,11 +70,11 @@ export interface Challenge {
      */
     starredCount: number;
     /**
-     * Datetime when metadata was added to the OC database.
+     * Datetime when the object was added to the database.
      */
     createdAt: string;
     /**
-     * Datetime when metadata was last modified in the OC database.
+     * Datetime when the object was last modified in the database.
      */
     updatedAt: string;
 }
