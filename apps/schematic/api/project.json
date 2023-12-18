@@ -64,10 +64,7 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "xargs rm -fr <.openapi-generator/FILES", 
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
@@ -108,7 +105,21 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run tox",
+        "command": "poetry run pytest -m 'not secrets'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest -m 'secrets'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test-all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest",
         "cwd": "apps/schematic/api"
       }
     },

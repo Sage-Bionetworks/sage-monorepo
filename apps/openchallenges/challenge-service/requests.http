@@ -24,10 +24,6 @@ GET {{basePath}}/challenges?status=active,upcoming
 
 GET {{basePath}}/challenges?platforms=synapse
 
-### List the challenges with intermediate difficulty.
-
-GET {{basePath}}/challenges?difficulties=intermediate
-
 ### List the challenges with a container image submissions.
 
 GET {{basePath}}/challenges?submissionTypes=container_image
@@ -122,7 +118,7 @@ GET {{basePath}}/challengeInputDataTypes?searchTerms=genomic
 
 ### Get the challenge with ID 1.
 
-GET {{basePath}}/challenges/1
+GET {{basePath}}/challenges/67
 
 ### Get the contributions to the challenge with ID 1.
 

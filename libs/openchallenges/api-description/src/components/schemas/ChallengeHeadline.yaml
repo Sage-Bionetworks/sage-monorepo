@@ -2,4 +2,5 @@ description: The headline of the challenge.
 type: string
 minLength: 0
 maxLength: 80
+nullable: true
 example: Example challenge headline

@@ -178,14 +178,6 @@ components:
       enum:
         - asc
         - desc
-    ChallengeDifficulty:
-      description: The difficulty level of a challenge.
-      type: string
-      enum:
-        - good_for_beginners
-        - intermediate
-        - advanced
-      example: intermediate
     ChallengeIncentive:
       description: The incentive type of the challenge.
       type: string
@@ -268,11 +260,6 @@ components:
           nullable: true
         direction:
           $ref: '#/components/schemas/ChallengeDirection'
-        difficulties:
-          description: An array of challenge difficulty levels used to filter the results.
-          type: array
-          items:
-            $ref: '#/components/schemas/ChallengeDifficulty'
         incentives:
           description: An array of challenge incentive types used to filter the results.
           type: array
@@ -369,7 +356,7 @@ components:
       format: int64
       example: 1
     ChallengeSlug:
-      description: The slug of the challenge.
+      description: The unique slug of the challenge.
       type: string
       minLength: 3
       maxLength: 255
@@ -385,6 +372,7 @@ components:
       type: string
       minLength: 0
       maxLength: 80
+      nullable: true
       example: Example challenge headline
     ChallengeDescription:
       description: The description of the challenge.
@@ -392,6 +380,13 @@ components:
       minLength: 0
       maxLength: 1000
       example: This is an example description of the challenge.
+    ChallengeDoi:
+      description: The DOI of the challenge.
+      type: string
+      format: url
+      maxLength: 120
+      nullable: true
+      example: https://doi.org/123/abc
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
@@ -412,10 +407,18 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSlug'
         name:
           $ref: '#/components/schemas/ChallengePlatformName'
+      nullable: true
       required:
         - id
         - slug
         - name
+    Url:
+      description: A URL to the website or image.
+      type: string
+      format: url
+      maxLength: 500
+      nullable: true
+      example: https://openchallenges.io
     ChallengeInputDataTypeId:
       description: The unique identifier of a challenge input data type.
       type: integer
@@ -457,6 +460,16 @@ components:
       format: date
       nullable: true
       example: '2017-07-21'
+    CreatedDateTime:
+      description: Datetime when the object was added to the database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
+    UpdatedDateTime:
+      description: Datetime when the object was last modified in the database.
+      type: string
+      format: date-time
+      example: '2022-07-04T22:19:11Z'
     Challenge:
       type: object
       description: A challenge
@@ -472,19 +485,15 @@ components:
         description:
           $ref: '#/components/schemas/ChallengeDescription'
         doi:
-          type: string
+          $ref: '#/components/schemas/ChallengeDoi'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
-        difficulty:
-          $ref: '#/components/schemas/ChallengeDifficulty'
         platform:
           $ref: '#/components/schemas/SimpleChallengePlatform'
         websiteUrl:
-          type: string
-          format: url
+          $ref: '#/components/schemas/Url'
         avatarUrl:
-          type: string
-          format: url
+          $ref: '#/components/schemas/Url'
         incentives:
           type: array
           items:
@@ -505,22 +514,18 @@ components:
           description: The number of times the challenge has been starred by users.
           type: integer
           default: 0
+          minimum: 0
+          example: 100
         createdAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/CreatedDateTime'
         updatedAt:
-          type: string
-          format: date-time
-          example: '2022-07-04T22:19:11Z'
+          $ref: '#/components/schemas/UpdatedDateTime'
       required:
         - id
         - slug
         - name
         - description
         - status
-        - difficulty
-        - platform
         - incentives
         - submissionTypes
         - starredCount

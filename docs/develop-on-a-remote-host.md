@@ -1,7 +1,3 @@
-# Develop on a remote host
-
-## Introduction
-
 Team members who develop locally may not benefit from the same compute resources. The most notable
 resources that can impact the productivity of developers are the number and frequency of the CPU
 cores, the memory available and internet speed. The worse case is when a machine does not have the

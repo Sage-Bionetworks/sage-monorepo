@@ -1,0 +1,128 @@
+name: Schematic API CI
+on:
+  pull_request:
+    branches:
+      - main
+
+env:
+  NX_BRANCH: ${{ github.event.number }}
+  NX_RUN_GROUP: ${{ github.run_id }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
+  NX_CLOUD_ENV_NAME: 'linux'
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  DOCKER_USERNAME: ${{ github.actor }}
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  pr:
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    # Runs this job if:
+    # 1. Triggered by a PR 
+    # 2. The PR originate from the Schematic-API-Staging branch
+    # 3. Targets the main branch
+    if: |
+      github.event_name == 'pull_request' && 
+      github.event.pull_request.base.ref == 'main' &&
+      github.event.pull_request.head.ref == 'Schematic-API-Staging'
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          fetch-depth: 0
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Set up Yarn cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.yarn/cache'
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Set up Poetry cache
+        uses: actions/cache@v3
+        with:
+          path: '/tmp/.cache/pypoetry'
+          key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Set up venv cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.local/share/virtualenv
+            **/.venv
+          key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Set up Gradle cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            /tmp/.gradle/caches
+            /tmp/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Install the Dev Container CLI
+        run: npm install -g @devcontainers/cli@0.49.0
+
+      - name: Start the dev container
+        run: |
+          mkdir -p \
+            /tmp/.yarn/cache \
+            /tmp/.cache/R/renv/cache \
+            /tmp/.cache/pypoetry \
+            /tmp/.local/share/virtualenv \
+            /tmp/.gradle/caches \
+            /tmp/.gradle/wrapper
+
+          devcontainer up \
+            --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
+            --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
+            --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
+            --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
+            --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
+            --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
+            --workspace-folder ../sage-monorepo
+
+      - name: Prepare the workspace
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+            sudo chown -R vscode:vscode \
+              /workspaces/sage-monorepo \
+              /home/vscode/.cache \
+              /home/vscode/.local \
+              /home/vscode/.gradle \
+            && . ./dev-env.sh \
+            && workspace-install"
+
+      - name: create synapse config
+        run: |
+          import yaml
+          secrets = {
+              "synapse_token": "${{ secrets.SCHEMATIC_SYNAPSE_TOKEN }}",
+              "test_project": "${{ secrets.SCHEMATIC_TEST_PROJECT }}",
+              "test_dataset": "${{ secrets.SCHEMATIC_TEST_DATASET }}",
+              "test_manifest": "${{ secrets.SCHEMATIC_TEST_MANIFEST }}",
+              "test_asset_view": "${{ secrets.SCHEMATIC_TEST_ASSET_VIEW }}"
+          }
+          for key, secret in secrets.items():
+              assert secret is not None
+              assert isinstance(secret, str)
+              assert len(secret) > 0
+          with open('apps/schematic/api/schematic_api/test/data/synapse_config.yaml', 'w') as file:
+              yaml.dump(secrets, file)
+        shell: python
+
+      - name: Test the affected projects (all)
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx affected --target=test-all"
+
+      - name: Remove the dev container
+        run: docker rm -f sage_devcontainer
