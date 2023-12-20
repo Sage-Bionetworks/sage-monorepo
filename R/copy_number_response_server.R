@@ -45,11 +45,8 @@ copy_number_response_server <- function(id, cohort_obj) {
         )
       })
 
-      # TODO: fix when query_copy_number_result_genes is not slow
       gene_tbl  <- shiny::reactive(
-        # iatlasGraphQLClient::query_copy_number_result_genes(cohort_obj()$dataset)
-        iatlasGraphQLClient::query_genes(entrez = 1:100) %>%
-          dplyr::select("hgnc", "entrez")
+         iatlasGraphQLClient::query_copy_number_result_genes(cohort_obj()$dataset_names)
       )
 
       gene_set_tbl <- shiny::reactive(iatlasGraphQLClient::query_gene_types())

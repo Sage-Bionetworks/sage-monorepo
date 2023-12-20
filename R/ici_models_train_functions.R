@@ -268,8 +268,9 @@ get_training_object <- function(cohort_obj,
     rbind(iatlasGraphQLClient::query_feature_values(cohorts = cohort_obj$dataset_names, features = c("OS", "OS_time", "PFI_1", "PFI_time_1")) %>%
                        dplyr::select(sample_name = sample, feature_name, feature_value)) %>%
     dplyr::filter(sample_name %in% pre_treat_samples$sample_name) %>%
+    dplyr::distinct() %>%
     #dplyr::filter(dplyr::across(tidyselect::everything(), ~ !stringr::str_starts(., "na_"))) %>%
-    tidyr::pivot_wider(., names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
+    tidyr::pivot_wider(., id_cols = sample_name, names_from = feature_name, values_from = feature_value, values_fill = NA) %>%
     dplyr::inner_join(iatlasGraphQLClient::query_dataset_samples(datasets = cohort_obj$dataset_names), by = "sample_name")
 
   #subset dataset

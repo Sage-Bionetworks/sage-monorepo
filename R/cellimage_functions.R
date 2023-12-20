@@ -14,16 +14,16 @@ get_cellimage_features <- function(){
 }
 
 get_cellimage_gene_nodes <- function(dataset, tag, genes){
-
   nodes <-
     iatlasGraphQLClient::query_nodes(
       datasets = dataset,
       network = "Cellimage Network",
       entrez = genes,
-      tags = tag
+      tag1 = tag,
+      n_tags = 1
     ) %>%
     dplyr::select(
-      "tags" = "node_tags",
+      "tags" = "tag_1_name",
       "node_name",
       "node_feature_name" = "gene_entrez",
       "node_feature_display" = "gene_hgnc",
@@ -36,7 +36,7 @@ get_cellimage_gene_nodes <- function(dataset, tag, genes){
       "node_name",
       "node_feature_name",
       "node_feature_display",
-      "tag" = "name",
+      "tag" = "tags",
       "x",
       "y",
       "score"
@@ -48,15 +48,17 @@ get_cellimage_gene_nodes <- function(dataset, tag, genes){
 }
 
 get_cellimage_feature_nodes <- function(dataset, tag, features){
+
   nodes <-
     iatlasGraphQLClient::query_nodes(
       datasets = dataset,
       network = "Cellimage Network",
       features = features,
-      tags = tag
+      tag1 = tag,
+      n_tags = 1
     ) %>%
     dplyr::select(
-      "tags" = "node_tags",
+      "tags" = "tag_1_name",
       "node_name",
       "node_feature_name" = "feature_name",
       "node_feature_display" = "feature_display",
@@ -69,7 +71,7 @@ get_cellimage_feature_nodes <- function(dataset, tag, features){
       "node_name",
       "node_feature_name",
       "node_feature_display",
-      "tag" = "name",
+      "tag" = "tags",
       "x",
       "y",
       "score"

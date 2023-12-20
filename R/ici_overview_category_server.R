@@ -93,7 +93,7 @@ ici_overview_category_server <- function(
       observeEvent(input$method_link,{
         shiny::showModal(modalDialog(
                   title = "Method",
-                  includeMarkdown("inst/markdown/methods/ResponseICIPredictors.txt"),
+                  includeMarkdown("inst/markdown/methods/Response_ICI_Predictors.markdown"),
                   easyClose = TRUE,
                   footer = NULL
                 ))

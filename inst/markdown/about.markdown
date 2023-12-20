@@ -14,7 +14,7 @@ Eddy JA, Thorsson V, Lamb AE, Gibbs DL, Heimann C, Yu JX, Chung V, Chae Y, Dang 
 
 ### About CRI iAtlas Explorer
 
-The main feature of the iAtlas web tool is the **iAtlas Explorer**, which provides several *Analysis Modules* to explore and visualize results on immune response in cancer. Each module presents information organized by theme, with multiple views and interactive controls:
+The main feature of the iAtlas web tool is the **CRI iAtlas Explorer**, which provides several *Analysis Modules* to explore and visualize results on immune response in cancer. Each module presents information organized by theme, with multiple views and interactive controls:
 
 **Immune Checkpoint Inhibition Analysis Modules:**
 

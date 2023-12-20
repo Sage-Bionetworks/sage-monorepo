@@ -10,7 +10,8 @@ create_barplot <- function(
   ylab = "",
   title = "",
   source_name = NULL,
-  bar_colors = NULL ) {
+  bar_colors = NULL,
+  showlegend = T) {
 
   if(is.na(key_col)) key_col <- x_col
   if(is.na(color_col)) color_col <- x_col
@@ -33,6 +34,7 @@ create_barplot <- function(
       y = ~Y,
       color = ~COLOR,
       text = ~LABEL,
+      textposition = 'none',
       key = ~KEY,
       type = 'bar',
       source = source_name,
@@ -41,7 +43,8 @@ create_barplot <- function(
         array = ~ERROR,
         color = 'black',
         thickness = 1),
-      hoverinfo = 'text'
+      hoverinfo = 'text',
+      showlegend = showlegend
     )) %>%
     plotly::layout(
       legend = list(orientation = 'h', x = 0, y = 1),
