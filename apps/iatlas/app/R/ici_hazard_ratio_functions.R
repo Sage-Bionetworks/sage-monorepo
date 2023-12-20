@@ -1,7 +1,18 @@
-get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datasets_names, dataset_display){
+get_feature_by_dataset <- function(features, feature_df, gene_df, group_df, fmx_df, datasets_names, dataset_display){
   datasets <- unique(fmx_df$dataset_name)
   num_features <- features[which(features %in% feature_df$name)]
+  gene_features <- gene_df[which(gene_df$entrez %in% features),]$hgnc
   cat_features <- features[which(features %in% group_df$parent_tag_name)]
+
+  all_features <- data.frame(
+    dataset = NA_character_,
+    group= NA_character_,
+    group_label = NA_character_,
+    feature = NA_character_,
+    dataset_display = NA_character_,
+    ft_label = NA_character_
+  )
+
   #Organize numerical features
   if(length(num_features)>0){
     num_cols <- tidyr::crossing(dataset = datasets, name = num_features) %>%
@@ -13,6 +24,21 @@ get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datas
       dplyr::mutate(feature= group,
                     dataset_display = unname(dataset_display[dataset]),
                     ft_label = "Immune Feature")
+
+    all_features <- rbind(all_features, num_cols)
+  }
+  #organize gene expression
+  if(length(gene_features)>0){
+    gene_cols <- tidyr::crossing(dataset = datasets, name = gene_features) %>%
+      #dplyr::left_join(., gene_df %>% dplyr::select(name = entrez, display = hgnc), by = "display") %>%
+      dplyr::select(dataset,
+                    group = name,
+                    group_label = name) %>%
+      dplyr::rowwise() %>%
+      dplyr::mutate(feature= group,
+                    dataset_display = unname(dataset_display[dataset]),
+                    ft_label = "Gene Expression")
+    all_features <- rbind(all_features, gene_cols)
   }
   #Check which datasets have more than one level for categorical features
   if(length(cat_features)>0){
@@ -34,14 +60,12 @@ get_feature_by_dataset <- function(features, feature_df, group_df, fmx_df, datas
         dplyr::select(dataset, dataset_display, feature, ft_label = parent_tag_short_display, group, group_label)
 
     else return()
-    rbind(cat_cols, num_cols)
-  }else{
-    num_cols
+    all_features <- rbind(all_features, cat_cols)
   }
+  all_features %>% tidyr::drop_na()
 }
 
 fit_coxph <- function(dataset1, data, feature, time, status, ft_labels, multivariate = FALSE){
-
   data_cox <- data %>%
     dplyr::filter(dataset_name == dataset1)
 
