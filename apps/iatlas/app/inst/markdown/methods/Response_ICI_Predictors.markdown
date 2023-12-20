@@ -1,13 +1,13 @@
 **Title:** Predictors of Response to Immune Checkpoint Inhibitor immunotherapy
 
-**Description:** Potential predictors of response to Immune Checkpoint Inhibitors 
+**Description:** Potential predictors of response to Immune Checkpoint Inhibitors
   therapy were computed for all samples in the datasets in the Molecular Response to ICI modules.
 
 
 *Obtaining gene counts:* STAR v2.4.2(Dobin, et al., 2013) was used to align RNA-seq paired fastq reads to the transcript coordinates of hg38. Read mappings to gene isoforms were counted using Salmon v1.1.0(Patro, et al., 2017).  These isoform counts were mapped to genes using biomart(Durinck, et al., 2009) and summed for gene-level counts.
 
 
-*Diversity calculation:* RNA-seq paired fastq reads were processed using MiXCR v2.1.9(Bolotin, et al., 2015) using the IMGT v201802-5.sv2(Lefranc, 2011) library. Two partial alignments were performed with one extension phase.  Abundance was taken as the sum of reads for each clone. Richness was the total number of clones. Chao1(Chiu, et al., 2014) and Shannon entropy(Shannon, 1948) were calculated using the R Package vegan. Evenness was calculated as Shannon entropy / Log(Richness)(Pielou, 1966). d25, d50 and d75 (dXX) indices were calculated as described by VDJTools(Shugay, et al., 2015) GitHub repository: “The estimate equals to 1 - n / N, where n is the minimum number of clonotypes accounting for at least XX% of the total reads and code N is the total number of clonotypes in the sample.” 
+*Diversity calculation:* RNA-seq paired fastq reads were processed using MiXCR v2.1.9(Bolotin, et al., 2015) using the IMGT v201802-5.sv2(Lefranc, 2011) library. Two partial alignments were performed with one extension phase.  Abundance was taken as the sum of reads for each clone. Richness was the total number of clones. Chao1(Chiu, et al., 2014) and Shannon entropy(Shannon, 1948) were calculated using the R Package vegan. Evenness was calculated as Shannon entropy / Log(Richness)(Pielou, 1966). d25, d50 and d75 (dXX) indices were calculated as described by VDJTools(Shugay, et al., 2015) GitHub repository: “The estimate equals to 1 - n / N, where n is the minimum number of clonotypes accounting for at least XX% of the total reads and code N is the total number of clonotypes in the sample.”
 
 *CIBERSORTx:* CIBERSORTx scores were obtained as described(Newman, et al., 2019).
 
@@ -46,7 +46,7 @@ GO_TCR_Signaling(Gene Ontology terms 0050852 - GO:0050852)
 
 IglesiaVincent_BCell, IglesiaVincent_CD8, IglesiaVincent_CD68, IglesiaVincent_MacTh1, IglesiaVincent_TCell (Iglesia, et al., 2014)
 
-KardosChai_ImSuppress, KardosChai_EMT_DOWN, KardosChai_EMT_UP (Kardos, et al., 2016)  
+KardosChai_ImSuppress, KardosChai_EMT_DOWN, KardosChai_EMT_UP (Kardos, et al., 2016)
 
 Palmer_BCell, Palmer_CD8, Palmer_TCell(Palmer, et al., 2006)
 
@@ -79,8 +79,8 @@ Hugo_IPRES06 - IPRES08 minus 2 gene sets Hugo et.al. felt weren't similar
 Vincent_IPRES_Responder – Vincent Lab analysis of Hugo et.al. data; genes up in responders
 
 Vincent_IPRES_NonResponder - Vincent Lab analysis of Hugo data; genes up in non-responders
- 
- 
+
+
 **Datasets**
 
 Gide_Cell_2019(Gide, et al., 2019)

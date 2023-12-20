@@ -52,8 +52,8 @@ ici_distribution_server <- function(
       plot_function <- shiny::reactive({
         switch(
           input$plot_type,
-          "Violin" = create_violinplot,
-          "Box" = create_boxplot
+          "Box" = create_boxplot,
+          "Violin" = create_violinplot
         )
       })
 

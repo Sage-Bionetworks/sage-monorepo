@@ -14,9 +14,9 @@ build_distribution_io_df <- function(
   )
 
   df %>%
-    tidyr::drop_na() %>%
+    tidyr::drop_na(feature) %>%
     dplyr::mutate(y = scale_function(.[[feature]])) %>%
-    tidyr::drop_na() %>%
+    tidyr::drop_na(feature) %>%
     dplyr::filter(!is.infinite(y))
 }
 
@@ -74,31 +74,13 @@ get_plot_title <- function(dataset_name, dataset_display){
 
 create_plot_onegroup <- function(dataset_data, cohort_obj, dataset_display, plot_type, dataset, feature, group1, reorder_function = "None",  ylabel){
 
-
-  if (reorder_function == "None"){
     order_plot <- iatlasGraphQLClient::query_tags_with_parent_tags(parent_tags = cohort_obj$group_name) %>%
       dplyr::select(tag_short_display, tag_order, tag_color) %>%
       dplyr::arrange(tag_order) %>%
       dplyr::select(group = tag_short_display, color = tag_color)
 
-  } else {
-    reorder_method <- switch(
-      reorder_function,
-      "Median" = median,
-      "Mean" = mean,
-      "Max" = max,
-      "Min" = min
-    )
-    order_plot <- dataset_data %>%
-      dplyr::group_by(group, color) %>%
-      dplyr::summarise(m = reorder_method(.data[[feature]]), .groups = "drop") %>%
-      dplyr::arrange(.data$m) %>%
-      dplyr::select("group", "color")
-  }
-
   xform <- list(automargin = TRUE,
-                categoryorder = "array",
-                categoryarray = order_plot$group)
+                categoryorder = reorder_function)
 
   group_colors <- order_plot$color
   names(group_colors) <- order_plot$group
@@ -135,33 +117,13 @@ create_plot_twogroup <- function(dataset_data, cohort_obj, dataset_display, plot
                       by = "var2") %>%
     dplyr::arrange(order1, order2)
 
-  #ordering plot
-  if (reorder_function == "None"){
     order_plot <- samples %>%
       dplyr::select(group)
-  } else {
-    reorder_method <- switch(
-      reorder_function,
-      "Median" = median,
-      "Mean" = mean,
-      "Max" = max,
-      "Min" = min
-    )
 
-    order_plot <- dataset_data %>%
-      dplyr::group_by(group, color) %>%
-      dplyr::inner_join(samples, by = "group") %>%
-      dplyr::summarise(m = order1,
-                       n = reorder_method(.data[[feature]]), .groups = "drop") %>%
-      dplyr::arrange(.data$m,.data$n) %>%
-      dplyr::ungroup() %>%
-      dplyr::select(group)
-  }
 
   xform <- list(automargin = TRUE,
                 tickangle = 80,
-                categoryorder = "array",
-                categoryarray = order_plot$group
+                categoryorder = reorder_function
   )
 
   group_colors <- dataset_data %>%

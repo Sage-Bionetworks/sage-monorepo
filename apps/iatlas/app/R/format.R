@@ -153,7 +153,9 @@ format_plotly <- function(p) {
                 size = font_size),
             margin = get_margins(p, font_size)
         ) %>%
-        plotly::config(displayModeBar = T)
+        plotly::config(displayModeBar = T,
+                       toImageButtonOptions = list(
+                         format = "svg"))
 }
 
 add_title_subplot_plotly <- function(p, plot_title){
