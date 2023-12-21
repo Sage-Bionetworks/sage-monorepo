@@ -32,7 +32,7 @@ default:
     # - rm glibc-bin-${GLIBC_VER}.apk
     # - rm -rf /var/cache/apk/*
     - apk update
-    - apk add aws-cli
+    - apk add --no-cache aws-cli jq
     - aws --version
 
 stages:
