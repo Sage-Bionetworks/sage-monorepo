@@ -37,9 +37,9 @@ default:
 
 stages:
   - test_code
-  - publish_coverage
-  - build_container
-  - deploy
+  # - publish_coverage
+  # - build_container
+  # - deploy
 
 tests:
   tags:
