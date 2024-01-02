@@ -54,7 +54,7 @@ export class NavbarComponent {
     this.userMenuItemSelected.emit(menuItem);
   }
 
-  public onToggleSidenav = () => {
+  public onToggleSidenav(): void {
     this.sidenavToggle.emit();
   };
 }
