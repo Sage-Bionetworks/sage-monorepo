@@ -1,0 +1,8 @@
+name: pageMaxItems
+in: query
+description: The maximum number of items per page (up to 100,000) for paginated endpoints
+required: false
+schema:
+  type: integer
+  default: 100000
+  minimum: 1

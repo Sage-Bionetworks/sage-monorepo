@@ -68,8 +68,11 @@ paths:
   /schemaAttributes:
     $ref: paths/schemaAttributes.yaml
 
-  /connectedNodes:
-    $ref: paths/connectedNodes.yaml
+  /connectedNodePairArray:
+    $ref: paths/connectedNodePairArray.yaml
+
+  /connectedNodePairPage:
+    $ref: paths/connectedNodePairPage.yaml
 
   /validateManifestJson:
     $ref: paths/validateManifestJson.yaml

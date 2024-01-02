@@ -5,7 +5,12 @@ from typing import Tuple
 from typing import Union
 
 from schematic_api.models.basic_error import BasicError  # noqa: E501
-from schematic_api.models.connected_nodes_page import ConnectedNodesPage  # noqa: E501
+from schematic_api.models.connected_node_pair_array import (
+    ConnectedNodePairArray,
+)  # noqa: E501
+from schematic_api.models.connected_node_pair_page import (
+    ConnectedNodePairPage,
+)  # noqa: E501
 from schematic_api.models.node_properties_page import NodePropertiesPage  # noqa: E501
 from schematic_api.models.nodes_page import NodesPage  # noqa: E501
 from schematic_api.models.validation_rules_page import ValidationRulesPage  # noqa: E501
@@ -32,19 +37,44 @@ def get_component(component_label, schema_url, include_index=None):  # noqa: E50
     )
 
 
-def get_connected_nodes(schema_url, relationship_type):  # noqa: E501
-    """Gets a list of connected node pairs
+def get_connected_node_pair_array(schema_url, relationship_type):  # noqa: E501
+    """Gets an array of connected node pairs
 
-    Gets a list of connected node pairs # noqa: E501
+    Gets a array of connected node pairs # noqa: E501
 
     :param schema_url: The URL of a schema in jsonld form
     :type schema_url: str
     :param relationship_type: Type of relationship in a schema, such as requiresDependency
     :type relationship_type: str
 
-    :rtype: Union[ConnectedNodesPage, Tuple[ConnectedNodesPage, int], Tuple[ConnectedNodesPage, int, Dict[str, str]]
+    :rtype: Union[ConnectedNodePairArray, Tuple[ConnectedNodePairArray, int], Tuple[ConnectedNodePairArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_connected_nodes(schema_url, relationship_type)
+    return schema_controller_impl.get_connected_node_pair_array(
+        schema_url, relationship_type
+    )
+
+
+def get_connected_node_pair_page(
+    schema_url, relationship_type, page_number=None, page_max_items=None
+):  # noqa: E501
+    """Gets a page of connected node pairs
+
+    Gets a page of connected node pairs # noqa: E501
+
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+    :param relationship_type: Type of relationship in a schema, such as requiresDependency
+    :type relationship_type: str
+    :param page_number: The page number to get for a paginated query
+    :type page_number: int
+    :param page_max_items: The maximum number of items per page (up to 100,000) for paginated endpoints
+    :type page_max_items: int
+
+    :rtype: Union[ConnectedNodePairPage, Tuple[ConnectedNodePairPage, int], Tuple[ConnectedNodePairPage, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_connected_node_pair_page(
+        schema_url, relationship_type, page_number, page_max_items
+    )
 
 
 def get_node_is_required(node_display, schema_url):  # noqa: E501
