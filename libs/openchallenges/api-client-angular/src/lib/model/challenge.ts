@@ -11,7 +11,6 @@
  */
 import { SimpleChallengePlatform } from './simpleChallengePlatform';
 import { SimpleChallengeInputDataType } from './simpleChallengeInputDataType';
-import { ChallengeDifficulty } from './challengeDifficulty';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeIncentive } from './challengeIncentive';
 import { ChallengeSubmissionType } from './challengeSubmissionType';
@@ -26,7 +25,7 @@ export interface Challenge {
      */
     id: number;
     /**
-     * The slug of the challenge.
+     * The unique slug of the challenge.
      */
     slug: string;
     /**
@@ -36,17 +35,25 @@ export interface Challenge {
     /**
      * The headline of the challenge.
      */
-    headline?: string;
+    headline?: string | null;
     /**
      * The description of the challenge.
      */
     description: string;
-    doi?: string;
+    /**
+     * The DOI of the challenge.
+     */
+    doi?: string | null;
     status: ChallengeStatus;
-    difficulty: ChallengeDifficulty;
-    platform: SimpleChallengePlatform;
-    websiteUrl?: string;
-    avatarUrl?: string;
+    platform?: SimpleChallengePlatform | null;
+    /**
+     * A URL to the website or image.
+     */
+    websiteUrl?: string | null;
+    /**
+     * A URL to the website or image.
+     */
+    avatarUrl?: string | null;
     incentives: Array<ChallengeIncentive>;
     submissionTypes: Array<ChallengeSubmissionType>;
     inputDataTypes?: Array<SimpleChallengeInputDataType>;
@@ -62,7 +69,13 @@ export interface Challenge {
      * The number of times the challenge has been starred by users.
      */
     starredCount: number;
+    /**
+     * Datetime when the object was added to the database.
+     */
     createdAt: string;
+    /**
+     * Datetime when the object was last modified in the database.
+     */
     updatedAt: string;
 }
 

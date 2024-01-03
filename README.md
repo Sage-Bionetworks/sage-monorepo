@@ -106,10 +106,12 @@ Join the conversation and help the community.
 
 - TODO: Add Slack or Discord
 
-## Projects
+## Products
 
-- OpenChallenges
-- Schematic (evaluation)
+- Agora (evaluation)
+- iAtlas
+- OpenChallenge
+- Schematic
 - Synapse (evaluation)
 
 Love Sage Monorepo and its projects? Give our repo a star ⭐.

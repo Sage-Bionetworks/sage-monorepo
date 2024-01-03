@@ -21,7 +21,6 @@ model/challengeContribution.ts
 model/challengeContributionRole.ts
 model/challengeContributionsPage.ts
 model/challengeContributionsPageAllOf.ts
-model/challengeDifficulty.ts
 model/challengeDirection.ts
 model/challengeIncentive.ts
 model/challengeInputDataType.ts

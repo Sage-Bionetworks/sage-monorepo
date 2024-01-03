@@ -1,17 +1,3 @@
-# Create a new Angular App Component
-
-In this document:
-
-- [Overview](#overview)
-- [Create a new Angular library](#1-create-a-new-angular-library)
-- [Create a new Angular component](#2-create-a-new-angular-component)
-- [Add routing](#3-add-routing)
-- [Time to test! ☕](#4-time-to-test-)
-- [Import code from the Figma-to-Code export](#5-import-code-from-the-figma-to-code-export)
-- [Update themes](#6-update-themes)
-
-## Overview
-
 This doc describes how to create a new library + component in the OpenChallenges app, though
 the steps can be applied to any app in this project. This doc will also include information on
 where/how to copy-paste code from the [Figma-to-code export] into the app (starting at [Step 5]).

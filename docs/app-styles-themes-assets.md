@@ -1,7 +1,3 @@
-# App Styles, Themes and Assets
-
-## Overview
-
 This document describes how SCSS styles, themes and assets are organized across a web app and its
 libraries.
 
