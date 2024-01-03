@@ -28,7 +28,7 @@ explorepage_ui <- function(){
     shinydashboard::sidebarMenu(
       id = "explorertabs",
       shinydashboard::menuItem(
-        "iAtlas Explorer Home",
+        "CRI iAtlas Explorer Home",
         tabName = "dashboard",
         icon = shiny::icon("tachometer-alt")
       ),
@@ -61,7 +61,7 @@ explorepage_ui <- function(){
         sc_module_menu_items
       ),
       shinydashboard::menuItem(
-        text = "iAtlas tools",
+        text = "CRI iAtlas tools",
         icon = shiny::icon("wrench"),
         startExpanded = TRUE,
         tool_module_menu_items
@@ -133,7 +133,7 @@ explorepage_ui <- function(){
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
     tabName = "dashboard",
-    iatlas.modules::titleBox("iAtlas Explorer - Home"),
+    iatlas.modules::titleBox("CRI iAtlas Explorer - Home"),
     iatlas.modules::sectionBox(
       title = "What's Inside",
       shiny::column(

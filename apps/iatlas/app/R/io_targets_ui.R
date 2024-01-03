@@ -3,7 +3,7 @@ io_targets_ui <- function(id) {
   ns <- shiny::NS(id)
 
   shiny::tagList(
-    iatlas.modules::titleBox("iAtlas Explorer — IO Targets"),
+    iatlas.modules::titleBox("CRI iAtlas Explorer — IO Targets"),
     iatlas.modules::textBox(
       width = 12,
       shiny::includeMarkdown(get_markdown_path("io_target"))
