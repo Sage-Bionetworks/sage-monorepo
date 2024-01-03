@@ -42,8 +42,9 @@ schematic_api/models/project.py
 schematic_api/models/projects_page.py
 schematic_api/models/projects_page_all_of.py
 schematic_api/models/validation_rule.py
-schematic_api/models/validation_rules_page.py
-schematic_api/models/validation_rules_page_all_of.py
+schematic_api/models/validation_rule_array.py
+schematic_api/models/validation_rule_page.py
+schematic_api/models/validation_rule_page_all_of.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
 schematic_api/typing_utils.py

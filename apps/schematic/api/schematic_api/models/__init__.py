@@ -35,5 +35,6 @@ from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
 from schematic_api.models.projects_page_all_of import ProjectsPageAllOf
 from schematic_api.models.validation_rule import ValidationRule
-from schematic_api.models.validation_rules_page import ValidationRulesPage
-from schematic_api.models.validation_rules_page_all_of import ValidationRulesPageAllOf
+from schematic_api.models.validation_rule_array import ValidationRuleArray
+from schematic_api.models.validation_rule_page import ValidationRulePage
+from schematic_api.models.validation_rule_page_all_of import ValidationRulePageAllOf

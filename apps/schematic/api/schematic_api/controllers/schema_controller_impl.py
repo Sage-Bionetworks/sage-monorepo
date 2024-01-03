@@ -8,8 +8,9 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_property import NodeProperty
 from schematic_api.models.node_property_array import NodePropertyArray
 from schematic_api.models.node_property_page import NodePropertyPage
-from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rule import ValidationRule
+from schematic_api.models.validation_rule_array import ValidationRuleArray
+from schematic_api.models.validation_rule_page import ValidationRulePage
 from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
 from schematic_api.models.node_page import NodePage
@@ -325,10 +326,10 @@ def get_node_property_page(
     return result, status
 
 
-def get_node_validation_rules(
+def get_node_validation_rules_from_schematic(
     node_display: str,
     schema_url: str,
-) -> list[str]:
+) -> list[ValidationRule]:
     """Gets the validation_rules associated with the node
 
     Args:
@@ -336,46 +337,75 @@ def get_node_validation_rules(
         node_display (str): The display name of the node
 
     Returns:
-        list[str]: A list of validation_rules of the node
+        list[ValidationRule]: A list of validation_rules of the node
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    return schema_generator.get_node_validation_rules(node_display)  # type: ignore
+    rules = schema_generator.get_node_validation_rules(node_display)  # type: ignore
+    return [ValidationRule(rule) for rule in rules]
 
 
 @handle_exceptions
-def list_node_validation_rules(
+def get_node_validation_rule_array(
     node_display: str,
     schema_url: str,
-) -> tuple[Union[ValidationRulesPage, BasicError], int]:
-    """Lists the validation rules associated with the node
+) -> tuple[Union[ValidationRuleArray, BasicError], int]:
+    """Gets the validation rules associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
         node_display(str): The display name of the node
 
     Returns:
-        tuple[Union[AttributesPage, BasicError], int]: A tuple
+        tuple[Union[ValidationRuleArray, BasicError], int]: A tuple
           The first item is either the validation rules or an error object
           The second item is the response status
     """
-
-    validation_rules = [
-        ValidationRule(attribute)
-        for attribute in get_node_validation_rules(node_display, schema_url)
-    ]
-
-    page = ValidationRulesPage(
-        number=0,
-        size=100,
-        total_elements=len(validation_rules),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        validation_rules=validation_rules,
+    validation_rules = get_node_validation_rules_from_schematic(
+        node_display, schema_url
     )
-    result: Union[ValidationRulesPage, BasicError] = page
+    result: Union[ValidationRuleArray, BasicError] = ValidationRuleArray(
+        validation_rules
+    )
     status = 200
+    return result, status
 
+
+@handle_exceptions
+def get_node_validation_rule_page(
+    node_display: str,
+    schema_url: str,
+    page_number: int = 1,
+    page_max_items: int = 100000,
+) -> tuple[Union[ValidationRulePage, BasicError], int]:
+    """Gets the validation rules associated with the node
+
+    Args:
+        schema_url (str): The URL of the schema in jsonld form
+        node_display(str): The display name of the node
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[Union[ValidationRulePage, BasicError], int]: A tuple
+          The first item is either the validation rules or an error object
+          The second item is the response status
+    """
+    # pylint: disable=duplicate-code
+    validation_rules = get_node_validation_rules_from_schematic(
+        node_display, schema_url
+    )
+    page = Page(validation_rules, page_number, page_max_items)
+    rules_page = ValidationRulePage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        validation_rules=page.items,
+    )
+    result: Union[ValidationRulePage, BasicError] = rules_page
+    status = 200
     return result, status
 
 

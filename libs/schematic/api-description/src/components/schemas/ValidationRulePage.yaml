@@ -5,7 +5,7 @@ allOf:
   - type: object
     properties:
       validation_rules:
-        description: A list of validation rules.
+        description: An array of validation rules.
         type: array
         items:
           $ref: ValidationRule.yaml

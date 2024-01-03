@@ -477,7 +477,7 @@ paths:
                 $ref: '#/components/schemas/PropertyLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/validationRules:
+  /nodes/{nodeDisplay}/validationRuleArray:
     parameters:
       - $ref: '#/components/parameters/nodeDisplay'
     get:
@@ -485,7 +485,7 @@ paths:
         - Schema
       summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
       description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: listNodeValidationRules
+      operationId: getNodeValidationRuleArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -494,7 +494,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationRulesPage'
+                $ref: '#/components/schemas/ValidationRuleArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeDisplay}/validationRulePage:
+    parameters:
+      - $ref: '#/components/parameters/nodeDisplay'
+    get:
+      tags:
+        - Schema
+      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
+      operationId: getNodeValidationRulePage
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationRulePage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /components/{componentLabel}/:
@@ -1128,7 +1148,16 @@ components:
         - name
       x-java-class-annotations:
         - '@lombok.Builder'
-    ValidationRulesPage:
+    ValidationRuleArray:
+      type: object
+      description: An array of validation rules.
+      properties:
+        validation_rules:
+          description: An array of validation rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationRule'
+    ValidationRulePage:
       type: object
       description: A page of validation rules.
       allOf:
@@ -1136,7 +1165,7 @@ components:
         - type: object
           properties:
             validation_rules:
-              description: A list of validation rules.
+              description: An array of validation rules.
               type: array
               items:
                 $ref: '#/components/schemas/ValidationRule'

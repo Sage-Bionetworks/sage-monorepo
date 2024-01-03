@@ -15,7 +15,8 @@ from schematic_api.models.node_array import NodeArray  # noqa: E501
 from schematic_api.models.node_page import NodePage  # noqa: E501
 from schematic_api.models.node_property_array import NodePropertyArray  # noqa: E501
 from schematic_api.models.node_property_page import NodePropertyPage  # noqa: E501
-from schematic_api.models.validation_rules_page import ValidationRulesPage  # noqa: E501
+from schematic_api.models.validation_rule_array import ValidationRuleArray  # noqa: E501
+from schematic_api.models.validation_rule_page import ValidationRulePage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
@@ -192,6 +193,40 @@ def get_node_property_page(
     )
 
 
+def get_node_validation_rule_array(node_display, schema_url):  # noqa: E501
+    """Gets the validation rules, along with the arguments for each given rule associated with a given node
+
+    Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
+
+    :param node_display: The display name of the node in a schema
+    :type node_display: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[ValidationRuleArray, Tuple[ValidationRuleArray, int], Tuple[ValidationRuleArray, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_node_validation_rule_array(
+        node_display, schema_url
+    )
+
+
+def get_node_validation_rule_page(node_display, schema_url):  # noqa: E501
+    """Gets the validation rules, along with the arguments for each given rule associated with a given node
+
+    Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
+
+    :param node_display: The display name of the node in a schema
+    :type node_display: str
+    :param schema_url: The URL of a schema in jsonld form
+    :type schema_url: str
+
+    :rtype: Union[ValidationRulePage, Tuple[ValidationRulePage, int], Tuple[ValidationRulePage, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_node_validation_rule_page(
+        node_display, schema_url
+    )
+
+
 def get_property_label(
     node_display, schema_url, use_strict_camel_case=None
 ):  # noqa: E501
@@ -224,18 +259,3 @@ def get_schema_attributes(schema_url):  # noqa: E501
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     return schema_controller_impl.get_schema_attributes(schema_url)
-
-
-def list_node_validation_rules(node_display, schema_url):  # noqa: E501
-    """Gets the validation rules, along with the arguments for each given rule associated with a given node
-
-    Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
-
-    :param node_display: The display name of the node in a schema
-    :type node_display: str
-    :param schema_url: The URL of a schema in jsonld form
-    :type schema_url: str
-
-    :rtype: Union[ValidationRulesPage, Tuple[ValidationRulesPage, int], Tuple[ValidationRulesPage, int, Dict[str, str]]
-    """
-    return schema_controller_impl.list_node_validation_rules(node_display, schema_url)
