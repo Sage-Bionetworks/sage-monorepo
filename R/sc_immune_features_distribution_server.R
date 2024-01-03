@@ -1,4 +1,4 @@
-sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feature_op){
+sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feature_op, clinical_info){
   shiny::moduleServer(
     id,
     function(input, output, session) {
@@ -25,15 +25,16 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         )
       })
 
-      # output$group2 <- renderUI({
-      #   #Second level group option
-      #   selectInput(
-      #     ns("groupvar2"),
-      #     "Select extra Sample Group (optional)",
-      #     c("None" = "None"),
-      #     selected = "None"
-      #   )
-      # })
+      output$group2 <- renderUI({
+        #Second level group option
+        selectInput(
+          ns("groupvar2"),
+          "Select extra Sample Group (optional)",
+          c("None" = "None",
+            "Responder" = "Responder"),
+          selected = "None"
+        )
+      })
 
       output$excluded_dataset <- shiny::renderText({
         "" #update once we have the sc data into the cohort object
@@ -87,9 +88,25 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       df_selected <- shiny::reactive({
         shiny::req(gsea_df(), input$var1_surv)
-        gsea_df() %>%
+        samples <- gsea_df() %>%
           dplyr::filter(feature_name == input$var1_surv) %>%
           build_distribution_io_df(., "feature_value", input$scale_method)
+
+        if(input$groupvar2 != "None"){
+          # samples %>%
+          #   dplyr::rename(group = group_name)
+        #}else{
+          samples <- samples %>%
+            dplyr::left_join(dplyr::select(clinical_info(), HTAN_Assayed_Biospecimen_ID, Responder), by = dplyr::join_by("sample_name" == "HTAN_Assayed_Biospecimen_ID")) %>%
+            dplyr::mutate(Responder = dplyr::if_else(
+              sample_name == "sum",
+              "sum",
+              Responder
+            ),
+            group_name = paste(group, Responder, sep = " - ")) %>%
+            dplyr::select("feature_name", "feature_value", "dataset_name", "sample_name", "group" = group_name, "y")
+        }
+        samples
       })
 
       dataset_displays <- shiny::reactive({
@@ -99,7 +116,9 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       group_colors <- shiny::reactive({
         shiny::req(df_selected())
-        setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
+        group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(df_selected()$group))
+        setNames(group_colors, unique(df_selected()$group))
+        #setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
       })
 
       output$dist_plots <- plotly::renderPlotly({
