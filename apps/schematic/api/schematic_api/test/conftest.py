@@ -45,6 +45,14 @@ MANIFEST_METADATA_KEYS = [
     "name",
 ]
 
+PAGING_KEYS = [
+    "hasNext",
+    "hasPrevious",
+    "number",
+    "size",
+    "totalElements",
+    "totalPages",
+]
 
 @pytest.fixture(scope="session", name="example_manifest_metadata")
 def fixture_example_manifest_metadata() -> Generator:

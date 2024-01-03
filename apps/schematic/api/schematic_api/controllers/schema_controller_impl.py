@@ -9,8 +9,9 @@ from schematic_api.models.node_properties_page import NodePropertiesPage
 from schematic_api.models.node_property import NodeProperty
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rule import ValidationRule
-from schematic_api.models.nodes_page import NodesPage
 from schematic_api.models.node import Node
+from schematic_api.models.node_array import NodeArray
+from schematic_api.models.node_page import NodePage
 from schematic_api.models.connected_node_pair_array import ConnectedNodePairArray
 from schematic_api.models.connected_node_pair_page import ConnectedNodePairPage
 from schematic_api.models.connected_node_pair import ConnectedNodePair
@@ -353,12 +354,12 @@ def list_node_validation_rules(
     return result, status
 
 
-def get_node_dependencies(
+def get_node_dependencies_from_schematic(
     node_label: str,
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
-) -> list[str]:
+) -> list[Node]:
     """Gets the nodes that the input node is dependent on
 
     Args:
@@ -370,25 +371,26 @@ def get_node_dependencies(
           the schema, otherwise random
 
     Returns:
-        list[str]: A list of node labels or display names
+        list[Node]: A list of nodes
 
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    return schema_generator.get_node_dependencies(
+    nodes = schema_generator.get_node_dependencies(
         source_node=node_label,
         display_names=return_display_names,
         schema_ordered=return_ordered_by_schema,
     )
+    return [Node(node) for node in nodes]
 
 
 @handle_exceptions
-def list_node_dependencies(
+def get_node_dependency_array(
     node_label: str,
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
-) -> tuple[Union[NodesPage, BasicError], int]:
-    """Lists the attributes that the input attribute is dependent on
+) -> tuple[Union[NodeArray, BasicError], int]:
+    """Gets the nodes that the input node is dependent on
 
     Args:
         node_label (str): The label of the node to get dependencies for
@@ -399,28 +401,61 @@ def list_node_dependencies(
           the schema, otherwise random
 
     Returns:
-        tuple[Union[NodesPage, BasicError], int]: A tuple
-          The first item is either the attributes or an error object
+        tuple[Union[NodeArray, BasicError], int]: A tuple
+          The first item is either the nodes or an error object
           The second item is the response status
     """
 
-    nodes = [
-        Node(node)
-        for node in get_node_dependencies(
-            node_label, schema_url, return_display_names, return_ordered_by_schema
-        )
-    ]
-
-    page = NodesPage(
-        number=0,
-        size=100,
-        total_elements=len(nodes),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        nodes=nodes,
+    nodes = get_node_dependencies_from_schematic(
+        node_label, schema_url, return_display_names, return_ordered_by_schema
     )
-    result: Union[NodesPage, BasicError] = page
+    result: Union[NodeArray, BasicError] = NodeArray(nodes)
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_node_dependency_page(  # pylint: disable=too-many-arguments
+    node_label: str,
+    schema_url: str,
+    return_display_names: bool = True,
+    return_ordered_by_schema: bool = True,
+    page_number: int = 1,
+    page_max_items: int = 100000,
+) -> tuple[Union[NodePage, BasicError], int]:
+    """Gets the nodes that the input node is dependent on
+
+    Args:
+        node_label (str): The label of the node to get dependencies for
+        schema_url (str): The URL of the schema in json form
+        return_display_names (bool): Whether or not to return the display names of the dependencies,
+          otherwise the label
+        return_ordered_by_schema (bool):Whether or not to order the dependencies by their order in
+          the schema, otherwise random
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[Union[NodePage, BasicError], int]: A tuple
+          The first item is either the nodes or an error object
+          The second item is the response status
+    """
+    # pylint: disable=duplicate-code
+    nodes = get_node_dependencies_from_schematic(
+        node_label, schema_url, return_display_names, return_ordered_by_schema
+    )
+    page = Page(nodes, page_number, page_max_items)
+
+    node_page = NodePage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        nodes=page.items,
+    )
+    result: Union[NodePage, BasicError] = node_page
     status = 200
 
     return result, status

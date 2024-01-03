@@ -4,7 +4,7 @@
 import unittest
 
 from schematic_api.test import BaseTestCase
-from .conftest import TEST_SCHEMA_URL
+from .conftest import TEST_SCHEMA_URL, PAGING_KEYS
 
 HEADERS = {
     "Accept": "application/json",
@@ -19,7 +19,8 @@ PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
 NODE_PROPERTIES_URL = "/api/v1/nodes/MolecularEntity/nodeProperties?schemaUrl="
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/CheckRegexList/validationRules?schemaUrl="
-NODE_DEPENDENCIES_URL = "/api/v1/nodes/Patient/dependencies?schemaUrl="
+NODE_DEPENDENCY_ARRAY_URL = "/api/v1/nodes/Patient/dependencyArray?schemaUrl="
+NODE_DEPENDENCY_PAGE_URL = "/api/v1/nodes/Patient/dependencyPage?schemaUrl="
 
 
 class TestGetComponent(BaseTestCase):
@@ -82,6 +83,7 @@ class TestGetConnectedNodePairPage(BaseTestCase):
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         result = response.json
         assert isinstance(result, dict)
+        assert list(result.keys()) == sorted(PAGING_KEYS + ["connectedNodes"])
         assert result["number"] == 1
         assert result["size"] == 100000
         assert not result["hasNext"]
@@ -199,45 +201,98 @@ class TestNodeValidationRules(BaseTestCase):
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
-class TestNodeDependencies(BaseTestCase):
+class TestGetNodeDependencyArray(BaseTestCase):
     """Test case for node depencencies endpoint"""
 
     def test_success(self) -> None:
         """Test for successful result"""
-        url = f"{NODE_DEPENDENCIES_URL}{TEST_SCHEMA_URL}"
+        url = f"{NODE_DEPENDENCY_ARRAY_URL}{TEST_SCHEMA_URL}"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
-        assert not response.json["hasNext"]
-        assert not response.json["hasPrevious"]
-        assert response.json["number"] == 0
-        assert response.json["size"] == 100
-        assert response.json["totalPages"] == 1
-        dependencies = response.json["nodes"]
-        assert dependencies
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == ["nodes"]
+        assert isinstance(result["nodes"], list)
+        for item in result["nodes"]:
+            assert isinstance(item, dict)
+            assert list(item.keys()) == ["name"]
+            assert isinstance(item["name"], str)
 
     def test_return_display_names(self) -> None:
         """Test for returnDisplayNames parameter"""
-        url = f"{NODE_DEPENDENCIES_URL}{TEST_SCHEMA_URL}&returnDisplayNames=true"
+        url = f"{NODE_DEPENDENCY_ARRAY_URL}{TEST_SCHEMA_URL}&returnDisplayNames=true"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
-        url = f"{NODE_DEPENDENCIES_URL}{TEST_SCHEMA_URL}&returnDisplayNames=false"
+        url = f"{NODE_DEPENDENCY_ARRAY_URL}{TEST_SCHEMA_URL}&returnDisplayNames=false"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
     def test_return_ordered_by_schema(self) -> None:
         """Test for returnOrderedBySchema parameter"""
-        url = f"{NODE_DEPENDENCIES_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=true"
+        url = f"{NODE_DEPENDENCY_ARRAY_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=true"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
-        url = f"{NODE_DEPENDENCIES_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=false"
+        url = (
+            f"{NODE_DEPENDENCY_ARRAY_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=false"
+        )
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
 
     def test_500(self) -> None:
         """Test for 500 result"""
-        url = f"{NODE_DEPENDENCIES_URL}not_a_url"
+        url = f"{NODE_DEPENDENCY_ARRAY_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetNodeDependencyPage(BaseTestCase):
+    """Test case for node depencencies endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{NODE_DEPENDENCY_PAGE_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == sorted(PAGING_KEYS + ["nodes"])
+        assert result["number"] == 1
+        assert result["size"] == 100000
+        assert not result["hasNext"]
+        assert not result["hasPrevious"]
+        assert result["totalPages"] == 1
+        assert isinstance(result["totalElements"], int)
+        assert isinstance(result["nodes"], list)
+        for item in result["nodes"]:
+            assert isinstance(item, dict)
+            assert list(item.keys()) == ["name"]
+            assert isinstance(item["name"], str)
+
+    def test_return_display_names(self) -> None:
+        """Test for returnDisplayNames parameter"""
+        url = f"{NODE_DEPENDENCY_PAGE_URL}{TEST_SCHEMA_URL}&returnDisplayNames=true"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        url = f"{NODE_DEPENDENCY_PAGE_URL}{TEST_SCHEMA_URL}&returnDisplayNames=false"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+    def test_return_ordered_by_schema(self) -> None:
+        """Test for returnOrderedBySchema parameter"""
+        url = f"{NODE_DEPENDENCY_PAGE_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=true"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        url = f"{NODE_DEPENDENCY_PAGE_URL}{TEST_SCHEMA_URL}&returnOrderedBySchema=false"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        url = f"{NODE_DEPENDENCY_PAGE_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 

@@ -347,7 +347,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/dependencies:
+  /nodes/{nodeLabel}/dependencyArray:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
@@ -355,7 +355,7 @@ paths:
         - Schema
       summary: Gets the immediate dependencies that are related to the given source node
       description: Gets the immediate dependencies that are related to the given source node
-      operationId: listNodeDependencies
+      operationId: getNodeDependencyArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/returnDisplayNames'
@@ -366,7 +366,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodesPage'
+                $ref: '#/components/schemas/NodeArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/dependencyPage:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the immediate dependencies that are related to the given source node
+      description: Gets the immediate dependencies that are related to the given source node
+      operationId: getNodeDependencyPage
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/isRequired:
@@ -998,7 +1022,16 @@ components:
         - name
       x-java-class-annotations:
         - '@lombok.Builder'
-    NodesPage:
+    NodeArray:
+      type: object
+      description: An array of nodes.
+      properties:
+        nodes:
+          description: An array of nodes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+    NodePage:
       type: object
       description: A page of nodes.
       allOf:
@@ -1006,7 +1039,7 @@ components:
         - type: object
           properties:
             nodes:
-              description: A list of nodes.
+              description: An array of nodes.
               type: array
               items:
                 $ref: '#/components/schemas/Node'

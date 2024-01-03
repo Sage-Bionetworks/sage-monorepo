@@ -30,11 +30,12 @@ schematic_api/models/manifest_metadata_page.py
 schematic_api/models/manifest_metadata_page_all_of.py
 schematic_api/models/manifest_validation_result.py
 schematic_api/models/node.py
+schematic_api/models/node_array.py
+schematic_api/models/node_page.py
+schematic_api/models/node_page_all_of.py
 schematic_api/models/node_properties_page.py
 schematic_api/models/node_properties_page_all_of.py
 schematic_api/models/node_property.py
-schematic_api/models/nodes_page.py
-schematic_api/models/nodes_page_all_of.py
 schematic_api/models/page_metadata.py
 schematic_api/models/project.py
 schematic_api/models/projects_page.py
