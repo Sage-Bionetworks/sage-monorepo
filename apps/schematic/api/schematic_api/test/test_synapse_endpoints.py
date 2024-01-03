@@ -143,11 +143,28 @@ class TestStorageEndpoints(BaseTestCase):
             for key in ["id", "name"]:
                 assert key in project
 
-    def test_get_project_datasets(self) -> None:
+    def test_get_project_dataset_metadata_array(self) -> None:
         """Test for successful result"""
         url = (
             "/api/v1/assetTypes/synapse/"
-            f"projects/{TEST_PROJECT}/datasets"
+            f"projects/{TEST_PROJECT}/datasetMetadataArray"
+            f"?assetViewId={TEST_ASSET_VIEW}"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, dict)
+        assert "datasets" in response.json
+        assert isinstance(response.json["datasets"], list)
+        for dataset in response.json["datasets"]:
+            assert isinstance(dataset, dict)
+            for key in ["id", "name"]:
+                assert key in dataset
+
+    def test_get_project_dataset_metadata_page(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"projects/{TEST_PROJECT}/datasetMetadataPage"
             f"?assetViewId={TEST_ASSET_VIEW}"
         )
         response = self.client.open(url, method="GET", headers=HEADERS)

@@ -4,9 +4,9 @@ parameters:
 get:
   tags:
     - Storage
-  summary: Gets all datasets in folder under a given storage project that the current user has access to.
-  description: Gets all datasets in folder under a given storage project that the current user has access to.
-  operationId: getProjectDatasets
+  summary: Gets all dataset metadata in folder under a given storage project that the current user has access to.
+  description: Gets all dataset meatdata in folder under a given storage project that the current user has access to.
+  operationId: getProjectDatasetMetadataArray
   parameters:
     - $ref: ../../../../../components/parameters/query/assetViewIdQuery.yaml
   security:
@@ -17,7 +17,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../../../components/schemas/DatasetsPage.yaml
+            $ref: ../../../../../components/schemas/DatasetMetadataArray.yaml
     '400':
       $ref: ../../../../../components/responses/BadRequest.yaml
     '401':

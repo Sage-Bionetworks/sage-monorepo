@@ -117,6 +117,7 @@ def get_connected_node_pair_page(
           The first item is either the connected nodes or an error object
           The second item is the response status
     """
+    # pylint: disable=duplicate-code
 
     connected_nodes = get_connected_node_pairs_from_schematic(
         relationship_type, schema_url

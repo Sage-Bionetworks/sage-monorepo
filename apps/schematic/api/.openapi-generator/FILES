@@ -16,9 +16,10 @@ schematic_api/models/connected_node_pair.py
 schematic_api/models/connected_node_pair_array.py
 schematic_api/models/connected_node_pair_page.py
 schematic_api/models/connected_node_pair_page_all_of.py
-schematic_api/models/dataset.py
-schematic_api/models/datasets_page.py
-schematic_api/models/datasets_page_all_of.py
+schematic_api/models/dataset_metadata.py
+schematic_api/models/dataset_metadata_array.py
+schematic_api/models/dataset_metadata_page.py
+schematic_api/models/dataset_metadata_page_all_of.py
 schematic_api/models/file.py
 schematic_api/models/files_page.py
 schematic_api/models/files_page_all_of.py

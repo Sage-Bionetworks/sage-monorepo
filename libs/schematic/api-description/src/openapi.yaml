@@ -26,8 +26,11 @@ paths:
   /schematicVersion:
     $ref: paths/schematicVersion.yaml
 
-  /assetTypes/{assetType}/projects/{projectId}/datasets:
-    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasets.yaml
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasetMetadataArray.yaml
+
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasetMetadataPage.yaml
 
   /assetTypes/{assetType}/projects/{projectId}/manifests:
     $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifests.yaml

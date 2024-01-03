@@ -1,5 +1,5 @@
 type: object
-description: A dataset.
+description: The metadata of a dataset.
 properties:
   name:
     type: string

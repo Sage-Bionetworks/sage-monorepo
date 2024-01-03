@@ -1,4 +1,5 @@
 """Tests for schema endpoint functions"""
+# pylint: disable=duplicate-code
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_properties_page import NodePropertiesPage

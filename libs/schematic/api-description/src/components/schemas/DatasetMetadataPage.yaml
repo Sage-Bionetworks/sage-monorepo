@@ -1,14 +1,14 @@
 type: object
-description: A page of datasets.
+description: A page of dataset metadata.
 allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
       datasets:
-        description: A list of datasets.
+        description: An array of dataset meatdata.
         type: array
         items:
-          $ref: Dataset.yaml
+          $ref: DatasetMetadata.yaml
     required:
       - datasets
 x-java-class-annotations:

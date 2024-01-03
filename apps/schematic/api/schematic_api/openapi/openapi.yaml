@@ -382,11 +382,11 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /assetTypes/{assetType}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
     get:
-      description: Gets all datasets in folder under a given storage project that
-        the current user has access to.
-      operationId: get_project_datasets
+      description: Gets all dataset meatdata in folder under a given storage project
+        that the current user has access to.
+      operationId: get_project_dataset_metadata_array
       parameters:
       - description: The Synapse ID of a storage project.
         explode: false
@@ -419,7 +419,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DatasetsPage'
+                $ref: '#/components/schemas/DatasetMetadataArray'
           description: Success
         "400":
           content:
@@ -454,8 +454,106 @@ paths:
             error
       security:
       - bearerAuth: []
-      summary: Gets all datasets in folder under a given storage project that the
-        current user has access to.
+      summary: Gets all dataset metadata in folder under a given storage project that
+        the current user has access to.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
+    get:
+      description: Gets a page of dataset meatdata in folder under a given storage
+        project that the current user has access to.
+      operationId: get_project_dataset_metadata_page
+      parameters:
+      - description: The Synapse ID of a storage project.
+        explode: false
+        in: path
+        name: projectId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProjectId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: The page number to get for a paginated query
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: "The maximum number of items per page (up to 100,000) for paginated\
+          \ endpoints"
+        explode: true
+        in: query
+        name: pageMaxItems
+        required: false
+        schema:
+          default: 100000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetMetadataPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Gets a page of dataset metadata in folder under a given storage project
+        that the current user has access to.
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
@@ -1480,6 +1578,29 @@ components:
       schema:
         $ref: '#/components/schemas/AssetViewId'
       style: form
+    pageNumber:
+      description: The page number to get for a paginated query
+      explode: true
+      in: query
+      name: pageNumber
+      required: false
+      schema:
+        default: 1
+        minimum: 1
+        type: integer
+      style: form
+    pageMaxItems:
+      description: "The maximum number of items per page (up to 100,000) for paginated\
+        \ endpoints"
+      explode: true
+      in: query
+      name: pageMaxItems
+      required: false
+      schema:
+        default: 100000
+        minimum: 1
+        type: integer
+      style: form
     assetViewId:
       description: ID of view listing all project data assets. E.g. for Synapse this
         would be the Synapse ID of the fileview listing all data assets for a given
@@ -1614,29 +1735,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
-      style: form
-    pageNumber:
-      description: The page number to get for a paginated query
-      explode: true
-      in: query
-      name: pageNumber
-      required: false
-      schema:
-        default: 1
-        minimum: 1
-        type: integer
-      style: form
-    pageMaxItems:
-      description: "The maximum number of items per page (up to 100,000) for paginated\
-        \ endpoints"
-      explode: true
-      in: query
-      name: pageMaxItems
-      required: false
-      schema:
-        default: 100000
-        minimum: 1
-        type: integer
       style: form
     componentLabelQuery:
       description: The label of a component in a schema
@@ -1828,6 +1926,46 @@ components:
       description: An asset view ID.
       example: syn23643253
       type: string
+    DatasetMetadata:
+      description: The metadata of a dataset.
+      example:
+        name: Example dataset
+        id: Syn1
+      properties:
+        name:
+          description: The name of the dataset.
+          example: Example dataset
+          title: name
+          type: string
+        id:
+          description: The ID of the dataset.
+          example: Syn1
+          title: id
+          type: string
+      required:
+      - id
+      - name
+      title: DatasetMetadata
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    DatasetMetadataArray:
+      description: An array of dataset metadata.
+      example:
+        datasets:
+        - name: Example dataset
+          id: Syn1
+        - name: Example dataset
+          id: Syn1
+      properties:
+        datasets:
+          description: An array of dataset meatdata.
+          items:
+            $ref: '#/components/schemas/DatasetMetadata'
+          title: datasets
+          type: array
+      title: DatasetMetadataArray
+      type: object
     PageMetadata:
       description: The metadata of a page.
       properties:
@@ -1874,32 +2012,12 @@ components:
       - totalPages
       title: PageMetadata
       type: object
-    Dataset:
-      description: A dataset.
-      properties:
-        name:
-          description: The name of the dataset.
-          example: Example dataset
-          title: name
-          type: string
-        id:
-          description: The ID of the dataset.
-          example: Syn1
-          title: id
-          type: string
-      required:
-      - id
-      - name
-      title: Dataset
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-    DatasetsPage:
+    DatasetMetadataPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/DatasetsPage_allOf'
-      description: A page of datasets.
-      title: DatasetsPage
+      - $ref: '#/components/schemas/DatasetMetadataPage_allOf'
+      description: A page of dataset metadata.
+      title: DatasetMetadataPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -2220,17 +2338,17 @@ components:
       description: Tangled tree plain or higlighted text to display for a given data
         model
       type: object
-    DatasetsPage_allOf:
+    DatasetMetadataPage_allOf:
       properties:
         datasets:
-          description: A list of datasets.
+          description: An array of dataset meatdata.
           items:
-            $ref: '#/components/schemas/Dataset'
+            $ref: '#/components/schemas/DatasetMetadata'
           title: datasets
           type: array
       required:
       - datasets
-      title: DatasetsPage_allOf
+      title: DatasetMetadataPage_allOf
       type: object
       example: null
     ManifestsPage_allOf:

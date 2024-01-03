@@ -33,16 +33,16 @@ paths:
                 example: v21.1.1
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
-      summary: Gets all datasets in folder under a given storage project that the current user has access to.
-      description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: getProjectDatasets
+      summary: Gets all dataset metadata in folder under a given storage project that the current user has access to.
+      description: Gets all dataset meatdata in folder under a given storage project that the current user has access to.
+      operationId: getProjectDatasetMetadataArray
       parameters:
         - $ref: '#/components/parameters/assetViewIdQuery'
       security:
@@ -53,7 +53,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DatasetsPage'
+                $ref: '#/components/schemas/DatasetMetadataArray'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets a page of dataset metadata in folder under a given storage project that the current user has access to.
+      description: Gets a page of dataset meatdata in folder under a given storage project that the current user has access to.
+      operationId: getProjectDatasetMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetMetadataPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -638,6 +671,32 @@ components:
       description: An asset view ID.
       type: string
       example: syn23643253
+    DatasetMetadata:
+      type: object
+      description: The metadata of a dataset.
+      properties:
+        name:
+          type: string
+          description: The name of the dataset.
+          example: Example dataset
+        id:
+          type: string
+          description: The ID of the dataset.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    DatasetMetadataArray:
+      type: object
+      description: An array of dataset metadata.
+      properties:
+        datasets:
+          description: An array of dataset meatdata.
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetMetadata'
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -677,35 +736,18 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    Dataset:
+    DatasetMetadataPage:
       type: object
-      description: A dataset.
-      properties:
-        name:
-          type: string
-          description: The name of the dataset.
-          example: Example dataset
-        id:
-          type: string
-          description: The ID of the dataset.
-          example: Syn1
-      required:
-        - name
-        - id
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    DatasetsPage:
-      type: object
-      description: A page of datasets.
+      description: A page of dataset metadata.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             datasets:
-              description: A list of datasets.
+              description: An array of dataset meatdata.
               type: array
               items:
-                $ref: '#/components/schemas/Dataset'
+                $ref: '#/components/schemas/DatasetMetadata'
           required:
             - datasets
       x-java-class-annotations:
@@ -1073,6 +1115,24 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetViewId'
+    pageNumber:
+      name: pageNumber
+      in: query
+      description: The page number to get for a paginated query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    pageMaxItems:
+      name: pageMaxItems
+      in: query
+      description: The maximum number of items per page (up to 100,000) for paginated endpoints
+      required: false
+      schema:
+        type: integer
+        default: 100000
+        minimum: 1
     assetViewId:
       name: assetViewId
       in: path
@@ -1171,24 +1231,6 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/RelationshipType'
-    pageNumber:
-      name: pageNumber
-      in: query
-      description: The page number to get for a paginated query
-      required: false
-      schema:
-        type: integer
-        default: 1
-        minimum: 1
-    pageMaxItems:
-      name: pageMaxItems
-      in: query
-      description: The maximum number of items per page (up to 100,000) for paginated endpoints
-      required: false
-      schema:
-        type: integer
-        default: 100000
-        minimum: 1
     componentLabelQuery:
       name: componentLabel
       in: query

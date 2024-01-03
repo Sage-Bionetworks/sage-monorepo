@@ -9,9 +9,10 @@ from schematic_api.models.connected_node_pair import ConnectedNodePair
 from schematic_api.models.connected_node_pair_array import ConnectedNodePairArray
 from schematic_api.models.connected_node_pair_page import ConnectedNodePairPage
 from schematic_api.models.connected_node_pair_page_all_of import ConnectedNodePairPageAllOf
-from schematic_api.models.dataset import Dataset
-from schematic_api.models.datasets_page import DatasetsPage
-from schematic_api.models.datasets_page_all_of import DatasetsPageAllOf
+from schematic_api.models.dataset_metadata import DatasetMetadata
+from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
+from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
+from schematic_api.models.dataset_metadata_page_all_of import DatasetMetadataPageAllOf
 from schematic_api.models.file import File
 from schematic_api.models.files_page import FilesPage
 from schematic_api.models.files_page_all_of import FilesPageAllOf
