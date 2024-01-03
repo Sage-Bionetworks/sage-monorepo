@@ -414,7 +414,7 @@ paths:
                 type: boolean
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/nodeProperties:
+  /nodes/{nodeLabel}/nodePropertyArray:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
@@ -422,7 +422,7 @@ paths:
         - Schema
       summary: Gets properties associated with a given node
       description: Gets properties associated with a given node
-      operationId: getNodeProperties
+      operationId: getNodePropertyArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -431,7 +431,29 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodePropertiesPage'
+                $ref: '#/components/schemas/NodePropertyArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/nodePropertyPage:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets properties associated with a given node
+      description: Gets properties associated with a given node
+      operationId: getNodePropertyPage
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePropertyPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/propertyLabel:
@@ -1061,7 +1083,16 @@ components:
           example: molecularlyInteractsWith
       required:
         - name
-    NodePropertiesPage:
+    NodePropertyArray:
+      type: object
+      description: An array of node properties.
+      properties:
+        node_properties:
+          description: An array of node properties.
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeProperty'
+    NodePropertyPage:
       type: object
       description: A page of node properties.
       allOf:
@@ -1069,7 +1100,7 @@ components:
         - type: object
           properties:
             node_properties:
-              description: A list of node properties.
+              description: An array of node properties.
               type: array
               items:
                 $ref: '#/components/schemas/NodeProperty'

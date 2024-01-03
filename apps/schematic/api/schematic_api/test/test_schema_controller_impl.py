@@ -2,7 +2,9 @@
 # pylint: disable=duplicate-code
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.node_properties_page import NodePropertiesPage
+from schematic_api.models.node_property import NodeProperty
+from schematic_api.models.node_property_array import NodePropertyArray
+from schematic_api.models.node_property_page import NodePropertyPage
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
@@ -17,7 +19,8 @@ from schematic_api.controllers.schema_controller_impl import (
     get_node_is_required,
     get_property_label,
     get_schema_attributes,
-    get_node_properties,
+    get_node_property_array,
+    get_node_property_page,
     list_node_validation_rules,
     get_node_dependency_array,
     get_node_dependency_page,
@@ -166,21 +169,57 @@ class TestGetSchemaAttributes:
         assert isinstance(result, BasicError)
 
 
-class TestGetNodeProperties:
-    """Test case for get_node_properties"""
+class TestGetNodePropertyArray:
+    """Test case for get_node_property_array"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = get_node_properties(
+        result, status = get_node_property_array(
             node_label="MolecularEntity",
             schema_url=test_schema_url,
         )
         assert status == 200
-        assert isinstance(result, NodePropertiesPage)
+        assert isinstance(result, NodePropertyArray)
+        assert isinstance(result.node_properties, list)
+        for item in result.node_properties:
+            assert isinstance(item, NodeProperty)
+            assert isinstance(item.name, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = get_node_properties(
+        result, status = get_node_property_array(
+            node_label="MolecularEntity",
+            schema_url="not_a_url",
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
+
+
+class TestGetNodePropertyPage:
+    """Test case for get_node_property_page"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_node_property_page(
+            node_label="MolecularEntity",
+            schema_url=test_schema_url,
+        )
+        assert status == 200
+        assert isinstance(result, NodePropertyPage)
+        assert result.number == 1
+        assert result.size == 100000
+        assert isinstance(result.total_elements, int)
+        assert isinstance(result.total_pages, int)
+        assert isinstance(result.has_next, bool)
+        assert isinstance(result.has_previous, bool)
+        assert isinstance(result.node_properties, list)
+        for item in result.node_properties:
+            assert isinstance(item, NodeProperty)
+            assert isinstance(item.name, str)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        result, status = get_node_property_page(
             node_label="MolecularEntity",
             schema_url="not_a_url",
         )

@@ -65,8 +65,11 @@ paths:
   /nodes/{nodeDisplay}/isRequired:
     $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
 
-  /nodes/{nodeLabel}/nodeProperties:
-    $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
+  /nodes/{nodeLabel}/nodePropertyArray:
+    $ref: paths/nodes/@{nodeLabel}/nodePropertyArray.yaml
+
+  /nodes/{nodeLabel}/nodePropertyPage:
+    $ref: paths/nodes/@{nodeLabel}/nodePropertyPage.yaml
 
   /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml

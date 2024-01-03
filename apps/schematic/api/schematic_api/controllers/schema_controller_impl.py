@@ -5,8 +5,9 @@ from schematic.schemas.generator import SchemaGenerator, SchemaExplorer  # type:
 from schematic.visualization.attributes_explorer import AttributesExplorer  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.node_properties_page import NodePropertiesPage
 from schematic_api.models.node_property import NodeProperty
+from schematic_api.models.node_property_array import NodePropertyArray
+from schematic_api.models.node_property_page import NodePropertyPage
 from schematic_api.models.validation_rules_page import ValidationRulesPage
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.node import Node
@@ -248,7 +249,7 @@ def get_schema_attributes(schema_url: str) -> tuple[Union[str, BasicError], int]
 def get_node_properties_from_schematic(
     node_label: str,
     schema_url: str,
-) -> list[str]:
+) -> list[NodeProperty]:
     """Gets the properties associated with the node
 
     Args:
@@ -256,18 +257,19 @@ def get_node_properties_from_schematic(
         node_label (str): The label of the node
 
     Returns:
-        list[str]: A list of properties of the node
+        list[NodeProperty]: A list of properties of the node
     """
     schema_explorer = SchemaExplorer()
     schema_explorer.load_schema(schema_url)
-    return schema_explorer.find_class_specific_properties(node_label)
+    properties = schema_explorer.find_class_specific_properties(node_label)
+    return [NodeProperty(prop) for prop in properties]
 
 
 @handle_exceptions
-def get_node_properties(
+def get_node_property_array(
     node_label: str,
     schema_url: str,
-) -> tuple[Union[NodePropertiesPage, BasicError], int]:
+) -> tuple[Union[NodePropertyArray, BasicError], int]:
     """Gets the properties associated with the node
 
     Args:
@@ -275,28 +277,51 @@ def get_node_properties(
         node_label (str): The label of the node
 
     Returns:
-        tuple[Union[NodePropertiesPage, BasicError], int]: A tuple
+        tuple[Union[NodePropertyArray, BasicError], int]: A tuple
           The first item is either the node properties or an error object
           The second item is the response status
     """
 
-    properties = [
-        NodeProperty(property)
-        for property in get_node_properties_from_schematic(node_label, schema_url)
-    ]
-
-    page = NodePropertiesPage(
-        number=0,
-        size=100,
-        total_elements=len(properties),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        node_properties=properties,
-    )
-    result: Union[NodePropertiesPage, BasicError] = page
+    properties = get_node_properties_from_schematic(node_label, schema_url)
+    result: Union[NodePropertyArray, BasicError] = NodePropertyArray(properties)
     status = 200
+    return result, status
 
+
+@handle_exceptions
+def get_node_property_page(
+    node_label: str,
+    schema_url: str,
+    page_number: int = 1,
+    page_max_items: int = 100000,
+) -> tuple[Union[NodePropertyPage, BasicError], int]:
+    """Gets the properties associated with the node
+
+    Args:
+        schema_url (str): The URL of the schema in jsonld form
+        node_label (str): The label of the node
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[Union[NodePropertyPage, BasicError], int]: A tuple
+          The first item is either the node properties or an error object
+          The second item is the response status
+    """
+    # pylint: disable=duplicate-code
+    properties = get_node_properties_from_schematic(node_label, schema_url)
+    page = Page(properties, page_number, page_max_items)
+    property_page = NodePropertyPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        node_properties=page.items,
+    )
+    result: Union[NodePropertyPage, BasicError] = property_page
+    status = 200
     return result, status
 
 

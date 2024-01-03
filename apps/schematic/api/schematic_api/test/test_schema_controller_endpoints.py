@@ -17,7 +17,8 @@ CONNECTED_NODE_PAIR_PAGE_URL = "/api/v1/connectedNodePairPage?schemaUrl="
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
 PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
-NODE_PROPERTIES_URL = "/api/v1/nodes/MolecularEntity/nodeProperties?schemaUrl="
+NODE_PROPERTY_ARRAY_URL = "/api/v1/nodes/MolecularEntity/nodePropertyArray?schemaUrl="
+NODE_PROPERTY_PAGE_URL = "/api/v1/nodes/MolecularEntity/nodePropertyPage?schemaUrl="
 NODE_VALIDATION_RULES_URL = "/api/v1/nodes/CheckRegexList/validationRules?schemaUrl="
 NODE_DEPENDENCY_ARRAY_URL = "/api/v1/nodes/Patient/dependencyArray?schemaUrl="
 NODE_DEPENDENCY_PAGE_URL = "/api/v1/nodes/Patient/dependencyPage?schemaUrl="
@@ -154,25 +155,55 @@ class TestGetSchemaAttributes(BaseTestCase):
         self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
-class TestGetNodeProperties(BaseTestCase):
+class TestGetNodePropertyArray(BaseTestCase):
     """Test case for node attributes endpoint"""
 
     def test_success(self) -> None:
         """Test for successful result"""
-        url = f"{NODE_PROPERTIES_URL}{TEST_SCHEMA_URL}"
+        url = f"{NODE_PROPERTY_ARRAY_URL}{TEST_SCHEMA_URL}"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
-        assert not response.json["hasNext"]
-        assert not response.json["hasPrevious"]
-        assert response.json["number"] == 0
-        assert response.json["size"] == 100
-        assert response.json["totalPages"] == 1
-        node_properties = response.json["node_properties"]
-        assert isinstance(node_properties, list)
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == ["node_properties"]
+        for item in result["node_properties"]:
+            assert isinstance(item, dict)
+            assert list(item.keys()) == ["name"]
+            assert isinstance(item["name"], str)
 
     def test_500(self) -> None:
         """Test for 500 result"""
-        url = f"{NODE_PROPERTIES_URL}not_a_url"
+        url = f"{NODE_PROPERTY_ARRAY_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetNodePropertyPage(BaseTestCase):
+    """Test case for node attributes endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{NODE_PROPERTY_PAGE_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == sorted(PAGING_KEYS + ["node_properties"])
+        assert result["number"] == 1
+        assert result["size"] == 100000
+        assert not result["hasNext"]
+        assert not result["hasPrevious"]
+        assert result["totalPages"] == 1
+        assert isinstance(result["totalElements"], int)
+        assert isinstance(result["node_properties"], list)
+        for item in result["node_properties"]:
+            assert isinstance(item, dict)
+            assert list(item.keys()) == ["name"]
+            assert isinstance(item["name"], str)
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        url = f"{NODE_PROPERTY_PAGE_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 

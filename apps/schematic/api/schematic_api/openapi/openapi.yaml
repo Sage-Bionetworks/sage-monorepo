@@ -1264,10 +1264,10 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
-  /nodes/{nodeLabel}/nodeProperties:
+  /nodes/{nodeLabel}/nodePropertyArray:
     get:
       description: Gets properties associated with a given node
-      operationId: get_node_properties
+      operationId: get_node_property_array
       parameters:
       - description: The label of the source node in a schema to get the dependencies
           of
@@ -1291,7 +1291,68 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodePropertiesPage'
+                $ref: '#/components/schemas/NodePropertyArray'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Gets properties associated with a given node
+      tags:
+      - Schema
+      x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /nodes/{nodeLabel}/nodePropertyPage:
+    get:
+      description: Gets properties associated with a given node
+      operationId: get_node_property_page
+      parameters:
+      - description: The label of the source node in a schema to get the dependencies
+          of
+        explode: false
+        in: path
+        name: nodeLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/NodeLabel'
+        style: simple
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The page number to get for a paginated query
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: "The maximum number of items per page (up to 100,000) for paginated\
+          \ endpoints"
+        explode: true
+        in: query
+        name: pageMaxItems
+        required: false
+        schema:
+          default: 100000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePropertyPage'
           description: Success
         "500":
           content:
@@ -2549,6 +2610,8 @@ components:
       type: string
     NodeProperty:
       description: A node property
+      example:
+        name: molecularlyInteractsWith
       properties:
         name:
           description: The name of the property
@@ -2559,12 +2622,27 @@ components:
       - name
       title: NodeProperty
       type: object
-    NodePropertiesPage:
+    NodePropertyArray:
+      description: An array of node properties.
+      example:
+        node_properties:
+        - name: molecularlyInteractsWith
+        - name: molecularlyInteractsWith
+      properties:
+        node_properties:
+          description: An array of node properties.
+          items:
+            $ref: '#/components/schemas/NodeProperty'
+          title: node_properties
+          type: array
+      title: NodePropertyArray
+      type: object
+    NodePropertyPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/NodePropertiesPage_allOf'
+      - $ref: '#/components/schemas/NodePropertyPage_allOf'
       description: A page of node properties.
-      title: NodePropertiesPage
+      title: NodePropertyPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -2760,17 +2838,17 @@ components:
       title: NodePage_allOf
       type: object
       example: null
-    NodePropertiesPage_allOf:
+    NodePropertyPage_allOf:
       properties:
         node_properties:
-          description: A list of node properties.
+          description: An array of node properties.
           items:
             $ref: '#/components/schemas/NodeProperty'
           title: node_properties
           type: array
       required:
       - node_properties
-      title: NodePropertiesPage_allOf
+      title: NodePropertyPage_allOf
       type: object
       example: null
     ValidationRulesPage_allOf:

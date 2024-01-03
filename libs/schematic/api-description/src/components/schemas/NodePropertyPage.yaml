@@ -5,7 +5,7 @@ allOf:
   - type: object
     properties:
       node_properties:
-        description: A list of node properties.
+        description: An array of node properties.
         type: array
         items:
           $ref: NodeProperty.yaml
