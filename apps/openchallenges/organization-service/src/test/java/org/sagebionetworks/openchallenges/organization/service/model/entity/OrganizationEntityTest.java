@@ -10,8 +10,6 @@ public class OrganizationEntityTest {
 
   private Long id = 1L;
   private String name = "Test Organization";
-  private String email = "test@example.com";
-  private String login = "testorg";
   private String avatarKey = "avatarKey";
   private String websiteUrl = "https://example.com";
   private Integer challengeCount = 5;
@@ -29,8 +27,6 @@ public class OrganizationEntityTest {
 
     entityFromConstructor.setId(id);
     entityFromConstructor.setName(name);
-    entityFromConstructor.setEmail(email);
-    entityFromConstructor.setLogin(login);
     entityFromConstructor.setDescription(description);
     entityFromConstructor.setAvatarKey(avatarKey);
     entityFromConstructor.setWebsiteUrl(websiteUrl);
@@ -45,8 +41,6 @@ public class OrganizationEntityTest {
 
     entityFromConstructor2.setId(id);
     entityFromConstructor2.setName(name);
-    entityFromConstructor2.setEmail(email);
-    entityFromConstructor2.setLogin(login);
     entityFromConstructor2.setDescription(description);
     entityFromConstructor2.setAvatarKey(avatarKey);
     entityFromConstructor2.setWebsiteUrl(websiteUrl);
@@ -66,8 +60,6 @@ public class OrganizationEntityTest {
         OrganizationEntity.builder()
             .id(id)
             .name(name)
-            .email(email)
-            .login(login)
             .avatarKey(avatarKey)
             .websiteUrl(websiteUrl)
             .challengeCount(challengeCount)
@@ -81,8 +73,6 @@ public class OrganizationEntityTest {
 
     Assertions.assertEquals(id, entity.getId());
     Assertions.assertEquals(name, entity.getName());
-    Assertions.assertEquals(email, entity.getEmail());
-    Assertions.assertEquals(login, entity.getLogin());
     Assertions.assertEquals(avatarKey, entity.getAvatarKey());
     Assertions.assertEquals(websiteUrl, entity.getWebsiteUrl());
     Assertions.assertEquals(challengeCount, entity.getChallengeCount());
@@ -99,8 +89,6 @@ public class OrganizationEntityTest {
 
     Assertions.assertEquals(id, entityFromConstructor.getId());
     Assertions.assertEquals(name, entityFromConstructor.getName());
-    Assertions.assertEquals(email, entityFromConstructor.getEmail());
-    Assertions.assertEquals(login, entityFromConstructor.getLogin());
     Assertions.assertEquals(avatarKey, entityFromConstructor.getAvatarKey());
     Assertions.assertEquals(websiteUrl, entityFromConstructor.getWebsiteUrl());
     Assertions.assertEquals(challengeCount, entityFromConstructor.getChallengeCount());
@@ -128,8 +116,6 @@ public class OrganizationEntityTest {
     OrganizationEntity entityFromConstructor3 = new OrganizationEntity();
     entityFromConstructor3.setId(2L);
     entityFromConstructor3.setName("Another Organization");
-    entityFromConstructor3.setEmail("another@example.com");
-    entityFromConstructor3.setLogin("anotherorg");
     entityFromConstructor3.setDescription("Another description");
     entityFromConstructor3.setAvatarKey("anotherAvatarKey");
     entityFromConstructor3.setWebsiteUrl("https://another-example.com");
