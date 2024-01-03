@@ -1,4 +1,4 @@
-The current version of the **iAtlas Portal** was built in R using code
+The current version of the **CRI iAtlas Portal** was built in R using code
 hosted at
 [https://github.com/CRI-iAtlas/iatlas-app]
 (https://github.com/CRI-iAtlas/iatlas-app/)

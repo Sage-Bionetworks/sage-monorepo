@@ -33,12 +33,18 @@ ici_hazard_ratio_main_server <- function(
                                         TRUE ~ "Treatment Data"))
       )
 
-      features <- shiny::reactive({cohort_obj()$feature_tbl %>%
+      features <- shiny::reactive({
+        cohort_obj()$feature_tbl %>%
                                     dplyr::filter(!name %in% c("OS", "OS_time", "PFI_1", "PFI_time_1"))
         })
 
+      genes <- shiny::reactive({
+        iatlasGraphQLClient::query_immunomodulators()
+
+      })
+
       shiny::observe({
-        shiny::req(categories(), features())
+        shiny::req(categories(), features(), genes())
         var_choices_clin <- create_nested_list_by_class(categories(),
                                                         class_column = "class",
                                                         internal_column = "tag_name",
@@ -49,7 +55,12 @@ ici_hazard_ratio_main_server <- function(
                                                         internal_column = "name",
                                                         display_column = "display")
 
-        var_choices <- c(var_choices_clin, var_choices_feat)
+        var_choices_gene <- create_nested_list_by_class(genes(),
+                                                        class_column = "gene_family",
+                                                        internal_column = "entrez",
+                                                        display_column = "hgnc")
+
+        var_choices <- c(var_choices_clin, var_choices_feat, var_choices_gene)
 
         shiny::updateSelectizeInput(session,
                           "var2_cox",
@@ -107,22 +118,39 @@ ici_hazard_ratio_main_server <- function(
         shiny::req(input$var2_cox, samples())
         shiny::validate(shiny::need(nrow(samples())>0, "Selected survival endpoint not available for selected dataset(s)"))
 
-        #Let's assume that selected variables are a mix of features and tags, and do both queries
-        new_feat <- iatlasGraphQLClient::query_feature_values(features = input$var2_cox) %>%
-          dplyr::select(sample, feature_name, feature_value) %>%
-          tidyr::pivot_wider(names_from = feature_name, values_from = feature_value)
+        feature_df <- samples()
 
-        if(sum(input$var2_cox %in% categories()$tag_name)>0){
-          new_tags <- iatlasGraphQLClient::query_tag_samples(parent_tags = input$var2_cox) %>%
-             dplyr::inner_join(groups(), by = "tag_name") %>%
-            dplyr::select(sample_name, tag_name, parent_tag_name) %>%
-            tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name)
+        selected_features <- input$var2_cox[input$var2_cox %in% features()$name]
+        selected_genes <- input$var2_cox[input$var2_cox %in% genes()$entrez]
+        selected_cat <- input$var2_cox[input$var2_cox %in% categories()$tag_name]
 
-          new_feat <- dplyr::inner_join(new_feat, new_tags, by = c("sample" = "sample_name"))
+        if(length(selected_features)>0){
+          feature_df <- dplyr::inner_join(feature_df,
+                                          iatlasGraphQLClient::query_feature_values(features = selected_features) %>%
+                                            dplyr::select(sample_name = sample, feature_name, feature_value) %>%
+                                            tidyr::pivot_wider(names_from = feature_name, values_from = feature_value),
+                                          by = "sample_name")
         }
 
-        samples() %>%
-          dplyr::inner_join(new_feat, by = c("sample_name" = "sample"))
+        if(length(selected_genes)>0){
+          feature_df <- dplyr::inner_join(feature_df,
+                                          iatlasGraphQLClient::query_gene_expression(cohorts = cohort_obj()$dataset_names, entrez = as.numeric(selected_genes))%>%
+                                            dplyr::select(sample_name = sample, feature_name = hgnc, feature_value = rna_seq_expr) %>%
+                                            tidyr::pivot_wider(names_from = feature_name, values_from = feature_value) %>%
+                                            dplyr::distinct(),
+                                          by = "sample_name")
+        }
+
+        if(length(selected_cat)>0){
+          feature_df <- dplyr::inner_join(feature_df,
+                                          iatlasGraphQLClient::query_tag_samples(cohorts = cohort_obj()$dataset_names, parent_tags = selected_cat) %>%
+                                            dplyr::inner_join(groups(), by = "tag_name") %>%
+                                            dplyr::select(sample_name, tag_name, parent_tag_name) %>%
+                                            tidyr::pivot_wider(names_from = parent_tag_name, values_from = tag_name),
+                                          by = "sample_name")
+
+        }
+        feature_df
       })
 
 
@@ -132,6 +160,7 @@ ici_hazard_ratio_main_server <- function(
         get_feature_by_dataset(
           features = input$var2_cox,
           feature_df = features(),
+          gene_df = genes(),
           group_df = groups(),
           fmx_df = feature_df_mult(),
           datasets = cohort_obj()[["dataset_names"]],
@@ -178,7 +207,7 @@ ici_hazard_ratio_main_server <- function(
         p
       })
 
-      summary_table <- shiny::reactive({
+      summary_table <- shiny::eventReactive(input$go_button,{
 
         if(mult_coxph() == FALSE){ #for univariable models, we need to display the FDR results
           coxph_df() %>%
@@ -191,7 +220,7 @@ ici_hazard_ratio_main_server <- function(
             dplyr::select(dataset_display, ft_label, group_label, logHR, loglower, logupper,  pvalue, logpvalue) %>%
             dplyr::rename(Dataset = dataset_display, Feature = ft_label, Variable = group_label, `log10(HR)` = logHR, `p.value` = pvalue, `Neg(log10(p.value))` = logpvalue) %>%
             dplyr::mutate_if(is.numeric, formatC, digits = 3) %>%
-            dplyr::arrange(dataset_display)
+            dplyr::arrange(Dataset)
         }
       })
 

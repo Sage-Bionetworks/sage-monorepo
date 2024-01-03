@@ -77,7 +77,6 @@ extracellular_network_main_server <- function(
       output$select_statify_groups_ui <- shiny::renderUI({
         choices <-
           iatlasGraphQLClient::query_tags(
-            datasets = cohort_obj()$dataset_names,
             parent_tags = "Immune_Subtype"
           ) %>%
           dplyr::pull("tag_name")
