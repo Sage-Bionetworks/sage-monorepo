@@ -1,14 +1,14 @@
 type: object
-description: A page of projects.
+description: A page of project metadata.
 allOf:
   - $ref: PageMetadata.yaml
   - type: object
     properties:
       projects:
-        description: A list of projects.
+        description: An array of project metadata.
         type: array
         items:
-          $ref: Project.yaml
+          $ref: ProjectMetadata.yaml
     required:
       - projects
 x-java-class-annotations:

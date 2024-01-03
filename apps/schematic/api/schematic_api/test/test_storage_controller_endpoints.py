@@ -12,7 +12,8 @@ import schematic_api.controllers.storage_controller_impl
 from schematic_api.test import BaseTestCase
 from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.dataset_metadata import DatasetMetadata
-from .conftest import EXAMPLE_MANIFEST_METADATA, MANIFEST_METADATA_KEYS
+from schematic_api.models.project_metadata import ProjectMetadata
+from .conftest import EXAMPLE_MANIFEST_METADATA, MANIFEST_METADATA_KEYS, PAGING_KEYS
 
 HEADERS = {
     "Accept": "application/json",
@@ -30,7 +31,12 @@ DATASET_MANIFEST_JSON_URL = (
     "/api/v1/assetTypes/synapse/datasets/syn2/manifestJson?assetViewId=syn1"
 )
 MANIFEST_JSON_URL = "/api/v1/assetTypes/synapse/manifests/syn1/json"
-PROJECTS_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/projects"
+PROJECT_METADATA_ARRAY_URL = (
+    "/api/v1/assetTypes/synapse/assetViews/syn1/projectMetadataArray"
+)
+PROJECT_METADATA_PAGE_URL = (
+    "/api/v1/assetTypes/synapse/assetViews/syn1/projectMetadataPage"
+)
 PROJECT_DATASET_METATDATA_ARRRAY_URL = (
     "/api/v1/assetTypes/synapse/projects/syn2/datasetMetadataArray?assetViewId=syn1"
 )
@@ -482,7 +488,7 @@ class TestGetManifestJson(BaseTestCase):
             )
 
 
-class TestGetProjects(BaseTestCase):
+class TestGetProjectMetadataArray(BaseTestCase):
     """Test case for projects endpoint"""
 
     def test_success(self) -> None:
@@ -490,35 +496,38 @@ class TestGetProjects(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects_from_schematic",
-            return_value=[("syn1", "name1"), ("syn2", "name2")],
+            "get_project_metadata_from_schematic",
+            return_value=[
+                ProjectMetadata("syn1", "name1"),
+                ProjectMetadata("syn2", "name2"),
+            ],
         ):
-            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-
-            assert not response.json["hasNext"]
-            assert not response.json["hasPrevious"]
-            assert response.json["number"] == 0
-            assert response.json["size"] == 100
-            assert response.json["totalElements"] == 2
-            assert response.json["totalPages"] == 1
-            projects = response.json["projects"]
-            assert len(projects) == 2
-            project = projects[0]
-            assert list(project.keys()) == ["id", "name"]
-            assert project["name"] == "name1"
-            assert project["id"] == "syn1"
+            result = response.json
+            assert isinstance(result, dict)
+            assert list(result.keys()) == ["projects"]
+            assert isinstance(result["projects"], list)
+            for item in result["projects"]:
+                assert isinstance(item, dict)
+                assert list(item.keys()) == ["id", "name"]
+                assert isinstance(item["name"], str)
+                assert isinstance(item["id"], str)
 
     def test_401(self) -> None:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects_from_schematic",
+            "get_project_metadata_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -527,10 +536,12 @@ class TestGetProjects(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects_from_schematic",
+            "get_project_metadata_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
@@ -539,10 +550,91 @@ class TestGetProjects(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_projects_from_schematic",
+            "get_project_metadata_from_schematic",
             side_effect=TypeError,
         ):
-            response = self.client.open(PROJECTS_URL, method="GET", headers=HEADERS)
+            response = self.client.open(
+                PROJECT_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestGetProjectMetadataPage(BaseTestCase):
+    """Test case for projects endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_metadata_from_schematic",
+            return_value=[
+                ProjectMetadata("syn1", "name1"),
+                ProjectMetadata("syn2", "name2"),
+            ],
+        ):
+            response = self.client.open(
+                PROJECT_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            result = response.json
+            assert isinstance(result, dict)
+            assert list(result.keys()) == sorted(PAGING_KEYS + ["projects"])
+            assert result["number"] == 1
+            assert result["size"] == 100000
+            assert not result["hasNext"]
+            assert not result["hasPrevious"]
+            assert result["totalPages"] == 1
+            assert isinstance(result["totalElements"], int)
+            assert isinstance(result["projects"], list)
+            for item in result["projects"]:
+                assert isinstance(item, dict)
+                assert list(item.keys()) == ["id", "name"]
+                assert isinstance(item["name"], str)
+                assert isinstance(item["id"], str)
+
+    def test_401(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_metadata_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            response = self.client.open(
+                PROJECT_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert401(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_403(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_metadata_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            response = self.client.open(
+                PROJECT_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert403(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_metadata_from_schematic",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                PROJECT_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )

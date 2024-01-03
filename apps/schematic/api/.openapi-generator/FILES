@@ -38,9 +38,10 @@ schematic_api/models/node_property_array.py
 schematic_api/models/node_property_page.py
 schematic_api/models/node_property_page_all_of.py
 schematic_api/models/page_metadata.py
-schematic_api/models/project.py
-schematic_api/models/projects_page.py
-schematic_api/models/projects_page_all_of.py
+schematic_api/models/project_metadata.py
+schematic_api/models/project_metadata_array.py
+schematic_api/models/project_metadata_page.py
+schematic_api/models/project_metadata_page_all_of.py
 schematic_api/models/validation_rule.py
 schematic_api/models/validation_rule_array.py
 schematic_api/models/validation_rule_page.py

@@ -6,7 +6,7 @@ get:
     - Storage
   summary: Gets all storage projects the current user has access to.
   description: Gets all storage projects the current user has access to.
-  operationId: getProjects
+  operationId: getProjectMetadataArray
   security:
     - bearerAuth: []
   responses:
@@ -15,7 +15,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../../../components/schemas/ProjectsPage.yaml
+            $ref: ../../../../../components/schemas/ProjectMetadataArray.yaml
     '400':
       $ref: ../../../../../components/responses/BadRequest.yaml
     '401':

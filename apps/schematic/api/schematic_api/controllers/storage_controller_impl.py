@@ -14,8 +14,9 @@ from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
 from schematic_api.models.manifest_metadata import ManifestMetadata
 from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
 from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
-from schematic_api.models.project import Project
-from schematic_api.models.projects_page import ProjectsPage
+from schematic_api.models.project_metadata import ProjectMetadata
+from schematic_api.models.project_metadata_array import ProjectMetadataArray
+from schematic_api.models.project_metadata_page import ProjectMetadataPage
 from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
@@ -493,52 +494,82 @@ def get_project_manifest_metadata_page(
     return result, status
 
 
-def get_projects_from_schematic(
+def get_project_metadata_from_schematic(
     asset_type: str,  # pylint: disable=unused-argument
-) -> list[tuple[str, str]]:
+) -> list[ProjectMetadata]:
     """Gets a list of projects
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        list[tuple(str, str)]: A list of projects in tuple form
+        list[ProjectMetadata]: A list of project metadata
     """
     access_token = get_access_token()
     store = SynapseStorage(access_token=access_token)  # type: ignore
-    return store.getStorageProjects()  # type: ignore
+    metadata_tuple_list = store.getStorageProjects()  # type: ignore
+    return [ProjectMetadata(id=item[0], name=item[1]) for item in metadata_tuple_list]
 
 
 @handle_exceptions
-def get_projects(
-    asset_view_id: str, asset_type: str
-) -> tuple[Union[ProjectsPage, BasicError], int]:
-    """Attempts to get a list of projects the user has access to
+def get_project_metadata_array(
+    asset_view_id: str,
+    asset_type: str,
+) -> tuple[Union[ProjectMetadataArray, BasicError], int]:
+    """Gets a list of project metadata the user has access to
 
     Args:
         asset_view_id (str): The id for the asset view of the project
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        tuple[Union[ProjectsPage, BasicError], int]: A tuple
+        tuple[Union[ProjectMetadataArray, BasicError], int]: A tuple
           The first item is either the projects or an error object
           The second item is the response status
     """
 
     CONFIG.synapse_master_fileview_id = asset_view_id
-    project_tuples = get_projects_from_schematic(asset_type)
-    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
-
-    page = ProjectsPage(
-        number=0,
-        size=100,
-        total_elements=len(projects),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        projects=projects,
+    project_metadata = get_project_metadata_from_schematic(asset_type)
+    result: Union[ProjectMetadataArray, BasicError] = ProjectMetadataArray(
+        project_metadata
     )
-    result: Union[ProjectsPage, BasicError] = page
     status = 200
+    return result, status
 
+
+@handle_exceptions
+def get_project_metadata_page(
+    asset_view_id: str,
+    asset_type: str,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[Union[ProjectMetadataPage, BasicError], int]:
+    """Gets a list of project metadata the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[Union[ProjectMetadataPage, BasicError], int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_metadata = get_project_metadata_from_schematic(asset_type)
+    page = Page(project_metadata, page_number, page_max_items)
+    manifest_page = ProjectMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        projects=page.items,
+    )
+    result: Union[ProjectMetadataPage, BasicError] = manifest_page
+    status = 200
     return result, status

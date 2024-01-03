@@ -1,5 +1,5 @@
 type: object
-description: A project.
+description: The metadata for a project
 properties:
   name:
     type: string

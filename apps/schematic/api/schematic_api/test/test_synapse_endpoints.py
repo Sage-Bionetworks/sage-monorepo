@@ -148,9 +148,28 @@ class TestStorageEndpoints(BaseTestCase):
         dataframe = pd.DataFrame.from_dict(response_dict)
         assert isinstance(dataframe, pd.DataFrame)
 
-    def test_get_projects(self) -> None:
+    def test_get_project_metadata_array(self) -> None:
         """Test for successful result"""
-        url = "/api/v1/assetTypes/synapse/" f"assetViews/{TEST_ASSET_VIEW}/projects"
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"assetViews/{TEST_ASSET_VIEW}/projectMetadataArray"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, dict)
+        assert "projects" in response.json
+        assert isinstance(response.json["projects"], list)
+        for project in response.json["projects"]:
+            assert isinstance(project, dict)
+            for key in ["id", "name"]:
+                assert key in project
+
+    def test_get_project_metadata_page(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"assetViews/{TEST_ASSET_VIEW}/projectMetadataPage"
+        )
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         assert isinstance(response.json, dict)

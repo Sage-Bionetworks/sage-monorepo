@@ -83,10 +83,10 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataArray:
     get:
       description: Gets all storage projects the current user has access to.
-      operationId: get_projects
+      operationId: get_project_metadata_array
       parameters:
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
@@ -111,7 +111,95 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectsPage'
+                $ref: '#/components/schemas/ProjectMetadataArray'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Gets all storage projects the current user has access to.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataPage:
+    get:
+      description: Gets all storage projects the current user has access to.
+      operationId: get_project_metadata_page
+      parameters:
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: false
+        in: path
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: The page number to get for a paginated query
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: "The maximum number of items per page (up to 100,000) for paginated\
+          \ endpoints"
+        explode: true
+        in: query
+        name: pageMaxItems
+        required: false
+        schema:
+          default: 100000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMetadataPage'
           description: Success
         "400":
           content:
@@ -2495,8 +2583,11 @@ components:
     ManifestJson:
       description: A manifest in json format
       type: object
-    Project:
-      description: A project.
+    ProjectMetadata:
+      description: The metadata for a project
+      example:
+        name: Example project
+        id: Syn1
       properties:
         name:
           description: The name of the project.
@@ -2511,16 +2602,33 @@ components:
       required:
       - id
       - name
-      title: Project
+      title: ProjectMetadata
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    ProjectsPage:
+    ProjectMetadataArray:
+      description: An array of project metadata.
+      example:
+        projects:
+        - name: Example project
+          id: Syn1
+        - name: Example project
+          id: Syn1
+      properties:
+        projects:
+          description: An array of project metadata.
+          items:
+            $ref: '#/components/schemas/ProjectMetadata'
+          title: projects
+          type: array
+      title: ProjectMetadataArray
+      type: object
+    ProjectMetadataPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ProjectsPage_allOf'
-      description: A page of projects.
-      title: ProjectsPage
+      - $ref: '#/components/schemas/ProjectMetadataPage_allOf'
+      description: A page of project metadata.
+      title: ProjectMetadataPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -2857,17 +2965,17 @@ components:
       title: ManifestMetadataPage_allOf
       type: object
       example: null
-    ProjectsPage_allOf:
+    ProjectMetadataPage_allOf:
       properties:
         projects:
-          description: A list of projects.
+          description: An array of project metadata.
           items:
-            $ref: '#/components/schemas/Project'
+            $ref: '#/components/schemas/ProjectMetadata'
           title: projects
           type: array
       required:
       - projects
-      title: ProjectsPage_allOf
+      title: ProjectMetadataPage_allOf
       type: object
       example: null
     FileMetadataPage_allOf:
