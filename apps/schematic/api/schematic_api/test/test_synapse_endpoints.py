@@ -9,6 +9,7 @@ import pandas as pd
 
 from schematic_api.test import BaseTestCase
 from .conftest import (
+    MANIFEST_METADATA_KEYS,
     TEST_SCHEMA_URL,
     CORRECT_MANIFEST_PATH,
     csv_to_bytes,
@@ -194,11 +195,11 @@ class TestStorageEndpoints(BaseTestCase):
             for key in ["id", "name"]:
                 assert key in dataset
 
-    def test_get_project_manifests(self) -> None:
+    def test_get_project_manifest_metadata_array(self) -> None:
         """Test for successful result"""
         url = (
             "/api/v1/assetTypes/synapse/"
-            f"projects/{TEST_PROJECT}/manifests"
+            f"projects/{TEST_PROJECT}/manifestMetadataArray"
             f"?assetViewId={TEST_ASSET_VIEW}"
         )
         response = self.client.open(url, method="GET", headers=HEADERS)
@@ -208,5 +209,20 @@ class TestStorageEndpoints(BaseTestCase):
         assert isinstance(response.json["manifests"], list)
         for manifest in response.json["manifests"]:
             assert isinstance(manifest, dict)
-            for key in ["componentName", "datasetId", "datasetName", "id", "name"]:
-                assert key in manifest
+            assert list(manifest.keys()) == MANIFEST_METADATA_KEYS
+
+    def test_get_project_manifest_metadata_page(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"projects/{TEST_PROJECT}/manifestMetadataPage"
+            f"?assetViewId={TEST_ASSET_VIEW}"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, dict)
+        assert "manifests" in response.json
+        assert isinstance(response.json["manifests"], list)
+        for manifest in response.json["manifests"]:
+            assert isinstance(manifest, dict)
+            assert list(manifest.keys()) == MANIFEST_METADATA_KEYS

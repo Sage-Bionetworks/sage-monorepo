@@ -6,9 +6,11 @@ get:
     - Storage
   summary: Gets all manifests in a project folder that users have access to
   description: Gets all manifests in a project folder that the current user has access to.
-  operationId: getProjectManifests
+  operationId: getProjectManifestMetadataPage
   parameters:
     - $ref: ../../../../../components/parameters/query/assetViewIdQuery.yaml
+    - $ref: ../../../../../components/parameters/query/pageNumber.yaml
+    - $ref: ../../../../../components/parameters/query/pageMaxItems.yaml
   security:
     - bearerAuth: []
   responses:
@@ -17,7 +19,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../../../components/schemas/ManifestsPage.yaml
+            $ref: ../../../../../components/schemas/ManifestMetadataPage.yaml
     '400':
       $ref: ../../../../../components/responses/BadRequest.yaml
     '401':

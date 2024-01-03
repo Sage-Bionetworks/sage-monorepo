@@ -11,7 +11,9 @@ from synapseclient.core.exceptions import (  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.manifests_page import ManifestsPage
+from schematic_api.models.manifest_metadata import ManifestMetadata
+from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
+from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
 from schematic_api.models.dataset_metadata import DatasetMetadata
 from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
 from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
@@ -29,7 +31,8 @@ from schematic_api.controllers.storage_controller_impl import (
     get_projects,
     get_project_dataset_metadata_array,
     get_project_dataset_metadata_page,
-    get_project_manifests,
+    get_project_manifest_metadata_array,
+    get_project_manifest_metadata_page,
 )
 
 
@@ -603,30 +606,38 @@ class TestGetProjectDatasetMetadataPage:
             assert isinstance(result, BasicError)
 
 
-class TestGetProjectManifests:
-    """Test case for list_storage_project_manifests"""
+class TestGetProjectManifestMetadataArray:
+    """Test case for get_project_manifest_metadata_array"""
 
-    def test_success(self, example_manifest_metadata: list) -> None:
+    def test_success(self, example_manifest_metadata: list[ManifestMetadata]) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             return_value=example_manifest_metadata,
         ):
-            result, status = get_project_manifests(
+            result, status = get_project_manifest_metadata_array(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
-            assert isinstance(result, ManifestsPage)
+            assert isinstance(result, ManifestMetadataArray)
+            assert isinstance(result.manifests, list)
+            for item in result.manifests:
+                assert isinstance(item, ManifestMetadata)
+                assert isinstance(item.id, str)
+                assert isinstance(item.name, str)
+                assert isinstance(item.dataset_name, str)
+                assert isinstance(item.dataset_id, str)
+                assert isinstance(item.component_name, str)
 
     def test_no_credentials_error(self) -> None:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            result, status = get_project_manifests(
+            result, status = get_project_manifest_metadata_array(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -636,10 +647,10 @@ class TestGetProjectManifests:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=SynapseAuthenticationError,
         ):
-            result, status = get_project_manifests(
+            result, status = get_project_manifest_metadata_array(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -649,10 +660,10 @@ class TestGetProjectManifests:
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            result, status = get_project_manifests(
+            result, status = get_project_manifest_metadata_array(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
@@ -662,10 +673,93 @@ class TestGetProjectManifests:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = get_project_manifests(
+            result, status = get_project_manifest_metadata_array(
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
+
+
+class TestGetProjectManifestMetadataPage:
+    """Test case for get_project_manifest_metadata_page"""
+
+    def test_success(self, example_manifest_metadata: list[ManifestMetadata]) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            return_value=example_manifest_metadata,
+        ):
+            result, status = get_project_manifest_metadata_page(
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 200
+            assert isinstance(result, ManifestMetadataPage)
+            assert result.number == 1
+            assert result.size == 100000
+            assert isinstance(result.total_elements, int)
+            assert isinstance(result.total_pages, int)
+            assert isinstance(result.has_next, bool)
+            assert isinstance(result.has_previous, bool)
+            assert isinstance(result.manifests, list)
+            for item in result.manifests:
+                assert isinstance(item, ManifestMetadata)
+                assert isinstance(item.id, str)
+                assert isinstance(item.name, str)
+                assert isinstance(item.dataset_name, str)
+                assert isinstance(item.dataset_id, str)
+                assert isinstance(item.component_name, str)
+
+    def test_no_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            result, status = get_project_manifest_metadata_page(
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_bad_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=SynapseAuthenticationError,
+        ):
+            result, status = get_project_manifest_metadata_page(
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_no_access_error(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            result, status = get_project_manifest_metadata_page(
+                project_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 403
+            assert isinstance(result, BasicError)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_project_manifest_metadata_page(
                 project_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500

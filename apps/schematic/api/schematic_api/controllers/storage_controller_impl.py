@@ -11,8 +11,9 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.dataset_metadata import DatasetMetadata
 from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
 from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
-from schematic_api.models.manifests_page import ManifestsPage
-from schematic_api.models.manifest import Manifest
+from schematic_api.models.manifest_metadata import ManifestMetadata
+from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
+from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
 from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
 from schematic_api.models.file_metadata import FileMetadata
@@ -389,64 +390,104 @@ def get_project_dataset_metadata_page(
     return result, status
 
 
-def get_project_manifests_from_schematic(
+def get_project_manifest_metadata_from_schematic(
     project_id: str,
     asset_type: str,  # pylint: disable=unused-argument
-) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
-    """Gets a list of manifests from the project
+) -> list[ManifestMetadata]:
+    """Gets manifest metadata from the project
 
     Args:
         project_id (str): The id for the project
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]: A list of manifests
+        list[ManifestMetadata]: A list of manifest metadata
     """
     access_token = get_access_token()
     store = SynapseStorage(access_token=access_token)  # type: ignore
-    return store.getProjectManifests(projectId=project_id)  # type: ignore
-
-
-@handle_exceptions
-def get_project_manifests(
-    project_id: str, asset_type: str, asset_view_id: str
-) -> tuple[Union[ManifestsPage, BasicError], int]:
-    """Attempts to get a list of manifests from a Synapse project
-
-    Args:
-        project_id (str): A Synapse id
-        asset_view_id (str): A Synapse id
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        tuple[Union[ManifestsPage, BasicError], int]: A tuple
-          The first item is either the manifests or an error object
-          The second item is the response status
-    """
-    # load config
-    CONFIG.synapse_master_fileview_id = asset_view_id
-    project_manifests = get_project_manifests_from_schematic(project_id, asset_type)
-    manifests = [
-        Manifest(
+    manifest_tuple_list = store.getProjectManifests(projectId=project_id)  # type: ignore
+    return [
+        ManifestMetadata(
             name=item[1][1],
             id=item[1][0],
             dataset_name=item[0][1],
             dataset_id=item[0][0],
             component_name=item[2][0],
         )
-        for item in project_manifests
+        for item in manifest_tuple_list
     ]
 
-    page = ManifestsPage(
-        number=0,
-        size=100,
-        total_elements=len(manifests),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        manifests=manifests,
+
+@handle_exceptions
+def get_project_manifest_metadata_array(
+    project_id: str,
+    asset_type: str,
+    asset_view_id: str,
+) -> tuple[Union[ManifestMetadataArray, BasicError], int]:
+    """Gets a list of manifest metadata from a project
+
+    Args:
+        project_id (str): The id of the project
+        asset_view_id (str): The id of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        [Union[tuple[ManifestMetadataArray, BasicError], int]: A tuple
+          The first item is either the manifests or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest_metadata = get_project_manifest_metadata_from_schematic(
+        project_id, asset_type
     )
-    result: Union[ManifestsPage, BasicError] = page
+    result: Union[ManifestMetadataArray, BasicError] = ManifestMetadataArray(
+        manifest_metadata
+    )
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_project_manifest_metadata_page(
+    project_id: str,
+    asset_type: str,
+    asset_view_id: str,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[Union[ManifestMetadataPage, BasicError], int]:
+    """Gets a page of manifest metadata from a project
+
+    Args:
+        project_id (str): The id of the project
+        asset_view_id (str): The id of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        [Union[tuple[ManifestMetadataPage, BasicError], int]: A tuple
+          The first item is either the manifests or an error object
+          The second item is the response status
+    """
+    # load config
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest_metadata = get_project_manifest_metadata_from_schematic(
+        project_id, asset_type
+    )
+
+    page = Page(manifest_metadata, page_number, page_max_items)
+
+    manifest_page = ManifestMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        manifests=page.items,
+    )
+
+    result: Union[ManifestMetadataPage, BasicError] = manifest_page
     status = 200
 
     return result, status

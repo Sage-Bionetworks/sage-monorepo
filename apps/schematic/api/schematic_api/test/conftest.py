@@ -4,6 +4,8 @@ import pytest
 
 import pandas as pd
 
+from schematic_api.models.manifest_metadata import ManifestMetadata
+
 
 def csv_to_bytes(path: str) -> str:
     """reads in a csv file and returns as bytes"""
@@ -19,8 +21,28 @@ def csv_to_json_str(path: str) -> str:
 
 
 EXAMPLE_MANIFEST_METADATA = [
-    (("dataset_id1", "dataset_name1"), ("syn1", "name1"), ("component1", "component1")),
-    (("dataset_id2", "dataset_name2"), ("syn2", "name2"), ("component2", "component2")),
+    ManifestMetadata(
+        name="name",
+        id="id",
+        dataset_name="name",
+        dataset_id="id",
+        component_name="name",
+    ),
+    ManifestMetadata(
+        name="name",
+        id="id",
+        dataset_name="name",
+        dataset_id="id",
+        component_name="name",
+    ),
+]
+
+MANIFEST_METADATA_KEYS = [
+    "componentName",
+    "datasetId",
+    "datasetName",
+    "id",
+    "name",
 ]
 
 

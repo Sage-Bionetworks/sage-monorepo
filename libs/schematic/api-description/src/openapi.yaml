@@ -32,8 +32,11 @@ paths:
   /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
     $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasetMetadataPage.yaml
 
-  /assetTypes/{assetType}/projects/{projectId}/manifests:
-    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifests.yaml
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifestMetadataArray.yaml
+
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifestMetadataPage.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml

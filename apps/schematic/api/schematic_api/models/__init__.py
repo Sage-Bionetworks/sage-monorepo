@@ -17,10 +17,11 @@ from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.models.file_metadata_page_all_of import FileMetadataPageAllOf
-from schematic_api.models.manifest import Manifest
+from schematic_api.models.manifest_metadata import ManifestMetadata
+from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
+from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
+from schematic_api.models.manifest_metadata_page_all_of import ManifestMetadataPageAllOf
 from schematic_api.models.manifest_validation_result import ManifestValidationResult
-from schematic_api.models.manifests_page import ManifestsPage
-from schematic_api.models.manifests_page_all_of import ManifestsPageAllOf
 from schematic_api.models.node import Node
 from schematic_api.models.node_properties_page import NodePropertiesPage
 from schematic_api.models.node_properties_page_all_of import NodePropertiesPageAllOf

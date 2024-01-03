@@ -97,7 +97,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetType'
@@ -106,7 +106,7 @@ paths:
         - Storage
       summary: Gets all manifests in a project folder that users have access to
       description: Gets all manifests in a project folder that the current user has access to.
-      operationId: getProjectManifests
+      operationId: getProjectManifestMetadataArray
       parameters:
         - $ref: '#/components/parameters/assetViewIdQuery'
       security:
@@ -117,7 +117,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestsPage'
+                $ref: '#/components/schemas/ManifestMetadataArray'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all manifests in a project folder that users have access to
+      description: Gets all manifests in a project folder that the current user has access to.
+      operationId: getProjectManifestMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestMetadataPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -787,9 +820,9 @@ components:
             - datasets
       x-java-class-annotations:
         - '@lombok.Builder'
-    Manifest:
+    ManifestMetadata:
       type: object
-      description: A manifest object
+      description: The metadata for a manifest file
       properties:
         name:
           type: string
@@ -814,18 +847,27 @@ components:
       required:
         - name
         - id
-    ManifestsPage:
+    ManifestMetadataArray:
       type: object
-      description: A page of manifests.
+      description: An array of manifest metadata
+      properties:
+        manifests:
+          description: A list of manifest metadata
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestMetadata'
+    ManifestMetadataPage:
+      type: object
+      description: A page of manifest metadata
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             manifests:
-              description: A list of manifests.
+              description: A list of manifest metadata
               type: array
               items:
-                $ref: '#/components/schemas/Manifest'
+                $ref: '#/components/schemas/ManifestMetadata'
           required:
             - manifests
       x-java-class-annotations:

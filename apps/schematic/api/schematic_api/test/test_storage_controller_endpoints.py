@@ -1,4 +1,5 @@
 """Tests for endpoints"""
+# pylint: disable=duplicate-code
 
 import unittest
 from unittest.mock import patch
@@ -11,7 +12,7 @@ import schematic_api.controllers.storage_controller_impl
 from schematic_api.test import BaseTestCase
 from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.dataset_metadata import DatasetMetadata
-from .conftest import EXAMPLE_MANIFEST_METADATA
+from .conftest import EXAMPLE_MANIFEST_METADATA, MANIFEST_METADATA_KEYS
 
 HEADERS = {
     "Accept": "application/json",
@@ -36,8 +37,11 @@ PROJECT_DATASET_METATDATA_ARRRAY_URL = (
 PROJECT_DATASET_METATDATA_PAGE_URL = (
     "/api/v1/assetTypes/synapse/projects/syn2/datasetMetadataPage?assetViewId=syn1"
 )
-PROJECT_MANIFESTS_URL = (
-    "/api/v1/assetTypes/synapse/projects/syn2/manifests?assetViewId=syn1"
+PROJECT_MANIFEST_METADATA_ARRAY_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/manifestMetadataArray?assetViewId=syn1"
+)
+PROJECT_MANIFEST_METADATA_PAGE_URL = (
+    "/api/v1/assetTypes/synapse/projects/syn2/manifestMetadataPage?assetViewId=syn1"
 )
 
 
@@ -253,6 +257,7 @@ class TestGetDatasetFileMetadataPage(BaseTestCase):
             assert isinstance(result["files"], list)
             for item in result["files"]:
                 assert isinstance(item, dict)
+                assert list(item.keys()) == ["id", "name"]
                 assert isinstance(item["id"], str)
                 assert isinstance(item["name"], str)
 
@@ -644,6 +649,7 @@ class TestGetProjectDatasetMetadataPage(BaseTestCase):
             assert isinstance(result["datasets"], list)
             for item in result["datasets"]:
                 assert isinstance(item, dict)
+                assert list(item.keys()) == ["id", "name"]
                 assert isinstance(item["id"], str)
                 assert isinstance(item["name"], str)
 
@@ -690,7 +696,7 @@ class TestGetProjectDatasetMetadataPage(BaseTestCase):
             )
 
 
-class TestGetProjectManifests(BaseTestCase):
+class TestGetProjectManifestMetadataArray(BaseTestCase):
     """Test case for manifests endpoint"""
 
     def test_success(self) -> None:
@@ -698,47 +704,36 @@ class TestGetProjectManifests(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             return_value=EXAMPLE_MANIFEST_METADATA,
         ):
             response = self.client.open(
-                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+                PROJECT_MANIFEST_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-
-            assert not response.json["hasNext"]
-            assert not response.json["hasPrevious"]
-            assert response.json["number"] == 0
-            assert response.json["size"] == 100
-            assert response.json["totalElements"] == 2
-            assert response.json["totalPages"] == 1
-            manifests = response.json["manifests"]
-            assert len(manifests) == 2
-            manifest = manifests[0]
-            assert list(manifest.keys()) == [
-                "componentName",
-                "datasetId",
-                "datasetName",
-                "id",
-                "name",
-            ]
-            assert manifest["name"] == "name1"
-            assert manifest["id"] == "syn1"
-            assert manifest["componentName"] == "component1"
-            assert manifest["datasetId"] == "dataset_id1"
-            assert manifest["datasetName"] == "dataset_name1"
+            result = response.json
+            assert isinstance(result, dict)
+            assert isinstance(result["manifests"], list)
+            for item in result["manifests"]:
+                assert isinstance(item, dict)
+                assert list(item.keys()) == MANIFEST_METADATA_KEYS
+                assert isinstance(item["id"], str)
+                assert isinstance(item["name"], str)
+                assert isinstance(item["datasetName"], str)
+                assert isinstance(item["datasetId"], str)
+                assert isinstance(item["componentName"], str)
 
     def test_401(self) -> None:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
             response = self.client.open(
-                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+                PROJECT_MANIFEST_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -748,11 +743,11 @@ class TestGetProjectManifests(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
             response = self.client.open(
-                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+                PROJECT_MANIFEST_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -762,11 +757,89 @@ class TestGetProjectManifests(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_project_manifests_from_schematic",
+            "get_project_manifest_metadata_from_schematic",
             side_effect=TypeError,
         ):
             response = self.client.open(
-                PROJECT_MANIFESTS_URL, method="GET", headers=HEADERS
+                PROJECT_MANIFEST_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestGetProjectManifestMetadataPage(BaseTestCase):
+    """Test case for manifests endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            return_value=EXAMPLE_MANIFEST_METADATA,
+        ):
+            response = self.client.open(
+                PROJECT_MANIFEST_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            result = response.json
+            assert isinstance(result, dict)
+            assert result["number"] == 1
+            assert result["size"] == 100000
+            assert not result["hasNext"]
+            assert not result["hasPrevious"]
+            assert result["totalPages"] == 1
+            assert isinstance(result["totalElements"], int)
+            assert isinstance(result["manifests"], list)
+            for item in result["manifests"]:
+                assert isinstance(item, dict)
+                assert list(item.keys()) == MANIFEST_METADATA_KEYS
+                assert isinstance(item["id"], str)
+                assert isinstance(item["name"], str)
+                assert isinstance(item["datasetName"], str)
+                assert isinstance(item["datasetId"], str)
+                assert isinstance(item["componentName"], str)
+
+    def test_401(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            response = self.client.open(
+                PROJECT_MANIFEST_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert401(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_403(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            response = self.client.open(
+                PROJECT_MANIFEST_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert403(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_project_manifest_metadata_from_schematic",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                PROJECT_MANIFEST_METADATA_PAGE_URL, method="GET", headers=HEADERS
             )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"

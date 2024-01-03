@@ -670,11 +670,11 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /assetTypes/{assetType}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
     get:
       description: Gets all manifests in a project folder that the current user has
         access to.
-      operationId: get_project_manifests
+      operationId: get_project_manifest_metadata_array
       parameters:
       - description: The Synapse ID of a storage project.
         explode: false
@@ -707,7 +707,104 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestsPage'
+                $ref: '#/components/schemas/ManifestMetadataArray'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Gets all manifests in a project folder that users have access to
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
+    get:
+      description: Gets all manifests in a project folder that the current user has
+        access to.
+      operationId: get_project_manifest_metadata_page
+      parameters:
+      - description: The Synapse ID of a storage project.
+        explode: false
+        in: path
+        name: projectId
+        required: true
+        schema:
+          $ref: '#/components/schemas/ProjectId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: The page number to get for a paginated query
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: "The maximum number of items per page (up to 100,000) for paginated\
+          \ endpoints"
+        explode: true
+        in: query
+        name: pageMaxItems
+        required: false
+        schema:
+          default: 100000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestMetadataPage'
           description: Success
         "400":
           content:
@@ -2134,8 +2231,14 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    Manifest:
-      description: A manifest object
+    ManifestMetadata:
+      description: The metadata for a manifest file
+      example:
+        name: synapse_storage_manifest.csv
+        datasetName: dataset_X
+        datasetId: syn2
+        id: syn1
+        componentName: patient
       properties:
         name:
           description: The name of the manifest file.
@@ -2165,14 +2268,37 @@ components:
       required:
       - id
       - name
-      title: Manifest
+      title: ManifestMetadata
       type: object
-    ManifestsPage:
+    ManifestMetadataArray:
+      description: An array of manifest metadata
+      example:
+        manifests:
+        - name: synapse_storage_manifest.csv
+          datasetName: dataset_X
+          datasetId: syn2
+          id: syn1
+          componentName: patient
+        - name: synapse_storage_manifest.csv
+          datasetName: dataset_X
+          datasetId: syn2
+          id: syn1
+          componentName: patient
+      properties:
+        manifests:
+          description: A list of manifest metadata
+          items:
+            $ref: '#/components/schemas/ManifestMetadata'
+          title: manifests
+          type: array
+      title: ManifestMetadataArray
+      type: object
+    ManifestMetadataPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ManifestsPage_allOf'
-      description: A page of manifests.
-      title: ManifestsPage
+      - $ref: '#/components/schemas/ManifestMetadataPage_allOf'
+      description: A page of manifest metadata
+      title: ManifestMetadataPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -2484,17 +2610,17 @@ components:
       title: DatasetMetadataPage_allOf
       type: object
       example: null
-    ManifestsPage_allOf:
+    ManifestMetadataPage_allOf:
       properties:
         manifests:
-          description: A list of manifests.
+          description: A list of manifest metadata
           items:
-            $ref: '#/components/schemas/Manifest'
+            $ref: '#/components/schemas/ManifestMetadata'
           title: manifests
           type: array
       required:
       - manifests
-      title: ManifestsPage_allOf
+      title: ManifestMetadataPage_allOf
       type: object
       example: null
     ProjectsPage_allOf:

@@ -24,10 +24,11 @@ schematic_api/models/file_metadata.py
 schematic_api/models/file_metadata_array.py
 schematic_api/models/file_metadata_page.py
 schematic_api/models/file_metadata_page_all_of.py
-schematic_api/models/manifest.py
+schematic_api/models/manifest_metadata.py
+schematic_api/models/manifest_metadata_array.py
+schematic_api/models/manifest_metadata_page.py
+schematic_api/models/manifest_metadata_page_all_of.py
 schematic_api/models/manifest_validation_result.py
-schematic_api/models/manifests_page.py
-schematic_api/models/manifests_page_all_of.py
 schematic_api/models/node.py
 schematic_api/models/node_properties_page.py
 schematic_api/models/node_properties_page_all_of.py
