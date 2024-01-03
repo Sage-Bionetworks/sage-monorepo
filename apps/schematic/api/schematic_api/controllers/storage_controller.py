@@ -10,7 +10,8 @@ from schematic_api.models.dataset_metadata_array import (
     DatasetMetadataArray,
 )  # noqa: E501
 from schematic_api.models.dataset_metadata_page import DatasetMetadataPage  # noqa: E501
-from schematic_api.models.files_page import FilesPage  # noqa: E501
+from schematic_api.models.file_metadata_array import FileMetadataArray  # noqa: E501
+from schematic_api.models.file_metadata_page import FileMetadataPage  # noqa: E501
 from schematic_api.models.manifests_page import ManifestsPage  # noqa: E501
 from schematic_api.models.projects_page import ProjectsPage  # noqa: E501
 from schematic_api import util
@@ -34,7 +35,7 @@ def get_asset_view_json(asset_view_id, asset_type):  # noqa: E501
     return storage_controller_impl.get_asset_view_json(asset_view_id, asset_type)
 
 
-def get_dataset_files(
+def get_dataset_file_metadata_array(
     dataset_id, asset_type, asset_view_id, file_names=None, use_full_file_path=None
 ):  # noqa: E501
     """Gets all files associated with a dataset.
@@ -52,12 +53,55 @@ def get_dataset_files(
     :param use_full_file_path: Whether or not to return the full path of output, or just the basename.
     :type use_full_file_path: bool
 
-    :rtype: Union[FilesPage, Tuple[FilesPage, int], Tuple[FilesPage, int, Dict[str, str]]
+    :rtype: Union[FileMetadataArray, Tuple[FileMetadataArray, int], Tuple[FileMetadataArray, int, Dict[str, str]]
     """
     if connexion.request.is_json:
         asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
-    return storage_controller_impl.get_dataset_files(
+    return storage_controller_impl.get_dataset_file_metadata_array(
         dataset_id, asset_type, asset_view_id, file_names, use_full_file_path
+    )
+
+
+def get_dataset_file_metadata_page(
+    dataset_id,
+    asset_type,
+    asset_view_id,
+    file_names=None,
+    use_full_file_path=None,
+    page_number=None,
+    page_max_items=None,
+):  # noqa: E501
+    """Gets all files associated with a dataset.
+
+    Gets all files associated with a dataset. # noqa: E501
+
+    :param dataset_id: The ID of a dataset.
+    :type dataset_id: str
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+    :param file_names: A list of file names used to filter the output.
+    :type file_names: List[str]
+    :param use_full_file_path: Whether or not to return the full path of output, or just the basename.
+    :type use_full_file_path: bool
+    :param page_number: The page number to get for a paginated query
+    :type page_number: int
+    :param page_max_items: The maximum number of items per page (up to 100,000) for paginated endpoints
+    :type page_max_items: int
+
+    :rtype: Union[FileMetadataPage, Tuple[FileMetadataPage, int], Tuple[FileMetadataPage, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_dataset_file_metadata_page(
+        dataset_id,
+        asset_type,
+        asset_view_id,
+        file_names,
+        use_full_file_path,
+        page_number,
+        page_max_items,
     )
 
 

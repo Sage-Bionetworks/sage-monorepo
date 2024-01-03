@@ -217,7 +217,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/datasets/{datasetId}/files:
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
     parameters:
       - $ref: '#/components/parameters/datasetId'
       - $ref: '#/components/parameters/assetType'
@@ -226,7 +226,7 @@ paths:
         - Storage
       summary: Gets all files associated with a dataset.
       description: Gets all files associated with a dataset.
-      operationId: getDatasetFiles
+      operationId: getDatasetFileMetadataArray
       parameters:
         - $ref: '#/components/parameters/fileNames'
         - $ref: '#/components/parameters/useFullFilePath'
@@ -239,7 +239,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilesPage'
+                $ref: '#/components/schemas/FileMetadataArray'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: getDatasetFileMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadataPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -847,9 +882,9 @@ components:
       description: Whether or not to return the full path of output, or just the basename.
       type: boolean
       default: false
-    File:
+    FileMetadata:
       type: object
-      description: A file.
+      description: The metadata for a file
       properties:
         name:
           type: string
@@ -864,18 +899,27 @@ components:
         - id
       x-java-class-annotations:
         - '@lombok.Builder'
-    FilesPage:
+    FileMetadataArray:
       type: object
-      description: A page of files.
+      description: A list of file metadata.
+      properties:
+        files:
+          description: A list of file metadata.
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+    FileMetadataPage:
+      type: object
+      description: A page of file metadata.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             files:
-              description: A list of files.
+              description: A list of file metadata.
               type: array
               items:
-                $ref: '#/components/schemas/File'
+                $ref: '#/components/schemas/FileMetadata'
           required:
             - files
       x-java-class-annotations:

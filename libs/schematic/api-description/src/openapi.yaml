@@ -44,8 +44,11 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
 
-  /assetTypes/{assetType}/datasets/{datasetId}/files:
-    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/files.yaml
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/fileMetadataArray.yaml
+
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/fileMetadataPage.yaml
 
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml

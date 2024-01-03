@@ -15,8 +15,9 @@ from schematic_api.models.manifests_page import ManifestsPage
 from schematic_api.models.manifest import Manifest
 from schematic_api.models.project import Project
 from schematic_api.models.projects_page import ProjectsPage
-from schematic_api.models.file import File
-from schematic_api.models.files_page import FilesPage
+from schematic_api.models.file_metadata import FileMetadata
+from schematic_api.models.file_metadata_array import FileMetadataArray
+from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.controllers.utils import handle_exceptions, get_access_token
 from schematic_api.controllers.paging import Page
 
@@ -83,12 +84,12 @@ def get_asset_view_json(
     return result, status
 
 
-def get_dataset_files_from_schematic(
+def get_dataset_file_metadata_from_schematic(
     dataset_id: str,
     asset_type: str,  # pylint: disable=unused-argument
     file_names: Optional[list[str]],
     use_full_file_path: bool,
-) -> list[tuple[str, str]]:
+) -> list[FileMetadata]:
     """Gets a list of datasets from the project
 
     Args:
@@ -96,26 +97,27 @@ def get_dataset_files_from_schematic(
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        list[tuple(str, str)]: A list of files in tuple form
+        list[FileMetadata]: A list of file metadata
     """
     access_token = get_access_token()
     store = SynapseStorage(access_token=access_token)  # type: ignore
-    return store.getFilesInStorageDataset(
+    file_tuple_list = store.getFilesInStorageDataset(
         datasetId=dataset_id,
         fileNames=file_names,  # type: ignore
         fullpath=use_full_file_path,
     )
+    return [FileMetadata(id=item[0], name=item[1]) for item in file_tuple_list]
 
 
 @handle_exceptions
-def get_dataset_files(
+def get_dataset_file_metadata_array(
     dataset_id: str,
     asset_type: str,
     asset_view_id: str,
     file_names: Optional[list[str]] = None,
     use_full_file_path: bool = False,
-) -> tuple[Union[FilesPage, BasicError], int]:
-    """Attempts to get a list of files associated with a dataset
+) -> tuple[Union[FileMetadataArray, BasicError], int]:
+    """Gets file metadata associated with a dataset
 
     Args:
         dataset_id (str): The Id for the dataset to get the files from
@@ -125,26 +127,65 @@ def get_dataset_files(
         use_full_file_path: Whether or not to return the full file path of each file
 
     Returns:
-        tuple[Union[FilesPage, BasicError], int]: A tuple
-          The first item is either the datasets or an error object
+        tuple[Union[FileMetadataArray, BasicError], int]: A tuple
+          The first item is either the file metadata or an error object
           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
-    file_tuples = get_dataset_files_from_schematic(
+    file_metadata_list = get_dataset_file_metadata_from_schematic(
         dataset_id, asset_type, file_names, use_full_file_path
     )
-    files = [File(id=item[0], name=item[1]) for item in file_tuples]
 
-    page = FilesPage(
-        number=0,
-        size=100,
-        total_elements=len(files),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        files=files,
+    result: Union[FileMetadataArray, BasicError] = FileMetadataArray(file_metadata_list)
+    status = 200
+
+    return result, status
+
+
+@handle_exceptions
+def get_dataset_file_metadata_page(  # pylint: disable=too-many-arguments
+    dataset_id: str,
+    asset_type: str,
+    asset_view_id: str,
+    file_names: Optional[list[str]] = None,
+    use_full_file_path: bool = False,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[Union[FileMetadataPage, BasicError], int]:
+    """Gets file metadata associated with a dataset
+
+    Args:
+        dataset_id (str): The Id for the dataset to get the files from
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        file_names (Optional[list[str]]): An optional list of file names to filter the output by
+        use_full_file_path: Whether or not to return the full file path of each file
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[Union[FileMetadataPage, BasicError], int]: A tuple
+          The first item is either the file metadata or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    file_metadata_list = get_dataset_file_metadata_from_schematic(
+        dataset_id, asset_type, file_names, use_full_file_path
     )
-    result: Union[FilesPage, BasicError] = page
+
+    page = Page(file_metadata_list, page_number, page_max_items)
+
+    file_page = FileMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        files=page.items,
+    )
+
+    result: Union[FileMetadataPage, BasicError] = file_page
     status = 200
 
     return result, status

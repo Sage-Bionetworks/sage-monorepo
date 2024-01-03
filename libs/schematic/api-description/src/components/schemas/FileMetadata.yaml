@@ -1,5 +1,5 @@
 type: object
-description: A file.
+description: The metadata for a file
 properties:
   name:
     type: string

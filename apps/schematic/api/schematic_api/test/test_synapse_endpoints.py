@@ -87,11 +87,11 @@ class TestStorageEndpoints(BaseTestCase):
         dataframe = pd.DataFrame.from_dict(response_dict)
         assert isinstance(dataframe, pd.DataFrame)
 
-    def test_get_dataset_files(self) -> None:
+    def test_get_dataset_file_metadata_array(self) -> None:
         """Test for successful result"""
         url = (
             "/api/v1/assetTypes/synapse/"
-            f"datasets/{TEST_DATASET}/files"
+            f"datasets/{TEST_DATASET}/fileMetadataArray"
             f"?assetViewId={TEST_ASSET_VIEW}"
         )
         response = self.client.open(url, method="GET", headers=HEADERS)
@@ -99,10 +99,27 @@ class TestStorageEndpoints(BaseTestCase):
         assert isinstance(response.json, dict)
         assert "files" in response.json
         assert isinstance(response.json["files"], list)
-        for fle in response.json["files"]:
-            assert isinstance(fle, dict)
+        for item in response.json["files"]:
+            assert isinstance(item, dict)
             for key in ["id", "name"]:
-                assert key in fle
+                assert key in item
+
+    def test_get_dataset_file_metadata_page(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"datasets/{TEST_DATASET}/fileMetadataPage"
+            f"?assetViewId={TEST_ASSET_VIEW}"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, dict)
+        assert "files" in response.json
+        assert isinstance(response.json["files"], list)
+        for item in response.json["files"]:
+            assert isinstance(item, dict)
+            for key in ["id", "name"]:
+                assert key in item
 
     def test_get_dataset_manifest_json(self) -> None:
         """Test for successful result"""

@@ -6,7 +6,7 @@ get:
     - Storage
   summary: Gets all files associated with a dataset.
   description: Gets all files associated with a dataset.
-  operationId: getDatasetFiles
+  operationId: getDatasetFileMetadataArray
   parameters:
     - $ref: ../../../../../components/parameters/query/fileNames.yaml
     - $ref: ../../../../../components/parameters/query/useFullFilePath.yaml
@@ -19,7 +19,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../../../components/schemas/FilesPage.yaml
+            $ref: ../../../../../components/schemas/FileMetadataArray.yaml
     '400':
       $ref: ../../../../../components/responses/BadRequest.yaml
     '401':

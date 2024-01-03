@@ -16,13 +16,16 @@ from schematic_api.models.dataset_metadata import DatasetMetadata
 from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
 from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
 from schematic_api.models.projects_page import ProjectsPage
-from schematic_api.models.files_page import FilesPage
+from schematic_api.models.file_metadata import FileMetadata
+from schematic_api.models.file_metadata_page import FileMetadataPage
+from schematic_api.models.file_metadata_array import FileMetadataArray
 import schematic_api.controllers.storage_controller_impl
 from schematic_api.controllers.storage_controller_impl import (
     get_dataset_manifest_json,
     get_manifest_json,
     get_asset_view_json,
-    get_dataset_files,
+    get_dataset_file_metadata_array,
+    get_dataset_file_metadata_page,
     get_projects,
     get_project_dataset_metadata_array,
     get_project_dataset_metadata_page,
@@ -99,30 +102,35 @@ class TestGetAssetViewJson:
             assert isinstance(result, BasicError)
 
 
-class TestGetDatasetFiles:
-    """Test case for get_dataset_files"""
+class TestGetDatasetFileMetadataArray:
+    """Test case for get_dataset_file_metadata_array"""
 
     def test_success(self) -> None:
         """Test for successful result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
-            return_value=[("syn1", "name1"), ("syn2", "name2")],
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
         ):
-            result, status = get_dataset_files(
+            result, status = get_dataset_file_metadata_array(
                 dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 200
-            assert isinstance(result, FilesPage)
+            assert isinstance(result, FileMetadataArray)
+            assert isinstance(result.files, list)
+            for item in result.files:
+                assert isinstance(item, FileMetadata)
+                assert isinstance(item.id, str)
+                assert isinstance(item.name, str)
 
     def test_no_credentials_error(self) -> None:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
-            result, status = get_dataset_files(
+            result, status = get_dataset_file_metadata_array(
                 dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -132,10 +140,10 @@ class TestGetDatasetFiles:
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=SynapseAuthenticationError,
         ):
-            result, status = get_dataset_files(
+            result, status = get_dataset_file_metadata_array(
                 dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 401
@@ -145,10 +153,10 @@ class TestGetDatasetFiles:
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
-            result, status = get_dataset_files(
+            result, status = get_dataset_file_metadata_array(
                 dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 403
@@ -158,10 +166,90 @@ class TestGetDatasetFiles:
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=TypeError,
         ):
-            result, status = get_dataset_files(
+            result, status = get_dataset_file_metadata_array(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
+
+
+class TestGetDatasetFileMetadataPage:
+    """Test case for get_dataset_file_metadata_page"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
+        ):
+            result, status = get_dataset_file_metadata_page(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 200
+            assert isinstance(result, FileMetadataPage)
+            assert result.number == 1
+            assert result.size == 100000
+            assert isinstance(result.total_elements, int)
+            assert isinstance(result.total_pages, int)
+            assert isinstance(result.has_next, bool)
+            assert isinstance(result.has_previous, bool)
+            assert isinstance(result.files, list)
+            for item in result.files:
+                assert isinstance(item, FileMetadata)
+                assert isinstance(item.id, str)
+                assert isinstance(item.name, str)
+
+    def test_no_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            result, status = get_dataset_file_metadata_page(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_bad_credentials_error(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=SynapseAuthenticationError,
+        ):
+            result, status = get_dataset_file_metadata_page(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 401
+            assert isinstance(result, BasicError)
+
+    def test_no_access_error(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            result, status = get_dataset_file_metadata_page(
+                dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
+            )
+            assert status == 403
+            assert isinstance(result, BasicError)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_dataset_file_metadata_page(
                 dataset_id="syn1", asset_view_id="syn2", asset_type="synapse"
             )
             assert status == 500

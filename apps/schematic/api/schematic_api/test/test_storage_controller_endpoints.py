@@ -9,6 +9,7 @@ from schematic.exceptions import AccessCredentialsError  # type: ignore
 
 import schematic_api.controllers.storage_controller_impl
 from schematic_api.test import BaseTestCase
+from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.dataset_metadata import DatasetMetadata
 from .conftest import EXAMPLE_MANIFEST_METADATA
 
@@ -18,7 +19,12 @@ HEADERS = {
 }
 
 ASSET_VIEW_JSON_URL = "/api/v1/assetTypes/synapse/assetViews/syn1/json"
-DATASET_FILES_URL = "/api/v1/assetTypes/synapse/datasets/syn2/files?assetViewId=syn1"
+DATASET_FILE_METADATA_ARRAY_URL = (
+    "/api/v1/assetTypes/synapse/datasets/syn2/fileMetadataArray?assetViewId=syn1"
+)
+DATASET_FILE_METADATA_PAGE_URL = (
+    "/api/v1/assetTypes/synapse/datasets/syn2/fileMetadataPage?assetViewId=syn1"
+)
 DATASET_MANIFEST_JSON_URL = (
     "/api/v1/assetTypes/synapse/datasets/syn2/manifestJson?assetViewId=syn1"
 )
@@ -97,7 +103,7 @@ class TestGetAssetViewJson(BaseTestCase):
             )
 
 
-class TestGetDatasetFiles(BaseTestCase):
+class TestGetDatasetFileMetadataArray(BaseTestCase):
     """Test case for files endpoint"""
 
     def test_success(self) -> None:
@@ -105,53 +111,47 @@ class TestGetDatasetFiles(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
-            return_value=[("syn1", "name1"), ("syn2", "name2")],
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
         ):
             response = self.client.open(
-                DATASET_FILES_URL, method="GET", headers=HEADERS
+                DATASET_FILE_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-
-            assert not response.json["hasNext"]
-            assert not response.json["hasPrevious"]
-            assert response.json["number"] == 0
-            assert response.json["size"] == 100
-            assert response.json["totalElements"] == 2
-            assert response.json["totalPages"] == 1
-            files = response.json["files"]
-            assert len(files) == 2
-            file1 = files[0]
-            assert list(file1.keys()) == ["id", "name"]
-            assert file1["name"] == "name1"
-            assert file1["id"] == "syn1"
+            result = response.json
+            assert isinstance(result, dict)
+            assert isinstance(result["files"], list)
+            for item in result["files"]:
+                assert isinstance(item, dict)
+                assert isinstance(item["id"], str)
+                assert isinstance(item["name"], str)
 
     def test_file_names(self) -> None:
         """Test with file_names parameter"""
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
-            return_value=[("syn1", "name1"), ("syn2", "name2")],
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
         ) as mock_function:
             response = self.client.open(
-                DATASET_FILES_URL, method="GET", headers=HEADERS
+                DATASET_FILE_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", None, False)
 
-            url = f"{DATASET_FILES_URL}&fileNames=file.text"
+            url = f"{DATASET_FILE_METADATA_ARRAY_URL}&fileNames=file.text"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", ["file.text"], False)
 
-            url = f"{DATASET_FILES_URL}&fileNames=file.text&fileNames=file2.text"
+            url = f"{DATASET_FILE_METADATA_ARRAY_URL}&fileNames=file.text&fileNames=file2.text"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -165,17 +165,17 @@ class TestGetDatasetFiles(BaseTestCase):
 
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
-            return_value=[("syn1", "name1"), ("syn2", "name2")],
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
         ) as mock_function:
-            url = f"{DATASET_FILES_URL}&useFullFilePath=true"
+            url = f"{DATASET_FILE_METADATA_ARRAY_URL}&useFullFilePath=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
             mock_function.assert_called_with("syn2", "synapse", None, True)
 
-            url = f"{DATASET_FILES_URL}&useFullFilePath=false"
+            url = f"{DATASET_FILE_METADATA_ARRAY_URL}&useFullFilePath=false"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -186,11 +186,11 @@ class TestGetDatasetFiles(BaseTestCase):
         """Test for 401 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=SynapseNoCredentialsError,
         ):
             response = self.client.open(
-                DATASET_FILES_URL, method="GET", headers=HEADERS
+                DATASET_FILE_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert401(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -200,11 +200,11 @@ class TestGetDatasetFiles(BaseTestCase):
         """Test for 403 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=AccessCredentialsError("project"),
         ):
             response = self.client.open(
-                DATASET_FILES_URL, method="GET", headers=HEADERS
+                DATASET_FILE_METADATA_ARRAY_URL, method="GET", headers=HEADERS
             )
             self.assert403(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -214,11 +214,139 @@ class TestGetDatasetFiles(BaseTestCase):
         """Test for 500 result"""
         with patch.object(
             schematic_api.controllers.storage_controller_impl,
-            "get_dataset_files_from_schematic",
+            "get_dataset_file_metadata_from_schematic",
             side_effect=TypeError,
         ):
             response = self.client.open(
-                DATASET_FILES_URL, method="GET", headers=HEADERS
+                DATASET_FILE_METADATA_ARRAY_URL, method="GET", headers=HEADERS
+            )
+            self.assert500(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+
+class TestGetDatasetFileMetadataPage(BaseTestCase):
+    """Test case for files endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
+        ):
+            response = self.client.open(
+                DATASET_FILE_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            result = response.json
+            assert isinstance(result, dict)
+            assert result["number"] == 1
+            assert result["size"] == 100000
+            assert not result["hasNext"]
+            assert not result["hasPrevious"]
+            assert result["totalPages"] == 1
+            assert isinstance(result["totalElements"], int)
+            assert isinstance(result["files"], list)
+            for item in result["files"]:
+                assert isinstance(item, dict)
+                assert isinstance(item["id"], str)
+                assert isinstance(item["name"], str)
+
+    def test_file_names(self) -> None:
+        """Test with file_names parameter"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
+        ) as mock_function:
+            response = self.client.open(
+                DATASET_FILE_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", None, False)
+
+            url = f"{DATASET_FILE_METADATA_PAGE_URL}&fileNames=file.text"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", ["file.text"], False)
+
+            url = f"{DATASET_FILE_METADATA_PAGE_URL}&fileNames=file.text&fileNames=file2.text"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with(
+                "syn2", "synapse", ["file.text", "file2.text"], False
+            )
+
+    def test_use_full_file_path(self) -> None:
+        """Test with use_full_file_path parameter"""
+
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            return_value=[FileMetadata("syn1", "name1"), FileMetadata("syn2", "name2")],
+        ) as mock_function:
+            url = f"{DATASET_FILE_METADATA_PAGE_URL}&useFullFilePath=true"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", None, True)
+
+            url = f"{DATASET_FILE_METADATA_PAGE_URL}&useFullFilePath=false"
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            mock_function.assert_called_with("syn2", "synapse", None, False)
+
+    def test_401(self) -> None:
+        """Test for 401 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=SynapseNoCredentialsError,
+        ):
+            response = self.client.open(
+                DATASET_FILE_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert401(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_403(self) -> None:
+        """Test for 403 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=AccessCredentialsError("project"),
+        ):
+            response = self.client.open(
+                DATASET_FILE_METADATA_PAGE_URL, method="GET", headers=HEADERS
+            )
+            self.assert403(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_file_metadata_from_schematic",
+            side_effect=TypeError,
+        ):
+            response = self.client.open(
+                DATASET_FILE_METADATA_PAGE_URL, method="GET", headers=HEADERS
             )
             self.assert500(
                 response, f"Response body is : {response.data.decode('utf-8')}"

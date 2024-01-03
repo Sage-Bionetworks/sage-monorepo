@@ -150,10 +150,10 @@ paths:
       tags:
       - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
-  /assetTypes/{assetType}/datasets/{datasetId}/files:
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
     get:
       description: Gets all files associated with a dataset.
-      operationId: get_dataset_files
+      operationId: get_dataset_file_metadata_array
       parameters:
       - description: The ID of a dataset.
         explode: false
@@ -203,7 +203,120 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilesPage'
+                $ref: '#/components/schemas/FileMetadataArray'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Unauthorized
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The specified resource was not found
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Gets all files associated with a dataset.
+      tags:
+      - Storage
+      x-openapi-router-controller: schematic_api.controllers.storage_controller
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
+    get:
+      description: Gets all files associated with a dataset.
+      operationId: get_dataset_file_metadata_page
+      parameters:
+      - description: The ID of a dataset.
+        explode: false
+        in: path
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: simple
+      - description: "Type of asset, such as Synapse"
+        explode: false
+        in: path
+        name: assetType
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetType'
+        style: simple
+      - description: A list of file names used to filter the output.
+        explode: true
+        in: query
+        name: fileNames
+        required: false
+        schema:
+          $ref: '#/components/schemas/FileNames'
+        style: form
+      - description: "Whether or not to return the full path of output, or just the\
+          \ basename."
+        explode: true
+        in: query
+        name: useFullFilePath
+        required: false
+        schema:
+          $ref: '#/components/schemas/UseFullFilePath'
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: The page number to get for a paginated query
+        explode: true
+        in: query
+        name: pageNumber
+        required: false
+        schema:
+          default: 1
+          minimum: 1
+          type: integer
+        style: form
+      - description: "The maximum number of items per page (up to 100,000) for paginated\
+          \ endpoints"
+        explode: true
+        in: query
+        name: pageMaxItems
+        required: false
+        schema:
+          default: 100000
+          minimum: 1
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadataPage'
           description: Success
         "400":
           content:
@@ -2112,8 +2225,11 @@ components:
       description: "Whether or not to return the full path of output, or just the\
         \ basename."
       type: boolean
-    File:
-      description: A file.
+    FileMetadata:
+      description: The metadata for a file
+      example:
+        name: file.txt
+        id: Syn1
       properties:
         name:
           description: The name of the file.
@@ -2128,16 +2244,33 @@ components:
       required:
       - id
       - name
-      title: File
+      title: FileMetadata
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    FilesPage:
+    FileMetadataArray:
+      description: A list of file metadata.
+      example:
+        files:
+        - name: file.txt
+          id: Syn1
+        - name: file.txt
+          id: Syn1
+      properties:
+        files:
+          description: A list of file metadata.
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+          title: files
+          type: array
+      title: FileMetadataArray
+      type: object
+    FileMetadataPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/FilesPage_allOf'
-      description: A page of files.
-      title: FilesPage
+      - $ref: '#/components/schemas/FileMetadataPage_allOf'
+      description: A page of file metadata.
+      title: FileMetadataPage
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -2377,17 +2510,17 @@ components:
       title: ProjectsPage_allOf
       type: object
       example: null
-    FilesPage_allOf:
+    FileMetadataPage_allOf:
       properties:
         files:
-          description: A list of files.
+          description: A list of file metadata.
           items:
-            $ref: '#/components/schemas/File'
+            $ref: '#/components/schemas/FileMetadata'
           title: files
           type: array
       required:
       - files
-      title: FilesPage_allOf
+      title: FileMetadataPage_allOf
       type: object
       example: null
     NodesPage_allOf:

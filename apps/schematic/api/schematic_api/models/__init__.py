@@ -13,9 +13,10 @@ from schematic_api.models.dataset_metadata import DatasetMetadata
 from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
 from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
 from schematic_api.models.dataset_metadata_page_all_of import DatasetMetadataPageAllOf
-from schematic_api.models.file import File
-from schematic_api.models.files_page import FilesPage
-from schematic_api.models.files_page_all_of import FilesPageAllOf
+from schematic_api.models.file_metadata import FileMetadata
+from schematic_api.models.file_metadata_array import FileMetadataArray
+from schematic_api.models.file_metadata_page import FileMetadataPage
+from schematic_api.models.file_metadata_page_all_of import FileMetadataPageAllOf
 from schematic_api.models.manifest import Manifest
 from schematic_api.models.manifest_validation_result import ManifestValidationResult
 from schematic_api.models.manifests_page import ManifestsPage
