@@ -6,12 +6,14 @@ sc_immune_features_server <- function(id, cohort_obj){
       ns <- session$ns
 
       gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_gsea_norm.feather"))
+      sc_clinical <- shiny::reactive(arrow::read_feather("inst/feather/sc_clinical.feather"))
 
       sc_immune_features_distribution_server(
         "sc_immune_features_distribution",
         cohort_obj,
         gsea_df,
-        feature_op = shiny::reactive(unique(gsea_df()$feature_name))
+        feature_op = shiny::reactive(unique(gsea_df()$feature_name)),
+        sc_clinical
       )
 
 
