@@ -50,11 +50,6 @@ sc_umap_ui <- function(id){
           style = "font-size: 70%"
         )
       )
-    ),
-    iatlas.modules::plotBox(
-      width=24,
-      plotly::plotlyOutput(ns("umap_plot"),
-                           height = 800)
     )
   )
 }
