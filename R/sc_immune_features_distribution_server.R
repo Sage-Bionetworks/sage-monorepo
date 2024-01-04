@@ -7,6 +7,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+      responder_display <- shiny::reactive(setNames(c("Responder", "Non-Responder", "Unknown"), c("true_responder", "false_responder", "unknown_responder")))
 
       plot_function <- shiny::reactive({
         switch(
@@ -101,7 +102,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
             dplyr::mutate(Responder = dplyr::if_else(
               sample_name == "sum",
               "sum",
-              Responder
+              responder_display()[Responder]
             ),
             group_name = paste(group, Responder, sep = " - ")) %>%
             dplyr::select("feature_name", "feature_value", "dataset_name", "sample_name", "group" = group_name, "y")
