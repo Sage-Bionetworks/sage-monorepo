@@ -6,6 +6,7 @@ sc_immunomodulators_server <- function(id, cohort_obj){
       ns <- session$ns
 
       gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_pseudobulk_gene_expr.feather"))
+      sc_clinical <- shiny::reactive(arrow::read_feather("inst/feather/sc_clinical.feather"))
 
       bubble_df <- shiny::reactive(arrow::read_feather("inst/feather/bubble_plot_df.feather"))
 
@@ -79,7 +80,8 @@ sc_immunomodulators_server <- function(id, cohort_obj){
         "sc_immunomodulators_distribution",
         cohort_obj,
         gsea_df,
-        feature_op = shiny::reactive(input$genes)
+        feature_op = shiny::reactive(input$genes),
+        sc_clinical
       )
 
 
