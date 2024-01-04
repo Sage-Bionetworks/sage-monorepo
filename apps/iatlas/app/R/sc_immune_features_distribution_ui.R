@@ -18,7 +18,7 @@ sc_immune_features_distribution_ui <- function(id){
           shiny::selectInput(
             ns("plot_type"),
             "Select Plot Type",
-            choices = c("Violin", "Box")
+            choices = c( "Box", "Violin")
           )
         ),
         column(
