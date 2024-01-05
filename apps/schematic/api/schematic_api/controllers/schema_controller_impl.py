@@ -340,7 +340,7 @@ def get_node_validation_rules_from_schematic(
         list[ValidationRule]: A list of validation_rules of the node
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    rules = schema_generator.get_node_validation_rules(node_display)  # type: ignore
+    rules = schema_generator.get_node_validation_rules(node_display)
     return [ValidationRule(rule) for rule in rules]
 
 
