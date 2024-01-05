@@ -27,14 +27,12 @@ create_scatterplot <- function(
                 Y = y_col,
                 KEY = key_col,
                 COLOR = color_col,
-                SIZE = size_col,
                 LABEL = label_col),
             plotly::plot_ly(
                 df,
                 x = ~X,
                 y = ~Y,
                 color = ~COLOR,
-                size = ~SIZE,
                 colors = fill_colors,
                 showlegend = show_legend,
                 legendgroup = ~COLOR,
@@ -66,6 +64,17 @@ create_scatterplot <- function(
                     y1 = horizontal_line_y,
                     line = list(color = "black", dash = "dot", alpha = 0.5)
                 ))
+    }
+
+
+    if (!is.na(size_col)) {
+      p <- p %>%
+        plotly::add_trace(df,
+                          x = ~X,
+                          y = ~Y,
+                          color = ~COLOR,
+                          size = ~size_col)
+
     }
 
     if (identity_line) {
