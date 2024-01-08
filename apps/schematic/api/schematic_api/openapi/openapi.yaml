@@ -1082,6 +1082,178 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /generateExcelManifest:
+    get:
+      description: Generates an excel file
+      operationId: generate_excel_manifest
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: "If true, annotations are added to the manifest"
+        explode: true
+        in: query
+        name: addAnnotations
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: The ID of a dataset.
+        explode: true
+        in: query
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: "If making one manifest, the title of the manifest If making\
+          \ multiple manifests, the prefix of the title of the manifests"
+        explode: true
+        in: query
+        name: manifestTitle
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: The label of the source node in a schema
+        explode: true
+        in: query
+        name: nodeLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/NodeLabel'
+        style: form
+      responses:
+        "200":
+          content:
+            application/vnd.ms-excel:
+              schema:
+                format: binary
+                type: string
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Generates an excel file
+      tags:
+      - ManifestGeneration
+      x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
+  /generateGoogleSheetManifests:
+    get:
+      description: Generates a list of google sheet links
+      operationId: generate_google_sheet_manifests
+      parameters:
+      - description: The URL of a schema in jsonld form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: "If true, annotations are added to the manifest"
+        explode: true
+        in: query
+        name: addAnnotations
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: An array of dataset ids
+        explode: true
+        in: query
+        name: datasetIdArray
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetIdArray'
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: true
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: "If making one manifest, the title of the manifest If making\
+          \ multiple manifests, the prefix of the title of the manifests"
+        explode: true
+        in: query
+        name: manifestTitle
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: An array of nodel labels
+        explode: true
+        in: query
+        name: nodeLabelArray
+        required: true
+        schema:
+          $ref: '#/components/schemas/NodeLabelArray'
+        style: form
+      - description: "If true, users are blocked from entering incorrect values. If\
+          \ false, users will get a warning when using incorrect values."
+        explode: true
+        in: query
+        name: useStrictValidation
+        required: false
+        schema:
+          default: true
+          type: boolean
+        style: form
+      - description: "If true, a manifest for all components will be generated, datasetIds\
+          \ will be ignored If false, manifests for each id in datasetIds will be\
+          \ generated"
+        explode: true
+        in: query
+        name: generateAllManifests
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: Generates a list of google sheet links
+      tags:
+      - ManifestGeneration
+      x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /nodes/{nodeDisplay}/isRequired:
     get:
       description: Gets whether or not the node is required in the schema
@@ -2339,6 +2511,53 @@ components:
         - highlighted
         type: string
       style: form
+    addAnnotations:
+      description: "If true, annotations are added to the manifest"
+      explode: true
+      in: query
+      name: addAnnotations
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    manifestTitle:
+      description: "If making one manifest, the title of the manifest If making multiple\
+        \ manifests, the prefix of the title of the manifests"
+      explode: true
+      in: query
+      name: manifestTitle
+      required: false
+      schema:
+        type: string
+      style: form
+    nodeLabelQuery:
+      description: The label of the source node in a schema
+      explode: true
+      in: query
+      name: nodeLabel
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabel'
+      style: form
+    datasetIdArray:
+      description: An array of dataset ids
+      explode: true
+      in: query
+      name: datasetIdArray
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+      style: form
+    nodeLabelArray:
+      description: An array of nodel labels
+      explode: true
+      in: query
+      name: nodeLabelArray
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabelArray'
+      style: form
   responses:
     InternalServerError:
       content:
@@ -2938,6 +3157,44 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data
         model
+      type: object
+    DatasetIdArray:
+      description: An array of dataset ids
+      properties:
+        connectedNodes:
+          description: An array of dataset ids
+          items:
+            $ref: '#/components/schemas/DatasetIdArray'
+          title: connectedNodes
+          type: array
+      title: DatasetIdArray
+      type: object
+    NodeLabelArray:
+      description: An array of node labels
+      properties:
+        connectedNodes:
+          description: An array of node labels
+          items:
+            $ref: '#/components/schemas/NodeLabelArray'
+          title: connectedNodes
+          type: array
+      title: NodeLabelArray
+      type: object
+    GoogleSheetLinks:
+      description: An array of google sheet links
+      example:
+        projects:
+        - projects
+        - projects
+      properties:
+        projects:
+          description: An array of google sheet links
+          items:
+            description: A link to a google sheet
+            type: string
+          title: projects
+          type: array
+      title: GoogleSheetLinks
       type: object
     DatasetMetadataPage_allOf:
       properties:

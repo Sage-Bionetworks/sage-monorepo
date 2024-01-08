@@ -1,0 +1,6 @@
+name: datasetIdArray
+in: query
+description: An array of dataset ids
+required: true
+schema:
+  $ref: ../../schemas/DatasetIdArray.yaml

@@ -1,0 +1,8 @@
+type: object
+description: An array of node labels
+properties:
+  connectedNodes:
+    description: An array of node labels
+    type: array
+    items:
+      $ref: NodeLabelArray.yaml

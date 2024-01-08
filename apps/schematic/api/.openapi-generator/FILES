@@ -1,6 +1,7 @@
 AUTHORS.md
 schematic_api/__init__.py
 schematic_api/controllers/__init__.py
+schematic_api/controllers/manifest_generation_controller.py
 schematic_api/controllers/manifest_validation_controller.py
 schematic_api/controllers/schema_controller.py
 schematic_api/controllers/security_controller_.py
@@ -16,6 +17,7 @@ schematic_api/models/connected_node_pair.py
 schematic_api/models/connected_node_pair_array.py
 schematic_api/models/connected_node_pair_page.py
 schematic_api/models/connected_node_pair_page_all_of.py
+schematic_api/models/dataset_id_array.py
 schematic_api/models/dataset_metadata.py
 schematic_api/models/dataset_metadata_array.py
 schematic_api/models/dataset_metadata_page.py
@@ -24,6 +26,7 @@ schematic_api/models/file_metadata.py
 schematic_api/models/file_metadata_array.py
 schematic_api/models/file_metadata_page.py
 schematic_api/models/file_metadata_page_all_of.py
+schematic_api/models/google_sheet_links.py
 schematic_api/models/manifest_metadata.py
 schematic_api/models/manifest_metadata_array.py
 schematic_api/models/manifest_metadata_page.py
@@ -31,6 +34,7 @@ schematic_api/models/manifest_metadata_page_all_of.py
 schematic_api/models/manifest_validation_result.py
 schematic_api/models/node.py
 schematic_api/models/node_array.py
+schematic_api/models/node_label_array.py
 schematic_api/models/node_page.py
 schematic_api/models/node_page_all_of.py
 schematic_api/models/node_property.py
@@ -48,5 +52,6 @@ schematic_api/models/validation_rule_page.py
 schematic_api/models/validation_rule_page_all_of.py
 schematic_api/openapi/openapi.yaml
 schematic_api/test/__init__.py
+schematic_api/test/test_manifest_generation_controller.py
 schematic_api/typing_utils.py
 schematic_api/util.py

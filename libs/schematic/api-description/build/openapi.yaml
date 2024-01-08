@@ -795,6 +795,67 @@ paths:
                 $ref: '#/components/schemas/TangledTreeText'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /generateExcelManifest:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates an excel file
+      description: Generates an excel file
+      operationId: generateExcelManifest
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/nodeLabelQuery'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                format: binary
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /generateGoogleSheetManifests:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates a list of google sheet links
+      description: Generates a list of google sheet links
+      operationId: generateGoogleSheetManifests
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdArray'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/nodeLabelArray'
+        - name: useStrictValidation
+          in: query
+          description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
+          required: false
+          schema:
+            type: boolean
+            default: true
+        - name: generateAllManifests
+          in: query
+          description: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -1288,6 +1349,34 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object
+    DatasetIdArray:
+      type: object
+      description: An array of dataset ids
+      properties:
+        connectedNodes:
+          description: An array of dataset ids
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetIdArray'
+    NodeLabelArray:
+      type: object
+      description: An array of node labels
+      properties:
+        connectedNodes:
+          description: An array of node labels
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeLabelArray'
+    GoogleSheetLinks:
+      type: object
+      description: An array of google sheet links
+      properties:
+        projects:
+          description: An array of google sheet links
+          type: array
+          items:
+            description: A link to a google sheet
+            type: string
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1541,3 +1630,39 @@ components:
           - plain
           - highlighted
         default: plain
+    addAnnotations:
+      name: addAnnotations
+      in: query
+      description: If true, annotations are added to the manifest
+      required: false
+      schema:
+        type: boolean
+        default: false
+    manifestTitle:
+      name: manifestTitle
+      in: query
+      description: If making one manifest, the title of the manifest If making multiple manifests, the prefix of the title of the manifests
+      required: false
+      schema:
+        type: string
+    nodeLabelQuery:
+      name: nodeLabel
+      in: query
+      description: The label of the source node in a schema
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabel'
+    datasetIdArray:
+      name: datasetIdArray
+      in: query
+      description: An array of dataset ids
+      required: true
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+    nodeLabelArray:
+      name: nodeLabelArray
+      in: query
+      description: An array of nodel labels
+      required: true
+      schema:
+        $ref: '#/components/schemas/NodeLabelArray'

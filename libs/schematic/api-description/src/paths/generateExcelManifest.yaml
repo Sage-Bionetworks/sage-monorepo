@@ -1,0 +1,23 @@
+get:
+  tags:
+    - ManifestGeneration
+  summary: Generates an excel file
+  description: Generates an excel file
+  operationId: generateExcelManifest
+  parameters:
+    - $ref: ../components/parameters/query/schemaUrl.yaml
+    - $ref: ../components/parameters/query/addAnnotations.yaml
+    - $ref: ../components/parameters/query/datasetIdQuery.yaml
+    - $ref: ../components/parameters/query/assetViewIdQuery.yaml
+    - $ref: ../components/parameters/query/manifestTitle.yaml
+    - $ref: ../components/parameters/query/nodeLabelQuery.yaml
+  responses:
+    '200':
+      description: 'Success'
+      content:
+        application/vnd.ms-excel:
+          schema:
+            type: string
+            format: binary
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

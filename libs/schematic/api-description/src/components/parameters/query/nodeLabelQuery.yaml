@@ -1,0 +1,6 @@
+name: nodeLabel
+in: query
+description: The label of the source node in a schema
+required: true
+schema:
+  $ref: ../../schemas/NodeLabel.yaml

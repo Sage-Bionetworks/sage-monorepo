@@ -1,0 +1,8 @@
+type: object
+description: An array of dataset ids
+properties:
+  connectedNodes:
+    description: An array of dataset ids
+    type: array
+    items:
+      $ref: DatasetIdArray.yaml
