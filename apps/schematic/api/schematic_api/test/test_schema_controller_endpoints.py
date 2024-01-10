@@ -18,9 +18,7 @@ NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
 PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
 NODE_PROPERTIES_URL = "/api/v1/nodes/MolecularEntity/nodeProperties?schemaUrl="
-NODE_VALIDATION_RULES_URL = (
-    "/api/v1/nodes/CheckRegexList/validationRules?schemaUrl="
-)
+NODE_VALIDATION_RULES_URL = "/api/v1/nodes/CheckRegexList/validationRules?schemaUrl="
 NODE_DEPENDENCY_ARRAY_URL = "/api/v1/nodes/Patient/dependencyArray?schemaUrl="
 NODE_DEPENDENCY_PAGE_URL = "/api/v1/nodes/Patient/dependencyPage?schemaUrl="
 
@@ -177,7 +175,6 @@ class TestGetNodeProperties(BaseTestCase):
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
-
 class TestGetNodeValidationRules(BaseTestCase):
     """Test case for node validation rules endpoint"""
 
@@ -199,6 +196,7 @@ class TestGetNodeValidationRules(BaseTestCase):
         url = f"{NODE_VALIDATION_RULES_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+
 
 class TestGetNodeDependencyArray(BaseTestCase):
     """Test case for node depencencies endpoint"""
