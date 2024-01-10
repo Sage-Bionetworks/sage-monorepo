@@ -111,7 +111,7 @@ public class OrganizationEntityTest {
   }
 
   @Test
-  public void EqualsObject_ShouldReturnBoolean_WhenPassedTwoObjects() {
+  public void EqualsObject_ShouldBeTheSame_WhenPassedTwoIdenticalObjects() {
 
     OrganizationEntity entityFromConstructor3 = new OrganizationEntity();
     entityFromConstructor3.setId(2L);
@@ -128,10 +128,29 @@ public class OrganizationEntityTest {
 
     boolean equals1 = entityFromConstructor.equals(entityFromConstructor2);
     boolean equals2 = entityFromConstructor2.equals(entityFromConstructor);
-    boolean equals3 = entityFromConstructor.equals(entityFromConstructor3);
 
     Assertions.assertTrue(equals1);
     Assertions.assertTrue(equals2);
+  }
+
+  @Test
+  public void EqualsObject_ShouldBeDifferent_WhenPassedTwoDifferentObjects() {
+
+    OrganizationEntity entityFromConstructor3 = new OrganizationEntity();
+    entityFromConstructor3.setId(2L);
+    entityFromConstructor3.setName("Another Organization");
+    entityFromConstructor3.setDescription("Another description");
+    entityFromConstructor3.setAvatarKey("anotherAvatarKey");
+    entityFromConstructor3.setWebsiteUrl("https://another-example.com");
+    entityFromConstructor3.setChallengeCount(10);
+    entityFromConstructor3.setCreatedAt(createdAt);
+    entityFromConstructor3.setUpdatedAt(updatedAt);
+    entityFromConstructor3.setAcronym("AO");
+    entityFromConstructor3.setCategories(Collections.emptyList());
+    entityFromConstructor3.setChallengeContributions(Collections.emptyList());
+
+    boolean equals3 = entityFromConstructor.equals(entityFromConstructor3);
+
     Assertions.assertFalse(equals3);
   }
 }
