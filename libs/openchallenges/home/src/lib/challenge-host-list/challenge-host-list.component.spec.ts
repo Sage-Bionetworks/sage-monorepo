@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientModule } from '@angular/common/http';
 
 import { ChallengeHostListComponent } from './challenge-host-list.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ChallengeHostListComponent', () => {
   let component: ChallengeHostListComponent;
@@ -9,7 +10,11 @@ describe('ChallengeHostListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule, ChallengeHostListComponent],
+      imports: [
+        HttpClientModule,
+        ChallengeHostListComponent,
+        RouterTestingModule,
+      ],
     }).compileComponents();
   });
 
