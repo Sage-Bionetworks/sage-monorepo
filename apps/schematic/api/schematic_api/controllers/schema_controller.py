@@ -14,9 +14,7 @@ from schematic_api.models.connected_node_pair_page import (
 from schematic_api.models.node_array import NodeArray  # noqa: E501
 from schematic_api.models.node_page import NodePage  # noqa: E501
 from schematic_api.models.node_property_array import NodePropertyArray  # noqa: E501
-from schematic_api.models.node_property_page import NodePropertyPage  # noqa: E501
 from schematic_api.models.validation_rule_array import ValidationRuleArray  # noqa: E501
-from schematic_api.models.validation_rule_page import ValidationRulePage  # noqa: E501
 from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
@@ -155,7 +153,7 @@ def get_node_is_required(node_display, schema_url):  # noqa: E501
     return schema_controller_impl.get_node_is_required(node_display, schema_url)
 
 
-def get_node_property_array(node_label, schema_url):  # noqa: E501
+def get_node_properties(node_label, schema_url):  # noqa: E501
     """Gets properties associated with a given node
 
     Gets properties associated with a given node # noqa: E501
@@ -167,33 +165,10 @@ def get_node_property_array(node_label, schema_url):  # noqa: E501
 
     :rtype: Union[NodePropertyArray, Tuple[NodePropertyArray, int], Tuple[NodePropertyArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_property_array(node_label, schema_url)
+    return schema_controller_impl.get_node_properties(node_label, schema_url)
 
 
-def get_node_property_page(
-    node_label, schema_url, page_number=None, page_max_items=None
-):  # noqa: E501
-    """Gets properties associated with a given node
-
-    Gets properties associated with a given node # noqa: E501
-
-    :param node_label: The label of the source node in a schema to get the dependencies of
-    :type node_label: str
-    :param schema_url: The URL of a schema in jsonld form
-    :type schema_url: str
-    :param page_number: The page number to get for a paginated query
-    :type page_number: int
-    :param page_max_items: The maximum number of items per page (up to 100,000) for paginated endpoints
-    :type page_max_items: int
-
-    :rtype: Union[NodePropertyPage, Tuple[NodePropertyPage, int], Tuple[NodePropertyPage, int, Dict[str, str]]
-    """
-    return schema_controller_impl.get_node_property_page(
-        node_label, schema_url, page_number, page_max_items
-    )
-
-
-def get_node_validation_rule_array(node_display, schema_url):  # noqa: E501
+def get_node_validation_rules(node_display, schema_url):  # noqa: E501
     """Gets the validation rules, along with the arguments for each given rule associated with a given node
 
     Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
@@ -205,26 +180,7 @@ def get_node_validation_rule_array(node_display, schema_url):  # noqa: E501
 
     :rtype: Union[ValidationRuleArray, Tuple[ValidationRuleArray, int], Tuple[ValidationRuleArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_validation_rule_array(
-        node_display, schema_url
-    )
-
-
-def get_node_validation_rule_page(node_display, schema_url):  # noqa: E501
-    """Gets the validation rules, along with the arguments for each given rule associated with a given node
-
-    Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
-
-    :param node_display: The display name of the node in a schema
-    :type node_display: str
-    :param schema_url: The URL of a schema in jsonld form
-    :type schema_url: str
-
-    :rtype: Union[ValidationRulePage, Tuple[ValidationRulePage, int], Tuple[ValidationRulePage, int, Dict[str, str]]
-    """
-    return schema_controller_impl.get_node_validation_rule_page(
-        node_display, schema_url
-    )
+    return schema_controller_impl.get_node_validation_rules(node_display, schema_url)
 
 
 def get_property_label(

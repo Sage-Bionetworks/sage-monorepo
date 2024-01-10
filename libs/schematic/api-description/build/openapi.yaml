@@ -446,7 +446,7 @@ paths:
                 type: boolean
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/nodePropertyArray:
+  /nodes/{nodeLabel}/nodeProperties:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
@@ -454,7 +454,7 @@ paths:
         - Schema
       summary: Gets properties associated with a given node
       description: Gets properties associated with a given node
-      operationId: getNodePropertyArray
+      operationId: getNodeProperties
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -464,28 +464,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodePropertyArray'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/nodePropertyPage:
-    parameters:
-      - $ref: '#/components/parameters/nodeLabel'
-    get:
-      tags:
-        - Schema
-      summary: Gets properties associated with a given node
-      description: Gets properties associated with a given node
-      operationId: getNodePropertyPage
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/pageNumber'
-        - $ref: '#/components/parameters/pageMaxItems'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NodePropertyPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/propertyLabel:
@@ -509,7 +487,7 @@ paths:
                 $ref: '#/components/schemas/PropertyLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/validationRuleArray:
+  /nodes/{nodeDisplay}/validationRules:
     parameters:
       - $ref: '#/components/parameters/nodeDisplay'
     get:
@@ -517,7 +495,7 @@ paths:
         - Schema
       summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
       description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: getNodeValidationRuleArray
+      operationId: getNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -527,26 +505,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationRuleArray'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/validationRulePage:
-    parameters:
-      - $ref: '#/components/parameters/nodeDisplay'
-    get:
-      tags:
-        - Schema
-      summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: getNodeValidationRulePage
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ValidationRulePage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /components/{componentLabel}/:
@@ -1134,16 +1092,6 @@ components:
       description: The display name of a node in a schema
       type: string
       example: MolecularEntity
-    NodeProperty:
-      type: object
-      description: A node property
-      properties:
-        name:
-          type: string
-          description: The name of the property
-          example: molecularlyInteractsWith
-      required:
-        - name
     NodePropertyArray:
       type: object
       description: An array of node properties.
@@ -1152,23 +1100,7 @@ components:
           description: An array of node properties.
           type: array
           items:
-            $ref: '#/components/schemas/NodeProperty'
-    NodePropertyPage:
-      type: object
-      description: A page of node properties.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            node_properties:
-              description: An array of node properties.
-              type: array
-              items:
-                $ref: '#/components/schemas/NodeProperty'
-          required:
-            - node_properties
-      x-java-class-annotations:
-        - '@lombok.Builder'
+            type: string
     UseStrictCamelCase:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
@@ -1198,22 +1130,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationRule'
-    ValidationRulePage:
-      type: object
-      description: A page of validation rules.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            validation_rules:
-              description: An array of validation rules.
-              type: array
-              items:
-                $ref: '#/components/schemas/ValidationRule'
-          required:
-            - validation_rules
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ComponentLabel:
       description: The label of a component in a schema
       type: string

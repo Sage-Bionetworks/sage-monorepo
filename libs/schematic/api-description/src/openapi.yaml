@@ -68,20 +68,14 @@ paths:
   /nodes/{nodeDisplay}/isRequired:
     $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
 
-  /nodes/{nodeLabel}/nodePropertyArray:
-    $ref: paths/nodes/@{nodeLabel}/nodePropertyArray.yaml
-
-  /nodes/{nodeLabel}/nodePropertyPage:
-    $ref: paths/nodes/@{nodeLabel}/nodePropertyPage.yaml
+  /nodes/{nodeLabel}/nodeProperties:
+    $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
 
   /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
 
-  /nodes/{nodeDisplay}/validationRuleArray:
-    $ref: paths/nodes/@{nodeDisplay}/validationRuleArray.yaml
-
-  /nodes/{nodeDisplay}/validationRulePage:
-    $ref: paths/nodes/@{nodeDisplay}/validationRulePage.yaml
+  /nodes/{nodeDisplay}/validationRules:
+    $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
 
   /components/{componentLabel}/:
     $ref: paths/components/@{componentLabel}/component.yaml

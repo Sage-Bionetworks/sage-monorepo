@@ -5,7 +5,7 @@ get:
     - Schema
   summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
   description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-  operationId: getNodeValidationRulePage
+  operationId: getNodeValidationRules
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:
@@ -14,6 +14,6 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../../../components/schemas/ValidationRulePage.yaml
+            $ref: ../../../components/schemas/ValidationRuleArray.yaml
     '500':
       $ref: ../../../components/responses/InternalServerError.yaml

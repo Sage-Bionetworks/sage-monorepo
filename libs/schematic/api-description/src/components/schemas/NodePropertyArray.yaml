@@ -5,4 +5,4 @@ properties:
     description: An array of node properties.
     type: array
     items:
-      $ref: NodeProperty.yaml
+      type: string
