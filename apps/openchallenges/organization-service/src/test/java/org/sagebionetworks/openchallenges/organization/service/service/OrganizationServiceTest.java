@@ -2,13 +2,16 @@
 
 // import java.util.Arrays;
 // import java.util.List;
-// import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
+// import
+// org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
 // import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
-// import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
+// import
+// org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationSearchQueryDto;
 // import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationsPageDto;
 // import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 // import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
-// import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
+// import
+// org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 // import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
 // import org.slf4j.Logger;
 // import org.slf4j.LoggerFactory;
@@ -74,5 +77,5 @@
 //   @Test
 //   public void ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
 //   }
-  
+
 // }
