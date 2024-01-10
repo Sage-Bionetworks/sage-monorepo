@@ -19,6 +19,7 @@ public class OrganizationEntityTest {
   private String acronym = "TO";
   private OrganizationEntity entityFromConstructor;
   private OrganizationEntity entityFromConstructor2;
+  private OrganizationEntity entityFromConstructor3;
 
   @BeforeEach
   public void setup() {
@@ -50,6 +51,20 @@ public class OrganizationEntityTest {
     entityFromConstructor2.setAcronym(acronym);
     entityFromConstructor2.setCategories(Collections.emptyList());
     entityFromConstructor2.setChallengeContributions(Collections.emptyList());
+
+    entityFromConstructor3 = new OrganizationEntity();
+    
+    entityFromConstructor3.setId(2L);
+    entityFromConstructor3.setName("Another Organization");
+    entityFromConstructor3.setDescription("Another description");
+    entityFromConstructor3.setAvatarKey("anotherAvatarKey");
+    entityFromConstructor3.setWebsiteUrl("https://another-example.com");
+    entityFromConstructor3.setChallengeCount(10);
+    entityFromConstructor3.setCreatedAt(createdAt);
+    entityFromConstructor3.setUpdatedAt(updatedAt);
+    entityFromConstructor3.setAcronym("AO");
+    entityFromConstructor3.setCategories(Collections.emptyList());
+    entityFromConstructor3.setChallengeContributions(Collections.emptyList());
   }
 
   @Test
@@ -113,19 +128,6 @@ public class OrganizationEntityTest {
   @Test
   public void EqualsObject_ShouldBeTheSame_WhenPassedTwoIdenticalObjects() {
 
-    OrganizationEntity entityFromConstructor3 = new OrganizationEntity();
-    entityFromConstructor3.setId(2L);
-    entityFromConstructor3.setName("Another Organization");
-    entityFromConstructor3.setDescription("Another description");
-    entityFromConstructor3.setAvatarKey("anotherAvatarKey");
-    entityFromConstructor3.setWebsiteUrl("https://another-example.com");
-    entityFromConstructor3.setChallengeCount(10);
-    entityFromConstructor3.setCreatedAt(createdAt);
-    entityFromConstructor3.setUpdatedAt(updatedAt);
-    entityFromConstructor3.setAcronym("AO");
-    entityFromConstructor3.setCategories(Collections.emptyList());
-    entityFromConstructor3.setChallengeContributions(Collections.emptyList());
-
     boolean equals1 = entityFromConstructor.equals(entityFromConstructor2);
     boolean equals2 = entityFromConstructor2.equals(entityFromConstructor);
 
@@ -135,19 +137,6 @@ public class OrganizationEntityTest {
 
   @Test
   public void EqualsObject_ShouldBeDifferent_WhenPassedTwoDifferentObjects() {
-
-    OrganizationEntity entityFromConstructor3 = new OrganizationEntity();
-    entityFromConstructor3.setId(2L);
-    entityFromConstructor3.setName("Another Organization");
-    entityFromConstructor3.setDescription("Another description");
-    entityFromConstructor3.setAvatarKey("anotherAvatarKey");
-    entityFromConstructor3.setWebsiteUrl("https://another-example.com");
-    entityFromConstructor3.setChallengeCount(10);
-    entityFromConstructor3.setCreatedAt(createdAt);
-    entityFromConstructor3.setUpdatedAt(updatedAt);
-    entityFromConstructor3.setAcronym("AO");
-    entityFromConstructor3.setCategories(Collections.emptyList());
-    entityFromConstructor3.setChallengeContributions(Collections.emptyList());
 
     boolean equals3 = entityFromConstructor.equals(entityFromConstructor3);
 
