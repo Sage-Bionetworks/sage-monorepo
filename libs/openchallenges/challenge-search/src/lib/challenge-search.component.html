@@ -149,7 +149,7 @@
         />
       </p-panel>
     </div>
-    <div class="main col">
+    <div *ngIf="challenges" class="main col">
       <h3>Results ({{ searchResultsCount }})</h3>
       <div class="card-group">
         <openchallenges-challenge-card
