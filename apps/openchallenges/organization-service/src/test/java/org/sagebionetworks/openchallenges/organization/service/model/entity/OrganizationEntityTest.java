@@ -53,7 +53,7 @@ public class OrganizationEntityTest {
     entityFromConstructor2.setChallengeContributions(Collections.emptyList());
 
     entityFromConstructor3 = new OrganizationEntity();
-    
+
     entityFromConstructor3.setId(2L);
     entityFromConstructor3.setName("Another Organization");
     entityFromConstructor3.setDescription("Another description");
