@@ -38,7 +38,7 @@ RUN openssl dhparam -out /etc/ssl/dhparam.pem 4096
 
 # copy all nginx config files
 WORKDIR ${NGINX_CONFIG}
-COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./redirect.conf ./
+COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./
 
 # copy to use custom uwsgi.ini
 WORKDIR /app
