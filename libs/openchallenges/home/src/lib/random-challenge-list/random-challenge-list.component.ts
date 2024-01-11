@@ -9,11 +9,17 @@ import {
   ChallengeSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ChallengeCardComponent } from '@sagebionetworks/openchallenges/ui';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-random-challenge-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, ChallengeCardComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    ChallengeCardComponent,
+    RouterModule,
+  ],
   templateUrl: './random-challenge-list.component.html',
   styleUrls: ['./random-challenge-list.component.scss'],
 })
