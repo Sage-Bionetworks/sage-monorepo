@@ -59,8 +59,10 @@
         />
       </p-panel>
     </div>
-    <div *ngIf="organizationCards" class="main col">
-      <h3>Results ({{ searchResultsCount }})</h3>
+    <div class="main col">
+      <h3>
+        Results <span *ngIf="organizationCards.length > 0">({{ searchResultsCount }})</span>
+      </h3>
       <div class="card-group">
         <openchallenges-organization-card
           *ngFor="let organizationCard of organizationCards"
@@ -68,6 +70,7 @@
         />
       </div>
       <openchallenges-paginator
+        *ngIf="organizationCards.length > 0"
         #paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
