@@ -130,7 +130,7 @@ export class ChallengeSearchComponent
   defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
-  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
+  @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = challengeSortFilter;
