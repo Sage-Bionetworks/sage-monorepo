@@ -208,7 +208,7 @@ export class ChallengeSearchComponent
       );
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
       this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: ChallengeSearchQuery = {
@@ -309,6 +309,7 @@ export class ChallengeSearchComponent
         // update challenges and total number of results
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
+        console.log(this.paginator.pageNumber);
       });
   }
 

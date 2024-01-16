@@ -5,6 +5,7 @@ import {
   Output,
   EventEmitter,
   ViewChild,
+  OnInit,
 } from '@angular/core';
 import {
   Paginator,
@@ -18,7 +19,7 @@ import {
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss'],
 })
-export class PaginatorComponent {
+export class PaginatorComponent implements OnInit {
   @Input({ required: true }) pageNumber = 0; // index of the new page
   @Input({ required: false }) pageLinkSize = 5;
   @Input({ required: true }) pageSize = 0; // number of items to display in new page
@@ -29,10 +30,9 @@ export class PaginatorComponent {
 
   itemIndex = 0; // index of the first item in the new page
 
-  // change itemIndex's value will not dynamically trigger selection updates - seems a primeng issue
-  // ngOnInit(): void {
-  //   this.itemIndex = this.pageNumber * this.pageSize;
-  // }
+  ngOnInit(): void {
+    this.itemIndex = this.pageNumber * this.pageSize;
+  }
 
   onPageChange(event: any): void {
     this.pageChange.emit(event);
