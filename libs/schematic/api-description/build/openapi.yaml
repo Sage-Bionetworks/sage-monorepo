@@ -33,16 +33,16 @@ paths:
                 example: v21.1.1
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/projects/{projectId}/datasets:
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetType'
     get:
       tags:
         - Storage
-      summary: Gets all datasets in folder under a given storage project that the current user has access to.
-      description: Gets all datasets in folder under a given storage project that the current user has access to.
-      operationId: getProjectDatasets
+      summary: Gets all dataset metadata in folder under a given storage project that the current user has access to.
+      description: Gets all dataset meatdata in folder under a given storage project that the current user has access to.
+      operationId: getProjectDatasetMetadataArray
       parameters:
         - $ref: '#/components/parameters/assetViewIdQuery'
       security:
@@ -53,7 +53,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DatasetsPage'
+                $ref: '#/components/schemas/DatasetMetadataArray'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -64,7 +64,40 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/projects/{projectId}/manifests:
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets a page of dataset metadata in folder under a given storage project that the current user has access to.
+      description: Gets a page of dataset meatdata in folder under a given storage project that the current user has access to.
+      operationId: getProjectDatasetMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasetMetadataPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
     parameters:
       - $ref: '#/components/parameters/projectId'
       - $ref: '#/components/parameters/assetType'
@@ -73,7 +106,7 @@ paths:
         - Storage
       summary: Gets all manifests in a project folder that users have access to
       description: Gets all manifests in a project folder that the current user has access to.
-      operationId: getProjectManifests
+      operationId: getProjectManifestMetadataArray
       parameters:
         - $ref: '#/components/parameters/assetViewIdQuery'
       security:
@@ -84,7 +117,40 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ManifestsPage'
+                $ref: '#/components/schemas/ManifestMetadataArray'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/projectId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all manifests in a project folder that users have access to
+      description: Gets all manifests in a project folder that the current user has access to.
+      operationId: getProjectManifestMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ManifestMetadataPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -155,7 +221,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataArray:
     parameters:
       - $ref: '#/components/parameters/assetViewId'
       - $ref: '#/components/parameters/assetType'
@@ -164,7 +230,7 @@ paths:
         - Storage
       summary: Gets all storage projects the current user has access to.
       description: Gets all storage projects the current user has access to.
-      operationId: getProjects
+      operationId: getProjectMetadataArray
       security:
         - bearerAuth: []
       responses:
@@ -173,7 +239,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProjectsPage'
+                $ref: '#/components/schemas/ProjectMetadataArray'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -184,7 +250,39 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /assetTypes/{assetType}/datasets/{datasetId}/files:
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all storage projects the current user has access to.
+      description: Gets all storage projects the current user has access to.
+      operationId: getProjectMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectMetadataPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
     parameters:
       - $ref: '#/components/parameters/datasetId'
       - $ref: '#/components/parameters/assetType'
@@ -193,7 +291,7 @@ paths:
         - Storage
       summary: Gets all files associated with a dataset.
       description: Gets all files associated with a dataset.
-      operationId: getDatasetFiles
+      operationId: getDatasetFileMetadataArray
       parameters:
         - $ref: '#/components/parameters/fileNames'
         - $ref: '#/components/parameters/useFullFilePath'
@@ -206,7 +304,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FilesPage'
+                $ref: '#/components/schemas/FileMetadataArray'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
+    parameters:
+      - $ref: '#/components/parameters/datasetId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets all files associated with a dataset.
+      description: Gets all files associated with a dataset.
+      operationId: getDatasetFileMetadataPage
+      parameters:
+        - $ref: '#/components/parameters/fileNames'
+        - $ref: '#/components/parameters/useFullFilePath'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileMetadataPage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -246,7 +379,7 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/dependencies:
+  /nodes/{nodeLabel}/dependencyArray:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
@@ -254,7 +387,7 @@ paths:
         - Schema
       summary: Gets the immediate dependencies that are related to the given source node
       description: Gets the immediate dependencies that are related to the given source node
-      operationId: listNodeDependencies
+      operationId: getNodeDependencyArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/returnDisplayNames'
@@ -265,7 +398,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodesPage'
+                $ref: '#/components/schemas/NodeArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /nodes/{nodeLabel}/dependencyPage:
+    parameters:
+      - $ref: '#/components/parameters/nodeLabel'
+    get:
+      tags:
+        - Schema
+      summary: Gets the immediate dependencies that are related to the given source node
+      description: Gets the immediate dependencies that are related to the given source node
+      operationId: getNodeDependencyPage
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/returnDisplayNames'
+        - $ref: '#/components/parameters/returnOrderedBySchema'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NodePage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/isRequired:
@@ -306,7 +463,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NodePropertiesPage'
+                $ref: '#/components/schemas/NodePropertyArray'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeDisplay}/propertyLabel:
@@ -338,7 +495,7 @@ paths:
         - Schema
       summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
       description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: listNodeValidationRules
+      operationId: getNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -347,7 +504,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationRulesPage'
+                $ref: '#/components/schemas/ValidationRuleArray'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /components/{componentLabel}/:
@@ -391,13 +548,13 @@ paths:
                 type: string
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /connectedNodes:
+  /connectedNodePairArray:
     get:
       tags:
         - Schema
-      summary: Gets a list of connected node pairs
-      description: Gets a list of connected node pairs
-      operationId: getConnectedNodes
+      summary: Gets an array of connected node pairs
+      description: Gets a array of connected node pairs
+      operationId: getConnectedNodePairArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/relationshipType'
@@ -407,7 +564,28 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ConnectedNodesPage'
+                $ref: '#/components/schemas/ConnectedNodePairArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /connectedNodePairPage:
+    get:
+      tags:
+        - Schema
+      summary: Gets a page of connected node pairs
+      description: Gets a page of connected node pairs
+      operationId: getConnectedNodePairPage
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/relationshipType'
+        - $ref: '#/components/parameters/pageNumber'
+        - $ref: '#/components/parameters/pageMaxItems'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConnectedNodePairPage'
         '500':
           $ref: '#/components/responses/InternalServerError'
   /validateManifestJson:
@@ -617,6 +795,32 @@ components:
       description: An asset view ID.
       type: string
       example: syn23643253
+    DatasetMetadata:
+      type: object
+      description: The metadata of a dataset.
+      properties:
+        name:
+          type: string
+          description: The name of the dataset.
+          example: Example dataset
+        id:
+          type: string
+          description: The ID of the dataset.
+          example: Syn1
+      required:
+        - name
+        - id
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    DatasetMetadataArray:
+      type: object
+      description: An array of dataset metadata.
+      properties:
+        datasets:
+          description: An array of dataset meatdata.
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasetMetadata'
     PageMetadata:
       type: object
       description: The metadata of a page.
@@ -656,42 +860,25 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    Dataset:
+    DatasetMetadataPage:
       type: object
-      description: A dataset.
-      properties:
-        name:
-          type: string
-          description: The name of the dataset.
-          example: Example dataset
-        id:
-          type: string
-          description: The ID of the dataset.
-          example: Syn1
-      required:
-        - name
-        - id
-      x-java-class-annotations:
-        - '@lombok.Builder'
-    DatasetsPage:
-      type: object
-      description: A page of datasets.
+      description: A page of dataset metadata.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             datasets:
-              description: A list of datasets.
+              description: An array of dataset meatdata.
               type: array
               items:
-                $ref: '#/components/schemas/Dataset'
+                $ref: '#/components/schemas/DatasetMetadata'
           required:
             - datasets
       x-java-class-annotations:
         - '@lombok.Builder'
-    Manifest:
+    ManifestMetadata:
       type: object
-      description: A manifest object
+      description: The metadata for a manifest file
       properties:
         name:
           type: string
@@ -716,18 +903,27 @@ components:
       required:
         - name
         - id
-    ManifestsPage:
+    ManifestMetadataArray:
       type: object
-      description: A page of manifests.
+      description: An array of manifest metadata
+      properties:
+        manifests:
+          description: A list of manifest metadata
+          type: array
+          items:
+            $ref: '#/components/schemas/ManifestMetadata'
+    ManifestMetadataPage:
+      type: object
+      description: A page of manifest metadata
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             manifests:
-              description: A list of manifests.
+              description: A list of manifest metadata
               type: array
               items:
-                $ref: '#/components/schemas/Manifest'
+                $ref: '#/components/schemas/ManifestMetadata'
           required:
             - manifests
       x-java-class-annotations:
@@ -742,9 +938,9 @@ components:
     ManifestJson:
       description: A manifest in json format
       type: object
-    Project:
+    ProjectMetadata:
       type: object
-      description: A project.
+      description: The metadata for a project
       properties:
         name:
           type: string
@@ -759,18 +955,27 @@ components:
         - id
       x-java-class-annotations:
         - '@lombok.Builder'
-    ProjectsPage:
+    ProjectMetadataArray:
       type: object
-      description: A page of projects.
+      description: An array of project metadata.
+      properties:
+        projects:
+          description: An array of project metadata.
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectMetadata'
+    ProjectMetadataPage:
+      type: object
+      description: A page of project metadata.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             projects:
-              description: A list of projects.
+              description: An array of project metadata.
               type: array
               items:
-                $ref: '#/components/schemas/Project'
+                $ref: '#/components/schemas/ProjectMetadata'
           required:
             - projects
       x-java-class-annotations:
@@ -784,9 +989,9 @@ components:
       description: Whether or not to return the full path of output, or just the basename.
       type: boolean
       default: false
-    File:
+    FileMetadata:
       type: object
-      description: A file.
+      description: The metadata for a file
       properties:
         name:
           type: string
@@ -801,18 +1006,27 @@ components:
         - id
       x-java-class-annotations:
         - '@lombok.Builder'
-    FilesPage:
+    FileMetadataArray:
       type: object
-      description: A page of files.
+      description: A list of file metadata.
+      properties:
+        files:
+          description: A list of file metadata.
+          type: array
+          items:
+            $ref: '#/components/schemas/FileMetadata'
+    FileMetadataPage:
+      type: object
+      description: A page of file metadata.
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
             files:
-              description: A list of files.
+              description: A list of file metadata.
               type: array
               items:
-                $ref: '#/components/schemas/File'
+                $ref: '#/components/schemas/FileMetadata'
           required:
             - files
       x-java-class-annotations:
@@ -849,7 +1063,16 @@ components:
         - name
       x-java-class-annotations:
         - '@lombok.Builder'
-    NodesPage:
+    NodeArray:
+      type: object
+      description: An array of nodes.
+      properties:
+        nodes:
+          description: An array of nodes.
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+    NodePage:
       type: object
       description: A page of nodes.
       allOf:
@@ -857,7 +1080,7 @@ components:
         - type: object
           properties:
             nodes:
-              description: A list of nodes.
+              description: An array of nodes.
               type: array
               items:
                 $ref: '#/components/schemas/Node'
@@ -869,32 +1092,15 @@ components:
       description: The display name of a node in a schema
       type: string
       example: MolecularEntity
-    NodeProperty:
+    NodePropertyArray:
       type: object
-      description: A node property
+      description: An array of node properties.
       properties:
-        name:
-          type: string
-          description: The name of the property
-          example: molecularlyInteractsWith
-      required:
-        - name
-    NodePropertiesPage:
-      type: object
-      description: A page of node properties.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            node_properties:
-              description: A list of node properties.
-              type: array
-              items:
-                $ref: '#/components/schemas/NodeProperty'
-          required:
-            - node_properties
-      x-java-class-annotations:
-        - '@lombok.Builder'
+        node_properties:
+          description: An array of node properties.
+          type: array
+          items:
+            type: string
     UseStrictCamelCase:
       description: Whether or not to use the more strict way of converting to camel case
       type: boolean
@@ -915,22 +1121,15 @@ components:
         - name
       x-java-class-annotations:
         - '@lombok.Builder'
-    ValidationRulesPage:
+    ValidationRuleArray:
       type: object
-      description: A page of validation rules.
-      allOf:
-        - $ref: '#/components/schemas/PageMetadata'
-        - type: object
-          properties:
-            validation_rules:
-              description: A list of validation rules.
-              type: array
-              items:
-                $ref: '#/components/schemas/ValidationRule'
-          required:
-            - validation_rules
-      x-java-class-annotations:
-        - '@lombok.Builder'
+      description: An array of validation rules.
+      properties:
+        validation_rules:
+          description: An array of validation rules.
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationRule'
     ComponentLabel:
       description: The label of a component in a schema
       type: string
@@ -939,7 +1138,7 @@ components:
       description: A type of schema relationship
       type: string
       example: requiresDependency
-    ConnectedNodes:
+    ConnectedNodePair:
       type: object
       description: A pair of conncted nodes
       properties:
@@ -956,20 +1155,29 @@ components:
         - node2
       x-java-class-annotations:
         - '@lombok.Builder'
-    ConnectedNodesPage:
+    ConnectedNodePairArray:
       type: object
-      description: A page of conncted nodes.
+      description: An array of conncted node pairs
+      properties:
+        connectedNodes:
+          description: An array of conncted node pairs.
+          type: array
+          items:
+            $ref: '#/components/schemas/ConnectedNodePair'
+    ConnectedNodePairPage:
+      type: object
+      description: A page of conncted node pairs
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
         - type: object
           properties:
-            connected_nodes:
-              description: A list of conncted node pairs.
+            connectedNodes:
+              description: An array of conncted node pairs.
               type: array
               items:
-                $ref: '#/components/schemas/ConnectedNodes'
+                $ref: '#/components/schemas/ConnectedNodePair'
           required:
-            - connected_nodes
+            - connectedNodes
       x-java-class-annotations:
         - '@lombok.Builder'
     RestrictRules:
@@ -1043,6 +1251,24 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/AssetViewId'
+    pageNumber:
+      name: pageNumber
+      in: query
+      description: The page number to get for a paginated query
+      required: false
+      schema:
+        type: integer
+        default: 1
+        minimum: 1
+    pageMaxItems:
+      name: pageMaxItems
+      in: query
+      description: The maximum number of items per page (up to 100,000) for paginated endpoints
+      required: false
+      schema:
+        type: integer
+        default: 100000
+        minimum: 1
     assetViewId:
       name: assetViewId
       in: path

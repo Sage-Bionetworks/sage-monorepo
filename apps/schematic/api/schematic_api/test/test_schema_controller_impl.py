@@ -1,19 +1,27 @@
 """Tests for schema endpoint functions"""
+# pylint: disable=duplicate-code
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.node_properties_page import NodePropertiesPage
-from schematic_api.models.validation_rules_page import ValidationRulesPage
-from schematic_api.models.nodes_page import NodesPage
-from schematic_api.models.connected_nodes_page import ConnectedNodesPage
+from schematic_api.models.node_property_array import NodePropertyArray
+from schematic_api.models.validation_rule import ValidationRule
+from schematic_api.models.validation_rule_array import ValidationRuleArray
+from schematic_api.models.node import Node
+from schematic_api.models.node_array import NodeArray
+from schematic_api.models.node_page import NodePage
+from schematic_api.models.connected_node_pair_page import ConnectedNodePairPage
+from schematic_api.models.connected_node_pair_array import ConnectedNodePairArray
+from schematic_api.models.connected_node_pair import ConnectedNodePair
 from schematic_api.controllers.schema_controller_impl import (
     get_component,
+    get_connected_node_pair_page,
+    get_connected_node_pair_array,
     get_node_is_required,
     get_property_label,
     get_schema_attributes,
     get_node_properties,
-    get_connected_nodes,
-    list_node_validation_rules,
-    list_node_dependencies,
+    get_node_validation_rules,
+    get_node_dependency_array,
+    get_node_dependency_page,
 )
 
 
@@ -37,21 +45,59 @@ class TestGetComponent:
         assert isinstance(result, BasicError)
 
 
-class TestGetConnectedNodes:
-    """Tests forget_connected_nodes"""
+class TestGetConnectedNodePairArray:
+    """Tests get_connected_node_pair_array"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = get_connected_nodes(
+        result, status = get_connected_node_pair_array(
             schema_url=test_schema_url,
             relationship_type="requiresDependency",
         )
         assert status == 200
-        assert isinstance(result, ConnectedNodesPage)
+        assert isinstance(result, ConnectedNodePairArray)
+        assert isinstance(result.connected_nodes, list)
+        for item in result.connected_nodes:
+            assert isinstance(item, ConnectedNodePair)
+            assert isinstance(item.node1, str)
+            assert isinstance(item.node2, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = get_connected_nodes(
+        result, status = get_connected_node_pair_array(
+            schema_url="not_a_url",
+            relationship_type="requiresDependency",
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
+
+
+class TestGetConnectedNodePairPage:
+    """Tests get_connected_node_pair_page"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_connected_node_pair_page(
+            schema_url=test_schema_url,
+            relationship_type="requiresDependency",
+        )
+        assert status == 200
+        assert isinstance(result, ConnectedNodePairPage)
+        assert result.number == 1
+        assert result.size == 100000
+        assert isinstance(result.total_elements, int)
+        assert isinstance(result.total_pages, int)
+        assert isinstance(result.has_next, bool)
+        assert isinstance(result.has_previous, bool)
+        assert isinstance(result.connected_nodes, list)
+        for item in result.connected_nodes:
+            assert isinstance(item, ConnectedNodePair)
+            assert isinstance(item.node1, str)
+            assert isinstance(item.node2, str)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        result, status = get_connected_node_pair_page(
             schema_url="not_a_url",
             relationship_type="requiresDependency",
         )
@@ -131,7 +177,10 @@ class TestGetNodeProperties:
             schema_url=test_schema_url,
         )
         assert status == 200
-        assert isinstance(result, NodePropertiesPage)
+        assert isinstance(result, NodePropertyArray)
+        assert isinstance(result.node_properties, list)
+        for item in result.node_properties:
+            assert isinstance(item, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
@@ -143,21 +192,25 @@ class TestGetNodeProperties:
         assert isinstance(result, BasicError)
 
 
-class TestNodeValidationRules:
-    """Test case for list_node_validation_rules"""
+class TestGetNodeValidationRuleArray:
+    """Test case for get_node_validation_rules"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = list_node_validation_rules(
+        result, status = get_node_validation_rules(
             node_display="CheckRegexList",
             schema_url=test_schema_url,
         )
         assert status == 200
-        assert isinstance(result, ValidationRulesPage)
+        assert isinstance(result, ValidationRuleArray)
+        assert isinstance(result.validation_rules, list)
+        for item in result.validation_rules:
+            assert isinstance(item, ValidationRule)
+            assert isinstance(item.name, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = list_node_validation_rules(
+        result, status = get_node_validation_rules(
             node_display="CheckRegexList",
             schema_url="not_a_url",
         )
@@ -165,21 +218,57 @@ class TestNodeValidationRules:
         assert isinstance(result, BasicError)
 
 
-class TestListNodeDependencies:
-    """Test case for list_node_dependencies"""
+class TestGetNodeDependencyArray:
+    """Test case for get_node_dependency_array"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = list_node_dependencies(
+        result, status = get_node_dependency_array(
             schema_url=test_schema_url,
             node_label="Patient",
         )
         assert status == 200
-        assert isinstance(result, NodesPage)
+        assert isinstance(result, NodeArray)
+        assert isinstance(result.nodes, list)
+        for item in result.nodes:
+            assert isinstance(item, Node)
+            assert isinstance(item.name, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = list_node_dependencies(
+        result, status = get_node_dependency_page(
+            schema_url="not_a_url",
+            node_label="Patient",
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
+
+
+class TestGetNodeDependencyPage:
+    """Test case for get_node_dependency_page"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_node_dependency_page(
+            schema_url=test_schema_url,
+            node_label="Patient",
+        )
+        assert status == 200
+        assert isinstance(result, NodePage)
+        assert result.number == 1
+        assert result.size == 100000
+        assert isinstance(result.total_elements, int)
+        assert isinstance(result.total_pages, int)
+        assert isinstance(result.has_next, bool)
+        assert isinstance(result.has_previous, bool)
+        assert isinstance(result.nodes, list)
+        for item in result.nodes:
+            assert isinstance(item, Node)
+            assert isinstance(item.name, str)
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        result, status = get_node_dependency_page(
             schema_url="not_a_url",
             node_label="Patient",
         )
