@@ -70,7 +70,6 @@
         />
       </div>
       <openchallenges-paginator
-        *ngIf="organizationCards.length > 0"
         #paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
