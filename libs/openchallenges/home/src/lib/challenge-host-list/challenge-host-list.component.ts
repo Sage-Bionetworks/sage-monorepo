@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import {
   ImageAspectRatio,
   ImageHeight,
@@ -24,7 +25,12 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'openchallenges-challenge-host-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, OrganizationCardComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    OrganizationCardComponent,
+    RouterModule,
+  ],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })

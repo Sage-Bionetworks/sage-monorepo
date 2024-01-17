@@ -130,7 +130,7 @@ export class ChallengeSearchComponent
   defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
-  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
+  @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = challengeSortFilter;
@@ -208,7 +208,7 @@ export class ChallengeSearchComponent
       );
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
       this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: ChallengeSearchQuery = {

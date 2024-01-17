@@ -102,7 +102,7 @@ def get_dataset_file_metadata_from_schematic(
         list[FileMetadata]: A list of file metadata
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
     file_tuple_list = store.getFilesInStorageDataset(
         datasetId=dataset_id,
         fileNames=file_names,  # type: ignore
@@ -312,8 +312,8 @@ def get_project_dataset_metadata_from_schematic(
         list[DatasetMetadata]: A list of dataset metadata
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
-    tuples = store.getStorageDatasetsInProject(projectId=project_id)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    tuples = store.getStorageDatasetsInProject(projectId=project_id)  # type: ignore
     return [DatasetMetadata(id=item[0], name=item[1]) for item in tuples]
 
 
@@ -405,8 +405,8 @@ def get_project_manifest_metadata_from_schematic(
         list[ManifestMetadata]: A list of manifest metadata
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
-    manifest_tuple_list = store.getProjectManifests(projectId=project_id)
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    manifest_tuple_list = store.getProjectManifests(projectId=project_id)  # type: ignore
     return [
         ManifestMetadata(
             name=item[1][1],
@@ -506,8 +506,8 @@ def get_project_metadata_from_schematic(
         list[ProjectMetadata]: A list of project metadata
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
-    metadata_tuple_list = store.getStorageProjects()
+    store = SynapseStorage(access_token=access_token)  # type: ignore
+    metadata_tuple_list = store.getStorageProjects()  # type: ignore
     return [ProjectMetadata(id=item[0], name=item[1]) for item in metadata_tuple_list]
 
 

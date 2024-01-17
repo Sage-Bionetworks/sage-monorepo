@@ -2,12 +2,8 @@
 # pylint: disable=duplicate-code
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.node_property import NodeProperty
 from schematic_api.models.node_property_array import NodePropertyArray
-from schematic_api.models.node_property_page import NodePropertyPage
-from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
-from schematic_api.models.validation_rule_page import ValidationRulePage
 from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
 from schematic_api.models.node_page import NodePage
@@ -22,11 +18,9 @@ from schematic_api.controllers.schema_controller_impl import (
     get_property_label,
     get_schema_attributes,
     get_node_property_array,
-    get_node_property_page,
     get_node_validation_rule_array,
-    get_node_validation_rule_page,
-    get_node_dependency_array,
     get_node_dependency_page,
+    get_node_dependency_array,
 )
 
 
@@ -185,44 +179,11 @@ class TestGetNodePropertyArray:
         assert isinstance(result, NodePropertyArray)
         assert isinstance(result.node_properties, list)
         for item in result.node_properties:
-            assert isinstance(item, NodeProperty)
-            assert isinstance(item.name, str)
+            assert isinstance(item, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
         result, status = get_node_property_array(
-            node_label="MolecularEntity",
-            schema_url="not_a_url",
-        )
-        assert status == 500
-        assert isinstance(result, BasicError)
-
-
-class TestGetNodePropertyPage:
-    """Test case for get_node_property_page"""
-
-    def test_success(self, test_schema_url: str) -> None:
-        """Test for successful result"""
-        result, status = get_node_property_page(
-            node_label="MolecularEntity",
-            schema_url=test_schema_url,
-        )
-        assert status == 200
-        assert isinstance(result, NodePropertyPage)
-        assert result.number == 1
-        assert result.size == 100000
-        assert isinstance(result.total_elements, int)
-        assert isinstance(result.total_pages, int)
-        assert isinstance(result.has_next, bool)
-        assert isinstance(result.has_previous, bool)
-        assert isinstance(result.node_properties, list)
-        for item in result.node_properties:
-            assert isinstance(item, NodeProperty)
-            assert isinstance(item.name, str)
-
-    def test_internal_error(self) -> None:
-        """Test for 500 result"""
-        result, status = get_node_property_page(
             node_label="MolecularEntity",
             schema_url="not_a_url",
         )
@@ -243,44 +204,11 @@ class TestGetNodeValidationRuleArray:
         assert isinstance(result, ValidationRuleArray)
         assert isinstance(result.validation_rules, list)
         for item in result.validation_rules:
-            assert isinstance(item, ValidationRule)
-            assert isinstance(item.name, str)
+            assert isinstance(item, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
         result, status = get_node_validation_rule_array(
-            node_display="CheckRegexList",
-            schema_url="not_a_url",
-        )
-        assert status == 500
-        assert isinstance(result, BasicError)
-
-
-class TestGetNodeValidationRulePage:
-    """Test case for get_node_validation_rule_page"""
-
-    def test_success(self, test_schema_url: str) -> None:
-        """Test for successful result"""
-        result, status = get_node_validation_rule_page(
-            node_display="CheckRegexList",
-            schema_url=test_schema_url,
-        )
-        assert status == 200
-        assert isinstance(result, ValidationRulePage)
-        assert result.number == 1
-        assert result.size == 100000
-        assert isinstance(result.total_elements, int)
-        assert isinstance(result.total_pages, int)
-        assert isinstance(result.has_next, bool)
-        assert isinstance(result.has_previous, bool)
-        assert isinstance(result.validation_rules, list)
-        for item in result.validation_rules:
-            assert isinstance(item, ValidationRule)
-            assert isinstance(item.name, str)
-
-    def test_internal_error(self) -> None:
-        """Test for 500 result"""
-        result, status = get_node_validation_rule_page(
             node_display="CheckRegexList",
             schema_url="not_a_url",
         )

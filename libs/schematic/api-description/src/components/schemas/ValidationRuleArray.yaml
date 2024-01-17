@@ -5,4 +5,4 @@ properties:
     description: An array of validation rules.
     type: array
     items:
-      $ref: ValidationRule.yaml
+      type: string

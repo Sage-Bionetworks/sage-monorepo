@@ -18,12 +18,8 @@ NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
 PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
 NODE_PROPERTY_ARRAY_URL = "/api/v1/nodes/MolecularEntity/nodePropertyArray?schemaUrl="
-NODE_PROPERTY_PAGE_URL = "/api/v1/nodes/MolecularEntity/nodePropertyPage?schemaUrl="
 NODE_VALIDATION_RULE_ARRAY_URL = (
     "/api/v1/nodes/CheckRegexList/validationRuleArray?schemaUrl="
-)
-NODE_VALIDATION_RULE_PAGE_URL = (
-    "/api/v1/nodes/CheckRegexList/validationRulePage?schemaUrl="
 )
 NODE_DEPENDENCY_ARRAY_URL = "/api/v1/nodes/Patient/dependencyArray?schemaUrl="
 NODE_DEPENDENCY_PAGE_URL = "/api/v1/nodes/Patient/dependencyPage?schemaUrl="
@@ -172,9 +168,7 @@ class TestGetNodePropertyArray(BaseTestCase):
         assert isinstance(result, dict)
         assert list(result.keys()) == ["node_properties"]
         for item in result["node_properties"]:
-            assert isinstance(item, dict)
-            assert list(item.keys()) == ["name"]
-            assert isinstance(item["name"], str)
+            assert isinstance(item, str)
 
     def test_500(self) -> None:
         """Test for 500 result"""
@@ -183,37 +177,7 @@ class TestGetNodePropertyArray(BaseTestCase):
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
-class TestGetNodePropertyPage(BaseTestCase):
-    """Test case for node attributes endpoint"""
-
-    def test_success(self) -> None:
-        """Test for successful result"""
-        url = f"{NODE_PROPERTY_PAGE_URL}{TEST_SCHEMA_URL}"
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
-        result = response.json
-        assert isinstance(result, dict)
-        assert list(result.keys()) == sorted(PAGING_KEYS + ["node_properties"])
-        assert result["number"] == 1
-        assert result["size"] == 100000
-        assert not result["hasNext"]
-        assert not result["hasPrevious"]
-        assert result["totalPages"] == 1
-        assert isinstance(result["totalElements"], int)
-        assert isinstance(result["node_properties"], list)
-        for item in result["node_properties"]:
-            assert isinstance(item, dict)
-            assert list(item.keys()) == ["name"]
-            assert isinstance(item["name"], str)
-
-    def test_500(self) -> None:
-        """Test for 500 result"""
-        url = f"{NODE_PROPERTY_PAGE_URL}not_a_url"
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
-
-
-class TestGetNodeValidationRuleArray(BaseTestCase):
+class TestGetNodeValidationRules(BaseTestCase):
     """Test case for node validation rules endpoint"""
 
     def test_success(self) -> None:
@@ -225,42 +189,11 @@ class TestGetNodeValidationRuleArray(BaseTestCase):
         assert list(result.keys()) == ["validation_rules"]
         assert isinstance(result["validation_rules"], list)
         for item in result["validation_rules"]:
-            assert isinstance(item, dict)
-            assert list(item.keys()) == ["name"]
-            assert isinstance(item["name"], str)
+            assert isinstance(item, str)
 
     def test_500(self) -> None:
         """Test for 500 result"""
         url = f"{NODE_VALIDATION_RULE_ARRAY_URL}not_a_url"
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
-
-
-class TestGetNodeValidationRulePage(BaseTestCase):
-    """Test case for node validation rules endpoint"""
-
-    def test_success(self) -> None:
-        """Test for successful result"""
-        url = f"{NODE_VALIDATION_RULE_PAGE_URL}{TEST_SCHEMA_URL}"
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        result = response.json
-        assert isinstance(result, dict)
-        assert list(result.keys()) == sorted(PAGING_KEYS + ["validation_rules"])
-        assert result["number"] == 1
-        assert result["size"] == 100000
-        assert not result["hasNext"]
-        assert not result["hasPrevious"]
-        assert result["totalPages"] == 1
-        assert isinstance(result["totalElements"], int)
-        assert isinstance(result["validation_rules"], list)
-        for item in result["validation_rules"]:
-            assert isinstance(item, dict)
-            assert list(item.keys()) == ["name"]
-            assert isinstance(item["name"], str)
-
-    def test_500(self) -> None:
-        """Test for 500 result"""
-        url = f"{NODE_VALIDATION_RULE_PAGE_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 

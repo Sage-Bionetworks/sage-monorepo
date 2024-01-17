@@ -71,17 +71,11 @@ paths:
   /nodes/{nodeLabel}/nodePropertyArray:
     $ref: paths/nodes/@{nodeLabel}/nodePropertyArray.yaml
 
-  /nodes/{nodeLabel}/nodePropertyPage:
-    $ref: paths/nodes/@{nodeLabel}/nodePropertyPage.yaml
-
   /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
 
   /nodes/{nodeDisplay}/validationRuleArray:
     $ref: paths/nodes/@{nodeDisplay}/validationRuleArray.yaml
-
-  /nodes/{nodeDisplay}/validationRulePage:
-    $ref: paths/nodes/@{nodeDisplay}/validationRulePage.yaml
 
   /components/{componentLabel}/:
     $ref: paths/components/@{componentLabel}/component.yaml

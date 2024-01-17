@@ -27,16 +27,10 @@ from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
 from schematic_api.models.node_page import NodePage
 from schematic_api.models.node_page_all_of import NodePageAllOf
-from schematic_api.models.node_property import NodeProperty
 from schematic_api.models.node_property_array import NodePropertyArray
-from schematic_api.models.node_property_page import NodePropertyPage
-from schematic_api.models.node_property_page_all_of import NodePropertyPageAllOf
 from schematic_api.models.page_metadata import PageMetadata
 from schematic_api.models.project_metadata import ProjectMetadata
 from schematic_api.models.project_metadata_array import ProjectMetadataArray
 from schematic_api.models.project_metadata_page import ProjectMetadataPage
 from schematic_api.models.project_metadata_page_all_of import ProjectMetadataPageAllOf
-from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
-from schematic_api.models.validation_rule_page import ValidationRulePage
-from schematic_api.models.validation_rule_page_all_of import ValidationRulePageAllOf
