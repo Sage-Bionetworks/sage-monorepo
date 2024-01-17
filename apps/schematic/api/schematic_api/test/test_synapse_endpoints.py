@@ -40,7 +40,7 @@ HEADERS = {
 
 @pytest.mark.synapse
 @pytest.mark.secrets
-class TestGenerateExcelManifest(BaseTestCase):
+class GenerateExcelManifest(BaseTestCase):
     """Tests google sheet manifest endpoint"""
 
     def test_success(self) -> None:

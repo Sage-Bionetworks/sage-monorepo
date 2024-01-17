@@ -17,10 +17,10 @@ from .conftest import (
 )
 
 
-class TestGenerateExcelManifests:
+class GenerateExcelManifests:
     """Tests generate_excel_manifest"""
 
-    def test_success(self, test_schema_url: str) -> None:
+    def success(self, test_schema_url: str) -> None:
         """Test for successful result"""
         with patch(GET_ACCESS_TOKEN_MOCK):
             with patch(CREATE_SINGLE_MANIFEST_MOCK, return_value=BinaryIO()):  # type: ignore
@@ -35,7 +35,7 @@ class TestGenerateExcelManifests:
                 assert status == 200
                 assert isinstance(result, BinaryIO)
 
-    def test_error_statuses(self) -> None:
+    def error_statuses(self) -> None:
         """Test for error statuses"""
         with patch(GET_ACCESS_TOKEN_MOCK):
             with patch(CREATE_SINGLE_MANIFEST_MOCK):

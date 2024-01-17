@@ -107,8 +107,5 @@ paths:
   /tangledTreeText:
     $ref: paths/tangledTreeText.yaml
 
-  /generateExcelManifest:
-    $ref: paths/generateExcelManifest.yaml
-
   /generateGoogleSheetManifests:
     $ref: paths/generateGoogleSheetManifests.yaml
