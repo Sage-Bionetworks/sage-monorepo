@@ -122,7 +122,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   defaultSortedBy: OrganizationSort = 'challenge_count';
   defaultPageNumber = 0;
   defaultPageSize = 24;
-  @ViewChild('paginator', { static: true }) paginator!: PaginatorComponent;
+  @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
   // define filters
   sortFilters: Filter[] = organizationSortFilter;
@@ -163,7 +163,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-      this.selectedPageSize = +params['pageSize'] || this.defaultPageSize;
+      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
       this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: OrganizationSearchQuery = {

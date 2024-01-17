@@ -309,7 +309,6 @@ export class ChallengeSearchComponent
         // update challenges and total number of results
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
-        console.log(this.paginator.pageNumber);
       });
   }
 
