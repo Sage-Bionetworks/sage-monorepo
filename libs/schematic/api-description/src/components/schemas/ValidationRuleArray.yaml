@@ -1,0 +1,8 @@
+type: object
+description: An array of validation rules.
+properties:
+  validation_rules:
+    description: An array of validation rules.
+    type: array
+    items:
+      $ref: ValidationRule.yaml

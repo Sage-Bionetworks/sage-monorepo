@@ -1,0 +1,8 @@
+type: object
+description: An array of manifest metadata
+properties:
+  manifests:
+    description: A list of manifest metadata
+    type: array
+    items:
+      $ref: ManifestMetadata.yaml
