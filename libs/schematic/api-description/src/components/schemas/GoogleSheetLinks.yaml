@@ -1,9 +1,7 @@
 type: object
 description: An array of google sheet links
 properties:
-  projects:
-    description: An array of google sheet links
+  links:
     type: array
     items:
-      description: A link to a google sheet
       type: string

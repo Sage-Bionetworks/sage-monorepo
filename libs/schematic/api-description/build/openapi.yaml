@@ -805,10 +805,15 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/addAnnotations'
-        - $ref: '#/components/parameters/datasetIdQuery'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/manifestTitle'
         - $ref: '#/components/parameters/nodeLabelQuery'
+        - name: datasetId
+          in: query
+          description: The ID of a dataset.
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetId'
       responses:
         '200':
           description: Success
@@ -1350,32 +1355,22 @@ components:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object
     DatasetIdArray:
-      type: object
+      type: array
       description: An array of dataset ids
-      properties:
-        connectedNodes:
-          description: An array of dataset ids
-          type: array
-          items:
-            $ref: '#/components/schemas/DatasetIdArray'
+      items:
+        $ref: '#/components/schemas/DatasetId'
     NodeLabelArray:
-      type: object
       description: An array of node labels
-      properties:
-        connectedNodes:
-          description: An array of node labels
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeLabelArray'
+      type: array
+      items:
+        $ref: '#/components/schemas/NodeLabel'
     GoogleSheetLinks:
       type: object
       description: An array of google sheet links
       properties:
-        projects:
-          description: An array of google sheet links
+        links:
           type: array
           items:
-            description: A link to a google sheet
             type: string
   responses:
     InternalServerError:
@@ -1656,13 +1651,13 @@ components:
       name: datasetIdArray
       in: query
       description: An array of dataset ids
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/DatasetIdArray'
     nodeLabelArray:
       name: nodeLabelArray
       in: query
       description: An array of nodel labels
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/NodeLabelArray'

@@ -1104,14 +1104,6 @@ paths:
           default: false
           type: boolean
         style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
           a given project
@@ -1138,6 +1130,14 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/NodeLabel'
+        style: form
+      - description: The ID of a dataset.
+        explode: true
+        in: query
+        name: datasetId
+        required: false
+        schema:
+          $ref: '#/components/schemas/DatasetId'
         style: form
       responses:
         "200":
@@ -1184,7 +1184,7 @@ paths:
         explode: true
         in: query
         name: datasetIdArray
-        required: true
+        required: false
         schema:
           $ref: '#/components/schemas/DatasetIdArray'
         style: form
@@ -1211,7 +1211,7 @@ paths:
         explode: true
         in: query
         name: nodeLabelArray
-        required: true
+        required: false
         schema:
           $ref: '#/components/schemas/NodeLabelArray'
         style: form
@@ -2545,7 +2545,7 @@ components:
       explode: true
       in: query
       name: datasetIdArray
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/DatasetIdArray'
       style: form
@@ -2554,7 +2554,7 @@ components:
       explode: true
       in: query
       name: nodeLabelArray
-      required: true
+      required: false
       schema:
         $ref: '#/components/schemas/NodeLabelArray'
       style: form
@@ -2798,6 +2798,7 @@ components:
     DatasetId:
       description: A dataset ID.
       example: syn23643250
+      title: DatasetId
       type: string
     ManifestJson:
       description: A manifest in json format
@@ -2917,6 +2918,7 @@ components:
     NodeLabel:
       description: The label of a node in a schema
       example: MolecularEntity
+      title: NodeLabel
       type: string
     SchemaUrl:
       description: The URL of a schema in jsonld form
@@ -3160,39 +3162,25 @@ components:
       type: object
     DatasetIdArray:
       description: An array of dataset ids
-      properties:
-        connectedNodes:
-          description: An array of dataset ids
-          items:
-            $ref: '#/components/schemas/DatasetIdArray'
-          title: connectedNodes
-          type: array
-      title: DatasetIdArray
-      type: object
+      items:
+        $ref: '#/components/schemas/DatasetId'
+      type: array
     NodeLabelArray:
       description: An array of node labels
-      properties:
-        connectedNodes:
-          description: An array of node labels
-          items:
-            $ref: '#/components/schemas/NodeLabelArray'
-          title: connectedNodes
-          type: array
-      title: NodeLabelArray
-      type: object
+      items:
+        $ref: '#/components/schemas/NodeLabel'
+      type: array
     GoogleSheetLinks:
       description: An array of google sheet links
       example:
-        projects:
-        - projects
-        - projects
+        links:
+        - links
+        - links
       properties:
-        projects:
-          description: An array of google sheet links
+        links:
           items:
-            description: A link to a google sheet
             type: string
-          title: projects
+          title: links
           type: array
       title: GoogleSheetLinks
       type: object

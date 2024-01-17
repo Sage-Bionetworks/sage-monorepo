@@ -15,21 +15,21 @@ class GoogleSheetLinks(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, projects=None):  # noqa: E501
+    def __init__(self, links=None):  # noqa: E501
         """GoogleSheetLinks - a model defined in OpenAPI
 
-        :param projects: The projects of this GoogleSheetLinks.  # noqa: E501
-        :type projects: List[str]
+        :param links: The links of this GoogleSheetLinks.  # noqa: E501
+        :type links: List[str]
         """
         self.openapi_types = {
-            'projects': List[str]
+            'links': List[str]
         }
 
         self.attribute_map = {
-            'projects': 'projects'
+            'links': 'links'
         }
 
-        self._projects = projects
+        self._links = links
 
     @classmethod
     def from_dict(cls, dikt) -> 'GoogleSheetLinks':
@@ -43,24 +43,22 @@ class GoogleSheetLinks(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def projects(self):
-        """Gets the projects of this GoogleSheetLinks.
+    def links(self):
+        """Gets the links of this GoogleSheetLinks.
 
-        An array of google sheet links  # noqa: E501
 
-        :return: The projects of this GoogleSheetLinks.
+        :return: The links of this GoogleSheetLinks.
         :rtype: List[str]
         """
-        return self._projects
+        return self._links
 
-    @projects.setter
-    def projects(self, projects):
-        """Sets the projects of this GoogleSheetLinks.
+    @links.setter
+    def links(self, links):
+        """Sets the links of this GoogleSheetLinks.
 
-        An array of google sheet links  # noqa: E501
 
-        :param projects: The projects of this GoogleSheetLinks.
-        :type projects: List[str]
+        :param links: The links of this GoogleSheetLinks.
+        :type links: List[str]
         """
 
-        self._projects = projects
+        self._links = links
