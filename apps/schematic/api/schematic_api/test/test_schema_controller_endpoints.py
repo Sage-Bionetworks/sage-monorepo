@@ -17,7 +17,7 @@ CONNECTED_NODE_PAIR_PAGE_URL = "/api/v1/connectedNodePairPage?schemaUrl="
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
 PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
-NODE_PROPERTY_ARRAY_URL = "/api/v1/nodes/MolecularEntity/nodePropertyArray?schemaUrl="
+NODE_PROPERTY_ARRAY_URL = "/api/v1/nodes/Patient/nodePropertyArray?schemaUrl="
 NODE_VALIDATION_RULE_ARRAY_URL = (
     "/api/v1/nodes/CheckRegexList/validationRuleArray?schemaUrl="
 )

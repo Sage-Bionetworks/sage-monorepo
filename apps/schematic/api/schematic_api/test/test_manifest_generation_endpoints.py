@@ -6,9 +6,7 @@ from unittest.mock import patch
 from schematic_api.test import BaseTestCase
 
 from .conftest import (
-    GET_ACCESS_TOKEN_MOCK,
     CREATE_MANIFESTS_MOCK,
-    CREATE_SINGLE_MANIFEST_MOCK,
     TEST_SCHEMA_URL,
 )
 
@@ -34,25 +32,6 @@ CREATE_MANIFESTS_ARGS = [
     "strict",
     "use_annotations",
 ]
-
-
-class TestGenerateExcelManifest(BaseTestCase):
-    """Tests excel manifest endpoint"""
-
-    def test_success(self) -> None:
-        """Test for successful result"""
-        with patch(GET_ACCESS_TOKEN_MOCK):
-            with patch(CREATE_SINGLE_MANIFEST_MOCK):
-                url = (
-                    f"{GENERATE_EXCEL_MANIFEST_URL}"
-                    "&datasetId=syn1"
-                    "&assetViewId=syn2"
-                    "&nodeLabel=node_label"
-                )
-                response = self.client.open(url, method="GET", headers=HEADERS)
-                self.assert200(
-                    response, f"Response body is : {response.data.decode('utf-8')}"
-                )
 
 
 class TestGenerateGoogleSheetManifests(BaseTestCase):

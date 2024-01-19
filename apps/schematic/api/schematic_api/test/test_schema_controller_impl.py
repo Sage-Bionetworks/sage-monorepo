@@ -172,7 +172,7 @@ class TestGetNodePropertyArray:
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
         result, status = get_node_property_array(
-            node_label="MolecularEntity",
+            node_label="Patient",
             schema_url=test_schema_url,
         )
         assert status == 200
@@ -184,7 +184,7 @@ class TestGetNodePropertyArray:
     def test_internal_error(self) -> None:
         """Test for 500 result"""
         result, status = get_node_property_array(
-            node_label="MolecularEntity",
+            node_label="Patient",
             schema_url="not_a_url",
         )
         assert status == 500

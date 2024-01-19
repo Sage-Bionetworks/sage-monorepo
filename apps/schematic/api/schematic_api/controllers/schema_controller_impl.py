@@ -254,7 +254,7 @@ def get_node_properties_from_schematic(
         node_label (str): The label of the node
 
     Returns:
-        list[NodeProperty]: A list of properties of the node
+        list[str]: A list of properties of the node
     """
     schema_explorer = SchemaExplorer()
     schema_explorer.load_schema(schema_url)
