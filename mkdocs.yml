@@ -9,20 +9,21 @@ repo_name: sage-monorepo
 
 # Navigation
 nav:
-  - Home:
-    - Home: index.md
-    - Changelog: changelog.md
+  - Home: 
+    - Sage Monorepo: index.md
+    - What's new: news.md
     - Contributing:
       - Overview: contributing-guidelines.md
       - Reporting a bug: bug-report.md
       - Adding a feature: contributing.md
-      - Code of conduct: code-of-conduct.md
+    - Code of conduct: code-of-conduct.md
   - Getting Started:
-    - Angular Universal: angular-universal.md
-    - Devcontainer: devcontainer.md
-    - Nx: using-nx.md
-    - Remote host: develop-on-a-remote-host.md
-  - Setup:
+    - What is Angular Universal?: angular-universal.md
+    - What is a devcontainer?: devcontainer.md
+    - What is Nx?: using-nx.md
+    - Setup: 
+      - develop-on-a-remote-host.md
+  - Developers Guide:
     - Figma-to-Code: figma-to-code.md
     - Using styles/themes: app-styles-themes-assets.md
     - Create a new library: libraries.md
@@ -31,14 +32,14 @@ nav:
     - Collect logs and system metrics: collect-challenge-logs-and-system-metrics.md
     - Update tools and dependencies: update-dependencies.md
     - Code coverage: coverage.md
-  - Cheat Sheets:
-    - VSCode: vscode-cheat-sheet.md
-    - Java: java-cheat-sheed.md
-    - OpenChallenges: cheat-sheet.md
-  - References:
-    - references.md
+    - Common Issues:
+      - faq.md
+  - Reference:
     - Linters and formatters: linters-and-formatters.md
-  - FAQ: faq.md
+    - Cheat Sheets:
+      - VSCode: vscode-cheat-sheet.md
+      - Java: java-cheat-sheet.md
+      - OpenChallenges: cheat-sheet.md
 
 # Theme configuration
 theme:
