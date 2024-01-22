@@ -2,10 +2,11 @@ version: "3.10"
 
 services:
   schematic-api:
-    # image: ghcr.io/sage-bionetworks/schematic-api:local
-    build: 
-      dockerfile: Dockerfile
-    image: sagebionetworks/schematic-aws-api:latest
+    image: ghcr.io/sage-bionetworks/schematic-api:local
+    # for building docker image locally if needed
+    # build: 
+    #   dockerfile: Dockerfile
+    # image: sagebionetworks/schematic-aws-api:latest
     container_name: schematic-api
     restart: always
     env_file:
