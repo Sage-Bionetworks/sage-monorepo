@@ -1,8 +1,5 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.10
 
-# add version tag as a build argument
-ARG TAG
-
 # add label 
 LABEL maintainer="Milen Nikolov, Andrew Lamb, Mialy DeFelice, Gianna Jordan, Lingling Peng"
 
@@ -26,6 +23,9 @@ ENV PYTHONFAULTHANDLER=1 \
 
 # run open ssl and generate certificate
 RUN apt update && \
+    && apt-get -y autoclean \
+    && apt-get -y autoremove \
+    && rm -rf /var/lib/apt/lists/* \
     apt-get install openssl && \
     openssl req -x509 -nodes -days 365 \
     -subj  "/C=CA/ST=QC/O=Company" \
