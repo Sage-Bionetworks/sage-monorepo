@@ -22,7 +22,7 @@ ENV PYTHONFAULTHANDLER=1 \
     VERSION=$TAG
 
 # run open ssl and generate certificate
-RUN apt update && \
+RUN apt update \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
