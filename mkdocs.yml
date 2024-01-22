@@ -23,6 +23,9 @@ nav:
     - What is Nx?: using-nx.md
     - Setup: 
       - develop-on-a-remote-host.md
+  - Tutorials:
+    - OpenChallenges:
+      - index.md
   - Developers Guide:
     - Figma-to-Code: figma-to-code.md
     - Using styles/themes: app-styles-themes-assets.md
