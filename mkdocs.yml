@@ -26,11 +26,11 @@ nav:
   - Tutorials:
     - OpenChallenges:
       - Your first app: tutorials/openchallenges/introduction.md
-      - Add a new library: tutorial/openchallenges/add-libraries.md
+      - Add a new library: tutorial/openchallenges/add-library.md
       - Add a new copmonent: tutorials/openchallenges/add-component.md
       - Using styles/themes: tutorials/openchallenges/use-style-theme.md
     - Schematic:
-      - Add a REST API: tutorials/schematic/api.md
+      - Add a REST API: tutorials/schematic/add-api.md
   - Developers Guide:
     - Common Issues: developers-guide/faq.md
   - Reference:
