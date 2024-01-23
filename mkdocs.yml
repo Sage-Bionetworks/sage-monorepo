@@ -13,36 +13,34 @@ nav:
     - Sage Monorepo: index.md
     - What's new: news.md
     - Contributing:
-      - Overview: contributing-guidelines.md
-      - Reporting a bug: bug-report.md
-      - Adding a feature: contributing.md
-    - Code of conduct: code-of-conduct.md
+      - Overview: contributions/overview.md
+      - Reporting a bug: contributions/bug-report.md
+      - Adding a feature: contributions/guidelines.md
   - Getting Started:
-    - What is Angular Universal?: angular-universal.md
-    - What is a devcontainer?: devcontainer.md
-    - What is Nx?: using-nx.md
+    - What is Angular Universal?: getting-started/what-is-angular.md
+    - What is a devcontainer?: getting-started/what-is-devcontainer.md
+    - What is Nx?: getting-started/what-is-nx.md
     - Setup: 
-      - develop-on-a-remote-host.md
+      - Develop Locally: getting-started/local-dev.md
+      - Develop On a Remote Host: getting-started/remote-dev.md
   - Tutorials:
     - OpenChallenges:
-      - index.md
+      - Your first app: tutorials/openchallenges/introduction.md
+      - Add a new library: tutorial/openchallenges/add-libraries.md
+      - Add a new copmonent: tutorials/openchallenges/add-component.md
+      - Using styles/themes: tutorials/openchallenges/use-style-theme.md
+    - Schematic:
+      - Add a REST API: tutorials/schematic/api.md
   - Developers Guide:
-    - Figma-to-Code: figma-to-code.md
-    - Using styles/themes: app-styles-themes-assets.md
-    - Create a new library: libraries.md
-    - Create a new component: create-a-new-angular-component.md
-    - Monitor the stack: stack-monitoring.md
-    - Collect logs and system metrics: collect-challenge-logs-and-system-metrics.md
-    - Update tools and dependencies: update-dependencies.md
-    - Code coverage: coverage.md
-    - Common Issues:
-      - faq.md
+    - Common Issues: developers-guide/faq.md
   - Reference:
-    - Linters and formatters: linters-and-formatters.md
-    - Cheat Sheets:
-      - VSCode: vscode-cheat-sheet.md
-      - Java: java-cheat-sheet.md
-      - OpenChallenges: cheat-sheet.md
+    - Agora:
+      - API: reference/agora.md
+    - OpenChallenges:
+      - Microservices: reference/oc-microservices.md
+      - Schemas: reference/oc-schemas.md
+    - Schematic:
+      - API: reference/schematic.md
 
 # Theme configuration
 theme:
@@ -50,13 +48,13 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)" 
       scheme: default
-      primary: teal
+      primary: blue
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)" 
       scheme: slate
-      primary: deep purple
+      primary: blue
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode
