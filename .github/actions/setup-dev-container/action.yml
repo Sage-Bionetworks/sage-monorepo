@@ -48,6 +48,7 @@ runs:
       run: npm install -g @devcontainers/cli@0.49.0
 
     - name: Start the dev container
+      shell: bash
       run: |
         mkdir -p \
           /tmp/.yarn/cache \
