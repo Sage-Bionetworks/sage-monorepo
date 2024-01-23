@@ -66,14 +66,14 @@ runs:
           --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
           --workspace-folder ../sage-monorepo
 
-      - name: Prepare the workspace
-        shell: bash
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c "
-            sudo chown -R vscode:vscode \
-              /workspaces/sage-monorepo \
-              /home/vscode/.cache \
-              /home/vscode/.local \
-              /home/vscode/.gradle \
-            && . ./dev-env.sh \
-            && workspace-install-affected"
+    - name: Prepare the workspace
+      shell: bash
+      run: |
+        devcontainer exec --workspace-folder ../sage-monorepo bash -c "
+          sudo chown -R vscode:vscode \
+            /workspaces/sage-monorepo \
+            /home/vscode/.cache \
+            /home/vscode/.local \
+            /home/vscode/.gradle \
+          && . ./dev-env.sh \
+          && workspace-install-affected"
