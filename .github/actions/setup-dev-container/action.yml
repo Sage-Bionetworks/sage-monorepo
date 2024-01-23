@@ -67,6 +67,7 @@ runs:
           --workspace-folder ../sage-monorepo
 
       - name: Prepare the workspace
+        shell: bash
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c "
             sudo chown -R vscode:vscode \
