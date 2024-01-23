@@ -44,6 +44,7 @@ runs:
           ${{ runner.os }}-gradle-
 
     - name: Install the Dev Container CLI
+      shell: bash
       run: npm install -g @devcontainers/cli@0.49.0
 
     - name: Start the dev container
