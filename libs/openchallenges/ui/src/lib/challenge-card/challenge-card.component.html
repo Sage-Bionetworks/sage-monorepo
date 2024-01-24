@@ -19,7 +19,7 @@
         {{ challenge.name }}
       </p>
       <div class="card-status">
-        <div><span [ngClass]="statusClass">●</span> {{ status | titlecase }}</div>
+        <div><span [ngClass]="statusClass">●</span> {{ dynamicStatus | titlecase }}</div>
         <div class="mat-small">
           {{ time_info }}
         </div>
