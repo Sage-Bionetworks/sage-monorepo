@@ -20,7 +20,7 @@ import { Observable } from 'rxjs';
 export class ChallengeCardComponent implements OnInit {
   @Input({ required: true }) challenge!: Challenge;
   banner$: Observable<Image> | undefined;
-  status!: string | undefined;
+  dynamicStatus!: string;
   desc!: string;
   incentives!: string;
   statusClass!: string;
@@ -30,8 +30,8 @@ export class ChallengeCardComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.challenge) {
-      this.status = this.challenge.status ? this.challenge.status : 'No Status';
-      this.statusClass = this.challenge.status || '';
+      this.dynamicStatus = this.getChallengeStatus(this.challenge);
+      this.statusClass = this.dynamicStatus || '';
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;
@@ -53,24 +53,48 @@ export class ChallengeCardComponent implements OnInit {
         : this.imageService.getImage({
             objectKey: 'banner-default.svg',
           });
-      try {
-        if (this.challenge.endDate && this.status === 'completed') {
-          const timeSince = this.calcTimeDiff(this.challenge.endDate, true);
-          if (timeSince) {
-            this.time_info = `Ended ${timeSince} ago`;
-          }
-        } else if (this.challenge.endDate && this.status === 'active') {
-          this.time_info = `Ends in ${this.calcTimeDiff(
-            this.challenge.endDate
-          )}`;
-        } else if (this.challenge.startDate && this.status === 'upcoming') {
-          this.time_info = `Starts in ${this.calcTimeDiff(
-            this.challenge.startDate
-          )}`;
-        }
-      } catch (error: unknown) {
-        console.log(error);
-      }
+
+      this.time_info = this.getTimeInfo(this.challenge);
+    }
+  }
+
+  private getChallengeStatus(challenge: Challenge): string {
+    // 1. Both startDate and endDate are missing -> No Status
+    // 2. Both startDate and endDate present
+    //    2.1.  now --- startDate -> upcoming
+    //    2.2.  startDate --- now --- endDate -> active
+    //    2.3.  endDate --- now -> completed
+    // 3. Either of startDate or endDate is missing
+    //    3.1. provide startDate, but no endDate
+    //         startDate --- ? --- now --- ? -> cannot decide if active/completed --> No Status
+    //    3.2. provided endDate, but no startDate
+    //         ? --- now --- ? --- endDate -> cannot decide if active/upcoming -> No Status
+
+    const now = new Date();
+    const startDate = challenge.startDate;
+    const endDate = challenge.endDate;
+
+    switch (true) {
+      case startDate && now < new Date(startDate):
+        return 'upcoming';
+      case endDate && now > new Date(endDate):
+        return 'completed';
+      case !!startDate && !!endDate:
+        return 'active';
+      default:
+        return 'No Status';
+    }
+  }
+
+  private getTimeInfo(challenge: Challenge): string {
+    if (challenge.endDate && this.dynamicStatus === 'completed') {
+      return `Ended ${this.calcTimeDiff(challenge.endDate, true)} ago`;
+    } else if (challenge.endDate && this.dynamicStatus === 'active') {
+      return `Ends in ${this.calcTimeDiff(challenge.endDate)}`;
+    } else if (challenge.startDate && this.dynamicStatus === 'upcoming') {
+      return `Starts in ${this.calcTimeDiff(challenge.startDate)}`;
+    } else {
+      return '';
     }
   }
 
