@@ -175,6 +175,58 @@ export class ChallengeSearchComponent
   }
 
   ngOnInit() {
+    this.challengeService
+      .listChallenges({ pageSize: 1000 })
+      .subscribe((page) => {
+        // update challenges and total number of results
+        const challengesMisMatch = page.challenges
+          .filter(
+            (challenge) =>
+              challenge.endDate &&
+              new Date(challenge.endDate) < new Date() &&
+              challenge.status !== 'completed'
+          )
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+        const challengesNoBothDates = page.challenges
+          .filter((challenge) => !challenge.startDate && !challenge.endDate)
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+        const challengesNoStartDate = page.challenges
+          .filter((challenge) => !challenge.startDate && challenge.endDate)
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+        const challengesNoEndDate = page.challenges
+          .filter((challenge) => challenge.startDate && !challenge.endDate)
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+
+        console.log('Challenges outdated');
+        console.log(challengesMisMatch);
+        console.log('Challenges provided no dates at all');
+        console.log(challengesNoBothDates);
+        console.log('Challenges provided startDate, but no endDate');
+        console.log(challengesNoEndDate);
+        console.log('Challenges provided endDate, but no startDate');
+        console.log(challengesNoStartDate);
+      });
+
     this.activatedRoute.queryParams.subscribe((params) => {
       // Chunk of codes below used to update selected values that represent in the UI of filters
       this.selectedMinStartDate = params['minStartDate'];
@@ -307,27 +359,6 @@ export class ChallengeSearchComponent
       )
       .subscribe((page) => {
         // update challenges and total number of results
-        const challengesNoStartDate = page.challenges
-          .filter((challenge) => !challenge.startDate && challenge.endDate)
-          .map((challenge) => ({
-            name: challenge.name,
-            startDate: challenge.startDate,
-            endDate: challenge.endDate,
-            status: challenge.status,
-          }));
-        const challengesNoEndDate = page.challenges
-          .filter((challenge) => challenge.startDate && !challenge.endDate)
-          .map((challenge) => ({
-            name: challenge.name,
-            startDate: challenge.startDate,
-            endDate: challenge.endDate,
-            status: challenge.status,
-          }));
-        console.log('Challenges provided startDate, but no endDate');
-        console.log(challengesNoStartDate);
-        console.log('Challenges provided endDate, but no startDate');
-        console.log(challengesNoEndDate);
-
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
