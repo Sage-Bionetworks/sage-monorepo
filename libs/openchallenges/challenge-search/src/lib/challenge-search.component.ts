@@ -359,6 +359,27 @@ export class ChallengeSearchComponent
       )
       .subscribe((page) => {
         // update challenges and total number of results
+        const challengesNoStartDate = page.challenges
+          .filter((challenge) => !challenge.startDate && challenge.endDate)
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+        const challengesNoEndDate = page.challenges
+          .filter((challenge) => challenge.startDate && !challenge.endDate)
+          .map((challenge) => ({
+            name: challenge.name,
+            startDate: challenge.startDate,
+            endDate: challenge.endDate,
+            status: challenge.status,
+          }));
+        console.log('Challenges provided startDate, but no endDate');
+        console.log(challengesNoStartDate);
+        console.log('Challenges provided endDate, but no startDate');
+        console.log(challengesNoEndDate);
+
         this.searchResultsCount = page.totalElements;
         this.challenges = page.challenges;
       });
