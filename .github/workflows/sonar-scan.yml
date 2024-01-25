@@ -4,16 +4,15 @@ on:
     types: [opened, synchronize, reopened]
 
 env:
-  HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
   HEAD_REF: ${{ github.event.pull_request.head.ref }}
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
 
 jobs:
   push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        name: Checkout ${{ env.HEAD_REF }} from repository ${{ env.HEAD_REPOSITORY }}
+        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPOSITORY }}
@@ -25,10 +24,10 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Scan scanner prototype for openchallenges-app
-        run: ./tools/sonar-scanner-for-pr.sh sage-monorepo apps/openchallenges/app ${{github.event.pull_request.number}} "${{env.HEAD_REPOSITORY}}:${{env.HEAD_REF}}"
-
-      # - name: Scan the affected projects with Sonar
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=sonar"
+      - name: Scan the affected projects with Sonar
+        env:
+          SONAR_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx affected --target=sonar"
