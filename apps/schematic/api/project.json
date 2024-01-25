@@ -147,7 +147,7 @@
         "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir .",
         "cwd": "{projectRoot}"
       }
-    },
+    }
   },
   "tags": [
     "type:service",

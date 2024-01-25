@@ -2,7 +2,11 @@
 
 # This script scan a project of the monorepo with Sonar.
 #
+# Prefer using scanners for specific languages provided by Sonar instead of this script when
+# available. E.g. SonarScanner for Gradle.
+#
 # Requires the environment variable SONAR_TOKEN to be set.
+#
 # Run locally, e.g. nx sonar openchallenges-app
 
 # Default variable values
