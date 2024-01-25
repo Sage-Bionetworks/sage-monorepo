@@ -19,13 +19,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "sonar-pr": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner-for-pr.sh {projectName}",
-        "cwd": "{projectRoot}"
-      }
-    },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
