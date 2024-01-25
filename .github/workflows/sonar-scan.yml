@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        name: Checkout ${{ env.HEAD_REF }} from repository ${{ env.HEAD_REPOSITORY }}
+        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
           ref: ${{ env.HEAD_REF }}
           repository: ${{ env.HEAD_REPOSITORY }}
