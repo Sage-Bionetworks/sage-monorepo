@@ -15,8 +15,7 @@
     "sonar": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir .",
-        "cwd": "{projectRoot}"
+        "command": "bash tools/sonar-scanner.sh --project-key {projectName} --project-dir {projectRoot}"
       }
     },
     "build": {
