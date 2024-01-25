@@ -1,0 +1,31 @@
+name: Scan affected projects with Sonar
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+
+env:
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout [${{ github.ref_name }}]
+        with:
+          fetch-depth: 0
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+
+      - name: Can read sonar token
+        run: if [ -z ${SONAR_TOKEN+x} ]; then echo "var is unset"; else echo "var is set to XXX"; fi
+
+
+      # - name: Set up the dev container
+      #   uses: ./.github/actions/setup-dev-container
+
+      # - name: Scan the affected projects with Sonar
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=sonar"
