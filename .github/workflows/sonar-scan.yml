@@ -11,9 +11,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        name: Checkout [${{ github.ref_name }}]
         with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
           fetch-depth: 0
+
+      - run: |
+          echo "github.event.pull_request.head.ref: ${{ github.event.pull_request.head.ref }}"
+          echo "repository: ${{ github.event.pull_request.head.repo.full_name }}"
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
@@ -21,10 +26,10 @@ jobs:
       - name: Can read sonar token
         run: if [ -z ${SONAR_TOKEN+x} ]; then echo "var is unset"; else echo "var is set to XXX"; fi
 
-      - name: Set up the dev container
-        uses: ./.github/actions/setup-dev-container
+      # - name: Set up the dev container
+      #   uses: ./.github/actions/setup-dev-container
 
-      - name: Scan the affected projects with Sonar
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=sonar"
+      # - name: Scan the affected projects with Sonar
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=sonar"
