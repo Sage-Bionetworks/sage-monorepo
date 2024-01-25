@@ -96,7 +96,7 @@ args=(
   -Dsonar.organization=$organization
   -Dsonar.projectKey=$project_key
   -Dsonar.sources=$project_dir
-  -Dsonar.python.coverage.reportPaths=coverage.xml
+  -Dsonar.python.coverage.reportPaths=${project_dir}/coverage.xml
 )
 
 pull_request_number=2458
