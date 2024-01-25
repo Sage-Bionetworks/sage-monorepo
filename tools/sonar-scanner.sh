@@ -2,7 +2,8 @@
 
 # This script scan a project of the monorepo with Sonar.
 #
-#
+# Requires the environment variable SONAR_TOKEN to be set.
+# Run locally, e.g. nx sonar openchallenges-app
 
 # Default variable values
 ## The Sonar host receiving scan results
@@ -89,25 +90,22 @@ handle_options() {
 # Main script execution
 handle_options "$@"
 
-echo "project_key: $project_key"
-echo "project_dir: $project_dir"
-echo "pull_request_number: $pull_request_number"
+# Build the scanner options
+args=(
+  -Dsonar.host.url=$sonar_host
+  -Dsonar.organization=$organization
+  -Dsonar.projectKey=$project_key
+  -Dsonar.sources=$project_dir
+  -Dsonar.python.coverage.reportPaths=coverage.xml
+)
 
-# if [ $# -lt 1 ]
-# then
-#   echo "The argument <project_key> must be specified."
-#   exit 1
-# fi
+pull_request_number=2458
 
-# PROJECT_KEY="$1"
-# SOURCES="${2:-$PWD}"
+# Include the PR key if specified
+if [[ ! -z ${pull_request_number+z} ]];
+then
+  args+=("-Dsonar.pullrequest.key=${pull_request_number}")
+fi
 
-# echo "Project key: $PROJECT_KEY"
-# echo "Sources: $SOURCES"
-
-# sonar-scanner \
-#   -Dsonar.organization=sage-bionetworks \
-#   -Dsonar.projectKey=$PROJECT_KEY \
-#   -Dsonar.sources=$SOURCES \
-#   -Dsonar.host.url=https://sonarcloud.io \
-#   -Dsonar.python.coverage.reportPaths=coverage.xml
+# Run the Sonar scanner
+sonar-scanner "${args[@]}"
