@@ -10,6 +10,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
+// XXX to trigger Sonar scan
 @ComponentScan(basePackages = {"org.sagebionetworks.openchallenges"})
 @EnableEurekaClient
 @EnableFeignClients
