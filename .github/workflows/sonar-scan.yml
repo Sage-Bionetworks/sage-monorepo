@@ -26,7 +26,7 @@ jobs:
         uses: ./.github/actions/setup-dev-container
 
       - name: Scan scanner prototype for openchallenges-app
-        run: ./tools/sonar-scanner-for-pr.sh ${{github.event.pull_request.number}} "${{env.HEAD_REPOSITORY}}:${{env.HEAD_REF}}"
+        run: ./tools/sonar-scanner-for-pr.sh sage-monorepo apps/openchallenges/app ${{github.event.pull_request.number}} "${{env.HEAD_REPOSITORY}}:${{env.HEAD_REF}}"
 
       # - name: Scan the affected projects with Sonar
       #   run: |
