@@ -21,11 +21,10 @@ jobs:
       - name: Can read sonar token
         run: if [ -z ${SONAR_TOKEN+x} ]; then echo "var is unset"; else echo "var is set to XXX"; fi
 
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
 
-      # - name: Set up the dev container
-      #   uses: ./.github/actions/setup-dev-container
-
-      # - name: Scan the affected projects with Sonar
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=sonar"
+      - name: Scan the affected projects with Sonar
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx affected --target=sonar"
