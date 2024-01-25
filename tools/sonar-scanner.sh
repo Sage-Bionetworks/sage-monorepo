@@ -1,20 +1,113 @@
 #!/usr/bin/env bash
 
-if [ $# -lt 1 ]
-then
-  echo "The argument <project_key> must be specified."
-  exit 1
-fi
+# This script scan a project of the monorepo with Sonar.
+#
+#
 
-PROJECT_KEY="$1"
-SOURCES="${2:-$PWD}"
+# Default variable values
+## The Sonar host receiving scan results
+sonar_host="https://sonarcloud.io"
+## The organization on SonarCloud that owns the project
+organization="sage-bionetworks"
+## The key of the project on SonarCloud (must match the name of the project in the monorepo)
+project_key=""
+## The path to the project folder
+project_dir=""
+## The pull request number (if the scan is triggered by a PR event)
+pull_request_number="$SONAR_PULL_REQUEST_NUMBER"
 
-echo "Project key: $PROJECT_KEY"
-echo "Sources: $SOURCES"
+# Function to display script usage
+usage() {
+ echo "Usage: $0 [OPTIONS]"
+ echo "Options:"
+ echo " -h, --help                      Display this help message"
+ echo " --project-key [key]             The key of the project on SonarCloud"
+ echo " --project-dir [path]            The path to the project folder"
+ echo " --pull-request-number [number]  The pull request number (if the scan is triggered by a PR event)"
+}
 
-sonar-scanner \
-  -Dsonar.organization=sage-bionetworks \
-  -Dsonar.projectKey=$PROJECT_KEY \
-  -Dsonar.sources=$SOURCES \
-  -Dsonar.host.url=https://sonarcloud.io \
-  -Dsonar.python.coverage.reportPaths=coverage.xml
+has_argument() {
+  [[ ("$1" == *=* && -n ${1#*=}) || ( ! -z "$2" && "$2" != -*)  ]];
+}
+
+# Note: Does not support --key=value, only --key value
+extract_argument() {
+  echo "${2:-${1#*=}}"
+}
+
+# Function to handle options and arguments
+handle_options() {
+  while [ $# -gt 0 ]; do
+    case $1 in
+      -h | --help)
+        usage
+        exit 0
+        ;;
+      --project-key*)
+        if ! has_argument $@; then
+          echo "Project key not specified." >&2
+          usage
+          exit 1
+        fi
+
+        project_key=$(extract_argument $@)
+
+        shift
+        ;;
+      --project-dir*)
+        if ! has_argument $@; then
+          echo "Project dir not specified." >&2
+          usage
+          exit 1
+        fi
+
+        project_dir=$(extract_argument $@)
+
+        shift
+        ;;
+      --pull-request-number*)
+        if ! has_argument $@; then
+          echo "Pull request number not specified." >&2
+          usage
+          exit 1
+        fi
+
+        pull_request_number=$(extract_argument $@)
+
+        shift
+        ;;
+      *)
+        echo "Invalid option: $1" >&2
+        usage
+        exit 1
+        ;;
+    esac
+    shift
+  done
+}
+
+# Main script execution
+handle_options "$@"
+
+echo "project_key: $project_key"
+echo "project_dir: $project_dir"
+echo "pull_request_number: $pull_request_number"
+
+# if [ $# -lt 1 ]
+# then
+#   echo "The argument <project_key> must be specified."
+#   exit 1
+# fi
+
+# PROJECT_KEY="$1"
+# SOURCES="${2:-$PWD}"
+
+# echo "Project key: $PROJECT_KEY"
+# echo "Sources: $SOURCES"
+
+# sonar-scanner \
+#   -Dsonar.organization=sage-bionetworks \
+#   -Dsonar.projectKey=$PROJECT_KEY \
+#   -Dsonar.sources=$SOURCES \
+#   -Dsonar.host.url=https://sonarcloud.io \
+#   -Dsonar.python.coverage.reportPaths=coverage.xml

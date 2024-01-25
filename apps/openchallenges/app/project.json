@@ -15,18 +15,22 @@
     "sonar": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir {projectRoot}",
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/openchallenges/app/browser/browser",
         "index": "apps/openchallenges/app/src/index.html",
         "main": "apps/openchallenges/app/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/openchallenges/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -119,7 +123,10 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/openchallenges/app/**/*.ts", "apps/openchallenges/app/**/*.html"]
+        "lintFilePatterns": [
+          "apps/openchallenges/app/**/*.ts",
+          "apps/openchallenges/app/**/*.html"
+        ]
       }
     },
     "lint-fix": {
@@ -134,7 +141,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/openchallenges/app"],
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/openchallenges/app"
+      ],
       "options": {
         "jestConfig": "apps/openchallenges/app/jest.config.ts",
         "passWithNoTests": true
@@ -145,24 +154,39 @@
       "options": {
         "context": ".",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/openchallenges-app"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
         },
         "push": false
       },
-      "dependsOn": ["server"]
+      "dependsOn": [
+        "server"
+      ]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/openchallenges-app"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
         },
         "push": true
       },
-      "dependsOn": ["build-image"]
+      "dependsOn": [
+        "build-image"
+      ]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -172,7 +196,9 @@
       }
     },
     "server": {
-      "dependsOn": ["build"],
+      "dependsOn": [
+        "build"
+      ],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/openchallenges/app/browser/server",
@@ -211,7 +237,9 @@
     "prerender": {
       "executor": "@nguniversal/builders:prerender",
       "options": {
-        "routes": ["/"]
+        "routes": [
+          "/"
+        ]
       },
       "configurations": {
         "development": {
@@ -233,13 +261,19 @@
     },
     "e2e": {
       "executor": "@nx/playwright:playwright",
-      "outputs": ["{workspaceRoot}/dist/.playwright/apps/openchallenges/app"],
+      "outputs": [
+        "{workspaceRoot}/dist/.playwright/apps/openchallenges/app"
+      ],
       "options": {
         "config": "apps/openchallenges/app/playwright.config.ts"
       }
     }
   },
-  "tags": ["type:app", "scope:client", "language:typescript"],
+  "tags": [
+    "type:app",
+    "scope:client",
+    "language:typescript"
+  ],
   "implicitDependencies": [
     "openchallenges-styles",
     "openchallenges-themes",
