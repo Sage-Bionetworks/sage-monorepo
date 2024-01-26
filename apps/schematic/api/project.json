@@ -36,8 +36,14 @@
       "options": {
         "context": "apps/schematic/api",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/schematic-api"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
         },
         "push": false
       }
@@ -47,12 +53,19 @@
       "options": {
         "context": "apps/schematic/api",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/schematic-api"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
         },
         "push": true
       },
-      "dependsOn": ["build-image"]
+      "dependsOn": [
+        "build-image"
+      ]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -64,11 +77,16 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
+        "commands": [
+          "xargs rm -fr <.openapi-generator/FILES",
+          "openapi-generator-cli generate"
+        ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -126,11 +144,18 @@
     "sonar": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir .",
         "cwd": "{projectRoot}"
       }
     }
   },
-  "tags": ["type:service", "scope:backend", "language:python", "package-manager:poetry"],
-  "implicitDependencies": ["schematic-api-description"]
+  "tags": [
+    "type:service",
+    "scope:backend",
+    "language:python",
+    "package-manager:poetry"
+  ],
+  "implicitDependencies": [
+    "schematic-api-description"
+  ]
 }
