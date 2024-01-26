@@ -22,12 +22,12 @@ jobs:
         uses: nrwl/nx-set-shas@v3
 
       - name: Set up the dev container
-        uses: ./.github/actions/setup-dev-container
-
-      - name: Scan the affected projects with Sonar
         env:
           SONAR_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Scan the affected projects with Sonar
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=sonar"
