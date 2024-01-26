@@ -68,14 +68,14 @@ paths:
   /nodes/{nodeDisplay}/isRequired:
     $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
 
-  /nodes/{nodeLabel}/nodeProperties:
-    $ref: paths/nodes/@{nodeLabel}/nodeProperties.yaml
+  /nodes/{nodeLabel}/nodePropertyArray:
+    $ref: paths/nodes/@{nodeLabel}/nodePropertyArray.yaml
 
   /nodes/{nodeDisplay}/propertyLabel:
     $ref: paths/nodes/@{nodeDisplay}/propertyLabel.yaml
 
-  /nodes/{nodeDisplay}/validationRules:
-    $ref: paths/nodes/@{nodeDisplay}/validationRules.yaml
+  /nodes/{nodeDisplay}/validationRuleArray:
+    $ref: paths/nodes/@{nodeDisplay}/validationRuleArray.yaml
 
   /components/{componentLabel}/:
     $ref: paths/components/@{componentLabel}/component.yaml
@@ -106,3 +106,6 @@ paths:
 
   /tangledTreeText:
     $ref: paths/tangledTreeText.yaml
+
+  /generateGoogleSheetManifests:
+    $ref: paths/generateGoogleSheetManifests.yaml

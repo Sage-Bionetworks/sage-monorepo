@@ -153,7 +153,7 @@ def get_node_is_required(node_display, schema_url):  # noqa: E501
     return schema_controller_impl.get_node_is_required(node_display, schema_url)
 
 
-def get_node_properties(node_label, schema_url):  # noqa: E501
+def get_node_property_array(node_label, schema_url):  # noqa: E501
     """Gets properties associated with a given node
 
     Gets properties associated with a given node # noqa: E501
@@ -165,10 +165,10 @@ def get_node_properties(node_label, schema_url):  # noqa: E501
 
     :rtype: Union[NodePropertyArray, Tuple[NodePropertyArray, int], Tuple[NodePropertyArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_properties(node_label, schema_url)
+    return schema_controller_impl.get_node_property_array(node_label, schema_url)
 
 
-def get_node_validation_rules(node_display, schema_url):  # noqa: E501
+def get_node_validation_rule_array(node_display, schema_url):  # noqa: E501
     """Gets the validation rules, along with the arguments for each given rule associated with a given node
 
     Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
@@ -180,7 +180,9 @@ def get_node_validation_rules(node_display, schema_url):  # noqa: E501
 
     :rtype: Union[ValidationRuleArray, Tuple[ValidationRuleArray, int], Tuple[ValidationRuleArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_validation_rules(node_display, schema_url)
+    return schema_controller_impl.get_node_validation_rule_array(
+        node_display, schema_url
+    )
 
 
 def get_property_label(

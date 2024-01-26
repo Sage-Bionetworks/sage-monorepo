@@ -6,7 +6,6 @@ from schematic.visualization.attributes_explorer import AttributesExplorer  # ty
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_property_array import NodePropertyArray
-from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
 from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
@@ -263,7 +262,7 @@ def get_node_properties_from_schematic(
 
 
 @handle_exceptions
-def get_node_properties(
+def get_node_property_array(
     node_label: str,
     schema_url: str,
 ) -> tuple[Union[NodePropertyArray, BasicError], int]:
@@ -288,7 +287,7 @@ def get_node_properties(
 def get_node_validation_rules_from_schematic(
     node_display: str,
     schema_url: str,
-) -> list[ValidationRule]:
+) -> list[str]:
     """Gets the validation_rules associated with the node
 
     Args:
@@ -296,15 +295,14 @@ def get_node_validation_rules_from_schematic(
         node_display (str): The display name of the node
 
     Returns:
-        list[ValidationRule]: A list of validation_rules of the node
+        list[str]: A list of validation_rules of the node
     """
     schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    rules = schema_generator.get_node_validation_rules(node_display)  # type: ignore
-    return [ValidationRule(rule) for rule in rules]
+    return schema_generator.get_node_validation_rules(node_display)  # type: ignore
 
 
 @handle_exceptions
-def get_node_validation_rules(
+def get_node_validation_rule_array(
     node_display: str,
     schema_url: str,
 ) -> tuple[Union[ValidationRuleArray, BasicError], int]:

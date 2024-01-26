@@ -5,7 +5,7 @@ get:
     - Schema
   summary: Gets properties associated with a given node
   description: Gets properties associated with a given node
-  operationId: getNodeProperties
+  operationId: getNodePropertyArray
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:

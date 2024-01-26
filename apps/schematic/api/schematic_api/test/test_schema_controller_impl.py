@@ -3,7 +3,6 @@
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_property_array import NodePropertyArray
-from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
 from schematic_api.models.node import Node
 from schematic_api.models.node_array import NodeArray
@@ -18,10 +17,10 @@ from schematic_api.controllers.schema_controller_impl import (
     get_node_is_required,
     get_property_label,
     get_schema_attributes,
-    get_node_properties,
-    get_node_validation_rules,
-    get_node_dependency_array,
+    get_node_property_array,
+    get_node_validation_rule_array,
     get_node_dependency_page,
+    get_node_dependency_array,
 )
 
 
@@ -167,13 +166,13 @@ class TestGetSchemaAttributes:
         assert isinstance(result, BasicError)
 
 
-class TestGetNodeProperties:
-    """Test case for get_node_properties"""
+class TestGetNodePropertyArray:
+    """Test case for get_node_property_array"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = get_node_properties(
-            node_label="MolecularEntity",
+        result, status = get_node_property_array(
+            node_label="Patient",
             schema_url=test_schema_url,
         )
         assert status == 200
@@ -184,8 +183,8 @@ class TestGetNodeProperties:
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = get_node_properties(
-            node_label="MolecularEntity",
+        result, status = get_node_property_array(
+            node_label="Patient",
             schema_url="not_a_url",
         )
         assert status == 500
@@ -193,11 +192,11 @@ class TestGetNodeProperties:
 
 
 class TestGetNodeValidationRuleArray:
-    """Test case for get_node_validation_rules"""
+    """Test case for get_node_validation_rule_array"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""
-        result, status = get_node_validation_rules(
+        result, status = get_node_validation_rule_array(
             node_display="CheckRegexList",
             schema_url=test_schema_url,
         )
@@ -205,12 +204,11 @@ class TestGetNodeValidationRuleArray:
         assert isinstance(result, ValidationRuleArray)
         assert isinstance(result.validation_rules, list)
         for item in result.validation_rules:
-            assert isinstance(item, ValidationRule)
-            assert isinstance(item.name, str)
+            assert isinstance(item, str)
 
     def test_internal_error(self) -> None:
         """Test for 500 result"""
-        result, status = get_node_validation_rules(
+        result, status = get_node_validation_rule_array(
             node_display="CheckRegexList",
             schema_url="not_a_url",
         )

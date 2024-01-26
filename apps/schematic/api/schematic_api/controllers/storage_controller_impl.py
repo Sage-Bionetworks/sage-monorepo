@@ -60,7 +60,7 @@ def get_asset_view_from_schematic(
         pandas.DataFrame: The asset view
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)  # type: ignore
+    store = SynapseStorage(access_token=access_token)
     return store.getStorageFileviewTable()
 
 
@@ -223,7 +223,7 @@ def get_dataset_manifest_from_schematic(
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)  # type: ignore
+    store = SynapseStorage(access_token=access_token)
     manifest_data = store.getDatasetManifest(
         datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
     )

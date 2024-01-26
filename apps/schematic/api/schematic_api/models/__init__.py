@@ -17,6 +17,7 @@ from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.models.file_metadata_page_all_of import FileMetadataPageAllOf
+from schematic_api.models.google_sheet_links import GoogleSheetLinks
 from schematic_api.models.manifest_metadata import ManifestMetadata
 from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
 from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
@@ -32,5 +33,4 @@ from schematic_api.models.project_metadata import ProjectMetadata
 from schematic_api.models.project_metadata_array import ProjectMetadataArray
 from schematic_api.models.project_metadata_page import ProjectMetadataPage
 from schematic_api.models.project_metadata_page_all_of import ProjectMetadataPageAllOf
-from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray

@@ -17,8 +17,10 @@ CONNECTED_NODE_PAIR_PAGE_URL = "/api/v1/connectedNodePairPage?schemaUrl="
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
 PROPERTY_LABEL_URL = "/api/v1/nodes/node_label/propertyLabel?schemaUrl="
 SCHEMA_ATTRIBUTES_URL = "/api/v1/schemaAttributes?schemaUrl="
-NODE_PROPERTIES_URL = "/api/v1/nodes/MolecularEntity/nodeProperties?schemaUrl="
-NODE_VALIDATION_RULES_URL = "/api/v1/nodes/CheckRegexList/validationRules?schemaUrl="
+NODE_PROPERTY_ARRAY_URL = "/api/v1/nodes/Patient/nodePropertyArray?schemaUrl="
+NODE_VALIDATION_RULE_ARRAY_URL = (
+    "/api/v1/nodes/CheckRegexList/validationRuleArray?schemaUrl="
+)
 NODE_DEPENDENCY_ARRAY_URL = "/api/v1/nodes/Patient/dependencyArray?schemaUrl="
 NODE_DEPENDENCY_PAGE_URL = "/api/v1/nodes/Patient/dependencyPage?schemaUrl="
 
@@ -154,12 +156,12 @@ class TestGetSchemaAttributes(BaseTestCase):
         self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
-class TestGetNodeProperties(BaseTestCase):
+class TestGetNodePropertyArray(BaseTestCase):
     """Test case for node attributes endpoint"""
 
     def test_success(self) -> None:
         """Test for successful result"""
-        url = f"{NODE_PROPERTIES_URL}{TEST_SCHEMA_URL}"
+        url = f"{NODE_PROPERTY_ARRAY_URL}{TEST_SCHEMA_URL}"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         result = response.json
@@ -170,7 +172,7 @@ class TestGetNodeProperties(BaseTestCase):
 
     def test_500(self) -> None:
         """Test for 500 result"""
-        url = f"{NODE_PROPERTIES_URL}not_a_url"
+        url = f"{NODE_PROPERTY_ARRAY_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 
@@ -180,20 +182,18 @@ class TestGetNodeValidationRules(BaseTestCase):
 
     def test_success(self) -> None:
         """Test for successful result"""
-        url = f"{NODE_VALIDATION_RULES_URL}{TEST_SCHEMA_URL}"
+        url = f"{NODE_VALIDATION_RULE_ARRAY_URL}{TEST_SCHEMA_URL}"
         response = self.client.open(url, method="GET", headers=HEADERS)
         result = response.json
         assert isinstance(result, dict)
         assert list(result.keys()) == ["validation_rules"]
         assert isinstance(result["validation_rules"], list)
         for item in result["validation_rules"]:
-            assert isinstance(item, dict)
-            assert list(item.keys()) == ["name"]
-            assert isinstance(item["name"], str)
+            assert isinstance(item, str)
 
     def test_500(self) -> None:
         """Test for 500 result"""
-        url = f"{NODE_VALIDATION_RULES_URL}not_a_url"
+        url = f"{NODE_VALIDATION_RULE_ARRAY_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 

@@ -65,6 +65,11 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
             res = BasicError("Invalid URL", status, str(error))
             return res, status
 
+        except InvalidValueError as error:
+            status = 422
+            res = BasicError("Invalid data", status, str(error))
+            return res, status
+
         except Exception as error:  # pylint: disable=broad-exception-caught
             status = 500
             res = BasicError("Internal error", status, str(error))
@@ -122,3 +127,22 @@ def download_schema_file_as_jsonld(schema_url: str) -> str:
         raise InvalidSchemaURL(
             "The provided URL could not be found", schema_url
         ) from error
+
+
+class InvalidValueError(Exception):
+    """Raised when a provided value for an endpoint is invalid"""
+
+    def __init__(self, message: str, values: dict[str, Any]):
+        """
+        Args:
+            message (str): The error message
+            values (dict[str, Any]): A dict where the argument names are keys and
+              argument values are values
+        """
+        self.message = message
+        self.values = values
+
+        super().__init__(self.message)
+
+    def __str__(self) -> str:
+        return f"{self.message}: {self.values}"

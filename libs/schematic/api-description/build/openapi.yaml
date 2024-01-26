@@ -446,7 +446,7 @@ paths:
                 type: boolean
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeLabel}/nodeProperties:
+  /nodes/{nodeLabel}/nodePropertyArray:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
     get:
@@ -454,7 +454,7 @@ paths:
         - Schema
       summary: Gets properties associated with a given node
       description: Gets properties associated with a given node
-      operationId: getNodeProperties
+      operationId: getNodePropertyArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -487,7 +487,7 @@ paths:
                 $ref: '#/components/schemas/PropertyLabel'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /nodes/{nodeDisplay}/validationRules:
+  /nodes/{nodeDisplay}/validationRuleArray:
     parameters:
       - $ref: '#/components/parameters/nodeDisplay'
     get:
@@ -495,7 +495,7 @@ paths:
         - Schema
       summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
       description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-      operationId: getNodeValidationRules
+      operationId: getNodeValidationRuleArray
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
       responses:
@@ -751,6 +751,43 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TangledTreeText'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /generateGoogleSheetManifests:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates a list of google sheet links
+      description: Generates a list of google sheet links
+      operationId: generateGoogleSheetManifests
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdArray'
+        - $ref: '#/components/parameters/assetViewIdQuery'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/nodeLabelArray'
+        - name: useStrictValidation
+          in: query
+          description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
+          required: false
+          schema:
+            type: boolean
+            default: true
+        - name: generateAllManifests
+          in: query
+          description: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
+          required: false
+          schema:
+            type: boolean
+            default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -1109,18 +1146,6 @@ components:
       description: The property label of a node in a schema
       type: string
       example: MolecularEntity
-    ValidationRule:
-      type: object
-      description: A validation rule.
-      properties:
-        name:
-          type: string
-          description: The name of the rule, along with the arguments for the given rule.
-          example: list strict
-      required:
-        - name
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ValidationRuleArray:
       type: object
       description: An array of validation rules.
@@ -1129,7 +1154,7 @@ components:
           description: An array of validation rules.
           type: array
           items:
-            $ref: '#/components/schemas/ValidationRule'
+            type: string
     ComponentLabel:
       description: The label of a component in a schema
       type: string
@@ -1204,6 +1229,24 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object
+    DatasetIdArray:
+      type: array
+      description: An array of dataset ids
+      items:
+        $ref: '#/components/schemas/DatasetId'
+    NodeLabelArray:
+      description: An array of node labels
+      type: array
+      items:
+        $ref: '#/components/schemas/NodeLabel'
+    GoogleSheetLinks:
+      type: object
+      description: An array of google sheet links
+      properties:
+        links:
+          type: array
+          items:
+            type: string
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1457,3 +1500,32 @@ components:
           - plain
           - highlighted
         default: plain
+    addAnnotations:
+      name: addAnnotations
+      in: query
+      description: If true, annotations are added to the manifest
+      required: false
+      schema:
+        type: boolean
+        default: false
+    datasetIdArray:
+      name: datasetIdArray
+      in: query
+      description: An array of dataset ids
+      required: false
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+    manifestTitle:
+      name: manifestTitle
+      in: query
+      description: If making one manifest, the title of the manifest If making multiple manifests, the prefix of the title of the manifests
+      required: false
+      schema:
+        type: string
+    nodeLabelArray:
+      name: nodeLabelArray
+      in: query
+      description: An array of nodel labels
+      required: false
+      schema:
+        $ref: '#/components/schemas/NodeLabelArray'

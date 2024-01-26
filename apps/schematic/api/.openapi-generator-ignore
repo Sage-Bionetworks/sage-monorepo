@@ -37,4 +37,5 @@ schematic_api/test/test_schema_controller.py
 schematic_api/test/test_manifest_validation_controller.py
 schematic_api/test/test_versions_controller.py
 schematic_api/test/test_tangled_tree_controller.py
+schematic_api/test/test_manifest_generation_controller.py
 tox.ini

@@ -5,7 +5,7 @@ get:
     - Schema
   summary: Gets the validation rules, along with the arguments for each given rule associated with a given node
   description: Gets the validation rules, along with the arguments for each given rule associated with a given node
-  operationId: getNodeValidationRules
+  operationId: getNodeValidationRuleArray
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
   responses:
