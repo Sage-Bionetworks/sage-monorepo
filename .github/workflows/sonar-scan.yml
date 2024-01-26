@@ -1,14 +1,15 @@
 name: Scan affected projects with Sonar
 on:
   pull_request_target:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, labeled]
 
 env:
   HEAD_REF: ${{ github.event.pull_request.head.ref }}
   HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
 
 jobs:
-  push:
+  sonar:
+    if: contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

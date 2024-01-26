@@ -103,8 +103,6 @@ args=(
   -Dsonar.python.coverage.reportPaths=${project_dir}/coverage.xml
 )
 
-pull_request_number=2458
-
 # Include the PR key if specified
 if [[ ! -z ${pull_request_number+z} ]];
 then
