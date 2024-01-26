@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Check the presence of the label `sonar-scan-approved`
         if: contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true
-        run: echo "Add the label 'sonar-scan-approved' to activate Sonar scan"; exit 1
+        run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
       - uses: actions/checkout@v3
         name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
