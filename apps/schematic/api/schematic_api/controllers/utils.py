@@ -1,5 +1,5 @@
 """utils for multiple controllers"""
-from typing import Callable, Union, Any, Optional
+from typing import Callable, Any
 import urllib.request
 import shutil
 import tempfile
@@ -15,7 +15,7 @@ from schematic.exceptions import AccessCredentialsError  # type: ignore
 from schematic_api.models.basic_error import BasicError
 
 
-def get_access_token() -> Optional[str]:
+def get_access_token() -> str | None:
     """Get access token from header"""
     bearer_token = None
     # Check if the Authorization header is present
@@ -39,7 +39,7 @@ def handle_exceptions(endpoint_function: Callable) -> Callable:
         f (Callable): A function that calls the input function
     """
 
-    def func(*args: Any, **kwargs: Any) -> tuple[Union[Any, BasicError], int]:
+    def func(*args: Any, **kwargs: Any) -> tuple[Any | BasicError, int]:
         try:
             return endpoint_function(*args, **kwargs)
 
