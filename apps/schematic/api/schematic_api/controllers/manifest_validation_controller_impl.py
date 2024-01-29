@@ -3,7 +3,7 @@ import tempfile
 import os
 import io
 import json
-from typing import Union, Any, Optional
+from typing import Any
 
 import pandas as pd
 from schematic import CONFIG  # type: ignore
@@ -54,7 +54,7 @@ def save_manifest_csv_string_as_csv(manifest_csv_string: bytes) -> str:
 def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     schema_path: str,
     manifest_path: str,
-    component: Optional[str],
+    component: str | None,
     dataset_id: str,
     restrict_rules: bool = False,
     storage_method: str = "table_file_and_entities",
@@ -67,7 +67,7 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     Args:
         schema_path (str): The path to a schema in jsonld form
         manifest_path (str): The path to a manifest in csv form
-        component (Optional[str]):
+        component (str | None):
           The component, either schema label, or display label
           See use_schema_label
         dataset_id (str): The id of the dataset to submit the manifest to
@@ -95,31 +95,25 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     metadata_model = MetadataModel(
         inputMModelLocation=schema_path, inputMModelLocationType="local"
     )
-
-    # The typing for this method has several issues:
-    # validate_component: str = None should be Optional[str]
-    # access_token: str = None should be Optional[str]
-    # -> string: should be -> str
-    # Mypy is currently ignoring these lines
     manifest_id: str = metadata_model.submit_metadata_manifest(
         path_to_json_ld=schema_path,
         manifest_path=manifest_path,
         dataset_id=dataset_id,
-        validate_component=component,  # type: ignore
-        access_token=access_token,  # type: ignore
+        validate_component=component,
+        access_token=access_token,
         manifest_record_type=storage_method,
         restrict_rules=restrict_rules,
         hide_blanks=hide_blanks,
         table_manipulation=table_manipulation_method,
         use_schema_label=use_schema_label,
     )
-    return manifest_id  # type: ignore
+    return manifest_id
 
 
 @handle_exceptions
 def submit_manifest_csv(  # pylint: disable=too-many-arguments
     schema_url: str,
-    component: Optional[str],
+    component: str | None,
     dataset_id: str,
     asset_view_id: str,
     body: bytes,
@@ -128,12 +122,12 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     use_schema_label: bool = True,
-) -> tuple[Union[str, BasicError], int]:
+) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
 
      Args:
          schema_url (str): The url to schema the component is in
-         component (Optional[str]):
+         component (str | None):
            The component, either schema label, or display label
            See use_schema_label
          dataset_id (str): The id of the dataset to submit the manifest to
@@ -157,7 +151,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
            Defaults to True.
 
     Returns:
-         tuple[Union[str, BasicError], int]: A tuple
+         tuple[str | BasicError, int]: A tuple
            The first item is either the id of the manifest or an error object
            The second item is the response status
     """
@@ -165,7 +159,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
     manifest_path = save_manifest_csv_string_as_csv(body)
     schema_path = download_schema_file_as_jsonld(schema_url)
 
-    result: Union[str, BasicError] = submit_manifest_with_schematic(
+    result: str | BasicError = submit_manifest_with_schematic(
         schema_path=schema_path,
         manifest_path=manifest_path,
         component=component,
@@ -184,7 +178,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
 @handle_exceptions
 def submit_manifest_json(  # pylint: disable=too-many-arguments
     schema_url: str,
-    component: Optional[str],
+    component: str | None,
     dataset_id: str,
     asset_view_id: str,
     restrict_rules: bool = False,
@@ -193,12 +187,12 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     table_manipulation_method: str = "replace",
     use_schema_label: bool = True,
     body: Any = None,
-) -> tuple[Union[str, BasicError], int]:
+) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
 
     Args:
         schema_url (str): The url to schema the component is in
-        component (Optional[str]):
+        component (str | None):
           The component, either schema label, or display label
           See use_schema_label
         dataset_id (str): The id of the dataset to submit the manifest to
@@ -222,15 +216,15 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
           Defaults to True.
 
     Returns:
-         tuple[Union[str, BasicError], int]: A tuple
-           The first item is either the id of the manifest or an error object
-           The second item is the response status
+        tuple[str | BasicError, int]: A tuple
+            The first item is either the id of the manifest or an error object
+            The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
     manifest_path = save_manifest_json_string_as_csv(body)
     schema_path = download_schema_file_as_jsonld(schema_url)
 
-    result: Union[str, BasicError] = submit_manifest_with_schematic(
+    result: str | BasicError = submit_manifest_with_schematic(
         schema_path=schema_path,
         manifest_path=manifest_path,
         component=component,
@@ -268,15 +262,11 @@ def validate_manifest_with_schematic(
     metadata_model = MetadataModel(
         inputMModelLocation=schema_path, inputMModelLocationType="local"
     )
-
-    # The typing for this method has some incorrect typing
-    # access_token: str = None should be Optional[str]
-    # -> List[str]: should be tuple[list, list]
-    result: tuple[list, list] = metadata_model.validateModelManifest(  # type: ignore
+    result: tuple[list, list] = metadata_model.validateModelManifest(
         manifestPath=manifest_path,
         rootNode=component_label,
         restrict_rules=restrict_rules,
-        access_token=access_token,  # type: ignore
+        access_token=access_token,
     )
     return result
 
@@ -284,7 +274,7 @@ def validate_manifest_with_schematic(
 @handle_exceptions
 def validate_manifest_csv(
     schema_url: str, component_label: str, body: bytes, restrict_rules: bool
-) -> tuple[Union[ManifestValidationResult, BasicError], int]:
+) -> tuple[ManifestValidationResult | BasicError, int]:
     """Validates a manifest csv file
 
     Args:
@@ -294,7 +284,7 @@ def validate_manifest_csv(
         restrict_rules (bool): Weather or not to restrict the rules used
 
     Returns:
-        tuple[Union[ManifestValidationResult, BasicError], int]: A tuple
+        tuple[ManifestValidationResult | BasicError, int]: A tuple
           The first item is the results of the validation attempt or an error
           The second item is the status of the request
     """
@@ -304,7 +294,7 @@ def validate_manifest_csv(
         manifest_path, schema_url, component_label, restrict_rules
     )
 
-    result: Union[ManifestValidationResult, BasicError] = ManifestValidationResult(
+    result: ManifestValidationResult | BasicError = ManifestValidationResult(
         errors=errors, warnings=warnings
     )
     return result, 200
@@ -316,7 +306,7 @@ def validate_manifest_json(
     component_label: str,
     restrict_rules: bool,
     body: Any,
-) -> tuple[Union[ManifestValidationResult, BasicError], int]:
+) -> tuple[ManifestValidationResult | BasicError, int]:
     """Validates a manifest in json string form
 
     Args:
@@ -326,7 +316,7 @@ def validate_manifest_json(
         restrict_rules (bool): Weather or not to restrict the rules used
 
     Returns:
-        tuple[Union[ManifestValidationResult, BasicError], int]: A tuple
+        tuple[ManifestValidationResult | BasicError, int]: A tuple
           The first item is the results of the validation attempt or an error
           The second item is the status of the request
     """
@@ -336,7 +326,7 @@ def validate_manifest_json(
         manifest_path, schema_url, component_label, restrict_rules
     )
 
-    result: Union[ManifestValidationResult, BasicError] = ManifestValidationResult(
+    result: ManifestValidationResult | BasicError = ManifestValidationResult(
         errors=errors, warnings=warnings
     )
     return result, 200
