@@ -1,0 +1,7 @@
+name: manifestTitle
+in: query
+description: If making one manifest, the title of the manifest
+  If making multiple manifests, the prefix of the title of the manifests
+required: false
+schema:
+  type: string

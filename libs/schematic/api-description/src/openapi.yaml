@@ -106,3 +106,6 @@ paths:
 
   /tangledTreeText:
     $ref: paths/tangledTreeText.yaml
+
+  /generateGoogleSheetManifests:
+    $ref: paths/generateGoogleSheetManifests.yaml

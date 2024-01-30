@@ -1,36 +1,6 @@
-# Do not change the 'definitions' section unless you know what you're doing
-definitions:
-  synapse_config: ".synapseConfig"
-  service_acct_creds: "schematic_service_account_creds.json"
+asset_store:
+  synapse:
+    config: '.synapseConfig'
 
-synapse:
-  master_fileview: 'syn23643253'
-  manifest_folder: 'manifests'
-  manifest_basename: 'synapse_storage_manifest' 
-  service_acct_creds: 'syn25171627'
-
-manifest:
-  # if making many manifests, just include name prefix
-  title: 'example'
-  # to make all manifests enter only 'all manifests'
-  data_type: 
-    - 'Biospecimen'
-    - 'Patient'
-
-model:
-  input:
-    location: 'tests/data/example.model.jsonld'
-    file_type: 'local'
-
-style:
-  google_manifest:
-    req_bg_color:
-      red: 0.9215
-      green: 0.9725
-      blue: 0.9803
-    opt_bg_color:
-      red: 1.0
-      green: 1.0
-      blue: 0.9019
-    master_template_id: '1LYS5qE4nV9jzcYw5sXwCza25slDfRA1CIg3cs-hCdpU'
-    strict_validation: true
+google_sheets:
+  service_acct_creds: 'schematic_service_account_creds.json'
