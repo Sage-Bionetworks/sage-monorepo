@@ -120,6 +120,8 @@ jobs:
         shell: python
 
       - name: Test the affected projects (all)
+        env:
+          SERVICE_ACCOUNT_CREDS: ${{ secrets.SERVICE_ACCOUNT_CREDS }}
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=test-all"
