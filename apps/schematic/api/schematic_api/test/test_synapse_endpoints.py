@@ -40,6 +40,29 @@ HEADERS = {
 
 @pytest.mark.synapse
 @pytest.mark.secrets
+class TestGenerateGoogleSheetManifests(BaseTestCase):
+    """Tests google sheet manifest endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = (
+            f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
+            "&assetViewId=syn28559058"
+            "&nodeLabelArray=Patient"
+            "&nodeLabelArray=Biospecimen"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == ["links"]
+        links = result["links"]
+        assert isinstance(links, list)
+        assert len(links) == 2
+
+
+@pytest.mark.synapse
+@pytest.mark.secrets
 class TestValidationEndpoints(BaseTestCase):
     """Integration tests"""
 
