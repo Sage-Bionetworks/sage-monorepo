@@ -45,6 +45,10 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
 
     def test_success(self) -> None:
         """Test for successful result"""
+        import os
+        if not "SERVICE_ACCOUNT_CREDS" in os.environ:
+            import logging
+            logging.warning(os.environ)
         url = (
             f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
             "&assetViewId=syn28559058"
