@@ -86,7 +86,6 @@ def generate_google_sheet_manifests(
             )
 
     access_token = get_access_token()
-    CONFIG.load_config("schematic_api/config.yml")
     CONFIG.synapse_master_fileview_id = asset_view_id
     schema_path = download_schema_file_as_jsonld(schema_url)
     links = ManifestGenerator.create_manifests(
