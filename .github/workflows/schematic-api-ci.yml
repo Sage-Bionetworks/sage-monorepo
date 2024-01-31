@@ -129,6 +129,7 @@ jobs:
           credentials_file_name = "apps/schematic/api/schematic_service_account_creds.json"
           with open(credentials_file_name, 'w', encoding='utf-8') as f:
               json.dump(credentials_dict, f, ensure_ascii=False, indent=4)
+        shell: python          
 
       - name: Test the affected projects (all)
         run: |
