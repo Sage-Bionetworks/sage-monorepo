@@ -119,9 +119,18 @@ jobs:
               yaml.dump(secrets, file)
         shell: python
 
-      - name: Test the affected projects (all)
+      - name: create google credentials
         env:
           SERVICE_ACCOUNT_CREDS: ${{ secrets.SCHEMATIC_SERVICE_ACCT_CREDS }}
+        run: |
+          import json
+          import os
+          credentials_dict = json.loads(os.environ["SERVICE_ACCOUNT_CREDS"])
+          credentials_file_name = "apps/schematic/api/schematic_service_account_creds.json"
+          with open(credentials_file_name, 'w', encoding='utf-8') as f:
+              json.dump(credentials_dict, f, ensure_ascii=False, indent=4)
+
+      - name: Test the affected projects (all)
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=test-all"
