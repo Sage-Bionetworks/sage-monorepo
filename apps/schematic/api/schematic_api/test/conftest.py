@@ -6,6 +6,8 @@ import pandas as pd
 
 from schematic_api.models.manifest_metadata import ManifestMetadata
 
+# testing functions -------------------------------------------------------------------------------
+
 
 def csv_to_bytes(path: str) -> str:
     """reads in a csv file and returns as bytes"""
@@ -18,6 +20,19 @@ def csv_to_json_str(path: str) -> str:
     """reads in a csv file and returns as json string"""
     dataframe = pd.read_csv(path)
     return dataframe.to_json()
+
+
+# strings for mocking -----------------------------------------------------------------------------
+
+GET_ACCESS_TOKEN_MOCK = (
+    "schematic_api.controllers.manifest_generation_controller_impl.get_access_token"
+)
+CREATE_SINGLE_MANIFEST_MOCK = (
+    "schematic.manifest.generator.ManifestGenerator.create_single_manifest"
+)
+CREATE_MANIFESTS_MOCK = (
+    "schematic.manifest.generator.ManifestGenerator.create_manifests"
+)
 
 
 EXAMPLE_MANIFEST_METADATA = [
