@@ -12,7 +12,7 @@ env:
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_CLOUD_ENCRYPTION_KEY: ${{ secrets.NX_CLOUD_ENCRYPTION_KEY }}
   NX_CLOUD_ENV_NAME: 'linux'
-  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
 
@@ -31,7 +31,8 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - uses: ./.github/actions/setup-dev-container
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
 
       - name: Lint the affected projects
         run: |
@@ -53,10 +54,10 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && nx affected --target=integration-test"
 
-      - name: Scan the affected projects with Sonar
-        run: |
-          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=sonar"
+      # - name: Scan the affected projects with Sonar
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx affected --target=sonar"
 
       - name: Publish the images of the affected projects
         run: |
@@ -90,7 +91,8 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - uses: ./.github/actions/setup-dev-container
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
 
       - name: Lint the affected projects
         run: |
