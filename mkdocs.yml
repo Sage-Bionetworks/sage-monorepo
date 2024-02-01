@@ -24,13 +24,20 @@ nav:
       - Develop Locally: getting-started/local-dev.md
       - Develop On a Remote Host: getting-started/remote-dev.md
   - Tutorials:
-    - OpenChallenges:
-      - Your first app: tutorials/openchallenges/introduction.md
-      - Add a new library: tutorial/openchallenges/add-library.md
-      - Add a new copmonent: tutorials/openchallenges/add-component.md
-      - Using styles/themes: tutorials/openchallenges/use-style-theme.md
-    - Schematic:
-      - Add a REST API: tutorials/schematic/add-api.md
+    - Angular:
+      - Create an Angular app: tutorials/angular/add-app.md
+      - Add an Angular API client: tutorials/angular/add-api-client.md
+      - Add an Angular component: tutorials/angular/add-component.md
+      - Add an Angular library: tutorials/angular/add-library.md
+    - Docker:
+      - Create a Docker-based project: tutorials/docker/new-project.md
+    - Java:
+      - Add a Java library: tutorials/java/add-library.md
+      - Add a Java REST API: tutorials/java/add-rest-api.md
+    - Python:
+      - Add a Python REST API: tutorials/python/add-rest-api.md
+    - R:
+      - Add an R project: tutorials/r/new-project.md
   - Developers Guide:
     - Common Issues: developers-guide/faq.md
   - Reference:
