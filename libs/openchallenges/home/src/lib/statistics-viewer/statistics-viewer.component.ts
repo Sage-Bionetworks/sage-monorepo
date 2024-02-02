@@ -26,6 +26,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
   private chartDataSubscription: Subscription | undefined;
 
   chartOptions!: EChartsOption;
+  // flippedChartOptions!: EChartsOption;
 
   ngOnInit() {
     // update plot's data
@@ -37,24 +38,26 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
             textStyle: {
               fontWeight: 'normal',
               fontFamily: 'Lato, sans-serif',
+              fontSize: '15px',
               color: '#000',
             },
             xAxis: {
               type: 'category',
               data: res.years,
-              axisLabel: { fontSize: '1em' },
+              axisLabel: { rotate: 45 },
             },
             yAxis: [
               {
                 type: 'value',
                 name: '',
-                axisLabel: { fontSize: '1em' },
                 nameTextStyle: {
-                  fontSize: '1.1em',
                   lineHeight: 56,
                 },
               },
             ],
+            grid: {
+              containLabel: true,
+            },
             series: [
               {
                 name: 'Total challenges',
@@ -70,6 +73,47 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
+            // }),
+            // (this.flippedChartOptions = {
+            //   textStyle: {
+            //     fontWeight: 'normal',
+            //     fontFamily: 'Lato, sans-serif',
+            //     fontSize: '14px',
+            //     color: '#000',
+            //   },
+            //   xAxis: [
+            //     {
+            //       type: 'value',
+            //       name: '',
+            //       nameTextStyle: {
+            //         fontSize: '15px',
+            //         lineHeight: 56,
+            //       },
+            //     },
+            //   ],
+            //   yAxis: {
+            //     type: 'category',
+            //     data: res.years,
+            //     inverse: true,
+            //   },
+            //   grid: {
+            //     containLabel: true,
+            //   },
+            //   series: [
+            //     {
+            //       name: 'Total challenges',
+            //       data: res.challengeCounts,
+            //       type: 'bar',
+            //       itemStyle: {
+            //         color: '#afa0fe',
+            //       },
+            //       // disable default clicking
+            //       silent: true,
+            //       // make bar plot rise from left to right
+            //       // instead of rising all together in the same time
+            //       animationDelay: (dataIndex: number) => dataIndex * 100,
+            //     },
+            //   ],
           })
       );
   }
