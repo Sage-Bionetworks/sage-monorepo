@@ -1,13 +1,20 @@
 {
   "name": "iatlas-data",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/iatlas/data/src",
+  "sourceRoot": "apps/iatlas/data/scripts",
   "projectType": "application",
   "targets": {
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
         "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./prepare-python.sh",
         "cwd": "{projectRoot}"
       }
     },
@@ -40,7 +47,8 @@
   },
   "tags": [
     "type:db",
-    "scope:backend"
+    "scope:backend",
+    "language:python"
   ],
   "implicitDependencies": []
 }

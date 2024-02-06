@@ -1,6 +1,4 @@
-ARG PYTHON_IMAGE_TAG
-
-FROM python:${PYTHON_IMAGE_TAG} as python-base
+FROM python:3.10.13 as python-base
 
 RUN apt-get -y update && apt-get -y install \
     wget && \

@@ -32,8 +32,8 @@ export IATLAS_ENV=${IATLAS_ENV:-dev}
 # database variables
 export DB_NAME=${DB_NAME:-iatlas_dev}
 export DB_HOST=${DB_HOST:-localhost}
-export DB_PORT=${DB_PORT:-5432}
-export DB_PW=${DB_PW:-docker}
+export DB_PORT=${DB_PORT:-2432}
+export DB_PW=${DB_PW:-changeme}
 export DB_USER=${DB_USER:-postgres}
 # schema variables
 # Curently using test database variables
