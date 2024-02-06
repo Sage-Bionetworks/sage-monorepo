@@ -41,8 +41,14 @@ paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml
 
+  /assetTypes/{assetType}/assetViews/{assetViewId}/csv:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/csv.yaml
+
   /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
     $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/manifestJson.yaml
+
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestCsv:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/manifestCsv.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataArray:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projectMetadataArray.yaml
@@ -58,6 +64,9 @@ paths:
 
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
+
+  /assetTypes/{assetType}/manifests/{manifestId}/csv:
+    $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/csv.yaml
 
   /nodes/{nodeLabel}/dependencyArray:
     $ref: paths/nodes/@{nodeLabel}/dependencyArray.yaml
