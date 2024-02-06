@@ -24,11 +24,6 @@ properties:
     nullable: true
   direction:
     $ref: ChallengeDirection.yaml
-  difficulties:
-    description: An array of challenge difficulty levels used to filter the results.
-    type: array
-    items:
-      $ref: ChallengeDifficulty.yaml
   incentives:
     description: An array of challenge incentive types used to filter the results.
     type: array

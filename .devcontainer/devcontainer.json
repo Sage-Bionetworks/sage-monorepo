@@ -10,6 +10,7 @@
     "NX_HEAD": "${localEnv:NX_HEAD}",
     "NX_RUN_GROUP": "${localEnv:NX_RUN_GROUP}",
     "SONAR_TOKEN": "${localEnv:SONAR_TOKEN}",
+    "SONAR_PULL_REQUEST_NUMBER": "${localEnv:SONAR_PULL_REQUEST_NUMBER}",
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
@@ -21,9 +22,7 @@
   },
   "customizations": {
     "codespaces": {
-      "openFiles": [
-        "README.md"
-      ]
+      "openFiles": ["README.md"]
     },
     "vscode": {
       "extensions": [
@@ -66,41 +65,9 @@
     }
   },
   "forwardPorts": [
-    2432,
-    3000,
-    3306,
-    4200,
-    4211,
-    5017,
-    5200,
-    5432,
-    5601,
-    7010,
-    7080,
-    7200,
-    7888,
-    8010,
-    8071,
-    8000,
-    8080,
-    8081,
-    8082,
-    8083,
-    8084,
-    8085,
-    8086,
-    8090,
-    8091,
-    8092,
-    8200,
-    8787,
-    8888,
-    8889,
-    9090,
-    9104,
-    9200,
-    9411,
-    27017
+    2432, 3000, 3306, 4200, 4211, 5017, 5200, 5432, 5601, 7010, 7080, 7200, 7888, 8010, 8071, 8000,
+    8080, 8081, 8082, 8083, 8084, 8085, 8086, 8090, 8091, 8092, 8200, 8787, 8888, 8889, 9090, 9104,
+    9200, 9411, 27017
   ],
   "portsAttributes": {
     "2432": {
@@ -250,8 +217,5 @@
   },
   "remoteUser": "vscode",
   "shutdownAction": "stopContainer",
-  "runArgs": [
-    "--name",
-    "sage_devcontainer"
-  ]
+  "runArgs": ["--name", "sage_devcontainer"]
 }

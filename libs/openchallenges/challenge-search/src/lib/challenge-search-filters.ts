@@ -1,6 +1,5 @@
 import {
   ChallengeCategory,
-  ChallengeDifficulty,
   ChallengeIncentive,
   ChallengeSort,
   ChallengeStatus,
@@ -68,21 +67,6 @@ export const challengeStatusFilter: Filter[] = [
   {
     value: ChallengeStatus.Completed,
     label: 'Completed',
-  },
-];
-
-export const challengeDifficultyFilter: Filter[] = [
-  {
-    value: ChallengeDifficulty.GoodForBeginners,
-    label: 'Good For Beginners',
-  },
-  {
-    value: ChallengeDifficulty.Intermediate,
-    label: 'Intermediate',
-  },
-  {
-    value: ChallengeDifficulty.Advanced,
-    label: 'Advanced',
   },
 ];
 

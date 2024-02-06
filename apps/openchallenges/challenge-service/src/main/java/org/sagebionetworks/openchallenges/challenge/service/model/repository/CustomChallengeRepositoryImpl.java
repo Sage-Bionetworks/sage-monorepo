@@ -18,7 +18,6 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.challenge.service.exception.BadRequestException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
@@ -54,9 +53,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     }
     if (query.getStatus() != null && !query.getStatus().isEmpty()) {
       predicates.add(getChallengeStatusPredicate(pf, query));
-    }
-    if (query.getDifficulties() != null && !query.getDifficulties().isEmpty()) {
-      predicates.add(getChallengeDifficultyPredicate(pf, query));
     }
     if (query.getPlatforms() != null && !query.getPlatforms().isEmpty()) {
       predicates.add(getChallengePlatformPredicate(pf, query));
@@ -127,24 +123,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             b -> {
               for (ChallengeStatusDto status : query.getStatus()) {
                 b.should(pf.match().field("status").matching(status.toString()));
-              }
-            })
-        .toPredicate();
-  }
-
-  /**
-   * Matches the challenges whose difficulty is in the list of difficulties specified.
-   *
-   * @param pf
-   * @param query
-   * @return
-   */
-  private SearchPredicate getChallengeDifficultyPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeDifficultyDto difficulty : query.getDifficulties()) {
-                b.should(pf.match().field("difficulty").matching(difficulty.toString()));
               }
             })
         .toPredicate();

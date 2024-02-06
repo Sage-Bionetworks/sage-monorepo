@@ -1,0 +1,8 @@
+type: object
+description: An array of conncted node pairs
+properties:
+  connectedNodes:
+    description: An array of conncted node pairs.
+    type: array
+    items:
+      $ref: ConnectedNodePair.yaml

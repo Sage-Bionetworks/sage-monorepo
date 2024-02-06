@@ -1,4 +1,4 @@
-description: The login of an organization
+description: The unique login of an organization.
 type: string
 minLength: 2
 maxLength: 64

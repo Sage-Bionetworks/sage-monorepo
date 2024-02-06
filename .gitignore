@@ -5,6 +5,7 @@
 !.yarn/sdks
 !.yarn/versions
 .nx-container/
+.nx/
 .pnpm-store/
 .scannerwork/
 playwright-report/

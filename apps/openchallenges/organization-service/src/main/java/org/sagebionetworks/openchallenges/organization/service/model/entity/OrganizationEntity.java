@@ -45,9 +45,6 @@ public class OrganizationEntity {
       sortable = Sortable.YES)
   private String name;
 
-  @Column(nullable = false)
-  private String email;
-
   @NaturalId(mutable = true)
   @Column(nullable = false, unique = true)
   private String login;
