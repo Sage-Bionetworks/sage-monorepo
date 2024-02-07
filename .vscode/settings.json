@@ -5,7 +5,7 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "black-formatter.importStrategy": "fromEnvironment",
   "[python]": {
@@ -78,6 +78,16 @@
       "driver": "MariaDB",
       "name": "openchallenges",
       "username": "maria",
+      "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 2432,
+      "driver": "PostgreSQL",
+      "name": "iatlas-postgres",
+      "database": "iatlas",
+      "username": "postgres",
       "password": "changeme"
     }
   ],

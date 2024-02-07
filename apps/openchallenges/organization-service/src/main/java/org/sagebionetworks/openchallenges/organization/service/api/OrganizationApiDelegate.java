@@ -36,7 +36,7 @@ public interface OrganizationApiDelegate {
               for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   String exampleString =
-                      "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://example.com\", \"acronym\" : \"OC\", \"name\" : \"Example organization\", \"description\" : \"A description of the organization.\", \"id\" : 1, \"challengeCount\" : 10, \"login\" : \"example-org\", \"email\" : \"john.smith@example.com\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
+                      "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarKey\" : \"logo/dream.png\", \"websiteUrl\" : \"https://openchallenges.io\", \"acronym\" : \"OC\", \"name\" : \"Example organization\", \"description\" : \"A description of the organization.\", \"id\" : 1, \"challengeCount\" : 10, \"login\" : \"example-org\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }

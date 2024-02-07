@@ -1,0 +1,85 @@
+# Project
+site_name: "Sage Monorepo"
+site_description: >-
+  A development environment for building robust apps faster.
+
+# Repository
+repo_url: https://github.com/Sage-Bionetworks/sage-monorepo
+repo_name: sage-monorepo
+
+# Navigation
+nav:
+  - Home:
+    - Home: index.md
+    - Changelog: changelog.md
+    - Contributing:
+      - Overview: contributing-guidelines.md
+      - Reporting a bug: bug-report.md
+      - Adding a feature: contributing.md
+      - Code of conduct: code-of-conduct.md
+  - Getting Started:
+    - Angular Universal: angular-universal.md
+    - Devcontainer: devcontainer.md
+    - Nx: using-nx.md
+    - Remote host: develop-on-a-remote-host.md
+  - Setup:
+    - Figma-to-Code: figma-to-code.md
+    - Using styles/themes: app-styles-themes-assets.md
+    - Create a new library: libraries.md
+    - Create a new component: create-a-new-angular-component.md
+    - Monitor the stack: stack-monitoring.md
+    - Collect logs and system metrics: collect-challenge-logs-and-system-metrics.md
+    - Update tools and dependencies: update-dependencies.md
+    - Code coverage: coverage.md
+  - Cheat Sheets:
+    - VSCode: vscode-cheat-sheet.md
+    - Java: java-cheat-sheed.md
+    - OpenChallenges: cheat-sheet.md
+  - References:
+    - references.md
+    - Linters and formatters: linters-and-formatters.md
+  - FAQ: faq.md
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)" 
+      scheme: default
+      primary: teal
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)" 
+      scheme: slate
+      primary: deep purple
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+  logo: images/sage.png
+  icon:
+    admonition:
+      note: octicons/tag-16
+      info: octicons/info-16
+  features:
+    - content.code.copy
+    - navigation.tabs
+    - navigation.footer
+    - navigation.sections
+    - search.highlight
+    - search.share
+    - search.suggest
+    - toc.follow
+
+plugins:
+- search
+- mkdocstrings
+- autorefs
+- termynal
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - toc:
+      permalink: true

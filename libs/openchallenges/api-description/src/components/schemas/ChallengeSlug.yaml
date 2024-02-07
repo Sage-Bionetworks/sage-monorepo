@@ -1,4 +1,4 @@
-description: The slug of the challenge.
+description: The unique slug of the challenge.
 type: string
 minLength: 3
 maxLength: 255
