@@ -7,18 +7,30 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+
     steps:
       - name: Get current date
         run: |
           echo "TODAY=$(date +"%Y-%m-%d")" >> $env:GITHUB_ENV
+
       - name: Use variable
         run: |
           echo "${{ env.TODAY }}"
+
+      # - name: Install schematic and validate files
+      #   shell: bash
+      #   run: |
+      #     python3.10 -m venv .venv
+      #     chmod 755 .venv/bin/activate
+      #     source .venv/bin/activate
+      #     pip3.10 install schematicpy
+  
       # - name: Commit files
       #   run: |
       #     git config user.name github-actions[bot]
       #     git config user.email 41898282+github-actions[bot]@users.noreply.github.com
       #     git commit -m "add latest CSV dump files for DB update" -a
+
       # - name: Push changes
       #   uses: ad-m/github-push-action@master
       #   with:
