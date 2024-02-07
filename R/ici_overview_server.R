@@ -10,12 +10,14 @@ ici_overview_server <- function(
 
       ici_overview_datasets_server(
         "ici_overview_datasets",
-        ioresponse_data
+        ioresponse_data,
+        shiny::reactive(input$data_group)
       )
 
       ici_overview_category_server(
         "ici_overview_category",
-        ioresponse_data
+        ioresponse_data,
+        shiny::reactive(input$data_group)
       )
 
     }

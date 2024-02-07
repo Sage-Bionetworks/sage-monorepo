@@ -16,8 +16,8 @@ ici_overview_datasets_ui <- function(id){
       DT::DTOutput(
         ns("ici_datasets_df")
       ),
-      shiny::br(),
-      tags$a(href="https://www.synapse.org/#!Synapse:syn24200710", "Download data from Synapse")
+      shiny::br()
+      # tags$a(href="https://www.synapse.org/#!Synapse:syn24200710", "Download data from Synapse")
     )
   )
 }
