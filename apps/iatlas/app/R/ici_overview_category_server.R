@@ -1,6 +1,7 @@
 ici_overview_category_server <- function(
   id,
-  ioresponse_data
+  ioresponse_data,
+  data_group
 ) {
   shiny::moduleServer(
     id,
@@ -8,29 +9,39 @@ ici_overview_category_server <- function(
 
       ns <- session$ns
 
-      ici_datasets <- shiny::reactive(iatlasGraphQLClient::query_datasets(types = "ici"))
+      dataset_type <- shiny::reactive({
+        switch(
+          data_group(),
+          "ici" = "ici",
+          "cancer genomics" = "analysis",
+          "single-cell RNA-Seq" = "ici" #UPDATE!!
+        )
+      })
+
+      ici_datasets <- shiny::reactive(iatlasGraphQLClient::query_datasets(types = dataset_type()))
       ici_samples <- shiny::reactive(iatlasGraphQLClient::query_dataset_samples(datasets = ici_datasets()$name))
 
       categories <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = ici_datasets()$name))
 
-      output$select_group1 <- renderUI(
+      output$select_group1 <- renderUI({
+        #shiny::req(categories())
         shiny::selectInput(ns("group1"), "Select Category",
-                    choices = categories()$tag_short_display,
-                    selected = "Responder")
-      )
+                    choices = categories()$tag_short_display)
+                    # selected = "Responder")
+      })
 
       output$select_group2 <- renderUI({
         shiny::req(input$group1)
         shiny::selectInput(ns("group2"), "Select second category to see groups overlap",
                     choices = (categories() %>%
-                                 dplyr::filter(tag_short_display != input$group1))$tag_short_display,
-                    selected = "Drug")
+                                 dplyr::filter(tag_short_display != input$group1))$tag_short_display)
+                    # selected = "Drug")
       })
 
       group1 <- reactive({
         shiny::req(input$group1)
         convert_value_between_columns(input_value = input$group1,
-                                      df = categories(),
+                                      df = shiny::isolate(categories()),
                                       from_column = "tag_short_display",
                                       to_column = "tag_name")
       })
@@ -38,7 +49,7 @@ ici_overview_category_server <- function(
       group2 <- reactive({
         shiny::req(input$group2)
         convert_value_between_columns(input_value = input$group2,
-                                      df = categories(),
+                                      df = shiny::isolate(categories()),
                                       from_column = "tag_short_display",
                                       to_column = "tag_name")
       })

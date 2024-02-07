@@ -1,6 +1,7 @@
 ici_overview_datasets_server <- function(
   id,
-  ioresponse_data
+  ioresponse_data,
+  data_group
 ) {
   shiny::moduleServer(
     id,
@@ -8,16 +9,21 @@ ici_overview_datasets_server <- function(
 
       ns <- session$ns
 
+      dataset_info <- shiny::reactive({
+        ioresponse_data$dataset_df %>%
+          dplyr::filter(type == data_group())
+      })
+
       output$sums <- shiny::renderText({
-        n_samples <- sum(ioresponse_data$dataset_df$Samples)
-        n_patients <- sum(ioresponse_data$dataset_df$Patients)
+        n_samples <- sum(dataset_info()$Samples)
+        n_patients <- sum(dataset_info()$Patients)
         glue::glue(
-          "CRI iAtlas has {n_samples} ICI samples, from {n_patients} patients."
+          "CRI iAtlas has {n_samples} samples, from {n_patients} patients in this category of datasets."
         )
       })
 
       output$ici_datasets_df <- DT::renderDT({
-        DT::datatable((ioresponse_data$dataset_df %>%
+        DT::datatable((dataset_info() %>%
                          dplyr::mutate(
                            Reference = paste(
                              "<a href=\"",
@@ -26,7 +32,7 @@ ici_overview_datasets_server <- function(
                              sep=""
                            )
                          )%>%
-                         select(Dataset, Study, Antibody, Samples, Patients, `Sequencing Method`, Reference)),
+                         select(Dataset, Study, Antibody, Samples, Patients, `Sequencing.Method`, Reference)),
                       options = list(pageLength = 20),
                       escape= FALSE)
       })

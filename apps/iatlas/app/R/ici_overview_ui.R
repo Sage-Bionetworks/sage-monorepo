@@ -8,10 +8,24 @@ ici_overview_ui <- function(id){
     ),
     iatlas.modules::textBox(
       width = 12,
-      p("This module describes the datasets that are available in CRI iAtlas for the analysis of molecular response to
-        Immune Checkpoint Inhibitor immunotherapy(ICI). Primary data processing and scoring of immune response, including
-        immune signatures and cell-content estimates were performed by UNC Lineberger team Dante Bortone, Sarah Entwistle,
-        led by Benjamin G. Vincent.")
+      p("There are different types of data in CRI iAtlas, select the one you are interested.")
+      # p("This module describes the datasets that are available in CRI iAtlas for the analysis of molecular response to
+      #   Immune Checkpoint Inhibitor immunotherapy(ICI). Primary data processing and scoring of immune response, including
+      #   immune signatures and cell-content estimates were performed by UNC Lineberger team Dante Bortone, Sarah Entwistle,
+      #   led by Benjamin G. Vincent.")
+    ),
+    iatlas.modules::optionsBox(
+      width = 12,
+      shiny::radioButtons(
+        ns("data_group"),
+        "Select the type of data for more information",
+        choices = c(
+          "ici",
+          "cancer genomics",
+          "single-cell RNA-Seq"
+        ),
+        selected = "ici"
+      )
     ),
     iatlas.modules::sectionBox(
       title = "Dataset Information",
