@@ -81,6 +81,13 @@ shiny::shinyServer(function(input, output, session) {
   # Other ---------------------------------------------------------------------
 
   call_iatlas_module(
+    "ici_overview",
+    ici_overview_server,
+    input,
+    session
+  )
+
+  call_iatlas_module(
     "data_info",
     data_info_server,
     input,

@@ -33,6 +33,11 @@ explorepage_ui <- function(){
         icon = shiny::icon("tachometer-alt")
       ),
       shinydashboard::menuItem(
+        "Datasets Overview",
+        icon = shiny::icon("th-list"),
+        tabName = "ici_overview"
+      ),
+      shinydashboard::menuItem(
         "ICI Cohort Selection",
         tabName = "ici_cohort_selection",
         icon = shiny::icon("cog")
@@ -191,12 +196,14 @@ explorepage_ui <- function(){
         "label" = c(
           "cg_cohort_selection",
           "ici_cohort_selection",
-          "data_info"
+          "data_info",
+          "ici_overview"
         ),
         "ui_function" = c(
           iatlas.modules2::cohort_selection_ui,
           iatlas.modules2::cohort_selection_ui,
-          data_info_ui
+          data_info_ui,
+          ici_overview_ui
         )
       )
     ) %>%

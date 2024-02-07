@@ -7,9 +7,9 @@ ici_overview_datasets_ui <- function(id){
       shiny::textOutput(
         ns("sums")
       ),
-      shiny::includeMarkdown(get_markdown_path(
-        "ici_overview_datasets"
-      ))
+      # shiny::includeMarkdown(get_markdown_path(
+      #   "ici_overview_datasets"
+      # ))
     ),
     iatlas.modules::plotBox(
       width = 12,

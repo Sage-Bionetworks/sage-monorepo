@@ -6,7 +6,7 @@ ici_overview_server <- function(
     id,
     function(input, output, session) {
 
-     # ici_data <- load_io_data()
+      ioresponse_data <- load_io_data()
 
       ici_overview_datasets_server(
         "ici_overview_datasets",
