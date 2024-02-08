@@ -4,6 +4,7 @@
 
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
+  "127.0.0.1 iatlas-postgres"
   "127.0.0.1 openchallenges-api-gateway"
   "127.0.0.1 openchallenges-app"
   "127.0.0.1 openchallenges-auth-service"
