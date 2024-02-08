@@ -101,7 +101,7 @@ jobs:
             && . ./dev-env.sh \
             && workspace-install"
 
-      - name: create synapse config
+      - name: Set up synapse config
         run: |
           import yaml
           secrets = {
@@ -119,7 +119,7 @@ jobs:
               yaml.dump(secrets, file)
         shell: python
 
-      - name: create google credentials
+      - name: Set up google credentials
         env:
           SERVICE_ACCOUNT_CREDS: ${{ secrets.SCHEMATIC_SERVICE_ACCT_CREDS }}
         run: |
