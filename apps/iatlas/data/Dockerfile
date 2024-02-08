@@ -1,4 +1,4 @@
-FROM python:3.10.13 as python-base
+FROM python:3.10.13
 
 RUN apt-get -y update && apt-get -y install \
     wget && \
@@ -12,5 +12,15 @@ RUN apt-get -y update && apt-get -y install \
     mkdir -p /home/gitlab/sage-iatlas-data
 
 COPY requirements.txt requirements.txt
+COPY src/ /src
 
 RUN pip3 install -r requirements.txt
+
+WORKDIR /
+COPY docker-entrypoint.sh ./
+RUN chmod +x docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+# Set up the iAtlas database
+CMD python /src/build_database.py

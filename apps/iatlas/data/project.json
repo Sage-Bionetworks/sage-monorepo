@@ -29,19 +29,24 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker compose up -d",
-        "cwd": "apps/iatlas/data"
-      },
-      "dependsOn": []
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
+      }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/iatlas/data",
-        "push": false,
-        "tags": [
-          "ghcr.io/sage-bionetworks/iatlas-data:local"
-        ]
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/iatlas-data"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
       }
     }
   },
