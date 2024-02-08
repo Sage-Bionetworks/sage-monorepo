@@ -71,7 +71,7 @@
   ],
   "portsAttributes": {
     "2432": {
-      "label": "iatlas-data",
+      "label": "iatlas-postgres",
       "onAutoForward": "silent"
     },
     "3000": {
