@@ -58,3 +58,12 @@ jobs:
         with:
           github_token: ${{ secrets.GH_TOKEN }}
           branch: db-update-${{ env.TODAY }}
+
+      - name: Create pull request
+        run: |
+          gh pr create -B main -H db-update-${{ env.TODAY }} \
+            --title 'chore(openchallenges): ${{ env.TODAY }} DB update' \
+            --body 'Daily OC datebase update'
+        env:
+            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+    
