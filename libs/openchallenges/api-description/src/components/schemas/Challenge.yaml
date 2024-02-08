@@ -35,20 +35,10 @@ properties:
     type: array
     items:
       $ref: SimpleChallengeInputDataType.yaml
-  #   ownerId:
-  #     $ref: AccountId.yaml
-  #   featured:
-  #     description: Whether the challenge is featured
-  #     type: boolean
-  #     default: false
-  #   participantCount:
-  #     description: Number of challenge participants
-  #     type: integer
-  #     default: 0
-  #   viewCount:
-  #     description: Number of challenge views
-  #     type: integer
-  #     default: 0
+  categories:
+    type: array
+    items:
+      $ref: ChallengeCategory.yaml
   startDate:
     $ref: ChallengeStartDate.yaml
   endDate:

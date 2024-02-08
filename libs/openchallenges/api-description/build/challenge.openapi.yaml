@@ -508,6 +508,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SimpleChallengeInputDataType'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
         startDate:
           $ref: '#/components/schemas/ChallengeStartDate'
         endDate:
