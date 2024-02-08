@@ -85,6 +85,10 @@ function schematic-build-images {
   nx run-many --target=build-image --projects=schematic-* --parallel=3
 }
 
+function iatlas-build-images {
+  nx run-many --target=build-image --projects=iatlas-* --parallel=3
+}
+
 function synapse-build-images {
   nx run-many --target=build-image --projects=synapse-* --parallel=3
 }

@@ -1,6 +1,7 @@
 {
-  "name": "iatlas-postgres",
+  "name": "iatlas-data",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/iatlas/data/scripts",
   "projectType": "application",
   "targets": {
     "create-config": {
@@ -10,18 +11,33 @@
         "cwd": "{projectRoot}"
       }
     },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./prepare-python.sh",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker compose up",
+        "cwd": "apps/iatlas/data"
+      },
+      "dependsOn": []
+    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/iatlas/serve-detach.sh iatlas-postgres"
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
       }
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/iatlas/postgres",
+        "context": "apps/iatlas/data",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/iatlas-postgres"],
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
           "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
@@ -30,7 +46,7 @@
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/iatlas/postgres",
+        "context": "apps/iatlas/data",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/{projectName}"],
           "tags": ["type=edge,branch=main", "type=sha"]
@@ -47,6 +63,6 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend"],
+  "tags": ["type:db", "scope:backend", "language:python"],
   "implicitDependencies": []
 }

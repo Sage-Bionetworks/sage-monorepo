@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "iatlas-data"
+version = "0.1.0"
+description = ""
+authors = ["andrewelamb <andrewelamb@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+schematic-db = {version = "0.0.36", extras = ["postgres", "synapse"]}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
