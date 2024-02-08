@@ -37,23 +37,32 @@
       "options": {
         "context": "apps/iatlas/data",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/iatlas-data"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/iatlas/data",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=sha"]
+        },
+        "push": true
+      },
+      "dependsOn": ["build-image"]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/{projectName}:local --quiet",
+        "color": true
+      }
     }
   },
-  "tags": [
-    "type:db",
-    "scope:backend",
-    "language:python"
-  ],
+  "tags": ["type:db", "scope:backend", "language:python"],
   "implicitDependencies": []
 }
