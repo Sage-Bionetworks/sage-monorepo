@@ -9,19 +9,29 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Get current date
+      - name: Install system dependencies
         run: |
-          echo "TODAY=$(date +"%Y-%m-%d")" >> $env:GITHUB_ENV
+          sudo add-apt-repository ppa:deadsnakes/ppa
+          sudo apt-get update
+          sudo apt-get install -y pip python3.10-venv libcurl4-openssl-dev
 
-      - name: Use variable
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Create Google Service credentials file
+        uses: jsdaniell/create-json@v1.2.3
+        with:
+          name: "service_account.json"
+          json: ${{ secrets.GC_JSON }}
+
+      - name: Update dump files
         run: |
-          echo "${{ env.TODAY }}"
-
-      # - name: Install system dependencies
-      #   run: |
-      #     sudo add-apt-repository ppa:deadsnakes/ppa
-      #     sudo apt-get update
-      #     sudo apt-get install -y pip python3.10-venv libcurl4-openssl-dev
+          python3 -m pip install --upgrade pip
+          pip install gspread pandas numpy
+          python3 apps/openchallenges/db-update/update_db_csv.py
 
       # - name: Install schematic and validate files
       #   shell: bash
@@ -30,15 +40,21 @@ jobs:
       #     chmod 755 .venv/bin/activate
       #     source .venv/bin/activate
       #     pip3.10 install schematicpy
-  
-      # - name: Commit files
-      #   run: |
-      #     git config user.name github-actions[bot]
-      #     git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-      #     git commit -m "add latest CSV dump files for DB update" -a
 
-      # - name: Push changes
-      #   uses: ad-m/github-push-action@master
-      #   with:
-      #     github_token: ${{ secrets.GH_TOKEN }}
-      #     branch: db-update-${{ env.TODAY }}
+      - name: Commit files
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git config advice.addIgnoredFile false
+          git add .
+          git commit -m "add latest CSV dump files for DB update"
+
+      - name: Get current date
+        run: |
+          echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GH_TOKEN }}
+          branch: db-update-${{ env.TODAY }}
