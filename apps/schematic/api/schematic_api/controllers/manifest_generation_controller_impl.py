@@ -62,7 +62,7 @@ def generate_google_sheet_manifests(
                 "When generate_all_manifests is True data_type_array must be None",
                 {"data_type_array": data_type_array},
             )
-        data_type_array = ["all_manifests"]
+        data_type_array = ["all manifests"]
 
     else:
         if not data_type_array:
