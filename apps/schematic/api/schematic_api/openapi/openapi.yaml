@@ -1131,13 +1131,13 @@ paths:
         schema:
           type: string
         style: form
-      - description: An array of nodel labels
+      - description: An array of data types
         explode: true
         in: query
-        name: nodeLabelArray
+        name: dataTypeArray
         required: false
         schema:
-          $ref: '#/components/schemas/NodeLabelArray'
+          $ref: '#/components/schemas/DataTypeArray'
         style: form
       - description: "If true, users are blocked from entering incorrect values. If\
           \ false, users will get a warning when using incorrect values."
@@ -1174,6 +1174,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
+      security:
+      - bearerAuth: []
       summary: Generates a list of google sheet links
       tags:
       - ManifestGeneration
@@ -2362,14 +2364,14 @@ components:
       schema:
         type: string
       style: form
-    nodeLabelArray:
-      description: An array of nodel labels
+    dataTypeArray:
+      description: An array of data types
       explode: true
       in: query
-      name: nodeLabelArray
+      name: dataTypeArray
       required: false
       schema:
-        $ref: '#/components/schemas/NodeLabelArray'
+        $ref: '#/components/schemas/DataTypeArray'
       style: form
   responses:
     InternalServerError:
@@ -2731,7 +2733,6 @@ components:
     NodeLabel:
       description: The label of a node in a schema
       example: MolecularEntity
-      title: NodeLabel
       type: string
     SchemaUrl:
       description: The URL of a schema in jsonld form
@@ -2946,10 +2947,11 @@ components:
       items:
         $ref: '#/components/schemas/DatasetId'
       type: array
-    NodeLabelArray:
-      description: An array of node labels
+    DataTypeArray:
+      description: An array of data types
       items:
-        $ref: '#/components/schemas/NodeLabel'
+        example: Patient
+        type: string
       type: array
     GoogleSheetLinks:
       description: An array of google sheet links

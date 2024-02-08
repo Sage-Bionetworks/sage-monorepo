@@ -48,8 +48,8 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
         url = (
             f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
             "&assetViewId=syn28559058"
-            "&nodeLabelArray=Patient"
-            "&nodeLabelArray=Biospecimen"
+            "&dataTypeArray=Patient"
+            "&dataTypeArray=Biospecimen"
         )
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")

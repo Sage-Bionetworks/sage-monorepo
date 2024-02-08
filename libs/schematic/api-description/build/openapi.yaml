@@ -766,7 +766,7 @@ paths:
         - $ref: '#/components/parameters/datasetIdArray'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/manifestTitle'
-        - $ref: '#/components/parameters/nodeLabelArray'
+        - $ref: '#/components/parameters/dataTypeArray'
         - name: useStrictValidation
           in: query
           description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
@@ -781,6 +781,8 @@ paths:
           schema:
             type: boolean
             default: false
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: Success
@@ -1246,11 +1248,12 @@ components:
       description: An array of dataset ids
       items:
         $ref: '#/components/schemas/DatasetId'
-    NodeLabelArray:
-      description: An array of node labels
+    DataTypeArray:
+      description: An array of data types
       type: array
       items:
-        $ref: '#/components/schemas/NodeLabel'
+        type: string
+        example: Patient
     GoogleSheetLinks:
       type: object
       description: An array of google sheet links
@@ -1534,10 +1537,10 @@ components:
       required: false
       schema:
         type: string
-    nodeLabelArray:
-      name: nodeLabelArray
+    dataTypeArray:
+      name: dataTypeArray
       in: query
-      description: An array of nodel labels
+      description: An array of data types
       required: false
       schema:
-        $ref: '#/components/schemas/NodeLabelArray'
+        $ref: '#/components/schemas/DataTypeArray'

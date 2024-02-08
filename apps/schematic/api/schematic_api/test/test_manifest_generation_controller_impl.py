@@ -22,7 +22,7 @@ class TestGenerateGoogleSheetManifests:
                     schema_url=test_schema_url,
                     dataset_id_array=["syn2", "syn3"],
                     asset_view_id="syn1",
-                    node_label_array=["syn4", "syn5"],
+                    data_type_array=["syn4", "syn5"],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -40,7 +40,7 @@ class TestGenerateGoogleSheetManifests:
                     schema_url="not_a_url",
                     dataset_id_array=["syn2", "syn3"],
                     asset_view_id="syn1",
-                    node_label_array=["syn4", "syn5"],
+                    data_type_array=["syn4", "syn5"],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -53,7 +53,7 @@ class TestGenerateGoogleSheetManifests:
                     schema_url=test_schema_url,
                     dataset_id_array=["syn2", "syn3"],
                     asset_view_id="syn1",
-                    node_label_array=["syn4", "syn5"],
+                    data_type_array=["syn4", "syn5"],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -70,7 +70,7 @@ class TestGenerateGoogleSheetManifests:
                     schema_url=test_schema_url,
                     dataset_id_array=None,
                     asset_view_id="syn1",
-                    node_label_array=["syn4", "syn5"],
+                    data_type_array=["syn4", "syn5"],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -79,15 +79,15 @@ class TestGenerateGoogleSheetManifests:
                 assert status == 422
                 assert isinstance(result, BasicError)
                 assert result.detail == (
-                    "When generate_all_manifests is True node_label_array must be None: "
-                    "{'node_label_array': ['syn4', 'syn5']}"
+                    "When generate_all_manifests is True data_type_array must be None: "
+                    "{'data_type_array': ['syn4', 'syn5']}"
                 )
 
                 result, status = generate_google_sheet_manifests(
                     schema_url=test_schema_url,
                     dataset_id_array=None,
                     asset_view_id="syn1",
-                    node_label_array=None,
+                    data_type_array=None,
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -96,15 +96,15 @@ class TestGenerateGoogleSheetManifests:
                 assert status == 422
                 assert isinstance(result, BasicError)
                 assert result.detail == (
-                    "When generate_all_manifests is False node_label_array must be a list with "
-                    "atleast one item: {'node_label_array': None}"
+                    "When generate_all_manifests is False data_type_array must be a list with "
+                    "atleast one item: {'data_type_array': None}"
                 )
 
                 result, status = generate_google_sheet_manifests(
                     schema_url=test_schema_url,
                     dataset_id_array=None,
                     asset_view_id="syn1",
-                    node_label_array=[],
+                    data_type_array=[],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -113,15 +113,15 @@ class TestGenerateGoogleSheetManifests:
                 assert status == 422
                 assert isinstance(result, BasicError)
                 assert result.detail == (
-                    "When generate_all_manifests is False node_label_array must be a list with "
-                    "atleast one item: {'node_label_array': []}"
+                    "When generate_all_manifests is False data_type_array must be a list with "
+                    "atleast one item: {'data_type_array': []}"
                 )
 
                 result, status = generate_google_sheet_manifests(
                     schema_url=test_schema_url,
                     dataset_id_array=["syn4"],
                     asset_view_id="syn1",
-                    node_label_array=["syn2", "syn3"],
+                    data_type_array=["syn2", "syn3"],
                     add_annotations=False,
                     manifest_title="title",
                     use_strict_validation=True,
@@ -130,7 +130,7 @@ class TestGenerateGoogleSheetManifests:
                 assert status == 422
                 assert isinstance(result, BasicError)
                 assert result.detail == (
-                    "When generate_all_manifests is False node_label_array and dataset_id_array "
+                    "When generate_all_manifests is False data_type_array and dataset_id_array "
                     "must both lists with the same length: "
-                    "{'node_label_array': ['syn2', 'syn3'], 'dataset_id_array': ['syn4']}"
+                    "{'data_type_array': ['syn2', 'syn3'], 'dataset_id_array': ['syn4']}"
                 )

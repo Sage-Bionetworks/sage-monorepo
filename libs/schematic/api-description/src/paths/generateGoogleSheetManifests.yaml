@@ -10,7 +10,7 @@ get:
     - $ref: ../components/parameters/query/datasetIdArray.yaml
     - $ref: ../components/parameters/query/assetViewIdQuery.yaml
     - $ref: ../components/parameters/query/manifestTitle.yaml
-    - $ref: ../components/parameters/query/nodeLabelArray.yaml
+    - $ref: ../components/parameters/query/dataTypeArray.yaml
     - name: useStrictValidation
       in: query
       description: If true, users are blocked from entering incorrect values.
@@ -28,6 +28,8 @@ get:
       schema:
         type: boolean
         default: false
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

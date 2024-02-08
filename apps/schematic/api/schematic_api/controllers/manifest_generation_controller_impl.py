@@ -21,7 +21,7 @@ def generate_google_sheet_manifests(
     add_annotations: bool,
     dataset_id_array: list[str] | None,
     manifest_title: str,
-    node_label_array: list[str] | None,
+    data_type_array: list[str] | None,
     use_strict_validation: bool,
     generate_all_manifests: bool,
 ) -> tuple[GoogleSheetLinks | BasicError, int]:
@@ -30,9 +30,9 @@ def generate_google_sheet_manifests(
     Args:
         schema_url (str): The URL of the schema
         dataset_id_array (list[str] | None): Use this to get the existing manifests in the
-          datasets. Must be of same type as the node_label_array, same order, and same length
+          datasets. Must be of same type as the data_type_array, same order, and same length
         asset_view_id (str): ID of the asset view
-        node_label_array (list[str] | None): The datatypes of the manifests to generate
+        data_type_array (list[str] | None): The datatypes of the manifests to generate
         add_annotations (bool): Whether or not annotatiosn get added to the manifest
         manifest_title (str): Title of the manifest
         use_strict_validation (bool): Whether or not to use google sheet strict validation
@@ -40,10 +40,10 @@ def generate_google_sheet_manifests(
 
     Raises:
         ValueError: When generate_all_manifests is true and either dataset_id_array or
-          node_label_array are provided
-        ValueError: When generate_all_manifests is false and node_label_array is not provided
+          data_type_array are provided
+        ValueError: When generate_all_manifests is false and data_type_array is not provided
         ValueError: When generate_all_manifests is false and dataset_id_arrayy is provided,
-          but it doesn't match the length of node_label_array
+          but it doesn't match the length of data_type_array
 
     Returns:
         tuple[GoogleSheetLinks | BasicError, int]: A tuple
@@ -57,30 +57,30 @@ def generate_google_sheet_manifests(
                 "When generate_all_manifests is True dataset_id_array must be None",
                 {"dataset_id_array": dataset_id_array},
             )
-        if node_label_array:
+        if data_type_array:
             raise InvalidValueError(
-                "When generate_all_manifests is True node_label_array must be None",
-                {"node_label_array": node_label_array},
+                "When generate_all_manifests is True data_type_array must be None",
+                {"data_type_array": data_type_array},
             )
-        node_label_array = ["all_manifests"]
+        data_type_array = ["all_manifests"]
 
     else:
-        if not node_label_array:
+        if not data_type_array:
             raise InvalidValueError(
                 (
-                    "When generate_all_manifests is False node_label_array must be a list with "
+                    "When generate_all_manifests is False data_type_array must be a list with "
                     "atleast one item"
                 ),
-                {"node_label_array": node_label_array},
+                {"data_type_array": data_type_array},
             )
-        if dataset_id_array and len(dataset_id_array) != len(node_label_array):
+        if dataset_id_array and len(dataset_id_array) != len(data_type_array):
             raise InvalidValueError(
                 (
-                    "When generate_all_manifests is False node_label_array and dataset_id_array "
+                    "When generate_all_manifests is False data_type_array and dataset_id_array "
                     "must both lists with the same length"
                 ),
                 {
-                    "node_label_array": node_label_array,
+                    "data_type_array": data_type_array,
                     "dataset_id_array": dataset_id_array,
                 },
             )
@@ -91,7 +91,7 @@ def generate_google_sheet_manifests(
     links = ManifestGenerator.create_manifests(
         jsonld=schema_path,
         output_format="google_sheet",
-        data_types=node_label_array,
+        data_types=data_type_array,
         title=manifest_title,
         access_token=access_token,
         dataset_ids=dataset_id_array,

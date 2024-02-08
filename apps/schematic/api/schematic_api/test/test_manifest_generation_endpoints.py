@@ -40,7 +40,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             url = (
                 f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}"
                 "&datasetIdArray=syn2"
-                "&nodeLabelArray=node_label"
+                "&dataTypeArray=node_label"
             )
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
@@ -64,8 +64,8 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
         with patch(CREATE_MANIFESTS_MOCK, return_value=["l1"]) as mock_method:  # type: ignore
             url = (
                 f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}"
-                "&nodeLabelArray=node_label1"
-                "&nodeLabelArray=node_label2"
+                "&dataTypeArray=data_type1"
+                "&dataTypeArray=data_type2"
                 "&datasetIdArray=syn2"
                 "&datasetIdArray=syn3"
                 "&manifestTitle=title"
@@ -83,7 +83,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             call_args = mock_method.call_args.kwargs
             assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
-            assert call_args["data_types"] == ["node_label1", "node_label2"]
+            assert call_args["data_types"] == ["data_type1", "data_type2"]
             assert call_args["dataset_ids"] == ["syn2", "syn3"]
             assert call_args["title"] == "title"
             assert not call_args["strict"]

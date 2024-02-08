@@ -16,7 +16,7 @@ def generate_google_sheet_manifests(
     add_annotations=None,
     dataset_id_array=None,
     manifest_title=None,
-    node_label_array=None,
+    data_type_array=None,
     use_strict_validation=None,
     generate_all_manifests=None,
 ):  # noqa: E501
@@ -34,8 +34,8 @@ def generate_google_sheet_manifests(
     :type dataset_id_array: List[str]
     :param manifest_title: If making one manifest, the title of the manifest If making multiple manifests, the prefix of the title of the manifests
     :type manifest_title: str
-    :param node_label_array: An array of nodel labels
-    :type node_label_array: List[str]
+    :param data_type_array: An array of data types
+    :type data_type_array: List[str]
     :param use_strict_validation: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
     :type use_strict_validation: bool
     :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
@@ -49,7 +49,7 @@ def generate_google_sheet_manifests(
         add_annotations,
         dataset_id_array,
         manifest_title,
-        node_label_array,
+        data_type_array,
         use_strict_validation,
         generate_all_manifests,
     )
