@@ -12,6 +12,6 @@ services:
     deploy:
       resources:
         limits:
-          memory: 500M
+          memory: 6G
     depends_on:
       - iatlas-postgres
