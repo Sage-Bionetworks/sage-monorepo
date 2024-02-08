@@ -56,7 +56,7 @@ jobs:
       - name: Push changes
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: db-update-${{ env.TODAY }}
 
       - name: Create pull request
@@ -65,5 +65,5 @@ jobs:
             --title 'chore(openchallenges): ${{ env.TODAY }} DB update' \
             --body 'Daily OC datebase update'
         env:
-            GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
