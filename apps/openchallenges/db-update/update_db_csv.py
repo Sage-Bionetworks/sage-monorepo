@@ -9,7 +9,7 @@ CHALLENGE_FOLDER = "apps/openchallenges/challenge-service/src/main/resources/db"
 ORGANIZATION_FOLDER = "apps/openchallenges/organization-service/src/main/resources/db"
 
 
-def output_csv(df, output_filename, output_folder=""):
+def output_csv(df, output_filename, output_folder="", print_row=False):
     """Output a dataframe into CSV file.
 
     CSV file should not include index numbers and all values should
@@ -17,7 +17,7 @@ def output_csv(df, output_filename, output_folder=""):
     """
     df.to_csv(
         os.path.join(output_folder, output_filename),
-        index=False,
+        index=print_row,
         quoting=csv.QUOTE_ALL,
     )
 
@@ -115,7 +115,11 @@ def get_challenge_data(wks, sheet_name="challenges"):
     sub_types = sub_types.sort_values(["challenge_id", "submission_types"])
     sub_types.index = np.arange(1, len(sub_types) + 1)
 
-    return challenges, incentives, sub_types
+    return (
+        challenges,
+        incentives[["incentives", "challenge_id", "created_at"]],
+        sub_types[["submission_types", "challenge_id", "created_at"]],
+    )
 
 
 def get_challenge_categories(wks, sheet_name="challenge_category"):
@@ -193,22 +197,24 @@ def main(gc):
     wks = gc.open(GOOGLE_SHEET_TITLE)
 
     platforms = get_platform_data(wks)
-    output_csv(platforms, "platforms.csv", CHALLENGE_FOLDER)
+    output_csv(platforms, "platforms.csv", output_folder=CHALLENGE_FOLDER)
 
     roles = get_roles(wks)
-    output_csv(roles, "contribution_roles.csv", CHALLENGE_FOLDER)
-    output_csv(roles, "contribution_roles.csv", ORGANIZATION_FOLDER)
+    output_csv(roles, "contribution_roles.csv", output_folder=CHALLENGE_FOLDER)
+    output_csv(roles, "contribution_roles.csv", output_folder=ORGANIZATION_FOLDER)
 
     categories = get_challenge_categories(wks)
-    output_csv(categories, "categories.csv", CHALLENGE_FOLDER)
+    output_csv(categories, "categories.csv", output_folder=CHALLENGE_FOLDER)
 
     organizations = get_organization_data(wks)
-    output_csv(organizations, "organizations.csv", ORGANIZATION_FOLDER)
+    output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
 
     challenges, incentives, sub_types = get_challenge_data(wks)
-    output_csv(challenges, "challenges.csv", CHALLENGE_FOLDER)
-    output_csv(incentives, "incentives.csv", CHALLENGE_FOLDER)
-    output_csv(sub_types, "submission_types.csv", CHALLENGE_FOLDER)
+    output_csv(challenges, "challenges.csv", output_folder=CHALLENGE_FOLDER)
+    output_csv(incentives, "incentives.csv", 
+               output_folder=CHALLENGE_FOLDER, print_row=True)
+    output_csv(sub_types, "submission_types.csv",
+               output_folder=CHALLENGE_FOLDER, print_row=True)
 
 
 if __name__ == "__main__":
