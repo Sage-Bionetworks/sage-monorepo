@@ -64,3 +64,4 @@ required:
   - starredCount
   - createdAt
   - updatedAt
+  - categories

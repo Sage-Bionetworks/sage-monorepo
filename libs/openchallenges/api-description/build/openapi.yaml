@@ -689,6 +689,7 @@ components:
         - starredCount
         - createdAt
         - updatedAt
+        - categories
     ChallengesPage:
       type: object
       description: A page of challenges.

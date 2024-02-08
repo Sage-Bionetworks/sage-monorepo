@@ -414,6 +414,8 @@ components:
       description: The category of the challenge.
       enum:
       - featured
+      - benchmark
+      - hackathon
       - starting_soon
       - ending_soon
       - recently_started
@@ -710,6 +712,9 @@ components:
         websiteUrl: https://openchallenges.io
         name: name
         id: 1
+        categories:
+        - featured
+        - featured
         headline: Example challenge headline
         slug: awesome-challenge
         startDate: 2017-07-21T00:00:00.000+00:00
@@ -791,6 +796,10 @@ components:
           items:
             $ref: '#/components/schemas/SimpleChallengeInputDataType'
           type: array
+        categories:
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
+          type: array
         startDate:
           description: The start date of the challenge.
           example: 2017-07-21
@@ -820,6 +829,7 @@ components:
           format: date-time
           type: string
       required:
+      - categories
       - createdAt
       - description
       - id

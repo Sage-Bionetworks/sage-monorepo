@@ -120,9 +120,7 @@ public class ChallengeEntity {
   private List<ChallengeStar> stars;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "categories",
-      includePaths = {"category"})
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeCategoryEntity> categories;
 
   @Column(name = "start_date", columnDefinition = "DATE", nullable = true)

@@ -48,9 +48,17 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
 GET {{basePath}}/challenges?inputDataTypes=genomic
 
-### List the challenge that is categorized as featured
+### List the challenges by category: featured
 
 GET {{basePath}}/challenges?categories=featured
+
+### List the challenges by category: hackathon
+
+GET {{basePath}}/challenges?categories=hackathon
+
+### List the challenges by category: benchmark
+
+GET {{basePath}}/challenges?categories=benchmark
 
 ### List the challenges that are categorized as starting soon.
 

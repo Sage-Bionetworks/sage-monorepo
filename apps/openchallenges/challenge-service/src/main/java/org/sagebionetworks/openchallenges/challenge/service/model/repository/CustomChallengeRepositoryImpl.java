@@ -269,7 +269,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
                     statusPredicate = pf.match().field("status").matching("active").toPredicate();
                   }
                   default -> {
-                    b.should(pf.match().field("categories.category").matching(category.toString()));
+                    b.should(pf.match().field("categories.name").matching(category.toString()));
                     return;
                   }
                 }
