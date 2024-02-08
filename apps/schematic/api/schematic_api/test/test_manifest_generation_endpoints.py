@@ -101,7 +101,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             call_args = mock_method.call_args.kwargs
             assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
-            assert call_args["data_types"] == ["all_manifests"]
+            assert call_args["data_types"] == ["all manifests"]
             assert not call_args["title"]
             assert not call_args["dataset_ids"]
             assert call_args["strict"]
