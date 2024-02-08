@@ -63,7 +63,8 @@ jobs:
         run: |
           gh pr create -B main -H db-update-${{ env.TODAY }} \
             --title 'chore(openchallenges): ${{ env.TODAY }} DB update' \
-            --body 'Daily OC datebase update'
+            --body 'Daily OC datebase update' \
+            --label sonar-scan-approved
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
