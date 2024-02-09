@@ -12,11 +12,11 @@ from schematic_api.controllers import manifest_generation_controller_impl
 
 def generate_google_sheet_manifests(
     schema_url,
-    asset_view_id,
     add_annotations=None,
     dataset_id_array=None,
     manifest_title=None,
     data_type_array=None,
+    asset_view_id=None,
     use_strict_validation=None,
     generate_all_manifests=None,
 ):  # noqa: E501
@@ -26,8 +26,6 @@ def generate_google_sheet_manifests(
 
     :param schema_url: The URL of a schema in jsonld form
     :type schema_url: str
-    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-    :type asset_view_id: str
     :param add_annotations: If true, annotations are added to the manifest
     :type add_annotations: bool
     :param dataset_id_array: An array of dataset ids
@@ -36,6 +34,8 @@ def generate_google_sheet_manifests(
     :type manifest_title: str
     :param data_type_array: An array of data types
     :type data_type_array: List[str]
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
     :param use_strict_validation: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
     :type use_strict_validation: bool
     :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
@@ -45,11 +45,11 @@ def generate_google_sheet_manifests(
     """
     return manifest_generation_controller_impl.generate_google_sheet_manifests(
         schema_url,
-        asset_view_id,
         add_annotations,
         dataset_id_array,
         manifest_title,
         data_type_array,
+        asset_view_id,
         use_strict_validation,
         generate_all_manifests,
     )

@@ -11,7 +11,7 @@ from .conftest import (
 )
 
 GENERATE_GOOGLE_SHEET_MANIFESTS_URL = (
-    f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}&assetViewId=syn1"
+    f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
 )
 
 HEADERS = {
@@ -41,6 +41,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
                 f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}"
                 "&datasetIdArray=syn2"
                 "&dataTypeArray=node_label"
+                "&assetViewId=syn1"
             )
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(

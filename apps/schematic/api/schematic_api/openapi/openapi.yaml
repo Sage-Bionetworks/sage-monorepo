@@ -1112,16 +1112,6 @@ paths:
         schema:
           $ref: '#/components/schemas/DatasetIdArray'
         style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
       - description: "If making one manifest, the title of the manifest If making\
           \ multiple manifests, the prefix of the title of the manifests"
         explode: true
@@ -1138,6 +1128,16 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/DataTypeArray'
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: false
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
         style: form
       - description: "If true, users are blocked from entering incorrect values. If\
           \ false, users will get a warning when using incorrect values."

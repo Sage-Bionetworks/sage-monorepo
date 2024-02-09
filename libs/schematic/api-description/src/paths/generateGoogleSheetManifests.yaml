@@ -8,9 +8,14 @@ get:
     - $ref: ../components/parameters/query/schemaUrl.yaml
     - $ref: ../components/parameters/query/addAnnotations.yaml
     - $ref: ../components/parameters/query/datasetIdArray.yaml
-    - $ref: ../components/parameters/query/assetViewIdQuery.yaml
     - $ref: ../components/parameters/query/manifestTitle.yaml
     - $ref: ../components/parameters/query/dataTypeArray.yaml
+    - name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: false
+      schema:
+        $ref: ../components/schemas/AssetViewId.yaml
     - name: useStrictValidation
       in: query
       description: If true, users are blocked from entering incorrect values.
