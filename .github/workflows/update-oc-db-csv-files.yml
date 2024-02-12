@@ -9,6 +9,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      # schematic only supports Python 3.9 and 3.10, so we will need
+      # to specifically use one of these versions.
       - name: Install system dependencies
         run: |
           sudo add-apt-repository ppa:deadsnakes/ppa
@@ -20,6 +23,30 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref }}
           persist-credentials: false
           fetch-depth: 0
+
+      - name: Find existing DB branch if available
+        run: |
+          echo "BRANCH=$(git branch -r | \
+                         grep "db-update-*" | \
+                         sed -e 's/origin\///' | \
+                         sed -e 's/^[ \t]*//')" >> $GITHUB_ENV
+
+      - name: Checkout existing DB branch if available
+        if: ${{ env.BRANCH != '' }}
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.BRANCH }}
+          persist-credentials: false
+
+      - name: Get current date
+        run: |
+          echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+
+      - name: Create new branch name if needed
+        if: ${{ env.BRANCH == '' }}
+        run : |
+          echo "BRANCH=db-update-${{ env.TODAY }}" >> $GITHUB_ENV
+          echo "PR_NEEDED="true"" >> $GITHUB_ENV
 
       - name: Create Google Service credentials file
         uses: jsdaniell/create-json@v1.2.3
@@ -47,11 +74,7 @@ jobs:
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git config advice.addIgnoredFile false
           git add .
-          git commit -m "add latest CSV dump files for DB update"
-
-      - name: Get current date
-        run: |
-          echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
+          git commit -m "${{ env.TODAY }}: add latest CSV dump files"
 
       - name: Push changes
         uses: ad-m/github-push-action@master
@@ -60,10 +83,11 @@ jobs:
           branch: db-update-${{ env.TODAY }}
 
       - name: Create pull request
+        if: ${{ env.PR_NEEDED == 'true' }}
         run: |
-          gh pr create -B main -H db-update-${{ env.TODAY }} \
+          gh pr create -B main -H ${{ env.BRANCH }} \
             --title 'chore(openchallenges): ${{ env.TODAY }} DB update' \
-            --body 'Daily OC datebase update' \
+            --body 'Daily OC datebase update(s)' \
             --label sonar-scan-approved
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
