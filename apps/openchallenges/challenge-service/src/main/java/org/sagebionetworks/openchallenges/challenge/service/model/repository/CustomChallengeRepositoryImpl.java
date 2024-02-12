@@ -24,6 +24,8 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeS
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CustomChallengeRepositoryImpl.class);
 
   @PersistenceContext private EntityManager entityManager;
 
@@ -225,7 +229,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches the organization whose at least one of their categories is in the list of categories
+   * Matches the challenges whose at least one of their categories is in the list of categories
    * specified.
    *
    * @param pf
@@ -242,42 +246,48 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     return pf.bool(
             b -> {
               for (ChallengeCategoryDto category : query.getCategories()) {
-
-                SearchPredicate datePredicate;
-                SearchPredicate statusPredicate;
-
                 switch (category) {
                   case RECENTLY_STARTED -> {
-                    datePredicate =
+                    SearchPredicate datePredicate =
                         pf.range().field("start_date").between(threeMonthsAgo, now).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                    SearchPredicate statusPredicate =
+                        pf.match().field("status").matching("active").toPredicate();
+                    b.should(
+                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                            .toPredicate());
                   }
                   case RECENTLY_ENDED -> {
-                    datePredicate =
+                    SearchPredicate datePredicate =
                         pf.range().field("end_date").between(threeMonthsAgo, now).toPredicate();
-                    statusPredicate =
+                    SearchPredicate statusPredicate =
                         pf.match().field("status").matching("completed").toPredicate();
+                    b.should(
+                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                            .toPredicate());
                   }
                   case STARTING_SOON -> {
-                    datePredicate =
+                    SearchPredicate datePredicate =
                         pf.range().field("start_date").between(now, oneMonthLater).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
+                    SearchPredicate statusPredicate =
+                        pf.match().field("status").matching("upcoming").toPredicate();
+                    b.should(
+                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                            .toPredicate());
                   }
                   case ENDING_SOON -> {
-                    datePredicate =
+                    SearchPredicate datePredicate =
                         pf.range().field("end_date").between(now, oneMonthLater).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                    SearchPredicate statusPredicate =
+                        pf.match().field("status").matching("active").toPredicate();
+                    b.should(
+                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
+                            .toPredicate());
                   }
                   default -> {
+                    LOG.info("categories.name: {}", pf.match().field("categories.name").toString());
+                    LOG.info("category: {}", category.toString());
                     b.should(pf.match().field("categories.name").matching(category.toString()));
-                    return;
                   }
-                }
-
-                if (datePredicate != null && statusPredicate != null) {
-                  b.should(
-                      pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                          .toPredicate());
                 }
               }
             })

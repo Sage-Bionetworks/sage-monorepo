@@ -56,9 +56,9 @@ GET {{basePath}}/challenges?categories=featured
 
 GET {{basePath}}/challenges?categories=hackathon
 
-### List the challenges by category: benchmark
+### List the challenges by category: benchmark and hackathon
 
-GET {{basePath}}/challenges?categories=benchmark
+GET {{basePath}}/challenges?categories=benchmark,hackathon
 
 ### List the challenges that are categorized as starting soon.
 
