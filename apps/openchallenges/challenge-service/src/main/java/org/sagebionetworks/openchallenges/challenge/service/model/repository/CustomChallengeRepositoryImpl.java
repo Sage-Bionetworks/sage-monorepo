@@ -229,12 +229,25 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
+   * This utility function creates a predicate clauses step for the challenge categories
+   * RECENTLY_STARTED, RECENTLY_ENDED, STARTING_SOON, ENDING_SOON.
+   */
+  private SearchPredicate getStartEndDateAndStatusBooleanPredicateClausesStep(
+      SearchPredicateFactory pf,
+      String dateField,
+      LocalDate minDate,
+      LocalDate maxDate,
+      ChallengeStatusDto status) {
+    SearchPredicate datePredicate =
+        pf.range().field(dateField).between(minDate, maxDate).toPredicate();
+    SearchPredicate statusPredicate =
+        pf.match().field("status").matching(status.toString()).toPredicate();
+    return pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate)).toPredicate();
+  }
+
+  /**
    * Matches the challenges whose at least one of their categories is in the list of categories
    * specified.
-   *
-   * @param pf
-   * @param query
-   * @return
    */
   private SearchPredicate getCategoriesPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
@@ -248,44 +261,26 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               for (ChallengeCategoryDto category : query.getCategories()) {
                 switch (category) {
                   case RECENTLY_STARTED -> {
-                    SearchPredicate datePredicate =
-                        pf.range().field("start_date").between(threeMonthsAgo, now).toPredicate();
-                    SearchPredicate statusPredicate =
-                        pf.match().field("status").matching("active").toPredicate();
                     b.should(
-                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                            .toPredicate());
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "start_date", threeMonthsAgo, now, ChallengeStatusDto.ACTIVE));
                   }
                   case RECENTLY_ENDED -> {
-                    SearchPredicate datePredicate =
-                        pf.range().field("end_date").between(threeMonthsAgo, now).toPredicate();
-                    SearchPredicate statusPredicate =
-                        pf.match().field("status").matching("completed").toPredicate();
                     b.should(
-                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                            .toPredicate());
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "end_date", threeMonthsAgo, now, ChallengeStatusDto.COMPLETED));
                   }
                   case STARTING_SOON -> {
-                    SearchPredicate datePredicate =
-                        pf.range().field("start_date").between(now, oneMonthLater).toPredicate();
-                    SearchPredicate statusPredicate =
-                        pf.match().field("status").matching("upcoming").toPredicate();
                     b.should(
-                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                            .toPredicate());
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "start_date", now, oneMonthLater, ChallengeStatusDto.UPCOMING));
                   }
                   case ENDING_SOON -> {
-                    SearchPredicate datePredicate =
-                        pf.range().field("end_date").between(now, oneMonthLater).toPredicate();
-                    SearchPredicate statusPredicate =
-                        pf.match().field("status").matching("active").toPredicate();
                     b.should(
-                        pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                            .toPredicate());
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "end_date", now, oneMonthLater, ChallengeStatusDto.ACTIVE));
                   }
                   default -> {
-                    LOG.info("categories.name: {}", pf.match().field("categories.name").toString());
-                    LOG.info("category: {}", category.toString());
                     b.should(pf.match().field("categories.name").matching(category.toString()));
                   }
                 }
