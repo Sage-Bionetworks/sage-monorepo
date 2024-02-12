@@ -119,7 +119,7 @@ export const challengeCategoriesFilter: Filter[] = [
   },
   {
     value: ChallengeCategory.Benchmark,
-    label: 'Continuous Benchmark',
+    label: 'Benchmark',
   },
   {
     value: ChallengeCategory.Hackathon,
