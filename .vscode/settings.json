@@ -5,7 +5,7 @@
   "editor.tabSize": 2,
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "black-formatter.importStrategy": "fromEnvironment",
   "[python]": {
@@ -55,7 +55,9 @@
   //     }
   //   ]
   // },
-  "eslint.workingDirectories": ["."],
+  "eslint.workingDirectories": [
+    "."
+  ],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -79,16 +81,31 @@
       "name": "openchallenges",
       "username": "maria",
       "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 2432,
+      "driver": "PostgreSQL",
+      "name": "iatlas-postgres",
+      "database": "iatlas",
+      "username": "postgres",
+      "password": "changeme"
     }
   ],
   "terminal.integrated.showExitAlert": false,
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100],
-  "eslint.validate": ["json"],
+  "editor.rulers": [
+    100
+  ],
+  "eslint.validate": [
+    "json"
+  ],
   "java.compile.nullAnalysis.mode": "disabled",
   "typescript.tsdk": "node_modules/typescript/lib",
   "python.analysis.autoImportCompletions": true,
-  "python.analysis.typeCheckingMode": "basic"
+  "python.analysis.typeCheckingMode": "basic",
+  "jest.runMode": "on-demand"
 }

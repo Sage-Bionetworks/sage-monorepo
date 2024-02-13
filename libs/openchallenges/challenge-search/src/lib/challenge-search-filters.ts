@@ -1,6 +1,5 @@
 import {
   ChallengeCategory,
-  ChallengeDifficulty,
   ChallengeIncentive,
   ChallengeSort,
   ChallengeStatus,
@@ -71,21 +70,6 @@ export const challengeStatusFilter: Filter[] = [
   },
 ];
 
-export const challengeDifficultyFilter: Filter[] = [
-  {
-    value: ChallengeDifficulty.GoodForBeginners,
-    label: 'Good For Beginners',
-  },
-  {
-    value: ChallengeDifficulty.Intermediate,
-    label: 'Intermediate',
-  },
-  {
-    value: ChallengeDifficulty.Advanced,
-    label: 'Advanced',
-  },
-];
-
 export const challengeSubmissionTypesFilter: Filter[] = [
   {
     value: ChallengeSubmissionType.ContainerImage,
@@ -132,6 +116,14 @@ export const challengeCategoriesFilter: Filter[] = [
   {
     value: ChallengeCategory.Featured,
     label: 'Featured',
+  },
+  {
+    value: ChallengeCategory.Benchmark,
+    label: 'Benchmark',
+  },
+  {
+    value: ChallengeCategory.Hackathon,
+    label: 'Hackathon',
   },
   {
     value: ChallengeCategory.StartingSoon,

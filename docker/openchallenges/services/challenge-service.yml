@@ -13,6 +13,7 @@ services:
       - DB_CONTRIBUTION_ROLES_CSV_PATH=/workspace/BOOT-INF/classes/db/contribution_roles.csv
       - DB_INCENTIVES_CSV_PATH=/workspace/BOOT-INF/classes/db/incentives.csv
       - DB_SUBMISSION_TYPES_CSV_PATH=/workspace/BOOT-INF/classes/db/submission_types.csv
+      - DB_CATEGORIES_CSV_PATH=/workspace/BOOT-INF/classes/db/categories.csv
     networks:
       - openchallenges
     ports:

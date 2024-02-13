@@ -1,0 +1,23 @@
+parameters:
+  - $ref: ../../../components/parameters/path/nodeLabel.yaml
+get:
+  tags:
+    - Schema
+  summary: Gets the immediate dependencies that are related to the given source node
+  description: Gets the immediate dependencies that are related to the given source node
+  operationId: getNodeDependencyPage
+  parameters:
+    - $ref: ../../../components/parameters/query/schemaUrl.yaml
+    - $ref: ../../../components/parameters/query/returnDisplayNames.yaml
+    - $ref: ../../../components/parameters/query/returnOrderedBySchema.yaml
+    - $ref: ../../../components/parameters/query/pageNumber.yaml
+    - $ref: ../../../components/parameters/query/pageMaxItems.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/NodePage.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

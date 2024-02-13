@@ -5,7 +5,6 @@ export * from './challengeContribution';
 export * from './challengeContributionRole';
 export * from './challengeContributionsPage';
 export * from './challengeContributionsPageAllOf';
-export * from './challengeDifficulty';
 export * from './challengeDirection';
 export * from './challengeIncentive';
 export * from './challengeInputDataType';

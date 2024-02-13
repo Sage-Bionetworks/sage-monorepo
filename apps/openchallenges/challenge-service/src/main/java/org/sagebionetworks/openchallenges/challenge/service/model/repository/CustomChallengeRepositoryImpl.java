@@ -18,13 +18,14 @@ import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.challenge.service.exception.BadRequestException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDifficultyDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDirectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomChallengeRepositoryImpl implements CustomChallengeRepository {
+
+  private static final Logger LOG = LoggerFactory.getLogger(CustomChallengeRepositoryImpl.class);
 
   @PersistenceContext private EntityManager entityManager;
 
@@ -54,9 +57,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     }
     if (query.getStatus() != null && !query.getStatus().isEmpty()) {
       predicates.add(getChallengeStatusPredicate(pf, query));
-    }
-    if (query.getDifficulties() != null && !query.getDifficulties().isEmpty()) {
-      predicates.add(getChallengeDifficultyPredicate(pf, query));
     }
     if (query.getPlatforms() != null && !query.getPlatforms().isEmpty()) {
       predicates.add(getChallengePlatformPredicate(pf, query));
@@ -127,24 +127,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             b -> {
               for (ChallengeStatusDto status : query.getStatus()) {
                 b.should(pf.match().field("status").matching(status.toString()));
-              }
-            })
-        .toPredicate();
-  }
-
-  /**
-   * Matches the challenges whose difficulty is in the list of difficulties specified.
-   *
-   * @param pf
-   * @param query
-   * @return
-   */
-  private SearchPredicate getChallengeDifficultyPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeDifficultyDto difficulty : query.getDifficulties()) {
-                b.should(pf.match().field("difficulty").matching(difficulty.toString()));
               }
             })
         .toPredicate();
@@ -247,12 +229,25 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
   }
 
   /**
-   * Matches the organization whose at least one of their categories is in the list of categories
+   * This utility function creates a predicate clauses step for the challenge categories
+   * RECENTLY_STARTED, RECENTLY_ENDED, STARTING_SOON, ENDING_SOON.
+   */
+  private SearchPredicate getStartEndDateAndStatusBooleanPredicateClausesStep(
+      SearchPredicateFactory pf,
+      String dateField,
+      LocalDate minDate,
+      LocalDate maxDate,
+      ChallengeStatusDto status) {
+    SearchPredicate datePredicate =
+        pf.range().field(dateField).between(minDate, maxDate).toPredicate();
+    SearchPredicate statusPredicate =
+        pf.match().field("status").matching(status.toString()).toPredicate();
+    return pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate)).toPredicate();
+  }
+
+  /**
+   * Matches the challenges whose at least one of their categories is in the list of categories
    * specified.
-   *
-   * @param pf
-   * @param query
-   * @return
    */
   private SearchPredicate getCategoriesPredicate(
       SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
@@ -264,42 +259,30 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     return pf.bool(
             b -> {
               for (ChallengeCategoryDto category : query.getCategories()) {
-
-                SearchPredicate datePredicate;
-                SearchPredicate statusPredicate;
-
                 switch (category) {
                   case RECENTLY_STARTED -> {
-                    datePredicate =
-                        pf.range().field("start_date").between(threeMonthsAgo, now).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                    b.should(
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "start_date", threeMonthsAgo, now, ChallengeStatusDto.ACTIVE));
                   }
                   case RECENTLY_ENDED -> {
-                    datePredicate =
-                        pf.range().field("end_date").between(threeMonthsAgo, now).toPredicate();
-                    statusPredicate =
-                        pf.match().field("status").matching("completed").toPredicate();
+                    b.should(
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "end_date", threeMonthsAgo, now, ChallengeStatusDto.COMPLETED));
                   }
                   case STARTING_SOON -> {
-                    datePredicate =
-                        pf.range().field("start_date").between(now, oneMonthLater).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("upcoming").toPredicate();
+                    b.should(
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "start_date", now, oneMonthLater, ChallengeStatusDto.UPCOMING));
                   }
                   case ENDING_SOON -> {
-                    datePredicate =
-                        pf.range().field("end_date").between(now, oneMonthLater).toPredicate();
-                    statusPredicate = pf.match().field("status").matching("active").toPredicate();
+                    b.should(
+                        getStartEndDateAndStatusBooleanPredicateClausesStep(
+                            pf, "end_date", now, oneMonthLater, ChallengeStatusDto.ACTIVE));
                   }
                   default -> {
-                    b.should(pf.match().field("categories.category").matching(category.toString()));
-                    return;
+                    b.should(pf.match().field("categories.name").matching(category.toString()));
                   }
-                }
-
-                if (datePredicate != null && statusPredicate != null) {
-                  b.should(
-                      pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate))
-                          .toPredicate());
                 }
               }
             })

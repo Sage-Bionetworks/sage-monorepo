@@ -30,12 +30,9 @@ public class ChallengeCategoryEntity {
 
   @Column(nullable = false)
   @GenericField()
-  private String category;
+  private String name;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "challenge_id", nullable = false)
   private ChallengeEntity challenge;
-
-  // @Column(name = "created_at")
-  // private OffsetDateTime createdAt;
 }

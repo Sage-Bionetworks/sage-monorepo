@@ -5,6 +5,7 @@
 !.yarn/sdks
 !.yarn/versions
 .nx-container/
+.nx/
 .pnpm-store/
 .scannerwork/
 playwright-report/
@@ -54,6 +55,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+service_account.json
 
 # System Files
 .DS_Store

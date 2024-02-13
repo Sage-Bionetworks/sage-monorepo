@@ -1,4 +1,5 @@
-"""Tests for endpoints"""
+"""Tests for version endpoints"""
+# pylint: disable=duplicate-code
 
 import importlib.metadata
 from unittest.mock import patch

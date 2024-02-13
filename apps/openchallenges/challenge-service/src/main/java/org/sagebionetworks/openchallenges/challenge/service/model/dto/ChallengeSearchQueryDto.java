@@ -35,10 +35,6 @@ public class ChallengeSearchQueryDto {
   @JsonProperty("direction")
   private ChallengeDirectionDto direction = null;
 
-  @JsonProperty("difficulties")
-  @Valid
-  private List<ChallengeDifficultyDto> difficulties = null;
-
   @JsonProperty("incentives")
   @Valid
   private List<ChallengeIncentiveDto> incentives = null;
@@ -183,37 +179,6 @@ public class ChallengeSearchQueryDto {
 
   public void setDirection(ChallengeDirectionDto direction) {
     this.direction = direction;
-  }
-
-  public ChallengeSearchQueryDto difficulties(List<ChallengeDifficultyDto> difficulties) {
-    this.difficulties = difficulties;
-    return this;
-  }
-
-  public ChallengeSearchQueryDto addDifficultiesItem(ChallengeDifficultyDto difficultiesItem) {
-    if (this.difficulties == null) {
-      this.difficulties = new ArrayList<>();
-    }
-    this.difficulties.add(difficultiesItem);
-    return this;
-  }
-
-  /**
-   * An array of challenge difficulty levels used to filter the results.
-   *
-   * @return difficulties
-   */
-  @Valid
-  @Schema(
-      name = "difficulties",
-      description = "An array of challenge difficulty levels used to filter the results.",
-      required = false)
-  public List<ChallengeDifficultyDto> getDifficulties() {
-    return difficulties;
-  }
-
-  public void setDifficulties(List<ChallengeDifficultyDto> difficulties) {
-    this.difficulties = difficulties;
   }
 
   public ChallengeSearchQueryDto incentives(List<ChallengeIncentiveDto> incentives) {
@@ -516,7 +481,6 @@ public class ChallengeSearchQueryDto {
         && Objects.equals(this.sort, challengeSearchQuery.sort)
         && Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed)
         && Objects.equals(this.direction, challengeSearchQuery.direction)
-        && Objects.equals(this.difficulties, challengeSearchQuery.difficulties)
         && Objects.equals(this.incentives, challengeSearchQuery.incentives)
         && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
         && Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate)
@@ -537,7 +501,6 @@ public class ChallengeSearchQueryDto {
         sort,
         sortSeed,
         direction,
-        difficulties,
         incentives,
         minStartDate,
         maxStartDate,
@@ -559,7 +522,6 @@ public class ChallengeSearchQueryDto {
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    sortSeed: ").append(toIndentedString(sortSeed)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
-    sb.append("    difficulties: ").append(toIndentedString(difficulties)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    minStartDate: ").append(toIndentedString(minStartDate)).append("\n");
     sb.append("    maxStartDate: ").append(toIndentedString(maxStartDate)).append("\n");

@@ -5,10 +5,13 @@
       Not sure where to start? Try one of our randomly selected daily challenges!
     </div>
     <div class="card-group">
-      <openchallenges-challenge-card *ngFor="let challenge of (challenges$ | async)" [challenge]="challenge"/>
+      <openchallenges-challenge-card
+        *ngFor="let challenge of challenges$ | async"
+        [challenge]="challenge"
+      />
     </div>
     <div class="text-center">
-      <a mat-raised-button class="see-more" href="/challenge">See More</a>
+      <a mat-raised-button class="see-more" routerLink="/challenge">See More</a>
     </div>
   </div>
 </section>
