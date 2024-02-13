@@ -18,5 +18,6 @@ export const MOCK_CHALLENGES: Challenge[] = [
     starredCount: 99,
     createdAt: '',
     updatedAt: '',
+    categories: [],
   },
 ];

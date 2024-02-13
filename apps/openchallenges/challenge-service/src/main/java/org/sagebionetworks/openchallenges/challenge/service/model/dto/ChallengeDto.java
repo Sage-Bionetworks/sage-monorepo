@@ -63,6 +63,10 @@ public class ChallengeDto {
   @Valid
   private List<SimpleChallengeInputDataTypeDto> inputDataTypes = null;
 
+  @JsonProperty("categories")
+  @Valid
+  private List<ChallengeCategoryDto> categories = new ArrayList<>();
+
   @JsonProperty("startDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
   private LocalDate startDate = null;
@@ -401,6 +405,35 @@ public class ChallengeDto {
     this.inputDataTypes = inputDataTypes;
   }
 
+  public ChallengeDto categories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeDto addCategoriesItem(ChallengeCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   *
+   * @return categories
+   */
+  @NotNull
+  @Valid
+  @Schema(name = "categories", required = true)
+  public List<ChallengeCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+  }
+
   public ChallengeDto startDate(LocalDate startDate) {
     this.startDate = startDate;
     return this;
@@ -546,6 +579,7 @@ public class ChallengeDto {
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
         && Objects.equals(this.inputDataTypes, challenge.inputDataTypes)
+        && Objects.equals(this.categories, challenge.categories)
         && Objects.equals(this.startDate, challenge.startDate)
         && Objects.equals(this.endDate, challenge.endDate)
         && Objects.equals(this.starredCount, challenge.starredCount)
@@ -569,6 +603,7 @@ public class ChallengeDto {
         incentives,
         submissionTypes,
         inputDataTypes,
+        categories,
         startDate,
         endDate,
         starredCount,
@@ -593,6 +628,7 @@ public class ChallengeDto {
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");
