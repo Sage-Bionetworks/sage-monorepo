@@ -24,7 +24,7 @@ jobs:
           persist-credentials: false
           fetch-depth: 0
 
-      - name: Create Google Service credentials file
+      - name: Create Google Client credentials file
         uses: jsdaniell/create-json@v1.2.3
         with:
           name: "service_account.json"
