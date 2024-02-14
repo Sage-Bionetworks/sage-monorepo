@@ -67,4 +67,4 @@ RUN chmod -R 777 /root /app
 WORKDIR ${APP_DIR}
 
 # Expose ports
-EXPOSE 443
+EXPOSE 8443
