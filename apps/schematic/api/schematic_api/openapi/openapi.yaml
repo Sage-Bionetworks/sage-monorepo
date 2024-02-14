@@ -945,7 +945,7 @@ paths:
         schema:
           $ref: '#/components/schemas/ComponentLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -988,7 +988,7 @@ paths:
       description: Gets a array of connected node pairs
       operationId: get_connected_node_pair_array
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1027,7 +1027,7 @@ paths:
       description: Gets a page of connected node pairs
       operationId: get_connected_node_pair_page
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1082,6 +1082,104 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /generateGoogleSheetManifests:
+    get:
+      description: Generates a list of google sheet links
+      operationId: generate_google_sheet_manifests
+      parameters:
+      - description: The URL of a schema in jsonld or csv form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: "If true, annotations are added to the manifest"
+        explode: true
+        in: query
+        name: addAnnotations
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: An array of dataset ids
+        explode: true
+        in: query
+        name: datasetIdArray
+        required: false
+        schema:
+          $ref: '#/components/schemas/DatasetIdArray'
+        style: form
+      - description: "If making one manifest, the title of the manifest. If making\
+          \ multiple manifests, the prefix of the title of the manifests."
+        explode: true
+        in: query
+        name: manifestTitle
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: An array of data types
+        explode: true
+        in: query
+        name: dataTypeArray
+        required: false
+        schema:
+          $ref: '#/components/schemas/DataTypeArray'
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: false
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      - description: "If true, users are blocked from entering incorrect values. If\
+          \ false, users will get a warning when using incorrect values."
+        explode: true
+        in: query
+        name: useStrictValidation
+        required: false
+        schema:
+          default: true
+          type: boolean
+        style: form
+      - description: "If true, a manifest for all components will be generated, datasetIds\
+          \ will be ignored. If false, manifests for each id in datasetIds will be\
+          \ generated."
+        explode: true
+        in: query
+        name: generateAllManifests
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Generates a list of google sheet links
+      tags:
+      - ManifestGeneration
+      x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /nodes/{nodeDisplay}/isRequired:
     get:
       description: Gets whether or not the node is required in the schema
@@ -1095,7 +1193,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1135,7 +1233,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1184,7 +1282,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1226,7 +1324,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1286,7 +1384,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1366,7 +1464,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1398,7 +1496,7 @@ paths:
         a dataframe (stored as a JSON String).
       operationId: get_schema_attributes
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1455,7 +1553,7 @@ paths:
       description: "Validates manifest in csv form, then submits it"
       operationId: submit_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1586,7 +1684,7 @@ paths:
       description: "Validates a manifest in json form, then submits it in csv form"
       operationId: submit_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1716,7 +1814,7 @@ paths:
         and figure type
       operationId: get_tangled_tree_layers
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1761,7 +1859,7 @@ paths:
         \ data model, text formatting and figure type"
       operationId: get_tangled_tree_text
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1817,7 +1915,7 @@ paths:
       description: Validates a manifest in csv form
       operationId: validate_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1876,7 +1974,7 @@ paths:
       description: Validates a manifest in json form
       operationId: validate_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -2039,7 +2137,7 @@ components:
         $ref: '#/components/schemas/NodeLabel'
       style: simple
     schemaUrl:
-      description: The URL of a schema in jsonld form
+      description: The URL of a schema in jsonld or csv form
       explode: true
       in: query
       name: schemaUrl
@@ -2236,6 +2334,44 @@ components:
         - plain
         - highlighted
         type: string
+      style: form
+    addAnnotations:
+      description: "If true, annotations are added to the manifest"
+      explode: true
+      in: query
+      name: addAnnotations
+      required: false
+      schema:
+        default: false
+        type: boolean
+      style: form
+    datasetIdArray:
+      description: An array of dataset ids
+      explode: true
+      in: query
+      name: datasetIdArray
+      required: false
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+      style: form
+    manifestTitle:
+      description: "If making one manifest, the title of the manifest. If making multiple\
+        \ manifests, the prefix of the title of the manifests."
+      explode: true
+      in: query
+      name: manifestTitle
+      required: false
+      schema:
+        type: string
+      style: form
+    dataTypeArray:
+      description: An array of data types
+      explode: true
+      in: query
+      name: dataTypeArray
+      required: false
+      schema:
+        $ref: '#/components/schemas/DataTypeArray'
       style: form
   responses:
     InternalServerError:
@@ -2477,6 +2613,7 @@ components:
     DatasetId:
       description: A dataset ID.
       example: syn23643250
+      title: DatasetId
       type: string
     ManifestJson:
       description: A manifest in json format
@@ -2804,6 +2941,31 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data
         model
+      type: object
+    DatasetIdArray:
+      description: An array of dataset ids
+      items:
+        $ref: '#/components/schemas/DatasetId'
+      type: array
+    DataTypeArray:
+      description: An array of data types
+      items:
+        example: Patient
+        type: string
+      type: array
+    GoogleSheetLinks:
+      description: An array of google sheet links
+      example:
+        links:
+        - links
+        - links
+      properties:
+        links:
+          items:
+            type: string
+          title: links
+          type: array
+      title: GoogleSheetLinks
       type: object
     DatasetMetadataPage_allOf:
       properties:

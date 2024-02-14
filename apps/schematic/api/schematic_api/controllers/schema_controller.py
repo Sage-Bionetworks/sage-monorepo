@@ -26,7 +26,7 @@ def get_component(component_label, schema_url, include_index=None):  # noqa: E50
 
     :param component_label: The label of a component in a schema
     :type component_label: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param include_index: Whether to include the indexes of the dataframe in the returned JSON string.
     :type include_index: bool
@@ -43,7 +43,7 @@ def get_connected_node_pair_array(schema_url, relationship_type):  # noqa: E501
 
     Gets a array of connected node pairs # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param relationship_type: Type of relationship in a schema, such as requiresDependency
     :type relationship_type: str
@@ -62,7 +62,7 @@ def get_connected_node_pair_page(
 
     Gets a page of connected node pairs # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param relationship_type: Type of relationship in a schema, such as requiresDependency
     :type relationship_type: str
@@ -87,7 +87,7 @@ def get_node_dependency_array(
 
     :param node_label: The label of the source node in a schema to get the dependencies of
     :type node_label: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param return_display_names: Whether or not to return the display names of the component, otherwise the label
     :type return_display_names: bool
@@ -115,7 +115,7 @@ def get_node_dependency_page(
 
     :param node_label: The label of the source node in a schema to get the dependencies of
     :type node_label: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param return_display_names: Whether or not to return the display names of the component, otherwise the label
     :type return_display_names: bool
@@ -145,7 +145,7 @@ def get_node_is_required(node_display, schema_url):  # noqa: E501
 
     :param node_display: The display name of the node in a schema
     :type node_display: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
 
     :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
@@ -160,7 +160,7 @@ def get_node_properties(node_label, schema_url):  # noqa: E501
 
     :param node_label: The label of the source node in a schema to get the dependencies of
     :type node_label: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
 
     :rtype: Union[NodePropertyArray, Tuple[NodePropertyArray, int], Tuple[NodePropertyArray, int, Dict[str, str]]
@@ -175,7 +175,7 @@ def get_node_validation_rules(node_display, schema_url):  # noqa: E501
 
     :param node_display: The display name of the node in a schema
     :type node_display: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
 
     :rtype: Union[ValidationRuleArray, Tuple[ValidationRuleArray, int], Tuple[ValidationRuleArray, int, Dict[str, str]]
@@ -192,7 +192,7 @@ def get_property_label(
 
     :param node_display: The display name of the node in a schema
     :type node_display: str
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param use_strict_camel_case: Whether or not to use the more strict way of converting to camel case
     :type use_strict_camel_case: bool
@@ -209,7 +209,7 @@ def get_schema_attributes(schema_url):  # noqa: E501
 
     Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String). # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
