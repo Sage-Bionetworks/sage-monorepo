@@ -24,13 +24,13 @@ def generate_google_sheet_manifests(
 
     Generates a list of google sheet links # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param add_annotations: If true, annotations are added to the manifest
     :type add_annotations: bool
     :param dataset_id_array: An array of dataset ids
     :type dataset_id_array: List[str]
-    :param manifest_title: If making one manifest, the title of the manifest If making multiple manifests, the prefix of the title of the manifests
+    :param manifest_title: If making one manifest, the title of the manifest. If making multiple manifests, the prefix of the title of the manifests.
     :type manifest_title: str
     :param data_type_array: An array of data types
     :type data_type_array: List[str]
@@ -38,7 +38,7 @@ def generate_google_sheet_manifests(
     :type asset_view_id: str
     :param use_strict_validation: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
     :type use_strict_validation: bool
-    :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
+    :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
     :type generate_all_manifests: bool
 
     :rtype: Union[GoogleSheetLinks, Tuple[GoogleSheetLinks, int], Tuple[GoogleSheetLinks, int, Dict[str, str]]

@@ -28,7 +28,7 @@ def submit_manifest_csv(
 
     Validates manifest in csv form, then submits it # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param component: A component in a schema, either the dsplay label or schema label
     :type component: str
@@ -81,7 +81,7 @@ def submit_manifest_json(
 
     Validates a manifest in json form, then submits it in csv form # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param component: A component in a schema, either the dsplay label or schema label
     :type component: str
@@ -125,7 +125,7 @@ def validate_manifest_csv(
 
     Validates a manifest in csv form # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param component_label: The label of a component in a schema
     :type component_label: str
@@ -148,7 +148,7 @@ def validate_manifest_json(
 
     Validates a manifest in json form # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param component_label: The label of a component in a schema
     :type component_label: str

@@ -781,7 +781,7 @@ paths:
             default: true
         - name: generateAllManifests
           in: query
-          description: If true, a manifest for all components will be generated, datasetIds will be ignored If false, manifests for each id in datasetIds will be generated
+          description: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
           required: false
           schema:
             type: boolean
@@ -1377,7 +1377,7 @@ components:
     schemaUrl:
       name: schemaUrl
       in: query
-      description: The URL of a schema in jsonld form
+      description: The URL of a schema in jsonld or csv form
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
@@ -1538,7 +1538,7 @@ components:
     manifestTitle:
       name: manifestTitle
       in: query
-      description: If making one manifest, the title of the manifest If making multiple manifests, the prefix of the title of the manifests
+      description: If making one manifest, the title of the manifest. If making multiple manifests, the prefix of the title of the manifests.
       required: false
       schema:
         type: string

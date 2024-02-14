@@ -945,7 +945,7 @@ paths:
         schema:
           $ref: '#/components/schemas/ComponentLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -988,7 +988,7 @@ paths:
       description: Gets a array of connected node pairs
       operationId: get_connected_node_pair_array
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1027,7 +1027,7 @@ paths:
       description: Gets a page of connected node pairs
       operationId: get_connected_node_pair_page
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1087,7 +1087,7 @@ paths:
       description: Generates a list of google sheet links
       operationId: generate_google_sheet_manifests
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1112,8 +1112,8 @@ paths:
         schema:
           $ref: '#/components/schemas/DatasetIdArray'
         style: form
-      - description: "If making one manifest, the title of the manifest If making\
-          \ multiple manifests, the prefix of the title of the manifests"
+      - description: "If making one manifest, the title of the manifest. If making\
+          \ multiple manifests, the prefix of the title of the manifests."
         explode: true
         in: query
         name: manifestTitle
@@ -1150,8 +1150,8 @@ paths:
           type: boolean
         style: form
       - description: "If true, a manifest for all components will be generated, datasetIds\
-          \ will be ignored If false, manifests for each id in datasetIds will be\
-          \ generated"
+          \ will be ignored. If false, manifests for each id in datasetIds will be\
+          \ generated."
         explode: true
         in: query
         name: generateAllManifests
@@ -1193,7 +1193,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1233,7 +1233,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1282,7 +1282,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1324,7 +1324,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1384,7 +1384,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1464,7 +1464,7 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeLabel'
         style: simple
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1496,7 +1496,7 @@ paths:
         a dataframe (stored as a JSON String).
       operationId: get_schema_attributes
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1553,7 +1553,7 @@ paths:
       description: "Validates manifest in csv form, then submits it"
       operationId: submit_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1684,7 +1684,7 @@ paths:
       description: "Validates a manifest in json form, then submits it in csv form"
       operationId: submit_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1814,7 +1814,7 @@ paths:
         and figure type
       operationId: get_tangled_tree_layers
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1859,7 +1859,7 @@ paths:
         \ data model, text formatting and figure type"
       operationId: get_tangled_tree_text
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1915,7 +1915,7 @@ paths:
       description: Validates a manifest in csv form
       operationId: validate_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -1974,7 +1974,7 @@ paths:
       description: Validates a manifest in json form
       operationId: validate_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld form
+      - description: The URL of a schema in jsonld or csv form
         explode: true
         in: query
         name: schemaUrl
@@ -2137,7 +2137,7 @@ components:
         $ref: '#/components/schemas/NodeLabel'
       style: simple
     schemaUrl:
-      description: The URL of a schema in jsonld form
+      description: The URL of a schema in jsonld or csv form
       explode: true
       in: query
       name: schemaUrl
@@ -2355,8 +2355,8 @@ components:
         $ref: '#/components/schemas/DatasetIdArray'
       style: form
     manifestTitle:
-      description: "If making one manifest, the title of the manifest If making multiple\
-        \ manifests, the prefix of the title of the manifests"
+      description: "If making one manifest, the title of the manifest. If making multiple\
+        \ manifests, the prefix of the title of the manifests."
       explode: true
       in: query
       name: manifestTitle

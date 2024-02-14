@@ -27,8 +27,8 @@ get:
     - name: generateAllManifests
       in: query
       description:
-        If true, a manifest for all components will be generated, datasetIds will be ignored
-        If false, manifests for each id in datasetIds will be generated
+        If true, a manifest for all components will be generated, datasetIds will be ignored.
+        If false, manifests for each id in datasetIds will be generated.
       required: false
       schema:
         type: boolean
