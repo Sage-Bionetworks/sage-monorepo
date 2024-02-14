@@ -3,10 +3,6 @@ version: "3.10"
 services:
   schematic-api:
     image: ghcr.io/sage-bionetworks/schematic-api:local
-    # for building docker image locally if needed
-    # build: 
-    #   dockerfile: Dockerfile
-    # image: sagebionetworks/schematic-aws-api:latest
     container_name: schematic-api
     restart: always
     env_file:
@@ -16,9 +12,8 @@ services:
     #   - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - schematic
-    ports: 
-      - "${SERVER_PORT}:80"
-      - "443:443"
+    ports:
+      - "8443:8443"
 
 # volumes:
 #   openchallenges-mariadb:
