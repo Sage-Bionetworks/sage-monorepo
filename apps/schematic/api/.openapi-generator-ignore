@@ -32,6 +32,7 @@ requirements.txt
 schematic_api/__main__.py
 setup.py
 test-requirements.txt
+schematic_api/test/test_manifest_generation_controller.py
 schematic_api/test/test_storage_controller.py
 schematic_api/test/test_schema_controller.py
 schematic_api/test/test_manifest_validation_controller.py

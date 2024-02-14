@@ -753,6 +753,50 @@ paths:
                 $ref: '#/components/schemas/TangledTreeText'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /generateGoogleSheetManifests:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates a list of google sheet links
+      description: Generates a list of google sheet links
+      operationId: generateGoogleSheetManifests
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdArray'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/dataTypeArray'
+        - name: assetViewId
+          in: query
+          description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+        - name: useStrictValidation
+          in: query
+          description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
+          required: false
+          schema:
+            type: boolean
+            default: true
+        - name: generateAllManifests
+          in: query
+          description: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
+          required: false
+          schema:
+            type: boolean
+            default: false
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -1204,6 +1248,25 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object
+    DatasetIdArray:
+      type: array
+      description: An array of dataset ids
+      items:
+        $ref: '#/components/schemas/DatasetId'
+    DataTypeArray:
+      description: An array of data types
+      type: array
+      items:
+        type: string
+        example: Patient
+    GoogleSheetLinks:
+      type: object
+      description: An array of google sheet links
+      properties:
+        links:
+          type: array
+          items:
+            type: string
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1314,7 +1377,7 @@ components:
     schemaUrl:
       name: schemaUrl
       in: query
-      description: The URL of a schema in jsonld form
+      description: The URL of a schema in jsonld or csv form
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
@@ -1457,3 +1520,32 @@ components:
           - plain
           - highlighted
         default: plain
+    addAnnotations:
+      name: addAnnotations
+      in: query
+      description: If true, annotations are added to the manifest
+      required: false
+      schema:
+        type: boolean
+        default: false
+    datasetIdArray:
+      name: datasetIdArray
+      in: query
+      description: An array of dataset ids
+      required: false
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+    manifestTitle:
+      name: manifestTitle
+      in: query
+      description: If making one manifest, the title of the manifest. If making multiple manifests, the prefix of the title of the manifests.
+      required: false
+      schema:
+        type: string
+    dataTypeArray:
+      name: dataTypeArray
+      in: query
+      description: An array of data types
+      required: false
+      schema:
+        $ref: '#/components/schemas/DataTypeArray'

@@ -1,6 +1,7 @@
 AUTHORS.md
 schematic_api/__init__.py
 schematic_api/controllers/__init__.py
+schematic_api/controllers/manifest_generation_controller.py
 schematic_api/controllers/manifest_validation_controller.py
 schematic_api/controllers/schema_controller.py
 schematic_api/controllers/security_controller_.py
@@ -24,6 +25,7 @@ schematic_api/models/file_metadata.py
 schematic_api/models/file_metadata_array.py
 schematic_api/models/file_metadata_page.py
 schematic_api/models/file_metadata_page_all_of.py
+schematic_api/models/google_sheet_links.py
 schematic_api/models/manifest_metadata.py
 schematic_api/models/manifest_metadata_array.py
 schematic_api/models/manifest_metadata_page.py
