@@ -13,7 +13,7 @@ services:
     networks:
       - schematic
     ports:
-      - "8443:8443"
+      - "7443:7443"
 
 # volumes:
 #   openchallenges-mariadb:
