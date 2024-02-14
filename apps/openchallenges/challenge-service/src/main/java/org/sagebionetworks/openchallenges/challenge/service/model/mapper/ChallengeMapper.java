@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.mapper;
 
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeCategoryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeIncentiveDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
@@ -43,6 +44,10 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       dto.incentives(
           entity.getIncentives().stream()
               .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
+              .toList());
+      dto.categories(
+          entity.getCategories().stream()
+              .map(o -> ChallengeCategoryDto.fromValue(o.getName()))
               .toList());
       dto.inputDataTypes(inputDataTypeMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());

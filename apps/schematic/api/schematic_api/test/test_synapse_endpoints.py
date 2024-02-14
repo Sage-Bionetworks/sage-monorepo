@@ -40,6 +40,47 @@ HEADERS = {
 
 @pytest.mark.synapse
 @pytest.mark.secrets
+class TestGenerateGoogleSheetManifests(BaseTestCase):
+    """Tests google sheet manifest endpoint"""
+
+    def test_success1(self) -> None:
+        """Test for successful result"""
+        url = (
+            f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
+            "&assetViewId=syn28559058"
+            "&dataTypeArray=Patient"
+            "&dataTypeArray=Biospecimen"
+            "&datasetIdArray=syn51730545"
+            "&datasetIdArray=syn51730547"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == ["links"]
+        links = result["links"]
+        assert isinstance(links, list)
+        assert len(links) == 2
+
+    def test_success2(self) -> None:
+        """Test for successful result"""
+        url = (
+            f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
+            "&assetViewId=syn28559058"
+            "&generateAllManifests=true"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        result = response.json
+        assert isinstance(result, dict)
+        assert list(result.keys()) == ["links"]
+        links = result["links"]
+        assert isinstance(links, list)
+        assert len(links) == 3
+
+
+@pytest.mark.synapse
+@pytest.mark.secrets
 class TestValidationEndpoints(BaseTestCase):
     """Integration tests"""
 

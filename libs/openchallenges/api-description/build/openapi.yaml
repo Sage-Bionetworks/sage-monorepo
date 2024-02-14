@@ -378,6 +378,8 @@ components:
       type: string
       enum:
         - featured
+        - benchmark
+        - hackathon
         - starting_soon
         - ending_soon
         - recently_started
@@ -658,6 +660,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SimpleChallengeInputDataType'
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengeCategory'
         startDate:
           $ref: '#/components/schemas/ChallengeStartDate'
         endDate:
@@ -683,6 +689,7 @@ components:
         - starredCount
         - createdAt
         - updatedAt
+        - categories
     ChallengesPage:
       type: object
       description: A page of challenges.

@@ -14,7 +14,7 @@ def get_tangled_tree_layers(schema_url, figure_type=None):  # noqa: E501
 
     Get tangled tree node layers to display for a given data model and figure type # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param figure_type: Figure type to generate.
     :type figure_type: str
@@ -29,7 +29,7 @@ def get_tangled_tree_text(schema_url, figure_type=None, text_format=None):  # no
 
     Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type # noqa: E501
 
-    :param schema_url: The URL of a schema in jsonld form
+    :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
     :param figure_type: Figure type to generate.
     :type figure_type: str

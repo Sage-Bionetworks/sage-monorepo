@@ -14,10 +14,12 @@
 /**
  * The category of the challenge.
  */
-export type ChallengeCategory = 'featured' | 'starting_soon' | 'ending_soon' | 'recently_started' | 'recently_ended';
+export type ChallengeCategory = 'featured' | 'benchmark' | 'hackathon' | 'starting_soon' | 'ending_soon' | 'recently_started' | 'recently_ended';
 
 export const ChallengeCategory = {
     Featured: 'featured' as ChallengeCategory,
+    Benchmark: 'benchmark' as ChallengeCategory,
+    Hackathon: 'hackathon' as ChallengeCategory,
     StartingSoon: 'starting_soon' as ChallengeCategory,
     EndingSoon: 'ending_soon' as ChallengeCategory,
     RecentlyStarted: 'recently_started' as ChallengeCategory,

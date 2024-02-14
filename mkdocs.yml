@@ -9,36 +9,45 @@ repo_name: sage-monorepo
 
 # Navigation
 nav:
-  - Home:
-    - Home: index.md
-    - Changelog: changelog.md
+  - Home: 
+    - Sage Monorepo: index.md
+    - What's new: news.md
     - Contributing:
-      - Overview: contributing-guidelines.md
-      - Reporting a bug: bug-report.md
-      - Adding a feature: contributing.md
-      - Code of conduct: code-of-conduct.md
+      - Overview: contributions/overview.md
+      - Reporting a bug: contributions/bug-report.md
+      - Adding a feature: contributions/guidelines.md
   - Getting Started:
-    - Angular Universal: angular-universal.md
-    - Devcontainer: devcontainer.md
-    - Nx: using-nx.md
-    - Remote host: develop-on-a-remote-host.md
-  - Setup:
-    - Figma-to-Code: figma-to-code.md
-    - Using styles/themes: app-styles-themes-assets.md
-    - Create a new library: libraries.md
-    - Create a new component: create-a-new-angular-component.md
-    - Monitor the stack: stack-monitoring.md
-    - Collect logs and system metrics: collect-challenge-logs-and-system-metrics.md
-    - Update tools and dependencies: update-dependencies.md
-    - Code coverage: coverage.md
-  - Cheat Sheets:
-    - VSCode: vscode-cheat-sheet.md
-    - Java: java-cheat-sheed.md
-    - OpenChallenges: cheat-sheet.md
-  - References:
-    - references.md
-    - Linters and formatters: linters-and-formatters.md
-  - FAQ: faq.md
+    - What is Angular Universal?: getting-started/what-is-angular.md
+    - What is a devcontainer?: getting-started/what-is-devcontainer.md
+    - What is Nx?: getting-started/what-is-nx.md
+    - Setup: 
+      - Develop Locally: getting-started/local-dev.md
+      - Develop On a Remote Host: getting-started/remote-dev.md
+  - Tutorials:
+    - Angular:
+      - Create an Angular app: tutorials/angular/add-app.md
+      - Add an Angular API client: tutorials/angular/add-api-client.md
+      - Add an Angular component: tutorials/angular/add-component.md
+      - Add an Angular library: tutorials/angular/add-library.md
+    - Docker:
+      - Create a Docker-based project: tutorials/docker/new-project.md
+    - Java:
+      - Add a Java library: tutorials/java/add-library.md
+      - Add a Java REST API: tutorials/java/add-rest-api.md
+    - Python:
+      - Add a Python REST API: tutorials/python/add-rest-api.md
+    - R:
+      - Add an R project: tutorials/r/new-project.md
+  - Developers Guide:
+    - Common Issues: developers-guide/faq.md
+  - Reference:
+    - Agora:
+      - API: reference/agora.md
+    - OpenChallenges:
+      - Microservices: reference/oc-microservices.md
+      - Schemas: reference/oc-schemas.md
+    - Schematic:
+      - API: reference/schematic.md
 
 # Theme configuration
 theme:
@@ -46,13 +55,13 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)" 
       scheme: default
-      primary: teal
+      primary: blue
       toggle:
         icon: material/toggle-switch-off-outline
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)" 
       scheme: slate
-      primary: deep purple
+      primary: blue
       toggle:
         icon: material/toggle-switch
         name: Switch to light mode

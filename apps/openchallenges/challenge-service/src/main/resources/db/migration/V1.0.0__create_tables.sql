@@ -118,7 +118,7 @@ CREATE TABLE `challenge_category`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
     `challenge_id`          bigint(20) NOT NULL,
-    `category`              ENUM('featured'),
+    `name`                  ENUM('featured', 'benchmark', 'hackathon'),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`)
 );

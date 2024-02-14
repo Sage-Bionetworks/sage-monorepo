@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { ChallengeCategory } from './challengeCategory';
 import { SimpleChallengePlatform } from './simpleChallengePlatform';
 import { SimpleChallengeInputDataType } from './simpleChallengeInputDataType';
 import { ChallengeStatus } from './challengeStatus';
@@ -57,6 +58,7 @@ export interface Challenge {
     incentives: Array<ChallengeIncentive>;
     submissionTypes: Array<ChallengeSubmissionType>;
     inputDataTypes?: Array<SimpleChallengeInputDataType>;
+    categories: Array<ChallengeCategory>;
     /**
      * The start date of the challenge.
      */

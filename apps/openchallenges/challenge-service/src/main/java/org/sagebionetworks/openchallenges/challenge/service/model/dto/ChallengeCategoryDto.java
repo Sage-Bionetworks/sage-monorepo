@@ -11,6 +11,10 @@ import javax.validation.constraints.*;
 public enum ChallengeCategoryDto {
   FEATURED("featured"),
 
+  BENCHMARK("benchmark"),
+
+  HACKATHON("hackathon"),
+
   STARTING_SOON("starting_soon"),
 
   ENDING_SOON("ending_soon"),
