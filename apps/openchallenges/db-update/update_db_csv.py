@@ -12,6 +12,7 @@ PLOT_FILE = (
     "apps/openchallenges/challenge-service/src/main/java/org/sagebionetworks/"
     "openchallenges/challenge/service/service/ChallengeAnalyticsService.java"
 )
+UPDATE_MARKER = r"(\/\* AUTO-UPDATE MARKER \*\/\s+)"
 
 
 def output_csv(df, output_filename, output_folder="", print_row=False):
@@ -226,7 +227,9 @@ def main(gc):
     with open(PLOT_FILE, "r", encoding="utf-8") as file:
         curr_content = file.read()
     updated_content = re.sub(
-        r"Arrays.asList\([\d,\s]+\);", updated_plot_numbers, curr_content
+        UPDATE_MARKER + r"Arrays.asList\([\d, ]+\);",
+        r"\1" + updated_plot_numbers,
+        curr_content,
     )
     with open(PLOT_FILE, "w", encoding="utf-8") as file:
         file.write(updated_content)
