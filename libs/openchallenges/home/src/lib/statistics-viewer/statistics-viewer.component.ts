@@ -42,19 +42,20 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
             xAxis: {
               type: 'category',
               data: res.years,
-              axisLabel: { fontSize: '1em' },
+              axisLabel: { rotate: 45, fontSize: '15px' },
             },
             yAxis: [
               {
                 type: 'value',
                 name: '',
-                axisLabel: { fontSize: '1em' },
                 nameTextStyle: {
-                  fontSize: '1.1em',
                   lineHeight: 56,
                 },
               },
             ],
+            grid: {
+              containLabel: true,
+            },
             series: [
               {
                 name: 'Total challenges',
