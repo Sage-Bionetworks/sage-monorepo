@@ -31,7 +31,7 @@
     </div>
     <div class="col-4 app-info">
       <ul>
-        <li><img height="55px" [src]="(sageLogo$ | async)?.url" alt="Sage Bionetworks"/></li>
+        <li><img [src]="(sageLogo$ | async)?.url" alt="Sage Bionetworks"/></li>
         <li>App version: {{ appVersion }}</li>
         <li>Data updated on: {{ dataUpdatedOn }}</li>
       </ul>
