@@ -19,19 +19,19 @@ import org.sagebionetworks.openchallenges.organization.service.model.mapper.Orga
 import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class OrganizationServiceTest {
+class OrganizationServiceTest {
 
   @Mock private OrganizationRepository organizationRepository;
 
   @Mock private OrganizationMapper organizationMapper;
 
   @BeforeEach
-  public void setup() {
+  void setup() {
     OrganizationService organizationService = new OrganizationService(organizationRepository);
   }
 
   @Test
-  public void getOrganization_ShouldReturnOrganizationDto_WhenValidIdentifierPassed() {
+  void getOrganization_ShouldReturnOrganizationDto_WhenValidIdentifierPassed() {
     // Create valid identifier
     String identifier = "123";
     Long orgId = 123L;
@@ -65,8 +65,7 @@ public class OrganizationServiceTest {
   }
 
   @Test
-  public void
-      getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
+  public void getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
     // Create invalid identifier
     String invalidIdentifier = "abc";
 
