@@ -65,7 +65,8 @@ class OrganizationServiceTest {
   }
 
   @Test
-  public void getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
+  public void
+      getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
     // Create invalid identifier
     String invalidIdentifier = "abc";
 
