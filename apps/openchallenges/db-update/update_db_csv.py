@@ -1,4 +1,5 @@
 import os
+import re
 import csv
 import gspread
 import numpy as np
@@ -7,6 +8,11 @@ import pandas as pd
 GOOGLE_SHEET_TITLE = "OpenChallenges Data"
 CHALLENGE_FOLDER = "apps/openchallenges/challenge-service/src/main/resources/db"
 ORGANIZATION_FOLDER = "apps/openchallenges/organization-service/src/main/resources/db"
+PLOT_FILE = (
+    "apps/openchallenges/challenge-service/src/main/java/org/sagebionetworks/"
+    "openchallenges/challenge/service/service/ChallengeAnalyticsService.java"
+)
+UPDATE_MARKER = r"(\/\* AUTO-UPDATE MARKER \*\/\s+)"  # capture as a group to preserve
 
 
 def output_csv(df, output_filename, output_folder="", print_row=False):
@@ -215,6 +221,18 @@ def main(gc):
                output_folder=CHALLENGE_FOLDER, print_row=True)
     output_csv(sub_types, "submission_types.csv",
                output_folder=CHALLENGE_FOLDER, print_row=True)
+
+    # Update static plot numbers (displayed on homepage).
+    updated_plot_numbers = wks.worksheet("(plot) challenges_by_year").acell("D3").value
+    with open(PLOT_FILE, "r", encoding="utf-8") as file:
+        curr_content = file.read()
+    updated_content = re.sub(
+        UPDATE_MARKER + r"Arrays.asList\([\d, ]+\);",
+        r"\1" + updated_plot_numbers,  # replace but keep reserved group (\1)
+        curr_content,
+    )
+    with open(PLOT_FILE, "w", encoding="utf-8") as file:
+        file.write(updated_content)
 
 
 if __name__ == "__main__":
