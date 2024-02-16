@@ -1,93 +1,92 @@
 package org.sagebionetworks.openchallenges.organization.service.service;
 
-import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
-import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
-import org.sagebionetworks.openchallenges.organization.service.service.OrganizationService;
-import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
-import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
-import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import org.junit.jupiter.api.BeforeEach;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import org.sagebionetworks.openchallenges.organization.service.exception.OrganizationNotFoundException;
+import org.sagebionetworks.openchallenges.organization.service.model.dto.OrganizationDto;
+import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
+import org.sagebionetworks.openchallenges.organization.service.model.mapper.OrganizationMapper;
+import org.sagebionetworks.openchallenges.organization.service.model.repository.OrganizationRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class OrganizationServiceTest {
 
-    @Mock
-    private OrganizationRepository organizationRepository;
+  @Mock private OrganizationRepository organizationRepository;
 
-    @Mock
-    private OrganizationMapper organizationMapper;
+  @Mock private OrganizationMapper organizationMapper;
 
-    @BeforeEach
-    public void setup() {
-      OrganizationService organizationService = new OrganizationService(organizationRepository);
-    }
+  @BeforeEach
+  public void setup() {
+    OrganizationService organizationService = new OrganizationService(organizationRepository);
+  }
 
-    @Test
-    public void getOrganization_ShouldReturnOrganizationDto_WhenValidIdentifierPassed() {
-      // Create valid identifier
-      String identifier = "123";
-      Long orgId = 123L;
-      String orgLogin = String.valueOf(identifier);
+  @Test
+  public void getOrganization_ShouldReturnOrganizationDto_WhenValidIdentifierPassed() {
+    // Create valid identifier
+    String identifier = "123";
+    Long orgId = 123L;
+    String orgLogin = String.valueOf(identifier);
 
-      OrganizationEntity orgEntity = new OrganizationEntity();
-      orgEntity.setId(orgId);
+    OrganizationEntity orgEntity = new OrganizationEntity();
+    orgEntity.setId(orgId);
 
-      OrganizationDto expectedDto = new OrganizationDto();
-      expectedDto.setId(orgId);
+    OrganizationDto expectedDto = new OrganizationDto();
+    expectedDto.setId(orgId);
 
-      /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
-      to control its response and verify the behavior of the tested code that interacts with it. */
-      when(organizationRepository.findByIdOrLogin(orgId, orgLogin)).thenReturn(Optional.of(orgEntity));
+    /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
+    to control its response and verify the behavior of the tested code that interacts with it. */
+    when(organizationRepository.findByIdOrLogin(orgId, orgLogin))
+        .thenReturn(Optional.of(orgEntity));
 
-      OrganizationService organizationService = new OrganizationService(organizationRepository);
+    OrganizationService organizationService = new OrganizationService(organizationRepository);
 
-      // get the organization using the identifier
-      OrganizationDto response = organizationService.getOrganization(identifier);
+    // get the organization using the identifier
+    OrganizationDto response = organizationService.getOrganization(identifier);
 
-      /* Test that the organization is in the repo, is not null, 
-      that the id can be pulled, findByIdOrLogin method is called, 
-      and no interactions with the organizationMapper 
-      (verifies interactions w/Mock object) */ 
+    /* Test that the organization is in the repo, is not null,
+    that the id can be pulled, findByIdOrLogin method is called,
+    and no interactions with the organizationMapper
+    (verifies interactions w/Mock object) */
 
-      verify(organizationRepository).findByIdOrLogin(orgId, orgLogin);
-      assertNotNull(response);
-      assertEquals(expectedDto.getId(), response.getId());
-      verifyNoInteractions(organizationMapper);
-    }
+    verify(organizationRepository).findByIdOrLogin(orgId, orgLogin);
+    assertNotNull(response);
+    assertEquals(expectedDto.getId(), response.getId());
+    verifyNoInteractions(organizationMapper);
+  }
 
-    @Test
-    public void getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
-      // Create invalid identifier
-      String invalidIdentifier = "abc";
+  @Test
+  public void
+      getOrganization_ShouldThrowOrganizationNotFoundException_WhenInvalidIdentifierPassed() {
+    // Create invalid identifier
+    String invalidIdentifier = "abc";
 
-      /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
-      to control its response and verify the behavior of the tested code that interacts with it. */
-      when(organizationRepository.findByIdOrLogin(any(), any())).thenReturn(Optional.empty());
+    /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
+    to control its response and verify the behavior of the tested code that interacts with it. */
+    when(organizationRepository.findByIdOrLogin(any(), any())).thenReturn(Optional.empty());
 
-      OrganizationService organizationService = new OrganizationService(organizationRepository);
+    OrganizationService organizationService = new OrganizationService(organizationRepository);
 
-      // Test that calling getOrganization throws an error
-      assertThrows(OrganizationNotFoundException.class, () -> {
-        organizationService.getOrganization(invalidIdentifier);
-      });
-      /* Test thatfindByIdOrLogin method is called, 
-      and no interactions with the organizationMapper 
-      (verifies interactions w/Mock object)*/ 
+    // Test that calling getOrganization throws an error
+    assertThrows(
+        OrganizationNotFoundException.class,
+        () -> {
+          organizationService.getOrganization(invalidIdentifier);
+        });
+    /* Test thatfindByIdOrLogin method is called,
+    and no interactions with the organizationMapper
+    (verifies interactions w/Mock object)*/
 
-      verify(organizationRepository).findByIdOrLogin(any(), any());
-      verifyNoInteractions(organizationMapper);
-    }
+    verify(organizationRepository).findByIdOrLogin(any(), any());
+    verifyNoInteractions(organizationMapper);
+  }
 }
