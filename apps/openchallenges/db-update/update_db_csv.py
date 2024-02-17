@@ -51,6 +51,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "status",
             "platform",
             "doi",
+            "operation",
             "start_date",
             "end_date",
             "created_at",
