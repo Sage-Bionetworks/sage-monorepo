@@ -1,88 +1,163 @@
-import { Filter } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeStartYearRangeFilterValues,
-  challengeStatusFilterValues,
-  // challengeDifficultyFilterValues,
-  challengeInputDataTypesFilterValues,
-  challengeSubmissionTypesFilterValues,
-  challengeIncentivesFilterValues,
-  challengePlatformsFilterValues,
-  challengeOrganizationsFilterValues,
-  challengeOrganizersFilterValues,
-  challengeCategoriesFilterValues,
-} from './challenge-search-filters-values';
+  ChallengeCategory,
+  ChallengeIncentive,
+  ChallengeSort,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Filter } from '@sagebionetworks/openchallenges/ui';
 
-export const challengeStartYearRangeFilter: Filter = {
-  query: 'startYearRange',
-  label: 'Challenge Year',
-  values: challengeStartYearRangeFilterValues,
-  collapsed: false,
+const thisYear = new Date().getFullYear();
+
+const updateYear = (
+  thisYear: number,
+  startYearDiff: number,
+  endYearDiff: number
+) => {
+  return {
+    start: `${thisYear + startYearDiff}-01-01`,
+    end: `${thisYear + endYearDiff}-12-31`,
+  };
 };
 
-// checkbox filters
-export const challengeStatusFilter: Filter = {
-  query: 'status',
-  label: 'Status',
-  values: challengeStatusFilterValues,
-  collapsed: false,
-};
+export const challengeStartYearRangeFilter: Filter[] = [
+  {
+    value: undefined,
+    label: 'All',
+  },
+  // {
+  //   value: updateYear(thisYear, 1, 1),
+  //   label: (thisYear + 1).toString(),
+  // },
+  {
+    value: updateYear(thisYear, 0, 0),
+    label: thisYear.toString(),
+  },
+  {
+    value: updateYear(thisYear, -1, -1),
+    label: (thisYear - 1).toString(),
+  },
+  {
+    value: updateYear(thisYear, -6, -2),
+    label: thisYear - 6 + ' - ' + (thisYear - 2),
+  },
+  {
+    value: updateYear(thisYear, -11, -7),
+    label: thisYear - 11 + ' - ' + (thisYear - 7),
+  },
+  {
+    value: updateYear(thisYear, -21, -12),
+    label: thisYear - 21 + ' - ' + (thisYear - 12),
+  },
+  {
+    value: 'custom',
+    label: 'Custom',
+  },
+];
 
-// export const challengeDifficultyFilter: Filter = {
-//   query: 'difficulties',
-//   label: 'Difficulty',
-//   values: challengeDifficultyFilterValues,
-//   collapsed: true,
-// };
+export const challengeStatusFilter: Filter[] = [
+  {
+    value: ChallengeStatus.Active,
+    label: 'Active',
+  },
+  {
+    value: ChallengeStatus.Upcoming,
+    label: 'Upcoming',
+  },
+  {
+    value: ChallengeStatus.Completed,
+    label: 'Completed',
+  },
+];
 
-export const challengeSubmissionTypesFilter: Filter = {
-  query: 'submissionTypes',
-  label: 'Submission Type',
-  values: challengeSubmissionTypesFilterValues,
-  collapsed: false,
-};
+export const challengeSubmissionTypesFilter: Filter[] = [
+  {
+    value: ChallengeSubmissionType.ContainerImage,
+    label: 'Container Image',
+  },
+  {
+    value: ChallengeSubmissionType.PredictionFile,
+    label: 'Prediction File',
+  },
+  {
+    value: ChallengeSubmissionType.Notebook,
+    label: 'Notebook',
+  },
+  {
+    value: ChallengeSubmissionType.Other,
+    label: 'Other',
+  },
+];
 
-export const challengeIncentivesFilter: Filter = {
-  query: 'incentives',
-  label: 'Incentive Type',
-  values: challengeIncentivesFilterValues,
-  collapsed: false,
-};
+export const challengeIncentivesFilter: Filter[] = [
+  {
+    value: ChallengeIncentive.Monetary,
+    label: 'Monetary',
+  },
+  {
+    value: ChallengeIncentive.Publication,
+    label: 'Publication',
+  },
+  {
+    value: ChallengeIncentive.SpeakingEngagement,
+    label: 'Speaking Engagement',
+  },
+  {
+    value: ChallengeIncentive.Other,
+    label: 'Other',
+  },
+];
 
-export const challengePlatformsFilter: Filter = {
-  query: 'platforms',
-  label: 'Platform',
-  values: challengePlatformsFilterValues,
-  collapsed: false,
-};
+export const challengePlatformsFilter: Filter[] = [];
 
-// dropdown filters
-export const challengeInputDataTypesFilter: Filter = {
-  query: 'inputDataTypes',
-  label: 'Input Data Type',
-  values: challengeInputDataTypesFilterValues,
-  collapsed: false,
-  showAvatar: false,
-};
+export const challengeInputDataTypesFilter: Filter[] = [];
 
-export const challengeCategoriesFilter: Filter = {
-  query: 'categories',
-  label: 'Category',
-  values: challengeCategoriesFilterValues,
-  collapsed: false,
-};
+export const challengeCategoriesFilter: Filter[] = [
+  {
+    value: ChallengeCategory.Featured,
+    label: 'Featured',
+  },
+  {
+    value: ChallengeCategory.Benchmark,
+    label: 'Benchmark',
+  },
+  {
+    value: ChallengeCategory.Hackathon,
+    label: 'Hackathon',
+  },
+  {
+    value: ChallengeCategory.StartingSoon,
+    label: 'Starting Soon',
+  },
+  {
+    value: ChallengeCategory.EndingSoon,
+    label: 'Closing Soon',
+  },
+  {
+    value: ChallengeCategory.RecentlyStarted,
+    label: 'Recently Launched',
+  },
+  {
+    value: ChallengeCategory.RecentlyEnded,
+    label: 'Recently Completed',
+  },
+];
 
-export const challengeOrganizationsFilter: Filter = {
-  query: 'organizations',
-  label: 'Organization',
-  values: challengeOrganizationsFilterValues,
-  collapsed: false,
-  showAvatar: true,
-};
+export const challengeOrganizationsFilter: Filter[] = [];
 
-export const challengeOrganizatersFilter: Filter = {
-  query: 'organizers',
-  label: 'Organizer',
-  values: challengeOrganizersFilterValues,
-  collapsed: false,
-  showAvatar: true,
-};
+export const challengeOrganizersFilter: Filter[] = [];
+
+export const challengeSortFilter: Filter[] = [
+  {
+    value: ChallengeSort.Relevance,
+    label: 'Relevance',
+  },
+  {
+    value: ChallengeSort.StartDate,
+    label: 'Start Date',
+  },
+  {
+    value: ChallengeSort.Starred,
+    label: 'Most Starred',
+  },
+];

@@ -19,12 +19,12 @@ class TestGetTangledTreeLayers:
         assert status == 200
         assert isinstance(result, str)
 
-    def test_internal_error(self) -> None:
-        """Test for 500 result"""
+    def test_404_error(self) -> None:
+        """Test for 404 result"""
         result, status = get_tangled_tree_layers(
             schema_url="not_a_url", figure_type="component"
         )
-        assert status == 500
+        assert status == 404
         assert isinstance(result, BasicError)
 
 
@@ -40,11 +40,11 @@ class TestGetTangledTreeText:
         assert status == 200
         assert isinstance(result, str)
 
-    def test_internal_error(self) -> None:
-        """Test for 500 result"""
+    def test_404_error(self) -> None:
+        """Test for 404 result"""
         res = get_tangled_tree_text(
             schema_url="not_a_url", figure_type="component", text_format="plain"
         )
         (result, status) = res  # pylint: disable=unpacking-non-sequence
-        assert status == 500
+        assert status == 404
         assert isinstance(result, BasicError)

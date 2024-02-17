@@ -1,10 +1,12 @@
 <p-paginator
+  #paginator
   [first]="itemIndex"
   [pageLinkSize]="pageLinkSize"
   [rows]="pageSize"
-  [totalRecords]="totalRecords"
+  [totalRecords]="totalElements"
   [rowsPerPageOptions]="itemsPerPage"
   [showCurrentPageReport]="true"
   currentPageReportTemplate="Showing {first} to {last} of {totalRecords} results"
   (onPageChange)="onPageChange($event)"
+  [alwaysShow]="false"
 ></p-paginator>

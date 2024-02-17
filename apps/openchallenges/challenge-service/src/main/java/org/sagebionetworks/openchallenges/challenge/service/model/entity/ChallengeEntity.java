@@ -75,12 +75,8 @@ public class ChallengeEntity {
   @GenericField()
   private String status;
 
-  @Column(nullable = false)
-  @GenericField()
-  private String difficulty;
-
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "platform_id", nullable = false)
+  @JoinColumn(name = "platform_id", nullable = true)
   @IndexedEmbedded(includePaths = {"slug", "name"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
@@ -124,9 +120,7 @@ public class ChallengeEntity {
   private List<ChallengeStar> stars;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "categories",
-      includePaths = {"category"})
+  @IndexedEmbedded(includePaths = {"name"})
   private List<ChallengeCategoryEntity> categories;
 
   @Column(name = "start_date", columnDefinition = "DATE", nullable = true)

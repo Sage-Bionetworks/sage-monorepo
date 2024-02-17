@@ -20,7 +20,7 @@ export class PlatformsComponent implements OnInit {
 
   ngOnInit() {
     this.platforms$ = this.imageService.getImage({
-      objectKey: 'logo/platforms.png',
+      objectKey: 'logo/platforms-v4.png',
     });
   }
 }

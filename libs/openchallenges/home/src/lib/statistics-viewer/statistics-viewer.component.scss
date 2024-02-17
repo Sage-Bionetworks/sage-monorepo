@@ -1,11 +1,5 @@
-// $screen-sm: 481px;
-// $screen-lg: 641px;
 @use 'libs/openchallenges/styles/src/lib/constants';
-$sm-breakpoint: 576px;
-$md-breakpoint: 768px;
-$lg-breakpoint: 992px;
-$xl-breakpoint: 1200px;
-$xxl-breakpoint: 1400px;
+
 // GENERAL CLASSES
 .container {
   max-width: 1128px;
@@ -14,7 +8,10 @@ $xxl-breakpoint: 1400px;
   margin: 0 auto;
   padding-left: 24px;
   padding-right: 24px;
-  gap: 32px;
+  align-items: center;
+}
+#timeline-plot {
+  width: 100%;
 }
 .section-title {
   text-align: center;
@@ -27,6 +24,10 @@ $xxl-breakpoint: 1400px;
   .row {
     flex-wrap: nowrap;
     width: unset;
+  }
+
+  .caption {
+    margin-top: -14px;
   }
 }
 .metrics-container {
@@ -45,7 +46,8 @@ $xxl-breakpoint: 1400px;
 .clickable {
   cursor: pointer;
 }
-@media (max-width: constants.$lg-breakpoint) {
+
+@media screen and (max-width: constants.$lg-breakpoint) {
   .metrics-container {
     gap: 40px;
 
@@ -55,7 +57,7 @@ $xxl-breakpoint: 1400px;
     }
   }
 }
-@media (max-width: constants.$md-breakpoint) {
+@media screen and (max-width: constants.$md-breakpoint) {
   .metrics-container {
     gap: 20px;
 

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  iatlas-data:
+    image: ghcr.io/sage-bionetworks/iatlas-data:${IATLAS_VERSION:-local}
+    container_name: iatlas-data
+    restart: no
+    env_file:
+      - ../../../apps/iatlas/data/.env
+    networks:
+      - iatlas
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+    depends_on:
+      iatlas-postgres:
+        condition: service_healthy

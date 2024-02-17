@@ -34,20 +34,6 @@
       },
       "dependsOn": ["build-image"]
     },
-    "publish-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/synapse-rstudio:* --quiet) --force"
-      },
-      "dependsOn": ["publish-image"]
-    },
-    "build-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/synapse-rstudio:* --quiet) --force"
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

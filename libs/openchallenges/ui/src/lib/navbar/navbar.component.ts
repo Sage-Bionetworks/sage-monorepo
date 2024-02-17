@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
-import { NavbarSection } from './navbar-section';
-import { ButtonGithubComponent } from '../button-github/button-github.component';
-import { CommonModule } from '@angular/common';
-import { MatLegacyButtonModule as MatButtonModule } from '@angular/material/legacy-button';
-import { RouterModule } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
 import { UserButtonComponent } from '../user-button/user-button.component';
+import { DiscordButtonComponent } from '../discord-button/discord-button.component';
+import { NavbarSection } from './navbar-section';
 
 @Component({
   selector: 'openchallenges-navbar',
@@ -16,8 +16,8 @@ import { UserButtonComponent } from '../user-button/user-button.component';
     CommonModule,
     RouterModule,
     MatButtonModule,
-    ButtonGithubComponent,
     UserButtonComponent,
+    DiscordButtonComponent,
   ],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],

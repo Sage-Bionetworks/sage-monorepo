@@ -85,6 +85,10 @@ function schematic-build-images {
   nx run-many --target=build-image --projects=schematic-* --parallel=3
 }
 
+function iatlas-build-images {
+  nx run-many --target=build-image --projects=iatlas-* --parallel=3
+}
+
 function synapse-build-images {
   nx run-many --target=build-image --projects=synapse-* --parallel=3
 }
@@ -102,7 +106,7 @@ function workspace-nx-cloud-help {
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 function check-vscode-version {
-  expected="1.81.1"
+  expected="1.84.2"
   actual="$(code --version | head -n 1)"
   if [ $(version $actual) -lt $(version $expected) ]; then
     echo "📦 Please update VS Code (${actual}) to version ${expected} or above."

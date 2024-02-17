@@ -9,9 +9,13 @@
 
   openchallenges-navbar {
     color: mat.get-color-from-palette($primary, default-contrast);
-
+  
     .sage-navbar {
       background: mat.get-color-from-palette($primary, 600);
+    }
+    // Overwrite color specified by .mdc-button
+    .navbar-item {
+      color: white !important;
     }
     .navbar-item:hover,
     .navbar-item:active,
@@ -23,6 +27,11 @@
 
 @mixin typography($theme) {
   $typography-config: mat.get-typography-config($theme);
+
+  // Overwrite line-height specified by .mdc-button
+  .navbar-item {
+    line-height: 18px !important;
+  }
 }
 
 @mixin theme($theme) {

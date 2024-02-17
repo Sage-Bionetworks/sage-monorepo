@@ -1,0 +1,15 @@
+type: object
+description: A page of file metadata.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      files:
+        description: A list of file metadata.
+        type: array
+        items:
+          $ref: FileMetadata.yaml
+    required:
+      - files
+x-java-class-annotations:
+  - '@lombok.Builder'

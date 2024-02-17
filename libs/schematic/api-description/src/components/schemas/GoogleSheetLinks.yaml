@@ -1,0 +1,7 @@
+type: object
+description: An array of google sheet links
+properties:
+  links:
+    type: array
+    items:
+      type: string

@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FilterValue } from './filter-value.model';
+import { Filter } from './filter.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -12,8 +12,8 @@ import { CheckboxModule } from 'primeng/checkbox';
   styleUrls: ['./checkbox-filter.component.scss'],
 })
 export class CheckboxFilterComponent {
-  @Input({ required: true }) values!: FilterValue[];
-  @Input({ required: true }) selectedValues!: string[];
+  @Input({ required: true }) options!: Filter[];
+  @Input({ required: true }) selectedOptions!: string[];
   @Input({ required: true }) inputId!: string;
   @Output() selectionChange = new EventEmitter<string[]>();
 

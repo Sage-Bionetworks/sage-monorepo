@@ -12,3 +12,10 @@ API and other related APIs.
     - `prepare-python.sh`
     - `pyproject.toml`
 2. Run `nx prepare openchallenges-notebook`
+
+## Generate challenge headlines
+
+```
+cd apps/openchallenges/notebook
+poetry run python src/challenge_headline/generate_challenge_headlines.py
+```

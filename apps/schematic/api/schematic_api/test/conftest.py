@@ -4,11 +4,15 @@ import pytest
 
 import pandas as pd
 
+from schematic_api.models.manifest_metadata import ManifestMetadata
+
+# testing functions -------------------------------------------------------------------------------
+
 
 def csv_to_bytes(path: str) -> str:
     """reads in a csv file and returns as bytes"""
     dataframe = pd.read_csv(path)
-    csv_string = dataframe.to_csv(line_terminator="\r\n", index=False)
+    csv_string = dataframe.to_csv(lineterminator="\r\n", index=False)
     return bytes(csv_string, encoding="utf-8")
 
 
@@ -18,9 +22,51 @@ def csv_to_json_str(path: str) -> str:
     return dataframe.to_json()
 
 
+# strings for mocking -----------------------------------------------------------------------------
+
+GET_ACCESS_TOKEN_MOCK = (
+    "schematic_api.controllers.manifest_generation_controller_impl.get_access_token"
+)
+CREATE_SINGLE_MANIFEST_MOCK = (
+    "schematic.manifest.generator.ManifestGenerator.create_single_manifest"
+)
+CREATE_MANIFESTS_MOCK = (
+    "schematic.manifest.generator.ManifestGenerator.create_manifests"
+)
+
+
 EXAMPLE_MANIFEST_METADATA = [
-    (("dataset_id1", "dataset_name1"), ("syn1", "name1"), ("component1", "component1")),
-    (("dataset_id2", "dataset_name2"), ("syn2", "name2"), ("component2", "component2")),
+    ManifestMetadata(
+        name="name",
+        id="id",
+        dataset_name="name",
+        dataset_id="id",
+        component_name="name",
+    ),
+    ManifestMetadata(
+        name="name",
+        id="id",
+        dataset_name="name",
+        dataset_id="id",
+        component_name="name",
+    ),
+]
+
+MANIFEST_METADATA_KEYS = [
+    "componentName",
+    "datasetId",
+    "datasetName",
+    "id",
+    "name",
+]
+
+PAGING_KEYS = [
+    "hasNext",
+    "hasPrevious",
+    "number",
+    "size",
+    "totalElements",
+    "totalPages",
 ]
 
 

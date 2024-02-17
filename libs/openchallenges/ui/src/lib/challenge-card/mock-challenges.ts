@@ -9,7 +9,6 @@ export const MOCK_CHALLENGES: Challenge[] = [
     headline: 'Example headline',
     description: 'Example description',
     status: 'active',
-    difficulty: 'good_for_beginners',
     platform: MOCK_PLATFORMS[0],
     incentives: [],
     submissionTypes: [],
@@ -19,5 +18,6 @@ export const MOCK_CHALLENGES: Challenge[] = [
     starredCount: 99,
     createdAt: '',
     updatedAt: '',
+    categories: [],
   },
 ];

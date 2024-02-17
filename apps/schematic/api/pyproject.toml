@@ -13,8 +13,11 @@ swagger-ui-bundle = "0.0.9"
 python-dateutil = "2.8.2"
 Flask = "2.1.3"
 Flask-Cors = "3.0.10"
-schematicpy = "23.7.1"
-synapseclient = "2.7.1"
+schematicpy = "23.12.1"
+# jsonschema isn't a direct import, but is used by connexion. 
+# This is to avoid deprecationWarnings
+# See https://sagebionetworks.jira.com/browse/FDS-1324
+jsonschema = ">=4.0.0 <4.10.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.7.0"

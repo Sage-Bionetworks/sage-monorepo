@@ -45,18 +45,18 @@
     color: #000;
 
     &.active {
-      border-color: #71c663;
-      background-color: #d0fedd;
+      color: #1C5E2A;
+      background-color: #D0FEDD;
     }
 
     &.completed {
-      border-color: #ffb6c1;
-      background-color: #ffdde2;
+      color: map.get($figma, dl-color-default-navbardark);
+      background-color: map.get($primary, 100);
     }
 
     &.upcoming {
-      border-color: #ffc56d;
-      background-color: #fff1bf;
+      color: #E1861F;
+      background-color: #FFF5D1;
     }
   }
 

@@ -18,7 +18,7 @@
     <section id="profile-stats" class="row">
       <div class="col fill-empty"></div>
       <div class="col">
-        <openchallenges-org-profile-stats [loggedIn]="loggedIn"/>
+        <openchallenges-org-profile-stats [loggedIn]="loggedIn" />
       </div>
     </section>
     <section id="profile-bottom" class="content">
@@ -26,24 +26,21 @@
         <div class="profile-nav-group">
           <a
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'overview' }"
+            (click)="updateTab('overview')"
             [ngClass]="{ 'active-tab': activeTab === tabs['overview'] }"
           >
             Overview
           </a>
           <a
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'challenges' }"
+            (click)="updateTab('challenges')"
             [ngClass]="{ 'active-tab': activeTab === tabs['challenges'] }"
           >
             Challenges
           </a>
           <a
             class="profile-nav-item"
-            routerLink="."
-            [queryParams]="{ tab: 'members' }"
+            (click)="updateTab('members')"
             [ngClass]="{ 'active-tab': activeTab === tabs['members'] }"
           >
             Members
@@ -60,7 +57,10 @@
             *ngSwitchCase="tabs['challenges']"
             [organization]="org"
           />
-          <openchallenges-org-profile-members *ngSwitchCase="tabs['members']" [organization]="org"/>
+          <openchallenges-org-profile-members
+            *ngSwitchCase="tabs['members']"
+            [organization]="org"
+          />
         </ng-container>
       </div>
     </section>

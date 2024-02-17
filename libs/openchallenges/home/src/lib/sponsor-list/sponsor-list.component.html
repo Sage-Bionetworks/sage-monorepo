@@ -1,22 +1,20 @@
 <section id="acknowledgements" class="mat-typography">
   <div class="container">
-    <p class="mat-body-strong text-center">OpenChallenges is made possible by...</p>
+    <h3 class="section-title">OpenChallenges is made possible by...</h3>
     <div class="sponsors-group row">
       <div class="col text-center sponsor-item">
-        <img
-          [src]="(itcr$ | async)?.url"
-          height="70px"
-          alt="Informatics Technology for Cancer Research (ITCR)"
-          title="Informatics Technology for Cancer Research"
-        />
-      </div>
-      <div class="col text-center sponsor-item">
-        <img
-          [src]="(sage$ | async)?.url"
-          height="80px"
-          alt="Sage Bionetworks"
-          title="Sage Bionetworks"
-        />
+        <a
+          href="https://itcr.cancer.gov/"
+          title="NCI Informatics Technology for Cancer Research"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          <img
+            [src]="(itcrImage$ | async)?.url"
+            alt="Informatics Technology for Cancer Research (ITCR)"
+            title="Informatics Technology for Cancer Research"
+          />
+        </a>
       </div>
     </div>
   </div>

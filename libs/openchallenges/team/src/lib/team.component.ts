@@ -3,6 +3,8 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   Image,
+  ImageAspectRatio,
+  ImageHeight,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
@@ -24,12 +26,19 @@ export class TeamComponent implements OnInit {
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
-  public logo$: Observable<Image> | undefined;
-  public thomas$: Observable<Image> | undefined;
-  public rong$: Observable<Image> | undefined;
-  public verena$: Observable<Image> | undefined;
-  public maria$: Observable<Image> | undefined;
-  public jake$: Observable<Image> | undefined;
+
+  public avatarImageHeight: ImageHeight = ImageHeight._500px;
+  public avatarImageAspectRatio: ImageAspectRatio = ImageAspectRatio._11;
+
+  public ocLogo$: Observable<Image> | undefined;
+  public sageLogo$: Observable<Image> | undefined;
+
+  public thomasAvatar$: Observable<Image> | undefined;
+  public rongAvatar$: Observable<Image> | undefined;
+  public verenaAvatar$: Observable<Image> | undefined;
+  public mariaAvatar$: Observable<Image> | undefined;
+  public gaiaAvatar$: Observable<Image> | undefined;
+  public jakeAvatar$: Observable<Image> | undefined;
 
   constructor(
     private readonly configService: ConfigService,
@@ -46,23 +55,26 @@ export class TeamComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.logo$ = this.imageService.getImage({
+    this.ocLogo$ = this.imageService.getImage({
       objectKey: 'openchallenges-icon.svg',
     });
-    this.thomas$ = this.imageService.getImage({
-      objectKey: 'team/thomas.png',
+    this.sageLogo$ = this.imageService.getImage({
+      objectKey: 'logo/sage-bionetworks-alt.svg',
     });
-    this.rong$ = this.imageService.getImage({
-      objectKey: 'team/rong.png',
-    });
-    this.verena$ = this.imageService.getImage({
-      objectKey: 'team/verena.png',
-    });
-    this.maria$ = this.imageService.getImage({
-      objectKey: 'team/maria.png',
-    });
-    this.jake$ = this.imageService.getImage({
-      objectKey: 'team/jake.png',
+
+    this.thomasAvatar$ = this.getAvatarImage('team/thomas_schaffter_v3.jpg');
+    this.verenaAvatar$ = this.getAvatarImage('team/verena_chung.jpg');
+    this.rongAvatar$ = this.getAvatarImage('team/rong_chai.jpg');
+    this.mariaAvatar$ = this.getAvatarImage('team/maria.png');
+    this.gaiaAvatar$ = this.getAvatarImage('team/gaia_andreoletti.jpg');
+    this.jakeAvatar$ = this.getAvatarImage('team/jake_albrecht.jpg');
+  }
+
+  private getAvatarImage(objectKey: string): Observable<Image> {
+    return this.imageService.getImage({
+      objectKey,
+      height: ImageHeight._500px,
+      aspectRatio: ImageAspectRatio._11,
     });
   }
 }

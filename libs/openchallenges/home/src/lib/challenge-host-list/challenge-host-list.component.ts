@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterModule } from '@angular/router';
 import {
   ImageAspectRatio,
   ImageHeight,
@@ -10,6 +11,8 @@ import {
   OrganizationSearchQuery,
   OrganizationService,
   Image,
+  OrganizationCategory,
+  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   OrganizationCard,
@@ -22,7 +25,12 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'openchallenges-challenge-host-list',
   standalone: true,
-  imports: [CommonModule, MatButtonModule, OrganizationCardComponent],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    OrganizationCardComponent,
+    RouterModule,
+  ],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })
@@ -38,9 +46,9 @@ export class ChallengeHostListComponent implements OnInit {
     const query: OrganizationSearchQuery = {
       pageNumber: 0,
       pageSize: 4,
-      categories: ['featured'],
+      categories: [OrganizationCategory.Featured],
       searchTerms: '',
-      sort: 'challenge_count',
+      sort: OrganizationSort.ChallengeCount,
     };
 
     const orgPage$ = this.organizationService.listOrganizations(query).pipe(

@@ -1,0 +1,26 @@
+type: object
+description: The metadata for a manifest file
+properties:
+  name:
+    type: string
+    description: The name of the manifest file.
+    example: synapse_storage_manifest.csv
+  id:
+    type: string
+    description: The id of the manifest file.
+    example: syn1
+  datasetName:
+    type: string
+    description: The name of the dataset the manifest belongs to.
+    example: dataset_X
+  datasetId:
+    type: string
+    description: The id of the dataset the manifest belongs to.
+    example: syn2
+  componentName:
+    type: string
+    description: The name of the component the manifest is of.
+    example: patient
+required:
+  - name
+  - id

@@ -1,6 +1,6 @@
 """Implementation of all endpoints"""
 import os
-from typing import Optional, Union, Callable, Any
+from typing import Callable, Any
 
 
 import pandas as pd
@@ -8,15 +8,20 @@ from schematic.store.synapse import SynapseStorage, ManifestDownload, load_df  #
 from schematic import CONFIG  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
-from schematic_api.models.dataset import Dataset
-from schematic_api.models.datasets_page import DatasetsPage
-from schematic_api.models.manifests_page import ManifestsPage
-from schematic_api.models.manifest import Manifest
-from schematic_api.models.project import Project
-from schematic_api.models.projects_page import ProjectsPage
-from schematic_api.models.file import File
-from schematic_api.models.files_page import FilesPage
+from schematic_api.models.dataset_metadata import DatasetMetadata
+from schematic_api.models.dataset_metadata_array import DatasetMetadataArray
+from schematic_api.models.dataset_metadata_page import DatasetMetadataPage
+from schematic_api.models.manifest_metadata import ManifestMetadata
+from schematic_api.models.manifest_metadata_array import ManifestMetadataArray
+from schematic_api.models.manifest_metadata_page import ManifestMetadataPage
+from schematic_api.models.project_metadata import ProjectMetadata
+from schematic_api.models.project_metadata_array import ProjectMetadataArray
+from schematic_api.models.project_metadata_page import ProjectMetadataPage
+from schematic_api.models.file_metadata import FileMetadata
+from schematic_api.models.file_metadata_array import FileMetadataArray
+from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.controllers.utils import handle_exceptions, get_access_token
+from schematic_api.controllers.paging import Page
 
 
 def get_asset_storage_class(asset_type: str) -> Callable:
@@ -42,7 +47,9 @@ def get_asset_storage_class(asset_type: str) -> Callable:
     return asset_type_object
 
 
-def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
+def get_asset_view_from_schematic(
+    asset_type: str,  # pylint: disable=unused-argument
+) -> pd.DataFrame:
     """Gets the asset view in pandas.Dataframe form
 
     Args:
@@ -53,15 +60,14 @@ def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
         pandas.DataFrame: The asset view
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)
     return store.getStorageFileviewTable()
 
 
 @handle_exceptions
 def get_asset_view_json(
     asset_view_id: str, asset_type: str
-) -> tuple[Union[str, BasicError], int]:
+) -> tuple[str | BasicError, int]:
     """Gets the asset view in json form
 
     Args:
@@ -69,49 +75,53 @@ def get_asset_view_json(
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        tuple[Union[str, BasicError], int]: A tuple
+        tuple[str | BasicError, int]: A tuple
           The first item is either the fileview or an error object
           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
     asset_view = get_asset_view_from_schematic(asset_type)
-    result: Union[str, BasicError] = asset_view.to_json()
+    result: str | BasicError = asset_view.to_json()
     status = 200
     return result, status
 
 
-def get_dataset_files_from_schematic(
+def get_dataset_file_metadata_from_schematic(
     dataset_id: str,
-    asset_type: str,
-    file_names: Optional[list[str]],
+    asset_type: str,  # pylint: disable=unused-argument
+    file_names: list[str] | None,
     use_full_file_path: bool,
-) -> list[tuple[str, str]]:
+) -> list[FileMetadata]:
     """Gets a list of datasets from the project
 
     Args:
-        project_id (str): The id for the project
+        dataset_id (str): The Id for the dataset to get the files from
         asset_type (str): The type of asset, ie "synapse"
+        file_names: (list[str] | None): An optional list of file names to filter the output by
+        use_full_file_path (str): Whether or not to return the full file path of each file
 
     Returns:
-        list[tuple(str, str)]: A list of files in tuple form
+        list[FileMetadata]: A list of file metadata
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getFilesInStorageDataset(
-        datasetId=dataset_id, fileNames=file_names, fullpath=use_full_file_path
+    store = SynapseStorage(access_token=access_token)
+    file_tuple_list = store.getFilesInStorageDataset(
+        datasetId=dataset_id,
+        fileNames=file_names,  # type: ignore
+        fullpath=use_full_file_path,
     )
+    return [FileMetadata(id=item[0], name=item[1]) for item in file_tuple_list]
 
 
 @handle_exceptions
-def get_dataset_files(
+def get_dataset_file_metadata_array(
     dataset_id: str,
-    asset_view_id: str,
     asset_type: str,
-    file_names: Optional[list[str]] = None,
+    asset_view_id: str,
+    file_names: list[str] | None = None,
     use_full_file_path: bool = False,
-) -> tuple[Union[FilesPage, BasicError], int]:
-    """Attempts to get a list of files associated with a dataset
+) -> tuple[FileMetadataArray | BasicError, int]:
+    """Gets file metadata associated with a dataset
 
     Args:
         dataset_id (str): The Id for the dataset to get the files from
@@ -121,26 +131,65 @@ def get_dataset_files(
         use_full_file_path: Whether or not to return the full file path of each file
 
     Returns:
-        tuple[Union[FilesPage, BasicError], int]: A tuple
-          The first item is either the datasets or an error object
+        tuple[FileMetadataArray | BasicError, int]: A tuple
+          The first item is either the file metadata or an error object
           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
-    file_tuples = get_dataset_files_from_schematic(
+    file_metadata_list = get_dataset_file_metadata_from_schematic(
         dataset_id, asset_type, file_names, use_full_file_path
     )
-    files = [File(id=item[0], name=item[1]) for item in file_tuples]
 
-    page = FilesPage(
-        number=0,
-        size=100,
-        total_elements=len(files),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        files=files,
+    result: FileMetadataArray | BasicError = FileMetadataArray(file_metadata_list)
+    status = 200
+
+    return result, status
+
+
+@handle_exceptions
+def get_dataset_file_metadata_page(  # pylint: disable=too-many-arguments
+    dataset_id: str,
+    asset_type: str,
+    asset_view_id: str,
+    file_names: list[str] | None = None,
+    use_full_file_path: bool = False,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[FileMetadataPage | BasicError, int]:
+    """Gets file metadata associated with a dataset
+
+    Args:
+        dataset_id (str): The Id for the dataset to get the files from
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        file_names (list[str] | None): An optional list of file names to filter the output by
+        use_full_file_path: Whether or not to return the full file path of each file
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[FileMetadataPage | BasicError, int]: A tuple
+          The first item is either the file metadata or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    file_metadata_list = get_dataset_file_metadata_from_schematic(
+        dataset_id, asset_type, file_names, use_full_file_path
     )
-    result: Union[FilesPage, BasicError] = page
+
+    page = Page(file_metadata_list, page_number, page_max_items)
+
+    file_page = FileMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        files=page.items,
+    )
+
+    result: FileMetadataPage | BasicError = file_page
     status = 200
 
     return result, status
@@ -163,9 +212,9 @@ def load_manifest_from_synapse_metadata(manifest_data: Any) -> pd.DataFrame:
 
 
 def get_dataset_manifest_from_schematic(
-    asset_type: str, dataset_id: str
+    asset_type: str, dataset_id: str  # pylint: disable=unused-argument
 ) -> pd.DataFrame:
-    """Gets a manifest in pandas.Datframe format
+    """Gets a manifest in pandas.Dataframe format
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
@@ -176,8 +225,7 @@ def get_dataset_manifest_from_schematic(
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
+    store = SynapseStorage(access_token=access_token)
     manifest_data = store.getDatasetManifest(
         datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
     )
@@ -186,8 +234,10 @@ def get_dataset_manifest_from_schematic(
 
 @handle_exceptions
 def get_dataset_manifest_json(
-    asset_type: str, asset_view_id: str, dataset_id: str
-) -> tuple[Union[str, BasicError], int]:
+    asset_type: str,
+    dataset_id: str,
+    asset_view_id: str,
+) -> tuple[str | BasicError, int]:
     """Gets a manifest in json form
 
     Args:
@@ -196,20 +246,22 @@ def get_dataset_manifest_json(
         dataset_id (str): The id of the dataset the manifest is in
 
     Returns:
-        tuple[Union[str, BasicError], int]: A tuple
+        tuple[str | BasicError, int]: A tuple
           The first item is either the manifest or an error object
           The second item is the response status
     """
     CONFIG.synapse_master_fileview_id = asset_view_id
-    mainfest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
-    result: Union[str, BasicError] = mainfest.to_json()
+    manifest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
+    result: str | BasicError = manifest.to_json()
     status = 200
 
     return result, status
 
 
-def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
-    """Gets a manifest in pandas.Datframe format
+def get_manifest_from_schematic(
+    asset_type: str, manifest_id: str  # pylint: disable=unused-argument
+) -> pd.DataFrame:
+    """Gets a manifest in pandas.Dataframe format
 
     Args:
         asset_type (str): The type of asset, ie "synapse"
@@ -219,10 +271,6 @@ def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFra
         pandas.DataFrame: The manifest
     """
     access_token = get_access_token()
-    # This will be used after the synapse storage refactor
-    asset_type_object = get_asset_storage_class(  # pylint: disable=unused-variable
-        asset_type
-    )
     store = SynapseStorage.login(access_token=access_token)
     manifest_download = ManifestDownload(store, manifest_id)
     manifest_data = ManifestDownload.download_manifest(
@@ -234,7 +282,7 @@ def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFra
 @handle_exceptions
 def get_manifest_json(
     asset_type: str, manifest_id: str
-) -> tuple[Union[str, BasicError], int]:
+) -> tuple[str | BasicError, int]:
     """Gets a manifest in json form
 
     Args:
@@ -242,88 +290,40 @@ def get_manifest_json(
         manifest_id (str): The unique id for the manifest file
 
     Returns:
-        tuple[Union[str, BasicError], int]: A tuple
+        tuple[str | BasicError, int]: A tuple
           The first item is either the manifest or an error object
           The second item is the response status
     """
-    mainfest = get_manifest_from_schematic(asset_type, manifest_id)
-    result: Union[str, BasicError] = mainfest.to_json()
+    manifest = get_manifest_from_schematic(asset_type, manifest_id)
+    result: str | BasicError = manifest.to_json()
     status = 200
 
     return result, status
 
 
-def get_projects(asset_type: str) -> list[tuple[str, str]]:
-    """Gets a list of projects
-
-    Args:
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        list[tuple(str, str)]: A list of projects in tuple form
-    """
-    access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getStorageProjects()
-
-
-@handle_exceptions
-def list_projects(
-    asset_view_id: str, asset_type: str
-) -> tuple[Union[ProjectsPage, BasicError], int]:
-    """Attempts to get a list of projects the user has access to
-
-    Args:
-        asset_view_id (str): The id for the asset view of the project
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        tuple[Union[ProjectsPage, BasicError], int]: A tuple
-          The first item is either the projects or an error object
-          The second item is the response status
-    """
-
-    CONFIG.synapse_master_fileview_id = asset_view_id
-    project_tuples = get_projects(asset_type)
-    projects = [Project(id=item[0], name=item[1]) for item in project_tuples]
-
-    page = ProjectsPage(
-        number=0,
-        size=100,
-        total_elements=len(projects),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        projects=projects,
-    )
-    result: Union[ProjectsPage, BasicError] = page
-    status = 200
-
-    return result, status
-
-
-def get_project_datasets(project_id: str, asset_type: str) -> list[tuple[str, str]]:
-    """Gets a list of datasets from the project
+def get_project_dataset_metadata_from_schematic(
+    project_id: str, asset_type: str  # pylint: disable=unused-argument
+) -> list[DatasetMetadata]:
+    """Gets a list of dataset metadata from the project
 
     Args:
         project_id (str): The id for the project
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        list[tuple(str, str)]: A list of datasets in tuple form
+        list[DatasetMetadata]: A list of dataset metadata
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getStorageDatasetsInProject(projectId=project_id)
+    store = SynapseStorage(access_token=access_token)
+    tuples = store.getStorageDatasetsInProject(projectId=project_id)
+    return [DatasetMetadata(id=item[0], name=item[1]) for item in tuples]
 
 
 @handle_exceptions
-def list_storage_project_datasets(
-    project_id: str, asset_view_id: str, asset_type: str
-) -> tuple[Union[DatasetsPage, BasicError], int]:
-    """Attempts to get a list of datasets from a Synapse project
+def get_project_dataset_metadata_array(
+    project_id: str, asset_type: str, asset_view_id: str
+) -> tuple[DatasetMetadataArray | BasicError, int]:
+    """Creates a list of dataset metadata from the project
 
     Args:
         project_id (str): The Id for the project to get datasets from
@@ -331,88 +331,245 @@ def list_storage_project_datasets(
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        tuple[Union[DatasetsPage, BasicError], int]: A tuple
-          The first item is either the datasets or an error object
+        tuple[DatasetMetadataArray | BasicError, int]: A tuple
+          The first item is either the dataset metadata or an error object
           The second item is the response status
     """
 
     CONFIG.synapse_master_fileview_id = asset_view_id
-    dataset_tuples = get_project_datasets(project_id, asset_type)
-    datasets = [Dataset(id=item[0], name=item[1]) for item in dataset_tuples]
-
-    page = DatasetsPage(
-        number=0,
-        size=100,
-        total_elements=len(datasets),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        datasets=datasets,
+    dataset_metadata_list = get_project_dataset_metadata_from_schematic(
+        project_id, asset_type
     )
-    result: Union[DatasetsPage, BasicError] = page
+    result: DatasetMetadataArray | BasicError = DatasetMetadataArray(
+        dataset_metadata_list
+    )
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_project_dataset_metadata_page(
+    project_id: str,
+    asset_type: str,
+    asset_view_id: str,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[DatasetMetadataPage | BasicError, int]:
+    """Creates a page of dataset metadata from the project
+
+    Args:
+        project_id (str): The Id for the project to get datasets from
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[DatasetMetadataPage | BasicError, int]: A tuple
+          The first item is either the dataset metadata or an error object
+          The second item is the response status
+    """
+    # pylint: disable=duplicate-code
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    dataset_metadata_list = get_project_dataset_metadata_from_schematic(
+        project_id, asset_type
+    )
+    page = Page(dataset_metadata_list, page_number, page_max_items)
+
+    dataset_page = DatasetMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        datasets=page.items,
+    )
+
+    result: DatasetMetadataPage | BasicError = dataset_page
     status = 200
 
     return result, status
 
 
-def get_project_manifests(
-    project_id: str, asset_type: str
-) -> list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]:
-    """Gets a list of manifests from the project
+def get_project_manifest_metadata_from_schematic(
+    project_id: str,
+    asset_type: str,  # pylint: disable=unused-argument
+) -> list[ManifestMetadata]:
+    """Gets manifest metadata from the project
 
     Args:
         project_id (str): The id for the project
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
-        list[tuple[tuple[str, str], tuple[str, str], tuple[str, str]]]: A list of manifests
+        list[ManifestMetadata]: A list of manifest metadata
     """
     access_token = get_access_token()
-    asset_type_object = get_asset_storage_class(asset_type)
-    store = asset_type_object(access_token=access_token)
-    return store.getProjectManifests(projectId=project_id)
-
-
-@handle_exceptions
-def list_storage_project_manifests(
-    project_id: str, asset_view_id: str, asset_type: str
-) -> tuple[Union[ManifestsPage, BasicError], int]:
-    """Attempts to get a list of manifests from a Synapse project
-
-    Args:
-        project_id (str): A Synapse id
-        asset_view_id (str): A Synapse id
-        asset_type (str): The type of asset, ie "synapse"
-
-    Returns:
-        tuple[Union[ManifestsPage, BasicError], int]: A tuple
-          The first item is either the manifests or an error object
-          The second item is the response status
-    """
-    # load config
-    CONFIG.synapse_master_fileview_id = asset_view_id
-    project_manifests = get_project_manifests(project_id, asset_type)
-    manifests = [
-        Manifest(
+    store = SynapseStorage(access_token=access_token)
+    manifest_tuple_list = store.getProjectManifests(projectId=project_id)
+    return [
+        ManifestMetadata(
             name=item[1][1],
             id=item[1][0],
             dataset_name=item[0][1],
             dataset_id=item[0][0],
             component_name=item[2][0],
         )
-        for item in project_manifests
+        for item in manifest_tuple_list
     ]
 
-    page = ManifestsPage(
-        number=0,
-        size=100,
-        total_elements=len(manifests),
-        total_pages=1,
-        has_next=False,
-        has_previous=False,
-        manifests=manifests,
+
+@handle_exceptions
+def get_project_manifest_metadata_array(
+    project_id: str,
+    asset_type: str,
+    asset_view_id: str,
+) -> tuple[ManifestMetadataArray | BasicError, int]:
+    """Gets a list of manifest metadata from a project
+
+    Args:
+        project_id (str): The id of the project
+        asset_view_id (str): The id of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[ManifestMetadataArray | BasicError, int]: A tuple
+          The first item is either the manifests or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest_metadata = get_project_manifest_metadata_from_schematic(
+        project_id, asset_type
     )
-    result: Union[ManifestsPage, BasicError] = page
+    result: ManifestMetadataArray | BasicError = ManifestMetadataArray(
+        manifest_metadata
+    )
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_project_manifest_metadata_page(
+    project_id: str,
+    asset_type: str,
+    asset_view_id: str,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[ManifestMetadataPage | BasicError, int]:
+    """Gets a page of manifest metadata from a project
+
+    Args:
+        project_id (str): The id of the project
+        asset_view_id (str): The id of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[ManifestMetadataPage | BasicError, int]: A tuple
+          The first item is either the manifests or an error object
+          The second item is the response status
+    """
+    # load config
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest_metadata = get_project_manifest_metadata_from_schematic(
+        project_id, asset_type
+    )
+
+    page = Page(manifest_metadata, page_number, page_max_items)
+
+    manifest_page = ManifestMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        manifests=page.items,
+    )
+
+    result: ManifestMetadataPage | BasicError = manifest_page
     status = 200
 
+    return result, status
+
+
+def get_project_metadata_from_schematic(
+    asset_type: str,  # pylint: disable=unused-argument
+) -> list[ProjectMetadata]:
+    """Gets a list of projects
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        list[ProjectMetadata]: A list of project metadata
+    """
+    access_token = get_access_token()
+    store = SynapseStorage(access_token=access_token)
+    metadata_tuple_list = store.getStorageProjects()
+    return [ProjectMetadata(id=item[0], name=item[1]) for item in metadata_tuple_list]
+
+
+@handle_exceptions
+def get_project_metadata_array(
+    asset_view_id: str,
+    asset_type: str,
+) -> tuple[ProjectMetadataArray | BasicError, int]:
+    """Gets a list of project metadata the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[ProjectMetadataArray, BasicError, int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_metadata = get_project_metadata_from_schematic(asset_type)
+    result: ProjectMetadataArray | BasicError = ProjectMetadataArray(project_metadata)
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_project_metadata_page(
+    asset_view_id: str,
+    asset_type: str,
+    page_number: int = 1,
+    page_max_items: int = 100_000,
+) -> tuple[ProjectMetadataPage | BasicError, int]:
+    """Gets a list of project metadata the user has access to
+
+    Args:
+        asset_view_id (str): The id for the asset view of the project
+        asset_type (str): The type of asset, ie "synapse"
+        page_number (int): The page number the current request is for
+        page_max_items (int): The maximum number of items per page
+
+    Returns:
+        tuple[ProjectMetadataPage | BasicError, int]: A tuple
+          The first item is either the projects or an error object
+          The second item is the response status
+    """
+
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    project_metadata = get_project_metadata_from_schematic(asset_type)
+    page = Page(project_metadata, page_number, page_max_items)
+    manifest_page = ProjectMetadataPage(
+        number=page.page_number,
+        size=page.page_max_items,
+        total_elements=page.total_items,
+        total_pages=page.total_pages,
+        has_next=page.has_next,
+        has_previous=page.has_previous,
+        projects=page.items,
+    )
+    result: ProjectMetadataPage | BasicError = manifest_page
+    status = 200
     return result, status

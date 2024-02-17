@@ -3,6 +3,7 @@
 @use './lib/challenge-registration/challenge-registration-theme' as challenge-registration;
 @use './lib/featured-challenge-list/featured-challenge-list-theme' as featured-challenge-list;
 @use './lib/challenge-search/challenge-search-theme' as challenge-search;
+@use './lib/statistics-viewer/statistics-viewer-theme' as statistics-viewer;
 
 @mixin theme($theme) {
   @include home.theme($theme);
@@ -10,4 +11,5 @@
   @include challenge-registration.theme($theme);
   @include featured-challenge-list.theme($theme);
   @include challenge-search.theme($theme);
+  @include statistics-viewer.theme($theme);
 }

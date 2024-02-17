@@ -22,6 +22,8 @@ post:
     - $ref: ../components/parameters/query/assetViewIdQuery.yaml
     - $ref: ../components/parameters/query/tableManipulationMethod.yaml
     - $ref: ../components/parameters/query/useSchemaLabel.yaml
+  security:
+    - bearerAuth: []
   responses:
     '200':
       description: Success

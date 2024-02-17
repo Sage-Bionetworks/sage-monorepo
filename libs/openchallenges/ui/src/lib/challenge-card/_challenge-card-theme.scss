@@ -16,37 +16,29 @@
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
-  .star-icon {
-    border-color: transparent;
-    color: map.get($figma, dl-color-default-primary1);
-  }
+  .star-icon,
   .card-icon {
     border-color: transparent;
     color: map.get($figma, dl-color-default-primary1);
   }
-  .status-tag {
-    border-color: map.get($figma, dl-color-default-primary2);
-    background-color: map.get($figma, dl-color-default-hover1);
-    color: #000;
-
-    &.active {
-      border-color: #71c663;
-      background-color: #d0fedd;
+  .card-status{
+    .active {
+      color: #71C663;
     }
-
-    &.completed {
-      border-color: #ffb6c1;
-      background-color: #ffdde2;
+    .completed {
+      color: map.get($figma, dl-color-default-primary1)
     }
-
-    &.upcoming {
-      border-color: #ffc56d;
-      background-color: #fff1bf;
+    .upcoming {
+      color: #FFC56D;
     }
   }
 }
 
-@mixin typography($theme) { }
+@mixin typography($theme) {
+  .card-status span {
+    font-size: 21px;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);

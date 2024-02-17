@@ -4,8 +4,8 @@
 @use 'libs/openchallenges/themes/src/palettes' as palettes;
 @use 'libs/openchallenges/themes/src/index' as openchallenges;
 
-@include mat.legacy-typography-hierarchy(fonts.$lato);
-@include mat.legacy-core();
+@include mat.typography-hierarchy(fonts.$lato);
+@include mat.core();
 
 $primary: mat.define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.define-palette(palettes.$accent-purple-palette, 400);
@@ -16,9 +16,9 @@ $theme: mat.define-light-theme(
       primary: $primary,
       accent: $accent,
     ),
-    typography: (
-      lato: fonts.$lato,
-    ),
+    typography: fonts.$lato,
+    density: 0,
+    is-dark: false,
   )
 );
 
@@ -32,14 +32,17 @@ $theme: map.deep-merge(
   )
 );
 
-// Emit theme-dependent styles for common features used across multiple
-// components.
-@include mat.legacy-core-theme($theme);
+// Emit theme-dependent styles for common features used across multiple components.
+@include mat.core-theme($theme);
 
 // Emit styles for MatButton based on `$theme`.
-@include mat.legacy-button-theme($theme);
-@include mat.legacy-progress-spinner-theme($theme);
-@include mat.legacy-button-typography(fonts.$lato);
+@include mat.button-theme($theme);
 
 // Include the theme mixins for other components you use here.
 @include openchallenges.theme($theme);
+
+:root {
+  --color-btn-primary: #39bde7;
+  --color-btn-disabled: #EBEBE4;
+  --color-btn-shadow: rgba(196, 196, 196, 1);
+}
