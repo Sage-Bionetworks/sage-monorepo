@@ -534,13 +534,6 @@ components:
       minLength: 0
       maxLength: 1000
       example: This is an example description of the challenge.
-    ChallengeOperation:
-      description: The EDAM operation class of the challenge.
-      type: string
-      maxLength: 16
-      pattern: ^$|^operation_\d+$
-      nullable: true
-      example: operation_0004
     ChallengeDoi:
       description: The DOI of the challenge.
       type: string
@@ -548,6 +541,13 @@ components:
       maxLength: 120
       nullable: true
       example: 'https://doi.org/123/abc'
+    ChallengeOperation:
+      description: The EDAM operation class of the challenge.
+      type: string
+      maxLength: 16
+      pattern: ^$|^operation_\d+$
+      nullable: true
+      example: operation_0004
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       type: integer
