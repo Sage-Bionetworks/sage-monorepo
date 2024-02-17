@@ -1,0 +1,16 @@
+type: object
+description: The metadata for a project
+properties:
+  name:
+    type: string
+    description: The name of the project.
+    example: Example project
+  id:
+    type: string
+    description: The ID of the project.
+    example: Syn1
+required:
+  - name
+  - id
+x-java-class-annotations:
+  - '@lombok.Builder'

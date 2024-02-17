@@ -1,19 +1,39 @@
-import { Filter } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeContributionRolesFilterValues,
-  organizationCategoriesFilterValues,
-} from './org-search-filters-values';
+  ChallengeContributionRole,
+  OrganizationCategory,
+  OrganizationSort,
+} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Filter } from '@sagebionetworks/openchallenges/ui';
 
-export const challengeContributionRolesFilter: Filter = {
-  query: 'challengeContributionRoles',
-  label: 'Contribution Role',
-  values: challengeContributionRolesFilterValues,
-  collapsed: false,
-};
+export const challengeContributionRolesFilter: Filter[] = [
+  {
+    value: ChallengeContributionRole.ChallengeOrganizer,
+    label: 'Challenge Organizer',
+  },
+  {
+    value: ChallengeContributionRole.DataContributor,
+    label: 'Data Contributor',
+  },
+  {
+    value: ChallengeContributionRole.Sponsor,
+    label: 'Sponsor',
+  },
+];
 
-export const organizationCategoriesFilter: Filter = {
-  query: 'categories',
-  label: 'Category',
-  values: organizationCategoriesFilterValues,
-  collapsed: false,
-};
+export const organizationCategoriesFilter: Filter[] = [
+  {
+    value: OrganizationCategory.Featured,
+    label: 'Featured',
+  },
+];
+
+export const organizationSortFilter: Filter[] = [
+  {
+    value: OrganizationSort.Relevance,
+    label: 'Relevance',
+  },
+  {
+    value: OrganizationSort.ChallengeCount,
+    label: 'Challenge Count',
+  },
+];

@@ -22,16 +22,14 @@ LOAD DATA LOCAL INFILE '${db_contribution_roles_csv_path}' INTO TABLE challenge_
 LOAD DATA LOCAL INFILE '${db_incentives_csv_path}' INTO TABLE challenge_incentive
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
-  IGNORE 1 LINES
-  SET created_at=NOW();
+  IGNORE 1 LINES;
 
 
 -- challenge_submission_type data
 LOAD DATA LOCAL INFILE '${db_submission_types_csv_path}' INTO TABLE challenge_submission_type
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
-  IGNORE 1 LINES
-  SET created_at=NOW();
+  IGNORE 1 LINES;
 
 
 -- challenge_star data
@@ -58,7 +56,7 @@ VALUES ('1', 1, 1),
 
 
 -- challenge_category data
-INSERT INTO challenge_category (id, challenge_id, category)
-VALUES (1, 161, 'featured'),
-  (2, 156, 'featured'),
-  (3, 58, 'featured');
+LOAD DATA LOCAL INFILE '${db_categories_csv_path}' INTO TABLE challenge_category
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;

@@ -36,8 +36,14 @@
       "options": {
         "context": "apps/schematic/api",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/schematic-api"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
         },
         "push": false
       }
@@ -47,26 +53,19 @@
       "options": {
         "context": "apps/schematic/api",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/schematic-api"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/schematic-api"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
         },
         "push": true
       },
-      "dependsOn": ["build-image"]
-    },
-    "publish-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api:* --quiet) --force"
-      },
-      "dependsOn": ["publish-image"]
-    },
-    "build-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/schematic-api:* --quiet) --force"
-      },
-      "dependsOn": ["build-image"]
+      "dependsOn": [
+        "build-image"
+      ]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -79,13 +78,15 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "xargs rm -fr <.openapi-generator/FILES", 
+          "xargs rm -fr <.openapi-generator/FILES",
           "openapi-generator-cli generate"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "lint": {
       "executor": "nx:run-commands",
@@ -122,18 +123,39 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run tox",
+        "command": "poetry run pytest -m 'not secrets'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test-integration": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest -m 'secrets'",
+        "cwd": "apps/schematic/api"
+      }
+    },
+    "test-all": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest",
         "cwd": "apps/schematic/api"
       }
     },
     "sonar": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh {projectName}",
+        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir .",
         "cwd": "{projectRoot}"
       }
     }
   },
-  "tags": ["type:service", "scope:backend", "language:python", "package-manager:poetry"],
-  "implicitDependencies": ["schematic-api-description"]
+  "tags": [
+    "type:service",
+    "scope:backend",
+    "language:python",
+    "package-manager:poetry"
+  ],
+  "implicitDependencies": [
+    "schematic-api-description"
+  ]
 }

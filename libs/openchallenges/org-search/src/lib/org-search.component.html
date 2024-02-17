@@ -26,7 +26,7 @@
           optionLabel="label"
           optionValue="value"
           scrollHeight="unset"
-          (onChange)="onSortChange()"
+          (onChange)="onParamChange({ sort: sortedBy })"
         ></p-dropdown>
       </div>
     </div>
@@ -39,9 +39,9 @@
         [collapsed]="contributionRolesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="contributionRolesFilter.values"
-          [selectedValues]="selectedContributionRoles"
-          (selectionChange)="onContributionRolesChange($event)"
+          [options]="contributionRolesFilter.options"
+          [selectedOptions]="selectedContributionRoles"
+          (selectionChange)="onParamChange({ challengeContributionRoles: $event })"
           inputId="{{ contributionRolesFilter.query }}"
         />
       </p-panel>
@@ -52,15 +52,17 @@
         [collapsed]="categoriesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [values]="categoriesFilter.values"
-          [selectedValues]="selectedCategories"
-          (selectionChange)="onCategoriesChange($event)"
+          [options]="categoriesFilter.options"
+          [selectedOptions]="selectedCategories"
+          (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
         />
       </p-panel>
     </div>
     <div class="main col">
-      <h3>Results ({{ searchResultsCount }})</h3>
+      <h3>
+        Results <span *ngIf="organizationCards.length > 0">({{ searchResultsCount }})</span>
+      </h3>
       <div class="card-group">
         <openchallenges-organization-card
           *ngFor="let organizationCard of organizationCards"
@@ -68,11 +70,11 @@
         />
       </div>
       <openchallenges-paginator
+        #paginator
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
-        [totalRecords]="searchResultsCount"
-        [itemsPerPage]="[12, 24, 36, 48]"
-        (pageChange)="onPageChange($event)"
+        [totalElements]="searchResultsCount"
+        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows,})"
       />
     </div>
   </section>

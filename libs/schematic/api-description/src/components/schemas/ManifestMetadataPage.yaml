@@ -1,0 +1,15 @@
+type: object
+description: A page of manifest metadata
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      manifests:
+        description: A list of manifest metadata
+        type: array
+        items:
+          $ref: ManifestMetadata.yaml
+    required:
+      - manifests
+x-java-class-annotations:
+  - '@lombok.Builder'

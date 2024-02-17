@@ -12,7 +12,6 @@
 import { ChallengeDirection } from './challengeDirection';
 import { ChallengeCategory } from './challengeCategory';
 import { ChallengeSort } from './challengeSort';
-import { ChallengeDifficulty } from './challengeDifficulty';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeIncentive } from './challengeIncentive';
 import { ChallengeSubmissionType } from './challengeSubmissionType';
@@ -36,10 +35,6 @@ export interface ChallengeSearchQuery {
      */
     sortSeed?: number | null;
     direction?: ChallengeDirection | null;
-    /**
-     * An array of challenge difficulty levels used to filter the results.
-     */
-    difficulties?: Array<ChallengeDifficulty>;
     /**
      * An array of challenge incentive types used to filter the results.
      */

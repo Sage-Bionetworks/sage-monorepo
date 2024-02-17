@@ -6,17 +6,50 @@
       from planning and organizing the challenge to contributing data and providing technical
       support.
     </p>
-    <ng-container *ngIf="organizationCards!.length > 0; else na_text">
-      <div class="card-group">
-        <openchallenges-organization-card
-          *ngFor="let organizationCard of organizationCards"
-          [organizationCard]="organizationCard"
-          [showMember]="false"
-        />
-      </div>
-    </ng-container>
-    <ng-template #na_text>
-      <h4 class="text-grey">Not available</h4>
-    </ng-template>
+    <div id="contributor-organizer">
+      <p class="mat-body-strong"><strong>Challenge Organizers</strong></p>
+      <ng-container *ngIf="organizerCardBundles.length > 0; else no_org">
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let bundle of organizerCardBundles"
+            [organizationCard]="bundle.card"
+            [showMember]="false"
+          />
+        </div>
+      </ng-container>
+      <ng-template #no_org>
+        <p class="text-grey">Not available</p>
+      </ng-template>
+    </div>
+    <div id="contributor-data">
+      <p class="mat-body-strong"><strong>Data Contributors</strong></p>
+      <ng-container *ngIf="dataContributorCardBundles.length > 0; else no_data">
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let bundle of dataContributorCardBundles"
+            [organizationCard]="bundle.card"
+            [showMember]="false"
+          />
+        </div>
+      </ng-container>
+      <ng-template #no_data>
+        <p class="text-grey">Not available</p>
+      </ng-template>
+    </div>
+    <div id="contributor-sponsor">
+      <p class="mat-body-strong"><strong>Sponsors</strong></p>
+      <ng-container *ngIf="sponsorCardBundles.length > 0; else no_sponsor">
+        <div class="card-group">
+          <openchallenges-organization-card
+            *ngFor="let bundle of sponsorCardBundles"
+            [organizationCard]="bundle.card"
+            [showMember]="false"
+          />
+        </div>
+      </ng-container>
+      <ng-template #no_sponsor>
+        <p class="text-grey">Not available</p>
+      </ng-template>
+    </div>
   </div>
 </main>

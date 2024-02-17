@@ -21,6 +21,7 @@ body:
       multiple: true
       options:
         - Agora
+        - iAtlas
         - OpenChallenges
         - Sage Monorepo
         - Schematic

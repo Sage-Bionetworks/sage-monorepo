@@ -6,8 +6,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT # optional, arbitrary value for documentation purposes
-security:
-  - bearerAuth: []
 info:
   title: Schematic REST API
   version: 0.1.0
@@ -28,29 +26,44 @@ paths:
   /schematicVersion:
     $ref: paths/schematicVersion.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/datasets:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/datasets.yaml
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasetMetadataArray.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects/{projectId}/manifests:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects/@{projectId}/manifests.yaml
+  /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/datasetMetadataPage.yaml
+
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifestMetadataArray.yaml
+
+  /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/projects/@{projectId}/manifestMetadataPage.yaml
 
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/json.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/manifestJson:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/manifestJson.yaml
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/manifestJson.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/projects:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projects.yaml
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projectMetadataArray.yaml
 
-  /assetTypes/{assetType}/assetViews/{assetViewId}/datasets/{datasetId}/files:
-    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/datasets/@{datasetId}/files.yaml
+  /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/assetViews/@{assetViewId}/projectMetadataPage.yaml
+
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/fileMetadataArray.yaml
+
+  /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
+    $ref: paths/assetTypes/@{assetType}/datasets/@{datasetId}/fileMetadataPage.yaml
 
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     $ref: paths/assetTypes/@{assetType}/manifests/@{manifestId}/json.yaml
 
-  /nodes/{nodeLabel}/dependencies:
-    $ref: paths/nodes/@{nodeLabel}/dependencies.yaml
+  /nodes/{nodeLabel}/dependencyArray:
+    $ref: paths/nodes/@{nodeLabel}/dependencyArray.yaml
+
+  /nodes/{nodeLabel}/dependencyPage:
+    $ref: paths/nodes/@{nodeLabel}/dependencyPage.yaml
 
   /nodes/{nodeDisplay}/isRequired:
     $ref: paths/nodes/@{nodeDisplay}/isRequired.yaml
@@ -70,8 +83,11 @@ paths:
   /schemaAttributes:
     $ref: paths/schemaAttributes.yaml
 
-  /connectedNodes:
-    $ref: paths/connectedNodes.yaml
+  /connectedNodePairArray:
+    $ref: paths/connectedNodePairArray.yaml
+
+  /connectedNodePairPage:
+    $ref: paths/connectedNodePairPage.yaml
 
   /validateManifestJson:
     $ref: paths/validateManifestJson.yaml
@@ -90,3 +106,6 @@ paths:
 
   /tangledTreeText:
     $ref: paths/tangledTreeText.yaml
+
+  /generateGoogleSheetManifests:
+    $ref: paths/generateGoogleSheetManifests.yaml

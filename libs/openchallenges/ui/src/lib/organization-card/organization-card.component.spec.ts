@@ -54,14 +54,4 @@ describe('OrganizationCardComponent', () => {
       size: 160,
     });
   });
-
-  // it('login property of org should be used for orgAvatar name', () => {
-  //   component.organization.name = '';
-  //   fixture.detectChanges();
-  //   expect(component.organizationAvatar).toEqual({
-  //     name: MOCK_ORGANIZATIONS[0].login.replace(/-/g, ' '),
-  //     src: '',
-  //     size: 160,
-  //   });
-  // });
 });

@@ -1,7 +1,7 @@
 <p-multiSelect
-  [options]="values"
-  [(ngModel)]="selectedValues"
-  (onChange)="onChange(selectedValues)"
+  [options]="options"
+  [(ngModel)]="selectedOptions"
+  (onChange)="onChange(selectedOptions)"
   [placeholder]="placeholder"
   [maxSelectedLabels]="2"
   selectedItemsLabel="{0} items selected"
@@ -24,10 +24,10 @@
     </div>
   </ng-template>
   <!-- custom list items -->
-  <ng-template let-value pTemplate="values">
+  <ng-template let-option pTemplate="options">
     <div class="item-container">
-      <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(value)"/>
-      <span class="item-label">{{ value.label }}</span>
+      <openchallenges-avatar *ngIf="showAvatar" [avatar]="getAvatar(option)" />
+      <span class="item-label">{{ option.label }}</span>
     </div>
   </ng-template>
 </p-multiSelect>

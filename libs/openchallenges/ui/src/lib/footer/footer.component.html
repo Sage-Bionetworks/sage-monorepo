@@ -7,17 +7,19 @@
         alt="OpenChallenges"
       />
       <ul class="footer-link-group">
-        <li><a href="/about">About</a></li>
-        <li><a href="/team">Meet Our Team</a></li>
+        <li><a routerLink="/about">About</a></li>
+        <li><a routerLink="/team">Meet Our Team</a></li>
         <li>
-          <a 
+          <a
             [href]="apiDocsUrl"
             title="Interactive documentation for OC API"
             rel="noopener noreferrer"
             target="_blank"
-            >API Docs</a></li>
+            >API Docs</a
+          >
+        </li>
         <li>
-          <a 
+          <a
             href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose"
             title="Share feedback about the OC app"
             rel="noopener noreferrer"
@@ -29,10 +31,9 @@
     </div>
     <div class="col-4 app-info">
       <ul>
+        <li><img height="55px" [src]="(sageLogo$ | async)?.url" alt="Sage Bionetworks"/></li>
         <li>App version: {{ appVersion }}</li>
         <li>Data updated on: {{ dataUpdatedOn }}</li>
-        <li>Code licensed under Apache License 2.0</li>
-        <li>Documentation licensed under CC-BY 4.0</li>
       </ul>
     </div>
   </div>

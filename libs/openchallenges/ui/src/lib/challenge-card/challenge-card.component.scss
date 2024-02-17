@@ -13,10 +13,22 @@
   cursor: pointer;
 }
 .card-body {
-  min-height: 160px;
+  min-height: 190px;
 }
 .card-banner {
   height: 100%;
+}
+.card-status {
+  div:first-child {
+    margin-right: 5px;
+  }
+  min-height: 58px;
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 // FOOTER
@@ -25,18 +37,4 @@
   align-items: center;
   flex: 1;
   @include general.line-clamp(2);
-}
-.status-tag {
-  max-width: 110px;
-  margin-left: 6px;
-  padding: 4px 0;
-  display: flex;
-  flex-direction: column;
-  flex-basis: 100%;
-  box-sizing: border-box;
-  align-items: center;
-  justify-content: center;
-  border-width: 1px;
-  border-style: solid;
-  border-radius: constants.$dl-radius-radius-radius16;
 }

@@ -26,6 +26,23 @@
       },
       "dependsOn": []
     }
+    // "build-image": {
+    //   "executor": "@nx-tools/nx-container:build",
+    //   "options": {
+    //     "context": "apps/openchallenges/notebook",
+    //     "metadata": {
+    //       "images": ["ghcr.io/sage-bionetworks/openchallenges-notebook"],
+    //       "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+    //     },
+    //     "push": false
+    //   }
+    // },
+    // "serve-detach": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "command": "docker/openchallenges/serve-detach.sh openchallenges-notebook"
+    //   }
+    // }
   },
   "tags": ["type:app", "scope:client"],
   "implicitDependencies": []

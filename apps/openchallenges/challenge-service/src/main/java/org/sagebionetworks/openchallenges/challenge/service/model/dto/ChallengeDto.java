@@ -31,28 +31,25 @@ public class ChallengeDto {
   private String name;
 
   @JsonProperty("headline")
-  private String headline;
+  private String headline = null;
 
   @JsonProperty("description")
   private String description;
 
   @JsonProperty("doi")
-  private String doi;
+  private String doi = null;
 
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
-  @JsonProperty("difficulty")
-  private ChallengeDifficultyDto difficulty;
-
   @JsonProperty("platform")
-  private SimpleChallengePlatformDto platform;
+  private SimpleChallengePlatformDto platform = null;
 
   @JsonProperty("websiteUrl")
-  private String websiteUrl;
+  private String websiteUrl = null;
 
   @JsonProperty("avatarUrl")
-  private String avatarUrl;
+  private String avatarUrl = null;
 
   @JsonProperty("incentives")
   @Valid
@@ -65,6 +62,10 @@ public class ChallengeDto {
   @JsonProperty("inputDataTypes")
   @Valid
   private List<SimpleChallengeInputDataTypeDto> inputDataTypes = null;
+
+  @JsonProperty("categories")
+  @Valid
+  private List<ChallengeCategoryDto> categories = new ArrayList<>();
 
   @JsonProperty("startDate")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
@@ -115,17 +116,17 @@ public class ChallengeDto {
   }
 
   /**
-   * The slug of the challenge.
+   * The unique slug of the challenge.
    *
    * @return slug
    */
   @NotNull
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 60)
+  @Size(min = 3, max = 255)
   @Schema(
       name = "slug",
       example = "awesome-challenge",
-      description = "The slug of the challenge.",
+      description = "The unique slug of the challenge.",
       required = true)
   public String getSlug() {
     return slug;
@@ -146,7 +147,7 @@ public class ChallengeDto {
    * @return name
    */
   @NotNull
-  @Size(min = 3, max = 60)
+  @Size(min = 3, max = 255)
   @Schema(name = "name", description = "The name of the challenge.", required = true)
   public String getName() {
     return name;
@@ -191,7 +192,7 @@ public class ChallengeDto {
    * @return description
    */
   @NotNull
-  @Size(min = 0, max = 280)
+  @Size(min = 0, max = 1000)
   @Schema(
       name = "description",
       example = "This is an example description of the challenge.",
@@ -211,11 +212,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get doi
+   * The DOI of the challenge.
    *
    * @return doi
    */
-  @Schema(name = "doi", required = false)
+  @Size(max = 120)
+  @Schema(
+      name = "doi",
+      example = "https://doi.org/123/abc",
+      description = "The DOI of the challenge.",
+      required = false)
   public String getDoi() {
     return doi;
   }
@@ -245,27 +251,6 @@ public class ChallengeDto {
     this.status = status;
   }
 
-  public ChallengeDto difficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-    return this;
-  }
-
-  /**
-   * Get difficulty
-   *
-   * @return difficulty
-   */
-  @NotNull
-  @Valid
-  @Schema(name = "difficulty", required = true)
-  public ChallengeDifficultyDto getDifficulty() {
-    return difficulty;
-  }
-
-  public void setDifficulty(ChallengeDifficultyDto difficulty) {
-    this.difficulty = difficulty;
-  }
-
   public ChallengeDto platform(SimpleChallengePlatformDto platform) {
     this.platform = platform;
     return this;
@@ -276,9 +261,8 @@ public class ChallengeDto {
    *
    * @return platform
    */
-  @NotNull
   @Valid
-  @Schema(name = "platform", required = true)
+  @Schema(name = "platform", required = false)
   public SimpleChallengePlatformDto getPlatform() {
     return platform;
   }
@@ -293,11 +277,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get websiteUrl
+   * A URL to the website or image.
    *
    * @return websiteUrl
    */
-  @Schema(name = "websiteUrl", required = false)
+  @Size(max = 500)
+  @Schema(
+      name = "websiteUrl",
+      example = "https://openchallenges.io",
+      description = "A URL to the website or image.",
+      required = false)
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -312,11 +301,16 @@ public class ChallengeDto {
   }
 
   /**
-   * Get avatarUrl
+   * A URL to the website or image.
    *
    * @return avatarUrl
    */
-  @Schema(name = "avatarUrl", required = false)
+  @Size(max = 500)
+  @Schema(
+      name = "avatarUrl",
+      example = "https://openchallenges.io",
+      description = "A URL to the website or image.",
+      required = false)
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -411,6 +405,35 @@ public class ChallengeDto {
     this.inputDataTypes = inputDataTypes;
   }
 
+  public ChallengeDto categories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+    return this;
+  }
+
+  public ChallengeDto addCategoriesItem(ChallengeCategoryDto categoriesItem) {
+    if (this.categories == null) {
+      this.categories = new ArrayList<>();
+    }
+    this.categories.add(categoriesItem);
+    return this;
+  }
+
+  /**
+   * Get categories
+   *
+   * @return categories
+   */
+  @NotNull
+  @Valid
+  @Schema(name = "categories", required = true)
+  public List<ChallengeCategoryDto> getCategories() {
+    return categories;
+  }
+
+  public void setCategories(List<ChallengeCategoryDto> categories) {
+    this.categories = categories;
+  }
+
   public ChallengeDto startDate(LocalDate startDate) {
     this.startDate = startDate;
     return this;
@@ -465,13 +488,15 @@ public class ChallengeDto {
   }
 
   /**
-   * The number of times the challenge has been starred by users.
+   * The number of times the challenge has been starred by users. minimum: 0
    *
    * @return starredCount
    */
   @NotNull
+  @Min(0)
   @Schema(
       name = "starredCount",
+      example = "100",
       description = "The number of times the challenge has been starred by users.",
       required = true)
   public Integer getStarredCount() {
@@ -488,13 +513,17 @@ public class ChallengeDto {
   }
 
   /**
-   * Get createdAt
+   * Datetime when the object was added to the database.
    *
    * @return createdAt
    */
   @NotNull
   @Valid
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "createdAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when the object was added to the database.",
+      required = true)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -509,13 +538,17 @@ public class ChallengeDto {
   }
 
   /**
-   * Get updatedAt
+   * Datetime when the object was last modified in the database.
    *
    * @return updatedAt
    */
   @NotNull
   @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(
+      name = "updatedAt",
+      example = "2022-07-04T22:19:11Z",
+      description = "Datetime when the object was last modified in the database.",
+      required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -540,13 +573,13 @@ public class ChallengeDto {
         && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.doi, challenge.doi)
         && Objects.equals(this.status, challenge.status)
-        && Objects.equals(this.difficulty, challenge.difficulty)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.websiteUrl, challenge.websiteUrl)
         && Objects.equals(this.avatarUrl, challenge.avatarUrl)
         && Objects.equals(this.incentives, challenge.incentives)
         && Objects.equals(this.submissionTypes, challenge.submissionTypes)
         && Objects.equals(this.inputDataTypes, challenge.inputDataTypes)
+        && Objects.equals(this.categories, challenge.categories)
         && Objects.equals(this.startDate, challenge.startDate)
         && Objects.equals(this.endDate, challenge.endDate)
         && Objects.equals(this.starredCount, challenge.starredCount)
@@ -564,13 +597,13 @@ public class ChallengeDto {
         description,
         doi,
         status,
-        difficulty,
         platform,
         websiteUrl,
         avatarUrl,
         incentives,
         submissionTypes,
         inputDataTypes,
+        categories,
         startDate,
         endDate,
         starredCount,
@@ -589,13 +622,13 @@ public class ChallengeDto {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    difficulty: ").append(toIndentedString(difficulty)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");
     sb.append("    avatarUrl: ").append(toIndentedString(avatarUrl)).append("\n");
     sb.append("    incentives: ").append(toIndentedString(incentives)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");

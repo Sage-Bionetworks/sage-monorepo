@@ -1,7 +1,6 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-
 @mixin color($theme) {
   $config: mat.get-color-config($theme);
   $primary: map.get($config, 'primary');
@@ -12,15 +11,20 @@
     color: white;
 
     .btn-block {
-      background-color:  mat.get-color-from-palette($accent);
+      color: white;
+      background-color: mat.get-color-from-palette($accent);
     }
     .btn-block:hover {
-      background-color:  mat.get-color-from-palette($accent, 500);
+      background-color: mat.get-color-from-palette($accent, 500);
     }
   }
 }
 
-@mixin typography($theme) {}
+@mixin typography($theme) {
+  #organizer-cta .btn-block {
+    text-transform: uppercase;
+  }
+}
 
 @mixin theme($theme) {
   $color-config: mat.get-color-config($theme);

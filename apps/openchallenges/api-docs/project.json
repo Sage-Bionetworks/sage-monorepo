@@ -36,37 +36,39 @@
       "options": {
         "context": "apps/openchallenges/api-docs",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-api-docs"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/openchallenges-api-docs"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
         },
         "push": false
-      }
+      },
+      "dependsOn": [
+        "build"
+      ]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/api-docs",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-api-docs"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/openchallenges-api-docs"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
         },
         "push": true
       },
-      "dependsOn": ["build-image"]
-    },
-    "publish-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-docs:* --quiet) --force"
-      },
-      "dependsOn": ["publish-image"]
-    },
-    "build-and-remove-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker rmi $(docker images --filter=reference=ghcr.io/sage-bionetworks/openchallenges-api-docs:* --quiet) --force"
-      },
-      "dependsOn": ["build-image"]
+      "dependsOn": [
+        "build-image"
+      ]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -76,6 +78,11 @@
       }
     }
   },
-  "tags": ["type:docs", "scope:backend"],
-  "implicitDependencies": ["openchallenges-api-description"]
+  "tags": [
+    "type:docs",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "openchallenges-api-description"
+  ]
 }

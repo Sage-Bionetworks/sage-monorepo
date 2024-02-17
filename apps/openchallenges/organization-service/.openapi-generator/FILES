@@ -17,4 +17,3 @@ src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/OrganizationsPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/organization/service/model/dto/PageMetadataDto.java
 src/main/resources/openapi.yaml
-src/test/java/org/sagebionetworks/openchallenges/organization/service/OpenApiGeneratorApplicationTests.java
