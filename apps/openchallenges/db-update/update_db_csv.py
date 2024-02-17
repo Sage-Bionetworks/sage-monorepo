@@ -212,6 +212,12 @@ def main(gc):
     categories = get_challenge_categories(wks)
     output_csv(categories, "categories.csv", output_folder=CHALLENGE_FOLDER)
 
+    edam_terms = get_edam_terms(wks)
+    output_csv(edam_terms, "edam_terms.csv", output_folder=CHALLENGE_FOLDER)
+    
+    edam_annotations = get_edam_annotations(wks)
+    output_csv(edam_annotations, "challenge_data_edam.csv", output_folder=CHALLENGE_FOLDER)
+
     organizations = get_organization_data(wks)
     output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
 
