@@ -49,6 +49,12 @@
             <span class="text-grey">Not available</span>
           </ng-template>
         </tr>
+        <!-- <tr>
+          <td class="text-right">EDAM Operation Class</td>
+          <td [ngClass]="{ 'text-grey': challenge.operationId === null }">
+            {{ useNaIfFalsey(challenge.operationId) }}
+          </td>
+        </tr> -->
         <tr>
           <td class="text-right">Submission Type</td>
           <td
