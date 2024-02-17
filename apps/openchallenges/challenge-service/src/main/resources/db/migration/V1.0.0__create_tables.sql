@@ -37,7 +37,7 @@ CREATE TABLE `challenge`
     `status`                ENUM('upcoming', 'active', 'completed'),
     `platform_id`           int,
     `doi`                   varchar(120),
-    `operation`             varchar(16),
+    `operation_id`             varchar(16),
     `start_date`            DATE,
     `end_date`              DATE,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,

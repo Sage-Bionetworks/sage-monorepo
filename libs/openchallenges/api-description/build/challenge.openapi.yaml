@@ -389,7 +389,7 @@ components:
       maxLength: 120
       nullable: true
       example: https://doi.org/123/abc
-    ChallengeOperation:
+    ChallengeOperationId:
       description: The EDAM operation class of the challenge.
       type: string
       maxLength: 16
@@ -495,8 +495,8 @@ components:
           $ref: '#/components/schemas/ChallengeDescription'
         doi:
           $ref: '#/components/schemas/ChallengeDoi'
-        operation:
-          $ref: '#/components/schemas/ChallengeOperation'
+        operationId:
+          $ref: '#/components/schemas/ChallengeOperationId'
         status:
           $ref: '#/components/schemas/ChallengeStatus'
         platform:
