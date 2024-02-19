@@ -109,6 +109,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
             df[df.notebook_submission == "TRUE"][["id", "created_at"]].assign(
                 submission_types="notebook"
             ),
+            df[df.mlcube_submission == "TRUE"][["id", "created_at"]].assign(
+                submission_types="mlcube"
+            ),
             df[df.other_submission == "TRUE"][["id", "created_at"]].assign(
                 submission_types="other"
             ),
@@ -116,7 +119,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
     ).rename(columns={"id": "challenge_id"})
     sub_types["submission_types"] = pd.Categorical(
         sub_types["submission_types"],
-        categories=["prediction_file", "container_image", "notebook", "other"],
+        categories=["prediction_file", "container_image", "notebook", "mlcube", "other"],
     )
     sub_types = sub_types.sort_values(["challenge_id", "submission_types"])
     sub_types.index = np.arange(1, len(sub_types) + 1)
