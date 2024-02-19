@@ -407,6 +407,7 @@ components:
       - container_image
       - prediction_file
       - notebook
+      - mlcube
       - other
       example: container_image
       type: string
