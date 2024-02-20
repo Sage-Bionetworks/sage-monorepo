@@ -25,8 +25,11 @@ from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.models.file_metadata_array import FileMetadataArray
 import schematic_api.controllers.storage_controller_impl
 from schematic_api.controllers.storage_controller_impl import (
+    get_dataset_manifest_csv,
     get_dataset_manifest_json,
+    get_manifest_csv,
     get_manifest_json,
+    get_asset_view_csv,
     get_asset_view_json,
     get_dataset_file_metadata_array,
     get_dataset_file_metadata_page,
@@ -37,6 +40,36 @@ from schematic_api.controllers.storage_controller_impl import (
     get_project_manifest_metadata_array,
     get_project_manifest_metadata_page,
 )
+
+
+class TestGetAssetViewCsv:
+    """Test case for get_asset_view_csv"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            return_value=pd.DataFrame({"col1": [1, 2], "col2": [3, 4]}),
+        ):
+            result, status = get_asset_view_csv(
+                asset_type="synapse", asset_view_id="syn1"
+            )
+            assert status == 200
+            assert result.endswith("asset_view.csv")
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_asset_view_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_asset_view_csv(
+                asset_type="synapse", asset_view_id="syn1"
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
 
 
 class TestGetAssetViewJson:
@@ -262,6 +295,36 @@ class TestGetDatasetFileMetadataPage:
             assert isinstance(result, BasicError)
 
 
+class TestGetDatasetManifestCsv:
+    """Test case for get_dataset_manifest_csv"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_manifest_from_schematic",
+            return_value=pd.DataFrame({"col1": [1, 2], "col2": [3, 4]}),
+        ):
+            result, status = get_dataset_manifest_csv(
+                asset_type="synapse", dataset_id="syn1", asset_view_id="syn2"
+            )
+            assert status == 200
+            assert result.endswith("manifest.csv")
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_dataset_manifest_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_dataset_manifest_csv(
+                asset_type="synapse", dataset_id="syn1", asset_view_id="syn2"
+            )
+            assert status == 500
+            assert isinstance(result, BasicError)
+
+
 class TestGetDatasetManifestJson:
     """Test case for get_dataset_manifest_json"""
 
@@ -327,6 +390,32 @@ class TestGetDatasetManifestJson:
             result, status = get_dataset_manifest_json(
                 asset_type="synapse", dataset_id="syn1", asset_view_id="syn2"
             )
+            assert status == 500
+            assert isinstance(result, BasicError)
+
+
+class TestGetManifestCsv:
+    """Test case for get_manifest_csv"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_manifest_from_schematic",
+            return_value=pd.DataFrame({"col1": [1, 2], "col2": [3, 4]}),
+        ):
+            result, status = get_manifest_csv(asset_type="synapse", manifest_id="syn1")
+            assert status == 200
+            assert result.endswith("manifest.csv")
+
+    def test_internal_error(self) -> None:
+        """Test for 500 result"""
+        with patch.object(
+            schematic_api.controllers.storage_controller_impl,
+            "get_manifest_from_schematic",
+            side_effect=TypeError,
+        ):
+            result, status = get_manifest_csv(asset_type="synapse", manifest_id="syn1")
             assert status == 500
             assert isinstance(result, BasicError)
 

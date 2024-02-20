@@ -1,9 +1,11 @@
 """Implementation of all endpoints"""
 import os
-from typing import Callable, Any
+from typing import Callable
+import tempfile
 
 
 import pandas as pd
+import synapseclient  # type: ignore
 from schematic.store.synapse import SynapseStorage, ManifestDownload, load_df  # type: ignore
 from schematic import CONFIG  # type: ignore
 
@@ -65,13 +67,38 @@ def get_asset_view_from_schematic(
 
 
 @handle_exceptions
+def get_asset_view_csv(
+    asset_view_id: str, asset_type: str
+) -> tuple[str | BasicError, int]:
+    """Gets the asset view in csv form
+
+    Args:
+        asset_view_id (str): The id of the asset view
+        asset_type (str): The type of asset, ie "synapse"
+
+    Returns:
+        tuple[str | BasicError, int]: A tuple
+          The first item is either the the path of the file or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    asset_view = get_asset_view_from_schematic(asset_type)
+    with tempfile.NamedTemporaryFile(
+        delete=False, suffix=".asset_view.csv"
+    ) as tmp_file:
+        export_path = tmp_file.name
+        asset_view.to_csv(tmp_file.name, index=False)
+    return export_path, 200
+
+
+@handle_exceptions
 def get_asset_view_json(
     asset_view_id: str, asset_type: str
 ) -> tuple[str | BasicError, int]:
     """Gets the asset view in json form
 
     Args:
-        asset_view_id (str): The d of the asset view
+        asset_view_id (str): The id of the asset view
         asset_type (str): The type of asset, ie "synapse"
 
     Returns:
@@ -195,11 +222,14 @@ def get_dataset_file_metadata_page(  # pylint: disable=too-many-arguments
     return result, status
 
 
-def load_manifest_from_synapse_metadata(manifest_data: Any) -> pd.DataFrame:
+def load_manifest_from_synapse_metadata(
+    manifest_data: synapseclient.File,
+) -> pd.DataFrame:
     """Loads a manifest from a csv file
 
     Args:
-        manifest_data (Any): Manifest metadata from doing syanpseclient.get on a file entity
+        manifest_data (synapseclient.File):
+          Manifest metadata from doing syanpseclient.get on a file entity
 
     Returns:
         pandas.DataFrame: The manifest
@@ -229,7 +259,34 @@ def get_dataset_manifest_from_schematic(
     manifest_data = store.getDatasetManifest(
         datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
     )
+    assert isinstance(manifest_data, synapseclient.File)
     return load_manifest_from_synapse_metadata(manifest_data)
+
+
+@handle_exceptions
+def get_dataset_manifest_csv(
+    asset_type: str,
+    dataset_id: str,
+    asset_view_id: str,
+) -> tuple[str | BasicError, int]:
+    """Gets a manifest in csv file form
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        asset_view_id (str): The id of the asst view the dataset is in
+        dataset_id (str): The id of the dataset the manifest is in
+
+    Returns:
+        tuple[str | BasicError, int]: A tuple
+          The first item is either the path of the manifest or an error object
+          The second item is the response status
+    """
+    CONFIG.synapse_master_fileview_id = asset_view_id
+    manifest = get_dataset_manifest_from_schematic(asset_type, dataset_id)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".manifest.csv") as tmp_file:
+        export_path = tmp_file.name
+        manifest.to_csv(tmp_file.name, index=False)
+    return export_path, 200
 
 
 @handle_exceptions
@@ -276,7 +333,28 @@ def get_manifest_from_schematic(
     manifest_data = ManifestDownload.download_manifest(
         manifest_download, "manifest.csv"
     )
+    assert isinstance(manifest_data, synapseclient.File)
     return load_manifest_from_synapse_metadata(manifest_data)
+
+
+@handle_exceptions
+def get_manifest_csv(asset_type: str, manifest_id: str) -> tuple[str | BasicError, int]:
+    """Gets a manifest in json form
+
+    Args:
+        asset_type (str): The type of asset, ie "synapse"
+        manifest_id (str): The unique id for the manifest file
+
+    Returns:
+        tuple[str | BasicError, int]: A tuple
+          The first item is either the path to the manifest or an error object
+          The second item is the response status
+    """
+    manifest = get_manifest_from_schematic(asset_type, manifest_id)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".manifest.csv") as tmp_file:
+        export_path = tmp_file.name
+        manifest.to_csv(tmp_file.name, index=False)
+    return export_path, 200
 
 
 @handle_exceptions

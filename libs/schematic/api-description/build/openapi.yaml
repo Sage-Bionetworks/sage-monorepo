@@ -190,6 +190,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/csv:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets the asset view table in csv file form
+      description: Gets the asset view table in csv file form
+      operationId: getAssetViewCsv
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
     parameters:
       - $ref: '#/components/parameters/assetType'
@@ -211,6 +240,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestCsv:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/datasetId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in csv form
+      description: Gets the manifest in csv form
+      operationId: getDatasetManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -369,6 +429,35 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/manifests/{manifestId}/csv:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/manifestId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in csv form
+      description: Gets the manifest in csv form
+      operationId: getManifestCsv
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
