@@ -1,7 +1,5 @@
 # ref: https://github.com/github/gitignore/blob/master/R.gitignore
 
-openapi-generator-cli.jar
-
 # History files
 .Rhistory
 .Rapp.history

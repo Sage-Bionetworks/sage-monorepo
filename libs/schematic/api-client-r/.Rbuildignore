@@ -1,5 +1,3 @@
-^renv$
-^renv\.lock$
 ^.*\.Rproj$         # Designates the directory as an RStudio Project
 ^\.Rproj\.user$     # Used by RStudio for temporary files
 ^README\.Rmd$       # An Rmd file used to generate README.md
@@ -20,6 +18,3 @@
 ^git_push\.sh$
 ^openapi\.Rcheck$
 ^\.\.Rcheck$
-openapi-generator-cli.jar
-openapitools.json
-project.json
