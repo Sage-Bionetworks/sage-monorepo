@@ -65,6 +65,12 @@ sc_umap_server <- function(
                                       )%>%
                                     add_title_subplot_plotly(dataset_display()[[x]])%>%
                                     plotly::layout(
+                                      xaxis = list(zeroline = F,
+                                                   showgrid = F,
+                                                   showticklabels = F),
+                                      yaxis = list(zeroline = F,
+                                                   showgrid = F,
+                                                   showticklabels = F),
                                       margin = list(b = 10, t = 70),
                                       plot_bgcolor  = "rgb(250, 250, 250)"
                                     )
