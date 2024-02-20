@@ -16,7 +16,6 @@ CREATE TABLE `challenge_platform`
 
 CREATE TABLE `edam_ontology_term`
 (
-    `id`                    int NOT NULL AUTO_INCREMENT,
     `edam_id`               varchar(16) NOT NULL UNIQUE,
     `name`                  varchar(80) NOT NULL UNIQUE,
     `subclass_of`           varchar(60),
