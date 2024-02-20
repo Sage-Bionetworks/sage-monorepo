@@ -7,8 +7,10 @@
 /apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @vpchung @gaiaandreoletti
 /apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @vpchung @gaiaandreoletti
 
+# Schematic
 /apps/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage
 /libs/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage
+/libs/schematic/api-client-r/ @andrewelamb @lakikowolfe @afwillia
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
