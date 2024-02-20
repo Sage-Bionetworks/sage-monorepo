@@ -2,7 +2,7 @@ get_io_overview_table <- function(values_for_group1){
   values_for_group1 %>%
   dplyr::group_by(dataset_display, Order = tag_order, Group = tag_short_display) %>%
   dplyr::mutate(dataset_display = sub("\\ -.*", "", dataset_display)) %>%
-  dplyr::summarise(n = dplyr::n_distinct(sample_name)) %>%
+  dplyr::summarise(n = dplyr::n_distinct(sample_name), .groups = "keep") %>%
   tidyr::pivot_wider(
     names_from = dataset_display,
     values_from = n)
