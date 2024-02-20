@@ -12,21 +12,21 @@
 
 
 /**
- * A challenge input data type.
+ * A challenge EDAM annotation.
  */
 export interface ChallengeInputDataType { 
     /**
-     * The unique identifier of a challenge input data type.
+     * The prefix Internationalized Resource Identifier (IRI) of the EDAM ontology term.
      */
-    id: number;
+    edamId: string;
     /**
-     * The slug of the challenge input data type.
-     */
-    slug: string;
-    /**
-     * The name of the challenge input data type.
+     * The preferred name/label of the EDAM ontology term.
      */
     name: string;
+    /**
+     * The parent EDAM ID(s) of the EDAM ontology term.
+     */
+    subclassOf?: string | null;
     createdAt: string;
     updatedAt: string;
 }
