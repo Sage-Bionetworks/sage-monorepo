@@ -185,7 +185,7 @@ def get_roles(wks, sheet_name="contribution_role"):
 def get_edam_terms(wks, sheet_name="edam_terms"):
     """Get list of EDAM terms currently used in the DB."""
     return pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")[
-        ["id", "edam_id", "name", "subclass_of", "created_at", "updated_at"]
+        ["edam_id", "name", "subclass_of", "created_at", "updated_at"]
     ]
 
 
