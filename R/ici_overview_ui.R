@@ -20,9 +20,9 @@ ici_overview_ui <- function(id){
         ns("data_group"),
         "Select the type of data for more information",
         choices = c(
-          "ici",
-          "cancer genomics",
-          "single-cell RNA-Seq"
+          "Immune Checkpoint Inhibitors datasets" = "ici",
+          "Cancer Genomics datasets" = "cancer genomics",
+          "Single-cell RNA-Seq datasets" = "single-cell RNA-Seq"
         ),
         selected = "ici"
       )
