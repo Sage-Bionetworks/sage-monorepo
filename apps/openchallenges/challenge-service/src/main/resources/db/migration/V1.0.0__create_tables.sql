@@ -77,7 +77,7 @@ CREATE TABLE `challenge_incentive`
 CREATE TABLE `challenge_submission_type`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `name`                  ENUM('container_image', 'prediction_file', 'notebook', 'other'),
+    `name`                  ENUM('container_image', 'prediction_file', 'notebook', 'mlcube', 'other'),
     `challenge_id`          bigint(20) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

@@ -84,6 +84,10 @@ export const challengeSubmissionTypesFilter: Filter[] = [
     label: 'Notebook',
   },
   {
+    value: ChallengeSubmissionType.MLCube,
+    label: 'MLCube',
+  },
+  {
     value: ChallengeSubmissionType.Other,
     label: 'Other',
   },
