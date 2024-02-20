@@ -22,7 +22,7 @@ CREATE TABLE `edam_ontology_term`
     `subclass_of`           varchar(60),
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`edam_id`)
 );
 
 
