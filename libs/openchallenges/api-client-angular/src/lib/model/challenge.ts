@@ -45,6 +45,10 @@ export interface Challenge {
      * The DOI of the challenge.
      */
     doi?: string | null;
+    /**
+     * The EDAM operation class of the challenge.
+     */
+    operationId?: string | null;
     status: ChallengeStatus;
     platform?: SimpleChallengePlatform | null;
     /**
