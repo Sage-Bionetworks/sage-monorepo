@@ -39,6 +39,9 @@ public class ChallengeDto {
   @JsonProperty("doi")
   private String doi = null;
 
+  @JsonProperty("operationId")
+  private String operationId = null;
+
   @JsonProperty("status")
   private ChallengeStatusDto status;
 
@@ -228,6 +231,31 @@ public class ChallengeDto {
 
   public void setDoi(String doi) {
     this.doi = doi;
+  }
+
+  public ChallengeDto operationId(String operationId) {
+    this.operationId = operationId;
+    return this;
+  }
+
+  /**
+   * The EDAM operation class of the challenge.
+   *
+   * @return operationId
+   */
+  @Pattern(regexp = "^$|^operation_\\d+$")
+  @Size(max = 16)
+  @Schema(
+      name = "operationId",
+      example = "operation_0004",
+      description = "The EDAM operation class of the challenge.",
+      required = false)
+  public String getOperationId() {
+    return operationId;
+  }
+
+  public void setOperationId(String operationId) {
+    this.operationId = operationId;
   }
 
   public ChallengeDto status(ChallengeStatusDto status) {
@@ -572,6 +600,7 @@ public class ChallengeDto {
         && Objects.equals(this.headline, challenge.headline)
         && Objects.equals(this.description, challenge.description)
         && Objects.equals(this.doi, challenge.doi)
+        && Objects.equals(this.operationId, challenge.operationId)
         && Objects.equals(this.status, challenge.status)
         && Objects.equals(this.platform, challenge.platform)
         && Objects.equals(this.websiteUrl, challenge.websiteUrl)
@@ -596,6 +625,7 @@ public class ChallengeDto {
         headline,
         description,
         doi,
+        operationId,
         status,
         platform,
         websiteUrl,
@@ -621,6 +651,7 @@ public class ChallengeDto {
     sb.append("    headline: ").append(toIndentedString(headline)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    doi: ").append(toIndentedString(doi)).append("\n");
+    sb.append("    operationId: ").append(toIndentedString(operationId)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    platform: ").append(toIndentedString(platform)).append("\n");
     sb.append("    websiteUrl: ").append(toIndentedString(websiteUrl)).append("\n");

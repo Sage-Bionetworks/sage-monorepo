@@ -577,6 +577,13 @@ components:
       maxLength: 120
       nullable: true
       type: string
+    ChallengeOperationId:
+      description: The EDAM operation class of the challenge.
+      example: operation_0004
+      maxLength: 16
+      nullable: true
+      pattern: ^$|^operation_\d+$
+      type: string
     ChallengePlatformId:
       description: The unique identifier of a challenge platform.
       example: 1
@@ -711,6 +718,7 @@ components:
         - container_image
         websiteUrl: https://openchallenges.io
         name: name
+        operationId: operation_0004
         id: 1
         categories:
         - featured
@@ -765,6 +773,13 @@ components:
           format: url
           maxLength: 120
           nullable: true
+          type: string
+        operationId:
+          description: The EDAM operation class of the challenge.
+          example: operation_0004
+          maxLength: 16
+          nullable: true
+          pattern: ^$|^operation_\d+$
           type: string
         status:
           $ref: '#/components/schemas/ChallengeStatus'
