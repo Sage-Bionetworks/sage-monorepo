@@ -1,8 +1,6 @@
 type: object
 description: A challenge EDAM annotation.
 properties:
-  id:
-    $ref: ChallengeInputDataTypeId.yaml
   edamId:
     $ref: EdamId.yaml
   name:
@@ -17,7 +15,6 @@ properties:
     type: string
     format: date-time
 required:
-  - id
   - edamId
   - name
   - createdAt

@@ -573,11 +573,6 @@ components:
       maxLength: 500
       nullable: true
       example: 'https://openchallenges.io'
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      type: integer
-      format: int64
-      example: 1
     EdamId:
       description: >-
         The prefix Internationalized Resource Identifier (IRI) of the EDAM
@@ -603,8 +598,6 @@ components:
       type: object
       description: A challenge EDAM annotation.
       properties:
-        id:
-          $ref: '#/components/schemas/ChallengeInputDataTypeId'
         edamId:
           $ref: '#/components/schemas/EdamId'
         name:
@@ -619,7 +612,6 @@ components:
           type: string
           format: date-time
       required:
-        - id
         - edamId
         - name
         - createdAt
@@ -859,8 +851,6 @@ components:
       type: object
       description: A challenge EDAM annotation.
       properties:
-        id:
-          $ref: '#/components/schemas/ChallengeInputDataTypeId'
         edamId:
           $ref: '#/components/schemas/EdamId'
         name:
@@ -875,7 +865,6 @@ components:
           type: string
           format: date-time
       required:
-        - id
         - edamId
         - name
         - createdAt
