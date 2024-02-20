@@ -624,46 +624,67 @@ components:
       maxLength: 500
       nullable: true
       type: string
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      example: 1
-      format: int64
-      type: integer
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
-      example: gene expression
-      maxLength: 50
+    EdamId:
+      description: The prefix Internationalized Resource Identifier (IRI) of the EDAM
+        ontology term.
+      example: data_1916
+      maxLength: 16
       minLength: 3
       type: string
+    EdamName:
+      description: The preferred name/label of the EDAM ontology term.
+      example: Alignment
+      maxLength: 80
+      minLength: 3
+      type: string
+    EdamSubclassOf:
+      description: The parent EDAM ID(s) of the EDAM ontology term.
+      example: data_0006
+      maxLength: 60
+      minLength: 3
+      nullable: true
+      type: string
     SimpleChallengeInputDataType:
-      description: A simple challenge input data type.
+      description: A challenge EDAM annotation.
       example:
-        name: gene expression
-        id: 1
-        slug: gene-expression
+        createdAt: 2022-07-04T22:19:11Z
+        subclassOf: data_0006
+        name: Alignment
+        edamId: data_1916
+        updatedAt: 2000-01-23T04:56:07.000+00:00
       properties:
-        id:
-          description: The unique identifier of a challenge input data type.
-          example: 1
-          format: int64
-          type: integer
-        slug:
-          description: The slug of the challenge input data type.
-          example: gene-expression
-          maxLength: 30
+        edamId:
+          description: The prefix Internationalized Resource Identifier (IRI) of the
+            EDAM ontology term.
+          example: data_1916
+          maxLength: 16
           minLength: 3
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
-          description: The name of the challenge input data type.
-          example: gene expression
-          maxLength: 50
+          description: The preferred name/label of the EDAM ontology term.
+          example: Alignment
+          maxLength: 80
           minLength: 3
           type: string
+        subclassOf:
+          description: The parent EDAM ID(s) of the EDAM ontology term.
+          example: data_0006
+          maxLength: 60
+          minLength: 3
+          nullable: true
+          type: string
+        createdAt:
+          example: 2022-07-04T22:19:11Z
+          format: date-time
+          type: string
+        updatedAt:
+          format: date-time
+          type: string
       required:
-      - id
+      - createdAt
+      - edamId
       - name
-      - slug
+      - updatedAt
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
@@ -721,12 +742,16 @@ components:
         doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
-        - name: gene expression
-          id: 1
-          slug: gene-expression
-        - name: gene expression
-          id: 1
-          slug: gene-expression
+        - createdAt: 2022-07-04T22:19:11Z
+          subclassOf: data_0006
+          name: Alignment
+          edamId: data_1916
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2022-07-04T22:19:11Z
+          subclassOf: data_0006
+          name: Alignment
+          edamId: data_1916
+          updatedAt: 2000-01-23T04:56:07.000+00:00
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -978,39 +1003,39 @@ components:
           type: string
       type: object
     ChallengeInputDataType:
-      description: A challenge input data type.
+      description: A challenge EDAM annotation.
       properties:
-        id:
-          description: The unique identifier of a challenge input data type.
-          example: 1
-          format: int64
-          type: integer
-        slug:
-          description: The slug of the challenge input data type.
-          example: gene-expression
-          maxLength: 30
+        edamId:
+          description: The prefix Internationalized Resource Identifier (IRI) of the
+            EDAM ontology term.
+          example: data_1916
+          maxLength: 16
           minLength: 3
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
           type: string
         name:
-          description: The name of the challenge input data type.
-          example: gene expression
-          maxLength: 50
+          description: The preferred name/label of the EDAM ontology term.
+          example: Alignment
+          maxLength: 80
           minLength: 3
+          type: string
+        subclassOf:
+          description: The parent EDAM ID(s) of the EDAM ontology term.
+          example: data_0006
+          maxLength: 60
+          minLength: 3
+          nullable: true
           type: string
         createdAt:
           example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
         updatedAt:
-          example: 2022-07-04T22:19:11Z
           format: date-time
           type: string
       required:
       - createdAt
-      - id
+      - edamId
       - name
-      - slug
       - updatedAt
       type: object
     ChallengeInputDataTypesPage:

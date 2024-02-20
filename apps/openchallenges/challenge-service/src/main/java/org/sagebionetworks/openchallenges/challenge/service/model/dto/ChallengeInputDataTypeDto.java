@@ -11,21 +11,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-/** A challenge input data type. */
-@Schema(name = "ChallengeInputDataType", description = "A challenge input data type.")
+/** A challenge EDAM annotation. */
+@Schema(name = "ChallengeInputDataType", description = "A challenge EDAM annotation.")
 @JsonTypeName("ChallengeInputDataType")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
 public class ChallengeInputDataTypeDto {
 
-  @JsonProperty("id")
-  private Long id;
-
-  @JsonProperty("slug")
-  private String slug;
+  @JsonProperty("edamId")
+  private String edamId;
 
   @JsonProperty("name")
   private String name;
+
+  @JsonProperty("subclassOf")
+  private String subclassOf = null;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -35,54 +35,30 @@ public class ChallengeInputDataTypeDto {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  public ChallengeInputDataTypeDto id(Long id) {
-    this.id = id;
+  public ChallengeInputDataTypeDto edamId(String edamId) {
+    this.edamId = edamId;
     return this;
   }
 
   /**
-   * The unique identifier of a challenge input data type.
+   * The prefix Internationalized Resource Identifier (IRI) of the EDAM ontology term.
    *
-   * @return id
+   * @return edamId
    */
   @NotNull
+  @Size(min = 3, max = 16)
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of a challenge input data type.",
+      name = "edamId",
+      example = "data_1916",
+      description =
+          "The prefix Internationalized Resource Identifier (IRI) of the EDAM ontology term.",
       required = true)
-  public Long getId() {
-    return id;
+  public String getEdamId() {
+    return edamId;
   }
 
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public ChallengeInputDataTypeDto slug(String slug) {
-    this.slug = slug;
-    return this;
-  }
-
-  /**
-   * The slug of the challenge input data type.
-   *
-   * @return slug
-   */
-  @NotNull
-  @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
-  @Size(min = 3, max = 30)
-  @Schema(
-      name = "slug",
-      example = "gene-expression",
-      description = "The slug of the challenge input data type.",
-      required = true)
-  public String getSlug() {
-    return slug;
-  }
-
-  public void setSlug(String slug) {
-    this.slug = slug;
+  public void setEdamId(String edamId) {
+    this.edamId = edamId;
   }
 
   public ChallengeInputDataTypeDto name(String name) {
@@ -91,16 +67,16 @@ public class ChallengeInputDataTypeDto {
   }
 
   /**
-   * The name of the challenge input data type.
+   * The preferred name/label of the EDAM ontology term.
    *
    * @return name
    */
   @NotNull
-  @Size(min = 3, max = 50)
+  @Size(min = 3, max = 80)
   @Schema(
       name = "name",
-      example = "gene expression",
-      description = "The name of the challenge input data type.",
+      example = "Alignment",
+      description = "The preferred name/label of the EDAM ontology term.",
       required = true)
   public String getName() {
     return name;
@@ -108,6 +84,30 @@ public class ChallengeInputDataTypeDto {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public ChallengeInputDataTypeDto subclassOf(String subclassOf) {
+    this.subclassOf = subclassOf;
+    return this;
+  }
+
+  /**
+   * The parent EDAM ID(s) of the EDAM ontology term.
+   *
+   * @return subclassOf
+   */
+  @Size(min = 3, max = 60)
+  @Schema(
+      name = "subclassOf",
+      example = "data_0006",
+      description = "The parent EDAM ID(s) of the EDAM ontology term.",
+      required = false)
+  public String getSubclassOf() {
+    return subclassOf;
+  }
+
+  public void setSubclassOf(String subclassOf) {
+    this.subclassOf = subclassOf;
   }
 
   public ChallengeInputDataTypeDto createdAt(OffsetDateTime createdAt) {
@@ -143,7 +143,7 @@ public class ChallengeInputDataTypeDto {
    */
   @NotNull
   @Valid
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", required = true)
+  @Schema(name = "updatedAt", required = true)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -161,25 +161,25 @@ public class ChallengeInputDataTypeDto {
       return false;
     }
     ChallengeInputDataTypeDto challengeInputDataType = (ChallengeInputDataTypeDto) o;
-    return Objects.equals(this.id, challengeInputDataType.id)
-        && Objects.equals(this.slug, challengeInputDataType.slug)
+    return Objects.equals(this.edamId, challengeInputDataType.edamId)
         && Objects.equals(this.name, challengeInputDataType.name)
+        && Objects.equals(this.subclassOf, challengeInputDataType.subclassOf)
         && Objects.equals(this.createdAt, challengeInputDataType.createdAt)
         && Objects.equals(this.updatedAt, challengeInputDataType.updatedAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, slug, name, createdAt, updatedAt);
+    return Objects.hash(edamId, name, subclassOf, createdAt, updatedAt);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ChallengeInputDataTypeDto {\n");
-    sb.append("    id: ").append(toIndentedString(id)).append("\n");
-    sb.append("    slug: ").append(toIndentedString(slug)).append("\n");
+    sb.append("    edamId: ").append(toIndentedString(edamId)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    subclassOf: ").append(toIndentedString(subclassOf)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");
