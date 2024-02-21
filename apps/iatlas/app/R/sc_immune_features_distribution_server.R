@@ -7,7 +7,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
-      responder_display <- shiny::reactive(setNames(c("Responder", "Non-Responder", "Unknown"), c("true_responder", "false_responder", "unknown_responder")))
+#      responder_display <- shiny::reactive(setNames(c("Responder", "Non-Responder", "Unknown"), c("true_responder", "false_responder", "unknown_responder")))
 
       plot_function <- shiny::reactive({
         switch(
@@ -32,7 +32,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
           ns("groupvar2"),
           "Select extra Sample Group (optional)",
           c("None" = "None",
-            "Responder" = "Responder"),
+            colnames(clinical_info())),
           selected = "None"
         )
       })
@@ -98,13 +98,14 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
           #   dplyr::rename(group = group_name)
         #}else{
           samples <- samples %>%
-            dplyr::left_join(dplyr::select(clinical_info(), HTAN_Assayed_Biospecimen_ID, Responder), by = dplyr::join_by("sample_name" == "HTAN_Assayed_Biospecimen_ID")) %>%
-            dplyr::mutate(Responder = dplyr::if_else(
+            dplyr::left_join(dplyr::select(clinical_info(), sample_name, !! input$groupvar2), by = dplyr::join_by("sample_name")) %>%
+            dplyr::mutate(
+            Group2 = dplyr::if_else(
               sample_name == "sum",
               "sum",
-              responder_display()[Responder]
+              .data[[input$groupvar2]]
             ),
-            group_name = paste(group, Responder, sep = " - ")) %>%
+            group_name = paste(group, Group2, sep = " - ")) %>%
             dplyr::select("feature_name", "feature_value", "dataset_name", "sample_name", "group" = group_name, "y")
         }
         samples
