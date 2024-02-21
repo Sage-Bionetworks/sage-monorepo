@@ -26,7 +26,9 @@ sc_immunomodulators_server <- function(id, cohort_obj){
 
       plot_df <- shiny::reactive({
         shiny::req(bubble_df(), input$genes)
-        plot_df <- dplyr::filter(bubble_df(), gene %in% input$genes) %>%
+        plot_df <- bubble_df() %>%
+          dplyr::filter(gene %in% input$genes) %>%
+          dplyr::filter(dataset %in% input$datasets) %>%
           dplyr::mutate(show_text = paste(
             paste0("% cells with expression for gene: ", round(perc_expr, 3)*100, "%"),
             paste("Average value:", round(avg, 3)), sep = "\n"
