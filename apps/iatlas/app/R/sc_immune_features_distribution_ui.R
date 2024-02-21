@@ -5,48 +5,60 @@ sc_immune_features_distribution_ui <- function(id){
   shiny::tagList(
       iatlas.modules::optionsBox(
         width=12,
-        column(
-          width = 3,
-          shiny::uiOutput(ns("feature_op"))
-        ),
-        column(
-          width = 3,
-          shiny:: uiOutput(ns("group2"))
-        ),
-        column(
-          width = 2,
-          shiny::selectInput(
-            ns("plot_type"),
-            "Select Plot Type",
-            choices = c( "Box", "Violin")
-          )
-        ),
-        column(
-          width = 2,
-          shiny::selectInput(
-            ns("scale_method"),
-            "Select scaling",
-            choices = c(
-              "None",
-              "Log2",
-              "Log2 + 1",
-              "Log10",
-              "Log10 + 1"
-            ),
-            selected = "None"
-          )
-        ),
-        column(
-          width = 2,
-          shiny::selectInput(
-            ns("reorder_method_choice"),
-            "Reorder Function",
-            choices = c("None" = "trace",
-                        "Median" = "median ascending",
-                        "Mean" = "mean ascending",
-                        "Max" = "max ascending",
-                        "Min" = "min ascending"),
-            selected = "None"
+        shiny::fluidRow(
+          shiny::column(
+            width = 4,
+            shiny::checkboxGroupInput(
+              ns("datasets"),
+              "Choose dataset(s)",
+              choices = c("MSK - SCLC" = "MSK",
+                          "Vanderbilt - colon polyps" = "Vanderbilt"),
+              selected = c("MSK", "Vanderbilt")
+            )
+          ),
+          column(
+            width = 4,
+            shiny::uiOutput(ns("feature_op"))
+          ),
+          column(
+            width = 4,
+            shiny:: uiOutput(ns("group2"))
+          ),
+          column(
+            width = 2,
+            shiny::selectInput(
+              ns("plot_type"),
+              "Select Plot Type",
+              choices = c( "Box", "Violin")
+            )
+          ),
+          column(
+            width = 2,
+            shiny::selectInput(
+              ns("scale_method"),
+              "Select scaling",
+              choices = c(
+                "None",
+                "Log2",
+                "Log2 + 1",
+                "Log10",
+                "Log10 + 1"
+              ),
+              selected = "None"
+            )
+          ),
+          column(
+            width = 2,
+            shiny::selectInput(
+              ns("reorder_method_choice"),
+              "Reorder Function",
+              choices = c("None" = "trace",
+                          "Median" = "median ascending",
+                          "Mean" = "mean ascending",
+                          "Max" = "max ascending",
+                          "Min" = "min ascending"),
+              selected = "None"
+            )
           )
         )
       ),#optionsBox

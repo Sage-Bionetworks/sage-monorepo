@@ -17,6 +17,16 @@ sc_umap_ui <- function(id){
     iatlas.modules::optionsBox(
       width=24,
       shiny::column(
+        width = 4,
+        shiny::checkboxGroupInput(
+          ns("datasets"),
+          "Choose dataset(s)",
+          choices = c("MSK - SCLC" = "MSK",
+                      "Vanderbilt - colon polyps" = "Vanderbilt"),
+          selected = c("MSK", "Vanderbilt")
+        )
+      ),
+      shiny::column(
         width = 6,
         shiny::selectInput(
           ns("color"),
@@ -26,19 +36,6 @@ sc_umap_ui <- function(id){
           multiple = FALSE
         )
         ),
-      # shiny::column(
-      #   width = 6,
-      #   parameter_tabs <- tabsetPanel(
-      #     id = ns("params"),
-      #     type = "hidden",
-      #     tabPanel("normal",
-      #              shiny::p("")
-      #     ),
-      #     tabPanel("gene",
-      #              shiny::uiOutput(ns("select_gene"))
-      #     )
-      #   )
-      # )
     ),
     iatlas.modules::plotBox(
       width=24,

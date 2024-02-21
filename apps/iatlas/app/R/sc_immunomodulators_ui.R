@@ -22,11 +22,24 @@ sc_immunomodulators_ui <- function(id){
           shiny::verticalLayout(
             iatlas.modules::optionsBox(
               width=24,
-              shiny::selectizeInput(
-                ns("genes"),
-                label = "Select or Search for genes",
-                choices = NULL,
-                multiple = TRUE
+              shiny::column(
+                width = 4,
+                shiny::checkboxGroupInput(
+                  ns("datasets"),
+                  "Choose dataset(s)",
+                  choices = c("MSK - SCLC" = "MSK",
+                              "Vanderbilt - colon polyps" = "Vanderbilt"),
+                  selected = c("MSK", "Vanderbilt")
+                )
+              ),
+              shiny::column(
+                width = 8,
+                shiny::selectizeInput(
+                  ns("genes"),
+                  label = "Select or Search for genes",
+                  choices = NULL,
+                  multiple = TRUE
+                )
               )
             ),
             iatlas.modules::plotBox(

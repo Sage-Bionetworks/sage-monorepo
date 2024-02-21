@@ -90,13 +90,11 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
       df_selected <- shiny::reactive({
         shiny::req(gsea_df(), input$var1_surv)
         samples <- gsea_df() %>%
+          dplyr::filter(dataset_name %in% input$datasets) %>%
           dplyr::filter(feature_name == input$var1_surv) %>%
           build_distribution_io_df(., "feature_value", input$scale_method)
 
         if(input$groupvar2 != "None"){
-          # samples %>%
-          #   dplyr::rename(group = group_name)
-        #}else{
           samples <- samples %>%
             dplyr::left_join(dplyr::select(clinical_info(), sample_name, !! input$groupvar2), by = dplyr::join_by("sample_name")) %>%
             dplyr::mutate(
