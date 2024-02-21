@@ -14,7 +14,7 @@ on:
 env:
   HEAD_REF: ${{ github.event.pull_request.head.ref }}
   HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
-  APPROVAL_NEEDED: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true }}
+  APPROVAL_NEEDED: ${{ github.event_name == 'pull_request_target' && (contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true) }}
 
 jobs:
   sonar:
