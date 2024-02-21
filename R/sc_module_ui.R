@@ -4,11 +4,11 @@ sc_module_ui <- function(id){
 
     shiny::tagList(
         iatlas.modules::titleBox(
-            "iAtlas Explorer — Single cell data prototype"
+            "iAtlas Explorer — UMAP Viewer of Single cell RNA-Seq data"
         ),
         iatlas.modules::textBox(
             width = 12,
-            shiny::p("Prototype of viz of scRNA seq data")
+            shiny::p("Explore UMAP visualizations of single-cell RNA-Seq datasets. Links for visualizations on CELLxGENE are provided for further exploration.")
         ),
         iatlas.modules::sectionBox(
             title = "UMAP",

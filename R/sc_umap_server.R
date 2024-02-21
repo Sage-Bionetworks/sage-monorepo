@@ -13,29 +13,33 @@ sc_umap_server <- function(
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+      link_to_cellxgene <- shiny::reactive(setNames(c("<a href = 'https://cellxgene.cziscience.com/e/76347874-8801-44bf-9aea-0da21c78c430.cxg/'>Explore in CELLxGENE</a>",
+                                                      "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>"),
+                                                    c("MSK", "Vanderbilt")))
 
       observeEvent(input$color, {
         if(input$color == "gene") updateTabsetPanel(inputId = "params", selected = "gene")
         if(input$color %in% c("cell_type", "type")) updateTabsetPanel(inputId = "params", selected = "normal")
       })
 
-      output$select_gene <- shiny::renderUI({
-        shiny::selectInput(
-          ns("gene"),
-          label = "Select gene",
-          choices = colnames(gene_df()),
-          multiple = FALSE
-        )
-      })
+      # output$select_gene <- shiny::renderUI({
+      #   shiny::selectInput(
+      #     ns("gene"),
+      #     label = "Select gene",
+      #     choices = colnames(gene_df()),
+      #     multiple = FALSE
+      #   )
+      # })
 
       color_criteria <- shiny::reactive({
         shiny::req(umap_df(), input$color)
-
-        if (input$color %in% c("cell_type", "type")) return(dplyr::select(umap_df(), "group" = input$color, dataset))
-        else{
-          shiny::req(input$gene)
-          return(gene_df()[[input$gene]])
-        }
+        return(dplyr::select(umap_df(), "group" = input$color, dataset))
+#
+#         if (input$color %in% c("cell_type", "type"))
+#         else{
+#           shiny::req(input$gene)
+#           return(gene_df()[[input$gene]])
+#         }
       })
 
       group_colors <- shiny::reactive({
@@ -73,6 +77,16 @@ sc_umap_server <- function(
                                                    showticklabels = F),
                                       margin = list(b = 10, t = 70),
                                       plot_bgcolor  = "rgb(250, 250, 250)"
+                                    ) %>%
+                                    plotly::add_annotations(
+                                      x = 1,
+                                      xref = "paper",
+                                      xanchor = "right",
+                                      y = 1,
+                                      yref = "paper",
+                                      yanchor = "bottom",
+                                      text = link_to_cellxgene()[[x]],
+                                      showarrow = FALSE
                                     )
                                 })
         plotly::subplot(all_plots, nrows = length(datasets), shareX = FALSE, titleX = FALSE, titleY= FALSE, margin = 0.1)
