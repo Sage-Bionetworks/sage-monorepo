@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the label `sonar-scan-approved` exists
-        if: ${{ env.APPROVAL_NEEDED }}
+        if: ${{ env.APPROVAL_NEEDED == true }}
         run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
       - uses: actions/checkout@v3
