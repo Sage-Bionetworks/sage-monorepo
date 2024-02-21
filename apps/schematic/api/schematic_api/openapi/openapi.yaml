@@ -1233,14 +1233,6 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
       - description: Whether or not to use the more strict way of converting to camel
           case
         explode: true

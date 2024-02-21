@@ -20,7 +20,7 @@ HEADERS = {
 }
 
 CREATE_MANIFESTS_ARGS = [
-    "jsonld",
+    "path_to_data_model",
     "output_format",
     "data_types",
     "title",

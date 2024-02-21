@@ -476,7 +476,6 @@ paths:
       description: Gets the property label of the node
       operationId: getPropertyLabel
       parameters:
-        - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'
       responses:
         '200':

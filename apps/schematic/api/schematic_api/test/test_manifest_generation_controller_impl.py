@@ -97,7 +97,7 @@ class TestGenerateGoogleSheetManifests:
                 assert isinstance(result, BasicError)
                 assert result.detail == (
                     "When generate_all_manifests is False data_type_array must be a list with "
-                    "atleast one item: {'data_type_array': None}"
+                    "at least one item: {'data_type_array': None}"
                 )
 
                 result, status = generate_google_sheet_manifests(
@@ -114,7 +114,7 @@ class TestGenerateGoogleSheetManifests:
                 assert isinstance(result, BasicError)
                 assert result.detail == (
                     "When generate_all_manifests is False data_type_array must be a list with "
-                    "atleast one item: {'data_type_array': []}"
+                    "at least one item: {'data_type_array': []}"
                 )
 
                 result, status = generate_google_sheet_manifests(

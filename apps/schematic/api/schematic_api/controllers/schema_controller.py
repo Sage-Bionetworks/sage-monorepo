@@ -183,24 +183,20 @@ def get_node_validation_rules(node_display, schema_url):  # noqa: E501
     return schema_controller_impl.get_node_validation_rules(node_display, schema_url)
 
 
-def get_property_label(
-    node_display, schema_url, use_strict_camel_case=None
-):  # noqa: E501
+def get_property_label(node_display, use_strict_camel_case=None):  # noqa: E501
     """Gets the property label of the node
 
     Gets the property label of the node # noqa: E501
 
     :param node_display: The display name of the node in a schema
     :type node_display: str
-    :param schema_url: The URL of a schema in jsonld or csv form
-    :type schema_url: str
     :param use_strict_camel_case: Whether or not to use the more strict way of converting to camel case
     :type use_strict_camel_case: bool
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     return schema_controller_impl.get_property_label(
-        node_display, schema_url, use_strict_camel_case
+        node_display, use_strict_camel_case
     )
 
 

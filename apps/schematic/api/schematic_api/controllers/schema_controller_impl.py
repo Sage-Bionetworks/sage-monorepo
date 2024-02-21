@@ -1,8 +1,13 @@
 """Implementation of all endpoints"""
 from typing import Union
 
-from schematic.schemas.generator import SchemaGenerator, SchemaExplorer  # type: ignore
+from schematic.schemas.data_model_parser import DataModelParser  # type: ignore
+from schematic.schemas.data_model_graph import (  # type: ignore
+    DataModelGraph,
+    DataModelGraphExplorer,
+)
 from schematic.visualization.attributes_explorer import AttributesExplorer  # type: ignore
+from schematic.utils.schema_utils import get_property_label_from_display_name  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_property_array import NodePropertyArray
@@ -61,15 +66,12 @@ def get_connected_node_pairs_from_schematic(
     Returns:
         list[ConnectedNodePair]: A list of connected node pairs
     """
-    schema_explorer = SchemaExplorer()
-    schema_explorer.load_schema(schema_url)
-    schema_graph = schema_explorer.get_nx_schema()
-
-    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    relationship_subgraph = schema_generator.get_subgraph_by_edge_type(
-        schema_graph, relationship_type
-    )
-
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(parsed_data_model)
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    dmge = DataModelGraphExplorer(graph_data_model)
+    relationship_subgraph = dmge.get_subgraph_by_edge_type(relationship_type)
     lst = [list(edge) for edge in relationship_subgraph.edges]
 
     return [
@@ -151,8 +153,12 @@ def get_node_is_required_from_schematic(
     Returns:
        bool: Whether or no the node is required
     """
-    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    return schema_generator.is_node_required(node_display)
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(parsed_data_model)
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    dmge = DataModelGraphExplorer(graph_data_model)
+    return dmge.get_node_required(node_display)
 
 
 @handle_exceptions
@@ -178,36 +184,14 @@ def get_node_is_required(
     return result, status
 
 
-def get_property_label_from_schematic(
-    node_display: str, schema_url: str, use_strict_camel_case: bool
-) -> str:
-    """Gets the property label of the node
-
-    Args:
-        node_display(str): The display name of the node
-        schema_url (str): The URL of the schema in jsonld form
-        use_strict_camel_case (bool): whether or not to use strict camel case when doing the
-          conversion
-
-    Returns:
-        str: The node label
-    """
-    schema_explorer = SchemaExplorer()
-    schema_explorer.load_schema(schema_url)
-    return schema_explorer.get_property_label_from_display_name(
-        node_display, use_strict_camel_case
-    )
-
-
 @handle_exceptions
 def get_property_label(
-    node_display: str, schema_url: str, use_strict_camel_case: bool
+    node_display: str, use_strict_camel_case: bool
 ) -> tuple[Union[str, BasicError], int]:
     """Gets the property label of the node
 
     Args:
         node_display(str): The display name of the node
-        schema_url (str): The URL of the schema in jsonld form
         use_strict_camel_case (bool): whether or not to use strict camel case when doing the
           conversion
 
@@ -216,8 +200,8 @@ def get_property_label(
           The first item is either the label or an error object
           The second item is the response status
     """
-    result: Union[str, BasicError] = get_property_label_from_schematic(
-        node_display, schema_url, use_strict_camel_case
+    result: Union[str, BasicError] = get_property_label_from_display_name(
+        display_name=node_display, strict_camel_case=use_strict_camel_case
     )
     status = 200
     return result, status
@@ -234,7 +218,7 @@ def get_schema_attributes(schema_url: str) -> tuple[Union[str, BasicError], int]
 
     Returns:
         tuple[Union[str, BasicError], int]: A tuple
-          The first item is either the sttraibutes or an error object
+          The first item is either the attributes or an error object
           The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
@@ -257,9 +241,13 @@ def get_node_properties_from_schematic(
     Returns:
         list[str]: A list of properties of the node
     """
-    schema_explorer = SchemaExplorer()
-    schema_explorer.load_schema(schema_url)
-    return schema_explorer.find_class_specific_properties(node_label)
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(parsed_data_model)
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    dmge = DataModelGraphExplorer(graph_data_model)
+    properties = dmge.find_class_specific_properties(node_label)
+    return properties
 
 
 @handle_exceptions
@@ -298,8 +286,12 @@ def get_node_validation_rules_from_schematic(
     Returns:
         list[ValidationRule]: A list of validation_rules of the node
     """
-    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    rules = schema_generator.get_node_validation_rules(node_display)  # type: ignore
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(parsed_data_model)
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    dmge = DataModelGraphExplorer(graph_data_model)
+    rules: list[str] = dmge.get_node_validation_rules(node_display)  # type: ignore
     return [ValidationRule(rule) for rule in rules]
 
 
@@ -349,11 +341,13 @@ def get_node_dependencies_from_schematic(
         list[Node]: A list of nodes
 
     """
-    schema_generator = SchemaGenerator(path_to_json_ld=schema_url)
-    nodes = schema_generator.get_node_dependencies(
-        source_node=node_label,
-        display_names=return_display_names,
-        schema_ordered=return_ordered_by_schema,
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(parsed_data_model)
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    dmge = DataModelGraphExplorer(graph_data_model)
+    nodes = dmge.get_node_dependencies(
+        node_label, return_display_names, return_ordered_by_schema
     )
     return [Node(node) for node in nodes]
 
