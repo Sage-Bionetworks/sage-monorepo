@@ -17,6 +17,6 @@ Immune Features	ici_immune_features	ici	See how immune readouts vary across grou
 Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
 Neoantigens	ici_neoantigen	ici	Explore the prevalence, variety and distribution of predicted neoantigens in ICI datasets. 	none
 Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.	none
-UMAP	sc_module	scRNA	See scRNA seq data.	none
+UMAP	sc_umap	scRNA	See scRNA seq data.	none
 Immune Features	sc_immune_features	scRNA	See how immune readouts in pseudobulk single cell RNA seq datasets.	none
 Immunomodulators	sc_immunomodulators	scRNA	xplore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
