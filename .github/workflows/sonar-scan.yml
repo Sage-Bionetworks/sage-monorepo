@@ -12,8 +12,8 @@ on:
     types: [opened, synchronize, reopened, labeled]
 
 env:
-  HEAD_REF: ${{ github.event.pull_request.head.ref }}
-  HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+  HEAD_REF: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.ref || github.ref_name }}
+  HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.event.repository.name }}
 
 jobs:
   sonar:
@@ -42,4 +42,4 @@ jobs:
       - name: Scan the affected projects with Sonar
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx affected --target=sonar"
+            && nx run-many --target=sonar"
