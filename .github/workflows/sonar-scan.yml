@@ -42,4 +42,4 @@ jobs:
       - name: Scan the affected projects with Sonar
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=sonar"
+            && nx affected --target=sonar"
