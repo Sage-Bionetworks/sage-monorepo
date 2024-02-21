@@ -16,24 +16,24 @@ sc_umap_ui <- function(id){
         shiny::selectInput(
           ns("color"),
           label = "Color by",
-          choices = c("Cell Type"="cell_type", "Type" = "type", "Gene Symbol" = "gene"),
+          choices = c("Cell Type"="cell_type", "Type" = "type"),
           selected = "cell_type",
           multiple = FALSE
         )
         ),
-      shiny::column(
-        width = 6,
-        parameter_tabs <- tabsetPanel(
-          id = ns("params"),
-          type = "hidden",
-          tabPanel("normal",
-                   shiny::p("")
-          ),
-          tabPanel("gene",
-                   shiny::uiOutput(ns("select_gene"))
-          )
-        )
-      )
+      # shiny::column(
+      #   width = 6,
+      #   parameter_tabs <- tabsetPanel(
+      #     id = ns("params"),
+      #     type = "hidden",
+      #     tabPanel("normal",
+      #              shiny::p("")
+      #     ),
+      #     tabPanel("gene",
+      #              shiny::uiOutput(ns("select_gene"))
+      #     )
+      #   )
+      # )
     ),
     iatlas.modules::plotBox(
       width=24,
