@@ -17,4 +17,4 @@ RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD python src/main.py
+CMD python "${APP_DIR}/src/main.py"
