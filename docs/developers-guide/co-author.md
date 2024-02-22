@@ -16,7 +16,7 @@ Annotating commits with co-authors is required when:
     3. User B copy-paste code written by User A and adapt it.
     4. User B adds User A as a co-author when the commits include code written by User A.
 
-## Add Co-Authors to a Commit
+## Add co-authors to commits
 
 Follow the instructions described [here](https://docs.github.com/en/pull-requests/committing-changes-to-your-project/creating-and-editing-commits/creating-a-commit-with-multiple-authors).
 
@@ -30,7 +30,7 @@ Co-authored-by: NAME <EMAIL>
 Co-authored-by: ANOTHER-NAME <ANOTHER-EMAIL>"
 ```
 
-## Names and Emails of Sage Monorepo Contributors
+## Names and emails of Sage Monorepo contributors
 
 The name and "no-reply" emails of the Sage Monorepo contributors sorted alphabetically:
 
