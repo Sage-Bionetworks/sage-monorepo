@@ -130,7 +130,5 @@ CREATE TABLE `edam_concept`
     `id`                    int NOT NULL AUTO_INCREMENT,
     `class_id`              varchar(60) NOT NULL UNIQUE,
     `preferred_label`       varchar(80) NOT NULL UNIQUE,
-    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
