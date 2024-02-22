@@ -1,9 +1,15 @@
-FROM python:3.12.2
+FROM python:3.12.0-slim
 
-COPY requirements.txt requirements.txt
-COPY src/ /src
+ENV APP_DIR=/opt/app
 
-RUN pip3 install -r requirements.txt
+WORKDIR ${APP_DIR}
+COPY src src/
+COPY pyproject.toml poetry.lock ./
+
+RUN pip install poetry \
+  && poetry config --local virtualenvs.create false \
+  && poetry install --with prod --no-root --no-interaction --no-ansi \
+  && pip cache purge
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
@@ -11,5 +17,4 @@ RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-# Set up the iAtlas database
-CMD python /src/main.py
+CMD python src/main.py
