@@ -36,8 +36,14 @@
       "options": {
         "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/{projectName}"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
         },
         "push": false
       }
@@ -47,12 +53,19 @@
       "options": {
         "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "images": [
+            "ghcr.io/sage-bionetworks/{projectName}"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
         },
         "push": true
       },
-      "dependsOn": ["build-image"]
+      "dependsOn": [
+        "build-image"
+      ]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -62,6 +75,10 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend", "language:python"],
+  "tags": [
+    "type:app",
+    "scope:backend",
+    "language:python"
+  ],
   "implicitDependencies": []
 }

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# The script must be run from its project directory.
+
 PYTHON_VERSION=$(cat ".python-version")
 
 pyenv install --skip-existing $PYTHON_VERSION
@@ -10,5 +12,4 @@ eval "$(pyenv init -)"
 
 pyenv local $PYTHON_VERSION
 poetry env use $PYTHON_VERSION
-poetry install
-# poetry install --with prod,dev
+poetry install --with prod,dev
