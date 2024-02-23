@@ -73,18 +73,17 @@ theme:
       info: octicons/info-16
   features:
     - content.code.copy
-    - navigation.tabs
     - navigation.footer
     - navigation.sections
+    - navigation.tabs
     - search.highlight
     - search.share
     - search.suggest
     - toc.follow
 
 plugins:
-  - search
-  - mkdocstrings
   - autorefs
+  - search
   - termynal
 
 markdown_extensions:
