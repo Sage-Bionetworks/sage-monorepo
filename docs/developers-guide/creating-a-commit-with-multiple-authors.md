@@ -32,7 +32,7 @@ Co-authored-by: ANOTHER-NAME <ANOTHER-EMAIL>"
 
 ## Names and emails of Sage Monorepo contributors
 
-The name and "no-reply" emails of the Sage Monorepo contributors sorted alphabetically:
+The name and "no-reply" emails of the Sage Monorepo contributors (sorted alphabetically):
 
 - Co-authored-by: andrewelamb <7220713+andrewelamb@users.noreply.github.com>
 - Co-authored-by: gaiaandreoletti <46945609+gaiaandreoletti@users.noreply.github.com>
