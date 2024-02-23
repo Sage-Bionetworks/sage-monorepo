@@ -14,6 +14,7 @@ services:
       - DB_INCENTIVES_CSV_PATH=/workspace/BOOT-INF/classes/db/incentives.csv
       - DB_SUBMISSION_TYPES_CSV_PATH=/workspace/BOOT-INF/classes/db/submission_types.csv
       - DB_CATEGORIES_CSV_PATH=/workspace/BOOT-INF/classes/db/categories.csv
+      - DB_EDAM_CONCEPT_CSV_PATH=/workspace/BOOT-INF/classes/db/edam_concept.csv
     networks:
       - openchallenges
     ports:
