@@ -963,6 +963,18 @@ paths:
           default: false
           type: boolean
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1496,6 +1508,18 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1633,15 +1657,17 @@ paths:
           - upsert
           type: string
         style: form
-      - description: "If true, store attributes using the schema label If false, store\
-          \ attributes using the display label"
+      - description: The type of label to display
         explode: true
         in: query
-        name: useSchemaLabel
+        name: displayLabelType
         required: false
         schema:
-          default: true
-          type: boolean
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -1764,15 +1790,17 @@ paths:
           - upsert
           type: string
         style: form
-      - description: "If true, store attributes using the schema label If false, store\
-          \ attributes using the display label"
+      - description: The type of label to display
         explode: true
         in: query
-        name: useSchemaLabel
+        name: displayLabelType
         required: false
         schema:
-          default: true
-          type: boolean
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -1826,6 +1854,18 @@ paths:
           - dependency
           type: string
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1847,7 +1887,7 @@ paths:
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
   /tangledTreeText:
     get:
-      description: "Get tangled tree plain or higlighted text to display for a given\
+      description: "Get tangled tree plain or highlighted text to display for a given\
         \ data model, text formatting and figure type"
       operationId: get_tangled_tree_text
       parameters:
@@ -1883,6 +1923,18 @@ paths:
           - highlighted
           type: string
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1897,8 +1949,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: "Get tangled tree plain or higlighted text to display for a given data\
-        \ model, text formatting and figure type"
+      summary: "Get tangled tree plain or highlighted text to display for a given\
+        \ data model, text formatting and figure type"
       tags:
       - TangledTree
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
@@ -1932,6 +1984,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -1991,6 +2055,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -2196,6 +2272,19 @@ components:
         default: false
         type: boolean
       style: form
+    displayLabelType:
+      description: The type of label to display
+      explode: true
+      in: query
+      name: displayLabelType
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        type: string
+      style: form
     relationshipType:
       description: "Type of relationship in a schema, such as requiresDependency"
       explode: true
@@ -2289,17 +2378,6 @@ components:
         - replace
         - upsert
         type: string
-      style: form
-    useSchemaLabel:
-      description: "If true, store attributes using the schema label If false, store\
-        \ attributes using the display label"
-      explode: true
-      in: query
-      name: useSchemaLabel
-      required: false
-      schema:
-        default: true
-        type: boolean
       style: form
     figureType:
       description: Figure type to generate.

@@ -22,7 +22,7 @@ def submit_manifest_csv(
     storage_method=None,
     hide_blanks=None,
     table_manipulation_method=None,
-    use_schema_label=None,
+    display_label_type=None,
 ):  # noqa: E501
     """Validates manifest in csv form, then submits it
 
@@ -46,8 +46,8 @@ def submit_manifest_csv(
     :type hide_blanks: bool
     :param table_manipulation_method: replace will remove the rows and columns from the existing table and store the new rows and columns, preserving the name and synID. upsert will add the new rows to the table and preserve the exisitng rows and columns in the existing table.
     :type table_manipulation_method: str
-    :param use_schema_label: If true, store attributes using the schema label If false, store attributes using the display label
-    :type use_schema_label: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
@@ -61,7 +61,7 @@ def submit_manifest_csv(
         storage_method,
         hide_blanks,
         table_manipulation_method,
-        use_schema_label,
+        display_label_type,
     )
 
 
@@ -74,7 +74,7 @@ def submit_manifest_json(
     storage_method=None,
     hide_blanks=None,
     table_manipulation_method=None,
-    use_schema_label=None,
+    display_label_type=None,
     body=None,
 ):  # noqa: E501
     """Validates a manifest in json form, then submits it
@@ -97,8 +97,8 @@ def submit_manifest_json(
     :type hide_blanks: bool
     :param table_manipulation_method: replace will remove the rows and columns from the existing table and store the new rows and columns, preserving the name and synID. upsert will add the new rows to the table and preserve the exisitng rows and columns in the existing table.
     :type table_manipulation_method: str
-    :param use_schema_label: If true, store attributes using the schema label If false, store attributes using the display label
-    :type use_schema_label: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
     :param body: A manifest in json form
     :type body: str
 
@@ -113,13 +113,13 @@ def submit_manifest_json(
         storage_method,
         hide_blanks,
         table_manipulation_method,
-        use_schema_label,
+        display_label_type,
         body,
     )
 
 
 def validate_manifest_csv(
-    schema_url, component_label, body, restrict_rules=None
+    schema_url, component_label, body, restrict_rules=None, display_label_type=None
 ):  # noqa: E501
     """Validates a manifest in csv form
 
@@ -133,16 +133,18 @@ def validate_manifest_csv(
     :type body: str
     :param restrict_rules: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
     :type restrict_rules: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[ManifestValidationResult, Tuple[ManifestValidationResult, int], Tuple[ManifestValidationResult, int, Dict[str, str]]
     """
     return manifest_validation_controller_impl.validate_manifest_csv(
-        schema_url, component_label, body, restrict_rules
+        schema_url, component_label, body, restrict_rules, display_label_type
     )
 
 
 def validate_manifest_json(
-    schema_url, component_label, restrict_rules=None, body=None
+    schema_url, component_label, restrict_rules=None, display_label_type=None, body=None
 ):  # noqa: E501
     """Validates a manifest in json form
 
@@ -154,11 +156,13 @@ def validate_manifest_json(
     :type component_label: str
     :param restrict_rules: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
     :type restrict_rules: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
     :param body: A manifest in json form
     :type body: str
 
     :rtype: Union[ManifestValidationResult, Tuple[ManifestValidationResult, int], Tuple[ManifestValidationResult, int, Dict[str, str]]
     """
     return manifest_validation_controller_impl.validate_manifest_json(
-        schema_url, component_label, restrict_rules, body
+        schema_url, component_label, restrict_rules, display_label_type, body
     )

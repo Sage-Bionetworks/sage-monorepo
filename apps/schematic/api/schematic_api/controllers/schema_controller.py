@@ -19,7 +19,9 @@ from schematic_api import util
 from schematic_api.controllers import schema_controller_impl
 
 
-def get_component(component_label, schema_url, include_index=None):  # noqa: E501
+def get_component(
+    component_label, schema_url, include_index=None, display_label_type=None
+):  # noqa: E501
     """Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String).
 
     Get all the attributes associated with a specific data model component formatted as a dataframe (stored as a JSON String). # noqa: E501
@@ -30,11 +32,13 @@ def get_component(component_label, schema_url, include_index=None):  # noqa: E50
     :type schema_url: str
     :param include_index: Whether to include the indexes of the dataframe in the returned JSON string.
     :type include_index: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
     return schema_controller_impl.get_component(
-        component_label, schema_url, include_index
+        component_label, schema_url, include_index, display_label_type
     )
 
 
@@ -200,14 +204,16 @@ def get_property_label(node_display, use_strict_camel_case=None):  # noqa: E501
     )
 
 
-def get_schema_attributes(schema_url):  # noqa: E501
+def get_schema_attributes(schema_url, display_label_type=None):  # noqa: E501
     """Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String).
 
     Get all the attributes associated with a data model formatted as a dataframe (stored as a JSON String). # noqa: E501
 
     :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_schema_attributes(schema_url)
+    return schema_controller_impl.get_schema_attributes(schema_url, display_label_type)

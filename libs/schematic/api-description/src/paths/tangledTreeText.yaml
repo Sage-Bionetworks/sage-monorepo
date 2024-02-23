@@ -1,13 +1,14 @@
 get:
   tags:
     - TangledTree
-  summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
-  description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+  summary: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
+  description: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
   operationId: getTangledTreeText
   parameters:
     - $ref: ../components/parameters/query/schemaUrl.yaml
     - $ref: ../components/parameters/query/figureType.yaml
     - $ref: ../components/parameters/query/textFormat.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
   responses:
     '200':
       description: Success

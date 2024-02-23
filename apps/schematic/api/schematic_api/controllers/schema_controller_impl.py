@@ -8,6 +8,7 @@ from schematic.schemas.data_model_graph import (  # type: ignore
 )
 from schematic.visualization.attributes_explorer import AttributesExplorer  # type: ignore
 from schematic.utils.schema_utils import get_property_label_from_display_name  # type: ignore
+from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.node_property_array import NodePropertyArray
@@ -28,7 +29,10 @@ from schematic_api.controllers.paging import Page
 
 @handle_exceptions
 def get_component(
-    component_label: str, schema_url: str, include_index: bool = False
+    component_label: str,
+    schema_url: str,
+    include_index: bool = False,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[str, BasicError], int]:
     """
     Get all the attributes associated with a specific data model component formatted as a
@@ -38,6 +42,9 @@ def get_component(
         component_label (str): The label of the component
         schema_url (str): The URL of the schema in json form
         include_index (bool): Whether to include the indexes of the dataframe
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[str, BasicError], int]: A tuple
@@ -45,8 +52,10 @@ def get_component(
           The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
-    explorer = AttributesExplorer(schema_path)
-    result: Union[str, BasicError] = explorer.parse_component_attributes(
+    explorer = AttributesExplorer(
+        path_to_jsonld=schema_path, data_model_labels=display_label_type
+    )
+    result: Union[str, BasicError] = explorer.parse_component_attributes(  # type: ignore
         component=component_label, save_file=False, include_index=include_index
     )
     status = 200
@@ -208,13 +217,18 @@ def get_property_label(
 
 
 @handle_exceptions
-def get_schema_attributes(schema_url: str) -> tuple[Union[str, BasicError], int]:
+def get_schema_attributes(
+    schema_url: str, display_label_type: DisplayLabelType = "class_label"
+) -> tuple[Union[str, BasicError], int]:
     """
     Get all the attributes associated with a data model formatted as a dataframe
     (stored as a JSON String).
 
     Args:
         schema_url (str): The URL of the schema in json form
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Returns:
         tuple[Union[str, BasicError], int]: A tuple
@@ -222,8 +236,10 @@ def get_schema_attributes(schema_url: str) -> tuple[Union[str, BasicError], int]
           The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
-    explorer = AttributesExplorer(schema_path)
-    result: Union[str, BasicError] = explorer.parse_attributes(save_file=False)
+    explorer = AttributesExplorer(
+        path_to_jsonld=schema_path, data_model_labels=display_label_type
+    )
+    result: Union[str, BasicError] = explorer.parse_attributes(save_file=False)  # type: ignore
     status = 200
     return result, status
 
