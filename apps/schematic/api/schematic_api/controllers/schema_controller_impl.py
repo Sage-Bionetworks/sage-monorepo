@@ -65,19 +65,26 @@ def get_component(
 def get_connected_node_pairs_from_schematic(
     relationship_type: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> list[ConnectedNodePair]:
     """Gets a list of connected node pairs via the provided relationship
 
     Args:
         relationship_type (str): the type of relationship in the schema to get
         schema_url (str): The URL of the schema in jsonld form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         list[ConnectedNodePair]: A list of connected node pairs
     """
     data_model_parser = DataModelParser(path_to_data_model=schema_url)
     parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(parsed_data_model)
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
     graph_data_model = data_model_grapher.generate_data_model_graph()
     dmge = DataModelGraphExplorer(graph_data_model)
     relationship_subgraph = dmge.get_subgraph_by_edge_type(relationship_type)
@@ -91,18 +98,25 @@ def get_connected_node_pairs_from_schematic(
 
 @handle_exceptions
 def get_connected_node_pair_array(
-    schema_url: str, relationship_type: str
+    schema_url: str,
+    relationship_type: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[ConnectedNodePairArray, BasicError], int]:
     """Gets a list of connected node pairs via the provided relationship
 
     Args:
         relationship_type (str): the type of relationship in the schema to get
         schema_url (str): The URL of the schema in jsonld form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[ConnectedNodePairArray, BasicError], int]: A list of connected node pairs
     """
-    nodes = get_connected_node_pairs_from_schematic(relationship_type, schema_url)
+    nodes = get_connected_node_pairs_from_schematic(
+        relationship_type, schema_url, display_label_type
+    )
     result: Union[ConnectedNodePairArray, BasicError] = ConnectedNodePairArray(nodes)
     status = 200
     return result, status
@@ -114,6 +128,7 @@ def get_connected_node_pair_page(
     relationship_type: str,
     page_number: int = 1,
     page_max_items: int = 100000,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[ConnectedNodePairPage, BasicError], int]:
     """Gets a page of connected node pairs via the provided relationship
 
@@ -122,6 +137,9 @@ def get_connected_node_pair_page(
         schema_url (str): The URL of the schema in json form
         page_number (int): The page number the current request is for
         page_max_items (int): The maximum number of items per page
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[ConnectedNodePairPage, BasicError], int: A tuple
@@ -131,7 +149,7 @@ def get_connected_node_pair_page(
     # pylint: disable=duplicate-code
 
     connected_nodes = get_connected_node_pairs_from_schematic(
-        relationship_type, schema_url
+        relationship_type, schema_url, display_label_type
     )
     page = Page(connected_nodes, page_number, page_max_items)
 
@@ -152,19 +170,26 @@ def get_connected_node_pair_page(
 def get_node_is_required_from_schematic(
     node_display: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> bool:
     """Gets whether or not the node is required by the schema
 
     Args:
         node_display(str): The display name of the node
         schema_url (str): The URL of the schema in jsonld form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
        bool: Whether or no the node is required
     """
     data_model_parser = DataModelParser(path_to_data_model=schema_url)
     parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(parsed_data_model)
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
     graph_data_model = data_model_grapher.generate_data_model_graph()
     dmge = DataModelGraphExplorer(graph_data_model)
     return dmge.get_node_required(node_display)
@@ -174,12 +199,16 @@ def get_node_is_required_from_schematic(
 def get_node_is_required(
     node_display: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[bool, BasicError], int]:
     """Gets whether or not the node is required by the schema
 
     Args:
         node_display(str): The display name of the node
         schema_url (str): The URL of the schema in jsonld form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[bool, BasicError], int]: A tuple
@@ -187,7 +216,7 @@ def get_node_is_required(
           The second item is the response status
     """
     result: Union[bool, BasicError] = get_node_is_required_from_schematic(
-        node_display, schema_url
+        node_display, schema_url, display_label_type
     )
     status = 200
     return result, status
@@ -247,19 +276,26 @@ def get_schema_attributes(
 def get_node_properties_from_schematic(
     node_label: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> list[str]:
     """Gets the properties associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
         node_label (str): The label of the node
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         list[str]: A list of properties of the node
     """
     data_model_parser = DataModelParser(path_to_data_model=schema_url)
     parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(parsed_data_model)
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
     graph_data_model = data_model_grapher.generate_data_model_graph()
     dmge = DataModelGraphExplorer(graph_data_model)
     properties = dmge.find_class_specific_properties(node_label)
@@ -270,12 +306,16 @@ def get_node_properties_from_schematic(
 def get_node_properties(
     node_label: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[NodePropertyArray, BasicError], int]:
     """Gets the properties associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
         node_label (str): The label of the node
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[NodePropertyArray, BasicError], int]: A tuple
@@ -283,7 +323,9 @@ def get_node_properties(
           The second item is the response status
     """
 
-    properties = get_node_properties_from_schematic(node_label, schema_url)
+    properties = get_node_properties_from_schematic(
+        node_label, schema_url, display_label_type
+    )
     result: Union[NodePropertyArray, BasicError] = NodePropertyArray(properties)
     status = 200
     return result, status
@@ -292,19 +334,26 @@ def get_node_properties(
 def get_node_validation_rules_from_schematic(
     node_display: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> list[ValidationRule]:
     """Gets the validation_rules associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
         node_display (str): The display name of the node
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         list[ValidationRule]: A list of validation_rules of the node
     """
     data_model_parser = DataModelParser(path_to_data_model=schema_url)
     parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(parsed_data_model)
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
     graph_data_model = data_model_grapher.generate_data_model_graph()
     dmge = DataModelGraphExplorer(graph_data_model)
     rules: list[str] = dmge.get_node_validation_rules(node_display)  # type: ignore
@@ -315,12 +364,16 @@ def get_node_validation_rules_from_schematic(
 def get_node_validation_rules(
     node_display: str,
     schema_url: str,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[ValidationRuleArray, BasicError], int]:
     """Gets the validation rules associated with the node
 
     Args:
         schema_url (str): The URL of the schema in jsonld form
         node_display(str): The display name of the node
+    display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[ValidationRuleArray, BasicError], int]: A tuple
@@ -328,7 +381,7 @@ def get_node_validation_rules(
           The second item is the response status
     """
     validation_rules = get_node_validation_rules_from_schematic(
-        node_display, schema_url
+        node_display, schema_url, display_label_type
     )
     result: Union[ValidationRuleArray, BasicError] = ValidationRuleArray(
         validation_rules
@@ -342,6 +395,7 @@ def get_node_dependencies_from_schematic(
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> list[Node]:
     """Gets the nodes that the input node is dependent on
 
@@ -352,6 +406,9 @@ def get_node_dependencies_from_schematic(
           otherwise the label
         return_ordered_by_schema (bool):Whether or not to order the nodes by their order in
           the schema, otherwise random
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         list[Node]: A list of nodes
@@ -359,7 +416,10 @@ def get_node_dependencies_from_schematic(
     """
     data_model_parser = DataModelParser(path_to_data_model=schema_url)
     parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(parsed_data_model)
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
     graph_data_model = data_model_grapher.generate_data_model_graph()
     dmge = DataModelGraphExplorer(graph_data_model)
     nodes = dmge.get_node_dependencies(
@@ -374,6 +434,7 @@ def get_node_dependency_array(
     schema_url: str,
     return_display_names: bool = True,
     return_ordered_by_schema: bool = True,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[NodeArray, BasicError], int]:
     """Gets the nodes that the input node is dependent on
 
@@ -384,6 +445,9 @@ def get_node_dependency_array(
           otherwise the label
         return_ordered_by_schema (bool):Whether or not to order the dependencies by their order in
           the schema, otherwise random
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[NodeArray, BasicError], int]: A tuple
@@ -392,7 +456,11 @@ def get_node_dependency_array(
     """
 
     nodes = get_node_dependencies_from_schematic(
-        node_label, schema_url, return_display_names, return_ordered_by_schema
+        node_label,
+        schema_url,
+        return_display_names,
+        return_ordered_by_schema,
+        display_label_type,
     )
     result: Union[NodeArray, BasicError] = NodeArray(nodes)
     status = 200
@@ -407,6 +475,7 @@ def get_node_dependency_page(  # pylint: disable=too-many-arguments
     return_ordered_by_schema: bool = True,
     page_number: int = 1,
     page_max_items: int = 100000,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[Union[NodePage, BasicError], int]:
     """Gets the nodes that the input node is dependent on
 
@@ -419,6 +488,9 @@ def get_node_dependency_page(  # pylint: disable=too-many-arguments
           the schema, otherwise random
         page_number (int): The page number the current request is for
         page_max_items (int): The maximum number of items per page
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
 
     Returns:
         tuple[Union[NodePage, BasicError], int]: A tuple
@@ -427,7 +499,11 @@ def get_node_dependency_page(  # pylint: disable=too-many-arguments
     """
     # pylint: disable=duplicate-code
     nodes = get_node_dependencies_from_schematic(
-        node_label, schema_url, return_display_names, return_ordered_by_schema
+        node_label,
+        schema_url,
+        return_display_names,
+        return_ordered_by_schema,
+        display_label_type,
     )
     page = Page(nodes, page_number, page_max_items)
 

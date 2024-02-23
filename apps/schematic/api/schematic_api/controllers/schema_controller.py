@@ -42,7 +42,9 @@ def get_component(
     )
 
 
-def get_connected_node_pair_array(schema_url, relationship_type):  # noqa: E501
+def get_connected_node_pair_array(
+    schema_url, relationship_type, display_label_type=None
+):  # noqa: E501
     """Gets an array of connected node pairs
 
     Gets a array of connected node pairs # noqa: E501
@@ -51,16 +53,22 @@ def get_connected_node_pair_array(schema_url, relationship_type):  # noqa: E501
     :type schema_url: str
     :param relationship_type: Type of relationship in a schema, such as requiresDependency
     :type relationship_type: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[ConnectedNodePairArray, Tuple[ConnectedNodePairArray, int], Tuple[ConnectedNodePairArray, int, Dict[str, str]]
     """
     return schema_controller_impl.get_connected_node_pair_array(
-        schema_url, relationship_type
+        schema_url, relationship_type, display_label_type
     )
 
 
 def get_connected_node_pair_page(
-    schema_url, relationship_type, page_number=None, page_max_items=None
+    schema_url,
+    relationship_type,
+    page_number=None,
+    page_max_items=None,
+    display_label_type=None,
 ):  # noqa: E501
     """Gets a page of connected node pairs
 
@@ -74,16 +82,22 @@ def get_connected_node_pair_page(
     :type page_number: int
     :param page_max_items: The maximum number of items per page (up to 100,000) for paginated endpoints
     :type page_max_items: int
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[ConnectedNodePairPage, Tuple[ConnectedNodePairPage, int], Tuple[ConnectedNodePairPage, int, Dict[str, str]]
     """
     return schema_controller_impl.get_connected_node_pair_page(
-        schema_url, relationship_type, page_number, page_max_items
+        schema_url, relationship_type, page_number, page_max_items, display_label_type
     )
 
 
 def get_node_dependency_array(
-    node_label, schema_url, return_display_names=None, return_ordered_by_schema=None
+    node_label,
+    schema_url,
+    return_display_names=None,
+    return_ordered_by_schema=None,
+    display_label_type=None,
 ):  # noqa: E501
     """Gets the immediate dependencies that are related to the given source node
 
@@ -97,11 +111,17 @@ def get_node_dependency_array(
     :type return_display_names: bool
     :param return_ordered_by_schema: Whether or not to order the components by their order in the schema, otherwise random
     :type return_ordered_by_schema: bool
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[NodeArray, Tuple[NodeArray, int], Tuple[NodeArray, int, Dict[str, str]]
     """
     return schema_controller_impl.get_node_dependency_array(
-        node_label, schema_url, return_display_names, return_ordered_by_schema
+        node_label,
+        schema_url,
+        return_display_names,
+        return_ordered_by_schema,
+        display_label_type,
     )
 
 
@@ -112,6 +132,7 @@ def get_node_dependency_page(
     return_ordered_by_schema=None,
     page_number=None,
     page_max_items=None,
+    display_label_type=None,
 ):  # noqa: E501
     """Gets the immediate dependencies that are related to the given source node
 
@@ -129,6 +150,8 @@ def get_node_dependency_page(
     :type page_number: int
     :param page_max_items: The maximum number of items per page (up to 100,000) for paginated endpoints
     :type page_max_items: int
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[NodePage, Tuple[NodePage, int], Tuple[NodePage, int, Dict[str, str]]
     """
@@ -139,10 +162,13 @@ def get_node_dependency_page(
         return_ordered_by_schema,
         page_number,
         page_max_items,
+        display_label_type,
     )
 
 
-def get_node_is_required(node_display, schema_url):  # noqa: E501
+def get_node_is_required(
+    node_display, schema_url, display_label_type=None
+):  # noqa: E501
     """Gets whether or not the node is required in the schema
 
     Gets whether or not the node is required in the schema # noqa: E501
@@ -151,13 +177,17 @@ def get_node_is_required(node_display, schema_url):  # noqa: E501
     :type node_display: str
     :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[bool, Tuple[bool, int], Tuple[bool, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_is_required(node_display, schema_url)
+    return schema_controller_impl.get_node_is_required(
+        node_display, schema_url, display_label_type
+    )
 
 
-def get_node_properties(node_label, schema_url):  # noqa: E501
+def get_node_properties(node_label, schema_url, display_label_type=None):  # noqa: E501
     """Gets properties associated with a given node
 
     Gets properties associated with a given node # noqa: E501
@@ -166,13 +196,19 @@ def get_node_properties(node_label, schema_url):  # noqa: E501
     :type node_label: str
     :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[NodePropertyArray, Tuple[NodePropertyArray, int], Tuple[NodePropertyArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_properties(node_label, schema_url)
+    return schema_controller_impl.get_node_properties(
+        node_label, schema_url, display_label_type
+    )
 
 
-def get_node_validation_rules(node_display, schema_url):  # noqa: E501
+def get_node_validation_rules(
+    node_display, schema_url, display_label_type=None
+):  # noqa: E501
     """Gets the validation rules, along with the arguments for each given rule associated with a given node
 
     Gets the validation rules, along with the arguments for each given rule associated with a given node # noqa: E501
@@ -181,10 +217,14 @@ def get_node_validation_rules(node_display, schema_url):  # noqa: E501
     :type node_display: str
     :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
 
     :rtype: Union[ValidationRuleArray, Tuple[ValidationRuleArray, int], Tuple[ValidationRuleArray, int, Dict[str, str]]
     """
-    return schema_controller_impl.get_node_validation_rules(node_display, schema_url)
+    return schema_controller_impl.get_node_validation_rules(
+        node_display, schema_url, display_label_type
+    )
 
 
 def get_property_label(node_display, use_strict_camel_case=None):  # noqa: E501

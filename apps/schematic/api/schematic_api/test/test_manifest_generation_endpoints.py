@@ -28,6 +28,7 @@ CREATE_MANIFESTS_ARGS = [
     "dataset_ids",
     "strict",
     "use_annotations",
+    "data_model_labels",
 ]
 
 

@@ -1016,6 +1016,18 @@ paths:
         schema:
           $ref: '#/components/schemas/RelationshipType'
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1075,6 +1087,18 @@ paths:
           default: 100000
           minimum: 1
           type: integer
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1140,6 +1164,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/DataTypeArray'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
@@ -1212,6 +1248,18 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1294,6 +1342,18 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1353,6 +1413,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/ReturnOrderedBySchema'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1435,6 +1507,18 @@ paths:
           minimum: 1
           type: integer
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1475,6 +1559,18 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -2233,6 +2329,19 @@ components:
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
       style: form
+    displayLabelType:
+      description: The type of label to display
+      explode: true
+      in: query
+      name: displayLabelType
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        type: string
+      style: form
     nodeDisplay:
       description: The display name of the node in a schema
       explode: false
@@ -2271,19 +2380,6 @@ components:
       schema:
         default: false
         type: boolean
-      style: form
-    displayLabelType:
-      description: The type of label to display
-      explode: true
-      in: query
-      name: displayLabelType
-      required: false
-      schema:
-        default: class_label
-        enum:
-        - class_label
-        - display_label
-        type: string
       style: form
     relationshipType:
       description: "Type of relationship in a schema, such as requiresDependency"

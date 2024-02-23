@@ -3,6 +3,7 @@
 
 from schematic import CONFIG  # type: ignore
 from schematic.manifest.generator import ManifestGenerator  # type: ignore
+from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.google_sheet_links import GoogleSheetLinks
@@ -21,9 +22,10 @@ def generate_google_sheet_manifests(
     dataset_id_array: list[str] | None,
     manifest_title: str | None,
     data_type_array: list[str] | None,
-    asset_view_id: str | None,
-    use_strict_validation: bool,
-    generate_all_manifests: bool,
+    display_label_type: DisplayLabelType = "class_label",
+    asset_view_id: str | None = None,
+    use_strict_validation: bool = True,
+    generate_all_manifests: bool = False,
 ) -> tuple[GoogleSheetLinks | BasicError, int]:
     """Generates a list of links to manifests in google sheet form
 
@@ -37,6 +39,9 @@ def generate_google_sheet_manifests(
         manifest_title (str | None): Title of the manifest
         use_strict_validation (bool): Whether or not to use google sheet strict validation
         generate_all_manifests (bool): Will generate a manifest for all data types
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Raises:
         ValueError: When generate_all_manifests is true and either dataset_id_array or
@@ -98,6 +103,7 @@ def generate_google_sheet_manifests(
         dataset_ids=dataset_id_array,
         strict=use_strict_validation,
         use_annotations=add_annotations,
+        data_model_labels=display_label_type,
     )
     result: GoogleSheetLinks | BasicError = GoogleSheetLinks(links)
     status = 200

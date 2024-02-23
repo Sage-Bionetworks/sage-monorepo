@@ -12,6 +12,7 @@ get:
     - $ref: ../../../components/parameters/query/returnOrderedBySchema.yaml
     - $ref: ../../../components/parameters/query/pageNumber.yaml
     - $ref: ../../../components/parameters/query/pageMaxItems.yaml
+    - $ref: ../../../components/parameters/query/displayLabelType.yaml
   responses:
     '200':
       description: Success

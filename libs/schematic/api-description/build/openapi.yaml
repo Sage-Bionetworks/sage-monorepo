@@ -392,6 +392,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/returnDisplayNames'
         - $ref: '#/components/parameters/returnOrderedBySchema'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -416,6 +417,7 @@ paths:
         - $ref: '#/components/parameters/returnOrderedBySchema'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -436,6 +438,7 @@ paths:
       operationId: getNodeIsRequired
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -457,6 +460,7 @@ paths:
       operationId: getNodeProperties
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -497,6 +501,7 @@ paths:
       operationId: getNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -559,6 +564,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/relationshipType'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -580,6 +586,7 @@ paths:
         - $ref: '#/components/parameters/relationshipType'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -771,6 +778,7 @@ paths:
         - $ref: '#/components/parameters/datasetIdArray'
         - $ref: '#/components/parameters/manifestTitle'
         - $ref: '#/components/parameters/dataTypeArray'
+        - $ref: '#/components/parameters/displayLabelType'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
@@ -1400,6 +1408,17 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
+    displayLabelType:
+      name: displayLabelType
+      in: query
+      description: The type of label to display
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
     nodeDisplay:
       name: nodeDisplay
       in: path
@@ -1428,17 +1447,6 @@ components:
       schema:
         type: boolean
         default: false
-    displayLabelType:
-      name: displayLabelType
-      in: query
-      description: The type of label to display
-      required: false
-      schema:
-        type: string
-        enum:
-          - class_label
-          - display_label
-        default: class_label
     relationshipType:
       name: relationshipType
       in: query
