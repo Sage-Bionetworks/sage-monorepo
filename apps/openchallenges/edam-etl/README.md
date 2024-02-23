@@ -40,7 +40,7 @@ $ nx serve openchallenges-edam-etl
  >  NX   Successfully ran target serve for project openchallenges-edam-etl
 ```
 
-### Build image
+### Build the image
 
 ```
 nx build-image openchallenges-edam-etl
