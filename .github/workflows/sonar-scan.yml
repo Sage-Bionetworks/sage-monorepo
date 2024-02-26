@@ -1,18 +1,26 @@
 name: Scan affected projects with Sonar
 on:
+  push:
+    branches:
+      - main
+      - 'agora/**'
+      - 'iatlas/**'
+      - 'openchallenges/**'
+      - 'sage-monorepo/**'
+      - 'schematic/**'
   pull_request_target:
     types: [opened, synchronize, reopened, labeled]
 
 env:
-  HEAD_REF: ${{ github.event.pull_request.head.ref }}
-  HEAD_REPOSITORY: ${{ github.event.pull_request.head.repo.full_name }}
+  HEAD_REF: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.ref || github.ref_name }}
+  HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.repository }}
 
 jobs:
   sonar:
     runs-on: ubuntu-latest
     steps:
       - name: Check if the label `sonar-scan-approved` exists
-        if: contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true
+        if: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true }}
         run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
       - uses: actions/checkout@v3

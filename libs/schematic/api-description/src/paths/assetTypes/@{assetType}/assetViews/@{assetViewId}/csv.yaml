@@ -1,0 +1,28 @@
+parameters:
+  - $ref: ../../../../../components/parameters/path/assetViewId.yaml
+  - $ref: ../../../../../components/parameters/path/assetType.yaml
+get:
+  tags:
+    - Storage
+  summary: Gets the asset view table in csv file form
+  description: Gets the asset view table in csv file form
+  operationId: getAssetViewCsv
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Success
+      content:
+        text/csv:
+          schema:
+            type: string
+    '400':
+      $ref: ../../../../../components/responses/BadRequest.yaml
+    '401':
+      $ref: ../../../../../components/responses/Unauthorized.yaml
+    '403':
+      $ref: ../../../../../components/responses/Unauthorized.yaml
+    '404':
+      $ref: ../../../../../components/responses/NotFound.yaml
+    '500':
+      $ref: ../../../../../components/responses/InternalServerError.yaml
