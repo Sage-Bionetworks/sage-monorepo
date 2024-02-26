@@ -12,6 +12,16 @@ CREATE TABLE `challenge_platform`
 );
 
 
+-- edam_concept definition
+CREATE TABLE `edam_concept`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `class_id`              varchar(60) NOT NULL UNIQUE,
+    `preferred_label`       varchar(80) NOT NULL,
+    PRIMARY KEY (`id`)
+);
+
+
 -- challenge_input_data_type definition
 CREATE TABLE `challenge_input_data_type`
 (
@@ -44,6 +54,7 @@ CREATE TABLE `challenge`
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`platform_id`) REFERENCES challenge_platform(`id`),
+    FOREIGN KEY (`operation_id`) REFERENCES edam_concept(`id`),
     CONSTRAINT slug_check CHECK (char_length(`slug`) >= 3 and `slug` REGEXP '^[a-z0-9]+(?:-[a-z0-9]+)*$')
 );
 
@@ -122,14 +133,4 @@ CREATE TABLE `challenge_category`
     `name`                  ENUM('featured', 'benchmark', 'hackathon'),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`)
-);
-
--- edam_concept definition
-
-CREATE TABLE `edam_concept`
-(
-    `id`                    int NOT NULL AUTO_INCREMENT,
-    `class_id`              varchar(60) NOT NULL UNIQUE,
-    `preferred_label`       varchar(80) NOT NULL UNIQUE,
-    PRIMARY KEY (`id`)
 );

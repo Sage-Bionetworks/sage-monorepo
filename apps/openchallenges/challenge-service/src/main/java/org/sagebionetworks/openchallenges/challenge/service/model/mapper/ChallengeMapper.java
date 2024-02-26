@@ -16,6 +16,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   private static final Logger LOG = LoggerFactory.getLogger(ChallengeMapper.class);
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
+  private EdamOperationMapper edamOperationMapper = new EdamOperationMapper();
   private SimpleChallengeInputDataTypeMapper inputDataTypeMapper =
       new SimpleChallengeInputDataTypeMapper();
 
@@ -37,6 +38,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
       LOG.info("challenge dto before set: {}", dto);
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
+      dto.setOperation(edamOperationMapper.convertToDto(entity.getOperation()));
       dto.submissionTypes(
           entity.getSubmissionTypes().stream()
               .map(o -> ChallengeSubmissionTypeDto.fromValue(o.getName()))
