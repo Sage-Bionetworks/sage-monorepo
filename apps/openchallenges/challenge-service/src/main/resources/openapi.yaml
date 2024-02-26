@@ -682,6 +682,25 @@ components:
       format: date
       nullable: true
       type: string
+    EdamOperation:
+      description: An EDAM Operation concept.
+      example:
+        classId: http://edamontology.org/operation_0230
+        preferredLabel: Sequence generation
+      properties:
+        classId:
+          example: http://edamontology.org/operation_0230
+          maxLength: 60
+          pattern: ^http:\/\/edamontology\.org\/operation_\d+$
+          type: string
+        preferredLabel:
+          example: Sequence generation
+          maxLength: 80
+          type: string
+      required:
+      - classId
+      - preferredLabel
+      type: object
     CreatedDateTime:
       description: Datetime when the object was added to the database.
       example: 2022-07-04T22:19:11Z
@@ -717,6 +736,9 @@ components:
         - featured
         - featured
         headline: Example challenge headline
+        operation:
+          classId: http://edamontology.org/operation_0230
+          preferredLabel: Sequence generation
         slug: awesome-challenge
         startDate: 2017-07-21T00:00:00.000+00:00
         doi: https://doi.org/123/abc
@@ -819,6 +841,8 @@ components:
           example: 100
           minimum: 0
           type: integer
+        operation:
+          $ref: '#/components/schemas/EdamOperation'
         createdAt:
           description: Datetime when the object was added to the database.
           example: 2022-07-04T22:19:11Z
