@@ -12,7 +12,7 @@
 
 
 /**
- * An EDAM Operation concept.
+ * The EDAM Operation concept.
  */
 export interface EdamOperation { 
     classId: string;
