@@ -39,6 +39,7 @@ CREATE TABLE `challenge`
     `doi`                   varchar(120),
     `start_date`            DATE,
     `end_date`              DATE,
+    `operation_id`          int,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),

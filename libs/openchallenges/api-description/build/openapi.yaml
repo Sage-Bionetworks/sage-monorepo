@@ -617,7 +617,7 @@ components:
       example: '2017-07-21'
     EdamOperation:
       type: object
-      description: An EDAM Operation concept.
+      description: The EDAM Operation concept.
       properties:
         classId:
           type: string
