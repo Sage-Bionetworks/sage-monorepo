@@ -77,7 +77,7 @@ CREATE TABLE `challenge_incentive`
 CREATE TABLE `challenge_submission_type`
 (
     `id`                    int NOT NULL AUTO_INCREMENT,
-    `name`                  ENUM('container_image', 'prediction_file', 'notebook', 'other'),
+    `name`                  ENUM('container_image', 'prediction_file', 'notebook', 'mlcube', 'other'),
     `challenge_id`          bigint(20) NOT NULL,
     `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
@@ -121,4 +121,14 @@ CREATE TABLE `challenge_category`
     `name`                  ENUM('featured', 'benchmark', 'hackathon'),
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`)
+);
+
+-- edam_concept definition
+
+CREATE TABLE `edam_concept`
+(
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `class_id`              varchar(60) NOT NULL UNIQUE,
+    `preferred_label`       varchar(80) NOT NULL UNIQUE,
+    PRIMARY KEY (`id`)
 );

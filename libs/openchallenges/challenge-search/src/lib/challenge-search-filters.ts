@@ -76,12 +76,16 @@ export const challengeSubmissionTypesFilter: Filter[] = [
     label: 'Container Image',
   },
   {
-    value: ChallengeSubmissionType.PredictionFile,
-    label: 'Prediction File',
+    value: ChallengeSubmissionType.MLCube,
+    label: 'MLCube',
   },
   {
     value: ChallengeSubmissionType.Notebook,
     label: 'Notebook',
+  },
+  {
+    value: ChallengeSubmissionType.PredictionFile,
+    label: 'Prediction File',
   },
   {
     value: ChallengeSubmissionType.Other,

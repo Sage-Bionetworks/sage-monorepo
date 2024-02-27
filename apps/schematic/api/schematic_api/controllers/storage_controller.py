@@ -26,6 +26,23 @@ from schematic_api import util
 from schematic_api.controllers import storage_controller_impl
 
 
+def get_asset_view_csv(asset_view_id, asset_type):  # noqa: E501
+    """Gets the asset view table in csv file form
+
+    Gets the asset view table in csv file form # noqa: E501
+
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_asset_view_csv(asset_view_id, asset_type)
+
+
 def get_asset_view_json(asset_view_id, asset_type):  # noqa: E501
     """Gets the asset view table in json form
 
@@ -113,6 +130,27 @@ def get_dataset_file_metadata_page(
     )
 
 
+def get_dataset_manifest_csv(asset_type, dataset_id, asset_view_id):  # noqa: E501
+    """Gets the manifest in csv form
+
+    Gets the manifest in csv form # noqa: E501
+
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param dataset_id: The ID of a dataset.
+    :type dataset_id: str
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
+
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_dataset_manifest_csv(
+        asset_type, dataset_id, asset_view_id
+    )
+
+
 def get_dataset_manifest_json(asset_type, dataset_id, asset_view_id):  # noqa: E501
     """Gets the manifest in json form
 
@@ -132,6 +170,23 @@ def get_dataset_manifest_json(asset_type, dataset_id, asset_view_id):  # noqa: E
     return storage_controller_impl.get_dataset_manifest_json(
         asset_type, dataset_id, asset_view_id
     )
+
+
+def get_manifest_csv(asset_type, manifest_id):  # noqa: E501
+    """Gets the manifest in csv form
+
+    Gets the manifest in csv form # noqa: E501
+
+    :param asset_type: Type of asset, such as Synapse
+    :type asset_type: dict | bytes
+    :param manifest_id: ID of a manifest
+    :type manifest_id: str
+
+    :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
+    """
+    if connexion.request.is_json:
+        asset_type = AssetType.from_dict(connexion.request.get_json())  # noqa: E501
+    return storage_controller_impl.get_manifest_csv(asset_type, manifest_id)
 
 
 def get_manifest_json(asset_type, manifest_id):  # noqa: E501

@@ -118,6 +118,17 @@ class TestValidationEndpoints(BaseTestCase):
 class TestStorageEndpoints(BaseTestCase):
     """Integration tests"""
 
+    def test_get_asset_view_csv(self) -> None:
+        """Test for successful result"""
+        url = "/api/v1/assetTypes/synapse/" f"assetViews/{TEST_ASSET_VIEW}/csv"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        path = json.loads(response.data)
+        assert isinstance(path, str)
+        assert path.endswith(".asset_view.csv")
+        asset_view = pd.read_csv(path)
+        assert isinstance(asset_view, pd.DataFrame)
+
     def test_get_asset_view_json(self) -> None:
         """Test for successful result"""
         url = "/api/v1/assetTypes/synapse/" f"assetViews/{TEST_ASSET_VIEW}/json"
@@ -163,6 +174,21 @@ class TestStorageEndpoints(BaseTestCase):
             for key in ["id", "name"]:
                 assert key in item
 
+    def test_get_dataset_manifest_csv(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/assetTypes/synapse/"
+            f"datasets/{TEST_DATASET}/manifestCsv"
+            f"?assetViewId={TEST_ASSET_VIEW}"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        path = json.loads(response.data)
+        assert isinstance(path, str)
+        assert path.endswith(".manifest.csv")
+        asset_view = pd.read_csv(path)
+        assert isinstance(asset_view, pd.DataFrame)
+
     def test_get_dataset_manifest_json(self) -> None:
         """Test for successful result"""
         url = (
@@ -177,6 +203,17 @@ class TestStorageEndpoints(BaseTestCase):
         assert isinstance(response_dict, dict)
         dataframe = pd.DataFrame.from_dict(response_dict)
         assert isinstance(dataframe, pd.DataFrame)
+
+    def test_get_manifest_csv(self) -> None:
+        """Test for successful result"""
+        url = "/api/v1/assetTypes/synapse/" f"manifests/{TEST_MANIFEST}/csv"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        path = json.loads(response.data)
+        assert isinstance(path, str)
+        assert path.endswith(".manifest.csv")
+        asset_view = pd.read_csv(path)
+        assert isinstance(asset_view, pd.DataFrame)
 
     def test_get_manifest_json(self) -> None:
         """Test for successful result"""

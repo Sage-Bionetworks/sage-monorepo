@@ -15,6 +15,8 @@ public enum ChallengeSubmissionTypeDto {
 
   NOTEBOOK("notebook"),
 
+  MLCUBE("mlcube"),
+
   OTHER("other");
 
   private String value;

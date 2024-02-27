@@ -78,7 +78,7 @@ def fixture_example_manifest_metadata() -> Generator:
     yield EXAMPLE_MANIFEST_METADATA
 
 
-TEST_SCHEMA_URL = "https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld"  # pylint: disable=line-too-long
+TEST_SCHEMA_URL = "https://raw.githubusercontent.com/Sage-Bionetworks/schematic/main/tests/data/example.model.jsonld"  # pylint: disable=line-too-long
 
 
 @pytest.fixture(scope="session", name="test_schema_url")
