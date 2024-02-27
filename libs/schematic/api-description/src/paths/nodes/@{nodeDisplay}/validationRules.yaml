@@ -8,6 +8,7 @@ get:
   operationId: getNodeValidationRules
   parameters:
     - $ref: ../../../components/parameters/query/schemaUrl.yaml
+    - $ref: ../../../components/parameters/query/displayLabelType.yaml
   responses:
     '200':
       description: Success

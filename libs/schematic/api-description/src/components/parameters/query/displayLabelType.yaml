@@ -1,0 +1,8 @@
+name: displayLabelType
+in: query
+description: 'The type of label to display'
+required: false
+schema:
+  type: string
+  enum: ['class_label', 'display_label']
+  default: 'class_label'

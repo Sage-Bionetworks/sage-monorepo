@@ -1170,6 +1170,18 @@ paths:
           default: false
           type: boolean
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1210,6 +1222,18 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/RelationshipType'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1270,6 +1294,18 @@ paths:
           default: 100000
           minimum: 1
           type: integer
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1335,6 +1371,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/DataTypeArray'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
@@ -1408,6 +1456,18 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1440,14 +1500,6 @@ paths:
         schema:
           $ref: '#/components/schemas/NodeDisplay'
         style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
       - description: Whether or not to use the more strict way of converting to camel
           case
         explode: true
@@ -1496,6 +1548,18 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1556,6 +1620,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/ReturnOrderedBySchema'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1638,6 +1714,18 @@ paths:
           minimum: 1
           type: integer
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1679,6 +1767,18 @@ paths:
         schema:
           $ref: '#/components/schemas/SchemaUrl'
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -1710,6 +1810,18 @@ paths:
         required: true
         schema:
           $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       responses:
         "200":
@@ -1848,15 +1960,42 @@ paths:
           - upsert
           type: string
         style: form
-      - description: "If true, store attributes using the schema label If false, store\
-          \ attributes using the display label"
+      - description: The type of label to display
         explode: true
         in: query
-        name: useSchemaLabel
+        name: displayLabelType
         required: false
         schema:
-          default: true
-          type: boolean
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling style for annotation keys.
+        explode: true
+        in: query
+        name: annotationKeyStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling syle for table column names.
+        explode: true
+        in: query
+        name: tableColumnNameStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          - display_name
+          type: string
         style: form
       requestBody:
         content:
@@ -1979,15 +2118,42 @@ paths:
           - upsert
           type: string
         style: form
-      - description: "If true, store attributes using the schema label If false, store\
-          \ attributes using the display label"
+      - description: The type of label to display
         explode: true
         in: query
-        name: useSchemaLabel
+        name: displayLabelType
         required: false
         schema:
-          default: true
-          type: boolean
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling style for annotation keys.
+        explode: true
+        in: query
+        name: annotationKeyStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling syle for table column names.
+        explode: true
+        in: query
+        name: tableColumnNameStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          - display_name
+          type: string
         style: form
       requestBody:
         content:
@@ -2041,6 +2207,18 @@ paths:
           - dependency
           type: string
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -2062,7 +2240,7 @@ paths:
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
   /tangledTreeText:
     get:
-      description: "Get tangled tree plain or higlighted text to display for a given\
+      description: "Get tangled tree plain or highlighted text to display for a given\
         \ data model, text formatting and figure type"
       operationId: get_tangled_tree_text
       parameters:
@@ -2098,6 +2276,18 @@ paths:
           - highlighted
           type: string
         style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -2112,8 +2302,8 @@ paths:
                 $ref: '#/components/schemas/BasicError'
           description: The request cannot be fulfilled due to an unexpected server
             error
-      summary: "Get tangled tree plain or higlighted text to display for a given data\
-        \ model, text formatting and figure type"
+      summary: "Get tangled tree plain or highlighted text to display for a given\
+        \ data model, text formatting and figure type"
       tags:
       - TangledTree
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
@@ -2147,6 +2337,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -2206,6 +2408,18 @@ paths:
         required: false
         schema:
           $ref: '#/components/schemas/RestrictRules'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
         style: form
       requestBody:
         content:
@@ -2372,6 +2586,19 @@ components:
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
       style: form
+    displayLabelType:
+      description: The type of label to display
+      explode: true
+      in: query
+      name: displayLabelType
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        type: string
+      style: form
     nodeDisplay:
       description: The display name of the node in a schema
       explode: false
@@ -2505,16 +2732,32 @@ components:
         - upsert
         type: string
       style: form
-    useSchemaLabel:
-      description: "If true, store attributes using the schema label If false, store\
-        \ attributes using the display label"
+    annotationKeyStyle:
+      description: The labeling style for annotation keys.
       explode: true
       in: query
-      name: useSchemaLabel
+      name: annotationKeyStyle
       required: false
       schema:
-        default: true
-        type: boolean
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        type: string
+      style: form
+    tableColumnNameStyle:
+      description: The labeling syle for table column names.
+      explode: true
+      in: query
+      name: tableColumnNameStyle
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        - display_name
+        type: string
       style: form
     figureType:
       description: Figure type to generate.
