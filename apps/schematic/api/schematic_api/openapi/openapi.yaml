@@ -1987,7 +1987,7 @@ paths:
       - description: The labeling syle for table column names.
         explode: true
         in: query
-        name: tableColumneNameStyle
+        name: tableColumnNameStyle
         required: false
         schema:
           default: class_label
@@ -2145,7 +2145,7 @@ paths:
       - description: The labeling syle for table column names.
         explode: true
         in: query
-        name: tableColumneNameStyle
+        name: tableColumnNameStyle
         required: false
         schema:
           default: class_label
@@ -2749,7 +2749,7 @@ components:
       description: The labeling syle for table column names.
       explode: true
       in: query
-      name: tableColumneNameStyle
+      name: tableColumnNameStyle
       required: false
       schema:
         default: class_label

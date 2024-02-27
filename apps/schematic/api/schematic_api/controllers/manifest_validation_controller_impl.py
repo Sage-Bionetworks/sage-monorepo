@@ -29,7 +29,7 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
-    table_columne_name_style: str = "class_label",
+    table_column_name_style: str = "class_label",
     annotation_key_style: str = "class_label",
 ) -> str:
     """Submits a manifest csv
@@ -62,7 +62,7 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
             characters
           display_label: will strip blacklisted characters including spaces, to retain display label
             formatting while ensuring the label is formatted properly for Synapse annotations.
-        table_columne_name_style: (str): Sets labeling style for table column names.
+        table_column_name_style: (str): Sets labeling style for table column names.
           display_name: will use the raw display name as the column name.
           class_label will format the display name as upper camelcase, and strip blacklisted
             characters
@@ -88,7 +88,7 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         restrict_rules=restrict_rules,
         hide_blanks=hide_blanks,
         table_manipulation=table_manipulation_method,
-        table_column_names=table_columne_name_style,
+        table_column_names=table_column_name_style,
         annotation_keys=annotation_key_style,
     )
     return manifest_id
@@ -107,7 +107,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
     annotation_key_style: str = "class_label",
-    table_columne_name_style: str = "class_label",
+    table_column_name_style: str = "class_label",
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
 
@@ -140,7 +140,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
             characters
           display_label: will strip blacklisted characters including spaces, to retain display label
             formatting while ensuring the label is formatted properly for Synapse annotations.
-        table_columne_name_style: (str): Sets labeling style for table column names.
+        table_column_name_style: (str): Sets labeling style for table column names.
           display_name: will use the raw display name as the column name.
           class_label will format the display name as upper camelcase, and strip blacklisted
             characters
@@ -166,7 +166,7 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
         display_label_type=display_label_type,
-        table_columne_name_style=table_columne_name_style,
+        table_column_name_style=table_column_name_style,
         annotation_key_style=annotation_key_style,
     )
 
@@ -186,7 +186,7 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
     annotation_key_style: str = "class_label",
-    table_columne_name_style: str = "class_label",
+    table_column_name_style: str = "class_label",
     body: Any = None,
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
@@ -220,7 +220,7 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
             characters
           display_label: will strip blacklisted characters including spaces, to retain display label
             formatting while ensuring the label is formatted properly for Synapse annotations.
-        table_columne_name_style: (str): Sets labeling style for table column names.
+        table_column_name_style: (str): Sets labeling style for table column names.
           display_name: will use the raw display name as the column name.
           class_label will format the display name as upper camelcase, and strip blacklisted
             characters
@@ -246,7 +246,7 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
         display_label_type=display_label_type,
-        table_columne_name_style=table_columne_name_style,
+        table_column_name_style=table_column_name_style,
         annotation_key_style=annotation_key_style,
     )
 

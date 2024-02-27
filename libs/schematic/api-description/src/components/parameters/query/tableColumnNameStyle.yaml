@@ -1,4 +1,4 @@
-name: tableColumneNameStyle
+name: tableColumnNameStyle
 in: query
 description: 'The labeling syle for table column names.'
 required: false
