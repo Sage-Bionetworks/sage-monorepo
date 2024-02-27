@@ -23,6 +23,8 @@ def submit_manifest_csv(
     hide_blanks=None,
     table_manipulation_method=None,
     display_label_type=None,
+    annotation_key_style=None,
+    table_columne_name_style=None,
 ):  # noqa: E501
     """Validates manifest in csv form, then submits it
 
@@ -48,6 +50,10 @@ def submit_manifest_csv(
     :type table_manipulation_method: str
     :param display_label_type: The type of label to display
     :type display_label_type: str
+    :param annotation_key_style: The labeling style for annotation keys.
+    :type annotation_key_style: str
+    :param table_columne_name_style: The labeling syle for table column names.
+    :type table_columne_name_style: str
 
     :rtype: Union[str, Tuple[str, int], Tuple[str, int, Dict[str, str]]
     """
@@ -62,6 +68,8 @@ def submit_manifest_csv(
         hide_blanks,
         table_manipulation_method,
         display_label_type,
+        annotation_key_style,
+        table_columne_name_style,
     )
 
 
@@ -75,6 +83,8 @@ def submit_manifest_json(
     hide_blanks=None,
     table_manipulation_method=None,
     display_label_type=None,
+    annotation_key_style=None,
+    table_columne_name_style=None,
     body=None,
 ):  # noqa: E501
     """Validates a manifest in json form, then submits it
@@ -99,6 +109,10 @@ def submit_manifest_json(
     :type table_manipulation_method: str
     :param display_label_type: The type of label to display
     :type display_label_type: str
+    :param annotation_key_style: The labeling style for annotation keys.
+    :type annotation_key_style: str
+    :param table_columne_name_style: The labeling syle for table column names.
+    :type table_columne_name_style: str
     :param body: A manifest in json form
     :type body: str
 
@@ -114,6 +128,8 @@ def submit_manifest_json(
         hide_blanks,
         table_manipulation_method,
         display_label_type,
+        annotation_key_style,
+        table_columne_name_style,
         body,
     )
 

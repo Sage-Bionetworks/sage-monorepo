@@ -766,6 +766,8 @@ paths:
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
         - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -802,6 +804,8 @@ paths:
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
         - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -1603,6 +1607,29 @@ components:
           - replace
           - upsert
         default: replace
+    annotationKeyStyle:
+      name: annotationKeyStyle
+      in: query
+      description: The labeling style for annotation keys.
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
+    tableColumnNameStyle:
+      name: tableColumneNameStyle
+      in: query
+      description: The labeling syle for table column names.
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+          - display_name
+        default: class_label
     figureType:
       name: figureType
       in: query

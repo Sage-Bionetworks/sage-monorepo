@@ -1,5 +1,7 @@
 """Implementation of manifest validation endpoints"""
 
+# pylint: disable=too-many-locals
+
 from typing import Any
 
 from schematic import CONFIG  # type: ignore
@@ -27,6 +29,8 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
+    table_columne_name_style: str = "class_label",
+    annotation_key_style: str = "class_label",
 ) -> str:
     """Submits a manifest csv
 
@@ -53,6 +57,17 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         display_label_type (DisplayLabelType):
           The type of label to use as display
           Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_columne_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
          str: The id of the manifest
@@ -73,6 +88,8 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         restrict_rules=restrict_rules,
         hide_blanks=hide_blanks,
         table_manipulation=table_manipulation_method,
+        table_column_names=table_columne_name_style,
+        annotation_keys=annotation_key_style,
     )
     return manifest_id
 
@@ -89,33 +106,46 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
+    annotation_key_style: str = "class_label",
+    table_columne_name_style: str = "class_label",
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
 
-     Args:
-         schema_url (str): The url to schema the component is in
-         component (str | None):
-           The component, either schema label, or display label
-           See use_schema_label
-         dataset_id (str): The id of the dataset to submit the manifest to
-         asset_view_id (str): The id of the asset view the dataset is in
-         body (bytes): The body of the request, contains the manifest in bytes form
-         restrict_rules (bool, optional):
-           Whether or not to restrict rule to non- great expectations.
-           Defaults to False.
-         storage_method (str, optional):
-           Specify what will be updated.
-           Defaults to "table_file_and_entities".
-         hide_blanks (bool, optional):
-           Whether or not annotations with blank values will be hidden from a
-             datasets annotation list.
-           Defaults to False.
-         table_manipulation_method (str, optional):
-           Specify the way the manifest tables should be stored.
-           Defaults to "replace".
-         display_label_type (DisplayLabelType):
-           The type of label to use as display
-           Defaults to "class_label"
+    Args:
+        schema_url (str): The url to schema the component is in
+        component (str | None):
+          The component, either schema label, or display label
+          See use_schema_label
+        dataset_id (str): The id of the dataset to submit the manifest to
+        asset_view_id (str): The id of the asset view the dataset is in
+        body (bytes): The body of the request, contains the manifest in bytes form
+        restrict_rules (bool, optional):
+          Whether or not to restrict rule to non- great expectations.
+          Defaults to False.
+        storage_method (str, optional):
+          Specify what will be updated.
+          Defaults to "table_file_and_entities".
+        hide_blanks (bool, optional):
+          Whether or not annotations with blank values will be hidden from a
+            datasets annotation list.
+          Defaults to False.
+        table_manipulation_method (str, optional):
+          Specify the way the manifest tables should be stored.
+          Defaults to "replace".
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_columne_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
          tuple[str | BasicError, int]: A tuple
@@ -136,6 +166,8 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
         display_label_type=display_label_type,
+        table_columne_name_style=table_columne_name_style,
+        annotation_key_style=annotation_key_style,
     )
 
     status = 200
@@ -153,6 +185,8 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
     display_label_type: DisplayLabelType = "class_label",
+    annotation_key_style: str = "class_label",
+    table_columne_name_style: str = "class_label",
     body: Any = None,
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
@@ -181,6 +215,17 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
         display_label_type (DisplayLabelType):
            The type of label to use as display
            Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_columne_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
         tuple[str | BasicError, int]: A tuple
@@ -201,6 +246,8 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
         display_label_type=display_label_type,
+        table_columne_name_style=table_columne_name_style,
+        annotation_key_style=annotation_key_style,
     )
 
     status = 200

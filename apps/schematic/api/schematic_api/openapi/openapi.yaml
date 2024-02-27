@@ -1972,6 +1972,31 @@ paths:
           - display_label
           type: string
         style: form
+      - description: The labeling style for annotation keys.
+        explode: true
+        in: query
+        name: annotationKeyStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling syle for table column names.
+        explode: true
+        in: query
+        name: tableColumneNameStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          - display_name
+          type: string
+        style: form
       requestBody:
         content:
           application/csv:
@@ -2103,6 +2128,31 @@ paths:
           enum:
           - class_label
           - display_label
+          type: string
+        style: form
+      - description: The labeling style for annotation keys.
+        explode: true
+        in: query
+        name: annotationKeyStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: The labeling syle for table column names.
+        explode: true
+        in: query
+        name: tableColumneNameStyle
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          - display_name
           type: string
         style: form
       requestBody:
@@ -2680,6 +2730,33 @@ components:
         enum:
         - replace
         - upsert
+        type: string
+      style: form
+    annotationKeyStyle:
+      description: The labeling style for annotation keys.
+      explode: true
+      in: query
+      name: annotationKeyStyle
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        type: string
+      style: form
+    tableColumnNameStyle:
+      description: The labeling syle for table column names.
+      explode: true
+      in: query
+      name: tableColumneNameStyle
+      required: false
+      schema:
+        default: class_label
+        enum:
+        - class_label
+        - display_label
+        - display_name
         type: string
       style: form
     figureType:

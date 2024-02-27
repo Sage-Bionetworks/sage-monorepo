@@ -1,0 +1,8 @@
+name: tableColumneNameStyle
+in: query
+description: 'The labeling syle for table column names.'
+required: false
+schema:
+  type: string
+  enum: ['class_label', 'display_label', 'display_name']
+  default: 'class_label'
