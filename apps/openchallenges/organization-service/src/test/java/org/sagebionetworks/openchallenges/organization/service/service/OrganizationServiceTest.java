@@ -56,6 +56,7 @@ class OrganizationServiceTest {
     /* Test that the organization is in the repo, is not null, that the id can be pulled,
     findByIdOrLogin method is called, and no interactions with the organizationMapper (verifies
     interactions w/Mock object) */
+    
 
     verify(organizationRepository).findByIdOrLogin(orgId, orgLogin);
     assertNotNull(response);
