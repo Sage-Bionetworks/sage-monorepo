@@ -80,8 +80,7 @@ class OrganizationServiceTest {
         () -> {
           organizationService.getOrganization(invalidIdentifier);
         });
-    /* Test thatfindByIdOrLogin method is called,
-    and no interactions with the organizationMapper
+    /* Test thatfindByIdOrLogin method is called, and no interactions with the organizationMapper
     (verifies interactions w/Mock object)*/
 
     verify(organizationRepository).findByIdOrLogin(any(), any());
