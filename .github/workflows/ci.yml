@@ -101,6 +101,7 @@ jobs:
       - name: Checkout the official `main` branch for Nx
         run: |
           git remote add upstream https://github.com/Sage-Bionetworks/sage-monorepo.git
+          git fetch upstream main
           git branch --track main upstream/main
 
       - name: Set up the dev container
