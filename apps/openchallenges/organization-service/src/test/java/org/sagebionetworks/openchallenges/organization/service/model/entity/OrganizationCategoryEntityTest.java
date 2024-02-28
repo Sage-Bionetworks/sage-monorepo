@@ -12,7 +12,7 @@ public class OrganizationCategoryEntityTest {
   private Long entityId1 = 1L;
   private Long entityId2 = 2L;
   private String category = "category";
-  
+
   @BeforeEach
   void setup() {
     // Create an OrganizationEntity
@@ -27,12 +27,16 @@ public class OrganizationCategoryEntityTest {
     contributor2 = new OrganizationCategoryEntity(1L, "category", organization);
 
     contributor3 =
-    OrganizationCategoryEntity.builder().id(2L).organization(organization).category(category).build();
+        OrganizationCategoryEntity.builder()
+            .id(2L)
+            .organization(organization)
+            .category(category)
+            .build();
   }
 
   @Test
   void
-  OrganizationCategoryEntityGetters_ShouldReturnOrganizationCategoryEntityValues_WhenArgsPassedViaSetters() {
+      OrganizationCategoryEntityGetters_ShouldReturnOrganizationCategoryEntityValues_WhenArgsPassedViaSetters() {
 
     // Verify the values are set
     Assertions.assertEquals(entityId1, contributor1.getId());
@@ -72,5 +76,4 @@ public class OrganizationCategoryEntityTest {
     Assertions.assertEquals(contributor1.hashCode(), contributor2.hashCode());
     Assertions.assertNotEquals(contributor1.hashCode(), contributor3.hashCode());
   }
-
 }
