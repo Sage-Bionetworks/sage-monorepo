@@ -17,6 +17,7 @@ public class OrganizationCategoryEntityTest {
   void setup() {
     // Create an OrganizationEntity
     organization = new OrganizationEntity();
+    
 
     // Create different OrganizationCategoryEntity using different methods
     contributor1 = new OrganizationCategoryEntity();
