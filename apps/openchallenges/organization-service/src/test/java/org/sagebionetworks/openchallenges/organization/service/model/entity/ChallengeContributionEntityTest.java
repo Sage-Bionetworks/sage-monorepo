@@ -33,19 +33,14 @@ class ChallengeContributionEntityTest {
 
   @Test
   void
-      ChallengeContributionEntityGetters_ShouldReturnChallengeContributionEntityValues_WhenArgsPassedViaSetters() {
+      ChallengeContributionEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
 
-    // Verify the values are set
+    // Verify the values are set when the setters are used to set them (NoArgsConstructor)
     Assertions.assertEquals(entityId1, contributor1.getId());
     Assertions.assertEquals(organization, contributor1.getOrganization());
     Assertions.assertEquals(role, contributor1.getRole());
-  }
 
-  @Test
-  void
-      ChallengeContributionEntityGetters_ShouldReturnChallengeContributionEntityValues_WhenAllArgsPassedtoConstructor() {
-
-    // Verify the values are set
+    // Verify the values are set with the ArgsConstructor
     Assertions.assertEquals(entityId1, contributor2.getId());
     Assertions.assertEquals(organization, contributor2.getOrganization());
     Assertions.assertEquals(role, contributor2.getRole());
@@ -63,11 +58,17 @@ class ChallengeContributionEntityTest {
 
   @Test
   void
-      DataMethods_ShouldReturnRecognizeIdenticalAndDifferentChallengeContributionEntity_WhenChallengeContributionEntityCompared() {
+  OrganizationContributionEntity_ShouldBeTheSameOrDifferent_WhenTwoOrganizationContributionEntityCompared() {
 
     // Verify the generated equals() method
     Assertions.assertEquals(contributor1, contributor2);
     Assertions.assertNotEquals(contributor1, contributor3);
+    
+  }
+
+  @Test
+  void
+  HashCode_ShouldBeTheSameOrDifferent_WhenTwoOrganizationContributionEntityCompared() {
 
     // Verify the generated hashCode() method
     Assertions.assertEquals(contributor1.hashCode(), contributor2.hashCode());

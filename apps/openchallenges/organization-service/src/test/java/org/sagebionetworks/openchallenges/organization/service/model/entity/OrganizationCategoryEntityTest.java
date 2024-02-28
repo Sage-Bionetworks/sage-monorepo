@@ -36,19 +36,14 @@ class OrganizationCategoryEntityTest {
 
   @Test
   void
-      OrganizationCategoryEntityGetters_ShouldReturnOrganizationCategoryEntityValues_WhenArgsPassedViaSetters() {
+      OrganizationCategoryEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
 
-    // Verify the values are set
+    // Verify the values are set when the setters are used to set them (NoArgsConstructor)
     Assertions.assertEquals(entityId1, contributor1.getId());
     Assertions.assertEquals(organization, contributor1.getOrganization());
     Assertions.assertEquals(category, contributor1.getCategory());
-  }
 
-  @Test
-  void
-      OrganizationCategoryEntityGetters_ShouldReturnOrganizationCategoryEntityValues_WhenAllArgsPassedtoConstructor() {
-
-    // Verify the values are set
+    // Verify the values are set when set with the ArgsConstructor
     Assertions.assertEquals(entityId1, contributor2.getId());
     Assertions.assertEquals(organization, contributor2.getOrganization());
     Assertions.assertEquals(category, contributor2.getCategory());
@@ -56,7 +51,7 @@ class OrganizationCategoryEntityTest {
 
   @Test
   void
-      OrganizationCategoryEntityGetters_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuiltWithClassBuilder() {
+      OrganizationCategoryEntity_ShouldReturnArgumentsPassed_WhenOrganizationCategoryEntityBuiltWithClassBuilder() {
 
     // Verify the values are set
     Assertions.assertEquals(entityId2, contributor3.getId());
@@ -66,12 +61,16 @@ class OrganizationCategoryEntityTest {
 
   @Test
   void
-      DataMethods_ShouldReturnRecognizeIdenticalAndDifferentOrganizationCategoryEntity_WhenOrganizationCategoryEntityCompared() {
+  OrganizationCategoryEntity_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
 
     // Verify the generated equals() method
     Assertions.assertEquals(contributor1, contributor2);
     Assertions.assertNotEquals(contributor1, contributor3);
+  }
 
+  @Test
+  void
+  HashCode_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
     // Verify the generated hashCode() method
     Assertions.assertEquals(contributor1.hashCode(), contributor2.hashCode());
     Assertions.assertNotEquals(contributor1.hashCode(), contributor3.hashCode());
