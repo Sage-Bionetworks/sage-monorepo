@@ -15,6 +15,8 @@ env:
   # SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   DOCKER_USERNAME: ${{ github.actor }}
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
+  HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
 
 jobs:
   push:
@@ -24,8 +26,10 @@ jobs:
     #   NX_BRANCH: main
     steps:
       - uses: actions/checkout@v4
-        name: Checkout [${{ github.ref_name }}]
+        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
@@ -82,14 +86,22 @@ jobs:
           || !startsWith(github.head_ref, 'renovate/')
         )
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ env.HEAD_REF }}
+          repository: ${{ env.HEAD_REPOSITORY }}
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
           fetch-depth: 0
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
+
+      - name: Checkout the official `main` branch for Nx
+        run: |
+          git remote add upstream https://github.com/Sage-Bionetworks/sage-monorepo.git
+          git branch --track main upstream/main
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
