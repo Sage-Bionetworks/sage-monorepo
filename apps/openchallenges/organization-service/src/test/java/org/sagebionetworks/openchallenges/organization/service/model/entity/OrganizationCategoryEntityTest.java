@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class OrganizationCategoryEntityTest {
+class OrganizationCategoryEntityTest {
   private OrganizationEntity organization;
   private OrganizationCategoryEntity contributor1;
   private OrganizationCategoryEntity contributor2;
