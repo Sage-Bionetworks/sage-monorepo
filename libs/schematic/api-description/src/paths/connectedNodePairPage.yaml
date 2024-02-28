@@ -9,6 +9,7 @@ get:
     - $ref: ../components/parameters/query/relationshipType.yaml
     - $ref: ../components/parameters/query/pageNumber.yaml
     - $ref: ../components/parameters/query/pageMaxItems.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
   responses:
     '200':
       description: Success

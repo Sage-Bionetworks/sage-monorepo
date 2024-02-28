@@ -32,7 +32,7 @@ class TestGetTangledTreeLayers(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url", "component")
+            mock_function.assert_called_once_with("url", "component", "class_label")
             assert response.json == "xxx"
 
     def test_parameters(self) -> None:
@@ -48,7 +48,7 @@ class TestGetTangledTreeLayers(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url2", "dependency")
+            mock_function.assert_called_once_with("url2", "dependency", "class_label")
             assert response.json == "xxx"
 
     def test_500(self) -> None:
@@ -81,7 +81,9 @@ class TestGetTangledTreeText(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url", "component", "plain")
+            mock_function.assert_called_once_with(
+                "url", "component", "plain", "class_label"
+            )
             assert response.json == "xxx"
 
     def test_parameters(self) -> None:
@@ -100,7 +102,9 @@ class TestGetTangledTreeText(BaseTestCase):
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
             )
-            mock_function.assert_called_once_with("url2", "dependency", "plain")
+            mock_function.assert_called_once_with(
+                "url2", "dependency", "plain", "class_label"
+            )
             assert response.json == "xxx"
 
     def test_500(self) -> None:

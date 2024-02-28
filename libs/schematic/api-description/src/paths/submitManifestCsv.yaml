@@ -21,7 +21,9 @@ post:
     - $ref: ../components/parameters/query/hideBlanks.yaml
     - $ref: ../components/parameters/query/assetViewIdQuery.yaml
     - $ref: ../components/parameters/query/tableManipulationMethod.yaml
-    - $ref: ../components/parameters/query/useSchemaLabel.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
+    - $ref: ../components/parameters/query/annotationKeyStyle.yaml
+    - $ref: ../components/parameters/query/tableColumnNameStyle.yaml
   security:
     - bearerAuth: []
   responses:

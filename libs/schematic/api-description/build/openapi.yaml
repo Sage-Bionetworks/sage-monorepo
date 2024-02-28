@@ -481,6 +481,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/returnDisplayNames'
         - $ref: '#/components/parameters/returnOrderedBySchema'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -505,6 +506,7 @@ paths:
         - $ref: '#/components/parameters/returnOrderedBySchema'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -525,6 +527,7 @@ paths:
       operationId: getNodeIsRequired
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -546,6 +549,7 @@ paths:
       operationId: getNodeProperties
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -565,7 +569,6 @@ paths:
       description: Gets the property label of the node
       operationId: getPropertyLabel
       parameters:
-        - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'
       responses:
         '200':
@@ -587,6 +590,7 @@ paths:
       operationId: getNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -608,6 +612,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/includeIndex'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -627,6 +632,7 @@ paths:
       operationId: getSchemaAttributes
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -647,6 +653,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/relationshipType'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -668,6 +675,7 @@ paths:
         - $ref: '#/components/parameters/relationshipType'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -694,6 +702,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -722,6 +731,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/displayLabelType'
       security:
         - bearerAuth: []
       responses:
@@ -755,7 +765,9 @@ paths:
         - $ref: '#/components/parameters/hideBlanks'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
-        - $ref: '#/components/parameters/useSchemaLabel'
+        - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -791,7 +803,9 @@ paths:
         - $ref: '#/components/parameters/hideBlanks'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
-        - $ref: '#/components/parameters/useSchemaLabel'
+        - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -813,6 +827,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/figureType'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -826,13 +841,14 @@ paths:
     get:
       tags:
         - TangledTree
-      summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
-      description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      summary: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
+      description: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
       operationId: getTangledTreeText
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/figureType'
         - $ref: '#/components/parameters/textFormat'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -855,6 +871,7 @@ paths:
         - $ref: '#/components/parameters/datasetIdArray'
         - $ref: '#/components/parameters/manifestTitle'
         - $ref: '#/components/parameters/dataTypeArray'
+        - $ref: '#/components/parameters/displayLabelType'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
@@ -1484,6 +1501,17 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
+    displayLabelType:
+      name: displayLabelType
+      in: query
+      description: The type of label to display
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
     nodeDisplay:
       name: nodeDisplay
       in: path
@@ -1579,14 +1607,29 @@ components:
           - replace
           - upsert
         default: replace
-    useSchemaLabel:
-      name: useSchemaLabel
+    annotationKeyStyle:
+      name: annotationKeyStyle
       in: query
-      description: If true, store attributes using the schema label If false, store attributes using the display label
+      description: The labeling style for annotation keys.
       required: false
       schema:
-        type: boolean
-        default: true
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
+    tableColumnNameStyle:
+      name: tableColumnNameStyle
+      in: query
+      description: The labeling syle for table column names.
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+          - display_name
+        default: class_label
     figureType:
       name: figureType
       in: query
