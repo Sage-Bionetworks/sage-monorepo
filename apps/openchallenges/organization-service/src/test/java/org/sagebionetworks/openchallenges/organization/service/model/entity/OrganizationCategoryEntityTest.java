@@ -35,8 +35,7 @@ class OrganizationCategoryEntityTest {
   }
 
   @Test
-  void
-      OrganizationCategoryEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
+  void OrganizationCategoryEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
 
     // Verify the values are set when the setters are used to set them (NoArgsConstructor)
     Assertions.assertEquals(entityId1, contributor1.getId());
@@ -61,7 +60,7 @@ class OrganizationCategoryEntityTest {
 
   @Test
   void
-  OrganizationCategoryEntity_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
+      OrganizationCategoryEntity_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
 
     // Verify the generated equals() method
     Assertions.assertEquals(contributor1, contributor2);
@@ -69,8 +68,7 @@ class OrganizationCategoryEntityTest {
   }
 
   @Test
-  void
-  HashCode_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
+  void HashCode_ShouldBeTheSameOrDifferent_WhenTwoOrganizationCategoryEntityCompared() {
     // Verify the generated hashCode() method
     Assertions.assertEquals(contributor1.hashCode(), contributor2.hashCode());
     Assertions.assertNotEquals(contributor1.hashCode(), contributor3.hashCode());
