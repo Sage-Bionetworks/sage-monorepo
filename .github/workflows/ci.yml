@@ -97,9 +97,12 @@ jobs:
 
       - name: Checkout upstream/main for Nx
         run: |
-          git remote add upstream https://github.com/${{ github.repository }}.git
-          git fetch upstream main
-          git branch --track main upstream/main
+          #git remote add upstream https://github.com/${{ github.repository }}.git
+          #git fetch upstream main
+          #git branch --track main upstream/main
+          git remote add downstream https://github.com/${{ env.HEAD_REPOSITORY }}.git
+          git fetch downstream ${{ env.HEAD_REF }}
+          git checkout -b ${{ env.HEAD_REF }} --track downstream/${{ env.HEAD_REF }}
           git remote --v
           git branch -vv
 
