@@ -95,14 +95,17 @@ jobs:
           # against.
           fetch-depth: 0
 
-      - name: Checkout the official `main` branch for Nx
+      - name: Checkout upstream/main for Nx
         run: |
           git remote add upstream https://github.com/Sage-Bionetworks/sage-monorepo.git
           git fetch upstream main
-          git branch --track main upstream/main
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
+
+      - name: Create the main branch from upstream/main
+        run: |
+          git branch --track main upstream/main
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
