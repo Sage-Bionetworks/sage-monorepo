@@ -18,7 +18,6 @@ env:
   HEAD_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref_name }}
   HEAD_REPOSITORY: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name || github.repository }}
 
-# Fake comment
 jobs:
   push:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
@@ -96,14 +95,14 @@ jobs:
           # against.
           fetch-depth: 0
 
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
-
       - name: Checkout the official `main` branch for Nx
         run: |
           git remote add upstream https://github.com/Sage-Bionetworks/sage-monorepo.git
           git fetch upstream main
           git branch --track main upstream/main
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
