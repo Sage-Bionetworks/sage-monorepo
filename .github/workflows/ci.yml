@@ -101,10 +101,12 @@ jobs:
           git fetch upstream main
           git branch --track main upstream/main
           git branch -vv
-          
+
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
+        with:
+          main-branch-name: 'main'
           
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
