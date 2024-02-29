@@ -13,3 +13,4 @@ properties:
 required:
   - classId
   - preferredLabel
+nullable: true

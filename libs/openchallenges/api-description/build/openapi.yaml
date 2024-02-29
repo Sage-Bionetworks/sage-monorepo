@@ -631,6 +631,7 @@ components:
       required:
         - classId
         - preferredLabel
+      nullable: true
     CreatedDateTime:
       description: Datetime when the object was added to the database.
       type: string
