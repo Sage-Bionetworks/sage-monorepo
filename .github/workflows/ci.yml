@@ -87,24 +87,11 @@ jobs:
         )
     steps:
       - uses: actions/checkout@v4
-        # name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
+        name: Checkout merge commit from origin and ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
         with:
-          # ref: ${{ env.HEAD_REF }}
-          # repository: ${{ env.HEAD_REPOSITORY }}
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
           fetch-depth: 0
-
-      # - name: Checkout upstream/main for Nx
-      #   run: |
-      #     #git remote add upstream https://github.com/${{ github.repository }}.git
-      #     #git fetch upstream main
-      #     #git branch --track main upstream/main
-      #     git remote add downstream https://github.com/${{ env.HEAD_REPOSITORY }}.git
-      #     git fetch downstream ${{ env.HEAD_REF }}
-      #     git checkout -b ${{ env.HEAD_REF }} --track downstream/${{ env.HEAD_REF }}
-      #     git remote --v
-      #     git branch -vv
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
