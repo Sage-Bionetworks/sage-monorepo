@@ -79,7 +79,7 @@ public class ChallengeDto {
   private Integer starredCount = 0;
 
   @JsonProperty("operation")
-  private EdamOperationDto operation;
+  private EdamOperationDto operation = null;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)

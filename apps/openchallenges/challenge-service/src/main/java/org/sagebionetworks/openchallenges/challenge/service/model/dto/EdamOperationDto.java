@@ -8,8 +8,8 @@ import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.constraints.*;
 
-/** An EDAM Operation concept. */
-@Schema(name = "EdamOperation", description = "An EDAM Operation concept.")
+/** The EDAM Operation concept. */
+@Schema(name = "EdamOperation", description = "The EDAM Operation concept.")
 @JsonTypeName("EdamOperation")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations

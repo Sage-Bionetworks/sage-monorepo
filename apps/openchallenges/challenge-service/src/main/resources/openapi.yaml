@@ -683,10 +683,11 @@ components:
       nullable: true
       type: string
     EdamOperation:
-      description: An EDAM Operation concept.
+      description: The EDAM Operation concept.
       example:
         classId: http://edamontology.org/operation_0230
         preferredLabel: Sequence generation
+      nullable: true
       properties:
         classId:
           example: http://edamontology.org/operation_0230
