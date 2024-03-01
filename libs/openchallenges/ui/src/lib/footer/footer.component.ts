@@ -27,7 +27,7 @@ export class FooterComponent implements OnInit {
 
   ngOnInit() {
     this.sageLogo$ = this.imageService.getImage({
-      objectKey: 'logo/sage-bionetworks-alt-white.svg',
+      objectKey: 'logo/SageBionetworks-Logo-FullColor-WhiteText.svg',
     });
   }
 }
