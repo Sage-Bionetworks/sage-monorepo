@@ -16,6 +16,7 @@ post:
     - $ref: ../components/parameters/query/schemaUrl.yaml
     - $ref: ../components/parameters/query/componentLabelQuery.yaml
     - $ref: ../components/parameters/query/restrictRules.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
   security:
     - bearerAuth: []
   responses:

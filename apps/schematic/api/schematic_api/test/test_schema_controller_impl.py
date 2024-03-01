@@ -127,30 +127,18 @@ class TestGetNodeIsRequired:
         assert isinstance(result, BasicError)
 
 
-class TestGetPropertyLabel:
-    """Test case for get_property_label"""
-
-    def test_success(self, test_schema_url: str) -> None:
-        """Test for successful result"""
-        result, status = get_property_label(
-            node_display="display_name",
-            schema_url=test_schema_url,
-            use_strict_camel_case=True,
-        )
-        assert status == 200
-        assert result == "displayName"
-
-    def test_internal_error(self) -> None:
-        """Test for 500 result"""
-        result, status = get_property_label(
-            node_display="display", schema_url="not_a_url", use_strict_camel_case=True
-        )
-        assert status == 500
-        assert isinstance(result, BasicError)
+def test_get_property_label() -> None:
+    """Test for get_property_label"""
+    result, status = get_property_label(
+        node_display="display_name",
+        use_strict_camel_case=True,
+    )
+    assert status == 200
+    assert result == "displayName"
 
 
 class TestGetSchemaAttributes:
-    """Tests geget_schema_attributes"""
+    """Tests get_schema_attributes"""
 
     def test_success(self, test_schema_url: str) -> None:
         """Test for successful result"""

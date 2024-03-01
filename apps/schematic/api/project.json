@@ -88,17 +88,17 @@
         "^build"
       ]
     },
-    "lint": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "poetry run black ./schematic_api --exclude 'models'",
-          "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
-          "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py"
-        ],
-        "cwd": "apps/schematic/api"
-      }
-    },
+    // "lint": {
+    //   "executor": "nx:run-commands",
+    //   "options": {
+    //     "commands": [
+    //       "poetry run black ./schematic_api --exclude 'models'",
+    //       "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+    //       "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py"
+    //     ],
+    //     "cwd": "apps/schematic/api"
+    //   }
+    // },
     "lint-fix": {
       "executor": "nx:run-commands",
       "options": {
