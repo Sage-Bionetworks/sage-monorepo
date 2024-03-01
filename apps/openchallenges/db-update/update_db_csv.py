@@ -53,6 +53,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "doi",
             "start_date",
             "end_date",
+            "operation_id",
             "created_at",
             "updated_at",
         ]
@@ -74,6 +75,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
     )
     challenges.loc[challenges.start_date == "", "start_date"] = "\\N"
     challenges.loc[challenges.end_date == "", "end_date"] = "\\N"
+    challenges.loc[challenges.operation_id == "", "operation_id"] = "\\N"
 
     incentives = pd.concat(
         [
