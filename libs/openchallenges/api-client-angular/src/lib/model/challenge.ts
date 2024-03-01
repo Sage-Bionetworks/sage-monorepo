@@ -72,7 +72,7 @@ export interface Challenge {
      * The number of times the challenge has been starred by users.
      */
     starredCount: number;
-    operation?: EdamOperation;
+    operation?: EdamOperation | null;
     /**
      * Datetime when the object was added to the database.
      */
