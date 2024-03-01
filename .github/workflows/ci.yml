@@ -93,9 +93,12 @@ jobs:
           # against.
           fetch-depth: 0
 
+      - name: Checkout HEAD^
+        run: git checkout HEAD^
+
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
-          
+
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
