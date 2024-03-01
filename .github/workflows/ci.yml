@@ -93,9 +93,12 @@ jobs:
           # against.
           fetch-depth: 0
 
-      - name: Switch to a new branch from HEAD
+      - name: Switch from the detached HEAD to a new branch
           # Buildx does not work on a detached HEAD, so we checkout HEAD
-        run: git switch -c feature-branch
+        run: |
+          git branch --v
+          git switch -c new-branch
+          git branch --v
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
