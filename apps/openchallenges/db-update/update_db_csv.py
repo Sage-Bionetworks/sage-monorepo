@@ -64,7 +64,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
         .replace("'", "''")
         .replace(u"\u2019", "''")  # replace curly right-quote 
         .replace(u"\u202f", " ")  # replace narrow no-break space
-        .replace(u"\u2020", "")  # remove word joiner
+        .replace(u"\u2060", "")  # remove word joiner
     )
     challenges["headline"] = (
         challenges["headline"]
@@ -174,7 +174,7 @@ def get_organization_data(wks, sheet_name="organizations"):
         .replace("'", "''")
         .replace(u"\u2019", "''")  # replace curly right-quote 
         .replace(u"\u202f", " ")  # replace narrow no-break space
-        .replace(u"\u2020", "")  # remove word joiner
+        .replace(u"\u2060", "")  # remove word joiner
     )
     organizations["description"] = (
         organizations["description"]
