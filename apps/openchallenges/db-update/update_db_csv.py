@@ -62,9 +62,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
-        .replace(u"\u2019", "''")  # replace curly right-quote 
-        .replace(u"\u202f", " ")  # replace narrow no-break space
-        .replace(u"\u2060", "")  # remove word joiner
+        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
+        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace(u"\u2060", "", regex=True)  # remove word joiner
     )
     challenges["headline"] = (
         challenges["headline"]
@@ -172,9 +172,9 @@ def get_organization_data(wks, sheet_name="organizations"):
         organizations.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
-        .replace(u"\u2019", "''")  # replace curly right-quote 
-        .replace(u"\u202f", " ")  # replace narrow no-break space
-        .replace(u"\u2060", "")  # remove word joiner
+        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
+        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace(u"\u2060", "", regex=True)  # remove word joiner
     )
     organizations["description"] = (
         organizations["description"]
