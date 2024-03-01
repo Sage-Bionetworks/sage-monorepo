@@ -131,6 +131,10 @@ public class ChallengeEntity {
   @GenericField(name = "end_date", sortable = Sortable.YES)
   private LocalDate endDate;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "operation_id", nullable = true)
+  private EdamOperationEntity operation;
+
   @Column(name = "created_at")
   @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;

@@ -76,7 +76,7 @@ export const challengeSubmissionTypesFilter: Filter[] = [
     label: 'Container Image',
   },
   {
-    value: ChallengeSubmissionType.MLCube,
+    value: ChallengeSubmissionType.Mlcube,
     label: 'MLCube',
   },
   {

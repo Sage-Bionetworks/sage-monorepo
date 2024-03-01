@@ -42,6 +42,7 @@ model/challengeSubmissionType.ts
 model/challengesPage.ts
 model/challengesPageAllOf.ts
 model/challengesPerYear.ts
+model/edamOperation.ts
 model/image.ts
 model/imageAspectRatio.ts
 model/imageHeight.ts
