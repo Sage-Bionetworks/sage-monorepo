@@ -53,6 +53,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "doi",
             "start_date",
             "end_date",
+            "operation_id",
             "created_at",
             "updated_at",
         ]
@@ -61,6 +62,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
+        .replace(u"\u2019", "''")  # replace curly right-quote 
+        .replace(u"\u202f", " ")  # replace narrow no-break space
+        .replace(u"\u2020", "")  # remove word joiner
     )
     challenges["headline"] = (
         challenges["headline"]
@@ -74,6 +78,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
     )
     challenges.loc[challenges.start_date == "", "start_date"] = "\\N"
     challenges.loc[challenges.end_date == "", "end_date"] = "\\N"
+    challenges.loc[challenges.operation_id == "", "operation_id"] = "\\N"
 
     incentives = pd.concat(
         [
@@ -167,6 +172,9 @@ def get_organization_data(wks, sheet_name="organizations"):
         organizations.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
+        .replace(u"\u2019", "''")  # replace curly right-quote 
+        .replace(u"\u202f", " ")  # replace narrow no-break space
+        .replace(u"\u2020", "")  # remove word joiner
     )
     organizations["description"] = (
         organizations["description"]
@@ -183,13 +191,6 @@ def get_roles(wks, sheet_name="contribution_role"):
         .fillna("")
         .drop(["_challenge", "_organization"], axis=1)
     )
-
-
-def get_edam_terms(wks, sheet_name="edam_terms"):
-    """Get list of EDAM terms currently used in the DB."""
-    return pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")[
-        ["id", "edam_id", "name", "subclass_of", "created_at", "updated_at"]
-    ]
 
 
 def get_edam_annotations(wks, sheet_name="challenge_data"):
@@ -214,6 +215,9 @@ def main(gc):
 
     categories = get_challenge_categories(wks)
     output_csv(categories, "categories.csv", output_folder=CHALLENGE_FOLDER)
+
+    edam_annotations = get_edam_annotations(wks)
+    output_csv(edam_annotations, "challenge_data_edam.csv", output_folder=CHALLENGE_FOLDER)
 
     organizations = get_organization_data(wks)
     output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
