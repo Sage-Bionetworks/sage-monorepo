@@ -20,7 +20,7 @@ export const ChallengeSubmissionType = {
     ContainerImage: 'container_image' as ChallengeSubmissionType,
     PredictionFile: 'prediction_file' as ChallengeSubmissionType,
     Notebook: 'notebook' as ChallengeSubmissionType,
-    MLCube: 'mlcube' as ChallengeSubmissionType,
+    Mlcube: 'mlcube' as ChallengeSubmissionType,
     Other: 'other' as ChallengeSubmissionType
 };
 
