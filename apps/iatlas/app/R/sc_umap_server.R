@@ -21,6 +21,7 @@ sc_umap_server <- function(
         dplyr::select(umap_df(), "group" = input$color, dataset)
       })
 
+
       group_colors <- shiny::reactive({
         shiny::req(umap_df(), color_criteria())
         group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(color_criteria()$group))
