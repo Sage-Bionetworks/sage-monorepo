@@ -26,6 +26,7 @@ export * from './challengeSubmissionType';
 export * from './challengesPage';
 export * from './challengesPageAllOf';
 export * from './challengesPerYear';
+export * from './edamOperation';
 export * from './image';
 export * from './imageAspectRatio';
 export * from './imageHeight';

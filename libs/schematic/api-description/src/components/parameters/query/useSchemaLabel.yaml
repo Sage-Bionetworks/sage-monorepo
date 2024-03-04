@@ -1,8 +1,0 @@
-name: useSchemaLabel
-in: query
-description: If true, store attributes using the schema label
-  If false, store attributes using the display label
-required: false
-schema:
-  type: boolean
-  default: true

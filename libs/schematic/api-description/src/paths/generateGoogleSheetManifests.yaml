@@ -10,6 +10,7 @@ get:
     - $ref: ../components/parameters/query/datasetIdArray.yaml
     - $ref: ../components/parameters/query/manifestTitle.yaml
     - $ref: ../components/parameters/query/dataTypeArray.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
     - name: assetViewId
       in: query
       description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project

@@ -78,6 +78,9 @@ public class ChallengeDto {
   @JsonProperty("starredCount")
   private Integer starredCount = 0;
 
+  @JsonProperty("operation")
+  private EdamOperationDto operation = null;
+
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -507,6 +510,26 @@ public class ChallengeDto {
     this.starredCount = starredCount;
   }
 
+  public ChallengeDto operation(EdamOperationDto operation) {
+    this.operation = operation;
+    return this;
+  }
+
+  /**
+   * Get operation
+   *
+   * @return operation
+   */
+  @Valid
+  @Schema(name = "operation", required = false)
+  public EdamOperationDto getOperation() {
+    return operation;
+  }
+
+  public void setOperation(EdamOperationDto operation) {
+    this.operation = operation;
+  }
+
   public ChallengeDto createdAt(OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
@@ -583,6 +606,7 @@ public class ChallengeDto {
         && Objects.equals(this.startDate, challenge.startDate)
         && Objects.equals(this.endDate, challenge.endDate)
         && Objects.equals(this.starredCount, challenge.starredCount)
+        && Objects.equals(this.operation, challenge.operation)
         && Objects.equals(this.createdAt, challenge.createdAt)
         && Objects.equals(this.updatedAt, challenge.updatedAt);
   }
@@ -607,6 +631,7 @@ public class ChallengeDto {
         startDate,
         endDate,
         starredCount,
+        operation,
         createdAt,
         updatedAt);
   }
@@ -632,6 +657,7 @@ public class ChallengeDto {
     sb.append("    startDate: ").append(toIndentedString(startDate)).append("\n");
     sb.append("    endDate: ").append(toIndentedString(endDate)).append("\n");
     sb.append("    starredCount: ").append(toIndentedString(starredCount)).append("\n");
+    sb.append("    operation: ").append(toIndentedString(operation)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");
     sb.append("}");

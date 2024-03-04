@@ -4,7 +4,12 @@ import urllib.request
 import shutil
 import tempfile
 from urllib.error import HTTPError
+import tempfile
+import os
+import io
+import json
 
+import pandas as pd
 from flask import request  # type: ignore
 from synapseclient.core.exceptions import (  # type: ignore
     SynapseNoCredentialsError,
@@ -13,6 +18,39 @@ from synapseclient.core.exceptions import (  # type: ignore
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
+
+
+def save_manifest_json_string_as_csv(manifest_json_string: str) -> str:
+    """Takes a manifest json string and converts it to a csv file
+
+    Args:
+        manifest_json_string (str): The manifest in json string form
+
+    Returns:
+        str: The path of the csv file
+    """
+    temp_dir = tempfile.gettempdir()
+    temp_path = os.path.join(temp_dir, "manifest.csv")
+    json_dict = json.loads(manifest_json_string)
+    manifest_df = pd.DataFrame(json_dict)
+    manifest_df.to_csv(temp_path, encoding="utf-8", index=False)
+    return temp_path
+
+
+def save_manifest_csv_string_as_csv(manifest_csv_string: bytes) -> str:
+    """Takes a manifest csv string and converts it to a csv file
+
+    Args:
+        manifest_csv_string (bytes): The manifest in csv string form
+
+    Returns:
+        str: The path of the csv file
+    """
+    temp_dir = tempfile.gettempdir()
+    temp_path = os.path.join(temp_dir, "manifest.csv")
+    manifest_df = pd.read_csv(io.BytesIO(manifest_csv_string), sep=",")
+    manifest_df.to_csv(temp_path, encoding="utf-8", index=False)
+    return temp_path
 
 
 def get_access_token() -> str | None:

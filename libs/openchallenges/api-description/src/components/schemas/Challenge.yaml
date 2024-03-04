@@ -12,8 +12,6 @@ properties:
   description:
     $ref: ChallengeDescription.yaml
   doi:
-    # type: array
-    # items:
     $ref: ChallengeDoi.yaml
   status:
     $ref: ChallengeStatus.yaml
@@ -49,6 +47,8 @@ properties:
     default: 0
     minimum: 0
     example: 100
+  operation:
+    $ref: EdamOperation.yaml
   createdAt:
     $ref: CreatedDateTime.yaml
   updatedAt:

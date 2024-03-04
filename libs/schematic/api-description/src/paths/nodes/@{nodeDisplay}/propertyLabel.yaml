@@ -7,7 +7,6 @@ get:
   description: Gets the property label of the node
   operationId: getPropertyLabel
   parameters:
-    - $ref: ../../../components/parameters/query/schemaUrl.yaml
     - $ref: ../../../components/parameters/query/useStrictCamelCase.yaml
   responses:
     '200':

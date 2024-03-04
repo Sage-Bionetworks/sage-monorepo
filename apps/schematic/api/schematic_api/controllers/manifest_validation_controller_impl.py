@@ -1,13 +1,12 @@
 """Implementation of manifest validation endpoints"""
-import tempfile
-import os
-import io
-import json
+
+# pylint: disable=too-many-locals
+
 from typing import Any
 
-import pandas as pd
 from schematic import CONFIG  # type: ignore
 from schematic.models.metadata import MetadataModel  # type: ignore
+from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
 
 from schematic_api.models.manifest_validation_result import ManifestValidationResult
 from schematic_api.models.basic_error import BasicError
@@ -15,40 +14,9 @@ from schematic_api.controllers.utils import (
     handle_exceptions,
     get_access_token,
     download_schema_file_as_jsonld,
+    save_manifest_json_string_as_csv,
+    save_manifest_csv_string_as_csv,
 )
-
-
-def save_manifest_json_string_as_csv(manifest_json_string: str) -> str:
-    """Takes a manifest json string and converts it to a csv file
-
-    Args:
-        manifest_json_string (str): The manifest in json string form
-
-    Returns:
-        str: The path of the csv file
-    """
-    temp_dir = tempfile.gettempdir()
-    temp_path = os.path.join(temp_dir, "manifest.csv")
-    json_dict = json.loads(manifest_json_string)
-    manifest_df = pd.DataFrame(json_dict)
-    manifest_df.to_csv(temp_path, encoding="utf-8", index=False)
-    return temp_path
-
-
-def save_manifest_csv_string_as_csv(manifest_csv_string: bytes) -> str:
-    """Takes a manifest csv string and converts it to a csv file
-
-    Args:
-        manifest_csv_string (bytes): The manifest in csv string form
-
-    Returns:
-        str: The path of the csv file
-    """
-    temp_dir = tempfile.gettempdir()
-    temp_path = os.path.join(temp_dir, "manifest.csv")
-    manifest_df = pd.read_csv(io.BytesIO(manifest_csv_string), sep=",")
-    manifest_df.to_csv(temp_path, encoding="utf-8", index=False)
-    return temp_path
 
 
 def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
@@ -60,7 +28,9 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
     storage_method: str = "table_file_and_entities",
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
-    use_schema_label: bool = True,
+    display_label_type: DisplayLabelType = "class_label",
+    table_column_name_style: str = "class_label",
+    annotation_key_style: str = "class_label",
 ) -> str:
     """Submits a manifest csv
 
@@ -84,16 +54,29 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         table_manipulation_method (str, optional):
           Specify the way the manifest tables should be stored.
           Defaults to "replace".
-        use_schema_label (bool, optional):
-          Whether or not the schema label will be used.
-          Defaults to True.
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_column_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
          str: The id of the manifest
     """
     access_token = get_access_token()
     metadata_model = MetadataModel(
-        inputMModelLocation=schema_path, inputMModelLocationType="local"
+        inputMModelLocation=schema_path,
+        inputMModelLocationType="local",
+        data_model_labels=display_label_type,
     )
     manifest_id: str = metadata_model.submit_metadata_manifest(
         path_to_json_ld=schema_path,
@@ -105,7 +88,8 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         restrict_rules=restrict_rules,
         hide_blanks=hide_blanks,
         table_manipulation=table_manipulation_method,
-        use_schema_label=use_schema_label,
+        table_column_names=table_column_name_style,
+        annotation_keys=annotation_key_style,
     )
     return manifest_id
 
@@ -121,34 +105,47 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
     storage_method: str = "table_file_and_entities",
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
-    use_schema_label: bool = True,
+    display_label_type: DisplayLabelType = "class_label",
+    annotation_key_style: str = "class_label",
+    table_column_name_style: str = "class_label",
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
 
-     Args:
-         schema_url (str): The url to schema the component is in
-         component (str | None):
-           The component, either schema label, or display label
-           See use_schema_label
-         dataset_id (str): The id of the dataset to submit the manifest to
-         asset_view_id (str): The id of the asset view the dataset is in
-         body (bytes): The body of the request, contains the manifest in bytes form
-         restrict_rules (bool, optional):
-           Whether or not to restrict rule to non- great expectations.
-           Defaults to False.
-         storage_method (str, optional):
-           Specify what will be updated.
-           Defaults to "table_file_and_entities".
-         hide_blanks (bool, optional):
-           Whether or not annotations with blank values will be hidden from a
-             datasets annotation list.
-           Defaults to False.
-         table_manipulation_method (str, optional):
-           Specify the way the manifest tables should be stored.
-           Defaults to "replace".
-         use_schema_label (bool, optional):
-           Whether or not the schema label will be used.
-           Defaults to True.
+    Args:
+        schema_url (str): The url to schema the component is in
+        component (str | None):
+          The component, either schema label, or display label
+          See use_schema_label
+        dataset_id (str): The id of the dataset to submit the manifest to
+        asset_view_id (str): The id of the asset view the dataset is in
+        body (bytes): The body of the request, contains the manifest in bytes form
+        restrict_rules (bool, optional):
+          Whether or not to restrict rule to non- great expectations.
+          Defaults to False.
+        storage_method (str, optional):
+          Specify what will be updated.
+          Defaults to "table_file_and_entities".
+        hide_blanks (bool, optional):
+          Whether or not annotations with blank values will be hidden from a
+            datasets annotation list.
+          Defaults to False.
+        table_manipulation_method (str, optional):
+          Specify the way the manifest tables should be stored.
+          Defaults to "replace".
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_column_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
          tuple[str | BasicError, int]: A tuple
@@ -168,7 +165,9 @@ def submit_manifest_csv(  # pylint: disable=too-many-arguments
         storage_method=storage_method,
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
-        use_schema_label=use_schema_label,
+        display_label_type=display_label_type,
+        table_column_name_style=table_column_name_style,
+        annotation_key_style=annotation_key_style,
     )
 
     status = 200
@@ -185,7 +184,9 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
     storage_method: str = "table_file_and_entities",
     hide_blanks: bool = False,
     table_manipulation_method: str = "replace",
-    use_schema_label: bool = True,
+    display_label_type: DisplayLabelType = "class_label",
+    annotation_key_style: str = "class_label",
+    table_column_name_style: str = "class_label",
     body: Any = None,
 ) -> tuple[str | BasicError, int]:
     """Submits a manifest csv in bytes form
@@ -211,9 +212,20 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
         table_manipulation_method (str, optional):
           Specify the way the manifest tables should be stored.
           Defaults to "replace".
-        use_schema_label (bool, optional):
-          Whether or not the schema label will be used.
-          Defaults to True.
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
+        annotation_key_style (str): Sets labeling syle for annotation keys.
+          class_label: will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting while ensuring the label is formatted properly for Synapse annotations.
+        table_column_name_style: (str): Sets labeling style for table column names.
+          display_name: will use the raw display name as the column name.
+          class_label will format the display name as upper camelcase, and strip blacklisted
+            characters
+          display_label: will strip blacklisted characters including spaces, to retain display label
+            formatting.
 
     Returns:
         tuple[str | BasicError, int]: A tuple
@@ -233,7 +245,9 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
         storage_method=storage_method,
         hide_blanks=hide_blanks,
         table_manipulation_method=table_manipulation_method,
-        use_schema_label=use_schema_label,
+        display_label_type=display_label_type,
+        table_column_name_style=table_column_name_style,
+        annotation_key_style=annotation_key_style,
     )
 
     status = 200
@@ -241,7 +255,11 @@ def submit_manifest_json(  # pylint: disable=too-many-arguments
 
 
 def validate_manifest_with_schematic(
-    manifest_path: str, schema_url: str, component_label: str, restrict_rules: bool
+    manifest_path: str,
+    schema_url: str,
+    component_label: str,
+    restrict_rules: bool,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[list, list]:
     """Validates a manifest csv file
 
@@ -250,6 +268,9 @@ def validate_manifest_with_schematic(
         schema_url (str): The url of the schema to validate the manifest against
         component_label (str): The label of the component being validated
         restrict_rules (bool): Weather or not to restrict the rules used
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Returns:
         tuple[list, list]: A tuple
@@ -260,7 +281,9 @@ def validate_manifest_with_schematic(
     access_token = get_access_token()
 
     metadata_model = MetadataModel(
-        inputMModelLocation=schema_path, inputMModelLocationType="local"
+        inputMModelLocation=schema_path,
+        inputMModelLocationType="local",
+        data_model_labels=display_label_type,
     )
     result: tuple[list, list] = metadata_model.validateModelManifest(
         manifestPath=manifest_path,
@@ -273,7 +296,11 @@ def validate_manifest_with_schematic(
 
 @handle_exceptions
 def validate_manifest_csv(
-    schema_url: str, component_label: str, body: bytes, restrict_rules: bool
+    schema_url: str,
+    component_label: str,
+    body: bytes,
+    restrict_rules: bool,
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[ManifestValidationResult | BasicError, int]:
     """Validates a manifest csv file
 
@@ -282,6 +309,9 @@ def validate_manifest_csv(
         component_label (str): The label of the component being validated
         body (bytes): The body of the request, a manifest csv in bytes form
         restrict_rules (bool): Weather or not to restrict the rules used
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Returns:
         tuple[ManifestValidationResult | BasicError, int]: A tuple
@@ -291,7 +321,11 @@ def validate_manifest_csv(
     manifest_path = save_manifest_csv_string_as_csv(body)
 
     errors, warnings = validate_manifest_with_schematic(
-        manifest_path, schema_url, component_label, restrict_rules
+        manifest_path,
+        schema_url,
+        component_label,
+        restrict_rules,
+        display_label_type=display_label_type,
     )
 
     result: ManifestValidationResult | BasicError = ManifestValidationResult(
@@ -305,7 +339,8 @@ def validate_manifest_json(
     schema_url: str,
     component_label: str,
     restrict_rules: bool,
-    body: Any,
+    display_label_type: DisplayLabelType = "class_label",
+    body: Any = None,
 ) -> tuple[ManifestValidationResult | BasicError, int]:
     """Validates a manifest in json string form
 
@@ -314,6 +349,9 @@ def validate_manifest_json(
         component_label (str): The label of the component being validated
         body (Any): The body of the request
         restrict_rules (bool): Weather or not to restrict the rules used
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Returns:
         tuple[ManifestValidationResult | BasicError, int]: A tuple
@@ -323,7 +361,11 @@ def validate_manifest_json(
     manifest_path = save_manifest_json_string_as_csv(body)
 
     errors, warnings = validate_manifest_with_schematic(
-        manifest_path, schema_url, component_label, restrict_rules
+        manifest_path,
+        schema_url,
+        component_label,
+        restrict_rules,
+        display_label_type=display_label_type,
     )
 
     result: ManifestValidationResult | BasicError = ManifestValidationResult(

@@ -130,12 +130,6 @@ class TestGetPropertyLabel(BaseTestCase):
         self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         assert response.json == "nodeLabel"
 
-    def test_500(self) -> None:
-        """Test for 500 result"""
-        url = f"{PROPERTY_LABEL_URL}not_a_url"
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
-
 
 class TestGetSchemaAttributes(BaseTestCase):
     """Test case for schema attributes endpoint"""
