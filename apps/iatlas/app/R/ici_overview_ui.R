@@ -30,10 +30,10 @@ ici_overview_ui <- function(id){
     iatlas.modules::sectionBox(
       title = "Dataset Information",
       ici_overview_datasets_ui(ns("ici_overview_datasets"))
-    ),
-    iatlas.modules::sectionBox(
-      title = "Category Key",
-      ici_overview_category_ui(ns("ici_overview_category"))
+    # ),
+    # iatlas.modules::sectionBox(
+    #   title = "Category Key",
+    #   ici_overview_category_ui(ns("ici_overview_category"))
     )
   )
 }

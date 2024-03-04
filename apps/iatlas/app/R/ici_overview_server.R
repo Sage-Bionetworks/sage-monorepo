@@ -14,11 +14,11 @@ ici_overview_server <- function(
         shiny::reactive(input$data_group)
       )
 
-      ici_overview_category_server(
-        "ici_overview_category",
-        ioresponse_data,
-        shiny::reactive(input$data_group)
-      )
+      # ici_overview_category_server(
+      #   "ici_overview_category",
+      #   ioresponse_data,
+      #   shiny::reactive(input$data_group)
+      # )
 
     }
   )
