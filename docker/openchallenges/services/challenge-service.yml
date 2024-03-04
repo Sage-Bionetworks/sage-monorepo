@@ -22,6 +22,8 @@ services:
     depends_on:
       openchallenges-config-server:
         condition: service_healthy
+      openchallenges-edam-etl:
+        condition: service_completed_successfully
       openchallenges-elasticsearch:
         condition: service_healthy
       openchallenges-mariadb:
