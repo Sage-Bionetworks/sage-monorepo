@@ -7,7 +7,7 @@ sc_umap_ui <- function(id){
       "iAtlas Explorer — UMAP Viewer of Single cell RNA-Seq data"
     ),
     iatlas.modules::textBox(
-      width = 12,
+      width = 24,
       shiny::p("Explore UMAP visualizations of single-cell RNA-Seq datasets.")
     ),
     iatlas.modules::messageBox(
@@ -35,7 +35,7 @@ sc_umap_ui <- function(id){
           selected = "cell_type",
           multiple = FALSE
         )
-        ),
+      )
     ),
     iatlas.modules::plotBox(
       width=24,

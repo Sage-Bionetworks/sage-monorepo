@@ -4,7 +4,7 @@ ici_overview_datasets_ui <- function(id){
   shiny::tagList(
     iatlas.modules::messageBox(
       width = 24,
-      shiny::textOutput(
+      shiny::uiOutput(
         ns("sums")
       ),
       # shiny::includeMarkdown(get_markdown_path(
