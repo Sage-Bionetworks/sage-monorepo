@@ -9,16 +9,33 @@ ici_overview_datasets_server <- function(
 
       ns <- session$ns
 
+      download_text <- shiny::reactive(
+        switch(
+          data_group(),
+          "ici" = c("https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/ici_query_iatlas_data.ipynb",
+                    "Information about downloading the Immune Checkpoint Inhibition data available in iAtlas is available at this Jupyter notebook."),
+          "cancer genomics" = c("https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/querying_TCGA_features_and_expression.ipynb",
+                                "Information about downloading the Cancer Genomics data available in iAtlas is available at this Jupyter notebook."),
+          "single-cell RNA-Seq"= c("https://www.synapse.org/#!Synapse:syn53761955",
+                                   "Processed data is available for download in Synapse.")
+        )
+      )
+
       dataset_info <- shiny::reactive({
         ioresponse_data$dataset_df %>%
           dplyr::filter(type == data_group())
       })
 
-      output$sums <- shiny::renderText({
+      output$sums <- shiny::renderUI({
         n_samples <- sum(dataset_info()$Samples)
         n_patients <- sum(dataset_info()$Patients)
-        glue::glue(
-          "CRI iAtlas has {n_samples} samples, from {n_patients} patients in this category of datasets."
+
+        tags$div(
+          glue::glue(
+            "CRI iAtlas has {n_samples} samples, from {n_patients} patients in this category of datasets."
+          ),
+          tags$a(href=download_text()[1],
+                 download_text()[2])
         )
       })
 
