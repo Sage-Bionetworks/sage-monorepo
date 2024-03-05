@@ -205,10 +205,13 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                        .f = get_stat_test)
       })
 
-      output$stats1 <- DT::renderDataTable({
-        shiny::req(test_summary_table())
-        test_summary_table()
-      })
+      output$stats1 <- DT::renderDataTable(
+       # shiny::req(test_summary_table())
+        test_summary_table(),
+        options = list(
+          order = list(list(7, 'asc'))
+          )
+      )
 
       output$download_test <- downloadHandler(
         filename = function() stringr::str_c("test_results-", Sys.Date(), ".csv"),
