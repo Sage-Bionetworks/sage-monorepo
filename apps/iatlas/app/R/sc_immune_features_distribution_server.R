@@ -209,7 +209,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
        # shiny::req(test_summary_table())
         test_summary_table(),
         options = list(
-          order = list(list(7, 'asc'))
+          order = list(list(7, 'desc'))
           )
       )
 
