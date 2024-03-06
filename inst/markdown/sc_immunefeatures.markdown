@@ -1,0 +1,3 @@
+This displays the value of immune readouts by cell type, computed based on pseudobulk data.
+
+Select a variable of interest to see the distribution of values within sample groups of the selected datasets. Samples can be further divided into an additional sub-group based on the availability of those groups for each dataset. Use the plot parameters to adjust the type of plot and choice of scale. A table with the result of statistical tests comparing all pairwise combinations of groups is provided at the bottom of the page. For an A vs B comparison, a positive t-statistics or Wilcox statistics corresponds to an elevated value in the A group over group B (Mean value in A greater than mean in B). The table also includes a comparison of the log2 fold change of groups.

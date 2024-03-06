@@ -27,6 +27,15 @@ sc_immune_features_server <- function(id, cohort_obj){
         sc_clinical
       )
 
+      observeEvent(input$method_link,{
+        shiny::showModal(modalDialog(
+          title = "Method",
+          includeMarkdown("inst/markdown/methods/sc-pseudobulk-scoring.md"),
+          easyClose = TRUE,
+          footer = NULL
+        ))
+      })
+
 
     }
   )
