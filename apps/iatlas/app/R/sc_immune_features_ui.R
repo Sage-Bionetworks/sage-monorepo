@@ -14,8 +14,8 @@ sc_immune_features_ui <- function(id){
       title = "Distributions",
       iatlas.modules::messageBox(
         width = 12,
-        shiny::p("GSEA results")
-      #   shiny::includeMarkdown("inst/markdown/ici_immunefeatures.markdown")
+        shiny::includeMarkdown("inst/markdown/sc_immunefeatures.markdown"),
+        shiny::actionLink(ns("method_link"), "Click to view method description.")
       ),
       sc_immune_features_distribution_ui(ns("sc_immune_features_distribution"))
     )
