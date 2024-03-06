@@ -26,11 +26,8 @@ RUN apt update \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
-    apt-get install openssl && \
-    openssl req -x509 -nodes -days 365 \
-    -subj  "/C=CA/ST=QC/O=Company" \
-    -newkey rsa:2048 -keyout /etc/ssl/private/localhost.key \
-    -out /etc/ssl/certs/localhost.crt;
+    && apt-get update \ 
+    && apt-get install -y openssl jq 
 
 # add dhparam.pem
 # dhparam.pem was used in ssl-params.conf
@@ -64,7 +61,22 @@ RUN echo "This is a test file." > /root/.synapseCache/test.txt
 # temporary here until we move .synapseCache to a different path
 RUN chmod -R 777 /root /app
 
+# Modify entrypoint script to allow private certificate to be saved
+WORKDIR ${ROOT}
+COPY ./uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
+COPY ./uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
+COPY ./save_key_certificate.py ./save_key_certificate.py
+RUN chmod +x uwsgi-nginx-entrypoint2.sh
+RUN chmod +x entrypoint2.sh
+RUN chown -R nginx /uwsgi-nginx-entrypoint2.sh
+RUN chown -R nginx /entrypoint2.sh
+
 WORKDIR ${APP_DIR}
+
+# specify entrypoint again to generate config
+# have to respecify CMD too
+ENTRYPOINT ["/entrypoint2.sh"]
+CMD ["/start.sh"]
 
 # Expose ports
 EXPOSE 7443
