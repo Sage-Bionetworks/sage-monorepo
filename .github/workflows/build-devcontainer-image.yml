@@ -2,7 +2,7 @@ name: Build Dev Container Image
 on:
   push:
     branches:
-      - 'main'
+      - 'develop-nginx-schematic-new'
     paths:
       - '.github/workflows/build-devcontainer-image.yml'
       - 'tools/devcontainers/sage/**/devcontainer.json'
@@ -15,7 +15,7 @@ on:
 
 env:
   IMAGE_REPOSITORY: ghcr.io/sage-bionetworks/sage-devcontainer
-  DEFAULT_BRANCH: main
+  DEFAULT_BRANCH: develop-nginx-schematic-new
 
 jobs:
   devcontainer:
