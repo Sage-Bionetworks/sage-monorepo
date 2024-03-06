@@ -30,13 +30,28 @@ ici_overview_datasets_server <- function(
         n_samples <- sum(dataset_info()$Samples)
         n_patients <- sum(dataset_info()$Patients)
 
-        tags$div(
-          glue::glue(
-            "CRI iAtlas has {n_samples} samples, from {n_patients} patients in this category of datasets."
-          ),
-          tags$a(href=download_text()[1],
-                 download_text()[2])
+        display_text <-  glue::glue(
+          "CRI iAtlas has {n_samples} samples, from {n_patients} patients in this category of datasets."
         )
+
+        if(data_group() != "single-cell RNA-Seq"){
+          tags$div(
+            display_text,
+            tags$a(href=download_text()[1],
+                   download_text()[2])
+          )
+        }else{
+
+
+          tags$div(
+            display_text,
+            shiny::p("These data sets were generated as part of the NCI Human Tumor Atlas Network, shared via ",
+                   a(href = "https://humantumoratlas.org/", "https://humantumoratlas.org/ .")),
+            tags$a(href=download_text()[1],
+                   download_text()[2])
+          )
+        }
+
       })
 
       output$ici_datasets_df <- DT::renderDT({
