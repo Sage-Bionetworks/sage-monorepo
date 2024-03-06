@@ -18,6 +18,7 @@ schematicpy = "23.12.1"
 # This is to avoid deprecationWarnings
 # See https://sagebionetworks.jira.com/browse/FDS-1324
 jsonschema = ">=4.0.0 <4.10.0"
+environs = "^11.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "23.7.0"
