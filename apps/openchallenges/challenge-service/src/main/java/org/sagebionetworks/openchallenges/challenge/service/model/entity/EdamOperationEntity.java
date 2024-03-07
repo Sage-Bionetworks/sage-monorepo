@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
@@ -28,10 +28,10 @@ public class EdamOperationEntity {
   private Long id;
 
   @Column(name = "class_id", nullable = false)
-  @FullTextField(name = "class_id")
+  @GenericField(name = "class_id")
   private String classId;
 
   @Column(name = "preferred_label", nullable = false)
-  @FullTextField(name = "preferred_label")
+  @GenericField(name = "preferred_label")
   private String preferredLabel;
 }
