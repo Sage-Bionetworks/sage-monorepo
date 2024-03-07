@@ -1,8 +1,5 @@
 #! /usr/bin/env sh
 set -e
-
-echo "Value of MY_VARIABLE is: $SECRETS_MANAGER_SECRETS"
-
 /uwsgi-nginx-entrypoint.sh
 
 # save private key and certificate from environment variable
