@@ -133,8 +133,8 @@ public class ChallengeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "operation_id", nullable = true)
-  //   @IndexedEmbedded(includePaths = {"classId", "preferredLabel"})
-  //   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
+  @IndexedEmbedded(includePaths = {"class_id", "preferred_label"})
+  @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private EdamOperationEntity operation;
 
   @Column(name = "created_at")

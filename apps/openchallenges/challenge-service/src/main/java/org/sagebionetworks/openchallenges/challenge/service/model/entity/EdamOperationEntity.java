@@ -28,10 +28,10 @@ public class EdamOperationEntity {
   private Long id;
 
   @Column(name = "class_id", nullable = false)
-  @FullTextField()
+  @FullTextField(name = "class_id")
   private String classId;
 
   @Column(name = "preferred_label", nullable = false)
-  @FullTextField()
+  @FullTextField(name = "preferred_label")
   private String preferredLabel;
 }
