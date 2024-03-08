@@ -61,7 +61,7 @@
     </div>
     <div class="main col">
       <h3>
-        Results <span *ngIf="organizationCards.length > 0">({{ searchResultsCount }})</span>
+        Results <span *ngIf="searchResultsCount !== undefined">({{ searchResultsCount }})</span>
       </h3>
       <div class="card-group">
         <openchallenges-organization-card

@@ -109,7 +109,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private destroy = new Subject<void>();
 
-  searchResultsCount = 0;
+  searchResultsCount!: number;
   totalOrgCount = 0;
   organizationCards: OrganizationCard[] = [];
 
