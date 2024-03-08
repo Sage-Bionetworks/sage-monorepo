@@ -12,7 +12,6 @@ on:
       - '.github/workflows/build-devcontainer-image.yml'
       - 'tools/devcontainers/sage/**/devcontainer.json'
       - 'tools/devcontainers/sage/**/Dockerfile'
-  workflow_dispatch:
 
 env:
   IMAGE_REPOSITORY: ghcr.io/sage-bionetworks/sage-devcontainer
