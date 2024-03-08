@@ -41,7 +41,7 @@ LOAD DATA LOCAL INFILE '${db_submission_types_csv_path}' INTO TABLE challenge_su
 
 
   -- challenge_input_data_type data
-LOAD DATA LOCAL INFILE '${db_challenge_input_data_type_csv_path}' INTO TABLE challenge_input_data_type
+LOAD DATA LOCAL INFILE '${db_input_data_type_csv_path}' INTO TABLE challenge_input_data_type
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
