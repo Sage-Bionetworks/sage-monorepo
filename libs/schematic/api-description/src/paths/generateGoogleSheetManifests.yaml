@@ -1,0 +1,47 @@
+get:
+  tags:
+    - ManifestGeneration
+  summary: Generates a list of google sheet links
+  description: Generates a list of google sheet links
+  operationId: generateGoogleSheetManifests
+  parameters:
+    - $ref: ../components/parameters/query/schemaUrl.yaml
+    - $ref: ../components/parameters/query/addAnnotations.yaml
+    - $ref: ../components/parameters/query/datasetIdArray.yaml
+    - $ref: ../components/parameters/query/manifestTitle.yaml
+    - $ref: ../components/parameters/query/dataTypeArray.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
+    - name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: false
+      schema:
+        $ref: ../components/schemas/AssetViewId.yaml
+    - name: useStrictValidation
+      in: query
+      description: If true, users are blocked from entering incorrect values.
+        If false, users will get a warning when using incorrect values.
+      required: false
+      schema:
+        type: boolean
+        default: true
+    - name: generateAllManifests
+      in: query
+      description:
+        If true, a manifest for all components will be generated, datasetIds will be ignored.
+        If false, manifests for each id in datasetIds will be generated.
+      required: false
+      schema:
+        type: boolean
+        default: false
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GoogleSheetLinks.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

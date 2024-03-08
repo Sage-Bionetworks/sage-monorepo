@@ -190,6 +190,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/assetViews/{assetViewId}/csv:
+    parameters:
+      - $ref: '#/components/parameters/assetViewId'
+      - $ref: '#/components/parameters/assetType'
+    get:
+      tags:
+        - Storage
+      summary: Gets the asset view table in csv file form
+      description: Gets the asset view table in csv file form
+      operationId: getAssetViewCsv
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
     parameters:
       - $ref: '#/components/parameters/assetType'
@@ -211,6 +240,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestJson'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/datasets/{datasetId}/manifestCsv:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/datasetId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in csv form
+      description: Gets the manifest in csv form
+      operationId: getDatasetManifestCsv
+      parameters:
+        - $ref: '#/components/parameters/assetViewIdQuery'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -379,6 +439,35 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /assetTypes/{assetType}/manifests/{manifestId}/csv:
+    parameters:
+      - $ref: '#/components/parameters/assetType'
+      - $ref: '#/components/parameters/manifestId'
+    get:
+      tags:
+        - Storage
+      summary: Gets the manifest in csv form
+      description: Gets the manifest in csv form
+      operationId: getManifestCsv
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/csv:
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /nodes/{nodeLabel}/dependencyArray:
     parameters:
       - $ref: '#/components/parameters/nodeLabel'
@@ -392,6 +481,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/returnDisplayNames'
         - $ref: '#/components/parameters/returnOrderedBySchema'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -416,6 +506,7 @@ paths:
         - $ref: '#/components/parameters/returnOrderedBySchema'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -436,6 +527,7 @@ paths:
       operationId: getNodeIsRequired
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -457,6 +549,7 @@ paths:
       operationId: getNodeProperties
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -476,7 +569,6 @@ paths:
       description: Gets the property label of the node
       operationId: getPropertyLabel
       parameters:
-        - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/useStrictCamelCase'
       responses:
         '200':
@@ -498,6 +590,7 @@ paths:
       operationId: getNodeValidationRules
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -519,6 +612,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/includeIndex'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -538,6 +632,7 @@ paths:
       operationId: getSchemaAttributes
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -558,6 +653,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/relationshipType'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -579,6 +675,7 @@ paths:
         - $ref: '#/components/parameters/relationshipType'
         - $ref: '#/components/parameters/pageNumber'
         - $ref: '#/components/parameters/pageMaxItems'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -605,6 +702,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -633,6 +731,7 @@ paths:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/componentLabelQuery'
         - $ref: '#/components/parameters/restrictRules'
+        - $ref: '#/components/parameters/displayLabelType'
       security:
         - bearerAuth: []
       responses:
@@ -666,7 +765,9 @@ paths:
         - $ref: '#/components/parameters/hideBlanks'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
-        - $ref: '#/components/parameters/useSchemaLabel'
+        - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -702,7 +803,9 @@ paths:
         - $ref: '#/components/parameters/hideBlanks'
         - $ref: '#/components/parameters/assetViewIdQuery'
         - $ref: '#/components/parameters/tableManipulationMethod'
-        - $ref: '#/components/parameters/useSchemaLabel'
+        - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/annotationKeyStyle'
+        - $ref: '#/components/parameters/tableColumnNameStyle'
       security:
         - bearerAuth: []
       responses:
@@ -724,6 +827,7 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/figureType'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -737,13 +841,14 @@ paths:
     get:
       tags:
         - TangledTree
-      summary: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
-      description: Get tangled tree plain or higlighted text to display for a given data model, text formatting and figure type
+      summary: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
+      description: Get tangled tree plain or highlighted text to display for a given data model, text formatting and figure type
       operationId: getTangledTreeText
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/figureType'
         - $ref: '#/components/parameters/textFormat'
+        - $ref: '#/components/parameters/displayLabelType'
       responses:
         '200':
           description: Success
@@ -751,6 +856,51 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TangledTreeText'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /generateGoogleSheetManifests:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates a list of google sheet links
+      description: Generates a list of google sheet links
+      operationId: generateGoogleSheetManifests
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdArray'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/dataTypeArray'
+        - $ref: '#/components/parameters/displayLabelType'
+        - name: assetViewId
+          in: query
+          description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+        - name: useStrictValidation
+          in: query
+          description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
+          required: false
+          schema:
+            type: boolean
+            default: true
+        - name: generateAllManifests
+          in: query
+          description: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
+          required: false
+          schema:
+            type: boolean
+            default: false
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GoogleSheetLinks'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -1204,6 +1354,25 @@ components:
     TangledTreeText:
       description: Tangled tree plain or higlighted text to display for a given data model
       type: object
+    DatasetIdArray:
+      type: array
+      description: An array of dataset ids
+      items:
+        $ref: '#/components/schemas/DatasetId'
+    DataTypeArray:
+      description: An array of data types
+      type: array
+      items:
+        type: string
+        example: Patient
+    GoogleSheetLinks:
+      type: object
+      description: An array of google sheet links
+      properties:
+        links:
+          type: array
+          items:
+            type: string
   responses:
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
@@ -1314,7 +1483,7 @@ components:
     schemaUrl:
       name: schemaUrl
       in: query
-      description: The URL of a schema in jsonld form
+      description: The URL of a schema in jsonld or csv form
       required: true
       schema:
         $ref: '#/components/schemas/SchemaUrl'
@@ -1332,6 +1501,17 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/ReturnOrderedBySchema'
+    displayLabelType:
+      name: displayLabelType
+      in: query
+      description: The type of label to display
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
     nodeDisplay:
       name: nodeDisplay
       in: path
@@ -1427,14 +1607,29 @@ components:
           - replace
           - upsert
         default: replace
-    useSchemaLabel:
-      name: useSchemaLabel
+    annotationKeyStyle:
+      name: annotationKeyStyle
       in: query
-      description: If true, store attributes using the schema label If false, store attributes using the display label
+      description: The labeling style for annotation keys.
       required: false
       schema:
-        type: boolean
-        default: true
+        type: string
+        enum:
+          - class_label
+          - display_label
+        default: class_label
+    tableColumnNameStyle:
+      name: tableColumnNameStyle
+      in: query
+      description: The labeling syle for table column names.
+      required: false
+      schema:
+        type: string
+        enum:
+          - class_label
+          - display_label
+          - display_name
+        default: class_label
     figureType:
       name: figureType
       in: query
@@ -1457,3 +1652,32 @@ components:
           - plain
           - highlighted
         default: plain
+    addAnnotations:
+      name: addAnnotations
+      in: query
+      description: If true, annotations are added to the manifest
+      required: false
+      schema:
+        type: boolean
+        default: false
+    datasetIdArray:
+      name: datasetIdArray
+      in: query
+      description: An array of dataset ids
+      required: false
+      schema:
+        $ref: '#/components/schemas/DatasetIdArray'
+    manifestTitle:
+      name: manifestTitle
+      in: query
+      description: If making one manifest, the title of the manifest. If making multiple manifests, the prefix of the title of the manifests.
+      required: false
+      schema:
+        type: string
+    dataTypeArray:
+      name: dataTypeArray
+      in: query
+      description: An array of data types
+      required: false
+      schema:
+        $ref: '#/components/schemas/DataTypeArray'

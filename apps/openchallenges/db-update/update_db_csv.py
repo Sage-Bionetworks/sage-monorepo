@@ -1,4 +1,5 @@
 import os
+import re
 import csv
 import gspread
 import numpy as np
@@ -7,6 +8,11 @@ import pandas as pd
 GOOGLE_SHEET_TITLE = "OpenChallenges Data"
 CHALLENGE_FOLDER = "apps/openchallenges/challenge-service/src/main/resources/db"
 ORGANIZATION_FOLDER = "apps/openchallenges/organization-service/src/main/resources/db"
+PLOT_FILE = (
+    "apps/openchallenges/challenge-service/src/main/java/org/sagebionetworks/"
+    "openchallenges/challenge/service/service/ChallengeAnalyticsService.java"
+)
+UPDATE_MARKER = r"(\/\* AUTO-UPDATE MARKER \*\/\s+)"  # capture as a group to preserve
 
 
 def output_csv(df, output_filename, output_folder="", print_row=False):
@@ -47,6 +53,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "doi",
             "start_date",
             "end_date",
+            "operation_id",
             "created_at",
             "updated_at",
         ]
@@ -55,6 +62,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
+        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
+        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace(u"\u2060", "", regex=True)  # remove word joiner
     )
     challenges["headline"] = (
         challenges["headline"]
@@ -68,6 +78,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
     )
     challenges.loc[challenges.start_date == "", "start_date"] = "\\N"
     challenges.loc[challenges.end_date == "", "end_date"] = "\\N"
+    challenges.loc[challenges.operation_id == "", "operation_id"] = "\\N"
 
     incentives = pd.concat(
         [
@@ -103,6 +114,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
             df[df.notebook_submission == "TRUE"][["id", "created_at"]].assign(
                 submission_types="notebook"
             ),
+            df[df.mlcube_submission == "TRUE"][["id", "created_at"]].assign(
+                submission_types="mlcube"
+            ),
             df[df.other_submission == "TRUE"][["id", "created_at"]].assign(
                 submission_types="other"
             ),
@@ -110,7 +124,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
     ).rename(columns={"id": "challenge_id"})
     sub_types["submission_types"] = pd.Categorical(
         sub_types["submission_types"],
-        categories=["prediction_file", "container_image", "notebook", "other"],
+        categories=["prediction_file", "container_image", "notebook", "mlcube", "other"],
     )
     sub_types = sub_types.sort_values(["challenge_id", "submission_types"])
     sub_types.index = np.arange(1, len(sub_types) + 1)
@@ -158,6 +172,9 @@ def get_organization_data(wks, sheet_name="organizations"):
         organizations.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
+        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
+        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace(u"\u2060", "", regex=True)  # remove word joiner
     )
     organizations["description"] = (
         organizations["description"]
@@ -174,13 +191,6 @@ def get_roles(wks, sheet_name="contribution_role"):
         .fillna("")
         .drop(["_challenge", "_organization"], axis=1)
     )
-
-
-def get_edam_terms(wks, sheet_name="edam_terms"):
-    """Get list of EDAM terms currently used in the DB."""
-    return pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")[
-        ["id", "edam_id", "name", "subclass_of", "created_at", "updated_at"]
-    ]
 
 
 def get_edam_annotations(wks, sheet_name="challenge_data"):
@@ -206,6 +216,9 @@ def main(gc):
     categories = get_challenge_categories(wks)
     output_csv(categories, "categories.csv", output_folder=CHALLENGE_FOLDER)
 
+    edam_annotations = get_edam_annotations(wks)
+    output_csv(edam_annotations, "challenge_data_edam.csv", output_folder=CHALLENGE_FOLDER)
+
     organizations = get_organization_data(wks)
     output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
 
@@ -215,6 +228,18 @@ def main(gc):
                output_folder=CHALLENGE_FOLDER, print_row=True)
     output_csv(sub_types, "submission_types.csv",
                output_folder=CHALLENGE_FOLDER, print_row=True)
+
+    # Update static plot numbers (displayed on homepage).
+    updated_plot_numbers = wks.worksheet("(plot) challenges_by_year").acell("D3").value
+    with open(PLOT_FILE, "r", encoding="utf-8") as file:
+        curr_content = file.read()
+    updated_content = re.sub(
+        UPDATE_MARKER + r"Arrays.asList\([\d, ]+\);",
+        r"\1" + updated_plot_numbers,  # replace but keep reserved group (\1)
+        curr_content,
+    )
+    with open(PLOT_FILE, "w", encoding="utf-8") as file:
+        file.write(updated_content)
 
 
 if __name__ == "__main__":

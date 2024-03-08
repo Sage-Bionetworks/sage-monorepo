@@ -59,7 +59,7 @@ export class TeamComponent implements OnInit {
       objectKey: 'openchallenges-icon.svg',
     });
     this.sageLogo$ = this.imageService.getImage({
-      objectKey: 'logo/sage-bionetworks-alt.svg',
+      objectKey: 'logo/SageBionetworks-Logo-FullColor.svg',
     });
 
     this.thomasAvatar$ = this.getAvatarImage('team/thomas_schaffter_v3.jpg');

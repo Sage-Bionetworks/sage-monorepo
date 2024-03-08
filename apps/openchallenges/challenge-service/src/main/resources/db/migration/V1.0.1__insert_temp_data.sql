@@ -4,6 +4,14 @@ LOAD DATA LOCAL INFILE '${db_platforms_csv_path}' INTO TABLE challenge_platform
   LINES TERMINATED BY '\n'
   IGNORE 1 LINES;
 
+
+-- edam_concept data
+LOAD DATA LOCAL INFILE '${db_edam_concept_csv_path}' INTO TABLE edam_concept
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
+
+
 -- challenge data
 LOAD DATA LOCAL INFILE '${db_challenges_csv_path}' INTO TABLE challenge
   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'

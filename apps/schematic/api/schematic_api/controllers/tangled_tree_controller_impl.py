@@ -3,6 +3,7 @@
 from typing import Literal
 
 from schematic.visualization.tangled_tree import TangledTree  # type: ignore
+from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.controllers.utils import (
@@ -13,13 +14,18 @@ from schematic_api.controllers.utils import (
 
 @handle_exceptions
 def get_tangled_tree_layers(
-    schema_url: str, figure_type: Literal["component", "dependency"] = "component"
+    schema_url: str,
+    figure_type: Literal["component", "dependency"] = "component",
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[str | BasicError, int]:
     """Gets layers for a tangled tree visualization.
 
     Args:
         schema_url (str): The URL to the schema file
         figure_type (Literal["component", "dependency"]): Figure type to generate.
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
     Returns:
         tuple[str | BasicError, int]: A tuple
@@ -27,7 +33,11 @@ def get_tangled_tree_layers(
           The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
-    tangled_tree = TangledTree(schema_path, figure_type)
+    tangled_tree = TangledTree(
+        path_to_json_ld=schema_path,
+        figure_type=figure_type,
+        data_model_labels=display_label_type,
+    )
     # Currently TangledTree.get_tangled_tree_layers() returns either an empty list if
     # save_file=False or a list of one string if save_file=False.
     # The API should output just the string.
@@ -47,6 +57,7 @@ def get_tangled_tree_text(
     schema_url: str,
     figure_type: Literal["component", "dependency"] = "component",
     text_format: Literal["plain", "highlighted"] = "plain",
+    display_label_type: DisplayLabelType = "class_label",
 ) -> tuple[str | BasicError, int]:
     """Gets text for a tangled tree visualization.
 
@@ -55,6 +66,9 @@ def get_tangled_tree_text(
         figure_type (Literal["component", "dependency"]): Figure type to generate.
         text_format (Literal["plain", "highlighted"]):  Determines the type of text
           rendering to return
+        display_label_type (DisplayLabelType):
+          The type of label to use as display
+          Defaults to "class_label"
 
       Returns:
         tuple[str | BasicError, int]: A tuple
@@ -62,7 +76,11 @@ def get_tangled_tree_text(
           The second item is the response status
     """
     schema_path = download_schema_file_as_jsonld(schema_url)
-    tangled_tree = TangledTree(schema_path, figure_type)
+    tangled_tree = TangledTree(
+        path_to_json_ld=schema_path,
+        figure_type=figure_type,
+        data_model_labels=display_label_type,
+    )
     attempt = tangled_tree.get_text_for_tangled_tree(text_format, save_file=False)
     assert isinstance(attempt, str)
     result: str | BasicError = attempt

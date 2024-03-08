@@ -1,0 +1,5 @@
+description: An array of data types
+type: array
+items:
+  type: string
+  example: Patient

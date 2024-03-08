@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  openchallenges-edam-etl:
+    image: ghcr.io/sage-bionetworks/openchallenges-edam-etl:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-edam-etl
+    restart: no
+    env_file:
+      - ../../../apps/openchallenges/edam-etl/.env
+    networks:
+      - openchallenges
+    deploy:
+      resources:
+        limits:
+          memory: 500M
+    depends_on:
+      openchallenges-mariadb:
+        condition: service_healthy

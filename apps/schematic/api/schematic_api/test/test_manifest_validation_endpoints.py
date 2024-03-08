@@ -63,7 +63,7 @@ class TestSubmitManifestCsv(BaseTestCase):
             arguments_dict = mock_function.call_args[1]
             assert not arguments_dict["restrict_rules"]
             assert not arguments_dict["hide_blanks"]
-            assert arguments_dict["use_schema_label"]
+            assert arguments_dict["display_label_type"] == "class_label"
             assert arguments_dict["storage_method"] == "table_file_and_entities"
             assert arguments_dict["table_manipulation_method"] == "replace"
 
@@ -79,16 +79,15 @@ class TestSubmitManifestCsv(BaseTestCase):
                 f"{SUBMIT_MANIFEST_CSV_URL}"
                 "&restrictRules=true&"
                 "hideBlanks=true"
-                "&useSchemaLabel=false"
+                "&displayLabelType=display_label"
                 "&storageMethod=file_only"
                 "&tableManipulationMethod=upsert"
             )
             self.client.open(url, method="POST", headers=HEADERS, data=body)
             arguments_dict = mock_function.call_args[1]
-
             assert arguments_dict["restrict_rules"]
             assert arguments_dict["hide_blanks"]
-            assert not arguments_dict["use_schema_label"]
+            assert arguments_dict["display_label_type"] == "display_label"
             assert arguments_dict["storage_method"] == "file_only"
             assert arguments_dict["table_manipulation_method"] == "upsert"
 
@@ -142,7 +141,7 @@ class TestSubmitManifestJson(BaseTestCase):
             arguments_dict = mock_function.call_args[1]
             assert not arguments_dict["restrict_rules"]
             assert not arguments_dict["hide_blanks"]
-            assert arguments_dict["use_schema_label"]
+            assert arguments_dict["display_label_type"] == "class_label"
             assert arguments_dict["storage_method"] == "table_file_and_entities"
             assert arguments_dict["table_manipulation_method"] == "replace"
 
@@ -158,7 +157,7 @@ class TestSubmitManifestJson(BaseTestCase):
                 f"{SUBMIT_MANIFEST_JSON_URL}"
                 "&restrictRules=true"
                 "&hideBlanks=true"
-                "&useSchemaLabel=false"
+                "&displayLabelType=display_label"
                 "&storageMethod=file_only"
                 "&tableManipulationMethod=upsert"
             )
@@ -167,7 +166,7 @@ class TestSubmitManifestJson(BaseTestCase):
 
             assert arguments_dict["restrict_rules"]
             assert arguments_dict["hide_blanks"]
-            assert not arguments_dict["use_schema_label"]
+            assert arguments_dict["display_label_type"] == "display_label"
             assert arguments_dict["storage_method"] == "file_only"
             assert arguments_dict["table_manipulation_method"] == "upsert"
 
@@ -199,7 +198,7 @@ class TestValidateManifestCsv(BaseTestCase):
         assert response.json["errors"] == []
         assert response.json["warnings"] == []
 
-    def test_restrict_rules(self) -> None:
+    def test_arguments(self) -> None:
         """Test for the restrict rules argument"""
         with patch.object(
             schematic_api.controllers.manifest_validation_controller_impl,
@@ -210,11 +209,15 @@ class TestValidateManifestCsv(BaseTestCase):
 
             url1 = f"{VALIDATE_MANIFEST_CSV_URL}?schemaUrl=x&componentLabel=x&restrictRules=true"
             self.client.open(url1, method="POST", headers=HEADERS, data=body)
-            mock_function.assert_called_with(TEMP_MANIFEST_PATH, "x", "x", True)
+            mock_function.assert_called_with(
+                TEMP_MANIFEST_PATH, "x", "x", True, display_label_type="class_label"
+            )
 
             url2 = f"{VALIDATE_MANIFEST_CSV_URL}?schemaUrl=x2&componentLabel=x2&restrictRules=false"
             self.client.open(url2, method="POST", headers=HEADERS, data=body)
-            mock_function.assert_called_with(TEMP_MANIFEST_PATH, "x2", "x2", False)
+            mock_function.assert_called_with(
+                TEMP_MANIFEST_PATH, "x2", "x2", False, display_label_type="class_label"
+            )
 
     def test_500(self) -> None:
         """Test for 500 result"""
@@ -253,14 +256,18 @@ class TestValidateManifestJson(BaseTestCase):
 
             url1 = f"{VALIDATE_MANIFEST_JSON_URL}?schemaUrl=x&componentLabel=x&restrictRules=true"
             self.client.open(url1, method="POST", headers=HEADERS, data=body)
-            mock_function.assert_called_with(TEMP_MANIFEST_PATH, "x", "x", True)
+            mock_function.assert_called_with(
+                TEMP_MANIFEST_PATH, "x", "x", True, display_label_type="class_label"
+            )
 
             url2 = (
                 f"{VALIDATE_MANIFEST_JSON_URL}"
                 "?schemaUrl=x2&componentLabel=x2&restrictRules=false"
             )
             self.client.open(url2, method="POST", headers=HEADERS, data=body)
-            mock_function.assert_called_with(TEMP_MANIFEST_PATH, "x2", "x2", False)
+            mock_function.assert_called_with(
+                TEMP_MANIFEST_PATH, "x2", "x2", False, display_label_type="class_label"
+            )
 
     def test_500(self) -> None:
         """Test for 500 result"""

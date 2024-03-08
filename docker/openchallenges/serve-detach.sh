@@ -8,6 +8,7 @@ args=(
   --file docker/openchallenges/services/app.yml
   --file docker/openchallenges/services/challenge-service.yml
   --file docker/openchallenges/services/config-server.yml
+  --file docker/openchallenges/services/edam-etl.yml
   --file docker/openchallenges/services/elasticsearch.yml
   --file docker/openchallenges/services/grafana.yml
   --file docker/openchallenges/services/image-service.yml
