@@ -61,7 +61,7 @@ public class ChallengeDto {
 
   @JsonProperty("inputDataTypes")
   @Valid
-  private List<SimpleChallengeInputDataTypeDto> inputDataTypes = null;
+  private List<EdamDataDto> inputDataTypes = null;
 
   @JsonProperty("categories")
   @Valid
@@ -380,12 +380,12 @@ public class ChallengeDto {
     this.submissionTypes = submissionTypes;
   }
 
-  public ChallengeDto inputDataTypes(List<SimpleChallengeInputDataTypeDto> inputDataTypes) {
+  public ChallengeDto inputDataTypes(List<EdamDataDto> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
     return this;
   }
 
-  public ChallengeDto addInputDataTypesItem(SimpleChallengeInputDataTypeDto inputDataTypesItem) {
+  public ChallengeDto addInputDataTypesItem(EdamDataDto inputDataTypesItem) {
     if (this.inputDataTypes == null) {
       this.inputDataTypes = new ArrayList<>();
     }
@@ -400,11 +400,11 @@ public class ChallengeDto {
    */
   @Valid
   @Schema(name = "inputDataTypes", required = false)
-  public List<SimpleChallengeInputDataTypeDto> getInputDataTypes() {
+  public List<EdamDataDto> getInputDataTypes() {
     return inputDataTypes;
   }
 
-  public void setInputDataTypes(List<SimpleChallengeInputDataTypeDto> inputDataTypes) {
+  public void setInputDataTypes(List<EdamDataDto> inputDataTypes) {
     this.inputDataTypes = inputDataTypes;
   }
 

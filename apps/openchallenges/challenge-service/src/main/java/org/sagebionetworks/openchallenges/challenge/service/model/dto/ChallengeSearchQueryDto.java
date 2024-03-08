@@ -55,10 +55,6 @@ public class ChallengeSearchQueryDto {
   @Valid
   private List<Long> organizations = null;
 
-  @JsonProperty("inputDataTypes")
-  @Valid
-  private List<String> inputDataTypes = null;
-
   @JsonProperty("status")
   @Valid
   private List<ChallengeStatusDto> status = null;
@@ -320,36 +316,6 @@ public class ChallengeSearchQueryDto {
     this.organizations = organizations;
   }
 
-  public ChallengeSearchQueryDto inputDataTypes(List<String> inputDataTypes) {
-    this.inputDataTypes = inputDataTypes;
-    return this;
-  }
-
-  public ChallengeSearchQueryDto addInputDataTypesItem(String inputDataTypesItem) {
-    if (this.inputDataTypes == null) {
-      this.inputDataTypes = new ArrayList<>();
-    }
-    this.inputDataTypes.add(inputDataTypesItem);
-    return this;
-  }
-
-  /**
-   * An array of challenge input data type ids used to filter the results.
-   *
-   * @return inputDataTypes
-   */
-  @Schema(
-      name = "inputDataTypes",
-      description = "An array of challenge input data type ids used to filter the results.",
-      required = false)
-  public List<String> getInputDataTypes() {
-    return inputDataTypes;
-  }
-
-  public void setInputDataTypes(List<String> inputDataTypes) {
-    this.inputDataTypes = inputDataTypes;
-  }
-
   public ChallengeSearchQueryDto status(List<ChallengeStatusDto> status) {
     this.status = status;
     return this;
@@ -486,7 +452,6 @@ public class ChallengeSearchQueryDto {
         && Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate)
         && Objects.equals(this.platforms, challengeSearchQuery.platforms)
         && Objects.equals(this.organizations, challengeSearchQuery.organizations)
-        && Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes)
         && Objects.equals(this.status, challengeSearchQuery.status)
         && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
         && Objects.equals(this.categories, challengeSearchQuery.categories)
@@ -506,7 +471,6 @@ public class ChallengeSearchQueryDto {
         maxStartDate,
         platforms,
         organizations,
-        inputDataTypes,
         status,
         submissionTypes,
         categories,
@@ -527,7 +491,6 @@ public class ChallengeSearchQueryDto {
     sb.append("    maxStartDate: ").append(toIndentedString(maxStartDate)).append("\n");
     sb.append("    platforms: ").append(toIndentedString(platforms)).append("\n");
     sb.append("    organizations: ").append(toIndentedString(organizations)).append("\n");
-    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
