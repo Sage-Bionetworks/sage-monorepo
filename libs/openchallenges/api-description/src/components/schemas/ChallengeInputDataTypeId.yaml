@@ -1,4 +1,0 @@
-description: The unique identifier of a challenge input data type.
-type: integer
-format: int64
-example: 1
