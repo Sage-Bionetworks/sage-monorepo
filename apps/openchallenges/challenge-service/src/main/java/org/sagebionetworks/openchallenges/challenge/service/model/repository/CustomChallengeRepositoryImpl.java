@@ -70,9 +70,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     if (query.getMinStartDate() != null || query.getMaxStartDate() != null) {
       predicates.add(getChallengeStartDatePredicate(pf, query));
     }
-    if (query.getInputDataTypes() != null && !query.getInputDataTypes().isEmpty()) {
-      predicates.add(getChallengeInputDataTypesPredicate(pf, query));
-    }
     if (query.getOrganizations() != null && !query.getOrganizations().isEmpty()) {
       predicates.add(getOrganizationsPredicate(pf, query));
     }
@@ -185,25 +182,6 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               for (Long organizationId : query.getOrganizations()) {
                 b.should(
                     pf.match().field("contributions.organization_id").matching(organizationId));
-              }
-            })
-        .toPredicate();
-  }
-
-  /**
-   * Matches the challenges whose at least one of their input data types is in the list of input
-   * data types specified.
-   *
-   * @param pf
-   * @param query
-   * @return
-   */
-  private SearchPredicate getChallengeInputDataTypesPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (String inputDataType : query.getInputDataTypes()) {
-                b.should(pf.match().field("input_data_types.slug").matching(inputDataType));
               }
             })
         .toPredicate();
