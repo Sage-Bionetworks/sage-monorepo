@@ -574,35 +574,23 @@ components:
       maxLength: 500
       nullable: true
       example: 'https://openchallenges.io'
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      type: integer
-      format: int64
-      example: 1
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
-      type: string
-      minLength: 3
-      maxLength: 50
-      example: gene expression
-    SimpleChallengeInputDataType:
+    EdamData:
       type: object
-      description: A simple challenge input data type.
+      description: The EDAM Data concept.
       properties:
-        id:
-          $ref: '#/components/schemas/ChallengeInputDataTypeId'
-        slug:
-          $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
-        name:
-          $ref: '#/components/schemas/ChallengeInputDataTypeName'
+        classId:
+          type: string
+          example: 'http://edamontology.org/data_0850'
+          maxLength: 60
+          pattern: '^http:\/\/edamontology\.org\/data_\d+$'
+        preferredLabel:
+          type: string
+          example: Sequence set
+          maxLength: 80
       required:
-        - id
-        - slug
-        - name
-      x-java-class-annotations:
-        - '@lombok.Builder'
-        - '@lombok.NoArgsConstructor'
-        - '@lombok.AllArgsConstructor'
+        - classId
+        - preferredLabel
+      nullable: true
     ChallengeStartDate:
       description: The start date of the challenge.
       type: string
@@ -677,7 +665,7 @@ components:
         inputDataTypes:
           type: array
           items:
-            $ref: '#/components/schemas/SimpleChallengeInputDataType'
+            $ref: '#/components/schemas/EdamData'
         categories:
           type: array
           items:
@@ -849,6 +837,17 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: genomic
+    ChallengeInputDataTypeId:
+      description: The unique identifier of a challenge input data type.
+      type: integer
+      format: int64
+      example: 1
+    ChallengeInputDataTypeName:
+      description: The name of the challenge input data type.
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: gene expression
     ChallengeInputDataType:
       type: object
       description: A challenge input data type.

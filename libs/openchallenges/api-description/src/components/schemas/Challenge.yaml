@@ -32,7 +32,7 @@ properties:
   inputDataTypes:
     type: array
     items:
-      $ref: SimpleChallengeInputDataType.yaml
+      $ref: EdamData.yaml
   categories:
     type: array
     items:
