@@ -1,7 +1,7 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.10
 
 # add label 
-LABEL maintainer="Milen Nikolov, Andrew Lamb, Mialy DeFelice, Gianna Jordan, Lingling Peng"
+LABEL maintainer="Milen Nikolov <milen.nikolov@sagebase.org>, Andrew Lamb <andrew.lamb@sagebase.org>, Mialy DeFelice <mialy.defelice@sagebase.org>, Gianna Jordan <gianna.jordan@sagebase.org>, Lingling Peng <lingling.peng@sagebase.org>"
 
 # the environment variables defined here are the default
 # and can be overwritten by docker run -e VARIABLE = XX
@@ -61,7 +61,7 @@ RUN echo "This is a test file." > /root/.synapseCache/test.txt
 # temporary here until we move .synapseCache to a different path
 RUN chmod -R 777 /root /app
 
-# Modify entrypoint script to allow private certificate to be saved
+# Modify entrypoint script to allow SSL private key and certificate to be saved
 WORKDIR ${ROOT}
 COPY ./uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
 COPY ./uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
