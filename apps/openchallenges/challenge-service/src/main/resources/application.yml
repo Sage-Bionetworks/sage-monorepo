@@ -16,6 +16,7 @@ spring:
       db_challenges_csv_path: ${DB_CHALLENGES_CSV_PATH:src/main/resources/db/challenges.csv}
       db_contribution_roles_csv_path: ${DB_CONTRIBUTION_ROLES_CSV_PATH:src/main/resources/db/contribution_roles.csv}
       db_incentives_csv_path: ${DB_INCENTIVES_CSV_PATH:src/main/resources/db/incentives.csv}
+      db_input_data_type_csv_path: ${DB_INPUT_DATA_TYPE_CSV_PATH:src/main/resources/db/input_data_type.csv}
       db_submission_types_csv_path: ${DB_SUBMISSION_TYPES_CSV_PATH:src/main/resources/db/submission_types.csv}
       db_categories_csv_path: ${DB_CATEGORIES_CSV_PATH:src/main/resources/db/categories.csv}
       db_edam_concept_csv_path: ${DB_EDAM_CONCEPT_CSV_PATH:src/main/resources/db/edam_concept.csv}

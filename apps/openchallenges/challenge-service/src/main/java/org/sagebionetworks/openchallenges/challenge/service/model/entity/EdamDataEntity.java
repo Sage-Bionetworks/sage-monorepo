@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Table(name = "edam_concept")
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Indexed(index = "openchallenges-edam-concept")
 public class EdamDataEntity {
 
   @Id
@@ -25,8 +28,10 @@ public class EdamDataEntity {
   private Long id;
 
   @Column(name = "class_id", nullable = false)
+  @FullTextField(name = "class_id")
   private String classId;
 
   @Column(name = "preferred_label", nullable = false)
+  @FullTextField(name = "preferred_label")
   private String preferredLabel;
 }
