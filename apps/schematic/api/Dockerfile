@@ -1,7 +1,7 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.10
 
 # add label 
-LABEL maintainer="Milen Nikolov <milen.nikolov@sagebase.org>, Andrew Lamb <andrew.lamb@sagebase.org>, Mialy DeFelice <mialy.defelice@sagebase.org>, Gianna Jordan <gianna.jordan@sagebase.org>, Lingling Peng <lingling.peng@sagebase.org>"
+LABEL org.opencontainers.image.authors='Milen Nikolov <milen.nikolov@sagebase.org>, Andrew Lamb <andrew.lamb@sagebase.org>, Mialy DeFelice <mialy.defelice@sagebase.org>, Gianna Jordan <gianna.jordan@sagebase.org>, Lingling Peng <lingling.peng@sagebase.org>'
 
 # the environment variables defined here are the default
 # and can be overwritten by docker run -e VARIABLE = XX
