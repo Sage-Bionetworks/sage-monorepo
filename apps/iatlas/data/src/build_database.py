@@ -37,6 +37,185 @@ for var in env_vars:
 
 iatlas_config = [
     {
+        "name": "cells",
+        "primary_key": "id",
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "name",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_samples",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": False,
+                "index": True,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_genes",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "single_cell_seq",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_features",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "feature_id",
+                "foreign_table_name": "features",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "feature_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "feature_value",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cell_stats",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "dataset_id",
+                "foreign_table_name": "datasets",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "dataset_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_count",
+                "datatype": "int",
+                "required": False,
+                "index": False,
+            },
+            {
+                "column_name": "avg_expr",
+                "datatype": "float",
+                "required": False,
+                "index": False,
+            },
+            {
+                "column_name": "perc_expr",
+                "datatype": "float",
+                "required": False,
+                "index": False,
+            },
+        ],
+    },
+    {
         "name": "cohorts",
         "primary_key": "id",
         "foreign_keys": [
@@ -1564,6 +1743,92 @@ iatlas_config = [
         ],
     },
     {
+        "name": "single_cell_pseudobulk",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "single_cell_seq_sum",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "single_cell_pseudobulk_features",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "feature_id",
+                "foreign_table_name": "features",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "feature_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "value",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
         "name": "snps",
         "primary_key": "id",
         "columns": [
@@ -1596,7 +1861,9 @@ db = PostgresDatabase(
 )
 
 schema = Schema(
-    SchemaConfig(schema_url=getenv("SCHEMA_URL")), DatabaseConfig(iatlas_config)
+    SchemaConfig(schema_url=getenv("SCHEMA_URL")),
+    DatabaseConfig(iatlas_config),
+    display_label_type="display_label",
 )
 
 
@@ -1609,7 +1876,8 @@ ms = SynapseManifestStore(
         synapse_project_id=getenv("SCHEMA_PROJECT_ID"),
         synapse_asset_view_id=getenv("SCHEMA_ASSET_VIEW_ID"),
         synapse_auth_token=getenv("SCHEMA_AUTH_TOKEN"),
-    )
+    ),
+    display_label_type="display_label",
 )
 
 updater = RDBUpdater(db, ms)

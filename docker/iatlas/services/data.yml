@@ -12,7 +12,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 6G
+          memory: 16G
     depends_on:
       iatlas-postgres:
         condition: service_healthy
