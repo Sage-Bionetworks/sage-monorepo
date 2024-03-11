@@ -1,0 +1,26 @@
+# git
+# used by git-log to rewrite usernames
+.mailmap
+git-genui.config.json
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# Generated files
+.DS_Store
+
+# Visual Studio Code
+.vscode
+*.code-workspace
+
+# VIM
+*.swp
+*.swo
+
+docker/
+no_commit/
+scripts/__pycache__
