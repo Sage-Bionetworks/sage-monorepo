@@ -1,7 +1,7 @@
 {
   "name": "iatlas-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/iatlas/api/scripts",
+  "sourceRoot": "apps/iatlas/api",
   "projectType": "application",
   "targets": {
     "create-config": {
