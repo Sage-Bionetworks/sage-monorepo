@@ -66,17 +66,6 @@
           </ng-template>
         </tr>
         <tr>
-          <td class="text-right">Data Type(s)</td>
-          <td *ngIf="challenge.inputDataTypes && challenge.inputDataTypes.length > 0; else na_data">
-            <span nowrap *ngFor="let dataType of challenge.inputDataTypes; let isLast = last">
-              {{ prettify(dataType.name) }}{{ isLast ? '' : ', ' }}
-            </span>
-          </td>
-          <ng-template #na_data>
-            <td><span class="text-grey">Not available</span></td>
-          </ng-template>
-        </tr>
-        <tr>
           <td class="text-right">Incentive(s)</td>
           <td *ngIf="challenge.incentives && challenge.incentives.length > 0; else na_prize">
             <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
