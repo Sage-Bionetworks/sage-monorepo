@@ -19,7 +19,7 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Indexed(index = "openchallenges-edam-concept")
+@Indexed(index = "openchallenges-edam-data")
 public class EdamDataEntity {
 
   @Id

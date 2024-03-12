@@ -35,7 +35,6 @@ public class ChallengeService {
           "description",
           "headline",
           "input_data_types.class_id",
-          "input_data_types.name",
           "input_data_types.preferred_label",
           "name",
           "operation.class_id",
