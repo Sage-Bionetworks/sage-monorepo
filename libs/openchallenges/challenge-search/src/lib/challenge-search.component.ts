@@ -110,7 +110,7 @@ export class ChallengeSearchComponent
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
-  searchResultsCount = 0;
+  searchResultsCount!: number;
 
   @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: Date[] | undefined;
@@ -235,9 +235,6 @@ export class ChallengeSearchComponent
       .listChallenges({ pageSize: 1, pageNumber: 0 })
       .subscribe((page) => {
         this.totalChallengesCount = page.totalElements;
-
-        // const num = page.challenges.filter((c) => c.startDate !== null).length;
-        // console.log(num);
       });
 
     // update platform filter values

@@ -31,7 +31,15 @@ public class ChallengeService {
   private ChallengeMapper challengeMapper = new ChallengeMapper();
 
   private static final List<String> SEARCHABLE_FIELDS =
-      Arrays.asList("name", "headline", "description");
+      Arrays.asList(
+          "description",
+          "headline",
+          "input_data_types.class_id",
+          "input_data_types.name",
+          "input_data_types.preferred_label",
+          "name",
+          "operation.class_id",
+          "operation.preferred_label");
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
