@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { ChallengeService } from './api/challenge.service';
 import { ChallengeAnalyticsService } from './api/challengeAnalytics.service';
 import { ChallengeContributionService } from './api/challengeContribution.service';
-import { ChallengeInputDataTypeService } from './api/challengeInputDataType.service';
 import { ChallengePlatformService } from './api/challengePlatform.service';
 import { ImageService } from './api/image.service';
 import { OrganizationService } from './api/organization.service';

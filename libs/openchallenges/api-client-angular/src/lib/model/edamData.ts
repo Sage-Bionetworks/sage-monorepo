@@ -12,12 +12,10 @@
 
 
 /**
- * The direction to sort the results by.
+ * The EDAM Data concept.
  */
-export type ChallengeInputDataTypeDirection = 'asc' | 'desc';
-
-export const ChallengeInputDataTypeDirection = {
-    Asc: 'asc' as ChallengeInputDataTypeDirection,
-    Desc: 'desc' as ChallengeInputDataTypeDirection
-};
+export interface EdamData { 
+    classId: string;
+    preferredLabel: string;
+}
 
