@@ -4,6 +4,7 @@ from tests import NoneType
 from api.enums import unit_enum
 from api.database import return_feature_query
 from api.resolvers.resolver_helpers.paging_utils import from_cursor_hash, to_cursor_hash, Paging
+from decimal import Decimal
 
 
 @pytest.fixture(scope='module')
@@ -32,6 +33,7 @@ def common_query_builder():
             $featureClass: [String!]
             $cohort: [String!]
             $sample: [String!]
+            $cellTypeSample: [String!]
             $minValue: Float
             $maxValue: Float
             $paging: PagingInput
@@ -42,6 +44,7 @@ def common_query_builder():
             featureClass: $featureClass
             cohort: $cohort
             sample: $sample
+            cellTypeSample: $cellTypeSample
             minValue: $minValue
             maxValue: $maxValue
             paging: $paging
@@ -97,6 +100,38 @@ def samples_query(common_query_builder):
                 samples {
                     name
                     value
+                }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }
+        """
+    )
+
+@pytest.fixture(scope='module')
+def samples_cell_types_query(common_query_builder):
+    return common_query_builder(
+        """
+        {
+            items {
+                id
+                name
+                class
+                order
+                cellTypeSamples {
+                    name
+                    value
+                    cellType
                 }
             }
             paging {
@@ -522,6 +557,7 @@ def test_feature_samples_query_with_feature_and_cohort2(client, feature_name, fe
         assert type(sample['value']) is float
         assert sample['name'] in tcga_tag_cohort_samples
 
+
 def test_feature_samples_query_with_feature_and_sample(client, feature_name, samples_query, sample):
     response = client.post(
         '/api', json={
@@ -545,6 +581,57 @@ def test_feature_samples_query_with_feature_and_sample(client, feature_name, sam
     for s in samples:
         assert s['name'] == sample
         assert type(s['value']) is float
+
+
+def test_cell_type_feature_samples_query_with_feature(client, samples_cell_types_query):
+    response = client.post(
+        '/api', json={
+            'query': samples_cell_types_query,
+            'variables': {
+                'feature': ["Th1_cells"],
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    assert feature['name'] == "Th1_cells"
+    assert isinstance(feature['class'], str)
+    samples = feature['cellTypeSamples']
+    assert isinstance(samples, list)
+    assert len(samples) > 0
+    for sample in samples[0:10]:
+        assert isinstance(sample['cellType'], str)
+        assert isinstance(sample['name'], str)
+        assert isinstance(sample['value'], float)
+
+
+def test_cell_type_feature_samples_query_with_cohort(client, samples_cell_types_query):
+    response = client.post(
+        '/api', json={
+            'query': samples_cell_types_query,
+            'variables': {
+                'cohort': ['MSK_Biopsy_Site']
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) > 0
+    feature = features[0]
+    assert isinstance(feature['name'], str)
+    assert isinstance(feature['class'], str)
+    samples = feature['cellTypeSamples']
+    assert isinstance(samples, list)
+    assert len(samples) > 0
+    for sample in samples[0:10]:
+        assert isinstance(sample['cellType'], str)
+        assert isinstance(sample['name'], str)
+        assert isinstance(sample['value'], float)
+
 
 
 def test_features_query_with_germline_feature(client, common_query, germline_feature, germline_module, germline_category):

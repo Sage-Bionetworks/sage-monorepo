@@ -1,3 +1,5 @@
+from .cell_stats_resolver import resolve_cell_stats
+from .cells_resolver import resolve_cells
 from .cohorts_resolver import resolve_cohorts
 from .colocalizations_resolver import resolve_colocalizations
 from .copy_number_results_resolver import resolve_copy_number_results

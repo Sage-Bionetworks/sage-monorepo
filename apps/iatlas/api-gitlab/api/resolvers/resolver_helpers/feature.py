@@ -1,7 +1,7 @@
 from sqlalchemy import and_
 from sqlalchemy.orm import aliased
 from api import db
-from api.db_models import Feature, FeatureToSample, Sample, Cohort, CohortToSample, CohortToFeature
+from api.db_models import Feature, FeatureToSample, Sample, Cohort, CohortToSample, CohortToFeature, SingleCellPseudobulkFeature
 from .sample import build_sample_graphql_response
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .paging_utils import get_pagination_queries
@@ -29,12 +29,22 @@ feature_request_fields = simple_feature_request_fields.union({
     'class',
     'methodTag',
     'samples',
+    'cellTypeSamples',
     'valueMax',
     'valueMin'
 })
 
 
-def build_feature_graphql_response(requested=[], sample_requested=[], max_value=None, min_value=None, cohort=None, sample=None, prefix='feature_'):
+def build_feature_graphql_response(
+    requested=[],
+    sample_requested=[],
+    cell_type_sample_requested=[],
+    max_value=None,
+    min_value=None,
+    cohort=None,
+    sample=None,
+    prefix='feature_'
+):
 
     def f(feature):
         if not feature:
@@ -42,6 +52,8 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
         id = get_value(feature, prefix + 'id')
         samples = get_samples(
             [id], requested=requested, sample_requested=sample_requested, max_value=max_value, min_value=min_value, cohort=cohort, sample=sample)
+        cell_type_samples = get_cell_type_samples(
+            [id], requested=requested, cell_type_sample_requested=cell_type_sample_requested, cohort=cohort, sample=sample)
         if 'valueMax' in requested or 'valueMin' in requested:
             values = [get_value(sample, 'sample_feature_value')
                       for sample in samples]
@@ -58,6 +70,7 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
             'germlineCategory': get_value(feature, prefix + 'germline_category'),
             'unit': get_value(feature, prefix + 'unit'),
             'samples': map(build_sample_graphql_response(), samples),
+            'cellTypeSamples': map(build_sample_graphql_response(), cell_type_samples),
             'valueMin': value_min if type(value_min) is Decimal else None,
             'valueMax': value_max if type(value_max) is Decimal else None
         }
@@ -65,7 +78,18 @@ def build_feature_graphql_response(requested=[], sample_requested=[], max_value=
     return f
 
 
-def build_features_query(requested, distinct=False, paging=None, feature=None, feature_class=None, max_value=None, min_value=None, sample=None, cohort=None):
+def build_features_query(
+    requested,
+    distinct=False,
+    paging=None,
+    feature=None,
+    feature_class=None,
+    max_value=None,
+    min_value=None,
+    sample=None,
+    cell_type_sample=None,
+    cohort=None
+):
     """
     Builds a SQL request.
     """
@@ -78,6 +102,8 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
     sample_1 = aliased(Sample, name='s')
     cohort_1 = aliased(Cohort, name='c')
     cohort_to_feature_1 = aliased(CohortToFeature, name='ctf')
+    pseudobulk_feature_1 = aliased(SingleCellPseudobulkFeature, name='scpf')
+    cohort_to_sample_1 = aliased(CohortToSample, name='cts')
 
     core_field_mapping = {
         'id': feature_1.id.label('feature_id'),
@@ -126,29 +152,50 @@ def build_features_query(requested, distinct=False, paging=None, feature=None, f
 
         query = query.filter(feature_1.id.in_(feature_to_sample_subquery))
 
-    if cohort:
-        cohort_subquery = sess.query(cohort_to_feature_1.feature_id)
+    if cell_type_sample:
 
-        cohort_join_condition = build_join_condition(
-            cohort_to_feature_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
-        cohort_subquery = cohort_subquery.join(cohort_1, and_(
-            *cohort_join_condition), isouter=False)
+        cell_type_sample_subquery = sess.query(pseudobulk_feature_1.feature_id)
+
+
+        sample_join_condition = build_join_condition(
+            pseudobulk_feature_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=cell_type_sample
+        )
+        cell_type_sample_subquery = cell_type_sample_subquery.join(sample_1, and_(
+            *sample_join_condition), isouter=False)
+
+        query = query.filter(feature_1.id.in_(cell_type_sample_subquery))
+
+    if cohort:
+
+        if cell_type_sample or "cellTypeSamples" in requested:
+
+            cohort_subquery = sess.query(pseudobulk_feature_1.feature_id)
+
+            cohort_to_sample_join_condition = build_join_condition(
+                pseudobulk_feature_1.sample_id, cohort_to_sample_1.sample_id
+            )
+            cohort_subquery = cohort_subquery.join(cohort_to_sample_1,and_(
+                *cohort_to_sample_join_condition), isouter=False
+            )
+
+            cohort_join_condition = build_join_condition(
+                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort
+            )
+            cohort_subquery = cohort_subquery.join(cohort_1,and_(
+                *cohort_join_condition), isouter=False
+            )
+
+
+        else:
+
+            cohort_subquery = sess.query(cohort_to_feature_1.feature_id)
+
+            cohort_join_condition = build_join_condition(
+                cohort_to_feature_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+            cohort_subquery = cohort_subquery.join(cohort_1, and_(
+                *cohort_join_condition), isouter=False)
 
         query = query.filter(feature_1.id.in_(cohort_subquery))
-
-    if 'samples' not in requested:
-        order = []
-        append_to_order = order.append
-        if 'class' in requested:
-            append_to_order(feature_1.feature_class)
-        if 'order' in requested:
-            append_to_order(feature_1.order)
-        if 'display' in requested:
-            append_to_order(feature_1.display)
-        if 'name' in requested:
-            append_to_order(feature_1.name)
-        if not order:
-            append_to_order(feature_1.id)
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
@@ -212,3 +259,75 @@ def get_samples(feature_id, requested, sample_requested, max_value=None, min_val
         return samples
 
     return []
+
+
+def get_cell_type_samples(feature_id, requested, cell_type_sample_requested, cohort=None, sample=None):
+
+
+    if 'cellTypeSamples' not in requested:
+        return []
+
+    sess = db.session
+
+    sample_1 = aliased(Sample, name='s')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_sample_1 = aliased(CohortToSample, name='cts')
+    pseudobulk_feature_1 = aliased(SingleCellPseudobulkFeature, name='scpf')
+
+    sample_core_field_mapping = {
+        'name': sample_1.name.label('sample_name')}
+
+    sample_core = get_selected(cell_type_sample_requested, sample_core_field_mapping)
+
+    sample_core |= {
+        sample_1.id.label('sample_id'),
+        pseudobulk_feature_1.feature_id.label('sample_feature_id')
+    }
+
+    if 'value' in cell_type_sample_requested:
+        sample_core |= {
+            pseudobulk_feature_1.value.label('sample_feature_value')
+        }
+
+    if 'cellType' in cell_type_sample_requested:
+        sample_core |= {
+            pseudobulk_feature_1.cell_type.label('sample_cell_type')
+        }
+
+    query = sess.query(*sample_core)
+    query = query.select_from(sample_1)
+
+    sample_join_condition = build_join_condition(
+        pseudobulk_feature_1.sample_id,
+        sample_1.id,
+        pseudobulk_feature_1.feature_id,
+        feature_id
+    )
+    query = query.join(
+        pseudobulk_feature_1, and_(*sample_join_condition))
+
+
+    if sample:
+        query = query.filter(sample_1.name.in_(sample))
+
+    if cohort:
+        cohort_subquery = sess.query(pseudobulk_feature_1.feature_id)
+
+        cohort_to_sample_join_condition = build_join_condition(
+            pseudobulk_feature_1.sample_id, cohort_to_sample_1.sample_id
+        )
+        cohort_subquery = cohort_subquery.join(cohort_to_sample_1,and_(
+            *cohort_to_sample_join_condition), isouter=False
+        )
+
+        cohort_join_condition = build_join_condition(
+            cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort
+        )
+        cohort_subquery = cohort_subquery.join(cohort_1,and_(
+            *cohort_join_condition), isouter=False
+        )
+
+        query = query.filter(pseudobulk_feature_1.feature_id.in_(cohort_subquery))
+
+    samples = query.distinct().all()
+    return samples

@@ -22,6 +22,8 @@ type FeatureNode implements BaseNode{
   germlineCategory: String
   "A list of the names of the sample related to this feature that is associated with the value."
   samples: [FeatureRelatedSample!]!
+  "A list of feature cell type pairs and their related feature value"
+  cellTypeSamples: [CellTypeFeatureRelatedSample!]!
   "The type of measurement of the value."
   unit: String
   "The maximum value of all relationships between a specific feature and the samples."

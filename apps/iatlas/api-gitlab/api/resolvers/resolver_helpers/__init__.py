@@ -1,3 +1,4 @@
+from .cell_stat import build_cell_stat_graphql_response, build_cell_stat_request, cell_stat_request_fields
 from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields
 from .colocalization import colocalization_request_fields, build_coloc_graphql_response, build_colocalization_request
 from .copy_number_result import build_cnr_graphql_response, build_copy_number_result_request, cnr_request_fields
@@ -17,7 +18,18 @@ from .node import build_node_graphql_response, build_node_request, node_request_
 from .patient import build_patient_request, build_patient_graphql_response, patient_request_fields, simple_patient_request_fields
 from .publication import build_publication_graphql_response, publication_request_fields, simple_publication_request_fields
 from .rare_variant_pathway_association import build_rvpa_graphql_response, build_rare_variant_pathway_association_request, rare_variant_pathway_association_request_fields
-from .sample import build_sample_graphql_response, feature_related_sample_request_fields, gene_related_sample_request_fields, mutation_related_sample_request_fields, build_sample_request, sample_request_fields, simple_sample_request_fields, cohort_sample_request_fields
+from .sample import (
+    build_sample_graphql_response,
+    feature_related_sample_request_fields,
+    cell_type_feature_related_sample_request_fields,
+    gene_related_sample_request_fields,
+    cell_type_gene_related_sample_request_fields,
+    mutation_related_sample_request_fields,
+    build_sample_request,
+    sample_request_fields,
+    simple_sample_request_fields,
+    cohort_sample_request_fields
+)
 from .slide import build_slide_graphql_response, build_slide_request, slide_request_fields, simple_slide_request_fields
 from .snp import snp_request_fields, build_snp_graphql_response, build_snp_request
 from .tag import build_tag_graphql_response, simple_tag_request_fields, tag_request_fields, build_tag_request, has_tag_fields

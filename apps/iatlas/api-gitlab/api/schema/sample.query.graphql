@@ -37,10 +37,40 @@ The "FeatureRelatedSample" type is a Sample that is specifically related to a Fe
 See also `Feature`
 """
 type FeatureRelatedSample {
-  "The sample's name (often the 'sample' portion of a [TCGA barcode](https://docs.gdc.cancer.gov/Encyclopedia/pages/TCGA_Barcode/))."
+  "The sample's name."
   name: String!
   "The calculated relational value or the Sample related to the Feature."
   value: Float
+}
+
+
+"""
+The "CellTypeFeatureRelatedSample" type is a Sample that is specifically related to a Feature and a cell type
+
+See also `Feature`
+"""
+type CellTypeFeatureRelatedSample {
+  "The sample's name."
+  name: String!
+  "The type of cell this sample is related to"
+  cellType: String!
+  "The calculated relational value or the Sample related to the Feature."
+  value: Float
+}
+
+
+"""
+The "CellTypeGeneRelatedSample" type is a Sample that is specifically related to a Gene and a cell type
+
+See also `Feature`
+"""
+type CellTypeGeneRelatedSample {
+  "The sample's name."
+  name: String!
+  "The type of cell this sample is related to"
+  cellType: String!
+  "The the pseudobulk sum single seq value of the Sample related to the Gene."
+  singleCellSeqSum: Float
 }
 
 """
