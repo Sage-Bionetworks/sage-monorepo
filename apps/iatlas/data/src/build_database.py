@@ -37,6 +37,185 @@ for var in env_vars:
 
 iatlas_config = [
     {
+        "name": "cells",
+        "primary_key": "id",
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "name",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_samples",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": False,
+                "index": True,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_genes",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "single_cell_seq",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cells_to_features",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "cell_id",
+                "foreign_table_name": "cells",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "feature_id",
+                "foreign_table_name": "features",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "cell_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "feature_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "feature_value",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "cell_stats",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "dataset_id",
+                "foreign_table_name": "datasets",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "dataset_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_count",
+                "datatype": "int",
+                "required": False,
+                "index": False,
+            },
+            {
+                "column_name": "avg_expr",
+                "datatype": "float",
+                "required": False,
+                "index": False,
+            },
+            {
+                "column_name": "perc_expr",
+                "datatype": "float",
+                "required": False,
+                "index": False,
+            },
+        ],
+    },
+    {
         "name": "cohorts",
         "primary_key": "id",
         "foreign_keys": [
@@ -1564,6 +1743,92 @@ iatlas_config = [
         ],
     },
     {
+        "name": "single_cell_pseudobulk",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "gene_id",
+                "foreign_table_name": "genes",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "gene_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "single_cell_seq_sum",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
+        "name": "single_cell_pseudobulk_features",
+        "primary_key": "id",
+        "foreign_keys": [
+            {
+                "column_name": "sample_id",
+                "foreign_table_name": "samples",
+                "foreign_column_name": "id",
+            },
+            {
+                "column_name": "feature_id",
+                "foreign_table_name": "features",
+                "foreign_column_name": "id",
+            },
+        ],
+        "columns": [
+            {"column_name": "id", "datatype": "str", "required": True, "index": True},
+            {
+                "column_name": "sample_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "cell_type",
+                "datatype": "str",
+                "required": True,
+                "index": False,
+            },
+            {
+                "column_name": "feature_id",
+                "datatype": "str",
+                "required": True,
+                "index": True,
+            },
+            {
+                "column_name": "value",
+                "datatype": "float",
+                "required": True,
+                "index": False,
+            },
+        ],
+    },
+    {
         "name": "snps",
         "primary_key": "id",
         "columns": [
@@ -1596,7 +1861,9 @@ db = PostgresDatabase(
 )
 
 schema = Schema(
-    SchemaConfig(schema_url=getenv("SCHEMA_URL")), DatabaseConfig(iatlas_config)
+    SchemaConfig(schema_url=getenv("SCHEMA_URL")),
+    DatabaseConfig(iatlas_config),
+    display_label_type="display_label",
 )
 
 
@@ -1609,109 +1876,110 @@ ms = SynapseManifestStore(
         synapse_project_id=getenv("SCHEMA_PROJECT_ID"),
         synapse_asset_view_id=getenv("SCHEMA_ASSET_VIEW_ID"),
         synapse_auth_token=getenv("SCHEMA_AUTH_TOKEN"),
-    )
+    ),
+    display_label_type="display_label",
 )
 
-updater = RDBUpdater(db, ms)
-updater.update_database(method="insert")
+# updater = RDBUpdater(db, ms)
+# updater.update_database(method="insert")
 
 
-def insert_as_chunk(df, db, table_name, chunk_size=20000):
-    num_chunks = ((len(df) - 1) // chunk_size) + 1
+# def insert_as_chunk(df, db, table_name, chunk_size=20000):
+#     num_chunks = ((len(df) - 1) // chunk_size) + 1
 
-    for i in range(num_chunks):
-        # Getting chunk boundaries
-        start_index = i * chunk_size
-        end_index = (i + 1) * chunk_size
+#     for i in range(num_chunks):
+#         # Getting chunk boundaries
+#         start_index = i * chunk_size
+#         end_index = (i + 1) * chunk_size
 
-        # Selecting rows for the current chunk
-        chunk = df[start_index:end_index]
+#         # Selecting rows for the current chunk
+#         chunk = df[start_index:end_index]
 
-        # Inserting rows into the table
-        db.insert_table_rows(table_name, chunk)
-
-
-cohorts_to_samples1 = db.execute_sql_query(
-    (
-        "SELECT DISTINCT c.id AS cohort_id, t.id AS cohorts_to_samples_tag_id, stt.sample_id "
-        "FROM samples s "
-        "INNER JOIN samples_to_tags stt ON s.id = stt.sample_id "
-        "INNER JOIN tags t ON stt.tag_id = t.id "
-        "INNER JOIN tags_to_tags ttt ON t.id = ttt.tag_id "
-        "INNER JOIN tags t2 ON ttt.related_tag_id = t2.id "
-        "INNER JOIN datasets_to_samples dts on s.id = dts.sample_id "
-        "INNER JOIN cohorts c on t2.id = c.cohort_tag_id AND dts.dataset_id = c.dataset_id "
-        "WHERE t.tag_type = 'group'"
-    )
-)
-cohorts_to_samples1["id"] = [
-    uuid.uuid1() for _ in range(len(cohorts_to_samples1.index))
-]
-insert_as_chunk(cohorts_to_samples1, db, "cohorts_to_samples")
-# db.insert_table_rows("cohorts_to_samples", cohorts_to_samples1)
+#         # Inserting rows into the table
+#         db.insert_table_rows(table_name, chunk)
 
 
-cohorts_to_samples2 = db.execute_sql_query(
-    (
-        "SELECT DISTINCT c.id AS cohort_id, dts.sample_id "
-        "FROM cohorts c "
-        "INNER JOIN datasets_to_samples dts ON c.dataset_id = dts.dataset_id "
-        "WHERE c.cohort_tag_id is NULL"
-    )
-)
-cohorts_to_samples2["id"] = [
-    uuid.uuid1() for _ in range(len(cohorts_to_samples2.index))
-]
-insert_as_chunk(cohorts_to_samples2, db, "cohorts_to_samples")
-# db.insert_table_rows("cohorts_to_samples", cohorts_to_samples2)
+# cohorts_to_samples1 = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT c.id AS cohort_id, t.id AS cohorts_to_samples_tag_id, stt.sample_id "
+#         "FROM samples s "
+#         "INNER JOIN samples_to_tags stt ON s.id = stt.sample_id "
+#         "INNER JOIN tags t ON stt.tag_id = t.id "
+#         "INNER JOIN tags_to_tags ttt ON t.id = ttt.tag_id "
+#         "INNER JOIN tags t2 ON ttt.related_tag_id = t2.id "
+#         "INNER JOIN datasets_to_samples dts on s.id = dts.sample_id "
+#         "INNER JOIN cohorts c on t2.id = c.cohort_tag_id AND dts.dataset_id = c.dataset_id "
+#         "WHERE t.tag_type = 'group'"
+#     )
+# )
+# cohorts_to_samples1["id"] = [
+#     uuid.uuid1() for _ in range(len(cohorts_to_samples1.index))
+# ]
+# insert_as_chunk(cohorts_to_samples1, db, "cohorts_to_samples")
+# # db.insert_table_rows("cohorts_to_samples", cohorts_to_samples1)
 
 
-cohorts_to_features = db.execute_sql_query(
-    (
-        "SELECT DISTINCT cohort_id, feature_id "
-        "FROM cohorts_to_samples cts "
-        "INNER JOIN features_to_samples fts USING(sample_id)"
-    )
-)
-cohorts_to_features["id"] = [
-    uuid.uuid1() for _ in range(len(cohorts_to_features.index))
-]
-insert_as_chunk(cohorts_to_features, db, "cohorts_to_features")
-# db.insert_table_rows("cohorts_to_features", cohorts_to_features)
+# cohorts_to_samples2 = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT c.id AS cohort_id, dts.sample_id "
+#         "FROM cohorts c "
+#         "INNER JOIN datasets_to_samples dts ON c.dataset_id = dts.dataset_id "
+#         "WHERE c.cohort_tag_id is NULL"
+#     )
+# )
+# cohorts_to_samples2["id"] = [
+#     uuid.uuid1() for _ in range(len(cohorts_to_samples2.index))
+# ]
+# insert_as_chunk(cohorts_to_samples2, db, "cohorts_to_samples")
+# # db.insert_table_rows("cohorts_to_samples", cohorts_to_samples2)
 
 
-cohorts_to_genes = db.execute_sql_query(
-    (
-        "SELECT DISTINCT cohort_id, gene_id "
-        "FROM cohorts_to_samples cts "
-        "INNER JOIN genes_to_samples gts USING(sample_id)"
-    )
-)
-cohorts_to_genes["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_genes.index))]
-insert_as_chunk(cohorts_to_genes, db, "cohorts_to_genes")
-# db.insert_table_rows("cohorts_to_genes", cohorts_to_genes)
+# cohorts_to_features = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT cohort_id, feature_id "
+#         "FROM cohorts_to_samples cts "
+#         "INNER JOIN features_to_samples fts USING(sample_id)"
+#     )
+# )
+# cohorts_to_features["id"] = [
+#     uuid.uuid1() for _ in range(len(cohorts_to_features.index))
+# ]
+# insert_as_chunk(cohorts_to_features, db, "cohorts_to_features")
+# # db.insert_table_rows("cohorts_to_features", cohorts_to_features)
 
 
-cohorts_to_mutations = db.execute_sql_query(
-    (
-        "SELECT DISTINCT cohort_id, mutation_id "
-        "FROM cohorts_to_samples cts "
-        "INNER JOIN samples_to_mutations stm USING(sample_id)"
-    )
-)
-cohorts_to_mutations["id"] = [
-    uuid.uuid1() for _ in range(len(cohorts_to_mutations.index))
-]
-insert_as_chunk(cohorts_to_mutations, db, "cohorts_to_mutations")
-# db.insert_table_rows("cohorts_to_mutations", cohorts_to_mutations)
+# cohorts_to_genes = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT cohort_id, gene_id "
+#         "FROM cohorts_to_samples cts "
+#         "INNER JOIN genes_to_samples gts USING(sample_id)"
+#     )
+# )
+# cohorts_to_genes["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_genes.index))]
+# insert_as_chunk(cohorts_to_genes, db, "cohorts_to_genes")
+# # db.insert_table_rows("cohorts_to_genes", cohorts_to_genes)
 
-cohorts_to_tags = db.execute_sql_query(
-    (
-        "SELECT DISTINCT cohort_id, tag_id "
-        "FROM cohorts_to_samples cts "
-        "INNER JOIN samples_to_tags sts USING(sample_id)"
-    )
-)
-cohorts_to_tags["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_tags.index))]
-insert_as_chunk(cohorts_to_tags, db, "cohorts_to_tags")
-# db.insert_table_rows("cohorts_to_tags", cohorts_to_tags)
+
+# cohorts_to_mutations = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT cohort_id, mutation_id "
+#         "FROM cohorts_to_samples cts "
+#         "INNER JOIN samples_to_mutations stm USING(sample_id)"
+#     )
+# )
+# cohorts_to_mutations["id"] = [
+#     uuid.uuid1() for _ in range(len(cohorts_to_mutations.index))
+# ]
+# insert_as_chunk(cohorts_to_mutations, db, "cohorts_to_mutations")
+# # db.insert_table_rows("cohorts_to_mutations", cohorts_to_mutations)
+
+# cohorts_to_tags = db.execute_sql_query(
+#     (
+#         "SELECT DISTINCT cohort_id, tag_id "
+#         "FROM cohorts_to_samples cts "
+#         "INNER JOIN samples_to_tags sts USING(sample_id)"
+#     )
+# )
+# cohorts_to_tags["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_tags.index))]
+# insert_as_chunk(cohorts_to_tags, db, "cohorts_to_tags")
+# # db.insert_table_rows("cohorts_to_tags", cohorts_to_tags)
