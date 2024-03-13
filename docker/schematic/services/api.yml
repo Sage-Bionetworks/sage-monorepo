@@ -10,7 +10,7 @@ services:
     networks:
       - schematic
     ports:
-      - '7080:7080'
+      - '7443:7443'
     # depends_on:
     #   openchallenges-config-server:
     #     condition: service_healthy
