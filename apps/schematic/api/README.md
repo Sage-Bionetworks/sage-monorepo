@@ -11,29 +11,24 @@ This example uses the [Connexion](https://github.com/zalando/connexion) library 
 Python 3.5.2+
 
 ## Usage
-To run the server, please execute the following from the root directory:
+To run the server, please execute the following from folder `apps/schematic/api`:
+```
+poetry shell
+```
+To install dependencies: 
 
 ```
-pip3 install -r requirements.txt
-python3 -m schematic_api
+poetry install 
 ```
+And run schematic APIs: 
 
+```
+python3 -m schematic-api
+```
 and open your browser to here:
 
 ```
-http://localhost:8080/v1/ui/
-```
-
-Your OpenAPI definition lives here:
-
-```
-http://localhost:8080/v1/openapi.json
-```
-
-To launch the integration tests, use tox:
-```
-sudo pip install tox
-tox
+http://127.0.0.1:7080/api/v1/ui/
 ```
 
 ## Running with Docker
@@ -41,9 +36,16 @@ tox
 To run the server on a Docker container, please execute the following from the root directory:
 
 ```bash
+# Get the correct Python version
+nx prepare schematic-api
+
+# You only need to run this command one time
+# This step adds SSL private key and certificate as environment variable in .env file
+python3 apps/schematic/api/prepare_key_certificate.py
+
 # building the image
-docker build -t schematic_api .
+nx build-image schematic-api
 
 # starting up a container
-docker run -p 8080:8080 schematic_api
+nx serve-detach schematic-api
 ```
