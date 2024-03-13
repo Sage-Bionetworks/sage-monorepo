@@ -31,7 +31,7 @@ RUN apt update \
 
 # add dhparam.pem
 # dhparam.pem was used in ssl-params.conf
-RUN openssl dhparam -out /etc/ssl/dhparam.pem 4096
+COPY ./dhparam.pem /etc/ssl/dhparam.pem
 
 # copy all nginx config files
 WORKDIR ${NGINX_CONFIG}
