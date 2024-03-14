@@ -48,7 +48,7 @@ tests:
     variables:
       - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
   stage: test_code
-  image: python:3.8-alpine
+  image: 3.8-slim-bookworm
   variables:
     FLASK_ENV: "test"
   script:
@@ -81,7 +81,7 @@ tests:coverage-report-staging:
   only:
     - staging
   stage: test_code
-  image: python:3.8-alpine
+  image: 3.8-slim-bookworm
   variables:
     FLASK_ENV: "staging"
   script:
@@ -123,7 +123,7 @@ tests:coverage-report-prod:
   only:
     - master
   stage: test_code
-  image: python:3.8-alpine
+  image: 3.8-slim-bookworm
   variables:
     FLASK_ENV: "production"
   script:
@@ -231,7 +231,7 @@ Deploy:Staging:
   only:
     - staging
   stage: deploy
-  image: python:3.8-alpine
+  image: 3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Staging"
     # Force update the ECS service. It should be using the latest image (staging-latest).
@@ -243,7 +243,7 @@ Deploy:Prod:
   only:
     - master
   stage: deploy
-  image: python:3.8-alpine
+  image: 3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
