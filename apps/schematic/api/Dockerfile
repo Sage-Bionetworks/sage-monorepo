@@ -38,15 +38,13 @@ WORKDIR ${NGINX_CONFIG}
 COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./
 
 # copy to use custom uwsgi.ini
-WORKDIR /app
-COPY ./uwsgi.ini ./
+COPY uwsgi.ini /app/uwsgi.ini
 
 # copy files relevant for schematic apis
-WORKDIR /app/app
-COPY  schematic_api ./schematic_api
-COPY pyproject.toml poetry.lock ./
+COPY schematic_api pyproject.toml poetry.lock /app/app/
 
 # install dependencies
+WORKDIR /app/app
 RUN pip install poetry \
   && poetry config --local virtualenvs.create false \
   && poetry run pip install "cython<3.0.0" \
@@ -54,8 +52,8 @@ RUN pip install poetry \
   && poetry install --with prod --no-root --no-interaction --no-ansi
 
 # Update file permission 
-RUN mkdir /root/.synapseCache
-RUN mkdir /app/app/manifests
+RUN mkdir /root/.synapseCache /app/app/manifests
+
 # temporary here to ensure .synapseCache is not empty
 RUN echo "This is a test file." > /root/.synapseCache/test.txt
 # temporary here until we move .synapseCache to a different path
@@ -66,6 +64,7 @@ WORKDIR ${ROOT}
 COPY ./uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
 COPY ./uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
 COPY ./save_key_certificate.py ./save_key_certificate.py
+
 RUN chmod +x uwsgi-nginx-entrypoint2.sh
 RUN chmod +x entrypoint2.sh
 RUN chown -R nginx /uwsgi-nginx-entrypoint2.sh
