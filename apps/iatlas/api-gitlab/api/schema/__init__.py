@@ -224,6 +224,7 @@ Associate resolvers with fields.
 Fields should be names of objects in schema/root.query.graphql.
 Values should be names of functions in resolvers
 '''
+root.set_field('cells', resolve_cells)
 root.set_field('cellStats', resolve_cell_stats)
 root.set_field('cohorts', resolve_cohorts)
 root.set_field('colocalizations', resolve_colocalizations)

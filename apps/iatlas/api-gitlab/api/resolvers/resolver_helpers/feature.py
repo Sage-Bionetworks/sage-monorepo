@@ -25,6 +25,8 @@ simple_feature_request_fields2 = {
     'class'
 }
 
+cell_feature_request_fields = simple_feature_request_fields.union({'value'})
+
 feature_request_fields = simple_feature_request_fields.union({
     'class',
     'methodTag',
@@ -72,7 +74,8 @@ def build_feature_graphql_response(
             'samples': map(build_sample_graphql_response(), samples),
             'cellTypeSamples': map(build_sample_graphql_response(), cell_type_samples),
             'valueMin': value_min if type(value_min) is Decimal else None,
-            'valueMax': value_max if type(value_max) is Decimal else None
+            'valueMax': value_max if type(value_max) is Decimal else None,
+            'value': get_value(feature, prefix + 'value'),
         }
         return(result)
     return f

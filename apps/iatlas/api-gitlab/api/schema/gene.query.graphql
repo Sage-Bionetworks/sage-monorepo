@@ -60,3 +60,15 @@ type SimpleGene {
   "The IO Landscape Name of the gene."
   ioLandscapeName: String
 }
+
+"""
+The "SingleCellGene" is a version of a `Feature`. Used by Cells.
+"""
+type SingleCellGene {
+  "The unique id of the gene to use on search engines."
+  entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
+  hgnc: String!
+  "The single cell sequencing value"
+  singleCellSeq: Float!
+}

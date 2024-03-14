@@ -77,3 +77,14 @@ type SimpleFeature2 {
   class: String
 }
 
+"""
+The "SingleCellFeature" is a version of a `Feature`. Used by Cells.
+"""
+type SingleCellFeature {
+  "A readable name for the feature."
+  display: String
+  "The feature's name (a unique string for this feature)."
+  name: String!
+  "The value fo the feature"
+  value: Float!
+}

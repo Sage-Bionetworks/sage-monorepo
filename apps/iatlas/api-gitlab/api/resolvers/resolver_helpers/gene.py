@@ -29,6 +29,8 @@ simple_gene_request_fields = {
     'ioLandscapeName'
 }
 
+cell_gene_request_fields = simple_gene_request_fields.union({'singleCellSeq'})
+
 gene_request_fields = simple_gene_request_fields.union({
     'geneFamily',
     'geneFunction',
@@ -96,7 +98,8 @@ def build_gene_graphql_response(
             'superCategory': get_value(gene, prefix + 'super_category'),
             'therapyType': get_value(gene, prefix + 'therapy_type'),
             'geneTypes': gene_types,
-            'publications': map(build_publication_graphql_response, publications)
+            'publications': map(build_publication_graphql_response, publications),
+            'singleCellSeq':get_value(gene, prefix + 'single_cell_seq')
         }
         result_dict['samples'] = map(build_gene_expression_graphql_response(), samples)
         result_dict['cellTypeSamples'] = map(build_single_cell_seq_response(), cell_type_samples)
