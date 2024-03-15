@@ -85,7 +85,8 @@
   "tags": [
     "type:app",
     "scope:backend",
-    "language:python"
+    "language:python",
+    "package-manager:poetry"
   ],
   "implicitDependencies": []
 }
