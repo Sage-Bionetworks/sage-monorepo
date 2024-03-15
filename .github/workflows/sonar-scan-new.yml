@@ -24,7 +24,7 @@ jobs:
         run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
       - name: Checkout
-        uses: ./.github/actions/checkout
+        uses: ./.github/actions/my-checkout
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
