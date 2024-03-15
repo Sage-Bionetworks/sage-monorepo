@@ -1,0 +1,22 @@
+name: 'Checkout'
+description: 'Checkout. If on a detached HEAD, switching to the branch `new-branch`.'
+runs:
+  using: 'composite'
+  steps:
+    - uses: actions/checkout@v4
+      name: Checkout merge commit
+      with:
+        # We need to fetch all branches and commits so that Nx affected has a base to compare
+        # against.
+        fetch-depth: 0
+
+    - name: Check if the HEAD is detached
+      id: check_head
+      run: |
+        git symbolic-ref -q HEAD > /dev/null 2>&1
+        echo "is_detached=$?" >> "$GITHUB_OUTPUT"
+
+    # Buildx does not work on a detached HEAD
+    - name:
+      if: ${{ steps.check_head.outputs.is_detached }}
+      run: git switch -c new-branch

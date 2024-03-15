@@ -11,10 +11,6 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened, labeled]
 
-env:
-  HEAD_REF: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.ref || github.ref_name }}
-  HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.repository }}
-
 jobs:
   sonar:
     runs-on: ubuntu-latest
@@ -23,15 +19,11 @@ jobs:
         if: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true }}
         run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
-      - uses: actions/checkout@v3
-        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
-        with:
-          ref: ${{ env.HEAD_REF }}
-          repository: ${{ env.HEAD_REPOSITORY }}
-          fetch-depth: 0
+      - name: Checkout merge commit
+        uses: ./.github/actions/checkout
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v3
+        uses: nrwl/nx-set-shas@v4
 
       - name: Set up the dev container
         env:
