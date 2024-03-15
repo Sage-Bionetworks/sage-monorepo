@@ -225,6 +225,9 @@ def main(gc):
     organizations = get_organization_data(wks)
     output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
 
+    edam_data_annotations = get_edam_annotations(wks)
+    output_csv(edam_data_annotations, "input_data_type.csv", output_folder=CHALLENGE_FOLDER)
+
     challenges, incentives, sub_types = get_challenge_data(wks)
     output_csv(challenges, "challenges.csv", output_folder=CHALLENGE_FOLDER)
     output_csv(
