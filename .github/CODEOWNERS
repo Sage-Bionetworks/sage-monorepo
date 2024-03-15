@@ -3,9 +3,13 @@
 /apps/openchallenges/ @rrchai @tschaffter @vpchung
 /libs/openchallenges/ @rrchai @tschaffter @vpchung
 
-# OC DB content
+# OpenChallenges
+## DB content
 /apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @vpchung @gaiaandreoletti
 /apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @vpchung @gaiaandreoletti
+
+## EDAM ETL
+/apps/openchallenges/edam-etl/  @mdsage1
 
 # Schematic
 /apps/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage
