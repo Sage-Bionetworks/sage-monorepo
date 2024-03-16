@@ -17,8 +17,6 @@ tags:
     description: Operations about challenges.
   - name: ChallengeAnalytics
     description: Operations about challenge analytics.
-  - name: ChallengeInputDataType
-    description: Operations about challenge input data types.
   - name: ChallengePlatform
     description: Operations about challenge platforms.
 paths:
@@ -30,8 +28,6 @@ paths:
     $ref: paths/challenges/@{challengeId}/contributions.yaml
   /challengeAnalytics/challengesPerYear:
     $ref: paths/challengeAnalytics/challengesPerYear.yaml
-  /challengeInputDataTypes:
-    $ref: paths/challengeInputDataTypes.yaml
   /challengePlatforms:
     $ref: paths/challengePlatforms.yaml
   /challengePlatforms/{challengePlatformName}:

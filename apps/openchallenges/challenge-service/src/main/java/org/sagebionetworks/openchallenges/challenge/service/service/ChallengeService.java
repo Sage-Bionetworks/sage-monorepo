@@ -32,10 +32,11 @@ public class ChallengeService {
 
   private static final List<String> SEARCHABLE_FIELDS =
       Arrays.asList(
-          "name",
-          "headline",
           "description",
-          "input_data_types.name",
+          "headline",
+          "input_data_types.class_id",
+          "input_data_types.preferred_label",
+          "name",
           "operation.class_id",
           "operation.preferred_label");
 

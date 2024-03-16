@@ -9,10 +9,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EdamData } from './edamData';
 import { EdamOperation } from './edamOperation';
 import { ChallengeCategory } from './challengeCategory';
 import { SimpleChallengePlatform } from './simpleChallengePlatform';
-import { SimpleChallengeInputDataType } from './simpleChallengeInputDataType';
 import { ChallengeStatus } from './challengeStatus';
 import { ChallengeIncentive } from './challengeIncentive';
 import { ChallengeSubmissionType } from './challengeSubmissionType';
@@ -58,7 +58,7 @@ export interface Challenge {
     avatarUrl?: string | null;
     incentives: Array<ChallengeIncentive>;
     submissionTypes: Array<ChallengeSubmissionType>;
-    inputDataTypes?: Array<SimpleChallengeInputDataType>;
+    inputDataTypes?: Array<EdamData>;
     categories: Array<ChallengeCategory>;
     /**
      * The start date of the challenge.

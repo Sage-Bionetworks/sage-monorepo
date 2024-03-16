@@ -40,27 +40,18 @@ LOAD DATA LOCAL INFILE '${db_submission_types_csv_path}' INTO TABLE challenge_su
   IGNORE 1 LINES;
 
 
+  -- challenge_input_data_type data
+LOAD DATA LOCAL INFILE '${db_input_data_type_csv_path}' INTO TABLE challenge_input_data_type
+  FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+  LINES TERMINATED BY '\n'
+  IGNORE 1 LINES;
+
+
 -- challenge_star data
 INSERT INTO challenge_star (id, challenge_id, user_id)
 VALUES (1, 1, 1),
   (2, 2, 1),
   (3, 1, 2);
-
-
--- challenge_input_data_type
-INSERT INTO challenge_input_data_type (id, slug, name)
-VALUES (1, 'genomic', 'genomic'),
-  (2, 'proteomic', 'proteomic'),
-  (3, 'gene-expression', 'gene expression'),
-  (4, 'metabolomic', 'metabolomic');
-
-
--- challenge_x_challenge_input_data_type definition
-INSERT INTO challenge_x_challenge_input_data_type (id, challenge_id, challenge_input_data_type_id)
-VALUES ('1', 1, 1),
-  ('2', 2, 1),
-  ('3', 1, 2),
-  ('4', 4, 4);
 
 
 -- challenge_category data

@@ -1,6 +1,0 @@
-description: What to sort results by.
-type: string
-default: relevance
-enum:
-  - name
-  - relevance

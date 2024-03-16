@@ -51,11 +51,6 @@ properties:
     type: array
     items:
       $ref: OrganizationId.yaml
-  inputDataTypes:
-    description: An array of challenge input data type ids used to filter the results.
-    type: array
-    items:
-      $ref: ChallengeInputDataTypeSlug.yaml
   status:
     description: An array of challenge status used to filter the results.
     type: array

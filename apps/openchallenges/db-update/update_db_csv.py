@@ -62,9 +62,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
         challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
-        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
-        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
-        .replace(u"\u2060", "", regex=True)  # remove word joiner
+        .replace("\u2019", "''", regex=True)  # replace curly right-quote
+        .replace("\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace("\u2060", "", regex=True)  # remove word joiner
     )
     challenges["headline"] = (
         challenges["headline"]
@@ -124,7 +124,13 @@ def get_challenge_data(wks, sheet_name="challenges"):
     ).rename(columns={"id": "challenge_id"})
     sub_types["submission_types"] = pd.Categorical(
         sub_types["submission_types"],
-        categories=["prediction_file", "container_image", "notebook", "mlcube", "other"],
+        categories=[
+            "prediction_file",
+            "container_image",
+            "notebook",
+            "mlcube",
+            "other",
+        ],
     )
     sub_types = sub_types.sort_values(["challenge_id", "submission_types"])
     sub_types.index = np.arange(1, len(sub_types) + 1)
@@ -172,9 +178,9 @@ def get_organization_data(wks, sheet_name="organizations"):
         organizations.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
         .replace(r"\n", " ", regex=True)
         .replace("'", "''")
-        .replace(u"\u2019", "''", regex=True)  # replace curly right-quote 
-        .replace(u"\u202f", " ", regex=True)  # replace narrow no-break space
-        .replace(u"\u2060", "", regex=True)  # remove word joiner
+        .replace("\u2019", "''", regex=True)  # replace curly right-quote
+        .replace("\u202f", " ", regex=True)  # replace narrow no-break space
+        .replace("\u2060", "", regex=True)  # remove word joiner
     )
     organizations["description"] = (
         organizations["description"]
@@ -216,18 +222,23 @@ def main(gc):
     categories = get_challenge_categories(wks)
     output_csv(categories, "categories.csv", output_folder=CHALLENGE_FOLDER)
 
-    edam_annotations = get_edam_annotations(wks)
-    output_csv(edam_annotations, "challenge_data_edam.csv", output_folder=CHALLENGE_FOLDER)
-
     organizations = get_organization_data(wks)
     output_csv(organizations, "organizations.csv", output_folder=ORGANIZATION_FOLDER)
 
+    edam_data_annotations = get_edam_annotations(wks)
+    output_csv(edam_data_annotations, "input_data_type.csv", output_folder=CHALLENGE_FOLDER)
+
     challenges, incentives, sub_types = get_challenge_data(wks)
     output_csv(challenges, "challenges.csv", output_folder=CHALLENGE_FOLDER)
-    output_csv(incentives, "incentives.csv", 
-               output_folder=CHALLENGE_FOLDER, print_row=True)
-    output_csv(sub_types, "submission_types.csv",
-               output_folder=CHALLENGE_FOLDER, print_row=True)
+    output_csv(
+        incentives, "incentives.csv", output_folder=CHALLENGE_FOLDER, print_row=True
+    )
+    output_csv(
+        sub_types,
+        "submission_types.csv",
+        output_folder=CHALLENGE_FOLDER,
+        print_row=True,
+    )
 
     # Update static plot numbers (displayed on homepage).
     updated_plot_numbers = wks.worksheet("(plot) challenges_by_year").acell("D3").value

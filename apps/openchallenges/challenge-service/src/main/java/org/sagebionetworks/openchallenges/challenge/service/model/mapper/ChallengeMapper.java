@@ -17,8 +17,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
   private EdamOperationMapper edamOperationMapper = new EdamOperationMapper();
-  private SimpleChallengeInputDataTypeMapper inputDataTypeMapper =
-      new SimpleChallengeInputDataTypeMapper();
+  private EdamDataMapper edamDataMapper = new EdamDataMapper();
 
   @Override
   public ChallengeEntity convertToEntity(ChallengeDto dto, Object... args) {
@@ -53,7 +52,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
           entity.getCategories().stream()
               .map(o -> ChallengeCategoryDto.fromValue(o.getName()))
               .toList());
-      dto.inputDataTypes(inputDataTypeMapper.convertToDtoList(entity.getInputDataTypes()));
+      dto.inputDataTypes(edamDataMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
       LOG.info("challenge dto: {}", dto);
     }

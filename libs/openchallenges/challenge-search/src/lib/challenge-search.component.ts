@@ -31,7 +31,6 @@ import {
   challengeStartYearRangeFilterPanel,
   challengeStatusFilterPanel,
   challengeSubmissionTypesFilterPanel,
-  challengeInputDataTypesFilterPanel,
   challengeIncentivesFilterPanel,
   challengePlatformsFilterPanel,
   challengeOrganizationsFilterPanel,
@@ -144,7 +143,6 @@ export class ChallengeSearchComponent
 
   // dropdown filters
   platformsFilter = challengePlatformsFilterPanel;
-  inputDataTypesFilter = challengeInputDataTypesFilterPanel;
   organizationsFilter = challengeOrganizationsFilterPanel;
 
   // define selected filter values
@@ -154,7 +152,6 @@ export class ChallengeSearchComponent
   selectedCategories!: ChallengeCategory[];
   selectedPlatforms!: string[];
   selectedOrgs!: number[];
-  selectedInputDataTypes!: string[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -201,7 +198,6 @@ export class ChallengeSearchComponent
       this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
       this.selectedIncentives = this.splitParam(params['incentives']);
       this.selectedPlatforms = this.splitParam(params['platforms']);
-      this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
       this.selectedCategories = this.splitParam(params['categories']);
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
@@ -222,7 +218,6 @@ export class ChallengeSearchComponent
         submissionTypes: this.selectedSubmissionTypes,
         platforms: this.selectedPlatforms,
         incentives: this.selectedIncentives,
-        inputDataTypes: this.selectedInputDataTypes,
         categories: this.selectedCategories,
         organizations: this.selectedOrgs,
       };
@@ -246,20 +241,6 @@ export class ChallengeSearchComponent
           this.selectedPlatforms.includes(option.value as string)
         );
         this.platformsFilter.options = union(options, selectedPlatformValues);
-      });
-
-    // update input data type filter values
-    this.challengeSearchDataService
-      .searchOriganizations()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedInputDataTypesValues = options.filter((option) =>
-          this.selectedInputDataTypes.includes(option.value as string)
-        );
-        this.inputDataTypesFilter.options = union(
-          options,
-          selectedInputDataTypesValues
-        );
       });
 
     // update organization filter values

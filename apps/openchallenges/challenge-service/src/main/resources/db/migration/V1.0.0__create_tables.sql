@@ -22,18 +22,6 @@ CREATE TABLE `edam_concept`
 );
 
 
--- challenge_input_data_type definition
-CREATE TABLE `challenge_input_data_type`
-(
-    `id`                    int NOT NULL AUTO_INCREMENT,
-    `slug`                  varchar(255) NOT NULL UNIQUE,
-    `name`                  varchar(255) NOT NULL UNIQUE,
-    `created_at`            DATETIME DEFAULT CURRENT_TIMESTAMP,
-    `updated_at`            DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    PRIMARY KEY (`id`)
-);
-
-
 -- challenge definition
 CREATE TABLE `challenge`
 (
@@ -98,17 +86,17 @@ CREATE TABLE `challenge_submission_type`
 );
 
 
--- challenge_x_challenge_input_data_type definition
-CREATE TABLE `challenge_x_challenge_input_data_type`
+-- challenge_input_data_type definition
+CREATE TABLE `challenge_input_data_type`
 (
     `id`                              int NOT NULL AUTO_INCREMENT,
     `challenge_id`                    bigint(20) NOT NULL,
-    `challenge_input_data_type_id`    int NOT NULL,
+    `edam_concept_id`                 int NOT NULL,
     `created_at`                      DATETIME DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`challenge_id`) REFERENCES challenge(`id`),
-    FOREIGN KEY (`challenge_input_data_type_id`) REFERENCES challenge_input_data_type(`id`),
-    CONSTRAINT unique_item UNIQUE (`challenge_id`, `challenge_input_data_type_id`)
+    FOREIGN KEY (`edam_concept_id`) REFERENCES edam_concept(`id`),
+    CONSTRAINT unique_item UNIQUE (`challenge_id`, `edam_concept_id`)
 );
 
 

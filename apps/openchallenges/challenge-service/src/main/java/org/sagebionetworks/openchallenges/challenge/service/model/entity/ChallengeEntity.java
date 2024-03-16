@@ -96,14 +96,14 @@ public class ChallengeEntity {
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
-      name = "challenge_x_challenge_input_data_type",
+      name = "challenge_input_data_type",
       joinColumns = @JoinColumn(name = "challenge_id"),
-      inverseJoinColumns = @JoinColumn(name = "challenge_input_data_type_id"))
+      inverseJoinColumns = @JoinColumn(name = "edam_concept_id"))
   @IndexedEmbedded(
       name = "input_data_types",
-      includePaths = {"slug", "name"})
+      includePaths = {"class_id", "preferred_label"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
-  private List<SimpleChallengeInputDataTypeEntity> inputDataTypes;
+  private List<EdamDataEntity> inputDataTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(includePaths = {"name"})

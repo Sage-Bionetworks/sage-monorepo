@@ -17,8 +17,6 @@ tags:
   name: Challenge
 - description: Operations about challenge analytics.
   name: ChallengeAnalytics
-- description: Operations about challenge input data types.
-  name: ChallengeInputDataType
 - description: Operations about challenge platforms.
   name: ChallengePlatform
 paths:
@@ -163,45 +161,6 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: ChallengeAnalytics
-  /challengeInputDataTypes:
-    get:
-      description: List challenge input data types
-      operationId: listChallengeInputDataTypes
-      parameters:
-      - description: The search query used to find challenge input data types.
-        explode: true
-        in: query
-        name: challengeInputDataTypeSearchQuery
-        required: false
-        schema:
-          $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
-        style: form
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ChallengeInputDataTypesPage'
-          description: Success
-        "400":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: Invalid request
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      summary: List challenge input data types
-      tags:
-      - ChallengeInputDataType
-      x-accepts: application/json
-      x-tags:
-      - tag: ChallengeInputDataType
   /challengePlatforms:
     get:
       description: List challenge platforms
@@ -300,15 +259,6 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengeId'
       style: simple
-    challengeInputDataTypeSearchQuery:
-      description: The search query used to find challenge input data types.
-      explode: true
-      in: query
-      name: challengeInputDataTypeSearchQuery
-      required: false
-      schema:
-        $ref: '#/components/schemas/ChallengeInputDataTypeSearchQuery'
-      style: form
     challengePlatformSearchQuery:
       description: The search query used to find challenge platforms.
       explode: true
@@ -386,13 +336,6 @@ components:
       example: 1
       format: int64
       type: integer
-    ChallengeInputDataTypeSlug:
-      description: The slug of the challenge input data type.
-      example: gene-expression
-      maxLength: 30
-      minLength: 3
-      pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-      type: string
     ChallengeStatus:
       description: The status of the challenge.
       enum:
@@ -475,12 +418,6 @@ components:
           description: An array of organization ids used to filter the results.
           items:
             $ref: '#/components/schemas/OrganizationId'
-          type: array
-        inputDataTypes:
-          description: An array of challenge input data type ids used to filter the
-            results.
-          items:
-            $ref: '#/components/schemas/ChallengeInputDataTypeSlug'
           type: array
         status:
           description: An array of challenge status used to filter the results.
@@ -625,51 +562,26 @@ components:
       maxLength: 500
       nullable: true
       type: string
-    ChallengeInputDataTypeId:
-      description: The unique identifier of a challenge input data type.
-      example: 1
-      format: int64
-      type: integer
-    ChallengeInputDataTypeName:
-      description: The name of the challenge input data type.
-      example: gene expression
-      maxLength: 50
-      minLength: 3
-      type: string
-    SimpleChallengeInputDataType:
-      description: A simple challenge input data type.
+    EdamData:
+      description: The EDAM Data concept.
       example:
-        name: gene expression
-        id: 1
-        slug: gene-expression
+        classId: http://edamontology.org/data_0850
+        preferredLabel: Sequence set
+      nullable: true
       properties:
-        id:
-          description: The unique identifier of a challenge input data type.
-          example: 1
-          format: int64
-          type: integer
-        slug:
-          description: The slug of the challenge input data type.
-          example: gene-expression
-          maxLength: 30
-          minLength: 3
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        classId:
+          example: http://edamontology.org/data_0850
+          maxLength: 60
+          pattern: ^http:\/\/edamontology\.org\/data_\d+$
           type: string
-        name:
-          description: The name of the challenge input data type.
-          example: gene expression
-          maxLength: 50
-          minLength: 3
+        preferredLabel:
+          example: Sequence set
+          maxLength: 80
           type: string
       required:
-      - id
-      - name
-      - slug
+      - classId
+      - preferredLabel
       type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
-      - '@lombok.NoArgsConstructor'
-      - '@lombok.AllArgsConstructor'
     ChallengeStartDate:
       description: The start date of the challenge.
       example: 2017-07-21
@@ -745,12 +657,10 @@ components:
         doi: https://doi.org/123/abc
         status: active
         inputDataTypes:
-        - name: gene expression
-          id: 1
-          slug: gene-expression
-        - name: gene expression
-          id: 1
-          slug: gene-expression
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
+        - classId: http://edamontology.org/data_0850
+          preferredLabel: Sequence set
         updatedAt: 2022-07-04T22:19:11Z
       properties:
         id:
@@ -818,7 +728,7 @@ components:
           type: array
         inputDataTypes:
           items:
-            $ref: '#/components/schemas/SimpleChallengeInputDataType'
+            $ref: '#/components/schemas/EdamData'
           type: array
         categories:
           items:
@@ -965,88 +875,6 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
-    ChallengeInputDataTypeSort:
-      default: relevance
-      description: What to sort results by.
-      enum:
-      - name
-      - relevance
-      type: string
-    ChallengeInputDataTypeDirection:
-      description: The direction to sort the results by.
-      enum:
-      - asc
-      - desc
-      nullable: true
-      type: string
-    ChallengeInputDataTypeSearchQuery:
-      description: A challenge input data type search query.
-      properties:
-        pageNumber:
-          default: 0
-          description: The page number.
-          format: int32
-          minimum: 0
-          type: integer
-        pageSize:
-          default: 100
-          description: The number of items in a single page.
-          format: int32
-          minimum: 1
-          type: integer
-        sort:
-          $ref: '#/components/schemas/ChallengeInputDataTypeSort'
-        direction:
-          $ref: '#/components/schemas/ChallengeInputDataTypeDirection'
-        searchTerms:
-          description: A string of search terms used to filter the results.
-          example: genomic
-          type: string
-      type: object
-    ChallengeInputDataType:
-      description: A challenge input data type.
-      properties:
-        id:
-          description: The unique identifier of a challenge input data type.
-          example: 1
-          format: int64
-          type: integer
-        slug:
-          description: The slug of the challenge input data type.
-          example: gene-expression
-          maxLength: 30
-          minLength: 3
-          pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$"
-          type: string
-        name:
-          description: The name of the challenge input data type.
-          example: gene expression
-          maxLength: 50
-          minLength: 3
-          type: string
-        createdAt:
-          example: 2022-07-04T22:19:11Z
-          format: date-time
-          type: string
-        updatedAt:
-          example: 2022-07-04T22:19:11Z
-          format: date-time
-          type: string
-      required:
-      - createdAt
-      - id
-      - name
-      - slug
-      - updatedAt
-      type: object
-    ChallengeInputDataTypesPage:
-      allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ChallengeInputDataTypesPage_allOf'
-      description: A page of challenge input data types.
-      type: object
-      x-java-class-annotations:
-      - '@lombok.Builder'
     ChallengePlatformSort:
       default: relevance
       description: What to sort results by.
@@ -1166,17 +994,6 @@ components:
           type: array
       required:
       - challengeContributions
-      type: object
-      example: null
-    ChallengeInputDataTypesPage_allOf:
-      properties:
-        challengeInputDataTypes:
-          description: A list of challenge input data types.
-          items:
-            $ref: '#/components/schemas/ChallengeInputDataType'
-          type: array
-      required:
-      - challengeInputDataTypes
       type: object
       example: null
     ChallengePlatformsPage_allOf:
