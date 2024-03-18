@@ -29,6 +29,8 @@ ARG playwrightVersion="1.40.1"
 ARG pnpmVersion="8.7.0"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="5.0.1.3006"
+# https://github.com/hadolint/hadolint
+ARG hadolintVersion="2.12.0"
 
 # Create the docker group so that we can assign it to the user.
 # This is to enable the non-root user to use the command `docker`.
@@ -39,7 +41,7 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat jq ca-certificates-java gdebi-core \
+    kafkacat jq ca-certificates-java gdebi-core shellcheck \
     # Required by AWS CLI
     mandoc \
     # Required for setting up locales
@@ -50,16 +52,20 @@ RUN groupadd docker \
     xz-utils tk-dev libffi-dev liblzma-dev \
   # Add Node.js repository
   && mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-      | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-    && NODE_MAJOR=18 \
-    && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
-      | tee /etc/apt/sources.list.d/nodesource.list \
+  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
+    | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+  && NODE_MAJOR=18 \
+  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
+    | tee /etc/apt/sources.list.d/nodesource.list \
+  # Add Hadolint
+  && curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
+  && mv hadolint /usr/local/bin/. \
+  && chmod +x /usr/local/bin/hadolint \
   # Add GitHub CLI repository
   && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-      gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
-      tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
   # Add ngrok repository
   && curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
   && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
@@ -105,15 +111,15 @@ RUN groupadd docker \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
   # Install R
   && curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
-    && gdebi --non-interactive /tmp/r_amd64.deb \
-    && rm -fr /tmp/r_amd64.deb \
-    && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
-    && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
-    && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")" \
+  && gdebi --non-interactive /tmp/r_amd64.deb \
+  && rm -fr /tmp/r_amd64.deb \
+  && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
+  && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
+  && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")" \
   # Install Trivy
   && curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
-    && dpkg -i /tmp/trivy.deb \
-    && rm -fr /tmp/trivy.deb \
+  && dpkg -i /tmp/trivy.deb \
+  && rm -fr /tmp/trivy.deb \
   # Cleanup
   && apt-get -y autoclean \
   && apt-get -y autoremove \
@@ -124,7 +130,7 @@ RUN groupadd docker \
 RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
   && locale-gen
 ENV LANG=en_US.UTF-8 \
-    LC_ALL=en_US.UTF-8
+  LC_ALL=en_US.UTF-8
 
 ARG user=vscode
 RUN useradd -m $user \
