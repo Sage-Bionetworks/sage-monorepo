@@ -37,8 +37,8 @@ tests:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
-    - apt-get install openssh-client libpq-dev
-    - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove --no-cache .build-deps
@@ -72,8 +72,8 @@ tests:coverage-report-staging:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
-    - apt-get install openssh-client libpq-dev
-    - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove .build-deps
@@ -116,8 +116,8 @@ tests:coverage-report-prod:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
-    - apt-get install openssh-client libpq-dev
-    - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove .build-deps
