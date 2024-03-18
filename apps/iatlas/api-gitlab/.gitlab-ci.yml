@@ -13,7 +13,6 @@ default:
     - export PATH=$HOME/.local/bin:$PATH
     - source ~/.profile
     - aws --version
-    - apt-get install -y jq
 
 stages:
   - test_code
@@ -38,6 +37,7 @@ tests:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
+    - apt-get -y install jq
     - apt-get -y install openssh-client libpq-dev
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
@@ -72,6 +72,7 @@ tests:coverage-report-staging:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
+    - apt-get -y install jq
     - apt-get -y install openssh-client libpq-dev
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
@@ -115,6 +116,7 @@ tests:coverage-report-prod:
     # (The dev dependencies are needed for testing.)
     - apt-get update
     - apt-get upgrade
+    - apt-get -y install jq
     - apt-get -y install openssh-client libpq-dev
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
