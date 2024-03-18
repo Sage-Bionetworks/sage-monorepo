@@ -1,4 +1,5 @@
 name: Scan affected projects with Sonar
+
 on:
   push:
     branches:
@@ -11,10 +12,6 @@ on:
   pull_request_target:
     types: [opened, synchronize, reopened, labeled]
 
-env:
-  HEAD_REF: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.ref || github.ref_name }}
-  HEAD_REPOSITORY: ${{ github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name || github.repository }}
-
 jobs:
   sonar:
     runs-on: ubuntu-latest
@@ -23,19 +20,27 @@ jobs:
         if: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true }}
         run: echo "Add the label 'sonar-scan-approved' to this PR to activate Sonar scan"; exit 1
 
-      - name: Checkout
-        uses: ./.github/actions/checkout
+      - uses: actions/checkout@v4
+        name: Checkout
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
+          fetch-depth: 0
+
+      - name: Switch from the detached HEAD of the merge commit to a new branch
+        # Buildx does not work on a detached HEAD
+        run: git switch -c new-branch
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
 
-      # - name: Set up the dev container
-      #   env:
-      #     SONAR_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
-      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      #   uses: ./.github/actions/setup-dev-container
+      - name: Set up the dev container
+        env:
+          SONAR_PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: ./.github/actions/setup-dev-container
 
-      # - name: Scan the affected projects with Sonar
-      #   run: |
-      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-      #       && nx affected --target=sonar"
+      - name: Scan the affected projects with Sonar
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx affected --target=sonar"
