@@ -34,6 +34,7 @@ jobs:
           # return exit code 1 if the head is detached
           git symbolic-ref -q HEAD > /dev/null 2>&1
           echo "detached=$?" >> "$GITHUB_OUTPUT"
+          echo $detached
 
       - name: Switch from the detached HEAD of the merge commit to a new branch
         if: ${{ steps.is_head_detached.outputs.detached == '1' }}
