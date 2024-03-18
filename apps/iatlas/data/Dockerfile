@@ -18,12 +18,12 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
+WORKDIR /
 COPY requirements.txt requirements.txt
 COPY src/ /src
 
-RUN pip3 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-WORKDIR /
 COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
 
