@@ -27,20 +27,6 @@ jobs:
           # against.
           fetch-depth: 0
 
-      - name: Check if the HEAD is detached
-        # Buildx does not work on a detached HEAD
-        id: is_head_detached
-        run: |
-          # return exit code 1 if the head is detached
-          git symbolic-ref -q HEAD > /dev/null 2>&1
-          is_detached=$?
-          echo "detached=$is_detached" >> "$GITHUB_OUTPUT"
-          echo $is_detached
-
-      - name: Switch from the detached HEAD of the merge commit to a new branch
-        if: ${{ steps.is_head_detached.outputs.detached == '1' }}
-        run: git switch -c new-branch
-
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
 
