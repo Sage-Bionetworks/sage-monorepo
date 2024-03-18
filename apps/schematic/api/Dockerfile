@@ -45,7 +45,9 @@ COPY schematic_api pyproject.toml poetry.lock /app/app/
 
 # install dependencies
 WORKDIR /app/app
-RUN pip install poetry \
+# Use the version of Poetry installed in the dev container.
+# See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
+RUN pip install --no-cache-dir poetry==1.6.1 \
   && poetry config --local virtualenvs.create false \
   && poetry run pip install "cython<3.0.0" \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
