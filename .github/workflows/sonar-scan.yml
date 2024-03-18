@@ -36,7 +36,7 @@ jobs:
           echo "detached=$?" >> "$GITHUB_OUTPUT"
 
       - name: Switch from the detached HEAD of the merge commit to a new branch
-        if: ${{ steps.is_head_detached.outputs.detached == 1 }}
+        if: ${{ steps.is_head_detached.outputs.detached == '1' }}
         run: git switch -c new-branch
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
