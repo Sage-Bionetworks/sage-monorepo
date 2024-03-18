@@ -50,6 +50,7 @@ def common_query_builder():
             $minRnaSeqExpr: Float
             $cohort: [String!]
             $sample: [String!]
+            $cellTypeSample: [String!]
             $paging: PagingInput
             $distinct: Boolean
         ) {
@@ -62,6 +63,7 @@ def common_query_builder():
                 maxRnaSeqExpr: $maxRnaSeqExpr
                 minRnaSeqExpr: $minRnaSeqExpr
                 sample: $sample
+                cellTypeSample: $cellTypeSample
             )""" + query_fields + "}"
     return f
 
@@ -134,6 +136,23 @@ def nanostring_query(common_query_builder):
                 samples {
                     nanostringExpr
                     name
+                }
+            }
+        }
+        """
+    )
+
+@pytest.fixture(scope='module')
+def single_cell_seq_sum_query(common_query_builder):
+        return common_query_builder(
+        """
+        {
+            items{
+                entrez
+                cellTypeSamples {
+                    name
+                    singleCellSeqSum
+                    cellType
                 }
             }
         }
@@ -558,3 +577,51 @@ def test_genes_nanostring_query_with_gene_and_sample(client, nanostring_query, n
     assert type(s['name']) is str
     assert type(s['nanostringExpr']) is float
     assert s['name'] == nanostring_sample
+
+def test_single_cell_seq_sum_query_with_entrez(client, single_cell_seq_sum_query):
+    response = client.post(
+        '/api',
+        json={
+            'query': single_cell_seq_sum_query,
+            'variables': {
+                'entrez': [135]
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) == 1
+    gene = genes[0]
+    assert gene['entrez'] == 135
+    samples = gene['cellTypeSamples']
+    assert isinstance(samples, list)
+    assert len(samples) >= 10
+    for sample in samples[0:10]:
+        assert isinstance(sample['name'], str)
+        assert isinstance(sample['cellType'], str)
+        assert isinstance(sample['singleCellSeqSum'], float)
+
+def test_single_cell_seq_sum_query_with_cohort(client, single_cell_seq_sum_query):
+    response = client.post(
+        '/api',
+        json={
+            'query': single_cell_seq_sum_query,
+            'variables': {
+                'cohort': ['MSK_Biopsy_Site']
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['genes']
+    genes = page['items']
+    assert isinstance(genes, list)
+    assert len(genes) >= 10
+    for gene in genes[0:10]:
+        assert isinstance(gene['entrez'], int)
+        samples = gene['cellTypeSamples']
+        assert isinstance(samples, list)
+        assert len(samples) >= 10
+        for sample in samples[0:10]:
+            assert isinstance(sample['name'], str)
+            assert isinstance(sample['cellType'], str)
+            assert isinstance(sample['singleCellSeqSum'], float)

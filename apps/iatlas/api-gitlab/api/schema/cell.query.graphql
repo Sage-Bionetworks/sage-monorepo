@@ -1,0 +1,24 @@
+"""
+The "CellNode" type
+"""
+type CellNode implements BaseNode {
+  "A unique id for the database. Please note that this value may change as the database gets updated and should not be relied on."
+  id: ID
+  "The type of cell the stats are for."
+  type: String!
+  "The name of the cell"
+  name: String!
+  "Features"
+  features: [SingleCellFeature]
+  "Genes"
+  genes: [SingleCellGene]
+}
+
+type Cell implements BaseResult {
+  "A Paging object (see Paging)"
+  paging: Paging
+  "A string describing any error that may have occurred."
+  error: String
+  "A list of returned CellNodes"
+  items: [CellNode]
+}

@@ -2,6 +2,11 @@ from api import db
 
 Base = db.Model
 
+from .cell import Cell
+from .cell_stat import CellStat
+from .cell_to_feature import CellToFeature
+from .cell_to_gene import CellToGene
+from .cell_to_sample import CellToSample
 from .cohort import Cohort
 from .cohort_to_gene import CohortToGene
 from .cohort_to_feature import CohortToFeature
@@ -30,6 +35,8 @@ from .node import Node
 from .patient import Patient
 from .publication import Publication
 from .publication_to_gene_to_gene_set import PublicationToGeneToGeneSet
+from .single_cell_pseudobulk import SingleCellPseudobulk
+from .single_cell_pseudobulk_feature import SingleCellPseudobulkFeature
 from .rare_variant_pathway_associations import RareVariantPathwayAssociation
 from .sample import Sample
 from .sample_to_mutation import SampleToMutation

@@ -17,8 +17,17 @@ sample_request_fields = simple_sample_request_fields.union({'patient'})
 feature_related_sample_request_fields = simple_sample_request_fields.union({
                                                                            'value'})
 
-gene_related_sample_request_fields = simple_sample_request_fields.union({
-                                                                        'rnaSeqExpr', 'nanostringExpr'})
+cell_type_feature_related_sample_request_fields = simple_sample_request_fields.union(
+    {'value', 'cellType'}
+)
+
+gene_related_sample_request_fields = simple_sample_request_fields.union(
+    {'rnaSeqExpr', 'nanostringExpr'}
+)
+
+cell_type_gene_related_sample_request_fields = simple_sample_request_fields.union(
+    {'cellType', 'singleCellSeqSum'}
+)
 
 mutation_related_sample_request_fields = sample_request_fields.union({
                                                                      'status'})
@@ -41,6 +50,8 @@ def build_sample_graphql_response(prefix='sample_'):
                 'rnaSeqExpr': get_value(sample, prefix + 'gene_rna_seq_expr'),
                 'nanostringExpr': get_value(sample, prefix + 'gene_nanostring_expr'),
                 'value': get_value(sample, prefix + 'feature_value'),
+                'singleCellSeqSum': get_value(sample, prefix + 'single_seq_sum'),
+                'cellType': get_value(sample, prefix + 'cell_type'),
                 'patient': build_patient_graphql_response()(sample),
                 'tag': build_tag_graphql_response()(sample) if has_tag_fields(sample) else None
             }
@@ -59,6 +70,20 @@ def build_gene_expression_graphql_response(prefix='sample_'):
             }
             result_dict['rnaSeqExpr'] = get_value(sample, prefix + 'gene_rna_seq_expr')
             result_dict['nanostringExpr'] = get_value(sample, prefix + 'gene_nanostring_expr')
+            return(result_dict)
+    return(f)
+
+def build_single_cell_seq_response(prefix='sample_'):
+    def f(sample):
+        if not sample:
+            return None
+        else:
+            result_dict = {
+                'id': get_value(sample, prefix + 'id'),
+                'name': get_value(sample, prefix + 'name'),
+                'singleCellSeqSum': get_value(sample, prefix + 'single_cell_seq_sum'),
+                'cellType': get_value(sample, prefix + 'cell_type')
+            }
             return(result_dict)
     return(f)
 

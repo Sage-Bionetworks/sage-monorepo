@@ -28,6 +28,8 @@ type GeneNode implements BaseNode{
   publications: [SimplePublication!]!
   "A list of samples related to this gene that is associated with the value."
   samples: [GeneRelatedSample!]!
+  "A list of gene cell type pairs and their related feature value"
+  cellTypeSamples: [CellTypeGeneRelatedSample!]!
   "The 'superCategory' of the gene."
   superCategory: String
   "The 'therapyType' of the gene."
@@ -57,4 +59,16 @@ type SimpleGene {
   friendlyName: String
   "The IO Landscape Name of the gene."
   ioLandscapeName: String
+}
+
+"""
+The "SingleCellGene" is a version of a `Feature`. Used by Cells.
+"""
+type SingleCellGene {
+  "The unique id of the gene to use on search engines."
+  entrez: Int!
+  "The HUGO Gene Nomenclature Committee."
+  hgnc: String!
+  "The single cell sequencing value"
+  singleCellSeq: Float!
 }

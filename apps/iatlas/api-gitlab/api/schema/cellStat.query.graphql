@@ -1,0 +1,26 @@
+"""
+The "CellStatNode" type
+"""
+type CellStatNode implements BaseNode {
+  "A unique id for the database. Please note that this value may change as the database gets updated and should not be relied on."
+  id: ID
+  "The the type of cell the stats are for."
+  type: String!
+  "The number of cells making up the group"
+  count: Int
+  avgExpr: Float
+  percExpr: Float
+  "The associated dataset"
+  dataSet: SimpleDataSet!
+  "The associated gene"
+  gene: SimpleGene!
+}
+
+type CellStat implements BaseResult {
+  "A Paging object (see Paging)"
+  paging: Paging
+  "A string describing any error that may have occurred."
+  error: String
+  "A list of returned CellStatNodes"
+  items: [CellStatNode]
+}

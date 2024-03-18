@@ -1,6 +1,8 @@
 from ariadne import load_schema_from_path, make_executable_schema, ObjectType, ScalarType
 import os
 from api.resolvers import (
+    resolve_cell_stats,
+    resolve_cells,
     resolve_cohorts,
     resolve_colocalizations,
     resolve_copy_number_results,
@@ -33,6 +35,10 @@ schema_dirname, _filename = os.path.split(os.path.abspath(__file__))
 root_query = load_schema_from_path(schema_dirname + '/root.query.graphql')
 paging_types = load_schema_from_path(
     schema_dirname + '/paging.graphql')
+cell_query = load_schema_from_path(
+    schema_dirname + '/cell.query.graphql')
+cell_stat_query = load_schema_from_path(
+    schema_dirname + '/cellStat.query.graphql')
 cohort_query = load_schema_from_path(
     schema_dirname + '/cohort.query.graphql')
 colocalization_query = load_schema_from_path(
@@ -74,6 +80,8 @@ tag_query = load_schema_from_path(schema_dirname + '/tag.query.graphql')
 type_defs = [
     root_query,
     paging_types,
+    cell_query,
+    cell_stat_query,
     cohort_query,
     colocalization_query,
     copy_number_result_query,
@@ -171,6 +179,8 @@ def serialize_coloc_plot_type_enum(value):
 
 # Initialize schema objects (general).
 root = ObjectType('Query')
+cell = ObjectType('Cell')
+cell_stat = ObjectType('CellStat')
 cohort = ObjectType('Cohort')
 colocalization = ObjectType('Colocalization')
 copy_number_result = ObjectType('CopyNumberResult')
@@ -214,6 +224,8 @@ Associate resolvers with fields.
 Fields should be names of objects in schema/root.query.graphql.
 Values should be names of functions in resolvers
 '''
+root.set_field('cells', resolve_cells)
+root.set_field('cellStats', resolve_cell_stats)
 root.set_field('cohorts', resolve_cohorts)
 root.set_field('colocalizations', resolve_colocalizations)
 root.set_field('copyNumberResults', resolve_copy_number_results)
@@ -243,6 +255,8 @@ schema = make_executable_schema(
     type_defs,
     [
         root,
+        cell,
+        cell_stat,
         cohort,
         colocalization,
         copy_number_result,
