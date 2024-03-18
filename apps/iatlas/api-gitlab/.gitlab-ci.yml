@@ -38,7 +38,7 @@ tests:
     - apt-get update
     - apt-get upgrade
     - apt-get -y install openssh-client libpq-dev
-    - apt-get -y install .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove --no-cache .build-deps
@@ -73,7 +73,7 @@ tests:coverage-report-staging:
     - apt-get update
     - apt-get upgrade
     - apt-get -y install openssh-client libpq-dev
-    - apt-get -y install .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove .build-deps
@@ -117,7 +117,7 @@ tests:coverage-report-prod:
     - apt-get update
     - apt-get upgrade
     - apt-get -y install openssh-client libpq-dev
-    - apt-get -y install .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     - apt-get remove .build-deps
