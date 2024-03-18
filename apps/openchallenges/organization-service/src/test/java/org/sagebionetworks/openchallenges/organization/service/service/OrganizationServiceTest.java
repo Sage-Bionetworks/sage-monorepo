@@ -4,7 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +45,9 @@ class OrganizationServiceTest {
     OrganizationDto expectedDto = new OrganizationDto();
     expectedDto.setId(orgId);
 
-    /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
-    to control its response and verify the behavior of the tested code that interacts with it. */
+    // Stubbing configuration to simulate a specific behavior of the organizationRepository mock
+    // object to control its response and verify the behavior of the tested code that interacts with
+    // it.
     when(organizationRepository.findByIdOrLogin(orgId, orgLogin))
         .thenReturn(Optional.of(orgEntity));
 
@@ -53,9 +56,9 @@ class OrganizationServiceTest {
     // get the organization using the identifier
     OrganizationDto response = organizationService.getOrganization(identifier);
 
-    /* Test that the organization is in the repo, is not null, that the id can be pulled,
-    findByIdOrLogin method is called, and no interactions with the organizationMapper (verifies
-    interactions w/Mock object) */
+    // Test that the organization is in the repo, is not null, that the id can be pulled,
+    // findByIdOrLogin method is called, and no interactions with the organizationMapper (verifies
+    // interactions w/Mock object)
 
     verify(organizationRepository).findByIdOrLogin(orgId, orgLogin);
     assertNotNull(response);
@@ -68,8 +71,9 @@ class OrganizationServiceTest {
     // Create invalid identifier
     String invalidIdentifier = "abc";
 
-    /* Stubbing configuration to simulate a specific behavior of the organizationRepository mock object
-    to control its response and verify the behavior of the tested code that interacts with it. */
+    // Stubbing configuration to simulate a specific behavior of the organizationRepository mock
+    // object to control its response and verify the behavior of the tested code that interacts with
+    // it.
     when(organizationRepository.findByIdOrLogin(any(), any())).thenReturn(Optional.empty());
 
     OrganizationService organizationService = new OrganizationService(organizationRepository);
