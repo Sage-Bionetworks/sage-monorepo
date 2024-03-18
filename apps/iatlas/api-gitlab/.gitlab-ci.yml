@@ -9,9 +9,9 @@ variables:
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
-    # Install aws cli (also installs jq) - (Running on Alpine)
-    - apk update
-    - apk add --no-cache aws-cli jq
+    - pip3 install awscli --upgrade --user
+    - export PATH=$HOME/.local/bin:$PATH
+    - source ~/.profile
     - aws --version
 
 stages:
@@ -29,19 +29,21 @@ tests:
     variables:
       - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "test"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -62,19 +64,21 @@ tests:coverage-report-staging:
   only:
     - staging
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "staging"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -104,19 +108,21 @@ tests:coverage-report-prod:
   only:
     - master
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "production"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -212,7 +218,7 @@ Deploy:Staging:
   only:
     - staging
   stage: deploy
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Staging"
     # Force update the ECS service. It should be using the latest image (staging-latest).
@@ -224,7 +230,7 @@ Deploy:Prod:
   only:
     - master
   stage: deploy
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
