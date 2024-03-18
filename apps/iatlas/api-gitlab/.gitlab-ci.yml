@@ -9,28 +9,9 @@ variables:
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
-    # Install aws cli (also installs binutils, jq, unzip, and wget) - (Running on Alpine)
-    - GLIBC_VER=2.34-r0
-    - apk add --no-cache binutils curl jq unzip
-    # Install glibc compatibility for alpine (Needed for AWS cli v2)
-    - curl -sL https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub -o /etc/apk/keys/sgerrand.rsa.pub
-    - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-${GLIBC_VER}.apk
-    - curl -sLO https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VER}/glibc-bin-${GLIBC_VER}.apk
-    - apk add --force-overwrite --no-cache glibc-${GLIBC_VER}.apk glibc-bin-${GLIBC_VER}.apk
-    - apk fix --force-overwrite alpine-baselayout-data
-    # Install AWS cli v2
-    - curl -sL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip
-    - unzip awscliv2.zip
-    - aws/install
-    - "rm -rf awscliv2.zip \
-      aws \
-      /usr/local/aws-cli/v2/*/dist/aws_completer \
-      /usr/local/aws-cli/v2/*/dist/awscli/data/ac.index \
-      /usr/local/aws-cli/v2/*/dist/awscli/examples"
-    - apk --no-cache del binutils curl unzip
-    - rm glibc-${GLIBC_VER}.apk
-    - rm glibc-bin-${GLIBC_VER}.apk
-    - rm -rf /var/cache/apk/*
+    - pip3 install awscli --upgrade --user
+    - export PATH=$HOME/.local/bin:$PATH
+    - source ~/.profile
     - aws --version
 
 stages:
@@ -48,19 +29,21 @@ tests:
     variables:
       - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "test"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -81,19 +64,21 @@ tests:coverage-report-staging:
   only:
     - staging
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "staging"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -123,19 +108,21 @@ tests:coverage-report-prod:
   only:
     - master
   stage: test_code
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   variables:
     FLASK_ENV: "production"
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apk add --no-cache openssh libpq
-    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - apt-get update
+    - apt-get upgrade
+    - apt-get -y install jq
+    - apt-get -y install openssh-client libpq-dev
+    - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apk del --no-cache .build-deps
     # Get DB Secrets from AWS.
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD} --region "us-east-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -231,11 +218,11 @@ Deploy:Staging:
   only:
     - staging
   stage: deploy
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Staging"
     # Force update the ECS service. It should be using the latest image (staging-latest).
-    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment
+    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment --region "us-east-1"
 
 Deploy:Prod:
   tags:
@@ -243,8 +230,8 @@ Deploy:Prod:
   only:
     - master
   stage: deploy
-  image: python:3.8-alpine
+  image: python:3.8-slim-bookworm
   script:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
-    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
+    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment --region "us-east-1"
