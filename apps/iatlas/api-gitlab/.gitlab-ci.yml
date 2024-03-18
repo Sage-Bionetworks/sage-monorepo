@@ -11,7 +11,7 @@ default:
   before_script:
     - pip3 install awscli --upgrade --user
     - export PATH=$HOME/.local/bin:$PATH
-    - source ~/.bash_profile
+    - source ~/.profile
     - aws --version
 
 stages:
