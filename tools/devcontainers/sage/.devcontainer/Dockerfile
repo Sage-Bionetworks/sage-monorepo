@@ -41,7 +41,7 @@ RUN groupadd docker \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
     htop unzip vim wget lsof iproute2 build-essential \
-    kafkacat jq ca-certificates-java gdebi-core shellcheck \
+    kafkacat jq ca-certificates-java gdebi-core \
     # Required by AWS CLI
     mandoc \
     # Required for setting up locales
@@ -50,6 +50,8 @@ RUN groupadd docker \
     make build-essential libssl-dev zlib1g-dev libbz2-dev \
     libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
     xz-utils tk-dev libffi-dev liblzma-dev \
+    # Required by Hadolint
+    shellcheck \
   # Add Node.js repository
   && mkdir -p /etc/apt/keyrings \
   && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
