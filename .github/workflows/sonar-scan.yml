@@ -1,4 +1,4 @@
-name: Scan affected projects with Sonar
+name: Security Scan - Sonar
 
 on:
   push:
