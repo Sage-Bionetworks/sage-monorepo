@@ -1,6 +1,6 @@
 FROM tiangolo/uwsgi-nginx-flask:python3.10
 
-# add label 
+# add label
 LABEL org.opencontainers.image.authors='Milen Nikolov <milen.nikolov@sagebase.org>, Andrew Lamb <andrew.lamb@sagebase.org>, Mialy DeFelice <mialy.defelice@sagebase.org>, Gianna Jordan <gianna.jordan@sagebase.org>, Lingling Peng <lingling.peng@sagebase.org>'
 
 # the environment variables defined here are the default
@@ -13,21 +13,21 @@ ENV PYTHONFAULTHANDLER=1 \
     PIP_DISABLE_PIP_VERSION_CHECK=on \
     PIP_DEFAULT_TIMEOUT=200 \
     POETRY_VERSION=1.3.0 \
-    APP_PARENT_DIR=/app \ 
+    APP_PARENT_DIR=/app \
     NGINX_CONFIG=/etc/nginx/conf.d \
     APP_DIR=/app/app \
     ROOT=/ \
-    UWSGI_INI=/app/uwsgi.ini \ 
+    UWSGI_INI=/app/uwsgi.ini \
     NGINX_WORKER_PROCESSES=1 \
     VERSION=$TAG
 
 # run open ssl and generate certificate
 RUN apt update \
+    && apt-get update \
+    && apt-get install -y openssl jq \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
-    && apt-get update \ 
-    && apt-get install -y openssl jq 
 
 # add dhparam.pem
 # dhparam.pem was used in ssl-params.conf
@@ -51,7 +51,7 @@ RUN pip install poetry \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
   && poetry install --with prod --no-root --no-interaction --no-ansi
 
-# Update file permission 
+# Update file permission
 RUN mkdir /root/.synapseCache /app/app/manifests
 
 # temporary here to ensure .synapseCache is not empty
