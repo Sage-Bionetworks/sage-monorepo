@@ -27,9 +27,11 @@ class OrganizationServiceTest {
 
   @Mock private OrganizationMapper organizationMapper;
 
+  OrganizationService organizationService;
+
   @BeforeEach
   void setup() {
-    OrganizationService organizationService = new OrganizationService(organizationRepository);
+    organizationService = new OrganizationService(organizationRepository);
   }
 
   @Test
@@ -50,8 +52,6 @@ class OrganizationServiceTest {
     // it.
     when(organizationRepository.findByIdOrLogin(orgId, orgLogin))
         .thenReturn(Optional.of(orgEntity));
-
-    OrganizationService organizationService = new OrganizationService(organizationRepository);
 
     // get the organization using the identifier
     OrganizationDto response = organizationService.getOrganization(identifier);
@@ -75,8 +75,6 @@ class OrganizationServiceTest {
     // object to control its response and verify the behavior of the tested code that interacts with
     // it.
     when(organizationRepository.findByIdOrLogin(any(), any())).thenReturn(Optional.empty());
-
-    OrganizationService organizationService = new OrganizationService(organizationRepository);
 
     // Test that calling getOrganization throws an error
     assertThrows(
