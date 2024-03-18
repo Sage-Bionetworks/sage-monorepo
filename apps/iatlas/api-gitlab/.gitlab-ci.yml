@@ -10,6 +10,8 @@ default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
     - pip3 install awscli --upgrade --user
+    - export PATH=$HOME/.local/bin:$PATH
+    - source ~/.bash_profile
     - aws --version
 
 stages:
