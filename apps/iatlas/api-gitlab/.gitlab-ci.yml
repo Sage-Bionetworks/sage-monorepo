@@ -42,8 +42,7 @@ tests:
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     # Get DB Secrets from AWS
-    - aws configure
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-eat-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -77,8 +76,7 @@ tests:coverage-report-staging:
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     # Get DB Secrets from AWS.
-    - aws configure
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-eat-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
@@ -121,8 +119,7 @@ tests:coverage-report-prod:
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
     # Get DB Secrets from AWS.
-    - aws configure
-    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD} --region "us-eat-1")
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
