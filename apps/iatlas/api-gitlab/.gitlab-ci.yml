@@ -35,7 +35,7 @@ tests:
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apt-get install openssh libpq
+    - apt-get install openssh-client libpq-dev
     - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
@@ -68,7 +68,7 @@ tests:coverage-report-staging:
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apt-get install openssh libpq
+    - apt-get install openssh-client libpq-dev
     - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
@@ -110,7 +110,7 @@ tests:coverage-report-prod:
   script:
     # Install dependencies for the app.
     # (The dev dependencies are needed for testing.)
-    - apt-get install openssh libpq
+    - apt-get install openssh-client libpq-dev
     - apt-get install --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
