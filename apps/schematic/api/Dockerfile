@@ -22,9 +22,9 @@ ENV PYTHONFAULTHANDLER=1 \
     VERSION=$TAG
 
 # run open ssl and generate certificate
-RUN apt update \
-    && apt-get update \
-    && apt-get install -y openssl jq \
+RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install --no-install-recommends -qq -y \
+      openssl jq \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
@@ -51,26 +51,24 @@ RUN pip install --no-cache-dir poetry==1.6.1 \
   && poetry config --local virtualenvs.create false \
   && poetry run pip install "cython<3.0.0" \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
-  && poetry install --with prod --no-root --no-interaction --no-ansi
-
-# Update file permission
-RUN mkdir /root/.synapseCache /app/app/manifests
-
-# temporary here to ensure .synapseCache is not empty
-RUN echo "This is a test file." > /root/.synapseCache/test.txt
-# temporary here until we move .synapseCache to a different path
-RUN chmod -R 777 /root /app
+  && poetry install --with prod --no-root --no-interaction --no-ansi \
+  # Update file permission
+  && mkdir /root/.synapseCache /app/app/manifests \
+  # temporary here to ensure .synapseCache is not empty
+  && echo "This is a test file." > /root/.synapseCache/test.txt \
+  # temporary here until we move .synapseCache to a different path
+  && chmod -R 777 /root /app
 
 # Modify entrypoint script to allow SSL private key and certificate to be saved
 WORKDIR ${ROOT}
-COPY ./uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
-COPY ./uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
-COPY ./save_key_certificate.py ./save_key_certificate.py
+COPY uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
+COPY uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
+COPY save_key_certificate.py ./save_key_certificate.py
 
-RUN chmod +x uwsgi-nginx-entrypoint2.sh
-RUN chmod +x entrypoint2.sh
-RUN chown -R nginx /uwsgi-nginx-entrypoint2.sh
-RUN chown -R nginx /entrypoint2.sh
+RUN chmod +x uwsgi-nginx-entrypoint2.sh \
+  && chmod +x entrypoint2.sh \
+  && chown -R nginx /uwsgi-nginx-entrypoint2.sh \
+  && chown -R nginx /entrypoint2.sh
 
 WORKDIR ${APP_DIR}
 
