@@ -41,7 +41,6 @@ tests:
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apt-get remove --no-cache .build-deps
     # Get DB Secrets from AWS
     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
@@ -76,7 +75,6 @@ tests:coverage-report-staging:
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apt-get remove .build-deps
     # Get DB Secrets from AWS.
     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
@@ -120,7 +118,6 @@ tests:coverage-report-prod:
     - apt-get -y install gcc musl-dev postgresql
     - pip install --no-cache-dir -r ./requirements.txt
     - pip install --no-cache-dir -r ./requirements-dev.txt
-    - apt-get remove .build-deps
     # Get DB Secrets from AWS.
     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
     - export POSTGRES_USER=$(echo $creds | jq -r .username)
