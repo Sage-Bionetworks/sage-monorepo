@@ -222,7 +222,7 @@ Deploy:Staging:
   script:
     - echo "Deploying iAtlas API to Staging"
     # Force update the ECS service. It should be using the latest image (staging-latest).
-    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment
+    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment --region "us-east-1"
 
 Deploy:Prod:
   tags:
@@ -234,4 +234,4 @@ Deploy:Prod:
   script:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
-    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
+    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment --region "us-east-1"
