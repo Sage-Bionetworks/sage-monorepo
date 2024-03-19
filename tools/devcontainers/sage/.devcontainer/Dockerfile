@@ -159,8 +159,8 @@ RUN useradd -m $user \
 # Install SonarScanner CLI
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
 ENV SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
-    SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
-    PATH=${SONAR_SCANNER_HOME}/bin:${PATH}
+  SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
+  PATH=${SONAR_SCANNER_HOME}/bin:${PATH}
 RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${sonarScannerVersion}.zip --output sonar-scanner-cli.zip \
   && unzip sonar-scanner-cli.zip \
   && mv sonar-scanner-${sonarScannerVersion} ${SONAR_SCANNER_HOME} \
