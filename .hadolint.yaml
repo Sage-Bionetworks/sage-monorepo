@@ -1,0 +1,9 @@
+ignored:
+  # Pin versions in apt-get install.
+  # Reason: Identifying the versions of apt packages is not trivial. The versions available would
+  # also differ for different base images. This decision should be re-evaluated periodically.
+  - DL3008
+  # Pin versions in apt get install.
+  # Reason: Identifying the versions of apk packages is not trivial. The versions available would
+  # also differ for different base images. This decision should be re-evaluated periodically.
+  - DL3018
