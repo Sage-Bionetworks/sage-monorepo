@@ -32,6 +32,7 @@
         "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",
+        "exiasr.hadolint",
         "formulahendry.auto-rename-tag",
         "github.vscode-github-actions",
         "GitHub.vscode-pull-request-github",
