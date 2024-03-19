@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import connexion
 from flask_cors import CORS
 import flask
@@ -18,7 +17,7 @@ CORS(app.app, resources={r"/api/*": {"origins": "*"}})
 
 
 def main():
-    app.run(port=7080, debug=False)
+    app.run(port=7443, debug=False)
 
 
 if __name__ == "__main__":
