@@ -27,7 +27,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
       openssl jq \
     && apt-get -y autoclean \
     && apt-get -y autoremove \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 # add dhparam.pem
 # dhparam.pem was used in ssl-params.conf
