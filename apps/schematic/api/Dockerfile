@@ -14,7 +14,6 @@ ENV PYTHONFAULTHANDLER=1 \
     PIP_DEFAULT_TIMEOUT=200 \
     POETRY_VERSION=1.3.0 \
     APP_PARENT_DIR=/app \ 
-    NGINX_CONFIG=/etc/nginx/conf.d \
     APP_DIR=/app/app \
     ROOT=/ \
     UWSGI_INI=/app/uwsgi.ini \ 
@@ -27,48 +26,43 @@ RUN apt update \
     && apt-get -y autoremove \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get update \ 
-    && apt-get install -y openssl jq 
+    && apt-get install --no-install-recommends -y openssl jq 
 
 # add dhparam.pem
-# dhparam.pem was used in ssl-params.conf
 COPY dhparam.pem /etc/ssl/dhparam.pem
 
 # copy all nginx config files
-WORKDIR ${NGINX_CONFIG}
-COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./
+COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf /etc/nginx/conf.d/
 
 # copy to use custom uwsgi.ini
-COPY uwsgi.ini /app/uwsgi.ini
+COPY uwsgi.ini /app/uwsgi.ini 
 
-# copy files relevant for schematic apis
-COPY schematic_api pyproject.toml poetry.lock /app/app/
-
-# install dependencies
+# copy files relevant for schematic apis, including uwsgi.ini
+# also install dependencies
 WORKDIR /app/app
-RUN pip install poetry \
+COPY pyproject.toml poetry.lock /app/app/
+COPY ./schematic_api /app/app/schematic_api
+
+RUN pip install --no-cache-dir poetry \
   && poetry config --local virtualenvs.create false \
   && poetry run pip install "cython<3.0.0" \
   && poetry run pip install --no-build-isolation pyyaml==5.4.1 \
   && poetry install --with prod --no-root --no-interaction --no-ansi
 
-# Update file permission 
-RUN mkdir /root/.synapseCache /app/app/manifests
-
-# temporary here to ensure .synapseCache is not empty
-RUN echo "This is a test file." > /root/.synapseCache/test.txt
-# temporary here until we move .synapseCache to a different path
-RUN chmod -R 777 /root /app
+# temporary here until schematic allows .synapseCache to a different path
+RUN mkdir -p /root/.synapseCache /app/app/manifests \
+    && echo "This is a test file." > /root/.synapseCache/test.txt \
+    && chmod -R 777 /root /app
 
 # Modify entrypoint script to allow SSL private key and certificate to be saved
 WORKDIR ${ROOT}
-COPY ./uwsgi-nginx-entrypoint.sh ./entrypoint2.sh
-COPY ./uwsgi-nginx-entrypoint.sh ./uwsgi-nginx-entrypoint2.sh
-COPY ./save_key_certificate.py ./save_key_certificate.py
+COPY uwsgi-nginx-entrypoint.sh entrypoint2.sh
+COPY uwsgi-nginx-entrypoint.sh uwsgi-nginx-entrypoint2.sh
+COPY save_key_certificate.py ./
 
-RUN chmod +x uwsgi-nginx-entrypoint2.sh
-RUN chmod +x entrypoint2.sh
-RUN chown -R nginx /uwsgi-nginx-entrypoint2.sh
-RUN chown -R nginx /entrypoint2.sh
+RUN chmod +x uwsgi-nginx-entrypoint2.sh entrypoint2.sh \
+    && chown -R nginx /uwsgi-nginx-entrypoint2.sh /entrypoint2.sh
+
 
 WORKDIR ${APP_DIR}
 
