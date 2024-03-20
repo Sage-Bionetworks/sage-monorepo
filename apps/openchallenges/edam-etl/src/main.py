@@ -26,7 +26,7 @@ def download_edam_csv(url: str, version: str) -> Optional[bool]:
         return None
 
 
-def transform_to_dataframe(version: str) -> pd.DataFrame:
+def transform_to_dataframe(version: str) -> pd.DataFrame | None:
     """Transform the CSV to a DataFrame with indices starting from 1"""
     print("Processing the EDAM concepts...")
     try:
