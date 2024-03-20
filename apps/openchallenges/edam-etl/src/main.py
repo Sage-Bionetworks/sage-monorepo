@@ -1,5 +1,3 @@
-"""Extract, transform and load EDAM concepts"""
-
 import pandas as pd
 import requests
 from os import getenv
@@ -8,7 +6,7 @@ from typing import Optional
 # Get config from the environment variables
 
 OC_DB_URL = getenv("OC_DB_URL")
-VERSION = getenv("OC_DB_VERSION")
+VERSION = getenv("VERSION")
 print(f"EDAM Version: {VERSION}")
 print(f"OC DB URL: {OC_DB_URL}")
 
@@ -22,6 +20,7 @@ def download_edam_csv(url: str, version: str) -> Optional[bool]:
         with open(f"EDAM_{version}.csv", "wb") as f:
             f.write(response.content)
         print("EDAM concepts downloaded successfully.")
+        return True
     except requests.RequestException as e:
         print(f"Error downloading EDAM concepts: {e}")
         return None
@@ -36,14 +35,15 @@ def transform_to_dataframe(version: str) -> pd.DataFrame:
             .rename(
                 columns={"Class ID": "class_id", "Preferred Label": "preferred_label"}
             )
-            .assign(id=lambda x: x.reset_index(drop=True).index + 1)
+            .reset_index(drop=True)
+            .reset_index(drop=False)
+            .rename(columns={"index": "id"})
         )
         print("EDAM concepts processed successfully.")
         return df
-    except FileNotFoundError:
-        print(f"File EDAM_{VERSION}.csv not found.")
-    except Exception as e:
+    except FileNotFoundError as e:
         print(f"Error processing EDAM concepts: {e}")
+        return None
 
 
 def print_info_statistics(df: pd.DataFrame) -> None:
@@ -60,39 +60,14 @@ def print_info_statistics(df: pd.DataFrame) -> None:
 
 
 def main() -> None:
-    """Main function to excute preceeding functions"""
+    """Main function to execute preceding functions"""
     url: str = (
-        f"https://github.com/edamontology/edamontology/raw/main/releases/EDAM_{VERSION}.csv"
+        f"https://raw.githubusercontent.com/Sage-Bionetworks/edamontology/main/releases/EDAM_{VERSION}.csv"
     )
-    download_edam_csv(url, VERSION)
-    df: pd.DataFrame = transform_to_dataframe(VERSION)
-    print_info_statistics(df)
-    except Exception as e:
-        print(f"Error processing EDAM concepts: {e}")
+    if download_edam_csv(url, VERSION):
+        df: pd.DataFrame = transform_to_dataframe(VERSION)
+        print_info_statistics(df)
 
-
-def print_info_statistics(df: pd.DataFrame) -> None:
-    """Gather data about the EDAM ontology"""
-    if df is not None:
-        print(f"Number of Concepts Transformed: {len(df)}")
-        print(f"Column names: {df.columns.tolist()}")
-        print("Statistics:")
-        # Set the display options to show only 2 decimal places
-        pd.set_option("display.float_format", "{:.0f}".format)
-        print(df.describe())
-    else:
-        print("No data available.")
-
-
-
-def main() -> None:
-    """Main function to excute preceeding functions"""
-    url: str = (
-        f"https://github.com/edamontology/edamontology/raw/main/releases/EDAM_{VERSION}.csv"
-    )
-    download_edam_csv(url, VERSION)
-    df = transform_to_dataframe(VERSION)
-    print_info_statistics(df)
 
 if __name__ == "__main__":
     main()
