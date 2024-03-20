@@ -5,7 +5,7 @@ import requests
 from os import getenv
 from typing import Optional
 
-"""Get config from the environment variables"""
+# Get config from the environment variables
 
 OC_DB_URL = getenv("OC_DB_URL")
 VERSION = getenv("OC_DB_VERSION")
@@ -94,7 +94,7 @@ def main() -> None:
         f"https://github.com/edamontology/edamontology/raw/main/releases/EDAM_{VERSION}.csv"
     )
     download_edam_csv(url, VERSION)
-    df: pd.DataFrame = transform_to_dataframe(VERSION)
+    df = transform_to_dataframe(VERSION)
     print_info_statistics(df)
 
 if __name__ == "__main__":
