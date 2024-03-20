@@ -41,7 +41,6 @@ def transform_to_dataframe(version: str) -> pd.DataFrame:
         print("EDAM concepts processed successfully.")
         return df
     except FileNotFoundError:
-<<<<<<< HEAD
         print(f"File EDAM_{VERSION}.csv not found.")
     except Exception as e:
         print(f"Error processing EDAM concepts: {e}")
@@ -68,8 +67,6 @@ def main() -> None:
     download_edam_csv(url, VERSION)
     df: pd.DataFrame = transform_to_dataframe(VERSION)
     print_info_statistics(df)
-=======
-        print(f"File EDAM_{version}.csv not found.")
     except Exception as e:
         print(f"Error processing EDAM concepts: {e}")
 
