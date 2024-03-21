@@ -53,33 +53,42 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Number of Concepts Transformed: {len(df)}")
         print(f"Column names: {df.columns.tolist()}")
 
-        # Define regex patterns for each concept
-        data_pattern = re.compile(r"data_", re.IGNORECASE)
-        operation_pattern = re.compile(r"operation_", re.IGNORECASE)
-        format_pattern = re.compile(r"format_", re.IGNORECASE)
+        # Create regex patterns for each concept
+        data_pattern = r"data_"
+        operation_pattern = r"operation_"
+        format_pattern = r"format_"
+        topic_pattern = r"topic_"
+        identifier_pattern = r"identifier_"
 
-        # Initialize counts
-        data_count = 0
-        operation_count = 0
-        format_count = 0
-        other_count = 0
+        # Use pandas' vectorized string operations to count occurrences
+        data_count = (
+            df["class_id"].str.contains(data_pattern, case=False, na=False).sum()
+        )
+        operation_count = (
+            df["class_id"].str.contains(operation_pattern, case=False, na=False).sum()
+        )
+        format_count = (
+            df["class_id"].str.contains(format_pattern, case=False, na=False).sum()
+        )
+        topic_count = (
+            df["class_id"].str.contains(topic_pattern, case=False, na=False).sum()
+        )
+        identifier_count = (
+            df["class_id"].str.contains(identifier_pattern, case=False, na=False).sum()
+        )
 
-        # Loop through the class_id column and count occurrences
-        for value in df["class_id"]:
-            if data_pattern.search(value):
-                data_count += 1
-            elif operation_pattern.search(value):
-                operation_count += 1
-            elif format_pattern.search(value):
-                format_count += 1
-            else:
-                other_count += 1
+        # Calculate 'other' count by subtracting the specific counts from the total
+        other_count = len(df) - (
+            data_count + operation_count + format_count + identifier_count + topic_count
+        )
 
         # Print counts of each concept
         print("Concept Counts:")
         print(f"Data: {data_count}")
         print(f"Operation: {operation_count}")
         print(f"Format: {format_count}")
+        print(f"Topic: {format_count}")
+        print(f"Identifier: {format_count}")
         print(f"Other: {other_count}")
 
     else:
