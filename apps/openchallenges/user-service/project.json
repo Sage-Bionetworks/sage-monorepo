@@ -65,13 +65,13 @@
       },
       "dependsOn": []
     },
-    "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
-      "options": {
-        "root": "apps/openchallenges/user-service"
-      },
-      "dependsOn": ["^install"]
-    },
+    // "build-image": {
+    //   "executor": "@nxrocks/nx-spring-boot:build-image",
+    //   "options": {
+    //     "root": "apps/openchallenges/user-service"
+    //   },
+    //   "dependsOn": ["^install"]
+    // },
     "generate": {
       "executor": "nx:run-commands",
       "options": {

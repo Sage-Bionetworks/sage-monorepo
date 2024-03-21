@@ -60,9 +60,10 @@
       "dependsOn": []
     },
     "build-image-base": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/service-registry"
+        "command": "./gradlew bootBuildImage",
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },

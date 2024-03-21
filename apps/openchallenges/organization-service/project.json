@@ -85,9 +85,10 @@
       "dependsOn": []
     },
     "build-image-base": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew bootBuildImage",
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },
