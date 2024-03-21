@@ -38,21 +38,24 @@
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-admin"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-admin"
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-admin"
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
       }
     }
   },

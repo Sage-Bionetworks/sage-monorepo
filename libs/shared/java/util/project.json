@@ -38,9 +38,10 @@
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/shared/java/util"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     }
   },

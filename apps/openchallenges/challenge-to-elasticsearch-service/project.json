@@ -28,21 +28,24 @@
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/challenge-to-elasticsearch-service"
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {

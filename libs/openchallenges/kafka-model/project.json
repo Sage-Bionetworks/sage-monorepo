@@ -50,9 +50,10 @@
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-model"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     }
   },

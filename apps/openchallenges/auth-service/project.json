@@ -37,9 +37,10 @@
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/auth-service"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
