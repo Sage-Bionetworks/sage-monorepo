@@ -51,10 +51,21 @@ def print_info_statistics(df: pd.DataFrame) -> None:
     if df is not None:
         print(f"Number of Concepts Transformed: {len(df)}")
         print(f"Column names: {df.columns.tolist()}")
-        print("Statistics:")
-        # Set the display options to show only 2 decimal places
-        pd.set_option("display.float_format", "{:.0f}".format)
-        print(df.describe())
+
+        # Count occurrences of specific concepts
+        concept_counts = df["preferred_label"].str.lower().value_counts()
+
+        # Print counts of specific concepts
+        print("\nConcept Counts:")
+        for concept in ["Data", "Operation", "Format"]:
+            concept_count = concept_counts.get(concept.lower(), 0)
+            print(f"{concept}: {concept_count}")
+
+        # Print counts of other concepts
+        other_count = sum(concept_counts) - sum(
+            concept_counts[["data", "operation", "format"]].fillna(0)
+        )
+        print(f"Other: {other_count}")
     else:
         print("No data available.")
 
