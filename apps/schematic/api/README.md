@@ -33,10 +33,10 @@ nx prepare schematic-api
 # This step adds SSL private key and certificate as environment variable in .env file
 python3 apps/schematic/api/prepare_key_certificate.py
 
-# building the image
+# Running the following command from root (/workspaces/sage-monorepo) to build the image
 nx build-image schematic-api
 
-# Start the containerized REST API with: 
+# In the same location as above, start the containerized REST API with: 
 nx serve-detach schematic-api
 ```
 You could open your browser here: 
