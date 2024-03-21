@@ -12,11 +12,13 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "libs/openchallenges/kafka-model"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}/build"]
+      "dependsOn": ["^install"]
     },
     "avro-generate": {
       "executor": "nx:run-commands",
@@ -39,10 +41,13 @@
       "dependsOn": ["build"]
     },
     "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "libs/openchallenges/kafka-model"
-      }
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
     },
     "clean": {
       "executor": "@nxrocks/nx-spring-boot:clean",

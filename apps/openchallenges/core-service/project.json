@@ -19,11 +19,12 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/core-service"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {

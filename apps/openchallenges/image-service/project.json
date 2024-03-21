@@ -19,17 +19,20 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/image-service"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/image-service"
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },
@@ -133,7 +136,7 @@
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-api-description",
-    "openchallenges-app-config-data", 
+    "openchallenges-app-config-data",
     "shared-java-util"
   ]
 }
