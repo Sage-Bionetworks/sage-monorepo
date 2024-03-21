@@ -41,7 +41,8 @@ COPY ./self-signed.conf ./ssl-params.conf ./certificate.conf ./
 COPY uwsgi.ini /app/uwsgi.ini
 
 # copy files relevant for schematic apis
-COPY schematic_api pyproject.toml poetry.lock /app/app/
+COPY pyproject.toml poetry.lock /app/app/
+COPY ./schematic_api /app/app/schematic_api
 
 # install dependencies
 WORKDIR /app/app
