@@ -2,6 +2,7 @@ import pandas as pd
 import requests
 from os import getenv
 from typing import Optional
+import regex as re
 
 # Get config from the environment variables
 
@@ -52,20 +53,35 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Number of Concepts Transformed: {len(df)}")
         print(f"Column names: {df.columns.tolist()}")
 
-        # Count occurrences of specific concepts
-        concept_counts = df["preferred_label"].str.lower().value_counts()
+        # Define regex patterns for each concept
+        data_pattern = re.compile(r"data_", re.IGNORECASE)
+        operation_pattern = re.compile(r"operation_", re.IGNORECASE)
+        format_pattern = re.compile(r"format_", re.IGNORECASE)
 
-        # Print counts of specific concepts
-        print("\nConcept Counts:")
-        for concept in ["Data", "Operation", "Format"]:
-            concept_count = concept_counts.get(concept.lower(), 0)
-            print(f"{concept}: {concept_count}")
+        # Initialize counts
+        data_count = 0
+        operation_count = 0
+        format_count = 0
+        other_count = 0
 
-        # Print counts of other concepts
-        other_count = sum(concept_counts) - sum(
-            concept_counts[["data", "operation", "format"]].fillna(0)
-        )
+        # Loop through the class_id column and count occurrences
+        for value in df["class_id"]:
+            if data_pattern.search(value):
+                data_count += 1
+            elif operation_pattern.search(value):
+                operation_count += 1
+            elif format_pattern.search(value):
+                format_count += 1
+            else:
+                other_count += 1
+
+        # Print counts of each concept
+        print("Concept Counts:")
+        print(f"Data: {data_count}")
+        print(f"Operation: {operation_count}")
+        print(f"Format: {format_count}")
         print(f"Other: {other_count}")
+
     else:
         print("No data available.")
 
