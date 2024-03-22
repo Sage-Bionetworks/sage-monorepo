@@ -87,7 +87,6 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Topic: {format_count}")
         print(f"Identifier: {format_count}")
         print(f"Other: {other_count}")
-        print(type(data_count))
 
     else:
         print("No data available.")
