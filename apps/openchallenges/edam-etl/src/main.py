@@ -2,7 +2,6 @@ import pandas as pd
 import requests
 from os import getenv
 from typing import Optional
-import regex as re
 
 # Get config from the environment variables
 
