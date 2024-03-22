@@ -1,6 +1,20 @@
 FROM python:3.12.0-slim
 
-ENV APP_DIR=/opt/app
+ARG USERNAME=app
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+ENV APP_DIR=/opt/app \
+    APP_USERNAME=${USERNAME}
+
+RUN groupadd --gid $USER_GID $USERNAME \
+  && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+  # Install sudo
+  && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get install --no-install-recommends -qq -y \
+    gosu \
+  && apt-get -y autoclean \
+  && apt-get -y autoremove \
+  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR ${APP_DIR}
 COPY src src/
@@ -19,4 +33,4 @@ RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["python", "${APP_DIR}/src/main.py"]
+CMD ["python", "src/main.py"]
