@@ -54,11 +54,11 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Column names: {df.columns.tolist()}")
 
         # Create regex patterns for each concept
-        data_pattern = r"data_"
-        operation_pattern = r"operation_"
-        format_pattern = r"format_"
-        topic_pattern = r"topic_"
-        identifier_pattern = r"identifier_"
+        data_pattern = r"/data_"
+        operation_pattern = r"/operation_"
+        format_pattern = r"/format_"
+        topic_pattern = r"/topic_"
+        identifier_pattern = r"/identifier_"
 
         # Use pandas' vectorized string operations to count occurrences
         data_count = (
