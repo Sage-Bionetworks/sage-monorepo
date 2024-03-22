@@ -19,29 +19,33 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/user-service"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/user-service"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/user-service"
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/user-service"
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -61,13 +65,13 @@
       },
       "dependsOn": []
     },
-    "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
-      "options": {
-        "root": "apps/openchallenges/user-service"
-      },
-      "dependsOn": ["^install"]
-    },
+    // "build-image": {
+    //   "executor": "@nxrocks/nx-spring-boot:build-image",
+    //   "options": {
+    //     "root": "apps/openchallenges/user-service"
+    //   },
+    //   "dependsOn": ["^install"]
+    // },
     "generate": {
       "executor": "nx:run-commands",
       "options": {

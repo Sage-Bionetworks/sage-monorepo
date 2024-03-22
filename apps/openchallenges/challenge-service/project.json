@@ -19,17 +19,20 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },
@@ -42,21 +45,24 @@
       "dependsOn": ["test"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -76,9 +82,10 @@
       "dependsOn": []
     },
     "build-image-base": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "{projectRoot}"
+        "command": "./gradlew bootBuildImage",
+        "cwd": "{projectRoot}"
       },
       "dependsOn": ["^install"]
     },
@@ -130,7 +137,7 @@
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-api-description",
-    "openchallenges-app-config-data", 
+    "openchallenges-app-config-data",
     "shared-java-util"
   ]
 }

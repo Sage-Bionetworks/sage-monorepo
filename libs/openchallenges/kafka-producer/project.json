@@ -12,11 +12,12 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
-      "options": {
-        "root": "libs/openchallenges/kafka-producer"
-      },
+      "executor": "nx:run-commands",
       "outputs": ["{projectRoot}/build"],
+      "options": {
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
+      },
       "dependsOn": ["^install"]
     },
     "install": {
@@ -28,27 +29,33 @@
       "dependsOn": ["build"]
     },
     "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "libs/openchallenges/kafka-producer"
-      }
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-producer"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "format": {
-      "executor": "@nxrocks/nx-spring-boot:format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-producer"
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
       }
     },
     "format-check": {
-      "executor": "@nxrocks/nx-spring-boot:check-format",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "libs/openchallenges/kafka-producer"
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
       }
     }
   },

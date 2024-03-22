@@ -19,23 +19,28 @@
       }
     },
     "build": {
-      "executor": "@nxrocks/nx-spring-boot:build",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/auth-service"
+        "command": "./gradlew build",
+        "cwd": "{projectRoot}"
       },
-      "outputs": ["{projectRoot}"],
       "dependsOn": ["^install"]
     },
     "test": {
-      "executor": "@nxrocks/nx-spring-boot:test",
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/build"],
       "options": {
-        "root": "apps/openchallenges/auth-service"
-      }
+        "command": "./gradlew test",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["^install"]
     },
     "clean": {
-      "executor": "@nxrocks/nx-spring-boot:clean",
+      "executor": "nx:run-commands",
       "options": {
-        "root": "apps/openchallenges/auth-service"
+        "command": "./gradlew clean",
+        "cwd": "{projectRoot}"
       }
     },
     "serve": {
@@ -54,14 +59,14 @@
         "cwd": "apps/openchallenges/auth-service"
       },
       "dependsOn": []
-    },
-    "build-image": {
-      "executor": "@nxrocks/nx-spring-boot:build-image",
-      "options": {
-        "root": "apps/openchallenges/auth-service"
-      },
-      "dependsOn": ["^install"]
     }
+    // "build-image": {
+    //   "executor": "@nxrocks/nx-spring-boot:build-image",
+    //   "options": {
+    //     "root": "apps/openchallenges/auth-service"
+    //   },
+    //   "dependsOn": ["^install"]
+    // }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
