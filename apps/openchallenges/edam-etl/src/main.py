@@ -46,13 +46,11 @@ def transform_to_dataframe(version: str) -> pd.DataFrame | None:
         return None
 
 
-def count_occurrences(identifier_pattern: str, df) -> int:
+def count_occurrences(identifier_pattern: str, column: pd.Series) -> np.int64:
     """Count the number of pattern occurrences"""
-    return (
-        df["class_id"]
-        .str.contains(identifier_pattern, case=False, na=False, regex=True)
-        .sum()
-    )
+    return column.str.contains(
+        identifier_pattern, case=False, na=False, regex=True
+    ).sum()
 
 
 def print_info_statistics(df: pd.DataFrame) -> None:
@@ -67,13 +65,14 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         format_pattern = r"/format_\d+$"
         topic_pattern = r"/topic_\d+$"
         identifier_pattern = r"/identifier_\d+$"
+        concept_column = df["class_id"]
 
         # Use pandas' vectorized string operations to count occurrences
-        data_count = count_occurrences(data_pattern, df)
-        operation_count = count_occurrences(operation_pattern, df)
-        format_count = count_occurrences(format_pattern, df)
-        topic_count = count_occurrences(topic_pattern, df)
-        identifier_count = count_occurrences(identifier_pattern, df)
+        data_count = count_occurrences(data_pattern, concept_column)
+        operation_count = count_occurrences(operation_pattern, concept_column)
+        format_count = count_occurrences(format_pattern, concept_column)
+        topic_count = count_occurrences(topic_pattern, concept_column)
+        identifier_count = count_occurrences(identifier_pattern, concept_column)
 
         # Calculate 'other' count by subtracting the specific counts from the total
         other_count = len(df) - (
@@ -88,6 +87,7 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Topic: {format_count}")
         print(f"Identifier: {format_count}")
         print(f"Other: {other_count}")
+        print(type(data_count))
 
     else:
         print("No data available.")
