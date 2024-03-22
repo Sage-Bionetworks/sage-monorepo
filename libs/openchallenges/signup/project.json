@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/signup"],
       "options": {
-        "jestConfig": "libs/openchallenges/signup/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/openchallenges/signup/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/openchallenges/signup/src/**/*.ts",
-          "libs/openchallenges/signup/src/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": ["type:feature", "scope:openchallenges", "language:typescript"],

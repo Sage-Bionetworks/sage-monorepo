@@ -14,17 +14,12 @@
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/openchallenges/infra/**/*.ts"]
-      }
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
     },
     "lint-fix": {
-      "executor": "@nx/linter:eslint",
-      "outputs": ["{options.outputFile}"],
+      "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["apps/openchallenges/infra/**/*.ts"],
         "fix": true
       }
     },
@@ -32,8 +27,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/openchallenges/infra"],
       "options": {
-        "jestConfig": "apps/openchallenges/infra/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "apps/openchallenges/infra/jest.config.ts"
       }
     }
   },

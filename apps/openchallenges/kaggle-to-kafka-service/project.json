@@ -65,13 +65,6 @@
       },
       "dependsOn": []
     },
-    // "build-image": {
-    //   "executor": "@nxrocks/nx-spring-boot:build-image",
-    //   "options": {
-    //     "root": "apps/openchallenges/kaggle-to-kafka-service"
-    //   },
-    //   "dependsOn": ["^install"]
-    // },
     "generate": {
       "executor": "nx:run-commands",
       "options": {

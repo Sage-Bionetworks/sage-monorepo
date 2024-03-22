@@ -9,8 +9,7 @@
       "executor": "@nx/angular:ng-packagr-lite",
       "outputs": ["{workspaceRoot}/dist/libs/openchallenges/api-client-angular"],
       "options": {
-        "project": "libs/openchallenges/api-client-angular/ng-package.json",
-        "updateBuildableProjectDepsInPackageJson": true
+        "project": "libs/openchallenges/api-client-angular/ng-package.json"
       },
       "configurations": {
         "production": {
@@ -26,30 +25,19 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/api-client-angular"],
       "options": {
-        "jestConfig": "libs/openchallenges/api-client-angular/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["libs/openchallenges/api-client-angular/src/index.ts"]
+        "jestConfig": "libs/openchallenges/api-client-angular/jest.config.ts"
       }
     },
     "lint-fix": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["libs/openchallenges/api-client-angular/src/index.ts"],
         "fix": true
       }
     },
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "rm -fr src/lib/*", 
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
