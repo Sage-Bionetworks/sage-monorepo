@@ -47,6 +47,15 @@ def transform_to_dataframe(version: str) -> pd.DataFrame | None:
         return None
 
 
+def count_occurrences(identifier_pattern: str, df) -> int:
+    """Count the number of pattern occurrences"""
+    return (
+        df["class_id"]
+        .str.contains(identifier_pattern, case=False, na=False, regex=True)
+        .sum()
+    )
+
+
 def print_info_statistics(df: pd.DataFrame) -> None:
     """Gather data about the EDAM ontology"""
     if df is not None:
@@ -54,36 +63,18 @@ def print_info_statistics(df: pd.DataFrame) -> None:
         print(f"Column names: {df.columns.tolist()}")
 
         # Create regex patterns for each concept
-        data_pattern = r"/data_"
-        operation_pattern = r"/operation_"
-        format_pattern = r"/format_"
-        topic_pattern = r"/topic_"
-        identifier_pattern = r"/identifier_"
+        data_pattern = r"/data_\d+$"
+        operation_pattern = r"/operation_\d+$"
+        format_pattern = r"/format_\d+$"
+        topic_pattern = r"/topic_\d+$"
+        identifier_pattern = r"/identifier_\d+$"
 
         # Use pandas' vectorized string operations to count occurrences
-        data_count = (
-            df["class_id"]
-            .str.contains(data_pattern, case=False, na=False, regex=True)
-            .sum()
-        )
-        operation_count = (
-            df["class_id"].str.contains(operation_pattern, case=False, na=False).sum()
-        )
-        format_count = (
-            df["class_id"]
-            .str.contains(format_pattern, case=False, na=False, regex=True)
-            .sum()
-        )
-        topic_count = (
-            df["class_id"]
-            .str.contains(topic_pattern, case=False, na=False, regex=True)
-            .sum()
-        )
-        identifier_count = (
-            df["class_id"]
-            .str.contains(identifier_pattern, case=False, na=False, regex=True)
-            .sum()
-        )
+        data_count = count_occurrences(data_pattern, df)
+        operation_count = count_occurrences(operation_pattern, df)
+        format_count = count_occurrences(format_pattern, df)
+        topic_count = count_occurrences(topic_pattern, df)
+        identifier_count = count_occurrences(identifier_pattern, df)
 
         # Calculate 'other' count by subtracting the specific counts from the total
         other_count = len(df) - (
