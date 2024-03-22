@@ -62,19 +62,27 @@ def print_info_statistics(df: pd.DataFrame) -> None:
 
         # Use pandas' vectorized string operations to count occurrences
         data_count = (
-            df["class_id"].str.contains(data_pattern, case=False, na=False).sum()
+            df["class_id"]
+            .str.contains(data_pattern, case=False, na=False, regex=True)
+            .sum()
         )
         operation_count = (
             df["class_id"].str.contains(operation_pattern, case=False, na=False).sum()
         )
         format_count = (
-            df["class_id"].str.contains(format_pattern, case=False, na=False).sum()
+            df["class_id"]
+            .str.contains(format_pattern, case=False, na=False, regex=True)
+            .sum()
         )
         topic_count = (
-            df["class_id"].str.contains(topic_pattern, case=False, na=False).sum()
+            df["class_id"]
+            .str.contains(topic_pattern, case=False, na=False, regex=True)
+            .sum()
         )
         identifier_count = (
-            df["class_id"].str.contains(identifier_pattern, case=False, na=False).sum()
+            df["class_id"]
+            .str.contains(identifier_pattern, case=False, na=False, regex=True)
+            .sum()
         )
 
         # Calculate 'other' count by subtracting the specific counts from the total
