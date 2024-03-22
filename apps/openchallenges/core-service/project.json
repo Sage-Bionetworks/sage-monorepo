@@ -51,13 +51,6 @@
       },
       "dependsOn": []
     }
-    // "build-image": {
-    //   "executor": "@nxrocks/nx-spring-boot:build-image",
-    //   "options": {
-    //     "root": "apps/openchallenges/core-service"
-    //   },
-    //   "dependsOn": ["^install"]
-    // }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [

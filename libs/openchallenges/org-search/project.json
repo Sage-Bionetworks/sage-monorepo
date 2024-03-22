@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/org-search"],
       "options": {
-        "jestConfig": "libs/openchallenges/org-search/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/openchallenges/org-search/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/openchallenges/org-search/src/**/*.ts",
-          "libs/openchallenges/org-search/src/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": ["type:feature", "scope:openchallenges", "language:typescript"],

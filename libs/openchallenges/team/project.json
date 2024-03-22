@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/openchallenges/team"],
       "options": {
-        "jestConfig": "libs/openchallenges/team/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/openchallenges/team/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/openchallenges/team/src/**/*.ts",
-          "libs/openchallenges/team/src/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
