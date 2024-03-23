@@ -6,8 +6,8 @@ ARG USER_GID=$USER_UID
 ENV APP_DIR=/opt/app \
     APP_USERNAME=${USERNAME}
 
-RUN groupadd --gid $USER_GID $USERNAME \
-  && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+RUN groupadd --gid "$USER_GID" "$USERNAME" \
+  && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
   # Install sudo
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
