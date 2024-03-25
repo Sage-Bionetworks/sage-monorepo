@@ -1,6 +1,6 @@
 # OpenChallenges App
 
-Plop v2
+Plop v3
 
 ## Configuration
 
