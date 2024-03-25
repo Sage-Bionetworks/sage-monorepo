@@ -1659,8 +1659,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
-      "RemoteRef": "0.2.3",
-      "RemoteSha": "ff8b2e63fe0de7d7d1c72abb09a79adeb2ea5878",
+      "RemoteRef": "69c9ec84527096e5730fb6a9a3d486a16b753efd",
+      "RemoteSha": "69c9ec84527096e5730fb6a9a3d486a16b753efd",
       "Requirements": [
         "assertthat",
         "dplyr",
@@ -1674,7 +1674,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "eacfbfbc241029a3cced29cd237c4c47"
+      "Hash": "48852e14f02ced16821c580c41bbbbc8"
     },
     "igvShiny": {
       "Package": "igvShiny",
@@ -2657,14 +2657,14 @@
     },
     "rlang": {
       "Package": "rlang",
-      "Version": "1.1.2",
+      "Version": "1.1.3",
       "Source": "Repository",
       "Repository": "RSPM",
       "Requirements": [
         "R",
         "utils"
       ],
-      "Hash": "50a6dbdc522936ca35afc5e2082ea91b"
+      "Hash": "42548638fae05fd9a9b5f3f437fbbbe2"
     },
     "rmarkdown": {
       "Package": "rmarkdown",
@@ -3148,9 +3148,9 @@
     },
     "tidyr": {
       "Package": "tidyr",
-      "Version": "1.3.0",
+      "Version": "1.3.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
@@ -3167,13 +3167,13 @@
         "utils",
         "vctrs"
       ],
-      "Hash": "e47debdc7ce599b070c8e78e8ac0cfcf"
+      "Hash": "915fb7ce036c22a6a33b5a8adb712eb1"
     },
     "tidyselect": {
       "Package": "tidyselect",
-      "Version": "1.2.0",
+      "Version": "1.2.1",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "R",
         "cli",
@@ -3183,7 +3183,7 @@
         "vctrs",
         "withr"
       ],
-      "Hash": "79540e5fcd9e0435af547d885f184fd5"
+      "Hash": "829f27b9c4919c16b593794a6344d6c0"
     },
     "timeDate": {
       "Package": "timeDate",
