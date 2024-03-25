@@ -1,10 +1,6 @@
 # OpenChallenges App
 
-Plop v3
-
 ## Configuration
-
-Test
 
 ### Dev Server
 
