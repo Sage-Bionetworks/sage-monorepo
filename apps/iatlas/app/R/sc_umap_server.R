@@ -9,7 +9,7 @@ sc_umap_server <- function(
       ns <- session$ns
 
       umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_umap.feather") %>% dplyr::filter(dataset %in% input$datasets))
-      gene_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_genes.feather"))
+      #gene_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_genes.feather"))
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
