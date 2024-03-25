@@ -1,34 +1,30 @@
 name: Sonar Scan
 
 on:
-  push:
-    branches:
-      - main
-      - 'agora/**'
-      - 'iatlas/**'
-      - 'openchallenges/**'
-      - 'sage-monorepo/**'
-      - 'schematic/**'
+  # Warning: using the pull_request_target event without the cautionary measures may allow
+  # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
   pull_request_target:
     types: [opened, synchronize, reopened, labeled]
 
 jobs:
   sonar:
+    environment: 
+      ${{ github.event_name == 'pull_request_target' && 
+      github.event.pull_request.head.repo.full_name != github.repository && 'sonar' || 'none' }}
     runs-on: ubuntu-latest
     steps:
-      - name: Check if the label `sonar-scan-approved` exists (PR only)
-        if: ${{ github.event_name == 'pull_request_target' && contains(github.event.pull_request.labels.*.name, 'sonar-scan-approved') != true }}
-        run: |
-          echo "WARNING: Please consider if this PR can be trusted with advanced privileges."
-          echo "If yes, add the label 'sonar-scan-approved' to this PR to enable Sonar scan."
-          exit 1
-
       - uses: actions/checkout@v4
-        name: Checkout
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
           fetch-depth: 0
+          persist-credentials: false
+          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
+          # commit when when using pull_request_target. It is currently difficult to checkout the
+          # merge commit in this context. The current solution is to checkout the PR HEAD insteand
+          # and enable the branch protection rule "Require branches to be up to date before
+          # merging".
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
