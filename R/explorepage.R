@@ -38,6 +38,12 @@ explorepage_ui <- function(){
         tabName = "ici_overview"
       ),
       shinydashboard::menuItem(
+        text = "Single Cell Modules",
+        icon = shiny::icon("chart-bar"),
+        startExpanded = TRUE,
+        sc_module_menu_items
+      ),
+      shinydashboard::menuItem(
         "ICI Cohort Selection",
         tabName = "ici_cohort_selection",
         icon = shiny::icon("cog")
@@ -60,12 +66,6 @@ explorepage_ui <- function(){
         cg_module_menu_items
       ),
       shinydashboard::menuItem(
-        text = "Single Cell Modules",
-        icon = shiny::icon("chart-bar"),
-        startExpanded = TRUE,
-        sc_module_menu_items
-      ),
-      shinydashboard::menuItem(
         text = "CRI iAtlas tools",
         icon = shiny::icon("wrench"),
         startExpanded = TRUE,
@@ -84,15 +84,15 @@ explorepage_ui <- function(){
   # info boxes at top of page
   readout_info_boxes <- dplyr::tibble(
     title = c(
+      "Single-cell RNA-seq datasets:",
       "Immune Checkpoint Inhibitors (ICI) datasets:",
       "Cancer Genomics (CG) datasets:",
-      "Immune Readouts:",
       "Samples:"
     ),
     value = c(
+      2,
       nrow(iatlasGraphQLClient::query_datasets(types = "ici")),
       2,
-      nrow(iatlasGraphQLClient::query_features()),
       nrow(iatlasGraphQLClient::query_samples())
     ),
     icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
@@ -134,6 +134,7 @@ explorepage_ui <- function(){
 
   cg_module_image_boxes  <- make_image_boxes(cg_modules_tbl)
   ici_module_image_boxes <- make_image_boxes(ici_modules_tbl)
+  sc_module_image_boxes <- make_image_boxes(sc_modules_tbl)
 
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
@@ -169,6 +170,14 @@ explorepage_ui <- function(){
         shiny::p(shiny::h4(shiny::strong("2. Visualize your data"))),
         shiny::p("Use our analysis modules to explore the selected cohorts. You can access the analysis modules from the sections below and from the left menu. Any changes in the selected cohort in step 1 will be automatically propagated to the corresponding modules.")
       )
+    ),
+    iatlas.modules::sectionBox(
+      title = "Single-cell RNA-seq data Analysis Modules",
+      iatlas.modules::messageBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore4.markdown")
+      ),
+      sc_module_image_boxes
     ),
     iatlas.modules::sectionBox(
       title = "Immune Checkpoint Inhibition Analysis Modules",
