@@ -1,6 +1,9 @@
 name: Sonar Scan
 
 on:
+  # Pull request from the same repository
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
   # Warning: using the pull_request_target event without the cautionary measures may allow
   # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
   pull_request_target:
