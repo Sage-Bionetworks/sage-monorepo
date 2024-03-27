@@ -1,0 +1,45 @@
+"""
+The "Publication" type
+"""
+type Publication {
+  "The first last name of the publication's author"
+  firstAuthorLastName: String
+  "The id of the publication in the doi website. See: https://www.doi.org/"
+  doId: String
+  "A list of Genes related to the publication"
+  genes: [SimpleGene!]
+  "A list of GeneTypes related to the publication"
+  geneTypes: [SimpleGeneType!]
+  "The 'journal' of the publication."
+  journal: String
+  "The unique name of the publication. This is generated as a combination of the do id and the pubmed id."
+  name: String!
+  "The id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/"
+  pubmedId: Int
+  "A list of Tags related to the publication"
+  tags: [SimpleTag!]
+  "The 'title' of the publication."
+  title: String
+  "The 'year' of the publication."
+  year: Int
+}
+
+"""
+The "SimplePublication" type is a version of a Publication. Only basic attributes may be returned.
+"""
+type SimplePublication {
+  "The first last name of the publication's author"
+  firstAuthorLastName: String
+  "The id of the publication in the doi website. See: https://www.doi.org/"
+  doId: String
+  "The 'journal' of the publication."
+  journal: String
+  "The unique name of the publication. This is generated as a combination of the do id and the pubmed id."
+  name: String!
+  "The id of the publication in the pubmed website. See https://pubmed.ncbi.nlm.nih.gov/"
+  pubmedId: Int
+  "The 'title' of the publication."
+  title: String
+  "The 'year' of the publication."
+  year: Int
+}
