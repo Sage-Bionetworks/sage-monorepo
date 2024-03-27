@@ -1,0 +1,29 @@
+{
+  "name": "bridge2ai-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/bridge2ai/app/src",
+  "projectType": "library",
+  "prefix": "bridge2ai",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sudo apt-get update",
+          "sudo apt-get install libgdal-dev -y",
+          "Rscript -e 'renv::restore()'"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "Rscript -e 'shiny::runApp(port = 3838, launch.browser = FALSE)'",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:app", "scope:client", "language:typescript", "language:r", "package-manager:renv"],
+  "implicitDependencies": []
+}
