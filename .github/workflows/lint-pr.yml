@@ -23,6 +23,7 @@ jobs:
           # These are regex patterns auto-wrapped in `^ $`.
           scopes: |
             agora
+            bridge2ai
             common
             iatlas
             openchallenges
