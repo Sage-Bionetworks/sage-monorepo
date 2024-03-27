@@ -1,15 +1,12 @@
-import 'zone.js/dist/zone-node';
+import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
-import { ngExpressEngine } from '@nguniversal/express-engine';
+import { CommonEngine } from '@angular/ssr';
 import * as express from 'express';
-import { existsSync } from 'fs';
-import { join } from 'path';
-
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-// that process port comes from the above builder utils
-// About setting a constant value: https://github.com/angular/universal/issues/1628
 const PORT = process.env['PORT'] || '4200';
 console.log(`server.ts: ${PORT}`);
 
@@ -21,16 +18,10 @@ export function app(): express.Express {
     'dist/apps/openchallenges/app/browser/browser'
   );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
-    ? 'index.original.html'
-    : 'index';
+    ? join(distFolder, 'index.original.html')
+    : join(distFolder, 'index.html');
 
-  // Our Universal express-engine (found @ https://github.com/angular/universal/tree/main/modules/express-engine)
-  server.engine(
-    'html',
-    ngExpressEngine({
-      bootstrap,
-    })
-  );
+  const commonEngine = new CommonEngine();
 
   server.set('view engine', 'html');
   server.set('views', distFolder);
@@ -48,28 +39,34 @@ export function app(): express.Express {
   // Health endpoint used by the container
   server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
 
-  // All regular routes use the Universal engine
-  server.get('*', (req, res) => {
-    const protocol = req.protocol;
-    const host = req.get('host');
-    res.render(indexHtml, {
-      req,
-      providers: [
-        { provide: APP_BASE_HREF, useValue: req.baseUrl },
-        // The base URL enables the app to load the app config file during server-side rendering.
-        {
-          provide: 'APP_BASE_URL',
-          // the format of ${host} is `host:port`
-          useFactory: () => `${protocol}://${host}`,
-          deps: [],
-        },
-        {
-          provide: 'APP_PORT',
-          useValue: PORT,
-          deps: [],
-        },
-      ],
-    });
+  // All regular routes use the Angular engine
+  server.get('*', (req, res, next) => {
+    const { protocol, originalUrl, baseUrl, headers } = req;
+
+    commonEngine
+      .render({
+        bootstrap,
+        documentFilePath: indexHtml,
+        url: `${protocol}://${headers.host}${originalUrl}`,
+        publicPath: distFolder,
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          // The base URL enables the app to load the app config file during server-side rendering.
+          {
+            provide: 'APP_BASE_URL',
+            // the format of ${host} is `host:port`
+            useFactory: () => `${protocol}://${headers.host}`,
+            deps: [],
+          },
+          {
+            provide: 'APP_PORT',
+            useValue: PORT,
+            deps: [],
+          },
+        ],
+      })
+      .then((html) => res.send(html))
+      .catch((err) => next(err));
   });
 
   return server;

@@ -3,7 +3,7 @@ set -e
 
 if [ "$1" = 'python' ]; then
     cd ${APP_DIR}
-    exec gosu www-data "$@"
+    exec gosu "$APP_USERNAME" "$@"
 fi
 
 exec "$@"

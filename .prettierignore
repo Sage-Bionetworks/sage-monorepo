@@ -8,3 +8,5 @@ build
 
 # Angular
 .angular
+
+/.nx/cache

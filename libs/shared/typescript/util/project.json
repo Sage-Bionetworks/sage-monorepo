@@ -9,18 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/util"],
       "options": {
-        "jestConfig": "libs/shared/typescript/util/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/typescript/util/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/shared/typescript/util/**/*.ts",
-          "libs/shared/typescript/util/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": ["type:util", "scope:shared", "language:typescript"],
