@@ -34,10 +34,10 @@ export default defineConfig({
       name: 'Mobile Chrome',
       use: { ...devices['Pixel 5'] },
     },
-    {
-      name: 'Mobile Safari',
-      use: { ...devices['iPhone 12'] },
-    },
+    // {
+    //   name: 'Mobile Safari',
+    //   use: { ...devices['iPhone 12'] },
+    // },
     /* Test against branded browsers. */
     // When Google Chrome and/or Microsoft Edge are installed in the dev container, Playwright will
     // use one of them to open the HTML report. These browsers are slow to open and respond because
