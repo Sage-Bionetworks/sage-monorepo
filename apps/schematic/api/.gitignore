@@ -71,6 +71,8 @@ target/
 *secrets*
 synapse_config.yaml
 schematic_service_account_creds.json
+private_localhost_certificate.crt
+private_localhost.key
 
 #schematic downloaded files
 manifests

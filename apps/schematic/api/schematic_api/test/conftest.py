@@ -27,9 +27,6 @@ def csv_to_json_str(path: str) -> str:
 GET_ACCESS_TOKEN_MOCK = (
     "schematic_api.controllers.manifest_generation_controller_impl.get_access_token"
 )
-CREATE_SINGLE_MANIFEST_MOCK = (
-    "schematic.manifest.generator.ManifestGenerator.create_single_manifest"
-)
 CREATE_MANIFESTS_MOCK = (
     "schematic.manifest.generator.ManifestGenerator.create_manifests"
 )
