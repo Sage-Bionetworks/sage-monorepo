@@ -77,7 +77,7 @@
       "port": 3306,
       "driver": "MariaDB",
       "name": "openchallenges",
-      "username": "edam-challenge-service",
+      "username": "maria",
       "password": "changeme"
     },
     {
