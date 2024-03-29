@@ -22,11 +22,13 @@ ici_overview_category_ui <- function(
       width = 12,
       DT::DTOutput(
         ns("ici_groups_df")
-      ),
+      )%>%
+      shinycssloaders::withSpinner(),
       br(),
       DT::DTOutput(
         ns("ici_per_ds_df")
-      ),
+      ) %>%
+      shinycssloaders::withSpinner(),
       style = "overflow-y: scroll;overflow-x: scroll;",
     ),
     #test if can be in the same submodule
