@@ -11,10 +11,12 @@ IO Targets	io_targets	cg	Explore the expression of genes that code for immuno-on
 TIL Maps	til_map	cg	Explore the characteristics of maps of tumor infiltrating lymphocytes obtained from analysis of H&E images.	none
 Tumor Microenvironment	tumor_microenvironment	cg	Explore the immune cell proportions in your cohort.	none
 Immune Subtype Classifier	immune_subtype_classifier	tool	Use an ensemble model trained on all TCGA data to classify gene expression profiles from your own data into the six immune subtypes identified in Thorsson et al.	none
-Datasets Overview	ici_overview	ici	Explore categories and groups of the available datasets.	none
 Clinical Outcomes	ici_clinical_outcomes	ici	Plot survival curves based on immune characteristics and identify variables associated with outcome.	none
 Hazard Ratio	ici_hazard_ratio	ici	Create Cox Proportional Hazard Regression Models and visualize Hazard Ratio in a heatmap and a forest plot.	none
 Immune Features	ici_immune_features	ici	See how immune readouts vary across groups and ICI datasets.	none
 Immunomodulators	ici_immunomodulators	ici	Explore the expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none
 Neoantigens	ici_neoantigen	ici	Explore the prevalence, variety and distribution of predicted neoantigens in ICI datasets. 	none
 Machine Learning	ici_models	ici	Train and run multivariable models with cross-validation on ICI genomics and immunogenomics data.	none
+UMAP	sc_umap	scRNA	Explore UMAP plots of single-cell RNA-seq datasets.	none
+Immune Features	sc_immune_features	scRNA	See how immune readouts in pseudobulk single cell RNA seq datasets.	none
+Immunomodulators	sc_immunomodulators	scRNA	Explore the pseudobulk expression of genes that code for immunomodulating proteins, including checkpoint proteins.	none

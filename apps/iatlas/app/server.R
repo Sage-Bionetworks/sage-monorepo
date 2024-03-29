@@ -15,6 +15,7 @@ modules_tbl <- MODULES_TBL %>%
 
 ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
 cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
+sc_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "scRNA")
 tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
 
@@ -71,7 +72,20 @@ shiny::shinyServer(function(input, output, session) {
     dplyr::select("name", "server_function") %>%
     purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
 
+  # Single cell Modules --------------------------------------------------------------
+
+  sc_modules_tbl %>%
+    dplyr::select("name", "server_function") %>%
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
+
   # Other ---------------------------------------------------------------------
+
+  call_iatlas_module(
+    "ici_overview",
+    ici_overview_server,
+    input,
+    session
+  )
 
   call_iatlas_module(
     "data_info",

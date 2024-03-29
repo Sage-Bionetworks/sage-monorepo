@@ -4,6 +4,7 @@ create_scatterplot <- function(
     y_col = "y",
     key_col = NA,
     color_col = NA,
+    size_col = NA,
     label_col = NA,
     xlab = "",
     ylab = "",
@@ -63,6 +64,17 @@ create_scatterplot <- function(
                     y1 = horizontal_line_y,
                     line = list(color = "black", dash = "dot", alpha = 0.5)
                 ))
+    }
+
+
+    if (!is.na(size_col)) {
+      p <- p %>%
+        plotly::add_trace(df,
+                          x = ~X,
+                          y = ~Y,
+                          color = ~COLOR,
+                          size = ~size_col)
+
     }
 
     if (identity_line) {

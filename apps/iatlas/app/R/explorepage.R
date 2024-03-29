@@ -8,6 +8,7 @@ explorepage_ui <- function(){
 
   ici_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "ici")
   cg_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "cg")
+  sc_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "scRNA")
   tool_modules_tbl <- dplyr::filter(modules_tbl, .data$type == "tool")
 
   # sidebar ----
@@ -20,6 +21,7 @@ explorepage_ui <- function(){
 
   ici_module_menu_items   <- create_menu_subitems(ici_modules_tbl)
   cg_module_menu_items    <- create_menu_subitems(cg_modules_tbl)
+  sc_module_menu_items  <- create_menu_subitems(sc_modules_tbl)
   tool_module_menu_items  <- create_menu_subitems(tool_modules_tbl)
 
   sidebar <- shinydashboard::dashboardSidebar(
@@ -29,6 +31,17 @@ explorepage_ui <- function(){
         "CRI iAtlas Explorer Home",
         tabName = "dashboard",
         icon = shiny::icon("tachometer-alt")
+      ),
+      shinydashboard::menuItem(
+        "Datasets Overview",
+        icon = shiny::icon("th-list"),
+        tabName = "ici_overview"
+      ),
+      shinydashboard::menuItem(
+        text = "Single Cell Modules",
+        icon = shiny::icon("chart-bar"),
+        startExpanded = TRUE,
+        sc_module_menu_items
       ),
       shinydashboard::menuItem(
         "ICI Cohort Selection",
@@ -71,15 +84,15 @@ explorepage_ui <- function(){
   # info boxes at top of page
   readout_info_boxes <- dplyr::tibble(
     title = c(
+      "Single-cell RNA-seq datasets:",
       "Immune Checkpoint Inhibitors (ICI) datasets:",
       "Cancer Genomics (CG) datasets:",
-      "Immune Readouts:",
       "Samples:"
     ),
     value = c(
+      2,
       nrow(iatlasGraphQLClient::query_datasets(types = "ici")),
       2,
-      nrow(iatlasGraphQLClient::query_features()),
       nrow(iatlasGraphQLClient::query_samples())
     ),
     icon = purrr::map(c("search", "database", "filter", "users"), shiny::icon)
@@ -121,6 +134,7 @@ explorepage_ui <- function(){
 
   cg_module_image_boxes  <- make_image_boxes(cg_modules_tbl)
   ici_module_image_boxes <- make_image_boxes(ici_modules_tbl)
+  sc_module_image_boxes <- make_image_boxes(sc_modules_tbl)
 
   # This is the tab item that users land on
   landing_tab_item <- list(shinydashboard::tabItem(
@@ -158,6 +172,14 @@ explorepage_ui <- function(){
       )
     ),
     iatlas.modules::sectionBox(
+      title = "Single-cell RNA-seq data Analysis Modules",
+      iatlas.modules::messageBox(
+        width = 12,
+        shiny::includeMarkdown("inst/markdown/explore4.markdown")
+      ),
+      sc_module_image_boxes
+    ),
+    iatlas.modules::sectionBox(
       title = "Immune Checkpoint Inhibition Analysis Modules",
       iatlas.modules::messageBox(
         width = 12,
@@ -183,12 +205,14 @@ explorepage_ui <- function(){
         "label" = c(
           "cg_cohort_selection",
           "ici_cohort_selection",
-          "data_info"
+          "data_info",
+          "ici_overview"
         ),
         "ui_function" = c(
           iatlas.modules2::cohort_selection_ui,
           iatlas.modules2::cohort_selection_ui,
-          data_info_ui
+          data_info_ui,
+          ici_overview_ui
         )
       )
     ) %>%
