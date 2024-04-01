@@ -28,8 +28,12 @@
     </div>
     <div class="card-footer">
       <mat-icon aria-hidden="true" class="card-icon">emoji_events</mat-icon>
-      <div class="difficulty-tag mat-small">
-        {{ incentives }}
+
+      <div
+        class="incentive-tag mat-small"
+        *ngFor="let incentive of challenge.incentives; let isLast = last"
+      >
+        {{ incentiveLabels[incentive] }}{{ isLast ? '' : ', ' }}
       </div>
     </div>
   </div>

@@ -7,7 +7,7 @@ import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-// import { startCase } from 'lodash';
+import { ChallengeIncentiveLabels } from './challenge-property-labels';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -25,7 +25,7 @@ export class ChallengeCardComponent implements OnInit {
   incentives!: string;
   statusClass!: string;
   time_info!: string | number;
-
+  incentiveLabels = ChallengeIncentiveLabels;
   constructor(private imageService: ImageService) {}
 
   ngOnInit(): void {
@@ -35,17 +35,6 @@ export class ChallengeCardComponent implements OnInit {
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;
-      this.incentives =
-        this.challenge.incentives.length === 0
-          ? 'No incentives listed'
-          : this.challenge.incentives
-              .map(function (s) {
-                return (
-                  s.charAt(0).toUpperCase() +
-                  s.slice(1).replace(/_/g, ' ').toLowerCase()
-                );
-              })
-              .join(', ');
       this.banner$ = this.challenge.avatarUrl
         ? this.imageService.getImage({
             objectKey: this.challenge.avatarUrl,
