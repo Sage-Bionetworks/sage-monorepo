@@ -1,11 +1,11 @@
-<mxfile modified="2024-04-01T22:01:02.496Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="TzFfJc8M5TafDPTsX4pN" version="24.0.7" type="github">
+<mxfile modified="2024-04-01T22:02:10.230Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="L6DPKPLuEbkehgrxgIxZ" version="24.0.7" type="github">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
     <mxGraphModel dx="2330" dy="1274" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="jZVaUwOg5UY3L9NAnvdq-71" value="EC2" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;labelBackgroundColor=none;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;" parent="1" vertex="1">
-          <mxGeometry x="60" y="279.5" width="1094.5" height="710.5" as="geometry" />
+          <mxGeometry x="60" y="253.5" width="1094.5" height="710.5" as="geometry" />
         </mxCell>
         <mxCell id="dtOV9YOIjFEI8-B-jVSO-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="jZVaUwOg5UY3L9NAnvdq-71" source="N08xS9JCno1T1F9PN58o-129" target="N08xS9JCno1T1F9PN58o-135" edge="1">
           <mxGeometry relative="1" as="geometry" />
@@ -165,19 +165,19 @@
           <mxGeometry x="20" y="40.5" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-46" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAEDED;fontSize=22;fontColor=#FFFFFF;strokeColor=none;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1544.5" y="37" width="539" height="473" as="geometry" />
+          <mxGeometry x="1355" y="106.5" width="539" height="473" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-36" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1563" y="124.5" width="40" height="38" as="geometry" />
+          <mxGeometry x="1373.5" y="222" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-37" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1561.5" y="226.5" width="40" height="38" as="geometry" />
+          <mxGeometry x="1372" y="324" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-38" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1561.5" y="279.5" width="40" height="38" as="geometry" />
+          <mxGeometry x="1372" y="377" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-39" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1561.5" y="346.5" width="40" height="38" as="geometry" />
+          <mxGeometry x="1372" y="444" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-47" value="OpenChallenges Infra 2024-04-01" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="36.5" y="26.5" width="480" height="40" as="geometry" />
@@ -189,25 +189,25 @@
           <mxGeometry x="32.5" y="101.5" width="1060" height="10" as="geometry" />
         </mxCell>
         <mxCell id="SCVMTBWpLvtzJIhz15lM-6" value="The name of the components match the name of the folders where they are developed in the GitHub repository &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;Sage-Bionetworks/sage-monorepo/apps/{name}&lt;/font&gt;&lt;/a&gt;. In general, the same name is used to create the Docker images, e.g. &lt;code class=&quot;d-block color-bg-subtle border-0 rounded-2 f6 lh-default&quot;&gt;&lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/pkgs/container/openchallenges-challenge-service&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;ghcr.io/&lt;span class=&quot;color-fg-done&quot;&gt;sage-bionetworks&lt;/span&gt;/&lt;/font&gt;&lt;/a&gt;&lt;span class=&quot;color-fg-done&quot;&gt;&lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/pkgs/container/openchallenges-challenge-service&quot;&gt;&lt;font face=&quot;aA-pcdCpK7w2fGQkS4mf&quot;&gt;{name}&lt;/font&gt;&lt;/a&gt;&lt;font face=&quot;Helvetica&quot;&gt;.&lt;/font&gt;&lt;/span&gt;&lt;/code&gt;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1614.5" y="124" width="449" height="101" as="geometry" />
+          <mxGeometry x="1425" y="221.5" width="449" height="101" as="geometry" />
         </mxCell>
         <mxCell id="SCVMTBWpLvtzJIhz15lM-7" value="An AWS-managed alternative to HashiCorp Vault is AWS SSM Parameter Store." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1613.5" y="227" width="450" height="48" as="geometry" />
+          <mxGeometry x="1424" y="324.5" width="450" height="48" as="geometry" />
         </mxCell>
         <mxCell id="SCVMTBWpLvtzJIhz15lM-9" value="Currently, OpenChallenges REST API only has read-only endpoints. In 2024, endpoints will be added to manage OC resources (create, update and delete operations). " style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1613.5" y="278" width="450" height="67" as="geometry" />
+          <mxGeometry x="1424" y="375.5" width="450" height="67" as="geometry" />
         </mxCell>
         <mxCell id="SCVMTBWpLvtzJIhz15lM-10" value="The rule of thumb is that the recommended minimum master-eligible members in any Elasticsearch node cluster is three. Setting three master nodes as a minimum is a surefire way to achieve a quorum and manage the cluster." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1613.5" y="347" width="450" height="78" as="geometry" />
+          <mxGeometry x="1424" y="444.5" width="450" height="78" as="geometry" />
         </mxCell>
         <mxCell id="jZVaUwOg5UY3L9NAnvdq-92" value="User" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3E;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.user;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1225.7000000000003" y="441.5" width="50" height="50" as="geometry" />
+          <mxGeometry x="1225.7000000000003" y="415.5" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="jZVaUwOg5UY3L9NAnvdq-93" value="API" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3E;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.external_sdk;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1225.7050000000002" y="710.75" width="43.59" height="50" as="geometry" />
+          <mxGeometry x="1225.7050000000002" y="684.75" width="43.59" height="50" as="geometry" />
         </mxCell>
         <mxCell id="jZVaUwOg5UY3L9NAnvdq-188" value="" style="group" parent="1" vertex="1" connectable="0">
-          <mxGeometry x="1290" y="950" width="21" height="26" as="geometry" />
+          <mxGeometry x="1290" y="924" width="21" height="26" as="geometry" />
         </mxCell>
         <mxCell id="jZVaUwOg5UY3L9NAnvdq-189" value="" style="rounded=0;whiteSpace=wrap;html=1;labelBackgroundColor=#ffffff;fontSize=14;align=center;strokeColor=none;" parent="jZVaUwOg5UY3L9NAnvdq-188" vertex="1">
           <mxGeometry width="21" height="26" as="geometry" />
@@ -658,68 +658,68 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="N08xS9JCno1T1F9PN58o-160" value="Sage-Bionetworks/&lt;br&gt;openchallenges-&lt;br&gt;config-server-repository " style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" parent="1" vertex="1">
-          <mxGeometry x="160.11" y="150.5" width="59" height="59" as="geometry" />
+          <mxGeometry x="160.11" y="124.5" width="59" height="59" as="geometry" />
         </mxCell>
         <mxCell id="dtOV9YOIjFEI8-B-jVSO-7" value="Research&lt;br&gt;" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#116D5B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.sagemaker_notebook;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1225.7050000000002" y="589.25" width="43.59" height="50" as="geometry" />
+          <mxGeometry x="1225.7050000000002" y="563.25" width="43.59" height="50" as="geometry" />
         </mxCell>
         <mxCell id="dtOV9YOIjFEI8-B-jVSO-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="N08xS9JCno1T1F9PN58o-127" target="jZVaUwOg5UY3L9NAnvdq-92" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1080" y="526" />
-              <mxPoint x="1080" y="468" />
+              <mxPoint x="1080" y="500" />
+              <mxPoint x="1080" y="442" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="N08xS9JCno1T1F9PN58o-127" value="app&lt;br&gt;Web App" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn0.iconfinder.com/data/icons/long-shadow-web-icons/512/angular-symbol-128.png" parent="1" vertex="1">
-          <mxGeometry x="960" y="500.5" width="50" height="50" as="geometry" />
+          <mxGeometry x="960" y="474.5" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="dtOV9YOIjFEI8-B-jVSO-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="N08xS9JCno1T1F9PN58o-158" target="N08xS9JCno1T1F9PN58o-127" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-20" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="N08xS9JCno1T1F9PN58o-158" target="N08xS9JCno1T1F9PN58o-127">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="743" y="526" as="sourcePoint" />
-            <mxPoint x="1248" y="589" as="targetPoint" />
+            <mxPoint x="743" y="500" as="sourcePoint" />
+            <mxPoint x="1248" y="563" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="dtOV9YOIjFEI8-B-jVSO-10" target="jZVaUwOg5UY3L9NAnvdq-92">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="1080" y="395" />
-              <mxPoint x="1080" y="455" />
+              <mxPoint x="1080" y="369" />
+              <mxPoint x="1080" y="429" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="N08xS9JCno1T1F9PN58o-135" target="N08xS9JCno1T1F9PN58o-127">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="840" y="865" />
-              <mxPoint x="840" y="538" />
+              <mxPoint x="840" y="839" />
+              <mxPoint x="840" y="512" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="N08xS9JCno1T1F9PN58o-158" target="dtOV9YOIjFEI8-B-jVSO-7">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="820" y="526" />
-              <mxPoint x="820" y="614" />
+              <mxPoint x="820" y="500" />
+              <mxPoint x="820" y="588" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="N08xS9JCno1T1F9PN58o-158" target="jZVaUwOg5UY3L9NAnvdq-93">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="820" y="526" />
-              <mxPoint x="820" y="736" />
+              <mxPoint x="820" y="500" />
+              <mxPoint x="820" y="710" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-44" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1561.5" y="27" width="40" height="38" as="geometry" />
+          <mxGeometry x="1372" y="124.5" width="40" height="38" as="geometry" />
         </mxCell>
         <mxCell id="-xrmGZC775zc49n530f5-45" value="All the components are containerized and their images available on GHCR. The OpenChallenges stack is currently deployed on an EC2 instance (t3.xlarge) with Docker Compose. The EC2 instance, ALB and other resources are deployed with the CDK for Terraform (CDKTF). See &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges/infra&quot;&gt;sage-monorepo/openchallenges/infra&lt;/a&gt;." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1613" y="26.5" width="449" height="63.5" as="geometry" />
+          <mxGeometry x="1423.5" y="124" width="449" height="63.5" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
