@@ -26,6 +26,7 @@ export class ChallengeCardComponent implements OnInit {
   statusClass!: string;
   time_info!: string | number;
   incentiveLabels = ChallengeIncentiveLabels;
+
   constructor(private imageService: ImageService) {}
 
   ngOnInit(): void {
@@ -35,6 +36,12 @@ export class ChallengeCardComponent implements OnInit {
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;
+      this.incentives =
+        this.challenge.incentives.length === 0
+          ? 'No incentives listed'
+          : this.challenge.incentives
+              .map((s) => ChallengeIncentiveLabels[s])
+              .join(', ');
       this.banner$ = this.challenge.avatarUrl
         ? this.imageService.getImage({
             objectKey: this.challenge.avatarUrl,
