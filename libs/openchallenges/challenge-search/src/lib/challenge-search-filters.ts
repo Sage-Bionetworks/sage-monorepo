@@ -7,6 +7,7 @@ import {
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   ChallengeIncentiveLabels,
+  ChallengeSubmissionTypeLabels,
   Filter,
 } from '@sagebionetworks/openchallenges/ui';
 
@@ -76,23 +77,25 @@ export const challengeStatusFilter: Filter[] = [
 export const challengeSubmissionTypesFilter: Filter[] = [
   {
     value: ChallengeSubmissionType.ContainerImage,
-    label: 'Container Image',
+    label:
+      ChallengeSubmissionTypeLabels[ChallengeSubmissionType.ContainerImage],
   },
   {
     value: ChallengeSubmissionType.Mlcube,
-    label: 'MLCube',
+    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Mlcube],
   },
   {
     value: ChallengeSubmissionType.Notebook,
-    label: 'Notebook',
+    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Notebook],
   },
   {
     value: ChallengeSubmissionType.PredictionFile,
-    label: 'Prediction File',
+    label:
+      ChallengeSubmissionTypeLabels[ChallengeSubmissionType.PredictionFile],
   },
   {
     value: ChallengeSubmissionType.Other,
-    label: 'Other',
+    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Other],
   },
 ];
 
