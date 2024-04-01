@@ -5,7 +5,10 @@ import {
   ChallengeStatus,
   ChallengeSubmissionType,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { Filter } from '@sagebionetworks/openchallenges/ui';
+import {
+  ChallengeIncentiveLabels,
+  Filter,
+} from '@sagebionetworks/openchallenges/ui';
 
 const thisYear = new Date().getFullYear();
 
@@ -96,19 +99,19 @@ export const challengeSubmissionTypesFilter: Filter[] = [
 export const challengeIncentivesFilter: Filter[] = [
   {
     value: ChallengeIncentive.Monetary,
-    label: 'Monetary',
+    label: ChallengeIncentiveLabels[ChallengeIncentive.Monetary],
   },
   {
     value: ChallengeIncentive.Publication,
-    label: 'Publication',
+    label: ChallengeIncentiveLabels[ChallengeIncentive.Publication],
   },
   {
     value: ChallengeIncentive.SpeakingEngagement,
-    label: 'Speaking Engagement',
+    label: ChallengeIncentiveLabels[ChallengeIncentive.SpeakingEngagement],
   },
   {
     value: ChallengeIncentive.Other,
-    label: 'Other',
+    label: ChallengeIncentiveLabels[ChallengeIncentive.Other],
   },
 ];
 

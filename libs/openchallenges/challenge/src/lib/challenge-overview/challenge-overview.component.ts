@@ -1,19 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
-  Challenge,
-  ChallengeIncentive,
-  ChallengeSubmissionType,
-} from '@sagebionetworks/openchallenges/api-client-angular';
-import {
+  ChallengeSubmissionTypeLabels,
+  ChallengeIncentiveLabels,
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
-import {
-  challengeIncentivesFilter,
-  challengeSubmissionTypesFilter,
-  getLabelByFilterValue,
-} from '@sagebionetworks/openchallenges/challenge-search';
 
 import { MatIconModule } from '@angular/material/icon';
 
@@ -27,16 +20,10 @@ import { MatIconModule } from '@angular/material/icon';
 export class ChallengeOverviewComponent {
   @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
+  incentiveLabels = ChallengeIncentiveLabels;
+  submissionTypeLabels = ChallengeSubmissionTypeLabels;
 
   useNaIfFalsey(str: string | null | undefined) {
     return str ?? 'Not available';
-  }
-
-  getIncentiveLabel(status: ChallengeIncentive): string | undefined {
-    return getLabelByFilterValue(challengeIncentivesFilter, status);
-  }
-
-  getSubmissionTypeLabel(status: ChallengeSubmissionType): string | undefined {
-    return getLabelByFilterValue(challengeSubmissionTypesFilter, status);
   }
 }
