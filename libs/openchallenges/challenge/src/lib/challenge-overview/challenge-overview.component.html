@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <td class="text-right">Status</td>
-          <td>{{ prettify(challenge.status) }}</td>
+          <td>{{ getStatusLabel(challenge.status) }}</td>
         </tr>
         <tr>
           <td class="text-right">Platform</td>
@@ -58,7 +58,7 @@
               nowrap
               *ngFor="let submissionType of challenge.submissionTypes; let isLast = last"
             >
-              {{ prettify(submissionType) }}{{ isLast ? '' : ', ' }}</span
+              {{ getSubmissionTypeLabel(submissionType) }}{{ isLast ? '' : ', ' }}</span
             >
           </td>
           <ng-template #na_subs>
@@ -69,7 +69,7 @@
           <td class="text-right">Incentive(s)</td>
           <td *ngIf="challenge.incentives && challenge.incentives.length > 0; else na_prize">
             <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
-              {{ prettify(incentive) }}{{ isLast ? '' : ', ' }}</span
+              {{ getIncentiveLabel(incentive) }}{{ isLast ? '' : ', ' }}</span
             >
           </td>
           <ng-template #na_prize>

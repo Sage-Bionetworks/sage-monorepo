@@ -1,10 +1,22 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
+import {
+  Challenge,
+  ChallengeIncentive,
+  ChallengeStatus,
+  ChallengeSubmissionType,
+} from '@sagebionetworks/openchallenges/api-client-angular';
 import {
   MOCK_ORGANIZATION_CARDS,
   OrganizationCard,
 } from '@sagebionetworks/openchallenges/ui';
+import {
+  challengeIncentivesFilter,
+  challengeStatusFilter,
+  challengeSubmissionTypesFilter,
+  getLabelByFilterValue,
+} from '@sagebionetworks/openchallenges/challenge-search';
+
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
@@ -17,16 +29,20 @@ import { MatIconModule } from '@angular/material/icon';
 export class ChallengeOverviewComponent {
   @Input({ required: true }) challenge!: Challenge;
   organizationCards: OrganizationCard[] = MOCK_ORGANIZATION_CARDS;
-  // mockTopics = ['breast', 'cancer'];
 
   useNaIfFalsey(str: string | null | undefined) {
-    return str || 'Not available';
+    return str ?? 'Not available';
   }
 
-  prettify(camel: string | undefined) {
-    return camel
-      ? camel.charAt(0).toUpperCase() +
-          camel.slice(1).replace(/_/g, ' ').toLowerCase()
-      : undefined;
+  getIncentiveLabel(status: ChallengeIncentive): string | undefined {
+    return getLabelByFilterValue(challengeIncentivesFilter, status);
+  }
+
+  getSubmissionTypeLabel(status: ChallengeSubmissionType): string | undefined {
+    return getLabelByFilterValue(challengeSubmissionTypesFilter, status);
+  }
+
+  getStatusLabel(status: ChallengeStatus): string | undefined {
+    return getLabelByFilterValue(challengeStatusFilter, status);
   }
 }
