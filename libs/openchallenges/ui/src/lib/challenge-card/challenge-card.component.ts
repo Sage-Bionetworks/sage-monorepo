@@ -13,7 +13,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'openchallenges-challenge-card',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule, IncentiveLabelPipe],
+  imports: [CommonModule, IncentiveLabelPipe, MatIconModule, RouterModule],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })
