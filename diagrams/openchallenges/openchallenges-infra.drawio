@@ -1,11 +1,11 @@
-<mxfile modified="2024-04-02T22:33:51.583Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="EId4FdkduoYvrPR6AEG5" version="24.0.7" type="github">
+<mxfile modified="2024-04-02T22:47:29.677Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="VwZ9w67FTlJ9898CuHCu" version="24.0.7" type="github">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2330" dy="1274" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2741" dy="1499" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-46" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAEDED;fontSize=22;fontColor=#FFFFFF;strokeColor=none;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1610" y="111.5" width="539" height="593.5" as="geometry" />
+          <mxGeometry x="1618" y="107" width="541" height="672.5" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-47" value="OpenChallenges Infra" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="36.5" y="26.5" width="310" height="42" as="geometry" />
@@ -340,54 +340,6 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="-xrmGZC775zc49n530f5-44" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1627" y="129.5" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="-xrmGZC775zc49n530f5-45" value="All the components are containerized and their images available on GHCR. The OpenChallenges stack is currently deployed on an EC2 instance (t3.xlarge) with Docker Compose. The EC2 instance, ALB and other resources are deployed with the CDK for Terraform (CDKTF). See &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges/infra&quot;&gt;sage-monorepo/openchallenges/infra&lt;/a&gt;." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1678.5" y="129" width="449" height="100" as="geometry" />
-        </mxCell>
-        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-36" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1628.5" y="227" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="SCVMTBWpLvtzJIhz15lM-6" value="The name of the components match the name of the folders where they are developed in the GitHub repository &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;Sage-Bionetworks/sage-monorepo/apps/{name}&lt;/font&gt;&lt;/a&gt;. In general, the same name is used to create the Docker images, e.g. &lt;code class=&quot;d-block color-bg-subtle border-0 rounded-2 f6 lh-default&quot;&gt;&lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/pkgs/container/openchallenges-challenge-service&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;ghcr.io/&lt;span class=&quot;color-fg-done&quot;&gt;sage-bionetworks&lt;/span&gt;/&lt;/font&gt;&lt;/a&gt;&lt;span class=&quot;color-fg-done&quot;&gt;&lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/pkgs/container/openchallenges-challenge-service&quot;&gt;&lt;font face=&quot;aA-pcdCpK7w2fGQkS4mf&quot;&gt;{name}&lt;/font&gt;&lt;/a&gt;&lt;font face=&quot;Helvetica&quot;&gt;.&lt;/font&gt;&lt;/span&gt;&lt;/code&gt;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1680" y="226.5" width="449" height="101" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-45" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1627.5" y="409" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-46" value="The AWS region (us-east-1) and security groups are note represented the sake of clarity. The security group for the resources deployed to &lt;span class=&quot;awsui_root_18wu0_1qbfe_99 awsui_box_18wu0_1qbfe_219 awsui_strong-variant_18wu0_1qbfe_219 awsui_color-default_18wu0_1qbfe_219 awsui_font-size-default_18wu0_1qbfe_235 awsui_font-weight-default_18wu0_1qbfe_275&quot;&gt;org-sagebase-cnb-dev with CDKTF are defined &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/openchallenges/infra/src/security-group/security-groups.ts&quot;&gt;here&lt;/a&gt;.&lt;br&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1679.5" y="409.5" width="450" height="78" as="geometry" />
-        </mxCell>
-        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-37" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1627.5" y="478" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="SCVMTBWpLvtzJIhz15lM-7" value="An AWS-managed alternative to HashiCorp Vault is AWS SSM Parameter Store." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1679.5" y="478.5" width="450" height="48" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-49" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1625.5" y="540" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-50" value="The MariaDB instance is deployed as a container that already includes most of the data. At this stage of the project, adopting an AWS managed solution would be preferred to support upcoming CUD operations." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1677.5" y="540.5" width="450" height="60.5" as="geometry" />
-        </mxCell>
-        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-39" value="7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1625.5" y="630" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="SCVMTBWpLvtzJIhz15lM-10" value="&lt;strong&gt;Three-Node Clusters&lt;/strong&gt; are a common starting point for production environments requiring high availability. With three nodes, you can configure Elasticsearch to replicate data across nodes, allowing the cluster to remain operational even if one node fails. This setup supports one replica, ensuring data redundancy and increasing read capacity." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1677.5" y="624.5" width="465" height="107" as="geometry" />
-        </mxCell>
-        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-38" value="8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1627.5" y="759.5" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="SCVMTBWpLvtzJIhz15lM-9" value="Currently, OpenChallenges REST API only has read-only endpoints. In 2024, endpoints will be added to manage OC resources (create, update and delete operations). " style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" parent="1" vertex="1">
-          <mxGeometry x="1679.5" y="758" width="450" height="67" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-69" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1625.5" y="336.5" width="40" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-70" value="The EC2 instance and ALB have been deployed with CDK for Terraform (CDKTF). The services that compose OC are currently deployed manually inside the EC2 with Docker Compose." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="1677.5" y="335" width="450" height="67" as="geometry" />
-        </mxCell>
         <mxCell id="PfW1Trj3aX01LcuOc2Ej-74" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="130" y="468" width="40" height="38" as="geometry" />
         </mxCell>
@@ -399,6 +351,78 @@
         </mxCell>
         <mxCell id="PfW1Trj3aX01LcuOc2Ej-77" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="130" y="377" width="40" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-79" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="124.5" width="502.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="-xrmGZC775zc49n530f5-44" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-79" vertex="1">
+          <mxGeometry y="0.5" width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="-xrmGZC775zc49n530f5-45" value="All the components are containerized and their images available on GHCR. The OpenChallenges stack is currently deployed on an EC2 instance (t3.xlarge) with Docker Compose. The EC2 instance, ALB and other resources are deployed with the CDK for Terraform (CDKTF). See &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges/infra&quot;&gt;sage-monorepo/openchallenges/infra&lt;/a&gt;." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;resizeWidth=1;fixedWidth=1;resizeHeight=1;" parent="PfW1Trj3aX01LcuOc2Ej-79" vertex="1">
+          <mxGeometry x="51.5" width="451" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-80" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="229.5" width="502.5" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-36" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-80" vertex="1">
+          <mxGeometry y="0.5" width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="SCVMTBWpLvtzJIhz15lM-6" value="&lt;font face=&quot;Helvetica&quot;&gt;The name of the components match the name of the folders where they are developed in the GitHub repository &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges&quot;&gt;Sage-Bionetworks/sage-monorepo/apps/{name}&lt;/a&gt;. In general, the same name is used to create the Docker images &lt;a href=&quot;https://github.com/orgs/Sage-Bionetworks/packages?repo_name=sage-monorepo&quot;&gt;ghcr.io/sage-bionetworks/{name}&lt;/a&gt;.&lt;code&gt;&lt;br&gt;&lt;/code&gt;&lt;/font&gt;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-80" vertex="1">
+          <mxGeometry x="51.5" width="451" height="93" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-81" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="318.5" width="504" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-69" value="3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-81">
+          <mxGeometry y="1.5" width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-70" value="The EC2 instance and ALB have been deployed with CDK for Terraform (CDKTF). The services that compose OC are currently deployed manually inside the EC2 with Docker Compose." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-81">
+          <mxGeometry x="52" width="452" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-82" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="389.5" width="504" height="56.5" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-45" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-82">
+          <mxGeometry width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-46" value="The AWS region (us-east-1) and security groups are note represented the sake of clarity. The security group for the resources deployed to &lt;span class=&quot;awsui_root_18wu0_1qbfe_99 awsui_box_18wu0_1qbfe_219 awsui_strong-variant_18wu0_1qbfe_219 awsui_color-default_18wu0_1qbfe_219 awsui_font-size-default_18wu0_1qbfe_235 awsui_font-weight-default_18wu0_1qbfe_275&quot;&gt;org-sagebase-cnb-dev with CDKTF are defined &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/apps/openchallenges/infra/src/security-group/security-groups.ts&quot;&gt;here&lt;/a&gt;.&lt;br&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-82">
+          <mxGeometry x="52" y="0.5" width="452" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-83" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="459.5" width="504" height="40.5" as="geometry" />
+        </mxCell>
+        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-37" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-83" vertex="1">
+          <mxGeometry width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="SCVMTBWpLvtzJIhz15lM-7" value="An AWS-managed alternative to HashiCorp Vault is AWS SSM Parameter Store." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-83" vertex="1">
+          <mxGeometry x="52" y="0.5" width="452" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-84" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="513.5" width="504" height="73.5" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-49" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-84">
+          <mxGeometry width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-50" value="The MariaDB instance is deployed as a container that already includes most of the data. At this stage of the project, adopting an AWS managed solution would be preferred to support upcoming CUD operations." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-84">
+          <mxGeometry x="52" y="0.5" width="452" height="73" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-85" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="600.5" width="505.5" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-39" value="7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-85" vertex="1">
+          <mxGeometry y="5.5" width="40.95551257253385" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="SCVMTBWpLvtzJIhz15lM-10" value="Three-Node Clusters are a common starting point for production environments requiring high availability. With three nodes, you can configure Elasticsearch to replicate data across nodes, allowing the cluster to remain operational even if one node fails. This setup supports one replica, ensuring data redundancy and increasing read capacity." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-85" vertex="1">
+          <mxGeometry x="50.642166344294004" width="454.85783365570603" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-86" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="1633.5" y="704.5" width="504" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-38" value="8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-86" vertex="1">
+          <mxGeometry y="1.5" width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="SCVMTBWpLvtzJIhz15lM-9" value="Currently, OpenChallenges REST API only has read-only endpoints. In 2024, endpoints will be added to manage OC resources (create, update and delete operations). " style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-86" vertex="1">
+          <mxGeometry x="52" width="452" height="56" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
