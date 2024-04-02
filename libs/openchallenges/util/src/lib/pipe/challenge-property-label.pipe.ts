@@ -3,12 +3,10 @@ import {
   ChallengeIncentive,
   ChallengeSubmissionType,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-// Directly import challenge filters from the challenge-search module to avoid circular dependencies.
-// Do not import these from a index file that might cause circular import paths.
 import {
-  challengeIncentivesFilter,
-  challengeSubmissionTypesFilter,
-} from '../../../../challenge-search/src/lib/challenge-search-filters';
+  challengeIncentivesLabels,
+  challengeSubmissionTypesLabels,
+} from './challenge-property-labels';
 
 @Pipe({
   name: 'incentiveLabel',
@@ -16,7 +14,7 @@ import {
 })
 export class IncentiveLabelPipe implements PipeTransform {
   transform(incentive: ChallengeIncentive): string | undefined {
-    const filterItem = challengeIncentivesFilter.find(
+    const filterItem = challengeIncentivesLabels.find(
       (item) => item.value === incentive
     );
     return filterItem ? filterItem.label : undefined;
@@ -29,7 +27,7 @@ export class IncentiveLabelPipe implements PipeTransform {
 })
 export class SubmissionTypeLabelPipe implements PipeTransform {
   transform(submissionType: ChallengeSubmissionType): string | undefined {
-    const filterItem = challengeSubmissionTypesFilter.find(
+    const filterItem = challengeSubmissionTypesLabels.find(
       (item) => item.value === submissionType
     );
     return filterItem ? filterItem.label : undefined;
