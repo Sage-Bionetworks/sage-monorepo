@@ -7,13 +7,13 @@ import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { ChallengeIncentiveLabels } from './challenge-property-labels';
+import { IncentiveLabelPipe } from '@sagebionetworks/openchallenges/util';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
   standalone: true,
-  imports: [CommonModule, MatIconModule, RouterModule],
+  imports: [CommonModule, MatIconModule, RouterModule, IncentiveLabelPipe],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })
@@ -22,10 +22,8 @@ export class ChallengeCardComponent implements OnInit {
   banner$: Observable<Image> | undefined;
   status!: string | undefined;
   desc!: string;
-  incentives!: string;
   statusClass!: string;
   time_info!: string | number;
-  incentiveLabels = ChallengeIncentiveLabels;
 
   constructor(private imageService: ImageService) {}
 
@@ -36,12 +34,6 @@ export class ChallengeCardComponent implements OnInit {
       this.desc = this.challenge.headline
         ? this.challenge.headline
         : this.challenge.description;
-      this.incentives =
-        this.challenge.incentives.length === 0
-          ? 'No incentives listed'
-          : this.challenge.incentives
-              .map((s) => ChallengeIncentiveLabels[s])
-              .join(', ');
       this.banner$ = this.challenge.avatarUrl
         ? this.imageService.getImage({
             objectKey: this.challenge.avatarUrl,

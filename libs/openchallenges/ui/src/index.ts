@@ -4,7 +4,7 @@ export * from './lib/avatar/mock-avatars';
 export * from './lib/challenge-card/challenge-card.component';
 export * from './lib/challenge-card/mock-challenges';
 export * from './lib/challenge-card/mock-platforms';
-export * from './lib/challenge-card/challenge-property-labels';
+// export * from './lib/challenge-card/challenge-property-labels';
 export * from './lib/checkbox-filter/checkbox-filter.component';
 export * from './lib/checkbox-filter/filter.model';
 export * from './lib/checkbox-filter/filter-panel.model';

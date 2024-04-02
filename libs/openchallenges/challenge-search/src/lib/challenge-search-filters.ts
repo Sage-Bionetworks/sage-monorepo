@@ -5,11 +5,7 @@ import {
   ChallengeStatus,
   ChallengeSubmissionType,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  ChallengeIncentiveLabels,
-  ChallengeSubmissionTypeLabels,
-  Filter,
-} from '@sagebionetworks/openchallenges/ui';
+import { Filter } from '@sagebionetworks/openchallenges/ui';
 
 const thisYear = new Date().getFullYear();
 
@@ -77,44 +73,42 @@ export const challengeStatusFilter: Filter[] = [
 export const challengeSubmissionTypesFilter: Filter[] = [
   {
     value: ChallengeSubmissionType.ContainerImage,
-    label:
-      ChallengeSubmissionTypeLabels[ChallengeSubmissionType.ContainerImage],
+    label: 'Container Image',
   },
   {
     value: ChallengeSubmissionType.Mlcube,
-    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Mlcube],
+    label: 'MLCube',
   },
   {
     value: ChallengeSubmissionType.Notebook,
-    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Notebook],
+    label: 'Notebook',
   },
   {
     value: ChallengeSubmissionType.PredictionFile,
-    label:
-      ChallengeSubmissionTypeLabels[ChallengeSubmissionType.PredictionFile],
+    label: 'Prediction File',
   },
   {
     value: ChallengeSubmissionType.Other,
-    label: ChallengeSubmissionTypeLabels[ChallengeSubmissionType.Other],
+    label: 'Other',
   },
 ];
 
 export const challengeIncentivesFilter: Filter[] = [
   {
     value: ChallengeIncentive.Monetary,
-    label: ChallengeIncentiveLabels[ChallengeIncentive.Monetary],
+    label: 'Monetary',
   },
   {
     value: ChallengeIncentive.Publication,
-    label: ChallengeIncentiveLabels[ChallengeIncentive.Publication],
+    label: 'Publication',
   },
   {
     value: ChallengeIncentive.SpeakingEngagement,
-    label: ChallengeIncentiveLabels[ChallengeIncentive.SpeakingEngagement],
+    label: 'Speaking Engagement',
   },
   {
     value: ChallengeIncentive.Other,
-    label: ChallengeIncentiveLabels[ChallengeIncentive.Other],
+    label: 'Other',
   },
 ];
 

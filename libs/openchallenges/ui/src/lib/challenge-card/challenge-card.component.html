@@ -28,9 +28,17 @@
     </div>
     <div class="card-footer">
       <mat-icon aria-hidden="true" class="card-icon">emoji_events</mat-icon>
-      <div class="incentive-tag mat-small">
-        {{ incentives }}
+      <div
+        class="incentive-tag mat-small"
+        *ngIf="challenge.incentives.length > 0; else noIncentives"
+      >
+        <ng-container *ngFor="let incentive of challenge.incentives; let isLast = last">
+          {{ incentive | incentiveLabel }}{{ isLast ? '' : ', ' }}
+        </ng-container>
       </div>
     </div>
+    <ng-template #noIncentives>
+      <div class="incentive-tag mat-small">No incentives listed</div>
+    </ng-template>
   </div>
 </div>
