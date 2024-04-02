@@ -5,15 +5,10 @@ sc_immunomodulators_server <- function(id, cohort_obj){
 
       ns <- session$ns
 
-      gsea_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_pseudobulk_gene_expr.feather"))
-      sc_clinical <- shiny::reactive(arrow::read_feather("inst/feather/sc_clinical.feather"))
-
-
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
 
       bubble_df <- shiny::reactive({
-        #arrow::read_feather("inst/feather/bubble_plot_df.feather")
         iatlasGraphQLClient::query_cell_stats()
       })
 
@@ -24,8 +19,7 @@ sc_immunomodulators_server <- function(id, cohort_obj){
             name = entrez,
             display = hgnc,
             class = gene_family
-          ) #%>%
-          # create_nested_list_by_class()
+          )
       })
 
       shiny::observe({
@@ -81,25 +75,45 @@ sc_immunomodulators_server <- function(id, cohort_obj){
           )
       })
 
-      # shiny::observeEvent(plotly::event_data("plotly_click","bubbleplot"), {
-      #
-      #   clicked <- plotly::event_data(event = "plotly_click", source = "bubbleplot")
-      #   print(clicked)
-      # })
+      #preparing data for pseudobulk plots
+
+      pseudobulk_df <- shiny::reactive({
+        shiny::req(input$genes)
+        iatlasGraphQLClient::query_pseudobulk_expression(cohorts = input$datasets, entrez = as.numeric(input$genes)) %>%
+           dplyr::inner_join(iatlasGraphQLClient::query_dataset_samples(input$datasets), by = "sample_name") %>%
+           dplyr::select(
+             "sample_name",
+             "group" = "cell_type",
+             "feature_name" = "gene_entrez",
+             "feature_display" = "gene_hgnc",
+             "feature_value" = "single_cell_seq_sum",
+             "dataset_name",
+             "dataset_display"
+           )
+        })
 
 
-      # sc_bubbleplot_server(
-      #   "sc_bubbleplot",
-      #   cohort_obj
-      # )
+      categories_df <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = names(dataset_display())) %>%
+                                         dplyr::mutate(class = dplyr::case_when(
+                                           tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
+                                           TRUE ~ "Treatment Data")) %>%
+                                         create_nested_list_by_class(.,
+                                                                     class_column = "class",
+                                                                     internal_column = "tag_name",
+                                                                     display_column = "tag_short_display")
+      )
 
+      selected_genes <- shiny::reactive({
+        selected <- dplyr::filter(genes(), name %in% input$genes)
+        setNames(selected$name, selected$display)
+      })
 
       sc_immune_features_distribution_server(
         "sc_immunomodulators_distribution",
         cohort_obj,
-        gsea_df,
-        feature_op = shiny::reactive(input$genes),
-        sc_clinical
+        pseudobulk_df,
+        feature_op = selected_genes,
+        categories_df
       )
 
       observeEvent(input$method_link,{

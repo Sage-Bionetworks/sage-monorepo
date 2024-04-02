@@ -1653,14 +1653,14 @@
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",
-      "Version": "0.2.2",
+      "Version": "0.2.4",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
-      "RemoteRef": "69c9ec84527096e5730fb6a9a3d486a16b753efd",
-      "RemoteSha": "69c9ec84527096e5730fb6a9a3d486a16b753efd",
+      "RemoteRef": "0.2.5",
+      "RemoteSha": "b397d717f6ae55ce044b795a6120f36926211072",
       "Requirements": [
         "assertthat",
         "dplyr",
@@ -1674,7 +1674,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "48852e14f02ced16821c580c41bbbbc8"
+      "Hash": "5efd6a8244e2899889755f3b2670e3e4"
     },
     "igvShiny": {
       "Package": "igvShiny",
