@@ -1,11 +1,11 @@
-<mxfile modified="2024-04-02T22:48:35.504Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="A12zo6Qu-J_Lk64Q0HDZ" version="24.0.7" type="github">
+<mxfile modified="2024-04-02T22:49:20.434Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0" etag="DVVrwXCxwXk8fZOJkYMl" version="24.0.7" type="github">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2741" dy="1499" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2330" dy="1274" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-46" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAEDED;fontSize=22;fontColor=#FFFFFF;strokeColor=none;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1605" y="107" width="541" height="672.5" as="geometry" />
+          <mxGeometry x="1605" y="107" width="541" height="663" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-47" value="OpenChallenges Infra" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="36.5" y="26.5" width="310" height="42" as="geometry" />
@@ -397,17 +397,8 @@
         <mxCell id="SCVMTBWpLvtzJIhz15lM-7" value="An AWS-managed alternative to HashiCorp Vault is AWS SSM Parameter Store." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-83" vertex="1">
           <mxGeometry x="52" y="0.5" width="452" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-84" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="1620.5" y="513.5" width="504" height="73.5" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-49" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-84">
-          <mxGeometry width="42" height="38" as="geometry" />
-        </mxCell>
-        <mxCell id="PfW1Trj3aX01LcuOc2Ej-50" value="The MariaDB instance is deployed as a container that already includes most of the data. At this stage of the project, adopting an AWS managed solution would be preferred to support upcoming CUD operations." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" vertex="1" parent="PfW1Trj3aX01LcuOc2Ej-84">
-          <mxGeometry x="52" y="0.5" width="452" height="73" as="geometry" />
-        </mxCell>
         <mxCell id="PfW1Trj3aX01LcuOc2Ej-85" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="1620.5" y="600.5" width="505.5" height="90" as="geometry" />
+          <mxGeometry x="1620.5" y="585.5" width="505.5" height="90" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-39" value="7" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-85" vertex="1">
           <mxGeometry y="5.5" width="40.95551257253385" height="38" as="geometry" />
@@ -416,13 +407,19 @@
           <mxGeometry x="50.642166344294004" width="454.85783365570603" height="90" as="geometry" />
         </mxCell>
         <mxCell id="PfW1Trj3aX01LcuOc2Ej-86" value="" style="group" vertex="1" connectable="0" parent="1">
-          <mxGeometry x="1620.5" y="704.5" width="504" height="56" as="geometry" />
+          <mxGeometry x="1620.5" y="689.5" width="504" height="56" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-38" value="8" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" parent="PfW1Trj3aX01LcuOc2Ej-86" vertex="1">
           <mxGeometry y="1.5" width="42" height="38" as="geometry" />
         </mxCell>
         <mxCell id="SCVMTBWpLvtzJIhz15lM-9" value="Currently, OpenChallenges REST API only has read-only endpoints. In 2024, endpoints will be added to manage OC resources (create, update and delete operations). " style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" parent="PfW1Trj3aX01LcuOc2Ej-86" vertex="1">
           <mxGeometry x="52" width="452" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-49" value="6" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1620.5" y="513.5" width="42" height="38" as="geometry" />
+        </mxCell>
+        <mxCell id="PfW1Trj3aX01LcuOc2Ej-50" value="The MariaDB instance is deployed as a container that already includes most of the data. At this stage of the project, adopting an AWS managed solution would be preferred to support upcoming CUD operations." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;fixedWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="1672.5" y="514" width="452" height="56" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
