@@ -8,17 +8,19 @@ import {
 
 import { MatIconModule } from '@angular/material/icon';
 import {
-  IncentiveLabelPipe,
-  SubmissionTypeLabelPipe,
+  ChallengeIncentiveLabelPipe,
+  ChallengeStatusLabelPipe,
+  ChallengeSubmissionTypeLabelPipe,
 } from '@sagebionetworks/openchallenges/util';
 @Component({
   selector: 'openchallenges-challenge-overview',
   standalone: true,
   imports: [
+    ChallengeIncentiveLabelPipe,
+    ChallengeStatusLabelPipe,
+    ChallengeSubmissionTypeLabelPipe,
     CommonModule,
-    IncentiveLabelPipe,
     MatIconModule,
-    SubmissionTypeLabelPipe,
   ],
   templateUrl: './challenge-overview.component.html',
   styleUrls: ['./challenge-overview.component.scss'],

@@ -1,12 +1,10 @@
-import {
-  ChallengeSort,
-  ChallengeStatus,
-} from '@sagebionetworks/openchallenges/api-client-angular';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
 import {
-  challengeCategoriesLabels,
-  challengeIncentivesLabels,
-  challengeSubmissionTypesLabels,
+  ChallengeCategoriesOptions,
+  ChallengeIncentivesOptions,
+  ChallengeStatusOptions,
+  ChallengeSubmissionTypesOptions,
+  ChallengeSortOptions,
 } from '@sagebionetworks/openchallenges/util';
 
 const thisYear = new Date().getFullYear();
@@ -57,47 +55,13 @@ export const challengeStartYearRangeFilter: Filter[] = [
   },
 ];
 
-export const challengeStatusFilter: Filter[] = [
-  {
-    value: ChallengeStatus.Active,
-    label: 'Active',
-  },
-  {
-    value: ChallengeStatus.Upcoming,
-    label: 'Upcoming',
-  },
-  {
-    value: ChallengeStatus.Completed,
-    label: 'Completed',
-  },
-];
-
-export const challengeSubmissionTypesFilter: Filter[] =
-  challengeSubmissionTypesLabels;
-
-export const challengeIncentivesFilter: Filter[] = challengeIncentivesLabels;
-
-export const challengePlatformsFilter: Filter[] = [];
-
+export const challengeCategoriesFilter: Filter[] = ChallengeCategoriesOptions;
+export const challengeIncentivesFilter: Filter[] = ChallengeIncentivesOptions;
 export const challengeInputDataTypesFilter: Filter[] = [];
-
-export const challengeCategoriesFilter: Filter[] = challengeCategoriesLabels;
-
 export const challengeOrganizationsFilter: Filter[] = [];
-
 export const challengeOrganizersFilter: Filter[] = [];
-
-export const challengeSortFilter: Filter[] = [
-  {
-    value: ChallengeSort.Relevance,
-    label: 'Relevance',
-  },
-  {
-    value: ChallengeSort.StartDate,
-    label: 'Start Date',
-  },
-  {
-    value: ChallengeSort.Starred,
-    label: 'Most Starred',
-  },
-];
+export const challengePlatformsFilter: Filter[] = [];
+export const challengeSortFilter: Filter[] = ChallengeSortOptions;
+export const challengeStatusFilter: Filter[] = ChallengeStatusOptions;
+export const challengeSubmissionTypesFilter: Filter[] =
+  ChallengeSubmissionTypesOptions;

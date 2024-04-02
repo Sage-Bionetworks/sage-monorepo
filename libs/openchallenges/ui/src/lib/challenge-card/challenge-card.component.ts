@@ -7,13 +7,18 @@ import {
   Image,
   ImageService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import { IncentiveLabelPipe } from '@sagebionetworks/openchallenges/util';
+import { ChallengeIncentiveLabelPipe } from '@sagebionetworks/openchallenges/util';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
   standalone: true,
-  imports: [CommonModule, IncentiveLabelPipe, MatIconModule, RouterModule],
+  imports: [
+    ChallengeIncentiveLabelPipe,
+    CommonModule,
+    MatIconModule,
+    RouterModule,
+  ],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })

@@ -33,7 +33,7 @@
         *ngIf="challenge.incentives.length > 0; else noIncentives"
       >
         <ng-container *ngFor="let incentive of challenge.incentives; let isLast = last">
-          {{ incentive | incentiveLabel }}{{ isLast ? '' : ', ' }}
+          {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}
         </ng-container>
       </div>
     </div>
