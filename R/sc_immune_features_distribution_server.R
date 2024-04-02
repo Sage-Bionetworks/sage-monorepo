@@ -7,13 +7,6 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
-      group2_display <- shiny::reactive({
-        iatlasGraphQLClient::query_tags(type = "parent_group") %>%
-          dplyr::filter(tag_name %in% colnames(clinical_info())) %>%
-          dplyr::select(tag_name, tag_short_display) %>%
-          dplyr::add_row(tag_name = "Tumor_tissue_type", tag_short_display ="Tumor tissue type") %>%
-          dplyr::add_row(tag_name = "Polyp_Histology", tag_short_display = "Polyp Histology")
-      })
 
       plot_function <- shiny::reactive({
         switch(
@@ -27,18 +20,18 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         shiny::selectInput(
           ns("var1_surv"),
           "Select Feature",
-          feature_op(),
+          choices = feature_op()
         )
       })
 
       output$group2 <- renderUI({
-        shiny::req(group2_display())
+        shiny::req(clinical_info())
         #Second level group option
         selectInput(
           ns("groupvar2"),
           "Select extra Sample Group (optional)",
           c("None" = "None",
-            group2_display()$tag_short_display),
+            clinical_info()),
           selected = "None"
         )
       })
@@ -59,12 +52,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
 
 
       varible_display_name <- shiny::reactive({
-        if(is.null(names(feature_op()))) input$var1_surv
-        else names(feature_op())[feature_op() == input$var1_surv]
-        # convert_value_between_columns(input_value = input$var1_surv,
-        #                               df = feature_df,
-        #                               from_column = "name",
-        #                               to_column = "display")
+        names(feature_op()[feature_op() == input$var1_surv])
       })
 
       varible_plot_label <- shiny::reactive({
@@ -97,20 +85,18 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
       df_selected <- shiny::reactive({
         shiny::req(gsea_df(), input$var1_surv)
         samples <- gsea_df() %>%
-          dplyr::filter(dataset_name %in% input$datasets) %>%
-          dplyr::filter(feature_name == input$var1_surv) %>%
           build_distribution_io_df(., "feature_value", input$scale_method)
 
         if(input$groupvar2 != "None"){
-          selected_group <- group2_display()[group2_display()$tag_short_display == input$groupvar2,]$tag_name
+          clinical_df <- iatlasGraphQLClient::query_tag_samples_parents(cohorts = input$datasets, parent_tags = input$groupvar2)
 
           samples <- samples %>%
-            dplyr::left_join(dplyr::select(clinical_info(), sample_name, selected_group), by = dplyr::join_by("sample_name")) %>%
+            dplyr::left_join(dplyr::select(clinical_df, sample_name, tag_name, tag_short_display), by = dplyr::join_by("sample_name")) %>%
             dplyr::mutate(
             Group2 = dplyr::if_else(
               sample_name == "sum",
               "sum",
-              .data[[selected_group]]
+              .data$tag_short_display
             ),
             group_name = paste(group, Group2, sep = " - ")) %>%
             dplyr::select("feature_name", "feature_value", "dataset_name", "sample_name", "group" = group_name, "y")
@@ -127,12 +113,11 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
         shiny::req(df_selected())
         group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(df_selected()$group))
         setNames(group_colors, unique(df_selected()$group))
-        #setNames(RColorBrewer::brewer.pal(dplyr::n_distinct(df_selected()$group), "Set2"), unique(df_selected()$group))
       })
 
       xlabel <- shiny::reactive({
         if(input$groupvar2 == "None") "Cell Type"
-        else paste("Cell Type", input$groupvar2, sep = " - ")
+        else paste("Cell Type", input$groupvar2, sep = " - ") #TODO: update when data is in cohort_obj
       })
 
       output$dist_plots <- plotly::renderPlotly({
