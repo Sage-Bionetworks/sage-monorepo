@@ -83,7 +83,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
       })
 
       df_selected <- shiny::reactive({
-        shiny::req(gsea_df(), input$var1_surv)
+        shiny::req(gsea_df(), input$var1_surv, input$datasets)
         samples <- gsea_df() %>%
           build_distribution_io_df(., "feature_value", input$scale_method)
 
