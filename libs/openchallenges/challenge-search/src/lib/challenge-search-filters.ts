@@ -1,11 +1,11 @@
-import {
-  ChallengeCategory,
-  ChallengeIncentive,
-  ChallengeSort,
-  ChallengeStatus,
-  ChallengeSubmissionType,
-} from '@sagebionetworks/openchallenges/api-client-angular';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
+import {
+  ChallengeCategoriesOptions,
+  ChallengeIncentivesOptions,
+  ChallengeStatusOptions,
+  ChallengeSubmissionTypesOptions,
+  ChallengeSortOptions,
+} from '@sagebionetworks/openchallenges/util';
 
 const thisYear = new Date().getFullYear();
 
@@ -55,113 +55,13 @@ export const challengeStartYearRangeFilter: Filter[] = [
   },
 ];
 
-export const challengeStatusFilter: Filter[] = [
-  {
-    value: ChallengeStatus.Active,
-    label: 'Active',
-  },
-  {
-    value: ChallengeStatus.Upcoming,
-    label: 'Upcoming',
-  },
-  {
-    value: ChallengeStatus.Completed,
-    label: 'Completed',
-  },
-];
-
-export const challengeSubmissionTypesFilter: Filter[] = [
-  {
-    value: ChallengeSubmissionType.ContainerImage,
-    label: 'Container Image',
-  },
-  {
-    value: ChallengeSubmissionType.Mlcube,
-    label: 'MLCube',
-  },
-  {
-    value: ChallengeSubmissionType.Notebook,
-    label: 'Notebook',
-  },
-  {
-    value: ChallengeSubmissionType.PredictionFile,
-    label: 'Prediction File',
-  },
-  {
-    value: ChallengeSubmissionType.Other,
-    label: 'Other',
-  },
-];
-
-export const challengeIncentivesFilter: Filter[] = [
-  {
-    value: ChallengeIncentive.Monetary,
-    label: 'Monetary',
-  },
-  {
-    value: ChallengeIncentive.Publication,
-    label: 'Publication',
-  },
-  {
-    value: ChallengeIncentive.SpeakingEngagement,
-    label: 'Speaking Engagement',
-  },
-  {
-    value: ChallengeIncentive.Other,
-    label: 'Other',
-  },
-];
-
-export const challengePlatformsFilter: Filter[] = [];
-
+export const challengeCategoriesFilter: Filter[] = ChallengeCategoriesOptions;
+export const challengeIncentivesFilter: Filter[] = ChallengeIncentivesOptions;
 export const challengeInputDataTypesFilter: Filter[] = [];
-
-export const challengeCategoriesFilter: Filter[] = [
-  {
-    value: ChallengeCategory.Featured,
-    label: 'Featured',
-  },
-  {
-    value: ChallengeCategory.Benchmark,
-    label: 'Benchmark',
-  },
-  {
-    value: ChallengeCategory.Hackathon,
-    label: 'Hackathon',
-  },
-  {
-    value: ChallengeCategory.StartingSoon,
-    label: 'Starting Soon',
-  },
-  {
-    value: ChallengeCategory.EndingSoon,
-    label: 'Closing Soon',
-  },
-  {
-    value: ChallengeCategory.RecentlyStarted,
-    label: 'Recently Launched',
-  },
-  {
-    value: ChallengeCategory.RecentlyEnded,
-    label: 'Recently Completed',
-  },
-];
-
 export const challengeOrganizationsFilter: Filter[] = [];
-
 export const challengeOrganizersFilter: Filter[] = [];
-
-export const challengeSortFilter: Filter[] = [
-  {
-    value: ChallengeSort.Relevance,
-    label: 'Relevance',
-  },
-  {
-    value: ChallengeSort.StartDate,
-    label: 'Start Date',
-  },
-  {
-    value: ChallengeSort.Starred,
-    label: 'Most Starred',
-  },
-];
+export const challengePlatformsFilter: Filter[] = [];
+export const challengeSortFilter: Filter[] = ChallengeSortOptions;
+export const challengeStatusFilter: Filter[] = ChallengeStatusOptions;
+export const challengeSubmissionTypesFilter: Filter[] =
+  ChallengeSubmissionTypesOptions;
