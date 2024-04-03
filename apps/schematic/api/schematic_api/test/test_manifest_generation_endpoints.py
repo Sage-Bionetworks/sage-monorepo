@@ -10,6 +10,9 @@ from .conftest import (
     TEST_SCHEMA_URL,
 )
 
+GENERATE_EXCEL_MANIFESTS_URL = (
+    f"/api/v1/generateExcelManifest?schemaUrl={TEST_SCHEMA_URL}"
+)
 GENERATE_GOOGLE_SHEET_MANIFESTS_URL = (
     f"/api/v1/generateGoogleSheetManifests?schemaUrl={TEST_SCHEMA_URL}"
 )
@@ -19,17 +22,62 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 
-CREATE_MANIFESTS_ARGS = [
-    "path_to_data_model",
-    "output_format",
-    "data_types",
-    "title",
-    "access_token",
-    "dataset_ids",
-    "strict",
-    "use_annotations",
-    "data_model_labels",
-]
+
+class TestGenerateExcelManifest(BaseTestCase):
+    """Tests excel manifest endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        with patch(CREATE_MANIFESTS_MOCK, return_value=["path"]) as mock_method:  # type: ignore
+            url = (
+                f"{GENERATE_EXCEL_MANIFESTS_URL}"
+                "&datasetId=syn2"
+                "&dataType=data_type"
+                "&assetViewId=syn1"
+            )
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            result = response.json
+            assert isinstance(result, str)
+            assert result == "path"
+            call_args = mock_method.call_args.kwargs
+            assert call_args["output_format"] == "excel"
+            assert call_args["data_types"] == ["data_type"]
+            assert not call_args["title"]
+            assert call_args["dataset_ids"] == ["syn2"]
+            assert call_args["strict"]
+            assert not call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "class_label"
+
+    def test_arguments(self) -> None:
+        """Test for arguments"""
+        with patch(CREATE_MANIFESTS_MOCK, return_value=["path"]) as mock_method:  # type: ignore
+            url = (
+                f"{GENERATE_EXCEL_MANIFESTS_URL}"
+                "&datasetId=syn2"
+                "&dataType=data_type1"
+                "&manifestTitle=title"
+                "&useStrictValidation=false"
+                "&addAnnotations=true"
+                "&displayLabelType=display_label"
+            )
+            response = self.client.open(url, method="GET", headers=HEADERS)
+            self.assert200(
+                response, f"Response body is : {response.data.decode('utf-8')}"
+            )
+            result = response.json
+            assert isinstance(result, str)
+            assert result == "path"
+            call_args = mock_method.call_args.kwargs
+            assert call_args["output_format"] == "excel"
+            assert call_args["data_types"] == ["data_type1"]
+            assert call_args["dataset_ids"] == ["syn2"]
+            assert call_args["title"] == "title"
+            assert not call_args["strict"]
+            assert call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "display_label"
 
 
 class TestGenerateGoogleSheetManifests(BaseTestCase):
@@ -53,13 +101,13 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["node_label"]
             assert not call_args["title"]
             assert call_args["dataset_ids"] == ["syn2"]
             assert call_args["strict"]
             assert not call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "class_label"
 
     def test_arguments(self) -> None:
         """Test for correct arguments"""
@@ -73,6 +121,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
                 "&manifestTitle=title"
                 "&useStrictValidation=false"
                 "&addAnnotations=true"
+                "&displayLabelType=display_label"
             )
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
@@ -83,15 +132,15 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["data_type1", "data_type2"]
             assert call_args["dataset_ids"] == ["syn2", "syn3"]
             assert call_args["title"] == "title"
             assert not call_args["strict"]
             assert call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "display_label"
 
-            url = f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}" "&generateAllManifests=true"
+            url = f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}&generateAllManifests=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -101,10 +150,10 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["all manifests"]
             assert not call_args["title"]
             assert not call_args["dataset_ids"]
             assert call_args["strict"]
             assert not call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "class_label"
