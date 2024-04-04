@@ -86,3 +86,60 @@ faster for Rin) and upload speeds (up to 180.5 times faster for Sakura) when dev
 instance. This table illustrates well the diversity in compute resources available locally to
 developers, and how relying on remote hosts like EC2 instances can provide a better working
 environment to developers.
+
+### Data collection
+
+Runtimes are obtained from [this
+commit](https://github.com/Sage-Bionetworks/sage-monorepo/tree/25f2292388d9e71bf46ba137aa530aefb571deab).
+
+Identification of the compute resources.
+
+```console
+$ nproc
+$ cat /proc/cpuinfo
+$ cat /proc/meminfo
+```
+
+Runtimes are averaged over 10 runs that follow a warmup run using
+[hyperfine](https://github.com/sharkdp/hyperfine).
+
+```console
+$ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=lint --skip-nx-cache'
+$ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=build --skip-nx-cache'
+$ hyperfine --warmup 1 --runs 10 'nx run-many --all --target=test --skip-nx-cache'
+$ hyperfine --warmup 1 --runs 10 'nx test api --skip-nx-cache'
+$ hyperfine --warmup 1 --runs 10 'nx test web-ui --skip-nx-cache'
+```
+
+Internet speeds are measured with [speedtest-cli](https://www.speedtest.net/apps/cli).
+
+```console
+$ speedtest
+```
+
+## Preparing the remote host (AWS EC2)
+
+This section describes how to instantiate an AWS EC2 as the remote host. Steps outlined below will
+assume you have access to the Sage AWS Service Catalog.
+
+### Creating the EC2 instance
+
+- Log in to the [Service Catalog](https://sc.sageit.org) with your Synapse credentials.
+- From the list of Products, select **EC2: Linux Docker**. On the Product page, click on **Launch
+product** in the upper-right corner.
+- On the next page, fill out the wizard as follows:
+  - **Provisioned product name**
+    - Name: `{GitHub username}-devcontainers-{yyyymmdd}`
+    - Example: `tschaffter-devcontainers-20240404`
+  - **Parameters**:
+    - EC2 Instance Type: `t3a.2xlarge`
+    - Base Image: `AmazonLinuxDocker` (leave default)
+    - Disk Size: 80
+  - **Manage tags**:
+    - `CostCenter`: Select the Cost Center associated to your project
+  - **Enable event notifications**: SKIP - DO NOT MODIFY
+- Click on **Launch product**. Your instance will take anywhere between 3-5 minutes to deploy.  You
+can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
+leave and come back at a later time.
+
+## References

@@ -39,6 +39,7 @@ nav:
       - R:
           - Add an R project: tutorials/r/new-project.md
   - Developers Guide:
+      - Developing on a remote host: developers-guide/developing-on-a-remote-host.md
       - Creating a commit with multiple authors: developers-guide/creating-a-commit-with-multiple-authors.md
       - Common Issues: developers-guide/faq.md
   - Reference:
