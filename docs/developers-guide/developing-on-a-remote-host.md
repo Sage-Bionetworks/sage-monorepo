@@ -117,29 +117,169 @@ Internet speeds are measured with [speedtest-cli](https://www.speedtest.net/apps
 $ speedtest
 ```
 
-## Preparing the remote host (AWS EC2)
+## Preparing the remote host - AWS EC2
 
 This section describes how to instantiate an AWS EC2 as the remote host. Steps outlined below will
 assume you have access to the Sage AWS Service Catalog.
 
 ### Creating the EC2 instance
 
-- Log in to the [Service Catalog](https://sc.sageit.org) with your Synapse credentials.
-- From the list of Products, select **EC2: Linux Docker**. On the Product page, click on **Launch
+1. Log in to the [Service Catalog](https://sc.sageit.org) with your Synapse credentials.
+2. From the list of Products, select **EC2: Linux Docker**. On the Product page, click on **Launch
 product** in the upper-right corner.
-- On the next page, fill out the wizard as follows:
-  - **Provisioned product name**
-    - Name: `{GitHub username}-devcontainers-{yyyymmdd}`
-    - Example: `tschaffter-devcontainers-20240404`
-  - **Parameters**:
-    - EC2 Instance Type: `t3a.2xlarge`
-    - Base Image: `AmazonLinuxDocker` (leave default)
-    - Disk Size: 80
-  - **Manage tags**:
-    - `CostCenter`: Select the Cost Center associated to your project
-  - **Enable event notifications**: SKIP - DO NOT MODIFY
-- Click on **Launch product**. Your instance will take anywhere between 3-5 minutes to deploy.  You
+3. On the next page, fill out the wizard as follows:
+    - **Provisioned product name**
+        - Name: `{GitHub username}-devcontainers-{yyyymmdd}`
+        - Example: `tschaffter-devcontainers-20240404`
+    - **Parameters**
+        - EC2 Instance Type: `t3a.2xlarge`
+        - Base Image: `AmazonLinuxDocker` (leave default)
+        - Disk Size: 80
+    - **Manage tags**
+        - `CostCenter`: Select the Cost Center associated to your project
+    - **Enable event notifications**: SKIP - DO NOT MODIFY
+4. Click on **Launch product**. Your instance will take anywhere between 3-5 minutes to deploy. You
 can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
 leave and come back at a later time.
 
-## References
+### Connecting to the EC2 instance
+
+If this is your first time ever connecting to an instance from your machine, you will first need to
+set up EC2 access with the AWS Systems Manager (SSM). Follow the instructions below to complete the
+setup:
+
+1. [Create a Synapse personal access
+  token](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
+2. [SSM access to an
+  Instance](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
+
+(Don't worry, you will only need to do this once for your local machine!)
+
+Then, from your computer:
+
+1. In a terminal, connect to your instance following the [**Connecting to an Instance - SSM with
+SSH**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH)
+instructions from the Service Catalog Provisioning doc.
+2. Once you can successfully login through SSM with SSH, exit the instance.
+3. Navigate to the Provisioned products page for your instance.  Under **Events**, copy the
+`EC2InstancePrivateIpAddress`
+4. In your terminal, add the following into your local `~/.ssh/config`:
+   ```console
+   Host devcontainers
+       HostName <private_ip>
+       User ec2-user
+       IdentityFile ~/.ssh/id_rsa
+   ```
+5. Connect to the [Sage
+  VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
+6. In your terminal, SSH to the instance to ensure `~/.ssh/config` was setup correctly.
+   ```console
+   ssh devcontainers
+   ```
+
+### Preparing the EC2 instance
+
+Once you are logged in into the instance:
+
+1. Update the system packages.
+   ```console
+   sudo yum update -y
+   ```
+
+2. Docker should already be readily available on the instance. Verify this by running any Docker
+command, e.g.
+   ```console
+   docker --version
+   ```
+
+3. TODO: Redirect to the page the describe how to clone the repo
+
+### Opening the monorepo in VS Code
+
+In VS Code:
+
+1. Install the extension `Remote - SSH` and `Remote - Containers`.
+2. `Remote-SSH: Connect to Host...` > Select the host.
+3. Verify that the bottom-left corner of the VSCode window shows `SSH: <host name>` upon successfully
+  connecting to the remote instance.
+
+  <!-- <img src="images/vscode-remote-ssh-button.png" height="24"> -->
+
+4. `Remote-Containers: Open Folder in Container...`
+5. Select the project folder and click on `OK`.
+6. Verify that the bottom-left corner of the VSCode window shows `Dev Container: Sage Dev Container @
+  ssh://<host name>`.
+
+  <!-- <img src="images/vscode-remote-ssh-devcontainer-button.png" height="58"> -->
+
+Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
+
+## Preparing the remote host - GitHub Codespace
+
+1. Open your browser and go to [GitHub Codespaces].
+2. Click on the "New codespace".
+3. Enter the information requested:
+    - **Repository**: Select your fork of the monorepo
+    - **Branch**: Select the default branch
+    - **Dev container configuration**: Select the dev container definition
+    - **Region**: Select your preferred region
+    - **Machine type**: Select the machine type
+4. Click on "Create codespace".
+5. Wait for the codespace to be created.
+6. Configure the monorepo and install its dependencies (see README).
+
+### Stopping a Codespace instance
+
+If your codespace is open in your browser, you can stop it with the following step. Note that a
+codespace stops automatically after one hour of inactivity.
+
+1. Click on the button "Codespaces" located in the bottom-left corner.
+2. Click on "Stop Current Codespace".
+
+### Opening a Codespace with VS Code
+
+If you prefer to develop with VS Code rather than inside your browser:
+
+1. Open your browser and go to [GitHub Codespaces].
+2. Find the codespace that you want to open with VS Code.
+3. Click on the three-dot menu > "Open in ..." > "Open in Visual Studio Code"
+
+### Changing the machine type
+
+The type of machine used by a codespace can be changed at any time, for example when a beefier
+codespace instance is needed. To change the machine type of an existing codespace.
+
+1. Stop the codespace.
+2. Open your browser and go to [GitHub Codespaces].
+3. Find the codespace that you want to open with VS Code.
+4. Click on the three-dot menu > "Change machine type".
+5. Update the properties of the machine and click on "Update codespace".
+
+## Accessing apps and services
+
+The devcontainer provided with this project uses the VS Code devcontainer feature
+`docker-in-docker`. In addition to isolating the Docker engine running in the devcontainer from the
+engine running on the host, this feature enables VS Code to forward the ports defined in
+`devcontainer.json` to the local envrionment of the developer. Therefore, apps and services can be
+accessed using the address `http://localhost` even though they are running on the remote host!
+
+Accessing the apps and services using the IP address of the remote host won't work, unless you
+replace the feature `docker-in-docker` by `docker-from-docker`. In this case, `http://localhost` can
+no longer be used to access the apps and services.
+
+## Uploading files
+
+Simply drag and drop files to the VS Code explorer to upload files from your local environment to
+the remote host.
+
+## Closing the remote connection
+
+Click on the button in the bottom-left corner of VS Code and select one of these options:
+
+- `Close Remote Connection` to close the connection with the remote host.
+- `Reopen Folder in SSH` if you want to stop the devcontainer but stay connected to the remote host.
+
+<!-- Links -->
+
+[GitHub Codespaces]: https://github.com/codespaces
+[Codespaces pricing]: https://docs.github.com/en/billing/managing-billing-for-github-codespaces/about-billing-for-github-codespaces
