@@ -16,10 +16,7 @@ uploading artifacts, like pulling or pushing Docker images, may take significant
 complete.
 
 This page describes how to setup a environment that enables developers to use VS Code while using
-the compute resources of a remote host. More specifically, you will learn how to:
-
-- create an EC2 instance from Sage Service Catalog
-- connect to the EC2 instance with VS Code
+the compute resources of a remote host.
 
 ## Use case
 
