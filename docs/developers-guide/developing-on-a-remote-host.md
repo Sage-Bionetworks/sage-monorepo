@@ -219,7 +219,7 @@ Then, on your local machine:
     ```
 2. Add the following content to your local `~/.ssh/config`.
     ```console
-    Host devcontainers
+    Host {alias}
         HostName {private ip}
         User ec2-user
         IdentityFile {path to your private SSH key, e.g. ~/.ssh/id_rsa}
