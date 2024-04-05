@@ -139,6 +139,24 @@ product** in the upper-right corner.
 can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
 leave and come back at a later time.
 
+### Stopping the EC2 instance
+
+It's not something you should do now as part of this tutorial. This section serves as a reminder
+that AWS charges for evey hour the EC2 instance is running. As soon as you identify that you will no
+longer need the instance for the rest of the day, open the Service Catalog to stop it.
+
+1. Open the Service Catalog, then select **Provisioned products**.
+2. Select the EC2 instance.
+3. Click on the button **Actions** > **Service actions** > **Stop**.
+4. Confirm the action.
+
+After a few seconds, the EC2 instance will be stopped.
+
+!!! note
+
+    AWS still charges us for the storage space that the EC2 instance takes even when it's not running.
+    Consider destroying the EC2 instance when you decide that you will no longer need it.
+
 ### Connecting to the EC2 instance with AWS Console
 
 We will now use the AWS Console to open a terminal to the EC2 instance and setup your public SSH
@@ -217,6 +235,10 @@ Then, on your local machine:
 5. Answer the prompts
 
 You are now connected to the EC2 instance! 🚀
+
+!!! tip
+
+    Please remember to stop the EC2 instance at the end of your working day to save on costs.
 
 ### Next
 
