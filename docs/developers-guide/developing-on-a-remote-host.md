@@ -18,7 +18,7 @@ complete.
 This page describes how to setup a environment that enables developers to use VS Code while using
 the compute resources of a remote host.
 
-## Use case
+## Motivation
 
 To illustrate the benefit of developing on a remote host, this table summarizes the local compute
 resources available to the developers of OpenChallenges in 2023. The same information is displayed
@@ -84,7 +84,7 @@ instance. This table illustrates well the diversity in compute resources availab
 developers, and how relying on remote hosts like EC2 instances can provide a better working
 environment to developers.
 
-### Data collection
+### Collectings OS info and benchmarking tasks
 
 Runtimes are obtained from [this
 commit](https://github.com/Sage-Bionetworks/sage-monorepo/tree/25f2292388d9e71bf46ba137aa530aefb571deab).
@@ -139,79 +139,100 @@ product** in the upper-right corner.
 can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
 leave and come back at a later time.
 
-### Connecting to the EC2 instance
+### Connecting to the EC2 instance with AWS Console
 
-If this is your first time ever connecting to an instance from your machine, you will first need to
-set up EC2 access with the AWS Systems Manager (SSM). Follow the instructions below to complete the
-setup:
+We will now use the AWS Console to open a terminal to the EC2 instance and setup your public SSH
+key.
 
-1. [Create a Synapse personal access
-  token](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-CreateaSynapsepersonalaccesstoken)
-2. [SSM access to an
-  Instance](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMaccesstoanInstance)
+!!! note
 
-(Don't worry, you will only need to do this once for your local machine!)
+    This section assumes that you already have a public and private SSH key created on your local
+    machine from where you are running VS Code.
 
-Then, from your computer:
+1. Open the Service Catalog, then select **Provisioned products**.
+2. In the section **Resources**, click on the link for "EC2Instance".
+3. Click on the checkbox of the new EC2 instance created.
+4. Click on the button **Actions** > **Connect**.
+5. Click on **Connect**.
 
-1. In a terminal, connect to your instance following the [**Connecting to an Instance - SSM with
-SSH**](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html#ServiceCatalogProvisioning-SSMwithSSH)
-instructions from the Service Catalog Provisioning doc.
-2. Once you can successfully login through SSM with SSH, exit the instance.
-3. Navigate to the Provisioned products page for your instance.  Under **Events**, copy the
-`EC2InstancePrivateIpAddress`
-4. In your terminal, add the following into your local `~/.ssh/config`:
-   ```console
-   Host devcontainers
-       HostName <private_ip>
-       User ec2-user
-       IdentityFile ~/.ssh/id_rsa
-   ```
-5. Connect to the [Sage
-  VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide)
-6. In your terminal, SSH to the instance to ensure `~/.ssh/config` was setup correctly.
-   ```console
-   ssh devcontainers
-   ```
+### Configuring the SSH public key on the EC2 instance
 
-### Preparing the EC2 instance
+6. Login as the user `ec2-user` and move to its home directory.
+    ```console
+    $ sudo -s
+    # su ec2-user
+    $ cd
+    ```
+7. Create the folder `~/.ssh` (if needed).
+    ```console
+    $ mkdir ~/.ssh
+    $ chmod 700 ~/.ssh
+    ```
+8. Create the file `~/.ssh/authorized_keys` (if needed).
+    ```console
+    $ touch ~/.ssh/authorized_keys
+    $ chmod 644 ~/.ssh/authorized_keys
+    ```
+9. Copy and paste your public SSH key at the end of `~/.ssh/authorized_keys`.
+10. Click on the button **Terminate** to terminate the session and confirm the action.
 
-Once you are logged in into the instance:
+### Configuring SSH on the local machine
 
-1. Update the system packages.
-   ```console
-   sudo yum update -y
-   ```
+This section describes how to create a profile for the EC2 instance in your local `~./ssh/config`
+file.
 
-2. Docker should already be readily available on the instance. Verify this by running any Docker
-command, e.g.
-   ```console
-   docker --version
-   ```
+!!! note
 
-3. TODO: Redirect to the page the describe how to clone the repo
+    This section assumes that you already have a public and private SSH key created on your local
+    machine from where you are running VS Code.
 
-### Opening the monorepo in VS Code
+First, you need to identify the private IP address of the EC2 instance.
 
-In VS Code:
+1. Open the Service Catalog, then select **Provisioned products**.
+2. In the section **Outputs**, the private IP address is the value associated to
+   "EC2InstancePrivateIpAddress".
 
-1. Install the extension `Remote - SSH` and `Remote - Containers`.
-2. `Remote-SSH: Connect to Host...` > Select the host.
-3. Verify that the bottom-left corner of the VSCode window shows `SSH: <host name>` upon successfully
-  connecting to the remote instance.
+Then, on your local machine:
 
-  <!-- <img src="images/vscode-remote-ssh-button.png" height="24"> -->
+1. Create the file `~/.ssh/config` (if needed).
+    ```console
+    $ touch ~/.ssh/config
+    $ chmod 600 ~/.ssh/config
+    ```
+2. Add the following content to your local `~/.ssh/config`.
+    ```console
+    Host devcontainers
+        HostName {private ip}
+        User ec2-user
+        IdentityFile {path to your private SSH key, e.g. ~/.ssh/id_rsa}
+    ```
+    where the placeholder values `{...}` should be replaced with the correct values.
 
-4. `Remote-Containers: Open Folder in Container...`
-5. Select the project folder and click on `OK`.
-6. Verify that the bottom-left corner of the VSCode window shows `Dev Container: Sage Dev Container @
-  ssh://<host name>`.
+### Connecting to the EC2 instance with VS Code
 
-  <!-- <img src="images/vscode-remote-ssh-devcontainer-button.png" height="58"> -->
+1. Open VS Code.
+2. Install the VS Code extension pack "Remote Development".
+3. Open the command palette with `Ctrl+Shit+P`.
+4. `Remote-SSH: Connect to Host...` > Select the host.
+5. Answer the prompts
 
-Congratulations, you are now ready to develop in the devcontainer that runs on the EC2 instance! 🚀
+You are now connected to the EC2 instance! 🚀
+
+### Next
+
+Go to the section XXX for the instructions on how to setup your environment to contribute to Sage
+Monorepo.
 
 ## Preparing the remote host - GitHub Codespace
+
+This section describes how to open your fork of Sage Monorepo in a GitHub Codespaces instance.
+
+!!! note
+
+    In practice, we will prefer to develop in an EC2 instance created from the Service Catalog for
+    security and budget reasons. Please refer to the instructions given above. Using a GitHub Codespace
+    has been proven to be ponctually useful for quick tests that require a fresh environment, as one of
+    Codespaces benefits is that they can be created and destroyed faster than EC2 instances.
 
 1. Open your browser and go to [GitHub Codespaces].
 2. Click on the "New codespace".
