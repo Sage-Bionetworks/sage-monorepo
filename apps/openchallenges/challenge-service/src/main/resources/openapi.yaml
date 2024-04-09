@@ -19,6 +19,8 @@ tags:
   name: ChallengeAnalytics
 - description: Operations about challenge platforms.
   name: ChallengePlatform
+- description: Operations about EDAM concepts.
+  name: EdamConcept
 paths:
   /challenges:
     get:
@@ -239,6 +241,45 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: ChallengePlatform
+  /edamConcepts:
+    get:
+      description: List EDAM concepts
+      operationId: listEdamConcepts
+      parameters:
+      - description: The search query used to find EDAM concepts.
+        explode: true
+        in: query
+        name: edamConceptSearchQuery
+        required: false
+        schema:
+          $ref: '#/components/schemas/EdamConceptSearchQuery'
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdamConceptsPage'
+          description: Success
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: Invalid request
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: List EDAM concepts
+      tags:
+      - EdamConcept
+      x-accepts: application/json
+      x-tags:
+      - tag: EdamConcept
 components:
   parameters:
     challengeSearchQuery:
@@ -277,6 +318,15 @@ components:
       schema:
         $ref: '#/components/schemas/ChallengePlatformName'
       style: simple
+    edamConceptSearchQuery:
+      description: The search query used to find EDAM concepts.
+      explode: true
+      in: query
+      name: edamConceptSearchQuery
+      required: false
+      schema:
+        $ref: '#/components/schemas/EdamConceptSearchQuery'
+      style: form
   responses:
     BadRequest:
       content:
@@ -974,6 +1024,50 @@ components:
       type: object
       x-java-class-annotations:
       - '@lombok.Builder'
+    EdamConceptSearchQuery:
+      description: An EDAM concept search query.
+      properties:
+        pageNumber:
+          default: 0
+          description: The page number.
+          format: int32
+          minimum: 0
+          type: integer
+        pageSize:
+          default: 100
+          description: The number of items in a single page.
+          format: int32
+          minimum: 1
+          type: integer
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          example: sequence image
+          type: string
+      type: object
+    EdamConcept:
+      description: The EDAM concept.
+      nullable: true
+      properties:
+        classId:
+          example: http://edamontology.org/data_0850
+          maxLength: 60
+          type: string
+        preferredLabel:
+          example: Sequence set
+          maxLength: 80
+          type: string
+      required:
+      - classId
+      - preferredLabel
+      type: object
+    EdamConceptsPage:
+      allOf:
+      - $ref: '#/components/schemas/PageMetadata'
+      - $ref: '#/components/schemas/EdamConceptsPage_allOf'
+      description: A page of EDAM concepts.
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     ChallengesPage_allOf:
       properties:
         challenges:
@@ -1005,5 +1099,16 @@ components:
           type: array
       required:
       - challengePlatforms
+      type: object
+      example: null
+    EdamConceptsPage_allOf:
+      properties:
+        edamConcepts:
+          description: A list of EDAM concepts.
+          items:
+            $ref: '#/components/schemas/EdamConcept'
+          type: array
+      required:
+      - edamConcepts
       type: object
       example: null

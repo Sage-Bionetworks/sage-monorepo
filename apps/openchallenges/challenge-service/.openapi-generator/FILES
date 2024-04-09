@@ -13,6 +13,9 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/Challenge
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengePlatformApi.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengePlatformApiController.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/ChallengePlatformApiDelegate.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/EdamConceptApi.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/EdamConceptApiController.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/api/EdamConceptApiDelegate.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/configuration/EnumConverterConfiguration.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/configuration/HomeController.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/configuration/SpringDocConfiguration.java
@@ -35,6 +38,9 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/Cha
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeSubmissionTypeDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPerYearDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptSearchQueryDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptsPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamDataDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamOperationDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/PageMetadataDto.java
