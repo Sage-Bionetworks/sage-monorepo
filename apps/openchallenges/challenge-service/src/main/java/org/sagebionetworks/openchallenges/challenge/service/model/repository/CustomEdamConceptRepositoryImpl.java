@@ -1,22 +1,16 @@
 package org.sagebionetworks.openchallenges.challenge.service.model.repository;
 
-import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.hibernate.search.backend.elasticsearch.ElasticsearchExtension;
 import org.hibernate.search.engine.search.common.BooleanOperator;
 import org.hibernate.search.engine.search.predicate.SearchPredicate;
 import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
 import org.hibernate.search.engine.search.query.SearchResult;
-import org.hibernate.search.engine.search.sort.SearchSort;
 import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
-import org.hibernate.search.engine.search.sort.dsl.SortOrder;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
-import org.sagebionetworks.openchallenges.challenge.service.exception.BadRequestException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamConceptEntity;
 import org.slf4j.Logger;
