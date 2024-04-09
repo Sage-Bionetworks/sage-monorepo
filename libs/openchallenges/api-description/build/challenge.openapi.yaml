@@ -19,6 +19,8 @@ tags:
     description: Operations about challenge analytics.
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+  - name: EdamConcept
+    description: Operations about EDAM concepts.
 paths:
   /challenges:
     get:
@@ -134,6 +136,26 @@ paths:
                 $ref: '#/components/schemas/ChallengePlatform'
         '404':
           $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /edamConcepts:
+    get:
+      tags:
+        - EdamConcept
+      summary: List EDAM concepts
+      description: List EDAM concepts
+      operationId: listEdamConcepts
+      parameters:
+        - $ref: '#/components/parameters/edamConceptSearchQuery'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EdamConceptsPage'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -699,6 +721,58 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    EdamConceptSearchQuery:
+      type: object
+      description: An EDAM concept search query.
+      properties:
+        pageNumber:
+          description: The page number.
+          type: integer
+          format: int32
+          default: 0
+          minimum: 0
+        pageSize:
+          description: The number of items in a single page.
+          type: integer
+          format: int32
+          default: 100
+          minimum: 1
+        searchTerms:
+          description: A string of search terms used to filter the results.
+          type: string
+          example: sequence image
+    EdamConcept:
+      type: object
+      description: The EDAM concept.
+      properties:
+        classId:
+          type: string
+          example: http://edamontology.org/data_0850
+          maxLength: 60
+        preferredLabel:
+          type: string
+          example: Sequence set
+          maxLength: 80
+      required:
+        - classId
+        - preferredLabel
+      nullable: true
+    EdamConceptsPage:
+      type: object
+      description: A page of EDAM concepts.
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            edamConcepts:
+              description: A list of EDAM concepts.
+              type: array
+              items:
+                $ref: '#/components/schemas/EdamConcept'
+          required:
+            - edamConcepts
+      x-java-class-annotations:
+        - '@lombok.Builder'
   parameters:
     challengeSearchQuery:
       name: challengeSearchQuery
@@ -726,6 +800,12 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/ChallengePlatformName'
+    edamConceptSearchQuery:
+      name: edamConceptSearchQuery
+      description: The search query used to find EDAM concepts.
+      in: query
+      schema:
+        $ref: '#/components/schemas/EdamConceptSearchQuery'
   responses:
     BadRequest:
       description: Invalid request
