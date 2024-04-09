@@ -1,6 +1,5 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptsPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.EdamConceptService;
