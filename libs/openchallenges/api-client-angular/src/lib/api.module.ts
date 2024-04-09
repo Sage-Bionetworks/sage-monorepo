@@ -6,6 +6,7 @@ import { ChallengeService } from './api/challenge.service';
 import { ChallengeAnalyticsService } from './api/challengeAnalytics.service';
 import { ChallengeContributionService } from './api/challengeContribution.service';
 import { ChallengePlatformService } from './api/challengePlatform.service';
+import { EdamConceptService } from './api/edamConcept.service';
 import { ImageService } from './api/image.service';
 import { OrganizationService } from './api/organization.service';
 import { UserService } from './api/user.service';
