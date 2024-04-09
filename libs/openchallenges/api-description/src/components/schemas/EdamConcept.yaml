@@ -1,0 +1,15 @@
+type: object
+description: The EDAM concept.
+properties:
+  classId:
+    type: string
+    example: 'http://edamontology.org/data_0850'
+    maxLength: 60
+  preferredLabel:
+    type: string
+    example: 'Sequence set'
+    maxLength: 80
+required:
+  - classId
+  - preferredLabel
+nullable: true

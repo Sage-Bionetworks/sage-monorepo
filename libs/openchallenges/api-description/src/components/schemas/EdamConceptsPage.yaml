@@ -1,0 +1,15 @@
+type: object
+description: A page of EDAM concepts.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      edamConcepts:
+        description: A list of EDAM concepts.
+        type: array
+        items:
+          $ref: EdamConcept.yaml
+    required:
+      - edamConcepts
+x-java-class-annotations:
+  - '@lombok.Builder'
