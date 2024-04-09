@@ -1044,10 +1044,20 @@ components:
           example: sequence image
           type: string
       type: object
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      example: 1
+      format: int64
+      type: integer
     EdamConcept:
       description: The EDAM concept.
       nullable: true
       properties:
+        id:
+          description: The unique identifier of the EDAM concept.
+          example: 1
+          format: int64
+          type: integer
         classId:
           example: http://edamontology.org/data_0850
           maxLength: 60
@@ -1058,6 +1068,7 @@ components:
           type: string
       required:
       - classId
+      - id
       - preferredLabel
       type: object
     EdamConceptsPage:

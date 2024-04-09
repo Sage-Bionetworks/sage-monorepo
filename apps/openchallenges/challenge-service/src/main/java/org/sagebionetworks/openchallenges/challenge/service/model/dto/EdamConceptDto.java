@@ -15,11 +15,38 @@ import javax.validation.constraints.*;
 // TODO Add x-java-class-annotations
 public class EdamConceptDto {
 
+  @JsonProperty("id")
+  private Long id;
+
   @JsonProperty("classId")
   private String classId;
 
   @JsonProperty("preferredLabel")
   private String preferredLabel;
+
+  public EdamConceptDto id(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  /**
+   * The unique identifier of the EDAM concept.
+   *
+   * @return id
+   */
+  @NotNull
+  @Schema(
+      name = "id",
+      example = "1",
+      description = "The unique identifier of the EDAM concept.",
+      required = true)
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
 
   public EdamConceptDto classId(String classId) {
     this.classId = classId;
@@ -72,19 +99,21 @@ public class EdamConceptDto {
       return false;
     }
     EdamConceptDto edamConcept = (EdamConceptDto) o;
-    return Objects.equals(this.classId, edamConcept.classId)
+    return Objects.equals(this.id, edamConcept.id)
+        && Objects.equals(this.classId, edamConcept.classId)
         && Objects.equals(this.preferredLabel, edamConcept.preferredLabel);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(classId, preferredLabel);
+    return Objects.hash(id, classId, preferredLabel);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class EdamConceptDto {\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    classId: ").append(toIndentedString(classId)).append("\n");
     sb.append("    preferredLabel: ").append(toIndentedString(preferredLabel)).append("\n");
     sb.append("}");
