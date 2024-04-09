@@ -893,10 +893,17 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: sequence image
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      type: integer
+      format: int64
+      example: 1
     EdamConcept:
       type: object
       description: The EDAM concept.
       properties:
+        id:
+          $ref: '#/components/schemas/EdamConceptId'
         classId:
           type: string
           example: 'http://edamontology.org/data_0850'
@@ -906,6 +913,7 @@ components:
           example: Sequence set
           maxLength: 80
       required:
+        - id
         - classId
         - preferredLabel
       nullable: true

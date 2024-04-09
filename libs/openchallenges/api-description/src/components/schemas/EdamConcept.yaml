@@ -1,6 +1,8 @@
 type: object
 description: The EDAM concept.
 properties:
+  id:
+    $ref: EdamConceptId.yaml
   classId:
     type: string
     example: 'http://edamontology.org/data_0850'
@@ -10,6 +12,7 @@ properties:
     example: 'Sequence set'
     maxLength: 80
 required:
+  - id
   - classId
   - preferredLabel
 nullable: true
