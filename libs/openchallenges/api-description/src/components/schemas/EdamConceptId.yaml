@@ -1,0 +1,4 @@
+description: The unique identifier of the EDAM concept.
+type: integer
+format: int64
+example: 1
