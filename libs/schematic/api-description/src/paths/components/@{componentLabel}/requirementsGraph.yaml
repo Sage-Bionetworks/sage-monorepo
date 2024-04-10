@@ -1,0 +1,20 @@
+parameters:
+  - $ref: ../../../components/parameters/path/componentLabel.yaml
+get:
+  tags:
+    - Schema
+  summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+  description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+  operationId: getComponentRequirementsGraph
+  parameters:
+    - $ref: ../../../components/parameters/query/schemaUrl.yaml
+    - $ref: ../../../components/parameters/query/displayLabelType.yaml
+  responses:
+    '200':
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: ../../../components/schemas/ComponentRequirementsGraph.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

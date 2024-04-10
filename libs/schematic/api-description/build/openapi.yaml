@@ -623,6 +623,48 @@ paths:
                 type: string
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsArray:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      operationId: getComponentRequirementsArray
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementsArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsGraph:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      operationId: getComponentRequirementsGraph
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementsGraph'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /schemaAttributes:
     get:
       tags:
@@ -1284,6 +1326,39 @@ components:
       description: The label of a component in a schema
       type: string
       example: MolecularEntity
+    ComponentRequirementsArray:
+      type: object
+      description: An array of components
+      properties:
+        componentRequirementsList:
+          type: array
+          items:
+            type: string
+    ComponentRequirementsSubgraph:
+      type: object
+      description: A pair of components
+      properties:
+        component1:
+          type: string
+          description: The display name of the first component in the graph
+          example: component1
+        component2:
+          type: string
+          description: The display name of the second component in the graph
+          example: component2
+      required:
+        - component1
+        - component2
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ComponentRequirementsGraph:
+      type: object
+      description: A graph of components
+      properties:
+        componentRequirementsGraph:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentRequirementsSubgraph'
     RelationshipType:
       description: A type of schema relationship
       type: string
