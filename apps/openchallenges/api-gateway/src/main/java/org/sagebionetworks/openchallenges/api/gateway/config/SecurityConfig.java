@@ -19,6 +19,7 @@ public class SecurityConfig {
         .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
         .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
         .permitAll().pathMatchers("/api/v1/challenges/**")
+        .permitAll().pathMatchers("/api/v1/edamConcepts/**")
         .permitAll().pathMatchers("/api/v1/images/**")
         .permitAll().pathMatchers("/api/v1/organizations/**")
         .permitAll()

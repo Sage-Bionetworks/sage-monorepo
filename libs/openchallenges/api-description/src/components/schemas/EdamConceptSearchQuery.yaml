@@ -1,0 +1,19 @@
+type: object
+description: An EDAM concept search query.
+properties:
+  pageNumber:
+    description: The page number.
+    type: integer
+    format: int32
+    default: 0
+    minimum: 0
+  pageSize:
+    description: The number of items in a single page.
+    type: integer
+    format: int32
+    default: 100
+    minimum: 1
+  searchTerms:
+    description: A string of search terms used to filter the results.
+    type: string
+    example: 'sequence image'
