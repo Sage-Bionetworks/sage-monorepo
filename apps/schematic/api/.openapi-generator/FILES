@@ -13,6 +13,9 @@ schematic_api/models/__init__.py
 schematic_api/models/asset_type.py
 schematic_api/models/base_model_.py
 schematic_api/models/basic_error.py
+schematic_api/models/component_requirement_array.py
+schematic_api/models/component_requirement_graph.py
+schematic_api/models/component_requirement_subgraph.py
 schematic_api/models/connected_node_pair.py
 schematic_api/models/connected_node_pair_array.py
 schematic_api/models/connected_node_pair_page.py

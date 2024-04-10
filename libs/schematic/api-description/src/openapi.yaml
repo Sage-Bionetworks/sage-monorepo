@@ -89,6 +89,12 @@ paths:
   /components/{componentLabel}/:
     $ref: paths/components/@{componentLabel}/component.yaml
 
+  /components/{componentLabel}/requirementsArray:
+    $ref: paths/components/@{componentLabel}/requirementsArray.yaml
+
+  /components/{componentLabel}/requirementsGraph:
+    $ref: paths/components/@{componentLabel}/requirementsGraph.yaml
+
   /schemaAttributes:
     $ref: paths/schemaAttributes.yaml
 
@@ -118,6 +124,3 @@ paths:
 
   /generateGoogleSheetManifests:
     $ref: paths/generateGoogleSheetManifests.yaml
-
-  /generateExcelManifest:
-    $ref: paths/generateExcelManifest.yaml

@@ -15,55 +15,6 @@ from schematic_api.controllers.utils import (
 
 
 @handle_exceptions
-def generate_excel_manifest(
-    schema_url: str,
-    dataset_id: str | None,
-    add_annotations: bool,
-    manifest_title: str,
-    data_type: str | None,
-    display_label_type: DisplayLabelType,
-    use_strict_validation: bool,
-    asset_view_id: str | None,
-) -> tuple[str | BasicError, int]:
-    """Generates a manifest in excel form
-    Args:
-        schema_url (str): The URL of the schema
-        dataset_id (str | None): Use this to get the existing manifest in the dataset.
-          Must be of same type as the data_type
-        add_annotations (bool): Whether or not annotatiosn get added to the manifest
-        manifest_title (str): Title of the manifest
-        data_type (str | None): The datatype of the manifest to generate
-        display_label_type (DisplayLabelType): The type of label to use as display
-        use_strict_validation (bool): Whether or not to use google sheet strict validation
-        asset_view_id (str): ID of the asset view
-    Returns:
-        tuple[str | BasicError], int]: A tuple
-           The first item is a path to an manifest in Excel form or an error object
-           The second item is the response status
-    """
-    access_token = get_access_token()
-    if asset_view_id:
-        CONFIG.synapse_master_fileview_id = asset_view_id
-    schema_path = download_schema_file_as_jsonld(schema_url)
-    manifest_path_list = ManifestGenerator.create_manifests(
-        path_to_data_model=schema_path,
-        output_format="excel",
-        data_types=[data_type],
-        title=manifest_title,
-        access_token=access_token,
-        dataset_ids=[dataset_id],
-        strict=use_strict_validation,
-        use_annotations=add_annotations,
-        data_model_labels=display_label_type,
-    )
-    manifest = manifest_path_list[0]
-    assert isinstance(manifest, str)
-    result: str | BasicError = manifest
-    status = 200
-    return result, status
-
-
-@handle_exceptions
 def generate_google_sheet_manifests(
     schema_url: str,
     add_annotations: bool,

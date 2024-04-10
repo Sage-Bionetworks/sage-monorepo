@@ -2,6 +2,7 @@
 
 # pylint: disable=duplicate-code
 import unittest
+from unittest.mock import patch, Mock, MagicMock
 
 from schematic_api.test import BaseTestCase
 from .conftest import TEST_SCHEMA_URL, PAGING_KEYS
@@ -12,6 +13,12 @@ HEADERS = {
 }
 
 COMPONENT_URL = "/api/v1/components/Patient/?schemaUrl="
+COMPONENT_REQUIREMENTS_ARRAY_URL = (
+    "/api/v1/components/Biospecimen/requirementsArray?schemaUrl="
+)
+COMPONENT_REQUIREMENTS_GRAPH_URL = (
+    "/api/v1/components/Biospecimen/requirementsGraph?schemaUrl="
+)
 CONNECTED_NODE_PAIR_ARRAY_URL = "/api/v1/connectedNodePairArray?schemaUrl="
 CONNECTED_NODE_PAIR_PAGE_URL = "/api/v1/connectedNodePairPage?schemaUrl="
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
@@ -43,6 +50,228 @@ class TestGetComponent(BaseTestCase):
     def test_404(self) -> None:
         """Test for 404 result"""
         url = f"{COMPONENT_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetComponentRequirementsArray(BaseTestCase):
+    """Test case for component requirements array endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, list)
+
+    @patch("schematic.models.metadata.MetadataModel.get_component_requirements")
+    def test_get_component_requirements_default_parameters(
+        self, mock_method: Mock
+    ) -> None:
+        """Tests that MetadataModel.get_component_requirements gets default parameters"""
+        mock_method.return_value = ["component"]
+
+        url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        mock_method.assert_called_once_with(
+            source_component="Biospecimen", as_graph=False
+        )
+
+    @patch("schematic.models.metadata.MetadataModel.get_component_requirements")
+    def test_get_component_requirements_parameters(self, mock_method: Mock) -> None:
+        """Tests that MetadataModel.get_component_requirements gets non default parameters"""
+        mock_method.return_value = ["component"]
+
+        url = f"/api/v1/components/Component/requirementsArray?schemaUrl={TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        mock_method.assert_called_once_with(
+            source_component="Component", as_graph=False
+        )
+
+    def test_metadata_model_default_parameters(self) -> None:
+        "Tests that MetadataModel is getting default parameters"
+
+        # Creates to mocked object and method to be used
+        mock_object = MagicMock()
+        mock_object.get_component_requirements = Mock(return_value=["component"])
+
+        # Patches in the mocked MetadataModel object and method into the API call
+        with patch(
+            "schematic_api.controllers.schema_controller_impl.MetadataModel",
+            return_value=mock_object,
+            autospec=True,
+        ) as patched_object:
+            # Patches the download_schema_file_as_jsonld function into the API call
+            with patch(
+                "schematic_api.controllers.schema_controller_impl.download_schema_file_as_jsonld",
+                return_value="temp_file_path.csv",
+                autospec=True,
+            ) as patched_function:
+                url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}{TEST_SCHEMA_URL}"
+                self.client.open(url, method="GET", headers=HEADERS)
+
+        # Asserts the patched object was called once with correct arguments and parameters
+        patched_object.assert_called_once()
+        call_args = patched_object.call_args.kwargs
+        assert call_args["inputMModelLocation"] == "temp_file_path.csv"
+        assert call_args["inputMModelLocationType"] == "local"
+        assert call_args["data_model_labels"] == "class_label"
+
+        # Asserts the patched function was called once with correct arguments and parameters
+        patched_function.assert_called_once_with(schema_url=TEST_SCHEMA_URL)
+
+    def test_metadata_model_parameters(self) -> None:
+        "Tests that MetadataModel is getting non default parameters"
+
+        # Creates to mocked object and method to be used
+        mock_object = MagicMock()
+        mock_object.get_component_requirements = Mock(return_value=["component"])
+
+        # Patches in the mocked MetadataModel object and method into the API call
+        with patch(
+            "schematic_api.controllers.schema_controller_impl.MetadataModel",
+            return_value=mock_object,
+            autospec=True,
+        ) as patched_object:
+            # Patches the download_schema_file_as_jsonld function into the API call
+            with patch(
+                "schematic_api.controllers.schema_controller_impl.download_schema_file_as_jsonld",
+                return_value="temp_file_path.csv",
+                autospec=True,
+            ) as patched_function:
+                url = (
+                    f"{COMPONENT_REQUIREMENTS_ARRAY_URL}url.jsonld"
+                    "&displayLabelType=display_label"
+                )
+                self.client.open(url, method="GET", headers=HEADERS)
+
+        # Asserts the pacthed object was called once with correct arguments and parameters
+        patched_object.assert_called_once()
+        call_args = patched_object.call_args.kwargs
+        assert call_args["inputMModelLocation"]
+        assert call_args["inputMModelLocationType"] == "local"
+        assert call_args["data_model_labels"] == "display_label"
+
+        # Asserts the patched function was called once with correct arguments and parameters
+        patched_function.assert_called_once_with(schema_url="url.jsonld")
+
+    def test_404(self) -> None:
+        """Test for 404 result"""
+        url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetComponentRequirementsGraph(BaseTestCase):
+    """Test case for component requirements graph endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, list)
+
+    @patch("schematic.models.metadata.MetadataModel.get_component_requirements")
+    def test_get_component_requirements_default_parameters(
+        self, mock_method: Mock
+    ) -> None:
+        """Tests that MetadataModel.get_component_requirements gets default parameters"""
+        mock_method.return_value = ["component"]
+
+        url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        mock_method.assert_called_once_with(
+            source_component="Biospecimen", as_graph=True
+        )
+
+    @patch("schematic.models.metadata.MetadataModel.get_component_requirements")
+    def test_get_component_requirements_parameters(self, mock_method: Mock) -> None:
+        """Tests that MetadataModel.get_component_requirements gets non default parameters"""
+        mock_method.return_value = ["component"]
+
+        url = f"/api/v1/components/Component/requirementsGraph?schemaUrl={TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+
+        mock_method.assert_called_once_with(source_component="Component", as_graph=True)
+
+    def test_metadata_model_default_parameters(self) -> None:
+        "Tests that MetadataModel is getting default parameters"
+
+        # Creates to mocked object and method to be used
+        mock_object = MagicMock()
+        mock_object.get_component_requirements = Mock(return_value=["component"])
+
+        # Patches in the mocked MetadataModel object and method into the API call
+        with patch(
+            "schematic_api.controllers.schema_controller_impl.MetadataModel",
+            return_value=mock_object,
+            autospec=True,
+        ) as patched_object:
+            # Patches the download_schema_file_as_jsonld function into the API call
+            with patch(
+                "schematic_api.controllers.schema_controller_impl.download_schema_file_as_jsonld",
+                return_value="temp_file_path.csv",
+                autospec=True,
+            ) as patched_function:
+                url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}{TEST_SCHEMA_URL}"
+                self.client.open(url, method="GET", headers=HEADERS)
+
+        # Asserts the patched object was called once with correct arguments and parameters
+        patched_object.assert_called_once()
+        call_args = patched_object.call_args.kwargs
+        assert call_args["inputMModelLocation"] == "temp_file_path.csv"
+        assert call_args["inputMModelLocationType"] == "local"
+        assert call_args["data_model_labels"] == "class_label"
+
+        # Asserts the patched function was called once with correct arguments and parameters
+        patched_function.assert_called_once_with(schema_url=TEST_SCHEMA_URL)
+
+    def test_metadata_model_parameters(self) -> None:
+        "Tests that MetadataModel is getting non default parameters"
+
+        # Creates to mocked object and method to be used
+        mock_object = MagicMock()
+        mock_object.get_component_requirements = Mock(return_value=["component"])
+
+        # Patches in the mocked MetadataModel object and method into the API call
+        with patch(
+            "schematic_api.controllers.schema_controller_impl.MetadataModel",
+            return_value=mock_object,
+            autospec=True,
+        ) as patched_object:
+            # Patches the download_schema_file_as_jsonld function into the API call
+            with patch(
+                "schematic_api.controllers.schema_controller_impl.download_schema_file_as_jsonld",
+                return_value="temp_file_path.csv",
+                autospec=True,
+            ) as patched_function:
+                url = (
+                    f"{COMPONENT_REQUIREMENTS_GRAPH_URL}url.jsonld"
+                    "&displayLabelType=display_label"
+                )
+                self.client.open(url, method="GET", headers=HEADERS)
+
+        # Asserts the pacthed object was called once with correct arguments and parameters
+        patched_object.assert_called_once()
+        call_args = patched_object.call_args.kwargs
+        assert call_args["inputMModelLocation"]
+        assert call_args["inputMModelLocationType"] == "local"
+        assert call_args["data_model_labels"] == "display_label"
+
+        # Asserts the patched function was called once with correct arguments and parameters
+        patched_function.assert_called_once_with(schema_url="url.jsonld")
+
+    def test_404(self) -> None:
+        """Test for 404 result"""
+        url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
 

@@ -9,8 +9,12 @@ from schematic.schemas.data_model_graph import (  # type: ignore
 from schematic.visualization.attributes_explorer import AttributesExplorer  # type: ignore
 from schematic.utils.schema_utils import get_property_label_from_display_name  # type: ignore
 from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
+from schematic.models.metadata import MetadataModel  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
+from schematic_api.models.component_requirement_subgraph import (
+    ComponentRequirementSubgraph,
+)
 from schematic_api.models.node_property_array import NodePropertyArray
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
@@ -58,6 +62,72 @@ def get_component(
     result: Union[str, BasicError] = explorer.parse_component_attributes(  # type: ignore
         component=component_label, save_file=False, include_index=include_index
     )
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_component_requirements_array(
+    component_label: str,
+    schema_url: str,
+    display_label_type: DisplayLabelType,
+) -> tuple[Union[list[str], BasicError], int]:
+    """Gets the input components required components
+
+    Args:
+        component_label (str): The label of the component
+        schema_url (str): The URL of the schema in json form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
+    Returns:
+        tuple[Union[ComponentRequirementArray, BasicError], int]: A tuple
+          item 1 is either the required coponents or an error
+          item 2 is the status
+    """
+    schema_path = download_schema_file_as_jsonld(schema_url)
+    metadata_model = MetadataModel(
+        inputMModelLocation=schema_path,
+        inputMModelLocationType="local",
+        data_model_labels=display_label_type,
+    )
+    result = metadata_model.get_component_requirements(
+        source_component=component_label, as_graph=False
+    )
+    status = 200
+    return result, status
+
+
+@handle_exceptions
+def get_component_requirements_graph(
+    component_label: str,
+    schema_url: str,
+    display_label_type: DisplayLabelType,
+) -> tuple[Union[list[ComponentRequirementSubgraph], BasicError], int]:
+    """Gets the input components required components
+
+    Args:
+        component_label (str): The label of the component
+        schema_url (str): The URL of the schema in json form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+           Defaults to "class_label"
+    Returns:
+        tuple[Union[ComponentRequirementGrpah, BasicError], int]: A tuple
+          item 1 is either the required coponents or an error
+          item 2 is the status
+    """
+    schema_path = download_schema_file_as_jsonld(schema_url)
+    metadata_model = MetadataModel(
+        inputMModelLocation=schema_path,
+        inputMModelLocationType="local",
+        data_model_labels=display_label_type,
+    )
+    results = metadata_model.get_component_requirements(
+        source_component=component_label, as_graph=True
+    )
+    result = [ComponentRequirementSubgraph(result[0], result[1]) for result in results]
+
     status = 200
     return result, status
 

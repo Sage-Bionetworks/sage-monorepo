@@ -1202,6 +1202,116 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /components/{componentLabel}/requirementsArray:
+    get:
+      description: "Given a source model component (see https://w3id.org/biolink/vocab/category\
+        \ for definnition of component), return all components required by it in array\
+        \ form."
+      operationId: get_component_requirements_array
+      parameters:
+      - description: The label of a component in a schema
+        explode: false
+        in: path
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: simple
+      - description: The URL of a schema in jsonld or csv form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementArray'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: "Given a source model component (see https://w3id.org/biolink/vocab/category\
+        \ for definnition of component), return all components required by it in array\
+        \ form."
+      tags:
+      - Schema
+      x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /components/{componentLabel}/requirementsGraph:
+    get:
+      description: "Given a source model component (see https://w3id.org/biolink/vocab/category\
+        \ for definnition of component), return all components required by it in graph\
+        \ form."
+      operationId: get_component_requirements_graph
+      parameters:
+      - description: The label of a component in a schema
+        explode: false
+        in: path
+        name: componentLabel
+        required: true
+        schema:
+          $ref: '#/components/schemas/ComponentLabel'
+        style: simple
+      - description: The URL of a schema in jsonld or csv form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementGraph'
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      summary: "Given a source model component (see https://w3id.org/biolink/vocab/category\
+        \ for definnition of component), return all components required by it in graph\
+        \ form."
+      tags:
+      - Schema
+      x-openapi-router-controller: schematic_api.controllers.schema_controller
   /connectedNodePairArray:
     get:
       description: Gets a array of connected node pairs
@@ -1325,106 +1435,6 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
-  /generateExcelManifest:
-    get:
-      description: Generates an excel file
-      operationId: generate_excel_manifest
-      parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "If true, annotations are added to the manifest"
-        explode: true
-        in: query
-        name: addAnnotations
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
-      - description: "If making one manifest, the title of the manifest. If making\
-          \ multiple manifests, the prefix of the title of the manifests."
-        explode: true
-        in: query
-        name: manifestTitle
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: A data type
-        explode: true
-        in: query
-        name: dataType
-        required: false
-        schema:
-          $ref: '#/components/schemas/DataType'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: "If true, users are blocked from entering incorrect values. If\
-          \ false, users will get a warning when using incorrect values."
-        explode: true
-        in: query
-        name: useStrictValidation
-        required: false
-        schema:
-          default: true
-          type: boolean
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: false
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      responses:
-        "200":
-          content:
-            application/vnd.ms-excel:
-              schema:
-                format: binary
-                type: string
-          description: Success
-        "500":
-          content:
-            application/problem+json:
-              schema:
-                $ref: '#/components/schemas/BasicError'
-          description: The request cannot be fulfilled due to an unexpected server
-            error
-      security:
-      - bearerAuth: []
-      summary: Generates an excel file
-      tags:
-      - ManifestGeneration
-      x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /generateGoogleSheetManifests:
     get:
       description: Generates a list of google sheet links
@@ -2934,15 +2944,6 @@ components:
         default: true
         type: boolean
       style: form
-    dataType:
-      description: A data type
-      explode: true
-      in: query
-      name: dataType
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataType'
-      style: form
   responses:
     InternalServerError:
       content:
@@ -3422,6 +3423,59 @@ components:
       description: The label of a component in a schema
       example: MolecularEntity
       type: string
+    ComponentRequirementArray:
+      description: An array of components
+      example:
+        componentRequirementsList:
+        - componentRequirementsList
+        - componentRequirementsList
+      properties:
+        componentRequirementsList:
+          items:
+            type: string
+          title: componentRequirementsList
+          type: array
+      title: ComponentRequirementArray
+      type: object
+    ComponentRequirementSubgraph:
+      description: A pair of components
+      example:
+        component1: component1
+        component2: component2
+      properties:
+        component1:
+          description: The display name of the first component in the graph
+          example: component1
+          title: component1
+          type: string
+        component2:
+          description: The display name of the second component in the graph
+          example: component2
+          title: component2
+          type: string
+      required:
+      - component1
+      - component2
+      title: ComponentRequirementSubgraph
+      type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
+    ComponentRequirementGraph:
+      description: A graph of components
+      example:
+        componentRequirementsGraph:
+        - component1: component1
+          component2: component2
+        - component1: component1
+          component2: component2
+      properties:
+        componentRequirementsGraph:
+          items:
+            $ref: '#/components/schemas/ComponentRequirementSubgraph'
+          title: componentRequirementsGraph
+          type: array
+      title: ComponentRequirementGraph
+      type: object
     RelationshipType:
       description: A type of schema relationship
       example: requiresDependency

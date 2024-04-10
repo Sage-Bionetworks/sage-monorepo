@@ -7,47 +7,8 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.google_sheet_links import GoogleSheetLinks
 from schematic_api.controllers.manifest_generation_controller_impl import (
     generate_google_sheet_manifests,
-    generate_excel_manifest,
 )
 from .conftest import GET_ACCESS_TOKEN_MOCK, CREATE_MANIFESTS_MOCK
-
-
-class TestGenerateExcelManifest:
-    """Tests generate_excel_manifest"""
-
-    def success(self, test_schema_url: str) -> None:
-        """Test for successful result"""
-        with patch(GET_ACCESS_TOKEN_MOCK):
-            with patch(CREATE_MANIFESTS_MOCK, return_value="path"):  # type: ignore
-                result, status = generate_excel_manifest(
-                    schema_url=test_schema_url,
-                    dataset_id="syn2",
-                    add_annotations=False,
-                    manifest_title="title",
-                    data_type="syn3",
-                    display_label_type="class_label",
-                    use_strict_validation=True,
-                    asset_view_id="syn1",
-                )
-                assert status == 200
-                assert result == "path"
-
-    def error_statuses(self) -> None:
-        """Test for error statuses"""
-        with patch(GET_ACCESS_TOKEN_MOCK):
-            with patch(CREATE_MANIFESTS_MOCK):
-                result, status = generate_excel_manifest(
-                    schema_url="not_a_url",
-                    dataset_id="syn2",
-                    add_annotations=False,
-                    manifest_title="title",
-                    data_type="syn3",
-                    display_label_type="class_label",
-                    use_strict_validation=True,
-                    asset_view_id="syn1",
-                )
-                assert status == 404
-                assert isinstance(result, BasicError)
 
 
 class TestGenerateGoogleSheetManifests:

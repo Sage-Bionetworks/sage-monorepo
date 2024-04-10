@@ -40,28 +40,6 @@ HEADERS = {
 
 @pytest.mark.synapse
 @pytest.mark.secrets
-class TestGenerateExcelManifest(BaseTestCase):
-    """Tests excel manifest endpoint"""
-
-    def test_success(self) -> None:
-        """Test for successful result"""
-        url = (
-            f"/api/v1/generateExcelManifest?schemaUrl={TEST_SCHEMA_URL}"
-            "&assetViewId=syn28559058"
-            "&dataType=Patient"
-            "&datasetId=syn51730545"
-        )
-        response = self.client.open(url, method="GET", headers=HEADERS)
-        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
-        result = response.json
-        assert isinstance(result, str)
-        assert result.endswith("Example.Patient.manifest.xlsx")
-        assert os.path.exists(result)
-        os.remove(result)
-
-
-@pytest.mark.synapse
-@pytest.mark.secrets
 class TestGenerateGoogleSheetManifests(BaseTestCase):
     """Tests google sheet manifest endpoint"""
 

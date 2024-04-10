@@ -5,6 +5,9 @@ from __future__ import absolute_import
 # import models into model package
 from schematic_api.models.asset_type import AssetType
 from schematic_api.models.basic_error import BasicError
+from schematic_api.models.component_requirement_array import ComponentRequirementArray
+from schematic_api.models.component_requirement_graph import ComponentRequirementGraph
+from schematic_api.models.component_requirement_subgraph import ComponentRequirementSubgraph
 from schematic_api.models.connected_node_pair import ConnectedNodePair
 from schematic_api.models.connected_node_pair_array import ConnectedNodePairArray
 from schematic_api.models.connected_node_pair_page import ConnectedNodePairPage

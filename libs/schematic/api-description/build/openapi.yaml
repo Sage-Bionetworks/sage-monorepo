@@ -623,6 +623,48 @@ paths:
                 type: string
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsArray:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      operationId: getComponentRequirementsArray
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsGraph:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      operationId: getComponentRequirementsGraph
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementGraph'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /schemaAttributes:
     get:
       tags:
@@ -895,39 +937,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GoogleSheetLinks'
-        '500':
-          $ref: '#/components/responses/InternalServerError'
-  /generateExcelManifest:
-    get:
-      tags:
-        - ManifestGeneration
-      summary: Generates an excel file
-      description: Generates an excel file
-      operationId: generateExcelManifest
-      parameters:
-        - $ref: '#/components/parameters/schemaUrl'
-        - $ref: '#/components/parameters/addAnnotations'
-        - $ref: '#/components/parameters/datasetIdQuery'
-        - $ref: '#/components/parameters/manifestTitle'
-        - $ref: '#/components/parameters/dataType'
-        - $ref: '#/components/parameters/displayLabelType'
-        - $ref: '#/components/parameters/useStrictValidation'
-        - name: assetViewId
-          in: query
-          description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-          required: false
-          schema:
-            $ref: '#/components/schemas/AssetViewId'
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Success
-          content:
-            application/vnd.ms-excel:
-              schema:
-                type: string
-                format: binary
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -1311,6 +1320,39 @@ components:
       description: The label of a component in a schema
       type: string
       example: MolecularEntity
+    ComponentRequirementArray:
+      type: object
+      description: An array of components
+      properties:
+        componentRequirementsList:
+          type: array
+          items:
+            type: string
+    ComponentRequirementSubgraph:
+      type: object
+      description: A pair of components
+      properties:
+        component1:
+          type: string
+          description: The display name of the first component in the graph
+          example: component1
+        component2:
+          type: string
+          description: The display name of the second component in the graph
+          example: component2
+      required:
+        - component1
+        - component2
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ComponentRequirementGraph:
+      type: object
+      description: A graph of components
+      properties:
+        componentRequirementsGraph:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentRequirementSubgraph'
     RelationshipType:
       description: A type of schema relationship
       type: string
@@ -1719,10 +1761,3 @@ components:
       schema:
         type: boolean
         default: true
-    dataType:
-      name: dataType
-      in: query
-      description: A data type
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataType'
