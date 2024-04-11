@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-mysqld-exporter:
     image: ghcr.io/sage-bionetworks/openchallenges-mysqld-exporter:${OPENCHALLENGES_VERSION:-local}

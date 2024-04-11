@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-vault:
     image: ghcr.io/sage-bionetworks/openchallenges-vault:${OPENCHALLENGES_VERSION:-local}

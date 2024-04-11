@@ -135,3 +135,11 @@ GET {{basePath}}/challenges/1/contributions
 ### Get the number of challenges tracked per year.
 
 GET {{basePath}}/challengeAnalytics/challengesPerYear
+
+### List the EDAM concepts
+
+GET {{basePath}}/edamConcepts
+
+### List the EDAM concepts that match the space-separated search terms "sequence".
+
+GET {{basePath}}/edamConcepts?searchTerms=sequence
