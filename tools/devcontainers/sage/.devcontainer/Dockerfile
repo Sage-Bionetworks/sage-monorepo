@@ -185,6 +185,6 @@ ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install \
   3.9.2 \
   3.10.14 \
-  3.11.0
+  3.11.8
 
 CMD ["bash"]
