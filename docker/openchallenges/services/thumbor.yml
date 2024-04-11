@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-thumbor:
     image: ghcr.io/sage-bionetworks/openchallenges-thumbor:${OPENCHALLENGES_VERSION:-local}
