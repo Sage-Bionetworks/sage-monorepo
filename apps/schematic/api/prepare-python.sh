@@ -2,6 +2,8 @@
 
 PYTHON_VERSION="3.10.14"
 
+pyenv update
+
 pyenv install --skip-existing $PYTHON_VERSION
 
 # Initializing pyenv again solves an issue encountered by GitHub action where the version of Python
