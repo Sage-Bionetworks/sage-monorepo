@@ -6,6 +6,7 @@ api/challenge.service.ts
 api/challengeAnalytics.service.ts
 api/challengeContribution.service.ts
 api/challengePlatform.service.ts
+api/edamConcept.service.ts
 api/image.service.ts
 api/organization.service.ts
 api/user.service.ts
@@ -35,6 +36,10 @@ model/challengeSubmissionType.ts
 model/challengesPage.ts
 model/challengesPageAllOf.ts
 model/challengesPerYear.ts
+model/edamConcept.ts
+model/edamConceptSearchQuery.ts
+model/edamConceptsPage.ts
+model/edamConceptsPageAllOf.ts
 model/edamData.ts
 model/edamOperation.ts
 model/image.ts

@@ -19,6 +19,8 @@ tags:
     description: Operations about challenge analytics.
   - name: ChallengePlatform
     description: Operations about challenge platforms.
+  - name: EdamConcept
+    description: Operations about EDAM concepts.
 paths:
   /challenges:
     $ref: paths/challenges.yaml
@@ -32,3 +34,5 @@ paths:
     $ref: paths/challengePlatforms.yaml
   /challengePlatforms/{challengePlatformName}:
     $ref: paths/challengePlatforms/@{challengePlatformName}.yaml
+  /edamConcepts:
+    $ref: paths/edamConcepts.yaml
