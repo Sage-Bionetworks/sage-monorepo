@@ -1,4 +1,4 @@
-ARG imageVersion=jammy-20230624
+ARG imageVersion=jammy-20240227
 FROM ubuntu:$imageVersion
 
 # Safer bash scripts with 'set -euxo pipefail'
@@ -16,7 +16,7 @@ ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.6.1"
+ARG poetryVersion="1.8.2"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
 # https://aquasecurity.github.io/trivy
@@ -184,7 +184,7 @@ ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pyenv install \
   3.9.2 \
-  3.10.6 \
+  3.10.14 \
   3.11.0
 
 CMD ["bash"]
