@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   agora-mongo:
     image: ghcr.io/sage-bionetworks/agora-mongo:${AGORA_VERSION:-local}

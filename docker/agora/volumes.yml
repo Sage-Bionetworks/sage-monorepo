@@ -1,5 +1,3 @@
-version: '3.8'
-
 volumes:
   agora-mongo-data:
     name: agora-mongo-data

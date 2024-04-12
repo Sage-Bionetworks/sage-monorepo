@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-edam-etl:
     image: ghcr.io/sage-bionetworks/openchallenges-edam-etl:${OPENCHALLENGES_VERSION:-local}
