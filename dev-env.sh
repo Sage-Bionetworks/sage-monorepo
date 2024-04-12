@@ -151,6 +151,6 @@ function workspace-initialize-env {
   sudo sysctl -w vm.max_map_count=262144 1> /dev/null
 
   # Prevent Corepack showing the URL when it needs to download software
-  # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables.
+  # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
 }
