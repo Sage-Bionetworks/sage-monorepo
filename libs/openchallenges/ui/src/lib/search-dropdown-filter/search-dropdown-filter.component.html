@@ -8,6 +8,9 @@
   [overlayOptions]="overlayOptions"
   [filter]="filter"
   (onFilter)="onSearch($event)"
+  [virtualScroll]="true"
+  [lazy]="lazy"
+  (onLazyLoad)="onLazy($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="header">

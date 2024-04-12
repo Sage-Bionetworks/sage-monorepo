@@ -63,6 +63,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
+import { MultiSelectLazyLoadEvent } from 'primeng/multiselect';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -386,6 +387,10 @@ export class ChallengeSearchComponent
     return Array.isArray(selectedParam)
       ? selectedParam.map((item) => item?.toString()).join(by)
       : (selectedParam as string) ?? '';
+  }
+
+  onLazyLoad(event: MultiSelectLazyLoadEvent): void {
+    console.log(event);
   }
 
   openSnackBar(message: string) {

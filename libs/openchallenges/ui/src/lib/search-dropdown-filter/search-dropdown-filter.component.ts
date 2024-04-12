@@ -4,7 +4,10 @@ import { Avatar } from '../avatar/avatar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvatarComponent } from '../avatar/avatar.component';
-import { MultiSelectModule } from 'primeng/multiselect';
+import {
+  MultiSelectLazyLoadEvent,
+  MultiSelectModule,
+} from 'primeng/multiselect';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -19,8 +22,11 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
+  @Input({ required: false }) lazy = true;
+
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
+  @Output() loadMore = new EventEmitter<any>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -38,6 +44,11 @@ export class SearchDropdownFilterComponent implements OnInit {
       // disable default filter and use custom search bar
       this.filter = !this.filterByApiClient;
     }
+  }
+
+  onLazy(event: MultiSelectLazyLoadEvent) {
+    // virtual scroll needs to be set 'true' as well
+    this.loadMore.emit(event);
   }
 
   onSearch(event: any): void {
