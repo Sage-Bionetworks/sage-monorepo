@@ -10,8 +10,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.sagebionetworks.openchallenges.challenge.service.model.search.EdamSectionValueBridge;
 
 @Entity
 @Table(name = "edam_concept")
@@ -29,6 +32,9 @@ public class EdamConceptEntity {
 
   @Column(name = "class_id", nullable = false)
   @FullTextField(name = "class_id")
+  @GenericField(
+      name = "section",
+      valueBridge = @ValueBridgeRef(type = EdamSectionValueBridge.class))
   private String classId;
 
   @Column(name = "preferred_label", nullable = false)
