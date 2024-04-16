@@ -149,4 +149,8 @@ function workspace-initialize-env {
   # Needed to run ES containers
   # See https://github.com/Sage-Bionetworks/sage-monorepo/issues/1899
   sudo sysctl -w vm.max_map_count=262144 1> /dev/null
+
+  # Prevent Corepack showing the URL when it needs to download software
+  # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
+  export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
 }
