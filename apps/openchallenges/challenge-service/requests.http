@@ -143,3 +143,7 @@ GET {{basePath}}/edamConcepts
 ### List the EDAM concepts that match the space-separated search terms "sequence".
 
 GET {{basePath}}/edamConcepts?searchTerms=sequence
+
+### List the EDAM concepts that belong to the "data" and "format" sections.
+
+GET {{basePath}}/edamConcepts?sections=data,format
