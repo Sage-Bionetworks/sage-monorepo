@@ -5,5 +5,8 @@
 
   <include resource="logback-common.xml" />
 
+  <logger name="org.hibernate" level="debug" />
+  <logger name="org.hibernate.search.query" level="trace" />
+
   <!-- <logger name="org.apache.kafka" level="debug" /> -->
 </configuration>

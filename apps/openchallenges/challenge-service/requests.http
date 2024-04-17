@@ -144,6 +144,6 @@ GET {{basePath}}/edamConcepts
 
 GET {{basePath}}/edamConcepts?searchTerms=sequence
 
-### List the EDAM concepts that belong to the "data" and "format" sections.
+### List the EDAM concepts that belong to the "data" section.
 
-GET {{basePath}}/edamConcepts?sections=data,format
+GET {{basePath}}/edamConcepts

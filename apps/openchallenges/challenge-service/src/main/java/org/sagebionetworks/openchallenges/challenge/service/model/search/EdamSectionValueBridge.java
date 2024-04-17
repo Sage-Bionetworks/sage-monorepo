@@ -13,6 +13,6 @@ public class EdamSectionValueBridge implements ValueBridge<String, String> {
         return section.getValue();
       }
     }
-    return null;
+    return "banana";
   }
 }
