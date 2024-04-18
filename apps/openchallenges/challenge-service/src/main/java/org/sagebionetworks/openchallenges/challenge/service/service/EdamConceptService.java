@@ -8,8 +8,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConcep
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamConceptEntity;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.EdamConceptMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.EdamConceptRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EdamConceptService {
-
-  private static final Logger LOG = LoggerFactory.getLogger(EdamConceptService.class);
 
   private final EdamConceptRepository edamConceptRepository;
 
