@@ -215,5 +215,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "kafka"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" style=\"shape=image;editableCssRules=.*;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHN0eWxlPip7ZmlsbDojODQ0RkJBfTwvc3R5bGU+PHBhdGggZD0iTTEuNDQgMHY3LjU3NWw2LjU2MSAzLjc5VjMuNzg3em0yMS4xMiA0LjIyN2wtNi41NjEgMy43OTF2Ny41NzRsNi41Ni0zLjc4N3pNOC43MiA0LjIzdjcuNTc1bDYuNTYxIDMuNzg3VjguMDE4em0wIDguNDA1djcuNTc1TDE1LjI4IDI0di03LjU3OHoiLz48L3N2Zz4=;aspect=fixed;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "terraform"
   }
 ]</mxlibrary>
