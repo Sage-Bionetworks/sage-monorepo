@@ -1,9 +1,15 @@
 * @tschaffter
 
+# Repository administration
+/.devcontainer @tschaffter
+/.github @tschaffter
+/.vscode @tschaffter
+/.yarn @tschaffter
+
+# OpenChallenges
 /apps/openchallenges/ @rrchai @tschaffter @vpchung
 /libs/openchallenges/ @rrchai @tschaffter @vpchung
 
-# OpenChallenges
 ## DB content
 /apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @vpchung @gaiaandreoletti
 /apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @vpchung @gaiaandreoletti

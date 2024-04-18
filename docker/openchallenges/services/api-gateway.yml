@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-api-gateway:
     image: ghcr.io/sage-bionetworks/openchallenges-api-gateway:${OPENCHALLENGES_VERSION:-local}

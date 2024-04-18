@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-service-registry:
     image: ghcr.io/sage-bionetworks/openchallenges-service-registry:${OPENCHALLENGES_VERSION:-local}

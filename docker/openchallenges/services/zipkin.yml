@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-zipkin:
     image: ghcr.io/sage-bionetworks/openchallenges-zipkin:${OPENCHALLENGES_VERSION:-local}

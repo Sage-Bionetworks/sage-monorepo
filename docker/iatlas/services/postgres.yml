@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   iatlas-postgres:
     image: ghcr.io/sage-bionetworks/iatlas-postgres:${IATLAS_VERSION:-local}

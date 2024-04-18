@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-prometheus:
     image: ghcr.io/sage-bionetworks/openchallenges-prometheus:${OPENCHALLENGES_VERSION:-local}

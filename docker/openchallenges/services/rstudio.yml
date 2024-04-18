@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-rstudio:
     image: ghcr.io/sage-bionetworks/openchallenges-rstudio:${OPENCHALLENGES_VERSION:-local}
