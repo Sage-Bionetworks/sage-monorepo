@@ -13,8 +13,6 @@ import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamSectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamConceptEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +20,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptRepository {
-
-  private static final Logger LOG = LoggerFactory.getLogger(CustomEdamConceptRepositoryImpl.class);
 
   @PersistenceContext private EntityManager entityManager;
 
@@ -84,7 +80,6 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
     return pf.bool(
             b -> {
               for (EdamSectionDto section : query.getSections()) {
-                LOG.info("Looking for section: {}", section.toString());
                 b.should(pf.match().field("section").matching(section.toString()));
               }
             })

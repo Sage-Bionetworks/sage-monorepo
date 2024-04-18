@@ -36,8 +36,6 @@ public class EdamConceptService {
   public EdamConceptsPageDto listEdamConcepts(EdamConceptSearchQueryDto query) {
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
-    LOG.info("Sections: {}", query.getSections());
-
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
     Page<EdamConceptEntity> entitiesPage =
         edamConceptRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
