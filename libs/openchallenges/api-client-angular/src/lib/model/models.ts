@@ -26,6 +26,7 @@ export * from './edamConceptsPage';
 export * from './edamConceptsPageAllOf';
 export * from './edamData';
 export * from './edamOperation';
+export * from './edamSection';
 export * from './image';
 export * from './imageAspectRatio';
 export * from './imageHeight';

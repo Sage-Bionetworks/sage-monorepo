@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EdamSection } from './edamSection';
 
 
 /**
@@ -27,5 +28,9 @@ export interface EdamConceptSearchQuery {
      * A string of search terms used to filter the results.
      */
     searchTerms?: string;
+    /**
+     * An array of EDAM sections (sub-ontologies) used to filter the results.
+     */
+    sections?: Array<EdamSection>;
 }
 

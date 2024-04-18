@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** An EDAM concept search query. */
@@ -23,6 +26,10 @@ public class EdamConceptSearchQueryDto {
 
   @JsonProperty("searchTerms")
   private String searchTerms;
+
+  @JsonProperty("sections")
+  @Valid
+  private List<EdamSectionDto> sections = null;
 
   public EdamConceptSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -90,6 +97,37 @@ public class EdamConceptSearchQueryDto {
     this.searchTerms = searchTerms;
   }
 
+  public EdamConceptSearchQueryDto sections(List<EdamSectionDto> sections) {
+    this.sections = sections;
+    return this;
+  }
+
+  public EdamConceptSearchQueryDto addSectionsItem(EdamSectionDto sectionsItem) {
+    if (this.sections == null) {
+      this.sections = new ArrayList<>();
+    }
+    this.sections.add(sectionsItem);
+    return this;
+  }
+
+  /**
+   * An array of EDAM sections (sub-ontologies) used to filter the results.
+   *
+   * @return sections
+   */
+  @Valid
+  @Schema(
+      name = "sections",
+      description = "An array of EDAM sections (sub-ontologies) used to filter the results.",
+      required = false)
+  public List<EdamSectionDto> getSections() {
+    return sections;
+  }
+
+  public void setSections(List<EdamSectionDto> sections) {
+    this.sections = sections;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -101,12 +139,13 @@ public class EdamConceptSearchQueryDto {
     EdamConceptSearchQueryDto edamConceptSearchQuery = (EdamConceptSearchQueryDto) o;
     return Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize)
-        && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms);
+        && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms)
+        && Objects.equals(this.sections, edamConceptSearchQuery.sections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, searchTerms);
+    return Objects.hash(pageNumber, pageSize, searchTerms, sections);
   }
 
   @Override
@@ -116,6 +155,7 @@ public class EdamConceptSearchQueryDto {
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
+    sb.append("    sections: ").append(toIndentedString(sections)).append("\n");
     sb.append("}");
     return sb.toString();
   }

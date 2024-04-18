@@ -721,6 +721,16 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    EdamSection:
+      description: The EDAM section (sub-ontology).
+      type: string
+      enum:
+        - data
+        - format
+        - identifier
+        - operation
+        - topic
+      example: data
     EdamConceptSearchQuery:
       type: object
       description: An EDAM concept search query.
@@ -741,6 +751,11 @@ components:
           description: A string of search terms used to filter the results.
           type: string
           example: sequence image
+        sections:
+          description: An array of EDAM sections (sub-ontologies) used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamSection'
     EdamConceptId:
       description: The unique identifier of the EDAM concept.
       type: integer

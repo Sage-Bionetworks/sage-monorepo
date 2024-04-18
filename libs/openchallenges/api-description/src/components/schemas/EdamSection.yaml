@@ -1,0 +1,9 @@
+description: The EDAM section (sub-ontology).
+type: string
+enum:
+  - data
+  - format
+  - identifier
+  - operation
+  - topic
+example: data
