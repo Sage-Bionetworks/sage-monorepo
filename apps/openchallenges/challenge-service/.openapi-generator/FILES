@@ -43,6 +43,7 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/Eda
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptsPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamDataDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamOperationDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamSectionDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/PageMetadataDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/SimpleChallengePlatformDto.java
 src/main/resources/openapi.yaml

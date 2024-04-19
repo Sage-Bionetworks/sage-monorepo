@@ -11,6 +11,7 @@ import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSearchQueryDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamSectionDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.EdamConceptEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -38,6 +39,9 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
+    if (query.getSections() != null && !query.getSections().isEmpty()) {
+      predicates.add(getEdamSectionsPredicate(pf, query));
+    }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
@@ -61,6 +65,24 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
         .fields(fields)
         .matching(query.getSearchTerms())
         .defaultOperator(BooleanOperator.AND)
+        .toPredicate();
+  }
+
+  /**
+   * Searches the EDAM concepts whose section is in the list of sections specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getEdamSectionsPredicate(
+      SearchPredicateFactory pf, EdamConceptSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (EdamSectionDto section : query.getSections()) {
+                b.should(pf.match().field("section").matching(section.toString()));
+              }
+            })
         .toPredicate();
   }
 

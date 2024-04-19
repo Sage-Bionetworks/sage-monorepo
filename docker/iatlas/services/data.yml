@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   iatlas-data:
     image: ghcr.io/sage-bionetworks/iatlas-data:${IATLAS_VERSION:-local}

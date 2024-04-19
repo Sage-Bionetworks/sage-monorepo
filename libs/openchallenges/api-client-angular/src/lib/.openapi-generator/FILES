@@ -42,6 +42,7 @@ model/edamConceptsPage.ts
 model/edamConceptsPageAllOf.ts
 model/edamData.ts
 model/edamOperation.ts
+model/edamSection.ts
 model/image.ts
 model/imageAspectRatio.ts
 model/imageHeight.ts
