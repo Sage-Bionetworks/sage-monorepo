@@ -873,6 +873,20 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    EdamConceptSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - preferred_label
+        - relevance
+    EdamConceptDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
     EdamSection:
       description: The EDAM section (sub-ontology).
       type: string
@@ -899,6 +913,10 @@ components:
           format: int32
           default: 100
           minimum: 1
+        sort:
+          $ref: '#/components/schemas/EdamConceptSort'
+        direction:
+          $ref: '#/components/schemas/EdamConceptDirection'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
