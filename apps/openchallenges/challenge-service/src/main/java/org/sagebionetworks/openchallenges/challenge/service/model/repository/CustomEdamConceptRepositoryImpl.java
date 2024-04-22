@@ -50,10 +50,6 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
     }
 
     SearchSort sort = getSearchSort(sf, query);
-    SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
-    if (sortPredicate != null) {
-      predicates.add(sortPredicate);
-    }
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
@@ -142,16 +138,6 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
       default -> {
         throw new BadRequestException(
             String.format("Unhandled sorting strategy '%s'", query.getSort()));
-      }
-    }
-  }
-
-  private SearchPredicate getSearchSortPredicate(
-      SearchPredicateFactory pf, EdamConceptSearchQueryDto query) {
-
-    switch (query.getSort()) {
-      default -> {
-        return null;
       }
     }
   }
