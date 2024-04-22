@@ -367,6 +367,11 @@ components:
         - mlcube
         - other
       example: container_image
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      type: integer
+      format: int64
+      example: 1
     ChallengeCategory:
       description: The category of the challenge.
       type: string
@@ -443,6 +448,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        inputDataTypes:
+          description: An array of EDAM concept ID used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
         categories:
           description: The array of challenge categories used to filter the results.
           type: array
@@ -928,11 +938,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamSection'
-    EdamConceptId:
-      description: The unique identifier of the EDAM concept.
-      type: integer
-      format: int64
-      example: 1
     EdamConcept:
       type: object
       description: The EDAM concept.
