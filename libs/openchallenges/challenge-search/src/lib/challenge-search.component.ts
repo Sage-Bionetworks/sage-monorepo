@@ -8,13 +8,15 @@ import {
 } from '@angular/core';
 import {
   Challenge,
-  ChallengeService,
+  ChallengeCategory,
+  ChallengeIncentive,
+  // ChallengeInputDataType,
   ChallengeSearchQuery,
+  ChallengeService,
   ChallengeSort,
   ChallengeStatus,
   ChallengeSubmissionType,
-  ChallengeIncentive,
-  ChallengeCategory,
+  EdamSection,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -28,13 +30,14 @@ import {
   SearchDropdownFilterComponent,
 } from '@sagebionetworks/openchallenges/ui';
 import {
+  challengeCategoriesFilterPanel,
+  challengeIncentivesFilterPanel,
+  challengeInputDataTypesFilterPanel,
+  challengeOrganizationsFilterPanel,
+  challengePlatformsFilterPanel,
   challengeStartYearRangeFilterPanel,
   challengeStatusFilterPanel,
   challengeSubmissionTypesFilterPanel,
-  challengeIncentivesFilterPanel,
-  challengePlatformsFilterPanel,
-  challengeOrganizationsFilterPanel,
-  challengeCategoriesFilterPanel,
 } from './challenge-search-filter-panels';
 import { challengeSortFilter } from './challenge-search-filters';
 import { BehaviorSubject, Subject, switchMap, throwError } from 'rxjs';
@@ -69,21 +72,21 @@ import { ChallengeSearchDataService } from './challenge-search-data.service';
   standalone: true,
   imports: [
     CalendarModule,
+    ChallengeCardComponent,
+    CheckboxFilterComponent,
     CommonModule,
     DividerModule,
     DropdownModule,
+    FooterComponent,
+    FormsModule,
     InputTextModule,
     MatIconModule,
     MatSnackBarModule,
-    RouterModule,
-    FormsModule,
+    PaginatorComponent,
     PanelModule,
     RadioButtonModule,
     ReactiveFormsModule,
-    FooterComponent,
-    PaginatorComponent,
-    ChallengeCardComponent,
-    CheckboxFilterComponent,
+    RouterModule,
     SearchDropdownFilterComponent,
   ],
   templateUrl: './challenge-search.component.html',
@@ -107,51 +110,56 @@ export class ChallengeSearchComponent
 
   private destroy = new Subject<void>();
 
+  @ViewChild('calendar') calendar?: Calendar;
+  @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
+
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
   searchResultsCount!: number;
 
-  @ViewChild('calendar') calendar?: Calendar;
   customMonthRange!: Date[] | undefined;
   isCustomYear = false;
   refreshed = true;
 
-  selectedYear!: DateRange | string | undefined;
-  selectedMinStartDate!: string | undefined;
-  selectedMaxStartDate!: string | undefined;
   searchedTerms!: string;
+  selectedMaxStartDate!: string | undefined;
+  selectedMinStartDate!: string | undefined;
   selectedPageNumber!: number;
   selectedPageSize!: number;
+  selectedYear!: DateRange | string | undefined;
   sortedBy!: ChallengeSort;
 
   // set default values
-  defaultSelectedYear = undefined;
-  defaultSortedBy: ChallengeSort = 'relevance';
   defaultPageNumber = 0;
   defaultPageSize = 24;
-  @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
+  defaultSelectedYear = undefined;
+  defaultSortedBy: ChallengeSort = 'relevance';
 
   // define filters
   sortFilters: Filter[] = challengeSortFilter;
   startYearRangeFilter: FilterPanel = challengeStartYearRangeFilterPanel;
 
   // checkbox filters
+  categoriesFilter = challengeCategoriesFilterPanel;
+  incentivesFilter = challengeIncentivesFilterPanel;
   statusFilter = challengeStatusFilterPanel;
   submissionTypesFilter = challengeSubmissionTypesFilterPanel;
-  incentivesFilter = challengeIncentivesFilterPanel;
-  categoriesFilter = challengeCategoriesFilterPanel;
 
   // dropdown filters
-  platformsFilter = challengePlatformsFilterPanel;
+  inputDataTypesFilter = challengeInputDataTypesFilterPanel;
   organizationsFilter = challengeOrganizationsFilterPanel;
+  platformsFilter = challengePlatformsFilterPanel;
 
   // define selected filter values
+
+  selectedCategories!: ChallengeCategory[];
+  selectedIncentives!: ChallengeIncentive[];
+  // selectedInputDataTypes!: ChallengeInputDataType[];
+  selectedInputDataTypes!: any[];
+  selectedOrgs!: number[];
+  selectedPlatforms!: string[];
   selectedStatus!: ChallengeStatus[];
   selectedSubmissionTypes!: ChallengeSubmissionType[];
-  selectedIncentives!: ChallengeIncentive[];
-  selectedCategories!: ChallengeCategory[];
-  selectedPlatforms!: string[];
-  selectedOrgs!: number[];
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -194,32 +202,34 @@ export class ChallengeSearchComponent
       }
 
       // update selected filter values based on params in url
-      this.selectedStatus = this.splitParam(params['status']);
-      this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
-      this.selectedIncentives = this.splitParam(params['incentives']);
-      this.selectedPlatforms = this.splitParam(params['platforms']);
+      this.searchedTerms = params['searchTerms'];
       this.selectedCategories = this.splitParam(params['categories']);
+      this.selectedIncentives = this.splitParam(params['incentives']);
+      this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
-      this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
       this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
+      this.selectedPlatforms = this.splitParam(params['platforms']);
+      this.selectedStatus = this.splitParam(params['status']);
+      this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
       this.sortedBy = params['sort'] || this.defaultSortedBy;
 
       const defaultQuery: ChallengeSearchQuery = {
+        categories: this.selectedCategories,
+        incentives: this.selectedIncentives,
+        // inputDataTypes: this.selectedInputDataTypes,
+        maxStartDate: this.selectedMaxStartDate,
+        minStartDate: this.selectedMinStartDate,
+        organizations: this.selectedOrgs,
         pageNumber: this.selectedPageNumber,
         pageSize: this.selectedPageSize,
-        sort: this.sortedBy,
+        platforms: this.selectedPlatforms,
         searchTerms: this.searchedTerms,
-        minStartDate: this.selectedMinStartDate,
-        maxStartDate: this.selectedMaxStartDate,
+        sort: this.sortedBy,
         status: this.selectedStatus,
         submissionTypes: this.selectedSubmissionTypes,
-        platforms: this.selectedPlatforms,
-        incentives: this.selectedIncentives,
-        categories: this.selectedCategories,
-        organizations: this.selectedOrgs,
       };
 
       this.query.next(defaultQuery);
@@ -232,15 +242,17 @@ export class ChallengeSearchComponent
         this.totalChallengesCount = page.totalElements;
       });
 
-    // update platform filter values
     this.challengeSearchDataService
-      .searchPlatforms()
+      .searchEdamConcepts()
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
-        const selectedPlatformValues = options.filter((option) =>
-          this.selectedPlatforms.includes(option.value as string)
+        const selectedInputDataTypesValues = options.filter((option) =>
+          this.selectedInputDataTypes.includes(option.value as string)
         );
-        this.platformsFilter.options = union(options, selectedPlatformValues);
+        this.inputDataTypesFilter.options = union(
+          options,
+          selectedInputDataTypesValues
+        );
       });
 
     // update organization filter values
@@ -252,6 +264,17 @@ export class ChallengeSearchComponent
           this.selectedOrgs.includes(option.value as number)
         );
         this.organizationsFilter.options = union(options, selectedOrgValues);
+      });
+
+    // update platform filter values
+    this.challengeSearchDataService
+      .searchPlatforms()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        const selectedPlatformValues = options.filter((option) =>
+          this.selectedPlatforms.includes(option.value as string)
+        );
+        this.platformsFilter.options = union(options, selectedPlatformValues);
       });
   }
 
@@ -358,18 +381,24 @@ export class ChallengeSearchComponent
   }
 
   onSearchChange(
-    searchType: 'challenges' | 'platforms' | 'organizations',
+    searchType: 'challenges' | 'inputDataTypes' | 'organizations' | 'platforms',
     searched: string
   ): void {
     switch (searchType) {
       case 'challenges':
         this.challengeSearchTerms.next(searched);
         break;
-      case 'platforms':
-        this.challengeSearchDataService.setPlatformSearchTerms(searched);
+      case 'inputDataTypes':
+        this.challengeSearchDataService.setEdamConceptSearchTerms({
+          searchTerms: searched,
+          sections: [EdamSection.Data],
+        });
         break;
       case 'organizations':
         this.challengeSearchDataService.setOriganizationSearchTerms(searched);
+        break;
+      case 'platforms':
+        this.challengeSearchDataService.setPlatformSearchTerms(searched);
         break;
     }
   }
