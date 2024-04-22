@@ -135,10 +135,8 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
       case RELEVANCE -> {
         return relevanceSort;
       }
-      default -> {
-        throw new BadRequestException(
-            String.format("Unhandled sorting strategy '%s'", query.getSort()));
-      }
+      default -> throw new BadRequestException(
+          String.format("Unhandled sorting strategy '%s'", query.getSort()));
     }
   }
 }
