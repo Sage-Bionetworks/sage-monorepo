@@ -46,7 +46,7 @@ GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
 ### Get the challenges whose input data types include the EDAM concept ID 1
 
-GET {{basePath}}/challenges?inputDataTypes=1&size=1
+GET {{basePath}}/challenges?inputDataTypes=18
 
 ### List the challenges by category: featured
 

@@ -64,6 +64,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     if (query.getSubmissionTypes() != null && !query.getSubmissionTypes().isEmpty()) {
       predicates.add(getChallengeSubmissionTypesPredicate(pf, query));
     }
+    if (query.getInputDataTypes() != null && !query.getInputDataTypes().isEmpty()) {
+      predicates.add(getInputDataTypesPredicate(pf, query));
+    }
     if (query.getIncentives() != null && !query.getIncentives().isEmpty()) {
       predicates.add(getChallengeIncentivesPredicate(pf, query));
     }
@@ -162,6 +165,18 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
               for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
                 b.should(
                     pf.match().field("submission_types.name").matching(submissionType.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  private SearchPredicate getInputDataTypesPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (Long edamConceptId : query.getInputDataTypes()) {
+                b.should(
+                    pf.match().field("input_data_types.id").matching(edamConceptId));
               }
             })
         .toPredicate();
