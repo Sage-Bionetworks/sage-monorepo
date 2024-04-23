@@ -570,20 +570,22 @@ components:
       maxLength: 500
       nullable: true
       example: 'https://openchallenges.io'
-    EdamData:
+    EdamConcept:
       type: object
-      description: The EDAM Data concept.
+      description: The EDAM concept.
       properties:
+        id:
+          $ref: '#/components/schemas/EdamConceptId'
         classId:
           type: string
           example: 'http://edamontology.org/data_0850'
           maxLength: 60
-          pattern: '^http:\/\/edamontology\.org\/data_\d+$'
         preferredLabel:
           type: string
           example: Sequence set
           maxLength: 80
       required:
+        - id
         - classId
         - preferredLabel
       nullable: true
@@ -661,7 +663,7 @@ components:
         inputDataTypes:
           type: array
           items:
-            $ref: '#/components/schemas/EdamData'
+            $ref: '#/components/schemas/EdamConcept'
         categories:
           type: array
           items:
@@ -938,25 +940,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamSection'
-    EdamConcept:
-      type: object
-      description: The EDAM concept.
-      properties:
-        id:
-          $ref: '#/components/schemas/EdamConceptId'
-        classId:
-          type: string
-          example: 'http://edamontology.org/data_0850'
-          maxLength: 60
-        preferredLabel:
-          type: string
-          example: Sequence set
-          maxLength: 80
-      required:
-        - id
-        - classId
-        - preferredLabel
-      nullable: true
     EdamConceptsPage:
       type: object
       description: A page of EDAM concepts.

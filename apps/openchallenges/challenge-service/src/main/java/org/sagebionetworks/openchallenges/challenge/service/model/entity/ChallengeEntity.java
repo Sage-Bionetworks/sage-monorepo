@@ -101,9 +101,9 @@ public class ChallengeEntity {
       inverseJoinColumns = @JoinColumn(name = "edam_concept_id"))
   @IndexedEmbedded(
       name = "input_data_types",
-      includePaths = {"class_id", "preferred_label"})
+      includePaths = {"id", "class_id", "preferred_label"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
-  private List<EdamDataEntity> inputDataTypes;
+  private List<EdamConceptEntity> inputDataTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @IndexedEmbedded(includePaths = {"name"})
