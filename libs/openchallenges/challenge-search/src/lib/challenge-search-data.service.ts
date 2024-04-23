@@ -31,7 +31,7 @@ import { Filter } from '@sagebionetworks/openchallenges/ui';
 })
 export class ChallengeSearchDataService {
   private edamConceptSearchTerms: BehaviorSubject<EdamConceptSearchQuery> =
-    new BehaviorSubject<EdamConceptSearchQuery>({ searchTerms: '' });
+    new BehaviorSubject<EdamConceptSearchQuery>({});
 
   private organizationSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
@@ -63,9 +63,7 @@ export class ChallengeSearchDataService {
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((searchQuery: EdamConceptSearchQuery) => {
-        // const sortedBy: EdamSort = 'name';
         const edamQuery: EdamConceptSearchQuery = searchQuery;
-        console.log(edamQuery);
         return this.edamConceptService.listEdamConcepts(edamQuery);
       }),
       map((page) =>
