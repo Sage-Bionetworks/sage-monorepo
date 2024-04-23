@@ -44,7 +44,7 @@ GET {{basePath}}/challenges?searchTerms=mortality%20dream
 
 GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
-### Get the challenges whose input data types include the EDAM concept ID 2 and 18
+### Get the challenges whose input data types include the EDAM concept ID 2 or 18
 
 GET {{basePath}}/challenges?inputDataTypes=2,18
 
