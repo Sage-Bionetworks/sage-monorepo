@@ -24,6 +24,12 @@ public class EdamConceptSearchQueryDto {
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
+  @JsonProperty("sort")
+  private EdamConceptSortDto sort = EdamConceptSortDto.RELEVANCE;
+
+  @JsonProperty("direction")
+  private EdamConceptDirectionDto direction = null;
+
   @JsonProperty("searchTerms")
   private String searchTerms;
 
@@ -72,6 +78,46 @@ public class EdamConceptSearchQueryDto {
 
   public void setPageSize(Integer pageSize) {
     this.pageSize = pageSize;
+  }
+
+  public EdamConceptSearchQueryDto sort(EdamConceptSortDto sort) {
+    this.sort = sort;
+    return this;
+  }
+
+  /**
+   * Get sort
+   *
+   * @return sort
+   */
+  @Valid
+  @Schema(name = "sort", required = false)
+  public EdamConceptSortDto getSort() {
+    return sort;
+  }
+
+  public void setSort(EdamConceptSortDto sort) {
+    this.sort = sort;
+  }
+
+  public EdamConceptSearchQueryDto direction(EdamConceptDirectionDto direction) {
+    this.direction = direction;
+    return this;
+  }
+
+  /**
+   * Get direction
+   *
+   * @return direction
+   */
+  @Valid
+  @Schema(name = "direction", required = false)
+  public EdamConceptDirectionDto getDirection() {
+    return direction;
+  }
+
+  public void setDirection(EdamConceptDirectionDto direction) {
+    this.direction = direction;
   }
 
   public EdamConceptSearchQueryDto searchTerms(String searchTerms) {
@@ -139,13 +185,15 @@ public class EdamConceptSearchQueryDto {
     EdamConceptSearchQueryDto edamConceptSearchQuery = (EdamConceptSearchQueryDto) o;
     return Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize)
+        && Objects.equals(this.sort, edamConceptSearchQuery.sort)
+        && Objects.equals(this.direction, edamConceptSearchQuery.direction)
         && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms)
         && Objects.equals(this.sections, edamConceptSearchQuery.sections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, searchTerms, sections);
+    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms, sections);
   }
 
   @Override
@@ -154,6 +202,8 @@ public class EdamConceptSearchQueryDto {
     sb.append("class EdamConceptSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("    sections: ").append(toIndentedString(sections)).append("\n");
     sb.append("}");
