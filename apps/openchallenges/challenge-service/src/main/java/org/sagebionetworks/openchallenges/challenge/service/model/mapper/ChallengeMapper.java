@@ -31,10 +31,10 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   @Override
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
-    LOG.info("challenge dto initial: {}", dto);
+    LOG.trace("challenge dto initial: {}", dto);
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes", "platform", "operation");
-      LOG.info("challenge dto before set: {}", dto);
+      LOG.trace("challenge dto before set: {}", dto);
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
       if (entity.getOperation() != null) {
@@ -54,7 +54,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
               .toList());
       dto.inputDataTypes(edamConceptMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
-      LOG.info("challenge dto: {}", dto);
+      LOG.trace("challenge dto: {}", dto);
     }
     return dto;
   }
