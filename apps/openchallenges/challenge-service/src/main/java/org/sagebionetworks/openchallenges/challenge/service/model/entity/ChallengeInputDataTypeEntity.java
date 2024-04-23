@@ -34,7 +34,7 @@ public class ChallengeInputDataTypeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "edam_concept_id", nullable = false)
-  private EdamDataEntity edamData;
+  private EdamConceptEntity edamConcept;
 
   @Column(name = "created_at")
   private OffsetDateTime createdAt;

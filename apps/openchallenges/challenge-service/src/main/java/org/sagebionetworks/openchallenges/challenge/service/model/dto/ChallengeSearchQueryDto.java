@@ -63,6 +63,10 @@ public class ChallengeSearchQueryDto {
   @Valid
   private List<ChallengeSubmissionTypeDto> submissionTypes = null;
 
+  @JsonProperty("inputDataTypes")
+  @Valid
+  private List<Long> inputDataTypes = null;
+
   @JsonProperty("categories")
   @Valid
   private List<ChallengeCategoryDto> categories = null;
@@ -379,6 +383,36 @@ public class ChallengeSearchQueryDto {
     this.submissionTypes = submissionTypes;
   }
 
+  public ChallengeSearchQueryDto inputDataTypes(List<Long> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+    return this;
+  }
+
+  public ChallengeSearchQueryDto addInputDataTypesItem(Long inputDataTypesItem) {
+    if (this.inputDataTypes == null) {
+      this.inputDataTypes = new ArrayList<>();
+    }
+    this.inputDataTypes.add(inputDataTypesItem);
+    return this;
+  }
+
+  /**
+   * An array of EDAM concept ID used to filter the results.
+   *
+   * @return inputDataTypes
+   */
+  @Schema(
+      name = "inputDataTypes",
+      description = "An array of EDAM concept ID used to filter the results.",
+      required = false)
+  public List<Long> getInputDataTypes() {
+    return inputDataTypes;
+  }
+
+  public void setInputDataTypes(List<Long> inputDataTypes) {
+    this.inputDataTypes = inputDataTypes;
+  }
+
   public ChallengeSearchQueryDto categories(List<ChallengeCategoryDto> categories) {
     this.categories = categories;
     return this;
@@ -454,6 +488,7 @@ public class ChallengeSearchQueryDto {
         && Objects.equals(this.organizations, challengeSearchQuery.organizations)
         && Objects.equals(this.status, challengeSearchQuery.status)
         && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
+        && Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes)
         && Objects.equals(this.categories, challengeSearchQuery.categories)
         && Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
   }
@@ -473,6 +508,7 @@ public class ChallengeSearchQueryDto {
         organizations,
         status,
         submissionTypes,
+        inputDataTypes,
         categories,
         searchTerms);
   }
@@ -493,6 +529,7 @@ public class ChallengeSearchQueryDto {
     sb.append("    organizations: ").append(toIndentedString(organizations)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
+    sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("}");
