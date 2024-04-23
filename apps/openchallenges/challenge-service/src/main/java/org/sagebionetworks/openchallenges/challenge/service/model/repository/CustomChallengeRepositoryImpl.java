@@ -175,8 +175,7 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     return pf.bool(
             b -> {
               for (Long edamConceptId : query.getInputDataTypes()) {
-                b.should(
-                    pf.match().field("input_data_types.id").matching(edamConceptId));
+                b.should(pf.match().field("input_data_types.id").matching(edamConceptId));
               }
             })
         .toPredicate();
