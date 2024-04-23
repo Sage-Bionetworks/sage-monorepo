@@ -9,6 +9,9 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeP
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSortDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeStatusDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSubmissionTypeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptDirectionDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamConceptSortDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.EdamSectionDto;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -102,6 +105,36 @@ public class EnumConverterConfiguration {
       @Override
       public ChallengeSubmissionTypeDto convert(String source) {
         return ChallengeSubmissionTypeDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, EdamConceptDirectionDto> edamConceptDirectionConverter() {
+    return new Converter<String, EdamConceptDirectionDto>() {
+      @Override
+      public EdamConceptDirectionDto convert(String source) {
+        return EdamConceptDirectionDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, EdamConceptSortDto> edamConceptSortConverter() {
+    return new Converter<String, EdamConceptSortDto>() {
+      @Override
+      public EdamConceptSortDto convert(String source) {
+        return EdamConceptSortDto.fromValue(source);
+      }
+    };
+  }
+
+  @Bean
+  Converter<String, EdamSectionDto> edamSectionConverter() {
+    return new Converter<String, EdamSectionDto>() {
+      @Override
+      public EdamSectionDto convert(String source) {
+        return EdamSectionDto.fromValue(source);
       }
     };
   }

@@ -13,7 +13,16 @@ properties:
     format: int32
     default: 100
     minimum: 1
+  sort:
+    $ref: EdamConceptSort.yaml
+  direction:
+    $ref: EdamConceptDirection.yaml
   searchTerms:
     description: A string of search terms used to filter the results.
     type: string
     example: 'sequence image'
+  sections:
+    description: An array of EDAM sections (sub-ontologies) used to filter the results.
+    type: array
+    items:
+      $ref: EdamSection.yaml

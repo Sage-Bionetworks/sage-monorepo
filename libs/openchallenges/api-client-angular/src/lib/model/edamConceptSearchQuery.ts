@@ -9,6 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { EdamSection } from './edamSection';
+import { EdamConceptSort } from './edamConceptSort';
+import { EdamConceptDirection } from './edamConceptDirection';
 
 
 /**
@@ -23,9 +26,15 @@ export interface EdamConceptSearchQuery {
      * The number of items in a single page.
      */
     pageSize?: number;
+    sort?: EdamConceptSort;
+    direction?: EdamConceptDirection | null;
     /**
      * A string of search terms used to filter the results.
      */
     searchTerms?: string;
+    /**
+     * An array of EDAM sections (sub-ontologies) used to filter the results.
+     */
+    sections?: Array<EdamSection>;
 }
 
