@@ -271,5 +271,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "redocli"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyBwcmVzZXJ2ZUFzcGVjdFJhdGlvPSJ4TWlkWU1pZCIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmVyc2lvbj0iMS4xIiB2aWV3Qm94PSIwIDAgMjU2IDI2NyIgaGVpZ2h0PSIyNjdweCIgd2lkdGg9IjI1NnB4Ij4mI3hhOwk8Zz4mI3hhOwkJPHBhdGggZmlsbD0iIzU5NjY2QyIgZD0iTTE1My42NzE0LDE3OC45MzMyIEwxNTIuNzM5NCwxODEuNjkwMiBMMjAxLjg3NjQsMjY1LjAzMjIgTDIwNC42NTc0LDI2Ny4wMDAyIEwyNTUuOTk5NCwxNzguMjIwMiBMMjA0LjY1NzQsODkuMDgzMiBMMTUzLjY3MTQsMTc4LjkzMzIgWiIvPiYjeGE7CQk8cGF0aCBmaWxsPSIjNTk2NjZDIiBkPSJNNTAuMjczMSwwLjMwMzkgTDAuMDAwMSw4OS4wODM5IEw1Mi4yMzQxLDE3OC45MzI5IEwxMDEuOTcyMSw4OS4wODM5IEwxMDEuODM4MSw4NS40NTI5IEw1Mi41NjUxLDIuMTA5OSBMNTAuMjczMSwwLjMwMzkgWiIvPiYjeGE7CQk8cGF0aCBmaWxsPSIjQkNBRTc5IiBkPSJNNTAuMjczMSwwLjMwMzkgTDEwMS45NzIxLDg5LjA4MzkgTDIwNC42NTcxLDg5LjA4MzkgTDE1Mi42MDExLDAuMzAzOSBMNTAuMjczMSwwLjMwMzkgWiIvPiYjeGE7CQk8cGF0aCBmaWxsPSIjQkNBRTc5IiBkPSJNNTIuMjM0MiwxNzguOTMzMiBMMTAyLjg2NDIsMjY3LjAwMDIgTDIwNC42NTcyLDI2Ny4wMDAyIEwxNTMuNjcxMiwxNzguOTMzMiBMNTIuMjM0MiwxNzguOTMzMiBaIi8+JiN4YTsJPC9nPiYjeGE7PC9zdmc+;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"47.94\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 47.94,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "hibernate"
   }
 ]</mxlibrary>
