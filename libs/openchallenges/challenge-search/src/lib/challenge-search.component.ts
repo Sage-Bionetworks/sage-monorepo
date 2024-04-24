@@ -10,7 +10,6 @@ import {
   Challenge,
   ChallengeCategory,
   ChallengeIncentive,
-  // ChallengeInputDataType,
   ChallengeSearchQuery,
   ChallengeService,
   ChallengeSort,
@@ -154,8 +153,7 @@ export class ChallengeSearchComponent
 
   selectedCategories!: ChallengeCategory[];
   selectedIncentives!: ChallengeIncentive[];
-  // selectedInputDataTypes!: ChallengeInputDataType[];
-  selectedInputDataTypes!: any[];
+  selectedInputDataTypes!: number[];
   selectedOrgs!: number[];
   selectedPlatforms!: string[];
   selectedStatus!: ChallengeStatus[];
@@ -205,7 +203,9 @@ export class ChallengeSearchComponent
       this.searchedTerms = params['searchTerms'];
       this.selectedCategories = this.splitParam(params['categories']);
       this.selectedIncentives = this.splitParam(params['incentives']);
-      this.selectedInputDataTypes = this.splitParam(params['inputDataTypes']);
+      this.selectedInputDataTypes = this.splitParam(
+        params['inputDataTypes']
+      ).map((idString) => +idString);
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
@@ -219,7 +219,7 @@ export class ChallengeSearchComponent
       const defaultQuery: ChallengeSearchQuery = {
         categories: this.selectedCategories,
         incentives: this.selectedIncentives,
-        // inputDataTypes: this.selectedInputDataTypes,
+        inputDataTypes: this.selectedInputDataTypes,
         maxStartDate: this.selectedMaxStartDate,
         minStartDate: this.selectedMinStartDate,
         organizations: this.selectedOrgs,
@@ -243,11 +243,11 @@ export class ChallengeSearchComponent
       });
 
     this.challengeSearchDataService
-      .searchEdamConcepts()
+      .searchEdamConcepts(EdamSection.Data)
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
         const selectedInputDataTypesValues = options.filter((option) =>
-          this.selectedInputDataTypes.includes(option.value as string)
+          this.selectedInputDataTypes.includes(option.value as number)
         );
         this.inputDataTypesFilter.options = union(
           options,

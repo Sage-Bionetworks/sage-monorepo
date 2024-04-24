@@ -13,6 +13,7 @@ import {
   ChallengePlatformSort,
   EdamConceptSearchQuery,
   EdamConceptService,
+  EdamSection,
   Image,
   ImageAspectRatio,
   ImageHeight,
@@ -58,17 +59,17 @@ export class ChallengeSearchDataService {
     this.platformSearchTerms.next(searchTerms);
   }
 
-  searchEdamConcepts(): Observable<Filter[]> {
+  searchEdamConcepts(sections?: EdamSection): Observable<Filter[]> {
     return this.edamConceptSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((searchQuery: EdamConceptSearchQuery) => {
-        const edamQuery: EdamConceptSearchQuery = searchQuery;
-        return this.edamConceptService.listEdamConcepts(edamQuery);
+        searchQuery.sections = sections ? [sections] : searchQuery.sections;
+        return this.edamConceptService.listEdamConcepts(searchQuery);
       }),
       map((page) =>
         page.edamConcepts.map((edamConcept) => ({
-          value: edamConcept.classId,
+          value: edamConcept.id,
           label: edamConcept.preferredLabel,
           active: false,
         }))
