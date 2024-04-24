@@ -235,9 +235,10 @@ export class ChallengeSearchComponent
 
     // update platform filter values
     this.challengeSearchDataService
-      .searchPlatforms()
+      .getPlatforms({})
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
+        console.log(options);
         const selectedPlatformValues = options.filter((option) =>
           this.selectedPlatforms.includes(option.value as string)
         );
@@ -390,7 +391,21 @@ export class ChallengeSearchComponent
   }
 
   onLazyLoad(event: MultiSelectLazyLoadEvent): void {
-    console.log(event);
+    // update platform filter values
+    const size = event.last - event.first + 1;
+    this.challengeSearchDataService
+      .getPlatforms({
+        pageNumber: Math.floor(event.first / size),
+        pageSize: size,
+      })
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        console.log(options);
+        const selectedPlatformValues = options.filter((option) =>
+          this.selectedPlatforms.includes(option.value as string)
+        );
+        this.platformsFilter.options = union(options, selectedPlatformValues);
+      });
   }
 
   openSnackBar(message: string) {

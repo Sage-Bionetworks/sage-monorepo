@@ -10,7 +10,6 @@ import {
 import {
   ChallengePlatformSearchQuery,
   ChallengePlatformService,
-  ChallengePlatformSort,
   Image,
   ImageAspectRatio,
   ImageHeight,
@@ -48,16 +47,18 @@ export class ChallengeSearchDataService {
     this.organizationSearchTerms.next(searchTerms);
   }
 
-  searchPlatforms(): Observable<Filter[]> {
+  getPlatforms(
+    platformQuery: ChallengePlatformSearchQuery
+  ): Observable<Filter[]> {
     return this.platformSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((searchTerm: string) => {
-        const sortedBy: ChallengePlatformSort = 'name';
-        const platformQuery: ChallengePlatformSearchQuery = {
-          searchTerms: searchTerm,
-          sort: sortedBy,
-        };
+        // const sortedBy: ChallengePlatformSort = 'name';
+        // const platformQuery: ChallengePlatformSearchQuery = {
+        //   searchTerms: searchTerm,
+        //   sort: sortedBy,
+        // };
         return this.challengePlatformService.listChallengePlatforms(
           platformQuery
         );

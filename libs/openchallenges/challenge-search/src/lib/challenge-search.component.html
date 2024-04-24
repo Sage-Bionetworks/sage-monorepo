@@ -103,7 +103,6 @@
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
-          (loadMore)="onLazyLoad($event)"
         />
       </p-panel>
       <p-divider></p-divider>
