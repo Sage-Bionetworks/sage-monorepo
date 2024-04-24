@@ -41,10 +41,10 @@ export class ChallengeSearchDataService {
     new BehaviorSubject<string>('');
 
   constructor(
-    private edamConceptService: EdamConceptService,
     private challengePlatformService: ChallengePlatformService,
-    private organizationService: OrganizationService,
-    private imageService: ImageService
+    private edamConceptService: EdamConceptService,
+    private imageService: ImageService,
+    private organizationService: OrganizationService
   ) {}
 
   setEdamConceptSearchTerms(searchQuery: EdamConceptSearchQuery) {
