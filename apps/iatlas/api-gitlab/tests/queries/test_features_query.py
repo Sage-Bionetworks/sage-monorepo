@@ -317,6 +317,34 @@ def test_features_query_with_feature(client, feature_name, common_query):
     assert type(feature['germlineCategory']) is str or NoneType
 
 
+def test_features_query_with_feature_and_cohort(client, common_query):
+    response = client.post(
+        '/api', json={
+            'query': common_query,
+            'variables': {
+                'feature': ["umap_1"],
+                'cohort': ['MSK']
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    assert feature['name'] == "umap_1"
+    assert type(feature['display']) is str
+    assert type(feature['class']) is str
+    assert type(feature['methodTag']) is str or NoneType
+    assert type(feature['order']) is int or NoneType
+    assert feature['unit'] in unit_enum.enums or type(
+        feature['unit']) is NoneType
+    assert type(feature['germlineModule']) is str or NoneType
+    assert type(feature['germlineCategory']) is str or NoneType
+
+
 def test_features_query_with_feature_class(client, feature_class, common_query):
     response = client.post(
         '/api', json={
@@ -534,13 +562,13 @@ def test_feature_samples_query_with_feature_and_cohort(client, feature_name, sam
 
 def test_feature_samples_query_with_feature_and_cohort2(client, feature_name, feature_class, tcga_tag_cohort_name, tcga_tag_cohort_samples, samples_query):
     response = client.post(
-        '/api', json={
-            'query': samples_query,
-            'variables': {
-                'feature': [feature_name],
-                'cohort': [tcga_tag_cohort_name]
-            }
-        })
+    '/api', json={
+        'query': samples_query,
+        'variables': {
+            'feature': [feature_name],
+            'cohort': [tcga_tag_cohort_name]
+        }
+    })
     json_data = json.loads(response.data)
     page = json_data['data']['features']
     features = page['items']
@@ -631,7 +659,6 @@ def test_cell_type_feature_samples_query_with_cohort(client, samples_cell_types_
         assert isinstance(sample['cellType'], str)
         assert isinstance(sample['name'], str)
         assert isinstance(sample['value'], float)
-
 
 
 def test_features_query_with_germline_feature(client, common_query, germline_feature, germline_module, germline_category):
