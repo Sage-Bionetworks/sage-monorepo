@@ -90,6 +90,22 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
+        header="{{ inputDataTypesFilter.label }}"
+        [toggleable]="true"
+        [collapsed]="inputDataTypesFilter.collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [options]="inputDataTypesFilter.options"
+          [selectedOptions]="selectedInputDataTypes"
+          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onParamChange({ inputDataTypes: $event })"
+          (searchChange)="onSearchChange('inputDataTypes', $event)"
+        />
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
         header="{{ organizationsFilter.label }}"
         [toggleable]="true"
         [collapsed]="organizationsFilter.collapsed"
