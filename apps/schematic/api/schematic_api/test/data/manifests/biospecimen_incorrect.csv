@@ -1,2 +1,2 @@
-Sample ID,Patient ID,Component
-123,1,Biospecimen
+Sample ID,Patient ID,Tissue Status,Component
+123,1,not_a_valid_status,Biospecimen
