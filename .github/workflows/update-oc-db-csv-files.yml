@@ -53,6 +53,5 @@ jobs:
         with: 
           title: "chore(openchallenges): ${{ env.TODAY }} DB update"
           body: Daily OC database update(s)
-          labels: sonar-scan-approved
           commit-message: "${{ env.TODAY }}: add latest CSV dump files"
           branch: openchallenges/db-update

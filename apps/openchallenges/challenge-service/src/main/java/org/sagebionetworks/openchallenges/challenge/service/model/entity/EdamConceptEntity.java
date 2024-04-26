@@ -10,8 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.search.engine.backend.types.Sortable;
 import org.hibernate.search.mapper.pojo.bridge.mapping.annotation.ValueBridgeRef;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.sagebionetworks.openchallenges.challenge.service.model.search.EdamSectionValueBridge;
@@ -28,6 +30,7 @@ public class EdamConceptEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false, updatable = false)
+  @GenericField(name = "id")
   private Long id;
 
   @Column(name = "class_id", nullable = false)
@@ -39,5 +42,6 @@ public class EdamConceptEntity {
 
   @Column(name = "preferred_label", nullable = false)
   @FullTextField(name = "preferred_label")
+  @GenericField(name = "preferred_label_sort", sortable = Sortable.YES)
   private String preferredLabel;
 }

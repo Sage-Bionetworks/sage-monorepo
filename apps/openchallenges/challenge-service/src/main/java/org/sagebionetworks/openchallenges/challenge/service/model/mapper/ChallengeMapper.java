@@ -17,7 +17,7 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
 
   private SimpleChallengePlatformMapper platformMapper = new SimpleChallengePlatformMapper();
   private EdamOperationMapper edamOperationMapper = new EdamOperationMapper();
-  private EdamDataMapper edamDataMapper = new EdamDataMapper();
+  private EdamConceptMapper edamConceptMapper = new EdamConceptMapper();
 
   @Override
   public ChallengeEntity convertToEntity(ChallengeDto dto, Object... args) {
@@ -31,10 +31,10 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
   @Override
   public ChallengeDto convertToDto(ChallengeEntity entity, Object... args) {
     ChallengeDto dto = new ChallengeDto();
-    LOG.info("challenge dto initial: {}", dto);
+    LOG.trace("challenge dto initial: {}", dto);
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto, "stars", "inputDataTypes", "platform", "operation");
-      LOG.info("challenge dto before set: {}", dto);
+      LOG.trace("challenge dto before set: {}", dto);
       dto.setStatus(ChallengeStatusDto.fromValue(entity.getStatus()));
       dto.setPlatform(platformMapper.convertToDto(entity.getPlatform()));
       if (entity.getOperation() != null) {
@@ -52,9 +52,9 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
           entity.getCategories().stream()
               .map(o -> ChallengeCategoryDto.fromValue(o.getName()))
               .toList());
-      dto.inputDataTypes(edamDataMapper.convertToDtoList(entity.getInputDataTypes()));
+      dto.inputDataTypes(edamConceptMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
-      LOG.info("challenge dto: {}", dto);
+      LOG.trace("challenge dto: {}", dto);
     }
     return dto;
   }

@@ -38,10 +38,11 @@ src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/Cha
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengeSubmissionTypeDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPageDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/ChallengesPerYearDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptDirectionDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptSearchQueryDto.java
+src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptSortDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamConceptsPageDto.java
-src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamDataDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamOperationDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/EdamSectionDto.java
 src/main/java/org/sagebionetworks/openchallenges/challenge/service/model/dto/PageMetadataDto.java

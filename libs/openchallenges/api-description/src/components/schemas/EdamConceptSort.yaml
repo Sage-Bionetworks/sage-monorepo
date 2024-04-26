@@ -1,0 +1,6 @@
+description: What to sort results by.
+type: string
+default: relevance
+enum:
+  - preferred_label
+  - relevance

@@ -32,7 +32,7 @@ properties:
   inputDataTypes:
     type: array
     items:
-      $ref: EdamData.yaml
+      $ref: EdamConcept.yaml
   categories:
     type: array
     items:

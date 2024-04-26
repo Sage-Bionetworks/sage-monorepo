@@ -367,6 +367,11 @@ components:
         - mlcube
         - other
       example: container_image
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      type: integer
+      format: int64
+      example: 1
     ChallengeCategory:
       description: The category of the challenge.
       type: string
@@ -443,6 +448,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        inputDataTypes:
+          description: An array of EDAM concept ID used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
         categories:
           description: The array of challenge categories used to filter the results.
           type: array
@@ -560,20 +570,22 @@ components:
       maxLength: 500
       nullable: true
       example: 'https://openchallenges.io'
-    EdamData:
+    EdamConcept:
       type: object
-      description: The EDAM Data concept.
+      description: The EDAM concept.
       properties:
+        id:
+          $ref: '#/components/schemas/EdamConceptId'
         classId:
           type: string
           example: 'http://edamontology.org/data_0850'
           maxLength: 60
-          pattern: '^http:\/\/edamontology\.org\/data_\d+$'
         preferredLabel:
           type: string
           example: Sequence set
           maxLength: 80
       required:
+        - id
         - classId
         - preferredLabel
       nullable: true
@@ -651,7 +663,7 @@ components:
         inputDataTypes:
           type: array
           items:
-            $ref: '#/components/schemas/EdamData'
+            $ref: '#/components/schemas/EdamConcept'
         categories:
           type: array
           items:
@@ -873,6 +885,20 @@ components:
             - challengePlatforms
       x-java-class-annotations:
         - '@lombok.Builder'
+    EdamConceptSort:
+      description: What to sort results by.
+      type: string
+      default: relevance
+      enum:
+        - preferred_label
+        - relevance
+    EdamConceptDirection:
+      description: The direction to sort the results by.
+      type: string
+      nullable: true
+      enum:
+        - asc
+        - desc
     EdamSection:
       description: The EDAM section (sub-ontology).
       type: string
@@ -899,6 +925,10 @@ components:
           format: int32
           default: 100
           minimum: 1
+        sort:
+          $ref: '#/components/schemas/EdamConceptSort'
+        direction:
+          $ref: '#/components/schemas/EdamConceptDirection'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
@@ -910,30 +940,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamSection'
-    EdamConceptId:
-      description: The unique identifier of the EDAM concept.
-      type: integer
-      format: int64
-      example: 1
-    EdamConcept:
-      type: object
-      description: The EDAM concept.
-      properties:
-        id:
-          $ref: '#/components/schemas/EdamConceptId'
-        classId:
-          type: string
-          example: 'http://edamontology.org/data_0850'
-          maxLength: 60
-        preferredLabel:
-          type: string
-          example: Sequence set
-          maxLength: 80
-      required:
-        - id
-        - classId
-        - preferredLabel
-      nullable: true
     EdamConceptsPage:
       type: object
       description: A page of EDAM concepts.
