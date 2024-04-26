@@ -55,9 +55,13 @@ def get_component(
     explorer = AttributesExplorer(
         path_to_jsonld=schema_path, data_model_labels=display_label_type
     )
-    result: Union[str, BasicError] = explorer.parse_component_attributes(  # type: ignore
-        component=component_label, save_file=False, include_index=include_index
+    attributes = (
+        explorer._parse_component_attributes(  # pylint:disable=protected-access
+            component=component_label, save_file=False, include_index=include_index
+        )
     )
+    assert isinstance(attributes, str)
+    result: Union[str, BasicError] = attributes
     status = 200
     return result, status
 
