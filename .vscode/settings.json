@@ -12,21 +12,11 @@
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
     "editor.tabSize": 4
-    // This settings still works even if VS Code does not recognize it.
-    // "notebook.formatOnSave.enabled": true
   },
   "[json][jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  // "[typescript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": false
-  // },
-  // "[javascript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": true
-  // },
   "java.format.enabled": false,
   "[java]": {
     "editor.formatOnSave": false
@@ -47,14 +37,6 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  // "emeraldwalk.runonsave": {
-  //   "commands": [
-  //     {
-  //       "match": "\\.(java|sql)$",
-  //       "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
-  //     }
-  //   ]
-  // },
   "eslint.workingDirectories": ["."],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
