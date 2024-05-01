@@ -4,6 +4,7 @@ from .resolver_helpers import (
     get_selection_set,
     gene_related_sample_request_fields,
     cell_type_gene_related_sample_request_fields,
+    gene_related_cell_request_fields,
     gene_request_fields,
     get_requested,
     simple_gene_set_request_fields,
@@ -27,7 +28,6 @@ def resolve_genes(
     pathway=None,
     cohort=None,
     sample=None,
-    cellTypeSample=None,
     superCategory=None,
     therapyType=None
 ):
@@ -46,8 +46,12 @@ def resolve_genes(
     samples_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=gene_related_sample_request_fields, child_node='samples')
 
-    cell_type_sample_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=cell_type_gene_related_sample_request_fields, child_node='cellTypeSamples')
+    pseudobulk_sample_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=cell_type_gene_related_sample_request_fields, child_node='pseudoBulkSamples')
+
+    cell_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=gene_related_cell_request_fields, child_node='cells')
+
 
     max_items = 10 if 'samples' in requested else 100_000
 
@@ -67,7 +71,6 @@ def resolve_genes(
         pathway=pathway,
         cohort=cohort,
         sample=sample,
-        cell_type_sample=cellTypeSample,
         super_category=superCategory,
         therapy_type=therapyType
     )
@@ -84,7 +87,8 @@ def resolve_genes(
             gene_types_requested,
             publications_requested,
             samples_requested,
-            cell_type_sample_requested,
+            pseudobulk_sample_requested,
+            cell_requested,
             gene_type=geneType,
             max_rna_seq_expr=maxRnaSeqExpr,
             min_rna_seq_expr=minRnaSeqExpr,

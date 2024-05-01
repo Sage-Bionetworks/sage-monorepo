@@ -20,10 +20,12 @@ type FeatureNode implements BaseNode{
   germlineModule: String
   "Immune traits clustered based on the approach used to derive them and the parameters they intend to measure , described by Sayaman et al, 2021."
   germlineCategory: String
-  "A list of the names of the sample related to this feature that is associated with the value."
+  "A list of samples that have a value for this feature"
   samples: [FeatureRelatedSample!]!
-  "A list of feature cell type pairs and their related feature value"
-  cellTypeSamples: [CellTypeFeatureRelatedSample!]!
+  "A list of samples that have a value for this feature via pseudobulk"
+  pseudoBulkSamples: [FeatureRelatedPseudoBulkSample!]!
+  "A list of cells that have a value for this feature"
+  cells: [FeatureRelatedCell!]!
   "The type of measurement of the value."
   unit: String
   "The maximum value of all relationships between a specific feature and the samples."
@@ -78,13 +80,37 @@ type SimpleFeature2 {
 }
 
 """
-The "SingleCellFeature" is a version of a `Feature`. Used by Cells.
+The "FeatureRelatedSample" type is a Sample that is specifically related to a Feature.
 """
-type SingleCellFeature {
-  "A readable name for the feature."
-  display: String
-  "The feature's name (a unique string for this feature)."
+type FeatureRelatedSample {
+  "The sample's name."
   name: String!
-  "The value fo the feature"
+  "The calculated relational value or the Sample related to the Feature."
+  value: Float
+}
+
+"""
+The "FeatureRelatedCell" is a version of a `Cell` used Feature.
+"""
+type FeatureRelatedCell {
+  "The cells name (a unique string for this cell)."
+  name: String!
+  "The type of cell"
+  type: String!
+  "The value of the cell for this feature"
   value: Float!
+}
+
+"""
+The "FeatureRelatedPseudoBulkSample" type is a Sample that is specifically related to a Feature.
+
+See also `Feature`
+"""
+type FeatureRelatedPseudoBulkSample {
+  "The sample's name."
+  name: String!
+  "The type of cell this sample is related to"
+  cellType: String!
+  "The calculated relational value or the Sample related to the Feature."
+  value: Float
 }

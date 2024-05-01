@@ -1,4 +1,4 @@
-from .cell import build_cell_graphql_response, build_cell_request, cell_request_fields
+from .cell import build_cell_graphql_response, build_cell_request, cell_request_fields, feature_related_cell_request_fields, gene_related_cell_request_fields
 from .cell_stat import build_cell_stat_graphql_response, build_cell_stat_request, cell_stat_request_fields
 from .cohort import build_cohort_graphql_response, build_cohort_request, cohort_request_fields
 from .colocalization import colocalization_request_fields, build_coloc_graphql_response, build_colocalization_request

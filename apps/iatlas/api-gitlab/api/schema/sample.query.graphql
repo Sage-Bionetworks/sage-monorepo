@@ -32,19 +32,6 @@ type GeneRelatedSample {
 }
 
 """
-The "FeatureRelatedSample" type is a Sample that is specifically related to a Feature.
-
-See also `Feature`
-"""
-type FeatureRelatedSample {
-  "The sample's name."
-  name: String!
-  "The calculated relational value or the Sample related to the Feature."
-  value: Float
-}
-
-
-"""
 The "CellTypeFeatureRelatedSample" type is a Sample that is specifically related to a Feature and a cell type
 
 See also `Feature`

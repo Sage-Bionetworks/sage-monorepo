@@ -13,7 +13,10 @@ from api.db_models import (
     Publication,
     PublicationToGeneToGeneSet,
     Sample,
-    SingleCellPseudobulk
+    SingleCellPseudobulk,
+    CellToSample,
+    CellToGene,
+    Cell
 )
 from .general_resolvers import build_join_condition, get_selected, get_value
 from .publication import build_publication_graphql_response
@@ -39,9 +42,10 @@ gene_request_fields = simple_gene_request_fields.union({
     'pathway',
     'publications',
     'samples',
-    'cellTypeSamples',
+    'pseudoBulkSamples',
     'superCategory',
-    'therapyType'
+    'therapyType',
+    'cells'
 })
 
 
@@ -62,7 +66,8 @@ def build_gene_graphql_response(
     gene_types_requested=[],
     publications_requested=[],
     sample_requested=[],
-    cell_type_sample_requested=[],
+    pseudobulk_sample_requested=[],
+    cell_requested=[],
     gene_type=None,
     cohort=None,
     sample=None,
@@ -72,6 +77,8 @@ def build_gene_graphql_response(
 ):
 
     def f(gene):
+        from .cell import build_cell_graphql_response
+
         if not gene:
             return None
 
@@ -79,10 +86,27 @@ def build_gene_graphql_response(
         gene_types = get_gene_types(
             id, requested, gene_types_requested, gene_type=gene_type)
         publications = get_publications(id, requested, publications_requested)
-        samples = get_samples(id, requested, sample_requested,
-                              cohort, sample, max_rna_seq_expr, min_rna_seq_expr)
-        cell_type_samples = get_cell_type_samples(
-            id, requested=requested, cell_type_sample_requested=cell_type_sample_requested, cohort=cohort, sample=sample
+        samples = get_samples(
+            id,
+            requested,
+            sample_requested,
+            cohort,
+            sample,
+            max_rna_seq_expr,
+            min_rna_seq_expr
+        )
+        pseudobulk_samples = get_pseudobulk_samples(
+            [id],
+            requested=requested,
+            sample_requested=pseudobulk_sample_requested,
+            cohort=cohort,
+            sample=sample
+        )
+        cells = get_cells(
+            [id],
+            requested=requested,
+            cell_requested=cell_requested,
+            cohort=None
         )
         result_dict = {
             'id': id,
@@ -99,10 +123,10 @@ def build_gene_graphql_response(
             'therapyType': get_value(gene, prefix + 'therapy_type'),
             'geneTypes': gene_types,
             'publications': map(build_publication_graphql_response, publications),
-            'singleCellSeq':get_value(gene, prefix + 'single_cell_seq')
+            'samples': map(build_gene_expression_graphql_response(), samples),
+            'pseudoBulkSamples': map(build_single_cell_seq_response(), pseudobulk_samples),
+            'cells': map(build_cell_graphql_response(), cells),
         }
-        result_dict['samples'] = map(build_gene_expression_graphql_response(), samples)
-        result_dict['cellTypeSamples'] = map(build_single_cell_seq_response(), cell_type_samples)
         return result_dict
     return f
 
@@ -135,7 +159,6 @@ def build_gene_request(
     therapy_type=None,
     cohort=None,
     sample=None,
-    cell_type_sample=None,
     max_rna_seq_expr=None,
     min_rna_seq_expr=None
 ):
@@ -181,6 +204,8 @@ def build_gene_request(
     cohort_to_gene_1 = aliased(CohortToGene, name='ctg')
     pseudobulk_1 = aliased(SingleCellPseudobulk, name='scp')
     cohort_to_sample_1 = aliased(CohortToSample, name='cts')
+    cell_to_sample_1 = aliased(CellToSample, name='celltosample')
+    cell_to_gene_1 = aliased(CellToGene, name='celltogene')
 
     core_field_mapping = {
         'id': gene_1.id.label('gene_id'),
@@ -258,49 +283,46 @@ def build_gene_request(
         query = query.filter(gene_1.id.in_(gene_to_sample_subquery))
 
 
-    if cell_type_sample:
-
-        cell_type_sample_subquery = sess.query(pseudobulk_1.feature_id)
-
-
-        sample_join_condition = build_join_condition(
-            pseudobulk_1.sample_id, sample_1.id, filter_column=sample_1.name, filter_list=cell_type_sample
-        )
-        cell_type_sample_subquery = cell_type_sample_subquery.join(sample_1, and_(
-            *sample_join_condition), isouter=False)
-
-        query = query.filter(gene_1.id.in_(cell_type_sample_subquery))
-
     if cohort:
 
-        if cell_type_sample or "cellTypeSamples" in requested:
+        cohort_subquery1 = sess.query(pseudobulk_1.gene_id)
 
-            cohort_subquery = sess.query(pseudobulk_1.gene_id)
+        cohort_to_sample_join_condition1 = build_join_condition(
+            pseudobulk_1.sample_id, cohort_to_sample_1.sample_id
+        )
+        cohort_subquery1 = cohort_subquery1.join(cohort_to_sample_1,and_(
+            *cohort_to_sample_join_condition1), isouter=False
+        )
 
-            cohort_to_sample_join_condition = build_join_condition(
-                pseudobulk_1.sample_id, cohort_to_sample_1.sample_id
-            )
-            cohort_subquery = cohort_subquery.join(cohort_to_sample_1,and_(
-                *cohort_to_sample_join_condition), isouter=False
-            )
+        cohort_join_condition1 = build_join_condition(
+            cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort
+        )
+        cohort_subquery1 = cohort_subquery1.join(cohort_1,and_(
+            *cohort_join_condition1), isouter=False
+        )
 
-            cohort_join_condition = build_join_condition(
-                cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort
-            )
-            cohort_subquery = cohort_subquery.join(cohort_1,and_(
-                *cohort_join_condition), isouter=False
-            )
 
-        else:
+        cohort_subquery2 = sess.query(cohort_to_gene_1.gene_id)
 
-            cohort_subquery = sess.query(cohort_to_gene_1.gene_id)
+        cohort_join_condition2 = build_join_condition(
+            cohort_to_gene_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
+        cohort_subquery2 = cohort_subquery2.join(cohort_1, and_(
+            *cohort_join_condition2), isouter=False)
 
-            cohort_join_condition = build_join_condition(
-                cohort_to_gene_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort)
-            cohort_subquery = cohort_subquery.join(cohort_1, and_(
-                *cohort_join_condition), isouter=False)
 
-        query = query.filter(gene_1.id.in_(cohort_subquery))
+        cohort_id_subquery = sess.query(cohort_1.id)
+        cohort_id_subquery = cohort_id_subquery.filter(cohort_1.name.in_(cohort))
+
+        sample_id_subquery = sess.query(cohort_to_sample_1.sample_id)
+        sample_id_subquery = sample_id_subquery.filter(cohort_to_sample_1.cohort_id.in_(cohort_id_subquery))
+
+        cell_id_subquery = sess.query(cell_to_sample_1.cell_id)
+        cell_id_subquery = cell_id_subquery.filter(cell_to_sample_1.sample_id.in_(sample_id_subquery))
+
+        gene_id_subquery3 = sess.query(cell_to_gene_1.gene_id)
+        gene_id_subquery3 = gene_id_subquery3.filter(cell_to_gene_1.cell_id.in_(cell_id_subquery))
+
+        query = query.filter(gene_1.id.in_(cohort_subquery1) | gene_1.id.in_(cohort_subquery2) | gene_1.id.in_(gene_id_subquery3))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=gene_1.id)
 
@@ -534,3 +556,140 @@ def get_publications(gene_id, requested, publications_requested):
     query = query.order_by(*order) if order else query
 
     return query.distinct().all()
+
+
+def get_pseudobulk_samples(gene_id, requested, sample_requested, cohort=None, sample=None):
+
+    if 'pseudoBulkSamples' not in requested:
+        return []
+
+    sess = db.session
+
+    sample_1 = aliased(Sample, name='s')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_sample_1 = aliased(CohortToSample, name='cts')
+    pseudobulk_1 = aliased(SingleCellPseudobulk, name='scp')
+
+    sample_core_field_mapping = {
+        'name': sample_1.name.label('sample_name')}
+
+    sample_core = get_selected(sample_requested, sample_core_field_mapping)
+
+    sample_core |= {
+        sample_1.id.label('sample_id'),
+        pseudobulk_1.gene_id.label('sample_gene_id')
+    }
+
+    if 'singleCellSeqSum' in sample_requested:
+        sample_core |= {
+            pseudobulk_1.single_cell_seq_sum.label('sample_single_cell_seq_sum')
+        }
+
+    if 'cellType' in sample_requested:
+        sample_core |= {
+            pseudobulk_1.cell_type.label('sample_cell_type')
+        }
+
+    query = sess.query(*sample_core)
+    query = query.select_from(sample_1)
+
+    sample_join_condition = build_join_condition(
+        pseudobulk_1.sample_id,
+        sample_1.id,
+        pseudobulk_1.gene_id,
+        gene_id
+    )
+    query = query.join(
+        pseudobulk_1, and_(*sample_join_condition))
+
+
+    if sample:
+        query = query.filter(sample_1.name.in_(sample))
+
+    if cohort:
+        cohort_subquery = sess.query(pseudobulk_1.gene_id)
+
+        cohort_to_sample_join_condition = build_join_condition(
+            pseudobulk_1.sample_id, cohort_to_sample_1.sample_id
+        )
+        cohort_subquery = cohort_subquery.join(cohort_to_sample_1,and_(
+            *cohort_to_sample_join_condition), isouter=False
+        )
+
+        cohort_join_condition = build_join_condition(
+            cohort_to_sample_1.cohort_id, cohort_1.id, filter_column=cohort_1.name, filter_list=cohort
+        )
+        cohort_subquery = cohort_subquery.join(cohort_1,and_(
+            *cohort_join_condition), isouter=False
+        )
+
+        query = query.filter(pseudobulk_1.gene_id.in_(cohort_subquery))
+
+    samples = query.distinct().all()
+    return samples
+
+
+def get_cells(gene_id, requested, cell_requested, cohort=None):
+
+    if 'cells' not in requested:
+        return []
+
+    sess = db.session
+
+    cell_1 = aliased(Cell, name='c')
+    cell_to_gene_1 = aliased(CellToGene, name='ctg')
+    cohort_1 = aliased(Cohort, name='c')
+    cohort_to_sample_1 = aliased(CohortToSample, name='cts')
+    cell_to_sample_1 = aliased(CellToSample, name='celltosample')
+    cell_1 = aliased(Cell, name = 'cell')
+
+    cell_core_field_mapping = {
+        'name': cell_1.name.label('cell_name')
+    }
+
+    cell_core = get_selected(cell_requested, cell_core_field_mapping)
+
+    cell_core |= {
+        cell_1.id.label('cell_id')
+    }
+
+    if 'singleCellSeq' in cell_requested:
+        cell_core |= {
+            cell_to_gene_1.single_cell_seq.label('cell_single_cell_seq')
+        }
+
+    if 'type' in cell_requested:
+        cell_core |= {
+            cell_1.cell_type.label('cell_type')
+        }
+
+    query = sess.query(*cell_core)
+    query = query.select_from(cell_1)
+
+    cell_to_gene_join_condition = build_join_condition(
+        cell_1.id,
+        cell_to_gene_1.cell_id,
+        cell_to_gene_1.gene_id,
+        gene_id
+    )
+    query = query.join(
+        cell_to_gene_1, and_(*cell_to_gene_join_condition))
+
+    if cohort:
+
+        cohort_id_subquery = sess.query(cohort_1.id)
+        cohort_id_subquery = cohort_id_subquery.filter(cohort_1.name.in_(cohort))
+
+        sample_id_subquery = sess.query(cohort_to_sample_1.sample_id)
+        sample_id_subquery = sample_id_subquery.filter(cohort_to_sample_1.cohort_id.in_(cohort_id_subquery))
+
+        cell_id_subquery = sess.query(cell_to_sample_1.cell_id)
+        cell_id_subquery = cell_id_subquery.filter(cell_to_sample_1.sample_id.in_(sample_id_subquery))
+
+        gene_id_subquery = sess.query(cell_to_gene_1.gene_id)
+        gene_id_subquery = gene_id_subquery.filter(cell_to_gene_1.cell_id.in_(cell_id_subquery))
+
+        query = query.filter(gene_1.id.in_(gene_id_subquery))
+
+    cells = query.distinct().all()
+    return cells

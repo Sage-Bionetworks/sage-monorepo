@@ -15,7 +15,8 @@ cohort_sample_request_fields = {'name', 'tag'}
 sample_request_fields = simple_sample_request_fields.union({'patient'})
 
 feature_related_sample_request_fields = simple_sample_request_fields.union({
-                                                                           'value'})
+    'value'
+})
 
 cell_type_feature_related_sample_request_fields = simple_sample_request_fields.union(
     {'value', 'cellType'}
