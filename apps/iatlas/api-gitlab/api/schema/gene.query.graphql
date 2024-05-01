@@ -28,8 +28,10 @@ type GeneNode implements BaseNode{
   publications: [SimplePublication!]!
   "A list of samples related to this gene that is associated with the value."
   samples: [GeneRelatedSample!]!
-  "A list of gene cell type pairs and their related feature value"
-  cellTypeSamples: [CellTypeGeneRelatedSample!]!
+  "A list of samples that have a value for this gene via pseudobulk"
+  pseudoBulkSamples: [GeneRelatedPseudoBulkSample!]!
+  "A list of cells that have a value for this gene"
+  cells: [GeneRelatedCell!]!
   "The 'superCategory' of the gene."
   superCategory: String
   "The 'therapyType' of the gene."
@@ -71,4 +73,29 @@ type SingleCellGene {
   hgnc: String!
   "The single cell sequencing value"
   singleCellSeq: Float!
+}
+
+"""
+The "GeneRelatedPseudoBulkSample" type is a Sample that is specifically related to a Gene.
+
+"""
+type GeneRelatedPseudoBulkSample {
+  "The unique name of the sample."
+  name: String!
+  "The single cell sequencing value"
+  singleCellSeqSum: Float!
+  "The sample's cell type."
+  cellType: String!
+}
+
+"""
+The "GeneRelatedCell" is a version of a `Cell` used by a 'Feature'.
+"""
+type GeneRelatedCell {
+  "The cells name (a unique string for this cell)."
+  name: String!
+  "The single cell sequencing value"
+  singleCellSeq: Float!
+  "The sample's cell type."
+  type: String!
 }

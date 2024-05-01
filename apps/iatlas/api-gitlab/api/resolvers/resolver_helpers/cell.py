@@ -11,17 +11,22 @@ cell_request_fields = {
     'id',
     'type',
     'name',
-    'features',
-    'genes',
 }
 
+feature_related_cell_request_fields = {
+    'name',
+    'type',
+    'value'
+}
+
+gene_related_cell_request_fields = {
+    'name',
+    'type',
+    'singleCellSeq'
+}
 
 def build_cell_graphql_response(
     requested=[],
-    gene_requested=[],
-    feature_requested=[],
-    entrez=None,
-    feature=None,
     prefix='cell_'
 ):
 
@@ -30,14 +35,12 @@ def build_cell_graphql_response(
             return None
 
         id = get_value(cell, prefix + 'id')
-        genes = get_genes(id, requested, gene_requested, entrez)
-        features = get_features(id, requested, feature_requested, feature)
         result = {
             'id': id,
             'type': get_value(cell, prefix + 'type'),
             'name': get_value(cell, prefix + 'name'),
-            'genes': map(build_gene_graphql_response(), genes),
-            'features': map(build_feature_graphql_response(), features)
+            'value': get_value(cell, prefix + 'feature_value'),
+            'singleCellSeq': get_value(cell, prefix + 'single_cell_seq'),
         }
         return result
     return f
@@ -45,12 +48,8 @@ def build_cell_graphql_response(
 
 def build_cell_request(
         requested,
-        feature_requested,
-        gene_requested,
         distinct=False,
         paging=None,
-        entrez=None,
-        feature=None,
         cohort=None,
         cell=None
 ):
@@ -81,42 +80,6 @@ def build_cell_request(
 
     if cell:
         query = query.filter(cell_1.name.in_(cell))
-
-    if feature:
-
-        feature_subquery = sess.query(cell_to_feature_1.cell_id)
-
-        feature_join_condition = build_join_condition(
-            cell_to_feature_1.feature_id,
-            feature_1.id,
-            filter_column=feature_1.name,
-            filter_list=feature
-        )
-        feature_subquery = feature_subquery.join(
-            feature_1,
-            and_(*feature_join_condition),
-            isouter=False
-        )
-
-        query = query.filter(cell_1.id.in_(feature_subquery))
-
-    if entrez:
-
-        gene_subquery = sess.query(cell_to_gene_1.cell_id)
-
-        gene_join_condition = build_join_condition(
-            cell_to_gene_1.gene_id,
-            gene_1.id,
-            filter_column=gene_1.entrez_id,
-            filter_list=entrez
-        )
-        gene_subquery = gene_subquery.join(
-            gene_1,
-            and_(*gene_join_condition),
-            isouter=False
-        )
-
-        query = query.filter(cell_1.id.in_(gene_subquery))
 
     if cohort:
 
@@ -156,84 +119,4 @@ def build_cell_request(
 
         query = query.filter(cell_1.id.in_(cohort_subquery))
 
-    import logging
-    logging.warning(query)
-
     return get_pagination_queries(query, paging, distinct, cursor_field=cell_1.id)
-
-
-
-def get_genes(cell_id, requested, gene_requested, entrez=None):
-
-    if 'genes' not in requested:
-        return []
-
-    sess = db.session
-
-    cell_to_gene_1 = aliased(CellToGene, name='ctg')
-    gene_1 = aliased(Gene, name = 'g')
-
-    core_field_mapping = {
-        'id': gene_1.id.label('gene_id'),
-        'entrez': gene_1.entrez_id.label('gene_entrez_id'),
-        'hgnc': gene_1.hgnc_id.label('gene_hgnc_id'),
-        'singleCellSeq': cell_to_gene_1.single_cell_seq.label('gene_single_cell_seq')
-    }
-
-    core = get_selected(gene_requested, core_field_mapping)
-    query = sess.query(*core)
-    query = query.select_from(cell_to_gene_1)
-    query = query.filter(cell_to_gene_1.cell_id.in_([cell_id]))
-
-    gene_join_condition = build_join_condition(
-        cell_to_gene_1.gene_id,
-        gene_1.id,
-        filter_column=gene_1.entrez_id,
-        filter_list=entrez
-    )
-    query = query.join(
-        gene_1,
-        and_(*gene_join_condition),
-        isouter=False
-    )
-
-    genes = query.distinct().all()
-    return genes
-
-
-def get_features(cell_id, requested, feature_requested, feature):
-
-    if 'features' not in requested:
-        return []
-
-    sess = db.session
-
-    cell_to_feature_1 = aliased(CellToFeature, name='ctf')
-    feature_1 = aliased(Feature, name = 'g')
-
-    core_field_mapping = {
-        'id': feature_1.id.label('fetaure_id'),
-        'name': feature_1.name.label('feature_name'),
-        'display': feature_1.display.label('feature_display'),
-        'value': cell_to_feature_1.feature_value.label('feature_value')
-    }
-
-    core = get_selected(feature_requested, core_field_mapping)
-    query = sess.query(*core)
-    query = query.select_from(cell_to_feature_1)
-    query = query.filter(cell_to_feature_1.cell_id.in_([cell_id]))
-
-    feature_join_condition = build_join_condition(
-        cell_to_feature_1.feature_id,
-        feature_1.id,
-        filter_column=feature_1.name,
-        filter_list=feature
-    )
-    query = query.join(
-        feature_1,
-        and_(*feature_join_condition),
-        isouter=False
-    )
-
-    features = query.distinct().all()
-    return features

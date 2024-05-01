@@ -2,6 +2,7 @@ from .resolver_helpers import (
     build_feature_graphql_response,
     feature_related_sample_request_fields,
     cell_type_feature_related_sample_request_fields,
+    feature_related_cell_request_fields,
     feature_request_fields,
     get_requested,
     build_features_query,
@@ -21,7 +22,6 @@ def resolve_features(
     maxValue=None,
     minValue=None,
     sample=None,
-    cellTypeSample=None,
     cohort=None
 ):
 
@@ -33,8 +33,11 @@ def resolve_features(
     sample_requested = get_requested(
         selection_set=selection_set, requested_field_mapping=feature_related_sample_request_fields, child_node='samples')
 
-    cell_type_sample_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=cell_type_feature_related_sample_request_fields, child_node='cellTypeSamples')
+    pseudobulk_sample_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=cell_type_feature_related_sample_request_fields, child_node='pseudoBulkSamples')
+
+    cell_requested = get_requested(
+        selection_set=selection_set, requested_field_mapping=feature_related_cell_request_fields, child_node='cells')
 
     max_items = 10 if 'samples' in requested else 100_000
 
@@ -49,7 +52,6 @@ def resolve_features(
         max_value=maxValue,
         min_value=minValue,
         sample=sample,
-        cell_type_sample=cellTypeSample,
         cohort=cohort
     )
 
@@ -61,13 +63,14 @@ def resolve_features(
         paging,
         distinct,
         build_feature_graphql_response(
-            requested,
-            sample_requested,
-            cell_type_sample_requested,
-            maxValue,
-            minValue,
-            cohort,
-            sample
+            requested = requested,
+            sample_requested = sample_requested,
+            pseudobulk_sample_requested = pseudobulk_sample_requested,
+            cell_requested = cell_requested,
+            max_value = maxValue,
+            min_value = minValue,
+            cohort = cohort,
+            sample = sample
         ),
         pagination_requested
     )

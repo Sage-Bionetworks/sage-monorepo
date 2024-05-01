@@ -8,10 +8,6 @@ type CellNode implements BaseNode {
   type: String!
   "The name of the cell"
   name: String!
-  "Features"
-  features: [SingleCellFeature]
-  "Genes"
-  genes: [SingleCellGene]
 }
 
 type Cell implements BaseResult {

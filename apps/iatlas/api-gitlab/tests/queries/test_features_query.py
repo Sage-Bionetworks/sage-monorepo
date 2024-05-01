@@ -33,7 +33,6 @@ def common_query_builder():
             $featureClass: [String!]
             $cohort: [String!]
             $sample: [String!]
-            $cellTypeSample: [String!]
             $minValue: Float
             $maxValue: Float
             $paging: PagingInput
@@ -44,7 +43,6 @@ def common_query_builder():
             featureClass: $featureClass
             cohort: $cohort
             sample: $sample
-            cellTypeSample: $cellTypeSample
             minValue: $minValue
             maxValue: $maxValue
             paging: $paging
@@ -118,8 +116,9 @@ def samples_query(common_query_builder):
         """
     )
 
+
 @pytest.fixture(scope='module')
-def samples_cell_types_query(common_query_builder):
+def pseudobulk_query(common_query_builder):
     return common_query_builder(
         """
         {
@@ -128,7 +127,7 @@ def samples_cell_types_query(common_query_builder):
                 name
                 class
                 order
-                cellTypeSamples {
+                pseudoBulkSamples {
                     name
                     value
                     cellType
@@ -150,6 +149,38 @@ def samples_cell_types_query(common_query_builder):
         """
     )
 
+
+@pytest.fixture(scope='module')
+def cells_query(common_query_builder):
+    return common_query_builder(
+        """
+        {
+            items {
+                id
+                name
+                class
+                order
+                cells {
+                    name
+                    type
+                    value
+                }
+            }
+            paging {
+                type
+                pages
+                total
+                startCursor
+                endCursor
+                hasPreviousPage
+                hasNextPage
+                page
+                limit
+            }
+            error
+        }
+        """
+    )
 
 @pytest.fixture(scope='module')
 def values_query(common_query_builder):
@@ -611,10 +642,10 @@ def test_feature_samples_query_with_feature_and_sample(client, feature_name, sam
         assert type(s['value']) is float
 
 
-def test_cell_type_feature_samples_query_with_feature(client, samples_cell_types_query):
+def test_pseudobulk_query_with_feature(client, pseudobulk_query):
     response = client.post(
         '/api', json={
-            'query': samples_cell_types_query,
+            'query': pseudobulk_query,
             'variables': {
                 'feature': ["Th1_cells"],
             }
@@ -627,7 +658,7 @@ def test_cell_type_feature_samples_query_with_feature(client, samples_cell_types
     feature = features[0]
     assert feature['name'] == "Th1_cells"
     assert isinstance(feature['class'], str)
-    samples = feature['cellTypeSamples']
+    samples = feature['pseudoBulkSamples']
     assert isinstance(samples, list)
     assert len(samples) > 0
     for sample in samples[0:10]:
@@ -636,10 +667,10 @@ def test_cell_type_feature_samples_query_with_feature(client, samples_cell_types
         assert isinstance(sample['value'], float)
 
 
-def test_cell_type_feature_samples_query_with_cohort(client, samples_cell_types_query):
+def test_pseudobulk_query_with_cohort(client, pseudobulk_query):
     response = client.post(
         '/api', json={
-            'query': samples_cell_types_query,
+            'query': pseudobulk_query,
             'variables': {
                 'cohort': ['MSK_Biopsy_Site']
             }
@@ -652,13 +683,38 @@ def test_cell_type_feature_samples_query_with_cohort(client, samples_cell_types_
     feature = features[0]
     assert isinstance(feature['name'], str)
     assert isinstance(feature['class'], str)
-    samples = feature['cellTypeSamples']
+    samples = feature['pseudoBulkSamples']
     assert isinstance(samples, list)
     assert len(samples) > 0
     for sample in samples[0:10]:
         assert isinstance(sample['cellType'], str)
         assert isinstance(sample['name'], str)
         assert isinstance(sample['value'], float)
+
+
+def test_cells_query_with_feature(client, cells_query):
+    response = client.post(
+        '/api', json={
+            'query': cells_query,
+            'variables': {
+                'feature': ["umap_1"],
+            }
+        })
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+    assert isinstance(features, list)
+    assert len(features) == 1
+    feature = features[0]
+    assert feature['name'] == "umap_1"
+    assert isinstance(feature['class'], str)
+    cells = feature['cells']
+    assert isinstance(cells, list)
+    assert len(cells) > 0
+    for cell in cells[0:10]:
+        assert isinstance(cell['type'], str)
+        assert isinstance(cell['name'], str)
+        assert isinstance(cell['value'], float)
 
 
 def test_features_query_with_germline_feature(client, common_query, germline_feature, germline_module, germline_category):

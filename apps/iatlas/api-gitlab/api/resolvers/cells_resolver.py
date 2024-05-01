@@ -4,7 +4,6 @@ from .resolver_helpers import (
     cell_request_fields,
     get_requested,
     get_selection_set,
-    cell_feature_request_fields,
     cell_gene_request_fields,
 )
 
@@ -16,8 +15,6 @@ def resolve_cells(
         info,
         distinct=False,
         paging=None,
-        entrez=None,
-        feature=None,
         cohort=None,
         cell=None
     ):
@@ -27,12 +24,6 @@ def resolve_cells(
     requested = get_requested(
         selection_set=selection_set, requested_field_mapping=cell_request_fields)
 
-    feature_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=cell_feature_request_fields, child_node='features')
-
-    gene_requested = get_requested(
-        selection_set=selection_set, requested_field_mapping=cell_gene_request_fields, child_node='genes')
-
     if distinct == False:
         # Add the id as a cursor if not selecting distinct
         requested.add('id')
@@ -41,12 +32,8 @@ def resolve_cells(
 
     query, count_query = build_cell_request(
         requested,
-        feature_requested,
-        gene_requested,
         distinct=distinct,
         paging=paging,
-        entrez=entrez,
-        feature=feature,
         cohort=cohort,
         cell=cell
     )
@@ -59,10 +46,6 @@ def resolve_cells(
         distinct,
         build_cell_graphql_response(
             requested=requested,
-            feature_requested=feature_requested,
-            gene_requested=gene_requested,
-            entrez=entrez,
-            feature=feature
         ),
         pagination_requested
     )
