@@ -1,4 +1,5 @@
 """Tests for utils"""
+from datetime import datetime
 
 import pytest
 
@@ -12,6 +13,8 @@ from schematic_api.controllers.utils import (
     handle_exceptions,
     download_schema_file_as_jsonld,
     InvalidSchemaURL,
+    calculate_datetime,
+    calculate_byte_size,
 )
 from schematic_api.models.basic_error import BasicError
 
@@ -76,3 +79,42 @@ class TestDownloadSchemaFileAsJsonLD:
             match="The provided URL could not be found: https://raw.github.com/model.jsonld",
         ):
             download_schema_file_as_jsonld("https://raw.github.com/model.jsonld")
+
+
+class TestCalculateByteSize:
+    """Tests calculate_byte_size"""
+
+    def test_success(self) -> None:
+        """Tests sucessful results"""
+        assert calculate_byte_size("1B") == 1
+        assert calculate_byte_size("2B") == 2
+        assert calculate_byte_size("1K") == 1024
+        assert calculate_byte_size("1.0K") == 1024
+        assert calculate_byte_size("1.1K") == 1127
+
+    def test_errors(self) -> None:
+        """Tests for raised exceptions"""
+
+        with pytest.raises(ValueError):
+            calculate_byte_size("1")
+
+        with pytest.raises(ValueError):
+            calculate_byte_size("1X")
+
+
+class TestCalculateDatetime:
+    """Tests calculate_datetime"""
+
+    def test_with_defaults(self) -> None:
+        """Tests sucessful results"""
+        assert isinstance(calculate_datetime(0), datetime)
+        assert isinstance(calculate_datetime(1), datetime)
+        assert isinstance(calculate_datetime(-1), datetime)
+
+    def test_with_input_datetime(self) -> None:
+        """Tests sucessful results"""
+        datetime1 = datetime(2024, 1, 15, 10, 0)
+        datetime2 = datetime(2024, 1, 15, 9, 50)
+        assert calculate_datetime(0, datetime1) == datetime1
+        assert calculate_datetime(10, datetime1) == datetime2
+        assert calculate_datetime(-10, datetime2) == datetime1
