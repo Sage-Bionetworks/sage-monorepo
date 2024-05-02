@@ -341,6 +341,8 @@ class TestStorageEndpoints(BaseTestCase):
             assert list(manifest.keys()) == MANIFEST_METADATA_KEYS
 
 
+@pytest.mark.synapse
+@pytest.mark.secrets
 class TestPurgeSynapseCache:  # pylint: disable=too-few-public-methods
     """Tests purge_synapse_cache"""
 
