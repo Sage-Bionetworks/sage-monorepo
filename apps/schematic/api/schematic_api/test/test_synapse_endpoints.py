@@ -4,6 +4,7 @@ import json
 import os
 from unittest import mock
 import shutil
+from typing import Generator
 
 import pytest
 import yaml
@@ -15,7 +16,6 @@ from schematic_api.controllers.utils import (
     purge_synapse_cache,
     check_synapse_cache_size,
 )
-from schematic_api.controllers.storage_controller_impl import AWS_SYNAPSE_CACHE_PATH
 from schematic_api.test import BaseTestCase
 from .conftest import (
     MANIFEST_METADATA_KEYS,
@@ -46,6 +46,18 @@ HEADERS = {
     "Accept": "application/json",
     "Authorization": f"Bearer {SYNAPSE_TOKEN}",
 }
+
+
+@pytest.fixture(scope="session", name="synapse_store")
+def fixture_synapse_store() -> Generator[SynapseStorage, None, None]:
+    """
+    Yields A synapse storage object, and deletes the cache at the end of the session
+    """
+    synapse_store = SynapseStorage(
+        access_token=SYNAPSE_TOKEN, synapse_cache_path="test_cache_path"
+    )
+    yield synapse_store
+    shutil.rmtree("test_cache_path")
 
 
 @pytest.mark.synapse
@@ -346,15 +358,11 @@ class TestStorageEndpoints(BaseTestCase):
 class TestPurgeSynapseCache:  # pylint: disable=too-few-public-methods
     """Tests purge_synapse_cache"""
 
-    def test_success(self) -> None:
+    def test_success(self, synapse_store: SynapseStorage) -> None:
         """Tests for a successful purge"""
-        synapse_store = SynapseStorage(
-            access_token=SYNAPSE_TOKEN, synapse_cache_path=AWS_SYNAPSE_CACHE_PATH
-        )
         size_before_purge = check_synapse_cache_size(synapse_store.root_synapse_cache)
         purge_synapse_cache(
             synapse_store, maximum_storage_allowed_cache_gb=0.000001, minute_buffer=0
         )
         size_after_purge = check_synapse_cache_size(synapse_store.root_synapse_cache)
         assert size_before_purge > size_after_purge
-        shutil.rmtree(AWS_SYNAPSE_CACHE_PATH)

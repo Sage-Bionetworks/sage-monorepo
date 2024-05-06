@@ -22,7 +22,6 @@ from synapseclient.core.exceptions import (  # type: ignore
 )
 from schematic.store import SynapseStorage
 from schematic.exceptions import AccessCredentialsError  # type: ignore
-from synapseclient.core import cache  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 
@@ -214,7 +213,8 @@ def purge_synapse_cache(
             1024**3
         )
         dir_size_bytes = check_synapse_cache_size(directory=store.root_synapse_cache)
-        # if 1 GB has already been taken, purge cache before 15 min
+        # Check if cache is bigger than the allowed size and if so delete all files in cache
+        # older than the buffer time
         if dir_size_bytes >= maximum_storage_allowed_cache_bytes:
             minutes_earlier = calculate_datetime(minute_buffer)
             num_of_deleted_files = store.syn.cache.purge(before_date=minutes_earlier)
@@ -227,16 +227,14 @@ def purge_synapse_cache(
             LOGGER.info(f"the total size of .synapseCache is: {dir_size_bytes} bytes")
 
 
-def check_synapse_cache_size(
-    directory: str = "/root/.synapseCache",
-) -> float:
-    """use du --sh command to calculate size of .synapseCache.
+def check_synapse_cache_size(directory: str) -> float:
+    """use du --sh command to calculate size of the Synapse cache
 
     Args:
-        directory (str, optional): .synapseCache directory. Defaults to '/root/.synapseCache'
+        directory (str, optional): The Synapse cache directory
 
     Returns:
-        float: returns size of .synapsecache directory in bytes
+        float: returns size of the Synapse directory in bytes
     """
     # Note: this command might fail on windows user.
     # But since this command is primarily for running on AWS, it is fine.
