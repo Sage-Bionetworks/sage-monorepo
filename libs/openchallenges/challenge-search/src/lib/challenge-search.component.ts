@@ -65,6 +65,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
+import { MultiSelectLazyLoadEvent } from 'primeng/multiselect';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -382,6 +383,24 @@ export class ChallengeSearchComponent
     // update query to trigger API call
     const newQuery = assign(this.query.getValue(), filteredQuery);
     this.query.next(newQuery);
+  }
+
+  onLazyLoad(event: MultiSelectLazyLoadEvent): void {
+    // update platform filter values
+    const size = event.last - event.first + 1;
+    this.challengeSearchDataService
+      .getPlatforms({
+        pageNumber: Math.floor(event.first / size),
+        pageSize: size,
+      })
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        console.log(options);
+        const selectedPlatformValues = options.filter((option) =>
+          this.selectedPlatforms.includes(option.value as string)
+        );
+        this.platformsFilter.options = union(options, selectedPlatformValues);
+      });
   }
 
   onSearchChange(

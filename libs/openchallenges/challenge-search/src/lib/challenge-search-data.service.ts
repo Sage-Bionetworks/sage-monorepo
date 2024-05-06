@@ -55,23 +55,39 @@ export class ChallengeSearchDataService {
     this.organizationSearchTerms.next(searchTerms);
   }
 
-  // getPlatforms(
-  //   platformQuery: ChallengePlatformSearchQuery
-  // ): Observable<Filter[]> {
-  //   return this.platformSearchTerms.pipe(
-  //     debounceTime(400),
-  //     distinctUntilChanged(),
-  //     switchMap((searchTerm: string) => {
-  //       // const sortedBy: ChallengePlatformSort = 'name';
-  //       // const platformQuery: ChallengePlatformSearchQuery = {
-  //       //   searchTerms: searchTerm,
-  //       //   sort: sortedBy,
-  //       // };
-  //       return this.challengePlatformService.listChallengePlatforms(
-  //         platformQuery
-  //       );
   setPlatformSearchTerms(searchTerms: string) {
     this.platformSearchTerms.next(searchTerms);
+  }
+
+  getPlatforms(
+    platformQuery: ChallengePlatformSearchQuery
+  ): Observable<Filter[]> {
+    return this.platformSearchTerms.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((searchTerm: string) => {
+        const sortedBy: ChallengePlatformSort = 'name';
+        const platformQuery: ChallengePlatformSearchQuery = {
+          searchTerms: searchTerm,
+          sort: sortedBy,
+        };
+        // const sortedBy: ChallengePlatformSort = 'name';
+        // const platformQuery: ChallengePlatformSearchQuery = {
+        //   searchTerms: searchTerm,
+        //   sort: sortedBy,
+        // };
+        return this.challengePlatformService.listChallengePlatforms(
+          platformQuery
+        );
+      }),
+      map((page) =>
+        page.challengePlatforms.map((platform) => ({
+          value: platform.slug,
+          label: platform.name,
+          active: false,
+        }))
+      )
+    );
   }
 
   searchEdamConcepts(sections?: EdamSection): Observable<Filter[]> {
