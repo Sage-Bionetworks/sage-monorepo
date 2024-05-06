@@ -303,6 +303,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamConceptId'
+        operations:
+          description: An array of EDAM concept ID used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
         categories:
           description: The array of challenge categories used to filter the results.
           type: array
