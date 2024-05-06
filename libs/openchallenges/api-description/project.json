@@ -45,6 +45,9 @@
       "options": {
         "command": "prettier --check {projectRoot}"
       }
+    },
+    "about": {
+      "executor": "@sagebionetworks/sage-monorepo:about"
     }
   },
   "tags": [],
