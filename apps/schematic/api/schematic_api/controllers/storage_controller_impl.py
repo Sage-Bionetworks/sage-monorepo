@@ -39,8 +39,6 @@ if os.path.exists(SYNAPSE_CONFIG_FILE):
             # If the user wants to set the synapse cache to something specific
             # or if set to null then let the python client decide.
             SYNAPSE_CACHE_PATH = config["cache_path"]
-else:
-    raise FileNotFoundError("Could not find config file at: ", SYNAPSE_CONFIG_FILE)
 
 
 def get_asset_storage_class(asset_type: str) -> Callable:
