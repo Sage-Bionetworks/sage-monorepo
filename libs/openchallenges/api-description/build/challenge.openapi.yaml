@@ -217,6 +217,11 @@ components:
         - mlcube
         - other
       example: container_image
+    EdamConceptId:
+      description: The unique identifier of the EDAM concept.
+      type: integer
+      format: int64
+      example: 1
     ChallengeCategory:
       description: The category of the challenge.
       type: string
@@ -293,6 +298,11 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ChallengeSubmissionType'
+        inputDataTypes:
+          description: An array of EDAM concept ID used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
         categories:
           description: The array of challenge categories used to filter the results.
           type: array
@@ -410,20 +420,22 @@ components:
       maxLength: 500
       nullable: true
       example: https://openchallenges.io
-    EdamData:
+    EdamConcept:
       type: object
-      description: The EDAM Data concept.
+      description: The EDAM concept.
       properties:
+        id:
+          $ref: '#/components/schemas/EdamConceptId'
         classId:
           type: string
           example: http://edamontology.org/data_0850
           maxLength: 60
-          pattern: ^http:\/\/edamontology\.org\/data_\d+$
         preferredLabel:
           type: string
           example: Sequence set
           maxLength: 80
       required:
+        - id
         - classId
         - preferredLabel
       nullable: true
@@ -501,7 +513,7 @@ components:
         inputDataTypes:
           type: array
           items:
-            $ref: '#/components/schemas/EdamData'
+            $ref: '#/components/schemas/EdamConcept'
         categories:
           type: array
           items:
@@ -774,30 +786,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/EdamSection'
-    EdamConceptId:
-      description: The unique identifier of the EDAM concept.
-      type: integer
-      format: int64
-      example: 1
-    EdamConcept:
-      type: object
-      description: The EDAM concept.
-      properties:
-        id:
-          $ref: '#/components/schemas/EdamConceptId'
-        classId:
-          type: string
-          example: http://edamontology.org/data_0850
-          maxLength: 60
-        preferredLabel:
-          type: string
-          example: Sequence set
-          maxLength: 80
-      required:
-        - id
-        - classId
-        - preferredLabel
-      nullable: true
     EdamConceptsPage:
       type: object
       description: A page of EDAM concepts.

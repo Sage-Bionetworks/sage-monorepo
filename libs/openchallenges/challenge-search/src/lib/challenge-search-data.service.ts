@@ -10,6 +10,10 @@ import {
 import {
   ChallengePlatformSearchQuery,
   ChallengePlatformService,
+  ChallengePlatformSort,
+  EdamConceptSearchQuery,
+  EdamConceptService,
+  EdamSection,
   Image,
   ImageAspectRatio,
   ImageHeight,
@@ -27,46 +31,61 @@ import { Filter } from '@sagebionetworks/openchallenges/ui';
   providedIn: 'root',
 })
 export class ChallengeSearchDataService {
-  private platformSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  private edamConceptSearchTerms: BehaviorSubject<EdamConceptSearchQuery> =
+    new BehaviorSubject<EdamConceptSearchQuery>({});
 
   private organizationSearchTerms: BehaviorSubject<string> =
     new BehaviorSubject<string>('');
 
+  private platformSearchTerms: BehaviorSubject<string> =
+    new BehaviorSubject<string>('');
+
   constructor(
     private challengePlatformService: ChallengePlatformService,
-    private organizationService: OrganizationService,
-    private imageService: ImageService
+    private edamConceptService: EdamConceptService,
+    private imageService: ImageService,
+    private organizationService: OrganizationService
   ) {}
 
-  setPlatformSearchTerms(searchTerms: string) {
-    this.platformSearchTerms.next(searchTerms);
+  setEdamConceptSearchTerms(searchQuery: EdamConceptSearchQuery) {
+    this.edamConceptSearchTerms.next(searchQuery);
   }
 
   setOriganizationSearchTerms(searchTerms: string) {
     this.organizationSearchTerms.next(searchTerms);
   }
 
-  getPlatforms(
-    platformQuery: ChallengePlatformSearchQuery
-  ): Observable<Filter[]> {
-    return this.platformSearchTerms.pipe(
+  // getPlatforms(
+  //   platformQuery: ChallengePlatformSearchQuery
+  // ): Observable<Filter[]> {
+  //   return this.platformSearchTerms.pipe(
+  //     debounceTime(400),
+  //     distinctUntilChanged(),
+  //     switchMap((searchTerm: string) => {
+  //       // const sortedBy: ChallengePlatformSort = 'name';
+  //       // const platformQuery: ChallengePlatformSearchQuery = {
+  //       //   searchTerms: searchTerm,
+  //       //   sort: sortedBy,
+  //       // };
+  //       return this.challengePlatformService.listChallengePlatforms(
+  //         platformQuery
+  //       );
+  setPlatformSearchTerms(searchTerms: string) {
+    this.platformSearchTerms.next(searchTerms);
+  }
+
+  searchEdamConcepts(sections?: EdamSection): Observable<Filter[]> {
+    return this.edamConceptSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((searchTerm: string) => {
-        // const sortedBy: ChallengePlatformSort = 'name';
-        // const platformQuery: ChallengePlatformSearchQuery = {
-        //   searchTerms: searchTerm,
-        //   sort: sortedBy,
-        // };
-        return this.challengePlatformService.listChallengePlatforms(
-          platformQuery
-        );
+      switchMap((searchQuery: EdamConceptSearchQuery) => {
+        searchQuery.sections = sections ? [sections] : searchQuery.sections;
+        return this.edamConceptService.listEdamConcepts(searchQuery);
       }),
       map((page) =>
-        page.challengePlatforms.map((platform) => ({
-          value: platform.slug,
-          label: platform.name,
+        page.edamConcepts.map((edamConcept) => ({
+          value: edamConcept.id,
+          label: edamConcept.preferredLabel,
           active: false,
         }))
       )
@@ -122,6 +141,30 @@ export class ChallengeSearchDataService {
         );
         return of({ url: '' });
       })
+    );
+  }
+
+  searchPlatforms(): Observable<Filter[]> {
+    return this.platformSearchTerms.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      switchMap((searchTerm: string) => {
+        const sortedBy: ChallengePlatformSort = 'name';
+        const platformQuery: ChallengePlatformSearchQuery = {
+          searchTerms: searchTerm,
+          sort: sortedBy,
+        };
+        return this.challengePlatformService.listChallengePlatforms(
+          platformQuery
+        );
+      }),
+      map((page) =>
+        page.challengePlatforms.map((platform) => ({
+          value: platform.slug,
+          label: platform.name,
+          active: false,
+        }))
+      )
     );
   }
 }

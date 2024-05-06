@@ -79,7 +79,6 @@ def submit_manifest_with_schematic(  # pylint: disable=too-many-arguments
         data_model_labels=display_label_type,
     )
     manifest_id: str = metadata_model.submit_metadata_manifest(
-        path_to_json_ld=schema_path,
         manifest_path=manifest_path,
         dataset_id=dataset_id,
         validate_component=component,

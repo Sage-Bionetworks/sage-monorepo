@@ -44,9 +44,9 @@ GET {{basePath}}/challenges?searchTerms=mortality%20dream
 
 GET {{basePath}}/challenges?minStartDate=2017-01-01&maxStartDate=2017-12-31
 
-### List the challenges that include the input data type 'genomic'.
+### Get the challenges whose input data types include the EDAM concept ID 2 or 18
 
-GET {{basePath}}/challenges?inputDataTypes=genomic
+GET {{basePath}}/challenges?inputDataTypes=2,18
 
 ### List the challenges by category: featured
 
