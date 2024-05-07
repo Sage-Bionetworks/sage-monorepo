@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2024-05-07T22:38:13.923Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="7FRPBW5Xl9nfvJuE4nsb" version="24.3.0" type="github">
+<mxfile host="app.diagrams.net" modified="2024-05-07T22:46:19.351Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="V3mkz0RWcbEty3dn731Q" version="24.3.0" type="github">
   <diagram name="Page-1" id="yRQ3IOpucz02juWziZWn">
-    <mxGraphModel dx="1026" dy="610" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1368" dy="813" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -87,9 +87,6 @@
             <mxGeometry x="270" y="360" width="50" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="yYz-vqZkxL4f6Y4ajkZT-41" value="Snowflake" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjMjliNWU4IiBoZWlnaHQ9IjY0IiB3aWR0aD0iNjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDY0IDY0Ij48cGF0aCBkPSJNOS44NiAxNS4yOThsMTMuMDA4IDcuOGEzLjcyIDMuNzIgMCAwIDAgNC41ODktLjYwMSA0LjAxIDQuMDEgMCAwIDAgMS4yMjctMi45MDhWMy45NTZhMy44MSAzLjgxIDAgMCAwLTEuODYxLTMuNDIgMy44MSAzLjgxIDAgMCAwLTMuODkzIDAgMy44MSAzLjgxIDAgMCAwLTEuODYxIDMuNDJ2OC44OTZsLTcuMzg3LTQuNDNhMy43OSAzLjc5IDAgMCAwLTIuOTIyLS40Yy0uOTg2LjI2NS0xLjgxOC45NC0yLjMgMS44NDQtMS4wNTcgMS45LS40NCA0LjI4IDEuNCA1LjQyMm0zMS4yNyA3LjhsMTMuMDA4LTcuOGMxLjg0LTEuMTQzIDIuNDU4LTMuNTMzIDEuNC01LjQyNGEzLjc1IDMuNzUgMCAwIDAtNS4yMi0xLjQ1MmwtNy4zIDQuMzd2LTguODRhMy44MSAzLjgxIDAgMSAwLTcuNjE1IDB2MTUuMzIzYTQuMDggNC4wOCAwIDAgMCAuNDk0IDIuMzY3Yy40ODIuOTAzIDEuMzE0IDEuNTcgMi4zIDEuODQ0YTMuNzEgMy43MSAwIDAgMCAyLjkyMi0uNE0yOS41NTIgMzEuOTdjLjAxMy0uMjUuMTA4LS41LjI3Mi0uNjhsMS41Mi0xLjU4YTEuMDYgMS4wNiAwIDAgMSAuNjU4LS4yODJoLjA1N2ExLjA1IDEuMDUgMCAwIDEgLjY1Ni4yODJsMS41MiAxLjU4YTEuMTIgMS4xMiAwIDAgMSAuMjcyLjY4MXYuMDZhMS4xMyAxLjEzIDAgMCAxLS4yNzIuNjgzbC0xLjUyIDEuNThhMS4wNCAxLjA0IDAgMCAxLS42NTYuMjg0aC0uMDU3Yy0uMjQ2LS4wMTQtLjQ4LS4xMTUtLjY1OC0uMjg0bC0xLjUyLTEuNThhMS4xMyAxLjEzIDAgMCAxLS4yNzItLjY4M3ptLTQuNjA0LS42NXYxLjM2NGExLjU0IDEuNTQgMCAwIDAgLjM3Mi45M2w1LjE2IDUuMzU3YTEuNDIgMS40MiAwIDAgMCAuODk1LjM4NmgxLjMxMmExLjQyIDEuNDIgMCAwIDAgLjg5NS0uMzg2bDUuMTYtNS4zNTdhMS41NCAxLjU0IDAgMCAwIC4zNzItLjkzVjMxLjMyYTEuNTQgMS41NCAwIDAgMC0uMzcyLS45M2wtNS4xNi01LjM1N2ExLjQyIDEuNDIgMCAwIDAtLjg5NS0uMzg2aC0xLjMxMmExLjQyIDEuNDIgMCAwIDAtLjg5NS4zODZMMjUuMzIgMzAuNGExLjU1IDEuNTUgMCAwIDAtLjM3Mi45M00zLjEzIDI3LjYybDcuMzY1IDQuNDE3TDMuMTMgMzYuNDVhNC4wNiA0LjA2IDAgMCAwLTEuMzk5IDUuNDI0IDMuNzUgMy43NSAwIDAgMCAyLjMgMS44NDRjLjk4Ni4yNzQgMi4wNDIuMTMzIDIuOTIyLS4zOTJsMTMuMDA4LTcuOGMxLjItLjc2MiAxLjktMi4wNzggMS45LTMuNDkyYTQuMTYgNC4xNiAwIDAgMC0xLjktMy40OTJsLTEzLjAwOC03LjhhMy43OSAzLjc5IDAgMCAwLTIuOTIyLS40Yy0uOTg2LjI2NS0xLjgxOC45NC0yLjMgMS44NDQtMS4wNTcgMS45LS40NCA0LjI3OCAxLjQgNS40MjJtMzguOTk1IDQuNDQyYTQgNCAwIDAgMCAxLjkxIDMuNDc3bDEzIDcuOGMuODguNTI0IDEuOTM0LjY2NiAyLjkyLjM5MnMxLjgxNy0uOTQgMi4zLTEuODQzYTQuMDUgNC4wNSAwIDAgMC0xLjQtNS40MjRMNTMuNSAzMi4wMzhsNy4zNjUtNC40MTdjMS44NC0xLjE0MyAyLjQ1Ny0zLjUzIDEuNC01LjQyMmEzLjc0IDMuNzQgMCAwIDAtMi4zLTEuODQ0Yy0uOTg3LS4yNzQtMi4wNDItLjEzNC0yLjkyLjRsLTEzIDcuOGE0IDQgMCAwIDAtMS45MSAzLjUwN00yNS40OCA0MC41MDhhMy43IDMuNyAwIDAgMC0yLjYxMS40NjRsLTEzLjAwOCA3LjhjLTEuODQgMS4xNDMtMi40NTYgMy41My0xLjQgNS40MjIuNDgzLjkwMyAxLjMxNCAxLjU3IDIuMyAxLjg0M2EzLjc1IDMuNzUgMCAwIDAgMi45MjItLjM5Mmw3LjM4Ny00LjQzdjguODNhMy44MSAzLjgxIDAgMSAwIDcuNjE0IDBWNDQuNGEzLjkxIDMuOTEgMCAwIDAtMy4yMDUtMy45MDNtMjguNjYgOC4yNzZsLTEzLjAwOC03LjhhMy43NSAzLjc1IDAgMCAwLTIuOTIyLS4zOTIgMy43NCAzLjc0IDAgMCAwLTIuMyAxLjg0MyA0LjA5IDQuMDkgMCAwIDAtLjQ5NCAyLjM3djE1LjI1YTMuODEgMy44MSAwIDEgMCA3LjYxNCAwVjUxLjI4bDcuMjg3IDQuMzdhMy43OSAzLjc5IDAgMCAwIDIuOTIyLjRjLjk4Ni0uMjY1IDEuODE4LS45NCAyLjMtMS44NDQgMS4wNTctMS45LjQ0LTQuMjgtMS40LTUuNDIyIi8+PC9zdmc+;" vertex="1" parent="1">
-          <mxGeometry x="290" y="710" width="50" height="50" as="geometry" />
-        </mxCell>
         <mxCell id="yYz-vqZkxL4f6Y4ajkZT-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="yYz-vqZkxL4f6Y4ajkZT-11" target="yYz-vqZkxL4f6Y4ajkZT-14">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -123,7 +120,7 @@
           <mxGeometry x="540" y="526.5" width="40" height="40" as="geometry" />
         </mxCell>
         <mxCell id="yYz-vqZkxL4f6Y4ajkZT-110" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAEDED;fontSize=22;fontColor=#FFFFFF;strokeColor=none;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="880" y="160" width="539" height="680" as="geometry" />
+          <mxGeometry x="880" y="160" width="539" height="500" as="geometry" />
         </mxCell>
         <mxCell id="yYz-vqZkxL4f6Y4ajkZT-111" value="Pushing data to Google Analytics (GA4) is straightforward and only requires updating one file (&lt;a href=&quot;https://gitlab.com/cri-iatlas/iatlas-app/-/blob/master/ui.R#L65-80&quot;&gt;ui.R&lt;/a&gt;). Customizing the analytics data sent from the Shiny app requires knowledge of JavaScript and jQuery. This article demonstrates &lt;a href=&quot;https://www.appsilon.com/post/r-shiny-google-analytics&quot;&gt;how to track custom events&lt;/a&gt;." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
           <mxGeometry x="950" y="172" width="449" height="118" as="geometry" />
@@ -148,18 +145,6 @@
         </mxCell>
         <mxCell id="yYz-vqZkxL4f6Y4ajkZT-118" value="4" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;arcSize=50;" vertex="1" parent="1">
           <mxGeometry x="897" y="530" width="40" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="yYz-vqZkxL4f6Y4ajkZT-120" value="Tableau" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgNjAuMyA1OS41IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNTAwIiBoZWlnaHQ9IjI0NjciPjxwYXRoIGZpbGw9IiNlODc2MmQiIGQ9Ik0yOC41IDQwLjJoMy4zdi05aDguM1YyOGgtOC4zdi05aC0zLjN2OWgtOC4ydjMuMmg4LjJ6Ii8+PHBhdGggZmlsbD0iI2M3MjAzNyIgZD0iTTEzLjIgNTMuMkgxNnYtOGg3LjR2LTIuNUgxNnYtOC4xaC0yLjh2OC4xSDUuOHYyLjVoNy40eiIvPjxwYXRoIGZpbGw9IiM1Yjg3OWIiIGQ9Ik00NC4zIDI0LjNoMi44di04aDcuNXYtMi40aC03LjVWNS44aC0yLjh2OC4xaC03LjR2Mi40aDcuNHoiLz48cGF0aCBmaWxsPSIjNWM2NjkyIiBkPSJNMjkgNTkuNWgyLjR2LTUuN2g1LjF2LTIuMWgtNS4xVjQ2SDI5djUuN2gtNXYyLjFoNXoiLz48cGF0aCBmaWxsPSIjZWI5MTI5IiBkPSJNMTMuMyAyNC4zaDIuNnYtOC4xaDcuNXYtMi4zaC03LjVWNS44aC0yLjZ2OC4xSDUuOHYyLjNoNy41eiIvPjxwYXRoIGZpbGw9IiM1YzY2OTIiIGQ9Ik01Mi44IDM2LjNoMi40di01LjZoNS4xdi0yLjJoLTUuMXYtNS42aC0yLjR2NS42aC01djIuMmg1eiIvPjxwYXRoIGZpbGwtcnVsZT0iZXZlbm9kZCIgZmlsbD0iIzFmNDU3ZSIgZD0iTTQ0LjMgNTMuMmgyLjh2LThoNy41di0yLjVoLTcuNXYtOC4xaC0yLjh2OC4xaC03LjR2Mi41aDcuNHoiIGNsaXAtcnVsZT0iZXZlbm9kZCIvPjxwYXRoIGZpbGw9IiM3MTk5YTYiIGQ9Ik0zNi4xIDcuMlY1LjVoLTVWMGgtMS44djUuNWgtNXYxLjdoNXY1LjVoMS44VjcuMnpNNSAzNS45aDEuOHYtNS41aDV2LTEuN2gtNXYtNS40SDV2NS40SDB2MS44bDUtLjF6Ii8+PC9zdmc+;" vertex="1" parent="1">
-          <mxGeometry x="590.96" y="585.34" width="50" height="49.33" as="geometry" />
-        </mxCell>
-        <mxCell id="yYz-vqZkxL4f6Y4ajkZT-122" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;arcSize=50;" vertex="1" parent="1">
-          <mxGeometry x="540" y="590" width="40" height="40" as="geometry" />
-        </mxCell>
-        <mxCell id="yYz-vqZkxL4f6Y4ajkZT-124" value="Grafana can aggregate data from multiple sources, including Prometheus and Google Analytics, in the same dashboard. Grafana supports a wide range of data sources, and by using panels within a dashboard, data from different sources can be visualized side by side or even in combined views, although this setup is more about visual mixing than data-level aggregation." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="949.5" y="650" width="450" height="121" as="geometry" />
-        </mxCell>
-        <mxCell id="yYz-vqZkxL4f6Y4ajkZT-125" value="5" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;arcSize=50;" vertex="1" parent="1">
-          <mxGeometry x="897.5" y="651" width="40" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
