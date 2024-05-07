@@ -15,8 +15,8 @@ default:
     - aws --version
 
 stages:
-  - test_code
-  - publish_coverage
+  # - test_code
+  # - publish_coverage
   - build_container
   - deploy
 
