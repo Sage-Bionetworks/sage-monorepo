@@ -1,3 +1,3 @@
 description: The label of a component in a schema
 type: string
-example: MolecularEntity
+example: Patient

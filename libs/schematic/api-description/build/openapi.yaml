@@ -1319,7 +1319,7 @@ components:
     ComponentLabel:
       description: The label of a component in a schema
       type: string
-      example: MolecularEntity
+      example: Patient
     ComponentRequirementArray:
       type: object
       description: An array of components
