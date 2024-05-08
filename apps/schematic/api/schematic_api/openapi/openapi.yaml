@@ -3421,7 +3421,7 @@ components:
       type: object
     ComponentLabel:
       description: The label of a component in a schema
-      example: MolecularEntity
+      example: Patient
       type: string
     ComponentRequirementArray:
       description: An array of components

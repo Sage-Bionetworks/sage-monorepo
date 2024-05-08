@@ -9,7 +9,6 @@ from schematic.schemas.data_model_graph import (  # type: ignore
 from schematic.visualization.attributes_explorer import AttributesExplorer  # type: ignore
 from schematic.utils.schema_utils import get_property_label_from_display_name  # type: ignore
 from schematic.utils.schema_utils import DisplayLabelType  # type: ignore
-from schematic.models.metadata import MetadataModel  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
 from schematic_api.models.component_requirement_subgraph import (
@@ -29,6 +28,29 @@ from schematic_api.controllers.utils import (
     download_schema_file_as_jsonld,
 )
 from schematic_api.controllers.paging import Page
+
+
+def create_data_model_graph_explorer(
+    schema_url: str, display_label_type: DisplayLabelType
+) -> DataModelGraphExplorer:
+    """Creates a DataModelGraphExplorer for use in variopus endpoints
+
+    Args:
+        schema_url (str): The URL of the schema in json form
+        display_label_type (DisplayLabelType):
+           The type of label to use as display
+
+    Returns:
+        DataModelGraphExplorer: _description_
+    """
+    data_model_parser = DataModelParser(path_to_data_model=schema_url)
+    parsed_data_model = data_model_parser.parse_model()
+    data_model_grapher = DataModelGraph(
+        attribute_relationships_dict=parsed_data_model,
+        data_model_labels=display_label_type,
+    )
+    graph_data_model = data_model_grapher.generate_data_model_graph()
+    return DataModelGraphExplorer(graph_data_model)
 
 
 @handle_exceptions
@@ -83,21 +105,13 @@ def get_component_requirements_array(
         schema_url (str): The URL of the schema in json form
         display_label_type (DisplayLabelType):
            The type of label to use as display
-           Defaults to "class_label"
     Returns:
         tuple[Union[ComponentRequirementArray, BasicError], int]: A tuple
           item 1 is either the required coponents or an error
           item 2 is the status
     """
-    schema_path = download_schema_file_as_jsonld(schema_url)
-    metadata_model = MetadataModel(
-        inputMModelLocation=schema_path,
-        inputMModelLocationType="local",
-        data_model_labels=display_label_type,
-    )
-    result = metadata_model.get_component_requirements(
-        source_component=component_label, as_graph=False
-    )
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
+    result = dmge.get_component_requirements(source_component=component_label)
     status = 200
     return result, status
 
@@ -115,23 +129,15 @@ def get_component_requirements_graph(
         schema_url (str): The URL of the schema in json form
         display_label_type (DisplayLabelType):
            The type of label to use as display
-           Defaults to "class_label"
     Returns:
         tuple[Union[ComponentRequirementGrpah, BasicError], int]: A tuple
           item 1 is either the required coponents or an error
           item 2 is the status
     """
-    schema_path = download_schema_file_as_jsonld(schema_url)
-    metadata_model = MetadataModel(
-        inputMModelLocation=schema_path,
-        inputMModelLocationType="local",
-        data_model_labels=display_label_type,
-    )
-    results = metadata_model.get_component_requirements(
-        source_component=component_label, as_graph=True
-    )
-    result = [ComponentRequirementSubgraph(result[0], result[1]) for result in results]
-
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
+    graph = dmge.get_component_requirements_graph(source_component=component_label)
+    edges: list[tuple[str, str]] = graph.edges()
+    result = [ComponentRequirementSubgraph(edge[0], edge[1]) for edge in edges]
     status = 200
     return result, status
 
@@ -153,14 +159,7 @@ def get_connected_node_pairs_from_schematic(
     Returns:
         list[ConnectedNodePair]: A list of connected node pairs
     """
-    data_model_parser = DataModelParser(path_to_data_model=schema_url)
-    parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(
-        attribute_relationships_dict=parsed_data_model,
-        data_model_labels=display_label_type,
-    )
-    graph_data_model = data_model_grapher.generate_data_model_graph()
-    dmge = DataModelGraphExplorer(graph_data_model)
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
     relationship_subgraph = dmge.get_subgraph_by_edge_type(relationship_type)
     lst = [list(edge) for edge in relationship_subgraph.edges]
 
@@ -258,14 +257,7 @@ def get_node_is_required_from_schematic(
     Returns:
        bool: Whether or no the node is required
     """
-    data_model_parser = DataModelParser(path_to_data_model=schema_url)
-    parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(
-        attribute_relationships_dict=parsed_data_model,
-        data_model_labels=display_label_type,
-    )
-    graph_data_model = data_model_grapher.generate_data_model_graph()
-    dmge = DataModelGraphExplorer(graph_data_model)
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
     return dmge.get_node_required(node_display)
 
 
@@ -364,14 +356,7 @@ def get_node_properties_from_schematic(
     Returns:
         list[str]: A list of properties of the node
     """
-    data_model_parser = DataModelParser(path_to_data_model=schema_url)
-    parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(
-        attribute_relationships_dict=parsed_data_model,
-        data_model_labels=display_label_type,
-    )
-    graph_data_model = data_model_grapher.generate_data_model_graph()
-    dmge = DataModelGraphExplorer(graph_data_model)
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
     properties = dmge.find_class_specific_properties(node_label)
     return properties
 
@@ -422,14 +407,7 @@ def get_node_validation_rules_from_schematic(
     Returns:
         list[ValidationRule]: A list of validation_rules of the node
     """
-    data_model_parser = DataModelParser(path_to_data_model=schema_url)
-    parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(
-        attribute_relationships_dict=parsed_data_model,
-        data_model_labels=display_label_type,
-    )
-    graph_data_model = data_model_grapher.generate_data_model_graph()
-    dmge = DataModelGraphExplorer(graph_data_model)
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
     rules: list[str] = dmge.get_node_validation_rules(node_display)  # type: ignore
     return [ValidationRule(rule) for rule in rules]
 
@@ -488,14 +466,7 @@ def get_node_dependencies_from_schematic(
         list[Node]: A list of nodes
 
     """
-    data_model_parser = DataModelParser(path_to_data_model=schema_url)
-    parsed_data_model = data_model_parser.parse_model()
-    data_model_grapher = DataModelGraph(
-        attribute_relationships_dict=parsed_data_model,
-        data_model_labels=display_label_type,
-    )
-    graph_data_model = data_model_grapher.generate_data_model_graph()
-    dmge = DataModelGraphExplorer(graph_data_model)
+    dmge = create_data_model_graph_explorer(schema_url, display_label_type)
     nodes = dmge.get_node_dependencies(
         node_label, return_display_names, return_ordered_by_schema
     )
