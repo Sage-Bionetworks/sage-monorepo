@@ -327,5 +327,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "elastic"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgODAgODAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNmMDRlOTg7fS5jbHMtMntmaWxsOiMzNDM3NDE7fS5jbHMtM3tmaWxsOiMwN2M7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5hcG0tY29sb3I8L3RpdGxlPjxnIGRhdGEtbmFtZT0iTGF5ZXIgMiIgaWQ9IkxheWVyXzIiPjxyZWN0IGhlaWdodD0iMjAiIHdpZHRoPSI2NCIgeT0iOCIgeD0iOCIgY2xhc3M9ImNscy0xIi8+PHBhdGggZD0iTTI4LDI4SDcyYTAsMCwwLDAsMSwwLDB2MEEyMCwyMCwwLDAsMSw1Miw0OEgyOGEwLDAsMCwwLDEsMCwwVjI4QTAsMCwwLDAsMSwyOCwyOFoiIGNsYXNzPSJjbHMtMiIvPjxyZWN0IGhlaWdodD0iMTgiIHdpZHRoPSIyNiIgeT0iNTQiIHg9IjQ2IiBjbGFzcz0iY2xzLTMiLz48L2c+PC9zdmc+;clipPath=inset(10% 10.33% 10% 9.67%);\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "elastic-apm"
   }
 ]</mxlibrary>
