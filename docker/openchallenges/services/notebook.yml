@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-notebook:
     image: ghcr.io/sage-bionetworks/openchallenges-notebook:${OPENCHALLENGES_VERSION:-local}

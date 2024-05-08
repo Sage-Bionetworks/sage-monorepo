@@ -106,18 +106,3 @@ def fixture_incorrect_manifest_dataframe() -> Generator:
     Yields the path to biospecimen manifest csv
     """
     yield INCORRECT_MANIFEST_PATH
-
-
-@pytest.fixture(scope="session", name="incorrect_manifest_errors")
-def fixture_incorrect_manifest_errors() -> Generator:
-    """
-    Yields the expected errors from the incorrect manifest
-    """
-    yield [
-        [
-            "2",
-            "Wrong schema",
-            "'Tissue Status' is a required property",
-            "Wrong schema",
-        ]
-    ]

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   openchallenges-mariadb:
     image: ghcr.io/sage-bionetworks/openchallenges-mariadb:${OPENCHALLENGES_VERSION:-local}

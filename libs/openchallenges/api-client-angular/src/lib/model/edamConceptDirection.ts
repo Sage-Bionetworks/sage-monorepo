@@ -12,10 +12,12 @@
 
 
 /**
- * The EDAM Data concept.
+ * The direction to sort the results by.
  */
-export interface EdamData { 
-    classId: string;
-    preferredLabel: string;
-}
+export type EdamConceptDirection = 'asc' | 'desc';
+
+export const EdamConceptDirection = {
+    Asc: 'asc' as EdamConceptDirection,
+    Desc: 'desc' as EdamConceptDirection
+};
 

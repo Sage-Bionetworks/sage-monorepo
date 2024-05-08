@@ -4,8 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 /** An EDAM concept search query. */
@@ -21,8 +24,18 @@ public class EdamConceptSearchQueryDto {
   @JsonProperty("pageSize")
   private Integer pageSize = 100;
 
+  @JsonProperty("sort")
+  private EdamConceptSortDto sort = EdamConceptSortDto.RELEVANCE;
+
+  @JsonProperty("direction")
+  private EdamConceptDirectionDto direction = null;
+
   @JsonProperty("searchTerms")
   private String searchTerms;
+
+  @JsonProperty("sections")
+  @Valid
+  private List<EdamSectionDto> sections = null;
 
   public EdamConceptSearchQueryDto pageNumber(Integer pageNumber) {
     this.pageNumber = pageNumber;
@@ -67,6 +80,46 @@ public class EdamConceptSearchQueryDto {
     this.pageSize = pageSize;
   }
 
+  public EdamConceptSearchQueryDto sort(EdamConceptSortDto sort) {
+    this.sort = sort;
+    return this;
+  }
+
+  /**
+   * Get sort
+   *
+   * @return sort
+   */
+  @Valid
+  @Schema(name = "sort", required = false)
+  public EdamConceptSortDto getSort() {
+    return sort;
+  }
+
+  public void setSort(EdamConceptSortDto sort) {
+    this.sort = sort;
+  }
+
+  public EdamConceptSearchQueryDto direction(EdamConceptDirectionDto direction) {
+    this.direction = direction;
+    return this;
+  }
+
+  /**
+   * Get direction
+   *
+   * @return direction
+   */
+  @Valid
+  @Schema(name = "direction", required = false)
+  public EdamConceptDirectionDto getDirection() {
+    return direction;
+  }
+
+  public void setDirection(EdamConceptDirectionDto direction) {
+    this.direction = direction;
+  }
+
   public EdamConceptSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
@@ -90,6 +143,37 @@ public class EdamConceptSearchQueryDto {
     this.searchTerms = searchTerms;
   }
 
+  public EdamConceptSearchQueryDto sections(List<EdamSectionDto> sections) {
+    this.sections = sections;
+    return this;
+  }
+
+  public EdamConceptSearchQueryDto addSectionsItem(EdamSectionDto sectionsItem) {
+    if (this.sections == null) {
+      this.sections = new ArrayList<>();
+    }
+    this.sections.add(sectionsItem);
+    return this;
+  }
+
+  /**
+   * An array of EDAM sections (sub-ontologies) used to filter the results.
+   *
+   * @return sections
+   */
+  @Valid
+  @Schema(
+      name = "sections",
+      description = "An array of EDAM sections (sub-ontologies) used to filter the results.",
+      required = false)
+  public List<EdamSectionDto> getSections() {
+    return sections;
+  }
+
+  public void setSections(List<EdamSectionDto> sections) {
+    this.sections = sections;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -101,12 +185,15 @@ public class EdamConceptSearchQueryDto {
     EdamConceptSearchQueryDto edamConceptSearchQuery = (EdamConceptSearchQueryDto) o;
     return Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber)
         && Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize)
-        && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms);
+        && Objects.equals(this.sort, edamConceptSearchQuery.sort)
+        && Objects.equals(this.direction, edamConceptSearchQuery.direction)
+        && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms)
+        && Objects.equals(this.sections, edamConceptSearchQuery.sections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, searchTerms);
+    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms, sections);
   }
 
   @Override
@@ -115,7 +202,10 @@ public class EdamConceptSearchQueryDto {
     sb.append("class EdamConceptSearchQueryDto {\n");
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
+    sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
+    sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
+    sb.append("    sections: ").append(toIndentedString(sections)).append("\n");
     sb.append("}");
     return sb.toString();
   }

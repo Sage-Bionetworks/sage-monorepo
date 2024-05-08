@@ -2,6 +2,7 @@
 
 import json
 import os
+from unittest import mock
 
 import pytest
 import yaml
@@ -43,6 +44,9 @@ HEADERS = {
 class TestGenerateGoogleSheetManifests(BaseTestCase):
     """Tests google sheet manifest endpoint"""
 
+    # local environment has variable 'SECRETS_MANAGER_SECRETS that causes an error when creating
+    # google credentials
+    @mock.patch.dict(os.environ, {}, clear=True)
     def test_success1(self) -> None:
         """Test for successful result"""
         url = (
@@ -62,6 +66,9 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
         assert isinstance(links, list)
         assert len(links) == 2
 
+    # local environment has variable 'SECRETS_MANAGER_SECRETS that causes an error when creating
+    # google credentials
+    @mock.patch.dict(os.environ, {}, clear=True)
     def test_success2(self) -> None:
         """Test for successful result"""
         url = (

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   schematic-api:
     image: ghcr.io/sage-bionetworks/schematic-api:${SCHEMATIC_VERSION:-local}

@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   agora-web-app:
     image: ghcr.io/sage-bionetworks/agora-web-app:${AGORA_VERSION:-local}
