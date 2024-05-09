@@ -1,0 +1,7 @@
+type: object
+description: A graph of components
+properties:
+  componentRequirementsGraph:
+    type: array
+    items:
+      $ref: ComponentRequirementSubgraph.yaml

@@ -70,6 +70,8 @@ target/
 #secrets
 *secrets*
 schematic_service_account_creds.json
+private_localhost_certificate.crt
+private_localhost.key
 
 #config files
 config.yaml

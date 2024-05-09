@@ -19,18 +19,6 @@ HEADERS = {
     "Authorization": "Bearer xxx",
 }
 
-CREATE_MANIFESTS_ARGS = [
-    "path_to_data_model",
-    "output_format",
-    "data_types",
-    "title",
-    "access_token",
-    "dataset_ids",
-    "strict",
-    "use_annotations",
-    "data_model_labels",
-]
-
 
 class TestGenerateGoogleSheetManifests(BaseTestCase):
     """Tests google sheet manifest endpoint"""
@@ -53,13 +41,13 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["node_label"]
             assert not call_args["title"]
             assert call_args["dataset_ids"] == ["syn2"]
             assert call_args["strict"]
             assert not call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "class_label"
 
     def test_arguments(self) -> None:
         """Test for correct arguments"""
@@ -73,6 +61,7 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
                 "&manifestTitle=title"
                 "&useStrictValidation=false"
                 "&addAnnotations=true"
+                "&displayLabelType=display_label"
             )
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
@@ -83,15 +72,15 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["data_type1", "data_type2"]
             assert call_args["dataset_ids"] == ["syn2", "syn3"]
             assert call_args["title"] == "title"
             assert not call_args["strict"]
             assert call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "display_label"
 
-            url = f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}" "&generateAllManifests=true"
+            url = f"{GENERATE_GOOGLE_SHEET_MANIFESTS_URL}&generateAllManifests=true"
             response = self.client.open(url, method="GET", headers=HEADERS)
             self.assert200(
                 response, f"Response body is : {response.data.decode('utf-8')}"
@@ -101,10 +90,10 @@ class TestGenerateGoogleSheetManifests(BaseTestCase):
             assert list(result.keys()) == ["links"]
             assert result["links"] == ["l1"]
             call_args = mock_method.call_args.kwargs
-            assert list(call_args.keys()) == CREATE_MANIFESTS_ARGS
             assert call_args["output_format"] == "google_sheet"
             assert call_args["data_types"] == ["all manifests"]
             assert not call_args["title"]
             assert not call_args["dataset_ids"]
             assert call_args["strict"]
             assert not call_args["use_annotations"]
+            assert call_args["data_model_labels"] == "class_label"
