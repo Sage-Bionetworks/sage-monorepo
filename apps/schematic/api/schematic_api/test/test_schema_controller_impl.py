@@ -1,7 +1,11 @@
 """Tests for schema endpoint functions"""
 # pylint: disable=duplicate-code
 
+
 from schematic_api.models.basic_error import BasicError
+from schematic_api.models.component_requirement_subgraph import (
+    ComponentRequirementSubgraph,
+)
 from schematic_api.models.node_property_array import NodePropertyArray
 from schematic_api.models.validation_rule import ValidationRule
 from schematic_api.models.validation_rule_array import ValidationRuleArray
@@ -13,6 +17,8 @@ from schematic_api.models.connected_node_pair_array import ConnectedNodePairArra
 from schematic_api.models.connected_node_pair import ConnectedNodePair
 from schematic_api.controllers.schema_controller_impl import (
     get_component,
+    get_component_requirements_array,
+    get_component_requirements_graph,
     get_connected_node_pair_page,
     get_connected_node_pair_array,
     get_node_is_required,
@@ -40,6 +46,60 @@ class TestGetComponent:
         """Test for 500 result"""
         result, status = get_component(
             component_label="not_a_component", schema_url=test_schema_url
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
+
+
+class TestGetComponentRequirementsArray:
+    """Tests get_component_requirements_array"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_component_requirements_array(
+            component_label="Biospecimen",
+            schema_url=test_schema_url,
+            display_label_type="class_label",
+        )
+        assert status == 200
+        assert isinstance(result, list)
+        for req in result:
+            assert isinstance(req, str)
+
+    def test_internal_error(self, test_schema_url: str) -> None:
+        """Test for 500 result"""
+        result, status = get_component_requirements_array(
+            component_label="not_a_component",
+            schema_url=test_schema_url,
+            display_label_type="class_label",
+        )
+        assert status == 500
+        assert isinstance(result, BasicError)
+
+
+class TestGetComponentRequirementsGraph:
+    """Tests get_component_requirements_graph"""
+
+    def test_success(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        result, status = get_component_requirements_graph(
+            component_label="Biospecimen",
+            schema_url=test_schema_url,
+            display_label_type="class_label",
+        )
+        assert status == 200
+        assert isinstance(result, list)
+        for subgraph in result:
+            assert isinstance(subgraph, ComponentRequirementSubgraph)
+            assert isinstance(subgraph.component1, str)
+            assert isinstance(subgraph.component2, str)
+
+    def test_internal_error(self, test_schema_url: str) -> None:
+        """Test for 500 result"""
+        result, status = get_component_requirements_graph(
+            component_label="not_a_component",
+            schema_url=test_schema_url,
+            display_label_type="class_label",
         )
         assert status == 500
         assert isinstance(result, BasicError)

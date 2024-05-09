@@ -623,6 +623,48 @@ paths:
                 type: string
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsArray:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+      operationId: getComponentRequirementsArray
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementArray'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /components/{componentLabel}/requirementsGraph:
+    parameters:
+      - $ref: '#/components/parameters/componentLabel'
+    get:
+      tags:
+        - Schema
+      summary: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      description: Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+      operationId: getComponentRequirementsGraph
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/displayLabelType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentRequirementGraph'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /schemaAttributes:
     get:
       tags:
@@ -872,19 +914,13 @@ paths:
         - $ref: '#/components/parameters/manifestTitle'
         - $ref: '#/components/parameters/dataTypeArray'
         - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/useStrictValidation'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
           required: false
           schema:
             $ref: '#/components/schemas/AssetViewId'
-        - name: useStrictValidation
-          in: query
-          description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
-          required: false
-          schema:
-            type: boolean
-            default: true
         - name: generateAllManifests
           in: query
           description: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
@@ -1283,7 +1319,40 @@ components:
     ComponentLabel:
       description: The label of a component in a schema
       type: string
-      example: MolecularEntity
+      example: Patient
+    ComponentRequirementArray:
+      type: object
+      description: An array of components
+      properties:
+        componentRequirementsList:
+          type: array
+          items:
+            type: string
+    ComponentRequirementSubgraph:
+      type: object
+      description: A pair of components
+      properties:
+        component1:
+          type: string
+          description: The display name of the first component in the graph
+          example: component1
+        component2:
+          type: string
+          description: The display name of the second component in the graph
+          example: component2
+      required:
+        - component1
+        - component2
+      x-java-class-annotations:
+        - '@lombok.Builder'
+    ComponentRequirementGraph:
+      type: object
+      description: A graph of components
+      properties:
+        componentRequirementsGraph:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComponentRequirementSubgraph'
     RelationshipType:
       description: A type of schema relationship
       type: string
@@ -1359,12 +1428,15 @@ components:
       description: An array of dataset ids
       items:
         $ref: '#/components/schemas/DatasetId'
+    DataType:
+      description: A data type
+      type: string
+      example: Patient
     DataTypeArray:
       description: An array of data types
       type: array
       items:
-        type: string
-        example: Patient
+        $ref: '#/components/schemas/DataType'
     GoogleSheetLinks:
       type: object
       description: An array of google sheet links
@@ -1681,3 +1753,11 @@ components:
       required: false
       schema:
         $ref: '#/components/schemas/DataTypeArray'
+    useStrictValidation:
+      name: useStrictValidation
+      in: query
+      description: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
+      required: false
+      schema:
+        type: boolean
+        default: true
