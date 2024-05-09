@@ -13,12 +13,12 @@ poetry install
 And run schematic APIs: 
 
 ```
-python3 -m schematic-api
+python3 -m schematic_api
 ```
 and open your browser to here:
 
 ```
-http://127.0.0.1:7080/api/v1/ui/
+http://localhost:7443/api/v1/ui/
 ```
 
 ## Running with Docker
