@@ -29,12 +29,12 @@ from schematic_api.models.basic_error import BasicError
 # Config for various settable global values
 # Will use config.yaml if it exists, otherwise uses the example file
 # config.yaml is ignored by git so can be changed locally without accidentaly commiting it
-# To do so copy example_cofnig.yaml to config.yaml and make changes there
+# To do so copy default_cofnig.yaml to config.yaml and make changes there
 if os.path.exists("config.yaml"):
     with open("config.yaml", "r", encoding="utf-8") as file:
         API_CONFIG = yaml.safe_load(file)
 else:
-    with open("example_config.yaml", "r", encoding="utf-8") as file:
+    with open("default_config.yaml", "r", encoding="utf-8") as file:
         API_CONFIG = yaml.safe_load(file)
 
 PURGE_SYNAPSE_CACHE = API_CONFIG["purge_synapse_cache"]
