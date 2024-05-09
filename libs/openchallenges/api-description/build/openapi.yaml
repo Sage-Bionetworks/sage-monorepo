@@ -606,23 +606,6 @@ components:
       format: date
       nullable: true
       example: '2017-07-21'
-    EdamOperation:
-      type: object
-      description: The EDAM Operation concept.
-      properties:
-        classId:
-          type: string
-          example: 'http://edamontology.org/operation_0230'
-          maxLength: 60
-          pattern: '^http:\/\/edamontology\.org\/operation_\d+$'
-        preferredLabel:
-          type: string
-          example: Sequence generation
-          maxLength: 80
-      required:
-        - classId
-        - preferredLabel
-      nullable: true
     CreatedDateTime:
       description: Datetime when the object was added to the database.
       type: string
@@ -684,7 +667,7 @@ components:
           minimum: 0
           example: 100
         operation:
-          $ref: '#/components/schemas/EdamOperation'
+          $ref: '#/components/schemas/EdamConcept'
         createdAt:
           $ref: '#/components/schemas/CreatedDateTime'
         updatedAt:

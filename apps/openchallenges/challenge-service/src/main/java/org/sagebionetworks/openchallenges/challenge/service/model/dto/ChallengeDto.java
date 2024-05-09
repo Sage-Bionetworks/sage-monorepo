@@ -79,7 +79,7 @@ public class ChallengeDto {
   private Integer starredCount = 0;
 
   @JsonProperty("operation")
-  private EdamOperationDto operation = null;
+  private EdamConceptDto operation = null;
 
   @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -510,7 +510,7 @@ public class ChallengeDto {
     this.starredCount = starredCount;
   }
 
-  public ChallengeDto operation(EdamOperationDto operation) {
+  public ChallengeDto operation(EdamConceptDto operation) {
     this.operation = operation;
     return this;
   }
@@ -522,11 +522,11 @@ public class ChallengeDto {
    */
   @Valid
   @Schema(name = "operation", required = false)
-  public EdamOperationDto getOperation() {
+  public EdamConceptDto getOperation() {
     return operation;
   }
 
-  public void setOperation(EdamOperationDto operation) {
+  public void setOperation(EdamConceptDto operation) {
     this.operation = operation;
   }
 
