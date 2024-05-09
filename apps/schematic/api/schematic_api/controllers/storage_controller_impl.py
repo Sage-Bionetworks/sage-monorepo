@@ -23,6 +23,7 @@ from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.controllers.utils import (
     SYNAPSE_CACHE_PATH,
+    PURGE_SYNAPSE_CACHE,
     handle_exceptions,
     get_access_token,
     purge_synapse_cache,
@@ -68,7 +69,8 @@ def get_store(
     store = SynapseStorage(
         access_token=access_token, synapse_cache_path=SYNAPSE_CACHE_PATH
     )
-    purge_synapse_cache(store)
+    if PURGE_SYNAPSE_CACHE:
+        purge_synapse_cache(store)
     return store
 
 

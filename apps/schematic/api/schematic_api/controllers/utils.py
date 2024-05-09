@@ -30,6 +30,7 @@ from schematic_api.models.basic_error import BasicError
 with open("config.yaml", "r", encoding="utf-8") as file:
     API_CONFIG = yaml.safe_load(file)
 
+PURGE_SYNAPSE_CACHE = API_CONFIG["purge_synapse_cache"]
 SYNAPSE_CACHE_PATH = API_CONFIG["synapse_cache_path"]
 
 LOGGER = logging.getLogger("Synapse cache")
