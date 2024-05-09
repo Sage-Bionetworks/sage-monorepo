@@ -91,6 +91,7 @@ class TestCalculateByteSize:
         assert calculate_byte_size("1K") == 1024
         assert calculate_byte_size("1.0K") == 1024
         assert calculate_byte_size("1.1K") == 1127
+        assert calculate_byte_size("0") == 0
 
     def test_errors(self) -> None:
         """Tests for raised exceptions"""

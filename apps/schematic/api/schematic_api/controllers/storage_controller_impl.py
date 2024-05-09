@@ -2,7 +2,6 @@
 import os
 from typing import Callable
 import tempfile
-import yaml
 
 import pandas as pd
 import synapseclient  # type: ignore
@@ -23,22 +22,12 @@ from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
 from schematic_api.controllers.utils import (
+    SYNAPSE_CACHE_PATH,
     handle_exceptions,
     get_access_token,
     purge_synapse_cache,
 )
 from schematic_api.controllers.paging import Page
-
-# Default path, used on AWS, when no config exists, or it doesn't contain the correct field
-SYNAPSE_CACHE_PATH = "/var/tmp/synapse"
-SYNAPSE_CONFIG_FILE = "schematic_api/test/data/synapse_config.yaml"
-if os.path.exists(SYNAPSE_CONFIG_FILE):
-    with open(SYNAPSE_CONFIG_FILE, "r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
-        if "cache_path" in config:
-            # If the user wants to set the synapse cache to something specific
-            # or if set to null then let the python client decide.
-            SYNAPSE_CACHE_PATH = config["cache_path"]
 
 
 def get_asset_storage_class(asset_type: str) -> Callable:

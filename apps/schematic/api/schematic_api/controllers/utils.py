@@ -13,6 +13,7 @@ import subprocess
 from datetime import datetime, timedelta
 import re
 from math import ceil
+import yaml
 
 import pandas as pd
 from flask import request  # type: ignore
@@ -24,6 +25,12 @@ from schematic.store import SynapseStorage
 from schematic.exceptions import AccessCredentialsError  # type: ignore
 
 from schematic_api.models.basic_error import BasicError
+
+# Config for various settable global values
+with open("config.yaml", "r", encoding="utf-8") as file:
+    API_CONFIG = yaml.safe_load(file)
+
+SYNAPSE_CACHE_PATH = API_CONFIG["synapse_cache_path"]
 
 LOGGER = logging.getLogger("Synapse cache")
 
@@ -263,6 +270,9 @@ def calculate_byte_size(size_string: str) -> int:
     Returns:
         int: The size in bytes
     """
+    if size_string.isnumeric() and int(size_string) == 0:
+        return 0
+
     size_dict: dict[str, int] = {"B": 0, "K": 1, "M": 2, "G": 3}
 
     size_letter_string = "".join(size_dict.keys())

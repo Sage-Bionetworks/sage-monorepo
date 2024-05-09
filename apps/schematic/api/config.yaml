@@ -1,0 +1,2 @@
+# This can be set to a specific path, or to null to let the python client deicde
+synapse_cache_path: '/var/tmp/synapse'
