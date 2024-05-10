@@ -66,6 +66,11 @@ properties:
     type: array
     items:
       $ref: EdamConceptId.yaml
+  operations:
+    description: An array of EDAM concept ID used to filter the results.
+    type: array
+    items:
+      $ref: EdamConceptId.yaml
   categories:
     description: The array of challenge categories used to filter the results.
     type: array

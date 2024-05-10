@@ -133,9 +133,9 @@ public class ChallengeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "operation_id", nullable = true)
-  @IndexedEmbedded(includePaths = {"class_id", "preferred_label"})
+  @IndexedEmbedded(includePaths = {"id", "class_id", "preferred_label"})
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
-  private EdamOperationEntity operation;
+  private EdamConceptEntity operation;
 
   @Column(name = "created_at")
   @GenericField(name = "created_at", sortable = Sortable.YES)

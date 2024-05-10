@@ -67,6 +67,10 @@ public class ChallengeSearchQueryDto {
   @Valid
   private List<Long> inputDataTypes = null;
 
+  @JsonProperty("operations")
+  @Valid
+  private List<Long> operations = null;
+
   @JsonProperty("categories")
   @Valid
   private List<ChallengeCategoryDto> categories = null;
@@ -413,6 +417,36 @@ public class ChallengeSearchQueryDto {
     this.inputDataTypes = inputDataTypes;
   }
 
+  public ChallengeSearchQueryDto operations(List<Long> operations) {
+    this.operations = operations;
+    return this;
+  }
+
+  public ChallengeSearchQueryDto addOperationsItem(Long operationsItem) {
+    if (this.operations == null) {
+      this.operations = new ArrayList<>();
+    }
+    this.operations.add(operationsItem);
+    return this;
+  }
+
+  /**
+   * An array of EDAM concept ID used to filter the results.
+   *
+   * @return operations
+   */
+  @Schema(
+      name = "operations",
+      description = "An array of EDAM concept ID used to filter the results.",
+      required = false)
+  public List<Long> getOperations() {
+    return operations;
+  }
+
+  public void setOperations(List<Long> operations) {
+    this.operations = operations;
+  }
+
   public ChallengeSearchQueryDto categories(List<ChallengeCategoryDto> categories) {
     this.categories = categories;
     return this;
@@ -489,6 +523,7 @@ public class ChallengeSearchQueryDto {
         && Objects.equals(this.status, challengeSearchQuery.status)
         && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
         && Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes)
+        && Objects.equals(this.operations, challengeSearchQuery.operations)
         && Objects.equals(this.categories, challengeSearchQuery.categories)
         && Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
   }
@@ -509,6 +544,7 @@ public class ChallengeSearchQueryDto {
         status,
         submissionTypes,
         inputDataTypes,
+        operations,
         categories,
         searchTerms);
   }
@@ -530,6 +566,7 @@ public class ChallengeSearchQueryDto {
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    submissionTypes: ").append(toIndentedString(submissionTypes)).append("\n");
     sb.append("    inputDataTypes: ").append(toIndentedString(inputDataTypes)).append("\n");
+    sb.append("    operations: ").append(toIndentedString(operations)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("}");
