@@ -22,6 +22,7 @@ body:
       options:
         - Agora
         - iAtlas
+        - MODEL-AD
         - OpenChallenges
         - Sage Monorepo
         - Schematic
