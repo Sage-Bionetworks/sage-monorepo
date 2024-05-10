@@ -387,16 +387,58 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  loadedPages: Set<number> = new Set();
+  edamLoadedPages: Set<number> = new Set();
+  platformsLoadedPages: Set<number> = new Set();
+  organizationLoadedPages: Set<number> = new Set();
 
-  onLazyLoad(event: MultiSelectLazyLoadEvent): void {
+  onLazyLoadEdam(event: MultiSelectLazyLoadEvent): void {
     const size = 10; // default page size
     const startPage = Math.floor(event.first / size);
     const endPage = Math.floor(event.last / size);
 
     for (let page = startPage; page <= endPage; page++) {
-      if (!this.loadedPages.has(page)) {
-        this.loadedPages.add(page);
+      // check if the page has already been loaded to avoid duplicates
+      if (!this.edamLoadedPages.has(page)) {
+        this.edamLoadedPages.add(page);
+
+        this.challengeSearchDataService
+          .getEdamConcepts({
+            pageNumber: page,
+            pageSize: size,
+            sections: [EdamSection.Data],
+          })
+          .pipe(takeUntil(this.destroy))
+          .subscribe((newOptions) => {
+            // find the starting index for the new options in the overall existing options list
+            const startIndex = page * size;
+            let options = this.inputDataTypesFilter.options;
+            // update dropdown options by inserting new data into correct position
+            if (startIndex < options.length) {
+              options.splice(startIndex, 0, ...newOptions);
+            } else {
+              options = options.concat(newOptions);
+            }
+
+            const selectedInputDataValues = options.filter((option) =>
+              this.selectedInputDataTypes.includes(option.value as number)
+            );
+            this.inputDataTypesFilter.options = union(
+              options,
+              selectedInputDataValues
+            );
+          });
+      }
+    }
+  }
+
+  onLazyLoadPlatform(event: MultiSelectLazyLoadEvent): void {
+    const size = 10; // default page size
+    const startPage = Math.floor(event.first / size);
+    const endPage = Math.floor(event.last / size);
+
+    for (let page = startPage; page <= endPage; page++) {
+      if (!this.platformsLoadedPages.has(page)) {
+        this.platformsLoadedPages.add(page);
         this.challengeSearchDataService
           .getPlatforms({
             pageNumber: page,
@@ -426,28 +468,26 @@ export class ChallengeSearchComponent
     }
   }
 
-  loadedPages2: Set<number> = new Set();
-  onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
+  onLazyLoadOrganization(event: MultiSelectLazyLoadEvent): void {
     const size = 10; // default page size
     const startPage = Math.floor(event.first / size);
     const endPage = Math.floor(event.last / size);
 
     for (let page = startPage; page <= endPage; page++) {
       // check if the page has already been loaded to avoid duplicates
-      if (!this.loadedPages2.has(page)) {
-        this.loadedPages2.add(page);
+      if (!this.organizationLoadedPages.has(page)) {
+        this.organizationLoadedPages.add(page);
 
         this.challengeSearchDataService
-          .getEdamConcepts({
+          .getOriganizations({
             pageNumber: page,
             pageSize: size,
-            sections: [EdamSection.Data],
           })
           .pipe(takeUntil(this.destroy))
           .subscribe((newOptions) => {
             // find the starting index for the new options in the overall existing options list
             const startIndex = page * size;
-            let options = this.inputDataTypesFilter.options;
+            let options = this.organizationsFilter.options;
             // update dropdown options by inserting new data into correct position
             if (startIndex < options.length) {
               options.splice(startIndex, 0, ...newOptions);
@@ -455,12 +495,12 @@ export class ChallengeSearchComponent
               options = options.concat(newOptions);
             }
 
-            const selectedInputDataValues = options.filter((option) =>
-              this.selectedInputDataTypes.includes(option.value as number)
+            const selectedOrgValues = options.filter((option) =>
+              this.selectedOrgs.includes(option.value as number)
             );
-            this.inputDataTypesFilter.options = union(
+            this.organizationsFilter.options = union(
               options,
-              selectedInputDataValues
+              selectedOrgValues
             );
           });
       }

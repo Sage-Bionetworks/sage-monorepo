@@ -86,7 +86,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
-          (loadMore)="onLazyLoad($event)"
+          (loadMore)="onLazyLoadPlatform($event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -103,7 +103,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
-          (loadMore)="onLazyLoad2($event)"
+          (loadMore)="onLazyLoadEdam($event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -120,6 +120,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
+          (loadMore)="onLazyLoadOrganization($event)"
         />
       </p-panel>
       <p-divider></p-divider>
