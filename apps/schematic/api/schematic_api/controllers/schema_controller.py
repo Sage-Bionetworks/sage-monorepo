@@ -5,6 +5,12 @@ from typing import Tuple
 from typing import Union
 
 from schematic_api.models.basic_error import BasicError  # noqa: E501
+from schematic_api.models.component_requirement_array import (
+    ComponentRequirementArray,
+)  # noqa: E501
+from schematic_api.models.component_requirement_graph import (
+    ComponentRequirementGraph,
+)  # noqa: E501
 from schematic_api.models.connected_node_pair_array import (
     ConnectedNodePairArray,
 )  # noqa: E501
@@ -39,6 +45,48 @@ def get_component(
     """
     return schema_controller_impl.get_component(
         component_label, schema_url, include_index, display_label_type
+    )
+
+
+def get_component_requirements_array(
+    component_label, schema_url, display_label_type=None
+):  # noqa: E501
+    """Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form.
+
+    Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in array form. # noqa: E501
+
+    :param component_label: The label of a component in a schema
+    :type component_label: str
+    :param schema_url: The URL of a schema in jsonld or csv form
+    :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
+
+    :rtype: Union[ComponentRequirementArray, Tuple[ComponentRequirementArray, int], Tuple[ComponentRequirementArray, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_component_requirements_array(
+        component_label, schema_url, display_label_type
+    )
+
+
+def get_component_requirements_graph(
+    component_label, schema_url, display_label_type=None
+):  # noqa: E501
+    """Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form.
+
+    Given a source model component (see https://w3id.org/biolink/vocab/category for definnition of component), return all components required by it in graph form. # noqa: E501
+
+    :param component_label: The label of a component in a schema
+    :type component_label: str
+    :param schema_url: The URL of a schema in jsonld or csv form
+    :type schema_url: str
+    :param display_label_type: The type of label to display
+    :type display_label_type: str
+
+    :rtype: Union[ComponentRequirementGraph, Tuple[ComponentRequirementGraph, int], Tuple[ComponentRequirementGraph, int, Dict[str, str]]
+    """
+    return schema_controller_impl.get_component_requirements_graph(
+        component_label, schema_url, display_label_type
     )
 
 

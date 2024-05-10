@@ -3,7 +3,6 @@ import os
 from typing import Callable
 import tempfile
 
-
 import pandas as pd
 import synapseclient  # type: ignore
 from schematic.store.synapse import SynapseStorage, ManifestDownload, load_df  # type: ignore
@@ -22,7 +21,13 @@ from schematic_api.models.project_metadata_page import ProjectMetadataPage
 from schematic_api.models.file_metadata import FileMetadata
 from schematic_api.models.file_metadata_array import FileMetadataArray
 from schematic_api.models.file_metadata_page import FileMetadataPage
-from schematic_api.controllers.utils import handle_exceptions, get_access_token
+from schematic_api.controllers.utils import (
+    SYNAPSE_CACHE_PATH,
+    PURGE_SYNAPSE_CACHE,
+    handle_exceptions,
+    get_access_token,
+    purge_synapse_cache,
+)
 from schematic_api.controllers.paging import Page
 
 
@@ -49,9 +54,27 @@ def get_asset_storage_class(asset_type: str) -> Callable:
     return asset_type_object
 
 
-def get_asset_view_from_schematic(
+def get_store(
     asset_type: str,  # pylint: disable=unused-argument
-) -> pd.DataFrame:
+) -> SynapseStorage:
+    """Creates a SynapseStorage class and purges its synapse cache
+
+    Args:
+        asset_type (str): The type of storage class (will be used in the future)
+
+    Returns:
+        SynapseStorage: A synapse storage class
+    """
+    access_token = get_access_token()
+    store = SynapseStorage(
+        access_token=access_token, synapse_cache_path=SYNAPSE_CACHE_PATH
+    )
+    if PURGE_SYNAPSE_CACHE:
+        purge_synapse_cache(store)
+    return store
+
+
+def get_asset_view_from_schematic(asset_type: str) -> pd.DataFrame:
     """Gets the asset view in pandas.Dataframe form
 
     Args:
@@ -61,8 +84,7 @@ def get_asset_view_from_schematic(
      Returns:
         pandas.DataFrame: The asset view
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     return store.getStorageFileviewTable()
 
 
@@ -115,7 +137,7 @@ def get_asset_view_json(
 
 def get_dataset_file_metadata_from_schematic(
     dataset_id: str,
-    asset_type: str,  # pylint: disable=unused-argument
+    asset_type: str,
     file_names: list[str] | None,
     use_full_file_path: bool,
 ) -> list[FileMetadata]:
@@ -130,8 +152,7 @@ def get_dataset_file_metadata_from_schematic(
     Returns:
         list[FileMetadata]: A list of file metadata
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     file_tuple_list = store.getFilesInStorageDataset(
         datasetId=dataset_id,
         fileNames=file_names,  # type: ignore
@@ -242,7 +263,7 @@ def load_manifest_from_synapse_metadata(
 
 
 def get_dataset_manifest_from_schematic(
-    asset_type: str, dataset_id: str  # pylint: disable=unused-argument
+    asset_type: str, dataset_id: str
 ) -> pd.DataFrame:
     """Gets a manifest in pandas.Dataframe format
 
@@ -254,8 +275,7 @@ def get_dataset_manifest_from_schematic(
     Returns:
         pandas.DataFrame: The manifest
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     manifest_data = store.getDatasetManifest(
         datasetId=dataset_id, downloadFile=True, newManifestName="manifest.csv"
     )
@@ -315,9 +335,7 @@ def get_dataset_manifest_json(
     return result, status
 
 
-def get_manifest_from_schematic(
-    asset_type: str, manifest_id: str  # pylint: disable=unused-argument
-) -> pd.DataFrame:
+def get_manifest_from_schematic(asset_type: str, manifest_id: str) -> pd.DataFrame:
     """Gets a manifest in pandas.Dataframe format
 
     Args:
@@ -327,9 +345,11 @@ def get_manifest_from_schematic(
     Returns:
         pandas.DataFrame: The manifest
     """
+    # The storage object isn't needed but this purges the synapse cache
+    get_store(asset_type)
     access_token = get_access_token()
-    store = SynapseStorage.login(access_token=access_token)
-    manifest_download = ManifestDownload(store, manifest_id)
+    synapse = SynapseStorage.login(access_token=access_token)
+    manifest_download = ManifestDownload(synapse, manifest_id)
     manifest_data = ManifestDownload.download_manifest(
         manifest_download, "manifest.csv"
     )
@@ -380,7 +400,7 @@ def get_manifest_json(
 
 
 def get_project_dataset_metadata_from_schematic(
-    project_id: str, asset_type: str  # pylint: disable=unused-argument
+    project_id: str, asset_type: str
 ) -> list[DatasetMetadata]:
     """Gets a list of dataset metadata from the project
 
@@ -391,8 +411,7 @@ def get_project_dataset_metadata_from_schematic(
     Returns:
         list[DatasetMetadata]: A list of dataset metadata
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     tuples = store.getStorageDatasetsInProject(projectId=project_id)
     return [DatasetMetadata(id=item[0], name=item[1]) for item in tuples]
 
@@ -473,7 +492,7 @@ def get_project_dataset_metadata_page(
 
 def get_project_manifest_metadata_from_schematic(
     project_id: str,
-    asset_type: str,  # pylint: disable=unused-argument
+    asset_type: str,
 ) -> list[ManifestMetadata]:
     """Gets manifest metadata from the project
 
@@ -484,8 +503,7 @@ def get_project_manifest_metadata_from_schematic(
     Returns:
         list[ManifestMetadata]: A list of manifest metadata
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     manifest_tuple_list = store.getProjectManifests(projectId=project_id)
     return [
         ManifestMetadata(
@@ -575,7 +593,7 @@ def get_project_manifest_metadata_page(
 
 
 def get_project_metadata_from_schematic(
-    asset_type: str,  # pylint: disable=unused-argument
+    asset_type: str,
 ) -> list[ProjectMetadata]:
     """Gets a list of projects
 
@@ -585,8 +603,7 @@ def get_project_metadata_from_schematic(
     Returns:
         list[ProjectMetadata]: A list of project metadata
     """
-    access_token = get_access_token()
-    store = SynapseStorage(access_token=access_token)
+    store = get_store(asset_type)
     metadata_tuple_list = store.getStorageProjects()
     return [ProjectMetadata(id=item[0], name=item[1]) for item in metadata_tuple_list]
 

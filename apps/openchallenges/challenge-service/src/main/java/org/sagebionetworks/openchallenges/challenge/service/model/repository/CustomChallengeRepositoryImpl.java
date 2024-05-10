@@ -79,6 +79,9 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
     if (query.getCategories() != null && !query.getCategories().isEmpty()) {
       predicates.add(getCategoriesPredicate(pf, query));
     }
+    if (query.getOperations() != null && !query.getOperations().isEmpty()) {
+      predicates.add(getChallengeOperationPredicate(pf, query));
+    }
 
     SearchSort sort = getSearchSort(sf, query);
     SearchPredicate sortPredicate = getSearchSortPredicate(pf, query);
@@ -145,6 +148,17 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
             b -> {
               for (String platform : query.getPlatforms()) {
                 b.should(pf.match().field("platform.slug").matching(platform));
+              }
+            })
+        .toPredicate();
+  }
+
+  private SearchPredicate getChallengeOperationPredicate(
+      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (Long operation : query.getOperations()) {
+                b.should(pf.match().field("operation.id").matching(operation));
               }
             })
         .toPredicate();

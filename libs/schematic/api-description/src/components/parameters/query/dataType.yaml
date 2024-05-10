@@ -1,0 +1,6 @@
+name: dataType
+in: query
+description: A data type
+required: false
+schema:
+  $ref: ../../schemas/DataType.yaml

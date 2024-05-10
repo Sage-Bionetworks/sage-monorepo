@@ -69,8 +69,13 @@ target/
 
 #secrets
 *secrets*
-synapse_config.yaml
 schematic_service_account_creds.json
+private_localhost_certificate.crt
+private_localhost.key
+
+#config files
+config.yaml
+schematic_api/test/data/synapse_config.yaml
 
 #schematic downloaded files
 manifests

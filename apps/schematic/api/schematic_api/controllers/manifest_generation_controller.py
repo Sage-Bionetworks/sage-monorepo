@@ -17,8 +17,8 @@ def generate_google_sheet_manifests(
     manifest_title=None,
     data_type_array=None,
     display_label_type=None,
-    asset_view_id=None,
     use_strict_validation=None,
+    asset_view_id=None,
     generate_all_manifests=None,
 ):  # noqa: E501
     """Generates a list of google sheet links
@@ -37,10 +37,10 @@ def generate_google_sheet_manifests(
     :type data_type_array: List[str]
     :param display_label_type: The type of label to display
     :type display_label_type: str
-    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-    :type asset_view_id: str
     :param use_strict_validation: If true, users are blocked from entering incorrect values. If false, users will get a warning when using incorrect values.
     :type use_strict_validation: bool
+    :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+    :type asset_view_id: str
     :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
     :type generate_all_manifests: bool
 
@@ -53,7 +53,7 @@ def generate_google_sheet_manifests(
         manifest_title,
         data_type_array,
         display_label_type,
-        asset_view_id,
         use_strict_validation,
+        asset_view_id,
         generate_all_manifests,
     )

@@ -12,6 +12,12 @@ HEADERS = {
 }
 
 COMPONENT_URL = "/api/v1/components/Patient/?schemaUrl="
+COMPONENT_REQUIREMENTS_ARRAY_URL = (
+    "/api/v1/components/Biospecimen/requirementsArray?schemaUrl="
+)
+COMPONENT_REQUIREMENTS_GRAPH_URL = (
+    "/api/v1/components/Biospecimen/requirementsGraph?schemaUrl="
+)
 CONNECTED_NODE_PAIR_ARRAY_URL = "/api/v1/connectedNodePairArray?schemaUrl="
 CONNECTED_NODE_PAIR_PAGE_URL = "/api/v1/connectedNodePairPage?schemaUrl="
 NODE_IS_REQUIRED_URL = "/api/v1/nodes/FamilyHistory/isRequired?schemaUrl="
@@ -45,6 +51,40 @@ class TestGetComponent(BaseTestCase):
         url = f"{COMPONENT_URL}not_a_url"
         response = self.client.open(url, method="GET", headers=HEADERS)
         self.assert404(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetComponentRequirementsArray(BaseTestCase):
+    """Test case for component requirements array endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, list)
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        url = f"{COMPONENT_REQUIREMENTS_ARRAY_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+class TestGetComponentRequirementsGraph(BaseTestCase):
+    """Test case for component requirements graph endpoint"""
+
+    def test_success(self) -> None:
+        """Test for successful result"""
+        url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}{TEST_SCHEMA_URL}"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        assert isinstance(response.json, list)
+
+    def test_500(self) -> None:
+        """Test for 500 result"""
+        url = f"{COMPONENT_REQUIREMENTS_GRAPH_URL}not_a_url"
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
 
 
 class TestGetConnectedNodePairArray(BaseTestCase):
