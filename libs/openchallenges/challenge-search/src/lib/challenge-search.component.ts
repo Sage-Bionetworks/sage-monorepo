@@ -387,55 +387,83 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
+  loadedPages: Set<number> = new Set();
+
   onLazyLoad(event: MultiSelectLazyLoadEvent): void {
-    // update platform filter values
-    const size = event.last - event.first + 1;
-    this.challengeSearchDataService
-      .getPlatforms({
-        pageNumber: Math.floor(event.first / size),
-        pageSize: size,
-      })
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedPlatformValues = options.filter((option) =>
-          this.selectedPlatforms.includes(option.value as string)
-        );
-        this.platformsFilter.options = union(options, selectedPlatformValues);
-      });
+    const size = 10; // default page size
+    const startPage = Math.floor(event.first / size);
+    const endPage = Math.floor(event.last / size);
+
+    for (let page = startPage; page <= endPage; page++) {
+      if (!this.loadedPages.has(page)) {
+        this.loadedPages.add(page);
+        this.challengeSearchDataService
+          .getPlatforms({
+            pageNumber: page,
+            pageSize: size,
+          })
+          .pipe(takeUntil(this.destroy))
+          .subscribe((newOptions) => {
+            // find the starting index for the new options in the overall existing options list
+            const startIndex = page * size;
+            let options = this.platformsFilter.options;
+            // update dropdown options by inserting new data into correct position
+            if (startIndex < options.length) {
+              options.splice(startIndex, 0, ...newOptions);
+            } else {
+              options = options.concat(newOptions);
+            }
+
+            const selectedPlatformValues = options.filter((option) =>
+              this.selectedPlatforms.includes(option.value as string)
+            );
+            this.platformsFilter.options = union(
+              options,
+              selectedPlatformValues
+            );
+          });
+      }
+    }
   }
 
+  loadedPages2: Set<number> = new Set();
   onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
     const size = 10; // default page size
     const startPage = Math.floor(event.first / size);
     const endPage = Math.floor(event.last / size);
 
     for (let page = startPage; page <= endPage; page++) {
-      this.challengeSearchDataService
-        .getEdamConcepts({
-          pageNumber: page,
-          pageSize: size,
-          sections: [EdamSection.Data],
-        })
-        .pipe(takeUntil(this.destroy))
-        .subscribe((newOptions) => {
-          // find the starting index for the new options in the overall existing options list
-          const startIndex = page * size;
-          let options = this.inputDataTypesFilter.options;
-          // update dropdown options by inserting new data into correct position
-          if (startIndex < options.length) {
-            options.splice(startIndex, 0, ...newOptions);
-          } else {
-            options = options.concat(newOptions);
-          }
+      // check if the page has already been loaded to avoid duplicates
+      if (!this.loadedPages2.has(page)) {
+        this.loadedPages2.add(page);
 
-          const selectedInputDataValues = options.filter((option) =>
-            this.selectedInputDataTypes.includes(option.value as number)
-          );
-          this.inputDataTypesFilter.options = union(
-            options,
-            selectedInputDataValues
-          );
-        });
+        this.challengeSearchDataService
+          .getEdamConcepts({
+            pageNumber: page,
+            pageSize: size,
+            sections: [EdamSection.Data],
+          })
+          .pipe(takeUntil(this.destroy))
+          .subscribe((newOptions) => {
+            // find the starting index for the new options in the overall existing options list
+            const startIndex = page * size;
+            let options = this.inputDataTypesFilter.options;
+            // update dropdown options by inserting new data into correct position
+            if (startIndex < options.length) {
+              options.splice(startIndex, 0, ...newOptions);
+            } else {
+              options = options.concat(newOptions);
+            }
+
+            const selectedInputDataValues = options.filter((option) =>
+              this.selectedInputDataTypes.includes(option.value as number)
+            );
+            this.inputDataTypesFilter.options = union(
+              options,
+              selectedInputDataValues
+            );
+          });
+      }
     }
   }
 
