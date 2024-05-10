@@ -11,7 +11,6 @@ from schematic_api.controllers.utils import (
     handle_exceptions,
     get_access_token,
     download_schema_file_as_jsonld,
-    InvalidValueError,
 )
 
 
@@ -22,10 +21,10 @@ def generate_google_sheet_manifests(
     dataset_id_array: list[str] | None,
     manifest_title: str | None,
     data_type_array: list[str] | None,
-    display_label_type: DisplayLabelType = "class_label",
-    asset_view_id: str | None = None,
-    use_strict_validation: bool = True,
-    generate_all_manifests: bool = False,
+    display_label_type: DisplayLabelType,
+    use_strict_validation: bool,
+    asset_view_id: str | None,
+    generate_all_manifests: bool,
 ) -> tuple[GoogleSheetLinks | BasicError, int]:
     """Generates a list of links to manifests in google sheet form
 
@@ -57,38 +56,9 @@ def generate_google_sheet_manifests(
     """
 
     if generate_all_manifests:
-        if dataset_id_array:
-            raise InvalidValueError(
-                "When generate_all_manifests is True dataset_id_array must be None",
-                {"dataset_id_array": dataset_id_array},
-            )
-        if data_type_array:
-            raise InvalidValueError(
-                "When generate_all_manifests is True data_type_array must be None",
-                {"data_type_array": data_type_array},
-            )
         data_type_array = ["all manifests"]
-
-    else:
-        if not data_type_array:
-            raise InvalidValueError(
-                (
-                    "When generate_all_manifests is False data_type_array must be a list with "
-                    "at least one item"
-                ),
-                {"data_type_array": data_type_array},
-            )
-        if dataset_id_array and len(dataset_id_array) != len(data_type_array):
-            raise InvalidValueError(
-                (
-                    "When generate_all_manifests is False data_type_array and dataset_id_array "
-                    "must both lists with the same length"
-                ),
-                {
-                    "data_type_array": data_type_array,
-                    "dataset_id_array": dataset_id_array,
-                },
-            )
+    if not data_type_array:
+        data_type_array = []
 
     access_token = get_access_token()
     if asset_view_id:
