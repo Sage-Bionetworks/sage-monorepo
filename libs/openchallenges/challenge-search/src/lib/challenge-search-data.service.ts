@@ -10,10 +10,8 @@ import {
 import {
   ChallengePlatformSearchQuery,
   ChallengePlatformService,
-  ChallengePlatformSort,
   EdamConceptSearchQuery,
   EdamConceptService,
-  EdamSection,
   Image,
   ImageAspectRatio,
   ImageHeight,
@@ -22,7 +20,6 @@ import {
   Organization,
   OrganizationSearchQuery,
   OrganizationService,
-  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { Filter } from '@sagebionetworks/openchallenges/ui';
@@ -31,14 +28,14 @@ import { Filter } from '@sagebionetworks/openchallenges/ui';
   providedIn: 'root',
 })
 export class ChallengeSearchDataService {
-  private edamConceptSearchTerms: BehaviorSubject<EdamConceptSearchQuery> =
+  private edamConceptSearchQuery: BehaviorSubject<EdamConceptSearchQuery> =
     new BehaviorSubject<EdamConceptSearchQuery>({});
 
-  private organizationSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  private organizationSearchQuery: BehaviorSubject<OrganizationSearchQuery> =
+    new BehaviorSubject<OrganizationSearchQuery>({});
 
-  private platformSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  private platformSearchQuery: BehaviorSubject<ChallengePlatformSearchQuery> =
+    new BehaviorSubject<ChallengePlatformSearchQuery>({});
 
   constructor(
     private challengePlatformService: ChallengePlatformService,
@@ -47,39 +44,29 @@ export class ChallengeSearchDataService {
     private organizationService: OrganizationService
   ) {}
 
-  setEdamConceptSearchTerms(searchQuery: EdamConceptSearchQuery) {
-    this.edamConceptSearchTerms.next(searchQuery);
+  setEdamConceptSearch(searchQuery: EdamConceptSearchQuery) {
+    this.edamConceptSearchQuery.next(searchQuery);
   }
 
-  setOriganizationSearchTerms(searchTerms: string) {
-    this.organizationSearchTerms.next(searchTerms);
+  setOriganizationSearch(searchQuery: OrganizationSearchQuery) {
+    this.organizationSearchQuery.next(searchQuery);
   }
 
-  setPlatformSearchTerms(searchTerms: string) {
-    this.platformSearchTerms.next(searchTerms);
+  setPlatformSearch(searchQuery: ChallengePlatformSearchQuery) {
+    this.platformSearchQuery.next(searchQuery);
   }
 
-  getPlatforms(
-    platformQuery: ChallengePlatformSearchQuery
-  ): Observable<Filter[]> {
-    return this.platformSearchTerms.pipe(
+  getPlatforms(newQuery: ChallengePlatformSearchQuery): Observable<Filter[]> {
+    return this.platformSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((searchTerm: string) => {
-        const sortedBy: ChallengePlatformSort = 'name';
-        const platformQuery: ChallengePlatformSearchQuery = {
-          searchTerms: searchTerm,
-          sort: sortedBy,
-        };
-        // const sortedBy: ChallengePlatformSort = 'name';
-        // const platformQuery: ChallengePlatformSearchQuery = {
-        //   searchTerms: searchTerm,
-        //   sort: sortedBy,
-        // };
-        return this.challengePlatformService.listChallengePlatforms(
-          platformQuery
-        );
-      }),
+      switchMap((searchQuery: ChallengePlatformSearchQuery) =>
+        // use newQuery properties to overwrite searchQuery ones
+        this.challengePlatformService.listChallengePlatforms({
+          ...searchQuery,
+          ...newQuery,
+        })
+      ),
       map((page) =>
         page.challengePlatforms.map((platform) => ({
           value: platform.slug,
@@ -90,20 +77,16 @@ export class ChallengeSearchDataService {
     );
   }
 
-  searchEdamConcepts(
-    // sections?: EdamSection,
-    pageNumber?: number,
-    pageSize?: number
-  ): Observable<Filter[]> {
-    return this.edamConceptSearchTerms.pipe(
+  getEdamConcepts(newQuery: EdamConceptSearchQuery): Observable<Filter[]> {
+    return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((searchQuery: EdamConceptSearchQuery) => {
-        searchQuery.pageSize = pageSize ?? 10;
-        searchQuery.pageNumber = pageNumber ?? 0;
-        searchQuery.sections = [EdamSection.Data];
-        return this.edamConceptService.listEdamConcepts(searchQuery);
-      }),
+      switchMap((searchQuery: EdamConceptSearchQuery) =>
+        this.edamConceptService.listEdamConcepts({
+          ...searchQuery,
+          ...newQuery,
+        })
+      ),
       map((page) =>
         page.edamConcepts.map((edamConcept) => ({
           value: edamConcept.id,
@@ -114,18 +97,16 @@ export class ChallengeSearchDataService {
     );
   }
 
-  searchOriganizations(): Observable<Filter[]> {
-    return this.organizationSearchTerms.pipe(
+  getOriganizations(newQuery: OrganizationSearchQuery): Observable<Filter[]> {
+    return this.organizationSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((searchTerm: string) => {
-        const sortBy: OrganizationSort = 'name';
-        const orgQuery: OrganizationSearchQuery = {
-          searchTerms: searchTerm,
-          sort: sortBy,
-        };
-        return this.organizationService.listOrganizations(orgQuery);
-      }),
+      switchMap((searchQuery: OrganizationSearchQuery) =>
+        this.organizationService.listOrganizations({
+          ...searchQuery,
+          ...newQuery,
+        })
+      ),
       map((page) => page.organizations),
       switchMap((orgs) =>
         forkJoin({
@@ -163,30 +144,6 @@ export class ChallengeSearchDataService {
         );
         return of({ url: '' });
       })
-    );
-  }
-
-  searchPlatforms(): Observable<Filter[]> {
-    return this.platformSearchTerms.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      switchMap((searchTerm: string) => {
-        const sortedBy: ChallengePlatformSort = 'name';
-        const platformQuery: ChallengePlatformSearchQuery = {
-          searchTerms: searchTerm,
-          sort: sortedBy,
-        };
-        return this.challengePlatformService.listChallengePlatforms(
-          platformQuery
-        );
-      }),
-      map((page) =>
-        page.challengePlatforms.map((platform) => ({
-          value: platform.slug,
-          label: platform.name,
-          active: false,
-        }))
-      )
     );
   }
 }

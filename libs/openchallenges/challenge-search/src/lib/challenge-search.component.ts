@@ -10,12 +10,14 @@ import {
   Challenge,
   ChallengeCategory,
   ChallengeIncentive,
+  ChallengePlatformSort,
   ChallengeSearchQuery,
   ChallengeService,
   ChallengeSort,
   ChallengeStatus,
   ChallengeSubmissionType,
   EdamSection,
+  OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -261,26 +263,26 @@ export class ChallengeSearchComponent
     //   });
 
     // update organization filter values
-    this.challengeSearchDataService
-      .searchOriganizations()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedOrgValues = options.filter((option) =>
-          this.selectedOrgs.includes(option.value as number)
-        );
-        this.organizationsFilter.options = union(options, selectedOrgValues);
-      });
+    // this.challengeSearchDataService
+    //   .searchOriganizations()
+    //   .pipe(takeUntil(this.destroy))
+    //   .subscribe((options) => {
+    //     const selectedOrgValues = options.filter((option) =>
+    //       this.selectedOrgs.includes(option.value as number)
+    //     );
+    //     this.organizationsFilter.options = union(options, selectedOrgValues);
+    //   });
 
     // update platform filter values
-    this.challengeSearchDataService
-      .getPlatforms({})
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedPlatformValues = options.filter((option) =>
-          this.selectedPlatforms.includes(option.value as string)
-        );
-        this.platformsFilter.options = union(options, selectedPlatformValues);
-      });
+    // this.challengeSearchDataService
+    //   .getPlatforms({})
+    //   .pipe(takeUntil(this.destroy))
+    //   .subscribe((options) => {
+    //     const selectedPlatformValues = options.filter((option) =>
+    //       this.selectedPlatforms.includes(option.value as string)
+    //     );
+    //     this.platformsFilter.options = union(options, selectedPlatformValues);
+    //   });
   }
 
   ngAfterContentInit(): void {
@@ -403,17 +405,21 @@ export class ChallengeSearchComponent
   }
 
   onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
-    const pageSize = 10; // default page size
-    const startPage = Math.floor(event.first / pageSize);
-    const endPage = Math.floor(event.last / pageSize);
+    const size = 10; // default page size
+    const startPage = Math.floor(event.first / size);
+    const endPage = Math.floor(event.last / size);
 
-    for (let newPage = startPage; newPage <= endPage; newPage++) {
+    for (let page = startPage; page <= endPage; page++) {
       this.challengeSearchDataService
-        .searchEdamConcepts(newPage, pageSize)
+        .getEdamConcepts({
+          pageNumber: page,
+          pageSize: size,
+          sections: [EdamSection.Data],
+        })
         .pipe(takeUntil(this.destroy))
         .subscribe((newOptions) => {
           // find the starting index for the new options in the overall existing options list
-          const startIndex = newPage * pageSize;
+          const startIndex = page * size;
           let options = this.inputDataTypesFilter.options;
           // update dropdown options by inserting new data into correct position
           if (startIndex < options.length) {
@@ -421,7 +427,14 @@ export class ChallengeSearchComponent
           } else {
             options = options.concat(newOptions);
           }
-          this.inputDataTypesFilter.options = options;
+
+          const selectedInputDataValues = options.filter((option) =>
+            this.selectedInputDataTypes.includes(option.value as number)
+          );
+          this.inputDataTypesFilter.options = union(
+            options,
+            selectedInputDataValues
+          );
         });
     }
   }
@@ -435,16 +448,22 @@ export class ChallengeSearchComponent
         this.challengeSearchTerms.next(searched);
         break;
       case 'inputDataTypes':
-        this.challengeSearchDataService.setEdamConceptSearchTerms({
+        this.challengeSearchDataService.setEdamConceptSearch({
           searchTerms: searched,
           sections: [EdamSection.Data],
         });
         break;
       case 'organizations':
-        this.challengeSearchDataService.setOriganizationSearchTerms(searched);
+        this.challengeSearchDataService.setOriganizationSearch({
+          searchTerms: searched,
+          sort: OrganizationSort.Name,
+        });
         break;
       case 'platforms':
-        this.challengeSearchDataService.setPlatformSearchTerms(searched);
+        this.challengeSearchDataService.setPlatformSearch({
+          searchTerms: searched,
+          sort: ChallengePlatformSort.Name,
+        });
         break;
     }
   }
