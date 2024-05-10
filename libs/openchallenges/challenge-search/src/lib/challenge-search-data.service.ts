@@ -90,12 +90,18 @@ export class ChallengeSearchDataService {
     );
   }
 
-  searchEdamConcepts(sections?: EdamSection): Observable<Filter[]> {
+  searchEdamConcepts(
+    // sections?: EdamSection,
+    pageSize?: number,
+    pageNumber?: number
+  ): Observable<Filter[]> {
     return this.edamConceptSearchTerms.pipe(
       debounceTime(400),
       distinctUntilChanged(),
       switchMap((searchQuery: EdamConceptSearchQuery) => {
-        searchQuery.sections = sections ? [sections] : searchQuery.sections;
+        searchQuery.pageSize = pageSize ?? 10;
+        searchQuery.pageNumber = pageNumber ?? 0;
+        searchQuery.sections = [EdamSection.Data];
         return this.edamConceptService.listEdamConcepts(searchQuery);
       }),
       map((page) =>

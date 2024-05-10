@@ -248,7 +248,7 @@ export class ChallengeSearchComponent
       });
 
     this.challengeSearchDataService
-      .searchEdamConcepts(EdamSection.Data)
+      .searchEdamConcepts()
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
         const selectedInputDataTypesValues = options.filter((option) =>
@@ -273,7 +273,7 @@ export class ChallengeSearchComponent
 
     // update platform filter values
     this.challengeSearchDataService
-      .searchPlatforms()
+      .getPlatforms({})
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
         const selectedPlatformValues = options.filter((option) =>
@@ -393,6 +393,23 @@ export class ChallengeSearchComponent
         pageNumber: Math.floor(event.first / size),
         pageSize: size,
       })
+      .pipe(takeUntil(this.destroy))
+      .subscribe((options) => {
+        const selectedInputDataTypesValues = options.filter((option) =>
+          this.selectedInputDataTypes.includes(option.value as number)
+        );
+        this.inputDataTypesFilter.options = union(
+          options,
+          selectedInputDataTypesValues
+        );
+      });
+  }
+
+  onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
+    // update platform filter values
+    const size = event.last - event.first + 1;
+    this.challengeSearchDataService
+      .searchEdamConcepts(size, Math.floor(event.first / size))
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
         console.log(options);

@@ -103,6 +103,7 @@
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
+          (loadMore)="onLazyLoad2($event)"
         />
       </p-panel>
       <p-divider></p-divider>
