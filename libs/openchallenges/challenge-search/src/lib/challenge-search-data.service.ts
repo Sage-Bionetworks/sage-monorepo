@@ -92,8 +92,8 @@ export class ChallengeSearchDataService {
 
   searchEdamConcepts(
     // sections?: EdamSection,
-    pageSize?: number,
-    pageNumber?: number
+    pageNumber?: number,
+    pageSize?: number
   ): Observable<Filter[]> {
     return this.edamConceptSearchTerms.pipe(
       debounceTime(400),

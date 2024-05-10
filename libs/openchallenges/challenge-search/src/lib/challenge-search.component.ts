@@ -247,18 +247,18 @@ export class ChallengeSearchComponent
         this.totalChallengesCount = page.totalElements;
       });
 
-    this.challengeSearchDataService
-      .searchEdamConcepts()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedInputDataTypesValues = options.filter((option) =>
-          this.selectedInputDataTypes.includes(option.value as number)
-        );
-        this.inputDataTypesFilter.options = union(
-          options,
-          selectedInputDataTypesValues
-        );
-      });
+    // this.challengeSearchDataService
+    //   .searchEdamConcepts()
+    //   .pipe(takeUntil(this.destroy))
+    //   .subscribe((options) => {
+    //     const selectedInputDataTypesValues = options.filter((option) =>
+    //       this.selectedInputDataTypes.includes(option.value as number)
+    //     );
+    //     this.inputDataTypesFilter.options = union(
+    //       options,
+    //       selectedInputDataTypesValues
+    //     );
+    //   });
 
     // update organization filter values
     this.challengeSearchDataService
@@ -395,29 +395,35 @@ export class ChallengeSearchComponent
       })
       .pipe(takeUntil(this.destroy))
       .subscribe((options) => {
-        const selectedInputDataTypesValues = options.filter((option) =>
-          this.selectedInputDataTypes.includes(option.value as number)
-        );
-        this.inputDataTypesFilter.options = union(
-          options,
-          selectedInputDataTypesValues
-        );
-      });
-  }
-
-  onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
-    // update platform filter values
-    const size = event.last - event.first + 1;
-    this.challengeSearchDataService
-      .searchEdamConcepts(size, Math.floor(event.first / size))
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        console.log(options);
         const selectedPlatformValues = options.filter((option) =>
           this.selectedPlatforms.includes(option.value as string)
         );
         this.platformsFilter.options = union(options, selectedPlatformValues);
       });
+  }
+
+  onLazyLoad2(event: MultiSelectLazyLoadEvent): void {
+    const pageSize = 10; // default page size
+    const startPage = Math.floor(event.first / pageSize);
+    const endPage = Math.floor(event.last / pageSize);
+
+    for (let newPage = startPage; newPage <= endPage; newPage++) {
+      this.challengeSearchDataService
+        .searchEdamConcepts(newPage, pageSize)
+        .pipe(takeUntil(this.destroy))
+        .subscribe((newOptions) => {
+          // find the starting index for the new options in the overall existing options list
+          const startIndex = newPage * pageSize;
+          let options = this.inputDataTypesFilter.options;
+          // update dropdown options by inserting new data into correct position
+          if (startIndex < options.length) {
+            options.splice(startIndex, 0, ...newOptions);
+          } else {
+            options = options.concat(newOptions);
+          }
+          this.inputDataTypesFilter.options = options;
+        });
+    }
   }
 
   onSearchChange(
