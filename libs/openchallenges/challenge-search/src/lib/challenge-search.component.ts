@@ -346,99 +346,101 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  edamLoadedPages: Set<number> = new Set();
+  inputDataTypesLoadedPages: Set<number> = new Set();
   platformsLoadedPages: Set<number> = new Set();
   organizationLoadedPages: Set<number> = new Set();
 
-  onLazyLoadEdam(event: MultiSelectLazyLoadEvent): void {
-    const size = 10; // default page size
-    const startPage = Math.floor(event.first / size);
-    const endPage = Math.floor(event.last / size);
+  // onLazyLoadEdam(event: MultiSelectLazyLoadEvent): void {
+  //   const size = 10; // default page size
+  //   const startPage = Math.floor(event.first / size);
+  //   const endPage = Math.floor(event.last / size);
 
-    for (let page = startPage; page <= endPage; page++) {
-      // check if the page has already been loaded to avoid duplicates
-      if (!this.edamLoadedPages.has(page)) {
-        this.edamLoadedPages.add(page);
+  //   for (let page = startPage; page <= endPage; page++) {
+  //     // check if the page has already been loaded to avoid duplicates
+  //     if (!this.edamLoadedPages.has(page)) {
+  //       this.edamLoadedPages.add(page);
 
-        this.challengeSearchDataService
-          .getEdamConcepts({
-            pageNumber: page,
-            pageSize: size,
-            sections: [EdamSection.Data],
-          })
-          .pipe(takeUntil(this.destroy))
-          .subscribe((newOptions) => {
-            // append the new results
-            this.inputDataTypesFilter.options = unionWith(
-              this.inputDataTypesFilter.options,
-              newOptions,
-              isEqual
-            );
-          });
-      }
-    }
-  }
+  //       this.challengeSearchDataService
+  //         .getEdamConcepts({
+  //           pageNumber: page,
+  //           pageSize: size,
+  //           sections: [EdamSection.Data],
+  //         })
+  //         .pipe(takeUntil(this.destroy))
+  //         .subscribe((newOptions) => {
+  //           // append the new results
+  //           this.inputDataTypesFilter.options = unionWith(
+  //             this.inputDataTypesFilter.options,
+  //             newOptions,
+  //             isEqual
+  //           );
+  //         });
+  //     }
+  //   }
+  // }
 
-  onLazyLoadPlatform(event: MultiSelectLazyLoadEvent): void {
-    const size = 10; // default page size
-    const startPage = Math.floor(event.first / size);
-    const endPage = Math.floor(event.last / size);
+  // onLazyLoadPlatform(event: MultiSelectLazyLoadEvent): void {
+  //   const size = 10; // default page size
+  //   const startPage = Math.floor(event.first / size);
+  //   const endPage = Math.floor(event.last / size);
 
-    for (let page = startPage; page <= endPage; page++) {
-      if (!this.platformsLoadedPages.has(page)) {
-        this.platformsLoadedPages.add(page);
-        this.challengeSearchDataService
-          .getPlatforms({
-            pageNumber: page,
-            pageSize: size,
-          })
-          .pipe(takeUntil(this.destroy))
-          .subscribe((newOptions) => {
-            // append the new results
-            this.platformsFilter.options = unionWith(
-              this.platformsFilter.options,
-              newOptions,
-              isEqual
-            );
-          });
-      }
-    }
-  }
+  //   for (let page = startPage; page <= endPage; page++) {
+  //     if (!this.platformsLoadedPages.has(page)) {
+  //       this.platformsLoadedPages.add(page);
+  //       this.challengeSearchDataService
+  //         .getPlatforms({
+  //           pageNumber: page,
+  //           pageSize: size,
+  //         })
+  //         .pipe(takeUntil(this.destroy))
+  //         .subscribe((newOptions) => {
+  //           // append the new results
+  //           this.platformsFilter.options = unionWith(
+  //             this.platformsFilter.options,
+  //             newOptions,
+  //             isEqual
+  //           );
+  //         });
+  //     }
+  //   }
+  // }
 
-  onLazyLoadOrganization(event: MultiSelectLazyLoadEvent): void {
-    const size = 10; // default page size
-    const startPage = Math.floor(event.first / size);
-    const endPage = Math.floor(event.last / size);
+  // onLazyLoadOrganization(event: MultiSelectLazyLoadEvent): void {
+  //   const size = 10; // default page size
+  //   const startPage = Math.floor(event.first / size);
+  //   const endPage = Math.floor(event.last / size);
 
-    for (let page = startPage; page <= endPage; page++) {
-      // check if the page has already been loaded to avoid duplicates
-      if (!this.organizationLoadedPages.has(page)) {
-        this.organizationLoadedPages.add(page);
-        this.challengeSearchDataService
-          .getOriganizations({
-            pageNumber: page,
-            pageSize: size,
-          })
-          .pipe(takeUntil(this.destroy))
-          .subscribe((newOptions) => {
-            // append the new results
-            this.organizationsFilter.options = unionWith(
-              this.organizationsFilter.options,
-              newOptions,
-              isEqual
-            );
-          });
-      }
-    }
-  }
+  //   for (let page = startPage; page <= endPage; page++) {
+  //     // check if the page has already been loaded to avoid duplicates
+  //     if (!this.organizationLoadedPages.has(page)) {
+  //       this.organizationLoadedPages.add(page);
+  //       this.challengeSearchDataService
+  //         .getOriganizations({
+  //           pageNumber: page,
+  //           pageSize: size,
+  //         })
+  //         .pipe(takeUntil(this.destroy))
+  //         .subscribe((newOptions) => {
+  //           // append the new results
+  //           this.organizationsFilter.options = unionWith(
+  //             this.organizationsFilter.options,
+  //             newOptions,
+  //             isEqual
+  //           );
+  //         });
+  //     }
+  //   }
+  // }
 
   onSearchChange(
     searchType: 'challenges' | 'inputDataTypes' | 'organizations' | 'platforms',
     searched: string
   ): void {
-    this.edamLoadedPages.clear();
-    this.platformsLoadedPages.clear();
+    this.inputDataTypesLoadedPages.clear();
     this.organizationLoadedPages.clear();
+    this.platformsLoadedPages.clear();
+    this.inputDataTypesFilter.options = [];
+    this.organizationsFilter.options = [];
     this.platformsFilter.options = [];
     switch (searchType) {
       case 'challenges':
@@ -462,6 +464,64 @@ export class ChallengeSearchComponent
           sort: ChallengePlatformSort.Name,
         });
         break;
+    }
+  }
+
+  onLazyLoad(
+    type: 'inputDataTypes' | 'organizations' | 'platforms',
+    event: MultiSelectLazyLoadEvent
+  ): void {
+    const configs = {
+      inputDataTypes: {
+        loadedPages: this.inputDataTypesLoadedPages,
+        dataServiceMethod: this.challengeSearchDataService.getEdamConcepts.bind(
+          this.challengeSearchDataService
+        ),
+        optionsFilter: this.inputDataTypesFilter,
+        extraParams: { sections: [EdamSection.Data] },
+      },
+      organizations: {
+        loadedPages: this.organizationLoadedPages,
+        dataServiceMethod:
+          this.challengeSearchDataService.getOriganizations.bind(
+            this.challengeSearchDataService
+          ),
+        optionsFilter: this.organizationsFilter,
+        extraParams: {},
+      },
+      platforms: {
+        loadedPages: this.platformsLoadedPages,
+        dataServiceMethod: this.challengeSearchDataService.getPlatforms.bind(
+          this.challengeSearchDataService
+        ),
+        optionsFilter: this.platformsFilter,
+        extraParams: {},
+      },
+    };
+
+    const config = configs[type];
+    const size = 10;
+    const startPage = Math.floor(event.first / size);
+    const endPage = Math.floor(event.last / size);
+
+    for (let page = startPage; page <= endPage; page++) {
+      if (!config.loadedPages.has(page)) {
+        config.loadedPages.add(page);
+        config
+          .dataServiceMethod({
+            pageNumber: page,
+            pageSize: size,
+            ...config.extraParams,
+          })
+          .pipe(takeUntil(this.destroy))
+          .subscribe((newOptions) => {
+            config.optionsFilter.options = unionWith(
+              config.optionsFilter.options,
+              newOptions,
+              isEqual
+            );
+          });
+      }
     }
   }
 
