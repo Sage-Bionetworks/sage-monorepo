@@ -52,7 +52,7 @@ import {
 } from 'rxjs/operators';
 import { Calendar, CalendarModule } from 'primeng/calendar';
 import { CommonModule, DatePipe, Location } from '@angular/common';
-import { assign, union } from 'lodash';
+import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -239,50 +239,9 @@ export class ChallengeSearchComponent
     });
 
     // update the total number of challenges in database with empty query
-    this.challengeService
-      .listChallenges({ pageSize: 10000, pageNumber: 0 })
-      .subscribe((page) => {
-        // const cc = page.challenges.filter(
-        //   (c) => c.inputDataTypes !== undefined && c.inputDataTypes.length > 0
-        // );
-        // console.log(cc.map((c) => c.inputDataTypes.map));
-        this.totalChallengesCount = page.totalElements;
-      });
-
-    // this.challengeSearchDataService
-    //   .searchEdamConcepts()
-    //   .pipe(takeUntil(this.destroy))
-    //   .subscribe((options) => {
-    //     const selectedInputDataTypesValues = options.filter((option) =>
-    //       this.selectedInputDataTypes.includes(option.value as number)
-    //     );
-    //     this.inputDataTypesFilter.options = union(
-    //       options,
-    //       selectedInputDataTypesValues
-    //     );
-    //   });
-
-    // update organization filter values
-    // this.challengeSearchDataService
-    //   .searchOriganizations()
-    //   .pipe(takeUntil(this.destroy))
-    //   .subscribe((options) => {
-    //     const selectedOrgValues = options.filter((option) =>
-    //       this.selectedOrgs.includes(option.value as number)
-    //     );
-    //     this.organizationsFilter.options = union(options, selectedOrgValues);
-    //   });
-
-    // update platform filter values
-    // this.challengeSearchDataService
-    //   .getPlatforms({})
-    //   .pipe(takeUntil(this.destroy))
-    //   .subscribe((options) => {
-    //     const selectedPlatformValues = options.filter((option) =>
-    //       this.selectedPlatforms.includes(option.value as string)
-    //     );
-    //     this.platformsFilter.options = union(options, selectedPlatformValues);
-    //   });
+    this.challengeService.listChallenges().subscribe((page) => {
+      this.totalChallengesCount = page.totalElements;
+    });
   }
 
   ngAfterContentInit(): void {
@@ -409,22 +368,11 @@ export class ChallengeSearchComponent
           })
           .pipe(takeUntil(this.destroy))
           .subscribe((newOptions) => {
-            // find the starting index for the new options in the overall existing options list
-            const startIndex = page * size;
-            let options = this.inputDataTypesFilter.options;
-            // update dropdown options by inserting new data into correct position
-            if (startIndex < options.length) {
-              options.splice(startIndex, 0, ...newOptions);
-            } else {
-              options = options.concat(newOptions);
-            }
-
-            const selectedInputDataValues = options.filter((option) =>
-              this.selectedInputDataTypes.includes(option.value as number)
-            );
-            this.inputDataTypesFilter.options = union(
-              options,
-              selectedInputDataValues
+            // append the new results
+            this.inputDataTypesFilter.options = unionWith(
+              this.inputDataTypesFilter.options,
+              newOptions,
+              isEqual
             );
           });
       }
@@ -446,22 +394,11 @@ export class ChallengeSearchComponent
           })
           .pipe(takeUntil(this.destroy))
           .subscribe((newOptions) => {
-            // find the starting index for the new options in the overall existing options list
-            const startIndex = page * size;
-            let options = this.platformsFilter.options;
-            // update dropdown options by inserting new data into correct position
-            if (startIndex < options.length) {
-              options.splice(startIndex, 0, ...newOptions);
-            } else {
-              options = options.concat(newOptions);
-            }
-
-            const selectedPlatformValues = options.filter((option) =>
-              this.selectedPlatforms.includes(option.value as string)
-            );
-            this.platformsFilter.options = union(
-              options,
-              selectedPlatformValues
+            // append the new results
+            this.platformsFilter.options = unionWith(
+              this.platformsFilter.options,
+              newOptions,
+              isEqual
             );
           });
       }
@@ -477,7 +414,6 @@ export class ChallengeSearchComponent
       // check if the page has already been loaded to avoid duplicates
       if (!this.organizationLoadedPages.has(page)) {
         this.organizationLoadedPages.add(page);
-
         this.challengeSearchDataService
           .getOriganizations({
             pageNumber: page,
@@ -485,22 +421,11 @@ export class ChallengeSearchComponent
           })
           .pipe(takeUntil(this.destroy))
           .subscribe((newOptions) => {
-            // find the starting index for the new options in the overall existing options list
-            const startIndex = page * size;
-            let options = this.organizationsFilter.options;
-            // update dropdown options by inserting new data into correct position
-            if (startIndex < options.length) {
-              options.splice(startIndex, 0, ...newOptions);
-            } else {
-              options = options.concat(newOptions);
-            }
-
-            const selectedOrgValues = options.filter((option) =>
-              this.selectedOrgs.includes(option.value as number)
-            );
-            this.organizationsFilter.options = union(
-              options,
-              selectedOrgValues
+            // append the new results
+            this.organizationsFilter.options = unionWith(
+              this.organizationsFilter.options,
+              newOptions,
+              isEqual
             );
           });
       }
@@ -511,6 +436,10 @@ export class ChallengeSearchComponent
     searchType: 'challenges' | 'inputDataTypes' | 'organizations' | 'platforms',
     searched: string
   ): void {
+    this.edamLoadedPages.clear();
+    this.platformsLoadedPages.clear();
+    this.organizationLoadedPages.clear();
+    this.platformsFilter.options = [];
     switch (searchType) {
       case 'challenges':
         this.challengeSearchTerms.next(searched);

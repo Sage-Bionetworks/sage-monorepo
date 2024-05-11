@@ -4,6 +4,7 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
+  take,
   map,
   switchMap,
 } from 'rxjs/operators';
@@ -45,28 +46,29 @@ export class ChallengeSearchDataService {
   ) {}
 
   setEdamConceptSearch(searchQuery: EdamConceptSearchQuery) {
-    this.edamConceptSearchQuery.next(searchQuery);
+    this.edamConceptSearchQuery.next({ ...searchQuery });
   }
 
   setOriganizationSearch(searchQuery: OrganizationSearchQuery) {
-    this.organizationSearchQuery.next(searchQuery);
+    this.organizationSearchQuery.next({ ...searchQuery });
   }
 
   setPlatformSearch(searchQuery: ChallengePlatformSearchQuery) {
-    this.platformSearchQuery.next(searchQuery);
+    this.platformSearchQuery.next({ ...searchQuery });
   }
 
   getPlatforms(newQuery: ChallengePlatformSearchQuery): Observable<Filter[]> {
     return this.platformSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      switchMap((searchQuery: ChallengePlatformSearchQuery) =>
+      take(1),
+      switchMap((searchQuery: ChallengePlatformSearchQuery) => {
         // use newQuery properties to overwrite searchQuery ones
-        this.challengePlatformService.listChallengePlatforms({
+        return this.challengePlatformService.listChallengePlatforms({
           ...searchQuery,
           ...newQuery,
-        })
-      ),
+        });
+      }),
       map((page) =>
         page.challengePlatforms.map((platform) => ({
           value: platform.slug,
@@ -81,6 +83,7 @@ export class ChallengeSearchDataService {
     return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
+      take(1),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
         this.edamConceptService.listEdamConcepts({
           ...searchQuery,
@@ -101,6 +104,7 @@ export class ChallengeSearchDataService {
     return this.organizationSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
+      take(1),
       switchMap((searchQuery: OrganizationSearchQuery) =>
         this.organizationService.listOrganizations({
           ...searchQuery,
