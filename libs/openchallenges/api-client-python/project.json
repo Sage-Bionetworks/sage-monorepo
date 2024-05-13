@@ -51,6 +51,15 @@
         ],
         "cwd": "{projectRoot}"
       }
+    },
+    "pylint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry run pylint ./openchallenges_client"
+        ],
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": [
