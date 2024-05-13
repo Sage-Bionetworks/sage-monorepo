@@ -57,34 +57,13 @@ export class ChallengeSearchDataService {
     this.platformSearchQuery.next({ ...searchQuery });
   }
 
-  getPlatforms(newQuery: ChallengePlatformSearchQuery): Observable<Filter[]> {
-    return this.platformSearchQuery.pipe(
-      debounceTime(400),
-      distinctUntilChanged(),
-      take(1),
-      switchMap((searchQuery: ChallengePlatformSearchQuery) => {
-        // use newQuery properties to overwrite searchQuery ones
-        return this.challengePlatformService.listChallengePlatforms({
-          ...searchQuery,
-          ...newQuery,
-        });
-      }),
-      map((page) =>
-        page.challengePlatforms.map((platform) => ({
-          value: platform.slug,
-          label: platform.name,
-          active: false,
-        }))
-      )
-    );
-  }
-
   getEdamConcepts(newQuery: EdamConceptSearchQuery): Observable<Filter[]> {
     return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
       take(1),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
+        // use the properties from new query to overwrite the ones from old query
         this.edamConceptService.listEdamConcepts({
           ...searchQuery,
           ...newQuery,
@@ -148,6 +127,27 @@ export class ChallengeSearchDataService {
         );
         return of({ url: '' });
       })
+    );
+  }
+
+  getPlatforms(newQuery: ChallengePlatformSearchQuery): Observable<Filter[]> {
+    return this.platformSearchQuery.pipe(
+      debounceTime(400),
+      distinctUntilChanged(),
+      take(1),
+      switchMap((searchQuery: ChallengePlatformSearchQuery) => {
+        return this.challengePlatformService.listChallengePlatforms({
+          ...searchQuery,
+          ...newQuery,
+        });
+      }),
+      map((page) =>
+        page.challengePlatforms.map((platform) => ({
+          value: platform.slug,
+          label: platform.name,
+          active: false,
+        }))
+      )
     );
   }
 }

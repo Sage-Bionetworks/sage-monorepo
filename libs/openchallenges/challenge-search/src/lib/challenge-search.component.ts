@@ -153,7 +153,6 @@ export class ChallengeSearchComponent
   platformsFilter = challengePlatformsFilterPanel;
 
   // define selected filter values
-
   selectedCategories!: ChallengeCategory[];
   selectedIncentives!: ChallengeIncentive[];
   selectedInputDataTypes!: number[];
@@ -161,6 +160,11 @@ export class ChallengeSearchComponent
   selectedPlatforms!: string[];
   selectedStatus!: ChallengeStatus[];
   selectedSubmissionTypes!: ChallengeSubmissionType[];
+
+  // record loaded pages for dropdown filters
+  inputDataTypesLoadedPages: Set<number> = new Set();
+  organizationLoadedPages: Set<number> = new Set();
+  platformsLoadedPages: Set<number> = new Set();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -203,12 +207,12 @@ export class ChallengeSearchComponent
       }
 
       // update selected filter values based on params in url
-      this.searchedTerms = params['searchTerms'];
       this.selectedCategories = this.splitParam(params['categories']);
       this.selectedIncentives = this.splitParam(params['incentives']);
       this.selectedInputDataTypes = this.splitParam(
         params['inputDataTypes']
       ).map((idString) => +idString);
+      this.searchedTerms = params['searchTerms'];
       this.selectedOrgs = this.splitParam(params['organizations']).map(
         (idString) => +idString
       );
@@ -346,92 +350,6 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  inputDataTypesLoadedPages: Set<number> = new Set();
-  platformsLoadedPages: Set<number> = new Set();
-  organizationLoadedPages: Set<number> = new Set();
-
-  // onLazyLoadEdam(event: MultiSelectLazyLoadEvent): void {
-  //   const size = 10; // default page size
-  //   const startPage = Math.floor(event.first / size);
-  //   const endPage = Math.floor(event.last / size);
-
-  //   for (let page = startPage; page <= endPage; page++) {
-  //     // check if the page has already been loaded to avoid duplicates
-  //     if (!this.edamLoadedPages.has(page)) {
-  //       this.edamLoadedPages.add(page);
-
-  //       this.challengeSearchDataService
-  //         .getEdamConcepts({
-  //           pageNumber: page,
-  //           pageSize: size,
-  //           sections: [EdamSection.Data],
-  //         })
-  //         .pipe(takeUntil(this.destroy))
-  //         .subscribe((newOptions) => {
-  //           // append the new results
-  //           this.inputDataTypesFilter.options = unionWith(
-  //             this.inputDataTypesFilter.options,
-  //             newOptions,
-  //             isEqual
-  //           );
-  //         });
-  //     }
-  //   }
-  // }
-
-  // onLazyLoadPlatform(event: MultiSelectLazyLoadEvent): void {
-  //   const size = 10; // default page size
-  //   const startPage = Math.floor(event.first / size);
-  //   const endPage = Math.floor(event.last / size);
-
-  //   for (let page = startPage; page <= endPage; page++) {
-  //     if (!this.platformsLoadedPages.has(page)) {
-  //       this.platformsLoadedPages.add(page);
-  //       this.challengeSearchDataService
-  //         .getPlatforms({
-  //           pageNumber: page,
-  //           pageSize: size,
-  //         })
-  //         .pipe(takeUntil(this.destroy))
-  //         .subscribe((newOptions) => {
-  //           // append the new results
-  //           this.platformsFilter.options = unionWith(
-  //             this.platformsFilter.options,
-  //             newOptions,
-  //             isEqual
-  //           );
-  //         });
-  //     }
-  //   }
-  // }
-
-  // onLazyLoadOrganization(event: MultiSelectLazyLoadEvent): void {
-  //   const size = 10; // default page size
-  //   const startPage = Math.floor(event.first / size);
-  //   const endPage = Math.floor(event.last / size);
-
-  //   for (let page = startPage; page <= endPage; page++) {
-  //     // check if the page has already been loaded to avoid duplicates
-  //     if (!this.organizationLoadedPages.has(page)) {
-  //       this.organizationLoadedPages.add(page);
-  //       this.challengeSearchDataService
-  //         .getOriganizations({
-  //           pageNumber: page,
-  //           pageSize: size,
-  //         })
-  //         .pipe(takeUntil(this.destroy))
-  //         .subscribe((newOptions) => {
-  //           // append the new results
-  //           this.organizationsFilter.options = unionWith(
-  //             this.organizationsFilter.options,
-  //             newOptions,
-  //             isEqual
-  //           );
-  //         });
-  //     }
-  //   }
-  // }
-
   onSearchChange(
     searchType: 'challenges' | 'inputDataTypes' | 'organizations' | 'platforms',
     searched: string
@@ -500,7 +418,7 @@ export class ChallengeSearchComponent
     };
 
     const config = configs[type];
-    const size = 10;
+    const size = 10; // set default size to query
     const startPage = Math.floor(event.first / size);
     const endPage = Math.floor(event.last / size);
 
@@ -515,6 +433,7 @@ export class ChallengeSearchComponent
           })
           .pipe(takeUntil(this.destroy))
           .subscribe((newOptions) => {
+            // combine old and new results by taking unique filter values
             config.optionsFilter.options = unionWith(
               config.optionsFilter.options,
               newOptions,

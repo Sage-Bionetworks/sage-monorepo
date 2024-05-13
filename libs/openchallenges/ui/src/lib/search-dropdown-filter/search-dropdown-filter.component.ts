@@ -26,7 +26,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
-  @Output() loadMore = new EventEmitter<any>();
+  @Output() lazyLoad = new EventEmitter<any>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -46,9 +46,9 @@ export class SearchDropdownFilterComponent implements OnInit {
     }
   }
 
-  onLazy(event: MultiSelectLazyLoadEvent) {
+  onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // virtual scroll needs to be set 'true' as well
-    this.loadMore.emit(event);
+    this.lazyLoad.emit(event);
   }
 
   onSearch(event: any): void {

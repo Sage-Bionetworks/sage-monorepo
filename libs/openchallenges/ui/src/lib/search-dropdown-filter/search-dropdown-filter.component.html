@@ -11,7 +11,7 @@
   [virtualScroll]="true"
   [virtualScrollItemSize]="50"
   [lazy]="lazy"
-  (onLazyLoad)="onLazy($event)"
+  (onLazyLoad)="onLazyLoad($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="header">
