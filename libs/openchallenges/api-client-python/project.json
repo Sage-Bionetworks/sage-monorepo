@@ -23,9 +23,23 @@
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest",
+        "cwd": "{projectRoot}"
+      }
     }
   },
-  "tags": ["language:python", "package-manager:poetry"],
-  "implicitDependencies": ["openchallenges-api-description"]
+  "tags": [
+    "language:python",
+    "package-manager:poetry"
+  ],
+  "implicitDependencies": [
+    "openchallenges-api-description"
+  ]
 }
