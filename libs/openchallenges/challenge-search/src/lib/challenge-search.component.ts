@@ -246,6 +246,9 @@ export class ChallengeSearchComponent
     this.challengeService.listChallenges().subscribe((page) => {
       this.totalChallengesCount = page.totalElements;
     });
+
+    // load initially data in search dropdown filters
+    this.loadInitialDropdownData();
   }
 
   ngAfterContentInit(): void {
@@ -418,7 +421,7 @@ export class ChallengeSearchComponent
     };
 
     const config = configs[type];
-    const size = 10; // set default size to query
+    const size = this.defaultPageSize;
     const startPage = Math.floor(event.first / size);
     const endPage = Math.floor(event.last / size);
 
@@ -442,6 +445,12 @@ export class ChallengeSearchComponent
           });
       }
     }
+  }
+
+  private loadInitialDropdownData(): void {
+    this.onLazyLoad('platforms', { first: 0, last: this.defaultPageSize });
+    // this.onLazyLoad('platforms', { first: 0, last: this.defaultPageSize });
+    // this.onLazyLoad('platforms', { first: 0, last: this.defaultPageSize });
   }
 
   dateToFormat(date: Date, format?: 'yyyy-MM-dd'): string | null {
