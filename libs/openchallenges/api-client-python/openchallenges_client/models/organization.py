@@ -26,17 +26,16 @@ class Organization(BaseModel):
     An organization
     """
     id: StrictInt = Field(..., description="The unique identifier of an organization")
-    name: StrictStr = Field(...)
-    email: StrictStr = Field(..., description="An email address.")
-    login: constr(strict=True, max_length=64, min_length=2) = Field(..., description="The login of an organization")
-    description: StrictStr = Field(...)
+    name: StrictStr = Field(..., description="The name of the organization.")
+    login: constr(strict=True, max_length=64, min_length=2) = Field(..., description="The unique login of an organization.")
+    description: Optional[StrictStr] = Field(None, description="A description of the organization.")
     avatar_key: Optional[StrictStr] = Field(None, alias="avatarKey")
-    website_url: StrictStr = Field(..., alias="websiteUrl")
-    challenge_count: Optional[conint(strict=True, ge=0)] = Field(None, alias="challengeCount")
-    created_at: datetime = Field(..., alias="createdAt")
-    updated_at: datetime = Field(..., alias="updatedAt")
-    acronym: Optional[StrictStr] = None
-    __properties = ["id", "name", "email", "login", "description", "avatarKey", "websiteUrl", "challengeCount", "createdAt", "updatedAt", "acronym"]
+    website_url: Optional[constr(strict=True, max_length=500)] = Field(None, alias="websiteUrl", description="A URL to the website or image.")
+    challenge_count: Optional[conint(strict=True, ge=0)] = Field(0, alias="challengeCount", description="The number of challenges involving this organization.")
+    created_at: datetime = Field(..., alias="createdAt", description="Datetime when the object was added to the database.")
+    updated_at: datetime = Field(..., alias="updatedAt", description="Datetime when the object was last modified in the database.")
+    acronym: Optional[constr(strict=True, max_length=10)] = Field(None, description="An acronym of the organization.")
+    __properties = ["id", "name", "login", "description", "avatarKey", "websiteUrl", "challengeCount", "createdAt", "updatedAt", "acronym"]
 
     @validator('login')
     def login_validate_regular_expression(cls, value):
@@ -69,6 +68,16 @@ class Organization(BaseModel):
                           exclude={
                           },
                           exclude_none=True)
+        # set to None if description (nullable) is None
+        # and __fields_set__ contains the field
+        if self.description is None and "description" in self.__fields_set__:
+            _dict['description'] = None
+
+        # set to None if website_url (nullable) is None
+        # and __fields_set__ contains the field
+        if self.website_url is None and "website_url" in self.__fields_set__:
+            _dict['websiteUrl'] = None
+
         return _dict
 
     @classmethod
@@ -83,12 +92,11 @@ class Organization(BaseModel):
         _obj = Organization.parse_obj({
             "id": obj.get("id"),
             "name": obj.get("name"),
-            "email": obj.get("email"),
             "login": obj.get("login"),
             "description": obj.get("description"),
             "avatar_key": obj.get("avatarKey"),
             "website_url": obj.get("websiteUrl"),
-            "challenge_count": obj.get("challengeCount"),
+            "challenge_count": obj.get("challengeCount") if obj.get("challengeCount") is not None else 0,
             "created_at": obj.get("createdAt"),
             "updated_at": obj.get("updatedAt"),
             "acronym": obj.get("acronym")

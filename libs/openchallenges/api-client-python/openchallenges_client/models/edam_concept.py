@@ -18,17 +18,17 @@ import re  # noqa: F401
 import json
 
 
-from typing import List
-from pydantic import BaseModel, Field, StrictInt, StrictStr, conint, conlist
 
-class ChallengesPerYear(BaseModel):
+from pydantic import BaseModel, Field, StrictInt, constr
+
+class EdamConcept(BaseModel):
     """
-    An object
+    The EDAM concept.
     """
-    years: conlist(StrictStr) = Field(...)
-    challenge_counts: conlist(StrictInt) = Field(..., alias="challengeCounts")
-    undated_challenge_count: conint(strict=True, ge=0) = Field(..., alias="undatedChallengeCount")
-    __properties = ["years", "challengeCounts", "undatedChallengeCount"]
+    id: StrictInt = Field(..., description="The unique identifier of the EDAM concept.")
+    class_id: constr(strict=True, max_length=60) = Field(..., alias="classId")
+    preferred_label: constr(strict=True, max_length=80) = Field(..., alias="preferredLabel")
+    __properties = ["id", "classId", "preferredLabel"]
 
     class Config:
         """Pydantic configuration"""
@@ -44,8 +44,8 @@ class ChallengesPerYear(BaseModel):
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> ChallengesPerYear:
-        """Create an instance of ChallengesPerYear from a JSON string"""
+    def from_json(cls, json_str: str) -> EdamConcept:
+        """Create an instance of EdamConcept from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self):
@@ -57,18 +57,18 @@ class ChallengesPerYear(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> ChallengesPerYear:
-        """Create an instance of ChallengesPerYear from a dict"""
+    def from_dict(cls, obj: dict) -> EdamConcept:
+        """Create an instance of EdamConcept from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return ChallengesPerYear.parse_obj(obj)
+            return EdamConcept.parse_obj(obj)
 
-        _obj = ChallengesPerYear.parse_obj({
-            "years": obj.get("years"),
-            "challenge_counts": obj.get("challengeCounts"),
-            "undated_challenge_count": obj.get("undatedChallengeCount") if obj.get("undatedChallengeCount") is not None else 0
+        _obj = EdamConcept.parse_obj({
+            "id": obj.get("id"),
+            "class_id": obj.get("classId"),
+            "preferred_label": obj.get("preferredLabel")
         })
         return _obj
 

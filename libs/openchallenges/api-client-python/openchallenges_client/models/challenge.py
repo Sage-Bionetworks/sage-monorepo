@@ -19,12 +19,12 @@ import json
 
 from datetime import date, datetime
 from typing import List, Optional
-from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist, constr, validator
-from openchallenges_client.models.challenge_difficulty import ChallengeDifficulty
+from pydantic import BaseModel, Field, StrictInt, conint, conlist, constr, validator
+from openchallenges_client.models.challenge_category import ChallengeCategory
 from openchallenges_client.models.challenge_incentive import ChallengeIncentive
 from openchallenges_client.models.challenge_status import ChallengeStatus
 from openchallenges_client.models.challenge_submission_type import ChallengeSubmissionType
-from openchallenges_client.models.simple_challenge_input_data_type import SimpleChallengeInputDataType
+from openchallenges_client.models.edam_concept import EdamConcept
 from openchallenges_client.models.simple_challenge_platform import SimpleChallengePlatform
 
 class Challenge(BaseModel):
@@ -32,25 +32,26 @@ class Challenge(BaseModel):
     A challenge
     """
     id: StrictInt = Field(..., description="The unique identifier of the challenge.")
-    slug: constr(strict=True, max_length=255, min_length=3) = Field(..., description="The slug of the challenge.")
+    slug: constr(strict=True, max_length=255, min_length=3) = Field(..., description="The unique slug of the challenge.")
     name: constr(strict=True, max_length=255, min_length=3) = Field(..., description="The name of the challenge.")
     headline: Optional[constr(strict=True, max_length=80, min_length=0)] = Field(None, description="The headline of the challenge.")
     description: constr(strict=True, max_length=1000, min_length=0) = Field(..., description="The description of the challenge.")
-    doi: Optional[StrictStr] = None
+    doi: Optional[constr(strict=True, max_length=120)] = Field(None, description="The DOI of the challenge.")
     status: ChallengeStatus = Field(...)
-    difficulty: ChallengeDifficulty = Field(...)
-    platform: SimpleChallengePlatform = Field(...)
-    website_url: Optional[StrictStr] = Field(None, alias="websiteUrl")
-    avatar_url: Optional[StrictStr] = Field(None, alias="avatarUrl")
+    platform: Optional[SimpleChallengePlatform] = None
+    website_url: Optional[constr(strict=True, max_length=500)] = Field(None, alias="websiteUrl", description="A URL to the website or image.")
+    avatar_url: Optional[constr(strict=True, max_length=500)] = Field(None, alias="avatarUrl", description="A URL to the website or image.")
     incentives: conlist(ChallengeIncentive) = Field(...)
     submission_types: conlist(ChallengeSubmissionType) = Field(..., alias="submissionTypes")
-    input_data_types: Optional[conlist(SimpleChallengeInputDataType)] = Field(None, alias="inputDataTypes")
+    input_data_types: Optional[conlist(EdamConcept)] = Field(None, alias="inputDataTypes")
+    categories: conlist(ChallengeCategory) = Field(...)
     start_date: Optional[date] = Field(None, alias="startDate", description="The start date of the challenge.")
     end_date: Optional[date] = Field(None, alias="endDate", description="The end date of the challenge.")
-    starred_count: StrictInt = Field(..., alias="starredCount", description="The number of times the challenge has been starred by users.")
-    created_at: datetime = Field(..., alias="createdAt")
-    updated_at: datetime = Field(..., alias="updatedAt")
-    __properties = ["id", "slug", "name", "headline", "description", "doi", "status", "difficulty", "platform", "websiteUrl", "avatarUrl", "incentives", "submissionTypes", "inputDataTypes", "startDate", "endDate", "starredCount", "createdAt", "updatedAt"]
+    starred_count: conint(strict=True, ge=0) = Field(..., alias="starredCount", description="The number of times the challenge has been starred by users.")
+    operation: Optional[EdamConcept] = None
+    created_at: datetime = Field(..., alias="createdAt", description="Datetime when the object was added to the database.")
+    updated_at: datetime = Field(..., alias="updatedAt", description="Datetime when the object was last modified in the database.")
+    __properties = ["id", "slug", "name", "headline", "description", "doi", "status", "platform", "websiteUrl", "avatarUrl", "incentives", "submissionTypes", "inputDataTypes", "categories", "startDate", "endDate", "starredCount", "operation", "createdAt", "updatedAt"]
 
     @validator('slug')
     def slug_validate_regular_expression(cls, value):
@@ -93,6 +94,34 @@ class Challenge(BaseModel):
                 if _item:
                     _items.append(_item.to_dict())
             _dict['inputDataTypes'] = _items
+        # override the default output from pydantic by calling `to_dict()` of operation
+        if self.operation:
+            _dict['operation'] = self.operation.to_dict()
+        # set to None if headline (nullable) is None
+        # and __fields_set__ contains the field
+        if self.headline is None and "headline" in self.__fields_set__:
+            _dict['headline'] = None
+
+        # set to None if doi (nullable) is None
+        # and __fields_set__ contains the field
+        if self.doi is None and "doi" in self.__fields_set__:
+            _dict['doi'] = None
+
+        # set to None if platform (nullable) is None
+        # and __fields_set__ contains the field
+        if self.platform is None and "platform" in self.__fields_set__:
+            _dict['platform'] = None
+
+        # set to None if website_url (nullable) is None
+        # and __fields_set__ contains the field
+        if self.website_url is None and "website_url" in self.__fields_set__:
+            _dict['websiteUrl'] = None
+
+        # set to None if avatar_url (nullable) is None
+        # and __fields_set__ contains the field
+        if self.avatar_url is None and "avatar_url" in self.__fields_set__:
+            _dict['avatarUrl'] = None
+
         # set to None if start_date (nullable) is None
         # and __fields_set__ contains the field
         if self.start_date is None and "start_date" in self.__fields_set__:
@@ -102,6 +131,11 @@ class Challenge(BaseModel):
         # and __fields_set__ contains the field
         if self.end_date is None and "end_date" in self.__fields_set__:
             _dict['endDate'] = None
+
+        # set to None if operation (nullable) is None
+        # and __fields_set__ contains the field
+        if self.operation is None and "operation" in self.__fields_set__:
+            _dict['operation'] = None
 
         return _dict
 
@@ -122,16 +156,17 @@ class Challenge(BaseModel):
             "description": obj.get("description"),
             "doi": obj.get("doi"),
             "status": obj.get("status"),
-            "difficulty": obj.get("difficulty"),
             "platform": SimpleChallengePlatform.from_dict(obj.get("platform")) if obj.get("platform") is not None else None,
             "website_url": obj.get("websiteUrl"),
             "avatar_url": obj.get("avatarUrl"),
             "incentives": obj.get("incentives"),
             "submission_types": obj.get("submissionTypes"),
-            "input_data_types": [SimpleChallengeInputDataType.from_dict(_item) for _item in obj.get("inputDataTypes")] if obj.get("inputDataTypes") is not None else None,
+            "input_data_types": [EdamConcept.from_dict(_item) for _item in obj.get("inputDataTypes")] if obj.get("inputDataTypes") is not None else None,
+            "categories": obj.get("categories"),
             "start_date": obj.get("startDate"),
             "end_date": obj.get("endDate"),
             "starred_count": obj.get("starredCount") if obj.get("starredCount") is not None else 0,
+            "operation": EdamConcept.from_dict(obj.get("operation")) if obj.get("operation") is not None else None,
             "created_at": obj.get("createdAt"),
             "updated_at": obj.get("updatedAt")
         })

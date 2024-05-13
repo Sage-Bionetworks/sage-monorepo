@@ -21,23 +21,23 @@ from aenum import Enum, no_arg
 
 
 
-class ChallengeSubmissionType(str, Enum):
+class EdamSection(str, Enum):
     """
-    The submission type of the challenge.
+    The EDAM section (sub-ontology).
     """
 
     """
     allowed enum values
     """
-    CONTAINER_IMAGE = 'container_image'
-    PREDICTION_FILE = 'prediction_file'
-    NOTEBOOK = 'notebook'
-    MLCUBE = 'mlcube'
-    OTHER = 'other'
+    DATA = 'data'
+    FORMAT = 'format'
+    IDENTIFIER = 'identifier'
+    OPERATION = 'operation'
+    TOPIC = 'topic'
 
     @classmethod
-    def from_json(cls, json_str: str) -> ChallengeSubmissionType:
-        """Create an instance of ChallengeSubmissionType from a JSON string"""
-        return ChallengeSubmissionType(json.loads(json_str))
+    def from_json(cls, json_str: str) -> EdamSection:
+        """Create an instance of EdamSection from a JSON string"""
+        return EdamSection(json.loads(json_str))
 
 

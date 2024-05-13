@@ -6,24 +6,25 @@ A challenge
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **id** | **int** | The unique identifier of the challenge. | 
-**slug** | **str** | The slug of the challenge. | 
+**slug** | **str** | The unique slug of the challenge. | 
 **name** | **str** | The name of the challenge. | 
 **headline** | **str** | The headline of the challenge. | [optional] 
 **description** | **str** | The description of the challenge. | 
-**doi** | **str** |  | [optional] 
+**doi** | **str** | The DOI of the challenge. | [optional] 
 **status** | [**ChallengeStatus**](ChallengeStatus.md) |  | 
-**difficulty** | [**ChallengeDifficulty**](ChallengeDifficulty.md) |  | 
-**platform** | [**SimpleChallengePlatform**](SimpleChallengePlatform.md) |  | 
-**website_url** | **str** |  | [optional] 
-**avatar_url** | **str** |  | [optional] 
+**platform** | [**SimpleChallengePlatform**](SimpleChallengePlatform.md) |  | [optional] 
+**website_url** | **str** | A URL to the website or image. | [optional] 
+**avatar_url** | **str** | A URL to the website or image. | [optional] 
 **incentives** | [**List[ChallengeIncentive]**](ChallengeIncentive.md) |  | 
 **submission_types** | [**List[ChallengeSubmissionType]**](ChallengeSubmissionType.md) |  | 
-**input_data_types** | [**List[SimpleChallengeInputDataType]**](SimpleChallengeInputDataType.md) |  | [optional] 
+**input_data_types** | [**List[EdamConcept]**](EdamConcept.md) |  | [optional] 
+**categories** | [**List[ChallengeCategory]**](ChallengeCategory.md) |  | 
 **start_date** | **date** | The start date of the challenge. | [optional] 
 **end_date** | **date** | The end date of the challenge. | [optional] 
 **starred_count** | **int** | The number of times the challenge has been starred by users. | [default to 0]
-**created_at** | **datetime** |  | 
-**updated_at** | **datetime** |  | 
+**operation** | [**EdamConcept**](EdamConcept.md) |  | [optional] 
+**created_at** | **datetime** | Datetime when the object was added to the database. | 
+**updated_at** | **datetime** | Datetime when the object was last modified in the database. | 
 
 ## Example
 

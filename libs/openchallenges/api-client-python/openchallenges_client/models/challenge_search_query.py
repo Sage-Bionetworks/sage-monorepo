@@ -21,7 +21,6 @@ from datetime import date
 from typing import List, Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr, conint, conlist, constr, validator
 from openchallenges_client.models.challenge_category import ChallengeCategory
-from openchallenges_client.models.challenge_difficulty import ChallengeDifficulty
 from openchallenges_client.models.challenge_direction import ChallengeDirection
 from openchallenges_client.models.challenge_incentive import ChallengeIncentive
 from openchallenges_client.models.challenge_sort import ChallengeSort
@@ -37,18 +36,18 @@ class ChallengeSearchQuery(BaseModel):
     sort: Optional[ChallengeSort] = None
     sort_seed: Optional[conint(strict=True, le=2147483647, ge=0)] = Field(None, alias="sortSeed", description="The seed that initializes the random sorter.")
     direction: Optional[ChallengeDirection] = None
-    difficulties: Optional[conlist(ChallengeDifficulty)] = Field(None, description="An array of challenge difficulty levels used to filter the results.")
     incentives: Optional[conlist(ChallengeIncentive)] = Field(None, description="An array of challenge incentive types used to filter the results.")
     min_start_date: Optional[date] = Field(None, alias="minStartDate", description="Keep the challenges that start at this date or later.")
     max_start_date: Optional[date] = Field(None, alias="maxStartDate", description="Keep the challenges that start at this date or sooner.")
     platforms: Optional[conlist(constr(strict=True, max_length=30, min_length=3))] = Field(None, description="An array of challenge platform ids used to filter the results.")
     organizations: Optional[conlist(StrictInt)] = Field(None, description="An array of organization ids used to filter the results.")
-    input_data_types: Optional[conlist(constr(strict=True, max_length=30, min_length=3))] = Field(None, alias="inputDataTypes", description="An array of challenge input data type ids used to filter the results.")
     status: Optional[conlist(ChallengeStatus)] = Field(None, description="An array of challenge status used to filter the results.")
     submission_types: Optional[conlist(ChallengeSubmissionType)] = Field(None, alias="submissionTypes", description="An array of challenge submission types used to filter the results.")
+    input_data_types: Optional[conlist(StrictInt)] = Field(None, alias="inputDataTypes", description="An array of EDAM concept ID used to filter the results.")
+    operations: Optional[conlist(StrictInt)] = Field(None, description="An array of EDAM concept ID used to filter the results.")
     categories: Optional[conlist(ChallengeCategory)] = Field(None, description="The array of challenge categories used to filter the results.")
     search_terms: Optional[StrictStr] = Field(None, alias="searchTerms", description="A string of search terms used to filter the results.")
-    __properties = ["pageNumber", "pageSize", "sort", "sortSeed", "direction", "difficulties", "incentives", "minStartDate", "maxStartDate", "platforms", "organizations", "inputDataTypes", "status", "submissionTypes", "categories", "searchTerms"]
+    __properties = ["pageNumber", "pageSize", "sort", "sortSeed", "direction", "incentives", "minStartDate", "maxStartDate", "platforms", "organizations", "status", "submissionTypes", "inputDataTypes", "operations", "categories", "searchTerms"]
 
     class Config:
         """Pydantic configuration"""
@@ -111,15 +110,15 @@ class ChallengeSearchQuery(BaseModel):
             "sort": obj.get("sort"),
             "sort_seed": obj.get("sortSeed"),
             "direction": obj.get("direction"),
-            "difficulties": obj.get("difficulties"),
             "incentives": obj.get("incentives"),
             "min_start_date": obj.get("minStartDate"),
             "max_start_date": obj.get("maxStartDate"),
             "platforms": obj.get("platforms"),
             "organizations": obj.get("organizations"),
-            "input_data_types": obj.get("inputDataTypes"),
             "status": obj.get("status"),
             "submission_types": obj.get("submissionTypes"),
+            "input_data_types": obj.get("inputDataTypes"),
+            "operations": obj.get("operations"),
             "categories": obj.get("categories"),
             "search_terms": obj.get("searchTerms")
         })

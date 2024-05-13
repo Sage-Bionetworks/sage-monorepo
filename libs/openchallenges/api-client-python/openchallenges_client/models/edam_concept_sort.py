@@ -21,23 +21,20 @@ from aenum import Enum, no_arg
 
 
 
-class ChallengeSubmissionType(str, Enum):
+class EdamConceptSort(str, Enum):
     """
-    The submission type of the challenge.
+    What to sort results by.
     """
 
     """
     allowed enum values
     """
-    CONTAINER_IMAGE = 'container_image'
-    PREDICTION_FILE = 'prediction_file'
-    NOTEBOOK = 'notebook'
-    MLCUBE = 'mlcube'
-    OTHER = 'other'
+    PREFERRED_LABEL = 'preferred_label'
+    RELEVANCE = 'relevance'
 
     @classmethod
-    def from_json(cls, json_str: str) -> ChallengeSubmissionType:
-        """Create an instance of ChallengeSubmissionType from a JSON string"""
-        return ChallengeSubmissionType(json.loads(json_str))
+    def from_json(cls, json_str: str) -> EdamConceptSort:
+        """Create an instance of EdamConceptSort from a JSON string"""
+        return EdamConceptSort(json.loads(json_str))
 
 

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **years** | **List[str]** |  | 
 **challenge_counts** | **List[int]** |  | 
+**undated_challenge_count** | **int** |  | [default to 0]
 
 ## Example
 
