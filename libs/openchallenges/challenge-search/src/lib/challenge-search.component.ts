@@ -374,7 +374,7 @@ export class ChallengeSearchComponent
   onLazyLoad(
     dropdown: ChallengeSearchDropdown,
     event: MultiSelectLazyLoadEvent,
-    extraParams?: any
+    extraParams = {}
   ): void {
     const size = this.defaultPageSize;
     const startPage = Math.floor(event.first / size);
