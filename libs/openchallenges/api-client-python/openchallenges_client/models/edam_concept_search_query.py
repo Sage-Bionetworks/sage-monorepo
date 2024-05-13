@@ -26,24 +26,45 @@ from openchallenges_client.models.edam_section import EdamSection
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class EdamConceptSearchQuery(BaseModel):
     """
     An EDAM concept search query.
-    """ # noqa: E501
-    page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(default=0, description="The page number.", alias="pageNumber")
-    page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(default=100, description="The number of items in a single page.", alias="pageSize")
+    """  # noqa: E501
+
+    page_number: Optional[Annotated[int, Field(strict=True, ge=0)]] = Field(
+        default=0, description="The page number.", alias="pageNumber"
+    )
+    page_size: Optional[Annotated[int, Field(strict=True, ge=1)]] = Field(
+        default=100,
+        description="The number of items in a single page.",
+        alias="pageSize",
+    )
     sort: Optional[EdamConceptSort] = None
     direction: Optional[EdamConceptDirection] = None
-    search_terms: Optional[StrictStr] = Field(default=None, description="A string of search terms used to filter the results.", alias="searchTerms")
-    sections: Optional[List[EdamSection]] = Field(default=None, description="An array of EDAM sections (sub-ontologies) used to filter the results.")
-    __properties: ClassVar[List[str]] = ["pageNumber", "pageSize", "sort", "direction", "searchTerms", "sections"]
+    search_terms: Optional[StrictStr] = Field(
+        default=None,
+        description="A string of search terms used to filter the results.",
+        alias="searchTerms",
+    )
+    sections: Optional[List[EdamSection]] = Field(
+        default=None,
+        description="An array of EDAM sections (sub-ontologies) used to filter the results.",
+    )
+    __properties: ClassVar[List[str]] = [
+        "pageNumber",
+        "pageSize",
+        "sort",
+        "direction",
+        "searchTerms",
+        "sections",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -69,8 +90,7 @@ class EdamConceptSearchQuery(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -80,7 +100,7 @@ class EdamConceptSearchQuery(BaseModel):
         # set to None if direction (nullable) is None
         # and model_fields_set contains the field
         if self.direction is None and "direction" in self.model_fields_set:
-            _dict['direction'] = None
+            _dict["direction"] = None
 
         return _dict
 
@@ -93,14 +113,18 @@ class EdamConceptSearchQuery(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "pageNumber": obj.get("pageNumber") if obj.get("pageNumber") is not None else 0,
-            "pageSize": obj.get("pageSize") if obj.get("pageSize") is not None else 100,
-            "sort": obj.get("sort"),
-            "direction": obj.get("direction"),
-            "searchTerms": obj.get("searchTerms"),
-            "sections": obj.get("sections")
-        })
+        _obj = cls.model_validate(
+            {
+                "pageNumber": obj.get("pageNumber")
+                if obj.get("pageNumber") is not None
+                else 0,
+                "pageSize": obj.get("pageSize")
+                if obj.get("pageSize") is not None
+                else 100,
+                "sort": obj.get("sort"),
+                "direction": obj.get("direction"),
+                "searchTerms": obj.get("searchTerms"),
+                "sections": obj.get("sections"),
+            }
+        )
         return _obj
-
-

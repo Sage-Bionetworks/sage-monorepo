@@ -25,20 +25,26 @@ from openchallenges_client.models.image_height import ImageHeight
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class ImageQuery(BaseModel):
     """
     An image query.
-    """ # noqa: E501
-    object_key: Annotated[str, Field(strict=True)] = Field(description="The unique identifier of the image.", alias="objectKey")
+    """  # noqa: E501
+
+    object_key: Annotated[str, Field(strict=True)] = Field(
+        description="The unique identifier of the image.", alias="objectKey"
+    )
     height: Optional[ImageHeight] = None
     aspect_ratio: Optional[ImageAspectRatio] = Field(default=None, alias="aspectRatio")
     __properties: ClassVar[List[str]] = ["objectKey", "height", "aspectRatio"]
 
-    @field_validator('object_key')
+    @field_validator("object_key")
     def object_key_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+", value):
-            raise ValueError(r"must validate the regular expression /^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+/"
+            )
         return value
 
     model_config = ConfigDict(
@@ -46,7 +52,6 @@ class ImageQuery(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -72,8 +77,7 @@ class ImageQuery(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -91,11 +95,11 @@ class ImageQuery(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "objectKey": obj.get("objectKey"),
-            "height": obj.get("height"),
-            "aspectRatio": obj.get("aspectRatio")
-        })
+        _obj = cls.model_validate(
+            {
+                "objectKey": obj.get("objectKey"),
+                "height": obj.get("height"),
+                "aspectRatio": obj.get("aspectRatio"),
+            }
+        )
         return _obj
-
-

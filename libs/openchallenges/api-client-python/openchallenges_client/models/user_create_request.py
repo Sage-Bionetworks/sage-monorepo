@@ -22,24 +22,32 @@ from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class UserCreateRequest(BaseModel):
     """
     The information required to create a user account
-    """ # noqa: E501
+    """  # noqa: E501
+
     login: StrictStr
     email: StrictStr = Field(description="An email address.")
     password: SecretStr
     name: Optional[StrictStr] = None
     avatar_url: Optional[StrictStr] = Field(default=None, alias="avatarUrl")
     bio: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["login", "email", "password", "name", "avatarUrl", "bio"]
+    __properties: ClassVar[List[str]] = [
+        "login",
+        "email",
+        "password",
+        "name",
+        "avatarUrl",
+        "bio",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -65,8 +73,7 @@ class UserCreateRequest(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -76,17 +83,17 @@ class UserCreateRequest(BaseModel):
         # set to None if name (nullable) is None
         # and model_fields_set contains the field
         if self.name is None and "name" in self.model_fields_set:
-            _dict['name'] = None
+            _dict["name"] = None
 
         # set to None if avatar_url (nullable) is None
         # and model_fields_set contains the field
         if self.avatar_url is None and "avatar_url" in self.model_fields_set:
-            _dict['avatarUrl'] = None
+            _dict["avatarUrl"] = None
 
         # set to None if bio (nullable) is None
         # and model_fields_set contains the field
         if self.bio is None and "bio" in self.model_fields_set:
-            _dict['bio'] = None
+            _dict["bio"] = None
 
         return _dict
 
@@ -99,14 +106,14 @@ class UserCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "login": obj.get("login"),
-            "email": obj.get("email"),
-            "password": obj.get("password"),
-            "name": obj.get("name"),
-            "avatarUrl": obj.get("avatarUrl"),
-            "bio": obj.get("bio")
-        })
+        _obj = cls.model_validate(
+            {
+                "login": obj.get("login"),
+                "email": obj.get("email"),
+                "password": obj.get("password"),
+                "name": obj.get("name"),
+                "avatarUrl": obj.get("avatarUrl"),
+                "bio": obj.get("bio"),
+            }
+        )
         return _obj
-
-

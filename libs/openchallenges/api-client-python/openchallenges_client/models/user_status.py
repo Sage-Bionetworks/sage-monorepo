@@ -26,14 +26,12 @@ class UserStatus(str, Enum):
     """
     allowed enum values
     """
-    PENDING = 'pending'
-    APPROVED = 'approved'
-    DISABLED = 'disabled'
-    BLACKLIST = 'blacklist'
+    PENDING = "pending"
+    APPROVED = "approved"
+    DISABLED = "disabled"
+    BLACKLIST = "blacklist"
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
         """Create an instance of UserStatus from a JSON string"""
         return cls(json.loads(json_str))
-
-

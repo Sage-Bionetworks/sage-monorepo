@@ -24,11 +24,15 @@ from openchallenges_client.models.user_status import UserStatus
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class User(BaseModel):
     """
     A simple user
-    """ # noqa: E501
-    id: Optional[StrictInt] = Field(default=None, description="The unique identifier of an account")
+    """  # noqa: E501
+
+    id: Optional[StrictInt] = Field(
+        default=None, description="The unique identifier of an account"
+    )
     login: StrictStr
     email: StrictStr = Field(description="An email address.")
     name: Optional[StrictStr] = None
@@ -38,14 +42,24 @@ class User(BaseModel):
     updated_at: datetime = Field(alias="updatedAt")
     type: StrictStr
     bio: Optional[StrictStr] = None
-    __properties: ClassVar[List[str]] = ["id", "login", "email", "name", "status", "avatarUrl", "createdAt", "updatedAt", "type", "bio"]
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "login",
+        "email",
+        "name",
+        "status",
+        "avatarUrl",
+        "createdAt",
+        "updatedAt",
+        "type",
+        "bio",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -71,8 +85,7 @@ class User(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -82,17 +95,17 @@ class User(BaseModel):
         # set to None if name (nullable) is None
         # and model_fields_set contains the field
         if self.name is None and "name" in self.model_fields_set:
-            _dict['name'] = None
+            _dict["name"] = None
 
         # set to None if avatar_url (nullable) is None
         # and model_fields_set contains the field
         if self.avatar_url is None and "avatar_url" in self.model_fields_set:
-            _dict['avatarUrl'] = None
+            _dict["avatarUrl"] = None
 
         # set to None if bio (nullable) is None
         # and model_fields_set contains the field
         if self.bio is None and "bio" in self.model_fields_set:
-            _dict['bio'] = None
+            _dict["bio"] = None
 
         return _dict
 
@@ -105,18 +118,18 @@ class User(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "login": obj.get("login"),
-            "email": obj.get("email"),
-            "name": obj.get("name"),
-            "status": obj.get("status"),
-            "avatarUrl": obj.get("avatarUrl"),
-            "createdAt": obj.get("createdAt"),
-            "updatedAt": obj.get("updatedAt"),
-            "type": obj.get("type"),
-            "bio": obj.get("bio")
-        })
+        _obj = cls.model_validate(
+            {
+                "id": obj.get("id"),
+                "login": obj.get("login"),
+                "email": obj.get("email"),
+                "name": obj.get("name"),
+                "status": obj.get("status"),
+                "avatarUrl": obj.get("avatarUrl"),
+                "createdAt": obj.get("createdAt"),
+                "updatedAt": obj.get("updatedAt"),
+                "type": obj.get("type"),
+                "bio": obj.get("bio"),
+            }
+        )
         return _obj
-
-

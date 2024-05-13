@@ -24,24 +24,40 @@ from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class ChallengePlatform(BaseModel):
     """
     A challenge platform
-    """ # noqa: E501
+    """  # noqa: E501
+
     id: StrictInt = Field(description="The unique identifier of a challenge platform.")
-    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(description="The slug of the challenge platform.")
-    name: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(description="The name of the challenge platform.")
+    slug: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(
+        description="The slug of the challenge platform."
+    )
+    name: Annotated[str, Field(min_length=3, strict=True, max_length=30)] = Field(
+        description="The name of the challenge platform."
+    )
     avatar_url: StrictStr = Field(alias="avatarUrl")
     website_url: StrictStr = Field(alias="websiteUrl")
     created_at: datetime = Field(alias="createdAt")
     updated_at: datetime = Field(alias="updatedAt")
-    __properties: ClassVar[List[str]] = ["id", "slug", "name", "avatarUrl", "websiteUrl", "createdAt", "updatedAt"]
+    __properties: ClassVar[List[str]] = [
+        "id",
+        "slug",
+        "name",
+        "avatarUrl",
+        "websiteUrl",
+        "createdAt",
+        "updatedAt",
+    ]
 
-    @field_validator('slug')
+    @field_validator("slug")
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
+            )
         return value
 
     model_config = ConfigDict(
@@ -49,7 +65,6 @@ class ChallengePlatform(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -75,8 +90,7 @@ class ChallengePlatform(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -94,15 +108,15 @@ class ChallengePlatform(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "id": obj.get("id"),
-            "slug": obj.get("slug"),
-            "name": obj.get("name"),
-            "avatarUrl": obj.get("avatarUrl"),
-            "websiteUrl": obj.get("websiteUrl"),
-            "createdAt": obj.get("createdAt"),
-            "updatedAt": obj.get("updatedAt")
-        })
+        _obj = cls.model_validate(
+            {
+                "id": obj.get("id"),
+                "slug": obj.get("slug"),
+                "name": obj.get("name"),
+                "avatarUrl": obj.get("avatarUrl"),
+                "websiteUrl": obj.get("websiteUrl"),
+                "createdAt": obj.get("createdAt"),
+                "updatedAt": obj.get("updatedAt"),
+            }
+        )
         return _obj
-
-

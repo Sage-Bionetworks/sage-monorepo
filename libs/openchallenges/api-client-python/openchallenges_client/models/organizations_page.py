@@ -23,25 +23,42 @@ from openchallenges_client.models.organization import Organization
 from typing import Optional, Set
 from typing_extensions import Self
 
+
 class OrganizationsPage(BaseModel):
     """
     A page of organizations
-    """ # noqa: E501
+    """  # noqa: E501
+
     number: StrictInt = Field(description="The page number.")
     size: StrictInt = Field(description="The number of items in a single page.")
-    total_elements: StrictInt = Field(description="Total number of elements in the result set.", alias="totalElements")
-    total_pages: StrictInt = Field(description="Total number of pages in the result set.", alias="totalPages")
-    has_next: StrictBool = Field(description="Returns if there is a next page.", alias="hasNext")
-    has_previous: StrictBool = Field(description="Returns if there is a previous page.", alias="hasPrevious")
+    total_elements: StrictInt = Field(
+        description="Total number of elements in the result set.", alias="totalElements"
+    )
+    total_pages: StrictInt = Field(
+        description="Total number of pages in the result set.", alias="totalPages"
+    )
+    has_next: StrictBool = Field(
+        description="Returns if there is a next page.", alias="hasNext"
+    )
+    has_previous: StrictBool = Field(
+        description="Returns if there is a previous page.", alias="hasPrevious"
+    )
     organizations: List[Organization] = Field(description="A list of organizations")
-    __properties: ClassVar[List[str]] = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "organizations"]
+    __properties: ClassVar[List[str]] = [
+        "number",
+        "size",
+        "totalElements",
+        "totalPages",
+        "hasNext",
+        "hasPrevious",
+        "organizations",
+    ]
 
     model_config = ConfigDict(
         populate_by_name=True,
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -67,8 +84,7 @@ class OrganizationsPage(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -81,7 +97,7 @@ class OrganizationsPage(BaseModel):
             for _item in self.organizations:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['organizations'] = _items
+            _dict["organizations"] = _items
         return _dict
 
     @classmethod
@@ -93,15 +109,19 @@ class OrganizationsPage(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "number": obj.get("number"),
-            "size": obj.get("size"),
-            "totalElements": obj.get("totalElements"),
-            "totalPages": obj.get("totalPages"),
-            "hasNext": obj.get("hasNext"),
-            "hasPrevious": obj.get("hasPrevious"),
-            "organizations": [Organization.from_dict(_item) for _item in obj["organizations"]] if obj.get("organizations") is not None else None
-        })
+        _obj = cls.model_validate(
+            {
+                "number": obj.get("number"),
+                "size": obj.get("size"),
+                "totalElements": obj.get("totalElements"),
+                "totalPages": obj.get("totalPages"),
+                "hasNext": obj.get("hasNext"),
+                "hasPrevious": obj.get("hasPrevious"),
+                "organizations": [
+                    Organization.from_dict(_item) for _item in obj["organizations"]
+                ]
+                if obj.get("organizations") is not None
+                else None,
+            }
+        )
         return _obj
-
-

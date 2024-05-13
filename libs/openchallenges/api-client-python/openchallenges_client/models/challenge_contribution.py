@@ -19,16 +19,24 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt
 from typing import Any, ClassVar, Dict, List
-from openchallenges_client.models.challenge_contribution_role import ChallengeContributionRole
+from openchallenges_client.models.challenge_contribution_role import (
+    ChallengeContributionRole,
+)
 from typing import Optional, Set
 from typing_extensions import Self
+
 
 class ChallengeContribution(BaseModel):
     """
     A challenge contribution.
-    """ # noqa: E501
-    challenge_id: StrictInt = Field(description="The unique identifier of the challenge.", alias="challengeId")
-    organization_id: StrictInt = Field(description="The unique identifier of an organization", alias="organizationId")
+    """  # noqa: E501
+
+    challenge_id: StrictInt = Field(
+        description="The unique identifier of the challenge.", alias="challengeId"
+    )
+    organization_id: StrictInt = Field(
+        description="The unique identifier of an organization", alias="organizationId"
+    )
     role: ChallengeContributionRole
     __properties: ClassVar[List[str]] = ["challengeId", "organizationId", "role"]
 
@@ -37,7 +45,6 @@ class ChallengeContribution(BaseModel):
         validate_assignment=True,
         protected_namespaces=(),
     )
-
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
@@ -63,8 +70,7 @@ class ChallengeContribution(BaseModel):
           were set at model initialization. Other fields with value `None`
           are ignored.
         """
-        excluded_fields: Set[str] = set([
-        ])
+        excluded_fields: Set[str] = set([])
 
         _dict = self.model_dump(
             by_alias=True,
@@ -82,11 +88,11 @@ class ChallengeContribution(BaseModel):
         if not isinstance(obj, dict):
             return cls.model_validate(obj)
 
-        _obj = cls.model_validate({
-            "challengeId": obj.get("challengeId"),
-            "organizationId": obj.get("organizationId"),
-            "role": obj.get("role")
-        })
+        _obj = cls.model_validate(
+            {
+                "challengeId": obj.get("challengeId"),
+                "organizationId": obj.get("organizationId"),
+                "role": obj.get("role"),
+            }
+        )
         return _obj
-
-
