@@ -171,7 +171,9 @@ key.
 2. In the section **Resources**, click on the link for "EC2Instance".
 3. Click on the checkbox of the new EC2 instance created.
 4. Click on the button **Actions** > **Connect**.
-5. Click on **Connect**.
+    - The error "Failed to describe security groups" shown by AWS can be ignored.
+5. Click on the tab **Session Manager**.
+6. Click on **Connect**.
 
 ### Configuring the SSH public key on the EC2 instance
 
