@@ -3,6 +3,7 @@
 A page of EDAM concepts.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **number** | **int** | The page number. | 
@@ -23,12 +24,12 @@ json = "{}"
 # create an instance of EdamConceptsPage from a JSON string
 edam_concepts_page_instance = EdamConceptsPage.from_json(json)
 # print the JSON string representation of the object
-print EdamConceptsPage.to_json()
+print(EdamConceptsPage.to_json())
 
 # convert the object into a dict
 edam_concepts_page_dict = edam_concepts_page_instance.to_dict()
 # create an instance of EdamConceptsPage from a dict
-edam_concepts_page_form_dict = edam_concepts_page.from_dict(edam_concepts_page_dict)
+edam_concepts_page_from_dict = EdamConceptsPage.from_dict(edam_concepts_page_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

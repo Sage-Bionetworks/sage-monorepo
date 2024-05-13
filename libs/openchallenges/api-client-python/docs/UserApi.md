@@ -19,9 +19,8 @@ Create a user with the specified account name
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.user_create_request import UserCreateRequest
 from openchallenges_client.models.user_create_response import UserCreateResponse
@@ -54,6 +53,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_create_request** | [**UserCreateRequest**](UserCreateRequest.md)|  | 
@@ -72,6 +72,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **201** | Account created |  -  |
@@ -90,9 +91,8 @@ Deletes the user specified
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.rest import ApiException
 from pprint import pprint
@@ -123,6 +123,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_id** | **int**| The unique identifier of the user, either the user account ID or login | 
@@ -141,6 +142,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Deleted |  -  |
@@ -158,9 +160,8 @@ Returns the user specified
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.user import User
 from openchallenges_client.rest import ApiException
@@ -192,6 +193,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **user_id** | **int**| The unique identifier of the user, either the user account ID or login | 
@@ -210,6 +212,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A user |  -  |
@@ -227,9 +230,8 @@ Returns the users
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.users_page import UsersPage
 from openchallenges_client.rest import ApiException
@@ -262,6 +264,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **page_number** | **int**| The page number. | [optional] [default to 0]
@@ -281,6 +284,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

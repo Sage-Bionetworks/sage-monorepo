@@ -3,6 +3,7 @@
 An EDAM concept search query.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **page_number** | **int** | The page number. | [optional] [default to 0]
@@ -22,12 +23,12 @@ json = "{}"
 # create an instance of EdamConceptSearchQuery from a JSON string
 edam_concept_search_query_instance = EdamConceptSearchQuery.from_json(json)
 # print the JSON string representation of the object
-print EdamConceptSearchQuery.to_json()
+print(EdamConceptSearchQuery.to_json())
 
 # convert the object into a dict
 edam_concept_search_query_dict = edam_concept_search_query_instance.to_dict()
 # create an instance of EdamConceptSearchQuery from a dict
-edam_concept_search_query_form_dict = edam_concept_search_query.from_dict(edam_concept_search_query_dict)
+edam_concept_search_query_from_dict = EdamConceptSearchQuery.from_dict(edam_concept_search_query_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

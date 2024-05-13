@@ -17,9 +17,8 @@ Returns the challenge platform specified
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenge_platform import ChallengePlatform
 from openchallenges_client.rest import ApiException
@@ -51,6 +50,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **challenge_platform_name** | **str**| The unique identifier of the challenge platform. | 
@@ -69,6 +69,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |
@@ -86,9 +87,8 @@ List challenge platforms
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenge_platform_search_query import ChallengePlatformSearchQuery
 from openchallenges_client.models.challenge_platforms_page import ChallengePlatformsPage
@@ -121,6 +121,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md)| The search query used to find challenge platforms. | [optional] 
@@ -139,6 +140,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

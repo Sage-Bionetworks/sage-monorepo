@@ -3,6 +3,7 @@
 The EDAM section (sub-ontology).
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 

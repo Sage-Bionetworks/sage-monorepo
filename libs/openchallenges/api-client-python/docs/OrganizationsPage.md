@@ -3,6 +3,7 @@
 A page of organizations
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **number** | **int** | The page number. | 
@@ -23,12 +24,12 @@ json = "{}"
 # create an instance of OrganizationsPage from a JSON string
 organizations_page_instance = OrganizationsPage.from_json(json)
 # print the JSON string representation of the object
-print OrganizationsPage.to_json()
+print(OrganizationsPage.to_json())
 
 # convert the object into a dict
 organizations_page_dict = organizations_page_instance.to_dict()
 # create an instance of OrganizationsPage from a dict
-organizations_page_form_dict = organizations_page.from_dict(organizations_page_dict)
+organizations_page_from_dict = OrganizationsPage.from_dict(organizations_page_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

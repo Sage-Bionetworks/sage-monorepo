@@ -16,9 +16,8 @@ List EDAM concepts
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.edam_concept_search_query import EdamConceptSearchQuery
 from openchallenges_client.models.edam_concepts_page import EdamConceptsPage
@@ -51,6 +50,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **edam_concept_search_query** | [**EdamConceptSearchQuery**](.md)| The search query used to find EDAM concepts. | [optional] 
@@ -69,6 +69,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

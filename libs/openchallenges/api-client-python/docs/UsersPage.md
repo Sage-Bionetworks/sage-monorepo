@@ -3,6 +3,7 @@
 A page of users
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **number** | **int** | The page number. | 
@@ -23,12 +24,12 @@ json = "{}"
 # create an instance of UsersPage from a JSON string
 users_page_instance = UsersPage.from_json(json)
 # print the JSON string representation of the object
-print UsersPage.to_json()
+print(UsersPage.to_json())
 
 # convert the object into a dict
 users_page_dict = users_page_instance.to_dict()
 # create an instance of UsersPage from a dict
-users_page_form_dict = users_page.from_dict(users_page_dict)
+users_page_from_dict = UsersPage.from_dict(users_page_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

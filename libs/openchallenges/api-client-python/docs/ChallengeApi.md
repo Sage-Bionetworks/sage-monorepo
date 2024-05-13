@@ -17,9 +17,8 @@ Returns the challenge specified
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenge import Challenge
 from openchallenges_client.rest import ApiException
@@ -51,6 +50,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **challenge_id** | **int**| The unique identifier of the challenge. | 
@@ -69,6 +69,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | A challenge |  -  |
@@ -86,9 +87,8 @@ List challenges
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenge_search_query import ChallengeSearchQuery
 from openchallenges_client.models.challenges_page import ChallengesPage
@@ -121,6 +121,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **challenge_search_query** | [**ChallengeSearchQuery**](.md)| The search query used to find challenges. | [optional] 
@@ -139,6 +140,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

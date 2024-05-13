@@ -3,6 +3,7 @@
 The category of the challenge.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 

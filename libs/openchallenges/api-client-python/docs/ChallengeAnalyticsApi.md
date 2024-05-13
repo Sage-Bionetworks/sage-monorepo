@@ -16,9 +16,8 @@ Returns the number of challenges tracked per year
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenges_per_year import ChallengesPerYear
 from openchallenges_client.rest import ApiException
@@ -48,6 +47,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 
 ### Parameters
+
 This endpoint does not need any parameter.
 
 ### Return type
@@ -64,6 +64,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | An object |  -  |

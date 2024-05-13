@@ -111,11 +111,4 @@ requirements.txt
 setup.py
 test-requirements.txt
 test/__init__.py
-test/test_edam_concept.py
-test/test_edam_concept_api.py
-test/test_edam_concept_direction.py
-test/test_edam_concept_search_query.py
-test/test_edam_concept_sort.py
-test/test_edam_concepts_page.py
-test/test_edam_section.py
 tox.ini

@@ -17,48 +17,64 @@ import pprint
 import re  # noqa: F401
 import json
 
-
-from typing import List
-from pydantic import BaseModel, Field, StrictBool, StrictInt, conlist
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, StrictInt
+from typing import Any, ClassVar, Dict, List
 from openchallenges_client.models.user import User
+from typing import Optional, Set
+from typing_extensions import Self
 
 class UsersPage(BaseModel):
     """
     A page of users
-    """
-    number: StrictInt = Field(..., description="The page number.")
-    size: StrictInt = Field(..., description="The number of items in a single page.")
-    total_elements: StrictInt = Field(..., alias="totalElements", description="Total number of elements in the result set.")
-    total_pages: StrictInt = Field(..., alias="totalPages", description="Total number of pages in the result set.")
-    has_next: StrictBool = Field(..., alias="hasNext", description="Returns if there is a next page.")
-    has_previous: StrictBool = Field(..., alias="hasPrevious", description="Returns if there is a previous page.")
-    users: conlist(User) = Field(..., description="A list of users")
-    __properties = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "users"]
+    """ # noqa: E501
+    number: StrictInt = Field(description="The page number.")
+    size: StrictInt = Field(description="The number of items in a single page.")
+    total_elements: StrictInt = Field(description="Total number of elements in the result set.", alias="totalElements")
+    total_pages: StrictInt = Field(description="Total number of pages in the result set.", alias="totalPages")
+    has_next: StrictBool = Field(description="Returns if there is a next page.", alias="hasNext")
+    has_previous: StrictBool = Field(description="Returns if there is a previous page.", alias="hasPrevious")
+    users: List[User] = Field(description="A list of users")
+    __properties: ClassVar[List[str]] = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "users"]
 
-    class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
         """Returns the JSON representation of the model using alias"""
+        # TODO: pydantic v2: use .model_dump_json(by_alias=True, exclude_unset=True) instead
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> UsersPage:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of UsersPage from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self):
-        """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+    def to_dict(self) -> Dict[str, Any]:
+        """Return the dictionary representation of the model using alias.
+
+        This has the following differences from calling pydantic's
+        `self.model_dump(by_alias=True)`:
+
+        * `None` is only added to the output dict for nullable fields that
+          were set at model initialization. Other fields with value `None`
+          are ignored.
+        """
+        excluded_fields: Set[str] = set([
+        ])
+
+        _dict = self.model_dump(
+            by_alias=True,
+            exclude=excluded_fields,
+            exclude_none=True,
+        )
         # override the default output from pydantic by calling `to_dict()` of each item in users (list)
         _items = []
         if self.users:
@@ -69,22 +85,22 @@ class UsersPage(BaseModel):
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> UsersPage:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of UsersPage from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return UsersPage.parse_obj(obj)
+            return cls.model_validate(obj)
 
-        _obj = UsersPage.parse_obj({
+        _obj = cls.model_validate({
             "number": obj.get("number"),
             "size": obj.get("size"),
-            "total_elements": obj.get("totalElements"),
-            "total_pages": obj.get("totalPages"),
-            "has_next": obj.get("hasNext"),
-            "has_previous": obj.get("hasPrevious"),
-            "users": [User.from_dict(_item) for _item in obj.get("users")] if obj.get("users") is not None else None
+            "totalElements": obj.get("totalElements"),
+            "totalPages": obj.get("totalPages"),
+            "hasNext": obj.get("hasNext"),
+            "hasPrevious": obj.get("hasPrevious"),
+            "users": [User.from_dict(_item) for _item in obj["users"]] if obj.get("users") is not None else None
         })
         return _obj
 

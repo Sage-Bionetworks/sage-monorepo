@@ -3,6 +3,7 @@
 A page of challenge platforms.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **number** | **int** | The page number. | 
@@ -23,12 +24,12 @@ json = "{}"
 # create an instance of ChallengePlatformsPage from a JSON string
 challenge_platforms_page_instance = ChallengePlatformsPage.from_json(json)
 # print the JSON string representation of the object
-print ChallengePlatformsPage.to_json()
+print(ChallengePlatformsPage.to_json())
 
 # convert the object into a dict
 challenge_platforms_page_dict = challenge_platforms_page_instance.to_dict()
 # create an instance of ChallengePlatformsPage from a dict
-challenge_platforms_page_form_dict = challenge_platforms_page.from_dict(challenge_platforms_page_dict)
+challenge_platforms_page_from_dict = ChallengePlatformsPage.from_dict(challenge_platforms_page_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

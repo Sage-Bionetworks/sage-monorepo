@@ -17,9 +17,8 @@ Returns the organization specified
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.organization import Organization
 from openchallenges_client.rest import ApiException
@@ -51,6 +50,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **org** | **str**| The id or login of the organization. | 
@@ -69,6 +69,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | An organization |  -  |
@@ -86,9 +87,8 @@ List organizations
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.organization_search_query import OrganizationSearchQuery
 from openchallenges_client.models.organizations_page import OrganizationsPage
@@ -121,6 +121,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **organization_search_query** | [**OrganizationSearchQuery**](.md)| The search query used to find organizations. | [optional] 
@@ -139,6 +140,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

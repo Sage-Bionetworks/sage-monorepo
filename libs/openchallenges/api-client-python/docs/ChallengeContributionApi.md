@@ -16,9 +16,8 @@ List challenge contributions
 
 ### Example
 
+
 ```python
-import time
-import os
 import openchallenges_client
 from openchallenges_client.models.challenge_contributions_page import ChallengeContributionsPage
 from openchallenges_client.rest import ApiException
@@ -50,6 +49,7 @@ with openchallenges_client.ApiClient(configuration) as api_client:
 
 ### Parameters
 
+
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **challenge_id** | **int**| The unique identifier of the challenge. | 
@@ -68,6 +68,7 @@ No authorization required
  - **Accept**: application/json, application/problem+json
 
 ### HTTP response details
+
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
 **200** | Success |  -  |

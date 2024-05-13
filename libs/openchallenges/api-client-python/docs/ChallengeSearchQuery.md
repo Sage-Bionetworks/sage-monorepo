@@ -3,6 +3,7 @@
 A challenge search query.
 
 ## Properties
+
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **page_number** | **int** | The page number. | [optional] [default to 0]
@@ -32,12 +33,12 @@ json = "{}"
 # create an instance of ChallengeSearchQuery from a JSON string
 challenge_search_query_instance = ChallengeSearchQuery.from_json(json)
 # print the JSON string representation of the object
-print ChallengeSearchQuery.to_json()
+print(ChallengeSearchQuery.to_json())
 
 # convert the object into a dict
 challenge_search_query_dict = challenge_search_query_instance.to_dict()
 # create an instance of ChallengeSearchQuery from a dict
-challenge_search_query_form_dict = challenge_search_query.from_dict(challenge_search_query_dict)
+challenge_search_query_from_dict = ChallengeSearchQuery.from_dict(challenge_search_query_dict)
 ```
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

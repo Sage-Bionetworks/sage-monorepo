@@ -17,58 +17,74 @@ import pprint
 import re  # noqa: F401
 import json
 
-
-
-from pydantic import BaseModel, Field, StrictInt
+from pydantic import BaseModel, ConfigDict, Field, StrictInt
+from typing import Any, ClassVar, Dict, List
 from openchallenges_client.models.challenge_contribution_role import ChallengeContributionRole
+from typing import Optional, Set
+from typing_extensions import Self
 
 class ChallengeContribution(BaseModel):
     """
     A challenge contribution.
-    """
-    challenge_id: StrictInt = Field(..., alias="challengeId", description="The unique identifier of the challenge.")
-    organization_id: StrictInt = Field(..., alias="organizationId", description="The unique identifier of an organization")
-    role: ChallengeContributionRole = Field(...)
-    __properties = ["challengeId", "organizationId", "role"]
+    """ # noqa: E501
+    challenge_id: StrictInt = Field(description="The unique identifier of the challenge.", alias="challengeId")
+    organization_id: StrictInt = Field(description="The unique identifier of an organization", alias="organizationId")
+    role: ChallengeContributionRole
+    __properties: ClassVar[List[str]] = ["challengeId", "organizationId", "role"]
 
-    class Config:
-        """Pydantic configuration"""
-        allow_population_by_field_name = True
-        validate_assignment = True
+    model_config = ConfigDict(
+        populate_by_name=True,
+        validate_assignment=True,
+        protected_namespaces=(),
+    )
+
 
     def to_str(self) -> str:
         """Returns the string representation of the model using alias"""
-        return pprint.pformat(self.dict(by_alias=True))
+        return pprint.pformat(self.model_dump(by_alias=True))
 
     def to_json(self) -> str:
         """Returns the JSON representation of the model using alias"""
+        # TODO: pydantic v2: use .model_dump_json(by_alias=True, exclude_unset=True) instead
         return json.dumps(self.to_dict())
 
     @classmethod
-    def from_json(cls, json_str: str) -> ChallengeContribution:
+    def from_json(cls, json_str: str) -> Optional[Self]:
         """Create an instance of ChallengeContribution from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
-    def to_dict(self):
-        """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+    def to_dict(self) -> Dict[str, Any]:
+        """Return the dictionary representation of the model using alias.
+
+        This has the following differences from calling pydantic's
+        `self.model_dump(by_alias=True)`:
+
+        * `None` is only added to the output dict for nullable fields that
+          were set at model initialization. Other fields with value `None`
+          are ignored.
+        """
+        excluded_fields: Set[str] = set([
+        ])
+
+        _dict = self.model_dump(
+            by_alias=True,
+            exclude=excluded_fields,
+            exclude_none=True,
+        )
         return _dict
 
     @classmethod
-    def from_dict(cls, obj: dict) -> ChallengeContribution:
+    def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
         """Create an instance of ChallengeContribution from a dict"""
         if obj is None:
             return None
 
         if not isinstance(obj, dict):
-            return ChallengeContribution.parse_obj(obj)
+            return cls.model_validate(obj)
 
-        _obj = ChallengeContribution.parse_obj({
-            "challenge_id": obj.get("challengeId"),
-            "organization_id": obj.get("organizationId"),
+        _obj = cls.model_validate({
+            "challengeId": obj.get("challengeId"),
+            "organizationId": obj.get("organizationId"),
             "role": obj.get("role")
         })
         return _obj
