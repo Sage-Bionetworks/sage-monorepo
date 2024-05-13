@@ -23,15 +23,16 @@ from pydantic import Field
 
 from typing import Optional
 
-from openchallenges_client.models.challenge_input_data_type_search_query import ChallengeInputDataTypeSearchQuery
-from openchallenges_client.models.challenge_input_data_types_page import ChallengeInputDataTypesPage
+from openchallenges_client.models.challenge_input_data_type_search_query import (
+    ChallengeInputDataTypeSearchQuery,
+)
+from openchallenges_client.models.challenge_input_data_types_page import (
+    ChallengeInputDataTypesPage,
+)
 
 from openchallenges_client.api_client import ApiClient
 from openchallenges_client.api_response import ApiResponse
-from openchallenges_client.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
-)
+from openchallenges_client.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
 
 class ChallengeInputDataTypeApi(object):
@@ -47,7 +48,16 @@ class ChallengeInputDataTypeApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def list_challenge_input_data_types(self, challenge_input_data_type_search_query : Annotated[Optional[ChallengeInputDataTypeSearchQuery], Field(description="The search query used to find challenge input data types.")] = None, **kwargs) -> ChallengeInputDataTypesPage:  # noqa: E501
+    def list_challenge_input_data_types(
+        self,
+        challenge_input_data_type_search_query: Annotated[
+            Optional[ChallengeInputDataTypeSearchQuery],
+            Field(
+                description="The search query used to find challenge input data types."
+            ),
+        ] = None,
+        **kwargs
+    ) -> ChallengeInputDataTypesPage:  # noqa: E501
         """List challenge input data types  # noqa: E501
 
         List challenge input data types  # noqa: E501
@@ -70,13 +80,26 @@ class ChallengeInputDataTypeApi(object):
                  returns the request thread.
         :rtype: ChallengeInputDataTypesPage
         """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            raise ValueError("Error! Please call the list_challenge_input_data_types_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.list_challenge_input_data_types_with_http_info(challenge_input_data_type_search_query, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if "_preload_content" in kwargs:
+            raise ValueError(
+                "Error! Please call the list_challenge_input_data_types_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"
+            )
+        return self.list_challenge_input_data_types_with_http_info(
+            challenge_input_data_type_search_query, **kwargs
+        )  # noqa: E501
 
     @validate_arguments
-    def list_challenge_input_data_types_with_http_info(self, challenge_input_data_type_search_query : Annotated[Optional[ChallengeInputDataTypeSearchQuery], Field(description="The search query used to find challenge input data types.")] = None, **kwargs) -> ApiResponse:  # noqa: E501
+    def list_challenge_input_data_types_with_http_info(
+        self,
+        challenge_input_data_type_search_query: Annotated[
+            Optional[ChallengeInputDataTypeSearchQuery],
+            Field(
+                description="The search query used to find challenge input data types."
+            ),
+        ] = None,
+        **kwargs
+    ) -> ApiResponse:  # noqa: E501
         """List challenge input data types  # noqa: E501
 
         List challenge input data types  # noqa: E501
@@ -91,7 +114,7 @@ class ChallengeInputDataTypeApi(object):
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the 
+                                 be set to none and raw_data will store the
                                  HTTP response body without reading/decoding.
                                  Default is True.
         :type _preload_content: bool, optional
@@ -115,30 +138,28 @@ class ChallengeInputDataTypeApi(object):
 
         _params = locals()
 
-        _all_params = [
-            'challenge_input_data_type_search_query'
-        ]
+        _all_params = ["challenge_input_data_type_search_query"]
         _all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
+                "_request_auth",
+                "_content_type",
+                "_headers",
             ]
         )
 
         # validate the arguments
-        for _key, _val in _params['kwargs'].items():
+        for _key, _val in _params["kwargs"].items():
             if _key not in _all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method list_challenge_input_data_types" % _key
                 )
             _params[_key] = _val
-        del _params['kwargs']
+        del _params["kwargs"]
 
         _collection_formats = {}
 
@@ -147,31 +168,40 @@ class ChallengeInputDataTypeApi(object):
 
         # process the query parameters
         _query_params = []
-        if _params.get('challenge_input_data_type_search_query') is not None:  # noqa: E501
-            _query_params.append(('challengeInputDataTypeSearchQuery', _params['challenge_input_data_type_search_query']))
+        if (
+            _params.get("challenge_input_data_type_search_query") is not None
+        ):  # noqa: E501
+            _query_params.append(
+                (
+                    "challengeInputDataTypeSearchQuery",
+                    _params["challenge_input_data_type_search_query"],
+                )
+            )
 
         # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
+        _header_params = dict(_params.get("_headers", {}))
         # process the form parameters
         _form_params = []
         _files = {}
         # process the body parameter
         _body_params = None
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/problem+json'])  # noqa: E501
+        _header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json", "application/problem+json"]
+        )  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "ChallengeInputDataTypesPage",
-            '400': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengeInputDataTypesPage",
+            "400": "BasicError",
+            "500": "BasicError",
         }
 
         return self.api_client.call_api(
-            '/challengeInputDataTypes', 'GET',
+            "/challengeInputDataTypes",
+            "GET",
             _path_params,
             _query_params,
             _header_params,
@@ -180,9 +210,10 @@ class ChallengeInputDataTypeApi(object):
             files=_files,
             response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
+            async_req=_params.get("async_req"),
+            _return_http_data_only=_params.get("_return_http_data_only"),  # noqa: E501
+            _preload_content=_params.get("_preload_content", True),
+            _request_timeout=_params.get("_request_timeout"),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _request_auth=_params.get("_request_auth"),
+        )

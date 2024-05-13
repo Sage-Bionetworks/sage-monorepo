@@ -23,9 +23,7 @@
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "test": {
       "executor": "nx:run-commands",
@@ -33,13 +31,22 @@
         "command": "poetry run pytest",
         "cwd": "{projectRoot}"
       }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["poetry run black ./openchallenges_client --exclude 'models' --check"],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["poetry run black ./openchallenges_client --exclude 'models'"],
+        "cwd": "{projectRoot}"
+      }
     }
   },
-  "tags": [
-    "language:python",
-    "package-manager:poetry"
-  ],
-  "implicitDependencies": [
-    "openchallenges-api-description"
-  ]
+  "tags": ["language:python", "package-manager:poetry"],
+  "implicitDependencies": ["openchallenges-api-description"]
 }

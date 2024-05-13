@@ -4,15 +4,15 @@ A challenge platform
 
 ## Properties
 
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**id** | **int** | The unique identifier of a challenge platform. | 
-**slug** | **str** | The slug of the challenge platform. | 
-**name** | **str** | The name of the challenge platform. | 
-**avatar_url** | **str** |  | 
-**website_url** | **str** |  | 
-**created_at** | **datetime** |  | 
-**updated_at** | **datetime** |  | 
+| Name            | Type         | Description                                    | Notes |
+| --------------- | ------------ | ---------------------------------------------- | ----- |
+| **id**          | **int**      | The unique identifier of a challenge platform. |
+| **slug**        | **str**      | The slug of the challenge platform.            |
+| **name**        | **str**      | The name of the challenge platform.            |
+| **avatar_url**  | **str**      |                                                |
+| **website_url** | **str**      |                                                |
+| **created_at**  | **datetime** |                                                |
+| **updated_at**  | **datetime** |                                                |
 
 ## Example
 
@@ -31,6 +31,5 @@ challenge_platform_dict = challenge_platform_instance.to_dict()
 # create an instance of ChallengePlatform from a dict
 challenge_platform_from_dict = ChallengePlatform.from_dict(challenge_platform_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

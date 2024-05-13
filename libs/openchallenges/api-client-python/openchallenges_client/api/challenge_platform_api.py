@@ -20,7 +20,9 @@ from pydantic import Field
 from typing import Optional
 from typing_extensions import Annotated
 from openchallenges_client.models.challenge_platform import ChallengePlatform
-from openchallenges_client.models.challenge_platform_search_query import ChallengePlatformSearchQuery
+from openchallenges_client.models.challenge_platform_search_query import (
+    ChallengePlatformSearchQuery,
+)
 from openchallenges_client.models.challenge_platforms_page import ChallengePlatformsPage
 
 from openchallenges_client.api_client import ApiClient, RequestSerialized
@@ -40,18 +42,24 @@ class ChallengePlatformApi:
             api_client = ApiClient.get_default()
         self.api_client = api_client
 
-
     @validate_call
     def get_challenge_platform(
         self,
-        challenge_platform_name: Annotated[str, Field(min_length=3, strict=True, max_length=30, description="The unique identifier of the challenge platform.")],
+        challenge_platform_name: Annotated[
+            str,
+            Field(
+                min_length=3,
+                strict=True,
+                max_length=30,
+                description="The unique identifier of the challenge platform.",
+            ),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -84,24 +92,23 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._get_challenge_platform_serialize(
             challenge_platform_name=challenge_platform_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatform",
-            '404': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatform",
+            "404": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -109,18 +116,24 @@ class ChallengePlatformApi:
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def get_challenge_platform_with_http_info(
         self,
-        challenge_platform_name: Annotated[str, Field(min_length=3, strict=True, max_length=30, description="The unique identifier of the challenge platform.")],
+        challenge_platform_name: Annotated[
+            str,
+            Field(
+                min_length=3,
+                strict=True,
+                max_length=30,
+                description="The unique identifier of the challenge platform.",
+            ),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -153,24 +166,23 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._get_challenge_platform_serialize(
             challenge_platform_name=challenge_platform_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatform",
-            '404': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatform",
+            "404": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -178,18 +190,24 @@ class ChallengePlatformApi:
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def get_challenge_platform_without_preload_content(
         self,
-        challenge_platform_name: Annotated[str, Field(min_length=3, strict=True, max_length=30, description="The unique identifier of the challenge platform.")],
+        challenge_platform_name: Annotated[
+            str,
+            Field(
+                min_length=3,
+                strict=True,
+                max_length=30,
+                description="The unique identifier of the challenge platform.",
+            ),
+        ],
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -222,27 +240,25 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._get_challenge_platform_serialize(
             challenge_platform_name=challenge_platform_name,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatform",
-            '404': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatform",
+            "404": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         return response_data.response
-
 
     def _get_challenge_platform_serialize(
         self,
@@ -252,11 +268,9 @@ class ChallengePlatformApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
-
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -267,29 +281,23 @@ class ChallengePlatformApi:
 
         # process the path parameters
         if challenge_platform_name is not None:
-            _path_params['challengePlatformName'] = challenge_platform_name
+            _path_params["challengePlatformName"] = challenge_platform_name
         # process the query parameters
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json', 
-                'application/problem+json'
-            ]
+        _header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json", "application/problem+json"]
         )
 
-
         # authentication setting
-        _auth_settings: List[str] = [
-        ]
+        _auth_settings: List[str] = []
 
         return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/challengePlatforms/{challengePlatformName}',
+            method="GET",
+            resource_path="/challengePlatforms/{challengePlatformName}",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -299,23 +307,22 @@ class ChallengePlatformApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
+            _request_auth=_request_auth,
         )
-
-
-
 
     @validate_call
     def list_challenge_platforms(
         self,
-        challenge_platform_search_query: Annotated[Optional[ChallengePlatformSearchQuery], Field(description="The search query used to find challenge platforms.")] = None,
+        challenge_platform_search_query: Annotated[
+            Optional[ChallengePlatformSearchQuery],
+            Field(description="The search query used to find challenge platforms."),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -348,24 +355,23 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._list_challenge_platforms_serialize(
             challenge_platform_search_query=challenge_platform_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatformsPage",
-            '400': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatformsPage",
+            "400": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -373,18 +379,19 @@ class ChallengePlatformApi:
             response_types_map=_response_types_map,
         ).data
 
-
     @validate_call
     def list_challenge_platforms_with_http_info(
         self,
-        challenge_platform_search_query: Annotated[Optional[ChallengePlatformSearchQuery], Field(description="The search query used to find challenge platforms.")] = None,
+        challenge_platform_search_query: Annotated[
+            Optional[ChallengePlatformSearchQuery],
+            Field(description="The search query used to find challenge platforms."),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -417,24 +424,23 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._list_challenge_platforms_serialize(
             challenge_platform_search_query=challenge_platform_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatformsPage",
-            '400': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatformsPage",
+            "400": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         response_data.read()
         return self.api_client.response_deserialize(
@@ -442,18 +448,19 @@ class ChallengePlatformApi:
             response_types_map=_response_types_map,
         )
 
-
     @validate_call
     def list_challenge_platforms_without_preload_content(
         self,
-        challenge_platform_search_query: Annotated[Optional[ChallengePlatformSearchQuery], Field(description="The search query used to find challenge platforms.")] = None,
+        challenge_platform_search_query: Annotated[
+            Optional[ChallengePlatformSearchQuery],
+            Field(description="The search query used to find challenge platforms."),
+        ] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
             Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
+                Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]
+            ],
         ] = None,
         _request_auth: Optional[Dict[StrictStr, Any]] = None,
         _content_type: Optional[StrictStr] = None,
@@ -486,27 +493,25 @@ class ChallengePlatformApi:
                             in the spec for a single request.
         :type _host_index: int, optional
         :return: Returns the result object.
-        """ # noqa: E501
+        """  # noqa: E501
 
         _param = self._list_challenge_platforms_serialize(
             challenge_platform_search_query=challenge_platform_search_query,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
         _response_types_map: Dict[str, Optional[str]] = {
-            '200': "ChallengePlatformsPage",
-            '400': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengePlatformsPage",
+            "400": "BasicError",
+            "500": "BasicError",
         }
         response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
+            *_param, _request_timeout=_request_timeout
         )
         return response_data.response
-
 
     def _list_challenge_platforms_serialize(
         self,
@@ -516,11 +521,9 @@ class ChallengePlatformApi:
         _headers,
         _host_index,
     ) -> RequestSerialized:
-
         _host = None
 
-        _collection_formats: Dict[str, str] = {
-        }
+        _collection_formats: Dict[str, str] = {}
 
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
@@ -532,30 +535,25 @@ class ChallengePlatformApi:
         # process the path parameters
         # process the query parameters
         if challenge_platform_search_query is not None:
-            
-            _query_params.append(('challengePlatformSearchQuery', challenge_platform_search_query))
-            
+            _query_params.append(
+                ("challengePlatformSearchQuery", challenge_platform_search_query)
+            )
+
         # process the header parameters
         # process the form parameters
         # process the body parameter
 
-
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            [
-                'application/json', 
-                'application/problem+json'
-            ]
+        _header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json", "application/problem+json"]
         )
 
-
         # authentication setting
-        _auth_settings: List[str] = [
-        ]
+        _auth_settings: List[str] = []
 
         return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/challengePlatforms',
+            method="GET",
+            resource_path="/challengePlatforms",
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -565,7 +563,5 @@ class ChallengePlatformApi:
             auth_settings=_auth_settings,
             collection_formats=_collection_formats,
             _host=_host,
-            _request_auth=_request_auth
+            _request_auth=_request_auth,
         )
-
-
