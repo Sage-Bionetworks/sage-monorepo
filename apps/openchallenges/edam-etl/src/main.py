@@ -3,6 +3,8 @@ import pandas as pd
 import requests
 from os import getenv
 from typing import Optional
+import mariadb 
+import sys
 
 # Get config from the environment variables
 
@@ -11,6 +13,33 @@ VERSION = getenv("VERSION")
 print(f"EDAM Version: {VERSION}")
 print(f"OC DB URL: {OC_DB_URL}")
 
+# Intialize required connection variables from environment variables
+
+USERNAME = getenv("USERNAME")
+PASSWORD = getenv("PASSWORD")
+PORT = getenv("PORT")
+DB = getenv("DB")
+HOST = getenv("HOST")
+
+def connect_to_mariadb(username: str, password: str, port: str, host: str, database: str) -> None:
+    """Connect to the MariaDB database"""
+    try:
+        conn = mariadb.connect(
+            user = username,
+            password = password,
+            host = host,
+            port = int(port),
+            database = database
+        )
+        print("Establishing a connection to the MariaDB Platform.")
+    
+    except mariadb.Error as e:
+        print(f"Error connecting to MariaDB Platform: {e}")
+        sys.exit(1)
+    
+    # Get the cursor
+    cur = conn.cursor()
+    print("Connection has been established to MariaDB Platform!")
 
 def download_edam_csv(url: str, version: str) -> Optional[bool]:
     """Download EDAM concepts from GitHub or S3 bucket (CSV file)"""
@@ -92,6 +121,8 @@ def print_info_statistics(df: pd.DataFrame) -> None:
     else:
         print("No data available.")
 
+# def load_edam_dataframe(df: pd.DataFrame) -> None:
+
 
 def main() -> None:
     """Main function to execute preceding functions"""
@@ -101,6 +132,7 @@ def main() -> None:
     if download_edam_csv(url, VERSION):
         df: pd.DataFrame = transform_to_dataframe(VERSION)
         print_info_statistics(df)
+        connect_to_mariadb(USERNAME, PASSWORD, PORT, HOST, DB)
 
 
 if __name__ == "__main__":
