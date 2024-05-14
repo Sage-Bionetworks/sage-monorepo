@@ -46,7 +46,7 @@
 
   <!-- Empty results templates -->
   <ng-template pTemplate="empty">
-    <div *ngIf="isLoading; else noResults">
+    <div *ngIf="options.length === 0 && isLoading; else noResults">
       <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
         <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
           <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
