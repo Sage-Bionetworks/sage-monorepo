@@ -16,6 +16,11 @@ GET {{basePath}}/organizations
 
 GET {{basePath}}/organizations?searchTerms=dream
 
+
+### List the organizations by ids
+
+GET {{basePath}}/organizations?ids=1
+
 ### List the organizations that categorized as featured
 
 GET {{basePath}}/organizations?categories=featured

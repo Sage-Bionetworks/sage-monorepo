@@ -41,6 +41,10 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
     SearchSortFactory sf = searchSession.scope(ChallengePlatformEntity.class).sort();
     List<SearchPredicate> predicates = new ArrayList<>();
 
+    if (query.getSlugs() != null && !query.getSlugs().isEmpty()) {
+      predicates.add(getSlugsPredicate(pf, query));
+    }
+
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
@@ -60,6 +64,17 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
             .sort(sort)
             .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
+  }
+
+  private SearchPredicate getSlugsPredicate(
+      SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (String slug : query.getSlugs()) {
+                b.should(pf.match().field("slug").matching(slug.toString()));
+              }
+            })
+        .toPredicate();
   }
 
   private SearchPredicate getSearchTermsPredicate(

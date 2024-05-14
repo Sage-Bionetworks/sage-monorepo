@@ -53,6 +53,9 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     SearchSortFactory sf = searchSession.scope(OrganizationEntity.class).sort();
     List<SearchPredicate> predicates = new ArrayList<>();
 
+    if (query.getIds() != null && !query.getIds().isEmpty()) {
+      predicates.add(getIdsPredicate(pf, query));
+    }
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
@@ -112,6 +115,25 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
               for (ChallengeContributionRoleDto role : query.getChallengeContributionRoles()) {
                 b.should(
                     pf.match().field("challenge_contributions.role").matching(role.toString()));
+              }
+            })
+        .toPredicate();
+  }
+
+  /**
+   * Matches the organization whose at least one of their id is in the list of ids
+   * specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getIdsPredicate(
+      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (Long id : query.getIds()) {
+                b.should(pf.match().field("id").matching(id));
               }
             })
         .toPredicate();
