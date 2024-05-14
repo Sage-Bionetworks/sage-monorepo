@@ -1659,8 +1659,8 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
-      "RemoteRef": "0.2.5",
-      "RemoteSha": "b397d717f6ae55ce044b795a6120f36926211072",
+      "RemoteRef": "0.2.6",
+      "RemoteSha": "d19279c6791a28badf758b654416147b5cfc024d",
       "Requirements": [
         "assertthat",
         "dplyr",
@@ -1674,7 +1674,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "5efd6a8244e2899889755f3b2670e3e4"
+      "Hash": "666d5ffbf9421ce5ca4087448ab3619a"
     },
     "igvShiny": {
       "Package": "igvShiny",
