@@ -4,7 +4,6 @@ import {
   catchError,
   debounceTime,
   distinctUntilChanged,
-  take,
   map,
   switchMap,
 } from 'rxjs/operators';
@@ -75,7 +74,6 @@ export class ChallengeSearchDataService {
     return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      take(1),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
         // use the properties from new query to overwrite the ones from old query
         this.edamConceptService.listEdamConcepts({
@@ -97,7 +95,6 @@ export class ChallengeSearchDataService {
     return this.organizationSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      take(1),
       switchMap((searchQuery: OrganizationSearchQuery) =>
         this.organizationService.listOrganizations({
           ...searchQuery,
@@ -148,7 +145,6 @@ export class ChallengeSearchDataService {
     return this.platformSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
-      take(1),
       switchMap((searchQuery: ChallengePlatformSearchQuery) => {
         return this.challengePlatformService.listChallengePlatforms({
           ...searchQuery,
