@@ -54,10 +54,43 @@
   }
 }
 
+.loader-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .skeleton {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+    margin-bottom: 6px;
+  }
+}
+
+.loader-with-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .skeleton-with-icon {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+    margin-bottom: 6px;
+
+    .circle {
+      margin-right: 6px;
+    }
+  }
+}
+
 @media screen and (max-width: constants.$md-breakpoint) {
   :host ::ng-deep .p-multiselect {
     width: 100%;
   }
+
   :host ::ng-deep .p-overlay {
     transform: translateX(0);
     top: 45px !important;

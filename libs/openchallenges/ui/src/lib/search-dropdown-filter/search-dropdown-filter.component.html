@@ -10,6 +10,7 @@
   (onFilter)="onSearch($event)"
   [virtualScroll]="true"
   [virtualScrollItemSize]="50"
+  [virtualScrollOptions]="scrollOptions"
   [lazy]="lazy"
   (onLazyLoad)="onLazyLoad($event)"
 >
@@ -26,6 +27,26 @@
       />
       <span class="p-multiselect-filter-icon pi pi-search"></span>
     </div>
+  </ng-template>
+
+  <!-- loader template with skeleton -->
+  <ng-template pTemplate="loader">
+    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+      <div class="skeleton-with-icon">
+        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+      </div>
+      <div class="skeleton-with-icon">
+        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+      </div>
+    </div>
+    <ng-template #noIconLoader>
+      <div class="loader-container">
+        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+      </div>
+    </ng-template>
   </ng-template>
   <!-- custom list items -->
   <ng-template let-option pTemplate="options">

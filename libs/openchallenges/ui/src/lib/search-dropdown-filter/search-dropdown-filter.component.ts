@@ -8,11 +8,18 @@ import {
   MultiSelectLazyLoadEvent,
   MultiSelectModule,
 } from 'primeng/multiselect';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
   standalone: true,
-  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule],
+  imports: [
+    AvatarComponent,
+    CommonModule,
+    FormsModule,
+    MultiSelectModule,
+    SkeletonModule,
+  ],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
@@ -31,6 +38,11 @@ export class SearchDropdownFilterComponent implements OnInit {
   overlayOptions = {
     showTransitionOptions: '0ms',
     hideTransitionOptions: '0ms',
+  };
+
+  scrollOptions = {
+    delay: 250,
+    showLoader: true,
   };
 
   searchTerm = '';
