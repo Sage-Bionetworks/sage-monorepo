@@ -19,7 +19,7 @@ GET {{basePath}}/organizations?searchTerms=dream
 
 ### List the organizations by ids
 
-GET {{basePath}}/organizations?ids=1
+GET {{basePath}}/organizations?ids=1,100
 
 ### List the organizations that categorized as featured
 

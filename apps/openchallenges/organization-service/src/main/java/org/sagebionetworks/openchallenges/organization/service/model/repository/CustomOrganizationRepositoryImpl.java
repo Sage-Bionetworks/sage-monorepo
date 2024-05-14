@@ -121,8 +121,7 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
   }
 
   /**
-   * Matches the organization whose at least one of their id is in the list of ids
-   * specified.
+   * Matches the organization whose at least one of their id is in the list of ids specified.
    *
    * @param pf
    * @param query
