@@ -819,11 +819,11 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSort'
         direction:
           $ref: '#/components/schemas/ChallengePlatformDirection'
-        ids:
-          description: An array of challenge platform ids used to filter the results.
+        slugs:
+          description: An array of challenge platform slugs used to filter the results.
           type: array
           items:
-            $ref: '#/components/schemas/ChallengePlatformId'
+            $ref: '#/components/schemas/ChallengePlatformSlug'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
