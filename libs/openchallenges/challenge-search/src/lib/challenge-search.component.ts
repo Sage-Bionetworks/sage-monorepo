@@ -418,6 +418,7 @@ export class ChallengeSearchComponent
       'platforms',
     ] as ChallengeSearchDropdown[];
     dropdowns.forEach((dropdown) => {
+      this.challengeSearchDataService.setSearchQuery(dropdown);
       this.onLazyLoad(dropdown, viewportRange);
       this.loadedPages[dropdown].clear();
     });

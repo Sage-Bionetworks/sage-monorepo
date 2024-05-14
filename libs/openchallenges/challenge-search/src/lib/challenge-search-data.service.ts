@@ -170,10 +170,6 @@ export class ChallengeSearchDataService {
       inputDataTypes: {
         sections: [EdamSection.Data],
       },
-      operations: {
-        sections: [EdamSection.Operation],
-        sort: EdamConceptSort.PreferredLabel,
-      },
     };
 
     const setQueryMethods = {
