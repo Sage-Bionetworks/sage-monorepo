@@ -5,6 +5,10 @@
   height: 45px;
 }
 
+:host ::ng-deep .p-scroller {
+  min-height: 200px; // height of scroll view
+}
+
 :host ::ng-deep .p-overlay {
   position: absolute;
   right: 0;

@@ -14,7 +14,6 @@ import {
   EdamConceptSearchQuery,
   EdamConceptService,
   EdamConceptSort,
-  EdamSection,
   Image,
   ImageAspectRatio,
   ImageHeight,
@@ -162,18 +161,8 @@ export class ChallengeSearchDataService {
   }
 
   setSearchQuery(dropdown: ChallengeSearchDropdown, searchQuery = {}) {
-    const extraParams = {
-      inputDataTypes: {
-        sections: [EdamSection.Data],
-      },
-    };
-
     const setQueryMethods = {
-      inputDataTypes: () =>
-        this.setEdamConceptSearchQuery({
-          ...extraParams.inputDataTypes,
-          ...searchQuery,
-        }),
+      inputDataTypes: () => this.setEdamConceptSearchQuery(searchQuery),
       organizations: () => this.setOriganizationSearchQuery(searchQuery),
       platforms: () => this.setPlatformSearchQuery(searchQuery),
     };
@@ -181,13 +170,13 @@ export class ChallengeSearchDataService {
     return setQueryMethods[dropdown]();
   }
 
-  fetchData(dropdown: ChallengeSearchDropdown) {
+  fetchData(dropdown: ChallengeSearchDropdown, searchQuery = {}) {
     const fetchDataMethods = {
-      inputDataTypes: this.getEdamConcepts.bind(this),
-      organizations: this.getOriganizations.bind(this),
-      platforms: this.getPlatforms.bind(this),
+      inputDataTypes: () => this.getEdamConcepts(searchQuery),
+      organizations: () => this.getOriganizations(searchQuery),
+      platforms: () => this.getPlatforms(searchQuery),
     };
 
-    return fetchDataMethods[dropdown];
+    return fetchDataMethods[dropdown]();
   }
 }

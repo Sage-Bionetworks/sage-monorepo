@@ -48,6 +48,8 @@ export class SearchDropdownFilterComponent implements OnInit {
   searchTerm = '';
   filter = true;
 
+  isLoading = false;
+
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
 
@@ -59,7 +61,12 @@ export class SearchDropdownFilterComponent implements OnInit {
   }
 
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
-    // virtual scroll needs to be set 'true' as well
+    // note: virtual scroll needs to be set 'true' to enable lazy load
+    // set loading to true on lazy load start
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 2000);
     this.lazyLoad.emit(event);
   }
 

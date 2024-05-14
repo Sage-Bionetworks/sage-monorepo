@@ -15,6 +15,7 @@ import {
   ChallengeSort,
   ChallengeStatus,
   ChallengeSubmissionType,
+  EdamSection,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
@@ -252,7 +253,7 @@ export class ChallengeSearchComponent
       platforms: challengePlatformsFilterPanel,
     };
 
-    // load initially data in search dropdown filters
+    // load initial data and listen to fetch data as query changes
     this.loadInitialDropdownData();
   }
 
@@ -376,8 +377,7 @@ export class ChallengeSearchComponent
 
   onLazyLoad(
     dropdown: ChallengeSearchDropdown,
-    event: MultiSelectLazyLoadEvent,
-    extraParams = {}
+    event: MultiSelectLazyLoadEvent
   ): void {
     const size = this.defaultPageSize;
     const startPage = Math.floor(event.first / size);
@@ -387,40 +387,39 @@ export class ChallengeSearchComponent
     for (let page = startPage; page <= endPage; page++) {
       if (!this.loadedPages[dropdown].has(page)) {
         this.loadedPages[dropdown].add(page);
-        // fetch new page data with corresponding page number
-        this.challengeSearchDataService
-          .fetchData(dropdown)({
-            pageNumber: page,
-            pageSize: size,
-            ...extraParams,
-          })
-          .pipe(takeUntil(this.destroy))
-          .subscribe((newOptions) => {
-            // combine old and new results by taking unique filter values
-            this.dropdownFilters[dropdown].options = unionWith(
-              this.dropdownFilters[dropdown].options,
-              newOptions,
-              isEqual
-            );
-          });
+        this.challengeSearchDataService.setSearchQuery(dropdown, {
+          pageNumber: page,
+          pageSize: size,
+        });
       }
     }
   }
 
   private loadInitialDropdownData(): void {
-    // define default how many items to load
-    const viewportRange = { first: 0, last: this.defaultPageSize };
-
-    // load initial data and reset the loaded pages
     const dropdowns = [
       'inputDataTypes',
       'organizations',
       'platforms',
     ] as ChallengeSearchDropdown[];
     dropdowns.forEach((dropdown) => {
-      this.challengeSearchDataService.setSearchQuery(dropdown);
-      this.onLazyLoad(dropdown, viewportRange);
-      this.loadedPages[dropdown].clear();
+      const extraParams =
+        dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
+
+      this.challengeSearchDataService
+        .fetchData(dropdown, {
+          pageNumber: this.defaultPageNumber,
+          pageSize: this.defaultPageSize,
+          ...extraParams,
+        })
+        .pipe(takeUntil(this.destroy))
+        .subscribe((newOptions) => {
+          // update filter options by taking unique filter values
+          this.dropdownFilters[dropdown].options = unionWith(
+            this.dropdownFilters[dropdown].options,
+            newOptions,
+            isEqual
+          );
+        });
     });
   }
 
