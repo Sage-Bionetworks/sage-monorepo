@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -27,6 +29,10 @@ public class ChallengePlatformSearchQueryDto {
 
   @JsonProperty("direction")
   private ChallengePlatformDirectionDto direction = null;
+
+  @JsonProperty("ids")
+  @Valid
+  private List<Long> ids = null;
 
   @JsonProperty("searchTerms")
   private String searchTerms;
@@ -114,6 +120,36 @@ public class ChallengePlatformSearchQueryDto {
     this.direction = direction;
   }
 
+  public ChallengePlatformSearchQueryDto ids(List<Long> ids) {
+    this.ids = ids;
+    return this;
+  }
+
+  public ChallengePlatformSearchQueryDto addIdsItem(Long idsItem) {
+    if (this.ids == null) {
+      this.ids = new ArrayList<>();
+    }
+    this.ids.add(idsItem);
+    return this;
+  }
+
+  /**
+   * An array of challenge platform ids used to filter the results.
+   *
+   * @return ids
+   */
+  @Schema(
+      name = "ids",
+      description = "An array of challenge platform ids used to filter the results.",
+      required = false)
+  public List<Long> getIds() {
+    return ids;
+  }
+
+  public void setIds(List<Long> ids) {
+    this.ids = ids;
+  }
+
   public ChallengePlatformSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
@@ -151,12 +187,13 @@ public class ChallengePlatformSearchQueryDto {
         && Objects.equals(this.pageSize, challengePlatformSearchQuery.pageSize)
         && Objects.equals(this.sort, challengePlatformSearchQuery.sort)
         && Objects.equals(this.direction, challengePlatformSearchQuery.direction)
+        && Objects.equals(this.ids, challengePlatformSearchQuery.ids)
         && Objects.equals(this.searchTerms, challengePlatformSearchQuery.searchTerms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms);
+    return Objects.hash(pageNumber, pageSize, sort, direction, ids, searchTerms);
   }
 
   @Override
@@ -167,6 +204,7 @@ public class ChallengePlatformSearchQueryDto {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
+    sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("}");
     return sb.toString();

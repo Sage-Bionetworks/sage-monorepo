@@ -962,6 +962,11 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSort'
         direction:
           $ref: '#/components/schemas/ChallengePlatformDirection'
+        ids:
+          description: An array of challenge platform ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/ChallengePlatformId'
+          type: array
         searchTerms:
           description: A string of search terms used to filter the results.
           example: synapse
@@ -1071,6 +1076,11 @@ components:
           $ref: '#/components/schemas/EdamConceptSort'
         direction:
           $ref: '#/components/schemas/EdamConceptDirection'
+        ids:
+          description: An array of EDAM concept ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
+          type: array
         searchTerms:
           description: A string of search terms used to filter the results.
           example: sequence image
