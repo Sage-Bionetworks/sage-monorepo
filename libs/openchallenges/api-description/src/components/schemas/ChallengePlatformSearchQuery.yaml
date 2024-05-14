@@ -17,6 +17,11 @@ properties:
     $ref: ChallengePlatformSort.yaml
   direction:
     $ref: ChallengePlatformDirection.yaml
+  ids:
+    description: An array of challenge platform ids used to filter the results.
+    type: array
+    items:
+      $ref: ChallengePlatformId.yaml
   searchTerms:
     description: A string of search terms used to filter the results.
     type: string
