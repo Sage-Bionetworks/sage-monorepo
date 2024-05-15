@@ -62,11 +62,11 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
-    // set loading to true on lazy load start
+    // trigger loader animation every time lazy load initiated
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;
-    }, 2000);
+    }, 250);
     this.lazyLoad.emit(event);
   }
 

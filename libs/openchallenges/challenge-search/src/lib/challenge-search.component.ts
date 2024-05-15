@@ -241,7 +241,6 @@ export class ChallengeSearchComponent
     });
 
     // update loaded pages and dropdown filters
-    // make sure to put under ngOnit lifecycle to reset every time page reloads
     this.loadedPages = {
       inputDataTypes: new Set(),
       organizations: new Set(),
@@ -360,16 +359,16 @@ export class ChallengeSearchComponent
   }
 
   onSearchChange(
-    dropdown: 'challenges' | ChallengeSearchDropdown,
+    searchType: 'challenges' | ChallengeSearchDropdown,
     searched: string
   ): void {
-    this.loadedPages[dropdown].clear();
-    this.dropdownFilters[dropdown].options = [];
+    this.loadedPages[searchType].clear();
+    this.dropdownFilters[searchType].options = [];
 
-    if (dropdown === 'challenges') {
+    if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
     } else {
-      this.challengeSearchDataService.setSearchQuery(dropdown, {
+      this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,
       });
     }
@@ -402,14 +401,13 @@ export class ChallengeSearchComponent
       'platforms',
     ] as ChallengeSearchDropdown[];
     dropdowns.forEach((dropdown) => {
-      const extraParams =
+      const extraDefaultParams =
         dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
 
       this.challengeSearchDataService
         .fetchData(dropdown, {
-          pageNumber: this.defaultPageNumber,
-          pageSize: this.defaultPageSize,
-          ...extraParams,
+          pageSize: this.defaultPageSize, // set constant pageSize to match lazyLoad
+          ...extraDefaultParams,
         })
         .pipe(takeUntil(this.destroy))
         .subscribe((newOptions) => {
