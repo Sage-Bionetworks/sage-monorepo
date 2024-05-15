@@ -71,7 +71,7 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
     return pf.bool(
             b -> {
               for (String slug : query.getSlugs()) {
-                b.should(pf.match().field("slug").matching(slug.toString()));
+                b.should(pf.match().field("slug").matching(slug));
               }
             })
         .toPredicate();
