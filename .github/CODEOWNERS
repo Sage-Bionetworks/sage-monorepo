@@ -26,3 +26,7 @@
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/shared/ @tschaffter
+
+/apps/model-ad/ @hallieswan @sagely1
+/docker/model-ad/ @hallieswan @sagely1
+/libs/model-ad/ @hallieswan @sagely1
