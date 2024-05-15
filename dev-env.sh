@@ -77,6 +77,10 @@ function openchallenges-infra {
   node dist/apps/openchallenges/infra/src/main.js "$@"
 }
 
+function model-ad-build-images {
+  nx run-many --target=build-image --projects=model-ad-* --parallel=3
+}
+
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
