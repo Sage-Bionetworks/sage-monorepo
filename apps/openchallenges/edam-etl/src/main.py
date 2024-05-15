@@ -5,6 +5,8 @@ from os import getenv
 from typing import Optional
 import mariadb 
 import sys
+import mysql.connector
+from sqlalchemy import create_engine
 
 # Get config from the environment variables
 
@@ -32,17 +34,47 @@ def connect_to_mariadb(username: str, password: str, port: str, host: str, datab
             database = database
         )
         print("Establishing a connection to the MariaDB Platform.")
+        
+        # Get the cursor
+        cur = conn.cursor()
+        print("Connection has been established to MariaDB Platform!")
+
+        # Commit the transaction
+        conn.commit()
+        print("The table edam_etl has been added to the edam database!")
+
+        # Create a SQLAlchemy engine from the MySQL Connector connection
+        engine = create_engine(f'mysql+mysqlconnector://{username}:{password}@{host}/{database}')
+
+        # Drop the table if it exists
+        cur.execute("DROP TABLE IF EXISTS edam_etl")
+
+        # Create the table with columns
+        cur.execute("""
+            CREATE TABLE edam_etl (
+                id INT PRIMARY KEY,
+                class_id VARCHAR(255),
+                preferred_label VARCHAR(255)
+            )
+        """)
+
+        #Load the concepts
+        df.to_sql(
+            name = "edam_etl",
+            con = engine,
+            if_exists = "append",
+            index = False
+        )
+
+        print("The table edam_etl has been populated with the EDAM concepts!")
+
+        # Close the connection
+        conn.close()
     
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
         sys.exit(1)
     
-    # Get the cursor
-    cur = conn.cursor()
-    print("Connection has been established to MariaDB Platform!")
-
-    #Load the concepts
-
 def download_edam_csv(url: str, version: str) -> Optional[bool]:
     """Download EDAM concepts from GitHub or S3 bucket (CSV file)"""
     print("Downloading the EDAM concepts from GitHub (CSV file)...")
@@ -134,7 +166,7 @@ def main() -> None:
     if download_edam_csv(url, VERSION):
         df: pd.DataFrame = transform_to_dataframe(VERSION)
         print_info_statistics(df)
-        connect_to_mariadb(USERNAME, PASSWORD, PORT, HOST, DB)
+    connect_to_mariadb(USERNAME, PASSWORD, PORT, HOST, DB, df)
 
 
 if __name__ == "__main__":
