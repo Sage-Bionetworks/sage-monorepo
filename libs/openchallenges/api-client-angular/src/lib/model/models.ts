@@ -26,7 +26,6 @@ export * from './edamConceptSearchQuery';
 export * from './edamConceptSort';
 export * from './edamConceptsPage';
 export * from './edamConceptsPageAllOf';
-export * from './edamOperation';
 export * from './edamSection';
 export * from './image';
 export * from './imageAspectRatio';

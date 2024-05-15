@@ -9,7 +9,6 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { EdamOperation } from './edamOperation';
 import { ChallengeCategory } from './challengeCategory';
 import { EdamConcept } from './edamConcept';
 import { SimpleChallengePlatform } from './simpleChallengePlatform';
@@ -72,7 +71,7 @@ export interface Challenge {
      * The number of times the challenge has been starred by users.
      */
     starredCount: number;
-    operation?: EdamOperation | null;
+    operation?: EdamConcept | null;
     /**
      * Datetime when the object was added to the database.
      */

@@ -28,6 +28,10 @@ export interface ChallengePlatformSearchQuery {
     sort?: ChallengePlatformSort;
     direction?: ChallengePlatformDirection | null;
     /**
+     * An array of challenge platform slugs used to filter the results.
+     */
+    slugs?: Array<string>;
+    /**
      * A string of search terms used to filter the results.
      */
     searchTerms?: string;
