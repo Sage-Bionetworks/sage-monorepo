@@ -117,7 +117,7 @@ $ speedtest
 ## Preparing the remote host - AWS EC2
 
 This section describes how to instantiate an AWS EC2 as the remote host. Steps outlined below will
-assume you have access to the Sage AWS Service Catalog.
+assume you have access to the [Sage AWS Service Catalog](https://help.sc.sageit.org/sc/Service-Catalog-Provisioning.938836322.html).
 
 ### Creating the EC2 instance
 
@@ -171,7 +171,9 @@ key.
 2. In the section **Resources**, click on the link for "EC2Instance".
 3. Click on the checkbox of the new EC2 instance created.
 4. Click on the button **Actions** > **Connect**.
-5. Click on **Connect**.
+    - The error "Failed to describe security groups" shown by AWS can be ignored.
+5. Click on the tab **Session Manager**.
+6. Click on **Connect**.
 
 ### Configuring the SSH public key on the EC2 instance
 
@@ -196,7 +198,7 @@ key.
 
 ### Configuring SSH on the local machine
 
-This section describes how to create a profile for the EC2 instance in your local `~./ssh/config`
+This section describes how to create a profile for the EC2 instance in your local `~/.ssh/config`
 file.
 
 !!! note
@@ -228,11 +230,12 @@ Then, on your local machine:
 
 ### Connecting to the EC2 instance with VS Code
 
-1. Open VS Code.
-2. Install the VS Code extension pack "Remote Development".
-3. Open the command palette with `Ctrl+Shit+P`.
-4. `Remote-SSH: Connect to Host...` > Select the host.
-5. Answer the prompts
+1. Connect to the [Sage VPN](https://sagebionetworks.jira.com/wiki/spaces/IT/pages/1705246745/AWS+Client+VPN+User+Guide).
+2. Open VS Code.
+3. Install the VS Code extension pack "Remote Development".
+4. Open the command palette with `Ctrl+Shit+P`.
+5. `Remote-SSH: Connect to Host...` > Select the host.
+6. Answer the prompts
 
 You are now connected to the EC2 instance! 🚀
 
