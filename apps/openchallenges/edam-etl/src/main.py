@@ -21,7 +21,7 @@ PORT = getenv("PORT")
 DB = getenv("DB")
 HOST = getenv("HOST")
 
-def connect_to_mariadb(username: str, password: str, port: str, host: str, database: str) -> None:
+def connect_to_mariadb(username: str, password: str, port: str, host: str, database: str, df: pd.DataFrame) -> None:
     """Connect to the MariaDB database"""
     try:
         conn = mariadb.connect(
@@ -40,6 +40,8 @@ def connect_to_mariadb(username: str, password: str, port: str, host: str, datab
     # Get the cursor
     cur = conn.cursor()
     print("Connection has been established to MariaDB Platform!")
+
+    #Load the concepts
 
 def download_edam_csv(url: str, version: str) -> Optional[bool]:
     """Download EDAM concepts from GitHub or S3 bucket (CSV file)"""
