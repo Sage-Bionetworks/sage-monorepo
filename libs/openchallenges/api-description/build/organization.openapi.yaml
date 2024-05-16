@@ -88,6 +88,11 @@ components:
       enum:
         - asc
         - desc
+    OrganizationId:
+      description: The unique identifier of an organization
+      type: integer
+      format: int64
+      example: 1
     OrganizationSearchQuery:
       type: object
       description: An organization search query.
@@ -118,6 +123,11 @@ components:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
           $ref: '#/components/schemas/OrganizationDirection'
+        ids:
+          description: An array of organization ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationId'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
@@ -161,11 +171,6 @@ components:
         - totalPages
         - hasNext
         - hasPrevious
-    OrganizationId:
-      description: The unique identifier of an organization
-      type: integer
-      format: int64
-      example: 1
     OrganizationLogin:
       description: The unique login of an organization.
       type: string

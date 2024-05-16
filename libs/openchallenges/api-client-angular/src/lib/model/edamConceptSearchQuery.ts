@@ -29,6 +29,10 @@ export interface EdamConceptSearchQuery {
     sort?: EdamConceptSort;
     direction?: EdamConceptDirection | null;
     /**
+     * An array of EDAM concept ids used to filter the results.
+     */
+    ids?: Array<number>;
+    /**
      * A string of search terms used to filter the results.
      */
     searchTerms?: string;

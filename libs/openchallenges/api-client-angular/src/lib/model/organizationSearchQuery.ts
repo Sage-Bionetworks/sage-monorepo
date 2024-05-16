@@ -38,6 +38,10 @@ export interface OrganizationSearchQuery {
     sort?: OrganizationSort;
     direction?: OrganizationDirection | null;
     /**
+     * An array of organization ids used to filter the results.
+     */
+    ids?: Array<number>;
+    /**
      * A string of search terms used to filter the results.
      */
     searchTerms?: string;
