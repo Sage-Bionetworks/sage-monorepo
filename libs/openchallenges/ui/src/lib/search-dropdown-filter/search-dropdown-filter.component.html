@@ -8,13 +8,18 @@
   [overlayOptions]="overlayOptions"
   [filter]="filter"
   (onFilter)="onSearch($event)"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="50"
+  [virtualScrollOptions]="scrollOptions"
+  [lazy]="lazy"
+  (onLazyLoad)="onLazyLoad($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="header">
     <div class="custom-filter-container p-multiselect-filter-container">
       <input
         type="text"
-        role="textbox"
+        placeholder="search"
         class="custom-filter p-multiselect-filter p-inputtext p-component"
         autocomplete="on"
         [(ngModel)]="searchTerm"
@@ -23,6 +28,50 @@
       <span class="p-multiselect-filter-icon pi pi-search"></span>
     </div>
   </ng-template>
+
+  <!-- loader template with skeleton -->
+  <ng-template pTemplate="loader">
+    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+      </div>
+    </div>
+    <ng-template #noIconLoader>
+      <div *ngFor="let _ of [].constructor(5)" class="loader-container">
+        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <!-- Empty results templates -->
+  <ng-template pTemplate="empty">
+    <div *ngIf="options.length === 0 && isLoading; else noResults">
+      <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+        <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+          <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+          <p-skeleton width="12rem" height="1rem"></p-skeleton>
+        </div>
+      </div>
+      <ng-template #noIconLoader>
+        <div class="loader-container">
+          <p-skeleton
+            *ngFor="let _ of [].constructor(5)"
+            class="skeleton"
+            width="14rem"
+            height="1.3rem"
+            borderRadius="16px"
+          ></p-skeleton>
+        </div>
+      </ng-template>
+    </div>
+    <ng-template #noResults>
+      <div *ngIf="options.length === 0 && !isLoading">
+        <span>No results found</span>
+      </div>
+    </ng-template>
+  </ng-template>
+
   <!-- custom list items -->
   <ng-template let-option pTemplate="options">
     <div class="item-container">

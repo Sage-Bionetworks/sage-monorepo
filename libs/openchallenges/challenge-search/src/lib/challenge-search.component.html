@@ -74,50 +74,53 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ platformsFilter.label }}"
+        header="{{ dropdownFilters['platforms'].label }}"
         [toggleable]="true"
-        [collapsed]="platformsFilter.collapsed"
+        [collapsed]="dropdownFilters['platforms'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="platformsFilter.options"
+          [options]="dropdownFilters['platforms'].options"
           [selectedOptions]="selectedPlatforms"
-          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="platformsFilter.showAvatar"
+          placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['platforms'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
+          (lazyLoad)="onLazyLoad('platforms', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ inputDataTypesFilter.label }}"
+        header="{{ dropdownFilters['inputDataTypes'].label }}"
         [toggleable]="true"
-        [collapsed]="inputDataTypesFilter.collapsed"
+        [collapsed]="dropdownFilters['inputDataTypes'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="inputDataTypesFilter.options"
+          [options]="dropdownFilters['inputDataTypes'].options"
           [selectedOptions]="selectedInputDataTypes"
-          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="inputDataTypesFilter.showAvatar"
+          placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
+          (lazyLoad)="onLazyLoad('inputDataTypes', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ organizationsFilter.label }}"
+        header="{{ dropdownFilters['organizations'].label }}"
         [toggleable]="true"
-        [collapsed]="organizationsFilter.collapsed"
+        [collapsed]="dropdownFilters['organizations'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="organizationsFilter.options"
+          [options]="dropdownFilters['organizations'].options"
           [selectedOptions]="selectedOrgs"
-          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="organizationsFilter.showAvatar"
+          placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
+          (lazyLoad)="onLazyLoad('organizations', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
