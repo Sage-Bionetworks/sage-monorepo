@@ -17,7 +17,6 @@ The config of the config server lives in two files:
 This config server pulls the configuration of the OpenChallenges distributed system from two storage
 backends. By order of priority:
 
-- Vault
 - Git repository
 
 ## Git Storage Backend
@@ -44,11 +43,6 @@ After creating `.env` from `.env.example`, the variables shown below must be set
 
 - `GIT_PRIVATE_KEY`: The private SSH key previously generated. The key must be folded in one line by
   replacing line breaks by `\n`.
-
-
-## Vault Storage Backend
-
-TBA
 
 ## Test: Fetch the config of a component
 

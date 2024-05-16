@@ -213,10 +213,6 @@
       "label": "openchallenges-core-service",
       "onAutoForward": "silent"
     },
-    "8200": {
-      "label": "openchallenges-vault",
-      "onAutoForward": "silent"
-    },
     "8787": {
       "label": "openchallenges-rstudio",
       "onAutoForward": "silent"
