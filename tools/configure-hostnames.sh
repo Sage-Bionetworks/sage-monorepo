@@ -26,7 +26,6 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-service-registry"
   "127.0.0.1 openchallenges-thumbor"
   "127.0.0.1 openchallenges-user-service"
-  "127.0.0.1 openchallenges-vault"
   "127.0.0.1 openchallenges-zipkin"
   "127.0.0.1 schematic-api"
 )
