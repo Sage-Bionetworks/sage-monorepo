@@ -819,6 +819,11 @@ components:
           $ref: '#/components/schemas/ChallengePlatformSort'
         direction:
           $ref: '#/components/schemas/ChallengePlatformDirection'
+        slugs:
+          description: An array of challenge platform slugs used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/ChallengePlatformSlug'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
@@ -917,6 +922,11 @@ components:
           $ref: '#/components/schemas/EdamConceptSort'
         direction:
           $ref: '#/components/schemas/EdamConceptDirection'
+        ids:
+          description: An array of EDAM concept ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/EdamConceptId'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string
@@ -1047,6 +1057,11 @@ components:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
           $ref: '#/components/schemas/OrganizationDirection'
+        ids:
+          description: An array of organization ids used to filter the results.
+          type: array
+          items:
+            $ref: '#/components/schemas/OrganizationId'
         searchTerms:
           description: A string of search terms used to filter the results.
           type: string

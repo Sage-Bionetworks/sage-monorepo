@@ -38,6 +38,10 @@ public class OrganizationSearchQueryDto {
   @JsonProperty("direction")
   private OrganizationDirectionDto direction = null;
 
+  @JsonProperty("ids")
+  @Valid
+  private List<Long> ids = null;
+
   @JsonProperty("searchTerms")
   private String searchTerms;
 
@@ -189,6 +193,36 @@ public class OrganizationSearchQueryDto {
     this.direction = direction;
   }
 
+  public OrganizationSearchQueryDto ids(List<Long> ids) {
+    this.ids = ids;
+    return this;
+  }
+
+  public OrganizationSearchQueryDto addIdsItem(Long idsItem) {
+    if (this.ids == null) {
+      this.ids = new ArrayList<>();
+    }
+    this.ids.add(idsItem);
+    return this;
+  }
+
+  /**
+   * An array of organization ids used to filter the results.
+   *
+   * @return ids
+   */
+  @Schema(
+      name = "ids",
+      description = "An array of organization ids used to filter the results.",
+      required = false)
+  public List<Long> getIds() {
+    return ids;
+  }
+
+  public void setIds(List<Long> ids) {
+    this.ids = ids;
+  }
+
   public OrganizationSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
@@ -228,13 +262,21 @@ public class OrganizationSearchQueryDto {
             this.challengeContributionRoles, organizationSearchQuery.challengeContributionRoles)
         && Objects.equals(this.sort, organizationSearchQuery.sort)
         && Objects.equals(this.direction, organizationSearchQuery.direction)
+        && Objects.equals(this.ids, organizationSearchQuery.ids)
         && Objects.equals(this.searchTerms, organizationSearchQuery.searchTerms);
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        pageNumber, pageSize, categories, challengeContributionRoles, sort, direction, searchTerms);
+        pageNumber,
+        pageSize,
+        categories,
+        challengeContributionRoles,
+        sort,
+        direction,
+        ids,
+        searchTerms);
   }
 
   @Override
@@ -249,6 +291,7 @@ public class OrganizationSearchQueryDto {
         .append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
+    sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("}");
     return sb.toString();
