@@ -30,6 +30,10 @@ public class EdamConceptSearchQueryDto {
   @JsonProperty("direction")
   private EdamConceptDirectionDto direction = null;
 
+  @JsonProperty("ids")
+  @Valid
+  private List<Long> ids = null;
+
   @JsonProperty("searchTerms")
   private String searchTerms;
 
@@ -120,6 +124,36 @@ public class EdamConceptSearchQueryDto {
     this.direction = direction;
   }
 
+  public EdamConceptSearchQueryDto ids(List<Long> ids) {
+    this.ids = ids;
+    return this;
+  }
+
+  public EdamConceptSearchQueryDto addIdsItem(Long idsItem) {
+    if (this.ids == null) {
+      this.ids = new ArrayList<>();
+    }
+    this.ids.add(idsItem);
+    return this;
+  }
+
+  /**
+   * An array of EDAM concept ids used to filter the results.
+   *
+   * @return ids
+   */
+  @Schema(
+      name = "ids",
+      description = "An array of EDAM concept ids used to filter the results.",
+      required = false)
+  public List<Long> getIds() {
+    return ids;
+  }
+
+  public void setIds(List<Long> ids) {
+    this.ids = ids;
+  }
+
   public EdamConceptSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
@@ -187,13 +221,14 @@ public class EdamConceptSearchQueryDto {
         && Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize)
         && Objects.equals(this.sort, edamConceptSearchQuery.sort)
         && Objects.equals(this.direction, edamConceptSearchQuery.direction)
+        && Objects.equals(this.ids, edamConceptSearchQuery.ids)
         && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms)
         && Objects.equals(this.sections, edamConceptSearchQuery.sections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms, sections);
+    return Objects.hash(pageNumber, pageSize, sort, direction, ids, searchTerms, sections);
   }
 
   @Override
@@ -204,6 +239,7 @@ public class EdamConceptSearchQueryDto {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
+    sb.append("    ids: ").append(toIndentedString(ids)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("    sections: ").append(toIndentedString(sections)).append("\n");
     sb.append("}");

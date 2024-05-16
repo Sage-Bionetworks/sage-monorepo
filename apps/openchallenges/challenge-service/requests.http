@@ -112,9 +112,13 @@ GET {{basePath}}/challengePlatforms?sort=name
 
 GET {{basePath}}/challengePlatforms?searchTerms=synapse
 
-### Get a challenge platform by ID.
+### Get a challenge platform that matches a specific slug.
 
 GET {{basePath}}/challengePlatforms/synapse
+
+### List the challenge platforms by multiple slugs.
+
+GET {{basePath}}/challengePlatforms?slugs=synapse,kaggle
 
 ### List the challenge input data types.
 
@@ -143,6 +147,11 @@ GET {{basePath}}/challengeAnalytics/challengesPerYear
 ### List the EDAM concepts
 
 GET {{basePath}}/edamConcepts
+
+### List the EDAM concepts by EDAM concept IDs
+
+GET {{basePath}}/edamConcepts?ids=1,100
+
 
 ### List the EDAM concepts that match the space-separated search terms "sequence".
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.annotation.Generated;
 import javax.validation.Valid;
@@ -27,6 +29,10 @@ public class ChallengePlatformSearchQueryDto {
 
   @JsonProperty("direction")
   private ChallengePlatformDirectionDto direction = null;
+
+  @JsonProperty("slugs")
+  @Valid
+  private List<String> slugs = null;
 
   @JsonProperty("searchTerms")
   private String searchTerms;
@@ -114,6 +120,36 @@ public class ChallengePlatformSearchQueryDto {
     this.direction = direction;
   }
 
+  public ChallengePlatformSearchQueryDto slugs(List<String> slugs) {
+    this.slugs = slugs;
+    return this;
+  }
+
+  public ChallengePlatformSearchQueryDto addSlugsItem(String slugsItem) {
+    if (this.slugs == null) {
+      this.slugs = new ArrayList<>();
+    }
+    this.slugs.add(slugsItem);
+    return this;
+  }
+
+  /**
+   * An array of challenge platform slugs used to filter the results.
+   *
+   * @return slugs
+   */
+  @Schema(
+      name = "slugs",
+      description = "An array of challenge platform slugs used to filter the results.",
+      required = false)
+  public List<String> getSlugs() {
+    return slugs;
+  }
+
+  public void setSlugs(List<String> slugs) {
+    this.slugs = slugs;
+  }
+
   public ChallengePlatformSearchQueryDto searchTerms(String searchTerms) {
     this.searchTerms = searchTerms;
     return this;
@@ -151,12 +187,13 @@ public class ChallengePlatformSearchQueryDto {
         && Objects.equals(this.pageSize, challengePlatformSearchQuery.pageSize)
         && Objects.equals(this.sort, challengePlatformSearchQuery.sort)
         && Objects.equals(this.direction, challengePlatformSearchQuery.direction)
+        && Objects.equals(this.slugs, challengePlatformSearchQuery.slugs)
         && Objects.equals(this.searchTerms, challengePlatformSearchQuery.searchTerms);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pageNumber, pageSize, sort, direction, searchTerms);
+    return Objects.hash(pageNumber, pageSize, sort, direction, slugs, searchTerms);
   }
 
   @Override
@@ -167,6 +204,7 @@ public class ChallengePlatformSearchQueryDto {
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
+    sb.append("    slugs: ").append(toIndentedString(slugs)).append("\n");
     sb.append("    searchTerms: ").append(toIndentedString(searchTerms)).append("\n");
     sb.append("}");
     return sb.toString();
