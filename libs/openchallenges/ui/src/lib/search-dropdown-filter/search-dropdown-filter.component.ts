@@ -25,7 +25,6 @@ import { SkeletonModule } from 'primeng/skeleton';
 })
 export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) options!: Filter[];
-  @Input({ required: false }) optionsPerPage = 10;
   @Input({ required: true }) selectedOptions!: any[];
   @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
@@ -35,7 +34,6 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
   @Output() lazyLoad = new EventEmitter<any>();
-  @Output() loadedPageChange = new EventEmitter<number>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -50,16 +48,10 @@ export class SearchDropdownFilterComponent implements OnInit {
   searchTerm = '';
   filter = true;
 
-  loadedPages = new Set();
+  isLoading = false;
 
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
-
-    // make sure the input page size is valid
-    this.optionsPerPage =
-      Number.isInteger(this.optionsPerPage) && this.optionsPerPage >= 0
-        ? this.optionsPerPage
-        : 10;
 
     if (this.filterByApiClient) {
       // if search field will be updated with query results
@@ -68,22 +60,14 @@ export class SearchDropdownFilterComponent implements OnInit {
     }
   }
 
-  onLazyLoad(event: MultiSelectLazyLoadEvent): void {
+  onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
-    // the loader animation is triggered every time lazy load initiated
-    const startPage = Math.floor(event.first / this.optionsPerPage);
-    const endPage = Math.floor(event.last / this.optionsPerPage);
-
-    for (let page = startPage; page <= endPage; page++) {
-      if (!this.loadedPages.has(page)) {
-        this.loadedPages.add(page);
-        this.loadedPageChange.emit(page);
-      }
-    }
-  }
-
-  clearLoadedPages(): void {
-    this.loadedPages.clear();
+    // trigger loader animation every time lazy load initiated
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, 250);
+    this.lazyLoad.emit(event);
   }
 
   onSearch(event: any): void {
