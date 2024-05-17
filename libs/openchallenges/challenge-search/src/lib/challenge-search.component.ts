@@ -146,19 +146,9 @@ export class ChallengeSearchComponent
   statusFilter = challengeStatusFilterPanel;
   submissionTypesFilter = challengeSubmissionTypesFilterPanel;
 
-  // set dropdown filter loaded pages
-  loadedPages: { [key: string]: Set<number> } = {
-    inputDataTypes: new Set(),
-    organizations: new Set(),
-    platforms: new Set(),
-  };
-
   // set dropdown filter placeholders
-  dropdownFilters: { [key: string]: FilterPanel } = {
-    inputDataTypes: challengeInputDataTypesFilterPanel,
-    organizations: challengeOrganizationsFilterPanel,
-    platforms: challengePlatformsFilterPanel,
-  };
+  dropdownFilters!: { [key: string]: FilterPanel };
+  loadedPages!: { [key: string]: Set<number> };
 
   // define selected filter values
   selectedCategories!: ChallengeCategory[];
@@ -249,6 +239,18 @@ export class ChallengeSearchComponent
     this.challengeService.listChallenges().subscribe((page) => {
       this.totalChallengesCount = page.totalElements;
     });
+
+    // update loaded pages and dropdown filters
+    this.loadedPages = {
+      inputDataTypes: new Set(),
+      organizations: new Set(),
+      platforms: new Set(),
+    };
+    this.dropdownFilters = {
+      inputDataTypes: challengeInputDataTypesFilterPanel,
+      organizations: challengeOrganizationsFilterPanel,
+      platforms: challengePlatformsFilterPanel,
+    };
 
     // load initial data and listen to fetch data as query changes
     this.loadInitialDropdownData();
