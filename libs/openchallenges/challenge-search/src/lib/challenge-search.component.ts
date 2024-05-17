@@ -147,7 +147,6 @@ export class ChallengeSearchComponent
 
   // set dropdown filter placeholders
   dropdownFilters!: { [key: string]: FilterPanel };
-  loadedPages!: { [key: string]: Set<number> };
 
   // define selected filter values
   selectedCategories!: ChallengeCategory[];
@@ -239,12 +238,7 @@ export class ChallengeSearchComponent
       this.totalChallengesCount = page.totalElements;
     });
 
-    // update loaded pages and dropdown filters
-    this.loadedPages = {
-      inputDataTypes: new Set(),
-      organizations: new Set(),
-      platforms: new Set(),
-    };
+    // update dropdown filters
     this.dropdownFilters = {
       inputDataTypes: challengeInputDataTypesFilterPanel,
       organizations: challengeOrganizationsFilterPanel,
