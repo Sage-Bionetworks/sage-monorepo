@@ -84,9 +84,6 @@ export class SearchDropdownFilterComponent implements OnInit {
   }
 
   onSearch(event: any): void {
-    if (this.lazy) {
-      this.loadedPages.clear();
-    }
     this.searchChange.emit(event.filter);
   }
 

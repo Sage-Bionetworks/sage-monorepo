@@ -364,7 +364,7 @@ export class ChallengeSearchComponent
     if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
     } else {
-      this.loadedPages[searchType].clear();
+      // reset options when search term is applied
       this.dropdownFilters[searchType].options = [];
       this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,
