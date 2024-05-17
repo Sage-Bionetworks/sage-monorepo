@@ -14,7 +14,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": ["./prepare-python.sh", 
+        "commands": ["./prepare-python.sh", 
         "pip wheel --no-cache-dir --use-pep517 'mariadb (==1.1.10)'"
       ],
         "cwd": "{projectRoot}"
