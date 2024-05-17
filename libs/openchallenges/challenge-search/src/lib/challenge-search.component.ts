@@ -362,12 +362,11 @@ export class ChallengeSearchComponent
     searchType: 'challenges' | ChallengeSearchDropdown,
     searched: string
   ): void {
-    this.loadedPages[searchType].clear();
-    this.dropdownFilters[searchType].options = [];
-
     if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
     } else {
+      this.loadedPages[searchType].clear();
+      this.dropdownFilters[searchType].options = [];
       this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,
       });
