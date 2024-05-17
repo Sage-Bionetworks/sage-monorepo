@@ -7,7 +7,7 @@
     "install-libmariadb-dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": 'pip wheel --no-cache-dir --use-pep517 "mariadb (==1.1.10)"',
+        "command": "pip wheel --no-cache-dir --use-pep517 'mariadb (==1.1.10)'",
         "cwd": "{projectRoot}"
       }
     },
