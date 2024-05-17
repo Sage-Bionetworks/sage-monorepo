@@ -4,6 +4,13 @@
   "sourceRoot": "apps/openchallenges/edam-etl/src",
   "projectType": "application",
   "targets": {
+    "install-libmariadb-dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sudo apt-get install libmariadb-dev",
+        "cwd": "{projectRoot}"
+      }
+    },
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
