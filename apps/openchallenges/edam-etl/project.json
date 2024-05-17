@@ -4,13 +4,6 @@
   "sourceRoot": "apps/openchallenges/edam-etl/src",
   "projectType": "application",
   "targets": {
-    "install-libmariadb-dev": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pip wheel --no-cache-dir --use-pep517 'mariadb (==1.1.10)'",
-        "cwd": "{projectRoot}"
-      }
-    },
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
@@ -21,7 +14,8 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./prepare-python.sh",
+        "command": ["./prepare-python.sh", 
+        "pip wheel --no-cache-dir --use-pep517 'mariadb (==1.1.10)'"],
         "cwd": "{projectRoot}"
       }
     },
