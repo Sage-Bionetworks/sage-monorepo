@@ -65,7 +65,6 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
-import { MultiSelectLazyLoadEvent } from 'primeng/multiselect';
 import { ChallengeSearchDropdown } from './challenge-search-dropdown';
 
 @Component({
@@ -113,6 +112,8 @@ export class ChallengeSearchComponent
 
   @ViewChild('calendar') calendar?: Calendar;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
+  @ViewChild('searchDropdownFilter', { static: false })
+  searchDropdownFilter!: SearchDropdownFilterComponent;
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -148,7 +149,6 @@ export class ChallengeSearchComponent
 
   // set dropdown filter placeholders
   dropdownFilters!: { [key: string]: FilterPanel };
-  loadedPages!: { [key: string]: Set<number> };
 
   // define selected filter values
   selectedCategories!: ChallengeCategory[];
@@ -240,12 +240,6 @@ export class ChallengeSearchComponent
       this.totalChallengesCount = page.totalElements;
     });
 
-    // update loaded pages and dropdown filters
-    this.loadedPages = {
-      inputDataTypes: new Set(),
-      organizations: new Set(),
-      platforms: new Set(),
-    };
     this.dropdownFilters = {
       inputDataTypes: challengeInputDataTypesFilterPanel,
       organizations: challengeOrganizationsFilterPanel,
@@ -362,9 +356,8 @@ export class ChallengeSearchComponent
     searchType: 'challenges' | ChallengeSearchDropdown,
     searched: string
   ): void {
-    this.loadedPages[searchType].clear();
-    this.dropdownFilters[searchType].options = [];
-
+    // this.loadedPages[searchType].clear();
+    // this.dropdownFilters[searchType].options = [];
     if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
     } else {
@@ -374,24 +367,11 @@ export class ChallengeSearchComponent
     }
   }
 
-  onLazyLoad(
-    dropdown: ChallengeSearchDropdown,
-    event: MultiSelectLazyLoadEvent
-  ): void {
-    const size = this.defaultPageSize;
-    const startPage = Math.floor(event.first / size);
-    const endPage = Math.floor(event.last / size);
-
-    // load next page as scrolling down
-    for (let page = startPage; page <= endPage; page++) {
-      if (!this.loadedPages[dropdown].has(page)) {
-        this.loadedPages[dropdown].add(page);
-        this.challengeSearchDataService.setSearchQuery(dropdown, {
-          pageNumber: page,
-          pageSize: size,
-        });
-      }
-    }
+  onLazyLoad(dropdown: ChallengeSearchDropdown, pageNumber: number): void {
+    console.log(pageNumber);
+    this.challengeSearchDataService.setSearchQuery(dropdown, {
+      pageNumber,
+    });
   }
 
   private loadInitialDropdownData(): void {

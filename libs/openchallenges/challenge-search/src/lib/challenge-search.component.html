@@ -80,13 +80,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['platforms'].options"
+          [optionsPerPage]="defaultPageSize"
           [selectedOptions]="selectedPlatforms"
           placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['platforms'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
-          (lazyLoad)="onLazyLoad('platforms', $event)"
+          (loadedPageChange)="onLazyLoad('platforms', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -97,13 +98,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['inputDataTypes'].options"
+          [optionsPerPage]="defaultPageSize"
           [selectedOptions]="selectedInputDataTypes"
           placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
-          (lazyLoad)="onLazyLoad('inputDataTypes', $event)"
+          (loadedPageChange)="onLazyLoad('inputDataTypes', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -114,13 +116,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['organizations'].options"
+          [optionsPerPage]="defaultPageSize"
           [selectedOptions]="selectedOrgs"
           placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
-          (lazyLoad)="onLazyLoad('organizations', $event)"
+          (loadedPageChange)="onLazyLoad('organizations', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
