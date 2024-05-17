@@ -4,13 +4,6 @@
   "sourceRoot": "apps/openchallenges/edam-etl/src",
   "projectType": "application",
   "targets": {
-    "install-mariadb": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./install_mariadb.sh",
-        "cwd": "{projectRoot}"
-      }
-    },
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
@@ -21,7 +14,12 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./prepare-python.sh",
+        "command": ["./prepare-python.sh", 
+        "sudo apt-get update",
+        "sudo apt-get install -y libmariadb-dev",
+        "pip install packaging",
+        "pip install --no-cache-dir --no-use-pep517 mariadb==1.1.10"
+      ],
         "cwd": "{projectRoot}"
       }
     },
