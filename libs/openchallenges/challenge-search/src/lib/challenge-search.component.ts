@@ -65,7 +65,6 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
-import { MultiSelectLazyLoadEvent } from 'primeng/multiselect';
 import { ChallengeSearchDropdown } from './challenge-search-dropdown';
 
 @Component({
@@ -373,24 +372,11 @@ export class ChallengeSearchComponent
     }
   }
 
-  onLazyLoad(
-    dropdown: ChallengeSearchDropdown,
-    event: MultiSelectLazyLoadEvent
-  ): void {
-    const size = this.defaultPageSize;
-    const startPage = Math.floor(event.first / size);
-    const endPage = Math.floor(event.last / size);
-
+  onLazyLoad(dropdown: ChallengeSearchDropdown, page: number): void {
     // load next page as scrolling down
-    for (let page = startPage; page <= endPage; page++) {
-      if (!this.loadedPages[dropdown].has(page)) {
-        this.loadedPages[dropdown].add(page);
-        this.challengeSearchDataService.setSearchQuery(dropdown, {
-          pageNumber: page,
-          pageSize: size,
-        });
-      }
-    }
+    this.challengeSearchDataService.setSearchQuery(dropdown, {
+      pageNumber: page,
+    });
   }
 
   private loadInitialDropdownData(): void {

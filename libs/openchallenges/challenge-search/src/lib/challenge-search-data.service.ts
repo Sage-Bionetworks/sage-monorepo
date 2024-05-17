@@ -6,6 +6,7 @@ import {
   distinctUntilChanged,
   map,
   switchMap,
+  tap,
 } from 'rxjs/operators';
 import {
   ChallengePlatformSearchQuery,
@@ -73,6 +74,7 @@ export class ChallengeSearchDataService {
     return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
       distinctUntilChanged(),
+      tap(() => console.log(1)),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
         // use the properties from new query to overwrite the ones from old query
         this.edamConceptService.listEdamConcepts({

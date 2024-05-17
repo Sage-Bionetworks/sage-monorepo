@@ -25,6 +25,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 })
 export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) options!: Filter[];
+  @Input({ required: true }) optionsPerPage!: number;
   @Input({ required: true }) selectedOptions!: any[];
   @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
@@ -33,7 +34,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
-  @Output() lazyLoad = new EventEmitter<any>();
+  @Output() pageChange = new EventEmitter<number>();
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -49,6 +50,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   filter = true;
 
   isLoading = false;
+  loadedPages = new Set();
 
   ngOnInit(): void {
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
@@ -63,18 +65,35 @@ export class SearchDropdownFilterComponent implements OnInit {
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
     // trigger loader animation every time lazy load initiated
-    this.isLoading = true;
-    setTimeout(() => {
-      this.isLoading = false;
-    }, 250);
-    this.lazyLoad.emit(event);
+
+    const startPage = Math.floor(event.first / this.optionsPerPage);
+    const endPage = Math.floor(event.last / this.optionsPerPage);
+
+    // load next page as scrolling down
+    for (let page = startPage; page <= endPage; page++) {
+      if (!this.loadedPages.has(page)) {
+        this.loadedPages.add(page);
+
+        this.isLoading = true;
+        setTimeout(() => {
+          this.isLoading = false;
+        }, 250);
+        this.pageChange.emit(page);
+      }
+    }
   }
 
   onSearch(event: any): void {
+    if (this.lazy) {
+      this.loadedPages.clear();
+    }
     this.searchChange.emit(event.filter);
   }
 
   onCustomSearch(): void {
+    if (this.lazy) {
+      this.loadedPages.clear();
+    }
     this.searchChange.emit(this.searchTerm);
   }
 
