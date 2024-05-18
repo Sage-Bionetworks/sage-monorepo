@@ -57,7 +57,7 @@ export class SearchDropdownFilterComponent implements OnInit {
       delay: this.showLoader ? this.delays : 0, // if no loader is applied, load data seamlessly
       showLoader: this.showLoader,
       step: this.optionsPerPage,
-      scrollHeight: `${this.itemHeight * this.optionsPerPage}px`, // set height dynamically
+      scrollHeight: `${this.itemHeight * this.optionsPerPage + 24}px`, // set height
     };
 
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
