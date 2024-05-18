@@ -75,12 +75,7 @@ export class SearchDropdownFilterComponent implements OnInit {
     // load next page as scrolling down
     for (let page = startPage; page <= endPage; page++) {
       if (!this.loadedPages.has(page)) {
-        // trigger loader
-        this.isLoading = true;
-        setTimeout(() => {
-          this.isLoading = false;
-        }, this.delays);
-
+        this.triggerLoader();
         this.loadedPages.add(page);
         this.pageChange.emit(page);
       }
@@ -94,10 +89,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   onCustomSearch(): void {
     if (this.lazy) {
       this.loadedPages.clear();
-      // this.isLoading = true;
-      // setTimeout(() => {
-      //   this.isLoading = false;
-      // }, 1000);
+      this.triggerLoader();
     }
     this.searchChange.emit(this.searchTerm);
   }
@@ -105,6 +97,13 @@ export class SearchDropdownFilterComponent implements OnInit {
   onChange(selected: string[] | number[]): void {
     // this filter will emit as string anyways
     this.selectionChange.emit(selected);
+  }
+
+  triggerLoader(): void {
+    this.isLoading = true;
+    setTimeout(() => {
+      this.isLoading = false;
+    }, this.delays);
   }
 
   getAvatar(option: Filter): Avatar {
