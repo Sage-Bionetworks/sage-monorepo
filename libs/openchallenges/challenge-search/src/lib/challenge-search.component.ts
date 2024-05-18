@@ -360,7 +360,7 @@ export class ChallengeSearchComponent
     } else {
       // reset options when search term is applied
       this.dropdownFilters[searchType].options = [];
-      this.challengeSearchDataService.setSearchQuery(searchType, {
+      this.challengeSearchDataService.setEdamConceptSearchQuery({
         searchTerms: searched,
       });
     }

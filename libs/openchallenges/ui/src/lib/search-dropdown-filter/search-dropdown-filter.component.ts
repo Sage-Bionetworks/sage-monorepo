@@ -32,6 +32,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Input({ required: false }) lazy = true;
+  @Input({ required: false }) showLoader = false;
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
@@ -47,13 +48,14 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   isLoading = false;
   loadedPages = new Set();
-  delays = 400;
+  delays = 100;
   scrollerOptions!: ScrollerOptions;
 
   ngOnInit(): void {
+    // if no loader is applied, load data seamlessly
     this.scrollerOptions = {
-      delay: this.delays,
-      showLoader: true,
+      delay: this.showLoader ? this.delays : 0,
+      showLoader: this.showLoader,
       step: this.optionsPerPage,
     };
 
@@ -75,7 +77,6 @@ export class SearchDropdownFilterComponent implements OnInit {
     // load next page as scrolling down
     for (let page = startPage; page <= endPage; page++) {
       if (!this.loadedPages.has(page)) {
-        this.triggerLoader();
         this.loadedPages.add(page);
         this.pageChange.emit(page);
       }
@@ -89,7 +90,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   onCustomSearch(): void {
     if (this.lazy) {
       this.loadedPages.clear();
-      this.triggerLoader();
+      this.triggerLoading();
     }
     this.searchChange.emit(this.searchTerm);
   }
@@ -99,7 +100,7 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.selectionChange.emit(selected);
   }
 
-  triggerLoader(): void {
+  triggerLoading(): void {
     this.isLoading = true;
     setTimeout(() => {
       this.isLoading = false;

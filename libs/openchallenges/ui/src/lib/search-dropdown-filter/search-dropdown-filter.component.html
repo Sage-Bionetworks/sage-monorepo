@@ -30,7 +30,7 @@
   </ng-template>
 
   <!-- custom loader template with skeleton -->
-  <ng-template #loaderTemplate>
+  <ng-template pTemplate="loader">
     <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
       <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
         <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
@@ -42,12 +42,6 @@
         <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
       </div>
     </ng-template>
-  </ng-template>
-
-  <ng-template pTemplate="loader">
-    <ng-container *ngIf="isLoading">
-      <ng-container *ngTemplateOutlet="loaderTemplate"></ng-container>
-    </ng-container>
   </ng-template>
 
   <!-- empty results templates -->
