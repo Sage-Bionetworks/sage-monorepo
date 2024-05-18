@@ -374,23 +374,63 @@ export class ChallengeSearchComponent
     });
   }
 
+  // private setSelectedDropdownData(): void {
+  //   this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
+  //     ids: this.selectedInputDataTypes,
+  //   });
+  //   this.challengeSearchDataService.setSearchQuery('organizations', {
+  //     ids: this.selectedOrgs,
+  //   });
+  //   this.challengeSearchDataService.setSearchQuery('platforms', {
+  //     slugs: this.selectedPlatforms,
+  //   });
+  // }
+
+  // private clearSelectedDropdownData(): void {
+  //   this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
+  //     ids: this.selectedInputDataTypes,
+  //   });
+  //   this.challengeSearchDataService.setSearchQuery('organizations', {
+  //     ids: this.selectedOrgs,
+  //   });
+  //   this.challengeSearchDataService.setSearchQuery('platforms', {
+  //     slugs: this.selectedPlatforms,
+  //   });
+  // }
+
   private loadInitialDropdownData(): void {
+    const extraDefaultParams = {
+      inputDataTypes: {
+        ids: this.selectedInputDataTypes,
+        sections: [EdamSection.Data],
+      },
+      organizations: {
+        ids: this.selectedOrgs,
+      },
+      platforms: {
+        slugs: this.selectedPlatforms,
+      },
+    };
     const dropdowns = [
       'inputDataTypes',
       'organizations',
       'platforms',
     ] as ChallengeSearchDropdown[];
     dropdowns.forEach((dropdown) => {
-      const extraDefaultParams =
-        dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
+      // const extraDefaultParams =
+      //   dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
 
+      // TODO: add step to reset selection, otherwise all new query will have selected params
+      // TODO: check if selected data is appended and reserved while filter changes
+      // TODO: add validation when the selected values is invalid to avoid empty
       this.challengeSearchDataService
         .fetchData(dropdown, {
           pageSize: this.defaultDropdownOptionSize, // set constant pageSize to match lazyLoad
-          ...extraDefaultParams,
+          ...extraDefaultParams[dropdown],
         })
         .pipe(takeUntil(this.destroy))
         .subscribe((newOptions) => {
+          console.log(newOptions);
           // update filter options by taking unique filter values
           this.dropdownFilters[dropdown].options = unionWith(
             this.dropdownFilters[dropdown].options,
