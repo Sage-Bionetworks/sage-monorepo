@@ -132,6 +132,7 @@ export class ChallengeSearchComponent
   // set default values
   defaultPageNumber = 0;
   defaultPageSize = 24;
+  defaultDropdownOptionSize = 5;
   defaultSelectedYear = undefined;
   defaultSortedBy: ChallengeSort = 'relevance';
 
@@ -385,7 +386,7 @@ export class ChallengeSearchComponent
 
       this.challengeSearchDataService
         .fetchData(dropdown, {
-          pageSize: this.defaultPageSize, // set constant pageSize to match lazyLoad
+          pageSize: this.defaultDropdownOptionSize, // set constant pageSize to match lazyLoad
           ...extraDefaultParams,
         })
         .pipe(takeUntil(this.destroy))

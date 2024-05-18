@@ -80,7 +80,7 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['platforms'].options"
-          [optionsPerPage]="defaultPageSize"
+          [optionsPerPage]="defaultDropdownOptionSize"
           [selectedOptions]="selectedPlatforms"
           placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['platforms'].showAvatar"
@@ -98,7 +98,7 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['inputDataTypes'].options"
-          [optionsPerPage]="defaultPageSize"
+          [optionsPerPage]="defaultDropdownOptionSize"
           [selectedOptions]="selectedInputDataTypes"
           placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
@@ -116,7 +116,7 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['organizations'].options"
-          [optionsPerPage]="defaultPageSize"
+          [optionsPerPage]="defaultDropdownOptionSize"
           [selectedOptions]="selectedOrgs"
           placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['organizations'].showAvatar"
