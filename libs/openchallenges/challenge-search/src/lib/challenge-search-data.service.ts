@@ -72,9 +72,7 @@ export class ChallengeSearchDataService {
   getEdamConcepts(newQuery: EdamConceptSearchQuery): Observable<Filter[]> {
     return this.edamConceptSearchQuery.pipe(
       debounceTime(400),
-      distinctUntilChanged(
-        (prev, curr) => prev.searchTerms === curr.searchTerms
-      ),
+      distinctUntilChanged(),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
         // use the properties from new query to overwrite the ones from old query
         this.edamConceptService.listEdamConcepts({
