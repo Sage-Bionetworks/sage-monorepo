@@ -31,53 +31,54 @@
 
   <!-- custom loader template with skeleton -->
   <ng-template #loaderTemplate>
-    <ng-container *ngIf="isLoading">
-      <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-        <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
-          <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
-          <p-skeleton width="12rem" height="1rem"></p-skeleton>
-        </div>
+    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton width="12rem" height="1rem"></p-skeleton>
       </div>
-      <ng-template #noIconLoader>
-        <div *ngFor="let _ of [].constructor(5)" class="loader-container">
-          <p-skeleton
-            class="skeleton"
-            width="14rem"
-            height="1.3rem"
-            borderRadius="16px"
-          ></p-skeleton>
-        </div>
-      </ng-template>
+    </div>
+    <ng-template #noIconLoader>
+      <div *ngFor="let _ of [].constructor(5)" class="loader-container">
+        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <ng-template pTemplate="loader">
+    <ng-container *ngIf="isLoading">
+      <ng-container *ngTemplateOutlet="loaderTemplate"></ng-container>
     </ng-container>
   </ng-template>
 
   <!-- Empty results templates -->
-  <ng-template pTemplate="empty">
-    <div *ngIf="isLoading; else noResults">
-      <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-        <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
-          <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
-          <p-skeleton width="12rem" height="1rem"></p-skeleton>
+  <!-- <ng-template pTemplate="empty">
+    <ng-container *ngIf="options.length === 0">
+      <div *ngIf="isLoading; else noResults">
+        <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+          <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+            <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+            <p-skeleton width="12rem" height="1rem"></p-skeleton>
+          </div>
         </div>
+        <ng-template #noIconLoader>
+          <div class="loader-container">
+            <p-skeleton
+              *ngFor="let _ of [].constructor(5)"
+              class="skeleton"
+              width="14rem"
+              height="1.3rem"
+              borderRadius="16px"
+            ></p-skeleton>
+          </div>
+        </ng-template>
       </div>
-      <ng-template #noIconLoader>
-        <div class="loader-container">
-          <p-skeleton
-            *ngFor="let _ of [].constructor(5)"
-            class="skeleton"
-            width="14rem"
-            height="1.3rem"
-            borderRadius="16px"
-          ></p-skeleton>
+      <ng-template #noResults>
+        <div *ngIf="!isLoading">
+          <span>No results found</span>
         </div>
       </ng-template>
-    </div>
-    <ng-template #noResults>
-      <div *ngIf="!isLoading">
-        <span>No results found</span>
-      </div>
-    </ng-template>
-  </ng-template>
+    </ng-container>
+  </ng-template> -->
 
   <!-- custom list items -->
   <ng-template let-option pTemplate="options">
