@@ -10,7 +10,7 @@
   (onFilter)="onSearch($event)"
   [virtualScroll]="true"
   [virtualScrollItemSize]="50"
-  [virtualScrollOptions]="scrollOptions"
+  [virtualScrollOptions]="scrollerOptions"
   [lazy]="lazy"
   (onLazyLoad)="onLazyLoad($event)"
 >
@@ -29,24 +29,31 @@
     </div>
   </ng-template>
 
-  <!-- loader template with skeleton -->
-  <ng-template pTemplate="loader">
-    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
-        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
-        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+  <!-- custom loader template with skeleton -->
+  <ng-template #loaderTemplate>
+    <ng-container *ngIf="isLoading">
+      <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
+        <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+          <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+          <p-skeleton width="12rem" height="1rem"></p-skeleton>
+        </div>
       </div>
-    </div>
-    <ng-template #noIconLoader>
-      <div *ngFor="let _ of [].constructor(5)" class="loader-container">
-        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
-      </div>
-    </ng-template>
+      <ng-template #noIconLoader>
+        <div *ngFor="let _ of [].constructor(5)" class="loader-container">
+          <p-skeleton
+            class="skeleton"
+            width="14rem"
+            height="1.3rem"
+            borderRadius="16px"
+          ></p-skeleton>
+        </div>
+      </ng-template>
+    </ng-container>
   </ng-template>
 
   <!-- Empty results templates -->
   <ng-template pTemplate="empty">
-    <div *ngIf="options.length === 0 && isLoading; else noResults">
+    <div *ngIf="isLoading; else noResults">
       <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
         <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
           <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
@@ -66,7 +73,7 @@
       </ng-template>
     </div>
     <ng-template #noResults>
-      <div *ngIf="options.length === 0 && !isLoading">
+      <div *ngIf="!isLoading">
         <span>No results found</span>
       </div>
     </ng-template>

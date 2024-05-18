@@ -9,6 +9,7 @@ import {
   MultiSelectModule,
 } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
+import { ScrollerOptions } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -41,18 +42,21 @@ export class SearchDropdownFilterComponent implements OnInit {
     hideTransitionOptions: '0ms',
   };
 
-  scrollOptions = {
-    delay: 250,
-    showLoader: true,
-  };
-
   searchTerm = '';
   filter = true;
 
   isLoading = false;
   loadedPages = new Set();
+  delays = 400;
+  scrollerOptions!: ScrollerOptions;
 
   ngOnInit(): void {
+    this.scrollerOptions = {
+      delay: this.delays,
+      showLoader: true,
+      step: this.optionsPerPage,
+    };
+
     this.showAvatar = this.showAvatar ? this.showAvatar : false;
 
     if (this.filterByApiClient) {
@@ -65,19 +69,19 @@ export class SearchDropdownFilterComponent implements OnInit {
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
     // trigger loader animation every time lazy load initiated
-
     const startPage = Math.floor(event.first / this.optionsPerPage);
     const endPage = Math.floor(event.last / this.optionsPerPage);
 
     // load next page as scrolling down
     for (let page = startPage; page <= endPage; page++) {
       if (!this.loadedPages.has(page)) {
-        this.loadedPages.add(page);
-
+        // trigger loader
         this.isLoading = true;
         setTimeout(() => {
           this.isLoading = false;
-        }, 250);
+        }, this.delays);
+
+        this.loadedPages.add(page);
         this.pageChange.emit(page);
       }
     }
@@ -90,6 +94,10 @@ export class SearchDropdownFilterComponent implements OnInit {
   onCustomSearch(): void {
     if (this.lazy) {
       this.loadedPages.clear();
+      // this.isLoading = true;
+      // setTimeout(() => {
+      //   this.isLoading = false;
+      // }, 1000);
     }
     this.searchChange.emit(this.searchTerm);
   }
