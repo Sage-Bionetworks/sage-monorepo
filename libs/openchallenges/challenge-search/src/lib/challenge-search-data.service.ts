@@ -6,7 +6,6 @@ import {
   distinctUntilChanged,
   map,
   switchMap,
-  tap,
 } from 'rxjs/operators';
 import {
   ChallengePlatformSearchQuery,
@@ -72,19 +71,10 @@ export class ChallengeSearchDataService {
 
   getEdamConcepts(newQuery: EdamConceptSearchQuery): Observable<Filter[]> {
     return this.edamConceptSearchQuery.pipe(
-      tap((query) => {
-        console.log('Before debounce:', query);
-      }),
       debounceTime(400),
-      // distinctUntilChanged(
-      //   (prev, curr) => prev.searchTerms === curr.searchTerms
-      // ),
-      distinctUntilChanged(),
-
-      tap((query) => {
-        console.log('After debounce:', query);
-      }),
-      // debounceTime(400),
+      distinctUntilChanged(
+        (prev, curr) => prev.searchTerms === curr.searchTerms
+      ),
       switchMap((searchQuery: EdamConceptSearchQuery) =>
         // use the properties from new query to overwrite the ones from old query
         this.edamConceptService.listEdamConcepts({
