@@ -69,6 +69,20 @@ export class SearchDropdownFilterComponent implements OnInit {
     }
   }
 
+  get validSelectionCount(): number {
+    // preparing a set for quick lookup
+    const validOptionValues = new Set(
+      this.options.map((option) => option.value)
+    );
+
+    // count how many selected values
+    // exlude the invalid selected values if they are not in the option list
+    return this.selectedOptions.filter(
+      (option) =>
+        option !== null && option !== undefined && validOptionValues.has(option)
+    ).length;
+  }
+
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
     // trigger loader animation every time lazy load initiated

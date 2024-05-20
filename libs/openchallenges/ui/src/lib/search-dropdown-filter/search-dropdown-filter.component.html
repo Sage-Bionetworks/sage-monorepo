@@ -29,7 +29,7 @@
     </div>
   </ng-template>
 
-  <!-- custom loader template with skeleton -->
+  <!-- custom loader with skeleton -->
   <ng-template pTemplate="loader">
     <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
       <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
@@ -44,11 +44,17 @@
     </ng-template>
   </ng-template>
 
-  <!-- empty results templates -->
+  <!-- custom message for empty results -->
   <ng-template pTemplate="empty">
     <ng-container *ngIf="!isLoading">
       <span>No results found</span>
     </ng-container>
+  </ng-template>
+
+  <!-- custom label for the selected values -->
+  <ng-template pTemplate="selectedItems" let-option>
+    <div *ngIf="validSelectionCount > 0">{{ validSelectionCount }} items selected</div>
+    <div *ngIf="validSelectionCount === 0">{{ placeholder }}</div>
   </ng-template>
 
   <!-- custom list items -->
