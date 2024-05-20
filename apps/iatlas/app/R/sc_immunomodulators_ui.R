@@ -28,8 +28,11 @@ sc_immunomodulators_ui <- function(id){
                 shiny::checkboxGroupInput(
                   ns("datasets"),
                   "Choose dataset(s)",
-                  choices = c("MSK - SCLC" = "MSK",
-                              "Vanderbilt - colon polyps" = "Vanderbilt"),
+                  choices = c("Krishna - ccRCC" = "Krishna_2021",
+                              "MSK - SCLC" = "MSK",
+                              "Shiao - BRCA" = "Shiao_2024",
+                              "Vanderbilt - colon polyps" = "Vanderbilt"
+                  ),
                   selected = c("MSK", "Vanderbilt")
                 )
               ),
