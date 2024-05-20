@@ -368,69 +368,49 @@ export class ChallengeSearchComponent
   }
 
   onLazyLoad(dropdown: ChallengeSearchDropdown, page: number): void {
+    const query: any = { pageNumber: page };
+
+    if (page === 0) {
+      // reset ids and slugs params of dropdown search query
+      query.ids = undefined;
+      query.slugs = undefined;
+    }
     // load next page as scrolling down
-    this.challengeSearchDataService.setSearchQuery(dropdown, {
-      pageNumber: page,
+    this.challengeSearchDataService.setSearchQuery(dropdown, query);
+  }
+
+  private setSelectedDropdownData(): void {
+    this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
+      ids: this.selectedInputDataTypes,
+    });
+    this.challengeSearchDataService.setSearchQuery('organizations', {
+      ids: this.selectedOrgs,
+    });
+    this.challengeSearchDataService.setSearchQuery('platforms', {
+      slugs: this.selectedPlatforms,
     });
   }
 
-  // private setSelectedDropdownData(): void {
-  //   this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
-  //     ids: this.selectedInputDataTypes,
-  //   });
-  //   this.challengeSearchDataService.setSearchQuery('organizations', {
-  //     ids: this.selectedOrgs,
-  //   });
-  //   this.challengeSearchDataService.setSearchQuery('platforms', {
-  //     slugs: this.selectedPlatforms,
-  //   });
-  // }
-
-  // private clearSelectedDropdownData(): void {
-  //   this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
-  //     ids: this.selectedInputDataTypes,
-  //   });
-  //   this.challengeSearchDataService.setSearchQuery('organizations', {
-  //     ids: this.selectedOrgs,
-  //   });
-  //   this.challengeSearchDataService.setSearchQuery('platforms', {
-  //     slugs: this.selectedPlatforms,
-  //   });
-  // }
-
   private loadInitialDropdownData(): void {
-    const extraDefaultParams = {
-      inputDataTypes: {
-        ids: this.selectedInputDataTypes,
-        sections: [EdamSection.Data],
-      },
-      organizations: {
-        ids: this.selectedOrgs,
-      },
-      platforms: {
-        slugs: this.selectedPlatforms,
-      },
-    };
+    // query the dropdown filter option(s) pre-selected in url param
+    this.setSelectedDropdownData();
+
     const dropdowns = [
       'inputDataTypes',
       'organizations',
       'platforms',
     ] as ChallengeSearchDropdown[];
     dropdowns.forEach((dropdown) => {
-      // const extraDefaultParams =
-      //   dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
+      const extraDefaultParams =
+        dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
 
-      // TODO: add step to reset selection, otherwise all new query will have selected params
-      // TODO: check if selected data is appended and reserved while filter changes
-      // TODO: add validation when the selected values is invalid to avoid empty
       this.challengeSearchDataService
         .fetchData(dropdown, {
           pageSize: this.defaultDropdownOptionSize, // set constant pageSize to match lazyLoad
-          ...extraDefaultParams[dropdown],
+          ...extraDefaultParams,
         })
         .pipe(takeUntil(this.destroy))
         .subscribe((newOptions) => {
-          console.log(newOptions);
           // update filter options by taking unique filter values
           this.dropdownFilters[dropdown].options = unionWith(
             this.dropdownFilters[dropdown].options,
