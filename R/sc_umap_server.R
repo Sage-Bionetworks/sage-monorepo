@@ -8,12 +8,12 @@ sc_umap_server <- function(
 
       ns <- session$ns
 
-      umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_umap.feather") %>% dplyr::filter(dataset %in% input$datasets))
-      # umap_df <- shiny::reactive({
-      #   iatlasGraphQLClient::query_single_cell_seq_feature_values(
-      #     cohorts = input$datasets,
-      #     features = c("umap_1", "umap_2"))
-      # })
+      #umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_umap.feather") %>% dplyr::filter(dataset %in% input$datasets))
+      umap_df <- shiny::reactive({
+        iatlasGraphQLClient::query_single_cell_seq_feature_values(
+          cohorts = input$datasets,
+          features = c("umap_1", "umap_2"))
+      })
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
