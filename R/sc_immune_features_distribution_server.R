@@ -6,7 +6,17 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
       ns <- session$ns
 
       #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+
+      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps", "Shiao - BRCA", "Krishna - ccRCC"),
+                                                  c("MSK", "Vanderbilt", "Shiao_2024", "Krishna_2021")))
+      group2_display <- shiny::reactive({
+        iatlasGraphQLClient::query_tags(type = "parent_group") %>%
+          dplyr::filter(tag_name %in% colnames(clinical_info())) %>%
+          dplyr::select(tag_name, tag_short_display) %>%
+          dplyr::add_row(tag_name = "Tumor_tissue_type", tag_short_display ="Tumor tissue type") %>%
+          dplyr::add_row(tag_name = "Polyp_Histology", tag_short_display = "Polyp Histology")
+      })
+
 
       plot_function <- shiny::reactive({
         switch(

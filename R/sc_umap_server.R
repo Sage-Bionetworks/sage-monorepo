@@ -16,7 +16,8 @@ sc_umap_server <- function(
       })
 
       #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps"), c("MSK", "Vanderbilt")))
+      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps", "Shiao - BRCA", "Krishna - ccRCC"),
+                                                  c("MSK", "Vanderbilt", "Shiao_2024", "Krishna_2021")))
       link_to_cellxgene <- shiny::reactive(setNames(c("<a href = 'https://cellxgene.cziscience.com/e/76347874-8801-44bf-9aea-0da21c78c430.cxg/'>Explore in CELLxGENE</a>",
                                                       "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>"),
                                                     c("MSK", "Vanderbilt")))
