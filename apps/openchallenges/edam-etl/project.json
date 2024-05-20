@@ -14,11 +14,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./prepare-python.sh", 
-        "sudo apt-get update",
-        "sudo apt-get install -y libmariadb-dev",
-        "pip install packaging",
-        "pip install --no-cache-dir --no-use-pep517 mariadb==1.1.10"
+        "command": ["./prepare-python.sh"
       ],
         "cwd": "{projectRoot}"
       }
