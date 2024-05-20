@@ -17,4 +17,3 @@ poetry install --with prod,dev
 sudo apt-get update
 sudo apt-get install -y libmariadb-dev
 pip install packaging
-poetry run pip wheel --no-cache-dir --use-pep517 'mariadb (==1.1.10)'
