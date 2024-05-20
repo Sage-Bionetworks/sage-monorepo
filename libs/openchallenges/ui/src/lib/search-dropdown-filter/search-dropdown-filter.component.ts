@@ -49,7 +49,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   isLoading = false;
   loadedPages = new Set();
-  delays = 100;
+  delays = 400;
   scrollerOptions!: ScrollerOptions;
 
   ngOnInit(): void {
