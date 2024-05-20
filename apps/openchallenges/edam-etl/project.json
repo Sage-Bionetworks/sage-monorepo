@@ -14,8 +14,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": ["./prepare-python.sh"
-      ],
+        "command": "./prepare-python.sh",
         "cwd": "{projectRoot}"
       }
     },
