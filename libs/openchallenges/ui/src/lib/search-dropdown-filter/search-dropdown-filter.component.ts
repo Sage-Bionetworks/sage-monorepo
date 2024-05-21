@@ -70,6 +70,10 @@ export class SearchDropdownFilterComponent implements OnInit {
   }
 
   get validSelectionCount(): number {
+    if (!this.options) {
+      return 0;
+    }
+
     // preparing a set for quick lookup
     const validOptionValues = new Set(
       this.options.map((option) => option.value)
