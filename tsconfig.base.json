@@ -45,11 +45,12 @@
         "libs/openchallenges/user-profile/src/index.ts"
       ],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
+      "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
+      "@sagebionetworks/shared/charts-ngx": ["libs/shared/typescript/charts-ngx/src/index.ts"],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],
-      "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/config": ["libs/model-ad/config/src/index.ts"]

@@ -1,0 +1,21 @@
+{
+  "name": "shared-typescript-charts-ngx",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/shared/typescript/charts-ngx/src",
+  "prefix": "sage",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/charts-ngx"],
+      "options": {
+        "jestConfig": "libs/shared/typescript/charts-ngx/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["type:util", "scope:shared", "language:typescript"],
+  "implicitDependencies": []
+}
