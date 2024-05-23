@@ -1,1 +1,2 @@
-export * from './lib/shared-typescript-charts';
+export * from './lib/boxplot-chart';
+export * from './lib/models';
