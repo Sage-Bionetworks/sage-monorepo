@@ -90,12 +90,14 @@ export class SearchDropdownFilterComponent implements OnInit {
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
     // trigger loader animation every time lazy load initiated
-    const startPage = Math.floor(event.first / this.optionsPerPage);
+    const startPage = Math.max(
+      0,
+      Math.floor(event.first / this.optionsPerPage)
+    ); // avoid negative pages
     const endPage = Math.floor(event.last / this.optionsPerPage);
 
     // load next page as scrolling down
     for (let page = startPage; page <= endPage; page++) {
-      // console.log(page);
       if (!this.loadedPages.has(page)) {
         this.loadedPages.add(page);
         this.pageChange.emit(page);
