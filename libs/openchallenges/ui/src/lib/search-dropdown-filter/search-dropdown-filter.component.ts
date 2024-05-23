@@ -95,6 +95,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
     // load next page as scrolling down
     for (let page = startPage; page <= endPage; page++) {
+      // console.log(page);
       if (!this.loadedPages.has(page)) {
         this.loadedPages.add(page);
         this.pageChange.emit(page);

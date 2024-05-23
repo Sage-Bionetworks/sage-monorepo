@@ -41,7 +41,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="incentivesFilter.options"
-          [selectedOptions]="selectedIncentives"
+          [selectedOptions]="selectedValues['incentives']"
           (selectionChange)="onParamChange({ incentives: $event })"
           inputId="{{ incentivesFilter.query }}"
         />
@@ -54,7 +54,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="statusFilter.options"
-          [selectedOptions]="selectedStatus"
+          [selectedOptions]="selectedValues['status']"
           (selectionChange)="onParamChange({ status: $event })"
           inputId="{{ statusFilter.query }}"
         />
@@ -67,7 +67,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
-          [selectedOptions]="selectedCategories"
+          [selectedOptions]="selectedValues['categories']"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
         />
@@ -81,7 +81,7 @@
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['platforms'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
-          [selectedOptions]="selectedPlatforms"
+          [selectedOptions]="selectedValues['platforms']"
           placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['platforms'].showAvatar"
           [filterByApiClient]="true"
@@ -99,7 +99,7 @@
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['inputDataTypes'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
-          [selectedOptions]="selectedInputDataTypes"
+          [selectedOptions]="selectedValues['inputDataTypes']"
           placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
           [filterByApiClient]="true"
@@ -117,7 +117,7 @@
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['organizations'].options"
           [optionsPerPage]="defaultDropdownOptionSize"
-          [selectedOptions]="selectedOrgs"
+          [selectedOptions]="selectedValues['organizations']"
           placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
@@ -165,7 +165,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="submissionTypesFilter.options"
-          [selectedOptions]="selectedSubmissionTypes"
+          [selectedOptions]="selectedValues['submissionTypes']"
           (selectionChange)="onParamChange({ submissionTypes: $event })"
           inputId="{{ submissionTypesFilter.query }}"
         />
