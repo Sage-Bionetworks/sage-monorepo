@@ -10,6 +10,7 @@ import {
 } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -38,6 +39,8 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
   @Output() pageChange = new EventEmitter<number>();
+
+  constructor(private _snackBar: MatSnackBar) {}
 
   overlayOptions = {
     showTransitionOptions: '0ms',
@@ -79,12 +82,23 @@ export class SearchDropdownFilterComponent implements OnInit {
       this.options.map((option) => option.value)
     );
 
-    // count how many selected values
-    // exlude the invalid selected values if they are not in the option list
-    return this.selectedOptions.filter(
+    // check if every selected option is valid
+    const allValid = this.selectedOptions.every(
       (option) =>
         option !== null && option !== undefined && validOptionValues.has(option)
-    ).length;
+    );
+
+    if (!allValid) {
+      // if any option is not valid, show an error message and return -1
+      this.openSnackBar(
+        'Unable to get the challenges. Please refresh the page and try again.'
+      );
+      // this.openSnackBar('Error: One or more selected options are invalid.');
+      return -1;
+    } else {
+      // If all options are valid, just return the length of selectedOptions
+      return this.selectedOptions.length;
+    }
   }
 
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
@@ -132,5 +146,11 @@ export class SearchDropdownFilterComponent implements OnInit {
       src: option.avatarUrl ? option.avatarUrl : '',
       size: 32,
     };
+  }
+
+  openSnackBar(message: string) {
+    this._snackBar.open(message, undefined, {
+      duration: 30000,
+    });
   }
 }
