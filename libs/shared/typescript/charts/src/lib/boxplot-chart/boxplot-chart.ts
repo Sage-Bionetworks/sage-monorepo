@@ -33,7 +33,7 @@ const defaultPointShape = 'circle';
 const defaultPointSize = 18;
 const defaultPointColor = '#8b8ad1';
 
-export class BoxplotVisualization {
+export class BoxplotChart {
   chart: ECharts | undefined;
 
   constructor(
