@@ -29,13 +29,13 @@
 
   <!-- custom loader with skeleton -->
   <ng-template pTemplate="loader">
-    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+    <div *ngIf="showAvatar; else noAvatarLoader" class="loader-with-avatar-container">
+      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-avatar">
         <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
         <p-skeleton width="12rem" height="1rem"></p-skeleton>
       </div>
     </div>
-    <ng-template #noIconLoader>
+    <ng-template #noAvatarLoader>
       <div *ngFor="let _ of [].constructor(5)" class="loader-container">
         <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
       </div>
