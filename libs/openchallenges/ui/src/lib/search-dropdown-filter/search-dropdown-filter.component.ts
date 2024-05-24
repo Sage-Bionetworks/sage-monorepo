@@ -33,7 +33,8 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Input({ required: false }) lazy = true;
   @Input({ required: false }) showLoader = false;
-  @Input({ required: false }) itemHeight = 50;
+  @Input({ required: false }) optionHeight = 50; // height of each option
+  @Input({ required: false }) optionSize = 10; // total number of displaying options
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
@@ -57,7 +58,7 @@ export class SearchDropdownFilterComponent implements OnInit {
       delay: this.showLoader ? this.delays : 0, // if no loader is applied, load data seamlessly
       showLoader: this.showLoader,
       step: this.optionsPerPage,
-      scrollHeight: `${this.itemHeight * this.optionsPerPage + 12}px`, // set height
+      scrollHeight: `${this.optionHeight * this.optionSize + 12}px`, // dynamically set scroller height
     };
 
     this.showAvatar = this.showAvatar ? this.showAvatar : false;

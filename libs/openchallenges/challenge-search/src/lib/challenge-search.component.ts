@@ -135,7 +135,7 @@ export class ChallengeSearchComponent
   // set default values
   defaultPageNumber = 0;
   defaultPageSize = 24;
-  defaultDropdownOptionSize = 5;
+  defaultDropdownOptionSize = 50;
   defaultSelectedYear = undefined;
   defaultSortedBy: ChallengeSort = 'relevance';
 
