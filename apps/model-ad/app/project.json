@@ -7,44 +7,72 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/apps/model-ad/app",
+        "outputPath": "dist/apps/model-ad/app/browser/browser",
         "index": "apps/model-ad/app/src/index.html",
-        "browser": "apps/model-ad/app/src/main.ts",
-        "polyfills": ["zone.js"],
+        "main": "apps/model-ad/app/src/main.ts",
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/model-ad/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/model-ad/app/src/favicon.ico", "apps/model-ad/app/src/assets"],
-        "styles": ["apps/model-ad/app/src/styles.scss"],
-        "scripts": [],
-        "server": "apps/model-ad/app/src/main.server.ts",
-        "prerender": true,
-        "ssr": {
-          "entry": "apps/model-ad/app/server.ts"
-        }
+        "assets": [
+          "apps/model-ad/app/src/assets",
+          "apps/model-ad/app/src/config",
+          "apps/model-ad/app/src/humans.txt",
+          "apps/model-ad/app/src/robots.txt",
+          "apps/model-ad/app/src/sitemap.xml",
+          {
+            "input": "libs/shared/typescript/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/model-ad/assets/src/assets",
+            "glob": "**/*",
+            "output": "model-ad-assets"
+          },
+          {
+            "input": "libs/model-ad/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          }
+        ],
+        "styles": [
+          "apps/model-ad/app/src/styles.scss",
+          "node_modules/primeicons/primeicons.css",
+          "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+          "node_modules/primeng/resources/primeng.min.css"
+        ],
+        "scripts": []
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "10kb"
             }
           ],
           "outputHashing": "all"
         },
         "development": {
+          "buildOptimizer": false,
           "optimization": false,
+          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "namedChunks": true
         }
       },
       "defaultConfiguration": "production"
@@ -72,7 +100,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/model-ad/app/jest.config.ts"
       }
@@ -84,5 +114,10 @@
         "staticFilePath": "dist/apps/model-ad/app/browser"
       }
     }
-  }
+  },
+  "implicitDependencies": [
+    "model-ad-styles",
+    "model-ad-themes",
+    "shared-typescript-assets"
+  ]
 }

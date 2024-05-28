@@ -1,0 +1,21 @@
+// @use 'libs/openchallenges/about/src/lib-theme' as openchallenges-about;
+@use 'libs/model-ad/ui/src/lib-theme' as model-ad-ui;
+// @use 'libs/openchallenges/challenge/src/lib-theme' as openchallenges-challenge;
+// @use 'libs/openchallenges/org-profile/src/lib-theme' as openchallenges-org-profile;
+// @use 'libs/openchallenges/user-profile/src/lib-theme' as openchallenges-user-profile;
+// @use 'libs/openchallenges/home/src/lib-theme' as openchallenges-home;
+// @use 'libs/openchallenges/team/src/lib-theme' as openchallenges-team;
+// @use 'libs/openchallenges/challenge-search/src/lib-theme' as challenge-search;
+// @use 'libs/openchallenges/not-found/src/lib-theme' as not-found;
+
+@mixin theme($theme) {
+  // @include openchallenges-challenge.theme($theme);
+  // @include openchallenges-org-profile.theme($theme);
+  // @include openchallenges-user-profile.theme($theme);
+  // @include openchallenges-about.theme($theme);
+  @include model-ad-ui.theme($theme);
+  // @include openchallenges-home.theme($theme);
+  // @include openchallenges-team.theme($theme);
+  // @include challenge-search.theme($theme);
+  // @include not-found.theme($theme);
+}
