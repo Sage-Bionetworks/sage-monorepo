@@ -17,17 +17,7 @@ const meta: Meta<BoxplotDirective> = {
     },
   },
   render: (args: BoxplotProps) => ({
-    props: {
-      points: args.points,
-      summaries: args.summaries,
-      title: args.title,
-      xAxisTitle: args.xAxisTitle,
-      yAxisTitle: args.yAxisTitle,
-      yAxisMin: args.yAxisMin,
-      yAxisMax: args.yAxisMax,
-      xAxisCategoryToTooltipText: args.xAxisCategoryToTooltipText,
-      pointTooltipFormatter: args.pointTooltipFormatter,
-    },
+    props: args,
     template: `<div sageBoxplot [points]="points" [summaries]="summaries" [title]="title" [xAxisTitle]="xAxisTitle" [yAxisTitle]="yAxisTitle" [yAxisMin]="yAxisMin" [yAxisMax]="yAxisMax" [xAxisCategoryToTooltipText]="xAxisCategoryToTooltipText" [pointTooltipFormatter]="pointTooltipFormatter"></div>`,
   }),
 };

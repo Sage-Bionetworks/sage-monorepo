@@ -6,7 +6,6 @@ import {
 } from 'echarts';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
-  addXAxisLabelTooltips,
   addXAxisValueToBoxplotSummaries,
   addXAxisValueToCategoryPoint,
   formatCategoryPointsForBoxplotTransform,
@@ -16,6 +15,7 @@ import {
   initChart,
   setNoDataOption,
 } from '../utils';
+import { XAxisLabelTooltips } from '../x-axis-label-tooltips';
 
 const titleTextStyle = {
   fontWeight: 700,
@@ -35,6 +35,7 @@ const defaultPointColor = '#8b8ad1';
 
 export class BoxplotChart {
   chart: ECharts | undefined;
+  xAxisLabelTooltips: XAxisLabelTooltips | undefined;
 
   constructor(
     chartDom: HTMLDivElement | HTMLCanvasElement,
@@ -42,15 +43,23 @@ export class BoxplotChart {
   ) {
     this.chart = initChart(chartDom);
     this.setOptions(boxplotProps);
-    if (boxplotProps.xAxisCategoryToTooltipText)
-      addXAxisLabelTooltips(
-        boxplotProps.xAxisCategoryToTooltipText,
-        this.chart
-      );
   }
 
   destroy() {
     this.chart?.dispose();
+  }
+
+  setXAxisLabelTooltips(xAxisCategoryToTooltipText?: Record<string, string>) {
+    if (!xAxisCategoryToTooltipText || !this.chart) return;
+    if (!this.xAxisLabelTooltips) {
+      this.xAxisLabelTooltips = new XAxisLabelTooltips(
+        this.chart,
+        xAxisCategoryToTooltipText
+      );
+    }
+    this.xAxisLabelTooltips.setXAxisCategoryToTooltipText(
+      xAxisCategoryToTooltipText
+    );
   }
 
   setOptions(boxplotProps: BoxplotProps) {
@@ -277,5 +286,6 @@ export class BoxplotChart {
     };
 
     this.chart.setOption(option);
+    this.setXAxisLabelTooltips(xAxisCategoryToTooltipText);
   }
 }
