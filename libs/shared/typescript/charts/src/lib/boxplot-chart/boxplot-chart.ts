@@ -101,29 +101,32 @@ export class BoxplotChart {
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
       : undefined;
-    const dataForDynamicBoxplots = formatCategoryPointsForBoxplotTransform(
-      dataForScatterPoints,
-      xAxisCategories
-    );
+    const dataForDynamicBoxplotTransforms =
+      formatCategoryPointsForBoxplotTransform(
+        dataForScatterPoints,
+        xAxisCategories
+      );
 
     const datasetOpts: DatasetComponentOption[] = [
-      // 0: static boxplots
       {
+        id: 'static-boxplot-summaries',
         dimensions: dataForStaticBoxplotSummaries
           ? Object.keys(dataForStaticBoxplotSummaries[0])
           : undefined,
         source: dataForStaticBoxplotSummaries,
       },
-      // 1: points
       {
+        id: 'points',
         dimensions: Object.keys(dataForScatterPoints[0]),
         source: dataForScatterPoints,
       },
-      // 2: points data formatted for boxplot transform
-      { source: dataForDynamicBoxplots },
-      // 3: dynamic boxplot data
       {
-        fromDatasetIndex: 2,
+        id: 'points-formatted-for-boxplot-transform',
+        source: dataForDynamicBoxplotTransforms,
+      },
+      {
+        id: 'dynamic-boxplot-summaries',
+        fromDatasetId: 'points-formatted-for-boxplot-transform',
         transform: {
           type: 'boxplot',
         },
@@ -131,37 +134,40 @@ export class BoxplotChart {
     ];
 
     const seriesOpts: SeriesOption[] = [];
+
+    // boxplots
+    const boxplotSeriesBase: SeriesOption = {
+      type: 'boxplot',
+      z: 1,
+      itemStyle: boxplotStyle,
+      silent: true,
+      tooltip: {
+        show: false,
+      },
+    };
     if (summaries) {
-      // static boxplots
       seriesOpts.push({
-        type: 'boxplot',
-        datasetIndex: 0,
+        ...boxplotSeriesBase,
+        datasetId: 'static-boxplot-summaries',
+        xAxisId: 'value-x-axis',
         encode: {
           x: 'xAxisValue',
           y: ['min', 'firstQuartile', 'median', 'thirdQuartile', 'max'],
         },
-        z: 1, // ensure that boxplot is shown beneath points
-        itemStyle: boxplotStyle,
-        silent: true,
       });
     } else {
-      // dynamic boxplots
       seriesOpts.push({
-        type: 'boxplot',
-        datasetIndex: 3,
-        tooltip: {
-          show: false,
-        },
-        z: 1, // ensure that boxplot is shown beneath points
-        itemStyle: boxplotStyle,
-        silent: true,
+        ...boxplotSeriesBase,
+        datasetId: 'dynamic-boxplot-summaries',
+        xAxisId: 'value-x-axis',
       });
     }
 
     // points
     seriesOpts.push({
       type: 'scatter',
-      datasetIndex: 1,
+      datasetId: 'points',
+      xAxisId: 'value-x-axis',
       encode: {
         x: 'xAxisValue',
         y: 'value',
@@ -223,6 +229,7 @@ export class BoxplotChart {
       //           value, not the displayed text.
       xAxis: [
         {
+          id: 'value-x-axis',
           type: 'value',
           axisLine: {
             onZero: false,
@@ -241,6 +248,7 @@ export class BoxplotChart {
           },
         },
         {
+          id: 'category-x-axis',
           type: 'category',
           data: xAxisCategories,
           axisLabel: {
