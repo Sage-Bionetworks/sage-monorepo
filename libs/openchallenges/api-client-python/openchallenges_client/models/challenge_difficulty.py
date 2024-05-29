@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeDifficulty(str, Enum):
     """
     The difficulty level of a challenge.
@@ -29,13 +26,11 @@ class ChallengeDifficulty(str, Enum):
     """
     allowed enum values
     """
-    GOOD_FOR_BEGINNERS = 'good_for_beginners'
-    INTERMEDIATE = 'intermediate'
-    ADVANCED = 'advanced'
+    GOOD_FOR_BEGINNERS = "good_for_beginners"
+    INTERMEDIATE = "intermediate"
+    ADVANCED = "advanced"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeDifficulty:
         """Create an instance of ChallengeDifficulty from a JSON string"""
         return ChallengeDifficulty(json.loads(json_str))
-
-

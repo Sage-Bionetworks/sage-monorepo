@@ -12,13 +12,10 @@
 """  # noqa: E501
 
 
+from __future__ import annotations
 import json
-import pprint
-import re  # noqa: F401
-from aenum import Enum, no_arg
-
-
-
+from enum import Enum
+from typing_extensions import Self
 
 
 class ChallengeSort(str, Enum):
@@ -29,16 +26,14 @@ class ChallengeSort(str, Enum):
     """
     allowed enum values
     """
-    CREATED = 'created'
-    RANDOM = 'random'
-    RELEVANCE = 'relevance'
-    STARRED = 'starred'
-    START_DATE = 'start_date'
-    END_DATE = 'end_date'
+    CREATED = "created"
+    RANDOM = "random"
+    RELEVANCE = "relevance"
+    STARRED = "starred"
+    START_DATE = "start_date"
+    END_DATE = "end_date"
 
     @classmethod
-    def from_json(cls, json_str: str) -> ChallengeSort:
+    def from_json(cls, json_str: str) -> Self:
         """Create an instance of ChallengeSort from a JSON string"""
-        return ChallengeSort(json.loads(json_str))
-
-
+        return cls(json.loads(json_str))

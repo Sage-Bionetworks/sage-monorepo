@@ -12,13 +12,10 @@
 """  # noqa: E501
 
 
+from __future__ import annotations
 import json
-import pprint
-import re  # noqa: F401
-from aenum import Enum, no_arg
-
-
-
+from enum import Enum
+from typing_extensions import Self
 
 
 class OrganizationSort(str, Enum):
@@ -29,14 +26,12 @@ class OrganizationSort(str, Enum):
     """
     allowed enum values
     """
-    CHALLENGE_COUNT = 'challenge_count'
-    CREATED = 'created'
-    NAME = 'name'
-    RELEVANCE = 'relevance'
+    CHALLENGE_COUNT = "challenge_count"
+    CREATED = "created"
+    NAME = "name"
+    RELEVANCE = "relevance"
 
     @classmethod
-    def from_json(cls, json_str: str) -> OrganizationSort:
+    def from_json(cls, json_str: str) -> Self:
         """Create an instance of OrganizationSort from a JSON string"""
-        return OrganizationSort(json.loads(json_str))
-
-
+        return cls(json.loads(json_str))

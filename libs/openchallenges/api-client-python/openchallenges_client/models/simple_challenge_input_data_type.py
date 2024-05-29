@@ -18,27 +18,37 @@ import re  # noqa: F401
 import json
 
 
-
 from pydantic import BaseModel, Field, StrictInt, constr, validator
+
 
 class SimpleChallengeInputDataType(BaseModel):
     """
     A simple challenge input data type.
     """
-    id: StrictInt = Field(..., description="The unique identifier of a challenge input data type.")
-    slug: constr(strict=True, max_length=30, min_length=3) = Field(..., description="The slug of the challenge input data type.")
-    name: constr(strict=True, max_length=50, min_length=3) = Field(..., description="The name of the challenge input data type.")
+
+    id: StrictInt = Field(
+        ..., description="The unique identifier of a challenge input data type."
+    )
+    slug: constr(strict=True, max_length=30, min_length=3) = Field(
+        ..., description="The slug of the challenge input data type."
+    )
+    name: constr(strict=True, max_length=50, min_length=3) = Field(
+        ..., description="The name of the challenge input data type."
+    )
     __properties = ["id", "slug", "name"]
 
-    @validator('slug')
+    @validator("slug")
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
+            )
         return value
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -57,10 +67,7 @@ class SimpleChallengeInputDataType(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -72,11 +79,7 @@ class SimpleChallengeInputDataType(BaseModel):
         if not isinstance(obj, dict):
             return SimpleChallengeInputDataType.parse_obj(obj)
 
-        _obj = SimpleChallengeInputDataType.parse_obj({
-            "id": obj.get("id"),
-            "slug": obj.get("slug"),
-            "name": obj.get("name")
-        })
+        _obj = SimpleChallengeInputDataType.parse_obj(
+            {"id": obj.get("id"), "slug": obj.get("slug"), "name": obj.get("name")}
+        )
         return _obj
-
-

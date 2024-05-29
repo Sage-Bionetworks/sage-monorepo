@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeInputDataTypeDirection(str, Enum):
     """
     The direction to sort the results by.
@@ -29,12 +26,10 @@ class ChallengeInputDataTypeDirection(str, Enum):
     """
     allowed enum values
     """
-    ASC = 'asc'
-    DESC = 'desc'
+    ASC = "asc"
+    DESC = "desc"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeInputDataTypeDirection:
         """Create an instance of ChallengeInputDataTypeDirection from a JSON string"""
         return ChallengeInputDataTypeDirection(json.loads(json_str))
-
-

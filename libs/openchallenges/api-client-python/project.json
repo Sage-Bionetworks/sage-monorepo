@@ -23,9 +23,50 @@
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry run black ./openchallenges_client --check"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry run black ./openchallenges_client"
+        ],
+        "cwd": "{projectRoot}"
+      }
+    },
+    "pylint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry run pylint ./openchallenges_client"
+        ],
+        "cwd": "{projectRoot}"
+      }
     }
   },
-  "tags": ["language:python", "package-manager:poetry"],
-  "implicitDependencies": ["openchallenges-api-description"]
+  "tags": [
+    "language:python",
+    "package-manager:poetry"
+  ],
+  "implicitDependencies": [
+    "openchallenges-api-description"
+  ]
 }

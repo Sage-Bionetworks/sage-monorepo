@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeInputDataTypeSort(str, Enum):
     """
     What to sort results by.
@@ -29,12 +26,10 @@ class ChallengeInputDataTypeSort(str, Enum):
     """
     allowed enum values
     """
-    NAME = 'name'
-    RELEVANCE = 'relevance'
+    NAME = "name"
+    RELEVANCE = "relevance"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeInputDataTypeSort:
         """Create an instance of ChallengeInputDataTypeSort from a JSON string"""
         return ChallengeInputDataTypeSort(json.loads(json_str))
-
-
