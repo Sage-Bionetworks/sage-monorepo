@@ -12,7 +12,7 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
-  getSortedUniqueValues,
+  getUniqueValues,
   initChart,
   setNoDataOption,
 } from '../utils';
@@ -73,11 +73,11 @@ export class BoxplotChart {
       return;
     }
 
-    const xAxisCategories = getSortedUniqueValues(
+    const xAxisCategories = getUniqueValues(
       points,
       'xAxisCategory'
     ) as string[];
-    const pointCategories = getSortedUniqueValues(
+    const pointCategories = getUniqueValues(
       points,
       'pointCategory'
     ) as string[];
@@ -86,7 +86,8 @@ export class BoxplotChart {
     const dataForScatterPoints = addXAxisValueToCategoryPoint(
       points,
       xAxisCategories,
-      pointCategories
+      pointCategories,
+      0.05
     );
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
@@ -177,7 +178,8 @@ export class BoxplotChart {
           if (pointTooltipFormatter) {
             return pointTooltipFormatter(param.data as CategoryPoint);
           }
-          return '';
+          const pt = param.data as CategoryPoint;
+          return `${pt.value}`;
         },
       },
     });
@@ -199,6 +201,9 @@ export class BoxplotChart {
           top: 'bottom',
         },
       ],
+      aria: {
+        enabled: true,
+      },
       dataset: datasetOpts,
       // Use two xAxes:
       //  - value: used to jitter points with multiple pointCategories, where

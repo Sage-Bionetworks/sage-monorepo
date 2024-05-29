@@ -12,7 +12,7 @@ import {
   getCategoryPointShape,
   getJitteredXValue,
   getPointStyleFromArray,
-  getSortedUniqueValues,
+  getUniqueValues,
 } from './boxplot-utils';
 
 const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
@@ -175,20 +175,30 @@ describe('boxplot-utils', () => {
     });
   });
 
-  describe('getSortedUniqueValues', () => {
-    it('should return sorted, unique values', () => {
+  describe('getUniqueValues', () => {
+    it('should return sorted, unique values when specified', () => {
       expect(
-        getSortedUniqueValues(pointsWithPointCategories, 'xAxisCategory')
+        getUniqueValues(pointsWithPointCategories, 'xAxisCategory', true)
       ).toEqual(['a', 'b', 'c']);
 
       expect(
-        getSortedUniqueValues(pointsWithPointCategories, 'pointCategory')
+        getUniqueValues(pointsWithPointCategories, 'pointCategory', true)
       ).toEqual(['X', 'Y', 'Z']);
+    });
+
+    it('should return unsorted, unique values by default', () => {
+      expect(
+        getUniqueValues(pointsWithPointCategories, 'xAxisCategory')
+      ).toEqual(['c', 'a', 'b']);
+
+      expect(
+        getUniqueValues(pointsWithPointCategories, 'pointCategory')
+      ).toEqual(['Y', 'X', 'Z']);
     });
 
     it('should handle all undefined values', () => {
       expect(
-        getSortedUniqueValues(pointsWithoutPointCategories, 'pointCategory')
+        getUniqueValues(pointsWithoutPointCategories, 'pointCategory')
       ).toEqual([]);
     });
   });
@@ -229,13 +239,15 @@ describe('boxplot-utils', () => {
         { xAxisCategory: 'a', value: 1, xAxisValue: 1 },
         { xAxisCategory: 'b', value: 2, xAxisValue: 2 },
       ];
-      expect(
-        addXAxisValueToCategoryPoint(
-          pointsWithoutPointCategories,
-          ['a', 'b', 'c'],
-          []
-        )
-      ).toEqual(valuePoints);
+
+      const updatedPoints = addXAxisValueToCategoryPoint(
+        pointsWithoutPointCategories,
+        ['a', 'b', 'c'],
+        []
+      );
+      valuePoints.forEach((valuePt, index) => {
+        expect(valuePt.xAxisValue).toBeCloseTo(updatedPoints[index].xAxisValue);
+      });
     });
 
     it('handles multiple points per pointCategory', () => {
@@ -250,13 +262,15 @@ describe('boxplot-utils', () => {
         { xAxisCategory: 'b', pointCategory: 'X', value: 8, xAxisValue: 1.8 },
         { xAxisCategory: 'b', pointCategory: 'Z', value: 9, xAxisValue: 2.2 },
       ];
-      expect(
-        addXAxisValueToCategoryPoint(
-          pointsWithPointCategories,
-          ['a', 'b', 'c'],
-          ['X', 'Y', 'Z']
-        )
-      ).toEqual(valuePoints);
+
+      const updatedPoints = addXAxisValueToCategoryPoint(
+        pointsWithPointCategories,
+        ['a', 'b', 'c'],
+        ['X', 'Y', 'Z']
+      );
+      valuePoints.forEach((valuePt, index) => {
+        expect(valuePt.xAxisValue).toBeCloseTo(updatedPoints[index].xAxisValue);
+      });
     });
   });
 

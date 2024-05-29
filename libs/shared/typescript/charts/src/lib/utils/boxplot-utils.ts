@@ -65,16 +65,17 @@ export const getCategoryPointColor = (
   );
 };
 
-export function getSortedUniqueValues(
+export function getUniqueValues(
   values: Record<string, unknown>[],
-  key: string
+  key: string,
+  sortValues = false
 ): unknown[] {
   const outputVals: unknown[] = [];
   values.forEach((val) => {
     const value = val[key];
     if (value && outputVals.indexOf(value) === -1) outputVals.push(value);
   });
-  outputVals.sort();
+  if (sortValues) outputVals.sort();
   return outputVals;
 }
 
@@ -92,9 +93,7 @@ export function getJitteredXValue(
   const startingXValue = xValue - totalDistance / 2;
   const pointOffset = (pointIndex * totalDistance) / (nPoints - 1);
   const newXValue = startingXValue + pointOffset;
-
-  // round to nearest hundredth decimal
-  return Math.round(newXValue * 100) / 100;
+  return newXValue;
 }
 
 function getXAxisValueOfXAxisCategory(
@@ -110,7 +109,8 @@ function getXAxisValueOfXAxisCategory(
 export function addXAxisValueToCategoryPoint(
   points: CategoryPoint[],
   xAxisCategories: string[],
-  pointCategories: string[]
+  pointCategories: string[],
+  spacing = 0.2
 ): CategoryAsValuePoint[] {
   return points.map((pt) => {
     let xAxisValue = getXAxisValueOfXAxisCategory(
@@ -122,7 +122,12 @@ export function addXAxisValueToCategoryPoint(
     if (pointCategories.length > 0 && pt.pointCategory) {
       const pointCategoryIndex = pointCategories.indexOf(pt.pointCategory);
       const nPoints = pointCategories.length;
-      xAxisValue = getJitteredXValue(xAxisValue, pointCategoryIndex, nPoints);
+      xAxisValue = getJitteredXValue(
+        xAxisValue,
+        pointCategoryIndex,
+        nPoints,
+        spacing
+      );
     }
 
     const valuePoint: CategoryAsValuePoint = { ...pt, xAxisValue };

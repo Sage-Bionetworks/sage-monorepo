@@ -1,10 +1,21 @@
-import { BoxplotProps, CategoryPoint } from '@sagebionetworks/shared/charts';
+import {
+  BoxplotProps,
+  CategoryPoint,
+  dynamicBoxplotPoints,
+  staticBoxplotPoints,
+  staticBoxplotSummaries,
+} from '@sagebionetworks/shared/charts';
 import { Meta, StoryObj } from '@storybook/angular';
 import { BoxplotDirective } from './boxplot.directive';
 
 const meta: Meta<BoxplotDirective> = {
   component: BoxplotDirective,
   title: 'directives/sageBoxplot',
+  argTypes: {
+    pointTooltipFormatter: {
+      control: { type: 'function' },
+    },
+  },
   render: (args: BoxplotProps) => ({
     props: {
       points: args.points,
@@ -31,46 +42,8 @@ export const NoData: Story = {
 
 export const StaticSummary: Story = {
   args: {
-    points: [
-      { xAxisCategory: 'CAT1', value: 25 },
-      { xAxisCategory: 'CAT2', value: 35 },
-      { xAxisCategory: 'CAT3', value: 45 },
-      { xAxisCategory: 'CAT4', value: 55 },
-    ],
-    summaries: [
-      {
-        xAxisCategory: 'CAT1',
-        min: 10,
-        firstQuartile: 20,
-        median: 30,
-        thirdQuartile: 40,
-        max: 50,
-      },
-      {
-        xAxisCategory: 'CAT2',
-        min: 15,
-        firstQuartile: 25,
-        median: 35,
-        thirdQuartile: 45,
-        max: 55,
-      },
-      {
-        xAxisCategory: 'CAT3',
-        min: 20,
-        firstQuartile: 30,
-        median: 40,
-        thirdQuartile: 50,
-        max: 60,
-      },
-      {
-        xAxisCategory: 'CAT4',
-        min: 20,
-        firstQuartile: 30,
-        median: 40,
-        thirdQuartile: 50,
-        max: 60,
-      },
-    ],
+    points: staticBoxplotPoints,
+    summaries: staticBoxplotSummaries,
     xAxisCategoryToTooltipText: {
       CAT1: 'Category 1',
       CAT2: 'Category 2',
@@ -90,26 +63,7 @@ export const StaticSummary: Story = {
 
 export const DynamicSummary: Story = {
   args: {
-    points: [
-      { xAxisCategory: 'Control1', value: 573, pointCategory: 'Female' },
-      { xAxisCategory: 'Control1', value: 317, pointCategory: 'Female' },
-      { xAxisCategory: 'Control1', value: 759, pointCategory: 'Female' },
-      { xAxisCategory: 'Control2', value: 809, pointCategory: 'Female' },
-      { xAxisCategory: 'Control2', value: 537, pointCategory: 'Female' },
-      { xAxisCategory: 'Control2', value: 590, pointCategory: 'Female' },
-      { xAxisCategory: 'Experimental', value: 596, pointCategory: 'Female' },
-      { xAxisCategory: 'Experimental', value: 416, pointCategory: 'Female' },
-      { xAxisCategory: 'Experimental', value: 626, pointCategory: 'Female' },
-      { xAxisCategory: 'Control1', value: 877, pointCategory: 'Male' },
-      { xAxisCategory: 'Control1', value: 699, pointCategory: 'Male' },
-      { xAxisCategory: 'Control1', value: 854, pointCategory: 'Male' },
-      { xAxisCategory: 'Control2', value: 550, pointCategory: 'Male' },
-      { xAxisCategory: 'Control2', value: 919, pointCategory: 'Male' },
-      { xAxisCategory: 'Control2', value: 407, pointCategory: 'Male' },
-      { xAxisCategory: 'Experimental', value: 982, pointCategory: 'Male' },
-      { xAxisCategory: 'Experimental', value: 336, pointCategory: 'Male' },
-      { xAxisCategory: 'Experimental', value: 856, pointCategory: 'Male' },
-    ],
+    points: dynamicBoxplotPoints,
     xAxisTitle: 'MODEL',
     yAxisTitle: '#objects/sqmm',
     pointTooltipFormatter: (pt: CategoryPoint) =>

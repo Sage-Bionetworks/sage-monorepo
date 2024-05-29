@@ -96,6 +96,12 @@ export function setNoDataOption(chart: ECharts) {
         fontSize: 18,
       },
     },
+    aria: {
+      enabled: true,
+      label: {
+        description: 'No data is currently available.',
+      },
+    },
   };
   chart.setOption(noDataOptions);
 }
