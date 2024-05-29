@@ -22,24 +22,12 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/model-ad/app/src/assets",
-          "apps/model-ad/app/src/config",
           "apps/model-ad/app/src/humans.txt",
           "apps/model-ad/app/src/robots.txt",
-          "apps/model-ad/app/src/sitemap.xml",
           {
             "input": "libs/shared/typescript/assets/src/assets",
             "glob": "**/*",
             "output": "assets"
-          },
-          {
-            "input": "libs/model-ad/assets/src/assets",
-            "glob": "**/*",
-            "output": "model-ad-assets"
-          },
-          {
-            "input": "libs/model-ad/assets/src",
-            "glob": "favicon.ico",
-            "output": ""
           }
         ],
         "styles": [
