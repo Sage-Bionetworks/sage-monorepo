@@ -20,7 +20,7 @@ import {
 export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   boxplot: BoxplotChart | undefined;
 
-  @Input() points: CategoryPoint[] = [];
+  @Input({ required: true }) points: CategoryPoint[] = [];
   @Input() summaries: CategoryBoxplotSummary[] | undefined;
   @Input() title = '';
   @Input() xAxisTitle = '';
