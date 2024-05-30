@@ -1,0 +1,5 @@
+@use 'libs/model-ad/ui/src/lib-theme' as model-ad-ui;
+
+@mixin theme($theme) {
+  @include model-ad-ui.theme($theme);
+}
