@@ -1,0 +1,13 @@
+{
+  "name": "model-ad-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/model-ad/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:styles",
+    "scope:model-ad",
+    "language:typescript"
+  ]
+}
