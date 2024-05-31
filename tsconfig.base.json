@@ -88,7 +88,10 @@
       ],
       "@sagebionetworks/model-ad/ui": [
         "libs/model-ad/ui/src/index.ts"
-      ]
+      ],
+      "@sagebionetworks/model-ad/not-found": [
+        "libs/model-ad/not-found/src/index.ts"
+      ],
     }
   },
   "exclude": [
