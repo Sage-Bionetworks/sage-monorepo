@@ -1,0 +1,27 @@
+{
+  "name": "model-ad-not-found",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/model-ad/not-found/src",
+  "prefix": "model-ad",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/model-ad/not-found"
+      ],
+      "options": {
+        "jestConfig": "libs/model-ad/not-found/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:model-ad",
+    "language:typescript"
+  ],
+  "implicitDependencies": []
+}
