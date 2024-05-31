@@ -79,21 +79,30 @@ export function getUniqueValues(
   return outputVals;
 }
 
+export function getRandomNumber(min: number, max: number) {
+  const range = max - min;
+  return Math.random() * range + min;
+}
+
 // Will calculate a new x-axis value for a point, such that the nPoints
 // will be equally spaced in the x direction around an initial xValue and this
-// point will be offset based on its index among those nPoints.
-export function getJitteredXValue(
+// point will be offset based on its index among those nPoints. Optionally, the points within
+// each category will also be jittered when there is >1 category.
+export function getOffsetAndJitteredXValue(
   xValue: number,
   pointIndex: number,
   nPoints: number,
-  spacing = 0.2
+  offset = 0.2,
+  jitterMax = 0 // set to positive value to jitter points
 ) {
   if (nPoints === 1) return xValue;
-  const totalDistance = Math.min(spacing * (nPoints - 1), 0.9);
+  const totalDistance = Math.min(offset * (nPoints - 1), 0.9);
   const startingXValue = xValue - totalDistance / 2;
   const pointOffset = (pointIndex * totalDistance) / (nPoints - 1);
-  const newXValue = startingXValue + pointOffset;
-  return newXValue;
+  const offsetXValue = startingXValue + pointOffset;
+  const jitter = getRandomNumber(jitterMax * -1, jitterMax);
+
+  return offsetXValue + jitter;
 }
 
 function getXAxisValueOfXAxisCategory(
@@ -110,7 +119,8 @@ export function addXAxisValueToCategoryPoint(
   points: CategoryPoint[],
   xAxisCategories: string[],
   pointCategories: string[],
-  spacing = 0.2
+  offset = 0.2,
+  jitterMax = 0 // set to positive value to jitter points
 ): CategoryAsValuePoint[] {
   return points.map((pt) => {
     let xAxisValue = getXAxisValueOfXAxisCategory(
@@ -122,11 +132,12 @@ export function addXAxisValueToCategoryPoint(
     if (pointCategories.length > 0 && pt.pointCategory) {
       const pointCategoryIndex = pointCategories.indexOf(pt.pointCategory);
       const nPoints = pointCategories.length;
-      xAxisValue = getJitteredXValue(
+      xAxisValue = getOffsetAndJitteredXValue(
         xAxisValue,
         pointCategoryIndex,
         nPoints,
-        spacing
+        offset,
+        jitterMax
       );
     }
 

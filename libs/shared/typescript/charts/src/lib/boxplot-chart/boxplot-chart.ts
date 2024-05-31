@@ -96,7 +96,8 @@ export class BoxplotChart {
       points,
       xAxisCategories,
       pointCategories,
-      0.05
+      0.1,
+      0.02
     );
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)

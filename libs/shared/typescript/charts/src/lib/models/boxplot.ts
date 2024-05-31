@@ -11,7 +11,7 @@ export type CategoryPoint = {
 
 export type CategoryAsValuePoint = CategoryPoint & {
   /* x-axis category for this point as a number based on
-  1-based indexing of the sorted, unique x-axis category values
+  1-based indexing of the unique x-axis category values
   if pointCategory values are also defined for the points, then value will be
   offset such that all pointCategories are equally spaced around the
   original index value */
@@ -32,7 +32,7 @@ export type CategoryBoxplotSummary = {
 
 export type CategoryAsValueBoxplotSummary = CategoryBoxplotSummary & {
   /* x-axis category for this point as a number based on
-  1-based indexing of the sorted, unique x-axis category values */
+  1-based indexing of the unique x-axis category values */
   xAxisValue: number;
 };
 

@@ -10,14 +10,17 @@ import {
   formatCategoryPointsForBoxplotTransform,
   getCategoryPointColor,
   getCategoryPointShape,
-  getJitteredXValue,
+  getOffsetAndJitteredXValue,
   getPointStyleFromArray,
+  getRandomNumber,
   getUniqueValues,
 } from './boxplot-utils';
 
 const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
   return undefined;
 });
+
+const defaultPtOffset = 0.2;
 
 const pointsWithPointCategories: CategoryPoint[] = [
   { xAxisCategory: 'c', pointCategory: 'Y', value: 1 },
@@ -203,32 +206,74 @@ describe('boxplot-utils', () => {
     });
   });
 
-  describe('getJitteredXValue', () => {
+  describe('getRandomNumber', () => {
+    it('returns point within expected range', () => {
+      const testPairs = [
+        { min: 0, max: 1 },
+        { min: -0.02, max: 0.02 },
+        { min: 100, max: 441 },
+        { min: -230, max: -5 },
+      ];
+
+      testPairs.forEach((testPair) => {
+        const min = testPair.min;
+        const max = testPair.max;
+
+        const num = getRandomNumber(min, max);
+        expect(num).toBeGreaterThan(min);
+        expect(num).toBeLessThan(max);
+      });
+    });
+  });
+
+  describe('getOffsetAndJitteredXValue', () => {
     it('1 point', () => {
-      expect(getJitteredXValue(2, 0, 1)).toEqual(2);
+      expect(getOffsetAndJitteredXValue(2, 0, 1)).toEqual(2);
     });
 
     it('2 points', () => {
-      expect(getJitteredXValue(2, 0, 2)).toEqual(1.9);
-      expect(getJitteredXValue(2, 1, 2)).toEqual(2.1);
+      expect(getOffsetAndJitteredXValue(2, 0, 2)).toEqual(1.9);
+      expect(getOffsetAndJitteredXValue(2, 1, 2)).toEqual(2.1);
     });
 
     it('3 points', () => {
-      expect(getJitteredXValue(2, 0, 3)).toEqual(1.8);
-      expect(getJitteredXValue(2, 1, 3)).toEqual(2);
-      expect(getJitteredXValue(2, 2, 3)).toEqual(2.2);
+      expect(getOffsetAndJitteredXValue(2, 0, 3)).toEqual(1.8);
+      expect(getOffsetAndJitteredXValue(2, 1, 3)).toEqual(2);
+      expect(getOffsetAndJitteredXValue(2, 2, 3)).toEqual(2.2);
     });
 
     it('4 points', () => {
-      expect(getJitteredXValue(2, 0, 4)).toEqual(1.7);
-      expect(getJitteredXValue(2, 1, 4)).toEqual(1.9);
-      expect(getJitteredXValue(2, 2, 4)).toEqual(2.1);
-      expect(getJitteredXValue(2, 3, 4)).toEqual(2.3);
+      expect(getOffsetAndJitteredXValue(2, 0, 4)).toEqual(1.7);
+      expect(getOffsetAndJitteredXValue(2, 1, 4)).toEqual(1.9);
+      expect(getOffsetAndJitteredXValue(2, 2, 4)).toEqual(2.1);
+      expect(getOffsetAndJitteredXValue(2, 3, 4)).toEqual(2.3);
     });
 
-    it('prevents overlap with next category when there are more subcategories than can be spaced using default spacing', () => {
-      expect(getJitteredXValue(2, 0, 6)).toEqual(1.55);
-      expect(getJitteredXValue(2, 5, 6)).toEqual(2.45);
+    it('prevents overlap with next category when there are more subcategories than can be offset using default offset', () => {
+      expect(getOffsetAndJitteredXValue(2, 0, 6)).toEqual(1.55);
+      expect(getOffsetAndJitteredXValue(2, 5, 6)).toEqual(2.45);
+    });
+
+    it('jitters xValues when jitterMax is greater than 0', () => {
+      const jitterMax = 0.02;
+      const offsetXValue = 1.9;
+      for (let i = 0; i < 10; i++) {
+        const xValue = getOffsetAndJitteredXValue(
+          2,
+          0,
+          2,
+          defaultPtOffset,
+          jitterMax
+        );
+        expect(xValue).toBeLessThan(offsetXValue + jitterMax);
+        expect(xValue).toBeGreaterThan(offsetXValue - jitterMax);
+      }
+    });
+
+    it('does not jitter xValues when there is only one category', () => {
+      expect(getOffsetAndJitteredXValue(2, 0, 1, defaultPtOffset, 0.1)).toEqual(
+        2
+      );
     });
   });
 
