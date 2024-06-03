@@ -17,7 +17,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "openchallenges",
+            "prefix": "modelAd",
             "style": "camelCase"
           }
         ],
@@ -25,7 +25,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "openchallenges",
+            "prefix": "model-ad",
             "style": "kebab-case"
           }
         ]

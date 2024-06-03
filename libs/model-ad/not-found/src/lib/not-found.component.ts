@@ -7,7 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FooterComponent } from '@sagebionetworks/model-ad/ui';
 
 @Component({
-  selector: 'openchallenges-not-found',
+  selector: 'model-ad-not-found',
   standalone: true,
   imports: [
     CommonModule,
