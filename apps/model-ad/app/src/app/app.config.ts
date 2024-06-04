@@ -15,6 +15,7 @@ import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 import { routes } from './app.routes';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
+// TODO: This index could be out of sync if we are not careful. Find a more elegant way.
 export const APP_BASE_URL_PROVIDER_INDEX = 1;
 
 export const appConfig: ApplicationConfig = {
