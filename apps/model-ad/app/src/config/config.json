@@ -5,5 +5,5 @@
   "dataUpdatedOn": "yyyy-mm-dd",
   "environment": "development",
   "googleTagManagerId": "",
-  "ssrApiUrl": "http://openchallenges-api-gateway:8082/api/v1"
+  "ssrApiUrl": "http://model-ad-api-gateway:8082/api/v1"
 }
