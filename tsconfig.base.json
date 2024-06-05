@@ -92,6 +92,9 @@
       "@sagebionetworks/model-ad/not-found": [
         "libs/model-ad/not-found/src/index.ts"
       ],
+      "@sagebionetworks/model-ad/config": [
+        "libs/model-ad/config/src/index.ts"
+      ],
     }
   },
   "exclude": [

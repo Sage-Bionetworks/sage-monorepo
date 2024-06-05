@@ -22,6 +22,7 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/model-ad/app/src/assets",
+          "apps/model-ad/app/src/config",
           "apps/model-ad/app/src/humans.txt",
           "apps/model-ad/app/src/robots.txt",
           {

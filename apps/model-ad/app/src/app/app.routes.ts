@@ -1,6 +1,6 @@
 import { Route } from '@angular/router';
 
-export const appRoutes: Route[] = [
+export const routes: Route[] = [
   {
     path: 'not-found',
     loadChildren: () =>

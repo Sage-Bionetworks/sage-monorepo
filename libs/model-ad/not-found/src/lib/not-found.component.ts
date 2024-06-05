@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-// import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/model-ad/ui';
+import { ConfigService } from '@sagebionetworks/model-ad/config';
 
 @Component({
   selector: 'model-ad-not-found',
@@ -26,11 +26,11 @@ export class NotFoundComponent {
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
 
-  constructor() {
-    this.appVersion = 'foo';
-    this.dataUpdatedOn = 'foo';
-    this.privacyPolicyUrl = 'foo';
-    this.termsOfUseUrl = 'foo';
-    this.apiDocsUrl = 'foo';
+  constructor(private readonly configService: ConfigService) {
+    this.appVersion = this.configService.config.appVersion;
+    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
+    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
+    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
+    this.apiDocsUrl = this.configService.config.apiDocsUrl;
   }
 }
