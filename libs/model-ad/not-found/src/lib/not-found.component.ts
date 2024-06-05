@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
-// import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { FooterComponent } from '@sagebionetworks/model-ad/ui';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
 
