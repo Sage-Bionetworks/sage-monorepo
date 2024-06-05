@@ -1,15 +1,15 @@
 {
-  "name": "shared-typescript-charts-ngx",
+  "name": "shared-typescript-charts-angular",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/shared/typescript/charts-ngx/src",
+  "sourceRoot": "libs/shared/typescript/charts-angular/src",
   "prefix": "sage",
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/charts-ngx"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/charts-angular"],
       "options": {
-        "jestConfig": "libs/shared/typescript/charts-ngx/jest.config.ts"
+        "jestConfig": "libs/shared/typescript/charts-angular/jest.config.ts"
       }
     },
     "lint": {
@@ -19,8 +19,8 @@
       "executor": "@storybook/angular:start-storybook",
       "options": {
         "port": 4400,
-        "configDir": "libs/shared/typescript/charts-ngx/.storybook",
-        "browserTarget": "shared-typescript-charts-ngx:build-storybook",
+        "configDir": "libs/shared/typescript/charts-angular/.storybook",
+        "browserTarget": "shared-typescript-charts-angular:build-storybook",
         "compodoc": false
       },
       "configurations": {
@@ -33,9 +33,9 @@
       "executor": "@storybook/angular:build-storybook",
       "outputs": ["{options.outputDir}"],
       "options": {
-        "outputDir": "dist/storybook/shared-typescript-charts-ngx",
-        "configDir": "libs/shared/typescript/charts-ngx/.storybook",
-        "browserTarget": "shared-typescript-charts-ngx:build-storybook",
+        "outputDir": "dist/storybook/shared-typescript-charts-angular",
+        "configDir": "libs/shared/typescript/charts-angular/.storybook",
+        "browserTarget": "shared-typescript-charts-angular:build-storybook",
         "compodoc": false
       },
       "configurations": {
@@ -47,12 +47,12 @@
     "static-storybook": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "shared-typescript-charts-ngx:build-storybook",
-        "staticFilePath": "dist/storybook/shared-typescript-charts-ngx"
+        "buildTarget": "shared-typescript-charts-angular:build-storybook",
+        "staticFilePath": "dist/storybook/shared-typescript-charts-angular"
       },
       "configurations": {
         "ci": {
-          "buildTarget": "shared-typescript-charts-ngx:build-storybook:ci"
+          "buildTarget": "shared-typescript-charts-angular:build-storybook:ci"
         }
       }
     }

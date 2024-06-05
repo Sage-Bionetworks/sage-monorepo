@@ -46,7 +46,9 @@
       ],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
       "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
-      "@sagebionetworks/shared/charts-ngx": ["libs/shared/typescript/charts-ngx/src/index.ts"],
+      "@sagebionetworks/shared/charts-angular": [
+        "libs/shared/typescript/charts-angular/src/index.ts"
+      ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"

@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-charts-ngx',
+  displayName: 'shared-typescript-charts-angular',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
-  coverageDirectory: '../../../../coverage/libs/shared/typescript/charts-ngx',
+  coverageDirectory: '../../../../coverage/libs/shared/typescript/charts-angular',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
