@@ -96,12 +96,44 @@
         "jestConfig": "apps/model-ad/app/jest.config.ts"
       }
     },
-    "serve-static": {
-      "executor": "@nx/web:file-server",
+    "server": {
+      "dependsOn": [
+        "build"
+      ],
+      "executor": "@angular-devkit/build-angular:server",
       "options": {
-        "buildTarget": "model-ad-app:build",
-        "staticFilePath": "dist/apps/model-ad/app/browser"
-      }
+        "outputPath": "dist/apps/model-ad/app/browser/server",
+        "main": "apps/model-ad/app/server.ts",
+        "tsConfig": "apps/model-ad/app/tsconfig.server.json",
+        "inlineStyleLanguage": "scss"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "model-ad-app:build:development",
+          "serverTarget": "model-ad-app:server:development"
+        },
+        "production": {
+          "browserTarget": "model-ad-app:build:production",
+          "serverTarget": "model-ad-app:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
     }
   },
   "implicitDependencies": [
