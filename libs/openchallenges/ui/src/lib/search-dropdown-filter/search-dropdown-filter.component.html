@@ -3,14 +3,12 @@
   [(ngModel)]="selectedOptions"
   (onChange)="onChange(selectedOptions)"
   [placeholder]="placeholder"
-  [maxSelectedLabels]="2"
-  selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
   [filter]="filter"
   (onFilter)="onSearch($event)"
   [virtualScroll]="true"
-  [virtualScrollItemSize]="50"
-  [virtualScrollOptions]="scrollOptions"
+  [virtualScrollItemSize]="optionHeight"
+  [virtualScrollOptions]="scrollerOptions"
   [lazy]="lazy"
   (onLazyLoad)="onLazyLoad($event)"
 >
@@ -29,47 +27,32 @@
     </div>
   </ng-template>
 
-  <!-- loader template with skeleton -->
+  <!-- custom loader with skeleton -->
   <ng-template pTemplate="loader">
-    <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
+    <div *ngIf="showAvatar; else noAvatarLoader" class="loader-with-avatar-container">
+      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-avatar">
         <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
         <p-skeleton width="12rem" height="1rem"></p-skeleton>
       </div>
     </div>
-    <ng-template #noIconLoader>
+    <ng-template #noAvatarLoader>
       <div *ngFor="let _ of [].constructor(5)" class="loader-container">
         <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
       </div>
     </ng-template>
   </ng-template>
 
-  <!-- Empty results templates -->
+  <!-- custom message for empty results -->
   <ng-template pTemplate="empty">
-    <div *ngIf="options.length === 0 && isLoading; else noResults">
-      <div *ngIf="showAvatar; else noIconLoader" class="loader-with-icon-container">
-        <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-icon">
-          <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
-          <p-skeleton width="12rem" height="1rem"></p-skeleton>
-        </div>
-      </div>
-      <ng-template #noIconLoader>
-        <div class="loader-container">
-          <p-skeleton
-            *ngFor="let _ of [].constructor(5)"
-            class="skeleton"
-            width="14rem"
-            height="1.3rem"
-            borderRadius="16px"
-          ></p-skeleton>
-        </div>
-      </ng-template>
-    </div>
-    <ng-template #noResults>
-      <div *ngIf="options.length === 0 && !isLoading">
-        <span>No results found</span>
-      </div>
-    </ng-template>
+    <ng-container *ngIf="!isLoading">
+      <span>No results found</span>
+    </ng-container>
+  </ng-template>
+
+  <!-- custom label for the selected values -->
+  <ng-template pTemplate="selectedItems" let-option>
+    <div *ngIf="validSelectionCount > 0">{{ validSelectionCount }} item(s) selected</div>
+    <div *ngIf="validSelectionCount === 0">{{ placeholder }}</div>
   </ng-template>
 
   <!-- custom list items -->

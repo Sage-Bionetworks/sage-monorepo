@@ -41,7 +41,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="incentivesFilter.options"
-          [selectedOptions]="selectedIncentives"
+          [selectedOptions]="selectedValues['incentives']"
           (selectionChange)="onParamChange({ incentives: $event })"
           inputId="{{ incentivesFilter.query }}"
         />
@@ -54,7 +54,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="statusFilter.options"
-          [selectedOptions]="selectedStatus"
+          [selectedOptions]="selectedValues['status']"
           (selectionChange)="onParamChange({ status: $event })"
           inputId="{{ statusFilter.query }}"
         />
@@ -67,7 +67,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
-          [selectedOptions]="selectedCategories"
+          [selectedOptions]="selectedValues['categories']"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
         />
@@ -80,13 +80,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['platforms'].options"
-          [selectedOptions]="selectedPlatforms"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['platforms']"
           placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['platforms'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
-          (lazyLoad)="onLazyLoad('platforms', $event)"
+          (pageChange)="onLazyLoad('platforms', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -97,13 +98,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['inputDataTypes'].options"
-          [selectedOptions]="selectedInputDataTypes"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['inputDataTypes']"
           placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
-          (lazyLoad)="onLazyLoad('inputDataTypes', $event)"
+          (pageChange)="onLazyLoad('inputDataTypes', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -114,13 +116,14 @@
       >
         <openchallenges-search-dropdown-filter
           [options]="dropdownFilters['organizations'].options"
-          [selectedOptions]="selectedOrgs"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['organizations']"
           placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
-          (lazyLoad)="onLazyLoad('organizations', $event)"
+          (pageChange)="onLazyLoad('organizations', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -162,7 +165,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="submissionTypesFilter.options"
-          [selectedOptions]="selectedSubmissionTypes"
+          [selectedOptions]="selectedValues['submissionTypes']"
           (selectionChange)="onParamChange({ submissionTypes: $event })"
           inputId="{{ submissionTypesFilter.query }}"
         />
