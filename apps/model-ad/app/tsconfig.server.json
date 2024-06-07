@@ -4,7 +4,13 @@
   "compilerOptions": {
     "outDir": "../../out-tsc/server",
     "target": "ES2022",
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "esModuleInterop": false,
   },
-  "files": ["src/main.server.ts", "server.ts"]
+  "files": [
+    "src/main.server.ts",
+    "server.ts"
+  ]
 }
