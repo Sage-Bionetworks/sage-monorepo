@@ -4,14 +4,14 @@ info:
   title: MODEL-AD REST API
   license:
     name: Apache 2.0
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt
   contact:
     name: Support
-    url: 'https://github.com/Sage-Bionetworks/sage-monorepo'
+    url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: 'https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png'
+    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
 servers:
-  - url: 'http://localhost/v1'
+  - url: http://localhost/v1
 tags:
   - name: Gene
     description: Operations about genes.
@@ -133,9 +133,7 @@ components:
           description: The HTTP status code
         detail:
           type: string
-          description: >-
-            A human readable explanation specific to this occurrence of the
-            problem
+          description: A human readable explanation specific to this occurrence of the problem
         type:
           type: string
           description: An absolute URI that identifies the problem type

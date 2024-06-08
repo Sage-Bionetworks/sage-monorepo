@@ -4,29 +4,17 @@
   "sourceRoot": "libs/model-ad/api-description/src",
   "projectType": "library",
   "targets": {
-    "build-individuals": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": [
-          "redocly bundle --output build/base.openapi.yaml src/base.openapi.yaml",
-          "redocly bundle --output build/api.openapi.yaml src/api.openapi.yaml"
-        ],
-        "parallel": true,
-        "cwd": "{projectRoot}"
-      }
-    },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "openapi-merge-cli --config openapi-merge.yaml",
+        "command": "redocly bundle --output build/openapi.yaml src/openapi.yaml",
         "cwd": "{projectRoot}"
-      },
-      "dependsOn": ["build-individuals"]
+      }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml build/api.openapi.yaml",
+        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
         "cwd": "{projectRoot}"
       },
       "dependsOn": ["build"]
