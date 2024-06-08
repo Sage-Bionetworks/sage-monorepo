@@ -1,0 +1,49 @@
+{
+  "name": "model-ad-api-description",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/model-ad/api-description/src",
+  "projectType": "library",
+  "targets": {
+    "build-individuals": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "redocly bundle --output build/base.openapi.yaml src/base.openapi.yaml",
+          "redocly bundle --output build/api.openapi.yaml src/api.openapi.yaml"
+        ],
+        "parallel": true,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "openapi-merge-cli --config openapi-merge.yaml",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["build-individuals"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml build/api.openapi.yaml",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["build"]
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write {projectRoot}"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --check {projectRoot}"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": []
+}
