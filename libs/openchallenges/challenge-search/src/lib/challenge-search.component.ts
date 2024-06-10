@@ -104,6 +104,7 @@ export class ChallengeSearchComponent
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
+  public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -180,6 +181,8 @@ export class ChallengeSearchComponent
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.enableOperationFilter =
+      this.configService.config.enableOperationFilter;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
