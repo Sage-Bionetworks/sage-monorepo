@@ -139,7 +139,7 @@
           placeholder="{{ dropdownFilters['operations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['operations'].showAvatar"
           [filterByApiClient]="true"
-          (selectionChange)="onParamChange({ organizations: $event })"
+          (selectionChange)="onParamChange({ operations: $event })"
           (searchChange)="onSearchChange('operations', $event)"
           (pageChange)="onLazyLoad('operations', $event)"
         />

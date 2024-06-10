@@ -235,6 +235,7 @@ export class ChallengeSearchComponent
         inputDataTypes: this.selectedValues['inputDataTypes'],
         maxStartDate: this.selectedMaxStartDate,
         minStartDate: this.selectedMinStartDate,
+        operations: this.selectedValues['operations'],
         organizations: this.selectedValues['organizations'],
         pageNumber: this.selectedPageNumber,
         pageSize: this.selectedPageSize,
