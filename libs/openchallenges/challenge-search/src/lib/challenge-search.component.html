@@ -128,6 +128,24 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
+        header="{{ dropdownFilters['operations'].label }}"
+        [toggleable]="true"
+        [collapsed]="dropdownFilters['operations'].collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [options]="dropdownFilters['operations'].options"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['operations']"
+          placeholder="{{ dropdownFilters['operations'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['operations'].showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onParamChange({ organizations: $event })"
+          (searchChange)="onSearchChange('operations', $event)"
+          (pageChange)="onLazyLoad('operations', $event)"
+        />
+      </p-panel>
+      <p-divider></p-divider>
+      <p-panel
         header="Challenge Year"
         [toggleable]="true"
         [collapsed]="startYearRangeFilter.collapsed"

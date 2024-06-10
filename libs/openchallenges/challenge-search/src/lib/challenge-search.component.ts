@@ -32,6 +32,7 @@ import {
   challengeCategoriesFilterPanel,
   challengeIncentivesFilterPanel,
   challengeInputDataTypesFilterPanel,
+  challengeOperationsFilterPanel,
   challengeOrganizationsFilterPanel,
   challengePlatformsFilterPanel,
   challengeStartYearRangeFilterPanel,
@@ -157,6 +158,7 @@ export class ChallengeSearchComponent
     categories: [] as ChallengeCategory[],
     incentives: [] as ChallengeIncentive[],
     inputDataTypes: [] as number[],
+    operations: [] as number[],
     organizations: [] as number[],
     platforms: [] as string[],
     status: [] as ChallengeStatus[],
@@ -251,6 +253,7 @@ export class ChallengeSearchComponent
     // update dropdown filters
     this.dropdownFilters = {
       inputDataTypes: challengeInputDataTypesFilterPanel,
+      operations: challengeOperationsFilterPanel,
       organizations: challengeOrganizationsFilterPanel,
       platforms: challengePlatformsFilterPanel,
     };
