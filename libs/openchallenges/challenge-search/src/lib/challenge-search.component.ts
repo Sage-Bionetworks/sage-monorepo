@@ -217,6 +217,9 @@ export class ChallengeSearchComponent
       this.selectedValues['inputDataTypes'] = this.splitParam(
         params['inputDataTypes']
       ).map((idString) => +idString);
+      this.selectedValues['operations'] = this.splitParam(
+        params['operations']
+      ).map((idString) => +idString);
       this.selectedValues['organizations'] = this.splitParam(
         params['organizations']
       ).map((idString) => +idString);
@@ -416,6 +419,9 @@ export class ChallengeSearchComponent
     this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
       ids: this.selectedValues['inputDataTypes'],
     });
+    this.challengeSearchDataService.setSearchQuery('operations', {
+      ids: this.selectedValues['operations'],
+    });
     this.challengeSearchDataService.setSearchQuery('organizations', {
       ids: this.selectedValues['organizations'],
     });
@@ -431,7 +437,11 @@ export class ChallengeSearchComponent
     // fetch and update dropdown options with new data for each dropdown category
     CHALLENGE_SEARCH_DROPDOWNS.forEach((dropdown) => {
       const extraDefaultParams =
-        dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
+        dropdown === 'inputDataTypes'
+          ? { sections: [EdamSection.Data] }
+          : dropdown === 'operations'
+          ? { sections: EdamSection.Operation }
+          : {};
 
       this.challengeSearchDataService
         .fetchData(dropdown, {

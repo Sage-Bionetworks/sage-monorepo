@@ -163,6 +163,7 @@ export class ChallengeSearchDataService {
   setSearchQuery(dropdown: ChallengeSearchDropdown, searchQuery = {}) {
     const setQueryMethods = {
       inputDataTypes: () => this.setEdamConceptSearchQuery(searchQuery),
+      operations: () => this.setEdamConceptSearchQuery(searchQuery),
       organizations: () => this.setOriganizationSearchQuery(searchQuery),
       platforms: () => this.setPlatformSearchQuery(searchQuery),
     };
@@ -173,6 +174,7 @@ export class ChallengeSearchDataService {
   fetchData(dropdown: ChallengeSearchDropdown, searchQuery = {}) {
     const fetchDataMethods = {
       inputDataTypes: () => this.getEdamConcepts(searchQuery),
+      operations: () => this.getEdamConcepts(searchQuery),
       organizations: () => this.getOriganizations(searchQuery),
       platforms: () => this.getPlatforms(searchQuery),
     };
