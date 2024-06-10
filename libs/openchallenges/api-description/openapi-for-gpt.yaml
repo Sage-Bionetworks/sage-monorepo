@@ -53,6 +53,13 @@ paths:
               maxLength: 30
               pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$'
               example: example-challenge-platform
+        - in: query
+          name: status
+          description: An array of challenge status used to filter the results.
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ChallengeStatus'
       responses:
         '200':
           content:
@@ -131,8 +138,8 @@ components:
         #   $ref: '#/components/schemas/ChallengeDescription'
         # doi:
         #   $ref: '#/components/schemas/ChallengeDoi'
-        # status:
-        #   $ref: '#/components/schemas/ChallengeStatus'
+        status:
+          $ref: '#/components/schemas/ChallengeStatus'
         # platform:
         #   $ref: '#/components/schemas/SimpleChallengePlatform'
         # websiteUrl:
@@ -170,7 +177,7 @@ components:
         - slug
         - name
         # - description
-        # - status
+        - status
         # - incentives
         # - submissionTypes
         # - starredCount
@@ -193,6 +200,14 @@ components:
       type: string
       minLength: 3
       maxLength: 255
+    ChallengeStatus:
+      description: The status of the challenge.
+      type: string
+      enum:
+        - upcoming
+        - active
+        - completed
+      example: active
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
