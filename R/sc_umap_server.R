@@ -12,11 +12,14 @@ sc_umap_server <- function(
       gene_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_msk_genes.feather"))
 
       #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps", "Shiao - BRCA", "Krishna - ccRCC"),
-                                                  c("MSK", "Vanderbilt", "Shiao_2024", "Krishna_2021")))
+      dataset_display <- shiny::reactive(setNames(c("Bi 2021 - ccRCC", "Krishna 2021 - ccRCC", "Li 2022 - ccRCC", "HTAN MSK - SCLC", "Shiao 2024- BRCA", "HTAN Vanderbilt - colon polyps"),
+                                                  c("Bi_2021", "Krishna_2021", "Li_2022", "MSK", "Shiao_2024", "Vanderbilt")))
       link_to_cellxgene <- shiny::reactive(setNames(c("<a href = 'https://cellxgene.cziscience.com/e/76347874-8801-44bf-9aea-0da21c78c430.cxg/'>Explore in CELLxGENE</a>",
-                                                      "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>"),
-                                                    c("MSK", "Vanderbilt")))
+                                                      "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>",
+                                                      "<a href = 'https://cellxgene.cziscience.com/e/bd65a70f-b274-4133-b9dd-0d1431b6af34.cxg/'>Explore in CELLxGENE</a>",
+                                                      "<a href = 'https://microenvironment-of-kidney-cancer.cellgeni.sanger.ac.uk/umap/'>Explore in CELLxGENE</a>",
+                                                      "<a href = 'https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#study-visualize'>Explore in Single Cell Portal</a>"),
+                                                    c("MSK", "Vanderbilt", "Krishna_2021", "Li_2022", "Bi_2021")))
       color_criteria <- shiny::reactive({
         shiny::req(umap_df(), input$color)
         dplyr::select(umap_df(), "group" = input$color, dataset)

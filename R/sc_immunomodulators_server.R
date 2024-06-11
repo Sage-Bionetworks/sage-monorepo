@@ -11,8 +11,8 @@ sc_immunomodulators_server <- function(id, cohort_obj){
       bubble_df <- shiny::reactive(arrow::read_feather("inst/feather/bubble_plot_df.feather"))
 
       #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("MSK - SCLC", "Vanderbilt - colon polyps", "Shiao - BRCA", "Krishna - ccRCC"),
-                                                  c("MSK", "Vanderbilt", "Shiao_2024", "Krishna_2021")))
+      dataset_display <- shiny::reactive(setNames(c("Bi 2021 - ccRCC", "Krishna 2021 - ccRCC", "Li 2022 - ccRCC", "HTAN MSK - SCLC", "Shiao 2024- BRCA", "HTAN Vanderbilt - colon polyps"),
+                                                  c("Bi_2021", "Krishna_2021", "Li_2022", "MSK", "Shiao_2024", "Vanderbilt")))
 
       shiny::observe({
         # shiny::req(bubble_df())
