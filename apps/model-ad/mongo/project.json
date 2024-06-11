@@ -1,0 +1,62 @@
+{
+  "name": "model-ad-mongo",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/model-ad/mongo/src",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/model-ad/serve-detach.sh {projectName}"
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": ".",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/model-ad-mongo"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      }
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": ".",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/model-ad-mongo"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": [
+        "build-image"
+      ]
+    }
+  },
+  "tags": [
+    "type:db",
+    "scope:backend"
+  ],
+  "implicitDependencies": []
+}

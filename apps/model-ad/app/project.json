@@ -85,6 +85,12 @@
       },
       "defaultConfiguration": "development"
     },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/model-ad/serve-detach.sh model-ad-app"
+      }
+    },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
