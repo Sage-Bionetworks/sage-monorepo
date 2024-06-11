@@ -48,7 +48,7 @@ sc_immunomodulators_ui <- function(id){
             ),
             iatlas.modules::plotBox(
               width=24,
-              plotly::plotlyOutput(ns("bubble_plot"))
+              plotly::plotlyOutput(ns("bubble_plot"), height = "800px")
             )
           )
         #)

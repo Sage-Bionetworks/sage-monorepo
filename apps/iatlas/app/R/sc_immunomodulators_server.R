@@ -61,8 +61,7 @@ sc_immunomodulators_server <- function(id, cohort_obj){
           ggplot2::facet_wrap(~dataset_display, ncol = 1)+
           ggplot2::theme(strip.text = ggplot2::element_text(size = 12),
                          axis.text.x = ggplot2::element_text(size = 10, angle = 315, hjust = 1, vjust = 0.5),
-                         title = ggplot2::element_text(size = 12),
-                         panel.spacing.y = unit(3, "lines"))
+                         title = ggplot2::element_text(size = 12))
       }
 
 
