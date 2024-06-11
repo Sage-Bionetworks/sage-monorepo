@@ -6,6 +6,7 @@ args=(
   --file docker/model-ad/services/mongo.yml
 
   --file docker/model-ad/networks.yml
+  --file docker/model-ad/volumes.yml
 
   up $1 --detach --remove-orphans
 )
