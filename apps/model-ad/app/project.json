@@ -6,6 +6,13 @@
   "sourceRoot": "apps/model-ad/app/src",
   "tags": [],
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": [
@@ -78,6 +85,12 @@
       },
       "defaultConfiguration": "development"
     },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/model-ad/serve-detach.sh model-ad-app"
+      }
+    },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
@@ -134,6 +147,52 @@
         }
       },
       "defaultConfiguration": "development"
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": ".",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/model-ad-app"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      },
+      "dependsOn": [
+        "server"
+      ]
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": ".",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/model-ad-app"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": [
+        "build-image"
+      ]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/model-ad-app:local --quiet",
+        "color": true
+      }
     }
   },
   "implicitDependencies": [

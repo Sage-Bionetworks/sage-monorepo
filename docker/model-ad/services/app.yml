@@ -1,0 +1,15 @@
+services:
+  model-ad-app:
+    image: ghcr.io/sage-bionetworks/model-ad-app:${MODEL_AD_VERSION:-local}
+    container_name: model-ad-app
+    restart: always
+    networks:
+      - model-ad
+    ports:
+      - '4200:4200'
+    env_file:
+      - ../../../apps/model-ad/app/.env
+    deploy:
+      resources:
+        limits:
+          memory: 1G
