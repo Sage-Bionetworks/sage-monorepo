@@ -14,6 +14,47 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/results-visualization-framework/ui/.storybook",
+        "browserTarget": "results-visualization-framework-ui:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/results-visualization-framework-ui",
+        "configDir": "libs/results-visualization-framework/ui/.storybook",
+        "browserTarget": "results-visualization-framework-ui:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "results-visualization-framework-ui:build-storybook",
+        "staticFilePath": "dist/storybook/results-visualization-framework-ui"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "results-visualization-framework-ui:build-storybook:ci"
+        }
+      }
     }
   },
   "tags": ["type:feature", "scope:results-visualization-framework", "language:typescript"],
