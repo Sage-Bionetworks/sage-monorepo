@@ -6,6 +6,7 @@ import {
   challengeSubmissionTypesFilter,
   challengeIncentivesFilter,
   challengePlatformsFilter,
+  challengeOperationsFilter,
   challengeOrganizationsFilter,
   challengeOrganizersFilter,
   challengeCategoriesFilter,
@@ -36,6 +37,13 @@ export const challengeInputDataTypesFilterPanel: FilterPanel = {
   query: 'inputDataTypes',
   label: 'Input Data Type',
   options: challengeInputDataTypesFilter,
+  collapsed: false,
+};
+
+export const challengeOperationsFilterPanel: FilterPanel = {
+  query: 'operations',
+  label: 'Operation',
+  options: challengeOperationsFilter,
   collapsed: false,
 };
 
