@@ -1,0 +1,21 @@
+{
+  "name": "results-visualization-framework-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/results-visualization-framework/ui/src",
+  "prefix": "results-visualization-framework",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/results-visualization-framework/ui"],
+      "options": {
+        "jestConfig": "libs/results-visualization-framework/ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["type:feature", "scope:results-visualization-framework", "language:typescript"],
+  "implicitDependencies": []
+}
