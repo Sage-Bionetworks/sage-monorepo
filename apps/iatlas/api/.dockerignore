@@ -1,0 +1,6 @@
+**/*.md
+.gitignore
+.git/
+Dockerfile
+no_commit/
+scripts/
