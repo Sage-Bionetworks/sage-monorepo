@@ -28,6 +28,7 @@ jobs:
             iatlas
             model-ad
             openchallenges
+            results-visualization-framework
             sage-monorepo
             schematic
             synapse
