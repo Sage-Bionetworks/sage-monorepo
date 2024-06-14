@@ -1,0 +1,4 @@
+networks:
+  model-ad:
+    name: model-ad
+    driver: bridge

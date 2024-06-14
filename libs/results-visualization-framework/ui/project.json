@@ -1,0 +1,62 @@
+{
+  "name": "results-visualization-framework-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/results-visualization-framework/ui/src",
+  "prefix": "results-visualization-framework",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/results-visualization-framework/ui"],
+      "options": {
+        "jestConfig": "libs/results-visualization-framework/ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "storybook": {
+      "executor": "@storybook/angular:start-storybook",
+      "options": {
+        "port": 4400,
+        "configDir": "libs/results-visualization-framework/ui/.storybook",
+        "browserTarget": "results-visualization-framework-ui:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook": {
+      "executor": "@storybook/angular:build-storybook",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "dist/storybook/results-visualization-framework-ui",
+        "configDir": "libs/results-visualization-framework/ui/.storybook",
+        "browserTarget": "results-visualization-framework-ui:build-storybook",
+        "compodoc": false
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "static-storybook": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "results-visualization-framework-ui:build-storybook",
+        "staticFilePath": "dist/storybook/results-visualization-framework-ui"
+      },
+      "configurations": {
+        "ci": {
+          "buildTarget": "results-visualization-framework-ui:build-storybook:ci"
+        }
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:results-visualization-framework", "language:typescript"],
+  "implicitDependencies": []
+}

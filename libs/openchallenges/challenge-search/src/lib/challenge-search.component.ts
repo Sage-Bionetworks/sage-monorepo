@@ -32,6 +32,7 @@ import {
   challengeCategoriesFilterPanel,
   challengeIncentivesFilterPanel,
   challengeInputDataTypesFilterPanel,
+  challengeOperationsFilterPanel,
   challengeOrganizationsFilterPanel,
   challengePlatformsFilterPanel,
   challengeStartYearRangeFilterPanel,
@@ -103,6 +104,7 @@ export class ChallengeSearchComponent
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
+  public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -157,6 +159,7 @@ export class ChallengeSearchComponent
     categories: [] as ChallengeCategory[],
     incentives: [] as ChallengeIncentive[],
     inputDataTypes: [] as number[],
+    operations: [] as number[],
     organizations: [] as number[],
     platforms: [] as string[],
     status: [] as ChallengeStatus[],
@@ -178,6 +181,8 @@ export class ChallengeSearchComponent
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.enableOperationFilter =
+      this.configService.config.enableOperationFilter;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
@@ -215,6 +220,9 @@ export class ChallengeSearchComponent
       this.selectedValues['inputDataTypes'] = this.splitParam(
         params['inputDataTypes']
       ).map((idString) => +idString);
+      this.selectedValues['operations'] = this.splitParam(
+        params['operations']
+      ).map((idString) => +idString);
       this.selectedValues['organizations'] = this.splitParam(
         params['organizations']
       ).map((idString) => +idString);
@@ -230,6 +238,7 @@ export class ChallengeSearchComponent
         inputDataTypes: this.selectedValues['inputDataTypes'],
         maxStartDate: this.selectedMaxStartDate,
         minStartDate: this.selectedMinStartDate,
+        operations: this.selectedValues['operations'],
         organizations: this.selectedValues['organizations'],
         pageNumber: this.selectedPageNumber,
         pageSize: this.selectedPageSize,
@@ -251,6 +260,7 @@ export class ChallengeSearchComponent
     // update dropdown filters
     this.dropdownFilters = {
       inputDataTypes: challengeInputDataTypesFilterPanel,
+      operations: challengeOperationsFilterPanel,
       organizations: challengeOrganizationsFilterPanel,
       platforms: challengePlatformsFilterPanel,
     };
@@ -413,6 +423,9 @@ export class ChallengeSearchComponent
     this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
       ids: this.selectedValues['inputDataTypes'],
     });
+    this.challengeSearchDataService.setSearchQuery('operations', {
+      ids: this.selectedValues['operations'],
+    });
     this.challengeSearchDataService.setSearchQuery('organizations', {
       ids: this.selectedValues['organizations'],
     });
@@ -428,7 +441,11 @@ export class ChallengeSearchComponent
     // fetch and update dropdown options with new data for each dropdown category
     CHALLENGE_SEARCH_DROPDOWNS.forEach((dropdown) => {
       const extraDefaultParams =
-        dropdown === 'inputDataTypes' ? { sections: [EdamSection.Data] } : {};
+        dropdown === 'inputDataTypes'
+          ? { sections: [EdamSection.Data] }
+          : dropdown === 'operations'
+          ? { sections: EdamSection.Operation }
+          : {};
 
       this.challengeSearchDataService
         .fetchData(dropdown, {
