@@ -36,7 +36,7 @@ import numpy as np
 GC_CHALLENGES_API = "https://grand-challenge.org/api/v1/challenges"
 
 
-def process_data(df):
+def process_data(df: pd.DataFrame) -> pd.DataFrame:
     """Process and clean the data so that it fits with the OC schema."""
 
     # Set default values for select columns.
