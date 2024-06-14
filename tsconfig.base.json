@@ -104,9 +104,12 @@
       "@sagebionetworks/model-ad/util": [
         "libs/model-ad/util/src/index.ts"
       ],
+      "@sagebionetworks/model-ad/api-client-angular": [
+        "libs/model-ad/api-client-angular/src/index.ts"
+      ],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
-      ],
+      ]
     }
   },
   "exclude": [
