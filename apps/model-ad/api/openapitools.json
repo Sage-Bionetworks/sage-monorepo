@@ -5,11 +5,9 @@
     "version": "6.2.1",
     "generators": {
       "model-ad-api": {
-        "config": "templates/config.yaml",
         "generatorName": "nodejs-express-server",
         "inputSpec": "#{cwd}/../../../libs/model-ad/api-description/build/openapi.yaml",
-        "output": "#{cwd}",
-        "templateDir": "templates"
+        "output": "#{cwd}"
       }
     }
   }
