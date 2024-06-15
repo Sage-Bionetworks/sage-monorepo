@@ -1,0 +1,26 @@
+{
+  "name": "model-ad-api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/model-ad/api/src",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["type:service", "scope:backend"],
+  "implicitDependencies": ["model-ad-api-description"]
+}
