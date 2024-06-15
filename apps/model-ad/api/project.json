@@ -14,7 +14,7 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["openapi-generator-cli generate"],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
