@@ -1,0 +1,13 @@
+type: object
+description: A gene
+properties:
+  id:
+    $ref: GeneId.yaml
+  name:
+    $ref: GeneName.yaml
+  description:
+    $ref: GeneDescription.yaml
+required:
+  - id
+  - name
+  - description

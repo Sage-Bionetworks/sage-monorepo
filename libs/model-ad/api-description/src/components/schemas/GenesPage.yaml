@@ -1,0 +1,15 @@
+type: object
+description: A page of genes.
+allOf:
+  - $ref: PageMetadata.yaml
+  - type: object
+    properties:
+      genes:
+        description: A list of genes.
+        type: array
+        items:
+          $ref: Gene.yaml
+    required:
+      - genes
+x-java-class-annotations:
+  - '@lombok.Builder'
