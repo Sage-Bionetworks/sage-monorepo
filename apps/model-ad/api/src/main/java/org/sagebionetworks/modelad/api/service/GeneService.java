@@ -1,6 +1,6 @@
 package org.sagebionetworks.modelad.api.service;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.modelad.api.model.dto.GeneDto;
 import org.sagebionetworks.modelad.api.model.dto.GenesPageDto;
@@ -12,7 +12,8 @@ public class GeneService {
   public GeneService() {}
 
   public GenesPageDto listGenes() {
-    List<GeneDto> genes = Collections.emptyList();
+    final GeneDto gene = GeneDto.builder().id(1L).name("gene").description("a gene").build();
+    List<GeneDto> genes = Arrays.asList(gene, gene);
 
     return GenesPageDto.builder()
         .genes(genes)

@@ -105,6 +105,8 @@ components:
         - id
         - name
         - description
+      x-java-class-annotations:
+        - '@lombok.Builder'
     GenesPage:
       type: object
       description: A page of genes.

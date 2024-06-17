@@ -140,6 +140,8 @@ components:
       - id
       - name
       type: object
+      x-java-class-annotations:
+      - '@lombok.Builder'
     GenesPage:
       allOf:
       - $ref: '#/components/schemas/PageMetadata'
