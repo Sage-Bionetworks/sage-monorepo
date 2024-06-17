@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.2.1",
+    "generators": {
+      "model-ad-api": {
+        "config": "templates/config.yaml",
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/model-ad/api-description/build/openapi.yaml",
+        "output": "#{cwd}",
+        "templateDir": "templates",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.modelad.api.api",
+          "basePackage": "org.sagebionetworks.modelad.api",
+          "configPackage": "org.sagebionetworks.modelad.api.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.modelad.api.model.dto",
+          "useTags": true,
+          "openApiNullable": false
+        }
+      }
+    }
+  }
+}

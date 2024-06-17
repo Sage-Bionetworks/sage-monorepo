@@ -1,0 +1,10 @@
+@apiHost = http://model-ad-api:8085
+
+### Select the base path
+
+# Option 1: Send the requests directly to the service
+@basePath = {{apiHost}}/v1
+
+### List the genes
+
+GET {{basePath}}/genes
