@@ -23,8 +23,6 @@ management:
       probes:
         enabled: true
       show-details: always
-    prometheus:
-      cache.time-to-live: 1ms
 
 info:
   application:
