@@ -1,4 +1,4 @@
-@apiHost = http://model-ad-api:8085
+@apiHost = http://localhost:8080
 
 ### Select the base path
 
