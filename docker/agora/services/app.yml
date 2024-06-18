@@ -1,14 +1,14 @@
 services:
-  agora-web-app:
-    image: ghcr.io/sage-bionetworks/agora-web-app:${AGORA_VERSION:-local}
-    container_name: agora-web-app
+  agora-app:
+    image: ghcr.io/sage-bionetworks/agora-app:${AGORA_VERSION:-local}
+    container_name: agora-app
     restart: always
     networks:
       - agora
     ports:
       - '5200:5200'
     env_file:
-      - ../../../apps/agora/web-app/.env
+      - ../../../apps/agora/app/.env
     deploy:
       resources:
         limits:
