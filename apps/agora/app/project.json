@@ -72,6 +72,12 @@
         "command": "docker/agora/serve-detach.sh agora-app"
       }
     },
+    "serve-detach-down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/agora/serve-detach-down.sh {projectName}"
+      }
+    },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {

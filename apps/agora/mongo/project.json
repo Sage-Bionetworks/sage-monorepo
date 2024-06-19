@@ -18,6 +18,12 @@
         "command": "docker/agora/serve-detach.sh {projectName}"
       }
     },
+    "serve-detach-down": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/agora/serve-detach-down.sh {projectName}"
+      }
+    },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
