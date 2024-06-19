@@ -40,7 +40,7 @@ paths:
             description: The number of items in a single page.
             type: integer
             format: int32
-            default: 100
+            default: 10
             minimum: 1
         - in: query
           name: platforms
