@@ -14,5 +14,5 @@ services:
         limits:
           memory: 200M
     depends_on:
-      agora-mongo:
-        condition: service_started
+      agora-data:
+        condition: service_completed_successfully

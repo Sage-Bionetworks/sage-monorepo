@@ -15,3 +15,20 @@ services:
       resources:
         limits:
           memory: 500M
+  agora-data:
+    image: ghcr.io/sage-bionetworks/agora-data:${AGORA_VERSION:-syn13363290.68}
+    platform: linux/amd64
+    restart: no
+    container_name: agora-data
+    networks:
+      - agora
+    depends_on:
+      - agora-mongo
+    env_file:
+      - ../../../apps/agora/mongo/.env
+    environment:
+      - DB_HOST=agora-mongo # must match mongo service name
+    deploy:
+      resources:
+        limits:
+          memory: 500M
