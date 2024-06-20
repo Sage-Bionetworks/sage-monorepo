@@ -1,19 +1,28 @@
 package org.sagebionetworks.modelad.api.service;
 
-import java.util.Arrays;
 import java.util.List;
+import org.sagebionetworks.modelad.api.model.document.GeneDocument;
 import org.sagebionetworks.modelad.api.model.dto.GeneDto;
 import org.sagebionetworks.modelad.api.model.dto.GenesPageDto;
+import org.sagebionetworks.modelad.api.model.mapper.GeneMapper;
+import org.sagebionetworks.modelad.api.model.repository.GeneRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 public class GeneService {
 
-  public GeneService() {}
+  private GeneMapper geneMapper = new GeneMapper();
+
+  private final GeneRepository geneRepository;
+
+  public GeneService(GeneRepository geneRepository) {
+    this.geneRepository = geneRepository;
+  }
 
   public GenesPageDto listGenes() {
-    final GeneDto gene = GeneDto.builder().id(1L).name("gene").description("a gene").build();
-    List<GeneDto> genes = Arrays.asList(gene, gene);
+
+    List<GeneDocument> geneDocuments = geneRepository.findAll();
+    List<GeneDto> genes = geneMapper.convertToDtoList(geneDocuments);
 
     return GenesPageDto.builder()
         .genes(genes)

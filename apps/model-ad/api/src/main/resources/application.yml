@@ -2,6 +2,13 @@ server:
   port: 8080
 
 spring:
+  data:
+    mongodb:
+      host: model-ad-mongo
+      port: 27017
+      database: modelad
+      username: modelad
+      password: changeme
   jackson:
     date-format: org.sagebionetworks.modelad.api.RFC3339DateFormat
     serialization:
