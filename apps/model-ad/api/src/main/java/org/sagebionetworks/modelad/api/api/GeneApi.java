@@ -75,6 +75,7 @@ public interface GeneApi {
       method = RequestMethod.GET,
       value = "/genes",
       produces = {"application/json", "application/problem+json"})
+  @CrossOrigin(origins = "*")
   default ResponseEntity<GenesPageDto> listGenes() {
 
     return getDelegate().listGenes();
