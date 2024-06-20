@@ -6,7 +6,8 @@ services:
     env_file:
       - ../../../apps/model-ad/mongo/.env
     volumes:
-      - model-ad-mongo-data:/data/db
+      - ../../../apps/model-ad/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      # - model-ad-mongo-data:/data/db
     networks:
       - model-ad
     ports:
