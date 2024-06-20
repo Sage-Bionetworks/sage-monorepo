@@ -29,6 +29,7 @@ dependencies {
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springDataVersion}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
