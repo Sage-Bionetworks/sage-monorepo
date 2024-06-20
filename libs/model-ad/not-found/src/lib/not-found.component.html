@@ -13,6 +13,10 @@
       >Contact Us</a
     >
   </div>
+  <div *ngFor="let gene of genes$ | async">
+    <h6>{{ gene.name }}</h6>
+    <p>{{ gene.description }}</p>
+  </div>
 </main>
 
 <model-ad-footer
