@@ -11,5 +11,3 @@ required:
   - id
   - name
   - description
-x-java-class-annotations:
-  - '@lombok.Builder'
