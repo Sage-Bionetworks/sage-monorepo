@@ -9,9 +9,9 @@ services:
       - model-ad
     ports:
       - '8080:8080'
-    # depends_on:
-    #   model-ad-mongo:
-    #     condition: service_started
+    depends_on:
+      model-ad-mongo:
+        condition: service_started
     deploy:
       resources:
         limits:
