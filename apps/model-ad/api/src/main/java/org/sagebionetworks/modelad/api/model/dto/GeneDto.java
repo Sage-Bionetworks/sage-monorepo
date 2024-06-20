@@ -12,6 +12,7 @@ import javax.validation.constraints.*;
 @Schema(name = "Gene", description = "A gene")
 @JsonTypeName("Gene")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+// @lombok.NoArgsConstructor
 @lombok.Builder
 public class GeneDto {
 

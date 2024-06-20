@@ -19,7 +19,6 @@ repositories {
 
 dependencies {
   annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
   compileOnly "org.projectlombok:lombok:${lombokVersion}"
   implementation 'com.google.code.findbugs:jsr305:3.0.2'
   implementation 'org.openapitools:jackson-databind-nullable:0.2.3'
@@ -27,6 +26,7 @@ dependencies {
   implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
+  implementation "org.sagebionetworks:util:0.0.1-SNAPSHOT"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springDataVersion}"
