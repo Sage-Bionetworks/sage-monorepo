@@ -2,6 +2,7 @@
 
 args=(
   # List of services in alphanumeric order
+  --file docker/model-ad/services/apex.yml
   --file docker/model-ad/services/api.yml
   --file docker/model-ad/services/app.yml
   --file docker/model-ad/services/mongo.yml
