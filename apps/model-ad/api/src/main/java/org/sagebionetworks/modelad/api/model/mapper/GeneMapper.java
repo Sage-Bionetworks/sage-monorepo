@@ -18,7 +18,7 @@ public class GeneMapper extends BaseMapper<GeneDocument, GeneDto> {
 
   @Override
   public GeneDto convertToDto(GeneDocument entity, Object... args) {
-    GeneDto dto = GeneDto.builder().build();
+    GeneDto dto = new GeneDto();
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto);
     }

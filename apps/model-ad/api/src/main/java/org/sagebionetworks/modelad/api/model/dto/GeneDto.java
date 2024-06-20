@@ -12,12 +12,11 @@ import javax.validation.constraints.*;
 @Schema(name = "Gene", description = "A gene")
 @JsonTypeName("Gene")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// @lombok.NoArgsConstructor
-@lombok.Builder
+// TODO Add x-java-class-annotations
 public class GeneDto {
 
   @JsonProperty("id")
-  private Long id;
+  private String id;
 
   @JsonProperty("name")
   private String name;
@@ -25,7 +24,7 @@ public class GeneDto {
   @JsonProperty("description")
   private String description;
 
-  public GeneDto id(Long id) {
+  public GeneDto id(String id) {
     this.id = id;
     return this;
   }
@@ -38,14 +37,14 @@ public class GeneDto {
   @NotNull
   @Schema(
       name = "id",
-      example = "1",
+      example = "66737b304e11611be5dab31d",
       description = "The unique identifier of the gene.",
       required = true)
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 

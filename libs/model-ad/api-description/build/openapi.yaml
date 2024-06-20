@@ -77,9 +77,8 @@ components:
         - hasPrevious
     GeneId:
       description: The unique identifier of the gene.
-      type: integer
-      format: int64
-      example: 1
+      type: string
+      example: 66737b304e11611be5dab31d
     GeneName:
       description: The name of the gene.
       type: string
