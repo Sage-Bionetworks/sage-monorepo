@@ -69,11 +69,10 @@ def connect_to_mariadb(username: str, password: str, port: str, host: str, datab
 
         # Close the connection
         conn.close()
-    
     except mariadb.Error as e:
         print(f"Error connecting to MariaDB Platform: {e}")
         sys.exit(1)
-    
+
 def download_edam_csv(url: str, version: str) -> Optional[bool]:
     """Download EDAM concepts from GitHub or S3 bucket (CSV file)"""
     print("Downloading the EDAM concepts from GitHub (CSV file)...")
@@ -153,9 +152,6 @@ def print_info_statistics(df: pd.DataFrame) -> None:
 
     else:
         print("No data available.")
-
-# def load_edam_dataframe(df: pd.DataFrame) -> None:
-
 
 def main() -> None:
     """Main function to execute preceding functions"""
