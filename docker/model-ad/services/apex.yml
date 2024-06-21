@@ -12,6 +12,8 @@ services:
     ports:
       - '8000:80'
     depends_on:
+      model-ad-api-docs:
+        condition: service_healthy
       model-ad-api:
         condition: service_healthy
       model-ad-app:
