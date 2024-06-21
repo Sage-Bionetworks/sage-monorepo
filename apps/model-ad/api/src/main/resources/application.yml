@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+spring:
+  data:
+    mongodb:
+      host: model-ad-mongo
+      port: 27017
+      database: modelad
+      username: modelad
+      password: changeme
+  jackson:
+    date-format: org.sagebionetworks.modelad.api.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+
+management:
+  endpoints:
+    web:
+      base-path: /actuator
+      exposure:
+        include: health
+  health:
+    readiness-state:
+      enabled: true
+    liveness-state:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+      show-details: always
+
+info:
+  application:
+    name: ${spring.application.name}

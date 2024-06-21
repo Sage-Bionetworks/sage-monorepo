@@ -17,6 +17,11 @@ properties:
     $ref: EdamConceptSort.yaml
   direction:
     $ref: EdamConceptDirection.yaml
+  ids:
+    description: An array of EDAM concept ids used to filter the results.
+    type: array
+    items:
+      $ref: EdamConceptId.yaml
   searchTerms:
     description: A string of search terms used to filter the results.
     type: string

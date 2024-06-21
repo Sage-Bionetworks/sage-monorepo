@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Gene
+  summary: List genes
+  description: List genes
+  operationId: listGenes
+  # parameters:
+  #   - $ref: ../components/parameters/query/challengeSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/GenesPage.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

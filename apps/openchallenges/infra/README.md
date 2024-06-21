@@ -200,7 +200,6 @@ $ OPENCHALLENGES_VERSION=edge ./docker/openchallenges/serve-detach.sh openchalle
  ✔ Container openchallenges-zipkin                Healthy                                                        67.0s
  ✔ Container openchallenges-elasticsearch-node-3  Healthy                                                         0.5s
  ✔ Container openchallenges-mariadb               Healthy                                                         1.5s
- ✔ Container openchallenges-vault                 Healthy                                                         0.5s
  ✔ Container openchallenges-config-server         Healthy                                                         1.5s
  ✔ Container openchallenges-service-registry      Healthy                                                         1.5s
  ✔ Container openchallenges-thumbor               Healthy                                                         1.5s

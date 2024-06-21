@@ -1,0 +1,18 @@
+services:
+  model-ad-mongo:
+    image: ghcr.io/sage-bionetworks/model-ad-mongo:${MODEL_AD_VERSION:-local}
+    container_name: model-ad-mongo
+    restart: always
+    env_file:
+      - ../../../apps/model-ad/mongo/.env
+    volumes:
+      - ../../../apps/model-ad/mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      # - model-ad-mongo-data:/data/db
+    networks:
+      - model-ad
+    ports:
+      - '27017:27017'
+    deploy:
+      resources:
+        limits:
+          memory: 500M

@@ -41,7 +41,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="incentivesFilter.options"
-          [selectedOptions]="selectedIncentives"
+          [selectedOptions]="selectedValues['incentives']"
           (selectionChange)="onParamChange({ incentives: $event })"
           inputId="{{ incentivesFilter.query }}"
         />
@@ -54,7 +54,7 @@
       >
         <openchallenges-checkbox-filter
           [options]="statusFilter.options"
-          [selectedOptions]="selectedStatus"
+          [selectedOptions]="selectedValues['status']"
           (selectionChange)="onParamChange({ status: $event })"
           inputId="{{ statusFilter.query }}"
         />
@@ -67,57 +67,63 @@
       >
         <openchallenges-checkbox-filter
           [options]="categoriesFilter.options"
-          [selectedOptions]="selectedCategories"
+          [selectedOptions]="selectedValues['categories']"
           (selectionChange)="onParamChange({ categories: $event })"
           inputId="{{ categoriesFilter.query }}"
         />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ platformsFilter.label }}"
+        header="{{ dropdownFilters['platforms'].label }}"
         [toggleable]="true"
-        [collapsed]="platformsFilter.collapsed"
+        [collapsed]="dropdownFilters['platforms'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="platformsFilter.options"
-          [selectedOptions]="selectedPlatforms"
-          placeholder="{{ platformsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="platformsFilter.showAvatar"
+          [options]="dropdownFilters['platforms'].options"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['platforms']"
+          placeholder="{{ dropdownFilters['platforms'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['platforms'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ platforms: $event })"
           (searchChange)="onSearchChange('platforms', $event)"
+          (pageChange)="onLazyLoad('platforms', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ inputDataTypesFilter.label }}"
+        header="{{ dropdownFilters['inputDataTypes'].label }}"
         [toggleable]="true"
-        [collapsed]="inputDataTypesFilter.collapsed"
+        [collapsed]="dropdownFilters['inputDataTypes'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="inputDataTypesFilter.options"
-          [selectedOptions]="selectedInputDataTypes"
-          placeholder="{{ inputDataTypesFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="inputDataTypesFilter.showAvatar"
+          [options]="dropdownFilters['inputDataTypes'].options"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['inputDataTypes']"
+          placeholder="{{ dropdownFilters['inputDataTypes'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['inputDataTypes'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ inputDataTypes: $event })"
           (searchChange)="onSearchChange('inputDataTypes', $event)"
+          (pageChange)="onLazyLoad('inputDataTypes', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ organizationsFilter.label }}"
+        header="{{ dropdownFilters['organizations'].label }}"
         [toggleable]="true"
-        [collapsed]="organizationsFilter.collapsed"
+        [collapsed]="dropdownFilters['organizations'].collapsed"
       >
         <openchallenges-search-dropdown-filter
-          [options]="organizationsFilter.options"
-          [selectedOptions]="selectedOrgs"
-          placeholder="{{ organizationsFilter.label.toLowerCase() + '(s)' }}  "
-          [showAvatar]="organizationsFilter.showAvatar"
+          [options]="dropdownFilters['organizations'].options"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['organizations']"
+          placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
+          (pageChange)="onLazyLoad('organizations', $event)"
         />
       </p-panel>
       <p-divider></p-divider>
@@ -159,9 +165,28 @@
       >
         <openchallenges-checkbox-filter
           [options]="submissionTypesFilter.options"
-          [selectedOptions]="selectedSubmissionTypes"
+          [selectedOptions]="selectedValues['submissionTypes']"
           (selectionChange)="onParamChange({ submissionTypes: $event })"
           inputId="{{ submissionTypesFilter.query }}"
+        />
+      </p-panel>
+      <p-divider *ngIf="enableOperationFilter"></p-divider>
+      <p-panel
+        *ngIf="enableOperationFilter"
+        header="{{ dropdownFilters['operations'].label }}"
+        [toggleable]="true"
+        [collapsed]="dropdownFilters['operations'].collapsed"
+      >
+        <openchallenges-search-dropdown-filter
+          [options]="dropdownFilters['operations'].options"
+          [optionsPerPage]="defaultDropdownOptionSize"
+          [selectedOptions]="selectedValues['operations']"
+          placeholder="{{ dropdownFilters['operations'].label.toLowerCase() + '(s)' }}  "
+          [showAvatar]="dropdownFilters['operations'].showAvatar"
+          [filterByApiClient]="true"
+          (selectionChange)="onParamChange({ operations: $event })"
+          (searchChange)="onSearchChange('operations', $event)"
+          (pageChange)="onLazyLoad('operations', $event)"
         />
       </p-panel>
     </div>

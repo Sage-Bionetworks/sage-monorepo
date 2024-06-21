@@ -9,6 +9,7 @@ export enum Environment {
 /* eslint-enable no-unused-vars */
 
 export interface AppConfig {
+  enableOperationFilter: boolean;
   appVersion: string;
   csrApiUrl: string;
   dataUpdatedOn: string;

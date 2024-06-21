@@ -42,6 +42,9 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
     SearchSortFactory sf = searchSession.scope(EdamConceptEntity.class).sort();
     List<SearchPredicate> predicates = new ArrayList<>();
 
+    if (query.getIds() != null && !query.getIds().isEmpty()) {
+      predicates.add(getIdsPredicate(pf, query));
+    }
     if (query.getSearchTerms() != null && !query.getSearchTerms().isBlank()) {
       predicates.add(getSearchTermsPredicate(pf, query, fields));
     }
@@ -58,6 +61,24 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
         .where(topLevelPredicate)
         .sort(sort)
         .fetch((int) pageable.getOffset(), pageable.getPageSize());
+  }
+
+  /**
+   * Searches the EDAM concepts whose id is in the list of ids specified.
+   *
+   * @param pf
+   * @param query
+   * @return
+   */
+  private SearchPredicate getIdsPredicate(
+      SearchPredicateFactory pf, EdamConceptSearchQueryDto query) {
+    return pf.bool(
+            b -> {
+              for (Long id : query.getIds()) {
+                b.should(pf.match().field("id").matching(id));
+              }
+            })
+        .toPredicate();
   }
 
   /**

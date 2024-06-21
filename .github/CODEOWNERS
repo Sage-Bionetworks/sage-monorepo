@@ -18,11 +18,16 @@
 /apps/openchallenges/edam-etl/  @mdsage1
 
 # Schematic
-/apps/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage
-/libs/schematic/ @andrewelamb @GiaJordan @linglp @mialy-defelice @milen-sage
+/apps/schematic/ @andrewelamb @GiaJordan @linglp @milen-sage
+/libs/schematic/ @andrewelamb @GiaJordan @linglp @milen-sage
 /libs/schematic/api-client-r/ @andrewelamb @lakikowolfe @afwillia
 
 /apps/agora/ @Sage-Bionetworks/sage-monorepo-agora
 /libs/agora/ @Sage-Bionetworks/sage-monorepo-agora
 
 /libs/shared/ @tschaffter
+
+/apps/model-ad/ @hallieswan @sagely1
+/docker/model-ad/ @hallieswan @sagely1
+/libs/model-ad/ @hallieswan @sagely1
+/libs/results-visualization-framework/ @hallieswan @sagely1

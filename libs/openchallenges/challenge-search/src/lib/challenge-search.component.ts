@@ -32,6 +32,7 @@ import {
   challengeCategoriesFilterPanel,
   challengeIncentivesFilterPanel,
   challengeInputDataTypesFilterPanel,
+  challengeOperationsFilterPanel,
   challengeOrganizationsFilterPanel,
   challengePlatformsFilterPanel,
   challengeStartYearRangeFilterPanel,
@@ -50,7 +51,7 @@ import {
 } from 'rxjs/operators';
 import { Calendar, CalendarModule } from 'primeng/calendar';
 import { CommonModule, DatePipe, Location } from '@angular/common';
-import { assign, union } from 'lodash';
+import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ActivatedRoute, RouterModule } from '@angular/router';
@@ -65,6 +66,10 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
+import {
+  ChallengeSearchDropdown,
+  CHALLENGE_SEARCH_DROPDOWNS,
+} from './challenge-search-dropdown';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -99,6 +104,7 @@ export class ChallengeSearchComponent
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
+  public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
   private query: BehaviorSubject<ChallengeSearchQuery> =
@@ -131,6 +137,7 @@ export class ChallengeSearchComponent
   // set default values
   defaultPageNumber = 0;
   defaultPageSize = 24;
+  defaultDropdownOptionSize = 50;
   defaultSelectedYear = undefined;
   defaultSortedBy: ChallengeSort = 'relevance';
 
@@ -144,20 +151,20 @@ export class ChallengeSearchComponent
   statusFilter = challengeStatusFilterPanel;
   submissionTypesFilter = challengeSubmissionTypesFilterPanel;
 
-  // dropdown filters
-  inputDataTypesFilter = challengeInputDataTypesFilterPanel;
-  organizationsFilter = challengeOrganizationsFilterPanel;
-  platformsFilter = challengePlatformsFilterPanel;
+  // set dropdown filter placeholders
+  dropdownFilters!: { [key: string]: FilterPanel };
 
   // define selected filter values
-
-  selectedCategories!: ChallengeCategory[];
-  selectedIncentives!: ChallengeIncentive[];
-  selectedInputDataTypes!: number[];
-  selectedOrgs!: number[];
-  selectedPlatforms!: string[];
-  selectedStatus!: ChallengeStatus[];
-  selectedSubmissionTypes!: ChallengeSubmissionType[];
+  selectedValues = {
+    categories: [] as ChallengeCategory[],
+    incentives: [] as ChallengeIncentive[],
+    inputDataTypes: [] as number[],
+    operations: [] as number[],
+    organizations: [] as number[],
+    platforms: [] as string[],
+    status: [] as ChallengeStatus[],
+    submissionTypes: [] as ChallengeSubmissionType[],
+  };
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -174,6 +181,8 @@ export class ChallengeSearchComponent
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.enableOperationFilter =
+      this.configService.config.enableOperationFilter;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
@@ -200,82 +209,64 @@ export class ChallengeSearchComponent
       }
 
       // update selected filter values based on params in url
+
       this.searchedTerms = params['searchTerms'];
-      this.selectedCategories = this.splitParam(params['categories']);
-      this.selectedIncentives = this.splitParam(params['incentives']);
-      this.selectedInputDataTypes = this.splitParam(
-        params['inputDataTypes']
-      ).map((idString) => +idString);
-      this.selectedOrgs = this.splitParam(params['organizations']).map(
-        (idString) => +idString
-      );
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
       this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-      this.selectedPlatforms = this.splitParam(params['platforms']);
-      this.selectedStatus = this.splitParam(params['status']);
-      this.selectedSubmissionTypes = this.splitParam(params['submissionTypes']);
       this.sortedBy = params['sort'] || this.defaultSortedBy;
 
+      this.selectedValues['categories'] = this.splitParam(params['categories']);
+      this.selectedValues['incentives'] = this.splitParam(params['incentives']);
+      this.selectedValues['inputDataTypes'] = this.splitParam(
+        params['inputDataTypes']
+      ).map((idString) => +idString);
+      this.selectedValues['operations'] = this.splitParam(
+        params['operations']
+      ).map((idString) => +idString);
+      this.selectedValues['organizations'] = this.splitParam(
+        params['organizations']
+      ).map((idString) => +idString);
+      this.selectedValues['platforms'] = this.splitParam(params['platforms']);
+      this.selectedValues['status'] = this.splitParam(params['status']);
+      this.selectedValues['submissionTypes'] = this.splitParam(
+        params['submissionTypes']
+      );
+
       const defaultQuery: ChallengeSearchQuery = {
-        categories: this.selectedCategories,
-        incentives: this.selectedIncentives,
-        inputDataTypes: this.selectedInputDataTypes,
+        categories: this.selectedValues['categories'],
+        incentives: this.selectedValues['incentives'],
+        inputDataTypes: this.selectedValues['inputDataTypes'],
         maxStartDate: this.selectedMaxStartDate,
         minStartDate: this.selectedMinStartDate,
-        organizations: this.selectedOrgs,
+        operations: this.selectedValues['operations'],
+        organizations: this.selectedValues['organizations'],
         pageNumber: this.selectedPageNumber,
         pageSize: this.selectedPageSize,
-        platforms: this.selectedPlatforms,
+        platforms: this.selectedValues['platforms'],
         searchTerms: this.searchedTerms,
         sort: this.sortedBy,
-        status: this.selectedStatus,
-        submissionTypes: this.selectedSubmissionTypes,
+        status: this.selectedValues['status'],
+        submissionTypes: this.selectedValues['submissionTypes'],
       };
 
       this.query.next(defaultQuery);
     });
 
     // update the total number of challenges in database with empty query
-    this.challengeService
-      .listChallenges({ pageSize: 1, pageNumber: 0 })
-      .subscribe((page) => {
-        this.totalChallengesCount = page.totalElements;
-      });
+    this.challengeService.listChallenges().subscribe((page) => {
+      this.totalChallengesCount = page.totalElements;
+    });
 
-    this.challengeSearchDataService
-      .searchEdamConcepts(EdamSection.Data)
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedInputDataTypesValues = options.filter((option) =>
-          this.selectedInputDataTypes.includes(option.value as number)
-        );
-        this.inputDataTypesFilter.options = union(
-          options,
-          selectedInputDataTypesValues
-        );
-      });
+    // update dropdown filters
+    this.dropdownFilters = {
+      inputDataTypes: challengeInputDataTypesFilterPanel,
+      operations: challengeOperationsFilterPanel,
+      organizations: challengeOrganizationsFilterPanel,
+      platforms: challengePlatformsFilterPanel,
+    };
 
-    // update organization filter values
-    this.challengeSearchDataService
-      .searchOriganizations()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedOrgValues = options.filter((option) =>
-          this.selectedOrgs.includes(option.value as number)
-        );
-        this.organizationsFilter.options = union(options, selectedOrgValues);
-      });
-
-    // update platform filter values
-    this.challengeSearchDataService
-      .searchPlatforms()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((options) => {
-        const selectedPlatformValues = options.filter((option) =>
-          this.selectedPlatforms.includes(option.value as string)
-        );
-        this.platformsFilter.options = union(options, selectedPlatformValues);
-      });
+    // load initial data and listen to fetch data as query changes
+    this.loadInitialDropdownData();
   }
 
   ngAfterContentInit(): void {
@@ -352,6 +343,14 @@ export class ChallengeSearchComponent
       // this.selectedPageSize = this.defaultPageSize;
       this.paginator.resetPageNumber();
     }
+
+    // update selected filter values if specific parameters change
+    Object.keys(filteredQuery).forEach((key) => {
+      if (key in this.selectedValues && filteredQuery[key] !== undefined) {
+        (this.selectedValues as any)[key] = filteredQuery[key];
+      }
+    });
+
     // update params of URL
     const currentParams = new HttpParams({
       fromString: this._location.path().split('?')[1] ?? '',
@@ -381,26 +380,88 @@ export class ChallengeSearchComponent
   }
 
   onSearchChange(
-    searchType: 'challenges' | 'inputDataTypes' | 'organizations' | 'platforms',
+    searchType: 'challenges' | ChallengeSearchDropdown,
     searched: string
   ): void {
-    switch (searchType) {
-      case 'challenges':
-        this.challengeSearchTerms.next(searched);
-        break;
-      case 'inputDataTypes':
-        this.challengeSearchDataService.setEdamConceptSearchTerms({
-          searchTerms: searched,
-          sections: [EdamSection.Data],
-        });
-        break;
-      case 'organizations':
-        this.challengeSearchDataService.setOriganizationSearchTerms(searched);
-        break;
-      case 'platforms':
-        this.challengeSearchDataService.setPlatformSearchTerms(searched);
-        break;
+    if (searchType === 'challenges') {
+      this.challengeSearchTerms.next(searched);
+    } else {
+      // reset options except selections when search term is applied
+      const selectedOptions = this.dropdownFilters[searchType].options.filter(
+        (option) => {
+          if (Array.isArray(option.value)) {
+            return option.value.some((item) =>
+              (this.selectedValues[searchType] as FilterValue[]).includes(item)
+            );
+          } else {
+            return (this.selectedValues[searchType] as FilterValue[]).includes(
+              option.value
+            );
+          }
+        }
+      );
+      this.dropdownFilters[searchType].options = selectedOptions;
+      this.challengeSearchDataService.setEdamConceptSearchQuery({
+        searchTerms: searched,
+      });
     }
+  }
+
+  onLazyLoad(dropdown: ChallengeSearchDropdown, page: number): void {
+    const query: any = { pageNumber: page };
+
+    if (page === 0) {
+      // reset ids and slugs params of dropdown search query
+      query.ids = undefined;
+      query.slugs = undefined;
+    }
+    // load next page as scrolling down
+    this.challengeSearchDataService.setSearchQuery(dropdown, query);
+  }
+
+  private setDropdownSelections(): void {
+    this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
+      ids: this.selectedValues['inputDataTypes'],
+    });
+    this.challengeSearchDataService.setSearchQuery('operations', {
+      ids: this.selectedValues['operations'],
+    });
+    this.challengeSearchDataService.setSearchQuery('organizations', {
+      ids: this.selectedValues['organizations'],
+    });
+    this.challengeSearchDataService.setSearchQuery('platforms', {
+      slugs: this.selectedValues['platforms'],
+    });
+  }
+
+  private loadInitialDropdownData(): void {
+    // query the dropdown filter option(s) pre-selected in url param (only initially)
+    this.setDropdownSelections();
+
+    // fetch and update dropdown options with new data for each dropdown category
+    CHALLENGE_SEARCH_DROPDOWNS.forEach((dropdown) => {
+      const extraDefaultParams =
+        dropdown === 'inputDataTypes'
+          ? { sections: [EdamSection.Data] }
+          : dropdown === 'operations'
+          ? { sections: EdamSection.Operation }
+          : {};
+
+      this.challengeSearchDataService
+        .fetchData(dropdown, {
+          pageSize: this.defaultDropdownOptionSize, // set constant pageSize to match lazyLoad
+          ...extraDefaultParams,
+        })
+        .pipe(takeUntil(this.destroy))
+        .subscribe((newOptions) => {
+          // update filter options by appending new unique filter values to the bottom
+          this.dropdownFilters[dropdown].options = unionWith(
+            this.dropdownFilters[dropdown].options,
+            newOptions,
+            isEqual
+          );
+        });
+    });
   }
 
   dateToFormat(date: Date, format?: 'yyyy-MM-dd'): string | null {

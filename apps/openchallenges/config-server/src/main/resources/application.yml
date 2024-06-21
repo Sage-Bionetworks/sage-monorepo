@@ -7,14 +7,6 @@ spring:
   cloud:
     config:
       server:
-        vault:
-          host: openchallenges-vault
-          port: 8200
-          scheme: http
-          order: 1
-          kv-version: 2
-          authentication: TOKEN
-          token: changeme
         git:
           uri: ${GIT_URI}
           ignoreLocalSshSettings: true

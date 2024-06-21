@@ -3,18 +3,21 @@
   [(ngModel)]="selectedOptions"
   (onChange)="onChange(selectedOptions)"
   [placeholder]="placeholder"
-  [maxSelectedLabels]="2"
-  selectedItemsLabel="{0} items selected"
   [overlayOptions]="overlayOptions"
   [filter]="filter"
   (onFilter)="onSearch($event)"
+  [virtualScroll]="true"
+  [virtualScrollItemSize]="optionHeight"
+  [virtualScrollOptions]="scrollerOptions"
+  [lazy]="lazy"
+  (onLazyLoad)="onLazyLoad($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="header">
     <div class="custom-filter-container p-multiselect-filter-container">
       <input
         type="text"
-        role="textbox"
+        placeholder="search"
         class="custom-filter p-multiselect-filter p-inputtext p-component"
         autocomplete="on"
         [(ngModel)]="searchTerm"
@@ -23,6 +26,35 @@
       <span class="p-multiselect-filter-icon pi pi-search"></span>
     </div>
   </ng-template>
+
+  <!-- custom loader with skeleton -->
+  <ng-template pTemplate="loader">
+    <div *ngIf="showAvatar; else noAvatarLoader" class="loader-with-avatar-container">
+      <div *ngFor="let _ of [].constructor(5)" class="skeleton-with-avatar">
+        <p-skeleton class="circle" shape="circle" size="2rem"></p-skeleton>
+        <p-skeleton width="12rem" height="1rem"></p-skeleton>
+      </div>
+    </div>
+    <ng-template #noAvatarLoader>
+      <div *ngFor="let _ of [].constructor(5)" class="loader-container">
+        <p-skeleton class="skeleton" width="14rem" height="1.3rem" borderRadius="16px"></p-skeleton>
+      </div>
+    </ng-template>
+  </ng-template>
+
+  <!-- custom message for empty results -->
+  <ng-template pTemplate="empty">
+    <ng-container *ngIf="!isLoading">
+      <span>No results found</span>
+    </ng-container>
+  </ng-template>
+
+  <!-- custom label for the selected values -->
+  <ng-template pTemplate="selectedItems" let-option>
+    <div *ngIf="validSelectionCount > 0">{{ validSelectionCount }} item(s) selected</div>
+    <div *ngIf="validSelectionCount === 0">{{ placeholder }}</div>
+  </ng-template>
+
   <!-- custom list items -->
   <ng-template let-option pTemplate="options">
     <div class="item-container">

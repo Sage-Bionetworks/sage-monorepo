@@ -178,6 +178,11 @@ components:
       - desc
       nullable: true
       type: string
+    OrganizationId:
+      description: The unique identifier of an organization
+      example: 1
+      format: int64
+      type: integer
     OrganizationSearchQuery:
       description: An organization search query.
       properties:
@@ -208,6 +213,11 @@ components:
           $ref: '#/components/schemas/OrganizationSort'
         direction:
           $ref: '#/components/schemas/OrganizationDirection'
+        ids:
+          description: An array of organization ids used to filter the results.
+          items:
+            $ref: '#/components/schemas/OrganizationId'
+          type: array
         searchTerms:
           description: A string of search terms used to filter the results.
           example: data provider
@@ -252,11 +262,6 @@ components:
       - totalElements
       - totalPages
       type: object
-    OrganizationId:
-      description: The unique identifier of an organization
-      example: 1
-      format: int64
-      type: integer
     OrganizationLogin:
       description: The unique login of an organization.
       example: example-org

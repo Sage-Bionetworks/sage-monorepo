@@ -1,0 +1,7 @@
+@use 'libs/model-ad/not-found/src/lib-theme' as model-ad-not-found;
+@use 'libs/model-ad/ui/src/lib-theme' as model-ad-ui;
+
+@mixin theme($theme) {
+  @include model-ad-not-found.theme($theme);
+  @include model-ad-ui.theme($theme);
+}

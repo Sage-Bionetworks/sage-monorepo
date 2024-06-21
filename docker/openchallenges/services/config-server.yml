@@ -13,6 +13,3 @@ services:
       resources:
         limits:
           memory: 1G
-    depends_on:
-      openchallenges-vault:
-        condition: service_healthy

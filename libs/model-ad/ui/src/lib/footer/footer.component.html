@@ -1,0 +1,41 @@
+<footer class="mat-typography">
+  <div class="row">
+    <div class="col-8 about-oc">
+      <img class="logo" src="/model-ad-assets/images/model-ad-color.svg" alt="MODEL-AD logo" />
+      <ul class="footer-link-group">
+        <li><a routerLink="/about">About</a></li>
+        <li><a routerLink="/team">Meet Our Team</a></li>
+        <li>
+          <a
+            [href]="apiDocsUrl"
+            title="Interactive documentation for OC API"
+            rel="noopener noreferrer"
+            target="_blank"
+            >API Docs</a
+          >
+        </li>
+        <li>
+          <a
+            href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose"
+            title="Share feedback about the OC app"
+            rel="noopener noreferrer"
+            target="_blank"
+            >Submit a Feature/Bug</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="col-4 app-info">
+      <ul>
+        <li>App version: {{ appVersion }}</li>
+        <li>Data updated on: {{ dataUpdatedOn }}</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-links">
+      <a [href]="privacyPolicyUrl">Privacy Policy</a> • <a [href]="termsOfUseUrl">Terms of Use</a> •
+      <a href="https://www.sagebionetworks.org">Powered by Sage Bionetworks</a>
+    </span>
+  </div>
+</footer>
