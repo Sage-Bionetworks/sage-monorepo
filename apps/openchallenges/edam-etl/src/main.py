@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 from os import getenv
 from typing import Optional
-import mariadb 
+import mariadb
 import sys
 import mysql.connector
 from sqlalchemy import create_engine
@@ -34,7 +34,6 @@ def connect_to_mariadb(username: str, password: str, port: str, host: str, datab
             database = database
         )
         print("Establishing a connection to the MariaDB Platform.")
-        
         # Get the cursor
         cur = conn.cursor()
         print("Connection has been established to MariaDB Platform!")
