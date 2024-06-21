@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "agora-data"
+version = "0.1.0"
+description = "Agora Data Release"
+authors = ["Hallie Swan <hallie.swan@sagebase.org>"]
+readme = "README.md"
+packages = [{include = "src"}]
+
+[tool.poetry.dependencies]
+python = "3.11.9"
+synapseclient = "4.3.0"
+
+[tool.poetry.group.dev.dependencies]
+
+[tool.poetry.group.prod.dependencies]
+
+[tool.poetry.group.test.dependencies]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
