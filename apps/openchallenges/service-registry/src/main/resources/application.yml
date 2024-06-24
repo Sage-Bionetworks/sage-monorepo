@@ -4,9 +4,9 @@ spring:
   profiles:
     active: dev,local
   config:
-    confighost: http://openchallenges-config-server:8090
-    import: configserver:${confighost}
+    import: 'configserver:'
   cloud:
     config:
+      uri: http://openchallenges-config-server:8090
       username: openchallenges
       password: changeme
