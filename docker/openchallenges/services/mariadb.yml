@@ -7,7 +7,7 @@ services:
       - ../../../apps/openchallenges/mariadb/.env
     volumes:
       # - openchallenges-mariadb:/data/db
-      - ../../../apps/openchallenges/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      # - ../../../apps/openchallenges/mariadb/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     networks:
       - openchallenges
     ports:
