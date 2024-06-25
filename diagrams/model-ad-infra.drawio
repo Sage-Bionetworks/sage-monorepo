@@ -1,11 +1,11 @@
-<mxfile modified="2024-06-25T14:26:34.490Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0" etag="wY6d7kr-2om51EoT0aM2" version="24.6.2" type="github">
+<mxfile modified="2024-06-25T14:26:58.578Z" host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:127.0) Gecko/20100101 Firefox/127.0" etag="2Hi4PQCzoogI_Dmsx5Cf" version="24.6.2" type="github">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
     <mxGraphModel dx="1607" dy="857" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-47" value="OpenChallenges Infra" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
-          <mxGeometry x="36.5" y="26.5" width="310" height="42" as="geometry" />
+        <mxCell id="-QjtrjUzRDEMRZ5MF8oH-47" value="MODEL-AD Infra" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=30;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
+          <mxGeometry x="36.5" y="26.5" width="245" height="42" as="geometry" />
         </mxCell>
         <mxCell id="-QjtrjUzRDEMRZ5MF8oH-48" value="Architect: Thomas Schaffter&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; Last Updated: 2024-06-24" style="text;html=1;resizable=0;points=[];autosize=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=16;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="36.5" y="76.5" width="423" height="25" as="geometry" />
