@@ -9,6 +9,7 @@ packages = [{include = "src"}]
 [tool.poetry.dependencies]
 python = "3.11.9"
 synapseclient = "4.3.0"
+pymongo = "4.7.3"
 
 [tool.poetry.group.dev.dependencies]
 
@@ -19,3 +20,10 @@ synapseclient = "4.3.0"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+# Include non-Python files
+include = [
+    { path = "src/data/collections.csv" },
+    { path = "src/scripts/import-data.sh" },
+    { path = "src/scripts/mongo-create-Indexes.js" }
+]
