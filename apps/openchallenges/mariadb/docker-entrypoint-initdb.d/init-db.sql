@@ -37,3 +37,8 @@ grant all privileges on edam.* to 'edam_etl';
 -- create user 'mysqld-exporter' identified by 'changeme' with max_user_connections 3;;
 -- grant process, slave monitor on *.* to 'mysqld-exporter';
 -- grant select on performance_schema.* to 'mysqld-exporter';
+
+
+-- Allow access from other hosts
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'0.0.0.0' IDENTIFIED BY 'changeme' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON *.* TO 'maria'@'0.0.0.0' IDENTIFIED BY 'changeme' WITH GRANT OPTION;
