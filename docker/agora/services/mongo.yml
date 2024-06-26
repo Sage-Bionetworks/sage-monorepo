@@ -5,8 +5,8 @@ services:
     restart: always
     env_file:
       - ../../../apps/agora/mongo/.env
-    #volumes:
-    #  - agora-mongo-data:/data/db
+    volumes:
+      - agora-mongo-data:/data/db
     networks:
       - agora
     ports:
