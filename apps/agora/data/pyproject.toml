@@ -5,6 +5,10 @@ description = "Agora Data Release"
 authors = ["Hallie Swan <hallie.swan@sagebase.org>"]
 readme = "README.md"
 packages = [{include = "src"}]
+include = [
+    { path = "src/data/collections.csv" },
+    { path = "src/data/collections-indexes.json" },
+]
 
 [tool.poetry.dependencies]
 python = "3.11.9"
@@ -20,10 +24,3 @@ pymongo = "4.7.3"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-# Include non-Python files
-include = [
-    { path = "src/data/collections.csv" },
-    { path = "src/scripts/import-data.sh" },
-    { path = "src/scripts/mongo-create-Indexes.js" }
-]

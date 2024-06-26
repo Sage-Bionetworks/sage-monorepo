@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
-source docker/agora/compose-files.sh
+args=(
+  # List of services in alphanumeric order
+  --file docker/agora/services/app.yml
+  --file docker/agora/services/data.yml
+  --file docker/agora/services/mongo.yml
 
-docker compose "${files[@]}" up $1 --detach --remove-orphans
+  --file docker/agora/networks.yml
+  --file docker/agora/volumes.yml
+
+  up $1 --detach --remove-orphans
+)
+
+docker compose "${args[@]}"
