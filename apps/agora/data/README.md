@@ -36,7 +36,6 @@ docker run --rm ghcr.io/sage-bionetworks/agora-data:local
 ### Run the container and its dependencies (MongoDB)
 
 ```
-# TODO - fix permission denied error when attempting to make local/data dir in container
 nx serve-detach agora-data
 ```
 

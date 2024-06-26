@@ -10,7 +10,7 @@ services:
     networks:
       - agora
     ports:
-      - '5017:27017'
+      - '27017:27017'
     deploy:
       resources:
         limits:
