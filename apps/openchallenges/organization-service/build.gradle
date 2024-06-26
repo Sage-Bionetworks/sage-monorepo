@@ -163,15 +163,15 @@ spotless {
   }
 }
 
-flyway {
-  url = 'jdbc:mysql://openchallenges-mariadb:3306/challenge'
-  user = 'maria'
-  password = 'changeme'
-  // cleanDisabled = false
-  // schemas = ['schema1', 'schema2', 'schema3']
-  // placeholders = [
-  //   'keyABC': 'valueXYZ',
-  //   'otherplaceholder': 'value123'
-  // ]
-}
+// flyway {
+//   url = 'jdbc:mysql://openchallenges-mariadb:3306/challenge'
+//   user = 'maria'
+//   password = 'changeme'
+//   // cleanDisabled = false
+//   // schemas = ['schema1', 'schema2', 'schema3']
+//   // placeholders = [
+//   //   'keyABC': 'valueXYZ',
+//   //   'otherplaceholder': 'value123'
+//   // ]
+// }
 
