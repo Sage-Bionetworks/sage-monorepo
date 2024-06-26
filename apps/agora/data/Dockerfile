@@ -1,6 +1,6 @@
 FROM python:3.11.9-slim
 
-ARG LOCAL_DATA_DIR="local/data"
+ARG LOCAL_DATA_DIR="./local/data"
 ARG USERNAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
