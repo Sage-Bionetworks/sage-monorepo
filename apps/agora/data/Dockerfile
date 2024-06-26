@@ -26,11 +26,10 @@ COPY pyproject.toml poetry.lock ./
 RUN pip install --no-cache-dir poetry==1.6.1 \
   && poetry config --local virtualenvs.create false \
   && poetry install --with prod --no-root --no-interaction --no-ansi \
-  && pip cache purge
-
-# Give APP_USER write permission to directory where synapse data will be written
-RUN mkdir -p ${LOCAL_DATA_DIR}
-RUN chown ${APP_USERNAME} ${LOCAL_DATA_DIR}
+  && pip cache purge \
+  # Give APP_USER write permission to directory where synapse data will be written
+  && mkdir -p ${LOCAL_DATA_DIR} \
+  && chown ${APP_USERNAME} ${LOCAL_DATA_DIR}
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
