@@ -53,7 +53,7 @@
         "context": "{projectRoot}",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=sha"]
+          "tags": ["type=edge,branch=main", "type=sha", "type=raw,value=$DATA_FILE.$DATA_VERSION"]
         },
         "push": true
       },
