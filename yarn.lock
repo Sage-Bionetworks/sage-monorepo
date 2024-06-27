@@ -6891,6 +6891,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@nrwl/express@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nrwl/express@npm:18.1.2"
+  dependencies:
+    "@nx/express": 18.1.2
+  checksum: 5efd94035f1450e2ace258c0d4c70544ff8eb4ad63dbfdb29513dc1548a82f17be041496026e6ab99a18a7dd0fcebf3ab63c7303fd41e8d04ba10c36810e2734
+  languageName: node
+  linkType: hard
+
 "@nrwl/jest@npm:18.1.2":
   version: 18.1.2
   resolution: "@nrwl/jest@npm:18.1.2"
@@ -7169,6 +7178,23 @@ __metadata:
     js-yaml:
       optional: true
   checksum: edd6322890db513edf419a0a04542bc8efd393592127bde58e3f6030eec7ceba502f9970376b572f5db4421ca2181c174ff4915f209a158e2200e79b54ddff34
+  languageName: node
+  linkType: hard
+
+"@nx/express@npm:18.1.2":
+  version: 18.1.2
+  resolution: "@nx/express@npm:18.1.2"
+  dependencies:
+    "@nrwl/express": 18.1.2
+    "@nx/devkit": 18.1.2
+    "@nx/node": 18.1.2
+    tslib: ^2.3.0
+  peerDependencies:
+    express: ^4.18.1
+  peerDependenciesMeta:
+    express:
+      optional: true
+  checksum: 486e2c903983623892c40e9d143de2add3ecc4ad4b5a116207c6f91fe4c1b80d4837150b3083cd7348b72b8fa6f8967ba1654bc726d057a7d6a25c9334a79f5b
   languageName: node
   linkType: hard
 
@@ -29029,6 +29055,7 @@ __metadata:
     "@nx/devkit": 18.1.2
     "@nx/eslint": 18.1.2
     "@nx/eslint-plugin": 18.1.2
+    "@nx/express": 18.1.2
     "@nx/jest": 18.1.2
     "@nx/js": 18.1.2
     "@nx/node": 18.1.2
