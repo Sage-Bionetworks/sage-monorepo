@@ -4,6 +4,7 @@
 
 # list of hostnames (defined in alphabetical order)
 declare -a hostnames=(
+  "127.0.0.1 agora-mongo"
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"
   "127.0.0.1 model-ad-mongo"
@@ -18,7 +19,6 @@ declare -a hostnames=(
   "127.0.0.1 openchallenges-image-service"
   "127.0.0.1 openchallenges-keycloak"
   "127.0.0.1 openchallenges-mariadb"
-  "127.0.0.1 openchallenges-mongo"
   "127.0.0.1 openchallenges-mysqld-exporter"
   "127.0.0.1 openchallenges-opensearch"
   "127.0.0.1 openchallenges-organization-service"

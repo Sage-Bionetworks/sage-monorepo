@@ -1,0 +1,17 @@
+services:
+  agora-data:
+    image: ghcr.io/sage-bionetworks/agora-data:${AGORA_VERSION:-local}
+    container_name: agora-data
+    restart: no
+    env_file:
+      - ../../../apps/agora/data/.env
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - agora
+    deploy:
+      resources:
+        limits:
+          memory: 2GB
+    depends_on:
+      - agora-mongo
