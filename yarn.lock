@@ -29063,6 +29063,7 @@ __metadata:
     "@nx/plugin": 18.1.2
     "@nx/storybook": 18.1.2
     "@nx/web": 18.1.2
+    "@nx/webpack": 18.1.2
     "@nx/workspace": 18.1.2
     "@openapitools/openapi-generator-cli": 2.5.2
     "@playwright/test": ^1.36.0

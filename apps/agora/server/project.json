@@ -1,0 +1,52 @@
+{
+  "name": "agora-server",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agora/server/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/agora/server",
+        "main": "apps/agora/server/src/main.ts",
+        "tsConfig": "apps/agora/server/tsconfig.app.json",
+        "assets": ["apps/agora/server/src/assets"],
+        "webpackConfig": "apps/agora/server/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "agora-server:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "agora-server:build:development"
+        },
+        "production": {
+          "buildTarget": "agora-server:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/agora/server/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

@@ -64,7 +64,10 @@
           "buildTarget": "agora-app:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/agora/app/proxy.conf.json"
+      }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
