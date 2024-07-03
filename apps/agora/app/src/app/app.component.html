@@ -1,1 +1,9 @@
+<div *ngIf="dataVersion$ | async as dataVersion">
+  <h3>Data Release Info</h3>
+  <ul>
+    <li>Data File: {{ dataVersion.data_file }}</li>
+    <li>Data Version: {{ dataVersion.data_version }}</li>
+    <li>Team Images Id: {{ dataVersion.team_images_id }}</li>
+  </ul>
+</div>
 <agora-nx-welcome></agora-nx-welcome> <router-outlet></router-outlet>

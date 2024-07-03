@@ -1,0 +1,36 @@
+{
+  "name": "agora-api-client-angular",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/agora/api-client-angular/src",
+  "projectType": "library",
+  "prefix": "agora",
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:ng-packagr-lite",
+      "outputs": ["{workspaceRoot}/dist/libs/agora/api-client-angular"],
+      "options": {
+        "project": "libs/agora/api-client-angular/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "libs/agora/api-client-angular/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "libs/agora/api-client-angular/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/api-client-angular"],
+      "options": {
+        "jestConfig": "libs/agora/api-client-angular/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["language:typescript"]
+}
