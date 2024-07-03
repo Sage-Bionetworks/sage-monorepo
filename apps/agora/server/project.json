@@ -4,6 +4,13 @@
   "sourceRoot": "apps/agora/server/src",
   "projectType": "application",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "build": {
       "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
