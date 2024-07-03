@@ -4,13 +4,16 @@
  */
 
 import express from 'express';
-import * as path from 'path';
+import path from 'path';
 import api from './api';
 
 const app = express();
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/api', api);
+
+// Health endpoint used by the container
+app.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
 
 const port = process.env.PORT ?? 3333;
 const server = app.listen(port, () => {
