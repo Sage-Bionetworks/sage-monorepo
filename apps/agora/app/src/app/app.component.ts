@@ -5,14 +5,8 @@ import {
   DataVersion,
   DataVersionService,
 } from '@sagebionetworks/agora/api-client-angular';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { NxWelcomeComponent } from './nx-welcome.component';
-
-const defaultDataVersion: DataVersion = {
-  data_file: 'unknown',
-  data_version: 'unknown',
-  team_images_id: 'unknown',
-};
 
 @Component({
   standalone: true,
@@ -29,8 +23,6 @@ export class AppComponent implements OnInit {
   constructor(private dataVersionService: DataVersionService) {}
 
   ngOnInit(): void {
-    this.dataVersion$ = this.dataVersionService
-      .getDataVersion()
-      .pipe(map((dataVersion) => dataVersion || defaultDataVersion));
+    this.dataVersion$ = this.dataVersionService.getDataVersion();
   }
 }

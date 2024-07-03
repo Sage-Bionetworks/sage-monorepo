@@ -10,7 +10,7 @@ import { BASE_URL, DEFAULT_HEADERS } from './constants';
 export class DataVersionService {
   constructor(private http: HttpClient) {}
 
-  getDataVersion(): Observable<DataVersion | null> {
+  getDataVersion(): Observable<DataVersion> {
     return this.http.get<DataVersion>(BASE_URL + '/dataversion', {
       headers: new HttpHeaders(DEFAULT_HEADERS),
     });
