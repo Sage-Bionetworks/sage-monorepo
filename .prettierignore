@@ -10,3 +10,4 @@ build
 .angular
 
 /.nx/cache
+/.nx/workspace-data
