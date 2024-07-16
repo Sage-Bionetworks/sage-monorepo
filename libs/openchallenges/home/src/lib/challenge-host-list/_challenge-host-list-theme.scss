@@ -1,18 +1,17 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
 
-
 @mixin color($theme) {
-  $config: mat.get-color-config($theme);
+  $config: mat.m2-get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
 
   .see-more {
-    background-color: mat.get-color-from-palette($primary, 800) !important;
+    background-color: mat.m2-get-color-from-palette($primary, 800) !important;
     color: white !important;
   }
   .see-more:hover {
-    background-color: mat.get-color-from-palette($primary, 900) !important;
+    background-color: mat.m2-get-color-from-palette($primary, 900) !important;
   }
 }
 
@@ -23,12 +22,12 @@
 }
 
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
   @if $color-config != null {
     @include color($theme);
   }
 
-  $typography-config: mat.get-typography-config($theme);
+  $typography-config: mat.m2-get-typography-config($theme);
   @if $typography-config != null {
     @include typography($theme);
   }
