@@ -2,7 +2,6 @@
 @use 'libs/openchallenges/ui/src/lib-theme' as openchallenges-ui;
 @use 'libs/openchallenges/challenge/src/lib-theme' as openchallenges-challenge;
 @use 'libs/openchallenges/org-profile/src/lib-theme' as openchallenges-org-profile;
-@use 'libs/openchallenges/user-profile/src/lib-theme' as openchallenges-user-profile;
 @use 'libs/openchallenges/home/src/lib-theme' as openchallenges-home;
 @use 'libs/openchallenges/team/src/lib-theme' as openchallenges-team;
 @use 'libs/openchallenges/challenge-search/src/lib-theme' as challenge-search;
@@ -11,7 +10,6 @@
 @mixin theme($theme) {
   @include openchallenges-challenge.theme($theme);
   @include openchallenges-org-profile.theme($theme);
-  @include openchallenges-user-profile.theme($theme);
   @include openchallenges-about.theme($theme);
   @include openchallenges-ui.theme($theme);
   @include openchallenges-home.theme($theme);
