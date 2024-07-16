@@ -17,6 +17,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
+      "@sagebionetworks/agora/api-client-angular": [
+        "libs/agora/api-client-angular/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
