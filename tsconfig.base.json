@@ -48,9 +48,6 @@
       "@sagebionetworks/openchallenges/team": ["libs/openchallenges/team/src/index.ts"],
       "@sagebionetworks/openchallenges/themes": ["libs/openchallenges/themes/src/index.ts"],
       "@sagebionetworks/openchallenges/ui": ["libs/openchallenges/ui/src/index.ts"],
-      "@sagebionetworks/openchallenges/user-profile": [
-        "libs/openchallenges/user-profile/src/index.ts"
-      ],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
