@@ -174,7 +174,7 @@ export class ChallengeSearchComponent
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
     private renderer2: Renderer2,
-    private _location: Location
+    private _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -218,18 +218,18 @@ export class ChallengeSearchComponent
       this.selectedValues['categories'] = this.splitParam(params['categories']);
       this.selectedValues['incentives'] = this.splitParam(params['incentives']);
       this.selectedValues['inputDataTypes'] = this.splitParam(
-        params['inputDataTypes']
+        params['inputDataTypes'],
       ).map((idString) => +idString);
       this.selectedValues['operations'] = this.splitParam(
-        params['operations']
+        params['operations'],
       ).map((idString) => +idString);
       this.selectedValues['organizations'] = this.splitParam(
-        params['organizations']
+        params['organizations'],
       ).map((idString) => +idString);
       this.selectedValues['platforms'] = this.splitParam(params['platforms']);
       this.selectedValues['status'] = this.splitParam(params['status']);
       this.selectedValues['submissionTypes'] = this.splitParam(
-        params['submissionTypes']
+        params['submissionTypes'],
       );
 
       const defaultQuery: ChallengeSearchQuery = {
@@ -275,7 +275,7 @@ export class ChallengeSearchComponent
         skip(1),
         debounceTime(400),
         distinctUntilChanged(),
-        takeUntil(this.destroy)
+        takeUntil(this.destroy),
       )
       .subscribe((searched) => {
         this.onParamChange({ searchTerms: searched });
@@ -285,17 +285,17 @@ export class ChallengeSearchComponent
       .pipe(
         tap((query) => console.log('List challenges query', query)),
         switchMap((query: ChallengeSearchQuery) =>
-          this.challengeService.listChallenges(query)
+          this.challengeService.listChallenges(query),
         ),
         tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
             this.openSnackBar(
-              'Unable to get the challenges. Please refresh the page and try again.'
+              'Unable to get the challenges. Please refresh the page and try again.',
             );
           }
           return throwError(() => new Error(err.message));
-        })
+        }),
       )
       .subscribe((page) => {
         // update challenges and total number of results
@@ -370,7 +370,7 @@ export class ChallengeSearchComponent
         // update with new param, or delete the param if empty string
         (params, [key, value]) =>
           value !== '' ? params.set(key, value) : params.delete(key),
-        currentParams
+        currentParams,
       );
     this._location.replaceState(location.pathname, params.toString());
 
@@ -381,7 +381,7 @@ export class ChallengeSearchComponent
 
   onSearchChange(
     searchType: 'challenges' | ChallengeSearchDropdown,
-    searched: string
+    searched: string,
   ): void {
     if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
@@ -391,14 +391,14 @@ export class ChallengeSearchComponent
         (option) => {
           if (Array.isArray(option.value)) {
             return option.value.some((item) =>
-              (this.selectedValues[searchType] as FilterValue[]).includes(item)
+              (this.selectedValues[searchType] as FilterValue[]).includes(item),
             );
           } else {
             return (this.selectedValues[searchType] as FilterValue[]).includes(
-              option.value
+              option.value,
             );
           }
-        }
+        },
       );
       this.dropdownFilters[searchType].options = selectedOptions;
       this.challengeSearchDataService.setEdamConceptSearchQuery({
@@ -444,8 +444,8 @@ export class ChallengeSearchComponent
         dropdown === 'inputDataTypes'
           ? { sections: [EdamSection.Data] }
           : dropdown === 'operations'
-          ? { sections: EdamSection.Operation }
-          : {};
+            ? { sections: EdamSection.Operation }
+            : {};
 
       this.challengeSearchDataService
         .fetchData(dropdown, {
@@ -458,7 +458,7 @@ export class ChallengeSearchComponent
           this.dropdownFilters[dropdown].options = unionWith(
             this.dropdownFilters[dropdown].options,
             newOptions,
-            isEqual
+            isEqual,
           );
         });
     });
@@ -475,7 +475,7 @@ export class ChallengeSearchComponent
   collapseParam(selectedParam: FilterValue | FilterValue[], by = ','): string {
     return Array.isArray(selectedParam)
       ? selectedParam.map((item) => item?.toString()).join(by)
-      : (selectedParam as string) ?? '';
+      : ((selectedParam as string) ?? '');
   }
 
   openSnackBar(message: string) {

@@ -54,6 +54,12 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {

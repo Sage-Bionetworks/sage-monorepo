@@ -15,7 +15,7 @@ export class SeoService {
   constructor(
     private titleService: Title,
     private metaService: Meta,
-    private jsonLdService: JsonLdService
+    private jsonLdService: JsonLdService,
   ) {}
 
   setData(seoData: SeoData, renderer2: Renderer2): void {

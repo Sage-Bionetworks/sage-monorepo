@@ -12,7 +12,7 @@ const thisYear = new Date().getFullYear();
 const updateYear = (
   thisYear: number,
   startYearDiff: number,
-  endYearDiff: number
+  endYearDiff: number,
 ) => {
   return {
     start: `${thisYear + startYearDiff}-01-01`,

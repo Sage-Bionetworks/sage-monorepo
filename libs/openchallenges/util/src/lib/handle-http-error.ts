@@ -6,7 +6,7 @@ export function handleHttpError(
   error: any,
   router: Router,
   httpStatusRedirect: HttpStatusRedirect,
-  defaultRedirectUrl = '/'
+  defaultRedirectUrl = '/',
 ): Error {
   const err = error.error;
   const status = error.status as number;

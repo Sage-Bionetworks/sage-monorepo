@@ -16,7 +16,7 @@ mongoose
 
 mongoose.connection.on(
   'error',
-  console.error.bind(console, 'MongoDB connection error:')
+  console.error.bind(console, 'MongoDB connection error:'),
 );
 
 const router = express.Router();

@@ -38,16 +38,16 @@ export class FeaturedChallengeListComponent implements OnInit {
     const challengesPage$ = this.challengeService.listChallenges(query).pipe(
       catchError((err) => {
         return throwError(() => new Error(err.message));
-      })
+      }),
     );
     this.challenges$ = challengesPage$.pipe(
       switchMap((page) =>
         // remove categories filter if no featured challenges
         page.challenges
           ? of(page)
-          : this.challengeService.listChallenges(defaultQuery)
+          : this.challengeService.listChallenges(defaultQuery),
       ),
-      map((page) => page.challenges)
+      map((page) => page.challenges),
     );
   }
 }

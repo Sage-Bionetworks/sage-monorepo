@@ -22,7 +22,7 @@ export class GoogleTagManagerComponent implements OnInit {
   constructor(
     private router: Router,
     private gtmService: GoogleTagManagerService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {}
 
   ngOnInit(): void {

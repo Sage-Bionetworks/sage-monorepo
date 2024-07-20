@@ -26,7 +26,7 @@ export class CnbDevStack extends SageStack {
       new TagsAddingAspect({
         OwnerEmail: stackOwnerEmail,
         CostCenter: SageCostCenter.ITCR,
-      })
+      }),
     );
 
     // Outputs

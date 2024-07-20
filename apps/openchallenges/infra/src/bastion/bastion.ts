@@ -15,7 +15,7 @@ export class Bastion extends Construct {
     this.instanceProfile = new BastionInstanceProfile(
       this,
       'bastion_instance_profile',
-      config.tagPrefix
+      config.tagPrefix,
     );
 
     const instanceScript = new TerraformAsset(this, 'bastion_instance_script', {

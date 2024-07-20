@@ -39,7 +39,7 @@ export class ChallengeHostListComponent implements OnInit {
 
   constructor(
     private organizationService: OrganizationService,
-    private imageService: ImageService
+    private imageService: ImageService,
   ) {}
 
   ngOnInit() {
@@ -54,7 +54,7 @@ export class ChallengeHostListComponent implements OnInit {
     const orgPage$ = this.organizationService.listOrganizations(query).pipe(
       catchError((err) => {
         return throwError(() => new Error(err.message));
-      })
+      }),
     );
 
     this.organizationCards$ = orgPage$.pipe(
@@ -64,17 +64,17 @@ export class ChallengeHostListComponent implements OnInit {
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-            Infinity
+            Infinity,
           ),
-        })
+        }),
       ),
       switchMap(({ orgs, avatarUrls }) =>
         of(
           orgs.map((org, index) =>
-            this.getOrganizationCard(org, avatarUrls[index])
-          )
-        )
-      )
+            this.getOrganizationCard(org, avatarUrls[index]),
+          ),
+        ),
+      ),
     );
   }
 
@@ -87,21 +87,21 @@ export class ChallengeHostListComponent implements OnInit {
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery),
-      of({ url: '' })
+      of({ url: '' }),
     ).pipe(
       catchError(() => {
         console.error(
-          'Unable to get the image url. Please check the logs of the image service.'
+          'Unable to get the image url. Please check the logs of the image service.',
         );
         return of({ url: '' });
-      })
+      }),
     );
   }
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image
+    avatarUrl: Image,
   ): OrganizationCard {
     return {
       acronym: org.acronym,

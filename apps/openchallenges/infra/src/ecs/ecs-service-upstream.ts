@@ -12,7 +12,7 @@ export class EcsServiceUpstream extends Construct {
     taskDefinitionArn: string,
     targetGroupArn: string,
     subnets: Subnet[],
-    securityGroupId: string
+    securityGroupId: string,
   ) {
     super(scope, id);
 

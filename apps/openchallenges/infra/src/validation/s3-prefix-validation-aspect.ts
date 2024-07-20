@@ -13,7 +13,7 @@ export class S3PrefixValidationAspect implements IAspect {
         // You can include `addInfo`, `addWarning`, and `addError`. CDKTF prints these messages when
         // the user runs `synth`, `plan`, or `deploy`.
         Annotations.of(node).addError(
-          `Each S3 Bucket name needs to start with ${this.prefix}`
+          `Each S3 Bucket name needs to start with ${this.prefix}`,
         );
       }
     }

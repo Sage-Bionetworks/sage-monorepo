@@ -15,7 +15,7 @@ const cnbDevStack = new CnbDevStack(app, 'cnb-dev');
 const openChallengesStack = new OpenChallengesStack(app, 'openchallenges');
 const openChallengesPreviewStack = new OpenChallengesPreviewStack(
   app,
-  'openchallenges-preview'
+  'openchallenges-preview',
 );
 
 new CloudBackend(cnbDevStack, {

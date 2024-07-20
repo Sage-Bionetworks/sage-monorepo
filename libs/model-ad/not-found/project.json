@@ -7,21 +7,21 @@
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/model-ad/not-found"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/not-found"],
       "options": {
         "jestConfig": "libs/model-ad/not-found/jest.config.ts"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:model-ad",
-    "language:typescript"
-  ],
+  "tags": ["type:feature", "scope:model-ad", "language:typescript"],
   "implicitDependencies": []
 }

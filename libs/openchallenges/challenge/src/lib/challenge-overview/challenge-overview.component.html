@@ -1,106 +1,108 @@
-<main *ngIf="challenge">
-  <div id="bio">
-    <h3 class="top-section-title">Overview</h3>
-    <p>{{ useNaIfFalsey(challenge.description) }}</p>
-    <div *ngIf="challenge.description.endsWith('...')">
-      <a class="read-more" href="{{ challenge.websiteUrl }}"
-        >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a
-      >
-    </div>
-  </div>
-  <div id="details">
-    <h3 class="section-title">Challenge Details</h3>
-    <table>
-      <tbody>
-        <tr>
-          <td class="text-right">Start Date</td>
-          <td [ngClass]="{ 'text-grey': challenge.startDate === null }">
-            {{ useNaIfFalsey(challenge.startDate) }}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-right">End Date</td>
-          <td [ngClass]="{ 'text-grey': challenge.endDate === null }">
-            {{ useNaIfFalsey(challenge.endDate) }}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-right">Status</td>
-          <td>{{ challenge.status | challengeStatusLabel }}</td>
-        </tr>
-        <tr>
-          <td class="text-right">Platform</td>
-          <td [ngClass]="{ 'text-grey': !challenge.platform }">
-            {{ useNaIfFalsey(challenge.platform?.name) }}
-          </td>
-        </tr>
-        <tr>
-          <td class="text-right">DOI</td>
-          <td>
-            <a
-              *ngIf="challenge.doi; else na_doi"
-              rel="noopener"
-              target="_blank"
-              href="https://doi.org/{{ challenge.doi }}"
-              >{{ challenge.doi }}</a
-            >
-          </td>
-          <ng-template #na_doi>
-            <span class="text-grey">Not available</span>
-          </ng-template>
-        </tr>
-        <tr>
-          <td class="text-right">Submission Type</td>
-          <td
-            *ngIf="challenge.inputDataTypes && challenge.submissionTypes.length > 0; else na_subs"
-          >
-            <span
-              nowrap
-              *ngFor="let submissionType of challenge.submissionTypes; let isLast = last"
-            >
-              {{ submissionType | challengeSubmissionTypeLabel }}{{ isLast ? '' : ', ' }}</span
-            >
-          </td>
-          <ng-template #na_subs>
-            <td><span class="text-grey">Not available</span></td>
-          </ng-template>
-        </tr>
-        <tr>
-          <td class="text-right">Incentive(s)</td>
-          <td *ngIf="challenge.incentives && challenge.incentives.length > 0; else na_prize">
-            <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
-              {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}</span
-            >
-          </td>
-          <ng-template #na_prize>
-            <td><span class="text-grey">Not available</span></td>
-          </ng-template>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <!-- <div id="info">
-    <div class="col">
-      <h3 class="section-title">Hosted By</h3>
-      <div class="card-group">
-        <openchallenges-organization-card
-          *ngFor="let organization of organizations"
-          [organization]="organization"
-        />
+@if (challenge) {
+  <main>
+    <div id="bio">
+      <h3 class="top-section-title">Overview</h3>
+      <p>{{ useNaIfFalsey(challenge.description) }}</p>
+      <div *ngIf="challenge.description.endsWith('...')">
+        <a class="read-more" href="{{ challenge.websiteUrl }}"
+          >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a
+        >
       </div>
     </div>
-  </div> -->
-  <hr />
-  <span class="mat-caption created-updated-dates">
-    Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }} //
-    See something missing or not up-to-date?
-    <a
-      href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{
-        challenge.id
-      }}&entry.1040159972={{ challenge.slug }}"
-      rel="noopener"
-      target="_blank"
-      >Suggest an edit here!</a
-    >
-  </span>
-</main>
+    <div id="details">
+      <h3 class="section-title">Challenge Details</h3>
+      <table>
+        <tbody>
+          <tr>
+            <td class="text-right">Start Date</td>
+            <td [ngClass]="{ 'text-grey': challenge.startDate === null }">
+              {{ useNaIfFalsey(challenge.startDate) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">End Date</td>
+            <td [ngClass]="{ 'text-grey': challenge.endDate === null }">
+              {{ useNaIfFalsey(challenge.endDate) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">Status</td>
+            <td>{{ challenge.status | challengeStatusLabel }}</td>
+          </tr>
+          <tr>
+            <td class="text-right">Platform</td>
+            <td [ngClass]="{ 'text-grey': !challenge.platform }">
+              {{ useNaIfFalsey(challenge.platform?.name) }}
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right">DOI</td>
+            <td>
+              <a
+                *ngIf="challenge.doi; else na_doi"
+                rel="noopener"
+                target="_blank"
+                href="https://doi.org/{{ challenge.doi }}"
+                >{{ challenge.doi }}</a
+              >
+            </td>
+            <ng-template #na_doi>
+              <span class="text-grey">Not available</span>
+            </ng-template>
+          </tr>
+          <tr>
+            <td class="text-right">Submission Type</td>
+            <td
+              *ngIf="challenge.inputDataTypes && challenge.submissionTypes.length > 0; else na_subs"
+            >
+              <span
+                nowrap
+                *ngFor="let submissionType of challenge.submissionTypes; let isLast = last"
+              >
+                {{ submissionType | challengeSubmissionTypeLabel }}{{ isLast ? '' : ', ' }}</span
+              >
+            </td>
+            <ng-template #na_subs>
+              <td><span class="text-grey">Not available</span></td>
+            </ng-template>
+          </tr>
+          <tr>
+            <td class="text-right">Incentive(s)</td>
+            <td *ngIf="challenge.incentives && challenge.incentives.length > 0; else na_prize">
+              <span nowrap *ngFor="let incentive of challenge.incentives; let isLast = last">
+                {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}</span
+              >
+            </td>
+            <ng-template #na_prize>
+              <td><span class="text-grey">Not available</span></td>
+            </ng-template>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- <div id="info">
+        <div class="col">
+          <h3 class="section-title">Hosted By</h3>
+          <div class="card-group">
+            <openchallenges-organization-card
+              *ngFor="let organization of organizations"
+              [organization]="organization"
+            />
+          </div>
+        </div>
+      </div> -->
+    <hr />
+    <span class="mat-caption created-updated-dates">
+      Added to the OC on {{ challenge.createdAt }} and last modified on {{ challenge.updatedAt }} //
+      See something missing or not up-to-date?
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&entry.2102238281={{
+          challenge.id
+        }}&entry.1040159972={{ challenge.slug }}"
+        rel="noopener"
+        target="_blank"
+        >Suggest an edit here!</a
+      >
+    </span>
+  </main>
+}

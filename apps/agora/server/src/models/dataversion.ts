@@ -9,10 +9,10 @@ const DataVersionSchema = new Schema<DataVersion>(
   },
   {
     collection: 'dataversion',
-  }
+  },
 );
 
 export const DataVersionCollection = model<DataVersion>(
   'DataVersionCollection',
-  DataVersionSchema
+  DataVersionSchema,
 );

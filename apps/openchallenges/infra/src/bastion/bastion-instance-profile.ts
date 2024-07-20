@@ -26,7 +26,7 @@ export class BastionInstanceProfile extends Construct {
             ],
           },
         ],
-      }
+      },
     );
 
     this.iamRole = new IamRole(this, 'bastion_role', {
@@ -43,7 +43,7 @@ export class BastionInstanceProfile extends Construct {
       {
         name: `${nameTagPrefix}-bastion-instance-profile`,
         role: this.iamRole.name,
-      }
+      },
     );
   }
 }

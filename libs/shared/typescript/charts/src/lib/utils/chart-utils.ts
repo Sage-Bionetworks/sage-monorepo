@@ -3,7 +3,7 @@ import { ECharts, EChartsOption } from 'echarts';
 
 // Chart must have initial height to be visible
 export function ensureChartDomHasHeight(
-  chartDom: HTMLDivElement | HTMLCanvasElement
+  chartDom: HTMLDivElement | HTMLCanvasElement,
 ) {
   const computedHeight = window
     .getComputedStyle(chartDom, null)
