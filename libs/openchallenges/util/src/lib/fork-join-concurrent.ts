@@ -4,7 +4,7 @@ import { last, map, mergeMap, toArray } from 'rxjs/operators';
 // Source: https://stackoverflow.com/a/54247150
 export function forkJoinConcurrent(
   observables: Observable<any>[],
-  concurrent: number
+  concurrent: number,
 ): Observable<any[]> {
   // Convert the array of observables to a higher-order observable:
   return from(observables).pipe(
@@ -18,9 +18,9 @@ export function forkJoinConcurrent(
           // Combine the value with the index so that the stream of merged
           // values - which could be in any order - can be sorted to match
           // the order of the source observables:
-          map((value) => ({ index: observableIndex, value }))
+          map((value) => ({ index: observableIndex, value })),
         ),
-      concurrent
+      concurrent,
     ),
     // Convert the stream of last values to an array:
     toArray(),
@@ -28,7 +28,7 @@ export function forkJoinConcurrent(
     // indices correspond to the source observable indices and then
     // map the pair to the value:
     map((pairs) =>
-      pairs.sort((l, r) => l.index - r.index).map((pair) => pair.value)
-    )
+      pairs.sort((l, r) => l.index - r.index).map((pair) => pair.value),
+    ),
   );
 }

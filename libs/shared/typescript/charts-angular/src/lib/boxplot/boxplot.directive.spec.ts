@@ -44,7 +44,7 @@ describe('BoxplotDirective', () => {
   it('should render no data placeholder when no data is passed', async () => {
     await renderTestComponent({ points: [] });
     expect(
-      screen.getByLabelText('No data is currently available.')
+      screen.getByLabelText('No data is currently available.'),
     ).toBeVisible();
   });
 
@@ -55,8 +55,8 @@ describe('BoxplotDirective', () => {
     });
     expect(
       screen.getByLabelText(
-        /The 0 series is a Boxplot.The data is as follows: the data for 1 is CAT1, 10, 20, 30, 40, 50, 1, the data for 2 is CAT2, 15, 25, 35, 45, 55, 2, the data for 3 is CAT3, 20, 30, 40, 50, 60, 3, the data for 4 is CAT4, 20, 30, 40, 50, 60, 4./i
-      )
+        /The 0 series is a Boxplot.The data is as follows: the data for 1 is CAT1, 10, 20, 30, 40, 50, 1, the data for 2 is CAT2, 15, 25, 35, 45, 55, 2, the data for 3 is CAT3, 20, 30, 40, 50, 60, 3, the data for 4 is CAT4, 20, 30, 40, 50, 60, 4./i,
+      ),
     ).toBeVisible();
   });
 
@@ -66,8 +66,8 @@ describe('BoxplotDirective', () => {
     });
     expect(
       screen.getByLabelText(
-        /The 0 series is a Boxplot.The data is as follows: the data for 0 is 0, NaN, NaN, NaN, NaN, NaN, the data for 1 is 1, 317, 604.5, 729, 830.25, 877, the data for 2 is 2, 407, 540.25, 570, 754.25, 919, the data for 3 is 3, 336, 461, 611, 798.5, 982./i
-      )
+        /The 0 series is a Boxplot.The data is as follows: the data for 0 is 0, NaN, NaN, NaN, NaN, NaN, the data for 1 is 1, 317, 604.5, 729, 830.25, 877, the data for 2 is 2, 407, 540.25, 570, 754.25, 919, the data for 3 is 3, 336, 461, 611, 798.5, 982./i,
+      ),
     ).toBeVisible();
   });
 });

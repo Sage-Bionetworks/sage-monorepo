@@ -47,7 +47,7 @@ export class HomeComponent {
   constructor(
     private readonly configService: ConfigService,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;

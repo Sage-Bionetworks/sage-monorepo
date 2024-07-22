@@ -15,7 +15,7 @@ export function app(): express.Express {
   const server = express();
   const distFolder = join(
     process.cwd(),
-    'dist/apps/openchallenges/app/browser/browser'
+    'dist/apps/openchallenges/app/browser/browser',
   );
   const indexHtml = existsSync(join(distFolder, 'index.original.html'))
     ? join(distFolder, 'index.original.html')
@@ -33,7 +33,7 @@ export function app(): express.Express {
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
-    })
+    }),
   );
 
   // Health endpoint used by the container

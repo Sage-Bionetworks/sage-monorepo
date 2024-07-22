@@ -13,7 +13,7 @@ export class Database extends Construct {
     id: string,
     subnetId: string,
     securityGroupId: string,
-    natGateway: NatGateway
+    natGateway: NatGateway,
   ) {
     super(scope, id);
 

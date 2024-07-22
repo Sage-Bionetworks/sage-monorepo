@@ -26,7 +26,7 @@ export class PreviewInstanceInstanceProfile extends Construct {
             ],
           },
         ],
-      }
+      },
     );
 
     this.iamRole = new IamRole(this, 'preview_instance_role', {
@@ -43,7 +43,7 @@ export class PreviewInstanceInstanceProfile extends Construct {
       {
         name: `${nameTagPrefix}-preview-instance-instance-profile`,
         role: this.iamRole.name,
-      }
+      },
     );
   }
 }

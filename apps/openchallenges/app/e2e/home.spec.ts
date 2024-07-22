@@ -5,6 +5,6 @@ test('has banner', async ({ page }) => {
 
   // Expect first h4 to contain a substring.
   await expect(page.locator('h4').first()).toHaveText(
-    'Welcome to OpenChallenges!'
+    'Welcome to OpenChallenges!',
   );
 });

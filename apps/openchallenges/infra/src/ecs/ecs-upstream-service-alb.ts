@@ -14,7 +14,7 @@ export class EcsUpstreamServiceAlb extends Construct {
     id: string,
     subnets: Subnet[],
     securityGroupId: string,
-    vpcId: string
+    vpcId: string,
   ) {
     super(scope, id);
 

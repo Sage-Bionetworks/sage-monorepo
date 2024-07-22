@@ -15,16 +15,12 @@
     },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/model-ad/app/browser/browser",
         "index": "apps/model-ad/app/src/index.html",
         "main": "apps/model-ad/app/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/model-ad/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -100,19 +96,21 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/model-ad/app/jest.config.ts"
       }
     },
     "server": {
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/model-ad/app/browser/server",
@@ -153,39 +151,24 @@
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-app"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-app"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
-      "dependsOn": [
-        "server"
-      ]
+      "dependsOn": ["server"]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-app"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-app"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -195,9 +178,5 @@
       }
     }
   },
-  "implicitDependencies": [
-    "model-ad-styles",
-    "model-ad-themes",
-    "shared-typescript-assets"
-  ]
+  "implicitDependencies": ["model-ad-styles", "model-ad-themes", "shared-typescript-assets"]
 }

@@ -20,7 +20,7 @@ export class PageTitleService implements OnDestroy {
           numNotifications > 0 ? `(${numNotifications}) ` : '';
         this.bodyTitle.setTitle(`${notification}${title}`);
       },
-      (err) => console.error(err)
+      (err) => console.error(err),
     );
   }
 

@@ -9,7 +9,7 @@ export async function getDataVersion() {
 export async function dataVersionRoute(
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) {
   try {
     const result = await getDataVersion();

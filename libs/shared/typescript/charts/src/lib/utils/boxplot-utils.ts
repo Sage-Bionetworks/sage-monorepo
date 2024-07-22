@@ -10,7 +10,7 @@ export const getPointStyleFromArray = (
   pointCategories: string[],
   styleValues: string[],
   styleType: string,
-  notFoundValue: string
+  notFoundValue: string,
 ) => {
   const pointIndex = pointCategories.indexOf(pt.pointCategory || '');
   if (pointIndex < 0) {
@@ -19,7 +19,7 @@ export const getPointStyleFromArray = (
   }
   if (pointIndex >= styleValues.length) {
     console.warn(
-      `More point category values provided than possible ${styleType}s. Will re-use an existing ${styleType}.`
+      `More point category values provided than possible ${styleType}s. Will re-use an existing ${styleType}.`,
     );
     return styleValues[pointIndex % styleValues.length];
   }
@@ -37,7 +37,7 @@ export const getCategoryPointShape = (
     'diamond',
     'pin',
     'arrow',
-  ]
+  ],
 ) => {
   return getPointStyleFromArray(pt, pointCategories, shapes, 'shape', 'none');
 };
@@ -54,21 +54,21 @@ export const getCategoryPointColor = (
     '#0072B2',
     '#D55E00',
     '#CC79A7',
-  ]
+  ],
 ) => {
   return getPointStyleFromArray(
     pt,
     pointCategories,
     colors,
     'color',
-    'transparent'
+    'transparent',
   );
 };
 
 export function getUniqueValues(
   values: Record<string, unknown>[],
   key: string,
-  sortValues = false
+  sortValues = false,
 ): unknown[] {
   const outputVals: unknown[] = [];
   values.forEach((val) => {
@@ -93,7 +93,7 @@ export function getOffsetAndJitteredXValue(
   pointIndex: number,
   nPoints: number,
   offset = 0.2,
-  jitterMax = 0 // set to positive value to jitter points
+  jitterMax = 0, // set to positive value to jitter points
 ) {
   if (nPoints === 1) return xValue;
   const totalDistance = Math.min(offset * (nPoints - 1), 0.9);
@@ -107,7 +107,7 @@ export function getOffsetAndJitteredXValue(
 
 function getXAxisValueOfXAxisCategory(
   xAxisCategories: string[],
-  xAxisCategory: string
+  xAxisCategory: string,
 ) {
   const xAxisCategoryIndex = xAxisCategories.indexOf(xAxisCategory);
   return xAxisCategoryIndex + 1;
@@ -120,12 +120,12 @@ export function addXAxisValueToCategoryPoint(
   xAxisCategories: string[],
   pointCategories: string[],
   offset = 0.2,
-  jitterMax = 0 // set to positive value to jitter points
+  jitterMax = 0, // set to positive value to jitter points
 ): CategoryAsValuePoint[] {
   return points.map((pt) => {
     let xAxisValue = getXAxisValueOfXAxisCategory(
       xAxisCategories,
-      pt.xAxisCategory
+      pt.xAxisCategory,
     );
 
     // calculate the underlying points offset, if there are point categories
@@ -137,7 +137,7 @@ export function addXAxisValueToCategoryPoint(
         pointCategoryIndex,
         nPoints,
         offset,
-        jitterMax
+        jitterMax,
       );
     }
 
@@ -148,12 +148,12 @@ export function addXAxisValueToCategoryPoint(
 
 export function addXAxisValueToBoxplotSummaries(
   summaries: CategoryBoxplotSummary[],
-  xAxisCategories: string[]
+  xAxisCategories: string[],
 ): CategoryAsValueBoxplotSummary[] {
   return summaries.map((summary) => {
     const xAxisValue = getXAxisValueOfXAxisCategory(
       xAxisCategories,
-      summary.xAxisCategory
+      summary.xAxisCategory,
     );
     const updatedSummary: CategoryAsValueBoxplotSummary = {
       ...summary,
@@ -168,7 +168,7 @@ export function addXAxisValueToBoxplotSummaries(
 // values of xAxisCategories, so the first array will always be empty.
 export function formatCategoryPointsForBoxplotTransform(
   points: CategoryPoint[],
-  xAxisCategories: string[]
+  xAxisCategories: string[],
 ) {
   // add a placeholder array, so xAxisCategories mapped to xAxisValues can start from index 1
   const dataForBoxplotTransform: number[][] = [];
@@ -178,7 +178,7 @@ export function formatCategoryPointsForBoxplotTransform(
   points.forEach((pt) => {
     const xAxisCategoryValue = getXAxisValueOfXAxisCategory(
       xAxisCategories,
-      pt.xAxisCategory
+      pt.xAxisCategory,
     );
     dataForBoxplotTransform[xAxisCategoryValue].push(pt.value);
   });
