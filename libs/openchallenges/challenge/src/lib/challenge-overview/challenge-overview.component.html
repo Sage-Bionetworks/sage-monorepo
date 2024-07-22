@@ -51,8 +51,8 @@
           </tr>
           <tr>
             <td class="text-right">Submission Type</td>
-            @if (challenge.inputDataTypes && challenge.submissionTypes.length > 0) {
-              <td>
+            <td>
+              @if (challenge.inputDataTypes && challenge.submissionTypes.length > 0) {
                 @for (
                   submissionType of challenge.submissionTypes;
                   track $index;
@@ -63,24 +63,24 @@
                     }}{{ isLast ? '' : ', ' }}</span
                   >
                 }
-              </td>
-            } @else {
-              <td><span class="text-grey">Not available</span></td>
-            }
+              } @else {
+                <span class="text-grey">Not available</span>
+              }
+            </td>
           </tr>
           <tr>
             <td class="text-right">Incentive(s)</td>
-            @if (challenge.incentives && challenge.incentives.length > 0) {
-              <td>
+            <td>
+              @if (challenge.incentives && challenge.incentives.length > 0) {
                 @for (incentive of challenge.incentives; track $index; let isLast = $last) {
                   <span nowrap>
                     {{ incentive | challengeIncentiveLabel }}{{ isLast ? '' : ', ' }}
                   </span>
                 }
-              </td>
-            } @else {
-              <td><span class="text-grey">Not available</span></td>
-            }
+              } @else {
+                <span class="text-grey">Not available</span>
+              }
+            </td>
           </tr>
         </tbody>
       </table>
