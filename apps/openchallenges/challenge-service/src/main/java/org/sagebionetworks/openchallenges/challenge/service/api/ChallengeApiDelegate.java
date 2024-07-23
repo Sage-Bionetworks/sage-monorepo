@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public interface ChallengeApiDelegate {
    *     or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#getChallenge
    */
-  default ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
+  default ResponseEntity<?> getChallenge(Long challengeId) {
     getRequest()
         .ifPresent(
             request -> {

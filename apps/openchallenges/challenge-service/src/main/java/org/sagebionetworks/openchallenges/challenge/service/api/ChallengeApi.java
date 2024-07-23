@@ -53,9 +53,6 @@ public interface ChallengeApi {
               @Content(
                   mediaType = "application/ld+json",
                   schema = @Schema(implementation = ChallengeJsonLdDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengeDto.class))
             }),
         @ApiResponse(
             responseCode = "404",
@@ -90,7 +87,7 @@ public interface ChallengeApi {
       method = RequestMethod.GET,
       value = "/challenges/{challengeId}",
       produces = {"application/json", "application/ld+json", "application/problem+json"})
-  default ResponseEntity<ChallengeDto> getChallenge(
+  default ResponseEntity<?> getChallenge(
       @Parameter(
               name = "challengeId",
               description = "The unique identifier of the challenge.",

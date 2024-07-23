@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.List;
 import java.util.Optional;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
@@ -17,6 +16,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeApiDelegateImpl.class);
+
+  private static final MediaType APPLICATION_LD_JSON = MediaType.valueOf("application/ld+json");
+  private static final MediaType APPLICATION_JSON = MediaType.valueOf("application/json");
 
   private final ChallengeService challengeService;
 
@@ -33,24 +35,16 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
   }
 
   @Override
-  public ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
-    LOGGER.info("getChallenge()");
-    getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                LOGGER.info("mediaType: {}", mediaType);
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  LOGGER.info("Requested application/json");
-                } else if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
-                  LOGGER.info("Requested application/ld+json");
-                } else {
-                  LOGGER.info("Requested type not specified");
-                }
-              }
-            });
-    List<MediaType> acceptedMediaTypes = getAcceptedMediaTypes(getRequest());
-    return ResponseEntity.ok(challengeService.getChallenge(challengeId, acceptedMediaTypes));
+  public ResponseEntity<?> getChallenge(Long challengeId) {
+    for (MediaType mediaType : getAcceptedMediaTypes(getRequest())) {
+      if (mediaType.isCompatibleWith(APPLICATION_LD_JSON)) {
+        return ResponseEntity.ok(challengeService.getChallengeJsonLd(challengeId));
+      }
+      if (mediaType.isCompatibleWith(APPLICATION_JSON)) {
+        return ResponseEntity.ok(challengeService.getChallenge(challengeId));
+      }
+    }
+    return ResponseEntity.ok(challengeService.getChallenge(challengeId));
   }
 
   @Override

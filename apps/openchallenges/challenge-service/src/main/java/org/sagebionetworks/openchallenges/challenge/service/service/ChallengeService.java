@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
@@ -74,7 +75,7 @@ public class ChallengeService {
   }
 
   @Transactional(readOnly = true)
-  public ChallengeDto getChallenge(Long challengeId, List<MediaType> acceptedMediaTypes) {
+  public ChallengeDto getChallenge(Long challengeId) {
     ChallengeEntity challengeEntity =
         challengeRepository
             .findById(challengeId)
@@ -85,6 +86,11 @@ public class ChallengeService {
     log.info("challenge entity platform: {}", challengeEntity.getPlatform());
     ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
     return challenge;
+  }
+
+  @Transactional(readOnly = true)
+  public ChallengeJsonLdDto getChallengeJsonLd(Long challengeId) {
+    return new ChallengeJsonLdDto();
   }
 
   // @Transactional(readOnly = true)
