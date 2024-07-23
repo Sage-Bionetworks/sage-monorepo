@@ -43,40 +43,15 @@ def generate_excel_manifest(
 
     :rtype: Union[file, Tuple[file, int], Tuple[file, int, Dict[str, str]]
     """
-    import os
-    from schematic.manifest.generator import ManifestGenerator
-    from flask import send_from_directory
-    from schematic_api.controllers.utils import get_access_token
-    from schematic import CONFIG  # type: ignore
-
-    if asset_view_id:
-        CONFIG.synapse_master_fileview_id = asset_view_id
-
-    access_token = get_access_token()
-    path_list = ManifestGenerator.create_manifests(
-        path_to_data_model=schema_url,
-        output_format="excel",
-        data_types=[data_type],
-        title=manifest_title,
-        access_token=access_token,
-        dataset_ids=[dataset_id],
-        strict=use_strict_validation,
-        use_annotations=add_annotations,
-        data_model_labels=display_label_type,
-    )
-    assert len(path_list) == 1
-    path = path_list[0]
-    assert isinstance(path, str)
-
-    dir_name = os.path.dirname(path)
-    file_name = os.path.basename(path)
-    mimetype = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    return send_from_directory(
-        directory=dir_name,
-        path=file_name,
-        as_attachment=True,
-        mimetype=mimetype,
-        max_age=0,
+    return manifest_generation_controller_impl.generate_excel_manifest(
+        schema_url,
+        dataset_id,
+        add_annotations,
+        manifest_title,
+        data_type,
+        display_label_type,
+        use_strict_validation,
+        asset_view_id,
     )
 
 
