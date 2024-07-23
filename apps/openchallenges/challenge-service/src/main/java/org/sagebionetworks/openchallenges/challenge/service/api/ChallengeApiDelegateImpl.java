@@ -1,5 +1,6 @@
 package org.sagebionetworks.openchallenges.challenge.service.api;
 
+import java.util.List;
 import java.util.Optional;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
@@ -41,17 +42,25 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
                 LOGGER.info("mediaType: {}", mediaType);
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
                   LOGGER.info("Requested application/json");
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
+                } else if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
                   LOGGER.info("Requested application/ld+json");
+                } else {
+                  LOGGER.info("Requested type not specified");
                 }
               }
             });
-    return ResponseEntity.ok(challengeService.getChallenge(challengeId));
+    List<MediaType> acceptedMediaTypes = getAcceptedMediaTypes(getRequest());
+    return ResponseEntity.ok(challengeService.getChallenge(challengeId, acceptedMediaTypes));
   }
 
   @Override
   public ResponseEntity<ChallengesPageDto> listChallenges(ChallengeSearchQueryDto query) {
     return ResponseEntity.ok(challengeService.listChallenges(query));
+  }
+
+  public List<MediaType> getAcceptedMediaTypes(Optional<NativeWebRequest> requestOpt) {
+    return requestOpt
+        .map(request -> MediaType.parseMediaTypes(request.getHeader("Accept")))
+        .orElseGet(List::of);
   }
 }
