@@ -1,0 +1,9 @@
+type: object
+description: A challenge
+properties:
+  '@context':
+    type: string
+  '@id':
+    type: string
+  '@type':
+    type: string

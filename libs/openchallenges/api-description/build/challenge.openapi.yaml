@@ -60,7 +60,7 @@ paths:
                 $ref: '#/components/schemas/Challenge'
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Challenge'
+                $ref: '#/components/schemas/ChallengeJsonLd'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -575,6 +575,16 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    ChallengeJsonLd:
+      type: object
+      description: A challenge
+      properties:
+        '@context':
+          type: string
+        '@id':
+          type: string
+        '@type':
+          type: string
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
