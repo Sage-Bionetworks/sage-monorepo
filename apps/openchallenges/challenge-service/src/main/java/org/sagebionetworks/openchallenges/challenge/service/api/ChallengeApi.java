@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public interface ChallengeApi {
                   schema = @Schema(implementation = ChallengeDto.class)),
               @Content(
                   mediaType = "application/ld+json",
-                  schema = @Schema(implementation = ChallengeDto.class)),
+                  schema = @Schema(implementation = ChallengeJsonLdDto.class)),
               @Content(
                   mediaType = "application/problem+json",
                   schema = @Schema(implementation = ChallengeDto.class))

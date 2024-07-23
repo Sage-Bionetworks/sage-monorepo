@@ -16,13 +16,13 @@ import javax.validation.constraints.*;
 public class ChallengeJsonLdDto {
 
   @JsonProperty("@context")
-  private String atContext;
+  private String atContext = "foo";
 
   @JsonProperty("@id")
-  private String atId;
+  private String atId = "foo";
 
   @JsonProperty("@type")
-  private String atType;
+  private String atType = "foo";
 
   public ChallengeJsonLdDto atContext(String atContext) {
     this.atContext = atContext;

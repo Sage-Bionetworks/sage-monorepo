@@ -581,10 +581,13 @@ components:
       properties:
         '@context':
           type: string
+          default: foo
         '@id':
           type: string
+          default: foo
         '@type':
           type: string
+          default: foo
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string

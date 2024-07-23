@@ -3,7 +3,10 @@ description: A challenge
 properties:
   '@context':
     type: string
+    default: 'foo'
   '@id':
     type: string
+    default: 'foo'
   '@type':
     type: string
+    default: 'foo'

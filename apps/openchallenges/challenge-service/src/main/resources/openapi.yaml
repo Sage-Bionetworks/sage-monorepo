@@ -869,10 +869,13 @@ components:
       description: A challenge
       properties:
         '@context':
+          default: foo
           type: string
         '@id':
+          default: foo
           type: string
         '@type':
+          default: foo
           type: string
       type: object
     ChallengeContributionRole:

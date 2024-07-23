@@ -21,6 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ChallengeService {
 
+  private static final MediaType APPLICATION_LD_JSON = MediaType.valueOf("application/ld+json");
+
   private final ChallengeRepository challengeRepository;
 
   public ChallengeService(ChallengeRepository challengeRepository) {
@@ -84,4 +86,25 @@ public class ChallengeService {
     ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
     return challenge;
   }
+
+  // @Transactional(readOnly = true)
+  // public ChallengeDto getChallenge(Long challengeId, List<MediaType> acceptedMediaTypes) {
+  //   ChallengeEntity challengeEntity =
+  //       challengeRepository
+  //           .findById(challengeId)
+  //           .orElseThrow(
+  //               () ->
+  //                   new ChallengeNotFoundException(
+  //                       String.format("The challenge with ID %d does not exist.", challengeId)));
+
+  //   if (acceptedMediaTypes != null
+  //       && acceptedMediaTypes.size() > 0
+  //       && acceptedMediaTypes[0].isCompatibleWith(APPLICATION_LD_JSON)) {
+  //     return new ChallengeJsonLdDto();
+  //   }
+
+  //   log.info("challenge entity platform: {}", challengeEntity.getPlatform());
+  //   ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
+  //   return challenge;
+  // }
 }
