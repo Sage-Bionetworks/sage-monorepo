@@ -80,6 +80,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Challenge'
           description: A challenge
         "404":
           content:

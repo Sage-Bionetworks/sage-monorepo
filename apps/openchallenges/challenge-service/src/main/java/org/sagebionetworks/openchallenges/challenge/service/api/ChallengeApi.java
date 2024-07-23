@@ -50,6 +50,9 @@ public interface ChallengeApi {
                   mediaType = "application/json",
                   schema = @Schema(implementation = ChallengeDto.class)),
               @Content(
+                  mediaType = "application/ld+json",
+                  schema = @Schema(implementation = ChallengeDto.class)),
+              @Content(
                   mediaType = "application/problem+json",
                   schema = @Schema(implementation = ChallengeDto.class))
             }),
@@ -59,6 +62,9 @@ public interface ChallengeApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/ld+json",
                   schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
@@ -72,6 +78,9 @@ public interface ChallengeApi {
                   mediaType = "application/json",
                   schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
+                  mediaType = "application/ld+json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
                   mediaType = "application/problem+json",
                   schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -79,7 +88,7 @@ public interface ChallengeApi {
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/challenges/{challengeId}",
-      produces = {"application/json", "application/problem+json"})
+      produces = {"application/json", "application/ld+json", "application/problem+json"})
   default ResponseEntity<ChallengeDto> getChallenge(
       @Parameter(
               name = "challengeId",

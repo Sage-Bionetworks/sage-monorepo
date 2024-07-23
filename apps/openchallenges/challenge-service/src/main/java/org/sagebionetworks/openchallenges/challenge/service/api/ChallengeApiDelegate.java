@@ -40,6 +40,12 @@ public interface ChallengeApiDelegate {
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
                   break;
                 }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
+                  String exampleString =
+                      "Custom MIME type example not yet supported: application/ld+json";
+                  ApiUtil.setExampleResponse(request, "application/ld+json", exampleString);
+                  break;
+                }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
                   String exampleString =
                       "Custom MIME type example not yet supported: application/problem+json";
