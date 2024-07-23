@@ -1435,6 +1435,106 @@ paths:
       tags:
       - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
+  /generateExcelManifest:
+    get:
+      description: Generates an excel file
+      operationId: generate_excel_manifest
+      parameters:
+      - description: The URL of a schema in jsonld or csv form
+        explode: true
+        in: query
+        name: schemaUrl
+        required: true
+        schema:
+          $ref: '#/components/schemas/SchemaUrl'
+        style: form
+      - description: "If true, annotations are added to the manifest"
+        explode: true
+        in: query
+        name: addAnnotations
+        required: false
+        schema:
+          default: false
+          type: boolean
+        style: form
+      - description: The ID of a dataset.
+        explode: true
+        in: query
+        name: datasetId
+        required: true
+        schema:
+          $ref: '#/components/schemas/DatasetId'
+        style: form
+      - description: "If making one manifest, the title of the manifest. If making\
+          \ multiple manifests, the prefix of the title of the manifests."
+        explode: true
+        in: query
+        name: manifestTitle
+        required: false
+        schema:
+          type: string
+        style: form
+      - description: A data type
+        explode: true
+        in: query
+        name: dataType
+        required: false
+        schema:
+          $ref: '#/components/schemas/DataType'
+        style: form
+      - description: The type of label to display
+        explode: true
+        in: query
+        name: displayLabelType
+        required: false
+        schema:
+          default: class_label
+          enum:
+          - class_label
+          - display_label
+          type: string
+        style: form
+      - description: "If true, users are blocked from entering incorrect values. If\
+          \ false, users will get a warning when using incorrect values."
+        explode: true
+        in: query
+        name: useStrictValidation
+        required: false
+        schema:
+          default: true
+          type: boolean
+        style: form
+      - description: ID of view listing all project data assets. E.g. for Synapse
+          this would be the Synapse ID of the fileview listing all data assets for
+          a given project
+        explode: true
+        in: query
+        name: assetViewId
+        required: false
+        schema:
+          $ref: '#/components/schemas/AssetViewId'
+        style: form
+      responses:
+        "200":
+          content:
+            application/vnd.ms-excel:
+              schema:
+                format: binary
+                type: string
+          description: Success
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/BasicError'
+          description: The request cannot be fulfilled due to an unexpected server
+            error
+      security:
+      - bearerAuth: []
+      summary: Generates an excel file
+      tags:
+      - ManifestGeneration
+      x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /generateGoogleSheetManifests:
     get:
       description: Generates a list of google sheet links
@@ -2943,6 +3043,15 @@ components:
       schema:
         default: true
         type: boolean
+      style: form
+    dataType:
+      description: A data type
+      explode: true
+      in: query
+      name: dataType
+      required: false
+      schema:
+        $ref: '#/components/schemas/DataType'
       style: form
   responses:
     InternalServerError:

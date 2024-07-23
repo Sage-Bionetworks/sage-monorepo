@@ -124,3 +124,6 @@ paths:
 
   /generateGoogleSheetManifests:
     $ref: paths/generateGoogleSheetManifests.yaml
+
+  /generateExcelManifest:
+    $ref: paths/generateExcelManifest.yaml

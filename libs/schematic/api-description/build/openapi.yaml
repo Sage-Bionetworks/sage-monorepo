@@ -939,6 +939,39 @@ paths:
                 $ref: '#/components/schemas/GoogleSheetLinks'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /generateExcelManifest:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates an excel file
+      description: Generates an excel file
+      operationId: generateExcelManifest
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/datasetIdQuery'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/dataType'
+        - $ref: '#/components/parameters/displayLabelType'
+        - $ref: '#/components/parameters/useStrictValidation'
+        - name: assetViewId
+          in: query
+          description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                format: binary
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   securitySchemes:
     bearerAuth:
@@ -1761,3 +1794,10 @@ components:
       schema:
         type: boolean
         default: true
+    dataType:
+      name: dataType
+      in: query
+      description: A data type
+      required: false
+      schema:
+        $ref: '#/components/schemas/DataType'

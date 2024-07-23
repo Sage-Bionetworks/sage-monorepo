@@ -1,0 +1,32 @@
+get:
+  tags:
+    - ManifestGeneration
+  summary: Generates an excel file
+  description: Generates an excel file
+  operationId: generateExcelManifest
+  parameters:
+    - $ref: ../components/parameters/query/schemaUrl.yaml
+    - $ref: ../components/parameters/query/addAnnotations.yaml
+    - $ref: ../components/parameters/query/datasetIdQuery.yaml
+    - $ref: ../components/parameters/query/manifestTitle.yaml
+    - $ref: ../components/parameters/query/dataType.yaml
+    - $ref: ../components/parameters/query/displayLabelType.yaml
+    - $ref: ../components/parameters/query/useStrictValidation.yaml
+    - name: assetViewId
+      in: query
+      description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+      required: false
+      schema:
+        $ref: ../components/schemas/AssetViewId.yaml
+  security:
+    - bearerAuth: []
+  responses:
+    '200':
+      description: 'Success'
+      content:
+        application/vnd.ms-excel:
+          schema:
+            type: string
+            format: binary
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml
