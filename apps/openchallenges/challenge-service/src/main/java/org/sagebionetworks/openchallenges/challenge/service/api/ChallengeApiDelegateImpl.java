@@ -7,7 +7,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.dto.Challenges
 import org.sagebionetworks.openchallenges.challenge.service.service.ChallengeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -18,12 +17,13 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ChallengeApiDelegateImpl.class);
 
-  @Autowired private NativeWebRequest request;
-
   private final ChallengeService challengeService;
 
-  public ChallengeApiDelegateImpl(ChallengeService challengeService) {
+  private final NativeWebRequest request;
+
+  public ChallengeApiDelegateImpl(ChallengeService challengeService, NativeWebRequest request) {
     this.challengeService = challengeService;
+    this.request = request;
   }
 
   @Override
