@@ -82,7 +82,7 @@ paths:
                 $ref: '#/components/schemas/Challenge'
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Challenge'
+                $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
         "404":
           content:
@@ -865,6 +865,16 @@ components:
       x-java-class-annotations:
       - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
+    ChallengeJsonLd:
+      description: A challenge
+      properties:
+        '@context':
+          type: string
+        '@id':
+          type: string
+        '@type':
+          type: string
+      type: object
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
