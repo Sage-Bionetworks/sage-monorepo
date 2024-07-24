@@ -7,6 +7,7 @@ export * from './challengeContributionsPage';
 export * from './challengeContributionsPageAllOf';
 export * from './challengeDirection';
 export * from './challengeIncentive';
+export * from './challengeJsonLd';
 export * from './challengePlatform';
 export * from './challengePlatformDirection';
 export * from './challengePlatformSearchQuery';
