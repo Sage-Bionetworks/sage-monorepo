@@ -866,17 +866,10 @@ components:
       - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
     ChallengeJsonLd:
+      allOf:
+      - $ref: '#/components/schemas/Challenge'
+      - $ref: '#/components/schemas/ChallengeJsonLd_allOf'
       description: A challenge
-      properties:
-        '@context':
-          default: foo
-          type: string
-        '@id':
-          default: foo
-          type: string
-        '@type':
-          default: foo
-          type: string
       type: object
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
@@ -1125,6 +1118,23 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    ChallengeJsonLd_allOf:
+      properties:
+        '@context':
+          example: https://schema.org
+          type: string
+        '@id':
+          example: https://openchallenges.io/api/v1/challenges/1
+          type: string
+        '@type':
+          example: bts:Challenge
+          type: string
+      required:
+      - '@context'
+      - '@id'
+      - '@type'
       type: object
       example: null
     ChallengeContributionsPage_allOf:

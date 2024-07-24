@@ -44,6 +44,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
         return ResponseEntity.ok(challengeService.getChallenge(challengeId));
       }
     }
+    // TODO return an error object if this API does not support any of the accepted types
     return ResponseEntity.ok(challengeService.getChallenge(challengeId));
   }
 

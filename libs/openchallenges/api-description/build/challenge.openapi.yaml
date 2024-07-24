@@ -587,7 +587,7 @@ components:
               example: https://schema.org
             '@id':
               type: string
-              example: /v1/challenges/1
+              example: https://openchallenges.io/api/v1/challenges/1
             '@type':
               type: string
               example: bts:Challenge
@@ -595,8 +595,6 @@ components:
             - '@context'
             - '@id'
             - '@type'
-      x-java-class-annotations:
-        - '@lombok.Builder'
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       type: string
