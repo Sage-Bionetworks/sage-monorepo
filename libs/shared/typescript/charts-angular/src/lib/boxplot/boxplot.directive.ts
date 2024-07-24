@@ -37,7 +37,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   ngOnInit() {
     this.boxplot = new BoxplotChart(
       this.el.nativeElement,
-      this.getBoxplotProps()
+      this.getBoxplotProps(),
     );
   }
 

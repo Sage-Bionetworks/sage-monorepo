@@ -71,6 +71,7 @@
     2432,
     3000,
     3306,
+    3333,
     4200,
     4211,
     5200,
@@ -114,6 +115,10 @@
     },
     "3306": {
       "label": "openchallenges-mariadb",
+      "onAutoForward": "silent"
+    },
+    "3333": {
+      "label": "agora-server",
       "onAutoForward": "silent"
     },
     "4200": {

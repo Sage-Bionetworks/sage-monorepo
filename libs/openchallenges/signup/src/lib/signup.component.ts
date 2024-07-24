@@ -55,7 +55,7 @@ export class SignupComponent implements OnInit {
     private router: Router,
     private formBuilder: UntypedFormBuilder,
     private userService: UserService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -153,7 +153,7 @@ export class SignupComponent implements OnInit {
             this.errors.other = `Server error: ${error.title}`;
           }
         }
-      }
+      },
     );
   }
 }

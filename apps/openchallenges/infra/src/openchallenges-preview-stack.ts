@@ -54,7 +54,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const securityGroups = new SecurityGroups(
       this,
       'security_groups',
-      network.vpc.id
+      network.vpc.id,
     );
 
     // The bastion
@@ -94,7 +94,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const previewInstance = new PreviewInstance(
       this,
       'preview_instance',
-      previewInstanceConfig
+      previewInstanceConfig,
     );
 
     // The preview instance ALB
@@ -104,7 +104,7 @@ export class OpenChallengesPreviewStack extends SageStack {
       network.publicSubnets,
       securityGroups.previewInstanceAlbSg.id,
       network.vpc.id,
-      previewInstance.instance.privateIp
+      previewInstance.instance.privateIp,
     );
 
     // The DNS configuration
@@ -115,7 +115,7 @@ export class OpenChallengesPreviewStack extends SageStack {
       new TagsAddingAspect({
         OwnerEmail: stackOwnerEmail,
         CostCenter: SageCostCenter.ITCR,
-      })
+      }),
     );
 
     // Outputs

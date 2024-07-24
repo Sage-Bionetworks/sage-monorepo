@@ -7,10 +7,10 @@
 @include mat.typography-hierarchy(fonts.$lato);
 @include mat.core();
 
-$primary: mat.define-palette(palettes.$dark-blue-palette, 600);
-$accent: mat.define-palette(palettes.$accent-purple-palette, 400);
+$primary: mat.m2-define-palette(palettes.$dark-blue-palette, 600);
+$accent: mat.m2-define-palette(palettes.$accent-purple-palette, 400);
 
-$theme: mat.define-light-theme(
+$theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $primary,

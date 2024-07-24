@@ -51,7 +51,7 @@ export class ChallengeSearchDataService {
     private challengePlatformService: ChallengePlatformService,
     private edamConceptService: EdamConceptService,
     private imageService: ImageService,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {}
 
   setEdamConceptSearchQuery(searchQuery: EdamConceptSearchQuery) {
@@ -78,15 +78,15 @@ export class ChallengeSearchDataService {
         this.edamConceptService.listEdamConcepts({
           ...searchQuery,
           ...newQuery,
-        })
+        }),
       ),
       map((page) =>
         page.edamConcepts.map((edamConcept) => ({
           value: edamConcept.id,
           label: edamConcept.preferredLabel,
           active: false,
-        }))
-      )
+        })),
+      ),
     );
   }
 
@@ -98,7 +98,7 @@ export class ChallengeSearchDataService {
         this.organizationService.listOrganizations({
           ...searchQuery,
           ...newQuery,
-        })
+        }),
       ),
       map((page) => page.organizations),
       switchMap((orgs) =>
@@ -106,9 +106,9 @@ export class ChallengeSearchDataService {
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-            Infinity
+            Infinity,
           ),
-        })
+        }),
       ),
       map(({ orgs, avatarUrls }) =>
         orgs.map((org, index) => ({
@@ -116,8 +116,8 @@ export class ChallengeSearchDataService {
           label: org.name,
           avatarUrl: avatarUrls[index]?.url,
           active: false,
-        }))
-      )
+        })),
+      ),
     );
   }
 
@@ -129,14 +129,14 @@ export class ChallengeSearchDataService {
         height: ImageHeight._32px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery),
-      of({ url: '' })
+      of({ url: '' }),
     ).pipe(
       catchError(() => {
         console.error(
-          'Unable to get the image url. Please check the logs of the image service.'
+          'Unable to get the image url. Please check the logs of the image service.',
         );
         return of({ url: '' });
-      })
+      }),
     );
   }
 
@@ -155,8 +155,8 @@ export class ChallengeSearchDataService {
           value: platform.slug,
           label: platform.name,
           active: false,
-        }))
-      )
+        })),
+      ),
     );
   }
 

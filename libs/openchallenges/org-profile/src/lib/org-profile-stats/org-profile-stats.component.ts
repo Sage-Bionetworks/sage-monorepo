@@ -27,7 +27,7 @@ export class OrgProfileStatsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private organizationService: OrganizationService
+    private organizationService: OrganizationService,
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +35,7 @@ export class OrgProfileStatsComponent implements OnInit {
 
     this.organization$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.organizationService.getOrganization(params['orgLogin'])
+        this.organizationService.getOrganization(params['orgLogin']),
       ),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
@@ -43,7 +43,7 @@ export class OrgProfileStatsComponent implements OnInit {
           400: '/org',
         } as HttpStatusRedirect);
         return throwError(() => error);
-      })
+      }),
     );
   }
 

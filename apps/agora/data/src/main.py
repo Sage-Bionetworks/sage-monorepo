@@ -62,9 +62,9 @@ def create_data_version_collection(db: database.Database) -> None:
     data_version_collection = db.get_collection("dataversion")
     data_version_collection.drop()
     dataversion = {
-        "data-file": DATA_FILE,
-        "data-version": DATA_VERSION,
-        "team-images-id": TEAM_IMAGES_ID,
+        "data_file": DATA_FILE,
+        "data_version": DATA_VERSION,
+        "team_images_id": TEAM_IMAGES_ID,
     }
     data_version_collection.insert_one(dataversion)
 

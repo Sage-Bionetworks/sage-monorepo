@@ -56,7 +56,7 @@ export class OpenChallengesStack extends SageStack {
     const securityGroups = new SecurityGroups(
       this,
       'security_groups',
-      network.vpc.id
+      network.vpc.id,
     );
 
     // The ECS Cluster
@@ -68,7 +68,7 @@ export class OpenChallengesStack extends SageStack {
       'client_alb',
       network.publicSubnets,
       securityGroups.clientAlbSg.id,
-      network.vpc.id
+      network.vpc.id,
     );
 
     const goldAlb = new EcsUpstreamServiceAlb(
@@ -76,7 +76,7 @@ export class OpenChallengesStack extends SageStack {
       'gold_alb',
       network.privateSubnets,
       securityGroups.upstreamServiceAlbSg.id,
-      network.vpc.id
+      network.vpc.id,
     );
 
     const silverAlb = new EcsUpstreamServiceAlb(
@@ -84,7 +84,7 @@ export class OpenChallengesStack extends SageStack {
       'silver_alb',
       network.privateSubnets,
       securityGroups.upstreamServiceAlbSg.id,
-      network.vpc.id
+      network.vpc.id,
     );
 
     // The Database
@@ -94,14 +94,14 @@ export class OpenChallengesStack extends SageStack {
       // vars,
       network.privateSubnets[0].id,
       securityGroups.databaseSg.id,
-      network.natGateway
+      network.natGateway,
     );
 
     // Client Service Resources
     const clientTaskDefinition = new EcsTaskDefinitionClient(
       this,
       'client_task_definition',
-      `http://${goldAlb.lb.dnsName},http://${silverAlb.lb.dnsName}`
+      `http://${goldAlb.lb.dnsName},http://${silverAlb.lb.dnsName}`,
     );
 
     new EcsServiceClient(
@@ -111,13 +111,13 @@ export class OpenChallengesStack extends SageStack {
       clientTaskDefinition.definition.arn,
       clientAlb.targetGroup.arn,
       network.privateSubnets,
-      securityGroups.clientServiceSg.id
+      securityGroups.clientServiceSg.id,
     );
 
     // Gold Service Resources
     const goldTaskDefinition = new EcsTaskDefinitionGold(
       this,
-      'gold_task_definition'
+      'gold_task_definition',
     );
 
     new EcsServiceUpstream(
@@ -127,13 +127,13 @@ export class OpenChallengesStack extends SageStack {
       goldTaskDefinition.definition.arn,
       goldAlb.targetGroup.arn,
       network.privateSubnets,
-      securityGroups.upstreamServiceSg.id
+      securityGroups.upstreamServiceSg.id,
     );
 
     // Silver Service Resources
     const silverTaskDefinition = new EcsTaskDefinitionSilver(
       this,
-      'silver_task_definition'
+      'silver_task_definition',
     );
 
     new EcsServiceUpstream(
@@ -143,7 +143,7 @@ export class OpenChallengesStack extends SageStack {
       silverTaskDefinition.definition.arn,
       silverAlb.targetGroup.arn,
       network.privateSubnets,
-      securityGroups.upstreamServiceSg.id
+      securityGroups.upstreamServiceSg.id,
     );
 
     // Outputs
@@ -199,7 +199,7 @@ export class OpenChallengesStack extends SageStack {
       new TagsAddingAspect({
         OwnerEmail: stackOwnerEmail,
         CostCenter: SageCostCenter.ITCR,
-      })
+      }),
     );
   }
 }

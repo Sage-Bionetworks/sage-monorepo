@@ -41,7 +41,7 @@ export class RandomChallengeListComponent implements OnInit {
       catchError((err) => {
         return throwError(() => new Error(err.message));
       }),
-      map((page) => page.challenges)
+      map((page) => page.challenges),
     );
   }
 }

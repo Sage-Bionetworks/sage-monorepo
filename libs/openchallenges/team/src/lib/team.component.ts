@@ -44,7 +44,7 @@ export class TeamComponent implements OnInit {
     private readonly configService: ConfigService,
     private imageService: ImageService,
     private seoService: SeoService,
-    private renderer2: Renderer2
+    private renderer2: Renderer2,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;

@@ -5,21 +5,7 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
-      "rules": {
-        // "@nx/enforce-module-boundaries": [
-        //   "error",
-        //   {
-        //     "enforceBuildableLibDependency": true,
-        //     "allow": [],
-        //     "depConstraints": [
-        //       {
-        //         "sourceTag": "*",
-        //         "onlyDependOnLibsWithTags": ["*"]
-        //       }
-        //     ]
-        //   }
-        // ]
-      }
+      "rules": {}
     },
     {
       "files": ["*.ts", "*.tsx"],
@@ -38,13 +24,18 @@
             "singleQuote": true,
             "printWidth": 80
           }
-        ]
+        ],
+        "@typescript-eslint/no-extra-semi": "error",
+        "no-extra-semi": "off"
       }
     },
     {
       "files": ["*.js", "*.jsx"],
       "extends": ["plugin:@nx/javascript"],
-      "rules": {}
+      "rules": {
+        "@typescript-eslint/no-extra-semi": "error",
+        "no-extra-semi": "off"
+      }
     },
     {
       "files": "*.json",

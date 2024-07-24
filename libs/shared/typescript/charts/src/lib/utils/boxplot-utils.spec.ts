@@ -57,8 +57,8 @@ describe('boxplot-utils', () => {
           pointCategories,
           shapes,
           styleType,
-          notFoundValue
-        )
+          notFoundValue,
+        ),
       ).toEqual('circle');
       expect(
         getPointStyleFromArray(
@@ -66,8 +66,8 @@ describe('boxplot-utils', () => {
           pointCategories,
           shapes,
           styleType,
-          notFoundValue
-        )
+          notFoundValue,
+        ),
       ).toEqual('triangle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
@@ -79,8 +79,8 @@ describe('boxplot-utils', () => {
           pointCategories,
           shapes,
           'shape',
-          'none'
-        )
+          'none',
+        ),
       ).toEqual('circle');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -92,8 +92,8 @@ describe('boxplot-utils', () => {
           pointCategories,
           shapes,
           styleType,
-          notFoundValue
-        )
+          notFoundValue,
+        ),
       ).toEqual(notFoundValue);
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -105,8 +105,8 @@ describe('boxplot-utils', () => {
           pointCategories,
           shapes,
           styleType,
-          notFoundValue
-        )
+          notFoundValue,
+        ),
       ).toEqual(notFoundValue);
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -117,8 +117,8 @@ describe('boxplot-utils', () => {
       expect(
         getCategoryPointShape(
           { xAxisCategory: 'b', pointCategory: 'X', value: 1 },
-          ['X', 'Y', 'Z']
-        )
+          ['X', 'Y', 'Z'],
+        ),
       ).toEqual('circle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
@@ -127,8 +127,8 @@ describe('boxplot-utils', () => {
       expect(
         getCategoryPointShape(
           { xAxisCategory: 'b', pointCategory: 'Y', value: 1 },
-          ['X', 'Y', 'Z']
-        )
+          ['X', 'Y', 'Z'],
+        ),
       ).toEqual('triangle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
@@ -137,8 +137,8 @@ describe('boxplot-utils', () => {
       expect(
         getCategoryPointShape(
           { xAxisCategory: 'b', pointCategory: 'WW', value: 1 },
-          ['X', 'Y', 'Z']
-        )
+          ['X', 'Y', 'Z'],
+        ),
       ).toEqual('none');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -150,8 +150,8 @@ describe('boxplot-utils', () => {
         getCategoryPointColor(
           { xAxisCategory: 'b', pointCategory: 'X', value: 1 },
           ['X', 'Y', 'Z'],
-          ['blue', 'red', 'yellow']
-        )
+          ['blue', 'red', 'yellow'],
+        ),
       ).toEqual('blue');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
@@ -161,8 +161,8 @@ describe('boxplot-utils', () => {
         getCategoryPointColor(
           { xAxisCategory: 'b', pointCategory: 'Y', value: 1 },
           ['X', 'Y', 'Z'],
-          ['blue', 'red', 'yellow']
-        )
+          ['blue', 'red', 'yellow'],
+        ),
       ).toEqual('red');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
@@ -171,8 +171,8 @@ describe('boxplot-utils', () => {
       expect(
         getCategoryPointColor(
           { xAxisCategory: 'b', pointCategory: 'WW', value: 1 },
-          ['X', 'Y', 'Z']
-        )
+          ['X', 'Y', 'Z'],
+        ),
       ).toEqual('transparent');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -181,27 +181,27 @@ describe('boxplot-utils', () => {
   describe('getUniqueValues', () => {
     it('should return sorted, unique values when specified', () => {
       expect(
-        getUniqueValues(pointsWithPointCategories, 'xAxisCategory', true)
+        getUniqueValues(pointsWithPointCategories, 'xAxisCategory', true),
       ).toEqual(['a', 'b', 'c']);
 
       expect(
-        getUniqueValues(pointsWithPointCategories, 'pointCategory', true)
+        getUniqueValues(pointsWithPointCategories, 'pointCategory', true),
       ).toEqual(['X', 'Y', 'Z']);
     });
 
     it('should return unsorted, unique values by default', () => {
       expect(
-        getUniqueValues(pointsWithPointCategories, 'xAxisCategory')
+        getUniqueValues(pointsWithPointCategories, 'xAxisCategory'),
       ).toEqual(['c', 'a', 'b']);
 
       expect(
-        getUniqueValues(pointsWithPointCategories, 'pointCategory')
+        getUniqueValues(pointsWithPointCategories, 'pointCategory'),
       ).toEqual(['Y', 'X', 'Z']);
     });
 
     it('should handle all undefined values', () => {
       expect(
-        getUniqueValues(pointsWithoutPointCategories, 'pointCategory')
+        getUniqueValues(pointsWithoutPointCategories, 'pointCategory'),
       ).toEqual([]);
     });
   });
@@ -263,7 +263,7 @@ describe('boxplot-utils', () => {
           0,
           2,
           defaultPtOffset,
-          jitterMax
+          jitterMax,
         );
         expect(xValue).toBeLessThan(offsetXValue + jitterMax);
         expect(xValue).toBeGreaterThan(offsetXValue - jitterMax);
@@ -272,7 +272,7 @@ describe('boxplot-utils', () => {
 
     it('does not jitter xValues when there is only one category', () => {
       expect(getOffsetAndJitteredXValue(2, 0, 1, defaultPtOffset, 0.1)).toEqual(
-        2
+        2,
       );
     });
   });
@@ -288,7 +288,7 @@ describe('boxplot-utils', () => {
       const updatedPoints = addXAxisValueToCategoryPoint(
         pointsWithoutPointCategories,
         ['a', 'b', 'c'],
-        []
+        [],
       );
       valuePoints.forEach((valuePt, index) => {
         expect(valuePt.xAxisValue).toBeCloseTo(updatedPoints[index].xAxisValue);
@@ -311,7 +311,7 @@ describe('boxplot-utils', () => {
       const updatedPoints = addXAxisValueToCategoryPoint(
         pointsWithPointCategories,
         ['a', 'b', 'c'],
-        ['X', 'Y', 'Z']
+        ['X', 'Y', 'Z'],
       );
       valuePoints.forEach((valuePt, index) => {
         expect(valuePt.xAxisValue).toBeCloseTo(updatedPoints[index].xAxisValue);
@@ -378,7 +378,7 @@ describe('boxplot-utils', () => {
       ];
 
       expect(addXAxisValueToBoxplotSummaries(input, ['a', 'b', 'c'])).toEqual(
-        output
+        output,
       );
     });
   });
@@ -391,7 +391,7 @@ describe('boxplot-utils', () => {
           'a',
           'b',
           'c',
-        ])
+        ]),
       ).toEqual(ptsBoxplotTransform);
     });
 
@@ -402,7 +402,7 @@ describe('boxplot-utils', () => {
           'a',
           'b',
           'c',
-        ])
+        ]),
       ).toEqual(ptsBoxplotTransform);
     });
   });

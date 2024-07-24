@@ -114,7 +114,7 @@ function workspace-nx-cloud-help {
 function version { echo "$@" | awk -F. '{ printf("%d%03d%03d%03d\n", $1,$2,$3,$4); }'; }
 
 function check-vscode-version {
-  expected="1.85.2"
+  expected="1.91.1"
   actual="$(code --version | head -n 1)"
   if [ $(version $actual) -lt $(version $expected) ]; then
     echo "📦 Please update VS Code (${actual}) to version ${expected} or above."

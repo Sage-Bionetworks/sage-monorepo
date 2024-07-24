@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import {
   Challenge,
   ChallengeSearchQuery,
@@ -20,7 +20,7 @@ import {
   templateUrl: './org-profile-challenges.component.html',
   styleUrls: ['./org-profile-challenges.component.scss'],
 })
-export class OrgProfileChallengesComponent {
+export class OrgProfileChallengesComponent implements OnInit {
   @Input({ required: true }) organization!: Organization;
   challenges: Challenge[] = [];
   // default pagination

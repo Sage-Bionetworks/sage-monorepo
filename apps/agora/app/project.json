@@ -64,7 +64,10 @@
           "buildTarget": "agora-app:build:development"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/agora/app/proxy.conf.json"
+      }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -80,6 +83,12 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
     },
     "test": {
       "executor": "@nx/jest:jest",
