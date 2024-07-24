@@ -1,12 +1,21 @@
 type: object
 description: A challenge
-properties:
-  '@context':
-    type: string
-    default: 'foo'
-  '@id':
-    type: string
-    default: 'foo'
-  '@type':
-    type: string
-    default: 'foo'
+allOf:
+  - $ref: Challenge.yaml
+  - type: object
+    properties:
+      '@context':
+        type: string
+        example: 'https://schema.org'
+      '@id':
+        type: string
+        example: '/v1/challenges/1'
+      '@type':
+        type: string
+        example: 'bts:Challenge'
+    required:
+      - '@context'
+      - '@id'
+      - '@type'
+x-java-class-annotations:
+  - '@lombok.Builder'
