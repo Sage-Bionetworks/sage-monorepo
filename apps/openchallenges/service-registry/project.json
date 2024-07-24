@@ -97,6 +97,20 @@
         "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-service-registry:local --quiet",
         "color": true
       }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew spotlessApply",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./gradlew spotlessCheck",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
