@@ -30,5 +30,4 @@ public class ServiceRegistryApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
     LOG.info(serviceRegistryConfigData.getWelcomeMessage());
   }
-
 }
