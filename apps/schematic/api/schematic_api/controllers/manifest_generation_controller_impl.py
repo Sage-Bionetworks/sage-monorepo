@@ -16,7 +16,7 @@ from schematic_api.controllers.utils import (
 )
 
 
-# @handle_exceptions
+@handle_exceptions
 def generate_excel_manifest_file(
     schema_url: str,
     dataset_id: str | None,

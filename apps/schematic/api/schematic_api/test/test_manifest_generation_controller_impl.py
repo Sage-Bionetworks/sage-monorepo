@@ -7,12 +7,13 @@ from schematic_api.models.basic_error import BasicError
 from schematic_api.models.google_sheet_links import GoogleSheetLinks
 from schematic_api.controllers.manifest_generation_controller_impl import (
     generate_excel_manifest_file,
+    generate_excel_manifest,
     generate_google_sheet_manifests,
 )
 from .conftest import GET_ACCESS_TOKEN_MOCK, CREATE_MANIFESTS_MOCK
 
 
-class TestGenerateExcelManifest:  # pylint: disable=too-few-public-methods
+class TestGenerateExcelManifestFile:
     """Tests generate_excel_manifest_file"""
 
     def test_success(self, test_schema_url: str) -> None:
@@ -31,6 +32,48 @@ class TestGenerateExcelManifest:  # pylint: disable=too-few-public-methods
                 )
                 assert status == 200
                 assert result == "path1"
+
+    def test_error(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        with patch(GET_ACCESS_TOKEN_MOCK):
+            with patch(CREATE_MANIFESTS_MOCK, side_effect=TypeError):
+                output = generate_excel_manifest_file(
+                    schema_url=test_schema_url,
+                    dataset_id="syn2",
+                    asset_view_id="syn1",
+                    data_type="syn4",
+                    add_annotations=False,
+                    manifest_title="title",
+                    use_strict_validation=True,
+                    display_label_type="class_label",
+                )
+                assert isinstance(output, tuple)
+                result, status = output
+                assert status == 500
+                assert isinstance(result, BasicError)
+
+
+class TestGenerateExcelManifest:  # pylint: disable=too-few-public-methods
+    """Tests generate_excel_manifest"""
+
+    def test_error(self, test_schema_url: str) -> None:
+        """Test for successful result"""
+        with patch(GET_ACCESS_TOKEN_MOCK):
+            with patch(CREATE_MANIFESTS_MOCK, side_effect=TypeError):
+                output = generate_excel_manifest(
+                    schema_url=test_schema_url,
+                    dataset_id="syn2",
+                    asset_view_id="syn1",
+                    data_type="syn4",
+                    add_annotations=False,
+                    manifest_title="title",
+                    use_strict_validation=True,
+                    display_label_type="class_label",
+                )
+                assert isinstance(output, tuple)
+                result, status = output
+                assert status == 500
+                assert isinstance(result, BasicError)
 
 
 class TestGenerateGoogleSheetManifests:
