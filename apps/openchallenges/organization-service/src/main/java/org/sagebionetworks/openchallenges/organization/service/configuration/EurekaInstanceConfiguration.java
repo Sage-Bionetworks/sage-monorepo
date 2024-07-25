@@ -1,5 +1,7 @@
 package org.sagebionetworks.openchallenges.organization.service.configuration;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -36,9 +38,9 @@ public class EurekaInstanceConfiguration {
       LOGGER.error("Unable to get the host address.", e);
     }
     bean.setIpAddress(ip);
-    bean.setPreferIpAddress(true);
-    bean.setNonSecurePortEnabled(true);
-    bean.setNonSecurePort(Integer.parseInt(port));
+    // bean.setPreferIpAddress(true);
+    // bean.setNonSecurePortEnabled(true);
+    // bean.setNonSecurePort(Integer.parseInt(port));
     return bean;
   }
 }
