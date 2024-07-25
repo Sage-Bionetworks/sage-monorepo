@@ -1,35 +1,94 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
-
-name: Create and publish a Docker image
+---
+name: Run precommit and conditionally build container
 
 on:
   push:
-    branches: ['release*']
+    branches:
+      - '*'
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
+  pull_request:
+    branches:
+      - '*'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_PATH: ghcr.io/${{ github.repository }}
+  TARFILE_NAME: image.tar
+
 
 jobs:
-  build-and-push-to-dockerhub:
+  tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Static Analysis
+        uses: pre-commit/action@v3.0.0
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
-        uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+        uses: docker/metadata-action@v4.1.1
         with:
-          images: sagebionetworks/shiny-base${{github.GITHUB_REF_NAME}}
+          images: ${{ env.IMAGE_PATH }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+      - name: Check that build works, save for scanning, but don't push yet
+        uses: docker/build-push-action@v6.4.0
         with:
           context: .
-          push: true
+          push: false
+          outputs: type=tar,dest=${{ env.TARFILE_NAME }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Upload tarball for use by Trivy job
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.TARFILE_NAME }}
+          path: ${{ env.TARFILE_NAME }}
+
+    outputs:
+      tags: ${{ steps.meta.outputs.tags }}
+      tarfile_artifact: ${{ env.TARFILE_NAME }}
+
+  trivy-scan:
+    needs: tests
+    uses: "./.github/workflows/trivy.yml"
+    with:
+      SOURCE_TYPE: tar
+      IMAGE_NAME: ${{ needs.tests.outputs.tags }}
+      TARFILE_NAME: ${{ needs.tests.outputs.tarfile_artifact }}
+      EXIT_CODE: 1
+
+  push-image:
+    if: ${{ github.event_name == 'push' }}
+    needs: [tests, trivy-scan]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Download tar file
+        id: tar-download
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ env.TARFILE_NAME }}
+          path: /tmp
+
+      - name: Load Docker image from tar
+        run: cat
+          ${{ steps.tar-download.outputs.download-path}}/${{ env.TARFILE_NAME}}
+          | docker import - ${{ needs.tests.outputs.tags }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ${{ needs.tests.outputs.tags }}
+...
