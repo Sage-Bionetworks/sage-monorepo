@@ -10,4 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class ChallengeServiceConfigData {
 
   private String welcomeMessage;
+  private boolean isDeployedOnAws;
 }
