@@ -1,6 +1,6 @@
 ---
 rules:
-  apt-get_missing_rm: off
-  apt-get_recommends: off
   apt-get-upgrade: off
+  apt-get-update_require_install: off
+  apt-get_recommends: off
   sudo_usage: off
