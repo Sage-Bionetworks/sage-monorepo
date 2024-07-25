@@ -1,6 +1,6 @@
-FROM ubuntu
+FROM ubuntu:22.04
 
-RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y update && apt-get -y upgrade && rm -rf /var/lib/apt/lists/*
 # The following is necessary to avoid an interactive prompt when installing r-base
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 # instructions here: https://www.rstudio.com/products/shiny/download-server/ubuntu/
@@ -19,7 +19,7 @@ RUN gdebi --n shiny-server-1.5.19.995-amd64.deb
 RUN rm /srv/shiny-server/*
 
 # overwrite the default config with our modified copy
-COPY shiny-server.conf /etc/shiny-server/shiny-server.conf 
+COPY shiny-server.conf /etc/shiny-server/shiny-server.conf
 RUN chmod 777 /etc/shiny-server/shiny-server.conf
 
 # This is the app folder specified in shiny-server.conf
