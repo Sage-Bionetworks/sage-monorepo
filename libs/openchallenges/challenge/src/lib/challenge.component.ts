@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   Challenge,
+  ChallengeJsonLd,
   ChallengeService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -14,6 +15,7 @@ import {
   switchMap,
   take,
   throwError,
+  tap,
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
@@ -66,6 +68,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   public apiDocsUrl: string;
 
   challenge$!: Observable<Challenge>;
+  challengeJsonLd$!: Observable<ChallengeJsonLd>;
   loggedIn = false;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
@@ -104,6 +107,32 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       take(1),
     );
 
+    this.challengeJsonLd$ = this.activatedRoute.params.pipe(
+      switchMap((params) =>
+        this.challengeService.getChallenge(
+          params['challengeId'],
+          undefined,
+          undefined,
+          { httpHeaderAccept: 'application/ld+json' },
+        ),
+      ),
+      catchError((err) => {
+        const error = handleHttpError(err, this.router, {
+          404: '/not-found',
+          400: '/challenge',
+        } as HttpStatusRedirect);
+        return throwError(() => error);
+      }),
+      tap((challenge) =>
+        console.log(`ChallengeJsonLd: ${JSON.stringify(challenge)}`),
+      ),
+      tap((challenge) =>
+        console.log(`@type: ${JSON.stringify(challenge['@type'])}`),
+      ),
+      shareReplay(1),
+      take(1),
+    );
+
     this.challenge$.subscribe((challenge) => {
       this.challengeAvatar = {
         name: challenge.name,
@@ -125,6 +154,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
 
     const combineSub = combineLatest({
       challenge: this.challenge$,
+      challengeJsonLd: this.challengeJsonLd$,
       activeTabKey: activeTabKey$,
     }).subscribe(({ challenge, activeTabKey }) => {
       // add slug in url and active param if any

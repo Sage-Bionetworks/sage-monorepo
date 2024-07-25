@@ -106,7 +106,8 @@ export class ChallengeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<Challenge>;
+    public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengeJsonLd>;
+    public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Challenge>;
     public getChallenge(challengeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Challenge>>;
     public getChallenge(challengeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Challenge>>;
     public getChallenge(challengeId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
