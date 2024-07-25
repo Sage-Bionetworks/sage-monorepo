@@ -143,6 +143,10 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       this.seoService.setData(getSeoData(challenge), this.renderer2);
     });
 
+    this.challengeJsonLd$.subscribe((challengeJsonLd) => {
+      this.seoService.setJsonLds([challengeJsonLd], this.renderer2);
+    });
+
     const activeTabKey$: Observable<string> =
       this.activatedRoute.queryParams.pipe(
         map((params) =>
