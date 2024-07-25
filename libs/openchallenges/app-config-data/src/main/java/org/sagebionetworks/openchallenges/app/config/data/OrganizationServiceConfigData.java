@@ -10,4 +10,5 @@ import org.springframework.context.annotation.Configuration;
 public class OrganizationServiceConfigData {
 
   private String welcomeMessage;
+  private boolean isDeployedOnAws;
 }
