@@ -1,0 +1,1056 @@
+<!DOCTYPE html><html lang="en" data-critters-container><head>
+    <meta charset="utf-8">
+    <title>Detecting Active Tuberculosis Bacilli - 2024 | OpenChallenges</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@angular-devkit/build-angular/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/@angular-devkit/build-angular/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/@angular-devkit/build-angular/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./apps/openchallenges/app/src/styles.scss?ngGlobalStyle ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+@import url(https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap);
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@angular-devkit/build-angular/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[1]!./node_modules/@angular-devkit/build-angular/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[6].rules[0].oneOf[0].use[2]!./node_modules/resolve-url-loader/index.js??ruleSet[1].rules[6].rules[1].use[0]!./node_modules/@angular-devkit/build-angular/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[6].rules[1].use[1]!./apps/openchallenges/app/src/styles.scss?ngGlobalStyle (1) ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+html {
+  margin-top: 68px;
+}
+
+body {
+  max-height: 100vh;
+  margin: 0;
+}
+
+.base {
+  width: 100%;
+  min-height: calc(100vh - 68px - 259px);
+}
+
+.row, .content {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 100%;
+}
+
+.fill-empty {
+  max-width: 920px;
+}
+
+.content {
+  max-width: 2000px;
+  margin: auto;
+  padding: 48px 32px;
+  gap: 36px;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-grey {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+.text-right {
+  font-weight: 600;
+}
+
+#profile-top,
+#profile-bottom {
+  min-height: 320px;
+  justify-content: center;
+}
+
+#profile-top {
+  padding-top: 60px;
+}
+
+#profile-bottom {
+  padding-top: 32px;
+}
+
+#profile-top > div {
+  align-self: center;
+  flex: 1 0 auto;
+  padding: 22px;
+}
+
+.profile-pic {
+  margin: 8px;
+  align-self: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  border-radius: 50%;
+  box-shadow: 1px 5px 18px 0px #d4d4d4;
+}
+.profile-pic div.avatar-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#profile-details {
+  max-width: 100%;
+  text-align: center;
+}
+
+.profile-nav-group {
+  margin: 18px;
+  padding: 48px 18px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 8px;
+}
+
+.profile-nav-item {
+  width: 100%;
+  height: 54px;
+  margin: 0 0 18px 0;
+  padding: 13px 18px;
+  box-sizing: border-box;
+  transition: 0.3s;
+  align-items: flex-start;
+  flex-shrink: 1;
+  text-align: left;
+  text-decoration: none;
+}
+
+.profile-type {
+  width: 100%;
+  max-width: 148px;
+  margin: 8px 0;
+  padding: 5px;
+  border-radius: 32px;
+  text-align: center;
+  align-self: center;
+}
+
+.stats-group {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: center;
+}
+
+.stat-item {
+  flex-direction: column;
+  flex: 1;
+  max-width: 120px;
+  padding: 18px 5px 8px;
+  border-style: solid;
+  border-width: 1px;
+  text-align: center;
+  border-color: var(--color-btn-shadow);
+  background-color: white;
+  border-right-width: 0;
+}
+.stat-item h3 {
+  margin-bottom: 2px !important;
+}
+
+.action-btn {
+  height: 100%;
+  min-width: 260px;
+  max-width: 280px;
+  padding: 13px 5px;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.action-btn {
+  background-color: var(--color-btn-primary);
+  color: white;
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.stats-card-icon {
+  margin-right: 4px;
+}
+
+table {
+  border-spacing: 11px;
+}
+
+#bio div a mat-icon {
+  font-size: 15px;
+  vertical-align: middle;
+}
+
+.created-updated-dates,
+.created-updated-dates a,
+.read-more {
+  color: #1f3b8f;
+}
+
+.created-updated-dates {
+  font-style: italic !important;
+}
+
+.read-more {
+  text-underline-offset: 3px;
+}
+
+.mat-caption {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+@media screen and (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+}
+@media screen and (min-width: 768px) {
+  .col {
+    flex: 1;
+  }
+  .col-4 {
+    flex: 4;
+  }
+  .col-8 {
+    flex: 8;
+  }
+  #profile-details {
+    max-width: 1060px;
+    text-align: left;
+  }
+  .profile-type {
+    align-self: auto;
+  }
+  .profile-sidenav {
+    max-width: 320px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  html {
+    margin-top: 240px;
+  }
+}
+
+.mat-typography h2 {
+  font: 700 40px / 50px 'Lato', sans-serif;
+  letter-spacing: normal;
+  margin: 0 0 16px;
+}
+
+.mat-typography h3 {
+  font: 700 28px / 38px 'Lato', sans-serif;
+  letter-spacing: -0.1px;
+  margin: 0 0 16px;
+}
+
+.mat-body-strong,
+.mat-typography .mat-body-strong {
+  font: 400 20px / 32px 'Lato', sans-serif;
+  letter-spacing: -0.1px;
+}
+
+.mat-typography {
+  font: 400 16px / 26px 'Lato', sans-serif;
+  letter-spacing: normal;
+}
+.mat-typography p {
+  margin: 0 0 12px;
+}
+
+.mat-caption,
+.mat-typography .mat-caption {
+  font: 400 14px / 21px 'Lato', sans-serif;
+  letter-spacing: normal;
+}
+
+.mat-mdc-focus-indicator {
+  position: relative;
+}
+.mat-mdc-focus-indicator::before {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  box-sizing: border-box;
+  pointer-events: none;
+  display: var(--mat-mdc-focus-indicator-display, none);
+  border: var(--mat-mdc-focus-indicator-border-width, 3px) var(--mat-mdc-focus-indicator-border-style, solid) var(--mat-mdc-focus-indicator-border-color, transparent);
+  border-radius: var(--mat-mdc-focus-indicator-border-radius, 4px);
+}
+.mat-mdc-focus-indicator:focus::before {
+  content: "";
+}
+
+.mat-elevation-z6 {
+  box-shadow: var(--mat-app-elevation-shadow-level-6, none);
+}
+
+html {
+  --mat-ripple-color: rgba(0, 0, 0, 0.1);
+}
+
+html {
+  --mat-option-selected-state-label-text-color: #314fa7;
+  --mat-option-label-text-color: rgba(0, 0, 0, 0.87);
+  --mat-option-hover-state-layer-color: rgba(0, 0, 0, 0.04);
+  --mat-option-focus-state-layer-color: rgba(0, 0, 0, 0.04);
+  --mat-option-selected-state-layer-color: rgba(0, 0, 0, 0.04);
+}
+
+html {
+  --mat-optgroup-label-text-color: rgba(0, 0, 0, 0.87);
+}
+
+html {
+  --mat-full-pseudo-checkbox-selected-icon-color: #6859ff;
+  --mat-full-pseudo-checkbox-selected-checkmark-color: #fafafa;
+  --mat-full-pseudo-checkbox-unselected-icon-color: rgba(0, 0, 0, 0.54);
+  --mat-full-pseudo-checkbox-disabled-selected-checkmark-color: #fafafa;
+  --mat-full-pseudo-checkbox-disabled-unselected-icon-color: #b0b0b0;
+  --mat-full-pseudo-checkbox-disabled-selected-icon-color: #b0b0b0;
+  --mat-minimal-pseudo-checkbox-selected-checkmark-color: #6859ff;
+  --mat-minimal-pseudo-checkbox-disabled-selected-checkmark-color: #b0b0b0;
+}
+
+html {
+  --mat-app-background-color: #fafafa;
+  --mat-app-text-color: rgba(0, 0, 0, 0.87);
+  --mat-app-elevation-shadow-level-0: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-1: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-2: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-3: 0px 3px 3px -2px rgba(0, 0, 0, 0.2), 0px 3px 4px 0px rgba(0, 0, 0, 0.14), 0px 1px 8px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-4: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-5: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 5px 8px 0px rgba(0, 0, 0, 0.14), 0px 1px 14px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-6: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-7: 0px 4px 5px -2px rgba(0, 0, 0, 0.2), 0px 7px 10px 1px rgba(0, 0, 0, 0.14), 0px 2px 16px 1px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-8: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-9: 0px 5px 6px -3px rgba(0, 0, 0, 0.2), 0px 9px 12px 1px rgba(0, 0, 0, 0.14), 0px 3px 16px 2px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-10: 0px 6px 6px -3px rgba(0, 0, 0, 0.2), 0px 10px 14px 1px rgba(0, 0, 0, 0.14), 0px 4px 18px 3px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-11: 0px 6px 7px -4px rgba(0, 0, 0, 0.2), 0px 11px 15px 1px rgba(0, 0, 0, 0.14), 0px 4px 20px 3px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-12: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-13: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 13px 19px 2px rgba(0, 0, 0, 0.14), 0px 5px 24px 4px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-14: 0px 7px 9px -4px rgba(0, 0, 0, 0.2), 0px 14px 21px 2px rgba(0, 0, 0, 0.14), 0px 5px 26px 4px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-15: 0px 8px 9px -5px rgba(0, 0, 0, 0.2), 0px 15px 22px 2px rgba(0, 0, 0, 0.14), 0px 6px 28px 5px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-16: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-17: 0px 8px 11px -5px rgba(0, 0, 0, 0.2), 0px 17px 26px 2px rgba(0, 0, 0, 0.14), 0px 6px 32px 5px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-18: 0px 9px 11px -5px rgba(0, 0, 0, 0.2), 0px 18px 28px 2px rgba(0, 0, 0, 0.14), 0px 7px 34px 6px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-19: 0px 9px 12px -6px rgba(0, 0, 0, 0.2), 0px 19px 29px 2px rgba(0, 0, 0, 0.14), 0px 7px 36px 6px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-20: 0px 10px 13px -6px rgba(0, 0, 0, 0.2), 0px 20px 31px 3px rgba(0, 0, 0, 0.14), 0px 8px 38px 7px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-21: 0px 10px 13px -6px rgba(0, 0, 0, 0.2), 0px 21px 33px 3px rgba(0, 0, 0, 0.14), 0px 8px 40px 7px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-22: 0px 10px 14px -6px rgba(0, 0, 0, 0.2), 0px 22px 35px 3px rgba(0, 0, 0, 0.14), 0px 8px 42px 7px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-23: 0px 11px 14px -7px rgba(0, 0, 0, 0.2), 0px 23px 36px 3px rgba(0, 0, 0, 0.14), 0px 9px 44px 8px rgba(0, 0, 0, 0.12);
+  --mat-app-elevation-shadow-level-24: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+html {
+  --mat-option-label-text-font: 'Lato', sans-serif;
+  --mat-option-label-text-line-height: 36px;
+  --mat-option-label-text-size: 21px;
+  --mat-option-label-text-tracking: -0.1px;
+  --mat-option-label-text-weight: 400;
+}
+
+html {
+  --mat-optgroup-label-text-font: 'Lato', sans-serif;
+  --mat-optgroup-label-text-line-height: 36px;
+  --mat-optgroup-label-text-size: 21px;
+  --mat-optgroup-label-text-tracking: -0.1px;
+  --mat-optgroup-label-text-weight: 400;
+}
+
+html {
+  --mdc-text-button-container-shape: 4px;
+  --mdc-text-button-keep-touch-target: false;
+  --mdc-filled-button-container-shape: 4px;
+  --mdc-filled-button-keep-touch-target: false;
+  --mdc-protected-button-container-shape: 4px;
+  --mdc-protected-button-keep-touch-target: false;
+  --mdc-outlined-button-keep-touch-target: false;
+  --mdc-outlined-button-outline-width: 1px;
+  --mdc-outlined-button-container-shape: 4px;
+  --mat-text-button-horizontal-padding: 8px;
+  --mat-text-button-with-icon-horizontal-padding: 8px;
+  --mat-text-button-icon-spacing: 8px;
+  --mat-text-button-icon-offset: 0;
+  --mat-filled-button-horizontal-padding: 16px;
+  --mat-filled-button-icon-spacing: 8px;
+  --mat-filled-button-icon-offset: -4px;
+  --mat-protected-button-horizontal-padding: 16px;
+  --mat-protected-button-icon-spacing: 8px;
+  --mat-protected-button-icon-offset: -4px;
+  --mat-outlined-button-horizontal-padding: 15px;
+  --mat-outlined-button-icon-spacing: 8px;
+  --mat-outlined-button-icon-offset: -4px;
+}
+
+html {
+  --mdc-text-button-label-text-color: black;
+  --mdc-text-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+  --mat-text-button-state-layer-color: black;
+  --mat-text-button-disabled-state-layer-color: black;
+  --mat-text-button-ripple-color: rgba(0, 0, 0, 0.1);
+  --mat-text-button-hover-state-layer-opacity: 0.04;
+  --mat-text-button-focus-state-layer-opacity: 0.12;
+  --mat-text-button-pressed-state-layer-opacity: 0.12;
+  --mdc-filled-button-container-color: white;
+  --mdc-filled-button-label-text-color: black;
+  --mdc-filled-button-disabled-container-color: rgba(0, 0, 0, 0.12);
+  --mdc-filled-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+  --mat-filled-button-state-layer-color: black;
+  --mat-filled-button-disabled-state-layer-color: black;
+  --mat-filled-button-ripple-color: rgba(0, 0, 0, 0.1);
+  --mat-filled-button-hover-state-layer-opacity: 0.04;
+  --mat-filled-button-focus-state-layer-opacity: 0.12;
+  --mat-filled-button-pressed-state-layer-opacity: 0.12;
+  --mdc-protected-button-container-color: white;
+  --mdc-protected-button-label-text-color: black;
+  --mdc-protected-button-disabled-container-color: rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+  --mdc-protected-button-container-elevation-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-disabled-container-elevation-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-focus-container-elevation-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-hover-container-elevation-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-pressed-container-elevation-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12);
+  --mdc-protected-button-container-shadow-color: #000;
+  --mat-protected-button-state-layer-color: black;
+  --mat-protected-button-disabled-state-layer-color: black;
+  --mat-protected-button-ripple-color: rgba(0, 0, 0, 0.1);
+  --mat-protected-button-hover-state-layer-opacity: 0.04;
+  --mat-protected-button-focus-state-layer-opacity: 0.12;
+  --mat-protected-button-pressed-state-layer-opacity: 0.12;
+  --mdc-outlined-button-disabled-outline-color: rgba(0, 0, 0, 0.12);
+  --mdc-outlined-button-disabled-label-text-color: rgba(0, 0, 0, 0.38);
+  --mdc-outlined-button-label-text-color: black;
+  --mdc-outlined-button-outline-color: rgba(0, 0, 0, 0.12);
+  --mat-outlined-button-state-layer-color: black;
+  --mat-outlined-button-disabled-state-layer-color: black;
+  --mat-outlined-button-ripple-color: rgba(0, 0, 0, 0.1);
+  --mat-outlined-button-hover-state-layer-opacity: 0.04;
+  --mat-outlined-button-focus-state-layer-opacity: 0.12;
+  --mat-outlined-button-pressed-state-layer-opacity: 0.12;
+}
+
+html {
+  --mdc-text-button-container-height: 36px;
+  --mdc-filled-button-container-height: 36px;
+  --mdc-outlined-button-container-height: 36px;
+  --mdc-protected-button-container-height: 36px;
+  --mat-text-button-touch-target-display: block;
+  --mat-filled-button-touch-target-display: block;
+  --mat-protected-button-touch-target-display: block;
+  --mat-outlined-button-touch-target-display: block;
+}
+
+html {
+  --mdc-text-button-label-text-font: 'Lato', sans-serif;
+  --mdc-text-button-label-text-size: 16px;
+  --mdc-text-button-label-text-tracking: normal;
+  --mdc-text-button-label-text-weight: 700;
+  --mdc-text-button-label-text-transform: none;
+  --mdc-filled-button-label-text-font: 'Lato', sans-serif;
+  --mdc-filled-button-label-text-size: 16px;
+  --mdc-filled-button-label-text-tracking: normal;
+  --mdc-filled-button-label-text-weight: 700;
+  --mdc-filled-button-label-text-transform: none;
+  --mdc-outlined-button-label-text-font: 'Lato', sans-serif;
+  --mdc-outlined-button-label-text-size: 16px;
+  --mdc-outlined-button-label-text-tracking: normal;
+  --mdc-outlined-button-label-text-weight: 700;
+  --mdc-outlined-button-label-text-transform: none;
+  --mdc-protected-button-label-text-font: 'Lato', sans-serif;
+  --mdc-protected-button-label-text-size: 16px;
+  --mdc-protected-button-label-text-tracking: normal;
+  --mdc-protected-button-label-text-weight: 700;
+  --mdc-protected-button-label-text-transform: none;
+}
+
+.base {
+  background-color: white;
+}
+
+#profile-top,
+#profile-stats {
+  border-color: transparent;
+  background-color: rgb(249, 249, 249);
+}
+
+.username {
+  color: #39bde7;
+}
+
+.profile-nav-group {
+  border-color: rgba(0, 0, 0, 0.12);
+  background-color: rgb(255, 255, 255);
+}
+
+.profile-nav-item {
+  border-color: transparent;
+  color: black;
+}
+.profile-nav-item:focus, .profile-nav-item:hover {
+  background-color: #586fbc;
+  color: white;
+}
+
+.profile-nav-item.active-tab {
+  background-color: #1f3b8f;
+  color: white;
+}
+
+.status {
+  color: #000;
+}
+.status.completed {
+  color: #1f3b8f;
+  background-color: #c4cce7;
+}
+
+.text-grey {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+@media (max-width: 479px) {
+  .profile-pic {
+    background-color: rgb(229, 229, 229);
+  }
+}
+.username {
+  font-size: 28px;
+}
+
+.profile-pic div.avatar-content {
+  font-family: "Lato", sans-serif !important;
+}
+
+@media screen and (max-width: 641px) {
+  #profile-details > h2 {
+    font-size: 32px;
+  }
+}
+.action-btn {
+  font-size: 21px;
+  text-decoration: none;
+}
+
+.base {
+  background-color: white;
+}
+
+#profile-top,
+#profile-stats {
+  border-color: transparent;
+  background-color: rgb(249, 249, 249);
+}
+
+.username {
+  color: #39bde7;
+}
+
+.profile-type {
+  border-color: #8a78ff;
+  background-color: #ede8ff;
+}
+
+.profile-nav-group {
+  border-color: rgba(0, 0, 0, 0.12);
+  background-color: rgb(255, 255, 255);
+}
+
+.profile-nav-item {
+  border-color: transparent;
+  color: black;
+}
+.profile-nav-item:focus, .profile-nav-item:hover {
+  background-color: #586fbc;
+  color: white;
+}
+
+.profile-nav-item.active-tab {
+  background-color: #1f3b8f;
+  color: white;
+}
+
+.text-grey {
+  color: rgba(0, 0, 0, 0.38);
+}
+
+@media (max-width: 479px) {
+  .profile-pic {
+    background-color: rgb(229, 229, 229);
+  }
+}
+.username {
+  font-size: 28px;
+}
+
+.profile-pic div.avatar-content {
+  font-family: "Lato", sans-serif !important;
+}
+
+@media screen and (max-width: 641px) {
+  #profile-details > h2 {
+    font-size: 32px;
+  }
+}
+.action-btn {
+  font-size: 21px;
+  text-decoration: none;
+}
+
+.container p {
+  font-size: 17px;
+  line-height: 28px;
+}
+
+footer {
+  background-color: #314fa7;
+  color: #fff;
+}
+
+.footer-link-group a,
+.footer-links a {
+  color: #fff;
+}
+
+.footer-bottom {
+  background-color: #1f3b8f;
+}
+
+footer {
+  font-weight: 500;
+  line-height: normal;
+}
+
+.app-info {
+  font-size: 14px;
+  line-height: 21px;
+}
+
+.footer-link-group {
+  font-size: 16px;
+}
+
+.footer-links,
+.footer-links a {
+  font-size: 16px;
+}
+
+@media only screen and (max-width: 768px) {
+  .footer-link-group {
+    font-size: 14px !important;
+  }
+}
+openchallenges-navbar {
+  color: white;
+}
+openchallenges-navbar .sage-navbar {
+  background: #314fa7;
+}
+openchallenges-navbar .navbar-item {
+  color: white !important;
+}
+openchallenges-navbar .navbar-item:hover,
+openchallenges-navbar .navbar-item:active,
+openchallenges-navbar .navbar-item:focus {
+  background-color: #27459b;
+}
+
+.navbar-item {
+  line-height: 18px !important;
+}
+
+.docs-button {
+  color: white !important;
+}
+
+:root {
+  --color-btn-primary: #39bde7;
+  --color-btn-disabled: #EBEBE4;
+  --color-btn-shadow: rgba(196, 196, 196, 1);
+}
+/*!************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@angular-devkit/build-angular/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[1]!./node_modules/@angular-devkit/build-angular/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[2]!./node_modules/primeicons/primeicons.css?ngGlobalStyle ***!
+  \************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+/*!*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@angular-devkit/build-angular/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[1]!./node_modules/@angular-devkit/build-angular/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[2]!./node_modules/primeng/resources/themes/lara-light-blue/theme.css?ngGlobalStyle ***!
+  \*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+:root {
+  --surface-a:#ffffff;
+  --surface-b:#f8f9fa;
+  --surface-c:#e9ecef;
+  --surface-d:#dee2e6;
+  --surface-e:#ffffff;
+  --surface-f:#ffffff;
+  --text-color:#495057;
+  --text-color-secondary:#6c757d;
+  --primary-color:#3B82F6;
+  --primary-color-text:#ffffff;
+  --font-family:-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
+  --surface-0: #ffffff;
+  --surface-50: #FAFAFA;
+  --surface-100: #F5F5F5;
+  --surface-200: #EEEEEE;
+  --surface-300: #E0E0E0;
+  --surface-400: #BDBDBD;
+  --surface-500: #9E9E9E;
+  --surface-600: #757575;
+  --surface-700: #616161;
+  --surface-800: #424242;
+  --surface-900: #212121;
+  --gray-50: #FAFAFA;
+  --gray-100: #F5F5F5;
+  --gray-200: #EEEEEE;
+  --gray-300: #E0E0E0;
+  --gray-400: #BDBDBD;
+  --gray-500: #9E9E9E;
+  --gray-600: #757575;
+  --gray-700: #616161;
+  --gray-800: #424242;
+  --gray-900: #212121;
+  --content-padding:1.25rem;
+  --inline-spacing:0.5rem;
+  --border-radius:6px;
+  --surface-ground:#eff3f8;
+  --surface-section:#ffffff;
+  --surface-card:#ffffff;
+  --surface-overlay:#ffffff;
+  --surface-border:#dfe7ef;
+  --surface-hover:#f6f9fc;
+  --focus-ring: 0 0 0 0.2rem #BFDBFE;
+  --maskbg: rgba(0, 0, 0, 0.4);
+  --highlight-bg: #EFF6FF;
+  --highlight-text-color: #1D4ED8;
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --blue-50:#f5f9ff;
+  --blue-100:#d0e1fd;
+  --blue-200:#abc9fb;
+  --blue-300:#85b2f9;
+  --blue-400:#609af8;
+  --blue-500:#3b82f6;
+  --blue-600:#326fd1;
+  --blue-700:#295bac;
+  --blue-800:#204887;
+  --blue-900:#183462;
+  --green-50:#f4fcf7;
+  --green-100:#caf1d8;
+  --green-200:#a0e6ba;
+  --green-300:#76db9b;
+  --green-400:#4cd07d;
+  --green-500:#22c55e;
+  --green-600:#1da750;
+  --green-700:#188a42;
+  --green-800:#136c34;
+  --green-900:#0e4f26;
+  --yellow-50:#fefbf3;
+  --yellow-100:#faedc4;
+  --yellow-200:#f6de95;
+  --yellow-300:#f2d066;
+  --yellow-400:#eec137;
+  --yellow-500:#eab308;
+  --yellow-600:#c79807;
+  --yellow-700:#a47d06;
+  --yellow-800:#816204;
+  --yellow-900:#5e4803;
+  --cyan-50:#f3fbfd;
+  --cyan-100:#c3edf5;
+  --cyan-200:#94e0ed;
+  --cyan-300:#65d2e4;
+  --cyan-400:#35c4dc;
+  --cyan-500:#06b6d4;
+  --cyan-600:#059bb4;
+  --cyan-700:#047f94;
+  --cyan-800:#036475;
+  --cyan-900:#024955;
+  --pink-50:#fef6fa;
+  --pink-100:#fad3e7;
+  --pink-200:#f7b0d3;
+  --pink-300:#f38ec0;
+  --pink-400:#f06bac;
+  --pink-500:#ec4899;
+  --pink-600:#c93d82;
+  --pink-700:#a5326b;
+  --pink-800:#822854;
+  --pink-900:#5e1d3d;
+  --indigo-50:#f7f7fe;
+  --indigo-100:#dadafc;
+  --indigo-200:#bcbdf9;
+  --indigo-300:#9ea0f6;
+  --indigo-400:#8183f4;
+  --indigo-500:#6366f1;
+  --indigo-600:#5457cd;
+  --indigo-700:#4547a9;
+  --indigo-800:#363885;
+  --indigo-900:#282960;
+  --teal-50:#f3fbfb;
+  --teal-100:#c7eeea;
+  --teal-200:#9ae0d9;
+  --teal-300:#6dd3c8;
+  --teal-400:#41c5b7;
+  --teal-500:#14b8a6;
+  --teal-600:#119c8d;
+  --teal-700:#0e8174;
+  --teal-800:#0b655b;
+  --teal-900:#084a42;
+  --orange-50:#fff8f3;
+  --orange-100:#feddc7;
+  --orange-200:#fcc39b;
+  --orange-300:#fba86f;
+  --orange-400:#fa8e42;
+  --orange-500:#f97316;
+  --orange-600:#d46213;
+  --orange-700:#ae510f;
+  --orange-800:#893f0c;
+  --orange-900:#642e09;
+  --bluegray-50:#f7f8f9;
+  --bluegray-100:#dadee3;
+  --bluegray-200:#bcc3cd;
+  --bluegray-300:#9fa9b7;
+  --bluegray-400:#818ea1;
+  --bluegray-500:#64748b;
+  --bluegray-600:#556376;
+  --bluegray-700:#465161;
+  --bluegray-800:#37404c;
+  --bluegray-900:#282e38;
+  --purple-50:#fbf7ff;
+  --purple-100:#ead6fd;
+  --purple-200:#dab6fc;
+  --purple-300:#c996fa;
+  --purple-400:#b975f9;
+  --purple-500:#a855f7;
+  --purple-600:#8f48d2;
+  --purple-700:#763cad;
+  --purple-800:#5c2f88;
+  --purple-900:#432263;
+  --red-50:#fff5f5;
+  --red-100:#ffd0ce;
+  --red-200:#ffaca7;
+  --red-300:#ff8780;
+  --red-400:#ff6259;
+  --red-500:#ff3d32;
+  --red-600:#d9342b;
+  --red-700:#b32b23;
+  --red-800:#8c221c;
+  --red-900:#661814;
+  --primary-50:#f5f9ff;
+  --primary-100:#d0e1fd;
+  --primary-200:#abc9fb;
+  --primary-300:#85b2f9;
+  --primary-400:#609af8;
+  --primary-500:#3b82f6;
+  --primary-600:#326fd1;
+  --primary-700:#295bac;
+  --primary-800:#204887;
+  --primary-900:#183462;
+}
+
+/*!********************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/@angular-devkit/build-angular/node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[1]!./node_modules/@angular-devkit/build-angular/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[5].rules[0].oneOf[0].use[2]!./node_modules/primeng/resources/primeng.min.css?ngGlobalStyle ***!
+  \********************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+
+/*# sourceMappingURL=styles.css.map*/</style><link rel="stylesheet" href="styles.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles.css"></noscript><style ng-app-id="openchallenges-app">/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhcHAuY29tcG9uZW50LnNjc3MifQ== */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2FwcHMvb3BlbmNoYWxsZW5nZXMvYXBwL3NyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFDQSxnS0FBZ0siLCJzb3VyY2VSb290IjoiIn0= */</style><style ng-app-id="openchallenges-app">.sage-navbar[_ngcontent-openchallenges-app-c983831802] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 68px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 8px 16px;
+  box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
+}
+.sage-navbar[_ngcontent-openchallenges-app-c983831802]    > .mat-mdc-button[_ngcontent-openchallenges-app-c983831802] {
+  padding: 0 16px !important;
+}
+.sage-navbar[_ngcontent-openchallenges-app-c983831802]    > .mat-mdc-button[_ngcontent-openchallenges-app-c983831802]:last-child {
+  margin-left: auto;
+}
+
+.flex-spacer[_ngcontent-openchallenges-app-c983831802] {
+  flex-grow: 1;
+}
+
+.logo[_ngcontent-openchallenges-app-c983831802] {
+  height: 36px;
+  vertical-align: middle;
+}
+
+@media only screen and (max-width: 992px) {
+  .navbar-item[_ngcontent-openchallenges-app-c983831802] {
+    width: 100%;
+    align-self: center;
+  }
+  .sage-navbar[_ngcontent-openchallenges-app-c983831802] {
+    height: 240px;
+  }
+  .flex-spacer[_ngcontent-openchallenges-app-c983831802] {
+    flex-grow: 0;
+  }
+  .test[_ngcontent-openchallenges-app-c983831802] {
+    width: 100%;
+  }
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIm5hdmJhci5jb21wb25lbnQuc2NzcyIsIi4uLy4uLy4uLy4uL3N0eWxlcy9zcmMvbGliL19jb25zdGFudHMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFFQTtFQUNFLGVBQUE7RUFDQSxNQUFBO0VBQ0EsT0FBQTtFQUNBLFVBQUE7RUFDQSxXQUFBO0VBQ0EsWUM0QmM7RUQzQmQsYUFBQTtFQUNBLGVBQUE7RUFDQSxtQkFBQTtFQUNBLGlCQUFBO0VBQ0EsZ0RBQUE7QUFERjtBQUdFO0VBQ0UsMEJBQUE7QUFESjtBQUdJO0VBQ0UsaUJBQUE7QUFETjs7QUFNQTtFQUNFLFlBQUE7QUFIRjs7QUFNQTtFQUNFLFlBQUE7RUFDQSxzQkFBQTtBQUhGOztBQU1BO0VBQ0U7SUFDRSxXQUFBO0lBQ0Esa0JBQUE7RUFIRjtFQUtBO0lBQ0UsYUNGaUI7RUREbkI7RUFLQTtJQUNFLFlBQUE7RUFIRjtFQUtBO0lBQ0UsV0FBQTtFQUhGO0FBQ0YiLCJmaWxlIjoibmF2YmFyLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQHVzZSAnbGlicy9vcGVuY2hhbGxlbmdlcy9zdHlsZXMvc3JjL2xpYi9jb25zdGFudHMnO1xuXG4uc2FnZS1uYXZiYXIge1xuICBwb3NpdGlvbjogZml4ZWQ7XG4gIHRvcDogMDtcbiAgbGVmdDogMDtcbiAgei1pbmRleDogMjtcbiAgd2lkdGg6IDEwMCU7XG4gIGhlaWdodDogY29uc3RhbnRzLiRuYXZiYXItaGVpZ2h0O1xuICBkaXNwbGF5OiBmbGV4O1xuICBmbGV4LXdyYXA6IHdyYXA7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIHBhZGRpbmc6IDhweCAxNnB4O1xuICBib3gtc2hhZG93OiAxcHggNXB4IDE4cHggMHB4IHJnYmEoMCwgMCwgMCwgMC4yNCk7XG5cbiAgPiAubWF0LW1kYy1idXR0b24ge1xuICAgIHBhZGRpbmc6IDAgMTZweCAhaW1wb3J0YW50O1xuXG4gICAgJjpsYXN0LWNoaWxkIHtcbiAgICAgIG1hcmdpbi1sZWZ0OiBhdXRvO1xuICAgIH1cbiAgfVxufVxuXG4uZmxleC1zcGFjZXIge1xuICBmbGV4LWdyb3c6IDE7XG59XG5cbi5sb2dvIHtcbiAgaGVpZ2h0OiAzNnB4O1xuICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6IGNvbnN0YW50cy4kbGctYnJlYWtwb2ludCkge1xuICAubmF2YmFyLWl0ZW0ge1xuICAgIHdpZHRoOiAxMDAlO1xuICAgIGFsaWduLXNlbGY6IGNlbnRlcjtcbiAgfVxuICAuc2FnZS1uYXZiYXIge1xuICAgIGhlaWdodDogY29uc3RhbnRzLiRuYXZiYXItaGVpZ2h0LXRhbGw7XG4gIH1cbiAgLmZsZXgtc3BhY2VyIHtcbiAgICBmbGV4LWdyb3c6IDA7XG4gIH1cbiAgLnRlc3Qge1xuICAgIHdpZHRoOiAxMDAlO1xuICB9XG59IiwiLy8gU2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9hbmd1bGFyL2NvbXBvbmVudHMvYmxvYi9tYXN0ZXIvc3JjL21hdGVyaWFsL2NvcmUvc3R5bGUvX3ZhcmlhYmxlcy5zY3NzXG5cbi8vIEdsb2JhbCBjb25zdGFudHNcbiRwaTogMy4xNDE1OTI2NDtcbiRwYWRkaW5nLXRlc3Q6IDIwcHg7XG5cbi8vIEZpZ21hIHZhcmlhYmxlc1xuJGRsLXNpemUtc2l6ZS1sYXJnZTogMTQ0cHg7XG4kZGwtc2l6ZS1zaXplLXNtYWxsOiA0OHB4O1xuJGRsLXNpemUtc2l6ZS1tZWRpdW06IDk2cHg7XG4kZGwtc2l6ZS1zaXplLXhsYXJnZTogMTkycHg7XG4kZGwtc2l6ZS1zaXplLXhzbWFsbDogMTZweDtcbiRkbC1zcGFjZS1zcGFjZS11bml0OiAxNnB4O1xuJGRsLXNpemUtc2l6ZS14eGxhcmdlOiAyODhweDtcbiRkbC1zaXplLXNpemUtbWF4d2lkdGg6IDE0MDBweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJvdW5kOiA1MCU7XG4kZGwtc3BhY2Utc3BhY2UtaGFsZnVuaXQ6IDhweDtcbiRkbC1zcGFjZS1zcGFjZS1zaXh1bml0czogOTZweDtcbiRkbC1zcGFjZS1zcGFjZS10d291bml0czogMzJweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czI6IDJweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czQ6IDRweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czg6IDhweDtcbiRkbC1zcGFjZS1zcGFjZS1maXZldW5pdHM6IDgwcHg7XG4kZGwtc3BhY2Utc3BhY2UtZm91cnVuaXRzOiA2NHB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcmFkaXVzMTY6IDE2cHg7XG4kZGwtc3BhY2Utc3BhY2UtdGhyZWV1bml0czogNDhweDtcbiRkbC1zcGFjZS1zcGFjZS1vbmVhbmRoYWxmdW5pdHM6IDI0cHg7XG5cbi8vIEJyZWFrcG9pbnRzIGZyb20gaHR0cHM6Ly9nZXRib290c3RyYXAuY29tL2RvY3MvNS4wL2xheW91dC9icmVha3BvaW50cy9cbiRzbS1icmVha3BvaW50OiA1NzZweDtcbiRtZC1icmVha3BvaW50OiA3NjhweDtcbiRsZy1icmVha3BvaW50OiA5OTJweDtcbiR4bC1icmVha3BvaW50OiAxMjAwcHg7XG4keHhsLWJyZWFrcG9pbnQ6IDE0MDBweDtcblxuLy8gRGltZW5zaW9ucyBvZiBjb21wb25lbnRcbiRuYXZiYXItaGVpZ2h0OiA2OHB4O1xuJG5hdmJhci1oZWlnaHQtdGFsbDogMjQwcHg7XG4kZm9vdGVyLWhlaWdodDogMjU5cHg7XG4iXX0= */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvdWkvc3JjL2xpYi9uYXZiYXIvbmF2YmFyLmNvbXBvbmVudC5zY3NzIiwid2VicGFjazovLy4vbGlicy9vcGVuY2hhbGxlbmdlcy9zdHlsZXMvc3JjL2xpYi9fY29uc3RhbnRzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUE7RUFDRSxlQUFBO0VBQ0EsTUFBQTtFQUNBLE9BQUE7RUFDQSxVQUFBO0VBQ0EsV0FBQTtFQUNBLFlDNEJjO0VEM0JkLGFBQUE7RUFDQSxlQUFBO0VBQ0EsbUJBQUE7RUFDQSxpQkFBQTtFQUNBLGdEQUFBO0FBREY7QUFHRTtFQUNFLDBCQUFBO0FBREo7QUFHSTtFQUNFLGlCQUFBO0FBRE47O0FBTUE7RUFDRSxZQUFBO0FBSEY7O0FBTUE7RUFDRSxZQUFBO0VBQ0Esc0JBQUE7QUFIRjs7QUFNQTtFQUNFO0lBQ0UsV0FBQTtJQUNBLGtCQUFBO0VBSEY7RUFLQTtJQUNFLGFDRmlCO0VERG5CO0VBS0E7SUFDRSxZQUFBO0VBSEY7RUFLQTtJQUNFLFdBQUE7RUFIRjtBQUNGO0FBQ0EsZ3ZHQUFndkciLCJzb3VyY2VzQ29udGVudCI6WyJAdXNlICdsaWJzL29wZW5jaGFsbGVuZ2VzL3N0eWxlcy9zcmMvbGliL2NvbnN0YW50cyc7XG5cbi5zYWdlLW5hdmJhciB7XG4gIHBvc2l0aW9uOiBmaXhlZDtcbiAgdG9wOiAwO1xuICBsZWZ0OiAwO1xuICB6LWluZGV4OiAyO1xuICB3aWR0aDogMTAwJTtcbiAgaGVpZ2h0OiBjb25zdGFudHMuJG5hdmJhci1oZWlnaHQ7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtd3JhcDogd3JhcDtcbiAgYWxpZ24taXRlbXM6IGNlbnRlcjtcbiAgcGFkZGluZzogOHB4IDE2cHg7XG4gIGJveC1zaGFkb3c6IDFweCA1cHggMThweCAwcHggcmdiYSgwLCAwLCAwLCAwLjI0KTtcblxuICA+IC5tYXQtbWRjLWJ1dHRvbiB7XG4gICAgcGFkZGluZzogMCAxNnB4ICFpbXBvcnRhbnQ7XG5cbiAgICAmOmxhc3QtY2hpbGQge1xuICAgICAgbWFyZ2luLWxlZnQ6IGF1dG87XG4gICAgfVxuICB9XG59XG5cbi5mbGV4LXNwYWNlciB7XG4gIGZsZXgtZ3JvdzogMTtcbn1cblxuLmxvZ28ge1xuICBoZWlnaHQ6IDM2cHg7XG4gIHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7XG59XG5cbkBtZWRpYSBvbmx5IHNjcmVlbiBhbmQgKG1heC13aWR0aDogY29uc3RhbnRzLiRsZy1icmVha3BvaW50KSB7XG4gIC5uYXZiYXItaXRlbSB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgYWxpZ24tc2VsZjogY2VudGVyO1xuICB9XG4gIC5zYWdlLW5hdmJhciB7XG4gICAgaGVpZ2h0OiBjb25zdGFudHMuJG5hdmJhci1oZWlnaHQtdGFsbDtcbiAgfVxuICAuZmxleC1zcGFjZXIge1xuICAgIGZsZXgtZ3JvdzogMDtcbiAgfVxuICAudGVzdCB7XG4gICAgd2lkdGg6IDEwMCU7XG4gIH1cbn0iLCIvLyBTZWUgaHR0cHM6Ly9naXRodWIuY29tL2FuZ3VsYXIvY29tcG9uZW50cy9ibG9iL21hc3Rlci9zcmMvbWF0ZXJpYWwvY29yZS9zdHlsZS9fdmFyaWFibGVzLnNjc3NcblxuLy8gR2xvYmFsIGNvbnN0YW50c1xuJHBpOiAzLjE0MTU5MjY0O1xuJHBhZGRpbmctdGVzdDogMjBweDtcblxuLy8gRmlnbWEgdmFyaWFibGVzXG4kZGwtc2l6ZS1zaXplLWxhcmdlOiAxNDRweDtcbiRkbC1zaXplLXNpemUtc21hbGw6IDQ4cHg7XG4kZGwtc2l6ZS1zaXplLW1lZGl1bTogOTZweDtcbiRkbC1zaXplLXNpemUteGxhcmdlOiAxOTJweDtcbiRkbC1zaXplLXNpemUteHNtYWxsOiAxNnB4O1xuJGRsLXNwYWNlLXNwYWNlLXVuaXQ6IDE2cHg7XG4kZGwtc2l6ZS1zaXplLXh4bGFyZ2U6IDI4OHB4O1xuJGRsLXNpemUtc2l6ZS1tYXh3aWR0aDogMTQwMHB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcm91bmQ6IDUwJTtcbiRkbC1zcGFjZS1zcGFjZS1oYWxmdW5pdDogOHB4O1xuJGRsLXNwYWNlLXNwYWNlLXNpeHVuaXRzOiA5NnB4O1xuJGRsLXNwYWNlLXNwYWNlLXR3b3VuaXRzOiAzMnB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcmFkaXVzMjogMnB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcmFkaXVzNDogNHB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcmFkaXVzODogOHB4O1xuJGRsLXNwYWNlLXNwYWNlLWZpdmV1bml0czogODBweDtcbiRkbC1zcGFjZS1zcGFjZS1mb3VydW5pdHM6IDY0cHg7XG4kZGwtcmFkaXVzLXJhZGl1cy1yYWRpdXMxNjogMTZweDtcbiRkbC1zcGFjZS1zcGFjZS10aHJlZXVuaXRzOiA0OHB4O1xuJGRsLXNwYWNlLXNwYWNlLW9uZWFuZGhhbGZ1bml0czogMjRweDtcblxuLy8gQnJlYWtwb2ludHMgZnJvbSBodHRwczovL2dldGJvb3RzdHJhcC5jb20vZG9jcy81LjAvbGF5b3V0L2JyZWFrcG9pbnRzL1xuJHNtLWJyZWFrcG9pbnQ6IDU3NnB4O1xuJG1kLWJyZWFrcG9pbnQ6IDc2OHB4O1xuJGxnLWJyZWFrcG9pbnQ6IDk5MnB4O1xuJHhsLWJyZWFrcG9pbnQ6IDEyMDBweDtcbiR4eGwtYnJlYWtwb2ludDogMTQwMHB4O1xuXG4vLyBEaW1lbnNpb25zIG9mIGNvbXBvbmVudFxuJG5hdmJhci1oZWlnaHQ6IDY4cHg7XG4kbmF2YmFyLWhlaWdodC10YWxsOiAyNDBweDtcbiRmb290ZXItaGVpZ2h0OiAyNTlweDtcbiJdLCJzb3VyY2VSb290IjoiIn0= */</style><style ng-app-id="openchallenges-app">.mdc-touch-target-wrapper{display:inline}.mdc-elevation-overlay{position:absolute;border-radius:inherit;pointer-events:none;opacity:var(--mdc-elevation-overlay-opacity, 0);transition:opacity 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button{position:relative;display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-width:64px;border:none;outline:none;line-height:inherit;user-select:none;-webkit-appearance:none;overflow:visible;vertical-align:middle;background:rgba(0,0,0,0)}.mdc-button .mdc-elevation-overlay{width:100%;height:100%;top:0;left:0}.mdc-button::-moz-focus-inner{padding:0;border:0}.mdc-button:active{outline:none}.mdc-button:hover{cursor:pointer}.mdc-button:disabled{cursor:default;pointer-events:none}.mdc-button[hidden]{display:none}.mdc-button .mdc-button__icon{margin-left:0;margin-right:8px;display:inline-block;position:relative;vertical-align:top}[dir=rtl] .mdc-button .mdc-button__icon,.mdc-button .mdc-button__icon[dir=rtl]{margin-left:8px;margin-right:0}.mdc-button .mdc-button__progress-indicator{font-size:0;position:absolute;transform:translate(-50%, -50%);top:50%;left:50%;line-height:initial}.mdc-button .mdc-button__label{position:relative}.mdc-button .mdc-button__focus-ring{pointer-events:none;border:2px solid rgba(0,0,0,0);border-radius:6px;box-sizing:content-box;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px);display:none}@media screen and (forced-colors: active){.mdc-button .mdc-button__focus-ring{border-color:CanvasText}}.mdc-button .mdc-button__focus-ring::after{content:"";border:2px solid rgba(0,0,0,0);border-radius:8px;display:block;position:absolute;top:50%;left:50%;transform:translate(-50%, -50%);height:calc(100% + 4px);width:calc(100% + 4px)}@media screen and (forced-colors: active){.mdc-button .mdc-button__focus-ring::after{border-color:CanvasText}}@media screen and (forced-colors: active){.mdc-button.mdc-ripple-upgraded--background-focused .mdc-button__focus-ring,.mdc-button:not(.mdc-ripple-upgraded):focus .mdc-button__focus-ring{display:block}}.mdc-button .mdc-button__touch{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%)}.mdc-button__label+.mdc-button__icon{margin-left:8px;margin-right:0}[dir=rtl] .mdc-button__label+.mdc-button__icon,.mdc-button__label+.mdc-button__icon[dir=rtl]{margin-left:0;margin-right:8px}svg.mdc-button__icon{fill:currentColor}.mdc-button--touch{margin-top:6px;margin-bottom:6px}.mdc-button{padding:0 8px 0 8px}.mdc-button--unelevated{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--unelevated.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--unelevated.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--raised{transition:box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);padding:0 16px 0 16px}.mdc-button--raised.mdc-button--icon-trailing{padding:0 12px 0 16px}.mdc-button--raised.mdc-button--icon-leading{padding:0 16px 0 12px}.mdc-button--outlined{border-style:solid;transition:border 280ms cubic-bezier(0.4, 0, 0.2, 1)}.mdc-button--outlined .mdc-button__ripple{border-style:solid;border-color:rgba(0,0,0,0)}.mat-mdc-button{font-family:var(--mdc-text-button-label-text-font);font-size:var(--mdc-text-button-label-text-size);letter-spacing:var(--mdc-text-button-label-text-tracking);font-weight:var(--mdc-text-button-label-text-weight);text-transform:var(--mdc-text-button-label-text-transform);height:var(--mdc-text-button-container-height);border-radius:var(--mdc-text-button-container-shape);padding:0 var(--mat-text-button-horizontal-padding, 8px)}.mat-mdc-button:not(:disabled){color:var(--mdc-text-button-label-text-color)}.mat-mdc-button:disabled{color:var(--mdc-text-button-disabled-label-text-color)}.mat-mdc-button .mdc-button__ripple{border-radius:var(--mdc-text-button-container-shape)}.mat-mdc-button:has(.material-icons,mat-icon,[matButtonIcon]){padding:0 var(--mat-text-button-with-icon-horizontal-padding, 8px)}.mat-mdc-button>.mat-icon{margin-right:var(--mat-text-button-icon-spacing, 8px);margin-left:var(--mat-text-button-icon-offset, 0)}[dir=rtl] .mat-mdc-button>.mat-icon{margin-right:var(--mat-text-button-icon-offset, 0);margin-left:var(--mat-text-button-icon-spacing, 8px)}.mat-mdc-button .mdc-button__label+.mat-icon{margin-right:var(--mat-text-button-icon-offset, 0);margin-left:var(--mat-text-button-icon-spacing, 8px)}[dir=rtl] .mat-mdc-button .mdc-button__label+.mat-icon{margin-right:var(--mat-text-button-icon-spacing, 8px);margin-left:var(--mat-text-button-icon-offset, 0)}.mat-mdc-button .mat-ripple-element{background-color:var(--mat-text-button-ripple-color)}.mat-mdc-button .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-text-button-state-layer-color)}.mat-mdc-button.mat-mdc-button-disabled .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-text-button-disabled-state-layer-color)}.mat-mdc-button:hover .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-text-button-hover-state-layer-opacity)}.mat-mdc-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-button.mat-mdc-button-disabled-interactive:focus .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-text-button-focus-state-layer-opacity)}.mat-mdc-button:active .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-text-button-pressed-state-layer-opacity)}.mat-mdc-button .mat-mdc-button-touch-target{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%);display:var(--mat-text-button-touch-target-display)}.mat-mdc-button[disabled],.mat-mdc-button.mat-mdc-button-disabled{cursor:default;pointer-events:none;color:var(--mdc-text-button-disabled-label-text-color)}.mat-mdc-button.mat-mdc-button-disabled-interactive{pointer-events:auto}.mat-mdc-unelevated-button{font-family:var(--mdc-filled-button-label-text-font);font-size:var(--mdc-filled-button-label-text-size);letter-spacing:var(--mdc-filled-button-label-text-tracking);font-weight:var(--mdc-filled-button-label-text-weight);text-transform:var(--mdc-filled-button-label-text-transform);height:var(--mdc-filled-button-container-height);border-radius:var(--mdc-filled-button-container-shape);padding:0 var(--mat-filled-button-horizontal-padding, 16px)}.mat-mdc-unelevated-button:not(:disabled){background-color:var(--mdc-filled-button-container-color)}.mat-mdc-unelevated-button:disabled{background-color:var(--mdc-filled-button-disabled-container-color)}.mat-mdc-unelevated-button:not(:disabled){color:var(--mdc-filled-button-label-text-color)}.mat-mdc-unelevated-button:disabled{color:var(--mdc-filled-button-disabled-label-text-color)}.mat-mdc-unelevated-button .mdc-button__ripple{border-radius:var(--mdc-filled-button-container-shape)}.mat-mdc-unelevated-button>.mat-icon{margin-right:var(--mat-filled-button-icon-spacing, 8px);margin-left:var(--mat-filled-button-icon-offset, -4px)}[dir=rtl] .mat-mdc-unelevated-button>.mat-icon{margin-right:var(--mat-filled-button-icon-offset, -4px);margin-left:var(--mat-filled-button-icon-spacing, 8px)}.mat-mdc-unelevated-button .mdc-button__label+.mat-icon{margin-right:var(--mat-filled-button-icon-offset, -4px);margin-left:var(--mat-filled-button-icon-spacing, 8px)}[dir=rtl] .mat-mdc-unelevated-button .mdc-button__label+.mat-icon{margin-right:var(--mat-filled-button-icon-spacing, 8px);margin-left:var(--mat-filled-button-icon-offset, -4px)}.mat-mdc-unelevated-button .mat-ripple-element{background-color:var(--mat-filled-button-ripple-color)}.mat-mdc-unelevated-button .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-filled-button-state-layer-color)}.mat-mdc-unelevated-button.mat-mdc-button-disabled .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-filled-button-disabled-state-layer-color)}.mat-mdc-unelevated-button:hover .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-filled-button-hover-state-layer-opacity)}.mat-mdc-unelevated-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-unelevated-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-unelevated-button.mat-mdc-button-disabled-interactive:focus .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-filled-button-focus-state-layer-opacity)}.mat-mdc-unelevated-button:active .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-filled-button-pressed-state-layer-opacity)}.mat-mdc-unelevated-button .mat-mdc-button-touch-target{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%);display:var(--mat-filled-button-touch-target-display)}.mat-mdc-unelevated-button[disabled],.mat-mdc-unelevated-button.mat-mdc-button-disabled{cursor:default;pointer-events:none;color:var(--mdc-filled-button-disabled-label-text-color);background-color:var(--mdc-filled-button-disabled-container-color)}.mat-mdc-unelevated-button.mat-mdc-button-disabled-interactive{pointer-events:auto}.mat-mdc-raised-button{font-family:var(--mdc-protected-button-label-text-font);font-size:var(--mdc-protected-button-label-text-size);letter-spacing:var(--mdc-protected-button-label-text-tracking);font-weight:var(--mdc-protected-button-label-text-weight);text-transform:var(--mdc-protected-button-label-text-transform);height:var(--mdc-protected-button-container-height);border-radius:var(--mdc-protected-button-container-shape);padding:0 var(--mat-protected-button-horizontal-padding, 16px);box-shadow:var(--mdc-protected-button-container-elevation-shadow)}.mat-mdc-raised-button:not(:disabled){background-color:var(--mdc-protected-button-container-color)}.mat-mdc-raised-button:disabled{background-color:var(--mdc-protected-button-disabled-container-color)}.mat-mdc-raised-button:not(:disabled){color:var(--mdc-protected-button-label-text-color)}.mat-mdc-raised-button:disabled{color:var(--mdc-protected-button-disabled-label-text-color)}.mat-mdc-raised-button .mdc-button__ripple{border-radius:var(--mdc-protected-button-container-shape)}.mat-mdc-raised-button>.mat-icon{margin-right:var(--mat-protected-button-icon-spacing, 8px);margin-left:var(--mat-protected-button-icon-offset, -4px)}[dir=rtl] .mat-mdc-raised-button>.mat-icon{margin-right:var(--mat-protected-button-icon-offset, -4px);margin-left:var(--mat-protected-button-icon-spacing, 8px)}.mat-mdc-raised-button .mdc-button__label+.mat-icon{margin-right:var(--mat-protected-button-icon-offset, -4px);margin-left:var(--mat-protected-button-icon-spacing, 8px)}[dir=rtl] .mat-mdc-raised-button .mdc-button__label+.mat-icon{margin-right:var(--mat-protected-button-icon-spacing, 8px);margin-left:var(--mat-protected-button-icon-offset, -4px)}.mat-mdc-raised-button .mat-ripple-element{background-color:var(--mat-protected-button-ripple-color)}.mat-mdc-raised-button .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-protected-button-state-layer-color)}.mat-mdc-raised-button.mat-mdc-button-disabled .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-protected-button-disabled-state-layer-color)}.mat-mdc-raised-button:hover .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-protected-button-hover-state-layer-opacity)}.mat-mdc-raised-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-raised-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-raised-button.mat-mdc-button-disabled-interactive:focus .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-protected-button-focus-state-layer-opacity)}.mat-mdc-raised-button:active .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-protected-button-pressed-state-layer-opacity)}.mat-mdc-raised-button .mat-mdc-button-touch-target{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%);display:var(--mat-protected-button-touch-target-display)}.mat-mdc-raised-button:hover{box-shadow:var(--mdc-protected-button-hover-container-elevation-shadow)}.mat-mdc-raised-button:focus{box-shadow:var(--mdc-protected-button-focus-container-elevation-shadow)}.mat-mdc-raised-button:active,.mat-mdc-raised-button:focus:active{box-shadow:var(--mdc-protected-button-pressed-container-elevation-shadow)}.mat-mdc-raised-button[disabled],.mat-mdc-raised-button.mat-mdc-button-disabled{cursor:default;pointer-events:none;color:var(--mdc-protected-button-disabled-label-text-color);background-color:var(--mdc-protected-button-disabled-container-color)}.mat-mdc-raised-button[disabled].mat-mdc-button-disabled,.mat-mdc-raised-button.mat-mdc-button-disabled.mat-mdc-button-disabled{box-shadow:var(--mdc-protected-button-disabled-container-elevation-shadow)}.mat-mdc-raised-button.mat-mdc-button-disabled-interactive{pointer-events:auto}.mat-mdc-outlined-button{font-family:var(--mdc-outlined-button-label-text-font);font-size:var(--mdc-outlined-button-label-text-size);letter-spacing:var(--mdc-outlined-button-label-text-tracking);font-weight:var(--mdc-outlined-button-label-text-weight);text-transform:var(--mdc-outlined-button-label-text-transform);height:var(--mdc-outlined-button-container-height);border-radius:var(--mdc-outlined-button-container-shape);padding:0 15px 0 15px;border-width:var(--mdc-outlined-button-outline-width);padding:0 var(--mat-outlined-button-horizontal-padding, 15px)}.mat-mdc-outlined-button:not(:disabled){color:var(--mdc-outlined-button-label-text-color)}.mat-mdc-outlined-button:disabled{color:var(--mdc-outlined-button-disabled-label-text-color)}.mat-mdc-outlined-button .mdc-button__ripple{border-radius:var(--mdc-outlined-button-container-shape)}.mat-mdc-outlined-button:not(:disabled){border-color:var(--mdc-outlined-button-outline-color)}.mat-mdc-outlined-button:disabled{border-color:var(--mdc-outlined-button-disabled-outline-color)}.mat-mdc-outlined-button.mdc-button--icon-trailing{padding:0 11px 0 15px}.mat-mdc-outlined-button.mdc-button--icon-leading{padding:0 15px 0 11px}.mat-mdc-outlined-button .mdc-button__ripple{top:-1px;left:-1px;bottom:-1px;right:-1px;border-width:var(--mdc-outlined-button-outline-width)}.mat-mdc-outlined-button .mdc-button__touch{left:calc(-1 * var(--mdc-outlined-button-outline-width));width:calc(100% + 2 * var(--mdc-outlined-button-outline-width))}.mat-mdc-outlined-button>.mat-icon{margin-right:var(--mat-outlined-button-icon-spacing, 8px);margin-left:var(--mat-outlined-button-icon-offset, -4px)}[dir=rtl] .mat-mdc-outlined-button>.mat-icon{margin-right:var(--mat-outlined-button-icon-offset, -4px);margin-left:var(--mat-outlined-button-icon-spacing, 8px)}.mat-mdc-outlined-button .mdc-button__label+.mat-icon{margin-right:var(--mat-outlined-button-icon-offset, -4px);margin-left:var(--mat-outlined-button-icon-spacing, 8px)}[dir=rtl] .mat-mdc-outlined-button .mdc-button__label+.mat-icon{margin-right:var(--mat-outlined-button-icon-spacing, 8px);margin-left:var(--mat-outlined-button-icon-offset, -4px)}.mat-mdc-outlined-button .mat-ripple-element{background-color:var(--mat-outlined-button-ripple-color)}.mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-outlined-button-state-layer-color)}.mat-mdc-outlined-button.mat-mdc-button-disabled .mat-mdc-button-persistent-ripple::before{background-color:var(--mat-outlined-button-disabled-state-layer-color)}.mat-mdc-outlined-button:hover .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-outlined-button-hover-state-layer-opacity)}.mat-mdc-outlined-button.cdk-program-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.cdk-keyboard-focused .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button.mat-mdc-button-disabled-interactive:focus .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-outlined-button-focus-state-layer-opacity)}.mat-mdc-outlined-button:active .mat-mdc-button-persistent-ripple::before{opacity:var(--mat-outlined-button-pressed-state-layer-opacity)}.mat-mdc-outlined-button .mat-mdc-button-touch-target{position:absolute;top:50%;height:48px;left:0;right:0;transform:translateY(-50%);display:var(--mat-outlined-button-touch-target-display)}.mat-mdc-outlined-button[disabled],.mat-mdc-outlined-button.mat-mdc-button-disabled{cursor:default;pointer-events:none;color:var(--mdc-outlined-button-disabled-label-text-color);border-color:var(--mdc-outlined-button-disabled-outline-color)}.mat-mdc-outlined-button.mat-mdc-button-disabled-interactive{pointer-events:auto}.mat-mdc-button-base{text-decoration:none}.mat-mdc-button,.mat-mdc-unelevated-button,.mat-mdc-raised-button,.mat-mdc-outlined-button{-webkit-tap-highlight-color:rgba(0,0,0,0)}.mat-mdc-button .mat-mdc-button-ripple,.mat-mdc-button .mat-mdc-button-persistent-ripple,.mat-mdc-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-unelevated-button .mat-mdc-button-ripple,.mat-mdc-unelevated-button .mat-mdc-button-persistent-ripple,.mat-mdc-unelevated-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-raised-button .mat-mdc-button-ripple,.mat-mdc-raised-button .mat-mdc-button-persistent-ripple,.mat-mdc-raised-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button .mat-mdc-button-ripple,.mat-mdc-outlined-button .mat-mdc-button-persistent-ripple,.mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before{top:0;left:0;right:0;bottom:0;position:absolute;pointer-events:none;border-radius:inherit}.mat-mdc-button .mat-mdc-button-ripple,.mat-mdc-unelevated-button .mat-mdc-button-ripple,.mat-mdc-raised-button .mat-mdc-button-ripple,.mat-mdc-outlined-button .mat-mdc-button-ripple{overflow:hidden}.mat-mdc-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-unelevated-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-raised-button .mat-mdc-button-persistent-ripple::before,.mat-mdc-outlined-button .mat-mdc-button-persistent-ripple::before{content:"";opacity:0}.mat-mdc-button .mdc-button__label,.mat-mdc-button .mat-icon,.mat-mdc-unelevated-button .mdc-button__label,.mat-mdc-unelevated-button .mat-icon,.mat-mdc-raised-button .mdc-button__label,.mat-mdc-raised-button .mat-icon,.mat-mdc-outlined-button .mdc-button__label,.mat-mdc-outlined-button .mat-icon{z-index:1;position:relative}.mat-mdc-button .mat-mdc-focus-indicator,.mat-mdc-unelevated-button .mat-mdc-focus-indicator,.mat-mdc-raised-button .mat-mdc-focus-indicator,.mat-mdc-outlined-button .mat-mdc-focus-indicator{top:0;left:0;right:0;bottom:0;position:absolute}.mat-mdc-button:focus .mat-mdc-focus-indicator::before,.mat-mdc-unelevated-button:focus .mat-mdc-focus-indicator::before,.mat-mdc-raised-button:focus .mat-mdc-focus-indicator::before,.mat-mdc-outlined-button:focus .mat-mdc-focus-indicator::before{content:""}.mat-mdc-button._mat-animation-noopable,.mat-mdc-unelevated-button._mat-animation-noopable,.mat-mdc-raised-button._mat-animation-noopable,.mat-mdc-outlined-button._mat-animation-noopable{transition:none !important;animation:none !important}.mat-mdc-button>.mat-icon,.mat-mdc-unelevated-button>.mat-icon,.mat-mdc-raised-button>.mat-icon,.mat-mdc-outlined-button>.mat-icon{display:inline-block;position:relative;vertical-align:top;font-size:1.125rem;height:1.125rem;width:1.125rem}.mat-mdc-outlined-button .mat-mdc-button-ripple,.mat-mdc-outlined-button .mdc-button__ripple{top:-1px;left:-1px;bottom:-1px;right:-1px;border-width:-1px}.mat-mdc-unelevated-button .mat-mdc-focus-indicator::before,.mat-mdc-raised-button .mat-mdc-focus-indicator::before{margin:calc(calc(var(--mat-mdc-focus-indicator-border-width, 3px) + 2px)*-1)}.mat-mdc-outlined-button .mat-mdc-focus-indicator::before{margin:calc(calc(var(--mat-mdc-focus-indicator-border-width, 3px) + 3px)*-1)}</style><style ng-app-id="openchallenges-app">.cdk-high-contrast-active .mat-mdc-button:not(.mdc-button--outlined),.cdk-high-contrast-active .mat-mdc-unelevated-button:not(.mdc-button--outlined),.cdk-high-contrast-active .mat-mdc-raised-button:not(.mdc-button--outlined),.cdk-high-contrast-active .mat-mdc-outlined-button:not(.mdc-button--outlined),.cdk-high-contrast-active .mat-mdc-icon-button{outline:solid 1px}</style><style ng-app-id="openchallenges-app">.discord-logo[_ngcontent-openchallenges-app-c1189365540] {
+  height: 21px;
+  margin: 0 7px 2px 0;
+  vertical-align: middle;
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRpc2NvcmQtYnV0dG9uLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsWUFBQTtFQUNBLG1CQUFBO0VBQ0Esc0JBQUE7QUFDRiIsImZpbGUiOiJkaXNjb3JkLWJ1dHRvbi5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi5kaXNjb3JkLWxvZ28ge1xuICBoZWlnaHQ6IDIxcHg7XG4gIG1hcmdpbjogMCA3cHggMnB4IDA7XG4gIHZlcnRpY2FsLWFsaWduOiBtaWRkbGU7XG59XG4iXX0= */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvdWkvc3JjL2xpYi9kaXNjb3JkLWJ1dHRvbi9kaXNjb3JkLWJ1dHRvbi5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLFlBQUE7RUFDQSxtQkFBQTtFQUNBLHNCQUFBO0FBQ0Y7QUFDQSxnYUFBZ2EiLCJzb3VyY2VzQ29udGVudCI6WyIuZGlzY29yZC1sb2dvIHtcbiAgaGVpZ2h0OiAyMXB4O1xuICBtYXJnaW46IDAgN3B4IDJweCAwO1xuICB2ZXJ0aWNhbC1hbGlnbjogbWlkZGxlO1xufVxuIl0sInNvdXJjZVJvb3QiOiIifQ== */</style><style ng-app-id="openchallenges-app">.main[_ngcontent-openchallenges-app-c3176901716] {
+  padding: 0 12px;
+}
+
+@media screen and (min-width: 768px) {
+  .main[_ngcontent-openchallenges-app-c3176901716] {
+    max-width: 1120px;
+    padding: 0 0 32px;
+  }
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNoYWxsZW5nZS5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFFQTtFQUNFLGVBQUE7QUFERjs7QUFJQTtFQUNFO0lBQ0UsaUJBQUE7SUFDQSxpQkFBQTtFQURGO0FBQ0YiLCJmaWxlIjoiY2hhbGxlbmdlLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiQHVzZSAnbGlicy9vcGVuY2hhbGxlbmdlcy9zdHlsZXMvc3JjL2xpYi9fY29uc3RhbnRzJyBhcyBjb25zdGFudHM7XG5cbi5tYWluIHtcbiAgcGFkZGluZzogMCAxMnB4O1xufVxuXG5AbWVkaWEgc2NyZWVuIGFuZCAobWluLXdpZHRoOiBjb25zdGFudHMuJG1kLWJyZWFrcG9pbnQpIHtcbiAgLm1haW4ge1xuICAgIG1heC13aWR0aDogMTEyMHB4O1xuICAgIHBhZGRpbmc6IDAgMCAzMnB4O1xuICB9XG59XG4iXX0= */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvY2hhbGxlbmdlL3NyYy9saWIvY2hhbGxlbmdlLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUVBO0VBQ0UsZUFBQTtBQURGOztBQUlBO0VBQ0U7SUFDRSxpQkFBQTtJQUNBLGlCQUFBO0VBREY7QUFDRjtBQUNBLDRtQkFBNG1CIiwic291cmNlc0NvbnRlbnQiOlsiQHVzZSAnbGlicy9vcGVuY2hhbGxlbmdlcy9zdHlsZXMvc3JjL2xpYi9fY29uc3RhbnRzJyBhcyBjb25zdGFudHM7XG5cbi5tYWluIHtcbiAgcGFkZGluZzogMCAxMnB4O1xufVxuXG5AbWVkaWEgc2NyZWVuIGFuZCAobWluLXdpZHRoOiBjb25zdGFudHMuJG1kLWJyZWFrcG9pbnQpIHtcbiAgLm1haW4ge1xuICAgIG1heC13aWR0aDogMTEyMHB4O1xuICAgIHBhZGRpbmc6IDAgMCAzMnB4O1xuICB9XG59XG4iXSwic291cmNlUm9vdCI6IiJ9 */</style><style ng-app-id="openchallenges-app">footer[_ngcontent-openchallenges-app-c4106554096] {
+  width: 100%;
+  height: 259px;
+  position: relative;
+  padding: 42px 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.footer-link-group[_ngcontent-openchallenges-app-c4106554096] {
+  width: 420px;
+  height: 30px;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+}
+
+.footer-link-group[_ngcontent-openchallenges-app-c4106554096]   li[_ngcontent-openchallenges-app-c4106554096] {
+  flex: 0 0 auto;
+}
+
+.app-info[_ngcontent-openchallenges-app-c4106554096] {
+  text-align: right;
+  align-self: center;
+}
+
+.app-info[_ngcontent-openchallenges-app-c4106554096]   ul[_ngcontent-openchallenges-app-c4106554096] {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-bottom[_ngcontent-openchallenges-app-c4106554096] {
+  bottom: 0;
+  left: 0px;
+  width: 100%;
+  height: 70px;
+  display: flex;
+  position: absolute;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-links[_ngcontent-openchallenges-app-c4106554096], 
+.footer-links[_ngcontent-openchallenges-app-c4106554096]   a[_ngcontent-openchallenges-app-c4106554096] {
+  text-decoration: none;
+}
+
+.footer-links[_ngcontent-openchallenges-app-c4106554096]   a[_ngcontent-openchallenges-app-c4106554096]:hover {
+  text-decoration: underline;
+}
+
+.logo[_ngcontent-openchallenges-app-c4106554096] {
+  height: 56px;
+}
+
+@media only screen and (max-width: 768px) {
+  footer[_ngcontent-openchallenges-app-c4106554096] {
+    height: 410px;
+  }
+  .about-oc[_ngcontent-openchallenges-app-c4106554096], 
+   .app-info[_ngcontent-openchallenges-app-c4106554096], 
+   .footer-link-group[_ngcontent-openchallenges-app-c4106554096] {
+    width: 100%;
+    text-align: center;
+    justify-content: space-around;
+  }
+  .footer-link-group[_ngcontent-openchallenges-app-c4106554096]   li[_ngcontent-openchallenges-app-c4106554096] {
+    flex: 1;
+  }
+  .app-info[_ngcontent-openchallenges-app-c4106554096] {
+    margin-top: 45px;
+  }
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZvb3Rlci5jb21wb25lbnQuc2NzcyIsIi4uLy4uLy4uLy4uL3N0eWxlcy9zcmMvbGliL19jb25zdGFudHMuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFFQTtFQUNFLFdBQUE7RUFDQSxhQ2tDYztFRGpDZCxrQkFBQTtFQUNBLGtCQUFBO0VBQ0EsYUFBQTtFQUNBLHNCQUFBO0VBQ0EsdUJBQUE7RUFDQSxzQkFBQTtBQURGOztBQUdBO0VBQ0UsWUFBQTtFQUNBLFlBQUE7RUFDQSxVQUFBO0VBQ0EsYUFBQTtFQUNBLDhCQUFBO0VBQ0EsZ0JBQUE7QUFBRjs7QUFFQTtFQUNFLGNBQUE7QUFDRjs7QUFDQTtFQUNFLGlCQUFBO0VBQ0Esa0JBQUE7QUFFRjs7QUFBQTtFQUNFLHFCQUFBO0VBQ0EsVUFBQTtFQUNBLFNBQUE7QUFHRjs7QUFEQTtFQUNFLFNBQUE7RUFDQSxTQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxhQUFBO0VBQ0Esa0JBQUE7RUFDQSxtQkFBQTtFQUNBLHVCQUFBO0FBSUY7O0FBRkE7O0VBRUUscUJBQUE7QUFLRjs7QUFIQTtFQUNFLDBCQUFBO0FBTUY7O0FBSkE7RUFDRSxZQUFBO0FBT0Y7O0FBSkE7RUFDRTtJQUNFLGFBQUE7RUFPRjtFQUxBOzs7SUFHRSxXQUFBO0lBQ0Esa0JBQUE7SUFDQSw2QkFBQTtFQU9GO0VBTEE7SUFDRSxPQUFBO0VBT0Y7RUFMQTtJQUNFLGdCQUFBO0VBT0Y7QUFDRiIsImZpbGUiOiJmb290ZXIuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyJAdXNlICdsaWJzL29wZW5jaGFsbGVuZ2VzL3N0eWxlcy9zcmMvbGliL2NvbnN0YW50cyc7XG5cbmZvb3RlciB7XG4gIHdpZHRoOiAxMDAlO1xuICBoZWlnaHQ6IGNvbnN0YW50cy4kZm9vdGVyLWhlaWdodDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBwYWRkaW5nOiA0MnB4IDUycHg7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIGFsaWduLWl0ZW1zOiBmbGV4LXN0YXJ0O1xuICBib3gtc2l6aW5nOiBib3JkZXItYm94O1xufVxuLmZvb3Rlci1saW5rLWdyb3VwIHtcbiAgd2lkdGg6IDQyMHB4O1xuICBoZWlnaHQ6IDMwcHg7XG4gIHBhZGRpbmc6IDA7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGp1c3RpZnktY29udGVudDogc3BhY2UtYmV0d2VlbjtcbiAgbGlzdC1zdHlsZTogbm9uZTtcbn1cbi5mb290ZXItbGluay1ncm91cCBsaSB7XG4gIGZsZXg6IDAgMCBhdXRvO1xufVxuLmFwcC1pbmZvIHtcbiAgdGV4dC1hbGlnbjogcmlnaHQ7XG4gIGFsaWduLXNlbGY6IGNlbnRlcjtcbn1cbi5hcHAtaW5mbyB1bCB7XG4gIGxpc3Qtc3R5bGUtdHlwZTogbm9uZTtcbiAgcGFkZGluZzogMDtcbiAgbWFyZ2luOiAwO1xufVxuLmZvb3Rlci1ib3R0b20ge1xuICBib3R0b206IDA7XG4gIGxlZnQ6IDBweDtcbiAgd2lkdGg6IDEwMCU7XG4gIGhlaWdodDogNzBweDtcbiAgZGlzcGxheTogZmxleDtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICBhbGlnbi1pdGVtczogY2VudGVyO1xuICBqdXN0aWZ5LWNvbnRlbnQ6IGNlbnRlcjtcbn1cbi5mb290ZXItbGlua3MsXG4uZm9vdGVyLWxpbmtzIGEge1xuICB0ZXh0LWRlY29yYXRpb246IG5vbmU7XG59XG4uZm9vdGVyLWxpbmtzIGE6aG92ZXIge1xuICB0ZXh0LWRlY29yYXRpb246IHVuZGVybGluZTtcbn1cbi5sb2dvIHtcbiAgaGVpZ2h0OiA1NnB4O1xufVxuXG5AbWVkaWEgb25seSBzY3JlZW4gYW5kIChtYXgtd2lkdGg6IGNvbnN0YW50cy4kbWQtYnJlYWtwb2ludCkge1xuICBmb290ZXIge1xuICAgIGhlaWdodDogNDEwcHg7XG4gIH1cbiAgLmFib3V0LW9jLFxuICAuYXBwLWluZm8sXG4gIC5mb290ZXItbGluay1ncm91cCB7XG4gICAgd2lkdGg6IDEwMCU7XG4gICAgdGV4dC1hbGlnbjogY2VudGVyO1xuICAgIGp1c3RpZnktY29udGVudDogc3BhY2UtYXJvdW5kO1xuICB9XG4gIC5mb290ZXItbGluay1ncm91cCBsaSB7XG4gICAgZmxleDogMTtcbiAgfVxuICAuYXBwLWluZm8ge1xuICAgIG1hcmdpbi10b3A6IDQ1cHg7XG4gIH1cbn1cbiIsIi8vIFNlZSBodHRwczovL2dpdGh1Yi5jb20vYW5ndWxhci9jb21wb25lbnRzL2Jsb2IvbWFzdGVyL3NyYy9tYXRlcmlhbC9jb3JlL3N0eWxlL192YXJpYWJsZXMuc2Nzc1xuXG4vLyBHbG9iYWwgY29uc3RhbnRzXG4kcGk6IDMuMTQxNTkyNjQ7XG4kcGFkZGluZy10ZXN0OiAyMHB4O1xuXG4vLyBGaWdtYSB2YXJpYWJsZXNcbiRkbC1zaXplLXNpemUtbGFyZ2U6IDE0NHB4O1xuJGRsLXNpemUtc2l6ZS1zbWFsbDogNDhweDtcbiRkbC1zaXplLXNpemUtbWVkaXVtOiA5NnB4O1xuJGRsLXNpemUtc2l6ZS14bGFyZ2U6IDE5MnB4O1xuJGRsLXNpemUtc2l6ZS14c21hbGw6IDE2cHg7XG4kZGwtc3BhY2Utc3BhY2UtdW5pdDogMTZweDtcbiRkbC1zaXplLXNpemUteHhsYXJnZTogMjg4cHg7XG4kZGwtc2l6ZS1zaXplLW1heHdpZHRoOiAxNDAwcHg7XG4kZGwtcmFkaXVzLXJhZGl1cy1yb3VuZDogNTAlO1xuJGRsLXNwYWNlLXNwYWNlLWhhbGZ1bml0OiA4cHg7XG4kZGwtc3BhY2Utc3BhY2Utc2l4dW5pdHM6IDk2cHg7XG4kZGwtc3BhY2Utc3BhY2UtdHdvdW5pdHM6IDMycHg7XG4kZGwtcmFkaXVzLXJhZGl1cy1yYWRpdXMyOiAycHg7XG4kZGwtcmFkaXVzLXJhZGl1cy1yYWRpdXM0OiA0cHg7XG4kZGwtcmFkaXVzLXJhZGl1cy1yYWRpdXM4OiA4cHg7XG4kZGwtc3BhY2Utc3BhY2UtZml2ZXVuaXRzOiA4MHB4O1xuJGRsLXNwYWNlLXNwYWNlLWZvdXJ1bml0czogNjRweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czE2OiAxNnB4O1xuJGRsLXNwYWNlLXNwYWNlLXRocmVldW5pdHM6IDQ4cHg7XG4kZGwtc3BhY2Utc3BhY2Utb25lYW5kaGFsZnVuaXRzOiAyNHB4O1xuXG4vLyBCcmVha3BvaW50cyBmcm9tIGh0dHBzOi8vZ2V0Ym9vdHN0cmFwLmNvbS9kb2NzLzUuMC9sYXlvdXQvYnJlYWtwb2ludHMvXG4kc20tYnJlYWtwb2ludDogNTc2cHg7XG4kbWQtYnJlYWtwb2ludDogNzY4cHg7XG4kbGctYnJlYWtwb2ludDogOTkycHg7XG4keGwtYnJlYWtwb2ludDogMTIwMHB4O1xuJHh4bC1icmVha3BvaW50OiAxNDAwcHg7XG5cbi8vIERpbWVuc2lvbnMgb2YgY29tcG9uZW50XG4kbmF2YmFyLWhlaWdodDogNjhweDtcbiRuYXZiYXItaGVpZ2h0LXRhbGw6IDI0MHB4O1xuJGZvb3Rlci1oZWlnaHQ6IDI1OXB4O1xuIl19 */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvdWkvc3JjL2xpYi9mb290ZXIvZm9vdGVyLmNvbXBvbmVudC5zY3NzIiwid2VicGFjazovLy4vbGlicy9vcGVuY2hhbGxlbmdlcy9zdHlsZXMvc3JjL2xpYi9fY29uc3RhbnRzLnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBRUE7RUFDRSxXQUFBO0VBQ0EsYUNrQ2M7RURqQ2Qsa0JBQUE7RUFDQSxrQkFBQTtFQUNBLGFBQUE7RUFDQSxzQkFBQTtFQUNBLHVCQUFBO0VBQ0Esc0JBQUE7QUFERjs7QUFHQTtFQUNFLFlBQUE7RUFDQSxZQUFBO0VBQ0EsVUFBQTtFQUNBLGFBQUE7RUFDQSw4QkFBQTtFQUNBLGdCQUFBO0FBQUY7O0FBRUE7RUFDRSxjQUFBO0FBQ0Y7O0FBQ0E7RUFDRSxpQkFBQTtFQUNBLGtCQUFBO0FBRUY7O0FBQUE7RUFDRSxxQkFBQTtFQUNBLFVBQUE7RUFDQSxTQUFBO0FBR0Y7O0FBREE7RUFDRSxTQUFBO0VBQ0EsU0FBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsYUFBQTtFQUNBLGtCQUFBO0VBQ0EsbUJBQUE7RUFDQSx1QkFBQTtBQUlGOztBQUZBOztFQUVFLHFCQUFBO0FBS0Y7O0FBSEE7RUFDRSwwQkFBQTtBQU1GOztBQUpBO0VBQ0UsWUFBQTtBQU9GOztBQUpBO0VBQ0U7SUFDRSxhQUFBO0VBT0Y7RUFMQTs7O0lBR0UsV0FBQTtJQUNBLGtCQUFBO0lBQ0EsNkJBQUE7RUFPRjtFQUxBO0lBQ0UsT0FBQTtFQU9GO0VBTEE7SUFDRSxnQkFBQTtFQU9GO0FBQ0Y7QUFDQSxnbUlBQWdtSSIsInNvdXJjZXNDb250ZW50IjpbIkB1c2UgJ2xpYnMvb3BlbmNoYWxsZW5nZXMvc3R5bGVzL3NyYy9saWIvY29uc3RhbnRzJztcblxuZm9vdGVyIHtcbiAgd2lkdGg6IDEwMCU7XG4gIGhlaWdodDogY29uc3RhbnRzLiRmb290ZXItaGVpZ2h0O1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIHBhZGRpbmc6IDQycHggNTJweDtcbiAgZGlzcGxheTogZmxleDtcbiAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcbiAgYWxpZ24taXRlbXM6IGZsZXgtc3RhcnQ7XG4gIGJveC1zaXppbmc6IGJvcmRlci1ib3g7XG59XG4uZm9vdGVyLWxpbmstZ3JvdXAge1xuICB3aWR0aDogNDIwcHg7XG4gIGhlaWdodDogMzBweDtcbiAgcGFkZGluZzogMDtcbiAgZGlzcGxheTogZmxleDtcbiAganVzdGlmeS1jb250ZW50OiBzcGFjZS1iZXR3ZWVuO1xuICBsaXN0LXN0eWxlOiBub25lO1xufVxuLmZvb3Rlci1saW5rLWdyb3VwIGxpIHtcbiAgZmxleDogMCAwIGF1dG87XG59XG4uYXBwLWluZm8ge1xuICB0ZXh0LWFsaWduOiByaWdodDtcbiAgYWxpZ24tc2VsZjogY2VudGVyO1xufVxuLmFwcC1pbmZvIHVsIHtcbiAgbGlzdC1zdHlsZS10eXBlOiBub25lO1xuICBwYWRkaW5nOiAwO1xuICBtYXJnaW46IDA7XG59XG4uZm9vdGVyLWJvdHRvbSB7XG4gIGJvdHRvbTogMDtcbiAgbGVmdDogMHB4O1xuICB3aWR0aDogMTAwJTtcbiAgaGVpZ2h0OiA3MHB4O1xuICBkaXNwbGF5OiBmbGV4O1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIGFsaWduLWl0ZW1zOiBjZW50ZXI7XG4gIGp1c3RpZnktY29udGVudDogY2VudGVyO1xufVxuLmZvb3Rlci1saW5rcyxcbi5mb290ZXItbGlua3MgYSB7XG4gIHRleHQtZGVjb3JhdGlvbjogbm9uZTtcbn1cbi5mb290ZXItbGlua3MgYTpob3ZlciB7XG4gIHRleHQtZGVjb3JhdGlvbjogdW5kZXJsaW5lO1xufVxuLmxvZ28ge1xuICBoZWlnaHQ6IDU2cHg7XG59XG5cbkBtZWRpYSBvbmx5IHNjcmVlbiBhbmQgKG1heC13aWR0aDogY29uc3RhbnRzLiRtZC1icmVha3BvaW50KSB7XG4gIGZvb3RlciB7XG4gICAgaGVpZ2h0OiA0MTBweDtcbiAgfVxuICAuYWJvdXQtb2MsXG4gIC5hcHAtaW5mbyxcbiAgLmZvb3Rlci1saW5rLWdyb3VwIHtcbiAgICB3aWR0aDogMTAwJTtcbiAgICB0ZXh0LWFsaWduOiBjZW50ZXI7XG4gICAganVzdGlmeS1jb250ZW50OiBzcGFjZS1hcm91bmQ7XG4gIH1cbiAgLmZvb3Rlci1saW5rLWdyb3VwIGxpIHtcbiAgICBmbGV4OiAxO1xuICB9XG4gIC5hcHAtaW5mbyB7XG4gICAgbWFyZ2luLXRvcDogNDVweDtcbiAgfVxufVxuIiwiLy8gU2VlIGh0dHBzOi8vZ2l0aHViLmNvbS9hbmd1bGFyL2NvbXBvbmVudHMvYmxvYi9tYXN0ZXIvc3JjL21hdGVyaWFsL2NvcmUvc3R5bGUvX3ZhcmlhYmxlcy5zY3NzXG5cbi8vIEdsb2JhbCBjb25zdGFudHNcbiRwaTogMy4xNDE1OTI2NDtcbiRwYWRkaW5nLXRlc3Q6IDIwcHg7XG5cbi8vIEZpZ21hIHZhcmlhYmxlc1xuJGRsLXNpemUtc2l6ZS1sYXJnZTogMTQ0cHg7XG4kZGwtc2l6ZS1zaXplLXNtYWxsOiA0OHB4O1xuJGRsLXNpemUtc2l6ZS1tZWRpdW06IDk2cHg7XG4kZGwtc2l6ZS1zaXplLXhsYXJnZTogMTkycHg7XG4kZGwtc2l6ZS1zaXplLXhzbWFsbDogMTZweDtcbiRkbC1zcGFjZS1zcGFjZS11bml0OiAxNnB4O1xuJGRsLXNpemUtc2l6ZS14eGxhcmdlOiAyODhweDtcbiRkbC1zaXplLXNpemUtbWF4d2lkdGg6IDE0MDBweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJvdW5kOiA1MCU7XG4kZGwtc3BhY2Utc3BhY2UtaGFsZnVuaXQ6IDhweDtcbiRkbC1zcGFjZS1zcGFjZS1zaXh1bml0czogOTZweDtcbiRkbC1zcGFjZS1zcGFjZS10d291bml0czogMzJweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czI6IDJweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czQ6IDRweDtcbiRkbC1yYWRpdXMtcmFkaXVzLXJhZGl1czg6IDhweDtcbiRkbC1zcGFjZS1zcGFjZS1maXZldW5pdHM6IDgwcHg7XG4kZGwtc3BhY2Utc3BhY2UtZm91cnVuaXRzOiA2NHB4O1xuJGRsLXJhZGl1cy1yYWRpdXMtcmFkaXVzMTY6IDE2cHg7XG4kZGwtc3BhY2Utc3BhY2UtdGhyZWV1bml0czogNDhweDtcbiRkbC1zcGFjZS1zcGFjZS1vbmVhbmRoYWxmdW5pdHM6IDI0cHg7XG5cbi8vIEJyZWFrcG9pbnRzIGZyb20gaHR0cHM6Ly9nZXRib290c3RyYXAuY29tL2RvY3MvNS4wL2xheW91dC9icmVha3BvaW50cy9cbiRzbS1icmVha3BvaW50OiA1NzZweDtcbiRtZC1icmVha3BvaW50OiA3NjhweDtcbiRsZy1icmVha3BvaW50OiA5OTJweDtcbiR4bC1icmVha3BvaW50OiAxMjAwcHg7XG4keHhsLWJyZWFrcG9pbnQ6IDE0MDBweDtcblxuLy8gRGltZW5zaW9ucyBvZiBjb21wb25lbnRcbiRuYXZiYXItaGVpZ2h0OiA2OHB4O1xuJG5hdmJhci1oZWlnaHQtdGFsbDogMjQwcHg7XG4kZm9vdGVyLWhlaWdodDogMjU5cHg7XG4iXSwic291cmNlUm9vdCI6IiJ9 */</style><meta name="author" content="The OpenChallenges Team"><meta name="description" property="og:description" content="Tuberculosis is one of the leading infectious causes of death worldwide 1. Each year, millions of individuals contract and develop active TB without knowing 2. Case identification and treatment are the primary methods for controlling spread as there is no effective TB vaccine for adults. Unfortunately, delays in diagnosis are common, especially in resource-limited settings, and can worsen individual outcomes and perpetuate transmission of the disease 3,4. Without a timely diagnosis, patients needing treatment would head home from a clinic without knowing they were positive. If they miss their follow up, they would not learn about their diagnosis and nor would they start their treatment. Automated TB diagnosis could play a role reducing the loss of follow up and get patients to be treated more timely. Automated digital microscopy has been proposed as a cost-effective solution 6,7. An automated algorithm that could reliably detect mycobacterium on samples from patients with suspecte..."><meta name="image" property="og:image" content="https://openchallenges.io/img/SmLKBHMODG7ctWjEHwS1_jqGc7M=/0x500/logo/OpenChallenges-icon.svg?seo=true"><meta name="publish_date" property="og:publish_date" content="2023-09-20T00:00:00Z"><meta name="title" property="og:title" content="Detecting Active Tuberculosis Bacilli - 2024 | OpenChallenges"><meta name="twitter:title" content="Detecting Active Tuberculosis Bacilli - 2024 | OpenChallenges"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:description" content="Tuberculosis is one of the leading infectious causes of death worldwide 1. Each year, millions of individuals contract and develop active TB without knowing 2. Case identification and treatment are the primary methods for controlling spread as there is no effective TB vaccine for adults. Unfortunately, delays in diagnosis are common, especially in resource-limited settings, and can worsen individual outcomes and perpetuate transmission of the disease 3,4. Without a timely diagnosis, patients needing treatment would head home from a clinic without knowing they were positive. If they miss their follow up, they would not learn about their diagnosis and nor would they start their treatment. Automated TB diagnosis could play a role reducing the loss of follow up and get patients to be treated more timely. Automated digital microscopy has been proposed as a cost-effective solution 6,7. An automated algorithm that could reliably detect mycobacterium on samples from patients with suspecte..."><meta name="twitter:image" content="https://openchallenges.io/img/SmLKBHMODG7ctWjEHwS1_jqGc7M=/0x500/logo/OpenChallenges-icon.svg?seo=true"><meta name="twitter:image:alt" content="OpenChallenges logo"><meta name="twitter:site"><meta property="og:type" content="website"><meta name="og:url" content><style ng-app-id="openchallenges-app">/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJhdmF0YXIuY29tcG9uZW50LnNjc3MifQ== */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvdWkvc3JjL2xpYi9hdmF0YXIvYXZhdGFyLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7QUFDQSxvS0FBb0siLCJzb3VyY2VSb290IjoiIn0= */</style><style ng-app-id="openchallenges-app">/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJjaGFsbGVuZ2Utc3RhdHMuY29tcG9uZW50LnNjc3MifQ== */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvY2hhbGxlbmdlL3NyYy9saWIvY2hhbGxlbmdlLXN0YXRzL2NoYWxsZW5nZS1zdGF0cy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiO0FBQ0EsZ0xBQWdMIiwic291cmNlUm9vdCI6IiJ9 */</style><style ng-app-id="openchallenges-app">[_nghost-openchallenges-app-c1743256203]{border-radius:50%}</style><style ng-app-id="openchallenges-app">mat-icon,mat-icon.mat-primary,mat-icon.mat-accent,mat-icon.mat-warn{color:var(--mat-icon-color)}.mat-icon{-webkit-user-select:none;user-select:none;background-repeat:no-repeat;display:inline-block;fill:currentColor;height:24px;width:24px;overflow:hidden}.mat-icon.mat-icon-inline{font-size:inherit;height:inherit;line-height:inherit;width:inherit}.mat-icon.mat-ligature-font[fontIcon]::before{content:attr(fontIcon)}[dir=rtl] .mat-icon-rtl-mirror{transform:scale(-1, 1)}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon{display:block}.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button .mat-icon,.mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button .mat-icon{margin:auto}</style><script _ngcontent-openchallenges-app-c3176901716 type="application/ld+json">{"id":522,"slug":"detecting-active-tuberculosis-bacilli-2024","name":"Detecting Active Tuberculosis Bacilli - 2024","headline":"","description":"Tuberculosis is one of the leading infectious causes of death worldwide 1. Each year, millions of individuals contract and develop active TB without knowing 2. Case identification and treatment are the primary methods for controlling spread as there is no effective TB vaccine for adults. Unfortunately, delays in diagnosis are common, especially in resource-limited settings, and can worsen individual outcomes and perpetuate transmission of the disease 3,4. Without a timely diagnosis, patients needing treatment would head home from a clinic without knowing they were positive. If they miss their follow up, they would not learn about their diagnosis and nor would they start their treatment. Automated TB diagnosis could play a role reducing the loss of follow up and get patients to be treated more timely. Automated digital microscopy has been proposed as a cost-effective solution 6,7. An automated algorithm that could reliably detect mycobacterium on samples from patients with suspecte...","doi":"","status":"completed","platform":{"id":15,"slug":"nightingale-os","name":"Nightingale OS"},"websiteUrl":"https://app.nightingalescience.org/contests/m3rl61qq21wo","avatarUrl":"","incentives":["monetary"],"submissionTypes":["prediction_file"],"inputDataTypes":[],"categories":[],"startDate":"2024-03-01","endDate":"2024-04-01","starredCount":0,"operation":null,"createdAt":"2024-07-02T22:45:34Z","updatedAt":"2024-07-02T22:47:34Z","@context":"https://raw.githubusercontent.com/Sage-Bionetworks/core-models/main/draft-data-models/challenges.jsonld","@id":"https://openchallenges.io/api/v1/challenges/522","@type":"bts:Challenge"}</script><style ng-app-id="openchallenges-app">.top-section-title[_ngcontent-openchallenges-app-c3521048253] {
+  margin-top: 14px;
+}
+
+.section-title[_ngcontent-openchallenges-app-c3521048253] {
+  margin-top: 24px;
+}
+/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImNoYWxsZW5nZS1vdmVydmlldy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFBO0FBQ0Y7O0FBQ0E7RUFDRSxnQkFBQTtBQUVGIiwiZmlsZSI6ImNoYWxsZW5nZS1vdmVydmlldy5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIi50b3Atc2VjdGlvbi10aXRsZSB7XG4gIG1hcmdpbi10b3A6IDE0cHg7XG59XG4uc2VjdGlvbi10aXRsZSB7XG4gIG1hcmdpbi10b3A6IDI0cHg7XG59Il19 */
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly8uL2xpYnMvb3BlbmNoYWxsZW5nZXMvY2hhbGxlbmdlL3NyYy9saWIvY2hhbGxlbmdlLW92ZXJ2aWV3L2NoYWxsZW5nZS1vdmVydmlldy5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFBO0FBQ0Y7O0FBQ0E7RUFDRSxnQkFBQTtBQUVGO0FBQ0Esd2FBQXdhIiwic291cmNlc0NvbnRlbnQiOlsiLnRvcC1zZWN0aW9uLXRpdGxlIHtcbiAgbWFyZ2luLXRvcDogMTRweDtcbn1cbi5zZWN0aW9uLXRpdGxlIHtcbiAgbWFyZ2luLXRvcDogMjRweDtcbn0iXSwic291cmNlUm9vdCI6IiJ9 */</style></head>
+  <body><!--nghm-->
+    <openchallenges-root _nghost-openchallenges-app-c2521297846 ng-version="18.0.7" ngh="8" ng-server-context="ssr"><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><openchallenges-navbar _ngcontent-openchallenges-app-c2521297846 class="mat-elevation-z6" _nghost-openchallenges-app-c983831802 ng-reflect-title="OpenChallenges" ng-reflect-sections="[object Object]" ng-reflect-is-logged-in="false" ng-reflect-user-avatar="[object Object]" ng-reflect-user-menu-items="[object Object],[object Object" ngh="2"><nav _ngcontent-openchallenges-app-c983831802 aria-label="Top Toolbar" class="sage-navbar"><a _ngcontent-openchallenges-app-c983831802 mat-button routerlink="/" aria-label="Home" mat-ripple-loader-uninitialized mat-ripple-loader-class-name="mat-mdc-button-ripple" class="mdc-button mat-mdc-button _mat-animation-noopable mat-unthemed mat-mdc-button-base" ng-reflect-router-link="/" href="/" ngh="0"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span class="mdc-button__label"><img _ngcontent-openchallenges-app-c983831802 src="/openchallenges-assets/images/openchallenges-color.svg" alt="OpenChallenges" class="logo"></span><span class="mat-mdc-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a><a _ngcontent-openchallenges-app-c983831802 mat-button class="navbar-item mdc-button mat-mdc-button _mat-animation-noopable mat-unthemed mat-mdc-button-base" mat-ripple-loader-uninitialized mat-ripple-loader-class-name="mat-mdc-button-ripple" ng-reflect-router-link="challenge" href="/challenge" ngh="0"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span class="mdc-button__label">Challenges </span><span class="mat-mdc-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a><a _ngcontent-openchallenges-app-c983831802 mat-button class="navbar-item mdc-button mat-mdc-button _mat-animation-noopable mat-unthemed mat-mdc-button-base" mat-ripple-loader-uninitialized mat-ripple-loader-class-name="mat-mdc-button-ripple" ng-reflect-router-link="org" href="/org" ngh="0"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span class="mdc-button__label">Organizations </span><span class="mat-mdc-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a><!--bindings={
+  "ng-reflect-ng-for-of": "challenge,org"
+}--><div _ngcontent-openchallenges-app-c983831802 class="flex-spacer"></div><a _ngcontent-openchallenges-app-c983831802 mat-button routerlink="/team" class="navbar-item mdc-button mat-mdc-button _mat-animation-noopable mat-unthemed mat-mdc-button-base" mat-ripple-loader-uninitialized mat-ripple-loader-class-name="mat-mdc-button-ripple" ng-reflect-router-link="/team" href="/team" ngh="0"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span class="mdc-button__label">Meet Our Team</span><span class="mat-mdc-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a><openchallenges-discord-button _ngcontent-openchallenges-app-c983831802 _nghost-openchallenges-app-c1189365540 ngh="1"><div _ngcontent-openchallenges-app-c1189365540 class="mat-typography"><a _ngcontent-openchallenges-app-c1189365540 mat-button aria-label="OpenChallenges Discord server" target="_blank" rel="noreferrer" class="docs-button mdc-button mat-mdc-button _mat-animation-noopable mat-unthemed mat-mdc-button-base" mat-ripple-loader-uninitialized mat-ripple-loader-class-name="mat-mdc-button-ripple" href="https://discord.gg/6PGt7nkcwG" ngh="0"><span class="mat-mdc-button-persistent-ripple mdc-button__ripple"></span><span class="mdc-button__label"><img _ngcontent-openchallenges-app-c1189365540 alt="OpenChallenges Discord server" src="/openchallenges-assets/images/discord-icon.svg" class="discord-logo"> Join us on Discord </span><span class="mat-mdc-focus-indicator"></span><span class="mat-mdc-button-touch-target"></span></a></div></openchallenges-discord-button></nav></openchallenges-navbar><div _ngcontent-openchallenges-app-c2521297846 class="container"><router-outlet _ngcontent-openchallenges-app-c2521297846></router-outlet><openchallenges-challenge _nghost-openchallenges-app-c3176901716 ngh="7"><main _ngcontent-openchallenges-app-c3176901716 class="base mat-typography"><section _ngcontent-openchallenges-app-c3176901716 id="profile-top" class="row"><openchallenges-avatar _ngcontent-openchallenges-app-c3176901716 class="profile-pic" _nghost-openchallenges-app-c2937983716 ng-reflect-avatar="[object Object]" ngh="4"><ngx-avatars _ngcontent-openchallenges-app-c2937983716 _nghost-openchallenges-app-c1743256203 ng-reflect-initials="Detecting Active Tuberculosis " ng-reflect-custom ng-reflect-value ng-reflect-size="250" ng-reflect-initials-size="1" ngh="3"><div _ngcontent-openchallenges-app-c1743256203 class="avatar-container" ng-reflect-ng-style="[object Object]" style="width: 250px; height: 250px;"><div _ngcontent-openchallenges-app-c1743256203 class="avatar-content" ng-reflect-ng-style="[object Object]" style="text-align: center; border-radius: 100%; text-transform: uppercase; color: #FFF; background-color: #e74c3c; font: 83px Helvetica, Arial, sans-serif; line-height: 250px;"> D </div><!--bindings={
+  "ng-reflect-ng-if": "D"
+}--><!--bindings={
+  "ng-reflect-ng-if-else": "[object Object]"
+}--><!--container--></div></ngx-avatars></openchallenges-avatar><div _ngcontent-openchallenges-app-c3176901716 id="profile-details" class="col"><h2 _ngcontent-openchallenges-app-c3176901716> Detecting Active Tuberculosis Bacilli - 2024 </h2><p _ngcontent-openchallenges-app-c3176901716 class="mat-body-strong username">@detecting-active-tuberculosis-bacilli-2024</p><div _ngcontent-openchallenges-app-c3176901716 class="profile-type status completed" ng-reflect-ng-class="status,completed"> Completed </div><!--bindings={
+  "ng-reflect-ng-if": "completed"
+}--></div></section><section _ngcontent-openchallenges-app-c3176901716 id="profile-stats" class="row"><div _ngcontent-openchallenges-app-c3176901716 class="col fill-empty"></div><div _ngcontent-openchallenges-app-c3176901716 class="col"><openchallenges-challenge-stats _ngcontent-openchallenges-app-c3176901716 _nghost-openchallenges-app-c3631399342 ng-reflect-challenge="[object Object]" ng-reflect-logged-in="false" ngh="5"><div _ngcontent-openchallenges-app-c3631399342 class="stats-group"><div _ngcontent-openchallenges-app-c3631399342 class="stat-item"><h3 _ngcontent-openchallenges-app-c3631399342>N</h3><p _ngcontent-openchallenges-app-c3631399342 class="mat-caption" ng-reflect-ng-plural="5000"><!--container-->views<!--container--></p></div><!--bindings={
+  "ng-reflect-ng-if": "false"
+}--><div _ngcontent-openchallenges-app-c3631399342 ng-reflect-ng-switch="true"><a _ngcontent-openchallenges-app-c3631399342 target="_blank" title="Go to Website" rel="noopener noreferrer" class="stat-item action-btn" href="https://app.nightingalescience.org/contests/m3rl61qq21wo"><mat-icon _ngcontent-openchallenges-app-c3631399342 role="img" aria-hidden="true" class="mat-icon notranslate stats-card-icon material-icons mat-ligature-font mat-icon-no-color" data-mat-icon-type="font" ngh="4">open_in_new</mat-icon> Go to Website </a><!--bindings={
+  "ng-reflect-ng-switch-case": "true"
+}--><!--bindings={
+  "ng-reflect-ng-switch-case": "false"
+}--></div><!--bindings={
+  "ng-reflect-ng-if": "true"
+}--></div><!--bindings={
+  "ng-reflect-ng-if": "[object Object]"
+}--></openchallenges-challenge-stats></div></section><section _ngcontent-openchallenges-app-c3176901716 id="profile-bottom" class="content"><div _ngcontent-openchallenges-app-c3176901716 class="profile-sidenav col"><div _ngcontent-openchallenges-app-c3176901716 class="profile-nav-group"><a _ngcontent-openchallenges-app-c3176901716 class="profile-nav-item active-tab" ng-reflect-ng-class="[object Object]"> Overview </a><a _ngcontent-openchallenges-app-c3176901716 class="profile-nav-item" ng-reflect-ng-class="[object Object]"> Contributors </a><a _ngcontent-openchallenges-app-c3176901716 class="profile-nav-item" ng-reflect-ng-class="[object Object]"> Organizers </a></div></div><div _ngcontent-openchallenges-app-c3176901716 class="main col"><openchallenges-challenge-overview _ngcontent-openchallenges-app-c3176901716 _nghost-openchallenges-app-c3521048253 ng-reflect-challenge="[object Object]" ngh="6"><main _ngcontent-openchallenges-app-c3521048253><div _ngcontent-openchallenges-app-c3521048253 id="bio"><h3 _ngcontent-openchallenges-app-c3521048253 class="top-section-title">Overview</h3><p _ngcontent-openchallenges-app-c3521048253>Tuberculosis is one of the leading infectious causes of death worldwide 1. Each year, millions of individuals contract and develop active TB without knowing 2. Case identification and treatment are the primary methods for controlling spread as there is no effective TB vaccine for adults. Unfortunately, delays in diagnosis are common, especially in resource-limited settings, and can worsen individual outcomes and perpetuate transmission of the disease 3,4. Without a timely diagnosis, patients needing treatment would head home from a clinic without knowing they were positive. If they miss their follow up, they would not learn about their diagnosis and nor would they start their treatment. Automated TB diagnosis could play a role reducing the loss of follow up and get patients to be treated more timely. Automated digital microscopy has been proposed as a cost-effective solution 6,7. An automated algorithm that could reliably detect mycobacterium on samples from patients with suspecte...</p><div _ngcontent-openchallenges-app-c3521048253><a _ngcontent-openchallenges-app-c3521048253 class="read-more" href="https://app.nightingalescience.org/contests/m3rl61qq21wo">Continue reading <mat-icon _ngcontent-openchallenges-app-c3521048253 role="img" aria-hidden="true" inline="true" class="mat-icon notranslate material-icons mat-ligature-font mat-icon-inline mat-icon-no-color" ng-reflect-inline="true" data-mat-icon-type="font" ngh="4">open_in_new</mat-icon></a></div><!--container--></div><div _ngcontent-openchallenges-app-c3521048253 id="details"><h3 _ngcontent-openchallenges-app-c3521048253 class="section-title">Challenge Details</h3><table _ngcontent-openchallenges-app-c3521048253><tbody _ngcontent-openchallenges-app-c3521048253><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">Start Date</td><td _ngcontent-openchallenges-app-c3521048253 ng-reflect-ng-class="[object Object]" class> 2024-03-01 </td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">End Date</td><td _ngcontent-openchallenges-app-c3521048253 ng-reflect-ng-class="[object Object]" class> 2024-04-01 </td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">Status</td><td _ngcontent-openchallenges-app-c3521048253>Completed</td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">Platform</td><td _ngcontent-openchallenges-app-c3521048253 ng-reflect-ng-class="[object Object]" class> Nightingale OS </td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">DOI</td><td _ngcontent-openchallenges-app-c3521048253><!--container--><span _ngcontent-openchallenges-app-c3521048253 class="text-grey">Not available</span><!--container--></td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">Submission Type</td><td _ngcontent-openchallenges-app-c3521048253><span _ngcontent-openchallenges-app-c3521048253 nowrap> Prediction File</span><!--container--><!--container--><!--container--></td></tr><tr _ngcontent-openchallenges-app-c3521048253><td _ngcontent-openchallenges-app-c3521048253 class="text-right">Incentive(s)</td><td _ngcontent-openchallenges-app-c3521048253><span _ngcontent-openchallenges-app-c3521048253 nowrap> Monetary </span><!--container--><!--container--><!--container--></td></tr></tbody></table></div><hr _ngcontent-openchallenges-app-c3521048253><span _ngcontent-openchallenges-app-c3521048253 class="mat-caption created-updated-dates"> Added to the OC on 2024-07-02T22:45:34Z and last modified on 2024-07-02T22:47:34Z // See something missing or not up-to-date? <a _ngcontent-openchallenges-app-c3521048253 rel="noopener" target="_blank" href="https://docs.google.com/forms/d/e/1FAIpQLSdkgAVOuof-tE4PvCnpPbbGnQvvMhLuTkXikDXTbsCHqcMVSw/viewform?usp=pp_url&amp;entry.2102238281=522&amp;entry.1040159972=detecting-active-tuberculosis-bacilli-2024">Suggest an edit here!</a></span></main><!--container--></openchallenges-challenge-overview><!--bindings={
+  "ng-reflect-ng-switch-case": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-switch-case": "[object Object]"
+}--><!--bindings={
+  "ng-reflect-ng-switch-case": "[object Object]"
+}--><!--ng-container--></div></section><!--ng-container--><!--bindings={
+  "ng-reflect-ng-if": "[object Object]"
+}--></main><openchallenges-footer _ngcontent-openchallenges-app-c3176901716 _nghost-openchallenges-app-c4106554096 ng-reflect-app-version="1.0.0-alpha" ng-reflect-data-updated-on="yyyy-mm-dd" ng-reflect-privacy-policy-url="https://sagebionetworks.jira.c" ng-reflect-terms-of-use-url="https://sagebionetworks.jira.c" ng-reflect-api-docs-url="http://localhost:8000/api-docs" ngh="4"><footer _ngcontent-openchallenges-app-c4106554096 class="mat-typography"><div _ngcontent-openchallenges-app-c4106554096 class="row"><div _ngcontent-openchallenges-app-c4106554096 class="col-8 about-oc"><img _ngcontent-openchallenges-app-c4106554096 src="/openchallenges-assets/images/openchallenges-color.svg" alt="OpenChallenges" class="logo"><ul _ngcontent-openchallenges-app-c4106554096 class="footer-link-group"><li _ngcontent-openchallenges-app-c4106554096><a _ngcontent-openchallenges-app-c4106554096 routerlink="/about" ng-reflect-router-link="/about" href="/about">About</a></li><li _ngcontent-openchallenges-app-c4106554096><a _ngcontent-openchallenges-app-c4106554096 routerlink="/team" ng-reflect-router-link="/team" href="/team">Meet Our Team</a></li><li _ngcontent-openchallenges-app-c4106554096><a _ngcontent-openchallenges-app-c4106554096 title="Interactive documentation for OC API" rel="noopener noreferrer" target="_blank" href="http://localhost:8000/api-docs">API Docs</a></li><li _ngcontent-openchallenges-app-c4106554096><a _ngcontent-openchallenges-app-c4106554096 href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose" title="Share feedback about the OC app" rel="noopener noreferrer" target="_blank">Submit a Feature/Bug</a></li></ul></div><div _ngcontent-openchallenges-app-c4106554096 class="col-4 app-info"><ul _ngcontent-openchallenges-app-c4106554096><li _ngcontent-openchallenges-app-c4106554096><img _ngcontent-openchallenges-app-c4106554096 alt="Sage Bionetworks" src="http://localhost:8000/img/rwDXW76YpOaDwjTmofnU_NZ6LXU=/logo/SageBionetworks-Logo-FullColor-WhiteText.svg"></li><li _ngcontent-openchallenges-app-c4106554096>App version: 1.0.0-alpha</li><li _ngcontent-openchallenges-app-c4106554096>Data updated on: yyyy-mm-dd</li></ul></div></div><div _ngcontent-openchallenges-app-c4106554096 class="footer-bottom"><span _ngcontent-openchallenges-app-c4106554096 class="footer-links"><a _ngcontent-openchallenges-app-c4106554096 href="https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy">Privacy Policy</a> • <a _ngcontent-openchallenges-app-c4106554096 href="https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use">Terms of Use</a> • <a _ngcontent-openchallenges-app-c4106554096 href="https://www.sagebionetworks.org">Powered by Sage Bionetworks</a></span></div></footer></openchallenges-footer></openchallenges-challenge><!--container--></div></openchallenges-root>
+  <script src="runtime.js" type="module"></script><script src="polyfills.js" type="module"></script><script src="vendor.js" type="module"></script><script src="main.js" type="module"></script>
+
+<script id="openchallenges-app-state" type="application/json">{"542209688":{"b":{"apiDocsUrl":"http://localhost:8000/api-docs","appVersion":"1.0.0-alpha","csrApiUrl":"http://localhost:8082/api/v1","dataUpdatedOn":"yyyy-mm-dd","environment":"development","googleTagManagerId":"","ssrApiUrl":"http://openchallenges-api-gateway:8082/api/v1","enableOperationFilter":false,"isPlatformServer":true,"privacyPolicyUrl":"https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy","termsOfUseUrl":"https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948333575/OpenChallenges+Terms+of+Use"},"h":{},"s":200,"st":"OK","u":"http://localhost:39043/config/config.json","rt":"json"},"1582924944":{"b":{"id":522,"slug":"detecting-active-tuberculosis-bacilli-2024","name":"Detecting Active Tuberculosis Bacilli - 2024","headline":"","description":"Tuberculosis is one of the leading infectious causes of death worldwide 1. Each year, millions of individuals contract and develop active TB without knowing 2. Case identification and treatment are the primary methods for controlling spread as there is no effective TB vaccine for adults. Unfortunately, delays in diagnosis are common, especially in resource-limited settings, and can worsen individual outcomes and perpetuate transmission of the disease 3,4. Without a timely diagnosis, patients needing treatment would head home from a clinic without knowing they were positive. If they miss their follow up, they would not learn about their diagnosis and nor would they start their treatment. Automated TB diagnosis could play a role reducing the loss of follow up and get patients to be treated more timely. Automated digital microscopy has been proposed as a cost-effective solution 6,7. An automated algorithm that could reliably detect mycobacterium on samples from patients with suspecte...","doi":"","status":"completed","platform":{"id":15,"slug":"nightingale-os","name":"Nightingale OS"},"websiteUrl":"https://app.nightingalescience.org/contests/m3rl61qq21wo","avatarUrl":"","incentives":["monetary"],"submissionTypes":["prediction_file"],"inputDataTypes":[],"categories":[],"startDate":"2024-03-01","endDate":"2024-04-01","starredCount":0,"operation":null,"createdAt":"2024-07-02T22:45:34Z","updatedAt":"2024-07-02T22:47:34Z","@context":"https://raw.githubusercontent.com/Sage-Bionetworks/core-models/main/draft-data-models/challenges.jsonld","@id":"https://openchallenges.io/api/v1/challenges/522","@type":"bts:Challenge"},"h":{},"s":200,"st":"OK","u":"http://openchallenges-api-gateway:8082/api/v1/challenges/522","rt":"json"},"3587722514":{"b":{"url":"http://localhost:8000/img/rwDXW76YpOaDwjTmofnU_NZ6LXU=/logo/SageBionetworks-Logo-FullColor-WhiteText.svg"},"h":{},"s":200,"st":"OK","u":"http://openchallenges-api-gateway:8082/api/v1/images","rt":"json"},"__nghData__":[{"n":{"2":"hfn","5":"hfn2"}},{"n":{"2":"1fnf"}},{"n":{"2":"1fnf","6":"5fnf"},"t":{"3":"t1"},"c":{"3":[{"i":"t1","r":1,"n":{"1":"0fnf"},"x":2}]}},{"t":{"1":"t13","2":"t14"},"c":{"1":[{"i":"t14","r":2,"t":{"0":"t15"},"c":{"0":[{"i":"t15","r":1}]}}],"2":[]}},{},{"t":{"0":"t17"},"c":{"0":[{"i":"t17","r":1,"t":{"5":"t18","6":"t19","7":"t20","8":"t21"},"c":{"5":[],"6":[{"i":"t19","r":1}],"7":[],"8":[{"i":"t21","r":1,"t":{"1":"t22","2":"t23"},"c":{"1":[{"i":"t22","r":1,"n":{"2":"1f"}}],"2":[]}}]}}]}},{"t":{"0":"t25"},"c":{"0":[{"i":"t25","r":1,"t":{"6":"t26","37":"t27","38":"t28","43":"t29","44":"t31","49":"t32","50":"t34"},"c":{"6":[{"i":"t26","r":1,"n":{"4":"3f"}}],"37":[],"38":[{"i":"t28","r":1}],"43":[{"i":"t29","r":2,"t":{"1":"t30"},"c":{"1":[{"i":"t30","r":1}]}}],"44":[],"49":[{"i":"t32","r":2,"t":{"1":"t33"},"c":{"1":[{"i":"t33","r":1}]}}],"50":[]}}]}},{"t":{"1":"t12"},"c":{"1":[{"i":"t12","r":4,"e":{"0":3,"23":4},"t":{"8":"t16","24":"t24","25":"t35","26":"t36"},"c":{"8":[{"i":"t16","r":1}],"24":[{"i":"t24","r":1}],"25":[],"26":[]}}]}},{"t":{"0":"t0"},"c":{"0":[],"3":[{"i":"c3176901716","r":1}]}}]}</script></body></html>
