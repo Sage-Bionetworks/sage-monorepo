@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-RUN apt-get -y update && apt-get -y upgrade && rm -rf /var/lib/apt/lists/*
+RUN apt-get -y update && apt-get -y upgrade
 # The following is necessary to avoid an interactive prompt when installing r-base
 RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install tzdata
 # instructions here: https://www.rstudio.com/products/shiny/download-server/ubuntu/
