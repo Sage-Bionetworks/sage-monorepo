@@ -11,7 +11,7 @@ RUN apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev jq pip sudo p
 RUN apt-get install -y cmake
 
 RUN Rscript -e "install.packages('shiny', repos='http://cran.rstudio.com/')"
-RUN apt-get install -y gdebi-core wget
+RUN apt-get install -y gdebi-core wget  && rm -rf /var/lib/apt/lists/*
 RUN wget https://download3.rstudio.org/ubuntu-18.04/x86_64/shiny-server-1.5.19.995-amd64.deb
 RUN gdebi --n shiny-server-1.5.19.995-amd64.deb
 
