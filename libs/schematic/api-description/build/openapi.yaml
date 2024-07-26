@@ -910,11 +910,21 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/addAnnotations'
-        - $ref: '#/components/parameters/datasetIdArray'
         - $ref: '#/components/parameters/manifestTitle'
-        - $ref: '#/components/parameters/dataTypeArray'
         - $ref: '#/components/parameters/displayLabelType'
         - $ref: '#/components/parameters/useStrictValidation'
+        - name: datasetIdArray
+          in: query
+          description: An array of dataset ids
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetIdArray'
+        - name: dataTypeArray
+          in: query
+          description: An array of data types
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataTypeArray'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
@@ -949,11 +959,20 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/addAnnotations'
-        - $ref: '#/components/parameters/datasetIdQuery'
         - $ref: '#/components/parameters/manifestTitle'
-        - $ref: '#/components/parameters/dataType'
         - $ref: '#/components/parameters/displayLabelType'
-        - $ref: '#/components/parameters/useStrictValidation'
+        - name: datasetId
+          in: query
+          description: The ID of a dataset.
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+        - name: dataType
+          in: query
+          description: A data type
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataType'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
@@ -1765,13 +1784,6 @@ components:
       schema:
         type: boolean
         default: false
-    datasetIdArray:
-      name: datasetIdArray
-      in: query
-      description: An array of dataset ids
-      required: false
-      schema:
-        $ref: '#/components/schemas/DatasetIdArray'
     manifestTitle:
       name: manifestTitle
       in: query
@@ -1779,13 +1791,6 @@ components:
       required: false
       schema:
         type: string
-    dataTypeArray:
-      name: dataTypeArray
-      in: query
-      description: An array of data types
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataTypeArray'
     useStrictValidation:
       name: useStrictValidation
       in: query
@@ -1794,10 +1799,3 @@ components:
       schema:
         type: boolean
         default: true
-    dataType:
-      name: dataType
-      in: query
-      description: A data type
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataType'

@@ -27,7 +27,6 @@ class TestGenerateExcelManifestFile:
                     data_type="syn4",
                     add_annotations=False,
                     manifest_title="title",
-                    use_strict_validation=True,
                     display_label_type="class_label",
                 )
                 assert status == 200
@@ -67,7 +66,6 @@ class TestGenerateExcelManifest:  # pylint: disable=too-few-public-methods
                     data_type="syn4",
                     add_annotations=False,
                     manifest_title="title",
-                    use_strict_validation=True,
                     display_label_type="class_label",
                 )
                 assert isinstance(output, tuple)

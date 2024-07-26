@@ -24,7 +24,6 @@ def generate_excel_manifest_file(
     manifest_title: str | None,
     data_type: str | None,
     display_label_type: DisplayLabelType,
-    use_strict_validation: bool,
     asset_view_id: str | None,
 ) -> tuple[str | BasicError, int]:
     """Creates an excel version of the manifest and returns the path
@@ -39,7 +38,6 @@ def generate_excel_manifest_file(
         display_label_type (DisplayLabelType):
           The type of label to use as display
           Defaults to "class_label"
-        use_strict_validation (bool): Whether or not to use google sheet strict validation
         asset_view_id (str | None): ID of the asset view
 
     Returns:
@@ -58,7 +56,6 @@ def generate_excel_manifest_file(
         title=manifest_title,
         access_token=access_token,
         dataset_ids=[dataset_id],
-        strict=use_strict_validation,
         use_annotations=add_annotations,
         data_model_labels=display_label_type,
     )
@@ -75,7 +72,6 @@ def generate_excel_manifest(
     manifest_title: str | None,
     data_type: str | None,
     display_label_type: DisplayLabelType,
-    use_strict_validation: bool,
     asset_view_id: str | None,
 ) -> Response | tuple[BasicError, int]:
     """Creates a a flask response for an excel manifest file
@@ -90,7 +86,6 @@ def generate_excel_manifest(
         display_label_type (DisplayLabelType):
           The type of label to use as display
           Defaults to "class_label"
-        use_strict_validation (bool): Whether or not to use google sheet strict validation
         asset_view_id (str | None): ID of the asset view
 
     Returns:
@@ -105,7 +100,6 @@ def generate_excel_manifest(
         manifest_title=manifest_title,
         data_type=data_type,
         display_label_type=display_label_type,
-        use_strict_validation=use_strict_validation,
         asset_view_id=asset_view_id,
     )
 

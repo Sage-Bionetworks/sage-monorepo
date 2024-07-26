@@ -1457,14 +1457,6 @@ paths:
           default: false
           type: boolean
         style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
       - description: "If making one manifest, the title of the manifest. If making\
           \ multiple manifests, the prefix of the title of the manifests."
         explode: true
@@ -1473,14 +1465,6 @@ paths:
         required: false
         schema:
           type: string
-        style: form
-      - description: A data type
-        explode: true
-        in: query
-        name: dataType
-        required: false
-        schema:
-          $ref: '#/components/schemas/DataType'
         style: form
       - description: The type of label to display
         explode: true
@@ -1494,15 +1478,21 @@ paths:
           - display_label
           type: string
         style: form
-      - description: "If true, users are blocked from entering incorrect values. If\
-          \ false, users will get a warning when using incorrect values."
+      - description: The ID of a dataset.
         explode: true
         in: query
-        name: useStrictValidation
+        name: datasetId
         required: false
         schema:
-          default: true
-          type: boolean
+          $ref: '#/components/schemas/DatasetId'
+        style: form
+      - description: A data type
+        explode: true
+        in: query
+        name: dataType
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataType'
         style: form
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
@@ -1557,14 +1547,6 @@ paths:
           default: false
           type: boolean
         style: form
-      - description: An array of dataset ids
-        explode: true
-        in: query
-        name: datasetIdArray
-        required: false
-        schema:
-          $ref: '#/components/schemas/DatasetIdArray'
-        style: form
       - description: "If making one manifest, the title of the manifest. If making\
           \ multiple manifests, the prefix of the title of the manifests."
         explode: true
@@ -1573,14 +1555,6 @@ paths:
         required: false
         schema:
           type: string
-        style: form
-      - description: An array of data types
-        explode: true
-        in: query
-        name: dataTypeArray
-        required: false
-        schema:
-          $ref: '#/components/schemas/DataTypeArray'
         style: form
       - description: The type of label to display
         explode: true
@@ -1603,6 +1577,22 @@ paths:
         schema:
           default: true
           type: boolean
+        style: form
+      - description: An array of dataset ids
+        explode: true
+        in: query
+        name: datasetIdArray
+        required: false
+        schema:
+          $ref: '#/components/schemas/DatasetIdArray'
+        style: form
+      - description: An array of data types
+        explode: true
+        in: query
+        name: dataTypeArray
+        required: true
+        schema:
+          $ref: '#/components/schemas/DataTypeArray'
         style: form
       - description: ID of view listing all project data assets. E.g. for Synapse
           this would be the Synapse ID of the fileview listing all data assets for
@@ -3005,15 +2995,6 @@ components:
         default: false
         type: boolean
       style: form
-    datasetIdArray:
-      description: An array of dataset ids
-      explode: true
-      in: query
-      name: datasetIdArray
-      required: false
-      schema:
-        $ref: '#/components/schemas/DatasetIdArray'
-      style: form
     manifestTitle:
       description: "If making one manifest, the title of the manifest. If making multiple\
         \ manifests, the prefix of the title of the manifests."
@@ -3023,15 +3004,6 @@ components:
       required: false
       schema:
         type: string
-      style: form
-    dataTypeArray:
-      description: An array of data types
-      explode: true
-      in: query
-      name: dataTypeArray
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataTypeArray'
       style: form
     useStrictValidation:
       description: "If true, users are blocked from entering incorrect values. If\
@@ -3043,15 +3015,6 @@ components:
       schema:
         default: true
         type: boolean
-      style: form
-    dataType:
-      description: A data type
-      explode: true
-      in: query
-      name: dataType
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataType'
       style: form
   responses:
     InternalServerError:
