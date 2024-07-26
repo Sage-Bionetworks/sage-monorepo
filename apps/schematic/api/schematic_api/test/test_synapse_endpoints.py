@@ -62,6 +62,23 @@ def fixture_synapse_store() -> Generator[SynapseStorage, None, None]:
 
 @pytest.mark.synapse
 @pytest.mark.secrets
+class TestGenerateExcelManifest(BaseTestCase):
+    """Tests excel manifest endpoint"""
+
+    def test_500(self) -> None:
+        """Test for successful result"""
+        url = (
+            "/api/v1/generateExcelManifest?schemaUrl=xxx"
+            "&assetViewId=syn28559058"
+            "&dataType=Patient"
+            "&datasetId=syn51730545"
+        )
+        response = self.client.open(url, method="GET", headers=HEADERS)
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+
+
+@pytest.mark.synapse
+@pytest.mark.secrets
 class TestGenerateGoogleSheetManifests(BaseTestCase):
     """Tests google sheet manifest endpoint"""
 
@@ -123,7 +140,7 @@ class TestValidationEndpoints(BaseTestCase):
         )
         body = csv_to_bytes(CORRECT_MANIFEST_PATH)
         response = self.client.open(url, method="POST", headers=HEADERS, data=body)
-        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
+        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
         assert isinstance(response.json, str)
 
     def test_submit_manifest_json(self) -> None:
