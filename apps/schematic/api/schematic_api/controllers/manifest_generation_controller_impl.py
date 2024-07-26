@@ -67,11 +67,11 @@ def generate_excel_manifest_file(
 
 def generate_excel_manifest(
     schema_url: str,
-    dataset_id: str | None,
+    data_type: str | None,
     add_annotations: bool,
     manifest_title: str | None,
-    data_type: str | None,
     display_label_type: DisplayLabelType,
+    dataset_id: str | None,
     asset_view_id: str | None,
 ) -> Response | tuple[BasicError, int]:
     """Creates a a flask response for an excel manifest file
@@ -122,11 +122,11 @@ def generate_excel_manifest(
 def generate_google_sheet_manifests(
     schema_url: str,
     add_annotations: bool,
-    dataset_id_array: list[str] | None,
     manifest_title: str | None,
-    data_type_array: list[str] | None,
     display_label_type: DisplayLabelType,
     use_strict_validation: bool,
+    dataset_id_array: list[str] | None,
+    data_type_array: list[str] | None,
     asset_view_id: str | None,
     generate_all_manifests: bool,
 ) -> tuple[GoogleSheetLinks | BasicError, int]:

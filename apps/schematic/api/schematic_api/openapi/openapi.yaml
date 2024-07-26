@@ -1590,7 +1590,7 @@ paths:
         explode: true
         in: query
         name: dataTypeArray
-        required: true
+        required: false
         schema:
           $ref: '#/components/schemas/DataTypeArray'
         style: form

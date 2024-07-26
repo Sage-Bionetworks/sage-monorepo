@@ -19,7 +19,7 @@ get:
     - name: dataTypeArray
       in: query
       description: An array of data types
-      required: true
+      required: false
       schema:
         $ref: ../components/schemas/DataTypeArray.yaml
     - name: assetViewId

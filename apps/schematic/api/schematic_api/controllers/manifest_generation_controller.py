@@ -53,12 +53,12 @@ def generate_excel_manifest(
 
 def generate_google_sheet_manifests(
     schema_url,
-    data_type_array,
     add_annotations=None,
     manifest_title=None,
     display_label_type=None,
     use_strict_validation=None,
     dataset_id_array=None,
+    data_type_array=None,
     asset_view_id=None,
     generate_all_manifests=None,
 ):  # noqa: E501
@@ -68,8 +68,6 @@ def generate_google_sheet_manifests(
 
     :param schema_url: The URL of a schema in jsonld or csv form
     :type schema_url: str
-    :param data_type_array: An array of data types
-    :type data_type_array: List[str]
     :param add_annotations: If true, annotations are added to the manifest
     :type add_annotations: bool
     :param manifest_title: If making one manifest, the title of the manifest. If making multiple manifests, the prefix of the title of the manifests.
@@ -80,6 +78,8 @@ def generate_google_sheet_manifests(
     :type use_strict_validation: bool
     :param dataset_id_array: An array of dataset ids
     :type dataset_id_array: List[str]
+    :param data_type_array: An array of data types
+    :type data_type_array: List[str]
     :param asset_view_id: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
     :type asset_view_id: str
     :param generate_all_manifests: If true, a manifest for all components will be generated, datasetIds will be ignored. If false, manifests for each id in datasetIds will be generated.
@@ -89,12 +89,12 @@ def generate_google_sheet_manifests(
     """
     return manifest_generation_controller_impl.generate_google_sheet_manifests(
         schema_url,
-        data_type_array,
         add_annotations,
         manifest_title,
         display_label_type,
         use_strict_validation,
         dataset_id_array,
+        data_type_array,
         asset_view_id,
         generate_all_manifests,
     )
