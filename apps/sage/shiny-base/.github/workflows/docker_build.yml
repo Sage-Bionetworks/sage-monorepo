@@ -39,7 +39,7 @@ jobs:
           context: .
           push: false
           outputs: type=tar,dest=${{ env.TARFILE_NAME }}
-          tags: ${{ steps.meta.outputs.tags }}
+          meta_json: ${{ steps.meta.outputs.json }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Upload tarball for use by Trivy job
@@ -49,7 +49,7 @@ jobs:
           path: ${{ env.TARFILE_NAME }}
 
     outputs:
-      tags: ${{ steps.meta.outputs.tags }}
+      meta_json: ${{ steps.meta.outputs.json }}
       tarfile_artifact: ${{ env.TARFILE_NAME }}
 
   trivy-scan:
@@ -57,7 +57,7 @@ jobs:
     uses: "./.github/workflows/trivy.yml"
     with:
       SOURCE_TYPE: tar
-      IMAGE_NAME: ${{ needs.tests.outputs.tags }}
+      IMAGE_NAME: image-name
       TARFILE_NAME: ${{ needs.tests.outputs.tarfile_artifact }}
       EXIT_CODE: 1
 
@@ -68,6 +68,9 @@ jobs:
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        value: ${{ fromJSON(needs.build.outputs.meta_json).tags }}
 
     steps:
       - name: Download tar file
@@ -80,7 +83,7 @@ jobs:
       - name: Load Docker image from tar
         run: cat
           ${{ steps.tar-download.outputs.download-path}}/${{ env.TARFILE_NAME}}
-          | docker import - ${{ needs.tests.outputs.tags }}
+          | docker import - ${{ matrix.value }}
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
@@ -90,5 +93,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push Docker image
-        run: docker push ${{ needs.tests.outputs.tags }}
+        run: docker push ${{ matrix.value }}
 ...
