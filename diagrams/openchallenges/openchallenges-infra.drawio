@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0" version="24.7.6">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="1748" dy="1035" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="999" dy="591" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -36,7 +36,7 @@
         <mxCell id="2vyknwHGhVF1o8syPONA-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="2vyknwHGhVF1o8syPONA-11" target="2vyknwHGhVF1o8syPONA-44">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="2vyknwHGhVF1o8syPONA-96" value="Fetch / Push" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-46">
+        <mxCell id="2vyknwHGhVF1o8syPONA-96" value="Pull / Push" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-46">
           <mxGeometry x="0.1763" y="-2" relative="1" as="geometry">
             <mxPoint x="16" as="offset" />
           </mxGeometry>
@@ -67,7 +67,7 @@
         <mxCell id="2vyknwHGhVF1o8syPONA-55" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="2vyknwHGhVF1o8syPONA-54" target="2vyknwHGhVF1o8syPONA-56">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="2vyknwHGhVF1o8syPONA-95" value="Fetch" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-55">
+        <mxCell id="2vyknwHGhVF1o8syPONA-95" value="Pull" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-55">
           <mxGeometry x="-0.1795" y="1" relative="1" as="geometry">
             <mxPoint x="-11" y="-1" as="offset" />
           </mxGeometry>
