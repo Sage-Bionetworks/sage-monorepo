@@ -348,5 +348,19 @@
     "h": 50,
     "aspect": "fixed",
     "title": "redocly"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://json-ld.org/images/json-ld-logo.svg;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "json-ld"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB2ZXJzaW9uPSIxLjEiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMiA1MTI7IiBoZWlnaHQ9IjUxMnB4Ij48ZyBpZD0iX3gzMV84OS1rYWdnbGUiPjxnPjxwYXRoIHN0eWxlPSJmaWxsOiMyMEJFRkY7IiBkPSJNMzg1LjcwOCw0NzYuNDc4TDI1NC43NDIsMzEzLjcxM2wxMjUuNTc4LTEyMS41MzRjMi4zMzQtMi40MjYsMS41MjYtOS40MzMtNC43NjEtOS40MzNoLTYyLjE2ICAgIGMtMy4xNDUsMC02LjI4OCwxLjYxOC05LjQzMyw0Ljc2MUwxODUuMTI4LDMwNy42MDRWMzIuNzM4YzAtNC40OTEtMi4yNDctNi43MzctNi43MzgtNi43MzdoLTQ2LjYxOCAgICBjLTQuNDkyLDAtNi43MzcsMi4yNDYtNi43MzcsNi43Mzd2NDQ2LjQzM2MwLDQuNDkxLDIuMjQ2LDYuNzM4LDYuNzM3LDYuNzM4aDQ2LjYxOGM0LjQ5MSwwLDYuNzM4LTIuMjQ3LDYuNzM4LTYuNzM4di05Ny45MSAgICBsMjcuNjY2LTI2LjMxN2w5OS4yNTcsMTI2LjI5NGMyLjY5NSwzLjE0NSw1LjgzOSw0Ljc2Miw5LjQzMiw0Ljc2Mmg2MC4wOTVjMy4xNDMsMCw0LjkzOS0wLjg5OSw1LjM4OS0yLjY5NkwzODUuNzA4LDQ3Ni40Nzh6Ii8+PC9nPjwvZz48ZyBpZD0iTGF5ZXJfMSIvPjwvc3ZnPg==;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry x=\"1.1368683772161603e-13\" y=\"5.684341886080802e-14\" width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "kaggle"
   }
 ]</mxlibrary>
