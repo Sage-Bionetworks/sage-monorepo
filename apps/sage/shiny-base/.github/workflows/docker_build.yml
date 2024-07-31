@@ -53,6 +53,9 @@ jobs:
           name: ${{ env.TARFILE_NAME }}
           path: ${{ env.TARFILE_NAME }}
 
+      - name: check meta json
+        run: echo $ {{steps.meta.outputs.json}}
+
     outputs:
       meta_json: ${{ steps.meta.outputs.json }}
       tarfile_artifact: ${{ env.TARFILE_NAME }}
