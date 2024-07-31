@@ -75,7 +75,7 @@
         <mxCell id="2vyknwHGhVF1o8syPONA-57" value="" style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.json" vertex="1" parent="1">
           <mxGeometry x="406.5" y="194" width="36.75" height="39.8" as="geometry" />
         </mxCell>
-        <UserObject label="Events and Profile pages as Structured data on Google (possible today)" link="https://developers.google.com/search/docs/appearance/structured-data/event" linkTarget="_blank" id="2vyknwHGhVF1o8syPONA-61">
+        <UserObject label="Events and Profile pages as Structured data on Google (possible today)" link="https://developers.google.com/search/docs/appearance/structured-data/search-gallery" linkTarget="_blank" id="2vyknwHGhVF1o8syPONA-61">
           <mxCell style="text;whiteSpace=wrap;fontSize=14;" vertex="1" parent="1">
             <mxGeometry x="1035" y="171" width="467" height="36" as="geometry" />
           </mxCell>
