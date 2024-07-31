@@ -53,9 +53,6 @@ jobs:
           name: ${{ env.TARFILE_NAME }}
           path: ${{ env.TARFILE_NAME }}
 
-      - name: check meta json
-        run: echo ${{steps.meta.outputs.json}}
-
     outputs:
       meta_json: ${{ steps.meta.outputs.json }}
       tarfile_artifact: ${{ env.TARFILE_NAME }}
@@ -78,7 +75,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        value: ${{ fromJSON(needs.build.outputs.meta_json).tags }}
+        value: ${{ fromJSON(needs.tests.outputs.meta_json).tags }}
 
     steps:
       - name: Download tar file
