@@ -205,7 +205,7 @@
         </mxCell>
         <UserObject label="OC uses the OpenGraph protocol to share metadata, allowing Google and other social media sites to display OC pages and create rich cards in their results." link="https://developers.google.com/search/docs/appearance/structured-data/event" linkTarget="_blank" id="2vyknwHGhVF1o8syPONA-124">
           <mxCell style="text;whiteSpace=wrap;fontSize=14;" vertex="1" parent="1">
-            <mxGeometry x="632" y="194" width="277" height="36" as="geometry" />
+            <mxGeometry x="636" y="188" width="277" height="36" as="geometry" />
           </mxCell>
         </UserObject>
       </root>
