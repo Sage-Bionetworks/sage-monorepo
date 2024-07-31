@@ -32,6 +32,11 @@ jobs:
         uses: docker/metadata-action@v4.1.1
         with:
           images: ${{ env.IMAGE_PATH }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}} # major.minor.patch
+            type=semver,pattern={{major}}.{{minor}}
 
       - name: Check that build works, save for scanning, but don't push yet
         uses: docker/build-push-action@v6.4.0
