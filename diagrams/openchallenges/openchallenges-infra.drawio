@@ -94,7 +94,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="2vyknwHGhVF1o8syPONA-74" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;❌&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-72">
+        <mxCell id="2vyknwHGhVF1o8syPONA-74" value="&lt;font style=&quot;font-size: 18px;&quot;&gt;(&lt;/font&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;❌&lt;/font&gt;&lt;font style=&quot;font-size: 18px;&quot;&gt;)&lt;/font&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="2vyknwHGhVF1o8syPONA-72">
           <mxGeometry x="0.1205" y="1" relative="1" as="geometry">
             <mxPoint x="-1" y="9" as="offset" />
           </mxGeometry>
@@ -203,6 +203,11 @@
         <mxCell id="2vyknwHGhVF1o8syPONA-116" value="APIs" style="outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3E;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.external_sdk;labelBackgroundColor=none;" vertex="1" parent="1">
           <mxGeometry x="173.45499999999987" y="565" width="43.59" height="50" as="geometry" />
         </mxCell>
+        <UserObject label="OC uses the OpenGraph protocol to share metadata, allowing Google and other social media sites to display OC pages and create rich cards in their results." link="https://developers.google.com/search/docs/appearance/structured-data/event" linkTarget="_blank" id="2vyknwHGhVF1o8syPONA-124">
+          <mxCell style="text;whiteSpace=wrap;fontSize=14;" vertex="1" parent="1">
+            <mxGeometry x="632" y="194" width="277" height="36" as="geometry" />
+          </mxCell>
+        </UserObject>
       </root>
     </mxGraphModel>
   </diagram>
