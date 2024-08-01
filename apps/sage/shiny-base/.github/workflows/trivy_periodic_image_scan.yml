@@ -14,26 +14,19 @@ on:
 
 jobs:
   trivy-matrix:
-    name: ${{ matrix.notebook_type }}
+    name: periodic scan
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        notebook_type:
-          - jupyter
-          - rstudio
 
     steps:
       - name: Ensure image name is lower case
         id: image_name
         uses: vishalmamidi/lowercase-action@v1
         with:
-          string: ghcr.io/${{ github.repository
-            }}-${{ matrix.notebook_type }}:main
+          string: ghcr.io/${{ github.repository }}:main
 
       - name: Run Trivy
         uses: "./.github/workflows/trivy.yml"
         with:
-          NOTEBOOK_TYPE: ${{ matrix.notebook_type }}
           SOURCE_TYPE: image
           IMAGE_NAME: ${{ steps.image_name.outputs.lowercase }}
 ...
