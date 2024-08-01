@@ -12,7 +12,7 @@ allOf:
         example: 'https://openchallenges.io/api/v1/challenges/1'
       '@type':
         type: string
-        example: 'bts:Challenge'
+        example: 'Challenge'
     required:
       - '@context'
       - '@id'
