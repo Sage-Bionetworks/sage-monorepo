@@ -71,7 +71,7 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
                 animationDelay: (dataIndex: number) => dataIndex * 100,
               },
             ],
-          })
+          }),
       );
   }
 

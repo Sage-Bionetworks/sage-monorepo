@@ -54,11 +54,11 @@ export class ChallengeCardComponent implements OnInit {
           }
         } else if (this.challenge.endDate && this.status === 'active') {
           this.time_info = `Ends in ${this.calcTimeDiff(
-            this.challenge.endDate
+            this.challenge.endDate,
           )}`;
         } else if (this.challenge.startDate && this.status === 'upcoming') {
           this.time_info = `Starts in ${this.calcTimeDiff(
-            this.challenge.startDate
+            this.challenge.startDate,
           )}`;
         }
       } catch (error: unknown) {

@@ -9,7 +9,7 @@ import {
   provideHttpClient,
 } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
-// import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client-angular';
+import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 
 import { routes } from './app.routes';
@@ -33,14 +33,14 @@ export const appConfig: ApplicationConfig = {
       deps: [ConfigService],
       multi: true,
     },
-    // {
-    //   provide: API_CLIENT_BASE_PATH,
-    //   useFactory: (configService: ConfigService) =>
-    //     configService.config.isPlatformServer
-    //       ? configService.config.ssrApiUrl
-    //       : configService.config.csrApiUrl,
-    //   deps: [ConfigService],
-    // },
+    {
+      provide: API_CLIENT_BASE_PATH,
+      useFactory: (configService: ConfigService) =>
+        configService.config.isPlatformServer
+          ? configService.config.ssrApiUrl
+          : configService.config.csrApiUrl,
+      deps: [ConfigService],
+    },
     provideAnimations(),
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
@@ -48,7 +48,7 @@ export const appConfig: ApplicationConfig = {
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
-      })
+      }),
     ),
   ],
 };

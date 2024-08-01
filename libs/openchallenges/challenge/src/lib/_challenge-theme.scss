@@ -2,7 +2,7 @@
 @use '@angular/material' as mat;
 
 @mixin color($theme) {
-  $config: mat.get-color-config($theme);
+  $config: mat.m2-get-color-config($theme);
   $primary: map.get($config, 'primary');
   $accent: map.get($config, 'accent');
   $warn: map.get($config, 'warn');
@@ -45,8 +45,8 @@
     color: #000;
 
     &.active {
-      color: #1C5E2A;
-      background-color: #D0FEDD;
+      color: #1c5e2a;
+      background-color: #d0fedd;
     }
 
     &.completed {
@@ -55,8 +55,8 @@
     }
 
     &.upcoming {
-      color: #E1861F;
-      background-color: #FFF5D1;
+      color: #e1861f;
+      background-color: #fff5d1;
     }
   }
 
@@ -94,12 +94,12 @@
 }
 
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
   @if $color-config != null {
     @include color($theme);
   }
 
-  $typography-config: mat.get-typography-config($theme);
+  $typography-config: mat.m2-get-typography-config($theme);
   @if $typography-config != null {
     @include typography($theme);
   }

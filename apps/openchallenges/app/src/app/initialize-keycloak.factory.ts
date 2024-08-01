@@ -9,7 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 export function initializeKeycloakFactory(
   configService: ConfigService,
   keycloak: KeycloakService,
-  platformId: Record<string, unknown>
+  platformId: Record<string, unknown>,
 ) {
   return () => {
     if (isPlatformBrowser(platformId)) {

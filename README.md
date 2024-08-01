@@ -25,6 +25,13 @@
   <img src="https://img.shields.io/github/license/Sage-Bionetworks/sage-monorepo.svg?color=007acc&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE" alt="Sage Monorepo License" />
 </p>
 
+<p align="center">
+  <h4 align="center">
+    Love Sage Monorepo and its projects? Give our repo a star ⭐.
+  </h4>
+  <br>
+</p>
+
 ---
 
 ## Documentation
@@ -113,8 +120,6 @@ Join the conversation and help the community.
 - OpenChallenge
 - Schematic
 - Synapse (evaluation)
-
-Love Sage Monorepo and its projects? Give our repo a star ⭐.
 
 <!-- Links -->
 

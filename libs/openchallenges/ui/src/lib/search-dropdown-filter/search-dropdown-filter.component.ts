@@ -77,14 +77,16 @@ export class SearchDropdownFilterComponent implements OnInit {
 
     // preparing a set for quick lookup
     const validOptionValues = new Set(
-      this.options.map((option) => option.value)
+      this.options.map((option) => option.value),
     );
 
     // count how many selected values
     // exlude the invalid selected values if they are not in the option list
     return this.selectedOptions.filter(
       (option) =>
-        option !== null && option !== undefined && validOptionValues.has(option)
+        option !== null &&
+        option !== undefined &&
+        validOptionValues.has(option),
     ).length;
   }
 
@@ -93,7 +95,7 @@ export class SearchDropdownFilterComponent implements OnInit {
     // trigger loader animation every time lazy load initiated
     const startPage = Math.max(
       0,
-      Math.floor(event.first / this.optionsPerPage)
+      Math.floor(event.first / this.optionsPerPage),
     ); // avoid negative pages
     const endPage = Math.floor(event.last / this.optionsPerPage);
 

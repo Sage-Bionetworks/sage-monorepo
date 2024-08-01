@@ -4,10 +4,11 @@ spring:
   profiles:
     active: dev,local
   config:
-    import: 'configserver:http://openchallenges-config-server:8090'
+    import: 'configserver:'
     # name: openchallenges-organization-service,openchallenges
   cloud:
     config:
+      uri: http://openchallenges-config-server:8090
       username: openchallenges
       password: changeme
   # TODO: Move to the remote config file

@@ -62,7 +62,7 @@ export class SecurityGroups extends Construct {
     // reusable ingress SSH from bastion rule
     const allowIngressSshFromBastion = (
       securityGroupId: string,
-      constructId: string
+      constructId: string,
     ) =>
       new SecurityGroupRule(this, constructId, {
         securityGroupId,
@@ -116,11 +116,11 @@ export class SecurityGroups extends Construct {
         namePrefix: `${nameTagPrefix}-ssh-from-bastion`,
         description: 'SSH from bastion security group for the bastion',
         vpcId,
-      }
+      },
     );
     allowIngressSshFromBastion(
       this.sshFromBastionSg.id,
-      'allow_ssh_from_bastion'
+      'allow_ssh_from_bastion',
     );
 
     // Preview Instance ALB Security Group and Rules
@@ -131,19 +131,19 @@ export class SecurityGroups extends Construct {
         namePrefix: `${nameTagPrefix}-preview-instance-alb`,
         description: 'Security group for the preview instance ALB',
         vpcId,
-      }
+      },
     );
     allowIngress80(
       this.previewInstanceAlbSg.id,
-      'preview_instance_alb_allow_80'
+      'preview_instance_alb_allow_80',
     );
     allowIngress443(
       this.previewInstanceAlbSg.id,
-      'preview_instance_alb_allow_443'
+      'preview_instance_alb_allow_443',
     );
     allowEgressAll(
       this.previewInstanceAlbSg.id,
-      'preview_instance_alb_allow_outbound'
+      'preview_instance_alb_allow_outbound',
     );
 
     // Preview Instance Security Group and Rules
@@ -164,11 +164,11 @@ export class SecurityGroups extends Construct {
     });
     allowInboundSelf(
       this.previewInstanceSg.id,
-      'preview_instance_allow_inbound_self'
+      'preview_instance_allow_inbound_self',
     );
     allowEgressAll(
       this.previewInstanceSg.id,
-      'preview_instance_allow_outbound'
+      'preview_instance_allow_outbound',
     );
 
     // Client Application ALB Security Group and Rules
@@ -199,7 +199,7 @@ export class SecurityGroups extends Construct {
     });
     allowInboundSelf(
       this.clientServiceSg.id,
-      'client_service_allow_inbound_self'
+      'client_service_allow_inbound_self',
     );
     allowEgressAll(this.clientServiceSg.id, 'client_service_allow_outbound');
 
@@ -211,7 +211,7 @@ export class SecurityGroups extends Construct {
         namePrefix: `${nameTagPrefix}-upstream-service-alb`,
         description: 'Security group for upstream services ALB',
         vpcId,
-      }
+      },
     );
 
     new SecurityGroupRule(this, 'upstream_service_alb_allow_client_80', {
@@ -226,7 +226,7 @@ export class SecurityGroups extends Construct {
     });
     allowEgressAll(
       this.upstreamServiceAlbSg.id,
-      'upstream_service_alb_allow_outbound'
+      'upstream_service_alb_allow_outbound',
     );
 
     // Upstream Service Security Group and Rules
@@ -247,11 +247,11 @@ export class SecurityGroups extends Construct {
     });
     allowInboundSelf(
       this.upstreamServiceSg.id,
-      'upstream_service_allow_inbound_self'
+      'upstream_service_allow_inbound_self',
     );
     allowEgressAll(
       this.upstreamServiceSg.id,
-      'upstream_service_allow_outbound'
+      'upstream_service_allow_outbound',
     );
 
     // Database Security Group and Rules

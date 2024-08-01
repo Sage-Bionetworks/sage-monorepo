@@ -910,11 +910,21 @@ paths:
       parameters:
         - $ref: '#/components/parameters/schemaUrl'
         - $ref: '#/components/parameters/addAnnotations'
-        - $ref: '#/components/parameters/datasetIdArray'
         - $ref: '#/components/parameters/manifestTitle'
-        - $ref: '#/components/parameters/dataTypeArray'
         - $ref: '#/components/parameters/displayLabelType'
         - $ref: '#/components/parameters/useStrictValidation'
+        - name: datasetIdArray
+          in: query
+          description: An array of dataset ids
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetIdArray'
+        - name: dataTypeArray
+          in: query
+          description: An array of data types
+          required: false
+          schema:
+            $ref: '#/components/schemas/DataTypeArray'
         - name: assetViewId
           in: query
           description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
@@ -937,6 +947,48 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GoogleSheetLinks'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /generateExcelManifest:
+    get:
+      tags:
+        - ManifestGeneration
+      summary: Generates an excel file
+      description: Generates an excel file
+      operationId: generateExcelManifest
+      parameters:
+        - $ref: '#/components/parameters/schemaUrl'
+        - $ref: '#/components/parameters/addAnnotations'
+        - $ref: '#/components/parameters/manifestTitle'
+        - $ref: '#/components/parameters/displayLabelType'
+        - name: datasetId
+          in: query
+          description: The ID of a dataset.
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+        - name: dataType
+          in: query
+          description: A data type
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataType'
+        - name: assetViewId
+          in: query
+          description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                format: binary
         '500':
           $ref: '#/components/responses/InternalServerError'
 components:
@@ -1732,13 +1784,6 @@ components:
       schema:
         type: boolean
         default: false
-    datasetIdArray:
-      name: datasetIdArray
-      in: query
-      description: An array of dataset ids
-      required: false
-      schema:
-        $ref: '#/components/schemas/DatasetIdArray'
     manifestTitle:
       name: manifestTitle
       in: query
@@ -1746,13 +1791,6 @@ components:
       required: false
       schema:
         type: string
-    dataTypeArray:
-      name: dataTypeArray
-      in: query
-      description: An array of data types
-      required: false
-      schema:
-        $ref: '#/components/schemas/DataTypeArray'
     useStrictValidation:
       name: useStrictValidation
       in: query

@@ -13,7 +13,7 @@ export class ConfigService {
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: string,
-    @Inject('APP_PORT') @Optional() private readonly port: string
+    @Inject('APP_PORT') @Optional() private readonly port: string,
   ) {}
 
   async loadConfig(): Promise<void> {
@@ -30,7 +30,7 @@ export class ConfigService {
       : '.';
 
     const appConfig$ = this.http.get<AppConfig>(
-      `${browserRoot}/config/config.json`
+      `${browserRoot}/config/config.json`,
     );
     try {
       const config = await lastValueFrom(appConfig$);

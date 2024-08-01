@@ -7,7 +7,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-const PORT = process.env['PORT'] || '4200';
+const PORT = process.env['PORT'] || '5200';
 console.log(`server.ts: ${PORT}`);
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -30,7 +30,7 @@ export function app(): express.Express {
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
-    })
+    }),
   );
 
   // Health endpoint used by the container

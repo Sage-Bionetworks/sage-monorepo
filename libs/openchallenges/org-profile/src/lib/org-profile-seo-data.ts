@@ -7,7 +7,7 @@ import {
 
 export const getSeoData = (
   org: Organization,
-  imageUrl: string | undefined
+  imageUrl: string | undefined,
 ): SeoData => {
   const defaultSeoData = getDefaultSeoData();
   // shallow merge

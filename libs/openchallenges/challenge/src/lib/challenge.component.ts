@@ -79,7 +79,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
     private readonly configService: ConfigService,
     private seoService: SeoService,
     private renderer2: Renderer2,
-    private _location: Location
+    private _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -91,7 +91,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.challenge$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.challengeService.getChallenge(params['challengeId'])
+        this.challengeService.getChallenge(params['challengeId']),
       ),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
@@ -101,7 +101,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       }),
       shareReplay(1),
-      take(1)
+      take(1),
     );
 
     this.challenge$.subscribe((challenge) => {
@@ -119,8 +119,8 @@ export class ChallengeComponent implements OnInit, OnDestroy {
         map((params) =>
           Object.keys(this.tabs).includes(params['tab'])
             ? params['tab']
-            : 'overview'
-        )
+            : 'overview',
+        ),
       );
 
     const combineSub = combineLatest({

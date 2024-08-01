@@ -36,7 +36,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private pageTitleService: PageTitleService,
     private homeDataService: HomeDataService,
-    private configService: ConfigService
+    private configService: ConfigService,
   ) {
     this.useGoogleTagManager =
       this.configService.config.googleTagManagerId.length > 0;

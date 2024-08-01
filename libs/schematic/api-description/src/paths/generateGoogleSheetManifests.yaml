@@ -7,11 +7,21 @@ get:
   parameters:
     - $ref: ../components/parameters/query/schemaUrl.yaml
     - $ref: ../components/parameters/query/addAnnotations.yaml
-    - $ref: ../components/parameters/query/datasetIdArray.yaml
     - $ref: ../components/parameters/query/manifestTitle.yaml
-    - $ref: ../components/parameters/query/dataTypeArray.yaml
     - $ref: ../components/parameters/query/displayLabelType.yaml
     - $ref: ../components/parameters/query/useStrictValidation.yaml
+    - name: datasetIdArray
+      in: query
+      description: An array of dataset ids
+      required: false
+      schema:
+        $ref: ../components/schemas/DatasetIdArray.yaml
+    - name: dataTypeArray
+      in: query
+      description: An array of data types
+      required: false
+      schema:
+        $ref: ../components/schemas/DataTypeArray.yaml
     - name: assetViewId
       in: query
       description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project

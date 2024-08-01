@@ -11,7 +11,7 @@ export class XAxisLabelTooltips {
 
   constructor(
     chart: ECharts,
-    xAxisCategoryToTooltipText: Record<string, string>
+    xAxisCategoryToTooltipText: Record<string, string>,
   ) {
     this.xAxisCategoryToTooltipText = xAxisCategoryToTooltipText;
 
@@ -59,7 +59,7 @@ export class XAxisLabelTooltips {
   }
 
   setXAxisCategoryToTooltipText(
-    xAxisCategoryToTooltipText: Record<string, string>
+    xAxisCategoryToTooltipText: Record<string, string>,
   ) {
     this.xAxisCategoryToTooltipText = xAxisCategoryToTooltipText;
   }

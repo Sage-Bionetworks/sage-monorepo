@@ -84,7 +84,7 @@ Seed the theme file with the following template:
 @use '@angular/material' as mat;
 
 @mixin color($theme) {
-  $config: mat.get-color-config($theme);
+  $config: mat.m2-get-color-config($theme);
   $primary: map.get($config, primary);
   $accent: map.get($config, accent);
   $warn: map.get($config, warn);
@@ -94,12 +94,12 @@ Seed the theme file with the following template:
   // Specify the colors of the elements of the component here.
   // Example:
   .awesome-class {
-    color: mat.get-color-from-palette($primary, default);
+    color: mat.m2-get-color-from-palette($primary, default);
   }
 }
 
 @mixin typography($theme) {
-  $config: mat.get-typography-config($theme);
+  $config: mat.m2-get-typography-config($theme);
 
   // Specify the typography of the elements of the component here.
   // Example:
@@ -111,12 +111,12 @@ Seed the theme file with the following template:
 }
 
 @mixin theme($theme) {
-  $color-config: mat.get-color-config($theme);
+  $color-config: mat.m2-get-color-config($theme);
   @if $color-config != null {
     @include color($theme);
   }
 
-  $typography-config: mat.get-typography-config($theme);
+  $typography-config: mat.m2-get-typography-config($theme);
   @if $typography-config != null {
     @include typography($theme);
   }

@@ -71,9 +71,9 @@
     2432,
     3000,
     3306,
+    3333,
     4200,
     4211,
-    5017,
     5200,
     5432,
     5601,
@@ -117,6 +117,10 @@
       "label": "openchallenges-mariadb",
       "onAutoForward": "silent"
     },
+    "3333": {
+      "label": "agora-server",
+      "onAutoForward": "silent"
+    },
     "4200": {
       "label": "openchallenges-app",
       "onAutoForward": "silent"
@@ -129,12 +133,8 @@
       "label": "openchallenges-postgres",
       "onAutoForward": "silent"
     },
-    "5017": {
-      "label": "agora-mongo",
-      "onAutoForward": "silent"
-    },
     "5200": {
-      "label": "agora-web-app",
+      "label": "agora-app",
       "onAutoForward": "silent"
     },
     "5601": {
@@ -242,7 +242,7 @@
       "onAutoForward": "silent"
     },
     "27017": {
-      "label": "openchallenges-mongo",
+      "label": "agora-mongo",
       "onAutoForward": "silent"
     }
   },

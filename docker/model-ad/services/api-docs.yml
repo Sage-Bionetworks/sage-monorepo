@@ -1,0 +1,15 @@
+services:
+  model-ad-api-docs:
+    image: ghcr.io/sage-bionetworks/model-ad-api-docs:${MODEL_AD_VERSION:-local}
+    container_name: model-ad-api-docs
+    restart: always
+    env_file:
+      - ../../../apps/model-ad/api-docs/.env
+    networks:
+      - model-ad
+    ports:
+      - '8010:8010'
+    deploy:
+      resources:
+        limits:
+          memory: 200M

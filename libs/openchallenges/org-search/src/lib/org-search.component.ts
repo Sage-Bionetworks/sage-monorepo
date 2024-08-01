@@ -104,7 +104,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // set a default behaviorSubject to trigger searchTearm's changes
   private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
-    ''
+    '',
   );
 
   private destroy = new Subject<void>();
@@ -144,7 +144,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
     private renderer2: Renderer2,
-    private _location: Location
+    private _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -158,7 +158,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe((params) => {
       // update selected filter values based on params in url
       this.selectedContributionRoles = this.splitParam(
-        params['contributionRoles']
+        params['contributionRoles'],
       );
       this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
@@ -194,18 +194,18 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     const orgPage$ = this.query.pipe(
       tap((query) => console.log('List organization query: ', query)),
       switchMap((query: OrganizationSearchQuery) =>
-        this.organizationService.listOrganizations(query)
+        this.organizationService.listOrganizations(query),
       ),
       tap((page) => console.log('List of organizations: ', page.organizations)),
       catchError((err) => {
         if (err.message) {
           this.openSnackBar(
-            'Unable to get the organizations. Please refresh the page and try again.'
+            'Unable to get the organizations. Please refresh the page and try again.',
           );
         }
         return throwError(() => new Error(err.message));
       }),
-      shareReplay(1)
+      shareReplay(1),
     );
 
     const organizationCards$ = orgPage$.pipe(
@@ -215,17 +215,17 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
           orgs: of(orgs),
           avatarUrls: forkJoinConcurrent(
             orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-            Infinity
+            Infinity,
           ),
-        })
+        }),
       ),
       switchMap(({ orgs, avatarUrls }) =>
         of(
           orgs.map((org, index) =>
-            this.getOrganizationCard(org, avatarUrls[index])
-          )
-        )
-      )
+            this.getOrganizationCard(org, avatarUrls[index]),
+          ),
+        ),
+      ),
     );
 
     orgPage$.subscribe((page) => {
@@ -255,20 +255,20 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery),
-      of({ url: '' })
+      of({ url: '' }),
     ).pipe(
       catchError(() => {
         console.error(
-          'Unable to get the image url. Please check the logs of the image service.'
+          'Unable to get the image url. Please check the logs of the image service.',
         );
         return of({ url: '' });
-      })
+      }),
     );
   }
 
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image
+    avatarUrl: Image,
   ): OrganizationCard {
     return {
       acronym: org.acronym,
@@ -306,7 +306,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         // update with new param, or delete the param if empty string
         (params, [key, value]) =>
           value !== '' ? params.set(key, value) : params.delete(key),
-        currentParams
+        currentParams,
       );
     this._location.replaceState(location.pathname, params.toString());
 
@@ -322,7 +322,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   collapseParam(selectedParam: FilterValue | FilterValue[], by = ','): string {
     return Array.isArray(selectedParam)
       ? selectedParam.map((item) => item?.toString()).join(by)
-      : (selectedParam as string) ?? '';
+      : ((selectedParam as string) ?? '');
   }
 
   openSnackBar(message: string) {

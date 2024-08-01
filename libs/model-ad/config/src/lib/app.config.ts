@@ -15,7 +15,6 @@ export interface AppConfig {
   environment: Environment;
   googleTagManagerId: string;
   isPlatformServer: boolean;
-  keycloakRealm: string;
   privacyPolicyUrl: string;
   ssrApiUrl: string;
   termsOfUseUrl: string;

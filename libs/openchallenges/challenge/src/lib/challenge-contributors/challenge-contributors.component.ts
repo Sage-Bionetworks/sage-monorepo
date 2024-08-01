@@ -53,7 +53,7 @@ export class ChallengeContributorsComponent implements OnInit {
   constructor(
     private challengeContributionService: ChallengeContributionService,
     private organizationService: OrganizationService,
-    private imageService: ImageService
+    private imageService: ImageService,
   ) {}
 
   ngOnInit() {
@@ -64,7 +64,7 @@ export class ChallengeContributorsComponent implements OnInit {
         .pipe(
           map((page) => page.challengeContributions),
           shareReplay(1),
-          take(1)
+          take(1),
         );
 
     // Get a list of unique orgs to minimize outbound requests
@@ -73,13 +73,13 @@ export class ChallengeContributorsComponent implements OnInit {
       switchMap((orgIds) =>
         forkJoinConcurrent(
           orgIds.map((orgId) =>
-            this.organizationService.getOrganization(orgId.toString())
+            this.organizationService.getOrganization(orgId.toString()),
           ),
-          Infinity
-        )
+          Infinity,
+        ),
       ),
       shareReplay(1),
-      take(1)
+      take(1),
     );
 
     // Get the logo of the orgs
@@ -87,9 +87,9 @@ export class ChallengeContributorsComponent implements OnInit {
       switchMap((orgs) =>
         forkJoinConcurrent(
           orgs.map((org) => this.getOrganizationAvatarUrl(org)),
-          Infinity
-        )
-      )
+          Infinity,
+        ),
+      ),
     );
 
     // Creates the contribution card bundles
@@ -116,42 +116,42 @@ export class ChallengeContributorsComponent implements OnInit {
         return contributionCardBundles;
       }),
       shareReplay(1),
-      take(1)
+      take(1),
     );
 
     // Get the organizer card bundles
     this.getContributionCardBundlesByRole(
       contributionCardBundles$,
-      ChallengeContributionRole.ChallengeOrganizer
+      ChallengeContributionRole.ChallengeOrganizer,
     ).subscribe((bundles) => (this.organizerCardBundles = bundles));
 
     // Get the data contributor card bundles
     this.getContributionCardBundlesByRole(
       contributionCardBundles$,
-      ChallengeContributionRole.DataContributor
+      ChallengeContributionRole.DataContributor,
     ).subscribe((bundles) => (this.dataContributorCardBundles = bundles));
 
     // Get the sponsor card bundles
     this.getContributionCardBundlesByRole(
       contributionCardBundles$,
-      ChallengeContributionRole.Sponsor
+      ChallengeContributionRole.Sponsor,
     ).subscribe((bundles) => (this.sponsorCardBundles = bundles));
   }
 
   private getContributionCardBundlesByRole(
     bundles$: Observable<ContributionCardBundle[]>,
-    role: ChallengeContributionRole
+    role: ChallengeContributionRole,
   ): Observable<ContributionCardBundle[]> {
     return bundles$.pipe(
       map((bundles) => bundles.filter((b) => b.role === role)),
       // order orgs by the number of challenges they have contributed to
-      map((bundles) => orderBy(bundles, ['card.challengeCount'], ['desc']))
+      map((bundles) => orderBy(bundles, ['card.challengeCount'], ['desc'])),
     );
   }
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationAvatarUrl(
-    org: Organization
+    org: Organization,
   ): Observable<Image | undefined> {
     return iif(
       () => !!org.avatarKey,
@@ -160,21 +160,21 @@ export class ChallengeContributorsComponent implements OnInit {
         height: ImageHeight._140px,
         aspectRatio: ImageAspectRatio._11,
       } as ImageQuery),
-      of(undefined)
+      of(undefined),
     ).pipe(
       catchError(() => {
         console.error(
-          'Unable to get the image url. Please check the logs of the image service.'
+          'Unable to get the image url. Please check the logs of the image service.',
         );
         return of(undefined);
-      })
+      }),
     );
   }
 
   // TODO Avoid duplicated code (see org search component)
   private getOrganizationCard(
     org: Organization,
-    avatarUrl: Image | undefined
+    avatarUrl: Image | undefined,
   ): OrganizationCard {
     return {
       acronym: org.acronym,

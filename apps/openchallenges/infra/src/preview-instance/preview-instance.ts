@@ -14,7 +14,7 @@ export class PreviewInstance extends Construct {
     this.instanceProfile = new PreviewInstanceInstanceProfile(
       this,
       'preview_instance_instance_profile',
-      config.tagPrefix
+      config.tagPrefix,
     );
 
     this.instance = new Instance(this, 'preview_instance_instance', {
@@ -25,7 +25,7 @@ export class PreviewInstance extends Construct {
       tags: { Name: `${config.tagPrefix}-preview-instance` },
       userData: readFileSync(
         './src/resources/scripts/preview-instance.sh',
-        'utf8'
+        'utf8',
       ),
       userDataReplaceOnChange: true,
       vpcSecurityGroupIds: config.securityGroupIds,

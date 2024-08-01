@@ -18,7 +18,7 @@ export class PreviewInstanceAlb extends Construct {
     subnets: Subnet[],
     securityGroupId: string,
     vpcId: string,
-    targetId: string
+    targetId: string,
   ) {
     super(scope, id);
 
@@ -71,7 +71,7 @@ export class PreviewInstanceAlb extends Construct {
             targetGroupArn: this.targetGroup.arn,
           },
         ],
-      }
+      },
     );
 
     this.httpListener = new LbListener(this, 'preview_instance_alb_http_80', {
@@ -98,7 +98,7 @@ export class PreviewInstanceAlb extends Construct {
       {
         targetGroupArn: this.targetGroup.arn,
         targetId,
-      }
+      },
     );
   }
 }

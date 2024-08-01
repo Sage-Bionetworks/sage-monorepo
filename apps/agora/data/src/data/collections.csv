@@ -1,0 +1,16 @@
+genes,rnaseq_differential_expression.json
+geneslinks,network.json
+geneinfo,gene_info.json
+teaminfo,team_info.json
+genesproteomics,proteomics.json
+genesmetabolomics,metabolomics.json
+genesneuropathcorr,neuropath_corr.json
+geneexpvalidation,target_exp_validation_harmonized.json
+genescoredistribution,distribution_data.json
+genesoverallscores,overall_scores.json
+rnaboxdistribution,rna_distribution_data.json
+proteomicsboxdistribution,proteomics_distribution_data.json
+proteomicstmt,proteomics_tmt.json
+proteomicssrm,proteomics_srm.json
+genesbiodomains,genes_biodomains.json
+biodomaininfo,biodomain_info.json

@@ -34,7 +34,6 @@
 | openchallenges-styles | OpenChallenges SCSS styles |
 | openchallenges-themes | OpenChallenges SCSS themes |
 | openchallenges-ui | OpenChallenges reusable UI components |
-| openchallenges-user-profile | OpenChallenges User profile page |
 | shared-assets | Assets shared by multiple TypeScript projects |
 | shared-java-util | Util library shared by multiple Java projects |
 | shared-styles | SCSS styles shared by multiple TypeScript projects |

@@ -69,7 +69,7 @@ export class Network extends Construct {
         cidrBlock: Fn.cidrsubnet(
           this.vpc.cidrBlock,
           4,
-          index + this.publicSubnets.length
+          index + this.publicSubnets.length,
         ),
         tags: {
           Name: `${nameTagPrefix}-private-subnet-${az}`,
@@ -104,7 +104,7 @@ export class Network extends Construct {
         {
           subnetId: subnet.id,
           routeTableId: this.publicRouteTable.id,
-        }
+        },
       );
     });
 
@@ -138,7 +138,7 @@ export class Network extends Construct {
         destinationCidrBlock: '0.0.0.0/0',
         natGatewayId: this.natGateway.id,
         routeTableId: this.privateRouteTable.id,
-      }
+      },
     );
 
     this.privateInternetAccessIpv6Route = new Route(
@@ -148,7 +148,7 @@ export class Network extends Construct {
         destinationIpv6CidrBlock: '::/0',
         egressOnlyGatewayId: this.eigw.id,
         routeTableId: this.privateRouteTable.id,
-      }
+      },
     );
 
     this.privateRouteTableAssociations = this.privateSubnets.map((subnet) => {
@@ -158,7 +158,7 @@ export class Network extends Construct {
         {
           subnetId: subnet.id,
           routeTableId: this.privateRouteTable.id,
-        }
+        },
       );
     });
   }

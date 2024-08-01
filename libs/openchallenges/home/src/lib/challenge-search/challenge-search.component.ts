@@ -50,7 +50,7 @@ export class ChallengeSearchComponent implements OnInit {
     private challengeService: ChallengeService,
     private challengePlatformService: ChallengePlatformService,
     private organizationService: OrganizationService,
-    @Inject(PLATFORM_ID) private platformId: string
+    @Inject(PLATFORM_ID) private platformId: string,
   ) {
     this.isPlatformServer = isPlatformServer(this.platformId);
   }

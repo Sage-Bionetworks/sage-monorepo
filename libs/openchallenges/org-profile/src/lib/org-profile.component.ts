@@ -83,7 +83,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
     private imageService: ImageService,
     private seoService: SeoService,
     private renderer2: Renderer2,
-    private _location: Location
+    private _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -96,7 +96,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
     // add more status codes if found
     this.organization$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.organizationService.getOrganization(params['orgLogin'])
+        this.organizationService.getOrganization(params['orgLogin']),
       ),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
@@ -106,7 +106,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
         return throwError(() => error);
       }),
       shareReplay(1),
-      take(1)
+      take(1),
     );
 
     this.organizationAvatar$ = this.organization$.pipe(
@@ -114,7 +114,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
         forkJoin({
           org: of(org),
           avatarUrl: this.getOrganizationImageUrl(org, ImageHeight._250px),
-        })
+        }),
       ),
       map(
         ({ org, avatarUrl }) =>
@@ -122,12 +122,12 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
             name: org.name,
             src: avatarUrl?.url,
             size: 250,
-          } as Avatar)
-      )
+          }) as Avatar,
+      ),
     );
 
     const seoOrgImage$ = this.organization$.pipe(
-      switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px))
+      switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px)),
     );
 
     const activeTabKey$: Observable<string> =
@@ -135,8 +135,8 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
         map((params) =>
           Object.keys(this.tabs).includes(params['tab'])
             ? params['tab']
-            : 'overview'
-        )
+            : 'overview',
+        ),
       );
 
     const combineSub = combineLatest({
@@ -157,7 +157,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
 
   private getOrganizationImageUrl(
     org: Organization,
-    height: ImageHeight
+    height: ImageHeight,
   ): Observable<Image> {
     return this.imageService
       .getImage({
@@ -168,10 +168,10 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
       .pipe(
         catchError(() => {
           console.error(
-            'Unable to get the image url. Please check the logs of the image service.'
+            'Unable to get the image url. Please check the logs of the image service.',
           );
           return of({ url: '' });
-        })
+        }),
       );
   }
 
