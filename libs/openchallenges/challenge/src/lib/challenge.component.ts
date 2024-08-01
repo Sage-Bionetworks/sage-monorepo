@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
-  Challenge,
+  ChallengeJsonLd,
   ChallengeService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import {
@@ -65,7 +65,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
 
-  challenge$!: Observable<Challenge>;
+  challenge$!: Observable<ChallengeJsonLd>;
   loggedIn = false;
   challengeAvatar!: Avatar;
   tabs = CHALLENGE_TABS;
@@ -91,7 +91,12 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.challenge$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.challengeService.getChallenge(params['challengeId']),
+        this.challengeService.getChallenge(
+          params['challengeId'],
+          undefined,
+          undefined,
+          { httpHeaderAccept: 'application/ld+json' },
+        ),
       ),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
@@ -112,6 +117,7 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       };
 
       this.seoService.setData(getSeoData(challenge), this.renderer2);
+      this.seoService.setJsonLds([challenge], this.renderer2);
     });
 
     const activeTabKey$: Observable<string> =

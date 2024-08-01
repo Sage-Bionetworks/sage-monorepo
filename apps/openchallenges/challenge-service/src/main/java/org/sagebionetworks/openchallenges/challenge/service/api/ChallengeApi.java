@@ -15,6 +15,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.springframework.http.ResponseEntity;
@@ -50,8 +51,8 @@ public interface ChallengeApi {
                   mediaType = "application/json",
                   schema = @Schema(implementation = ChallengeDto.class)),
               @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengeDto.class))
+                  mediaType = "application/ld+json",
+                  schema = @Schema(implementation = ChallengeJsonLdDto.class)),
             }),
         @ApiResponse(
             responseCode = "404",
@@ -59,6 +60,9 @@ public interface ChallengeApi {
             content = {
               @Content(
                   mediaType = "application/json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
+                  mediaType = "application/ld+json",
                   schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
                   mediaType = "application/problem+json",
@@ -72,6 +76,9 @@ public interface ChallengeApi {
                   mediaType = "application/json",
                   schema = @Schema(implementation = BasicErrorDto.class)),
               @Content(
+                  mediaType = "application/ld+json",
+                  schema = @Schema(implementation = BasicErrorDto.class)),
+              @Content(
                   mediaType = "application/problem+json",
                   schema = @Schema(implementation = BasicErrorDto.class))
             })
@@ -79,8 +86,8 @@ public interface ChallengeApi {
   @RequestMapping(
       method = RequestMethod.GET,
       value = "/challenges/{challengeId}",
-      produces = {"application/json", "application/problem+json"})
-  default ResponseEntity<ChallengeDto> getChallenge(
+      produces = {"application/json", "application/ld+json", "application/problem+json"})
+  default ResponseEntity<?> getChallenge(
       @Parameter(
               name = "challengeId",
               description = "The unique identifier of the challenge.",

@@ -80,6 +80,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Challenge'
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/ChallengeJsonLd'
           description: A challenge
         "404":
           content:
@@ -862,6 +865,12 @@ components:
       x-java-class-annotations:
       - '@lombok.AllArgsConstructor'
       - '@lombok.Builder'
+    ChallengeJsonLd:
+      allOf:
+      - $ref: '#/components/schemas/Challenge'
+      - $ref: '#/components/schemas/ChallengeJsonLd_allOf'
+      description: A challenge
+      type: object
     ChallengeContributionRole:
       description: The nature of a challenge contribution.
       enum:
@@ -1109,6 +1118,23 @@ components:
           type: array
       required:
       - challenges
+      type: object
+      example: null
+    ChallengeJsonLd_allOf:
+      properties:
+        '@context':
+          example: https://schema.org
+          type: string
+        '@id':
+          example: https://openchallenges.io/api/v1/challenges/1
+          type: string
+        '@type':
+          example: Challenge
+          type: string
+      required:
+      - '@context'
+      - '@id'
+      - '@type'
       type: object
       example: null
     ChallengeContributionsPage_allOf:

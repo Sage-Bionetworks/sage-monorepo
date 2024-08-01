@@ -5,9 +5,11 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.openchallenges.challenge.service.exception.ChallengeNotFoundException;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
+import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeJsonLdDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.entity.ChallengeEntity;
+import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeJsonLdMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.mapper.ChallengeMapper;
 import org.sagebionetworks.openchallenges.challenge.service.model.repository.ChallengeRepository;
 import org.springframework.data.domain.Page;
@@ -29,6 +31,7 @@ public class ChallengeService {
   // @Autowired private ProducerService producerService;
 
   private ChallengeMapper challengeMapper = new ChallengeMapper();
+  private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
 
   private static final List<String> SEARCHABLE_FIELDS =
       Arrays.asList(
@@ -72,15 +75,22 @@ public class ChallengeService {
 
   @Transactional(readOnly = true)
   public ChallengeDto getChallenge(Long challengeId) {
-    ChallengeEntity challengeEntity =
-        challengeRepository
-            .findById(challengeId)
-            .orElseThrow(
-                () ->
-                    new ChallengeNotFoundException(
-                        String.format("The challenge with ID %d does not exist.", challengeId)));
-    log.info("challenge entity platform: {}", challengeEntity.getPlatform());
-    ChallengeDto challenge = challengeMapper.convertToDto(challengeEntity);
-    return challenge;
+    ChallengeEntity challengeEntity = getChallengeEntity(challengeId);
+    return challengeMapper.convertToDto(challengeEntity);
+  }
+
+  @Transactional(readOnly = true)
+  public ChallengeJsonLdDto getChallengeJsonLd(Long challengeId) {
+    ChallengeEntity challengeEntity = getChallengeEntity(challengeId);
+    return challengeJsonLdMapper.convertToDto(challengeEntity);
+  }
+
+  private ChallengeEntity getChallengeEntity(Long challengeId) throws ChallengeNotFoundException {
+    return challengeRepository
+        .findById(challengeId)
+        .orElseThrow(
+            () ->
+                new ChallengeNotFoundException(
+                    String.format("The challenge with ID %d does not exist.", challengeId)));
   }
 }

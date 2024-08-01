@@ -2,7 +2,6 @@ package org.sagebionetworks.openchallenges.challenge.service.api;
 
 import java.util.Optional;
 import javax.annotation.Generated;
-import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengeSearchQueryDto;
 import org.sagebionetworks.openchallenges.challenge.service.model.dto.ChallengesPageDto;
 import org.springframework.http.HttpStatus;
@@ -29,7 +28,7 @@ public interface ChallengeApiDelegate {
    *     or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see ChallengeApi#getChallenge
    */
-  default ResponseEntity<ChallengeDto> getChallenge(Long challengeId) {
+  default ResponseEntity<?> getChallenge(Long challengeId) {
     getRequest()
         .ifPresent(
             request -> {
@@ -38,6 +37,12 @@ public interface ChallengeApiDelegate {
                   String exampleString =
                       "{ \"avatarUrl\" : \"https://openchallenges.io\", \"endDate\" : \"2017-07-21T00:00:00.000+00:00\", \"description\" : \"This is an example description of the challenge.\", \"platform\" : { \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\" }, \"starredCount\" : 100, \"createdAt\" : \"2022-07-04T22:19:11Z\", \"incentives\" : [ \"publication\", \"publication\" ], \"submissionTypes\" : [ \"container_image\", \"container_image\" ], \"websiteUrl\" : \"https://openchallenges.io\", \"name\" : \"name\", \"id\" : 1, \"categories\" : [ \"featured\", \"featured\" ], \"headline\" : \"Example challenge headline\", \"operation\" : { \"classId\" : \"http://edamontology.org/data_0850\", \"preferredLabel\" : \"Sequence set\", \"id\" : 1 }, \"slug\" : \"awesome-challenge\", \"startDate\" : \"2017-07-21T00:00:00.000+00:00\", \"doi\" : \"https://doi.org/123/abc\", \"status\" : \"active\", \"inputDataTypes\" : [ { \"classId\" : \"http://edamontology.org/data_0850\", \"preferredLabel\" : \"Sequence set\", \"id\" : 1 }, { \"classId\" : \"http://edamontology.org/data_0850\", \"preferredLabel\" : \"Sequence set\", \"id\" : 1 } ], \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
                   ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                  break;
+                }
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/ld+json"))) {
+                  String exampleString =
+                      "Custom MIME type example not yet supported: application/ld+json";
+                  ApiUtil.setExampleResponse(request, "application/ld+json", exampleString);
                   break;
                 }
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {

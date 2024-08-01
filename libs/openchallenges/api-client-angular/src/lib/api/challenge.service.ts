@@ -23,6 +23,8 @@ import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { Challenge } from '../model/challenge';
 // @ts-ignore
+import { ChallengeJsonLd } from '../model/challengeJsonLd';
+// @ts-ignore
 import { ChallengeSearchQuery } from '../model/challengeSearchQuery';
 // @ts-ignore
 import { ChallengesPage } from '../model/challengesPage';
@@ -104,10 +106,11 @@ export class ChallengeService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
+    public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<ChallengeJsonLd>;
     public getChallenge(challengeId: number, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<Challenge>;
-    public getChallenge(challengeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Challenge>>;
-    public getChallenge(challengeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Challenge>>;
-    public getChallenge(challengeId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
+    public getChallenge(challengeId: number, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<HttpResponse<Challenge>>;
+    public getChallenge(challengeId: number, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<HttpEvent<Challenge>>;
+    public getChallenge(challengeId: number, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json', context?: HttpContext}): Observable<any> {
         if (challengeId === null || challengeId === undefined) {
             throw new Error('Required parameter challengeId was null or undefined when calling getChallenge.');
         }
@@ -119,6 +122,7 @@ export class ChallengeService {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
                 'application/json',
+                'application/ld+json',
                 'application/problem+json'
             ];
             localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
