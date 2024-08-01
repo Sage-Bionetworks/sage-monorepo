@@ -1129,7 +1129,7 @@ components:
           example: https://openchallenges.io/api/v1/challenges/1
           type: string
         '@type':
-          example: bts:Challenge
+          example: Challenge
           type: string
       required:
       - '@context'

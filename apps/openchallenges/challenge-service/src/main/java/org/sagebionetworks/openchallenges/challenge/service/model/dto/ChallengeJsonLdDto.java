@@ -640,7 +640,7 @@ public class ChallengeJsonLdDto {
    * @return atType
    */
   @NotNull
-  @Schema(name = "@type", example = "bts:Challenge", required = true)
+  @Schema(name = "@type", example = "Challenge", required = true)
   public String getAtType() {
     return atType;
   }
