@@ -18,6 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Ensure image name is lower case
         id: image_name
         uses: vishalmamidi/lowercase-action@v1
