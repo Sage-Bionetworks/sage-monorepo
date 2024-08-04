@@ -13,23 +13,21 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  trivy-matrix:
-    name: periodic scan
+  lower-case:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
       - name: Ensure image name is lower case
         id: image_name
         uses: vishalmamidi/lowercase-action@v1
         with:
           string: ghcr.io/${{ github.repository }}:main
+    outputs:
+      lowercase: ${{ steps.image_name.outputs.lowercase }}
 
-      - name: Run Trivy
-        uses: "./.github/workflows/trivy.yml"
-        with:
-          SOURCE_TYPE: image
-          IMAGE_NAME: ${{ steps.image_name.outputs.lowercase }}
+  periodic-scan:
+    needs: lower-case
+    uses: "./.github/workflows/trivy.yml"
+    with:
+      SOURCE_TYPE: image
+      IMAGE_NAME: ${{ needs.lower-case.outputs.lowercase }}
 ...
