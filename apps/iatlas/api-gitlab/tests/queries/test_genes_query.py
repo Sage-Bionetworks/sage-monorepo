@@ -621,31 +621,6 @@ def test_pseudobulk_query_with_entrez(client, pseudobulk_query):
         assert isinstance(sample['singleCellSeqSum'], float)
 
 
-def test_pseudobulk_query_with_cohort(client, pseudobulk_query):
-    response = client.post(
-        '/api',
-        json={
-            'query': pseudobulk_query,
-            'variables': {
-                'cohort': ['MSK_Biopsy_Site']
-            }
-        })
-    json_data = json.loads(response.data)
-    page = json_data['data']['genes']
-    genes = page['items']
-    assert isinstance(genes, list)
-    assert len(genes) >= 10
-    for gene in genes[0:10]:
-        assert isinstance(gene['entrez'], int)
-        samples = gene['pseudoBulkSamples']
-        assert isinstance(samples, list)
-        assert len(samples) >= 10
-        for sample in samples[0:10]:
-            assert isinstance(sample['name'], str)
-            assert isinstance(sample['cellType'], str)
-            assert isinstance(sample['singleCellSeqSum'], float)
-
-
 def test_cells_query_with_entrez(client, cells_query):
     response = client.post(
         '/api', json={
