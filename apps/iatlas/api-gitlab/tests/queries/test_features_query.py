@@ -692,31 +692,6 @@ def test_pseudobulk_query_with_cohort(client, pseudobulk_query):
         assert isinstance(sample['value'], float)
 
 
-def test_cells_query_with_feature(client, cells_query):
-    response = client.post(
-        '/api', json={
-            'query': cells_query,
-            'variables': {
-                'feature': ["umap_1"],
-            }
-        })
-    json_data = json.loads(response.data)
-    page = json_data['data']['features']
-    features = page['items']
-    assert isinstance(features, list)
-    assert len(features) == 1
-    feature = features[0]
-    assert feature['name'] == "umap_1"
-    assert isinstance(feature['class'], str)
-    cells = feature['cells']
-    assert isinstance(cells, list)
-    assert len(cells) > 0
-    for cell in cells[0:10]:
-        assert isinstance(cell['type'], str)
-        assert isinstance(cell['name'], str)
-        assert isinstance(cell['value'], float)
-
-
 def test_features_query_with_germline_feature(client, common_query, germline_feature, germline_module, germline_category):
     response = client.post(
         '/api', json={

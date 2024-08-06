@@ -9,162 +9,158 @@ variables:
 default:
   # This runs on every job that doesn't have a 'before_script'.
   before_script:
-    - pip3 install awscli --upgrade --user
-    - export PATH=$HOME/.local/bin:$PATH
-    - source ~/.profile
+    # Install aws cli (also installs jq) - (Running on Alpine)
+    - apk update
+    - apk add --no-cache aws-cli jq
     - aws --version
 
 stages:
+  - test_code
+  - publish_coverage
   - build_container
   - deploy
 
-# tests:
-#   tags:
-#     - staging
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
-#   stage: test_code
-#   image: python:3.8-slim-bookworm
-#   variables:
-#     FLASK_ENV: "test"
-#   script:
-#     # Install dependencies for the app.
-#     # (The dev dependencies are needed for testing.)
-#     - apt-get update
-#     - apt-get upgrade
-#     - apt-get -y install jq
-#     - apt-get -y install openssh-client libpq-dev
-#     - apt-get -y install gcc musl-dev postgresql
-#     - pip install --no-cache-dir -r ./requirements.txt
-#     - pip install --no-cache-dir -r ./requirements-dev.txt
-#     # Get DB Secrets from AWS
-#     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
-#     - export POSTGRES_USER=$(echo $creds | jq -r .username)
-#     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
-#     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
-#     # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
-#     - export POSTGRES_HOST=$DB_HOST
-#     - export POSTGRES_PORT=$DB_PORT
-#     # Run test coverage using as many cores as are available.
-#     - pytest --cov --cov-report html -n auto
-#   artifacts:
-#     expose_as: "coverage-mr"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
+tests:
+  tags:
+    - staging
+  only:
+    - merge_requests
+  except:
+    variables:
+      - '$CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "master"'
+  stage: test_code
+  image: python:3.8-alpine
+  variables:
+    FLASK_ENV: "test"
+  script:
+    # Install dependencies for the app.
+    # (The dev dependencies are needed for testing.)
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
+    # Get DB Secrets from AWS
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
+    # Run test coverage using as many cores as are available.
+    - pytest --cov --cov-report html -n auto
+  artifacts:
+    expose_as: "coverage-mr"
+    paths:
+      - coverage
+    expire_in: 30 days
 
-# tests:coverage-report-staging:
-#   tags:
-#     - staging
-#   only:
-#     - staging
-#   stage: test_code
-#   image: python:3.8-slim-bookworm
-#   variables:
-#     FLASK_ENV: "staging"
-#   script:
-#     # Install dependencies for the app.
-#     # (The dev dependencies are needed for testing.)
-#     - apt-get update
-#     - apt-get upgrade
-#     - apt-get -y install jq
-#     - apt-get -y install openssh-client libpq-dev
-#     - apt-get -y install gcc musl-dev postgresql
-#     - pip install --no-cache-dir -r ./requirements.txt
-#     - pip install --no-cache-dir -r ./requirements-dev.txt
-#     # Get DB Secrets from AWS.
-#     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING} --region "us-east-1")
-#     - export POSTGRES_USER=$(echo $creds | jq -r .username)
-#     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
-#     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
-#     # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
-#     - export POSTGRES_HOST=$DB_HOST
-#     - export POSTGRES_PORT=$DB_PORT
-#     # Run test coverage using as many cores as are available.
-#     # Output the results to an xml document.
-#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
-#     # Get the coverage value for the badge.
-#     - coverage report --skip-covered | grep TOTAL
-#   artifacts:
-#     expose_as: "coverage-staging"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
-#     reports:
-#       # Make the coverage xml available.
-#       coverage_report:
-#         coverage_format: cobertura
-#         path: coverage/iatlas-api_coverage_staging.xml
+tests:coverage-report-staging:
+  tags:
+    - staging
+  only:
+    - staging
+  stage: test_code
+  image: python:3.8-alpine
+  variables:
+    FLASK_ENV: "staging"
+  script:
+    # Install dependencies for the app.
+    # (The dev dependencies are needed for testing.)
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
+    # Get DB Secrets from AWS.
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_STAGING})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
+    # Run test coverage using as many cores as are available.
+    # Output the results to an xml document.
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    # Get the coverage value for the badge.
+    - coverage report --skip-covered | grep TOTAL
+  artifacts:
+    expose_as: "coverage-staging"
+    paths:
+      - coverage
+    expire_in: 30 days
+    reports:
+      # Make the coverage xml available.
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/iatlas-api_coverage_staging.xml
 
 
-# tests:coverage-report-prod:
-#   tags:
-#     - prod
-#   only:
-#     - master
-#   stage: test_code
-#   image: python:3.8-slim-bookworm
-#   variables:
-#     FLASK_ENV: "production"
-#   script:
-#     # Install dependencies for the app.
-#     # (The dev dependencies are needed for testing.)
-#     - apt-get update
-#     - apt-get upgrade
-#     - apt-get -y install jq
-#     - apt-get -y install openssh-client libpq-dev
-#     - apt-get -y install gcc musl-dev postgresql
-#     - pip install --no-cache-dir -r ./requirements.txt
-#     - pip install --no-cache-dir -r ./requirements-dev.txt
-#     # Get DB Secrets from AWS.
-#     - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD} --region "us-east-1")
-#     - export POSTGRES_USER=$(echo $creds | jq -r .username)
-#     - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
-#     - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
-#     # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
-#     - export POSTGRES_HOST=$DB_HOST
-#     - export POSTGRES_PORT=$DB_PORT
-#     # Run test coverage using as many cores as are available.
-#     # Output the results to an xml document.
-#     - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
-#     # Get the coverage value for the badge.
-#     - coverage report --skip-covered | grep TOTAL
-#   artifacts:
-#     expose_as: "coverage-prod"
-#     paths:
-#       - coverage
-#     expire_in: 30 days
-#     reports:
-#       # Make the coverage xml available.
-#       coverage_report:
-#         coverage_format: cobertura
-#         path: coverage/iatlas-api_coverage.xml
+tests:coverage-report-prod:
+  tags:
+    - prod
+  only:
+    - master
+  stage: test_code
+  image: python:3.8-alpine
+  variables:
+    FLASK_ENV: "production"
+  script:
+    # Install dependencies for the app.
+    # (The dev dependencies are needed for testing.)
+    - apk add --no-cache openssh libpq
+    - apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev linux-headers
+    - pip install --no-cache-dir -r ./requirements.txt
+    - pip install --no-cache-dir -r ./requirements-dev.txt
+    - apk del --no-cache .build-deps
+    # Get DB Secrets from AWS.
+    - creds=$(aws --output text --query SecretString secretsmanager get-secret-value --secret-id ${DB_SECRET_NAME_PROD})
+    - export POSTGRES_USER=$(echo $creds | jq -r .username)
+    - export POSTGRES_PASSWORD=$(echo $creds | jq -r .password)
+    - export POSTGRES_DB=$(echo $creds | jq -r .db_name)
+    # (The DB_HOST and DB_PORT variables comes from the GitLab runner itself.)
+    - export POSTGRES_HOST=$DB_HOST
+    - export POSTGRES_PORT=$DB_PORT
+    # Run test coverage using as many cores as are available.
+    # Output the results to an xml document.
+    - pytest --cov --cov-report html --cov-report xml:coverage/iatlas-api_coverage.xml --cov-report term:skip-covered -n auto
+    # Get the coverage value for the badge.
+    - coverage report --skip-covered | grep TOTAL
+  artifacts:
+    expose_as: "coverage-prod"
+    paths:
+      - coverage
+    expire_in: 30 days
+    reports:
+      # Make the coverage xml available.
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage/iatlas-api_coverage.xml
 
 
-# pages:
-#   tags:
-#     - staging
-#   only:
-#     - merge_requests
-#   except:
-#     variables:
-#       - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
-#   stage: publish_coverage
-#   dependencies:
-#     - tests
-#   before_script:
-#     - echo "Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
-#   script:
-#     - mv ./coverage/ ./public/
-#     - echo "Coverage available at ${CI_PAGES_URL}"
-#   artifacts:
-#     expose_as: "coverage"
-#     paths:
-#       - public
-#     expire_in: 30 days
+pages:
+  tags:
+    - staging
+  only:
+    - merge_requests
+  except:
+    variables:
+      - $CI_MERGE_REQUEST_TARGET_BRANCH_NAME != "staging"
+  stage: publish_coverage
+  dependencies:
+    - tests
+  before_script:
+    - echo "Publishing ${CI_MERGE_REQUEST_TARGET_BRANCH_NAME} coverage."
+  script:
+    - mv ./coverage/ ./public/
+    - echo "Coverage available at ${CI_PAGES_URL}"
+  artifacts:
+    expose_as: "coverage"
+    paths:
+      - public
+    expire_in: 30 days
 
 # Build the Staging container with the app in it.
 # Save it to the container repo as the latest and as the commit name (so it may be re-used if needed).
@@ -216,11 +212,11 @@ Deploy:Staging:
   only:
     - staging
   stage: deploy
-  image: python:3.8-slim-bookworm
+  image: python:3.8-alpine
   script:
     - echo "Deploying iAtlas API to Staging"
     # Force update the ECS service. It should be using the latest image (staging-latest).
-    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment --region "us-east-1"
+    - aws ecs update-service --cluster iatlas-staging-EcsCluster --service iatlas-staging-EcsService --force-new-deployment
 
 Deploy:Prod:
   tags:
@@ -228,8 +224,8 @@ Deploy:Prod:
   only:
     - master
   stage: deploy
-  image: python:3.8-slim-bookworm
+  image: python:3.8-alpine
   script:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
-    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment --region "us-east-1"
+    - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
