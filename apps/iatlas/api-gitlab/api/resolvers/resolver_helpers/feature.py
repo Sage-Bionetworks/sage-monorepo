@@ -38,6 +38,8 @@ simple_feature_request_fields2 = {
 
 cell_feature_request_fields = simple_feature_request_fields.union({'value'})
 
+cell_related_feature_request_fields = {'name', 'value'}
+
 feature_request_fields = simple_feature_request_fields.union({
     'class',
     'methodTag',
@@ -112,6 +114,7 @@ def build_feature_graphql_response(
             'valueMax': value_max if type(value_max) is Decimal else None,
             'value': get_value(feature, prefix + 'value'),
         }
+
         return(result)
     return f
 
