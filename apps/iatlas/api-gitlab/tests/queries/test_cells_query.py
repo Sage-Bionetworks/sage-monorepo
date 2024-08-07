@@ -45,6 +45,35 @@ def common_query(common_query_builder):
     """
     )
 
+@pytest.fixture(scope='module')
+def feature_query(common_query_builder):
+    return common_query_builder(
+        """
+    {
+        items {
+            name
+            type
+            features {
+              name
+              value
+            }
+        }
+        paging {
+            type
+            pages
+            total
+            startCursor
+            endCursor
+            hasPreviousPage
+            hasNextPage
+            page
+            limit
+        }
+        error
+    }
+    """
+    )
+
 
 def test_cells_cursor_pagination_first(client, common_query_builder):
     query = common_query_builder("""{
@@ -168,10 +197,10 @@ def test_cell_query_with_cell(client, common_query):
     assert isinstance(result['type'], str)
 
 
-def test_cell_query_with_cohort(client, common_query):
+def test_feature_query_with_cohort(client, feature_query):
     response = client.post(
         '/api',
-        json={'query': common_query, 'variables': {'cohort': ['MSK_Biopsy_Site']}}
+        json={'query': feature_query, 'variables': {'cohort': ['MSK_Biopsy_Site']}}
     )
     json_data = json.loads(response.data)
     page = json_data['data']['cells']
@@ -181,3 +210,7 @@ def test_cell_query_with_cohort(client, common_query):
     for result in results[0:10]:
         assert isinstance(result['name'], str)
         assert isinstance(result['type'], str)
+        assert isinstance(result['features'], list)
+        for feature in result['features']:
+            assert isinstance(feature['name'], str)
+            assert isinstance(feature['value'], float)

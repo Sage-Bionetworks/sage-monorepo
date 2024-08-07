@@ -11,6 +11,7 @@ cell_request_fields = {
     'id',
     'type',
     'name',
+    'features'
 }
 
 feature_related_cell_request_fields = {
@@ -27,20 +28,32 @@ gene_related_cell_request_fields = {
 
 def build_cell_graphql_response(
     requested=[],
+    feature_requested=None,
     prefix='cell_'
 ):
+
+    from .feature import build_feature_graphql_response
 
     def f(cell):
         if not cell:
             return None
 
         id = get_value(cell, prefix + 'id')
+
+        features = get_features(
+            [id],
+            requested=requested,
+            feature_requested=feature_requested
+        )
+
+
         result = {
             'id': id,
             'type': get_value(cell, prefix + 'type'),
             'name': get_value(cell, prefix + 'name'),
             'value': get_value(cell, prefix + 'feature_value'),
             'singleCellSeq': get_value(cell, prefix + 'single_cell_seq'),
+            'features': map(build_feature_graphql_response(), features),
         }
         return result
     return f
@@ -51,7 +64,8 @@ def build_cell_request(
         distinct=False,
         paging=None,
         cohort=None,
-        cell=None
+        cell=None,
+        feature=None
 ):
     sess = db.session
 
@@ -120,3 +134,43 @@ def build_cell_request(
         query = query.filter(cell_1.id.in_(cohort_subquery))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=cell_1.id)
+
+def get_features(cell_id, requested, feature_requested, cohort=None):
+
+    if 'features' not in requested:
+        return []
+
+    sess = db.session
+
+    feature_1 = aliased(Feature, name='f')
+    cell_to_feature_1 = aliased(CellToFeature, name='celltofeature')
+
+    feature_core_field_mapping = {
+        'name': feature_1.name.label('feature_name')
+    }
+
+    feature_core = get_selected(feature_requested, feature_core_field_mapping)
+
+    feature_core |= {
+        feature_1.id.label('feature_id')
+    }
+
+    if 'value' in feature_requested:
+        feature_core |= {
+            cell_to_feature_1.feature_value.label('feature_value')
+        }
+
+    query = sess.query(*feature_core)
+    query = query.select_from(feature_1)
+
+    cell_to_feature_join_condition = build_join_condition(
+        feature_1.id,
+        cell_to_feature_1.feature_id,
+        cell_to_feature_1.cell_id,
+        cell_id
+    )
+    query = query.join(
+        cell_to_feature_1, and_(*cell_to_feature_join_condition))
+
+    features = query.distinct().all()
+    return features

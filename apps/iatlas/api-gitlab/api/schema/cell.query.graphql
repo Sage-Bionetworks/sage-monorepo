@@ -8,6 +8,8 @@ type CellNode implements BaseNode {
   type: String!
   "The name of the cell"
   name: String!
+  "A list of features that the cell has a value"
+  features: [CellRelatedFeature!]!
 }
 
 type Cell implements BaseResult {
@@ -17,4 +19,14 @@ type Cell implements BaseResult {
   error: String
   "A list of returned CellNodes"
   items: [CellNode]
+}
+
+"""
+The "CellRelatedFeature" is a version of a `Feature` used by `Cell`.
+"""
+type CellRelatedFeature {
+  "The features name."
+  name: String!
+  "The value of the feature for this cell"
+  value: Float!
 }

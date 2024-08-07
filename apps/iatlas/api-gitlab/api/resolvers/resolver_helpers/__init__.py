@@ -13,6 +13,7 @@ from .feature import (
     simple_feature_request_fields,
     simple_feature_request_fields2,
     cell_feature_request_fields,
+    cell_related_feature_request_fields,
     build_features_query
 )
 from .gene import (
