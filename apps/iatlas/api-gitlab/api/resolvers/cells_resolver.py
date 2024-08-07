@@ -34,7 +34,8 @@ def resolve_cells(
         # Add the id as a cursor if not selecting distinct
         requested.add('id')
 
-    paging = paging if paging else Paging.DEFAULT
+    max_items = 20 if 'features' in requested else 100_000
+    paging = create_paging(paging, max_items)
 
     query, count_query = build_cell_request(
         requested,
@@ -46,9 +47,6 @@ def resolve_cells(
     )
 
     pagination_requested = get_requested(info, paging_fields, 'paging')
-
-    max_items = 20 if 'features' in requested else 100_000
-    paging = create_paging(paging, max_items)
 
     res = paginate(
         query,
