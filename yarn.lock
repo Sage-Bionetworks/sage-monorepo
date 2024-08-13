@@ -27226,25 +27226,25 @@ __metadata:
   languageName: node
   linkType: hard
 
-"primeicons@npm:6.0.1":
-  version: 6.0.1
-  resolution: "primeicons@npm:6.0.1"
-  checksum: a1412fee16ddbd24e06052a7e94b973cf6f68fadb5349192101388f2681f822b3bde077948e6d53e9949f87148b495e4bf2b149ad07242de068d2e7233f4446c
+"primeicons@npm:7.0.0":
+  version: 7.0.0
+  resolution: "primeicons@npm:7.0.0"
+  checksum: bb7c2fa71d1039f58e52b7ffaa08936c8fc1b10cf462aa2bd769fb16ebd68094a5f0eb51cc362bf49e48392b2fbc2c0754175a72830db800572e64b69c06a03b
   languageName: node
   linkType: hard
 
-"primeng@npm:16.1.0":
-  version: 16.1.0
-  resolution: "primeng@npm:16.1.0"
+"primeng@npm:17.18.8":
+  version: 17.18.8
+  resolution: "primeng@npm:17.18.8"
   dependencies:
     tslib: ^2.3.0
   peerDependencies:
-    "@angular/common": ^16.0.0
-    "@angular/core": ^16.0.0
-    "@angular/forms": ^16.0.0
+    "@angular/common": ^17.0.0 || ^18.0.0
+    "@angular/core": ^17.0.0 || ^18.0.0
+    "@angular/forms": ^17.0.0 || ^18.0.0
     rxjs: ^6.0.0 || ^7.8.1
-    zone.js: ~0.13.0
-  checksum: fab8191aad3dfead577fdeec1b3a21b265e521b4031b355aa3d91b7ec07a184ff4dd20b87bc3c429999131adb3f4f3b1058901a626fe5f6174b30354da708ba1
+    zone.js: ~0.14.0
+  checksum: a07cc873735fb8fa9fc88ca782169338075f296ec4b90ae38f31fe769c2e4094151f9be58fd3904958571be051b98b6781eef47a477816cb9795cff8d734c40f
   languageName: node
   linkType: hard
 
@@ -28867,8 +28867,8 @@ __metadata:
     postcss-preset-env: ^7.8.3
     postcss-url: ^10.1.3
     prettier: 3.3.3
-    primeicons: 6.0.1
-    primeng: 16.1.0
+    primeicons: 7.0.0
+    primeng: 17.18.8
     probot: 12.2.8
     react: ^18.2.0
     react-dom: ^18.2.0
