@@ -5,9 +5,13 @@ sc_immune_features_server <- function(id, cohort_obj){
 
       ns <- session$ns
 
+      single_cell_datasets <- shiny::reactive(
+        iatlasGraphQLClient::query_datasets(types = "scrna")
+      )
+
       pseudobulk_df <- shiny::reactive({
         iatlasGraphQLClient::query_pseudobulk_feature_values() %>% #TODO: update when data in cohort_obj
-          dplyr::inner_join(iatlasGraphQLClient::query_dataset_samples(c("MSK", "Vanderbilt")), by = "sample_name") %>%
+          dplyr::inner_join(iatlasGraphQLClient::query_dataset_samples(single_cell_datasets()$name), by = "sample_name") %>%
           dplyr::select(
             "sample_name",
             "group" = "cell_type",
@@ -19,7 +23,7 @@ sc_immune_features_server <- function(id, cohort_obj){
           )
       })
 
-      categories_df <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = c("MSK", "Vanderbilt")) %>% #TODO: update when data is in ccohort_obj
+      categories_df <- shiny::reactive(iatlasGraphQLClient::query_tags(datasets = single_cell_datasets()$name) %>% #TODO: update when data is in cohort_obj
                                          dplyr::mutate(class = dplyr::case_when(
                                            tag_name %in% c( "Response", "Responder", "Progression", "Clinical_Benefit") ~ "Response to ICI",
                                            TRUE ~ "Treatment Data")) %>%
