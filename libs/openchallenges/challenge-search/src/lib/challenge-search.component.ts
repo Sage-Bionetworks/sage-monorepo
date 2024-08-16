@@ -214,7 +214,7 @@ export class ChallengeSearchComponent
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
       this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
       this.sortedBy = params['sort'] || this.defaultSortedBy;
-
+      
       this.selectedValues['categories'] = this.splitParam(params['categories']);
       this.selectedValues['incentives'] = this.splitParam(params['incentives']);
       this.selectedValues['inputDataTypes'] = this.splitParam(
@@ -401,7 +401,7 @@ export class ChallengeSearchComponent
         },
       );
       this.dropdownFilters[searchType].options = selectedOptions;
-      this.challengeSearchDataService.setEdamConceptSearchQuery({
+      this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,
       });
     }
