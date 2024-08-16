@@ -92,5 +92,6 @@ jobs:
         uses: docker/build-push-action@v6.4.0
         with:
           context: .
+          push: true
           tags: ${{ matrix.value }}
 ...
