@@ -401,7 +401,7 @@ export class ChallengeSearchComponent
         },
       );
       this.dropdownFilters[searchType].options = selectedOptions;
-      this.challengeSearchDataService.setEdamConceptSearchQuery({
+      this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,
       });
     }
