@@ -49,9 +49,8 @@ jobs:
 
       - name: load docker image from tar file
         if: ${{ inputs.SOURCE_TYPE == 'tar' }}
-        run: cat ${{ steps.tar-download.outputs.download-path
-          }}/${{ inputs.TARFILE_NAME
-          }} | docker import - ${{ inputs.IMAGE_NAME }}
+        run: docker load -i ${{ steps.tar-download.outputs.download-path
+          }}/${{ inputs.TARFILE_NAME}}
 
       - name: Run Trivy vulnerability scanner for any major issues
         uses: aquasecurity/trivy-action@0.24.0
