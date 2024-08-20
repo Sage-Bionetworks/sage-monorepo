@@ -2,6 +2,7 @@
 
 args=(
   # List of services in alphanumeric order
+  --file docker/agora/services/api-docs.yml
   --file docker/agora/services/app.yml
   --file docker/agora/services/data.yml
   --file docker/agora/services/mongo.yml
