@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.commons.util.InetUtils;
 import org.springframework.cloud.netflix.eureka.EurekaInstanceConfigBean;
@@ -14,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 public class EurekaInstanceConfiguration {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(EurekaInstanceConfiguration.class);
+
+  @Value("${server.port}")
+  private String port;
 
   /**
    * If the application is planned to be deployed to an AWS cloud, the Eureka instance must be
@@ -38,9 +42,9 @@ public class EurekaInstanceConfiguration {
       LOGGER.error("Unable to get the host address.", e);
     }
     bean.setIpAddress(ip);
-    // bean.setPreferIpAddress(true);
-    // bean.setNonSecurePortEnabled(true);
-    // bean.setNonSecurePort(Integer.parseInt(port));
+    bean.setPreferIpAddress(true);
+    bean.setNonSecurePortEnabled(true);
+    bean.setNonSecurePort(Integer.parseInt(port));
     return bean;
   }
 }
