@@ -1,7 +1,7 @@
 # See https://docs.redoc.ly/cli/configuration/ for more information.
 apis:
   main:
-    root: '../../../libs/model-ad/api-description/build/openapi.yaml'
+    root: '../../../libs/agora/api-description/build/openapi.yaml'
 # theme:
 #   openapi:
 #     theme:
