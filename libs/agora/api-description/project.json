@@ -17,9 +17,7 @@
         "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "format": {
       "executor": "nx:run-commands",
