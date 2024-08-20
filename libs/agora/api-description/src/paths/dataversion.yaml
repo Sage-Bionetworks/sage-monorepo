@@ -1,9 +1,9 @@
 get:
   tags:
-    - Data
-  summary: Get data version
-  description: Get data version
-  operationId: getDataVersion
+    - Dataversion
+  summary: Get dataversion
+  description: Get dataversion
+  operationId: getDataversion
   # parameters:
   #   - $ref: ../components/parameters/query/challengeSearchQuery.yaml
   responses:
@@ -11,7 +11,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/DataVersion.yaml
+            $ref: ../components/schemas/Dataversion.yaml
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml

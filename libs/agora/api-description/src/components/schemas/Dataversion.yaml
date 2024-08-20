@@ -1,5 +1,5 @@
 type: object
-description: A data version
+description: A dataversion
 properties:
   data_file:
     type: string
