@@ -1,0 +1,19 @@
+get:
+  tags:
+    - Data
+  summary: Get data version
+  description: Get data version
+  operationId: getDataVersion
+  # parameters:
+  #   - $ref: ../components/parameters/query/challengeSearchQuery.yaml
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/DataVersion.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

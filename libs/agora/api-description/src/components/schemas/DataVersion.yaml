@@ -1,0 +1,13 @@
+type: object
+description: A data version
+properties:
+  data_file:
+    type: string
+  data_version:
+    type: string
+  team_images_id:
+    type: string
+required:
+  - data_file
+  - data_version
+  - team_images_id
