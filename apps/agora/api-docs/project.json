@@ -1,0 +1,87 @@
+{
+  "name": "agora-api-docs",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly build-docs --config redocly.yaml --template index.hbs --output build/redoc-static.html",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly preview-docs --config redocly.yaml --port 8010",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/agora/serve-detach.sh agora-api-docs"
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/agora/api-docs",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/agora-api-docs"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=sha"
+          ]
+        },
+        "push": false
+      },
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "publish-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/agora/api-docs",
+        "metadata": {
+          "images": [
+            "ghcr.io/sage-bionetworks/agora-api-docs"
+          ],
+          "tags": [
+            "type=edge,branch=main",
+            "type=sha"
+          ]
+        },
+        "push": true
+      },
+      "dependsOn": [
+        "build-image"
+      ]
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/agora-api-docs:local --quiet",
+        "color": true
+      }
+    }
+  },
+  "tags": [
+    "type:docs",
+    "scope:backend"
+  ],
+  "implicitDependencies": [
+    "agora-api-description"
+  ]
+}
