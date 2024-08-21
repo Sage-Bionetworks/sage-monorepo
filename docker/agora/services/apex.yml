@@ -1,0 +1,24 @@
+services:
+  agora-apex:
+    image: ghcr.io/sage-bionetworks/agora-apex:${AGORA_VERSION:-local}
+    container_name: agora-apex
+    restart: always
+    env_file:
+      - ../../../apps/agora/apex/.env
+    volumes:
+      - ../../../apps/agora/apex/Caddyfile:/etc/caddy/Caddyfile
+    networks:
+      - agora
+    ports:
+      - '8000:80'
+    depends_on:
+      agora-api-docs:
+        condition: service_healthy
+      agora-api:
+        condition: service_healthy
+      agora-app:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 200M

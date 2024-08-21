@@ -5,11 +5,11 @@ ENV APP_DIR=/app
 RUN apk add --no-cache curl jq su-exec
 
 WORKDIR /
-COPY apps/agora/server/docker-entrypoint.sh .
-RUN chmod +x docker-entrypoint.sh 
+COPY apps/agora/api/docker-entrypoint.sh .
+RUN chmod +x docker-entrypoint.sh
 
 WORKDIR ${APP_DIR}
-COPY dist/apps/agora/server ${APP_DIR}
+COPY dist/apps/agora/api ${APP_DIR}
 RUN npm install
 
 HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=5s \
