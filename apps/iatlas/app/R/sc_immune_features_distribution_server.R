@@ -140,13 +140,13 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                                   plot_function()(df =  dplyr::filter(df_selected(), dataset_name == x),
                                                   x_col = "group",
                                                   y_col = "y",
-                                                  xlab = xlabel(),
+                                                  #xlab = xlabel(),
                                                   ylab = varible_plot_label(),
                                                   custom_data = as.character(x),
                                                   fill_colors = group_colors(),
                                                   #source = "p1",
                                                   showlegend = F)  %>%
-                                    add_title_subplot_plotly(dataset_display()[[x]])%>%
+                                    add_title_subplot_plotly(dataset_display()[[x]]) %>%
                                     plotly::layout(
                                       xaxis = list(automargin = TRUE,
                                                    tickangle = 80,
@@ -198,7 +198,7 @@ sc_immune_features_distribution_server <- function(id, cohort_obj, gsea_df, feat
                        paired = paired_test(),
                        test = test_function(),
                        label = group,
-                       dataset_title = dataset_displays(),
+                       dataset_title = dataset_display(),
                        .f = get_stat_test)
       })
 
