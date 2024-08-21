@@ -4,6 +4,14 @@
     <h1>Page Not Found</h1>
     <p>Oops! The page you are looking for does not exist. It might have been moved or deleted.</p>
   </div>
+  <div *ngIf="dataversion$ | async as dataVersion">
+    <h3>Data Release Info</h3>
+    <ul>
+      <li>Data File: {{ dataVersion.data_file }}</li>
+      <li>Data Version: {{ dataVersion.data_version }}</li>
+      <li>Team Images Id: {{ dataVersion.team_images_id }}</li>
+    </ul>
+  </div>
   <div class="btn-group">
     <a mat-raised-button class="home-btn" href="/home">Home</a>
     <a
