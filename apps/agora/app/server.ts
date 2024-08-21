@@ -7,7 +7,7 @@ import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
 
-const PORT = process.env['PORT'] || '5200';
+const PORT = process.env['PORT'] || '4200';
 console.log(`server.ts: ${PORT}`);
 
 // The Express app is exported so that it can be used by serverless Functions.
