@@ -1,4 +1,4 @@
-package org.sagebionetworks.openchallenges.challenge.service.configuration;
+package org.sagebionetworks.openchallenges.image.service.configuration;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -29,7 +29,7 @@ public class EurekaInstanceConfiguration {
    */
   @Bean
   @ConditionalOnProperty(
-      value = "openchallenges-challenge-service.is-deployed-on-aws",
+      value = "openchallenges-image-service.is-deployed-on-aws",
       havingValue = "true",
       matchIfMissing = false)
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
