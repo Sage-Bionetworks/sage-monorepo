@@ -37,7 +37,7 @@ export class NotFoundComponent implements OnInit {
 
   constructor(
     private readonly configService: ConfigService,
-    private dataVersionService: DataversionService,
+    private dataversionService: DataversionService,
     private seoService: SeoService,
     private renderer2: Renderer2,
   ) {
@@ -51,6 +51,6 @@ export class NotFoundComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataversion$ = this.dataVersionService.getDataversion();
+    this.dataversion$ = this.dataversionService.getDataversion();
   }
 }

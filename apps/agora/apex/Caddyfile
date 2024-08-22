@@ -3,7 +3,8 @@
     reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
   }
 
-  handle_path /api* {
+  # Serve the API, stripping the /api prefix
+  handle_path /api/* {
     reverse_proxy {env.API_HOST}:{env.API_PORT}
   }
 

@@ -6,7 +6,7 @@ services:
     networks:
       - agora
     ports:
-      - '5200:5200'
+      - '4200:4200'
     env_file:
       - ../../../apps/agora/app/.env
     deploy:
