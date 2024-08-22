@@ -1,6 +1,0 @@
-{
-  "/api": {
-    "target": "http://agora-server:3333",
-    "secure": false
-  }
-}

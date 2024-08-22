@@ -1,0 +1,17 @@
+services:
+  agora-api:
+    image: ghcr.io/sage-bionetworks/agora-api:${AGORA_VERSION:-local}
+    container_name: agora-api
+    restart: always
+    env_file:
+      - ../../../apps/agora/api/.env
+    networks:
+      - agora
+    ports:
+      - '3333:3333'
+    deploy:
+      resources:
+        limits:
+          memory: 1GB
+    depends_on:
+      - agora-mongo

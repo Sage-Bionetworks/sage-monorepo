@@ -1,0 +1,22 @@
+@use 'libs/agora/styles/src/lib/constants';
+
+#error {
+  background: url('/agora-assets/images/banner-sm.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - constants.$navbar-height);
+}
+.err-message {
+  padding-top: 100px;
+}
+.btn-group {
+  margin-top: 48px;
+
+  a {
+    padding: 26px 40px;
+  }
+}

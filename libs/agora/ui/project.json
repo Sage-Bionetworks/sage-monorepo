@@ -1,0 +1,27 @@
+{
+  "name": "agora-ui",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/ui/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/agora/ui"
+      ],
+      "options": {
+        "jestConfig": "libs/agora/ui/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:agora",
+    "language:typescript"
+  ],
+  "implicitDependencies": []
+}

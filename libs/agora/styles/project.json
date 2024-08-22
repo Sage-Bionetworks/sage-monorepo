@@ -1,0 +1,13 @@
+{
+  "name": "agora-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/agora/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": [
+    "type:styles",
+    "scope:agora",
+    "language:typescript"
+  ]
+}
