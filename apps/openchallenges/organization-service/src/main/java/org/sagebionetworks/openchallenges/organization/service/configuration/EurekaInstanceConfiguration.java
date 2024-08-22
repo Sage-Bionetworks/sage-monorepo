@@ -33,7 +33,7 @@ public class EurekaInstanceConfiguration {
       havingValue = "true",
       matchIfMissing = false)
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
-    LOGGER.info("Configuring the Eureka instance to be AWS-aware.");
+    LOGGER.info("Configuring the Eureka instance for AWS.");
     EurekaInstanceConfigBean bean = new EurekaInstanceConfigBean(inetUtils);
     String ip = null;
     try {
