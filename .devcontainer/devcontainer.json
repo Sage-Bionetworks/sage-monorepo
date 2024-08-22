@@ -118,7 +118,7 @@
       "onAutoForward": "silent"
     },
     "3333": {
-      "label": "agora-server",
+      "label": "agora-api",
       "onAutoForward": "silent"
     },
     "4200": {

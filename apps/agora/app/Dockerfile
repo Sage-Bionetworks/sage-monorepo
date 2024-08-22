@@ -15,9 +15,9 @@ COPY dist/apps/agora/app/browser/server ${APP_DIR}
 COPY dist/apps/agora/app/browser/browser ${APP_DIR}/dist/apps/agora/app/browser/browser
 
 HEALTHCHECK --interval=2s --timeout=3s --retries=20 --start-period=5s \
-  CMD curl --fail --silent "localhost:5200/health" | jq '.status' | grep UP || exit 1
+  CMD curl --fail --silent "localhost:4200/health" | jq '.status' | grep UP || exit 1
 
-EXPOSE 5200
+EXPOSE 4200
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

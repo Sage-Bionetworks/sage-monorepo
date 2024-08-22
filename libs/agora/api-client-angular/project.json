@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
-      "outputs": ["{workspaceRoot}/dist/libs/agora/api-client-angular"],
+      "outputs": [
+        "{workspaceRoot}/dist/libs/agora/api-client-angular"
+      ],
       "options": {
         "project": "libs/agora/api-client-angular/ng-package.json"
       },
@@ -23,14 +25,38 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/agora/api-client-angular"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/agora/api-client-angular"
+      ],
       "options": {
         "jestConfig": "libs/agora/api-client-angular/jest.config.ts"
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint"
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "rm -fr src/lib/*",
+          "openapi-generator-cli generate"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": [
+        "^build"
+      ]
     }
   },
-  "tags": ["language:typescript"]
+  "tags": [
+    "language:typescript"
+  ],
+  "implicitDependencies": [
+    "agora-api-description"
+  ]
 }

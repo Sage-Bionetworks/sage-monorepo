@@ -19,7 +19,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "agora",
+            "prefix": "app",
             "style": "camelCase"
           }
         ],
@@ -27,7 +27,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "agora",
+            "prefix": "app",
             "style": "kebab-case"
           }
         ]

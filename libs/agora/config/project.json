@@ -1,0 +1,33 @@
+{
+  "name": "agora-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/config/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/agora/config"
+      ],
+      "options": {
+        "jestConfig": "libs/agora/config/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": [
+    "type:feature",
+    "scope:agora",
+    "language:typescript"
+  ],
+  "implicitDependencies": []
+}
