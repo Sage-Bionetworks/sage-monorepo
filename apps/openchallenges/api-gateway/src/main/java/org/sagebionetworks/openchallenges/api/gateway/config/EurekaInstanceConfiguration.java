@@ -29,7 +29,7 @@ public class EurekaInstanceConfiguration {
    */
   @Bean
   @ConditionalOnProperty(
-      value = "openchallenges-api-gateway-service.is-deployed-on-aws",
+      value = "openchallenges-api-gateway.is-deployed-on-aws",
       havingValue = "true",
       matchIfMissing = false)
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
