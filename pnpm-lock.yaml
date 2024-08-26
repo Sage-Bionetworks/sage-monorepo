@@ -74,6 +74,9 @@ importers:
       express:
         specifier: ~4.18.2
         version: 4.18.3
+      json5:
+        specifier: 2.2.3
+        version: 2.2.3
       keycloak-angular:
         specifier: 12.1.0
         version: 12.1.0(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/router@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(rxjs@7.8.1))(keycloak-js@19.0.3)
@@ -18473,12 +18476,12 @@ snapshots:
       pump: 3.0.0
       tar-fs: 2.1.1
 
-  '@nestjs/common@8.4.4(reflect-metadata@0.1.13)(rxjs@7.8.1)':
+  '@nestjs/common@8.4.4(reflect-metadata@0.1.13)(rxjs@7.5.5)':
     dependencies:
       axios: 0.26.1
       iterare: 1.2.1
       reflect-metadata: 0.1.13
-      rxjs: 7.8.1
+      rxjs: 7.5.5
       tslib: 2.3.1
       uuid: 8.3.2
     transitivePeerDependencies:
@@ -18486,7 +18489,7 @@ snapshots:
 
   '@nestjs/core@8.4.4(@nestjs/common@8.4.4(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
     dependencies:
-      '@nestjs/common': 8.4.4(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common': 8.4.4(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -19586,7 +19589,7 @@ snapshots:
 
   '@openapitools/openapi-generator-cli@2.5.2(encoding@0.1.13)':
     dependencies:
-      '@nestjs/common': 8.4.4(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/common': 8.4.4(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nestjs/core': 8.4.4(@nestjs/common@8.4.4(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       chalk: 4.1.2
@@ -20056,7 +20059,7 @@ snapshots:
       portfinder: 1.0.32
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
-      redoc: 2.0.0(core-js@3.36.1)(encoding@0.1.13)(mobx@6.13.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(styled-components@5.3.11(@babel/core@7.24.9)(react-dom@17.0.2(react@17.0.2))(react-is@18.3.1)(react@17.0.2))(webpack@5.93.0(@swc/core@1.6.13(@swc/helpers@0.5.12))(esbuild@0.18.20))
+      redoc: 2.0.0(core-js@3.36.1)(encoding@0.1.13)(mobx@6.13.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(styled-components@5.3.11(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(webpack@5.93.0(@swc/core@1.6.13(@swc/helpers@0.5.12))(esbuild@0.18.20))
       semver: 7.6.2
       simple-websocket: 9.1.0
       styled-components: 5.3.11(@babel/core@7.24.9)(react-dom@17.0.2(react@17.0.2))(react-is@18.3.1)(react@17.0.2)
@@ -30193,7 +30196,7 @@ snapshots:
     dependencies:
       redis-errors: 1.2.0
 
-  redoc@2.0.0(core-js@3.36.1)(encoding@0.1.13)(mobx@6.13.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(styled-components@5.3.11(@babel/core@7.24.9)(react-dom@17.0.2(react@17.0.2))(react-is@18.3.1)(react@17.0.2))(webpack@5.93.0(@swc/core@1.6.13(@swc/helpers@0.5.12))(esbuild@0.18.20)):
+  redoc@2.0.0(core-js@3.36.1)(encoding@0.1.13)(mobx@6.13.0)(react-dom@17.0.2(react@17.0.2))(react@17.0.2)(styled-components@5.3.11(@babel/core@7.24.9)(react-dom@18.3.1(react@18.3.1))(react-is@18.3.1)(react@18.3.1))(webpack@5.93.0(@swc/core@1.6.13(@swc/helpers@0.5.12))(esbuild@0.18.20)):
     dependencies:
       '@redocly/openapi-core': 1.18.0(encoding@0.1.13)
       classnames: 2.5.1
