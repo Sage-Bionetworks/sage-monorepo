@@ -3,13 +3,13 @@ description: 'Installs the dev container CLI, fetches caches (if exist), and sta
 runs:
   using: 'composite'
   steps:
-    - name: Set up Yarn cache
+    - name: Set up pnpm cache
       uses: actions/cache@v3
       with:
-        path: '/tmp/.yarn/cache'
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        path: '.pnpm-store'
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-pnpm-store-
 
     - name: Set up Renv cache
       uses: actions/cache@v3
@@ -51,7 +51,7 @@ runs:
       shell: bash
       run: |
         mkdir -p \
-          /tmp/.yarn/cache \
+          /tmp/.pnpm-store \
           /tmp/.cache/R/renv/cache \
           /tmp/.cache/pypoetry \
           /tmp/.local/share/virtualenv \
@@ -59,7 +59,7 @@ runs:
           /tmp/.gradle/wrapper
 
         devcontainer up \
-          --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
+          --mount type=bind,source=/tmp/.pnpm-store,target=/workspaces/sage-monorepo/.pnpm-store \
           --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
           --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
           --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
