@@ -20,14 +20,14 @@ function workspace-cd {
 export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
 function workspace-install {
-  yarn install --immutable
+  pnpm install --frozen-lockfile
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
   nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
 function workspace-install-affected {
-  yarn install --immutable
+  pnpm install --frozen-lockfile
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
   nx affected --target=prepare --exclude 'tag:language:java'

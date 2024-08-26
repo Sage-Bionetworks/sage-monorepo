@@ -157,5 +157,5 @@
     "ts-node": "10.9.1",
     "typescript": "5.4.5"
   },
-  "packageManager": "yarn@3.6.1"
+  "packageManager": "pnpm@9.9.0"
 }
