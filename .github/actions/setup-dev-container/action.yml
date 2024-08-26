@@ -6,7 +6,7 @@ runs:
     - name: Set up pnpm cache
       uses: actions/cache@v3
       with:
-        path: '.pnpm-store'
+        path: '/tmp/.pnpm-store'
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
