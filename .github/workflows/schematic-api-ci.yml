@@ -18,11 +18,11 @@ jobs:
   pr:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     # Runs this job if:
-    # 1. Triggered by a PR 
+    # 1. Triggered by a PR
     # 2. The PR originate from the Schematic-API-Staging branch
     # 3. Targets the main branch
     if: |
-      github.event_name == 'pull_request' && 
+      github.event_name == 'pull_request' &&
       github.event.pull_request.base.ref == 'main' &&
       github.event.pull_request.head.ref == 'Schematic-API-Staging'
 
@@ -36,13 +36,13 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
 
-      - name: Set up Yarn cache
+      - name: Set up pnpm cache
         uses: actions/cache@v3
         with:
-          path: '/tmp/.yarn/cache'
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          path: '/tmp/.pnpm-store'
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-yarn-
+            ${{ runner.os }}-pnpm-store-
 
       - name: Set up Poetry cache
         uses: actions/cache@v3
@@ -74,7 +74,7 @@ jobs:
       - name: Start the dev container
         run: |
           mkdir -p \
-            /tmp/.yarn/cache \
+            /tmp/.pnpm-store \
             /tmp/.cache/R/renv/cache \
             /tmp/.cache/pypoetry \
             /tmp/.local/share/virtualenv \
@@ -82,7 +82,7 @@ jobs:
             /tmp/.gradle/wrapper
 
           devcontainer up \
-            --mount type=bind,source=/tmp/.yarn/cache,target=/workspaces/sage-monorepo/.yarn/cache \
+            --mount type=bind,source=/tmp/.pnpm-store,target=/workspaces/sage-monorepo/.pnpm-store \
             --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
             --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
             --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
@@ -129,7 +129,7 @@ jobs:
           credentials_file_name = "apps/schematic/api/schematic_service_account_creds.json"
           with open(credentials_file_name, 'w', encoding='utf-8') as f:
               json.dump(credentials_dict, f, ensure_ascii=False, indent=4)
-        shell: python          
+        shell: python
 
       - name: Test the affected projects (all)
         run: |
