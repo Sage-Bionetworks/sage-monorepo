@@ -17,53 +17,27 @@
       "style": "scss",
       "unitTestRunner": "jest"
     },
-    "@nx/angular:library": {
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nx/angular:component": {
-      "style": "scss"
-    }
+    "@nx/angular:library": { "linter": "eslint", "unitTestRunner": "jest" },
+    "@nx/angular:component": { "style": "scss" }
   },
   "defaultProject": "openchallenges-app",
   "plugins": [],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
-      "cache": true
-    },
+    "build": { "dependsOn": ["^build"], "inputs": ["production", "^production"], "cache": true },
     "test": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "cache": true
     },
-    "lint": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"],
-      "cache": true
-    },
-    "lint-fix": {
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
-    },
-    "e2e": {
-      "inputs": ["default", "^production"],
-      "cache": true
-    },
-    "server": {
-      "cache": true
-    },
+    "lint": { "inputs": ["default", "{workspaceRoot}/.eslintrc.json"], "cache": true },
+    "lint-fix": { "inputs": ["default", "{workspaceRoot}/.eslintrc.json"] },
+    "e2e": { "inputs": ["default", "^production"], "cache": true },
+    "server": { "cache": true },
     "@nx/jest:jest": {
       "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
       "cache": true,
-      "options": {
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
+      "options": { "passWithNoTests": true },
+      "configurations": { "ci": { "ci": true, "codeCoverage": true } }
     },
     "@nx/eslint:lint": {
       "cache": true,
@@ -120,5 +94,6 @@
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
-  "packageManager": "pnpm"
+  "packageManager": "pnpm",
+  "nxCloudAccessToken": "NjA5NGQ5YzEtMjg5YS00OTc0LTgxN2EtNWYyOTM5NjMyYTA2fHJlYWQtd3JpdGU="
 }
