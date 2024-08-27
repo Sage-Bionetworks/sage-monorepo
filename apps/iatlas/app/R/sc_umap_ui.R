@@ -47,7 +47,7 @@ sc_umap_ui <- function(id){
       shiny::column(
         width = 10,
         plotly::plotlyOutput(ns("umap_plot"),
-                             height = 800) %>%
+                             height = "4800px") %>%
           shinycssloaders::withSpinner(.)
       ),
       shiny::column(

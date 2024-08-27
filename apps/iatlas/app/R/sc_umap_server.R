@@ -8,12 +8,14 @@ sc_umap_server <- function(
 
       ns <- session$ns
 
-      umap_df <- shiny::reactive(arrow::read_feather("inst/feather/sc_umap.feather") %>% dplyr::filter(dataset %in% input$datasets))
-      # umap_df <- shiny::reactive({
-      #   iatlasGraphQLClient::query_single_cell_seq_feature_values(
-      #     cohorts = input$datasets,
-      #     features = c("umap_1", "umap_2"))
-      # })
+      all_umap <- shiny::reactive({
+        arrow::read_feather("inst/feather/sc_umap_coord.feather")
+        })
+
+      umap_df <- shiny::reactive(
+        all_umap() %>%
+          dplyr::filter(dataset_name %in% input$datasets)
+        )
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("Bi 2021 - ccRCC", "Krishna 2021 - ccRCC", "Li 2022 - ccRCC", "HTAN MSK - SCLC", "Shiao 2024- BRCA", "HTAN Vanderbilt - colon polyps"),
@@ -22,11 +24,12 @@ sc_umap_server <- function(
                                                       "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>",
                                                       "<a href = 'https://cellxgene.cziscience.com/e/bd65a70f-b274-4133-b9dd-0d1431b6af34.cxg/'>Explore in CELLxGENE</a>",
                                                       "<a href = 'https://microenvironment-of-kidney-cancer.cellgeni.sanger.ac.uk/umap/'>Explore in CELLxGENE</a>",
-                                                      "<a href = 'https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#study-visualize'>Explore in Single Cell Portal</a>"),
-                                                    c("MSK", "Vanderbilt", "Krishna_2021", "Li_2022", "Bi_2021")))
+                                                      "<a href = 'https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#study-visualize'>Explore in Single Cell Portal</a>",
+                                                      ""),
+                                                    c("MSK", "Vanderbilt", "Krishna_2021", "Li_2022", "Bi_2021", "Shiao_2024")))
       color_criteria <- shiny::reactive({
         shiny::req(umap_df(), input$color)
-        dplyr::select(umap_df(), "group" = input$color, dataset)
+        dplyr::select(umap_df(), "group" = input$color, dataset_name)
       })
 
 
@@ -40,19 +43,20 @@ sc_umap_server <- function(
       output$umap_plot <- plotly::renderPlotly({
         shiny::req(umap_df(),color_criteria(), group_colors())
 
-        datasets <- unique(umap_df()$dataset)
+        datasets <- unique(umap_df()$dataset_name)
 
         all_plots <- purrr::map(.x = datasets,
                                 .f = function(x){
                                     umap_df() %>%
-                                      dplyr::filter(dataset == x) %>%
+                                      dplyr::filter(dataset_name == x) %>%
                                       plotly::plot_ly(
                                         x = ~ umap_1,
                                         y = ~ umap_2,
                                         type = "scatter",
-                                        color = ~(dplyr::filter(color_criteria(), dataset == x))$group,
+                                        color = ~(dplyr::filter(color_criteria(), dataset_name == x))$group,
                                         colors = group_colors(),
                                         mode = "markers",
+                                        height = "800px",
                                         showlegend = FALSE
                                       )%>%
                                     add_title_subplot_plotly(dataset_display()[[x]])%>%
