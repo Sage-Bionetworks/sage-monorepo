@@ -1,3 +1,5 @@
 packages:
   - 'apps/**'
   - 'libs/**'
+  # prevent the creation of libs/**/api-client-angular/node_modules that break the apps and tests
+  - '!libs/**/api-client-angular'
