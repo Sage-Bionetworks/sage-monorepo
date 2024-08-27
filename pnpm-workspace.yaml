@@ -1,6 +1,8 @@
 packages:
   - 'apps/**'
   - 'libs/**'
+  - '!apps/openchallenges/infra'
+  - '!apps/openchallenges/infra/old'
   # prevent the creation of libs/**/api-client-angular/node_modules when running `workspace-install`
   # that break the apps and tests
   - '!libs/**/api-client-angular'
