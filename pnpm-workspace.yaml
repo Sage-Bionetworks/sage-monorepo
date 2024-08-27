@@ -1,5 +1,6 @@
 packages:
   - 'apps/**'
   - 'libs/**'
-  # prevent the creation of libs/**/api-client-angular/node_modules that break the apps and tests
+  # prevent the creation of libs/**/api-client-angular/node_modules when running `workspace-install`
+  # that break the apps and tests
   - '!libs/**/api-client-angular'
