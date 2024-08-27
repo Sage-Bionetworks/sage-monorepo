@@ -1,6 +1,7 @@
 {
   "tasksRunnerOptions": {
     "default": {
+      "runner": "nx/tasks-runners/default",
       "options": {
         "canTrackAnalytics": false,
         "showUsageWarnings": true,
@@ -118,5 +119,6 @@
     ]
   },
   "useInferencePlugins": false,
-  "defaultBase": "main"
+  "defaultBase": "main",
+  "packageManager": "pnpm"
 }
