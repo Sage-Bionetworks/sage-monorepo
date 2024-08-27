@@ -119,5 +119,6 @@
     ]
   },
   "useInferencePlugins": false,
-  "defaultBase": "main"
+  "defaultBase": "main",
+  "packageManager": "pnpm"
 }
