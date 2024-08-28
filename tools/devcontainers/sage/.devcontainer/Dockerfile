@@ -24,7 +24,7 @@ ARG renvVersion="1.0.0"
 # https://www.npmjs.com/package/playwright
 ARG playwrightVersion="1.40.1"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="8.7.0"
+ARG pnpmVersion="9.9.0"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="5.0.1.3006"
 # https://github.com/hadolint/hadolint
@@ -82,9 +82,7 @@ RUN groupadd docker \
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
   # Instal pnpm
-  # && curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=${pnpmVersion} bash - \
-  && corepack enable pnpm \
-  && corepack prepare "pnpm@${pnpmVersion}" --activate \
+  && corepack install --global "pnpm@${pnpmVersion}" \
   # Install @devcontainers/cli
   && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
   # Install act
