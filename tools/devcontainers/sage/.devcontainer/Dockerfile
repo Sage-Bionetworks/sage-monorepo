@@ -11,8 +11,6 @@ ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 ARG actVersion="0.2.49"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.17.0"
-# https://github.com/yarnpkg/berry
-ARG yarnVersion="3.6.1"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
@@ -83,9 +81,6 @@ RUN groupadd docker \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
-  # Install Yarn
-  && corepack enable yarn \
-  && corepack prepare "yarn@${yarnVersion}" --activate \
   # Instal pnpm
   # && curl -fsSL https://get.pnpm.io/install.sh | env PNPM_VERSION=${pnpmVersion} bash - \
   && corepack enable pnpm \
@@ -152,9 +147,7 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" | tee -a "/home/$user/.bashrc" \
-  # Set the default version of Yarn
-  && corepack prepare "yarn@${yarnVersion}" --activate
+    "" | tee -a "/home/$user/.bashrc"
 
 # Install SonarScanner CLI
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
