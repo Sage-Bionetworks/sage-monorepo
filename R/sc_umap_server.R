@@ -12,10 +12,10 @@ sc_umap_server <- function(
         arrow::read_feather("inst/feather/sc_umap_coord.feather")
         })
 
-      umap_df <- shiny::reactive(
+      umap_df <-shiny::eventReactive(input$plot_button,{
         all_umap() %>%
           dplyr::filter(dataset_name %in% input$datasets)
-        )
+        })
 
       #TODO: change this when data is in cohort_obj
       dataset_display <- shiny::reactive(setNames(c("Bi 2021 - ccRCC", "Krishna 2021 - ccRCC", "Li 2022 - ccRCC", "HTAN MSK - SCLC", "Shiao 2024- BRCA", "HTAN Vanderbilt - colon polyps"),
@@ -27,21 +27,22 @@ sc_umap_server <- function(
                                                       "<a href = 'https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#study-visualize'>Explore in Single Cell Portal</a>",
                                                       ""),
                                                     c("MSK", "Vanderbilt", "Krishna_2021", "Li_2022", "Bi_2021", "Shiao_2024")))
-      color_criteria <- shiny::reactive({
-        shiny::req(umap_df(), input$color)
-        dplyr::select(umap_df(), "group" = input$color, dataset_name)
-      })
+      # color_criteria <- shiny::eventReactive(input$plot_button,{
+      #   shiny::req( input$color)
+      #   print("color")
+      #   dplyr::select(umap_df(), "group" = input$color, dataset_name)
+      # })
 
 
-      group_colors <- shiny::reactive({
-        shiny::req(umap_df(), color_criteria())
-        group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(color_criteria()$group))
-        setNames(group_colors, unique(color_criteria()$group))
+      group_colors <- shiny::eventReactive(input$plot_button,{
+        #shiny::req(umap_df(), color_criteria())
+        group_colors <- grDevices::colorRampPalette(RColorBrewer::brewer.pal(12, "Set3"))(dplyr::n_distinct(umap_df()$cell_type))
+        setNames(group_colors, unique(umap_df()$cell_type))
       })
 
 
       output$umap_plot <- plotly::renderPlotly({
-        shiny::req(umap_df(),color_criteria(), group_colors())
+        shiny::req(umap_df(), group_colors())
 
         datasets <- unique(umap_df()$dataset_name)
 
@@ -53,10 +54,10 @@ sc_umap_server <- function(
                                         x = ~ umap_1,
                                         y = ~ umap_2,
                                         type = "scatter",
-                                        color = ~(dplyr::filter(color_criteria(), dataset_name == x))$group,
+                                        color = ~(dplyr::filter(umap_df(), dataset_name == x))$cell_type,
                                         colors = group_colors(),
                                         mode = "markers",
-                                        height = "800px",
+                                        height = "600",
                                         showlegend = FALSE
                                       )%>%
                                     add_title_subplot_plotly(dataset_display()[[x]])%>%
