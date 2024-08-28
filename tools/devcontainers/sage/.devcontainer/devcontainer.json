@@ -1,13 +1,16 @@
 {
   "name": "Sage Dev Container",
-	"build": {
-		"dockerfile": "Dockerfile",
-		"args": {
-			"imageVersion": "jammy-20230624",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "imageVersion": "jammy-20240808",
       "devcontainerVersion": "${localEnv:DEVCONTAINER_VERSION}"
-		}
-	},
-	"remoteUser": "vscode",
+    }
+  },
+  "remoteUser": "vscode",
   "shutdownAction": "stopContainer",
-  "runArgs": ["--name", "sage_devcontainer"]
+  "runArgs": [
+    "--name",
+    "sage_devcontainer"
+  ]
 }

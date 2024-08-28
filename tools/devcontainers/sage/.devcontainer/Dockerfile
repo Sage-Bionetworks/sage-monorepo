@@ -1,4 +1,4 @@
-ARG imageVersion=jammy-20240227
+ARG imageVersion=jammy-20240808
 FROM ubuntu:$imageVersion
 
 # Safer bash scripts with 'set -euxo pipefail'
@@ -52,7 +52,7 @@ RUN groupadd docker \
     xz-utils tk-dev libffi-dev liblzma-dev \
     # Required by Hadolint
     shellcheck \
-  # Add Node.js repository
+  # Add Node.js
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
   # Add Hadolint
@@ -79,8 +79,8 @@ RUN groupadd docker \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
-  # Instal pnpm
-  && corepack install --global "pnpm@${pnpmVersion}" \
+  # Enable corepack
+  && corepack enable \
   # Install @devcontainers/cli
   && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
   # Install act
@@ -143,7 +143,9 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" | tee -a "/home/$user/.bashrc"
+    "" | tee -a "/home/$user/.bashrc" \
+  # Install the default version of pnpm
+  && corepack install --global "pnpm@${pnpmVersion}"
 
 # Install SonarScanner CLI
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
@@ -165,7 +167,7 @@ RUN npx playwright@${playwrightVersion} install --with-deps \
     chromium \
     firefox \
     webkit \
-  # Install pyenv as the user
+  # Install pyenv as the non-root user
   && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
 
 # Install Python environments
