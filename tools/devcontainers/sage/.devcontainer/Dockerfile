@@ -8,19 +8,21 @@ ARG devcontainerVersion=""
 ENV DEVCONTAINER_VERSION=${devcontainerVersion}
 
 # https://github.com/nektos/act
-ARG actVersion="0.2.49"
+ARG actVersion="0.2.65"
 # https://github.com/sharkdp/hyperfine
-ARG hyperfineVersion="1.17.0"
+ARG hyperfineVersion="1.18.0"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.50.2"
 # https://pypi.org/project/poetry
-ARG poetryVersion="1.8.2"
+ARG poetryVersion="1.8.3"
 # https://docs.posit.co/resources/install-r/#specify-r-version
 ARG rVersion="4.2.3"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.44.1"
+ARG trivyVersion="0.54.1"
 # https://github.com/rstudio/renv
 ARG renvVersion="1.0.0"
+# https://nodejs.org/en/about/previous-releases
+ARG nodeVersionMajor="20"
 # https://www.npmjs.com/package/playwright
 ARG playwrightVersion="1.40.1"
 # https://github.com/pnpm/pnpm/releases
@@ -51,12 +53,8 @@ RUN groupadd docker \
     # Required by Hadolint
     shellcheck \
   # Add Node.js repository
-  && mkdir -p /etc/apt/keyrings \
-  && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key \
-    | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
-  && NODE_MAJOR=18 \
-  && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" \
-    | tee /etc/apt/sources.list.d/nodesource.list \
+  && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
+  && bash nodesource_setup.sh \
   # Add Hadolint
   && curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
   && mv hadolint /usr/local/bin/. \
