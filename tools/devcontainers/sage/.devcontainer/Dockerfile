@@ -5,7 +5,7 @@ FROM ubuntu:$imageVersion
 # Set safer bash scripts
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
-# Arguments
+# Image arguments
 # https://github.com/nektos/act
 ARG actVersion="0.2.65"
 # https://github.com/sharkdp/hyperfine
@@ -22,8 +22,6 @@ ARG trivyVersion="0.54.1"
 ARG renvVersion="1.0.0"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="20"
-# https://www.npmjs.com/package/playwright
-ARG playwrightVersion="1.40.1"
 # https://github.com/pnpm/pnpm/releases
 ARG pnpmVersion="9.9.0"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
@@ -81,20 +79,23 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
   # Set up UTF-8 locale
-  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen \
+  # Install R (must be done before clearing the apt cache)
+  && curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+    && gdebi --non-interactive /tmp/r_amd64.deb \
+    && rm -fr /tmp/r_amd64.deb \
+    && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
+    && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
+    && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")" \
+  # Cleanup
+  && apt-get -y autoclean \
+  && apt-get -y autoremove \
+  && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/.
 
-# Install R
-RUN curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
-  && gdebi --non-interactive /tmp/r_amd64.deb \
-  && rm -fr /tmp/r_amd64.deb \
-  && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
-  && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
-  && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")"
-  
 # Install Trivy
 RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
   && dpkg -i /tmp/trivy.deb \
@@ -102,9 +103,6 @@ RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivy
 
 # Install act
 RUN curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
-
-# Install @devcontainers/cli
-RUN npm install -g "@devcontainers/cli@${devcontainerCliVersion}"
 
 # Install AWS CLI
 RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
@@ -115,6 +113,9 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zi
   && curl -fsSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o /tmp/session-manager-plugin.deb \
   && dpkg -i /tmp/session-manager-plugin.deb \
   && rm -fr /tmp/session-manager-plugin.deb
+
+# Install the devcontainer CLI
+RUN npm install -g "@devcontainers/cli@${devcontainerCliVersion}"
 
 # Install Hadolint
 RUN curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
@@ -160,31 +161,17 @@ RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
   && chown -R ${user}:${user} "${SONAR_SCANNER_HOME}" \
   && chmod -R 777 "${SONAR_USER_HOME}"
 
-# Cleanup
-RUN apt-get -y autoclean \
-  && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/* \
-  && pip install --no-cache-dir pipenv
-
 # Switch to non-root user
 USER $user
 
 # Install the global version of pnpm
 RUN corepack install --global "pnpm@${pnpmVersion}"
 
-# Install browsers for Playwright
-# Note: The version of Playwright should be the same as the one used by your project (package.json)
-RUN npx playwright@${playwrightVersion} install --with-deps \
-    chromium \
-    firefox \
-    webkit
-
-# Install pyenv
-RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
-
 # Set up Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN pyenv install 3.9.2 3.10.14 3.11.8
+RUN pip install --no-cache-dir pipenv \
+  && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash - \
+  && pyenv install 3.9.2 3.10.14 3.11.8
 
 CMD ["bash"]

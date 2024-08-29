@@ -11,6 +11,6 @@
   "shutdownAction": "stopContainer",
   "runArgs": [
     "--name",
-    "sage_devcontainer_testing"
+    "sage_devcontainer_test"
   ]
 }
