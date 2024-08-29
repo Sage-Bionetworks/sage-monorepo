@@ -5,7 +5,7 @@ FROM ubuntu:$imageVersion
 # Set safer bash scripts
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
-# Image arguments
+# List of build arguments
 # https://github.com/nektos/act
 ARG actVersion="0.2.65"
 # https://github.com/sharkdp/hyperfine
@@ -22,8 +22,12 @@ ARG trivyVersion="0.54.1"
 ARG renvVersion="1.0.0"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="20"
+# https://pypi.org/project/pipenv/
+ARG pipenvVersion="2024.0.1"
 # https://github.com/pnpm/pnpm/releases
 ARG pnpmVersion="9.9.0"
+# List of Python versions separated by spaces
+ARG pyenvPythonVersions="3.9.2 3.10.14 3.11.8"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="5.0.1.3006"
 # https://github.com/hadolint/hadolint
@@ -31,7 +35,7 @@ ARG hadolintVersion="2.12.0"
 # The version of this dev container image
 ARG devcontainerVersion=""
 # The username of the non-root user
-ARG user=vscode
+ARG user="vscode"
 
 # Set environment variables
 ENV DEVCONTAINER_VERSION=${devcontainerVersion} \
@@ -39,7 +43,7 @@ ENV DEVCONTAINER_VERSION=${devcontainerVersion} \
   LC_ALL=en_US.UTF-8
 
 # Install system packages
-# hadolint ignore=DL3008,DL3013
+# hadolint ignore=DL3008
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
@@ -170,8 +174,8 @@ RUN corepack install --global "pnpm@${pnpmVersion}"
 # Set up Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN pip install --no-cache-dir pipenv \
+RUN pip install --no-cache-dir pipenv==${pipenvVersion} \
   && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash - \
-  && pyenv install 3.9.2 3.10.14 3.11.8
+  && pyenv install ${pyenvPythonVersions}
 
 CMD ["bash"]
