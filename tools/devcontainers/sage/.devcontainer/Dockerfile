@@ -1,12 +1,11 @@
+# Base image
 ARG imageVersion=jammy-20240808
 FROM ubuntu:$imageVersion
 
-# Safer bash scripts with 'set -euxo pipefail'
+# Set safer bash scripts
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
-ARG devcontainerVersion=""
-ENV DEVCONTAINER_VERSION=${devcontainerVersion}
-
+# Arguments
 # https://github.com/nektos/act
 ARG actVersion="0.2.65"
 # https://github.com/sharkdp/hyperfine
@@ -31,12 +30,19 @@ ARG pnpmVersion="9.9.0"
 ARG sonarScannerVersion="5.0.1.3006"
 # https://github.com/hadolint/hadolint
 ARG hadolintVersion="2.12.0"
+# The version of this dev container image
+ARG devcontainerVersion=""
+# The username of the non-root user
+ARG user=vscode
 
-# Create the docker group so that we can assign it to the user.
-# This is to enable the non-root user to use the command `docker`.
+# Set environment variables
+ENV DEVCONTAINER_VERSION=${devcontainerVersion} \
+  LANG=en_US.UTF-8 \
+  LC_ALL=en_US.UTF-8
+
+# Install system packages
 # hadolint ignore=DL3008,DL3013
-RUN groupadd docker \
-  && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
     python3-pip python3-dev python-is-python3 openjdk-17-jdk \
@@ -52,13 +58,9 @@ RUN groupadd docker \
     xz-utils tk-dev libffi-dev liblzma-dev \
     # Required by Hadolint
     shellcheck \
-  # Add Node.js
+  # Add Node.js repository
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
-  # Add Hadolint
-  && curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
-  && mv hadolint /usr/local/bin/. \
-  && chmod +x /usr/local/bin/hadolint \
   # Add GitHub CLI repository
   && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
     gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
@@ -70,64 +72,65 @@ RUN groupadd docker \
   # Add hashicorp repository
   && curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - \
   && echo "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/hashicorp.list \
-  # Install extra packages
+  # Install additional packages
   && apt-get update -qq -y \
-  && apt-get install --no-install-recommends -qq -y \
-    nodejs gh ngrok \
-    terraform \
-    vault \
+  && apt-get install --no-install-recommends -qq -y nodejs gh ngrok terraform vault \
+  # Enable corepack
+  && corepack enable \
   # Fix Vault CLI
   # See https://github.com/hashicorp/vault/issues/10924
   && setcap -r /usr/bin/vault \
-  # Enable corepack
-  && corepack enable \
-  # Install @devcontainers/cli
-  && npm install -g "@devcontainers/cli@${devcontainerCliVersion}" \
-  # Install act
-  && curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash - \
-  # Install hyperfine
-  && curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
-    -o /tmp/hyperfine.deb \
-  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
-  && rm -fr /tmp/hyperfine.deb \
-  # Install AWS CLI
-  && curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+  # Set up UTF-8 locale
+  && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
+  && ln -s /etc/poetry/bin/poetry /usr/local/bin/.
+
+# Install R
+RUN curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+  && gdebi --non-interactive /tmp/r_amd64.deb \
+  && rm -fr /tmp/r_amd64.deb \
+  && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
+  && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
+  && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")"
+  
+# Install Trivy
+RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
+  && dpkg -i /tmp/trivy.deb \
+  && rm -fr /tmp/trivy.deb
+
+# Install act
+RUN curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
+
+# Install @devcontainers/cli
+RUN npm install -g "@devcontainers/cli@${devcontainerCliVersion}"
+
+# Install AWS CLI
+RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
   # Add AWS Session Manager plugin
   && curl -fsSL "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o /tmp/session-manager-plugin.deb \
   && dpkg -i /tmp/session-manager-plugin.deb \
-  && rm -fr /tmp/session-manager-plugin.deb \
-  # Install Poetry
-  && curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
-  && ln -s /etc/poetry/bin/poetry /usr/local/bin/. \
-  # Install R
-  && curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
-  && gdebi --non-interactive /tmp/r_amd64.deb \
-  && rm -fr /tmp/r_amd64.deb \
-  && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
-  && ln -s /opt/R/${rVersion}/bin/Rscript /usr/local/bin/Rscript \
-  && R -e "options(repos = c(POSIT = \"https://packagemanager.posit.co/all/__linux__/jammy/latest\", CRAN = \"https://mirror.las.iastate.edu/CRAN\")); install.packages(\"renv\", version = \"${renvVersion}\")" \
-  # Install Trivy
-  && curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
-  && dpkg -i /tmp/trivy.deb \
-  && rm -fr /tmp/trivy.deb \
-  # Cleanup
-  && apt-get -y autoclean \
-  && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/* \
-  && pip install --no-cache-dir pipenv
+  && rm -fr /tmp/session-manager-plugin.deb
 
-# Setting up a UTF-8 locale
-RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
-  && locale-gen
-ENV LANG=en_US.UTF-8 \
-  LC_ALL=en_US.UTF-8
+# Install Hadolint
+RUN curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
+  && mv hadolint /usr/local/bin/. \
+  && chmod +x /usr/local/bin/hadolint
 
-ARG user=vscode
+# Install hyperfine
+RUN curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
+    -o /tmp/hyperfine.deb \
+  && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
+  && rm -fr /tmp/hyperfine.deb
+
+# Create non-root user
 RUN useradd -m $user \
   && echo "$user:$user" | chpasswd \
+  && groupadd docker \
   && usermod -a --groups docker,sudo $user \
   && usermod --shell /bin/bash $user \
   && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers \
@@ -143,9 +146,7 @@ RUN useradd -m $user \
     "  . ./dev-env.sh" \
     "  workspace-initialize-env" \
     "fi" \
-    "" | tee -a "/home/$user/.bashrc" \
-  # Install the default version of pnpm
-  && corepack install --global "pnpm@${pnpmVersion}"
+    "" | tee -a "/home/$user/.bashrc"
 
 # Install SonarScanner CLI
 ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
@@ -159,23 +160,31 @@ RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-s
   && chown -R ${user}:${user} "${SONAR_SCANNER_HOME}" \
   && chmod -R 777 "${SONAR_USER_HOME}"
 
+# Cleanup
+RUN apt-get -y autoclean \
+  && apt-get -y autoremove \
+  && rm -rf /var/lib/apt/lists/* \
+  && pip install --no-cache-dir pipenv
+
+# Switch to non-root user
 USER $user
 
-# Install browsers used for e2e testing with Playwright
+# Install the global version of pnpm
+RUN corepack install --global "pnpm@${pnpmVersion}"
+
+# Install browsers for Playwright
 # Note: The version of Playwright should be the same as the one used by your project (package.json)
 RUN npx playwright@${playwrightVersion} install --with-deps \
     chromium \
     firefox \
-    webkit \
-  # Install pyenv as the non-root user
-  && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
+    webkit
 
-# Install Python environments
+# Install pyenv
+RUN curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash -
+
+# Set up Python environments
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
-RUN pyenv install \
-  3.9.2 \
-  3.10.14 \
-  3.11.8
+RUN pyenv install 3.9.2 3.10.14 3.11.8
 
 CMD ["bash"]

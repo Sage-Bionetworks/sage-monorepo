@@ -1,5 +1,5 @@
 {
-  "name": "Sage Dev Container",
+  "name": "Sage Dev Container (Test)",
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
@@ -11,6 +11,6 @@
   "shutdownAction": "stopContainer",
   "runArgs": [
     "--name",
-    "sage_devcontainer"
+    "sage_devcontainer_testing"
   ]
 }
