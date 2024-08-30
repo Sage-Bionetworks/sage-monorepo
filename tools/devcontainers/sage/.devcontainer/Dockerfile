@@ -11,7 +11,7 @@ ARG actVersion="0.2.65"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.18.0"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.50.2"
+ARG devcontainerCliVersion="0.69.0"
 # https://pypi.org/project/poetry
 ARG poetryVersion="1.8.3"
 # https://docs.posit.co/resources/install-r/#specify-r-version
