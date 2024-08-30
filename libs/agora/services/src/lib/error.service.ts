@@ -12,8 +12,6 @@ export class ErrorService implements ErrorHandler {
   constructor(private messageService: MessageService) {}
 
   handleError(error: any) {
-    const self = this;
-
     this.messageService.clear();
     this.messageService.add({
       severity: 'warn',
@@ -23,7 +21,7 @@ export class ErrorService implements ErrorHandler {
         'An unexpected error has occurred, we recommend reloading the application.',
     });
     setTimeout(() => {
-      self.messageService.clear();
+      this.messageService.clear();
     }, 5000);
 
     const getCircularReplacer = () => {
