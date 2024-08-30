@@ -69,7 +69,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Install the Dev Container CLI
-        run: npm install -g @devcontainers/cli@0.49.0
+        run: npm install -g @devcontainers/cli@0.69.0
 
       - name: Start the dev container
         run: |

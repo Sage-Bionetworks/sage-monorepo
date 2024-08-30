@@ -1,6 +1,6 @@
 {
   "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:3f79a5d",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:873545d",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
@@ -15,8 +15,8 @@
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.4.0": {
-      "version": "24.0.5",
+    "ghcr.io/devcontainers/features/docker-in-docker:2.11.0": {
+      "version": "27.0.3",
       "moby": false
     }
   },

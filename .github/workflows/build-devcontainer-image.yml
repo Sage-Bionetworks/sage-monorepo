@@ -66,7 +66,7 @@ jobs:
           export DEVCONTAINER_VERSION=${{ steps.prep.outputs.devcontainer_version }}
 
           # Build the image
-          npm install -g @devcontainers/cli
+          npm install -g @devcontainers/cli@0.69.0
           devcontainer build \
             --image-name "${IMAGE_NAME}:${IMAGE_TAG}" \
             --workspace-folder "${WORKSPACE_FOLDER}"
