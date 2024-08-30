@@ -15,8 +15,8 @@
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.4.0": {
-      "version": "24.0.5",
+    "ghcr.io/devcontainers/features/docker-in-docker:2.11.0": {
+      "version": "27.0.3",
       "moby": false
     }
   },
