@@ -15,7 +15,11 @@
     // This settings still works even if VS Code does not recognize it.
     // "notebook.formatOnSave.enabled": true
   },
-  "[json][jsonc]": {
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
@@ -55,7 +59,9 @@
   //     }
   //   ]
   // },
-  "eslint.workingDirectories": ["."],
+  "eslint.workingDirectories": [
+    "."
+  ],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -95,8 +101,12 @@
   "java.configuration.updateBuildConfiguration": "disabled",
   "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [100],
-  "eslint.validate": ["json"],
+  "editor.rulers": [
+    100
+  ],
+  "eslint.validate": [
+    "json"
+  ],
   "java.compile.nullAnalysis.mode": "disabled",
   "typescript.tsdk": "node_modules/typescript/lib",
   "python.analysis.autoImportCompletions": true,
