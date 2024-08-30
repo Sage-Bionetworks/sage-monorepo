@@ -1,0 +1,21 @@
+{
+  "name": "agora-services",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/services/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/services"],
+      "options": {
+        "jestConfig": "libs/agora/services/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["type:services", "scope:agora", "language:typescript"],
+  "implicitDependencies": []
+}
