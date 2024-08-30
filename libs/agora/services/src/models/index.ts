@@ -1,1 +1,1 @@
-export * from './SynapseWiki';
+export * from './synapse-wiki';

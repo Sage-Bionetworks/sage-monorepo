@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: 'web-services',
+  displayName: 'agora-services',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {},
