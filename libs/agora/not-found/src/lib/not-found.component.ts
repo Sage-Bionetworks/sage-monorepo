@@ -28,9 +28,6 @@ import { Observable } from 'rxjs';
 })
 export class NotFoundComponent implements OnInit {
   public appVersion: string;
-  public dataUpdatedOn: string;
-  public privacyPolicyUrl: string;
-  public termsOfUseUrl: string;
   public apiDocsUrl: string;
 
   dataversion$!: Observable<Dataversion>;
@@ -42,9 +39,6 @@ export class NotFoundComponent implements OnInit {
     private renderer2: Renderer2,
   ) {
     this.appVersion = this.configService.config.appVersion;
-    this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
-    this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
-    this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
 
     this.seoService.setData(getSeoData(), this.renderer2);
