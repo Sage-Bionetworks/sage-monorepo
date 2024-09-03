@@ -2,5 +2,6 @@
   "apiDocsUrl": "http://localhost:8000/api-docs",
   "appVersion": "0.0.1",
   "csrApiUrl": "http://localhost:3333/v1",
-  "ssrApiUrl": "http://agora-api:3333/v1"
+  "ssrApiUrl": "http://agora-api:3333/v1",
+  "rollbarToken": "e788198867474855a996485580b08d03"
 }
