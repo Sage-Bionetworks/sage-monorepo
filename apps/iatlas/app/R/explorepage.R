@@ -90,7 +90,7 @@ explorepage_ui <- function(){
       "Samples:"
     ),
     value = c(
-      2,
+      6,
       nrow(iatlasGraphQLClient::query_datasets(types = "ici")),
       2,
       nrow(iatlasGraphQLClient::query_samples())
