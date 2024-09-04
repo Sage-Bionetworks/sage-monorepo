@@ -7,9 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/agora/ui"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/ui"],
       "options": {
         "jestConfig": "libs/agora/ui/jest.config.ts"
       }
@@ -18,10 +16,6 @@
       "executor": "@nx/eslint:lint"
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:agora",
-    "language:typescript"
-  ],
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
   "implicitDependencies": []
 }

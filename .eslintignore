@@ -1,1 +1,4 @@
 node_modules
+
+# ESLint ignores files in dot folders by default. A workaround is to unignore them.
+!.vscode

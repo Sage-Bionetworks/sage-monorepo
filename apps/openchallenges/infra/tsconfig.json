@@ -9,13 +9,11 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   },
   "files": [],
   "include": [],
-  "exclude": [
-    "cdktf.out"
-  ],
+  "exclude": ["cdktf.out"],
   "references": [
     {
       "path": "./tsconfig.app.json"

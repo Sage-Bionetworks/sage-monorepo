@@ -7,9 +7,7 @@
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/agora/not-found"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/not-found"],
       "options": {
         "jestConfig": "libs/agora/not-found/jest.config.ts"
       }
@@ -24,10 +22,6 @@
       }
     }
   },
-  "tags": [
-    "type:feature",
-    "scope:agora",
-    "language:typescript"
-  ],
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
   "implicitDependencies": []
 }

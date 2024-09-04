@@ -1,10 +1,10 @@
 {
   "root": true,
-  "ignorePatterns": ["**/*"],
+  // "ignorePatterns": ["**/*"],
   "plugins": ["@nx"],
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
+      "files": ["*.ts", "*.tsx", "*.js", "*.jsx", "*.json", "*.jsonc", "*.json5"],
       "rules": {}
     },
     {
@@ -38,8 +38,9 @@
       }
     },
     {
-      "files": "*.json",
+      "files": ["*.json", "*.jsonc", "*.json5"],
       "parser": "jsonc-eslint-parser",
+      "extends": ["plugin:prettier/recommended"],
       "rules": {}
     }
   ]
