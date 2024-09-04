@@ -20,13 +20,14 @@ germline_heritability_server <- function(id, cohort_obj){
 
         if(input$parameter == "feature_display"){
           opt <- heritability() %>%
-            dplyr::select(feature_display,feature_germline_category) %>%
-            dplyr::group_by(feature_germline_category) %>%
+            dplyr::filter(!is.na(feature_name)) %>%
+            dplyr::select(feature_display,feature_germline_module) %>%
+            dplyr::group_by(feature_germline_module) %>%
             tidyr::nest(data = c(feature_display))%>%
             dplyr::mutate(data = purrr::map(data, tibble::deframe)) %>%
             tibble::deframe()
         }
-        if(input$parameter == "feature_germline_category") opt <- unique(heritability()$feature_germline_category)
+        if(input$parameter == "feature_germline_category") opt <- na.omit(unique(heritability()$feature_germline_category))
         if(input$parameter == "feature_germline_module") opt <- unique(heritability()$feature_germline_module)
 
         shiny::selectizeInput(ns("group"), "Show associated results for", choices = opt, selected = opt[4])
