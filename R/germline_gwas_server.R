@@ -15,8 +15,8 @@ germline_gwas_server <- function(id, cohort_obj){
 
       immune_feat <- reactive({
         iatlas.modules::create_nested_named_list(
-          gwas_data(),
-          names_col1 = "feature_germline_category",
+          gwas_data() %>% dplyr::select(feature_display, feature_name, feature_germline_module) %>% dplyr::distinct(),
+          names_col1 = "feature_germline_module",
           names_col2 = "feature_display",
           values_col = "feature_name"
         )
@@ -25,7 +25,7 @@ germline_gwas_server <- function(id, cohort_obj){
       shiny::updateSelectizeInput(session, 'immunefeature',
                                  choices = immune_feat(),
                                  selected = c("Wolf_MHC2_21978456", "Bindea_Th17_cells"), #default to exclude that, as suggested by manuscript authors
-                                 server = TRUE)
+                                 server = FALSE)
 
       snp_options <- reactive({
         shiny::req(gwas_data())
