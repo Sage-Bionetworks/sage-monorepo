@@ -18,23 +18,34 @@ sc_umap_ui <- function(id){
       width=24,
       shiny::column(
         width = 4,
-        shiny::checkboxGroupInput(
+        shiny::selectInput(
           ns("datasets"),
           "Choose dataset(s)",
-          choices = c("MSK - SCLC" = "MSK",
-                      "Vanderbilt - colon polyps" = "Vanderbilt"),
-          selected = c("MSK", "Vanderbilt")
+          choices = c("Bi 2021 - ccRCC" = "Bi_2021",
+                      "Krishna 2021 - ccRCC" = "Krishna_2021",
+                      "Li 2022 - ccRCC" = "Li_2022",
+                      "HTAN MSK - SCLC" = "MSK",
+                      "Shiao 2024 - BRCA" = "Shiao_2024",
+                      "HTAN Vanderbilt - colon polyps" = "Vanderbilt"
+                      ),
+          selected = c("Vanderbilt")
         )
       ),
+
       shiny::column(
         width = 6,
-        shiny::selectInput(
-          ns("color"),
-          label = "Color by",
-          choices = c("Cell Type"="cell_type", "Type" = "type"),
-          selected = "cell_type",
-          multiple = FALSE
+        style = "margin-top: 10px;",
+        shiny::actionButton(
+          ns("plot_button"),
+          "Plot UMAP"
         )
+        # shiny::selectInput(
+        #   ns("color"),
+        #   label = "Color by",
+        #   choices = c("Cell Type"="cell_type", "Type" = "type"),
+        #   selected = "cell_type",
+        #   multiple = FALSE
+        # )
       )
     ),
     iatlas.modules::plotBox(
@@ -42,7 +53,7 @@ sc_umap_ui <- function(id){
       shiny::column(
         width = 10,
         plotly::plotlyOutput(ns("umap_plot"),
-                             height = 800) %>%
+                             height = "600px") %>%
           shinycssloaders::withSpinner(.)
       ),
       shiny::column(
