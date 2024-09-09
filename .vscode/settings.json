@@ -21,9 +21,6 @@
   "eslint.validate": [
     "json"
   ],
-  "[java]": {
-    "editor.formatOnSave": false
-  },
   "typescript.tsdk": "node_modules/typescript/lib",
   "black-formatter.importStrategy": "fromEnvironment",
   "python.analysis.autoImportCompletions": true,
