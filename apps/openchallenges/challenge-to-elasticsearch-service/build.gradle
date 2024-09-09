@@ -5,7 +5,6 @@ buildscript {
 }
 
 plugins {
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
@@ -57,23 +56,4 @@ tasks.withType(JavaCompile) {
 bootBuildImage {
   imageName = 'ghcr.io/sage-bionetworks/openchallenges-challenge-to-elasticsearch-service:local'
 }
-
-spotless {
-  // format 'misc', {
-  //   target '*.gradle', '*.md', '.gitignore'
-
-  //   trimTrailingWhitespace()
-  //   indentWithSpaces(2)
-  //   endWithNewline()
-  // }
-
-  java {
-    target 'src/*/java/**/*.java'
-
-    importOrder()
-    removeUnusedImports()
-    googleJavaFormat()
-  }
-}
-
 

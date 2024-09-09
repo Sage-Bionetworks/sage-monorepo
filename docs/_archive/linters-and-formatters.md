@@ -58,11 +58,7 @@ Formatter configuration:
 ### Java
 
 - File type(s): `*.java`
-- On Save listener: [VS Code extension Run on Save] (see `.vscode/settings.json`)
-- Actions:
-  1. Run the task `format` for the affected projects (since last commit) identified by Nx.
-  2. The task `format` of Java projects runs `@nxrocks/nx-spring-boot:format`.
-  3. The project is formatted using Spotless plugin for Maven or Gradle (see `build.gradle`).
+- TODO
 
 ### TypeScript
 

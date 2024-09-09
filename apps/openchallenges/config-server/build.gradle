@@ -8,7 +8,6 @@ plugins {
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
   id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
 }
 
 repositories {
@@ -49,22 +48,4 @@ tasks.withType(JavaCompile) {
 
 bootBuildImage {
   imageName = "ghcr.io/sage-bionetworks/${project.name}-base:local"
-}
-
-spotless {
-  // format 'misc', {
-  //   target '*.gradle', '*.md', '.gitignore'
-
-  //   trimTrailingWhitespace()
-  //   indentWithSpaces(2)
-  //   endWithNewline()
-  // }
-
-  java {
-    target 'src/*/java/**/*.java'
-
-    importOrder()
-    removeUnusedImports()
-    googleJavaFormat()
-  }
 }

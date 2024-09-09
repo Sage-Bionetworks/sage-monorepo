@@ -67,7 +67,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
-          "./gradlew build --continuous --exclude-task spotlessCheck",
+          "./gradlew build --continuous",
           "./gradlew bootRun"
         ],
         "cwd": "{projectRoot}",
