@@ -14,18 +14,24 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew --version 1> /dev/null"],
+        "commands": [
+          "./gradlew --version 1> /dev/null"
+        ],
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{projectRoot}/build"],
+      "outputs": [
+        "{projectRoot}/build"
+      ],
       "options": {
         "command": "./gradlew build",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": ["^install"]
+      "dependsOn": [
+        "^install"
+      ]
     },
     "clean": {
       "executor": "nx:run-commands",
@@ -34,28 +40,19 @@
         "cwd": "{projectRoot}"
       }
     },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessApply",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "format-check": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessCheck",
-        "cwd": "{projectRoot}"
-      }
-    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
+        "commands": [
+          "./gradlew build --continuous",
+          "./gradlew bootRun"
+        ],
         "cwd": "apps/openchallenges/user-service",
         "parallel": true
       },
-      "dependsOn": ["^install"]
+      "dependsOn": [
+        "^install"
+      ]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -70,16 +67,22 @@
       "options": {
         "commands": [
           "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate",
-          "./gradlew spotlessApply"
+          "openapi-generator-cli generate"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     }
   },
-  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
+  "tags": [
+    "type:service",
+    "scope:backend",
+    "language:java",
+    "package-manager:gradle"
+  ],
   "implicitDependencies": [
     "openchallenges-api-description",
     "openchallenges-api-gateway",

@@ -53,20 +53,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessApply",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "format-check": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessCheck",
-        "cwd": "{projectRoot}"
-      }
-    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
@@ -149,8 +135,7 @@
       "options": {
         "commands": [
           "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate",
-          "./gradlew spotlessApply"
+          "openapi-generator-cli generate"
         ],
         "cwd": "{projectRoot}",
         "parallel": false
