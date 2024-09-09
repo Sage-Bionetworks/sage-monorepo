@@ -1,0 +1,29 @@
+{
+  "name": "agora-teams",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/teams/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/teams"],
+      "options": {
+        "jestConfig": "libs/agora/teams/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-html": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["hint src/**/*.html"],
+        "cwd": "libs/agora/teams",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "implicitDependencies": []
+}
