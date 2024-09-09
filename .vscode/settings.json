@@ -9,14 +9,15 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "never"
+    "source.fixAll": "explicit"
+    // "source.fixAll.eslint": "never"
   },
   "editor.rulers": [100],
   "editor.inlayHints.enabled": "off",
   "eslint.workingDirectories": ["."],
   // We need to explicitly set Prettier as the format for JSON formats, otherwise the formatter
-  // provided with VS Code extension JSON Language Features will set itself as the default one,
-  // despite us specifying that Prettier is the default formatter (editor.defaultFormatter).
+  // provided with VS Code will set itself as the default one, despite us specifying that Prettier
+  // is the default formatter (editor.defaultFormatter).
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -24,6 +25,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[json5]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "eslint.validate": ["json"],
