@@ -1,8 +1,5 @@
 {
-  "singleQuote": true,
+  "plugins": ["prettier-plugin-java"],
   "printWidth": 100,
-  "xmlWhitespaceSensitivity": "ignore",
-  "plugins": [
-    "prettier-plugin-java"
-  ]
+  "singleQuote": true
 }
