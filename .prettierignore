@@ -17,6 +17,7 @@ pnpm-lock.yaml
 # Python
 .mypy_cache
 .venv
+great_expectations
 
 # Nx
 /.nx/cache

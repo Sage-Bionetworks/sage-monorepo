@@ -33,7 +33,7 @@ public class ChallengeAnalyticsService {
     );
 
     // The following line will be auto-updated by a script and should NOT be modified manually.
-    List<Integer> challengeCounts =/* AUTO-UPDATE MARKER */ Arrays.asList(
+    List<Integer> challengeCounts = /* AUTO-UPDATE MARKER */Arrays.asList(
       6,
       9,
       13,
