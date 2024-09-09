@@ -21,9 +21,10 @@ public class KaggleToKafkaServiceApplication implements CommandLineRunner {
   private final StreamInitializer streamInitializer;
 
   public KaggleToKafkaServiceApplication(
-      KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
-      StreamRunner streamRunner,
-      StreamInitializer streamInitializer) {
+    KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
+    StreamRunner streamRunner,
+    StreamInitializer streamInitializer
+  ) {
     this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
     this.streamRunner = streamRunner;
     this.streamInitializer = streamInitializer;

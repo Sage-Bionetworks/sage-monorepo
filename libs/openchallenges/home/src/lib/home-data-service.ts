@@ -14,8 +14,7 @@ export class HomeDataService {
   constructor(private challengeAnalyticsService: ChallengeAnalyticsService) {}
 
   setChallengesPerYear() {
-    this.challengesPerYear$ =
-      this.challengeAnalyticsService.getChallengesPerYear();
+    this.challengesPerYear$ = this.challengeAnalyticsService.getChallengesPerYear();
   }
 
   getChallengesPerYear(): Observable<ChallengesPerYear> {

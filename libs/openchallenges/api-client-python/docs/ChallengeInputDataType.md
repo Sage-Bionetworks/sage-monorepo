@@ -3,13 +3,14 @@
 A challenge input data type.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**id** | **int** | The unique identifier of a challenge input data type. | 
-**slug** | **str** | The slug of the challenge input data type. | 
-**name** | **str** | The name of the challenge input data type. | 
-**created_at** | **datetime** |  | 
-**updated_at** | **datetime** |  | 
+
+| Name           | Type         | Description                                           | Notes |
+| -------------- | ------------ | ----------------------------------------------------- | ----- |
+| **id**         | **int**      | The unique identifier of a challenge input data type. |
+| **slug**       | **str**      | The slug of the challenge input data type.            |
+| **name**       | **str**      | The name of the challenge input data type.            |
+| **created_at** | **datetime** |                                                       |
+| **updated_at** | **datetime** |                                                       |
 
 ## Example
 
@@ -28,6 +29,5 @@ challenge_input_data_type_dict = challenge_input_data_type_instance.to_dict()
 # create an instance of ChallengeInputDataType from a dict
 challenge_input_data_type_form_dict = challenge_input_data_type.from_dict(challenge_input_data_type_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

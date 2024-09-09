@@ -20,18 +20,17 @@ public class GeneService {
   }
 
   public GenesPageDto listGenes() {
-
     List<GeneDocument> geneDocuments = geneRepository.findAll();
     List<GeneDto> genes = geneMapper.convertToDtoList(geneDocuments);
 
     return GenesPageDto.builder()
-        .genes(genes)
-        .number(0)
-        .size(genes.size())
-        .totalElements(0L)
-        .totalPages(1)
-        .hasNext(false)
-        .hasPrevious(false)
-        .build();
+      .genes(genes)
+      .number(0)
+      .size(genes.size())
+      .totalElements(0L)
+      .totalPages(1)
+      .hasNext(false)
+      .hasPrevious(false)
+      .build();
   }
 }

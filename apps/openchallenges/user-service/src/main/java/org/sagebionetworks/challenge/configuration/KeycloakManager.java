@@ -11,7 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class KeycloakManager {
 
-  @Autowired private KeycloakManagerProperties keycloakProperties;
+  @Autowired
+  private KeycloakManagerProperties keycloakProperties;
 
   private static Keycloak keycloakInstance = null;
 
@@ -22,14 +23,13 @@ public class KeycloakManager {
   public Keycloak getInstance() {
     if (keycloakInstance == null) {
       log.info("KC SERVER URL: {}", keycloakProperties.getServerUrl());
-      keycloakInstance =
-          KeycloakBuilder.builder()
-              .serverUrl(keycloakProperties.getServerUrl())
-              .realm(keycloakProperties.getRealm())
-              .grantType("client_credentials")
-              .clientId(keycloakProperties.getClientId())
-              .clientSecret(keycloakProperties.getClientSecret())
-              .build();
+      keycloakInstance = KeycloakBuilder.builder()
+        .serverUrl(keycloakProperties.getServerUrl())
+        .realm(keycloakProperties.getRealm())
+        .grantType("client_credentials")
+        .clientId(keycloakProperties.getClientId())
+        .clientSecret(keycloakProperties.getClientSecret())
+        .build();
     }
     return keycloakInstance;
   }

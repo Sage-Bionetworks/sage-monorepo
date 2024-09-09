@@ -34,7 +34,7 @@ public class ChallengeStar {
   private ChallengeEntity challenge;
 
   @Column(name = "user_id", nullable = false)
-  @GenericField()
+  @GenericField
   private int userId;
 
   @Column(name = "created_at")

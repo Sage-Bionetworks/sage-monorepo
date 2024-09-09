@@ -38,8 +38,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private homeDataService: HomeDataService,
     private configService: ConfigService,
   ) {
-    this.useGoogleTagManager =
-      this.configService.config.googleTagManagerId.length > 0;
+    this.useGoogleTagManager = this.configService.config.googleTagManagerId.length > 0;
   }
 
   ngOnInit() {

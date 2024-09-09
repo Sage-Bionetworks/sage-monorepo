@@ -14,8 +14,9 @@ import org.springframework.context.annotation.Configuration;
 @Slf4j
 @Configuration
 @ConditionalOnProperty(
-    value = "spring.jpa.properties.hibernate.search.enabled",
-    havingValue = "true")
+  value = "spring.jpa.properties.hibernate.search.enabled",
+  havingValue = "true"
+)
 public class HibernateSearchIndexBuild implements ApplicationListener<ApplicationReadyEvent> {
 
   private final EntityManager entityManager;
@@ -29,17 +30,14 @@ public class HibernateSearchIndexBuild implements ApplicationListener<Applicatio
   public void onApplicationEvent(ApplicationReadyEvent event) {
     log.info("Started Initializing Indexes");
     SearchSession searchSession = Search.session(entityManager);
-    MassIndexer indexer =
-        searchSession
-            .massIndexer()
-            .idFetchSize(150)
-            .batchSizeToLoadObjects(25)
-            .threadsToLoadObjects(12);
+    MassIndexer indexer = searchSession
+      .massIndexer()
+      .idFetchSize(150)
+      .batchSizeToLoadObjects(25)
+      .threadsToLoadObjects(12);
 
     try {
-
       indexer.startAndWait();
-
     } catch (InterruptedException e) {
       log.warn("Failed to load data from database");
       Thread.currentThread().interrupt();

@@ -1,9 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  Image,
-  ImageService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { Observable } from 'rxjs';
 import { RouterModule } from '@angular/router';
 

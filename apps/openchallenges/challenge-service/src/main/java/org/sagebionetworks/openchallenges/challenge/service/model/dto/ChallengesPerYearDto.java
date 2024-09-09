@@ -115,9 +115,11 @@ public class ChallengesPerYearDto {
       return false;
     }
     ChallengesPerYearDto challengesPerYear = (ChallengesPerYearDto) o;
-    return Objects.equals(this.years, challengesPerYear.years)
-        && Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts)
-        && Objects.equals(this.undatedChallengeCount, challengesPerYear.undatedChallengeCount);
+    return (
+      Objects.equals(this.years, challengesPerYear.years) &&
+      Objects.equals(this.challengeCounts, challengesPerYear.challengeCounts) &&
+      Objects.equals(this.undatedChallengeCount, challengesPerYear.undatedChallengeCount)
+    );
   }
 
   @Override
@@ -131,9 +133,10 @@ public class ChallengesPerYearDto {
     sb.append("class ChallengesPerYearDto {\n");
     sb.append("    years: ").append(toIndentedString(years)).append("\n");
     sb.append("    challengeCounts: ").append(toIndentedString(challengeCounts)).append("\n");
-    sb.append("    undatedChallengeCount: ")
-        .append(toIndentedString(undatedChallengeCount))
-        .append("\n");
+    sb
+      .append("    undatedChallengeCount: ")
+      .append(toIndentedString(undatedChallengeCount))
+      .append("\n");
     sb.append("}");
     return sb.toString();
   }

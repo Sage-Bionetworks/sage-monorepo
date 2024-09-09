@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "User", description = "Operations about users")
 @RequestMapping("${openapi.challengeUser.base-path:}")
 public interface UserApi {
-
   default UserApiDelegate getDelegate() {
     return new UserApiDelegate() {};
   }
@@ -41,65 +40,81 @@ public interface UserApi {
    *     be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "createUser",
-      summary = "Create a user",
-      tags = {"User"},
-      responses = {
-        @ApiResponse(
-            responseCode = "201",
-            description = "Account created",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = UserCreateResponseDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = UserCreateResponseDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "409",
-            description = "The request conflicts with current state of the target resource",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "createUser",
+    summary = "Create a user",
+    tags = { "User" },
+    responses = {
+      @ApiResponse(
+        responseCode = "201",
+        description = "Account created",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = UserCreateResponseDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = UserCreateResponseDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "409",
+        description = "The request conflicts with current state of the target resource",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.POST,
-      value = "/users/register",
-      produces = {"application/json", "application/problem+json"},
-      consumes = {"application/json"})
+    method = RequestMethod.POST,
+    value = "/users/register",
+    produces = { "application/json", "application/problem+json" },
+    consumes = { "application/json" }
+  )
   default ResponseEntity<UserCreateResponseDto> createUser(
-      @Parameter(name = "UserCreateRequestDto", description = "", required = true)
-          @Valid
-          @RequestBody
-          UserCreateRequestDto userCreateRequestDto) {
+    @Parameter(
+      name = "UserCreateRequestDto",
+      description = "",
+      required = true
+    ) @Valid @RequestBody UserCreateRequestDto userCreateRequestDto
+  ) {
     return getDelegate().createUser(userCreateRequestDto);
   }
 
@@ -111,56 +126,63 @@ public interface UserApi {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "deleteUser",
-      summary = "Delete a user",
-      tags = {"User"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Deleted",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = Object.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = Object.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "The specified resource was not found",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "deleteUser",
+    summary = "Delete a user",
+    tags = { "User" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Deleted",
+        content = {
+          @Content(mediaType = "application/json", schema = @Schema(implementation = Object.class)),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = Object.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.DELETE,
-      value = "/users/{userId}",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.DELETE,
+    value = "/users/{userId}",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<Object> deleteUser(
-      @Parameter(
-              name = "userId",
-              description =
-                  "The unique identifier of the user, either the user account ID or login",
-              required = true)
-          @PathVariable("userId")
-          Long userId) {
+    @Parameter(
+      name = "userId",
+      description = "The unique identifier of the user, either the user account ID or login",
+      required = true
+    ) @PathVariable("userId") Long userId
+  ) {
     return getDelegate().deleteUser(userId);
   }
 
@@ -172,56 +194,66 @@ public interface UserApi {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "getUser",
-      summary = "Get a user",
-      tags = {"User"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "A user",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = UserDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = UserDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The specified resource was not found",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "getUser",
+    summary = "Get a user",
+    tags = { "User" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "A user",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = UserDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = UserDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/users/{userId}",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/users/{userId}",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<UserDto> getUser(
-      @Parameter(
-              name = "userId",
-              description =
-                  "The unique identifier of the user, either the user account ID or login",
-              required = true)
-          @PathVariable("userId")
-          Long userId) {
+    @Parameter(
+      name = "userId",
+      description = "The unique identifier of the user, either the user account ID or login",
+      required = true
+    ) @PathVariable("userId") Long userId
+  ) {
     return getDelegate().getUser(userId);
   }
 
@@ -234,59 +266,74 @@ public interface UserApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listUsers",
-      summary = "Get all users",
-      tags = {"User"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = UsersPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = UsersPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listUsers",
+    summary = "Get all users",
+    tags = { "User" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = UsersPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = UsersPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/users",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/users",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<UsersPageDto> listUsers(
-      @Min(0)
-          @Parameter(name = "pageNumber", description = "The page number")
-          @Valid
-          @RequestParam(value = "pageNumber", required = false, defaultValue = "0")
-          Integer pageNumber,
-      @Min(10)
-          @Parameter(name = "pageSize", description = "The number of items in a single page")
-          @Valid
-          @RequestParam(value = "pageSize", required = false, defaultValue = "100")
-          Integer pageSize) {
+    @Min(0) @Parameter(name = "pageNumber", description = "The page number") @Valid @RequestParam(
+      value = "pageNumber",
+      required = false,
+      defaultValue = "0"
+    ) Integer pageNumber,
+    @Min(10) @Parameter(
+      name = "pageSize",
+      description = "The number of items in a single page"
+    ) @Valid @RequestParam(
+      value = "pageSize",
+      required = false,
+      defaultValue = "100"
+    ) Integer pageSize
+  ) {
     return getDelegate().listUsers(pageNumber, pageSize);
   }
 }

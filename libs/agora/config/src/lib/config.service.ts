@@ -25,13 +25,9 @@ export class ConfigService {
     // server and accessing it directly (e.g. APP_BASE_URL = 'http://localhost:37677') but not when
     // accessing the production server in the container from apex (APP_BASE_URL =
     // 'http://localhost:8000', which is invalid inside the container).
-    const browserRoot = isPlatformServer(this.platformId)
-      ? `http://localhost:${this.port}`
-      : '.';
+    const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:${this.port}` : '.';
 
-    const appConfig$ = this.http.get<AppConfig>(
-      `${browserRoot}/config/config.json`,
-    );
+    const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
     try {
       const config = await lastValueFrom(appConfig$);
       this.config = config;

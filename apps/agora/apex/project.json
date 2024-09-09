@@ -21,14 +21,8 @@
       "options": {
         "context": "apps/agora/apex",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/agora-apex"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/agora-apex"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -38,19 +32,12 @@
       "options": {
         "context": "apps/agora/apex",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/agora-apex"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/agora-apex"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -60,9 +47,6 @@
       }
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend"
-  ],
+  "tags": ["type:service", "scope:backend"],
   "implicitDependencies": []
 }

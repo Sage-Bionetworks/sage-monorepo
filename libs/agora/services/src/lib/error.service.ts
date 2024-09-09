@@ -17,8 +17,7 @@ export class ErrorService implements ErrorHandler {
       severity: 'warn',
       sticky: true,
       summary: 'Error',
-      detail:
-        'An unexpected error has occurred, we recommend reloading the application.',
+      detail: 'An unexpected error has occurred, we recommend reloading the application.',
     });
     setTimeout(() => {
       this.messageService.clear();

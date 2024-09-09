@@ -1,16 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import {
-  Observable,
-  catchError,
-  forkJoin,
-  iif,
-  map,
-  of,
-  shareReplay,
-  switchMap,
-  take,
-} from 'rxjs';
+import { Observable, catchError, forkJoin, iif, map, of, shareReplay, switchMap, take } from 'rxjs';
 import {
   Challenge,
   ChallengeContribution,
@@ -24,10 +14,7 @@ import {
   Organization,
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  OrganizationCard,
-  OrganizationCardComponent,
-} from '@sagebionetworks/openchallenges/ui';
+import { OrganizationCard, OrganizationCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { orderBy } from 'lodash';
 
@@ -58,23 +45,20 @@ export class ChallengeContributorsComponent implements OnInit {
 
   ngOnInit() {
     // Get all the contributions
-    const contribs$: Observable<ChallengeContribution[]> =
-      this.challengeContributionService
-        .listChallengeContributions(this.challenge.id)
-        .pipe(
-          map((page) => page.challengeContributions),
-          shareReplay(1),
-          take(1),
-        );
+    const contribs$: Observable<ChallengeContribution[]> = this.challengeContributionService
+      .listChallengeContributions(this.challenge.id)
+      .pipe(
+        map((page) => page.challengeContributions),
+        shareReplay(1),
+        take(1),
+      );
 
     // Get a list of unique orgs to minimize outbound requests
     const orgs$: Observable<Organization[]> = contribs$.pipe(
       map((contribs) => [...new Set(contribs.map((c) => c.organizationId))]),
       switchMap((orgIds) =>
         forkJoinConcurrent(
-          orgIds.map((orgId) =>
-            this.organizationService.getOrganization(orgId.toString()),
-          ),
+          orgIds.map((orgId) => this.organizationService.getOrganization(orgId.toString())),
           Infinity,
         ),
       ),
@@ -101,9 +85,7 @@ export class ChallengeContributorsComponent implements OnInit {
       map((data) => {
         const contributionCardBundles: ContributionCardBundle[] = [];
         for (const contrib of data.contribs) {
-          const orgIndex = data.orgs
-            .map((org) => org.id)
-            .indexOf(contrib.organizationId);
+          const orgIndex = data.orgs.map((org) => org.id).indexOf(contrib.organizationId);
           const org = orgIndex >= 0 ? data.orgs[orgIndex] : undefined;
           const orgLogo = orgIndex >= 0 ? data.orgLogos[orgIndex] : undefined;
           if (org !== undefined) {
@@ -150,9 +132,7 @@ export class ChallengeContributorsComponent implements OnInit {
   }
 
   // TODO Avoid duplicated code (see org search component)
-  private getOrganizationAvatarUrl(
-    org: Organization,
-  ): Observable<Image | undefined> {
+  private getOrganizationAvatarUrl(org: Organization): Observable<Image | undefined> {
     return iif(
       () => !!org.avatarKey,
       this.imageService.getImage({
@@ -163,19 +143,14 @@ export class ChallengeContributorsComponent implements OnInit {
       of(undefined),
     ).pipe(
       catchError(() => {
-        console.error(
-          'Unable to get the image url. Please check the logs of the image service.',
-        );
+        console.error('Unable to get the image url. Please check the logs of the image service.');
         return of(undefined);
       }),
     );
   }
 
   // TODO Avoid duplicated code (see org search component)
-  private getOrganizationCard(
-    org: Organization,
-    avatarUrl: Image | undefined,
-  ): OrganizationCard {
+  private getOrganizationCard(org: Organization, avatarUrl: Image | undefined): OrganizationCard {
     return {
       acronym: org.acronym,
       avatarUrl: avatarUrl?.url,

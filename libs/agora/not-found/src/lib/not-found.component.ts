@@ -6,23 +6,14 @@ import { MatCardModule } from '@angular/material/card';
 import { FooterComponent } from '@sagebionetworks/agora/ui';
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { SeoService } from '@sagebionetworks/shared/util';
-import {
-  DataversionService,
-  Dataversion,
-} from '@sagebionetworks/agora/api-client-angular';
+import { DataversionService, Dataversion } from '@sagebionetworks/agora/api-client-angular';
 import { getSeoData } from './seo-data';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'agora-not-found',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    FooterComponent,
-  ],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, FooterComponent],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })

@@ -28,9 +28,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-  @Autowired private KeycloakUserService keycloakUserService;
+  @Autowired
+  private KeycloakUserService keycloakUserService;
 
-  @Autowired private UserRepository userRepository;
+  @Autowired
+  private UserRepository userRepository;
 
   private UserMapper userMapper = new UserMapper();
 
@@ -38,7 +40,8 @@ public class UserService {
   public UserCreateResponseDto createUser(UserCreateRequestDto userCreateRequest) {
     if (keycloakUserService.getUserByUsername(userCreateRequest.getLogin()).isPresent()) {
       throw new UsernameAlreadyExistsException(
-          String.format("The username %s already exist.", userCreateRequest.getLogin()));
+        String.format("The username %s already exist.", userCreateRequest.getLogin())
+      );
     }
 
     UserRepresentation userRepresentation = new UserRepresentation();
@@ -55,8 +58,9 @@ public class UserService {
     Integer userCreationResponse = keycloakUserService.createUser(userRepresentation);
 
     if (userCreationResponse == 201) {
-      Optional<UserRepresentation> representation =
-          keycloakUserService.getUserByUsername(userCreateRequest.getLogin());
+      Optional<UserRepresentation> representation = keycloakUserService.getUserByUsername(
+        userCreateRequest.getLogin()
+      );
       UserEntity user = new UserEntity();
       user.setAuthId(representation.get().getId());
       user.setStatus(UserStatusDto.PENDING);
@@ -69,38 +73,34 @@ public class UserService {
 
   @Transactional(readOnly = true)
   public UsersPageDto listUsers(Integer pageNumber, Integer pageSize) {
-    Page<UserEntity> userEntitiesPage =
-        userRepository.findAll(PageRequest.of(pageNumber, pageSize));
+    Page<UserEntity> userEntitiesPage = userRepository.findAll(
+      PageRequest.of(pageNumber, pageSize)
+    );
     List<UserEntity> userEntities = userEntitiesPage.getContent();
     List<UserDto> users = new ArrayList<>();
-    userEntities.forEach(
-        userEntity -> {
-          UserRepresentation userRepresentation =
-              keycloakUserService.getUser(userEntity.getAuthId());
-          UserDto user = userMapper.convertToDto(userEntity);
-          user.email(userRepresentation.getEmail());
-          user.login(userRepresentation.getUsername());
-          users.add(user);
-        });
+    userEntities.forEach(userEntity -> {
+      UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
+      UserDto user = userMapper.convertToDto(userEntity);
+      user.email(userRepresentation.getEmail());
+      user.login(userRepresentation.getUsername());
+      users.add(user);
+    });
     return UsersPageDto.builder().users(users).totalResults(0).paging(null).build();
   }
 
   @Transactional(readOnly = true)
   public UserDto getUser(Long userId) {
-    UserEntity userEntity =
-        userRepository
-            .findById(userId)
-            .orElseThrow(
-                () ->
-                    new UserNotFoundException(
-                        String.format("The user with ID %s does not exist.", userId)));
+    UserEntity userEntity = userRepository
+      .findById(userId)
+      .orElseThrow(() ->
+        new UserNotFoundException(String.format("The user with ID %s does not exist.", userId))
+      );
 
     UserRepresentation userRepresentation = keycloakUserService.getUser(userEntity.getAuthId());
     UserDto user = userMapper.convertToDto(userEntity);
     user.setEmail(userRepresentation.getEmail());
     return user;
   }
-
   // // TODO Review this function
   // public UserDto updateUser(Long id, UserUpdateRequestDto userUpdateRequest) {
   //   UserEntity userEntity =

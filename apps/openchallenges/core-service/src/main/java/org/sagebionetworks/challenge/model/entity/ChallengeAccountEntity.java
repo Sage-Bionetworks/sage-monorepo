@@ -1,12 +1,11 @@
 package org.sagebionetworks.challenge.model.entity;
 
-import org.sagebionetworks.challenge.model.AccountStatus;
-import org.sagebionetworks.challenge.model.AccountType;
+import java.math.BigDecimal;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.math.BigDecimal;
+import org.sagebionetworks.challenge.model.AccountStatus;
+import org.sagebionetworks.challenge.model.AccountType;
 
 @Getter
 @Setter

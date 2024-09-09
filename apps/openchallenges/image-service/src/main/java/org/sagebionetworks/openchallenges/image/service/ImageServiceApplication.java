@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @EnableEurekaClient
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.sagebionetworks.openchallenges"})
+@ComponentScan(basePackages = { "org.sagebionetworks.openchallenges" })
 public class ImageServiceApplication implements CommandLineRunner {
 
   private static final Logger LOG = LoggerFactory.getLogger(ImageServiceApplication.class);

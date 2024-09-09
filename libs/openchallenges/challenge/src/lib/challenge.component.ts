@@ -17,16 +17,9 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { CHALLENGE_TABS } from './challenge-tabs';
-import {
-  Avatar,
-  AvatarComponent,
-  FooterComponent,
-} from '@sagebionetworks/openchallenges/ui';
+import { Avatar, AvatarComponent, FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
-import {
-  HttpStatusRedirect,
-  handleHttpError,
-} from '@sagebionetworks/openchallenges/util';
+import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatIconModule } from '@angular/material/icon';
 import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
@@ -91,12 +84,9 @@ export class ChallengeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.challenge$ = this.activatedRoute.params.pipe(
       switchMap((params) =>
-        this.challengeService.getChallenge(
-          params['challengeId'],
-          undefined,
-          undefined,
-          { httpHeaderAccept: 'application/ld+json' },
-        ),
+        this.challengeService.getChallenge(params['challengeId'], undefined, undefined, {
+          httpHeaderAccept: 'application/ld+json',
+        }),
       ),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
@@ -120,14 +110,11 @@ export class ChallengeComponent implements OnInit, OnDestroy {
       this.seoService.setJsonLds([challenge], this.renderer2);
     });
 
-    const activeTabKey$: Observable<string> =
-      this.activatedRoute.queryParams.pipe(
-        map((params) =>
-          Object.keys(this.tabs).includes(params['tab'])
-            ? params['tab']
-            : 'overview',
-        ),
-      );
+    const activeTabKey$: Observable<string> = this.activatedRoute.queryParams.pipe(
+      map((params) =>
+        Object.keys(this.tabs).includes(params['tab']) ? params['tab'] : 'overview',
+      ),
+    );
 
     const combineSub = combineLatest({
       challenge: this.challenge$,

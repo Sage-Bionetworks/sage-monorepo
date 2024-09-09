@@ -10,8 +10,9 @@ import javax.validation.constraints.*;
 
 /** The response returned after the creation of the user */
 @Schema(
-    name = "UserCreateResponse",
-    description = "The response returned after the creation of the user")
+  name = "UserCreateResponse",
+  description = "The response returned after the creation of the user"
+)
 @JsonTypeName("UserCreateResponse")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
@@ -32,10 +33,11 @@ public class UserCreateResponseDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an account",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of an account",
+    required = true
+  )
   public Long getId() {
     return id;
   }

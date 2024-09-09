@@ -13,18 +13,18 @@ public class OpenApiConfiguration {
   @Bean
   public OpenAPI openApi() {
     return new OpenAPI()
-        .info(
-            new Info()
-                .title("User API")
-                .description("This is the User Service of the OpenChallenges.")
-                .version("v1.0")
-                .contact(
-                    new Contact().name("This is the User ").url("https://openchallenges.org"))
-                .termsOfService("TOC")
-                .license(
-                    new License()
-                        .name("Apache 2.0")
-                        .url(
-                            "https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt")));
+      .info(
+        new Info()
+          .title("User API")
+          .description("This is the User Service of the OpenChallenges.")
+          .version("v1.0")
+          .contact(new Contact().name("This is the User ").url("https://openchallenges.org"))
+          .termsOfService("TOC")
+          .license(
+            new License()
+              .name("Apache 2.0")
+              .url("https://github.com/Sage-Bionetworks/sage-monorepo/blob/main/LICENSE.txt")
+          )
+      );
   }
 }

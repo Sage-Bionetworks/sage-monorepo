@@ -44,10 +44,11 @@ public class ImageQueryDto {
   @NotNull
   @Pattern(regexp = "^[a-zA-Z0-9/_-]+.[a-zA-Z0-9/_-]+")
   @Schema(
-      name = "objectKey",
-      example = "logo/dream.png",
-      description = "The unique identifier of the image.",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+    name = "objectKey",
+    example = "logo/dream.png",
+    description = "The unique identifier of the image.",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("objectKey")
   public String getObjectKey() {
     return objectKey;
@@ -108,9 +109,11 @@ public class ImageQueryDto {
       return false;
     }
     ImageQueryDto imageQuery = (ImageQueryDto) o;
-    return Objects.equals(this.objectKey, imageQuery.objectKey)
-        && Objects.equals(this.height, imageQuery.height)
-        && Objects.equals(this.aspectRatio, imageQuery.aspectRatio);
+    return (
+      Objects.equals(this.objectKey, imageQuery.objectKey) &&
+      Objects.equals(this.height, imageQuery.height) &&
+      Objects.equals(this.aspectRatio, imageQuery.aspectRatio)
+    );
   }
 
   @Override

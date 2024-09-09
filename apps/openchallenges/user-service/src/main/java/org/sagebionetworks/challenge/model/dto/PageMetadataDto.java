@@ -55,9 +55,10 @@ public class PageMetadataDto {
    */
   @NotNull
   @Schema(
-      name = "totalResults",
-      description = "Total number of results in the result set",
-      required = true)
+    name = "totalResults",
+    description = "Total number of results in the result set",
+    required = true
+  )
   public Integer getTotalResults() {
     return totalResults;
   }
@@ -75,8 +76,10 @@ public class PageMetadataDto {
       return false;
     }
     PageMetadataDto pageMetadata = (PageMetadataDto) o;
-    return Objects.equals(this.paging, pageMetadata.paging)
-        && Objects.equals(this.totalResults, pageMetadata.totalResults);
+    return (
+      Objects.equals(this.paging, pageMetadata.paging) &&
+      Objects.equals(this.totalResults, pageMetadata.totalResults)
+    );
   }
 
   @Override

@@ -1,5 +1,8 @@
 package org.sagebionetworks.challenge.model;
 
 public enum AccountStatus {
-  PENDING, ACTIVE, DORMANT, BLOCKED
+  PENDING,
+  ACTIVE,
+  DORMANT,
+  BLOCKED,
 }

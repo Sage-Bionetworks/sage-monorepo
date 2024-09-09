@@ -23,7 +23,6 @@ public class OrganizationEntityTest {
 
   @BeforeEach
   public void setup() {
-
     entityFromConstructor = new OrganizationEntity();
 
     entityFromConstructor.setId(id);
@@ -68,23 +67,20 @@ public class OrganizationEntityTest {
   }
 
   @Test
-  public void
-      OrganizationEntity_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuiltWithClassBuilder() {
-
-    OrganizationEntity entity =
-        OrganizationEntity.builder()
-            .id(id)
-            .name(name)
-            .avatarKey(avatarKey)
-            .websiteUrl(websiteUrl)
-            .challengeCount(challengeCount)
-            .categories(Collections.emptyList())
-            .challengeContributions(Collections.emptyList())
-            .description(description)
-            .createdAt(createdAt)
-            .updatedAt(updatedAt)
-            .acronym(acronym)
-            .build();
+  public void OrganizationEntity_ShouldReturnArgumentsPassed_WhenOrganizationEntityBuiltWithClassBuilder() {
+    OrganizationEntity entity = OrganizationEntity.builder()
+      .id(id)
+      .name(name)
+      .avatarKey(avatarKey)
+      .websiteUrl(websiteUrl)
+      .challengeCount(challengeCount)
+      .categories(Collections.emptyList())
+      .challengeContributions(Collections.emptyList())
+      .description(description)
+      .createdAt(createdAt)
+      .updatedAt(updatedAt)
+      .acronym(acronym)
+      .build();
 
     Assertions.assertEquals(id, entity.getId());
     Assertions.assertEquals(name, entity.getName());
@@ -101,7 +97,6 @@ public class OrganizationEntityTest {
 
   @Test
   public void OrganizationEntityGetters_ShouldReturnExpectedValues_WhenArgumentsPassed() {
-
     Assertions.assertEquals(id, entityFromConstructor.getId());
     Assertions.assertEquals(name, entityFromConstructor.getName());
     Assertions.assertEquals(avatarKey, entityFromConstructor.getAvatarKey());
@@ -109,7 +104,9 @@ public class OrganizationEntityTest {
     Assertions.assertEquals(challengeCount, entityFromConstructor.getChallengeCount());
     Assertions.assertEquals(Collections.emptyList(), entityFromConstructor.getCategories());
     Assertions.assertEquals(
-        Collections.emptyList(), entityFromConstructor.getChallengeContributions());
+      Collections.emptyList(),
+      entityFromConstructor.getChallengeContributions()
+    );
     Assertions.assertEquals(description, entityFromConstructor.getDescription());
     Assertions.assertEquals(createdAt, entityFromConstructor.getCreatedAt());
     Assertions.assertEquals(updatedAt, entityFromConstructor.getUpdatedAt());
@@ -118,7 +115,6 @@ public class OrganizationEntityTest {
 
   @Test
   public void HashCode_ShouldBuildHashCodeOfOrganizationEntity_WhenArgumentsPassed() {
-
     int hashCode1 = entityFromConstructor.hashCode();
     int hashCode2 = entityFromConstructor2.hashCode();
 
@@ -127,7 +123,6 @@ public class OrganizationEntityTest {
 
   @Test
   public void EqualsObject_ShouldBeTheSame_WhenPassedTwoIdenticalObjects() {
-
     boolean equals1 = entityFromConstructor.equals(entityFromConstructor2);
     boolean equals2 = entityFromConstructor2.equals(entityFromConstructor);
 
@@ -137,7 +132,6 @@ public class OrganizationEntityTest {
 
   @Test
   public void EqualsObject_ShouldBeDifferent_WhenPassedTwoDifferentObjects() {
-
     boolean equals3 = entityFromConstructor.equals(entityFromConstructor3);
 
     Assertions.assertFalse(equals3);

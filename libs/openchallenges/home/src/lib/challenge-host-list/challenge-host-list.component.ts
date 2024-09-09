@@ -14,10 +14,7 @@ import {
   OrganizationCategory,
   OrganizationSort,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  OrganizationCard,
-  OrganizationCardComponent,
-} from '@sagebionetworks/openchallenges/ui';
+import { OrganizationCard, OrganizationCardComponent } from '@sagebionetworks/openchallenges/ui';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
 import { forkJoin, iif, Observable, of, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
@@ -25,12 +22,7 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 @Component({
   selector: 'openchallenges-challenge-host-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    OrganizationCardComponent,
-    RouterModule,
-  ],
+  imports: [CommonModule, MatButtonModule, OrganizationCardComponent, RouterModule],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],
 })
@@ -69,11 +61,7 @@ export class ChallengeHostListComponent implements OnInit {
         }),
       ),
       switchMap(({ orgs, avatarUrls }) =>
-        of(
-          orgs.map((org, index) =>
-            this.getOrganizationCard(org, avatarUrls[index]),
-          ),
-        ),
+        of(orgs.map((org, index) => this.getOrganizationCard(org, avatarUrls[index]))),
       ),
     );
   }
@@ -90,19 +78,14 @@ export class ChallengeHostListComponent implements OnInit {
       of({ url: '' }),
     ).pipe(
       catchError(() => {
-        console.error(
-          'Unable to get the image url. Please check the logs of the image service.',
-        );
+        console.error('Unable to get the image url. Please check the logs of the image service.');
         return of({ url: '' });
       }),
     );
   }
 
   // TODO Avoid duplicated code (see org search component)
-  private getOrganizationCard(
-    org: Organization,
-    avatarUrl: Image,
-  ): OrganizationCard {
+  private getOrganizationCard(org: Organization, avatarUrl: Image): OrganizationCard {
     return {
       acronym: org.acronym,
       avatarUrl: avatarUrl?.url,

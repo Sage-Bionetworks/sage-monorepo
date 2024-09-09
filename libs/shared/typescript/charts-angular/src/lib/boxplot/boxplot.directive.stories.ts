@@ -56,7 +56,6 @@ export const DynamicSummary: Story = {
     points: dynamicBoxplotPoints,
     xAxisTitle: 'MODEL',
     yAxisTitle: '#objects/sqmm',
-    pointTooltipFormatter: (pt: CategoryPoint) =>
-      `${pt.pointCategory}: ${pt.value}`,
+    pointTooltipFormatter: (pt: CategoryPoint) => `${pt.pointCategory}: ${pt.value}`,
   },
 };

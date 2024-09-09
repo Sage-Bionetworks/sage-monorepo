@@ -9,8 +9,5 @@
   },
   "remoteUser": "vscode",
   "shutdownAction": "stopContainer",
-  "runArgs": [
-    "--name",
-    "sage_devcontainer_test"
-  ]
+  "runArgs": ["--name", "sage_devcontainer_test"]
 }

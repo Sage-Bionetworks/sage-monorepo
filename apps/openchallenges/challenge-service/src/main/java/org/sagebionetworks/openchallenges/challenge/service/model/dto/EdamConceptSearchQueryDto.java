@@ -73,9 +73,10 @@ public class EdamConceptSearchQueryDto {
    */
   @Min(1)
   @Schema(
-      name = "pageSize",
-      description = "The number of items in a single page.",
-      required = false)
+    name = "pageSize",
+    description = "The number of items in a single page.",
+    required = false
+  )
   public Integer getPageSize() {
     return pageSize;
   }
@@ -143,9 +144,10 @@ public class EdamConceptSearchQueryDto {
    * @return ids
    */
   @Schema(
-      name = "ids",
-      description = "An array of EDAM concept ids used to filter the results.",
-      required = false)
+    name = "ids",
+    description = "An array of EDAM concept ids used to filter the results.",
+    required = false
+  )
   public List<Long> getIds() {
     return ids;
   }
@@ -165,10 +167,11 @@ public class EdamConceptSearchQueryDto {
    * @return searchTerms
    */
   @Schema(
-      name = "searchTerms",
-      example = "sequence image",
-      description = "A string of search terms used to filter the results.",
-      required = false)
+    name = "searchTerms",
+    example = "sequence image",
+    description = "A string of search terms used to filter the results.",
+    required = false
+  )
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -197,9 +200,10 @@ public class EdamConceptSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "sections",
-      description = "An array of EDAM sections (sub-ontologies) used to filter the results.",
-      required = false)
+    name = "sections",
+    description = "An array of EDAM sections (sub-ontologies) used to filter the results.",
+    required = false
+  )
   public List<EdamSectionDto> getSections() {
     return sections;
   }
@@ -217,13 +221,15 @@ public class EdamConceptSearchQueryDto {
       return false;
     }
     EdamConceptSearchQueryDto edamConceptSearchQuery = (EdamConceptSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber)
-        && Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize)
-        && Objects.equals(this.sort, edamConceptSearchQuery.sort)
-        && Objects.equals(this.direction, edamConceptSearchQuery.direction)
-        && Objects.equals(this.ids, edamConceptSearchQuery.ids)
-        && Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms)
-        && Objects.equals(this.sections, edamConceptSearchQuery.sections);
+    return (
+      Objects.equals(this.pageNumber, edamConceptSearchQuery.pageNumber) &&
+      Objects.equals(this.pageSize, edamConceptSearchQuery.pageSize) &&
+      Objects.equals(this.sort, edamConceptSearchQuery.sort) &&
+      Objects.equals(this.direction, edamConceptSearchQuery.direction) &&
+      Objects.equals(this.ids, edamConceptSearchQuery.ids) &&
+      Objects.equals(this.searchTerms, edamConceptSearchQuery.searchTerms) &&
+      Objects.equals(this.sections, edamConceptSearchQuery.sections)
+    );
   }
 
   @Override

@@ -15,16 +15,12 @@
     },
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/agora/app/browser/browser",
         "index": "apps/agora/app/src/index.html",
         "main": "apps/agora/app/src/main.ts",
-        "polyfills": [
-          "zone.js"
-        ],
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/agora/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -108,17 +104,13 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/agora/app/jest.config.ts"
       }
     },
     "server": {
-      "dependsOn": [
-        "build"
-      ],
+      "dependsOn": ["build"],
       "executor": "@angular-devkit/build-angular:server",
       "options": {
         "outputPath": "dist/apps/agora/app/browser/server",
@@ -159,39 +151,24 @@
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/agora-app"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/agora-app"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
-      "dependsOn": [
-        "server"
-      ]
+      "dependsOn": ["server"]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/agora-app"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/agora-app"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -201,9 +178,5 @@
       }
     }
   },
-  "implicitDependencies": [
-    "agora-styles",
-    "agora-themes",
-    "shared-typescript-assets"
-  ]
+  "implicitDependencies": ["agora-styles", "agora-themes", "shared-typescript-assets"]
 }

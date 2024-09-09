@@ -66,11 +66,7 @@ export class Network extends Construct {
     this.privateSubnets = this.azs.map((az, index) => {
       return new Subnet(this, `private-subnet-${az}`, {
         availabilityZone: az,
-        cidrBlock: Fn.cidrsubnet(
-          this.vpc.cidrBlock,
-          4,
-          index + this.publicSubnets.length,
-        ),
+        cidrBlock: Fn.cidrsubnet(this.vpc.cidrBlock, 4, index + this.publicSubnets.length),
         tags: {
           Name: `${nameTagPrefix}-private-subnet-${az}`,
         },
@@ -131,25 +127,17 @@ export class Network extends Construct {
       tags: { Name: `${nameTagPrefix}-private-rtb` },
     });
 
-    this.privateInternetAccessRoute = new Route(
-      this,
-      'private_internet_access',
-      {
-        destinationCidrBlock: '0.0.0.0/0',
-        natGatewayId: this.natGateway.id,
-        routeTableId: this.privateRouteTable.id,
-      },
-    );
+    this.privateInternetAccessRoute = new Route(this, 'private_internet_access', {
+      destinationCidrBlock: '0.0.0.0/0',
+      natGatewayId: this.natGateway.id,
+      routeTableId: this.privateRouteTable.id,
+    });
 
-    this.privateInternetAccessIpv6Route = new Route(
-      this,
-      'private_internet_access_ipv6',
-      {
-        destinationIpv6CidrBlock: '::/0',
-        egressOnlyGatewayId: this.eigw.id,
-        routeTableId: this.privateRouteTable.id,
-      },
-    );
+    this.privateInternetAccessIpv6Route = new Route(this, 'private_internet_access_ipv6', {
+      destinationIpv6CidrBlock: '::/0',
+      egressOnlyGatewayId: this.eigw.id,
+      routeTableId: this.privateRouteTable.id,
+    });
 
     this.privateRouteTableAssociations = this.privateSubnets.map((subnet) => {
       return new RouteTableAssociation(

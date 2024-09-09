@@ -13,19 +13,20 @@ import org.sagebionetworks.util.exception.SimpleChallengeGlobalException;
 
 @Slf4j
 public class CustomFeignErrorDecoder implements ErrorDecoder {
+
   @Override
   public Exception decode(String methodKey, Response response) {
-
     SimpleChallengeGlobalException simpleChallengeGlobalException =
-        extractChallengeCoreGlobalException(response);
+      extractChallengeCoreGlobalException(response);
 
     switch (response.status()) {
       case 400:
         log.error(
-            "Error in request went through feign client {} ",
-            simpleChallengeGlobalException.getMessage()
-                + " - "
-                + simpleChallengeGlobalException.getCode());
+          "Error in request went through feign client {} ",
+          simpleChallengeGlobalException.getMessage() +
+          " - " +
+          simpleChallengeGlobalException.getCode()
+        );
         return simpleChallengeGlobalException;
       case 401:
         log.error("Unauthorized Request Through Feign");

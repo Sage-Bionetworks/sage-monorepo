@@ -34,15 +34,16 @@ public class ChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
-  @KeywordField()
+  @KeywordField
   private String slug;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   @GenericField(
-      name = "name_sort",
-      valueBridge = @ValueBridgeRef(type = ChallengePlatformNameValueBridge.class),
-      sortable = Sortable.YES)
+    name = "name_sort",
+    valueBridge = @ValueBridgeRef(type = ChallengePlatformNameValueBridge.class),
+    sortable = Sortable.YES
+  )
   private String name;
 
   @Column(name = "avatar_url", nullable = false)

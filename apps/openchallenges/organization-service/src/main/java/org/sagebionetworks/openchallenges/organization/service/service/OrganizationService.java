@@ -39,22 +39,26 @@ public class OrganizationService {
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<OrganizationEntity> organizationEntitiesPage =
-        organizationRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    Page<OrganizationEntity> organizationEntitiesPage = organizationRepository.findAll(
+      pageable,
+      query,
+      fieldsToSearchBy.toArray(new String[0])
+    );
 
-    List<OrganizationDto> organizations =
-        organizationMapper.convertToDtoList(organizationEntitiesPage.getContent());
+    List<OrganizationDto> organizations = organizationMapper.convertToDtoList(
+      organizationEntitiesPage.getContent()
+    );
     LOG.debug("Organizations {}", organizations);
 
     return OrganizationsPageDto.builder()
-        .organizations(organizations)
-        .number(organizationEntitiesPage.getNumber())
-        .size(organizationEntitiesPage.getSize())
-        .totalElements(organizationEntitiesPage.getTotalElements())
-        .totalPages(organizationEntitiesPage.getTotalPages())
-        .hasNext(organizationEntitiesPage.hasNext())
-        .hasPrevious(organizationEntitiesPage.hasPrevious())
-        .build();
+      .organizations(organizations)
+      .number(organizationEntitiesPage.getNumber())
+      .size(organizationEntitiesPage.getSize())
+      .totalElements(organizationEntitiesPage.getTotalElements())
+      .totalPages(organizationEntitiesPage.getTotalPages())
+      .hasNext(organizationEntitiesPage.hasNext())
+      .hasPrevious(organizationEntitiesPage.hasPrevious())
+      .build();
   }
 
   @Transactional(readOnly = true)
@@ -70,15 +74,13 @@ public class OrganizationService {
     LOG.info("login: {}", orgLogin);
     LOG.info("id: {}", orgId);
 
-    OrganizationEntity orgEntity =
-        organizationRepository
-            .findByIdOrLogin(orgId, orgLogin)
-            .orElseThrow(
-                () ->
-                    new OrganizationNotFoundException(
-                        String.format(
-                            "The organization with the ID or login %s does not exist.",
-                            identifier)));
+    OrganizationEntity orgEntity = organizationRepository
+      .findByIdOrLogin(orgId, orgLogin)
+      .orElseThrow(() ->
+        new OrganizationNotFoundException(
+          String.format("The organization with the ID or login %s does not exist.", identifier)
+        )
+      );
 
     return organizationMapper.convertToDto(orgEntity);
   }

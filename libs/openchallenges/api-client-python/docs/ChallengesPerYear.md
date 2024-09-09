@@ -3,10 +3,11 @@
 An object
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**years** | **List[str]** |  | 
-**challenge_counts** | **List[int]** |  | 
+
+| Name                 | Type          | Description | Notes |
+| -------------------- | ------------- | ----------- | ----- |
+| **years**            | **List[str]** |             |
+| **challenge_counts** | **List[int]** |             |
 
 ## Example
 
@@ -25,6 +26,5 @@ challenges_per_year_dict = challenges_per_year_instance.to_dict()
 # create an instance of ChallengesPerYear from a dict
 challenges_per_year_form_dict = challenges_per_year.from_dict(challenges_per_year_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

@@ -15,6 +15,7 @@ node_modules
 pnpm-lock.yaml
 
 # Python
+.mypy_cache
 .venv
 
 # Nx

@@ -13,24 +13,28 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(SimpleChallengeGlobalException.class)
   protected ResponseEntity<BasicErrorDto> handleGlobalException(
-      SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
+    SimpleChallengeGlobalException simpleChallengeGlobalException,
+    Locale locale
+  ) {
     return new ResponseEntity<>(
-        BasicErrorDto.builder()
-            .type(simpleChallengeGlobalException.getType())
-            .title(simpleChallengeGlobalException.getTitle())
-            .status(simpleChallengeGlobalException.getStatus().value())
-            .detail(simpleChallengeGlobalException.getDetail())
-            .build(),
-        simpleChallengeGlobalException.getStatus());
+      BasicErrorDto.builder()
+        .type(simpleChallengeGlobalException.getType())
+        .title(simpleChallengeGlobalException.getTitle())
+        .status(simpleChallengeGlobalException.getStatus().value())
+        .detail(simpleChallengeGlobalException.getDetail())
+        .build(),
+      simpleChallengeGlobalException.getStatus()
+    );
   }
 
-  @ExceptionHandler({Exception.class})
+  @ExceptionHandler({ Exception.class })
   protected ResponseEntity<BasicErrorDto> handleException(Exception e, Locale locale) {
     return ResponseEntity.internalServerError()
-        .body(
-            BasicErrorDto.builder()
-                .title("An exception occured")
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .build());
+      .body(
+        BasicErrorDto.builder()
+          .title("An exception occured")
+          .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+          .build()
+      );
   }
 }

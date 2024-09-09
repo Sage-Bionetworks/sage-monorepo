@@ -2,23 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterModule } from '@angular/router';
-import {
-  Challenge,
-  Image,
-  ImageService,
-} from '@sagebionetworks/openchallenges/api-client-angular';
+import { Challenge, Image, ImageService } from '@sagebionetworks/openchallenges/api-client-angular';
 import { ChallengeIncentiveLabelPipe } from '@sagebionetworks/openchallenges/util';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-card',
   standalone: true,
-  imports: [
-    ChallengeIncentiveLabelPipe,
-    CommonModule,
-    MatIconModule,
-    RouterModule,
-  ],
+  imports: [ChallengeIncentiveLabelPipe, CommonModule, MatIconModule, RouterModule],
   templateUrl: './challenge-card.component.html',
   styleUrls: ['./challenge-card.component.scss'],
 })
@@ -36,9 +27,7 @@ export class ChallengeCardComponent implements OnInit {
     if (this.challenge) {
       this.status = this.challenge.status ? this.challenge.status : 'No Status';
       this.statusClass = this.challenge.status || '';
-      this.desc = this.challenge.headline
-        ? this.challenge.headline
-        : this.challenge.description;
+      this.desc = this.challenge.headline ? this.challenge.headline : this.challenge.description;
       this.banner$ = this.challenge.avatarUrl
         ? this.imageService.getImage({
             objectKey: this.challenge.avatarUrl,
@@ -53,13 +42,9 @@ export class ChallengeCardComponent implements OnInit {
             this.time_info = `Ended ${timeSince} ago`;
           }
         } else if (this.challenge.endDate && this.status === 'active') {
-          this.time_info = `Ends in ${this.calcTimeDiff(
-            this.challenge.endDate,
-          )}`;
+          this.time_info = `Ends in ${this.calcTimeDiff(this.challenge.endDate)}`;
         } else if (this.challenge.startDate && this.status === 'upcoming') {
-          this.time_info = `Starts in ${this.calcTimeDiff(
-            this.challenge.startDate,
-          )}`;
+          this.time_info = `Starts in ${this.calcTimeDiff(this.challenge.startDate)}`;
         }
       } catch (error: unknown) {
         console.log(error);

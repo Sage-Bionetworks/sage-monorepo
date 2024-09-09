@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomEdamConceptRepository {
-
   Page<EdamConceptEntity> findAll(
-      Pageable pageable, EdamConceptSearchQueryDto query, String... fields);
+    Pageable pageable,
+    EdamConceptSearchQueryDto query,
+    String... fields
+  );
 }

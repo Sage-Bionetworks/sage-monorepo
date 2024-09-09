@@ -1,14 +1,14 @@
 # openchallenges_client.OrganizationApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**get_organization**](OrganizationApi.md#get_organization) | **GET** /organizations/{org} | Get an organization
-[**list_organizations**](OrganizationApi.md#list_organizations) | **GET** /organizations | List organizations
-
+| Method                                                          | HTTP request                 | Description         |
+| --------------------------------------------------------------- | ---------------------------- | ------------------- |
+| [**get_organization**](OrganizationApi.md#get_organization)     | **GET** /organizations/{org} | Get an organization |
+| [**list_organizations**](OrganizationApi.md#list_organizations) | **GET** /organizations       | List organizations  |
 
 # **get_organization**
+
 > Organization get_organization(org)
 
 Get an organization
@@ -47,13 +47,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling OrganizationApi->get_organization: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **org** | **str**| The id or login of the organization. | 
+| Name    | Type    | Description                          | Notes |
+| ------- | ------- | ------------------------------------ | ----- |
+| **org** | **str** | The id or login of the organization. |
 
 ### Return type
 
@@ -65,19 +63,21 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | An organization |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | An organization                                                   | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_organizations**
+
 > OrganizationsPage list_organizations(organization_search_query=organization_search_query)
 
 List organizations
@@ -117,13 +117,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling OrganizationApi->list_organizations: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **organization_search_query** | [**OrganizationSearchQuery**](.md)| The search query used to find organizations. | [optional] 
+| Name                          | Type                               | Description                                  | Notes      |
+| ----------------------------- | ---------------------------------- | -------------------------------------------- | ---------- |
+| **organization_search_query** | [**OrganizationSearchQuery**](.md) | The search query used to find organizations. | [optional] |
 
 ### Return type
 
@@ -135,15 +133,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

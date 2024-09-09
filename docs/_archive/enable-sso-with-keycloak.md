@@ -14,15 +14,15 @@
 2. Click on the dropdown near the Google Cloud logo.
 3. Click on `New Project`.
 4. Enter the information about the project.
-    - Project name: `openchallenges-keycloak-google`
-    - Organization: `sagebase.org`
-    - Location: `sagebase.org`
+   - Project name: `openchallenges-keycloak-google`
+   - Organization: `sagebase.org`
+   - Location: `sagebase.org`
 5. Click on `Create`.
 6. Select the new project by clicking on the dropdown near the Google Cloud logo.
 7. Click on `Credentials` in the left menu.
 8. Click on `Configure Consent Screen`.
 9. Enter the OAuth consent screen information.
-    - User type: `Internal` (suitable for testing)
+   - User type: `Internal` (suitable for testing)
 10. Click on `Create`.
 11. Enter the App information.
     - App name: `Challenge Keycloak Test App`
@@ -35,12 +35,14 @@
     - Email addresses: `<contact addresses>`
 14. Click on `Save and Continue`.
 15. Enter Scopes information.
-  - Click on `Add or Remove Scopes`.
-  - Add these scopes:
-    - `.../auth/userinfo.email`
-    - `.../auth/userinfo.profile`
-    - `openid`
-  - Click on `Update`.
+
+- Click on `Add or Remove Scopes`.
+- Add these scopes:
+  - `.../auth/userinfo.email`
+  - `.../auth/userinfo.profile`
+  - `openid`
+- Click on `Update`.
+
 16. Click on `Save and Continue`.
 17. Review the app registration information and click on `Back to Dashboard`.
 18. Go back to the Credentials page and click on `Create Credentials`.

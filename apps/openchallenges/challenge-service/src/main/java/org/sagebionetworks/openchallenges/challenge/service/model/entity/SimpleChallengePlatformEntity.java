@@ -27,11 +27,11 @@ public class SimpleChallengePlatformEntity {
   private Long id;
 
   @Column(nullable = false)
-  @GenericField()
+  @GenericField
   private String slug;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   private String name;
 
   @Column(name = "avatar_url", nullable = false)

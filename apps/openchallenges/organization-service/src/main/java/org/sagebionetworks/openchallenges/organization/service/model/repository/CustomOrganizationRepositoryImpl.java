@@ -29,25 +29,32 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepository {
 
-  @PersistenceContext private EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
   public Optional<OrganizationEntity> findBySimpleNaturalId(String naturalId) {
     return entityManager
-        .unwrap(Session.class)
-        .bySimpleNaturalId(OrganizationEntity.class)
-        .loadOptional(naturalId);
+      .unwrap(Session.class)
+      .bySimpleNaturalId(OrganizationEntity.class)
+      .loadOptional(naturalId);
   }
 
   @Override
   public Page<OrganizationEntity> findAll(
-      Pageable pageable, OrganizationSearchQueryDto query, String... fields) {
+    Pageable pageable,
+    OrganizationSearchQueryDto query,
+    String... fields
+  ) {
     SearchResult<OrganizationEntity> result = getSearchResult(pageable, query, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<OrganizationEntity> getSearchResult(
-      Pageable pageable, OrganizationSearchQueryDto query, String[] fields) {
+    Pageable pageable,
+    OrganizationSearchQueryDto query,
+    String[] fields
+  ) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(OrganizationEntity.class).predicate();
     SearchSortFactory sf = searchSession.scope(OrganizationEntity.class).sort();
@@ -62,8 +69,10 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
     if (query.getCategories() != null && !query.getCategories().isEmpty()) {
       predicates.add(getCategoriesPredicate(pf, query));
     }
-    if (query.getChallengeContributionRoles() != null
-        && !query.getChallengeContributionRoles().isEmpty()) {
+    if (
+      query.getChallengeContributionRoles() != null &&
+      !query.getChallengeContributionRoles().isEmpty()
+    ) {
       predicates.add(getChallengeContributionRolesPredicate(pf, query));
     }
 
@@ -75,12 +84,11 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
-    SearchResult<OrganizationEntity> result =
-        searchSession
-            .search(OrganizationEntity.class)
-            .where(topLevelPredicate)
-            .sort(sort)
-            .fetch((int) pageable.getOffset(), pageable.getPageSize());
+    SearchResult<OrganizationEntity> result = searchSession
+      .search(OrganizationEntity.class)
+      .where(topLevelPredicate)
+      .sort(sort)
+      .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
 
@@ -93,13 +101,18 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchPredicate getSearchTermsPredicate(
-      SearchPredicateFactory pf, OrganizationSearchQueryDto query, String[] fields) {
-    return pf.simpleQueryString()
-        .fields(fields)
-        .matching(query.getSearchTerms())
-        .defaultOperator(BooleanOperator.AND)
-        .toPredicate();
+    SearchPredicateFactory pf,
+    OrganizationSearchQueryDto query,
+    String[] fields
+  ) {
+    return pf
+      .simpleQueryString()
+      .fields(fields)
+      .matching(query.getSearchTerms())
+      .defaultOperator(BooleanOperator.AND)
+      .toPredicate();
   }
+
   /**
    * Matches the organization whose at least one of their contributor roles is in the list of
    * contributor roles specified.
@@ -109,15 +122,16 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchPredicate getChallengeContributionRolesPredicate(
-      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeContributionRoleDto role : query.getChallengeContributionRoles()) {
-                b.should(
-                    pf.match().field("challenge_contributions.role").matching(role.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    OrganizationSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (ChallengeContributionRoleDto role : query.getChallengeContributionRoles()) {
+          b.should(pf.match().field("challenge_contributions.role").matching(role.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -128,14 +142,16 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchPredicate getIdsPredicate(
-      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (Long id : query.getIds()) {
-                b.should(pf.match().field("id").matching(id));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    OrganizationSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (Long id : query.getIds()) {
+          b.should(pf.match().field("id").matching(id));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -147,14 +163,16 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchPredicate getCategoriesPredicate(
-      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (OrganizationCategoryDto category : query.getCategories()) {
-                b.should(pf.match().field("categories.category").matching(category.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    OrganizationSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (OrganizationCategoryDto category : query.getCategories()) {
+          b.should(pf.match().field("categories.category").matching(category.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -165,15 +183,17 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchPredicate buildTopLevelPredicate(
-      SearchPredicateFactory pf, List<SearchPredicate> predicates) {
-    return pf.bool(
-            b -> {
-              b.must(f -> f.matchAll());
-              for (SearchPredicate predicate : predicates) {
-                b.must(predicate);
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    List<SearchPredicate> predicates
+  ) {
+    return pf
+      .bool(b -> {
+        b.must(f -> f.matchAll());
+        for (SearchPredicate predicate : predicates) {
+          b.must(predicate);
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -184,20 +204,23 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, OrganizationSearchQueryDto query) {
-    SortOrder orderWithDefaultAsc =
-        query.getDirection() == OrganizationDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    SortOrder orderWithDefaultDesc =
-        query.getDirection() == OrganizationDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
+    SortOrder orderWithDefaultAsc = query.getDirection() == OrganizationDirectionDto.DESC
+      ? SortOrder.DESC
+      : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc = query.getDirection() == OrganizationDirectionDto.ASC
+      ? SortOrder.ASC
+      : SortOrder.DESC;
 
-    SearchSort challengeCountSort =
-        sf.field("challenge_count").order(orderWithDefaultDesc).toSort();
+    SearchSort challengeCountSort = sf
+      .field("challenge_count")
+      .order(orderWithDefaultDesc)
+      .toSort();
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
     SearchSort nameSort = sf.field("name_sort").order(orderWithDefaultAsc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
-    SearchSort relevanceSort =
-        (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
-            ? createdSort
-            : scoreSort;
+    SearchSort relevanceSort = (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+      ? createdSort
+      : scoreSort;
 
     switch (query.getSort()) {
       case CHALLENGE_COUNT -> {
@@ -214,13 +237,16 @@ public class CustomOrganizationRepositoryImpl implements CustomOrganizationRepos
       }
       default -> {
         throw new BadRequestException(
-            String.format("Unhandled sorting strategy '%s'", query.getSort()));
+          String.format("Unhandled sorting strategy '%s'", query.getSort())
+        );
       }
     }
   }
 
   private SearchPredicate getSearchSortPredicate(
-      SearchPredicateFactory pf, OrganizationSearchQueryDto query) {
+    SearchPredicateFactory pf,
+    OrganizationSearchQueryDto query
+  ) {
     switch (query.getSort()) {
       default -> {
         return null;

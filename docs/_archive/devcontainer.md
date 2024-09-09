@@ -48,9 +48,6 @@ inside the container.
 [Developing inside a Container]: https://code.visualstudio.com/docs/remote/containers
 [Docker]: https://docs.docker.com/get-docker/
 [VS Code]: https://code.visualstudio.com/
-[Remote - Containers]:
-    https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
-[Sharing Git credentials with your container]:
-    https://code.visualstudio.com/docs/remote/containers#_sharing-git-credentials-with-your-container
-[Signing commits requires a GPG key]:
-    https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account
+[Remote - Containers]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+[Sharing Git credentials with your container]: https://code.visualstudio.com/docs/remote/containers#_sharing-git-credentials-with-your-container
+[Signing commits requires a GPG key]: https://docs.github.com/en/authentication/managing-commit-signature-verification/adding-a-new-gpg-key-to-your-github-account

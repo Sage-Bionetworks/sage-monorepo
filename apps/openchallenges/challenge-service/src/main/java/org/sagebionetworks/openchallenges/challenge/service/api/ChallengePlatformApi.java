@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "ChallengePlatform", description = "Operations about challenge platforms.")
 public interface ChallengePlatformApi {
-
   default ChallengePlatformApiDelegate getDelegate() {
     return new ChallengePlatformApiDelegate() {};
   }
@@ -39,56 +38,66 @@ public interface ChallengePlatformApi {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "getChallengePlatform",
-      summary = "Get a challenge platform",
-      tags = {"ChallengePlatform"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = ChallengePlatformDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengePlatformDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The specified resource was not found",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "getChallengePlatform",
+    summary = "Get a challenge platform",
+    tags = { "ChallengePlatform" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ChallengePlatformDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ChallengePlatformDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/challengePlatforms/{challengePlatformName}",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/challengePlatforms/{challengePlatformName}",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<ChallengePlatformDto> getChallengePlatform(
-      @Size(min = 3, max = 30)
-          @Parameter(
-              name = "challengePlatformName",
-              description = "The unique identifier of the challenge platform.",
-              required = true)
-          @PathVariable("challengePlatformName")
-          String challengePlatformName) {
+    @Size(min = 3, max = 30) @Parameter(
+      name = "challengePlatformName",
+      description = "The unique identifier of the challenge platform.",
+      required = true
+    ) @PathVariable("challengePlatformName") String challengePlatformName
+  ) {
     return getDelegate().getChallengePlatform(challengePlatformName);
   }
 
@@ -101,54 +110,65 @@ public interface ChallengePlatformApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listChallengePlatforms",
-      summary = "List challenge platforms",
-      tags = {"ChallengePlatform"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = ChallengePlatformsPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengePlatformsPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listChallengePlatforms",
+    summary = "List challenge platforms",
+    tags = { "ChallengePlatform" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ChallengePlatformsPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ChallengePlatformsPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/challengePlatforms",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/challengePlatforms",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      @Parameter(
-              name = "challengePlatformSearchQuery",
-              description = "The search query used to find challenge platforms.")
-          @Valid
-          ChallengePlatformSearchQueryDto challengePlatformSearchQuery) {
+    @Parameter(
+      name = "challengePlatformSearchQuery",
+      description = "The search query used to find challenge platforms."
+    ) @Valid ChallengePlatformSearchQueryDto challengePlatformSearchQuery
+  ) {
     return getDelegate().listChallengePlatforms(challengePlatformSearchQuery);
   }
 }

@@ -20,9 +20,7 @@ import {
 })
 export class ChallengeCategoryLabelPipe implements PipeTransform {
   transform(category: ChallengeCategory): string | undefined {
-    const option = ChallengeCategoriesOptions.find(
-      (item) => item.value === category,
-    );
+    const option = ChallengeCategoriesOptions.find((item) => item.value === category);
     return option ? option.label : undefined;
   }
 }
@@ -33,9 +31,7 @@ export class ChallengeCategoryLabelPipe implements PipeTransform {
 })
 export class ChallengeIncentiveLabelPipe implements PipeTransform {
   transform(incentive: ChallengeIncentive): string | undefined {
-    const option = ChallengeIncentivesOptions.find(
-      (item) => item.value === incentive,
-    );
+    const option = ChallengeIncentivesOptions.find((item) => item.value === incentive);
     return option ? option.label : undefined;
   }
 }
@@ -68,9 +64,7 @@ export class ChallengeStatusLabelPipe implements PipeTransform {
 })
 export class ChallengeSubmissionTypeLabelPipe implements PipeTransform {
   transform(submissionType: ChallengeSubmissionType): string | undefined {
-    const option = ChallengeSubmissionTypesOptions.find(
-      (item) => item.value === submissionType,
-    );
+    const option = ChallengeSubmissionTypesOptions.find((item) => item.value === submissionType);
     return option ? option.label : undefined;
   }
 }

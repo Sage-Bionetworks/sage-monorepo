@@ -62,10 +62,11 @@ public class OrganizationDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an organization",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of an organization",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -86,10 +87,11 @@ public class OrganizationDto {
    */
   @NotNull
   @Schema(
-      name = "name",
-      example = "Example organization",
-      description = "The name of the organization.",
-      required = true)
+    name = "name",
+    example = "Example organization",
+    description = "The name of the organization.",
+    required = true
+  )
   public String getName() {
     return name;
   }
@@ -112,10 +114,11 @@ public class OrganizationDto {
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 2, max = 64)
   @Schema(
-      name = "login",
-      example = "example-org",
-      description = "The unique login of an organization.",
-      required = true)
+    name = "login",
+    example = "example-org",
+    description = "The unique login of an organization.",
+    required = true
+  )
   public String getLogin() {
     return login;
   }
@@ -135,10 +138,11 @@ public class OrganizationDto {
    * @return description
    */
   @Schema(
-      name = "description",
-      example = "A description of the organization.",
-      description = "A description of the organization.",
-      required = false)
+    name = "description",
+    example = "A description of the organization.",
+    description = "A description of the organization.",
+    required = false
+  )
   public String getDescription() {
     return description;
   }
@@ -178,10 +182,11 @@ public class OrganizationDto {
    */
   @Size(max = 500)
   @Schema(
-      name = "websiteUrl",
-      example = "https://openchallenges.io",
-      description = "A URL to the website or image.",
-      required = false)
+    name = "websiteUrl",
+    example = "https://openchallenges.io",
+    description = "A URL to the website or image.",
+    required = false
+  )
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -202,10 +207,11 @@ public class OrganizationDto {
    */
   @Min(0)
   @Schema(
-      name = "challengeCount",
-      example = "10",
-      description = "The number of challenges involving this organization.",
-      required = false)
+    name = "challengeCount",
+    example = "10",
+    description = "The number of challenges involving this organization.",
+    required = false
+  )
   public Integer getChallengeCount() {
     return challengeCount;
   }
@@ -227,10 +233,11 @@ public class OrganizationDto {
   @NotNull
   @Valid
   @Schema(
-      name = "createdAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was added to the database.",
-      required = true)
+    name = "createdAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was added to the database.",
+    required = true
+  )
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -252,10 +259,11 @@ public class OrganizationDto {
   @NotNull
   @Valid
   @Schema(
-      name = "updatedAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was last modified in the database.",
-      required = true)
+    name = "updatedAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was last modified in the database.",
+    required = true
+  )
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -276,10 +284,11 @@ public class OrganizationDto {
    */
   @Size(max = 10)
   @Schema(
-      name = "acronym",
-      example = "OC",
-      description = "An acronym of the organization.",
-      required = false)
+    name = "acronym",
+    example = "OC",
+    description = "An acronym of the organization.",
+    required = false
+  )
   public String getAcronym() {
     return acronym;
   }
@@ -297,31 +306,34 @@ public class OrganizationDto {
       return false;
     }
     OrganizationDto organization = (OrganizationDto) o;
-    return Objects.equals(this.id, organization.id)
-        && Objects.equals(this.name, organization.name)
-        && Objects.equals(this.login, organization.login)
-        && Objects.equals(this.description, organization.description)
-        && Objects.equals(this.avatarKey, organization.avatarKey)
-        && Objects.equals(this.websiteUrl, organization.websiteUrl)
-        && Objects.equals(this.challengeCount, organization.challengeCount)
-        && Objects.equals(this.createdAt, organization.createdAt)
-        && Objects.equals(this.updatedAt, organization.updatedAt)
-        && Objects.equals(this.acronym, organization.acronym);
+    return (
+      Objects.equals(this.id, organization.id) &&
+      Objects.equals(this.name, organization.name) &&
+      Objects.equals(this.login, organization.login) &&
+      Objects.equals(this.description, organization.description) &&
+      Objects.equals(this.avatarKey, organization.avatarKey) &&
+      Objects.equals(this.websiteUrl, organization.websiteUrl) &&
+      Objects.equals(this.challengeCount, organization.challengeCount) &&
+      Objects.equals(this.createdAt, organization.createdAt) &&
+      Objects.equals(this.updatedAt, organization.updatedAt) &&
+      Objects.equals(this.acronym, organization.acronym)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        id,
-        name,
-        login,
-        description,
-        avatarKey,
-        websiteUrl,
-        challengeCount,
-        createdAt,
-        updatedAt,
-        acronym);
+      id,
+      name,
+      login,
+      description,
+      avatarKey,
+      websiteUrl,
+      challengeCount,
+      createdAt,
+      updatedAt,
+      acronym
+    );
   }
 
   @Override

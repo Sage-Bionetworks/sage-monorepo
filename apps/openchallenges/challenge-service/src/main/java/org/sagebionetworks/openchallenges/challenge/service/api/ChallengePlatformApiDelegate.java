@@ -16,7 +16,6 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public interface ChallengePlatformApiDelegate {
-
   default Optional<NativeWebRequest> getRequest() {
     return Optional.empty();
   }
@@ -32,23 +31,22 @@ public interface ChallengePlatformApiDelegate {
    */
   default ResponseEntity<ChallengePlatformDto> getChallengePlatform(String challengePlatformName) {
     getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString =
-                      "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
-                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                  break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                  String exampleString =
-                      "Custom MIME type example not yet supported: application/problem+json";
-                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                  break;
-                }
-              }
-            });
+      .ifPresent(request -> {
+        for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+            String exampleString =
+              "{ \"createdAt\" : \"2022-07-04T22:19:11Z\", \"avatarUrl\" : \"https://via.placeholder.com/300.png\", \"websiteUrl\" : \"https://example.com\", \"name\" : \"name\", \"id\" : 1, \"slug\" : \"example-challenge-platform\", \"updatedAt\" : \"2022-07-04T22:19:11Z\" }";
+            ApiUtil.setExampleResponse(request, "application/json", exampleString);
+            break;
+          }
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+            String exampleString =
+              "Custom MIME type example not yet supported: application/problem+json";
+            ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+            break;
+          }
+        }
+      });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
@@ -62,24 +60,24 @@ public interface ChallengePlatformApiDelegate {
    * @see ChallengePlatformApi#listChallengePlatforms
    */
   default ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      ChallengePlatformSearchQueryDto challengePlatformSearchQuery) {
+    ChallengePlatformSearchQueryDto challengePlatformSearchQuery
+  ) {
     getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "null";
-                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                  break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                  String exampleString =
-                      "Custom MIME type example not yet supported: application/problem+json";
-                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                  break;
-                }
-              }
-            });
+      .ifPresent(request -> {
+        for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+            String exampleString = "null";
+            ApiUtil.setExampleResponse(request, "application/json", exampleString);
+            break;
+          }
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+            String exampleString =
+              "Custom MIME type example not yet supported: application/problem+json";
+            ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+            break;
+          }
+        }
+      });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 }

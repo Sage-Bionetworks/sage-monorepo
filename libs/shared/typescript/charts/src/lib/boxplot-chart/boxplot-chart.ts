@@ -1,9 +1,4 @@
-import {
-  DatasetComponentOption,
-  ECharts,
-  EChartsOption,
-  SeriesOption,
-} from 'echarts';
+import { DatasetComponentOption, ECharts, EChartsOption, SeriesOption } from 'echarts';
 import { BoxplotProps, CategoryPoint } from '../models';
 import {
   addXAxisValueToBoxplotSummaries,
@@ -37,10 +32,7 @@ export class BoxplotChart {
   chart: ECharts | undefined;
   xAxisLabelTooltips: XAxisLabelTooltips | undefined;
 
-  constructor(
-    chartDom: HTMLDivElement | HTMLCanvasElement,
-    boxplotProps: BoxplotProps,
-  ) {
+  constructor(chartDom: HTMLDivElement | HTMLCanvasElement, boxplotProps: BoxplotProps) {
     this.chart = initChart(chartDom);
     this.setOptions(boxplotProps);
   }
@@ -52,14 +44,9 @@ export class BoxplotChart {
   setXAxisLabelTooltips(xAxisCategoryToTooltipText?: Record<string, string>) {
     if (!xAxisCategoryToTooltipText || !this.chart) return;
     if (!this.xAxisLabelTooltips) {
-      this.xAxisLabelTooltips = new XAxisLabelTooltips(
-        this.chart,
-        xAxisCategoryToTooltipText,
-      );
+      this.xAxisLabelTooltips = new XAxisLabelTooltips(this.chart, xAxisCategoryToTooltipText);
     }
-    this.xAxisLabelTooltips.setXAxisCategoryToTooltipText(
-      xAxisCategoryToTooltipText,
-    );
+    this.xAxisLabelTooltips.setXAxisCategoryToTooltipText(xAxisCategoryToTooltipText);
   }
 
   setOptions(boxplotProps: BoxplotProps) {
@@ -82,14 +69,8 @@ export class BoxplotChart {
       return;
     }
 
-    const xAxisCategories = getUniqueValues(
-      points,
-      'xAxisCategory',
-    ) as string[];
-    const pointCategories = getUniqueValues(
-      points,
-      'pointCategory',
-    ) as string[];
+    const xAxisCategories = getUniqueValues(points, 'xAxisCategory') as string[];
+    const pointCategories = getUniqueValues(points, 'pointCategory') as string[];
     const hasPointCategories = pointCategories.length > 0;
 
     const dataForScatterPoints = addXAxisValueToCategoryPoint(
@@ -102,11 +83,10 @@ export class BoxplotChart {
     const dataForStaticBoxplotSummaries = summaries
       ? addXAxisValueToBoxplotSummaries(summaries, xAxisCategories)
       : undefined;
-    const dataForDynamicBoxplotTransforms =
-      formatCategoryPointsForBoxplotTransform(
-        dataForScatterPoints,
-        xAxisCategories,
-      );
+    const dataForDynamicBoxplotTransforms = formatCategoryPointsForBoxplotTransform(
+      dataForScatterPoints,
+      xAxisCategories,
+    );
 
     const datasetOpts: DatasetComponentOption[] = [
       {
@@ -182,10 +162,7 @@ export class BoxplotChart {
       itemStyle: {
         color: (params) => {
           return hasPointCategories
-            ? getCategoryPointColor(
-                params.value as CategoryPoint,
-                pointCategories,
-              )
+            ? getCategoryPointColor(params.value as CategoryPoint, pointCategories)
             : defaultPointColor;
         },
       },

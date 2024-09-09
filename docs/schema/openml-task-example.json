@@ -30,11 +30,7 @@
     "evaluation_measures": "predictive_accuracy",
     "number_samples": "1",
     "target_feature": "class",
-    "target_values": [
-      "1",
-      "2",
-      "3"
-    ],
+    "target_values": ["1", "2", "3"],
     "tags": [
       {
         "tag": "under1m",

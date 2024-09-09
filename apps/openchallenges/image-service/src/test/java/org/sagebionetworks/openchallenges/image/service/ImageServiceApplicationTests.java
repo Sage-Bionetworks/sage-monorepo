@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class ImageServiceApplicationTests {
 
-  @Test()
+  @Test
   @SuppressWarnings("squid:S2699")
   void contextLoads() {}
 }

@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-notebook:
@@ -12,7 +12,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8888:8888"
+      - '8888:8888'
 
 networks:
   openchallenges:

@@ -1,14 +1,14 @@
 # openchallenges_client.ChallengeApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**get_challenge**](ChallengeApi.md#get_challenge) | **GET** /challenges/{challengeId} | Get a challenge
-[**list_challenges**](ChallengeApi.md#list_challenges) | **GET** /challenges | List challenges
-
+| Method                                                 | HTTP request                      | Description     |
+| ------------------------------------------------------ | --------------------------------- | --------------- |
+| [**get_challenge**](ChallengeApi.md#get_challenge)     | **GET** /challenges/{challengeId} | Get a challenge |
+| [**list_challenges**](ChallengeApi.md#list_challenges) | **GET** /challenges               | List challenges |
 
 # **get_challenge**
+
 > Challenge get_challenge(challenge_id)
 
 Get a challenge
@@ -47,13 +47,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengeApi->get_challenge: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_id** | **int**| The unique identifier of the challenge. | 
+| Name             | Type    | Description                             | Notes |
+| ---------------- | ------- | --------------------------------------- | ----- |
+| **challenge_id** | **int** | The unique identifier of the challenge. |
 
 ### Return type
 
@@ -65,19 +63,21 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | A challenge |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | A challenge                                                       | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_challenges**
+
 > ChallengesPage list_challenges(challenge_search_query=challenge_search_query)
 
 List challenges
@@ -117,13 +117,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengeApi->list_challenges: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_search_query** | [**ChallengeSearchQuery**](.md)| The search query used to find challenges. | [optional] 
+| Name                       | Type                            | Description                               | Notes      |
+| -------------------------- | ------------------------------- | ----------------------------------------- | ---------- |
+| **challenge_search_query** | [**ChallengeSearchQuery**](.md) | The search query used to find challenges. | [optional] |
 
 ### Return type
 
@@ -135,15 +133,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

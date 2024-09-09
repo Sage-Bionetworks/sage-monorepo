@@ -37,10 +37,11 @@ public class ChallengeContributionDto {
    */
   @NotNull
   @Schema(
-      name = "challengeId",
-      example = "1",
-      description = "The unique identifier of the challenge.",
-      required = true)
+    name = "challengeId",
+    example = "1",
+    description = "The unique identifier of the challenge.",
+    required = true
+  )
   public Long getChallengeId() {
     return challengeId;
   }
@@ -61,10 +62,11 @@ public class ChallengeContributionDto {
    */
   @NotNull
   @Schema(
-      name = "organizationId",
-      example = "1",
-      description = "The unique identifier of an organization",
-      required = true)
+    name = "organizationId",
+    example = "1",
+    description = "The unique identifier of an organization",
+    required = true
+  )
   public Long getOrganizationId() {
     return organizationId;
   }
@@ -103,9 +105,11 @@ public class ChallengeContributionDto {
       return false;
     }
     ChallengeContributionDto challengeContribution = (ChallengeContributionDto) o;
-    return Objects.equals(this.challengeId, challengeContribution.challengeId)
-        && Objects.equals(this.organizationId, challengeContribution.organizationId)
-        && Objects.equals(this.role, challengeContribution.role);
+    return (
+      Objects.equals(this.challengeId, challengeContribution.challengeId) &&
+      Objects.equals(this.organizationId, challengeContribution.organizationId) &&
+      Objects.equals(this.role, challengeContribution.role)
+    );
   }
 
   @Override

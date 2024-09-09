@@ -22,14 +22,8 @@
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-mongo"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-mongo"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       }
@@ -39,24 +33,14 @@
       "options": {
         "context": ".",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-mongo"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-mongo"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     }
   },
-  "tags": [
-    "type:db",
-    "scope:backend"
-  ],
+  "tags": ["type:db", "scope:backend"],
   "implicitDependencies": []
 }

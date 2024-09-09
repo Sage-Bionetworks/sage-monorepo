@@ -7,7 +7,6 @@ public class ImageResponseTest {
 
   @Test
   public void ImageUrlGetterAndSetter_ShouldSetAndGetUrl_WhenCalledAfterImageUrlKeyPassed() {
-
     String imageUrl = "https://example.com/image.jpg";
     ImageResponse imageResponse = new ImageResponse();
 

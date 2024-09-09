@@ -27,12 +27,11 @@ class ChallengeContributionEntityTest {
 
     contributor2 = new ChallengeContributionEntity(entityId1, role, organization);
 
-    contributor3 =
-        ChallengeContributionEntity.builder()
-            .id(entityId2)
-            .organization(organization)
-            .role(role)
-            .build();
+    contributor3 = ChallengeContributionEntity.builder()
+      .id(entityId2)
+      .organization(organization)
+      .role(role)
+      .build();
   }
 
   @Test

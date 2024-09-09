@@ -11,66 +11,66 @@ info:
   x-logo:
     url: https://Sage-Bionetworks.github.io/rocc-schemas/logo.png
 servers:
-- url: http://localhost/api/v1
+  - url: http://localhost/api/v1
 tags:
-- description: Operations about storages.
-  name: Storage
+  - description: Operations about storages.
+    name: Storage
 paths:
   /assetTypes/{assetType}/assetViews/{assetViewId}/csv:
     get:
       description: Gets the asset view table in csv file form
       operationId: get_asset_view_csv
       parameters:
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: false
-        in: path
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: false
+          in: path
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             text/csv:
               schema:
                 type: string
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -78,66 +78,66 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the asset view table in csv file form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/json:
     get:
       description: Gets the asset view table in json form
       operationId: get_asset_view_json
       parameters:
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: false
-        in: path
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: false
+          in: path
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/AssetViewJson'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -145,66 +145,66 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the asset view table in json form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataArray:
     get:
       description: Gets all storage projects the current user has access to.
       operationId: get_project_metadata_array
       parameters:
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: false
-        in: path
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: false
+          in: path
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectMetadataArray'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -212,87 +212,87 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all storage projects the current user has access to.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/assetViews/{assetViewId}/projectMetadataPage:
     get:
       description: Gets all storage projects the current user has access to.
       operationId: get_project_metadata_page
       parameters:
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: false
-        in: path
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: false
+          in: path
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProjectMetadataPage'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -300,91 +300,91 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all storage projects the current user has access to.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataArray:
     get:
       description: Gets all files associated with a dataset.
       operationId: get_dataset_file_metadata_array
       parameters:
-      - description: The ID of a dataset.
-        explode: false
-        in: path
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: A list of file names used to filter the output.
-        explode: true
-        in: query
-        name: fileNames
-        required: false
-        schema:
-          $ref: '#/components/schemas/FileNames'
-        style: form
-      - description: "Whether or not to return the full path of output, or just the\
-          \ basename."
-        explode: true
-        in: query
-        name: useFullFilePath
-        required: false
-        schema:
-          $ref: '#/components/schemas/UseFullFilePath'
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: The ID of a dataset.
+          explode: false
+          in: path
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: A list of file names used to filter the output.
+          explode: true
+          in: query
+          name: fileNames
+          required: false
+          schema:
+            $ref: '#/components/schemas/FileNames'
+          style: form
+        - description: "Whether or not to return the full path of output, or just the\
+            \ basename."
+          explode: true
+          in: query
+          name: useFullFilePath
+          required: false
+          schema:
+            $ref: '#/components/schemas/UseFullFilePath'
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileMetadataArray'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -392,112 +392,112 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all files associated with a dataset.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/datasets/{datasetId}/fileMetadataPage:
     get:
       description: Gets all files associated with a dataset.
       operationId: get_dataset_file_metadata_page
       parameters:
-      - description: The ID of a dataset.
-        explode: false
-        in: path
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: A list of file names used to filter the output.
-        explode: true
-        in: query
-        name: fileNames
-        required: false
-        schema:
-          $ref: '#/components/schemas/FileNames'
-        style: form
-      - description: "Whether or not to return the full path of output, or just the\
-          \ basename."
-        explode: true
-        in: query
-        name: useFullFilePath
-        required: false
-        schema:
-          $ref: '#/components/schemas/UseFullFilePath'
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
+        - description: The ID of a dataset.
+          explode: false
+          in: path
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: A list of file names used to filter the output.
+          explode: true
+          in: query
+          name: fileNames
+          required: false
+          schema:
+            $ref: '#/components/schemas/FileNames'
+          style: form
+        - description: "Whether or not to return the full path of output, or just the\
+            \ basename."
+          explode: true
+          in: query
+          name: useFullFilePath
+          required: false
+          schema:
+            $ref: '#/components/schemas/UseFullFilePath'
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FileMetadataPage'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -505,74 +505,74 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all files associated with a dataset.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/datasets/{datasetId}/manifestCsv:
     get:
       description: Gets the manifest in csv form
       operationId: get_dataset_manifest_csv
       parameters:
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: The ID of a dataset.
-        explode: false
-        in: path
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: The ID of a dataset.
+          explode: false
+          in: path
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             text/csv:
               schema:
                 type: string
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -580,74 +580,74 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the manifest in csv form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/datasets/{datasetId}/manifestJson:
     get:
       description: Gets the manifest in json form
       operationId: get_dataset_manifest_json
       parameters:
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: The ID of a dataset.
-        explode: false
-        in: path
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: The ID of a dataset.
+          explode: false
+          in: path
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestJson'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -655,64 +655,64 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the manifest in json form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/manifests/{manifestId}/csv:
     get:
       description: Gets the manifest in csv form
       operationId: get_manifest_csv
       parameters:
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of a manifest
-        explode: false
-        in: path
-        name: manifestId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ManifestId'
-        style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of a manifest
+          explode: false
+          in: path
+          name: manifestId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ManifestId'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             text/csv:
               schema:
                 type: string
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -720,64 +720,64 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the manifest in csv form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/manifests/{manifestId}/json:
     get:
       description: Gets the manifest in json form
       operationId: get_manifest_json
       parameters:
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of a manifest
-        explode: false
-        in: path
-        name: manifestId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ManifestId'
-        style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of a manifest
+          explode: false
+          in: path
+          name: manifestId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ManifestId'
+          style: simple
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestJson'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -785,10 +785,10 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets the manifest in json form
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/projects/{projectId}/datasetMetadataArray:
     get:
@@ -796,64 +796,64 @@ paths:
         that the current user has access to.
       operationId: get_project_dataset_metadata_array
       parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: The Synapse ID of a storage project.
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProjectId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetMetadataArray'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -861,11 +861,11 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all dataset metadata in folder under a given storage project that
         the current user has access to.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/projects/{projectId}/datasetMetadataPage:
     get:
@@ -873,85 +873,85 @@ paths:
         project that the current user has access to.
       operationId: get_project_dataset_metadata_page
       parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
+        - description: The Synapse ID of a storage project.
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProjectId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/DatasetMetadataPage'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -959,11 +959,11 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets a page of dataset metadata in folder under a given storage project
         that the current user has access to.
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/projects/{projectId}/manifestMetadataArray:
     get:
@@ -971,64 +971,64 @@ paths:
         access to.
       operationId: get_project_manifest_metadata_array
       parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: The Synapse ID of a storage project.
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProjectId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestMetadataArray'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1036,10 +1036,10 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all manifests in a project folder that users have access to
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /assetTypes/{assetType}/projects/{projectId}/manifestMetadataPage:
     get:
@@ -1047,85 +1047,85 @@ paths:
         access to.
       operationId: get_project_manifest_metadata_page
       parameters:
-      - description: The Synapse ID of a storage project.
-        explode: false
-        in: path
-        name: projectId
-        required: true
-        schema:
-          $ref: '#/components/schemas/ProjectId'
-        style: simple
-      - description: "Type of asset, such as Synapse"
-        explode: false
-        in: path
-        name: assetType
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetType'
-        style: simple
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
+        - description: The Synapse ID of a storage project.
+          explode: false
+          in: path
+          name: projectId
+          required: true
+          schema:
+            $ref: '#/components/schemas/ProjectId'
+          style: simple
+        - description: 'Type of asset, such as Synapse'
+          explode: false
+          in: path
+          name: assetType
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetType'
+          style: simple
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestMetadataPage'
           description: Success
-        "400":
+        '400':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Invalid request
-        "401":
+        '401':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "403":
+        '403':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: Unauthorized
-        "404":
+        '404':
           content:
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/BasicError'
           description: The specified resource was not found
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1133,10 +1133,10 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Gets all manifests in a project folder that users have access to
       tags:
-      - Storage
+        - Storage
       x-openapi-router-controller: schematic_api.controllers.storage_controller
   /components/{componentLabel}/:
     get:
@@ -1144,53 +1144,53 @@ paths:
         formatted as a dataframe (stored as a JSON String).
       operationId: get_component
       parameters:
-      - description: The label of a component in a schema
-        explode: false
-        in: path
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: Whether to include the indexes of the dataframe in the returned
-          JSON string.
-        explode: true
-        in: query
-        name: includeIndex
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of a component in a schema
+          explode: false
+          in: path
+          name: componentLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComponentLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: Whether to include the indexes of the dataframe in the returned
+            JSON string.
+          explode: true
+          in: query
+          name: includeIndex
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 description: The component as a json string
                 type: string
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1200,7 +1200,7 @@ paths:
       summary: Get all the attributes associated with a specific data model component
         formatted as a dataframe (stored as a JSON String).
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /components/{componentLabel}/requirementsArray:
     get:
@@ -1209,42 +1209,42 @@ paths:
         \ form."
       operationId: get_component_requirements_array
       parameters:
-      - description: The label of a component in a schema
-        explode: false
-        in: path
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of a component in a schema
+          explode: false
+          in: path
+          name: componentLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComponentLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ComponentRequirementArray'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1255,7 +1255,7 @@ paths:
         \ for definnition of component), return all components required by it in array\
         \ form."
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /components/{componentLabel}/requirementsGraph:
     get:
@@ -1264,42 +1264,42 @@ paths:
         \ form."
       operationId: get_component_requirements_graph
       parameters:
-      - description: The label of a component in a schema
-        explode: false
-        in: path
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of a component in a schema
+          explode: false
+          in: path
+          name: componentLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComponentLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ComponentRequirementGraph'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1310,49 +1310,49 @@ paths:
         \ for definnition of component), return all components required by it in graph\
         \ form."
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /connectedNodePairArray:
     get:
       description: Gets a array of connected node pairs
       operationId: get_connected_node_pair_array
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "Type of relationship in a schema, such as requiresDependency"
-        explode: true
-        in: query
-        name: relationshipType
-        required: true
-        schema:
-          $ref: '#/components/schemas/RelationshipType'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'Type of relationship in a schema, such as requiresDependency'
+          explode: true
+          in: query
+          name: relationshipType
+          required: true
+          schema:
+            $ref: '#/components/schemas/RelationshipType'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectedNodePairArray'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1361,70 +1361,70 @@ paths:
             error
       summary: Gets an array of connected node pairs
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /connectedNodePairPage:
     get:
       description: Gets a page of connected node pairs
       operationId: get_connected_node_pair_page
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "Type of relationship in a schema, such as requiresDependency"
-        explode: true
-        in: query
-        name: relationshipType
-        required: true
-        schema:
-          $ref: '#/components/schemas/RelationshipType'
-        style: form
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'Type of relationship in a schema, such as requiresDependency'
+          explode: true
+          in: query
+          name: relationshipType
+          required: true
+          schema:
+            $ref: '#/components/schemas/RelationshipType'
+          style: form
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ConnectedNodePairPage'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1433,86 +1433,86 @@ paths:
             error
       summary: Gets a page of connected node pairs
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /generateExcelManifest:
     get:
       description: Generates an excel file
       operationId: generate_excel_manifest
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "If true, annotations are added to the manifest"
-        explode: true
-        in: query
-        name: addAnnotations
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: "If making one manifest, the title of the manifest. If making\
-          \ multiple manifests, the prefix of the title of the manifests."
-        explode: true
-        in: query
-        name: manifestTitle
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: false
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
-      - description: A data type
-        explode: true
-        in: query
-        name: dataType
-        required: true
-        schema:
-          $ref: '#/components/schemas/DataType'
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: false
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'If true, annotations are added to the manifest'
+          explode: true
+          in: query
+          name: addAnnotations
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
+        - description: "If making one manifest, the title of the manifest. If making\
+            \ multiple manifests, the prefix of the title of the manifests."
+          explode: true
+          in: query
+          name: manifestTitle
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: The ID of a dataset.
+          explode: true
+          in: query
+          name: datasetId
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: form
+        - description: A data type
+          explode: true
+          in: query
+          name: dataType
+          required: true
+          schema:
+            $ref: '#/components/schemas/DataType'
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/vnd.ms-excel:
               schema:
                 format: binary
                 type: string
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1520,109 +1520,109 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Generates an excel file
       tags:
-      - ManifestGeneration
+        - ManifestGeneration
       x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /generateGoogleSheetManifests:
     get:
       description: Generates a list of google sheet links
       operationId: generate_google_sheet_manifests
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "If true, annotations are added to the manifest"
-        explode: true
-        in: query
-        name: addAnnotations
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: "If making one manifest, the title of the manifest. If making\
-          \ multiple manifests, the prefix of the title of the manifests."
-        explode: true
-        in: query
-        name: manifestTitle
-        required: false
-        schema:
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: "If true, users are blocked from entering incorrect values. If\
-          \ false, users will get a warning when using incorrect values."
-        explode: true
-        in: query
-        name: useStrictValidation
-        required: false
-        schema:
-          default: true
-          type: boolean
-        style: form
-      - description: An array of dataset ids
-        explode: true
-        in: query
-        name: datasetIdArray
-        required: false
-        schema:
-          $ref: '#/components/schemas/DatasetIdArray'
-        style: form
-      - description: An array of data types
-        explode: true
-        in: query
-        name: dataTypeArray
-        required: false
-        schema:
-          $ref: '#/components/schemas/DataTypeArray'
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: false
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: "If true, a manifest for all components will be generated, datasetIds\
-          \ will be ignored. If false, manifests for each id in datasetIds will be\
-          \ generated."
-        explode: true
-        in: query
-        name: generateAllManifests
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'If true, annotations are added to the manifest'
+          explode: true
+          in: query
+          name: addAnnotations
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
+        - description: "If making one manifest, the title of the manifest. If making\
+            \ multiple manifests, the prefix of the title of the manifests."
+          explode: true
+          in: query
+          name: manifestTitle
+          required: false
+          schema:
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: "If true, users are blocked from entering incorrect values. If\
+            \ false, users will get a warning when using incorrect values."
+          explode: true
+          in: query
+          name: useStrictValidation
+          required: false
+          schema:
+            default: true
+            type: boolean
+          style: form
+        - description: An array of dataset ids
+          explode: true
+          in: query
+          name: datasetIdArray
+          required: false
+          schema:
+            $ref: '#/components/schemas/DatasetIdArray'
+          style: form
+        - description: An array of data types
+          explode: true
+          in: query
+          name: dataTypeArray
+          required: false
+          schema:
+            $ref: '#/components/schemas/DataTypeArray'
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: false
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: "If true, a manifest for all components will be generated, datasetIds\
+            \ will be ignored. If false, manifests for each id in datasetIds will be\
+            \ generated."
+          explode: true
+          in: query
+          name: generateAllManifests
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GoogleSheetLinks'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1630,53 +1630,53 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Generates a list of google sheet links
       tags:
-      - ManifestGeneration
+        - ManifestGeneration
       x-openapi-router-controller: schematic_api.controllers.manifest_generation_controller
   /nodes/{nodeDisplay}/isRequired:
     get:
       description: Gets whether or not the node is required in the schema
       operationId: get_node_is_required
       parameters:
-      - description: The display name of the node in a schema
-        explode: false
-        in: path
-        name: nodeDisplay
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeDisplay'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The display name of the node in a schema
+          explode: false
+          in: path
+          name: nodeDisplay
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeDisplay'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 description: Whether or not the node is required in the schema
                 type: boolean
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1685,38 +1685,38 @@ paths:
             error
       summary: Gets whether or not the node is required in the schema
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeDisplay}/propertyLabel:
     get:
       description: Gets the property label of the node
       operationId: get_property_label
       parameters:
-      - description: The display name of the node in a schema
-        explode: false
-        in: path
-        name: nodeDisplay
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeDisplay'
-        style: simple
-      - description: Whether or not to use the more strict way of converting to camel
-          case
-        explode: true
-        in: query
-        name: useStrictCamelCase
-        required: false
-        schema:
-          $ref: '#/components/schemas/UseStrictCamelCase'
-        style: form
+        - description: The display name of the node in a schema
+          explode: false
+          in: path
+          name: nodeDisplay
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeDisplay'
+          style: simple
+        - description: Whether or not to use the more strict way of converting to camel
+            case
+          explode: true
+          in: query
+          name: useStrictCamelCase
+          required: false
+          schema:
+            $ref: '#/components/schemas/UseStrictCamelCase'
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/PropertyLabel'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1725,7 +1725,7 @@ paths:
             error
       summary: Gets the property label of the node
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeDisplay}/validationRules:
     get:
@@ -1733,42 +1733,42 @@ paths:
         \ rule associated with a given node"
       operationId: get_node_validation_rules
       parameters:
-      - description: The display name of the node in a schema
-        explode: false
-        in: path
-        name: nodeDisplay
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeDisplay'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The display name of the node in a schema
+          explode: false
+          in: path
+          name: nodeDisplay
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeDisplay'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ValidationRuleArray'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1778,7 +1778,7 @@ paths:
       summary: "Gets the validation rules, along with the arguments for each given\
         \ rule associated with a given node"
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeLabel}/dependencyArray:
     get:
@@ -1786,61 +1786,61 @@ paths:
         node
       operationId: get_node_dependency_array
       parameters:
-      - description: The label of the source node in a schema to get the dependencies
-          of
-        explode: false
-        in: path
-        name: nodeLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "Whether or not to return the display names of the component,\
-          \ otherwise the label"
-        explode: true
-        in: query
-        name: returnDisplayNames
-        required: false
-        schema:
-          $ref: '#/components/schemas/ReturnDisplayNames'
-        style: form
-      - description: "Whether or not to order the components by their order in the\
-          \ schema, otherwise random"
-        explode: true
-        in: query
-        name: returnOrderedBySchema
-        required: false
-        schema:
-          $ref: '#/components/schemas/ReturnOrderedBySchema'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of the source node in a schema to get the dependencies
+            of
+          explode: false
+          in: path
+          name: nodeLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: "Whether or not to return the display names of the component,\
+            \ otherwise the label"
+          explode: true
+          in: query
+          name: returnDisplayNames
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReturnDisplayNames'
+          style: form
+        - description: "Whether or not to order the components by their order in the\
+            \ schema, otherwise random"
+          explode: true
+          in: query
+          name: returnOrderedBySchema
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReturnOrderedBySchema'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodeArray'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1850,7 +1850,7 @@ paths:
       summary: Gets the immediate dependencies that are related to the given source
         node
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeLabel}/dependencyPage:
     get:
@@ -1858,82 +1858,82 @@ paths:
         node
       operationId: get_node_dependency_page
       parameters:
-      - description: The label of the source node in a schema to get the dependencies
-          of
-        explode: false
-        in: path
-        name: nodeLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "Whether or not to return the display names of the component,\
-          \ otherwise the label"
-        explode: true
-        in: query
-        name: returnDisplayNames
-        required: false
-        schema:
-          $ref: '#/components/schemas/ReturnDisplayNames'
-        style: form
-      - description: "Whether or not to order the components by their order in the\
-          \ schema, otherwise random"
-        explode: true
-        in: query
-        name: returnOrderedBySchema
-        required: false
-        schema:
-          $ref: '#/components/schemas/ReturnOrderedBySchema'
-        style: form
-      - description: The page number to get for a paginated query
-        explode: true
-        in: query
-        name: pageNumber
-        required: false
-        schema:
-          default: 1
-          minimum: 1
-          type: integer
-        style: form
-      - description: "The maximum number of items per page (up to 100,000) for paginated\
-          \ endpoints"
-        explode: true
-        in: query
-        name: pageMaxItems
-        required: false
-        schema:
-          default: 100000
-          minimum: 1
-          type: integer
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of the source node in a schema to get the dependencies
+            of
+          explode: false
+          in: path
+          name: nodeLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: "Whether or not to return the display names of the component,\
+            \ otherwise the label"
+          explode: true
+          in: query
+          name: returnDisplayNames
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReturnDisplayNames'
+          style: form
+        - description: "Whether or not to order the components by their order in the\
+            \ schema, otherwise random"
+          explode: true
+          in: query
+          name: returnOrderedBySchema
+          required: false
+          schema:
+            $ref: '#/components/schemas/ReturnOrderedBySchema'
+          style: form
+        - description: The page number to get for a paginated query
+          explode: true
+          in: query
+          name: pageNumber
+          required: false
+          schema:
+            default: 1
+            minimum: 1
+            type: integer
+          style: form
+        - description: "The maximum number of items per page (up to 100,000) for paginated\
+            \ endpoints"
+          explode: true
+          in: query
+          name: pageMaxItems
+          required: false
+          schema:
+            default: 100000
+            minimum: 1
+            type: integer
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodePage'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1943,50 +1943,50 @@ paths:
       summary: Gets the immediate dependencies that are related to the given source
         node
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /nodes/{nodeLabel}/nodeProperties:
     get:
       description: Gets properties associated with a given node
       operationId: get_node_properties
       parameters:
-      - description: The label of the source node in a schema to get the dependencies
-          of
-        explode: false
-        in: path
-        name: nodeLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/NodeLabel'
-        style: simple
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The label of the source node in a schema to get the dependencies
+            of
+          explode: false
+          in: path
+          name: nodeLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/NodeLabel'
+          style: simple
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/NodePropertyArray'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -1995,7 +1995,7 @@ paths:
             error
       summary: Gets properties associated with a given node
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /schemaAttributes:
     get:
@@ -2003,35 +2003,35 @@ paths:
         a dataframe (stored as a JSON String).
       operationId: get_schema_attributes
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 description: The schema as a json string
                 type: string
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2041,7 +2041,7 @@ paths:
       summary: Get all the attributes associated with a data model formatted as a
         dataframe (stored as a JSON String).
       tags:
-      - Schema
+        - Schema
       x-openapi-router-controller: schematic_api.controllers.schema_controller
   /schematicVersion:
     get:
@@ -2049,14 +2049,14 @@ paths:
         API
       operationId: get_schematic_version
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 example: v21.1.1
                 type: string
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2065,138 +2065,138 @@ paths:
             error
       summary: Gets the version of the schematic library currently used by the API
       tags:
-      - Versions
+        - Versions
       x-openapi-router-controller: schematic_api.controllers.versions_controller
   /submitManifestCsv:
     post:
-      description: "Validates manifest in csv form, then submits it"
+      description: 'Validates manifest in csv form, then submits it'
       operationId: submit_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "A component in a schema, either the dsplay label or schema label"
-        explode: true
-        in: query
-        name: component
-        required: true
-        schema:
-          type: string
-        style: form
-      - description: "If True, validation suite will only run with in-house validation\
-          \ rule. If False, the Great Expectations suite will be utilized and all\
-          \ rules will be available."
-        explode: true
-        in: query
-        name: restrictRules
-        required: false
-        schema:
-          $ref: '#/components/schemas/RestrictRules'
-        style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
-      - description: file_and_entities will store the manifest as a csv and create
-          Synapse files for each row in the manifest. table_and_file will store the
-          manifest as a table and a csv on Synapse. file_only will store the manifest
-          as a csv only on Synapse. table_file_and_entities will perform the options
-          file_with_entites and table in combination.
-        explode: true
-        in: query
-        name: storageMethod
-        required: false
-        schema:
-          default: table_file_and_entities
-          enum:
-          - file_and_entities
-          - table_and_file
-          - file_only
-          - table_file_and_entities
-          type: string
-        style: form
-      - description: "If true, annotations with blank values will be hidden from a\
-          \ dataset's annotation list in Synaspe. If false, annotations with blank\
-          \ values will be displayed."
-        explode: true
-        in: query
-        name: hideBlanks
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: "replace will remove the rows and columns from the existing table\
-          \ and store the new rows and columns, preserving the name and synID. upsert\
-          \ will add the new rows to the table and preserve the exisitng rows and\
-          \ columns in the existing table."
-        explode: true
-        in: query
-        name: tableManipulationMethod
-        required: false
-        schema:
-          default: replace
-          enum:
-          - replace
-          - upsert
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: The labeling style for annotation keys.
-        explode: true
-        in: query
-        name: annotationKeyStyle
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: The labeling syle for table column names.
-        explode: true
-        in: query
-        name: tableColumnNameStyle
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          - display_name
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'A component in a schema, either the dsplay label or schema label'
+          explode: true
+          in: query
+          name: component
+          required: true
+          schema:
+            type: string
+          style: form
+        - description: "If True, validation suite will only run with in-house validation\
+            \ rule. If False, the Great Expectations suite will be utilized and all\
+            \ rules will be available."
+          explode: true
+          in: query
+          name: restrictRules
+          required: false
+          schema:
+            $ref: '#/components/schemas/RestrictRules'
+          style: form
+        - description: The ID of a dataset.
+          explode: true
+          in: query
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: form
+        - description: file_and_entities will store the manifest as a csv and create
+            Synapse files for each row in the manifest. table_and_file will store the
+            manifest as a table and a csv on Synapse. file_only will store the manifest
+            as a csv only on Synapse. table_file_and_entities will perform the options
+            file_with_entites and table in combination.
+          explode: true
+          in: query
+          name: storageMethod
+          required: false
+          schema:
+            default: table_file_and_entities
+            enum:
+              - file_and_entities
+              - table_and_file
+              - file_only
+              - table_file_and_entities
+            type: string
+          style: form
+        - description: "If true, annotations with blank values will be hidden from a\
+            \ dataset's annotation list in Synaspe. If false, annotations with blank\
+            \ values will be displayed."
+          explode: true
+          in: query
+          name: hideBlanks
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: "replace will remove the rows and columns from the existing table\
+            \ and store the new rows and columns, preserving the name and synID. upsert\
+            \ will add the new rows to the table and preserve the exisitng rows and\
+            \ columns in the existing table."
+          explode: true
+          in: query
+          name: tableManipulationMethod
+          required: false
+          schema:
+            default: replace
+            enum:
+              - replace
+              - upsert
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: The labeling style for annotation keys.
+          explode: true
+          in: query
+          name: annotationKeyStyle
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: The labeling syle for table column names.
+          explode: true
+          in: query
+          name: tableColumnNameStyle
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+              - display_name
+            type: string
+          style: form
       requestBody:
         content:
           application/csv:
@@ -2206,13 +2206,13 @@ paths:
         description: .csv file
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestId'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2220,141 +2220,141 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
-      summary: "Validates manifest in csv form, then submits it"
+        - bearerAuth: []
+      summary: 'Validates manifest in csv form, then submits it'
       tags:
-      - ManifestValidation
+        - ManifestValidation
       x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /submitManifestJson:
     post:
-      description: "Validates a manifest in json form, then submits it in csv form"
+      description: 'Validates a manifest in json form, then submits it in csv form'
       operationId: submit_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: "A component in a schema, either the dsplay label or schema label"
-        explode: true
-        in: query
-        name: component
-        required: true
-        schema:
-          type: string
-        style: form
-      - description: "If True, validation suite will only run with in-house validation\
-          \ rule. If False, the Great Expectations suite will be utilized and all\
-          \ rules will be available."
-        explode: true
-        in: query
-        name: restrictRules
-        required: false
-        schema:
-          $ref: '#/components/schemas/RestrictRules'
-        style: form
-      - description: The ID of a dataset.
-        explode: true
-        in: query
-        name: datasetId
-        required: true
-        schema:
-          $ref: '#/components/schemas/DatasetId'
-        style: form
-      - description: file_and_entities will store the manifest as a csv and create
-          Synapse files for each row in the manifest. table_and_file will store the
-          manifest as a table and a csv on Synapse. file_only will store the manifest
-          as a csv only on Synapse. table_file_and_entities will perform the options
-          file_with_entites and table in combination.
-        explode: true
-        in: query
-        name: storageMethod
-        required: false
-        schema:
-          default: table_file_and_entities
-          enum:
-          - file_and_entities
-          - table_and_file
-          - file_only
-          - table_file_and_entities
-          type: string
-        style: form
-      - description: "If true, annotations with blank values will be hidden from a\
-          \ dataset's annotation list in Synaspe. If false, annotations with blank\
-          \ values will be displayed."
-        explode: true
-        in: query
-        name: hideBlanks
-        required: false
-        schema:
-          default: false
-          type: boolean
-        style: form
-      - description: ID of view listing all project data assets. E.g. for Synapse
-          this would be the Synapse ID of the fileview listing all data assets for
-          a given project
-        explode: true
-        in: query
-        name: assetViewId
-        required: true
-        schema:
-          $ref: '#/components/schemas/AssetViewId'
-        style: form
-      - description: "replace will remove the rows and columns from the existing table\
-          \ and store the new rows and columns, preserving the name and synID. upsert\
-          \ will add the new rows to the table and preserve the exisitng rows and\
-          \ columns in the existing table."
-        explode: true
-        in: query
-        name: tableManipulationMethod
-        required: false
-        schema:
-          default: replace
-          enum:
-          - replace
-          - upsert
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: The labeling style for annotation keys.
-        explode: true
-        in: query
-        name: annotationKeyStyle
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
-      - description: The labeling syle for table column names.
-        explode: true
-        in: query
-        name: tableColumnNameStyle
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          - display_name
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: 'A component in a schema, either the dsplay label or schema label'
+          explode: true
+          in: query
+          name: component
+          required: true
+          schema:
+            type: string
+          style: form
+        - description: "If True, validation suite will only run with in-house validation\
+            \ rule. If False, the Great Expectations suite will be utilized and all\
+            \ rules will be available."
+          explode: true
+          in: query
+          name: restrictRules
+          required: false
+          schema:
+            $ref: '#/components/schemas/RestrictRules'
+          style: form
+        - description: The ID of a dataset.
+          explode: true
+          in: query
+          name: datasetId
+          required: true
+          schema:
+            $ref: '#/components/schemas/DatasetId'
+          style: form
+        - description: file_and_entities will store the manifest as a csv and create
+            Synapse files for each row in the manifest. table_and_file will store the
+            manifest as a table and a csv on Synapse. file_only will store the manifest
+            as a csv only on Synapse. table_file_and_entities will perform the options
+            file_with_entites and table in combination.
+          explode: true
+          in: query
+          name: storageMethod
+          required: false
+          schema:
+            default: table_file_and_entities
+            enum:
+              - file_and_entities
+              - table_and_file
+              - file_only
+              - table_file_and_entities
+            type: string
+          style: form
+        - description: "If true, annotations with blank values will be hidden from a\
+            \ dataset's annotation list in Synaspe. If false, annotations with blank\
+            \ values will be displayed."
+          explode: true
+          in: query
+          name: hideBlanks
+          required: false
+          schema:
+            default: false
+            type: boolean
+          style: form
+        - description: ID of view listing all project data assets. E.g. for Synapse
+            this would be the Synapse ID of the fileview listing all data assets for
+            a given project
+          explode: true
+          in: query
+          name: assetViewId
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssetViewId'
+          style: form
+        - description: "replace will remove the rows and columns from the existing table\
+            \ and store the new rows and columns, preserving the name and synID. upsert\
+            \ will add the new rows to the table and preserve the exisitng rows and\
+            \ columns in the existing table."
+          explode: true
+          in: query
+          name: tableManipulationMethod
+          required: false
+          schema:
+            default: replace
+            enum:
+              - replace
+              - upsert
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: The labeling style for annotation keys.
+          explode: true
+          in: query
+          name: annotationKeyStyle
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
+        - description: The labeling syle for table column names.
+          explode: true
+          in: query
+          name: tableColumnNameStyle
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+              - display_name
+            type: string
+          style: form
       requestBody:
         content:
           text/plain:
@@ -2362,13 +2362,13 @@ paths:
               type: string
         description: A manifest in json form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestId'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2376,10 +2376,10 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
-      summary: "Validates a manifest in json form, then submits it"
+        - bearerAuth: []
+      summary: 'Validates a manifest in json form, then submits it'
       tags:
-      - ManifestValidation
+        - ManifestValidation
       x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /tangledTreeLayers:
     get:
@@ -2387,46 +2387,46 @@ paths:
         and figure type
       operationId: get_tangled_tree_layers
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: Figure type to generate.
-        explode: true
-        in: query
-        name: figureType
-        required: false
-        schema:
-          default: component
-          enum:
-          - component
-          - dependency
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: Figure type to generate.
+          explode: true
+          in: query
+          name: figureType
+          required: false
+          schema:
+            default: component
+            enum:
+              - component
+              - dependency
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TangledTreeLayers'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2436,7 +2436,7 @@ paths:
       summary: Get tangled tree node layers to display for a given data model and
         figure type
       tags:
-      - TangledTree
+        - TangledTree
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
   /tangledTreeText:
     get:
@@ -2444,58 +2444,58 @@ paths:
         \ data model, text formatting and figure type"
       operationId: get_tangled_tree_text
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: Figure type to generate.
-        explode: true
-        in: query
-        name: figureType
-        required: false
-        schema:
-          default: component
-          enum:
-          - component
-          - dependency
-          type: string
-        style: form
-      - description: Text formatting type.
-        explode: true
-        in: query
-        name: textFormat
-        required: false
-        schema:
-          default: plain
-          enum:
-          - plain
-          - highlighted
-          type: string
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: Figure type to generate.
+          explode: true
+          in: query
+          name: figureType
+          required: false
+          schema:
+            default: component
+            enum:
+              - component
+              - dependency
+            type: string
+          style: form
+        - description: Text formatting type.
+          explode: true
+          in: query
+          name: textFormat
+          required: false
+          schema:
+            default: plain
+            enum:
+              - plain
+              - highlighted
+            type: string
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/TangledTreeText'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2505,51 +2505,51 @@ paths:
       summary: "Get tangled tree plain or highlighted text to display for a given\
         \ data model, text formatting and figure type"
       tags:
-      - TangledTree
+        - TangledTree
       x-openapi-router-controller: schematic_api.controllers.tangled_tree_controller
   /validateManifestCsv:
     post:
       description: Validates a manifest in csv form
       operationId: validate_manifest_csv
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The label of a component in a schema
-        explode: true
-        in: query
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: form
-      - description: "If True, validation suite will only run with in-house validation\
-          \ rule. If False, the Great Expectations suite will be utilized and all\
-          \ rules will be available."
-        explode: true
-        in: query
-        name: restrictRules
-        required: false
-        schema:
-          $ref: '#/components/schemas/RestrictRules'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The label of a component in a schema
+          explode: true
+          in: query
+          name: componentLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComponentLabel'
+          style: form
+        - description: "If True, validation suite will only run with in-house validation\
+            \ rule. If False, the Great Expectations suite will be utilized and all\
+            \ rules will be available."
+          explode: true
+          in: query
+          name: restrictRules
+          required: false
+          schema:
+            $ref: '#/components/schemas/RestrictRules'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       requestBody:
         content:
           application/csv:
@@ -2559,13 +2559,13 @@ paths:
         description: .csv file
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestValidationResult'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2573,54 +2573,54 @@ paths:
           description: The request cannot be fulfilled due to an unexpected server
             error
       security:
-      - bearerAuth: []
+        - bearerAuth: []
       summary: Validates a manifest in csv form
       tags:
-      - ManifestValidation
+        - ManifestValidation
       x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
   /validateManifestJson:
     post:
       description: Validates a manifest in json form
       operationId: validate_manifest_json
       parameters:
-      - description: The URL of a schema in jsonld or csv form
-        explode: true
-        in: query
-        name: schemaUrl
-        required: true
-        schema:
-          $ref: '#/components/schemas/SchemaUrl'
-        style: form
-      - description: The label of a component in a schema
-        explode: true
-        in: query
-        name: componentLabel
-        required: true
-        schema:
-          $ref: '#/components/schemas/ComponentLabel'
-        style: form
-      - description: "If True, validation suite will only run with in-house validation\
-          \ rule. If False, the Great Expectations suite will be utilized and all\
-          \ rules will be available."
-        explode: true
-        in: query
-        name: restrictRules
-        required: false
-        schema:
-          $ref: '#/components/schemas/RestrictRules'
-        style: form
-      - description: The type of label to display
-        explode: true
-        in: query
-        name: displayLabelType
-        required: false
-        schema:
-          default: class_label
-          enum:
-          - class_label
-          - display_label
-          type: string
-        style: form
+        - description: The URL of a schema in jsonld or csv form
+          explode: true
+          in: query
+          name: schemaUrl
+          required: true
+          schema:
+            $ref: '#/components/schemas/SchemaUrl'
+          style: form
+        - description: The label of a component in a schema
+          explode: true
+          in: query
+          name: componentLabel
+          required: true
+          schema:
+            $ref: '#/components/schemas/ComponentLabel'
+          style: form
+        - description: "If True, validation suite will only run with in-house validation\
+            \ rule. If False, the Great Expectations suite will be utilized and all\
+            \ rules will be available."
+          explode: true
+          in: query
+          name: restrictRules
+          required: false
+          schema:
+            $ref: '#/components/schemas/RestrictRules'
+          style: form
+        - description: The type of label to display
+          explode: true
+          in: query
+          name: displayLabelType
+          required: false
+          schema:
+            default: class_label
+            enum:
+              - class_label
+              - display_label
+            type: string
+          style: form
       requestBody:
         content:
           text/plain:
@@ -2628,13 +2628,13 @@ paths:
               type: string
         description: A manifest in json form
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ManifestValidationResult'
           description: Success
-        "500":
+        '500':
           content:
             application/problem+json:
               schema:
@@ -2643,7 +2643,7 @@ paths:
             error
       summary: Validates a manifest in json form
       tags:
-      - ManifestValidation
+        - ManifestValidation
       x-openapi-router-controller: schematic_api.controllers.manifest_validation_controller
 components:
   parameters:
@@ -2657,7 +2657,7 @@ components:
         $ref: '#/components/schemas/ProjectId'
       style: simple
     assetType:
-      description: "Type of asset, such as Synapse"
+      description: 'Type of asset, such as Synapse'
       explode: false
       in: path
       name: assetType
@@ -2795,8 +2795,8 @@ components:
       schema:
         default: class_label
         enum:
-        - class_label
-        - display_label
+          - class_label
+          - display_label
         type: string
       style: form
     nodeDisplay:
@@ -2839,7 +2839,7 @@ components:
         type: boolean
       style: form
     relationshipType:
-      description: "Type of relationship in a schema, such as requiresDependency"
+      description: 'Type of relationship in a schema, such as requiresDependency'
       explode: true
       in: query
       name: relationshipType
@@ -2868,7 +2868,7 @@ components:
         $ref: '#/components/schemas/RestrictRules'
       style: form
     component:
-      description: "A component in a schema, either the dsplay label or schema label"
+      description: 'A component in a schema, either the dsplay label or schema label'
       explode: true
       in: query
       name: component
@@ -2898,10 +2898,10 @@ components:
       schema:
         default: table_file_and_entities
         enum:
-        - file_and_entities
-        - table_and_file
-        - file_only
-        - table_file_and_entities
+          - file_and_entities
+          - table_and_file
+          - file_only
+          - table_file_and_entities
         type: string
       style: form
     hideBlanks:
@@ -2928,8 +2928,8 @@ components:
       schema:
         default: replace
         enum:
-        - replace
-        - upsert
+          - replace
+          - upsert
         type: string
       style: form
     annotationKeyStyle:
@@ -2941,8 +2941,8 @@ components:
       schema:
         default: class_label
         enum:
-        - class_label
-        - display_label
+          - class_label
+          - display_label
         type: string
       style: form
     tableColumnNameStyle:
@@ -2954,9 +2954,9 @@ components:
       schema:
         default: class_label
         enum:
-        - class_label
-        - display_label
-        - display_name
+          - class_label
+          - display_label
+          - display_name
         type: string
       style: form
     figureType:
@@ -2968,8 +2968,8 @@ components:
       schema:
         default: component
         enum:
-        - component
-        - dependency
+          - component
+          - dependency
         type: string
       style: form
     textFormat:
@@ -2981,12 +2981,12 @@ components:
       schema:
         default: plain
         enum:
-        - plain
-        - highlighted
+          - plain
+          - highlighted
         type: string
       style: form
     addAnnotations:
-      description: "If true, annotations are added to the manifest"
+      description: 'If true, annotations are added to the manifest'
       explode: true
       in: query
       name: addAnnotations
@@ -3063,20 +3063,20 @@ components:
           title: type
           type: string
       required:
-      - status
-      - title
+        - status
+        - title
       title: BasicError
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ProjectId:
       description: A project ID.
       example: syn26251192
       type: string
     AssetType:
-      description: "Type of asset store, such as Synapse"
+      description: 'Type of asset store, such as Synapse'
       enum:
-      - synapse
+        - synapse
       example: synapse
       title: AssetType
       type: string
@@ -3101,20 +3101,20 @@ components:
           title: id
           type: string
       required:
-      - id
-      - name
+        - id
+        - name
       title: DatasetMetadata
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     DatasetMetadataArray:
       description: An array of dataset metadata.
       example:
         datasets:
-        - name: Example dataset
-          id: Syn1
-        - name: Example dataset
-          id: Syn1
+          - name: Example dataset
+            id: Syn1
+          - name: Example dataset
+            id: Syn1
       properties:
         datasets:
           description: An array of dataset meatdata.
@@ -3162,23 +3162,23 @@ components:
           title: hasPrevious
           type: boolean
       required:
-      - hasNext
-      - hasPrevious
-      - number
-      - size
-      - totalElements
-      - totalPages
+        - hasNext
+        - hasPrevious
+        - number
+        - size
+        - totalElements
+        - totalPages
       title: PageMetadata
       type: object
     DatasetMetadataPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/DatasetMetadataPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/DatasetMetadataPage_allOf'
       description: A page of dataset metadata.
       title: DatasetMetadataPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ManifestMetadata:
       description: The metadata for a manifest file
       example:
@@ -3214,24 +3214,24 @@ components:
           title: componentName
           type: string
       required:
-      - id
-      - name
+        - id
+        - name
       title: ManifestMetadata
       type: object
     ManifestMetadataArray:
       description: An array of manifest metadata
       example:
         manifests:
-        - name: synapse_storage_manifest.csv
-          datasetName: dataset_X
-          datasetId: syn2
-          id: syn1
-          componentName: patient
-        - name: synapse_storage_manifest.csv
-          datasetName: dataset_X
-          datasetId: syn2
-          id: syn1
-          componentName: patient
+          - name: synapse_storage_manifest.csv
+            datasetName: dataset_X
+            datasetId: syn2
+            id: syn1
+            componentName: patient
+          - name: synapse_storage_manifest.csv
+            datasetName: dataset_X
+            datasetId: syn2
+            id: syn1
+            componentName: patient
       properties:
         manifests:
           description: A list of manifest metadata
@@ -3243,13 +3243,13 @@ components:
       type: object
     ManifestMetadataPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ManifestMetadataPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/ManifestMetadataPage_allOf'
       description: A page of manifest metadata
       title: ManifestMetadataPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     AssetViewJson:
       description: An asset view in json format
       type: object
@@ -3278,20 +3278,20 @@ components:
           title: id
           type: string
       required:
-      - id
-      - name
+        - id
+        - name
       title: ProjectMetadata
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ProjectMetadataArray:
       description: An array of project metadata.
       example:
         projects:
-        - name: Example project
-          id: Syn1
-        - name: Example project
-          id: Syn1
+          - name: Example project
+            id: Syn1
+          - name: Example project
+            id: Syn1
       properties:
         projects:
           description: An array of project metadata.
@@ -3303,13 +3303,13 @@ components:
       type: object
     ProjectMetadataPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ProjectMetadataPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/ProjectMetadataPage_allOf'
       description: A page of project metadata.
       title: ProjectMetadataPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     FileNames:
       description: A list of file names.
       items:
@@ -3337,20 +3337,20 @@ components:
           title: id
           type: string
       required:
-      - id
-      - name
+        - id
+        - name
       title: FileMetadata
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     FileMetadataArray:
       description: A list of file metadata.
       example:
         files:
-        - name: file.txt
-          id: Syn1
-        - name: file.txt
-          id: Syn1
+          - name: file.txt
+            id: Syn1
+          - name: file.txt
+            id: Syn1
       properties:
         files:
           description: A list of file metadata.
@@ -3362,13 +3362,13 @@ components:
       type: object
     FileMetadataPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/FileMetadataPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/FileMetadataPage_allOf'
       description: A page of file metadata.
       title: FileMetadataPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ManifestId:
       description: A manifest ID.
       example: syn51078535
@@ -3402,17 +3402,17 @@ components:
           title: name
           type: string
       required:
-      - name
+        - name
       title: Node
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     NodeArray:
       description: An array of nodes.
       example:
         nodes:
-        - name: Patient
-        - name: Patient
+          - name: Patient
+          - name: Patient
       properties:
         nodes:
           description: An array of nodes.
@@ -3424,13 +3424,13 @@ components:
       type: object
     NodePage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/NodePage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/NodePage_allOf'
       description: A page of nodes.
       title: NodePage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     NodeDisplay:
       description: The display name of a node in a schema
       example: MolecularEntity
@@ -3439,8 +3439,8 @@ components:
       description: An array of node properties.
       example:
         node_properties:
-        - node_properties
-        - node_properties
+          - node_properties
+          - node_properties
       properties:
         node_properties:
           description: An array of node properties.
@@ -3471,17 +3471,17 @@ components:
           title: name
           type: string
       required:
-      - name
+        - name
       title: ValidationRule
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ValidationRuleArray:
       description: An array of validation rules.
       example:
         validation_rules:
-        - name: list strict
-        - name: list strict
+          - name: list strict
+          - name: list strict
       properties:
         validation_rules:
           description: An array of validation rules.
@@ -3499,8 +3499,8 @@ components:
       description: An array of components
       example:
         componentRequirementsList:
-        - componentRequirementsList
-        - componentRequirementsList
+          - componentRequirementsList
+          - componentRequirementsList
       properties:
         componentRequirementsList:
           items:
@@ -3526,20 +3526,20 @@ components:
           title: component2
           type: string
       required:
-      - component1
-      - component2
+        - component1
+        - component2
       title: ComponentRequirementSubgraph
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ComponentRequirementGraph:
       description: A graph of components
       example:
         componentRequirementsGraph:
-        - component1: component1
-          component2: component2
-        - component1: component1
-          component2: component2
+          - component1: component1
+            component2: component2
+          - component1: component1
+            component2: component2
       properties:
         componentRequirementsGraph:
           items:
@@ -3569,20 +3569,20 @@ components:
           title: node2
           type: string
       required:
-      - node1
-      - node2
+        - node1
+        - node2
       title: ConnectedNodePair
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     ConnectedNodePairArray:
       description: An array of conncted node pairs
       example:
         connectedNodes:
-        - node2: Node2
-          node1: Node1
-        - node2: Node2
-          node1: Node1
+          - node2: Node2
+            node1: Node1
+          - node2: Node2
+            node1: Node1
       properties:
         connectedNodes:
           description: An array of conncted node pairs.
@@ -3594,13 +3594,13 @@ components:
       type: object
     ConnectedNodePairPage:
       allOf:
-      - $ref: '#/components/schemas/PageMetadata'
-      - $ref: '#/components/schemas/ConnectedNodePairPage_allOf'
+        - $ref: '#/components/schemas/PageMetadata'
+        - $ref: '#/components/schemas/ConnectedNodePairPage_allOf'
       description: A page of conncted node pairs
       title: ConnectedNodePairPage
       type: object
       x-java-class-annotations:
-      - '@lombok.Builder'
+        - '@lombok.Builder'
     RestrictRules:
       default: false
       description: "If True, validation suite will only run with in-house validation\
@@ -3611,11 +3611,11 @@ components:
       description: The results of manifest validation
       example:
         warnings:
-        - warnings
-        - warnings
+          - warnings
+          - warnings
         errors:
-        - errors
-        - errors
+          - errors
+          - errors
       properties:
         errors:
           description: Any errors from validation
@@ -3657,8 +3657,8 @@ components:
       description: An array of google sheet links
       example:
         links:
-        - links
-        - links
+          - links
+          - links
       properties:
         links:
           items:
@@ -3676,7 +3676,7 @@ components:
           title: datasets
           type: array
       required:
-      - datasets
+        - datasets
       title: DatasetMetadataPage_allOf
       type: object
       example: null
@@ -3689,7 +3689,7 @@ components:
           title: manifests
           type: array
       required:
-      - manifests
+        - manifests
       title: ManifestMetadataPage_allOf
       type: object
       example: null
@@ -3702,7 +3702,7 @@ components:
           title: projects
           type: array
       required:
-      - projects
+        - projects
       title: ProjectMetadataPage_allOf
       type: object
       example: null
@@ -3715,7 +3715,7 @@ components:
           title: files
           type: array
       required:
-      - files
+        - files
       title: FileMetadataPage_allOf
       type: object
       example: null
@@ -3728,7 +3728,7 @@ components:
           title: nodes
           type: array
       required:
-      - nodes
+        - nodes
       title: NodePage_allOf
       type: object
       example: null
@@ -3741,7 +3741,7 @@ components:
           title: connectedNodes
           type: array
       required:
-      - connectedNodes
+        - connectedNodes
       title: ConnectedNodePairPage_allOf
       type: object
       example: null

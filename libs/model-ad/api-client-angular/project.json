@@ -7,9 +7,7 @@
   "targets": {
     "build": {
       "executor": "@nx/angular:ng-packagr-lite",
-      "outputs": [
-        "{workspaceRoot}/dist/libs/model-ad/api-client-angular"
-      ],
+      "outputs": ["{workspaceRoot}/dist/libs/model-ad/api-client-angular"],
       "options": {
         "project": "libs/model-ad/api-client-angular/ng-package.json"
       },
@@ -25,9 +23,7 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/model-ad/api-client-angular"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/libs/model-ad/api-client-angular"],
       "options": {
         "jestConfig": "libs/model-ad/api-client-angular/jest.config.ts"
       }
@@ -41,22 +37,13 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "rm -fr src/lib/*",
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [
-    "language:typescript"
-  ],
-  "implicitDependencies": [
-    "model-ad-api-description"
-  ]
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["model-ad-api-description"]
 }

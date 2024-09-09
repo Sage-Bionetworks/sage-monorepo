@@ -51,15 +51,9 @@ describe('boxplot-utils', () => {
     const notFoundValue = 'none';
 
     it('should handle valid point categories', () => {
-      expect(
-        getPointStyleFromArray(
-          pt,
-          pointCategories,
-          shapes,
-          styleType,
-          notFoundValue,
-        ),
-      ).toEqual('circle');
+      expect(getPointStyleFromArray(pt, pointCategories, shapes, styleType, notFoundValue)).toEqual(
+        'circle',
+      );
       expect(
         getPointStyleFromArray(
           { ...pt, pointCategory: 'b' },
@@ -115,30 +109,33 @@ describe('boxplot-utils', () => {
   describe('getCategoryPointShape', () => {
     it('should return first shape for the first point category', () => {
       expect(
-        getCategoryPointShape(
-          { xAxisCategory: 'b', pointCategory: 'X', value: 1 },
-          ['X', 'Y', 'Z'],
-        ),
+        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'X', value: 1 }, [
+          'X',
+          'Y',
+          'Z',
+        ]),
       ).toEqual('circle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return second shape for the second point category', () => {
       expect(
-        getCategoryPointShape(
-          { xAxisCategory: 'b', pointCategory: 'Y', value: 1 },
-          ['X', 'Y', 'Z'],
-        ),
+        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'Y', value: 1 }, [
+          'X',
+          'Y',
+          'Z',
+        ]),
       ).toEqual('triangle');
       expect(consoleWarnSpy).not.toHaveBeenCalled();
     });
 
     it('should return default when point category is not found', () => {
       expect(
-        getCategoryPointShape(
-          { xAxisCategory: 'b', pointCategory: 'WW', value: 1 },
-          ['X', 'Y', 'Z'],
-        ),
+        getCategoryPointShape({ xAxisCategory: 'b', pointCategory: 'WW', value: 1 }, [
+          'X',
+          'Y',
+          'Z',
+        ]),
       ).toEqual('none');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -169,10 +166,11 @@ describe('boxplot-utils', () => {
 
     it('should return default when point category is not found', () => {
       expect(
-        getCategoryPointColor(
-          { xAxisCategory: 'b', pointCategory: 'WW', value: 1 },
-          ['X', 'Y', 'Z'],
-        ),
+        getCategoryPointColor({ xAxisCategory: 'b', pointCategory: 'WW', value: 1 }, [
+          'X',
+          'Y',
+          'Z',
+        ]),
       ).toEqual('transparent');
       expect(consoleWarnSpy).toHaveBeenCalledTimes(1);
     });
@@ -180,29 +178,27 @@ describe('boxplot-utils', () => {
 
   describe('getUniqueValues', () => {
     it('should return sorted, unique values when specified', () => {
-      expect(
-        getUniqueValues(pointsWithPointCategories, 'xAxisCategory', true),
-      ).toEqual(['a', 'b', 'c']);
+      expect(getUniqueValues(pointsWithPointCategories, 'xAxisCategory', true)).toEqual([
+        'a',
+        'b',
+        'c',
+      ]);
 
-      expect(
-        getUniqueValues(pointsWithPointCategories, 'pointCategory', true),
-      ).toEqual(['X', 'Y', 'Z']);
+      expect(getUniqueValues(pointsWithPointCategories, 'pointCategory', true)).toEqual([
+        'X',
+        'Y',
+        'Z',
+      ]);
     });
 
     it('should return unsorted, unique values by default', () => {
-      expect(
-        getUniqueValues(pointsWithPointCategories, 'xAxisCategory'),
-      ).toEqual(['c', 'a', 'b']);
+      expect(getUniqueValues(pointsWithPointCategories, 'xAxisCategory')).toEqual(['c', 'a', 'b']);
 
-      expect(
-        getUniqueValues(pointsWithPointCategories, 'pointCategory'),
-      ).toEqual(['Y', 'X', 'Z']);
+      expect(getUniqueValues(pointsWithPointCategories, 'pointCategory')).toEqual(['Y', 'X', 'Z']);
     });
 
     it('should handle all undefined values', () => {
-      expect(
-        getUniqueValues(pointsWithoutPointCategories, 'pointCategory'),
-      ).toEqual([]);
+      expect(getUniqueValues(pointsWithoutPointCategories, 'pointCategory')).toEqual([]);
     });
   });
 
@@ -258,22 +254,14 @@ describe('boxplot-utils', () => {
       const jitterMax = 0.02;
       const offsetXValue = 1.9;
       for (let i = 0; i < 10; i++) {
-        const xValue = getOffsetAndJitteredXValue(
-          2,
-          0,
-          2,
-          defaultPtOffset,
-          jitterMax,
-        );
+        const xValue = getOffsetAndJitteredXValue(2, 0, 2, defaultPtOffset, jitterMax);
         expect(xValue).toBeLessThan(offsetXValue + jitterMax);
         expect(xValue).toBeGreaterThan(offsetXValue - jitterMax);
       }
     });
 
     it('does not jitter xValues when there is only one category', () => {
-      expect(getOffsetAndJitteredXValue(2, 0, 1, defaultPtOffset, 0.1)).toEqual(
-        2,
-      );
+      expect(getOffsetAndJitteredXValue(2, 0, 1, defaultPtOffset, 0.1)).toEqual(2);
     });
   });
 
@@ -377,9 +365,7 @@ describe('boxplot-utils', () => {
         },
       ];
 
-      expect(addXAxisValueToBoxplotSummaries(input, ['a', 'b', 'c'])).toEqual(
-        output,
-      );
+      expect(addXAxisValueToBoxplotSummaries(input, ['a', 'b', 'c'])).toEqual(output);
     });
   });
 
@@ -387,22 +373,14 @@ describe('boxplot-utils', () => {
     it('correctly restructures data', () => {
       const ptsBoxplotTransform = [[], [1], [2], [3]];
       expect(
-        formatCategoryPointsForBoxplotTransform(pointsWithoutPointCategories, [
-          'a',
-          'b',
-          'c',
-        ]),
+        formatCategoryPointsForBoxplotTransform(pointsWithoutPointCategories, ['a', 'b', 'c']),
       ).toEqual(ptsBoxplotTransform);
     });
 
     it('ignores point categories', () => {
       const ptsBoxplotTransform = [[], [4, 5, 6], [7, 8, 9], [1, 2, 3]];
       expect(
-        formatCategoryPointsForBoxplotTransform(pointsWithPointCategories, [
-          'a',
-          'b',
-          'c',
-        ]),
+        formatCategoryPointsForBoxplotTransform(pointsWithPointCategories, ['a', 'b', 'c']),
       ).toEqual(ptsBoxplotTransform);
     });
   });

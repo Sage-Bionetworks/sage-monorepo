@@ -3,8 +3,7 @@ import { SeoData } from '@sagebionetworks/shared/util';
 export const getDefaultSeoData = (): SeoData => {
   return new SeoData({
     title: 'MODEL-AD',
-    description:
-      'A complementary team of investigators from several laboratories and institutions',
+    description: 'A complementary team of investigators from several laboratories and institutions',
     url: '',
     imageUrl: '',
     imageAlt: 'MODEL-AD logo',

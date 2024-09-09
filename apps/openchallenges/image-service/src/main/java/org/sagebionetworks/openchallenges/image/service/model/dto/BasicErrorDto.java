@@ -46,9 +46,10 @@ public class BasicErrorDto {
    */
   @NotNull
   @Schema(
-      name = "title",
-      description = "A human readable documentation for the problem type",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+    name = "title",
+    description = "A human readable documentation for the problem type",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("title")
   public String getTitle() {
     return title;
@@ -70,9 +71,10 @@ public class BasicErrorDto {
    */
   @NotNull
   @Schema(
-      name = "status",
-      description = "The HTTP status code",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+    name = "status",
+    description = "The HTTP status code",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("status")
   public Integer getStatus() {
     return status;
@@ -93,9 +95,10 @@ public class BasicErrorDto {
    * @return detail
    */
   @Schema(
-      name = "detail",
-      description = "A human readable explanation specific to this occurrence of the problem",
-      requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    name = "detail",
+    description = "A human readable explanation specific to this occurrence of the problem",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("detail")
   public String getDetail() {
     return detail;
@@ -116,9 +119,10 @@ public class BasicErrorDto {
    * @return type
    */
   @Schema(
-      name = "type",
-      description = "An absolute URI that identifies the problem type",
-      requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+    name = "type",
+    description = "An absolute URI that identifies the problem type",
+    requiredMode = Schema.RequiredMode.NOT_REQUIRED
+  )
   @JsonProperty("type")
   public String getType() {
     return type;
@@ -137,10 +141,12 @@ public class BasicErrorDto {
       return false;
     }
     BasicErrorDto basicError = (BasicErrorDto) o;
-    return Objects.equals(this.title, basicError.title)
-        && Objects.equals(this.status, basicError.status)
-        && Objects.equals(this.detail, basicError.detail)
-        && Objects.equals(this.type, basicError.type);
+    return (
+      Objects.equals(this.title, basicError.title) &&
+      Objects.equals(this.status, basicError.status) &&
+      Objects.equals(this.detail, basicError.detail) &&
+      Objects.equals(this.type, basicError.type)
+    );
   }
 
   @Override

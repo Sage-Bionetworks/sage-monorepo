@@ -1,5 +1,3 @@
-
-
 - [Overview of Sage Monorepo]
 - Cheat Sheet (coming soon)
 - [Docs](docs)
@@ -23,6 +21,7 @@ cloning. For more information on contributing and/or our Forking Workflow, see
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 <!-- termynal -->
+
 ```console
 $ git clone --filter=blob:none <fork url>
 ---> 100%
@@ -40,7 +39,6 @@ Then open your fork repo inside our dev container using these instructions:
 - Node.js
 - Python
 - R
-
 
 ## Projects
 

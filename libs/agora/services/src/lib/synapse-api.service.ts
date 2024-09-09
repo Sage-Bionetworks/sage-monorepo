@@ -27,12 +27,7 @@ export class SynapseApiService {
       return of(this.wikis[key]);
     } else {
       return this.http
-        .get(
-          'https://repo-prod.prod.sagebase.org/repo/v1/entity/' +
-            ownerId +
-            '/wiki/' +
-            wikiId,
-        )
+        .get('https://repo-prod.prod.sagebase.org/repo/v1/entity/' + ownerId + '/wiki/' + wikiId)
         .pipe(
           tap((wiki: any) => {
             this.wikis[key] = wiki;
@@ -71,13 +66,7 @@ export class SynapseApiService {
     }
 
     return (
-      '<a href="' +
-      url +
-      '"' +
-      (target ? ' target="' + target + '"' : '') +
-      '>' +
-      text +
-      '</a>'
+      '<a href="' + url + '"' + (target ? ' target="' + target + '"' : '') + '>' + text + '</a>'
     );
   }
 
@@ -90,9 +79,7 @@ export class SynapseApiService {
 
     try {
       const contentArr = content.split('?');
-      params = new URLSearchParams(
-        contentArr.length > 1 ? contentArr[1] : contentArr[0],
-      );
+      params = new URLSearchParams(contentArr.length > 1 ? contentArr[1] : contentArr[0]);
     } catch (err) {
       console.error(err);
     }
@@ -123,13 +110,7 @@ export class SynapseApiService {
     content = content.replace(/(\s|\*)/g, '');
 
     if (content) {
-      return (
-        '<a class="link email-link" href="mailto:' +
-        content +
-        '">' +
-        content +
-        '</a>'
-      );
+      return '<a class="link email-link" href="mailto:' + content + '">' + content + '</a>';
     }
 
     return content;

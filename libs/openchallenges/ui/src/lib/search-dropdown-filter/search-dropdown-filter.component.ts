@@ -4,23 +4,14 @@ import { Avatar } from '../avatar/avatar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvatarComponent } from '../avatar/avatar.component';
-import {
-  MultiSelectLazyLoadEvent,
-  MultiSelectModule,
-} from 'primeng/multiselect';
+import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
   standalone: true,
-  imports: [
-    AvatarComponent,
-    CommonModule,
-    FormsModule,
-    MultiSelectModule,
-    SkeletonModule,
-  ],
+  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule, SkeletonModule],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
@@ -76,27 +67,19 @@ export class SearchDropdownFilterComponent implements OnInit {
     }
 
     // preparing a set for quick lookup
-    const validOptionValues = new Set(
-      this.options.map((option) => option.value),
-    );
+    const validOptionValues = new Set(this.options.map((option) => option.value));
 
     // count how many selected values
     // exlude the invalid selected values if they are not in the option list
     return this.selectedOptions.filter(
-      (option) =>
-        option !== null &&
-        option !== undefined &&
-        validOptionValues.has(option),
+      (option) => option !== null && option !== undefined && validOptionValues.has(option),
     ).length;
   }
 
   onLazyLoad(event: MultiSelectLazyLoadEvent) {
     // note: virtual scroll needs to be set 'true' to enable lazy load
     // trigger loader animation every time lazy load initiated
-    const startPage = Math.max(
-      0,
-      Math.floor(event.first / this.optionsPerPage),
-    ); // avoid negative pages
+    const startPage = Math.max(0, Math.floor(event.first / this.optionsPerPage)); // avoid negative pages
     const endPage = Math.floor(event.last / this.optionsPerPage);
 
     // load next page as scrolling down

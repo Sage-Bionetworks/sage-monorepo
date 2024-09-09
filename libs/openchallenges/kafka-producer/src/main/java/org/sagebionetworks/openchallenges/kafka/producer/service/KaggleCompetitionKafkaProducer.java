@@ -13,7 +13,7 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 @Slf4j
 @Service
 public class KaggleCompetitionKafkaProducer
-    implements KafkaProducer<Long, KaggleCompetitionAvroModel> {
+  implements KafkaProducer<Long, KaggleCompetitionAvroModel> {
 
   private KafkaTemplate<Long, KaggleCompetitionAvroModel> kafkaTemplate;
 
@@ -25,7 +25,7 @@ public class KaggleCompetitionKafkaProducer
   public void send(String topicName, Long key, KaggleCompetitionAvroModel message) {
     log.info("Sending message='{}' to topic={}", message, topicName);
     ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture =
-        kafkaTemplate.send(topicName, key, message);
+      kafkaTemplate.send(topicName, key, message);
     addCallback(topicName, message, kafkaResultFuture);
   }
 
@@ -38,27 +38,30 @@ public class KaggleCompetitionKafkaProducer
   }
 
   private void addCallback(
-      String topicName,
-      KaggleCompetitionAvroModel message,
-      ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture) {
+    String topicName,
+    KaggleCompetitionAvroModel message,
+    ListenableFuture<SendResult<Long, KaggleCompetitionAvroModel>> kafkaResultFuture
+  ) {
     kafkaResultFuture.addCallback(
-        new ListenableFutureCallback<>() {
-          @Override
-          public void onFailure(Throwable throwable) {
-            log.error("Error while sending message {} to topic {}.", message.toString(), topicName);
-          }
+      new ListenableFutureCallback<>() {
+        @Override
+        public void onFailure(Throwable throwable) {
+          log.error("Error while sending message {} to topic {}.", message.toString(), topicName);
+        }
 
-          @Override
-          public void onSuccess(SendResult<Long, KaggleCompetitionAvroModel> result) {
-            RecordMetadata metadata = result.getRecordMetadata();
-            log.debug(
-                "Received new metadata. Topic: {}, Partition: {}, Offset: {}, Timestamp: {}, at time {}",
-                metadata.topic(),
-                metadata.partition(),
-                metadata.offset(),
-                metadata.timestamp(),
-                System.nanoTime());
-          }
-        });
+        @Override
+        public void onSuccess(SendResult<Long, KaggleCompetitionAvroModel> result) {
+          RecordMetadata metadata = result.getRecordMetadata();
+          log.debug(
+            "Received new metadata. Topic: {}, Partition: {}, Offset: {}, Timestamp: {}, at time {}",
+            metadata.topic(),
+            metadata.partition(),
+            metadata.offset(),
+            metadata.timestamp(),
+            System.nanoTime()
+          );
+        }
+      }
+    );
   }
 }

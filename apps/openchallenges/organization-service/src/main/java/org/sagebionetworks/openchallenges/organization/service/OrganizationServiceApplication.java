@@ -10,7 +10,7 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackages = {"org.sagebionetworks.openchallenges"})
+@ComponentScan(basePackages = { "org.sagebionetworks.openchallenges" })
 @EnableEurekaClient
 @EnableFeignClients
 @SpringBootApplication
@@ -21,7 +21,8 @@ public class OrganizationServiceApplication implements CommandLineRunner {
   private final OrganizationServiceConfigData organizationServiceConfigData;
 
   public OrganizationServiceApplication(
-      OrganizationServiceConfigData organizationServiceConfigData) {
+    OrganizationServiceConfigData organizationServiceConfigData
+  ) {
     this.organizationServiceConfigData = organizationServiceConfigData;
   }
 

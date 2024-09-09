@@ -43,9 +43,7 @@ export class FeaturedChallengeListComponent implements OnInit {
     this.challenges$ = challengesPage$.pipe(
       switchMap((page) =>
         // remove categories filter if no featured challenges
-        page.challenges
-          ? of(page)
-          : this.challengeService.listChallenges(defaultQuery),
+        page.challenges ? of(page) : this.challengeService.listChallenges(defaultQuery),
       ),
       map((page) => page.challenges),
     );

@@ -4,16 +4,10 @@ import {
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
-import {
-  withInterceptorsFromDi,
-  provideHttpClient,
-} from '@angular/common/http';
+import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  configFactory,
-  ConfigService,
-} from '@sagebionetworks/openchallenges/config';
+import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/config';
 
 import { routes } from './app.routes';
 

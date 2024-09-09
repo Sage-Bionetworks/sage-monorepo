@@ -36,10 +36,11 @@ public class SimpleChallengePlatformDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of a challenge platform.",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of a challenge platform.",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -62,10 +63,11 @@ public class SimpleChallengePlatformDto {
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 30)
   @Schema(
-      name = "slug",
-      example = "example-challenge-platform",
-      description = "The slug of the challenge platform.",
-      required = true)
+    name = "slug",
+    example = "example-challenge-platform",
+    description = "The slug of the challenge platform.",
+    required = true
+  )
   public String getSlug() {
     return slug;
   }
@@ -104,9 +106,11 @@ public class SimpleChallengePlatformDto {
       return false;
     }
     SimpleChallengePlatformDto simpleChallengePlatform = (SimpleChallengePlatformDto) o;
-    return Objects.equals(this.id, simpleChallengePlatform.id)
-        && Objects.equals(this.slug, simpleChallengePlatform.slug)
-        && Objects.equals(this.name, simpleChallengePlatform.name);
+    return (
+      Objects.equals(this.id, simpleChallengePlatform.id) &&
+      Objects.equals(this.slug, simpleChallengePlatform.slug) &&
+      Objects.equals(this.name, simpleChallengePlatform.name)
+    );
   }
 
   @Override

@@ -72,10 +72,11 @@ public class OrganizationsPageDto {
    */
   @NotNull
   @Schema(
-      name = "size",
-      example = "99",
-      description = "The number of items in a single page.",
-      required = true)
+    name = "size",
+    example = "99",
+    description = "The number of items in a single page.",
+    required = true
+  )
   public Integer getSize() {
     return size;
   }
@@ -96,10 +97,11 @@ public class OrganizationsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalElements",
-      example = "99",
-      description = "Total number of elements in the result set.",
-      required = true)
+    name = "totalElements",
+    example = "99",
+    description = "Total number of elements in the result set.",
+    required = true
+  )
   public Long getTotalElements() {
     return totalElements;
   }
@@ -120,10 +122,11 @@ public class OrganizationsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalPages",
-      example = "99",
-      description = "Total number of pages in the result set.",
-      required = true)
+    name = "totalPages",
+    example = "99",
+    description = "Total number of pages in the result set.",
+    required = true
+  )
   public Integer getTotalPages() {
     return totalPages;
   }
@@ -144,10 +147,11 @@ public class OrganizationsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasNext",
-      example = "true",
-      description = "Returns if there is a next page.",
-      required = true)
+    name = "hasNext",
+    example = "true",
+    description = "Returns if there is a next page.",
+    required = true
+  )
   public Boolean getHasNext() {
     return hasNext;
   }
@@ -168,10 +172,11 @@ public class OrganizationsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasPrevious",
-      example = "true",
-      description = "Returns if there is a previous page.",
-      required = true)
+    name = "hasPrevious",
+    example = "true",
+    description = "Returns if there is a previous page.",
+    required = true
+  )
   public Boolean getHasPrevious() {
     return hasPrevious;
   }
@@ -218,19 +223,28 @@ public class OrganizationsPageDto {
       return false;
     }
     OrganizationsPageDto organizationsPage = (OrganizationsPageDto) o;
-    return Objects.equals(this.number, organizationsPage.number)
-        && Objects.equals(this.size, organizationsPage.size)
-        && Objects.equals(this.totalElements, organizationsPage.totalElements)
-        && Objects.equals(this.totalPages, organizationsPage.totalPages)
-        && Objects.equals(this.hasNext, organizationsPage.hasNext)
-        && Objects.equals(this.hasPrevious, organizationsPage.hasPrevious)
-        && Objects.equals(this.organizations, organizationsPage.organizations);
+    return (
+      Objects.equals(this.number, organizationsPage.number) &&
+      Objects.equals(this.size, organizationsPage.size) &&
+      Objects.equals(this.totalElements, organizationsPage.totalElements) &&
+      Objects.equals(this.totalPages, organizationsPage.totalPages) &&
+      Objects.equals(this.hasNext, organizationsPage.hasNext) &&
+      Objects.equals(this.hasPrevious, organizationsPage.hasPrevious) &&
+      Objects.equals(this.organizations, organizationsPage.organizations)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        number, size, totalElements, totalPages, hasNext, hasPrevious, organizations);
+      number,
+      size,
+      totalElements,
+      totalPages,
+      hasNext,
+      hasPrevious,
+      organizations
+    );
   }
 
   @Override

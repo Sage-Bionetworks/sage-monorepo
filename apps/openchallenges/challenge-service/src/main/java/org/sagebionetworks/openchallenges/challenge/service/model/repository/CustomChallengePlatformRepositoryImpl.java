@@ -25,17 +25,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomChallengePlatformRepositoryImpl implements CustomChallengePlatformRepository {
 
-  @PersistenceContext private EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
   public Page<ChallengePlatformEntity> findAll(
-      Pageable pageable, ChallengePlatformSearchQueryDto query, String... fields) {
+    Pageable pageable,
+    ChallengePlatformSearchQueryDto query,
+    String... fields
+  ) {
     SearchResult<ChallengePlatformEntity> result = getSearchResult(pageable, query, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<ChallengePlatformEntity> getSearchResult(
-      Pageable pageable, ChallengePlatformSearchQueryDto query, String[] fields) {
+    Pageable pageable,
+    ChallengePlatformSearchQueryDto query,
+    String[] fields
+  ) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengePlatformEntity.class).predicate();
     SearchSortFactory sf = searchSession.scope(ChallengePlatformEntity.class).sort();
@@ -57,57 +64,67 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
-    SearchResult<ChallengePlatformEntity> result =
-        searchSession
-            .search(ChallengePlatformEntity.class)
-            .where(topLevelPredicate)
-            .sort(sort)
-            .fetch((int) pageable.getOffset(), pageable.getPageSize());
+    SearchResult<ChallengePlatformEntity> result = searchSession
+      .search(ChallengePlatformEntity.class)
+      .where(topLevelPredicate)
+      .sort(sort)
+      .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
 
   private SearchPredicate getSlugsPredicate(
-      SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (String slug : query.getSlugs()) {
-                b.should(pf.match().field("slug").matching(slug));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengePlatformSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (String slug : query.getSlugs()) {
+          b.should(pf.match().field("slug").matching(slug));
+        }
+      })
+      .toPredicate();
   }
 
   private SearchPredicate getSearchTermsPredicate(
-      SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query, String[] fields) {
-    return pf.simpleQueryString()
-        .fields(fields)
-        .matching(query.getSearchTerms())
-        .defaultOperator(BooleanOperator.AND)
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengePlatformSearchQueryDto query,
+    String[] fields
+  ) {
+    return pf
+      .simpleQueryString()
+      .fields(fields)
+      .matching(query.getSearchTerms())
+      .defaultOperator(BooleanOperator.AND)
+      .toPredicate();
   }
 
   private SearchPredicate buildTopLevelPredicate(
-      SearchPredicateFactory pf, List<SearchPredicate> predicates) {
-    return pf.bool(
-            b -> {
-              b.must(f -> f.matchAll());
-              for (SearchPredicate predicate : predicates) {
-                b.must(predicate);
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    List<SearchPredicate> predicates
+  ) {
+    return pf
+      .bool(b -> {
+        b.must(f -> f.matchAll());
+        for (SearchPredicate predicate : predicates) {
+          b.must(predicate);
+        }
+      })
+      .toPredicate();
   }
 
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengePlatformSearchQueryDto query) {
-    SortOrder orderWithDefaultAsc =
-        query.getDirection() == ChallengePlatformDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    SortOrder orderWithDefaultDesc =
-        query.getDirection() == ChallengePlatformDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
+    SortOrder orderWithDefaultAsc = query.getDirection() == ChallengePlatformDirectionDto.DESC
+      ? SortOrder.DESC
+      : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc = query.getDirection() == ChallengePlatformDirectionDto.ASC
+      ? SortOrder.ASC
+      : SortOrder.DESC;
 
     SearchSort nameSort = sf.field("name_sort").order(orderWithDefaultAsc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
-    SearchSort relevanceSort =
-        (query.getSearchTerms() == null || query.getSearchTerms().isBlank()) ? nameSort : scoreSort;
+    SearchSort relevanceSort = (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+      ? nameSort
+      : scoreSort;
 
     switch (query.getSort()) {
       case NAME -> {
@@ -118,13 +135,16 @@ public class CustomChallengePlatformRepositoryImpl implements CustomChallengePla
       }
       default -> {
         throw new BadRequestException(
-            String.format("Unhandled sorting strategy '%s'", query.getSort()));
+          String.format("Unhandled sorting strategy '%s'", query.getSort())
+        );
       }
     }
   }
 
   private SearchPredicate getSearchSortPredicate(
-      SearchPredicateFactory pf, ChallengePlatformSearchQueryDto query) {
+    SearchPredicateFactory pf,
+    ChallengePlatformSearchQueryDto query
+  ) {
     switch (query.getSort()) {
       default -> {
         return null;

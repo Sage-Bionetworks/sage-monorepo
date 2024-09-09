@@ -13,15 +13,20 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @ExceptionHandler(SimpleChallengeGlobalException.class)
   protected ResponseEntity<ErrorResponse> handleGlobalException(
-      SimpleChallengeGlobalException simpleChallengeGlobalException, Locale locale) {
+    SimpleChallengeGlobalException simpleChallengeGlobalException,
+    Locale locale
+  ) {
     return ResponseEntity.badRequest()
-        .body(ErrorResponse.builder().code(simpleChallengeGlobalException.getCode())
-            .message(simpleChallengeGlobalException.getMessage()).build());
+      .body(
+        ErrorResponse.builder()
+          .code(simpleChallengeGlobalException.getCode())
+          .message(simpleChallengeGlobalException.getMessage())
+          .build()
+      );
   }
 
-  @ExceptionHandler({Exception.class})
+  @ExceptionHandler({ Exception.class })
   protected ResponseEntity<String> handleException(Exception e, Locale locale) {
     return ResponseEntity.badRequest().body("Exception occur inside API " + e);
   }
-
 }

@@ -1,16 +1,16 @@
 package org.sagebionetworks.challenge.model.entity;
 
+import java.util.List;
+import javax.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "challenge_core_user")
 public class UserEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

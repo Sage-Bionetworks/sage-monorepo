@@ -6,27 +6,35 @@
 package org.sagebionetworks.openchallenges.kafka.model;
 
 import org.apache.avro.generic.GenericArray;
+import org.apache.avro.message.BinaryMessageDecoder;
+import org.apache.avro.message.BinaryMessageEncoder;
+import org.apache.avro.message.SchemaStore;
 import org.apache.avro.specific.SpecificData;
 import org.apache.avro.util.Utf8;
-import org.apache.avro.message.BinaryMessageEncoder;
-import org.apache.avro.message.BinaryMessageDecoder;
-import org.apache.avro.message.SchemaStore;
 
 @org.apache.avro.specific.AvroGenerated
-public class KaggleCompetitionAvroModel extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
+public class KaggleCompetitionAvroModel
+  extends org.apache.avro.specific.SpecificRecordBase
+  implements org.apache.avro.specific.SpecificRecord {
+
   private static final long serialVersionUID = -3127420308691200792L;
 
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser()
+    .parse(
+      "{\"type\":\"record\",\"name\":\"KaggleCompetitionAvroModel\",\"namespace\":\"org.sagebionetworks.openchallenges.kafka.model\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"title\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}"
+    );
 
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"KaggleCompetitionAvroModel\",\"namespace\":\"org.sagebionetworks.openchallenges.kafka.model\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"title\",\"type\":{\"type\":\"string\",\"avro.java.string\":\"String\"}}]}");
-  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
+  public static org.apache.avro.Schema getClassSchema() {
+    return SCHEMA$;
+  }
 
   private static final SpecificData MODEL$ = new SpecificData();
 
   private static final BinaryMessageEncoder<KaggleCompetitionAvroModel> ENCODER =
-      new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
+    new BinaryMessageEncoder<>(MODEL$, SCHEMA$);
 
   private static final BinaryMessageDecoder<KaggleCompetitionAvroModel> DECODER =
-      new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
+    new BinaryMessageDecoder<>(MODEL$, SCHEMA$);
 
   /**
    * Return the BinaryMessageEncoder instance used by this class.
@@ -49,7 +57,9 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
    * @param resolver a {@link SchemaStore} used to find schemas by fingerprint
    * @return a BinaryMessageDecoder instance for this class backed by the given SchemaStore
    */
-  public static BinaryMessageDecoder<KaggleCompetitionAvroModel> createDecoder(SchemaStore resolver) {
+  public static BinaryMessageDecoder<KaggleCompetitionAvroModel> createDecoder(
+    SchemaStore resolver
+  ) {
     return new BinaryMessageDecoder<>(MODEL$, SCHEMA$, resolver);
   }
 
@@ -68,8 +78,8 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
    * @return a KaggleCompetitionAvroModel instance decoded from the given buffer
    * @throws java.io.IOException if the given bytes could not be deserialized into an instance of this class
    */
-  public static KaggleCompetitionAvroModel fromByteBuffer(
-      java.nio.ByteBuffer b) throws java.io.IOException {
+  public static KaggleCompetitionAvroModel fromByteBuffer(java.nio.ByteBuffer b)
+    throws java.io.IOException {
     return DECODER.decode(b);
   }
 
@@ -94,29 +104,41 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
   }
 
   @Override
-  public org.apache.avro.specific.SpecificData getSpecificData() { return MODEL$; }
+  public org.apache.avro.specific.SpecificData getSpecificData() {
+    return MODEL$;
+  }
 
   @Override
-  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+  public org.apache.avro.Schema getSchema() {
+    return SCHEMA$;
+  }
 
   // Used by DatumWriter.  Applications should not call.
   @Override
   public java.lang.Object get(int field$) {
     switch (field$) {
-    case 0: return id;
-    case 1: return title;
-    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
+      case 0:
+        return id;
+      case 1:
+        return title;
+      default:
+        throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
   // Used by DatumReader.  Applications should not call.
   @Override
-  @SuppressWarnings(value="unchecked")
+  @SuppressWarnings(value = "unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: id = (java.lang.Long)value$; break;
-    case 1: title = value$ != null ? value$.toString() : null; break;
-    default: throw new IndexOutOfBoundsException("Invalid index: " + field$);
+      case 0:
+        id = (java.lang.Long) value$;
+        break;
+      case 1:
+        title = value$ != null ? value$.toString() : null;
+        break;
+      default:
+        throw new IndexOutOfBoundsException("Invalid index: " + field$);
     }
   }
 
@@ -127,7 +149,6 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
   public long getId() {
     return id;
   }
-
 
   /**
    * Sets the value of the 'id' field.
@@ -144,7 +165,6 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
   public java.lang.String getTitle() {
     return title;
   }
-
 
   /**
    * Sets the value of the 'title' field.
@@ -167,11 +187,15 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
    * @param other The existing builder to copy.
    * @return A new KaggleCompetitionAvroModel RecordBuilder
    */
-  public static org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder newBuilder(org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder other) {
+  public static org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder newBuilder(
+    org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder other
+  ) {
     if (other == null) {
       return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder();
     } else {
-      return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder(other);
+      return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder(
+        other
+      );
     }
   }
 
@@ -180,11 +204,15 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
    * @param other The existing instance to copy.
    * @return A new KaggleCompetitionAvroModel RecordBuilder
    */
-  public static org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder newBuilder(org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel other) {
+  public static org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder newBuilder(
+    org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel other
+  ) {
     if (other == null) {
       return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder();
     } else {
-      return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder(other);
+      return new org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder(
+        other
+      );
     }
   }
 
@@ -192,7 +220,8 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
    * RecordBuilder for KaggleCompetitionAvroModel instances.
    */
   @org.apache.avro.specific.AvroGenerated
-  public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<KaggleCompetitionAvroModel>
+  public static class Builder
+    extends org.apache.avro.specific.SpecificRecordBuilderBase<KaggleCompetitionAvroModel>
     implements org.apache.avro.data.RecordBuilder<KaggleCompetitionAvroModel> {
 
     private long id;
@@ -207,7 +236,9 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
      * Creates a Builder by copying an existing Builder.
      * @param other The existing Builder to copy.
      */
-    private Builder(org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder other) {
+    private Builder(
+      org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder other
+    ) {
       super(other);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -223,7 +254,9 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
      * Creates a Builder by copying an existing KaggleCompetitionAvroModel instance
      * @param other The existing instance to copy.
      */
-    private Builder(org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel other) {
+    private Builder(
+      org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel other
+    ) {
       super(SCHEMA$, MODEL$);
       if (isValidValue(fields()[0], other.id)) {
         this.id = data().deepCopy(fields()[0].schema(), other.id);
@@ -236,20 +269,21 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
     }
 
     /**
-      * Gets the value of the 'id' field.
-      * @return The value.
-      */
+     * Gets the value of the 'id' field.
+     * @return The value.
+     */
     public long getId() {
       return id;
     }
 
-
     /**
-      * Sets the value of the 'id' field.
-      * @param value The value of 'id'.
-      * @return This builder.
-      */
-    public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder setId(long value) {
+     * Sets the value of the 'id' field.
+     * @param value The value of 'id'.
+     * @return This builder.
+     */
+    public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder setId(
+      long value
+    ) {
       validate(fields()[0], value);
       this.id = value;
       fieldSetFlags()[0] = true;
@@ -257,38 +291,38 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
     }
 
     /**
-      * Checks whether the 'id' field has been set.
-      * @return True if the 'id' field has been set, false otherwise.
-      */
+     * Checks whether the 'id' field has been set.
+     * @return True if the 'id' field has been set, false otherwise.
+     */
     public boolean hasId() {
       return fieldSetFlags()[0];
     }
 
-
     /**
-      * Clears the value of the 'id' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'id' field.
+     * @return This builder.
+     */
     public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder clearId() {
       fieldSetFlags()[0] = false;
       return this;
     }
 
     /**
-      * Gets the value of the 'title' field.
-      * @return The value.
-      */
+     * Gets the value of the 'title' field.
+     * @return The value.
+     */
     public java.lang.String getTitle() {
       return title;
     }
 
-
     /**
-      * Sets the value of the 'title' field.
-      * @param value The value of 'title'.
-      * @return This builder.
-      */
-    public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder setTitle(java.lang.String value) {
+     * Sets the value of the 'title' field.
+     * @param value The value of 'title'.
+     * @return This builder.
+     */
+    public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder setTitle(
+      java.lang.String value
+    ) {
       validate(fields()[1], value);
       this.title = value;
       fieldSetFlags()[1] = true;
@@ -296,18 +330,17 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
     }
 
     /**
-      * Checks whether the 'title' field has been set.
-      * @return True if the 'title' field has been set, false otherwise.
-      */
+     * Checks whether the 'title' field has been set.
+     * @return True if the 'title' field has been set, false otherwise.
+     */
     public boolean hasTitle() {
       return fieldSetFlags()[1];
     }
 
-
     /**
-      * Clears the value of the 'title' field.
-      * @return This builder.
-      */
+     * Clears the value of the 'title' field.
+     * @return This builder.
+     */
     public org.sagebionetworks.openchallenges.kafka.model.KaggleCompetitionAvroModel.Builder clearTitle() {
       title = null;
       fieldSetFlags()[1] = false;
@@ -320,7 +353,9 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
       try {
         KaggleCompetitionAvroModel record = new KaggleCompetitionAvroModel();
         record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
-        record.title = fieldSetFlags()[1] ? this.title : (java.lang.String) defaultValue(fields()[1]);
+        record.title = fieldSetFlags()[1]
+          ? this.title
+          : (java.lang.String) defaultValue(fields()[1]);
         return record;
       } catch (org.apache.avro.AvroMissingFieldException e) {
         throw e;
@@ -331,68 +366,55 @@ public class KaggleCompetitionAvroModel extends org.apache.avro.specific.Specifi
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumWriter<KaggleCompetitionAvroModel>
-    WRITER$ = (org.apache.avro.io.DatumWriter<KaggleCompetitionAvroModel>)MODEL$.createDatumWriter(SCHEMA$);
+  private static final org.apache.avro.io.DatumWriter<KaggleCompetitionAvroModel> WRITER$ =
+    (org.apache.avro.io.DatumWriter<KaggleCompetitionAvroModel>) MODEL$.createDatumWriter(SCHEMA$);
 
-  @Override public void writeExternal(java.io.ObjectOutput out)
-    throws java.io.IOException {
+  @Override
+  public void writeExternal(java.io.ObjectOutput out) throws java.io.IOException {
     WRITER$.write(this, SpecificData.getEncoder(out));
   }
 
   @SuppressWarnings("unchecked")
-  private static final org.apache.avro.io.DatumReader<KaggleCompetitionAvroModel>
-    READER$ = (org.apache.avro.io.DatumReader<KaggleCompetitionAvroModel>)MODEL$.createDatumReader(SCHEMA$);
+  private static final org.apache.avro.io.DatumReader<KaggleCompetitionAvroModel> READER$ =
+    (org.apache.avro.io.DatumReader<KaggleCompetitionAvroModel>) MODEL$.createDatumReader(SCHEMA$);
 
-  @Override public void readExternal(java.io.ObjectInput in)
-    throws java.io.IOException {
+  @Override
+  public void readExternal(java.io.ObjectInput in) throws java.io.IOException {
     READER$.read(this, SpecificData.getDecoder(in));
   }
 
-  @Override protected boolean hasCustomCoders() { return true; }
+  @Override
+  protected boolean hasCustomCoders() {
+    return true;
+  }
 
-  @Override public void customEncode(org.apache.avro.io.Encoder out)
-    throws java.io.IOException
-  {
+  @Override
+  public void customEncode(org.apache.avro.io.Encoder out) throws java.io.IOException {
     out.writeLong(this.id);
 
     out.writeString(this.title);
-
   }
 
-  @Override public void customDecode(org.apache.avro.io.ResolvingDecoder in)
-    throws java.io.IOException
-  {
+  @Override
+  public void customDecode(org.apache.avro.io.ResolvingDecoder in) throws java.io.IOException {
     org.apache.avro.Schema.Field[] fieldOrder = in.readFieldOrderIfDiff();
     if (fieldOrder == null) {
       this.id = in.readLong();
 
       this.title = in.readString();
-
     } else {
       for (int i = 0; i < 2; i++) {
         switch (fieldOrder[i].pos()) {
-        case 0:
-          this.id = in.readLong();
-          break;
-
-        case 1:
-          this.title = in.readString();
-          break;
-
-        default:
-          throw new java.io.IOException("Corrupt ResolvingDecoder.");
+          case 0:
+            this.id = in.readLong();
+            break;
+          case 1:
+            this.title = in.readString();
+            break;
+          default:
+            throw new java.io.IOException("Corrupt ResolvingDecoder.");
         }
       }
     }
   }
 }
-
-
-
-
-
-
-
-
-
-

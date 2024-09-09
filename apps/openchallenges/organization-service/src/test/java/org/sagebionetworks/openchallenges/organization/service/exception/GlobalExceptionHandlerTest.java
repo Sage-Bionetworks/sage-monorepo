@@ -11,9 +11,7 @@ import org.springframework.http.ResponseEntity;
 public class GlobalExceptionHandlerTest {
 
   @Test
-  public void
-      GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
-
+  public void GlobalExceptionHandler_ShouldReturnInternalServerErrorStatusCode_WhenExceptionAndLocalePassed() {
     // Create a sample Exception
     Exception exception = new Exception("An exception occurred");
     Locale locale = Locale.getDefault();
@@ -22,17 +20,17 @@ public class GlobalExceptionHandlerTest {
     GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
 
     // Call handleException
-    ResponseEntity<BasicErrorDto> responseEntity =
-        exceptionHandler.handleException(exception, locale);
+    ResponseEntity<BasicErrorDto> responseEntity = exceptionHandler.handleException(
+      exception,
+      locale
+    );
 
     // Verify the Response Entity matches the Internal Server Error Code
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   @Test
-  public void
-      GlobalExceptionHandler_ShouldReturnStatusCodeOfSimpleChallengeGlobalExceptionResponseEntityObject_WhenArgsPassedToSimpleChallengeGlobalException() {
-
+  public void GlobalExceptionHandler_ShouldReturnStatusCodeOfSimpleChallengeGlobalExceptionResponseEntityObject_WhenArgsPassedToSimpleChallengeGlobalException() {
     // Create a sample Exception
     Locale locale = Locale.getDefault();
 
@@ -43,15 +41,21 @@ public class GlobalExceptionHandlerTest {
     String detail = "Exception detail message";
 
     // Create newSimpleChallengeGlobalException instance
-    SimpleChallengeGlobalException exception =
-        new SimpleChallengeGlobalException(type, title, status, detail);
+    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(
+      type,
+      title,
+      status,
+      detail
+    );
 
     // Create the GlobalExceptionHandler instance
     GlobalExceptionHandler exceptionHandler = new GlobalExceptionHandler();
 
     // Call handleGlobalException
-    ResponseEntity<BasicErrorDto> responseEntity =
-        exceptionHandler.handleGlobalException(exception, locale);
+    ResponseEntity<BasicErrorDto> responseEntity = exceptionHandler.handleGlobalException(
+      exception,
+      locale
+    );
 
     // confirm that the status code that was set was retrieved and applied to the Response Entity
     // object

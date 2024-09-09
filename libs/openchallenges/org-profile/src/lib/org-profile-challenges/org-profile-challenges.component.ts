@@ -8,10 +8,7 @@ import {
 import { BehaviorSubject, switchMap } from 'rxjs';
 import { assign } from 'lodash';
 import { CommonModule } from '@angular/common';
-import {
-  ChallengeCardComponent,
-  PaginatorComponent,
-} from '@sagebionetworks/openchallenges/ui';
+import { ChallengeCardComponent, PaginatorComponent } from '@sagebionetworks/openchallenges/ui';
 
 @Component({
   selector: 'openchallenges-org-profile-challenges',
@@ -29,8 +26,9 @@ export class OrgProfileChallengesComponent implements OnInit {
   pageSizeOptions!: number[];
   totalChallengesCount = 0;
 
-  private query: BehaviorSubject<ChallengeSearchQuery> =
-    new BehaviorSubject<ChallengeSearchQuery>({});
+  private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
+    {},
+  );
 
   constructor(private challengeService: ChallengeService) {}
 

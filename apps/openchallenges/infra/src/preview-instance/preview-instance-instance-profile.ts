@@ -10,40 +10,30 @@ export class PreviewInstanceInstanceProfile extends Construct {
   constructor(scope: Construct, id: string, nameTagPrefix: string) {
     super(scope, id);
 
-    const iamPolicy = new DataAwsIamPolicyDocument(
-      this,
-      'preview_instance_assume_role',
-      {
-        statement: [
-          {
-            actions: ['sts:AssumeRole'],
-            effect: 'Allow',
-            principals: [
-              {
-                identifiers: ['ec2.amazonaws.com'],
-                type: 'Service',
-              },
-            ],
-          },
-        ],
-      },
-    );
+    const iamPolicy = new DataAwsIamPolicyDocument(this, 'preview_instance_assume_role', {
+      statement: [
+        {
+          actions: ['sts:AssumeRole'],
+          effect: 'Allow',
+          principals: [
+            {
+              identifiers: ['ec2.amazonaws.com'],
+              type: 'Service',
+            },
+          ],
+        },
+      ],
+    });
 
     this.iamRole = new IamRole(this, 'preview_instance_role', {
       name: `${nameTagPrefix}-preview-instance-role`,
       assumeRolePolicy: iamPolicy.json,
-      managedPolicyArns: [
-        'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore',
-      ],
+      managedPolicyArns: ['arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'],
     });
 
-    this.iamInstanceProfile = new IamInstanceProfile(
-      this,
-      'preview_instance_instance_profile',
-      {
-        name: `${nameTagPrefix}-preview-instance-instance-profile`,
-        role: this.iamRole.name,
-      },
-    );
+    this.iamInstanceProfile = new IamInstanceProfile(this, 'preview_instance_instance_profile', {
+      name: `${nameTagPrefix}-preview-instance-instance-profile`,
+      role: this.iamRole.name,
+    });
   }
 }

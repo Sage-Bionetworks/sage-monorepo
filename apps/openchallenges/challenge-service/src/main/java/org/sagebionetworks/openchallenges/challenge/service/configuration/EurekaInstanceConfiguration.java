@@ -29,9 +29,10 @@ public class EurekaInstanceConfiguration {
    */
   @Bean
   @ConditionalOnProperty(
-      value = "openchallenges-challenge-service.is-deployed-on-aws",
-      havingValue = "true",
-      matchIfMissing = false)
+    value = "openchallenges-challenge-service.is-deployed-on-aws",
+    havingValue = "true",
+    matchIfMissing = false
+  )
   public EurekaInstanceConfigBean eurekaInstanceConfig(InetUtils inetUtils) {
     LOGGER.info("Configuring the Eureka instance for AWS.");
     EurekaInstanceConfigBean bean = new EurekaInstanceConfigBean(inetUtils);

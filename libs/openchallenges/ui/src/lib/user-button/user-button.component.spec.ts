@@ -38,8 +38,6 @@ describe('UserButtonComponent', () => {
   it('should emit', () => {
     jest.spyOn(component.menuItemSelected, 'emit');
     component.selectMenuItem(USER_MENU_ITEMS[0]);
-    expect(component.menuItemSelected.emit).toHaveBeenCalledWith(
-      USER_MENU_ITEMS[0],
-    );
+    expect(component.menuItemSelected.emit).toHaveBeenCalledWith(USER_MENU_ITEMS[0]);
   });
 });

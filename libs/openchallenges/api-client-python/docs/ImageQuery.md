@@ -3,11 +3,12 @@
 An image query.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**object_key** | **str** | The unique identifier of the image. | 
-**height** | [**ImageHeight**](ImageHeight.md) |  | [optional] 
-**aspect_ratio** | [**ImageAspectRatio**](ImageAspectRatio.md) |  | [optional] 
+
+| Name             | Type                                        | Description                         | Notes      |
+| ---------------- | ------------------------------------------- | ----------------------------------- | ---------- |
+| **object_key**   | **str**                                     | The unique identifier of the image. |
+| **height**       | [**ImageHeight**](ImageHeight.md)           |                                     | [optional] |
+| **aspect_ratio** | [**ImageAspectRatio**](ImageAspectRatio.md) |                                     | [optional] |
 
 ## Example
 
@@ -26,6 +27,5 @@ image_query_dict = image_query_instance.to_dict()
 # create an instance of ImageQuery from a dict
 image_query_form_dict = image_query.from_dict(image_query_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

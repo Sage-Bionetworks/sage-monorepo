@@ -33,19 +33,18 @@ public class ChallengeService {
   private ChallengeMapper challengeMapper = new ChallengeMapper();
   private ChallengeJsonLdMapper challengeJsonLdMapper = new ChallengeJsonLdMapper();
 
-  private static final List<String> SEARCHABLE_FIELDS =
-      Arrays.asList(
-          "description",
-          "headline",
-          "input_data_types.class_id",
-          "input_data_types.preferred_label",
-          "name",
-          "operation.class_id",
-          "operation.preferred_label");
+  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList(
+    "description",
+    "headline",
+    "input_data_types.class_id",
+    "input_data_types.preferred_label",
+    "name",
+    "operation.class_id",
+    "operation.preferred_label"
+  );
 
   @Transactional(readOnly = true)
   public ChallengesPageDto listChallenges(ChallengeSearchQueryDto query) {
-
     log.info("query {}", query);
 
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
@@ -55,22 +54,26 @@ public class ChallengeService {
     // producerService.sendMessage(challengeDomain);
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<ChallengeEntity> challengeEntitiesPage =
-        challengeRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    Page<ChallengeEntity> challengeEntitiesPage = challengeRepository.findAll(
+      pageable,
+      query,
+      fieldsToSearchBy.toArray(new String[0])
+    );
     log.info("challengeEntitiesPage {}", challengeEntitiesPage);
 
-    List<ChallengeDto> challenges =
-        challengeMapper.convertToDtoList(challengeEntitiesPage.getContent());
+    List<ChallengeDto> challenges = challengeMapper.convertToDtoList(
+      challengeEntitiesPage.getContent()
+    );
 
     return ChallengesPageDto.builder()
-        .challenges(challenges)
-        .number(challengeEntitiesPage.getNumber())
-        .size(challengeEntitiesPage.getSize())
-        .totalElements(challengeEntitiesPage.getTotalElements())
-        .totalPages(challengeEntitiesPage.getTotalPages())
-        .hasNext(challengeEntitiesPage.hasNext())
-        .hasPrevious(challengeEntitiesPage.hasPrevious())
-        .build();
+      .challenges(challenges)
+      .number(challengeEntitiesPage.getNumber())
+      .size(challengeEntitiesPage.getSize())
+      .totalElements(challengeEntitiesPage.getTotalElements())
+      .totalPages(challengeEntitiesPage.getTotalPages())
+      .hasNext(challengeEntitiesPage.hasNext())
+      .hasPrevious(challengeEntitiesPage.hasPrevious())
+      .build();
   }
 
   @Transactional(readOnly = true)
@@ -87,10 +90,11 @@ public class ChallengeService {
 
   private ChallengeEntity getChallengeEntity(Long challengeId) throws ChallengeNotFoundException {
     return challengeRepository
-        .findById(challengeId)
-        .orElseThrow(
-            () ->
-                new ChallengeNotFoundException(
-                    String.format("The challenge with ID %d does not exist.", challengeId)));
+      .findById(challengeId)
+      .orElseThrow(() ->
+        new ChallengeNotFoundException(
+          String.format("The challenge with ID %d does not exist.", challengeId)
+        )
+      );
   }
 }

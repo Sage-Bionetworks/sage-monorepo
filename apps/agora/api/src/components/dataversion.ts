@@ -6,11 +6,7 @@ export async function getDataVersion() {
   return await DataVersionCollection.findOne();
 }
 
-export async function dataVersionRoute(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function dataVersionRoute(req: Request, res: Response, next: NextFunction) {
   try {
     const result = await getDataVersion();
     setHeaders(res);

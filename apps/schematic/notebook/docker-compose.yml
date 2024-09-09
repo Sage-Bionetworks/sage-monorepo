@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   schematic-notebook:
@@ -12,7 +12,7 @@ services:
     networks:
       - schematic
     ports:
-      - "7888:8888"
+      - '7888:8888'
 
 networks:
   schematic:

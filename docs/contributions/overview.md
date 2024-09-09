@@ -1,11 +1,10 @@
-Thank you contributing to the Sage Monorepo!  We welcome any and all feedback, ideas, and
+Thank you contributing to the Sage Monorepo! We welcome any and all feedback, ideas, and
 suggestions.
 
 Contributions can be made via issues and pull eequests (PRs).
 
-* [Reporting a bug](/bug-report)
-* [Adding a feature](/contributing)
-
+- [Reporting a bug](/bug-report)
+- [Adding a feature](/contributing)
 
 ### Code of Conduct
 

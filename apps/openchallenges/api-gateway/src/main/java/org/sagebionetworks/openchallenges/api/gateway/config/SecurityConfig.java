@@ -9,23 +9,42 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
+
   @Bean
   SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-    http.authorizeExchange()
-        // ALLOWING REGISTER API FOR DIRECT ACCESS
-        .pathMatchers("/api/v1/users/register").permitAll().pathMatchers("/api/v1/auth/login")
-        .permitAll().pathMatchers("/actuator/health/readiness")
-        .permitAll().pathMatchers("/api/v1/challengeAnalytics/**")
-        .permitAll().pathMatchers("/api/v1/challengeInputDataTypes/**")
-        .permitAll().pathMatchers("/api/v1/challengePlatforms/**")
-        .permitAll().pathMatchers("/api/v1/challenges/**")
-        .permitAll().pathMatchers("/api/v1/edamConcepts/**")
-        .permitAll().pathMatchers("/api/v1/images/**")
-        .permitAll().pathMatchers("/api/v1/organizations/**")
-        .permitAll()
-        // ALL OTHER APIS ARE AUTHENTICATED
-        .anyExchange().authenticated().and().csrf().disable().oauth2Login().and()
-        .oauth2ResourceServer().jwt();
+    http
+      .authorizeExchange()
+      // ALLOWING REGISTER API FOR DIRECT ACCESS
+      .pathMatchers("/api/v1/users/register")
+      .permitAll()
+      .pathMatchers("/api/v1/auth/login")
+      .permitAll()
+      .pathMatchers("/actuator/health/readiness")
+      .permitAll()
+      .pathMatchers("/api/v1/challengeAnalytics/**")
+      .permitAll()
+      .pathMatchers("/api/v1/challengeInputDataTypes/**")
+      .permitAll()
+      .pathMatchers("/api/v1/challengePlatforms/**")
+      .permitAll()
+      .pathMatchers("/api/v1/challenges/**")
+      .permitAll()
+      .pathMatchers("/api/v1/edamConcepts/**")
+      .permitAll()
+      .pathMatchers("/api/v1/images/**")
+      .permitAll()
+      .pathMatchers("/api/v1/organizations/**")
+      .permitAll()
+      // ALL OTHER APIS ARE AUTHENTICATED
+      .anyExchange()
+      .authenticated()
+      .and()
+      .csrf()
+      .disable()
+      .oauth2Login()
+      .and()
+      .oauth2ResourceServer()
+      .jwt();
     return http.build();
   }
 }

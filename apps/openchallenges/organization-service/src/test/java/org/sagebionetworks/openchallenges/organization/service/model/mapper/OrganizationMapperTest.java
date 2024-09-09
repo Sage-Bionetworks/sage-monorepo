@@ -6,9 +6,9 @@ import org.sagebionetworks.openchallenges.organization.service.model.dto.Organiz
 import org.sagebionetworks.openchallenges.organization.service.model.entity.OrganizationEntity;
 
 public class OrganizationMapperTest {
+
   @Test
   public void ConvertToEntity_ShouldReturnDtoProperties_WhenDtoPropertiesPassed() {
-
     // create new Dto with properties to be copied to organization entity
     OrganizationDto dto = new OrganizationDto();
     dto.setName("Test Organization");
@@ -36,9 +36,7 @@ public class OrganizationMapperTest {
   }
 
   @Test
-  public void
-      ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
-
+  public void ConvertToDto_ShouldReturndDtoWithMatchingEntityProperties_WhenEntityPropertiesPassed() {
     OrganizationEntity entity = new OrganizationEntity();
 
     entity.setName("Test Organization");

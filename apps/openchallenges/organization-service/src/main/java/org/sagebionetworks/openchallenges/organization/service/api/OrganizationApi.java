@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "Organization", description = "Operations about organizations")
 public interface OrganizationApi {
-
   default OrganizationApiDelegate getDelegate() {
     return new OrganizationApiDelegate() {};
   }
@@ -38,56 +37,66 @@ public interface OrganizationApi {
    *     404) or The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "getOrganization",
-      summary = "Get an organization",
-      tags = {"Organization"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "An organization",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = OrganizationDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = OrganizationDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The specified resource was not found",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "getOrganization",
+    summary = "Get an organization",
+    tags = { "Organization" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "An organization",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = OrganizationDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = OrganizationDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/organizations/{org}",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/organizations/{org}",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<OrganizationDto> getOrganization(
-      @Size(min = 1, max = 64)
-          @Parameter(
-              name = "org",
-              description = "The id or login of the organization.",
-              required = true)
-          @PathVariable("org")
-          String org) {
+    @Size(min = 1, max = 64) @Parameter(
+      name = "org",
+      description = "The id or login of the organization.",
+      required = true
+    ) @PathVariable("org") String org
+  ) {
     return getDelegate().getOrganization(org);
   }
 
@@ -99,54 +108,65 @@ public interface OrganizationApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listOrganizations",
-      summary = "List organizations",
-      tags = {"Organization"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = OrganizationsPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = OrganizationsPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listOrganizations",
+    summary = "List organizations",
+    tags = { "Organization" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = OrganizationsPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = OrganizationsPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/organizations",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/organizations",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<OrganizationsPageDto> listOrganizations(
-      @Parameter(
-              name = "organizationSearchQuery",
-              description = "The search query used to find organizations.")
-          @Valid
-          OrganizationSearchQueryDto organizationSearchQuery) {
+    @Parameter(
+      name = "organizationSearchQuery",
+      description = "The search query used to find organizations."
+    ) @Valid OrganizationSearchQueryDto organizationSearchQuery
+  ) {
     return getDelegate().listOrganizations(organizationSearchQuery);
   }
 }

@@ -5,10 +5,7 @@ import {
   OrganizationService,
 } from '@sagebionetworks/openchallenges/api-client-angular';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
-import {
-  HttpStatusRedirect,
-  handleHttpError,
-} from '@sagebionetworks/openchallenges/util';
+import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
@@ -34,9 +31,7 @@ export class OrgProfileStatsComponent implements OnInit {
     this.mockMembers = 3;
 
     this.organization$ = this.activatedRoute.params.pipe(
-      switchMap((params) =>
-        this.organizationService.getOrganization(params['orgLogin']),
-      ),
+      switchMap((params) => this.organizationService.getOrganization(params['orgLogin'])),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
           404: '/not-found',

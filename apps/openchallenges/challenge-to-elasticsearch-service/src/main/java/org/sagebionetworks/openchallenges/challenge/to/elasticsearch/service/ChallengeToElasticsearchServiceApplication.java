@@ -15,7 +15,8 @@ public class ChallengeToElasticsearchServiceApplication implements CommandLineRu
   private final ChallengeToElasticsearchServiceConfigData challengeToElasticsearchServiceConfigData;
 
   public ChallengeToElasticsearchServiceApplication(
-      ChallengeToElasticsearchServiceConfigData challengeToElasticsearchServiceConfigData) {
+    ChallengeToElasticsearchServiceConfigData challengeToElasticsearchServiceConfigData
+  ) {
     this.challengeToElasticsearchServiceConfigData = challengeToElasticsearchServiceConfigData;
   }
 

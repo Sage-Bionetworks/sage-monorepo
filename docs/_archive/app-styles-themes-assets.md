@@ -53,8 +53,8 @@ asset files from these libraries. This example shows how to import an image from
 app-specific asset libraries.
 
 ```html
-<img src="/shared-typescript-assets/images/github.png">
-<img src="/openchallenges-assets/images/challenge-view-header-background.png">
+<img src="/shared-typescript-assets/images/github.png" />
+<img src="/openchallenges-assets/images/challenge-view-header-background.png" />
 ```
 
 ## Applying a theme to a component
@@ -75,9 +75,8 @@ _about-theme.scss                      <---- theme file
 
 Seed the theme file with the following template:
 
-> **Note**
-> `@mixin color()` collects the color-related styles, `color` and `*-color` (i.e `background-color`), while the
-[typography](https://www.w3schools.com/cssref/pr_font_font.asp) styles, `line-height` and `font-*` (i.e `font-size`), should be added into `@mixin typography()`.
+> **Note** > `@mixin color()` collects the color-related styles, `color` and `*-color` (i.e `background-color`), while the
+> [typography](https://www.w3schools.com/cssref/pr_font_font.asp) styles, `line-height` and `font-*` (i.e `font-size`), should be added into `@mixin typography()`.
 
 ```scss
 @use 'sass:map';

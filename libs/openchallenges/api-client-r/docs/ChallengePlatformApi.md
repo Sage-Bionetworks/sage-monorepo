@@ -1,14 +1,14 @@
 # ChallengePlatformApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**GetChallengePlatform**](ChallengePlatformApi.md#GetChallengePlatform) | **GET** /challengePlatforms/{challengePlatformName} | Get a challenge platform
-[**ListChallengePlatforms**](ChallengePlatformApi.md#ListChallengePlatforms) | **GET** /challengePlatforms | List challenge platforms
-
+| Method                                                                       | HTTP request                                        | Description              |
+| ---------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------ |
+| [**GetChallengePlatform**](ChallengePlatformApi.md#GetChallengePlatform)     | **GET** /challengePlatforms/{challengePlatformName} | Get a challenge platform |
+| [**ListChallengePlatforms**](ChallengePlatformApi.md#ListChallengePlatforms) | **GET** /challengePlatforms                         | List challenge platforms |
 
 # **GetChallengePlatform**
+
 > ChallengePlatform GetChallengePlatform(challenge_platform_name)
 
 Get a challenge platform
@@ -16,6 +16,7 @@ Get a challenge platform
 Returns the challenge platform specified
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -33,9 +34,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_name** | **character**| The unique identifier of the challenge platform. | 
+| Name                        | Type          | Description                                      | Notes |
+| --------------------------- | ------------- | ------------------------------------------------ | ----- |
+| **challenge_platform_name** | **character** | The unique identifier of the challenge platform. |
 
 ### Return type
 
@@ -47,17 +48,19 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-| **404** | The specified resource was not found |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 # **ListChallengePlatforms**
+
 > ChallengePlatformsPage ListChallengePlatforms(challenge_platform_search_query = var.challenge_platform_search_query)
 
 List challenge platforms
@@ -65,6 +68,7 @@ List challenge platforms
 List challenge platforms
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -82,9 +86,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md)| The search query used to find challenge platforms. | [optional] 
+| Name                                | Type                                    | Description                                        | Notes      |
+| ----------------------------------- | --------------------------------------- | -------------------------------------------------- | ---------- |
+| **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md) | The search query used to find challenge platforms. | [optional] |
 
 ### Return type
 
@@ -96,13 +100,13 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-| **400** | Invalid request |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |

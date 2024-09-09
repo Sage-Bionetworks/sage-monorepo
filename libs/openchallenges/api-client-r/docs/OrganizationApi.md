@@ -1,14 +1,14 @@
 # OrganizationApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**GetOrganization**](OrganizationApi.md#GetOrganization) | **GET** /organizations/{org} | Get an organization
-[**ListOrganizations**](OrganizationApi.md#ListOrganizations) | **GET** /organizations | List organizations
-
+| Method                                                        | HTTP request                 | Description         |
+| ------------------------------------------------------------- | ---------------------------- | ------------------- |
+| [**GetOrganization**](OrganizationApi.md#GetOrganization)     | **GET** /organizations/{org} | Get an organization |
+| [**ListOrganizations**](OrganizationApi.md#ListOrganizations) | **GET** /organizations       | List organizations  |
 
 # **GetOrganization**
+
 > Organization GetOrganization(org)
 
 Get an organization
@@ -16,6 +16,7 @@ Get an organization
 Returns the organization specified
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -33,9 +34,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **org** | **character**| The unique identifier of the organization. | 
+| Name    | Type          | Description                                | Notes |
+| ------- | ------------- | ------------------------------------------ | ----- |
+| **org** | **character** | The unique identifier of the organization. |
 
 ### Return type
 
@@ -47,17 +48,19 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | An organization |  -  |
-| **404** | The specified resource was not found |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | An organization                                                   | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 # **ListOrganizations**
+
 > OrganizationsPage ListOrganizations(organization_search_query = var.organization_search_query)
 
 List organizations
@@ -65,6 +68,7 @@ List organizations
 List organizations
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -82,9 +86,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **organization_search_query** | [**OrganizationSearchQuery**](.md)| The search query used to find organizations. | [optional] 
+| Name                          | Type                               | Description                                  | Notes      |
+| ----------------------------- | ---------------------------------- | -------------------------------------------- | ---------- |
+| **organization_search_query** | [**OrganizationSearchQuery**](.md) | The search query used to find organizations. | [optional] |
 
 ### Return type
 
@@ -96,13 +100,13 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-| **400** | Invalid request |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |

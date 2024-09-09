@@ -40,17 +40,26 @@ public class ChallengeMapper extends BaseMapper<ChallengeEntity, ChallengeDto> {
         dto.setOperation(edamConceptMapper.convertToDto(entity.getOperation()));
       }
       dto.submissionTypes(
-          entity.getSubmissionTypes().stream()
-              .map(o -> ChallengeSubmissionTypeDto.fromValue(o.getName()))
-              .toList());
+        entity
+          .getSubmissionTypes()
+          .stream()
+          .map(o -> ChallengeSubmissionTypeDto.fromValue(o.getName()))
+          .toList()
+      );
       dto.incentives(
-          entity.getIncentives().stream()
-              .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
-              .toList());
+        entity
+          .getIncentives()
+          .stream()
+          .map(o -> ChallengeIncentiveDto.fromValue(o.getName()))
+          .toList()
+      );
       dto.categories(
-          entity.getCategories().stream()
-              .map(o -> ChallengeCategoryDto.fromValue(o.getName()))
-              .toList());
+        entity
+          .getCategories()
+          .stream()
+          .map(o -> ChallengeCategoryDto.fromValue(o.getName()))
+          .toList()
+      );
       dto.inputDataTypes(edamConceptMapper.convertToDtoList(entity.getInputDataTypes()));
       dto.starredCount(entity.getStars().size());
       LOG.trace("challenge dto: {}", dto);

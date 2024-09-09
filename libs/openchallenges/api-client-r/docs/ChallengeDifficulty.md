@@ -3,7 +3,6 @@
 The difficulty level of a challenge.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
 
-
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |

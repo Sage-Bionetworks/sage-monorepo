@@ -6,6 +6,7 @@ import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class UserMapper extends BaseMapper<UserEntity, User> {
+
   @Override
   public UserEntity convertToEntity(User dto, Object... args) {
     UserEntity userEntity = new UserEntity();

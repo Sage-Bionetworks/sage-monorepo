@@ -7,22 +7,13 @@ import { FooterComponent } from '@sagebionetworks/model-ad/ui';
 import { ConfigService } from '@sagebionetworks/model-ad/config';
 import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './seo-data';
-import {
-  Gene,
-  GeneService,
-} from '@sagebionetworks/model-ad/api-client-angular';
+import { Gene, GeneService } from '@sagebionetworks/model-ad/api-client-angular';
 import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'model-ad-not-found',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    FooterComponent,
-  ],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, FooterComponent],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })

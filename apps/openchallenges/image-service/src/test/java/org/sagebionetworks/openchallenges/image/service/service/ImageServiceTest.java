@@ -19,11 +19,13 @@ import org.sagebionetworks.openchallenges.image.service.model.dto.ImageQueryDto;
 @ExtendWith(MockitoExtension.class)
 class ImageServiceTest {
 
-  @Mock private ImageServiceConfigData imageServiceConfigData;
+  @Mock
+  private ImageServiceConfigData imageServiceConfigData;
 
   private Thumbor thumbor = Mockito.mock(Thumbor.class, Mockito.RETURNS_DEEP_STUBS);
 
-  @InjectMocks private ImageService imageService;
+  @InjectMocks
+  private ImageService imageService;
 
   @Test
   void GetImage_ShouldReturnImage_WhenObjectKeyIsPassed() {

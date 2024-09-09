@@ -36,10 +36,11 @@ public class GeneDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "66737b304e11611be5dab31d",
-      description = "The unique identifier of the gene.",
-      required = true)
+    name = "id",
+    example = "66737b304e11611be5dab31d",
+    description = "The unique identifier of the gene.",
+    required = true
+  )
   public String getId() {
     return id;
   }
@@ -82,10 +83,11 @@ public class GeneDto {
   @NotNull
   @Size(min = 0, max = 1000)
   @Schema(
-      name = "description",
-      example = "This is an example description of the gene.",
-      description = "The description of the gene.",
-      required = true)
+    name = "description",
+    example = "This is an example description of the gene.",
+    description = "The description of the gene.",
+    required = true
+  )
   public String getDescription() {
     return description;
   }
@@ -103,9 +105,11 @@ public class GeneDto {
       return false;
     }
     GeneDto gene = (GeneDto) o;
-    return Objects.equals(this.id, gene.id)
-        && Objects.equals(this.name, gene.name)
-        && Objects.equals(this.description, gene.description);
+    return (
+      Objects.equals(this.id, gene.id) &&
+      Objects.equals(this.name, gene.name) &&
+      Objects.equals(this.description, gene.description)
+    );
   }
 
   @Override

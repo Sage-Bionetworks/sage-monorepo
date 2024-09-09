@@ -26,8 +26,12 @@ public class SimpleChallengeGlobalExceptionTest {
     String detail = "Exception detail message";
 
     // Create an instance of SimpleChallengeGlobalException using the all-args constructor
-    SimpleChallengeGlobalException exception =
-        new SimpleChallengeGlobalException(type, title, status, detail);
+    SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException(
+      type,
+      title,
+      status,
+      detail
+    );
 
     // Verify the exception details
     assertThat(exception.getStatus()).isEqualTo(status);
@@ -37,9 +41,7 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void
-      SimpleChallengeGlobalException_ShouldReturnNullArgs_WhenCalledUsingNoArgsConstructor() {
-
+  public void SimpleChallengeGlobalException_ShouldReturnNullArgs_WhenCalledUsingNoArgsConstructor() {
     // Create an instance of SimpleChallengeGlobalException using the no-args constructor
     SimpleChallengeGlobalException exception = new SimpleChallengeGlobalException();
 
@@ -51,8 +53,7 @@ public class SimpleChallengeGlobalExceptionTest {
   }
 
   @Test
-  public void
-      SimpleChallengeGlobalException_ShouldSetArgs_WhenNoArgsConstructorExceptionPassedArgsKeys() {
+  public void SimpleChallengeGlobalException_ShouldSetArgs_WhenNoArgsConstructorExceptionPassedArgsKeys() {
     // Define the exception details
     String type = "ExceptionType";
     String title = "Exception Title";

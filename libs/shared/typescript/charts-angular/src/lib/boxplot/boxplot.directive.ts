@@ -1,11 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Directive, ElementRef, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import {
   BoxplotChart,
   BoxplotProps,
@@ -35,10 +28,7 @@ export class BoxplotDirective implements OnChanges, OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.boxplot = new BoxplotChart(
-      this.el.nativeElement,
-      this.getBoxplotProps(),
-    );
+    this.boxplot = new BoxplotChart(this.el.nativeElement, this.getBoxplotProps());
   }
 
   ngOnChanges(): void {

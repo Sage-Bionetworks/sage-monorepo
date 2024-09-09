@@ -69,9 +69,10 @@ public class ChallengePlatformSearchQueryDto {
    */
   @Min(1)
   @Schema(
-      name = "pageSize",
-      description = "The number of items in a single page.",
-      required = false)
+    name = "pageSize",
+    description = "The number of items in a single page.",
+    required = false
+  )
   public Integer getPageSize() {
     return pageSize;
   }
@@ -139,9 +140,10 @@ public class ChallengePlatformSearchQueryDto {
    * @return slugs
    */
   @Schema(
-      name = "slugs",
-      description = "An array of challenge platform slugs used to filter the results.",
-      required = false)
+    name = "slugs",
+    description = "An array of challenge platform slugs used to filter the results.",
+    required = false
+  )
   public List<String> getSlugs() {
     return slugs;
   }
@@ -161,10 +163,11 @@ public class ChallengePlatformSearchQueryDto {
    * @return searchTerms
    */
   @Schema(
-      name = "searchTerms",
-      example = "synapse",
-      description = "A string of search terms used to filter the results.",
-      required = false)
+    name = "searchTerms",
+    example = "synapse",
+    description = "A string of search terms used to filter the results.",
+    required = false
+  )
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -182,13 +185,15 @@ public class ChallengePlatformSearchQueryDto {
       return false;
     }
     ChallengePlatformSearchQueryDto challengePlatformSearchQuery =
-        (ChallengePlatformSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, challengePlatformSearchQuery.pageNumber)
-        && Objects.equals(this.pageSize, challengePlatformSearchQuery.pageSize)
-        && Objects.equals(this.sort, challengePlatformSearchQuery.sort)
-        && Objects.equals(this.direction, challengePlatformSearchQuery.direction)
-        && Objects.equals(this.slugs, challengePlatformSearchQuery.slugs)
-        && Objects.equals(this.searchTerms, challengePlatformSearchQuery.searchTerms);
+      (ChallengePlatformSearchQueryDto) o;
+    return (
+      Objects.equals(this.pageNumber, challengePlatformSearchQuery.pageNumber) &&
+      Objects.equals(this.pageSize, challengePlatformSearchQuery.pageSize) &&
+      Objects.equals(this.sort, challengePlatformSearchQuery.sort) &&
+      Objects.equals(this.direction, challengePlatformSearchQuery.direction) &&
+      Objects.equals(this.slugs, challengePlatformSearchQuery.slugs) &&
+      Objects.equals(this.searchTerms, challengePlatformSearchQuery.searchTerms)
+    );
   }
 
   @Override

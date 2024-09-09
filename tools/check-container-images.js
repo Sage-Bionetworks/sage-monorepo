@@ -34,8 +34,7 @@ getGitDiffFiles().then((changedFiles) => {
   changedFiles.push('apps/openchallenges/challenge-service/Dockerfile');
   getNxProjects()
     .then((projects) => {
-      const toUpdate = (project) =>
-        haveProjectFilesChanged(project['projectDir'], changedFiles);
+      const toUpdate = (project) => haveProjectFilesChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
     .then((projectsToUpdate) => {

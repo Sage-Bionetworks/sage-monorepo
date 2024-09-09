@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/v1/users")
 public class UserController {
 
-  @Autowired UserService userService;
+  @Autowired
+  UserService userService;
 
   @PostMapping(value = "/register")
   public ResponseEntity<User> createUser(@RequestBody User request) {
@@ -27,7 +28,9 @@ public class UserController {
 
   @PatchMapping(value = "/{id}")
   public ResponseEntity<User> updateUser(
-      @PathVariable("id") Long userId, @RequestBody UserUpdateRequest userUpdateRequest) {
+    @PathVariable("id") Long userId,
+    @RequestBody UserUpdateRequest userUpdateRequest
+  ) {
     log.info("Update the user with {}", userUpdateRequest.toString());
     return ResponseEntity.ok(userService.updateUser(userId, userUpdateRequest));
     // return ResponseEntity.ok(null);

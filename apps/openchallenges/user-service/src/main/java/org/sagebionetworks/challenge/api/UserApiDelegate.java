@@ -17,7 +17,6 @@ import org.springframework.web.context.request.NativeWebRequest;
  */
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public interface UserApiDelegate {
-
   default Optional<NativeWebRequest> getRequest() {
     return Optional.empty();
   }
@@ -32,24 +31,24 @@ public interface UserApiDelegate {
    * @see UserApi#createUser
    */
   default ResponseEntity<UserCreateResponseDto> createUser(
-      UserCreateRequestDto userCreateRequestDto) {
+    UserCreateRequestDto userCreateRequestDto
+  ) {
     getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "{ \"id\" : \"507f1f77bcf86cd799439011\" }";
-                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                  break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                  String exampleString =
-                      "Custom MIME type example not yet supported: application/problem+json";
-                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                  break;
-                }
-              }
-            });
+      .ifPresent(request -> {
+        for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+            String exampleString = "{ \"id\" : \"507f1f77bcf86cd799439011\" }";
+            ApiUtil.setExampleResponse(request, "application/json", exampleString);
+            break;
+          }
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+            String exampleString =
+              "Custom MIME type example not yet supported: application/problem+json";
+            ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+            break;
+          }
+        }
+      });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
@@ -75,23 +74,22 @@ public interface UserApiDelegate {
    */
   default ResponseEntity<UserDto> getUser(Long userId) {
     getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString =
-                      "{ \"login\" : \"awesome-user\", \"email\" : \"awesome-user@example.org\", \"name\" : \"Awesome User\", \"status\" : \"approved\", \"avatarUrl\" : \"https://example.com/awesome-avatar.png\", \"bio\" : \"A great bio\", \"createdAt\" : \"2017-07-08T16:18:44-04:00\", \"updatedAt\" : \"2017-07-08T16:18:44-04:00\", \"type\" : \"User\" }";
-                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                  break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                  String exampleString =
-                      "Custom MIME type example not yet supported: application/problem+json";
-                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                  break;
-                }
-              }
-            });
+      .ifPresent(request -> {
+        for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+            String exampleString =
+              "{ \"login\" : \"awesome-user\", \"email\" : \"awesome-user@example.org\", \"name\" : \"Awesome User\", \"status\" : \"approved\", \"avatarUrl\" : \"https://example.com/awesome-avatar.png\", \"bio\" : \"A great bio\", \"createdAt\" : \"2017-07-08T16:18:44-04:00\", \"updatedAt\" : \"2017-07-08T16:18:44-04:00\", \"type\" : \"User\" }";
+            ApiUtil.setExampleResponse(request, "application/json", exampleString);
+            break;
+          }
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+            String exampleString =
+              "Custom MIME type example not yet supported: application/problem+json";
+            ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+            break;
+          }
+        }
+      });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 
@@ -106,22 +104,21 @@ public interface UserApiDelegate {
    */
   default ResponseEntity<UsersPageDto> listUsers(Integer pageNumber, Integer pageSize) {
     getRequest()
-        .ifPresent(
-            request -> {
-              for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                  String exampleString = "null";
-                  ApiUtil.setExampleResponse(request, "application/json", exampleString);
-                  break;
-                }
-                if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
-                  String exampleString =
-                      "Custom MIME type example not yet supported: application/problem+json";
-                  ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
-                  break;
-                }
-              }
-            });
+      .ifPresent(request -> {
+        for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+            String exampleString = "null";
+            ApiUtil.setExampleResponse(request, "application/json", exampleString);
+            break;
+          }
+          if (mediaType.isCompatibleWith(MediaType.valueOf("application/problem+json"))) {
+            String exampleString =
+              "Custom MIME type example not yet supported: application/problem+json";
+            ApiUtil.setExampleResponse(request, "application/problem+json", exampleString);
+            break;
+          }
+        }
+      });
     return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
   }
 }

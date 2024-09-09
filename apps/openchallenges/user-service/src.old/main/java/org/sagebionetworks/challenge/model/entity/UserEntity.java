@@ -18,6 +18,7 @@ import org.sagebionetworks.challenge.model.dto.UserStatus;
 @Table(name = "challenge_user")
 @NoArgsConstructor
 public class UserEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

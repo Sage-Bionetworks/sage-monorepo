@@ -36,8 +36,9 @@ public class EdamConceptEntity {
   @Column(name = "class_id", nullable = false)
   @FullTextField(name = "class_id")
   @KeywordField(
-      name = "section",
-      valueBridge = @ValueBridgeRef(type = EdamSectionValueBridge.class))
+    name = "section",
+    valueBridge = @ValueBridgeRef(type = EdamSectionValueBridge.class)
+  )
   private String classId;
 
   @Column(name = "preferred_label", nullable = false)

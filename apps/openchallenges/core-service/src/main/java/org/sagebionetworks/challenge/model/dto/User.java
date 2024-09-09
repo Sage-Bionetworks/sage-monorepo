@@ -1,8 +1,7 @@
 package org.sagebionetworks.challenge.model.dto;
 
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class User {
@@ -13,5 +12,4 @@ public class User {
   private String email;
   private String identificationNumber;
   private List<ChallengeAccount> challengeAccounts;
-
 }

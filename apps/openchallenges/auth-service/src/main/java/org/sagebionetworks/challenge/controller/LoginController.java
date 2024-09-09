@@ -1,6 +1,7 @@
 package org.sagebionetworks.challenge.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.LoginRequest;
 import org.sagebionetworks.challenge.model.dto.LoginResponse;
 import org.sagebionetworks.challenge.service.LoginService;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -21,8 +21,10 @@ public class LoginController {
   LoginService loginService;
 
   @PostMapping(value = "/login")
-  public ResponseEntity<LoginResponse> login(HttpServletRequest request,
-      @RequestBody LoginRequest loginRequest) throws Exception {
+  public ResponseEntity<LoginResponse> login(
+    HttpServletRequest request,
+    @RequestBody LoginRequest loginRequest
+  ) throws Exception {
     log.info("Executing login");
     log.info("Username: {}", loginRequest.getUsername());
 

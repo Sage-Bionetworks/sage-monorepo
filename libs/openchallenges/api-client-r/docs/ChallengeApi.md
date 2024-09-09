@@ -1,14 +1,14 @@
 # ChallengeApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**GetChallenge**](ChallengeApi.md#GetChallenge) | **GET** /challenges/{challengeId} | Get a challenge
-[**ListChallenges**](ChallengeApi.md#ListChallenges) | **GET** /challenges | List challenges
-
+| Method                                               | HTTP request                      | Description     |
+| ---------------------------------------------------- | --------------------------------- | --------------- |
+| [**GetChallenge**](ChallengeApi.md#GetChallenge)     | **GET** /challenges/{challengeId} | Get a challenge |
+| [**ListChallenges**](ChallengeApi.md#ListChallenges) | **GET** /challenges               | List challenges |
 
 # **GetChallenge**
+
 > Challenge GetChallenge(challenge_id)
 
 Get a challenge
@@ -16,6 +16,7 @@ Get a challenge
 Returns the challenge specified
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -33,9 +34,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_id** | **integer**| The unique identifier of the challenge. | 
+| Name             | Type        | Description                             | Notes |
+| ---------------- | ----------- | --------------------------------------- | ----- |
+| **challenge_id** | **integer** | The unique identifier of the challenge. |
 
 ### Return type
 
@@ -47,17 +48,19 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | A challenge |  -  |
-| **404** | The specified resource was not found |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | A challenge                                                       | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 # **ListChallenges**
+
 > ChallengesPage ListChallenges(challenge_search_query = var.challenge_search_query)
 
 List challenges
@@ -65,6 +68,7 @@ List challenges
 List challenges
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -82,9 +86,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_search_query** | [**ChallengeSearchQuery**](.md)| The search query used to find challenges. | [optional] 
+| Name                       | Type                            | Description                               | Notes      |
+| -------------------------- | ------------------------------- | ----------------------------------------- | ---------- |
+| **challenge_search_query** | [**ChallengeSearchQuery**](.md) | The search query used to find challenges. | [optional] |
 
 ### Return type
 
@@ -96,13 +100,13 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | Success |  -  |
-| **400** | Invalid request |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |

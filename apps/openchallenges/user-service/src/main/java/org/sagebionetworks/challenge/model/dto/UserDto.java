@@ -63,10 +63,11 @@ public class UserDto {
    * @return id
    */
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of an account",
-      required = false)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of an account",
+    required = false
+  )
   public Long getId() {
     return id;
   }
@@ -108,10 +109,11 @@ public class UserDto {
   @NotNull
   @Email
   @Schema(
-      name = "email",
-      example = "john.smith@example.com",
-      description = "An email address",
-      required = true)
+    name = "email",
+    example = "john.smith@example.com",
+    description = "An email address",
+    required = true
+  )
   public String getEmail() {
     return email;
   }
@@ -268,25 +270,29 @@ public class UserDto {
       return false;
     }
     UserDto user = (UserDto) o;
-    return Objects.equals(this.id, user.id)
-        && Objects.equals(this.login, user.login)
-        && Objects.equals(this.email, user.email)
-        && Objects.equals(this.name, user.name)
-        && Objects.equals(this.status, user.status)
-        && Objects.equals(this.avatarUrl, user.avatarUrl)
-        && Objects.equals(this.createdAt, user.createdAt)
-        && Objects.equals(this.updatedAt, user.updatedAt)
-        && Objects.equals(this.type, user.type)
-        && Objects.equals(this.bio, user.bio);
+    return (
+      Objects.equals(this.id, user.id) &&
+      Objects.equals(this.login, user.login) &&
+      Objects.equals(this.email, user.email) &&
+      Objects.equals(this.name, user.name) &&
+      Objects.equals(this.status, user.status) &&
+      Objects.equals(this.avatarUrl, user.avatarUrl) &&
+      Objects.equals(this.createdAt, user.createdAt) &&
+      Objects.equals(this.updatedAt, user.updatedAt) &&
+      Objects.equals(this.type, user.type) &&
+      Objects.equals(this.bio, user.bio)
+    );
   }
 
   private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b
-        || (a != null
-            && b != null
-            && a.isPresent()
-            && b.isPresent()
-            && Objects.deepEquals(a.get(), b.get()));
+    return (
+      a == b ||
+      (a != null &&
+        b != null &&
+        a.isPresent() &&
+        b.isPresent() &&
+        Objects.deepEquals(a.get(), b.get()))
+    );
   }
 
   @Override
@@ -298,7 +304,7 @@ public class UserDto {
     if (a == null) {
       return 1;
     }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[] {a.get()}) : 31;
+    return a.isPresent() ? Arrays.deepHashCode(new Object[] { a.get() }) : 31;
   }
 
   @Override

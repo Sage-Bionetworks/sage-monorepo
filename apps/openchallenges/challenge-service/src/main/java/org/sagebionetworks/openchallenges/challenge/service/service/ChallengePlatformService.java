@@ -32,15 +32,16 @@ public class ChallengePlatformService {
 
   @Transactional(readOnly = true)
   public ChallengePlatformDto getChallengePlatform(String challengePlatformName) {
-    ChallengePlatformEntity entity =
-        challengePlatformRepository
-            .findByName(challengePlatformName)
-            .orElseThrow(
-                () ->
-                    new ChallengePlatformNotFoundException(
-                        String.format(
-                            "The challenge platform with name %s does not exist.",
-                            challengePlatformName)));
+    ChallengePlatformEntity entity = challengePlatformRepository
+      .findByName(challengePlatformName)
+      .orElseThrow(() ->
+        new ChallengePlatformNotFoundException(
+          String.format(
+            "The challenge platform with name %s does not exist.",
+            challengePlatformName
+          )
+        )
+      );
 
     return challengePlatformMapper.convertToDto(entity);
   }
@@ -52,22 +53,25 @@ public class ChallengePlatformService {
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<ChallengePlatformEntity> entitiesPage =
-        challengePlatformRepository.findAll(
-            pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    Page<ChallengePlatformEntity> entitiesPage = challengePlatformRepository.findAll(
+      pageable,
+      query,
+      fieldsToSearchBy.toArray(new String[0])
+    );
     log.info("entitiesPage {}", entitiesPage);
 
-    List<ChallengePlatformDto> challengePlatforms =
-        challengePlatformMapper.convertToDtoList(entitiesPage.getContent());
+    List<ChallengePlatformDto> challengePlatforms = challengePlatformMapper.convertToDtoList(
+      entitiesPage.getContent()
+    );
 
     return ChallengePlatformsPageDto.builder()
-        .challengePlatforms(challengePlatforms)
-        .number(entitiesPage.getNumber())
-        .size(entitiesPage.getSize())
-        .totalElements(entitiesPage.getTotalElements())
-        .totalPages(entitiesPage.getTotalPages())
-        .hasNext(entitiesPage.hasNext())
-        .hasPrevious(entitiesPage.hasPrevious())
-        .build();
+      .challengePlatforms(challengePlatforms)
+      .number(entitiesPage.getNumber())
+      .size(entitiesPage.getSize())
+      .totalElements(entitiesPage.getTotalElements())
+      .totalPages(entitiesPage.getTotalPages())
+      .hasNext(entitiesPage.hasNext())
+      .hasPrevious(entitiesPage.hasPrevious())
+      .build();
   }
 }

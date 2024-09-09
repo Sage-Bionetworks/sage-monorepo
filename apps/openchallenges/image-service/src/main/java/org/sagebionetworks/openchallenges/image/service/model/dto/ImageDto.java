@@ -38,9 +38,10 @@ public class ImageDto {
    */
   @NotNull
   @Schema(
-      name = "url",
-      example = "http://example.com/an-image.png",
-      requiredMode = Schema.RequiredMode.REQUIRED)
+    name = "url",
+    example = "http://example.com/an-image.png",
+    requiredMode = Schema.RequiredMode.REQUIRED
+  )
   @JsonProperty("url")
   public String getUrl() {
     return url;

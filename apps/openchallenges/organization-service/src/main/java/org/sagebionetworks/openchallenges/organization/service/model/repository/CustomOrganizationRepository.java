@@ -7,9 +7,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CustomOrganizationRepository {
-
   Optional<OrganizationEntity> findBySimpleNaturalId(String naturalId);
 
   Page<OrganizationEntity> findAll(
-      Pageable pageable, OrganizationSearchQueryDto query, String... fields);
+    Pageable pageable,
+    OrganizationSearchQueryDto query,
+    String... fields
+  );
 }

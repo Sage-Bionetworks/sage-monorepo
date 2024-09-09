@@ -3,7 +3,6 @@
 The height of the image.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
 
-
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |

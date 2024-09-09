@@ -9,8 +9,8 @@ public class KaggleCompetitionToAvroTransformer {
 
   public KaggleCompetitionAvroModel getKaggleCompetitionAvroModelFromDto(KaggleCompetitionDto dto) {
     return KaggleCompetitionAvroModel.newBuilder()
-        .setId(dto.getId())
-        .setTitle(dto.getTitle())
-        .build();
+      .setId(dto.getId())
+      .setTitle(dto.getTitle())
+      .build();
   }
 }

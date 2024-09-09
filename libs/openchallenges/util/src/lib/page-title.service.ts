@@ -7,8 +7,7 @@ import { BehaviorSubject, combineLatest, Subscription } from 'rxjs';
 })
 export class PageTitleService implements OnDestroy {
   private title: BehaviorSubject<string> = new BehaviorSubject<string>('');
-  private numNotifications: BehaviorSubject<number> =
-    new BehaviorSubject<number>(0);
+  private numNotifications: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
   private subscription!: Subscription;
 
@@ -16,8 +15,7 @@ export class PageTitleService implements OnDestroy {
     combineLatest([this.title, this.numNotifications]).subscribe(
       ([title, numNotifications]) => {
         title = title !== '' ? `${title}` : '';
-        const notification =
-          numNotifications > 0 ? `(${numNotifications}) ` : '';
+        const notification = numNotifications > 0 ? `(${numNotifications}) ` : '';
         this.bodyTitle.setTitle(`${notification}${title}`);
       },
       (err) => console.error(err),

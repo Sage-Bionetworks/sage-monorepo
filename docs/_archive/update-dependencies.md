@@ -2,9 +2,9 @@
 
 - [Renovate](#Renovate)
 - [Dependency update workflow](#Dependency-update-workflow)
-    - [Exceptions](#Exceptions)
-    - [Dev container](#Dev-container)
-    - [Yarn](#Yarn)
+  - [Exceptions](#Exceptions)
+  - [Dev container](#Dev-container)
+  - [Yarn](#Yarn)
 
 ## Renovate
 
@@ -31,12 +31,12 @@ workflow currently applied to update the dependencies.
 
 1. Go to Renovate's [dashboard].
 2. Review the dependency updates listed in the section "Open", for which a PR is already open.
-    > **Note** Currently, Renovate is configured to open up to 5 PRs for the sake of reducing
-    > notifications.
+   > **Note** Currently, Renovate is configured to open up to 5 PRs for the sake of reducing
+   > notifications.
 3. Merge the PRs that you are confident will not break the workspace.
-    > **Note** For PRs that affect projects with low test coverage, it is recommended to checkout
-    > the branch locally and manually test that the main projects still work (e.g. the Challenge
-    > Registry app).
+   > **Note** For PRs that affect projects with low test coverage, it is recommended to checkout
+   > the branch locally and manually test that the main projects still work (e.g. the Challenge
+   > Registry app).
 4. Trigger the creation of PRs from the dashboard for dependencies listed in the section
    "Rate-Limited" (minor and patch updates) that you are confident you can merge according to the
    criteria listed in Step 3.
@@ -68,9 +68,9 @@ The workflow used to update the dev container is described in this
 1. Update the version of `yarn` in the Dockerfile of the devcontainer.
 2. Rebuild and restart the devcontainer.
 3. Update the version of `yarn` used in the workspace.
-    ```console
-    yarn set version <version>
-    ```
+   ```console
+   yarn set version <version>
+   ```
 
 ## Attic
 

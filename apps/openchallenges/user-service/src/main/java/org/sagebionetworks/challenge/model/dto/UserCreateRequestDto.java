@@ -12,8 +12,9 @@ import org.openapitools.jackson.nullable.JsonNullable;
 
 /** The information required to create a user account */
 @Schema(
-    name = "UserCreateRequest",
-    description = "The information required to create a user account")
+  name = "UserCreateRequest",
+  description = "The information required to create a user account"
+)
 @JsonTypeName("UserCreateRequest")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
@@ -70,10 +71,11 @@ public class UserCreateRequestDto {
   @NotNull
   @Email
   @Schema(
-      name = "email",
-      example = "john.smith@example.com",
-      description = "An email address",
-      required = true)
+    name = "email",
+    example = "john.smith@example.com",
+    description = "An email address",
+    required = true
+  )
   public String getEmail() {
     return email;
   }
@@ -168,21 +170,25 @@ public class UserCreateRequestDto {
       return false;
     }
     UserCreateRequestDto userCreateRequest = (UserCreateRequestDto) o;
-    return Objects.equals(this.login, userCreateRequest.login)
-        && Objects.equals(this.email, userCreateRequest.email)
-        && Objects.equals(this.password, userCreateRequest.password)
-        && Objects.equals(this.name, userCreateRequest.name)
-        && Objects.equals(this.avatarUrl, userCreateRequest.avatarUrl)
-        && Objects.equals(this.bio, userCreateRequest.bio);
+    return (
+      Objects.equals(this.login, userCreateRequest.login) &&
+      Objects.equals(this.email, userCreateRequest.email) &&
+      Objects.equals(this.password, userCreateRequest.password) &&
+      Objects.equals(this.name, userCreateRequest.name) &&
+      Objects.equals(this.avatarUrl, userCreateRequest.avatarUrl) &&
+      Objects.equals(this.bio, userCreateRequest.bio)
+    );
   }
 
   private static <T> boolean equalsNullable(JsonNullable<T> a, JsonNullable<T> b) {
-    return a == b
-        || (a != null
-            && b != null
-            && a.isPresent()
-            && b.isPresent()
-            && Objects.deepEquals(a.get(), b.get()));
+    return (
+      a == b ||
+      (a != null &&
+        b != null &&
+        a.isPresent() &&
+        b.isPresent() &&
+        Objects.deepEquals(a.get(), b.get()))
+    );
   }
 
   @Override
@@ -194,7 +200,7 @@ public class UserCreateRequestDto {
     if (a == null) {
       return 1;
     }
-    return a.isPresent() ? Arrays.deepHashCode(new Object[] {a.get()}) : 31;
+    return a.isPresent() ? Arrays.deepHashCode(new Object[] { a.get() }) : 31;
   }
 
   @Override

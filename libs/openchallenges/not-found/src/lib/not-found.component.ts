@@ -9,13 +9,7 @@ import { FooterComponent } from '@sagebionetworks/openchallenges/ui';
 @Component({
   selector: 'openchallenges-not-found',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterModule,
-    MatCardModule,
-    MatButtonModule,
-    FooterComponent,
-  ],
+  imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule, FooterComponent],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],
 })

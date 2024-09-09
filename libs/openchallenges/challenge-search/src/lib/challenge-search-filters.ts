@@ -9,11 +9,7 @@ import {
 
 const thisYear = new Date().getFullYear();
 
-const updateYear = (
-  thisYear: number,
-  startYearDiff: number,
-  endYearDiff: number,
-) => {
+const updateYear = (thisYear: number, startYearDiff: number, endYearDiff: number) => {
   return {
     start: `${thisYear + startYearDiff}-01-01`,
     end: `${thisYear + endYearDiff}-12-31`,
@@ -64,5 +60,4 @@ export const challengeOrganizersFilter: Filter[] = [];
 export const challengePlatformsFilter: Filter[] = [];
 export const challengeSortFilter: Filter[] = ChallengeSortOptions;
 export const challengeStatusFilter: Filter[] = ChallengeStatusOptions;
-export const challengeSubmissionTypesFilter: Filter[] =
-  ChallengeSubmissionTypesOptions;
+export const challengeSubmissionTypesFilter: Filter[] = ChallengeSubmissionTypesOptions;

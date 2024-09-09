@@ -6,13 +6,13 @@
 2. Copy your token from Getting Started > Your Authtoken.
 3. Install the ngrok client.
 4. Authenticate witn your ngrok token.
-    ```console
-    ngrok config add-authtoken <token>
-    ```
+   ```console
+   ngrok config add-authtoken <token>
+   ```
 5. Start the HTTP tunnel, for example for the Angular app that listens to the port 4200.
-    ```console
-    ngrok http --host-header=rewrite 4200
-    ```
+   ```console
+   ngrok http --host-header=rewrite 4200
+   ```
 
 ## Curl a page as a bot
 

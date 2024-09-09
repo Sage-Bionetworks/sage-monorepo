@@ -5,10 +5,6 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": [
-    "type:themes",
-    "scope:model-ad",
-    "language:typescript"
-  ],
+  "tags": ["type:themes", "scope:model-ad", "language:typescript"],
   "implicitDependencies": []
 }

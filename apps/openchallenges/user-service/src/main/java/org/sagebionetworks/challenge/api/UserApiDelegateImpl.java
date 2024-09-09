@@ -15,7 +15,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserApiDelegateImpl implements UserApiDelegate {
 
-  @Autowired UserService userService;
+  @Autowired
+  UserService userService;
 
   @Override
   public ResponseEntity<UserCreateResponseDto> createUser(UserCreateRequestDto userCreateRequest) {

@@ -16,24 +16,28 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleBindException(
-      BindException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-
+    BindException ex,
+    HttpHeaders headers,
+    HttpStatus status,
+    WebRequest request
+  ) {
     BindingResult result = ex.getBindingResult();
     FieldError fieldError = result.getFieldErrors().get(0);
 
-    BadRequestException exception =
-        new BadRequestException(
-            String.format(
-                "Invalid value '%s' for for property '%s'",
-                fieldError.getRejectedValue(), fieldError.getField()));
+    BadRequestException exception = new BadRequestException(
+      String.format(
+        "Invalid value '%s' for for property '%s'",
+        fieldError.getRejectedValue(),
+        fieldError.getField()
+      )
+    );
 
-    BasicErrorDto error =
-        BasicErrorDto.builder()
-            .title(exception.getTitle())
-            .status(exception.getStatus().value())
-            .detail(exception.getDetail())
-            .type(exception.getType())
-            .build();
+    BasicErrorDto error = BasicErrorDto.builder()
+      .title(exception.getTitle())
+      .status(exception.getStatus().value())
+      .detail(exception.getDetail())
+      .type(exception.getType())
+      .build();
 
     return new ResponseEntity<Object>(error, HttpStatus.BAD_REQUEST);
   }

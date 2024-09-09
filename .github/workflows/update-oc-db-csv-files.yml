@@ -1,7 +1,7 @@
 name: Update OpenChallenges DB files
 on:
   schedule:
-    - cron: "0 0 * * *"  # daily at 00:00 UTC 
+    - cron: '0 0 * * *' # daily at 00:00 UTC
   workflow_dispatch:
 
 jobs:
@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       # schematic only supports Python 3.9 and 3.10, so we will need
       # to specifically use one of these versions.
       - name: Install system dependencies
@@ -27,7 +26,7 @@ jobs:
       - name: Create Google Client credentials file
         uses: jsdaniell/create-json@v1.2.3
         with:
-          name: "service_account.json"
+          name: 'service_account.json'
           json: ${{ secrets.GOOGLE_CLIENT_JSON }}
 
       - name: Update dump files
@@ -47,11 +46,11 @@ jobs:
       - name: Get current date
         run: |
           echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
-    
+
       - name: Push changes, then create or update pull request
         uses: peter-evans/create-pull-request@v6
-        with: 
-          title: "chore(openchallenges): ${{ env.TODAY }} DB update"
+        with:
+          title: 'chore(openchallenges): ${{ env.TODAY }} DB update'
           body: Daily OC database update(s)
-          commit-message: "${{ env.TODAY }}: add latest CSV dump files"
+          commit-message: '${{ env.TODAY }}: add latest CSV dump files'
           branch: openchallenges/db-update

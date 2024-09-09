@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-keycloak:
@@ -13,7 +13,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8080:8080"
+      - '8080:8080'
     command: start-dev
     deploy:
       resources:

@@ -7,9 +7,7 @@
   "automergeType": "pr",
   "prHourlyLimit": 2,
   "prConcurrentLimit": 5,
-  "ignorePaths": [
-    "apps/api"
-  ],
+  "ignorePaths": ["apps/api"],
   "baseBranches": ["main"],
   "labels": ["bot", "dependencies"],
   "packageRules": [
@@ -56,7 +54,5 @@
     }
   ],
   "timezone": "America/Los_Angeles",
-  "schedule": [
-    "every weekend"
-  ]
+  "schedule": ["every weekend"]
 }

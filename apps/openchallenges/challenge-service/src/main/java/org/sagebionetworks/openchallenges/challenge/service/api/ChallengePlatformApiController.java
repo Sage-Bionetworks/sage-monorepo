@@ -15,7 +15,8 @@ public class ChallengePlatformApiController implements ChallengePlatformApi {
   private final ChallengePlatformApiDelegate delegate;
 
   public ChallengePlatformApiController(
-      @Autowired(required = false) ChallengePlatformApiDelegate delegate) {
+    @Autowired(required = false) ChallengePlatformApiDelegate delegate
+  ) {
     this.delegate = Optional.ofNullable(delegate).orElse(new ChallengePlatformApiDelegate() {});
   }
 

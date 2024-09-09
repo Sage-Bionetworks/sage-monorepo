@@ -1,5 +1,6 @@
 package org.sagebionetworks.challenge.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.sagebionetworks.challenge.model.dto.LoginRequest;
 import org.sagebionetworks.challenge.model.dto.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -31,7 +31,6 @@ public class LoginService {
   RestTemplate restTemplate;
 
   public ResponseEntity<LoginResponse> login(LoginRequest request) {
-
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
@@ -45,12 +44,14 @@ public class LoginService {
     log.info("client_id: {}", clientId);
 
     HttpEntity<MultiValueMap<String, String>> httpEntity = new HttpEntity<>(map, headers);
-    ResponseEntity<LoginResponse> loginResponse =
-        restTemplate.postForEntity(loginUrl, httpEntity, LoginResponse.class);
+    ResponseEntity<LoginResponse> loginResponse = restTemplate.postForEntity(
+      loginUrl,
+      httpEntity,
+      LoginResponse.class
+    );
 
     log.info(loginResponse.getBody().toString());
 
     return ResponseEntity.status(200).body(loginResponse.getBody());
-
   }
 }

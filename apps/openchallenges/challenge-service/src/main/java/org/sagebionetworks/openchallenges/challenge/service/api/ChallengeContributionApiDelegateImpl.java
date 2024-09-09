@@ -11,13 +11,15 @@ public class ChallengeContributionApiDelegateImpl implements ChallengeContributi
   private final ChallengeContributionService challengeContributionService;
 
   public ChallengeContributionApiDelegateImpl(
-      ChallengeContributionService challengeContributionService) {
+    ChallengeContributionService challengeContributionService
+  ) {
     this.challengeContributionService = challengeContributionService;
   }
 
   @Override
   public ResponseEntity<ChallengeContributionsPageDto> listChallengeContributions(
-      Long challengeId) {
+    Long challengeId
+  ) {
     return ResponseEntity.ok(challengeContributionService.listChallengeContributions(challengeId));
   }
 }

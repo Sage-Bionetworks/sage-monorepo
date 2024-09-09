@@ -66,10 +66,7 @@ import { SeoService } from '@sagebionetworks/shared/util';
 import { getSeoData } from './challenge-search-seo-data';
 import { HttpParams } from '@angular/common/http';
 import { ChallengeSearchDataService } from './challenge-search-data.service';
-import {
-  ChallengeSearchDropdown,
-  CHALLENGE_SEARCH_DROPDOWNS,
-} from './challenge-search-dropdown';
+import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge-search-dropdown';
 
 @Component({
   selector: 'openchallenges-challenge-search',
@@ -96,9 +93,7 @@ import {
   templateUrl: './challenge-search.component.html',
   styleUrls: ['./challenge-search.component.scss'],
 })
-export class ChallengeSearchComponent
-  implements OnInit, AfterContentInit, OnDestroy
-{
+export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public appVersion: string;
   public dataUpdatedOn: string;
   public privacyPolicyUrl: string;
@@ -107,11 +102,11 @@ export class ChallengeSearchComponent
   public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
-  private query: BehaviorSubject<ChallengeSearchQuery> =
-    new BehaviorSubject<ChallengeSearchQuery>({});
+  private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
+    {},
+  );
 
-  private challengeSearchTerms: BehaviorSubject<string> =
-    new BehaviorSubject<string>('');
+  private challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
 
@@ -181,8 +176,7 @@ export class ChallengeSearchComponent
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
-    this.enableOperationFilter =
-      this.configService.config.enableOperationFilter;
+    this.enableOperationFilter = this.configService.config.enableOperationFilter;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 
@@ -217,20 +211,18 @@ export class ChallengeSearchComponent
 
       this.selectedValues['categories'] = this.splitParam(params['categories']);
       this.selectedValues['incentives'] = this.splitParam(params['incentives']);
-      this.selectedValues['inputDataTypes'] = this.splitParam(
-        params['inputDataTypes'],
-      ).map((idString) => +idString);
-      this.selectedValues['operations'] = this.splitParam(
-        params['operations'],
-      ).map((idString) => +idString);
-      this.selectedValues['organizations'] = this.splitParam(
-        params['organizations'],
-      ).map((idString) => +idString);
+      this.selectedValues['inputDataTypes'] = this.splitParam(params['inputDataTypes']).map(
+        (idString) => +idString,
+      );
+      this.selectedValues['operations'] = this.splitParam(params['operations']).map(
+        (idString) => +idString,
+      );
+      this.selectedValues['organizations'] = this.splitParam(params['organizations']).map(
+        (idString) => +idString,
+      );
       this.selectedValues['platforms'] = this.splitParam(params['platforms']);
       this.selectedValues['status'] = this.splitParam(params['status']);
-      this.selectedValues['submissionTypes'] = this.splitParam(
-        params['submissionTypes'],
-      );
+      this.selectedValues['submissionTypes'] = this.splitParam(params['submissionTypes']);
 
       const defaultQuery: ChallengeSearchQuery = {
         categories: this.selectedValues['categories'],
@@ -271,12 +263,7 @@ export class ChallengeSearchComponent
 
   ngAfterContentInit(): void {
     this.challengeSearchTerms
-      .pipe(
-        skip(1),
-        debounceTime(400),
-        distinctUntilChanged(),
-        takeUntil(this.destroy),
-      )
+      .pipe(skip(1), debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
       .subscribe((searched) => {
         this.onParamChange({ searchTerms: searched });
       });
@@ -284,9 +271,7 @@ export class ChallengeSearchComponent
     this.query
       .pipe(
         tap((query) => console.log('List challenges query', query)),
-        switchMap((query: ChallengeSearchQuery) =>
-          this.challengeService.listChallenges(query),
-        ),
+        switchMap((query: ChallengeSearchQuery) => this.challengeService.listChallenges(query)),
         tap((page) => console.log('List of challenges: ', page.challenges)),
         catchError((err) => {
           if (err.message) {
@@ -368,8 +353,7 @@ export class ChallengeSearchComponent
       })
       .reduce(
         // update with new param, or delete the param if empty string
-        (params, [key, value]) =>
-          value !== '' ? params.set(key, value) : params.delete(key),
+        (params, [key, value]) => (value !== '' ? params.set(key, value) : params.delete(key)),
         currentParams,
       );
     this._location.replaceState(location.pathname, params.toString());
@@ -379,27 +363,20 @@ export class ChallengeSearchComponent
     this.query.next(newQuery);
   }
 
-  onSearchChange(
-    searchType: 'challenges' | ChallengeSearchDropdown,
-    searched: string,
-  ): void {
+  onSearchChange(searchType: 'challenges' | ChallengeSearchDropdown, searched: string): void {
     if (searchType === 'challenges') {
       this.challengeSearchTerms.next(searched);
     } else {
       // reset options except selections when search term is applied
-      const selectedOptions = this.dropdownFilters[searchType].options.filter(
-        (option) => {
-          if (Array.isArray(option.value)) {
-            return option.value.some((item) =>
-              (this.selectedValues[searchType] as FilterValue[]).includes(item),
-            );
-          } else {
-            return (this.selectedValues[searchType] as FilterValue[]).includes(
-              option.value,
-            );
-          }
-        },
-      );
+      const selectedOptions = this.dropdownFilters[searchType].options.filter((option) => {
+        if (Array.isArray(option.value)) {
+          return option.value.some((item) =>
+            (this.selectedValues[searchType] as FilterValue[]).includes(item),
+          );
+        } else {
+          return (this.selectedValues[searchType] as FilterValue[]).includes(option.value);
+        }
+      });
       this.dropdownFilters[searchType].options = selectedOptions;
       this.challengeSearchDataService.setSearchQuery(searchType, {
         searchTerms: searched,

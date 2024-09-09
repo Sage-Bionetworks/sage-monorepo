@@ -3,15 +3,16 @@
 A page of challenge input data types.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**number** | **int** | The page number. | 
-**size** | **int** | The number of items in a single page. | 
-**total_elements** | **int** | Total number of elements in the result set. | 
-**total_pages** | **int** | Total number of pages in the result set. | 
-**has_next** | **bool** | Returns if there is a next page. | 
-**has_previous** | **bool** | Returns if there is a previous page. | 
-**challenge_input_data_types** | [**List[ChallengeInputDataType]**](ChallengeInputDataType.md) | A list of challenge input data types. | 
+
+| Name                           | Type                                                          | Description                                 | Notes |
+| ------------------------------ | ------------------------------------------------------------- | ------------------------------------------- | ----- |
+| **number**                     | **int**                                                       | The page number.                            |
+| **size**                       | **int**                                                       | The number of items in a single page.       |
+| **total_elements**             | **int**                                                       | Total number of elements in the result set. |
+| **total_pages**                | **int**                                                       | Total number of pages in the result set.    |
+| **has_next**                   | **bool**                                                      | Returns if there is a next page.            |
+| **has_previous**               | **bool**                                                      | Returns if there is a previous page.        |
+| **challenge_input_data_types** | [**List[ChallengeInputDataType]**](ChallengeInputDataType.md) | A list of challenge input data types.       |
 
 ## Example
 
@@ -30,6 +31,5 @@ challenge_input_data_types_page_dict = challenge_input_data_types_page_instance.
 # create an instance of ChallengeInputDataTypesPage from a dict
 challenge_input_data_types_page_form_dict = challenge_input_data_types_page.from_dict(challenge_input_data_types_page_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

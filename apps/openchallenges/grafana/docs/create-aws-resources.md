@@ -11,27 +11,18 @@ IAM policy:
 
 ```json
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListBucket",
-                "s3:GetObject",
-                "s3:GetObject*"
-            ],
-            "Resource": [
-                "arn:aws:s3:::openchallenges-grafana",
-                "arn:aws:s3:::openchallenges-grafana/*"
-            ]
-        },
-        {
-            "Effect": "Allow",
-            "Action": "s3:*Object",
-            "Resource": [
-                "arn:aws:s3:::openchallenges-grafana/*"
-            ]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": ["s3:ListBucket", "s3:GetObject", "s3:GetObject*"],
+      "Resource": ["arn:aws:s3:::openchallenges-grafana", "arn:aws:s3:::openchallenges-grafana/*"]
+    },
+    {
+      "Effect": "Allow",
+      "Action": "s3:*Object",
+      "Resource": ["arn:aws:s3:::openchallenges-grafana/*"]
+    }
+  ]
 }
 ```

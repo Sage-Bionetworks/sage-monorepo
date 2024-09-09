@@ -1,9 +1,9 @@
 package org.sagebionetworks.challenge.controller;
 
-import org.sagebionetworks.challenge.model.dto.User;
-import org.sagebionetworks.challenge.service.UserService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.sagebionetworks.challenge.model.dto.User;
+import org.sagebionetworks.challenge.service.UserService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,5 +27,4 @@ public class UserController {
   public ResponseEntity<List<User>> readUser(Pageable pageable) {
     return ResponseEntity.ok(userService.readUsers(pageable));
   }
-
 }

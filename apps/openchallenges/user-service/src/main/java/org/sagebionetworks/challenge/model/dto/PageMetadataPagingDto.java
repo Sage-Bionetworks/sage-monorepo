@@ -10,8 +10,9 @@ import javax.validation.constraints.*;
 
 /** Links to navigate to different pages of results */
 @Schema(
-    name = "PageMetadata_paging",
-    description = "Links to navigate to different pages of results")
+  name = "PageMetadata_paging",
+  description = "Links to navigate to different pages of results"
+)
 @JsonTypeName("PageMetadata_paging")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations

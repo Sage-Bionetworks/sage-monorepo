@@ -10,11 +10,7 @@ describe('ChallengeSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        ChallengeSearchComponent,
-        RouterTestingModule,
-      ],
+      imports: [HttpClientModule, ChallengeSearchComponent, RouterTestingModule],
       providers: [ConfigService],
     }).compileComponents();
   });

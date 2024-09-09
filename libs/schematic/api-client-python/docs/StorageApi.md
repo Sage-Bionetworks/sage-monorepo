@@ -1,13 +1,13 @@
 # schematic_client.StorageApi
 
-All URIs are relative to *http://localhost/api/v1*
+All URIs are relative to _http://localhost/api/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**list_storage_project_datasets**](StorageApi.md#list_storage_project_datasets) | **GET** /storages/projects/{projectId}/datasets | Gets all datasets in folder under a given storage project that the current user has access to.
-
+| Method                                                                           | HTTP request                                    | Description                                                                                    |
+| -------------------------------------------------------------------------------- | ----------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| [**list_storage_project_datasets**](StorageApi.md#list_storage_project_datasets) | **GET** /storages/projects/{projectId}/datasets | Gets all datasets in folder under a given storage project that the current user has access to. |
 
 # **list_storage_project_datasets**
+
 > DatasetsPage list_storage_project_datasets(project_id)
 
 Gets all datasets in folder under a given storage project that the current user has access to.
@@ -15,7 +15,6 @@ Gets all datasets in folder under a given storage project that the current user 
 Gets all datasets in folder under a given storage project that the current user has access to.
 
 ### Example
-
 
 ```python
 import time
@@ -46,12 +45,11 @@ with schematic_client.ApiClient() as api_client:
         print("Exception when calling StorageApi->list_storage_project_datasets: %s\n" % e)
 ```
 
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **project_id** | **str**| The Synapse ID of a storage project. |
+| Name           | Type    | Description                          | Notes |
+| -------------- | ------- | ------------------------------------ | ----- |
+| **project_id** | **str** | The Synapse ID of a storage project. |
 
 ### Return type
 
@@ -63,17 +61,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
-
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
 
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-
