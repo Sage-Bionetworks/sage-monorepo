@@ -9,18 +9,24 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll.eslint": "never"
   },
-  "editor.rulers": [
-    100
-  ],
+  "editor.rulers": [100],
   "editor.inlayHints.enabled": "off",
-  "eslint.workingDirectories": [
-    "."
-  ],
-  "eslint.validate": [
-    "json"
-  ],
+  "eslint.workingDirectories": ["."],
+  // We need to explicitly set Prettier as the format for JSON formats, otherwise the formatter
+  // provided with VS Code extension JSON Language Features will set itself as the default one,
+  // despite us specifying that Prettier is the default formatter (editor.defaultFormatter).
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json5]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.validate": ["json"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "black-formatter.importStrategy": "fromEnvironment",
   "python.analysis.autoImportCompletions": true,
@@ -32,14 +38,6 @@
     // This settings still works even if VS Code does not recognize it.
     // "notebook.formatOnSave.enabled": true
   },
-  // "emeraldwalk.runonsave": {
-  //   "commands": [
-  //     {
-  //       "match": "\\.(java|sql)$",
-  //       "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
-  //     }
-  //   ]
-  // },
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {

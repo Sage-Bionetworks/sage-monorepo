@@ -7,24 +7,18 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew --version 1> /dev/null"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{projectRoot}/build"
-      ],
+      "outputs": ["{projectRoot}/build"],
       "options": {
         "command": "./gradlew build",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "install": {
       "executor": "nx:run-commands",
@@ -32,22 +26,16 @@
         "command": "./gradlew publishToMavenLocal",
         "cwd": "libs/openchallenges/kafka-producer"
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "test": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{projectRoot}/build"
-      ],
+      "outputs": ["{projectRoot}/build"],
       "options": {
         "command": "./gradlew test",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "clean": {
       "executor": "nx:run-commands",
@@ -57,12 +45,7 @@
       }
     }
   },
-  "tags": [
-    "type:library",
-    "scope:openchallenges",
-    "language:java",
-    "package-manager:gradle"
-  ],
+  "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-app-config-data",
     "openchallenges-kafka-admin",

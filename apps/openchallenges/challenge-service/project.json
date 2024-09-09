@@ -14,37 +14,27 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew --version 1> /dev/null"
-        ],
+        "commands": ["./gradlew --version 1> /dev/null"],
         "cwd": "{projectRoot}"
       }
     },
     "build": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{projectRoot}/build"
-      ],
+      "outputs": ["{projectRoot}/build"],
       "options": {
         "command": "./gradlew build",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "test": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{projectRoot}/build"
-      ],
+      "outputs": ["{projectRoot}/build"],
       "options": {
         "command": "./gradlew test",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "sonar": {
       "executor": "nx:run-commands",
@@ -52,9 +42,7 @@
         "command": "./gradlew sonar",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "test"
-      ]
+      "dependsOn": ["test"]
     },
     "clean": {
       "executor": "nx:run-commands",
@@ -66,16 +54,11 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "./gradlew build --continuous",
-          "./gradlew bootRun"
-        ],
+        "commands": ["./gradlew build --continuous", "./gradlew bootRun"],
         "cwd": "{projectRoot}",
         "parallel": true
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "serve-detach": {
       "executor": "nx:run-commands",
@@ -90,48 +73,31 @@
         "command": "./gradlew bootBuildImage",
         "cwd": "{projectRoot}"
       },
-      "dependsOn": [
-        "^install"
-      ]
+      "dependsOn": ["^install"]
     },
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/openchallenges/challenge-service",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/{projectName}"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
-      "dependsOn": [
-        "build-image-base"
-      ]
+      "dependsOn": ["build-image-base"]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "context": "apps/openchallenges/challenge-service",
       "options": {
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/{projectName}"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -143,24 +109,14 @@
     "generate": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "xargs rm -fr <.openapi-generator/FILES",
-          "openapi-generator-cli generate"
-        ],
+        "commands": ["xargs rm -fr <.openapi-generator/FILES", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     }
   },
-  "tags": [
-    "type:service",
-    "scope:backend",
-    "language:java",
-    "package-manager:gradle"
-  ],
+  "tags": ["type:service", "scope:backend", "language:java", "package-manager:gradle"],
   "implicitDependencies": [
     "openchallenges-api-description",
     "openchallenges-app-config-data",
