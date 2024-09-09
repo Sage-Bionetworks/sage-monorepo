@@ -1,9 +1,10 @@
 {
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
   "editor.tabSize": 2,
-  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
@@ -19,18 +20,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[typescript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+    "editor.formatOnSave": false
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
     "editor.formatOnSave": true
   },
-  // "[typescript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": false
-  // },
-  // "[javascript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": true
-  // },
   "java.format.enabled": false,
   "[java]": {
     "editor.formatOnSave": false
