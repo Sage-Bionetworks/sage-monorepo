@@ -27,10 +27,6 @@
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
       }
-    },
-    {
-      "files": ["*.json", "*.json5"],
-      "parser": "jsonc-eslint-parser"
     }
   ]
 }

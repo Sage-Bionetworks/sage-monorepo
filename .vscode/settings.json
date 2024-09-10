@@ -29,7 +29,6 @@
   "[yaml]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "eslint.validate": ["json"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "black-formatter.importStrategy": "fromEnvironment",
   "python.analysis.autoImportCompletions": true,
