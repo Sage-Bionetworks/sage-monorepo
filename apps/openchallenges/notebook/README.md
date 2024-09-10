@@ -8,9 +8,9 @@ API and other related APIs.
 ## Update Python version
 
 1. Update the version of Python in
-    - `.python-version`
-    - `prepare-python.sh`
-    - `pyproject.toml`
+   - `.python-version`
+   - `prepare-python.sh`
+   - `pyproject.toml`
 2. Run `nx prepare openchallenges-notebook`
 
 ## Generate challenge headlines

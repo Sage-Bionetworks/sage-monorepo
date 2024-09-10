@@ -77,9 +77,10 @@ public class OrganizationSearchQueryDto {
    */
   @Min(1)
   @Schema(
-      name = "pageSize",
-      description = "The number of items in a single page.",
-      required = false)
+    name = "pageSize",
+    description = "The number of items in a single page.",
+    required = false
+  )
   public Integer getPageSize() {
     return pageSize;
   }
@@ -108,9 +109,10 @@ public class OrganizationSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "categories",
-      description = "The array of organization categories used to filter the results.",
-      required = false)
+    name = "categories",
+    description = "The array of organization categories used to filter the results.",
+    required = false
+  )
   public List<OrganizationCategoryDto> getCategories() {
     return categories;
   }
@@ -120,13 +122,15 @@ public class OrganizationSearchQueryDto {
   }
 
   public OrganizationSearchQueryDto challengeContributionRoles(
-      List<ChallengeContributionRoleDto> challengeContributionRoles) {
+    List<ChallengeContributionRoleDto> challengeContributionRoles
+  ) {
     this.challengeContributionRoles = challengeContributionRoles;
     return this;
   }
 
   public OrganizationSearchQueryDto addChallengeContributionRolesItem(
-      ChallengeContributionRoleDto challengeContributionRolesItem) {
+    ChallengeContributionRoleDto challengeContributionRolesItem
+  ) {
     if (this.challengeContributionRoles == null) {
       this.challengeContributionRoles = new ArrayList<>();
     }
@@ -141,15 +145,17 @@ public class OrganizationSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "challengeContributionRoles",
-      description = "An array of challenge contribution roles used to filter the results.",
-      required = false)
+    name = "challengeContributionRoles",
+    description = "An array of challenge contribution roles used to filter the results.",
+    required = false
+  )
   public List<ChallengeContributionRoleDto> getChallengeContributionRoles() {
     return challengeContributionRoles;
   }
 
   public void setChallengeContributionRoles(
-      List<ChallengeContributionRoleDto> challengeContributionRoles) {
+    List<ChallengeContributionRoleDto> challengeContributionRoles
+  ) {
     this.challengeContributionRoles = challengeContributionRoles;
   }
 
@@ -212,9 +218,10 @@ public class OrganizationSearchQueryDto {
    * @return ids
    */
   @Schema(
-      name = "ids",
-      description = "An array of organization ids used to filter the results.",
-      required = false)
+    name = "ids",
+    description = "An array of organization ids used to filter the results.",
+    required = false
+  )
   public List<Long> getIds() {
     return ids;
   }
@@ -234,10 +241,11 @@ public class OrganizationSearchQueryDto {
    * @return searchTerms
    */
   @Schema(
-      name = "searchTerms",
-      example = "data provider",
-      description = "A string of search terms used to filter the results.",
-      required = false)
+    name = "searchTerms",
+    example = "data provider",
+    description = "A string of search terms used to filter the results.",
+    required = false
+  )
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -255,28 +263,33 @@ public class OrganizationSearchQueryDto {
       return false;
     }
     OrganizationSearchQueryDto organizationSearchQuery = (OrganizationSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, organizationSearchQuery.pageNumber)
-        && Objects.equals(this.pageSize, organizationSearchQuery.pageSize)
-        && Objects.equals(this.categories, organizationSearchQuery.categories)
-        && Objects.equals(
-            this.challengeContributionRoles, organizationSearchQuery.challengeContributionRoles)
-        && Objects.equals(this.sort, organizationSearchQuery.sort)
-        && Objects.equals(this.direction, organizationSearchQuery.direction)
-        && Objects.equals(this.ids, organizationSearchQuery.ids)
-        && Objects.equals(this.searchTerms, organizationSearchQuery.searchTerms);
+    return (
+      Objects.equals(this.pageNumber, organizationSearchQuery.pageNumber) &&
+      Objects.equals(this.pageSize, organizationSearchQuery.pageSize) &&
+      Objects.equals(this.categories, organizationSearchQuery.categories) &&
+      Objects.equals(
+        this.challengeContributionRoles,
+        organizationSearchQuery.challengeContributionRoles
+      ) &&
+      Objects.equals(this.sort, organizationSearchQuery.sort) &&
+      Objects.equals(this.direction, organizationSearchQuery.direction) &&
+      Objects.equals(this.ids, organizationSearchQuery.ids) &&
+      Objects.equals(this.searchTerms, organizationSearchQuery.searchTerms)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        pageNumber,
-        pageSize,
-        categories,
-        challengeContributionRoles,
-        sort,
-        direction,
-        ids,
-        searchTerms);
+      pageNumber,
+      pageSize,
+      categories,
+      challengeContributionRoles,
+      sort,
+      direction,
+      ids,
+      searchTerms
+    );
   }
 
   @Override
@@ -286,9 +299,10 @@ public class OrganizationSearchQueryDto {
     sb.append("    pageNumber: ").append(toIndentedString(pageNumber)).append("\n");
     sb.append("    pageSize: ").append(toIndentedString(pageSize)).append("\n");
     sb.append("    categories: ").append(toIndentedString(categories)).append("\n");
-    sb.append("    challengeContributionRoles: ")
-        .append(toIndentedString(challengeContributionRoles))
-        .append("\n");
+    sb
+      .append("    challengeContributionRoles: ")
+      .append(toIndentedString(challengeContributionRoles))
+      .append("\n");
     sb.append("    sort: ").append(toIndentedString(sort)).append("\n");
     sb.append("    direction: ").append(toIndentedString(direction)).append("\n");
     sb.append("    ids: ").append(toIndentedString(ids)).append("\n");

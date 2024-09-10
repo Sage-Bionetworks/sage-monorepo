@@ -3,11 +3,12 @@
 A simple challenge input data type.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**id** | **int** | The unique identifier of a challenge input data type. | 
-**slug** | **str** | The slug of the challenge input data type. | 
-**name** | **str** | The name of the challenge input data type. | 
+
+| Name     | Type    | Description                                           | Notes |
+| -------- | ------- | ----------------------------------------------------- | ----- |
+| **id**   | **int** | The unique identifier of a challenge input data type. |
+| **slug** | **str** | The slug of the challenge input data type.            |
+| **name** | **str** | The name of the challenge input data type.            |
 
 ## Example
 
@@ -26,6 +27,5 @@ simple_challenge_input_data_type_dict = simple_challenge_input_data_type_instanc
 # create an instance of SimpleChallengeInputDataType from a dict
 simple_challenge_input_data_type_form_dict = simple_challenge_input_data_type.from_dict(simple_challenge_input_data_type_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

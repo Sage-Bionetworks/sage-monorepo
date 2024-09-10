@@ -1,13 +1,13 @@
 # ImageApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**GetImage**](ImageApi.md#GetImage) | **GET** /images | Get an image
-
+| Method                               | HTTP request    | Description  |
+| ------------------------------------ | --------------- | ------------ |
+| [**GetImage**](ImageApi.md#GetImage) | **GET** /images | Get an image |
 
 # **GetImage**
+
 > Image GetImage(image_query = var.image_query)
 
 Get an image
@@ -15,6 +15,7 @@ Get an image
 Returns the image specified.
 
 ### Example
+
 ```R
 library(openapi)
 
@@ -32,9 +33,9 @@ dput(result)
 
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **image_query** | [**ImageQuery**](.md)| The query used to get an image. | [optional] 
+| Name            | Type                  | Description                     | Notes      |
+| --------------- | --------------------- | ------------------------------- | ---------- |
+| **image_query** | [**ImageQuery**](.md) | The query used to get an image. | [optional] |
 
 ### Return type
 
@@ -46,13 +47,13 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-| **200** | An image |  -  |
-| **404** | The specified resource was not found |  -  |
-| **500** | The request cannot be fulfilled due to an unexpected server error |  -  |
 
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | An image                                                          | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |

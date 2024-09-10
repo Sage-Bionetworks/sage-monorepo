@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
   private Long id;
   private String username;
   private String email;
   private String password;
   private String authId;
   private UserStatus status;
-
   // public User(String username, String email, String password) {
   // this.username = username;
   // this.email = email;

@@ -53,11 +53,7 @@ export class OpenChallengesStack extends SageStack {
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
-    const securityGroups = new SecurityGroups(
-      this,
-      'security_groups',
-      network.vpc.id,
-    );
+    const securityGroups = new SecurityGroups(this, 'security_groups', network.vpc.id);
 
     // The ECS Cluster
     const cluster = new EcsCluster(this, 'ecs_cluster');
@@ -115,10 +111,7 @@ export class OpenChallengesStack extends SageStack {
     );
 
     // Gold Service Resources
-    const goldTaskDefinition = new EcsTaskDefinitionGold(
-      this,
-      'gold_task_definition',
-    );
+    const goldTaskDefinition = new EcsTaskDefinitionGold(this, 'gold_task_definition');
 
     new EcsServiceUpstream(
       this,
@@ -131,10 +124,7 @@ export class OpenChallengesStack extends SageStack {
     );
 
     // Silver Service Resources
-    const silverTaskDefinition = new EcsTaskDefinitionSilver(
-      this,
-      'silver_task_definition',
-    );
+    const silverTaskDefinition = new EcsTaskDefinitionSilver(this, 'silver_task_definition');
 
     new EcsServiceUpstream(
       this,

@@ -26,9 +26,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    name = "kaggle-to-kafka-service.enable-mock-challenges",
-    havingValue = "false",
-    matchIfMissing = true)
+  name = "kaggle-to-kafka-service.enable-mock-challenges",
+  havingValue = "false",
+  matchIfMissing = true
+)
 public class KaggleKafkaStreamRunner implements StreamRunner {
 
   private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
@@ -40,10 +41,11 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
   private final KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer;
 
   public KaggleKafkaStreamRunner(
-      KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
-      KafkaConfigData kafkaConfigData,
-      KafkaProducer<Long, KaggleCompetitionAvroModel> kafkaProducer,
-      KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer) {
+    KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData,
+    KafkaConfigData kafkaConfigData,
+    KafkaProducer<Long, KaggleCompetitionAvroModel> kafkaProducer,
+    KaggleCompetitionToAvroTransformer kaggleCompetitionToAvroTransformer
+  ) {
     this.kaggleToKafkaServiceConfigData = kaggleToKafkaServiceConfigData;
     this.kafkaConfigData = kafkaConfigData;
     this.kafkaProducer = kafkaProducer;
@@ -65,20 +67,20 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
 
   private void listKaggleChallenges() throws IOException, URISyntaxException {
     try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
-      final String basicAuthToken =
-          Base64.encodeBase64String(
-              String.format(
-                      "%s:%s",
-                      kaggleToKafkaServiceConfigData.getKaggleUsername(),
-                      kaggleToKafkaServiceConfigData.getKaggleKey())
-                  .getBytes());
+      final String basicAuthToken = Base64.encodeBase64String(
+        String.format(
+          "%s:%s",
+          kaggleToKafkaServiceConfigData.getKaggleUsername(),
+          kaggleToKafkaServiceConfigData.getKaggleKey()
+        ).getBytes()
+      );
 
       URIBuilder builder = new URIBuilder();
       builder
-          .setScheme("https")
-          .setHost("www.kaggle.com")
-          .setPath("/api/v1/competitions/list")
-          .setParameter("page", "1");
+        .setScheme("https")
+        .setHost("www.kaggle.com")
+        .setPath("/api/v1/competitions/list")
+        .setParameter("page", "1");
       URI uri = builder.build();
 
       // final HttpGet httpGet = new HttpGet(config.getKaggleBaseUrl() + "/competitions/list");
@@ -103,19 +105,23 @@ public class KaggleKafkaStreamRunner implements StreamRunner {
       System.out.println(responseBody);
 
       ObjectMapper mapper = new ObjectMapper();
-      List<KaggleCompetitionDto> competitions =
-          mapper.readValue(responseBody, new TypeReference<List<KaggleCompetitionDto>>() {});
+      List<KaggleCompetitionDto> competitions = mapper.readValue(
+        responseBody,
+        new TypeReference<List<KaggleCompetitionDto>>() {}
+      );
       log.info("Competitions: {}", competitions);
       log.info("Competitions count: {}", competitions.size());
 
       // send the first competition to kafka
       KaggleCompetitionAvroModel kaggleCompetitionAvroModel =
-          kaggleCompetitionToAvroTransformer.getKaggleCompetitionAvroModelFromDto(
-              competitions.get(0));
+        kaggleCompetitionToAvroTransformer.getKaggleCompetitionAvroModelFromDto(
+          competitions.get(0)
+        );
       kafkaProducer.send(
-          kafkaConfigData.getTopicName(),
-          kaggleCompetitionAvroModel.getId(),
-          kaggleCompetitionAvroModel);
+        kafkaConfigData.getTopicName(),
+        kaggleCompetitionAvroModel.getId(),
+        kaggleCompetitionAvroModel
+      );
     }
   }
 }

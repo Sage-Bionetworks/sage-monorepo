@@ -2,12 +2,38 @@
   "java.checkstyle.configuration": "checkstyle.xml",
   "java.checkstyle.version": "10.3",
   "java.jdt.ls.java.home": "/usr/lib/jvm/java-17-openjdk-amd64",
+  "java.format.enabled": false,
+  "java.compile.nullAnalysis.mode": "disabled",
+  "java.configuration.updateBuildConfiguration": "disabled",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
   "editor.tabSize": 2,
-  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.fixAll": "explicit"
   },
+  "editor.rulers": [100],
+  "editor.inlayHints.enabled": "off",
+  "eslint.workingDirectories": ["."],
+  // We need to explicitly set Prettier as the format for JSON formats, otherwise the formatter
+  // provided with VS Code will set itself as the default one, despite us specifying that Prettier
+  // is the default formatter (editor.defaultFormatter).
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json5]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "eslint.validate": ["json"],
+  "typescript.tsdk": "node_modules/typescript/lib",
   "black-formatter.importStrategy": "fromEnvironment",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
@@ -15,53 +41,6 @@
     // This settings still works even if VS Code does not recognize it.
     // "notebook.formatOnSave.enabled": true
   },
-  "[json]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  // "[typescript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": false
-  // },
-  // "[javascript]": {
-  //   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  //   "editor.formatOnSave": true
-  // },
-  "java.format.enabled": false,
-  "[java]": {
-    "editor.formatOnSave": false
-  },
-  "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[scss]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[xml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  "[yaml]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "editor.formatOnSave": true
-  },
-  // "emeraldwalk.runonsave": {
-  //   "commands": [
-  //     {
-  //       "match": "\\.(java|sql)$",
-  //       "cmd": "node_modules/.bin/nx affected --base=HEAD --target=format"
-  //     }
-  //   ]
-  // },
-  "eslint.workingDirectories": [
-    "."
-  ],
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
@@ -98,18 +77,6 @@
     }
   ],
   "terminal.integrated.showExitAlert": false,
-  "java.configuration.updateBuildConfiguration": "disabled",
-  "editor.inlayHints.enabled": "off",
   "rewrap.wrappingColumn": 100,
-  "editor.rulers": [
-    100
-  ],
-  "eslint.validate": [
-    "json"
-  ],
-  "java.compile.nullAnalysis.mode": "disabled",
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "python.analysis.autoImportCompletions": true,
-  "python.analysis.typeCheckingMode": "basic",
   "jest.runMode": "on-demand"
 }

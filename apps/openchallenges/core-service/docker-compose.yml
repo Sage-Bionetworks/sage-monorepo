@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-core-service:
@@ -10,7 +10,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8092:8092"
+      - '8092:8092'
     command: start-dev
 
 networks:

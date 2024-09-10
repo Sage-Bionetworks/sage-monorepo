@@ -1,16 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  OnInit,
-} from '@angular/core';
-import {
-  Paginator,
-  PaginatorModule as PrimengPaginatorModule,
-} from 'primeng/paginator';
+import { Component, Input, Output, EventEmitter, ViewChild, OnInit } from '@angular/core';
+import { Paginator, PaginatorModule as PrimengPaginatorModule } from 'primeng/paginator';
 
 @Component({
   selector: 'openchallenges-paginator',

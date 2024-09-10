@@ -21,8 +21,10 @@ public class EdamConceptService {
 
   private EdamConceptMapper edamConceptMapper = new EdamConceptMapper();
 
-  private static final List<String> SEARCHABLE_FIELDS =
-      Arrays.asList("class_id", "preferred_label");
+  private static final List<String> SEARCHABLE_FIELDS = Arrays.asList(
+    "class_id",
+    "preferred_label"
+  );
 
   public EdamConceptService(EdamConceptRepository edamConceptRepository) {
     this.edamConceptRepository = edamConceptRepository;
@@ -33,20 +35,24 @@ public class EdamConceptService {
     Pageable pageable = PageRequest.of(query.getPageNumber(), query.getPageSize());
 
     List<String> fieldsToSearchBy = SEARCHABLE_FIELDS;
-    Page<EdamConceptEntity> entitiesPage =
-        edamConceptRepository.findAll(pageable, query, fieldsToSearchBy.toArray(new String[0]));
+    Page<EdamConceptEntity> entitiesPage = edamConceptRepository.findAll(
+      pageable,
+      query,
+      fieldsToSearchBy.toArray(new String[0])
+    );
 
-    List<EdamConceptDto> edamConcepts =
-        edamConceptMapper.convertToDtoList(entitiesPage.getContent());
+    List<EdamConceptDto> edamConcepts = edamConceptMapper.convertToDtoList(
+      entitiesPage.getContent()
+    );
 
     return EdamConceptsPageDto.builder()
-        .edamConcepts(edamConcepts)
-        .number(entitiesPage.getNumber())
-        .size(entitiesPage.getSize())
-        .totalElements(entitiesPage.getTotalElements())
-        .totalPages(entitiesPage.getTotalPages())
-        .hasNext(entitiesPage.hasNext())
-        .hasPrevious(entitiesPage.hasPrevious())
-        .build();
+      .edamConcepts(edamConcepts)
+      .number(entitiesPage.getNumber())
+      .size(entitiesPage.getSize())
+      .totalElements(entitiesPage.getTotalElements())
+      .totalPages(entitiesPage.getTotalPages())
+      .hasNext(entitiesPage.hasNext())
+      .hasPrevious(entitiesPage.hasPrevious())
+      .build();
   }
 }

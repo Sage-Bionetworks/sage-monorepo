@@ -9,5 +9,19 @@ build
 # Angular
 .angular
 
+# Node.js
+.pnpm-store
+node_modules
+pnpm-lock.yaml
+
+# Python
+.mypy_cache
+.venv
+great_expectations
+
+# Nx
 /.nx/cache
 /.nx/workspace-data
+
+# Mist
+tmp

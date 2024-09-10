@@ -110,9 +110,10 @@ public class ChallengeSearchQueryDto {
    */
   @Min(1)
   @Schema(
-      name = "pageSize",
-      description = "The number of items in a single page.",
-      required = false)
+    name = "pageSize",
+    description = "The number of items in a single page.",
+    required = false
+  )
   public Integer getPageSize() {
     return pageSize;
   }
@@ -154,9 +155,10 @@ public class ChallengeSearchQueryDto {
   @Min(0)
   @Max(2147483647)
   @Schema(
-      name = "sortSeed",
-      description = "The seed that initializes the random sorter.",
-      required = false)
+    name = "sortSeed",
+    description = "The seed that initializes the random sorter.",
+    required = false
+  )
   public Integer getSortSeed() {
     return sortSeed;
   }
@@ -205,9 +207,10 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "incentives",
-      description = "An array of challenge incentive types used to filter the results.",
-      required = false)
+    name = "incentives",
+    description = "An array of challenge incentive types used to filter the results.",
+    required = false
+  )
   public List<ChallengeIncentiveDto> getIncentives() {
     return incentives;
   }
@@ -228,10 +231,11 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "minStartDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "Keep the challenges that start at this date or later.",
-      required = false)
+    name = "minStartDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "Keep the challenges that start at this date or later.",
+    required = false
+  )
   public LocalDate getMinStartDate() {
     return minStartDate;
   }
@@ -252,10 +256,11 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "maxStartDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "Keep the challenges that start at this date or sooner.",
-      required = false)
+    name = "maxStartDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "Keep the challenges that start at this date or sooner.",
+    required = false
+  )
   public LocalDate getMaxStartDate() {
     return maxStartDate;
   }
@@ -283,9 +288,10 @@ public class ChallengeSearchQueryDto {
    * @return platforms
    */
   @Schema(
-      name = "platforms",
-      description = "An array of challenge platform ids used to filter the results.",
-      required = false)
+    name = "platforms",
+    description = "An array of challenge platform ids used to filter the results.",
+    required = false
+  )
   public List<String> getPlatforms() {
     return platforms;
   }
@@ -313,9 +319,10 @@ public class ChallengeSearchQueryDto {
    * @return organizations
    */
   @Schema(
-      name = "organizations",
-      description = "An array of organization ids used to filter the results.",
-      required = false)
+    name = "organizations",
+    description = "An array of organization ids used to filter the results.",
+    required = false
+  )
   public List<Long> getOrganizations() {
     return organizations;
   }
@@ -344,9 +351,10 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "status",
-      description = "An array of challenge status used to filter the results.",
-      required = false)
+    name = "status",
+    description = "An array of challenge status used to filter the results.",
+    required = false
+  )
   public List<ChallengeStatusDto> getStatus() {
     return status;
   }
@@ -361,7 +369,8 @@ public class ChallengeSearchQueryDto {
   }
 
   public ChallengeSearchQueryDto addSubmissionTypesItem(
-      ChallengeSubmissionTypeDto submissionTypesItem) {
+    ChallengeSubmissionTypeDto submissionTypesItem
+  ) {
     if (this.submissionTypes == null) {
       this.submissionTypes = new ArrayList<>();
     }
@@ -376,9 +385,10 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "submissionTypes",
-      description = "An array of challenge submission types used to filter the results.",
-      required = false)
+    name = "submissionTypes",
+    description = "An array of challenge submission types used to filter the results.",
+    required = false
+  )
   public List<ChallengeSubmissionTypeDto> getSubmissionTypes() {
     return submissionTypes;
   }
@@ -406,9 +416,10 @@ public class ChallengeSearchQueryDto {
    * @return inputDataTypes
    */
   @Schema(
-      name = "inputDataTypes",
-      description = "An array of EDAM concept ID used to filter the results.",
-      required = false)
+    name = "inputDataTypes",
+    description = "An array of EDAM concept ID used to filter the results.",
+    required = false
+  )
   public List<Long> getInputDataTypes() {
     return inputDataTypes;
   }
@@ -436,9 +447,10 @@ public class ChallengeSearchQueryDto {
    * @return operations
    */
   @Schema(
-      name = "operations",
-      description = "An array of EDAM concept ID used to filter the results.",
-      required = false)
+    name = "operations",
+    description = "An array of EDAM concept ID used to filter the results.",
+    required = false
+  )
   public List<Long> getOperations() {
     return operations;
   }
@@ -467,9 +479,10 @@ public class ChallengeSearchQueryDto {
    */
   @Valid
   @Schema(
-      name = "categories",
-      description = "The array of challenge categories used to filter the results.",
-      required = false)
+    name = "categories",
+    description = "The array of challenge categories used to filter the results.",
+    required = false
+  )
   public List<ChallengeCategoryDto> getCategories() {
     return categories;
   }
@@ -489,10 +502,11 @@ public class ChallengeSearchQueryDto {
    * @return searchTerms
    */
   @Schema(
-      name = "searchTerms",
-      example = "dream challenge",
-      description = "A string of search terms used to filter the results.",
-      required = false)
+    name = "searchTerms",
+    example = "dream challenge",
+    description = "A string of search terms used to filter the results.",
+    required = false
+  )
   public String getSearchTerms() {
     return searchTerms;
   }
@@ -510,43 +524,46 @@ public class ChallengeSearchQueryDto {
       return false;
     }
     ChallengeSearchQueryDto challengeSearchQuery = (ChallengeSearchQueryDto) o;
-    return Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber)
-        && Objects.equals(this.pageSize, challengeSearchQuery.pageSize)
-        && Objects.equals(this.sort, challengeSearchQuery.sort)
-        && Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed)
-        && Objects.equals(this.direction, challengeSearchQuery.direction)
-        && Objects.equals(this.incentives, challengeSearchQuery.incentives)
-        && Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate)
-        && Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate)
-        && Objects.equals(this.platforms, challengeSearchQuery.platforms)
-        && Objects.equals(this.organizations, challengeSearchQuery.organizations)
-        && Objects.equals(this.status, challengeSearchQuery.status)
-        && Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes)
-        && Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes)
-        && Objects.equals(this.operations, challengeSearchQuery.operations)
-        && Objects.equals(this.categories, challengeSearchQuery.categories)
-        && Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms);
+    return (
+      Objects.equals(this.pageNumber, challengeSearchQuery.pageNumber) &&
+      Objects.equals(this.pageSize, challengeSearchQuery.pageSize) &&
+      Objects.equals(this.sort, challengeSearchQuery.sort) &&
+      Objects.equals(this.sortSeed, challengeSearchQuery.sortSeed) &&
+      Objects.equals(this.direction, challengeSearchQuery.direction) &&
+      Objects.equals(this.incentives, challengeSearchQuery.incentives) &&
+      Objects.equals(this.minStartDate, challengeSearchQuery.minStartDate) &&
+      Objects.equals(this.maxStartDate, challengeSearchQuery.maxStartDate) &&
+      Objects.equals(this.platforms, challengeSearchQuery.platforms) &&
+      Objects.equals(this.organizations, challengeSearchQuery.organizations) &&
+      Objects.equals(this.status, challengeSearchQuery.status) &&
+      Objects.equals(this.submissionTypes, challengeSearchQuery.submissionTypes) &&
+      Objects.equals(this.inputDataTypes, challengeSearchQuery.inputDataTypes) &&
+      Objects.equals(this.operations, challengeSearchQuery.operations) &&
+      Objects.equals(this.categories, challengeSearchQuery.categories) &&
+      Objects.equals(this.searchTerms, challengeSearchQuery.searchTerms)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        pageNumber,
-        pageSize,
-        sort,
-        sortSeed,
-        direction,
-        incentives,
-        minStartDate,
-        maxStartDate,
-        platforms,
-        organizations,
-        status,
-        submissionTypes,
-        inputDataTypes,
-        operations,
-        categories,
-        searchTerms);
+      pageNumber,
+      pageSize,
+      sort,
+      sortSeed,
+      direction,
+      incentives,
+      minStartDate,
+      maxStartDate,
+      platforms,
+      organizations,
+      status,
+      submissionTypes,
+      inputDataTypes,
+      operations,
+      categories,
+      searchTerms
+    );
   }
 
   @Override

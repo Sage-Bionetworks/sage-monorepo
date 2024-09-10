@@ -6,6 +6,7 @@ import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class OrganizationMapper extends BaseMapper<OrganizationEntity, OrganizationDto> {
+
   @Override
   public OrganizationEntity convertToEntity(OrganizationDto dto, Object... args) {
     OrganizationEntity OrganizationEntity = new OrganizationEntity();

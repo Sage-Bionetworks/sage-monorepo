@@ -16,7 +16,6 @@ Embracing the monorepo-style development often requires some changes to the deve
 development only works if we rebuild, retest, and relint only the projects that can be affected by
 our changes. If we instead retest everything, we will get the the following problems:
 
-
 - The performance of CI checks will degrade over time. The time it takes to run the CI checks should
   be proportional to the impact of the change, not the size of the repo.
 - We will be affected by the code your change didn’t touch

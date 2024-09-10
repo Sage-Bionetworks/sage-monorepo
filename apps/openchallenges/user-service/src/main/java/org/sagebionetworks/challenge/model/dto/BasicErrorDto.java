@@ -39,9 +39,10 @@ public class BasicErrorDto {
    */
   @NotNull
   @Schema(
-      name = "title",
-      description = "A human readable documentation for the problem type",
-      required = true)
+    name = "title",
+    description = "A human readable documentation for the problem type",
+    required = true
+  )
   public String getTitle() {
     return title;
   }
@@ -81,9 +82,10 @@ public class BasicErrorDto {
    * @return detail
    */
   @Schema(
-      name = "detail",
-      description = "A human readable explanation specific to this occurrence of the problem",
-      required = false)
+    name = "detail",
+    description = "A human readable explanation specific to this occurrence of the problem",
+    required = false
+  )
   public String getDetail() {
     return detail;
   }
@@ -103,9 +105,10 @@ public class BasicErrorDto {
    * @return type
    */
   @Schema(
-      name = "type",
-      description = "An absolute URI that identifies the problem type",
-      required = false)
+    name = "type",
+    description = "An absolute URI that identifies the problem type",
+    required = false
+  )
   public String getType() {
     return type;
   }
@@ -123,10 +126,12 @@ public class BasicErrorDto {
       return false;
     }
     BasicErrorDto basicError = (BasicErrorDto) o;
-    return Objects.equals(this.title, basicError.title)
-        && Objects.equals(this.status, basicError.status)
-        && Objects.equals(this.detail, basicError.detail)
-        && Objects.equals(this.type, basicError.type);
+    return (
+      Objects.equals(this.title, basicError.title) &&
+      Objects.equals(this.status, basicError.status) &&
+      Objects.equals(this.detail, basicError.detail) &&
+      Objects.equals(this.type, basicError.type)
+    );
   }
 
   @Override

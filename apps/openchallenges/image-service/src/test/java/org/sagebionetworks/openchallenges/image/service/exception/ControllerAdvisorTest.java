@@ -23,9 +23,15 @@ public class ControllerAdvisorTest {
     // Create a sample BindException
     BindException bindException = mock(BindException.class);
     BindingResult bindingResult = mock(BindingResult.class);
-    FieldError fieldError =
-        new FieldError(
-            "objectName", "fieldName", "rejectedValue", false, null, null, "error message");
+    FieldError fieldError = new FieldError(
+      "objectName",
+      "fieldName",
+      "rejectedValue",
+      false,
+      null,
+      null,
+      "error message"
+    );
     List<FieldError> fieldErrors = new ArrayList<>();
     fieldErrors.add(fieldError);
 
@@ -37,9 +43,12 @@ public class ControllerAdvisorTest {
     ControllerAdvisor controllerAdvisor = new ControllerAdvisor();
 
     // Call handleBindException
-    ResponseEntity<Object> responseEntity =
-        controllerAdvisor.handleBindException(
-            bindException, new HttpHeaders(), HttpStatus.BAD_REQUEST, mock(WebRequest.class));
+    ResponseEntity<Object> responseEntity = controllerAdvisor.handleBindException(
+      bindException,
+      new HttpHeaders(),
+      HttpStatus.BAD_REQUEST,
+      mock(WebRequest.class)
+    );
 
     // Verify the response
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);

@@ -27,13 +27,13 @@ Remainders:
 - Diagram filename
   - Diagram names must be lower kebab case.
   - Use the extension `.drawio.svg` to enable GitHub to render a preview of the diagram, while
-  indicating that this is a draw.io file.
+    indicating that this is a draw.io file.
 
 ## Create a diagram in draw.io
 
 1. Open your browser and navigate to [draw.io].
 2. Log in with your GitHub account.
-3. To create a diagram click on *File* > *New...*.
+3. To create a diagram click on _File_ > _New..._.
 4. Select the extension `Editable Vector Image (.svg)`.
 5. Enter the name of the diagram and use the extension `.drawio.svg`.
 6. Click on `Create`.
@@ -42,45 +42,47 @@ Remainders:
 
 If you are saving a file that has been opened from GitHub,
 
-1. Click on *File* > *Save* (*Ctrl + S*)
-2. Specify a commit message and click on *OK*.
+1. Click on _File_ > _Save_ (_Ctrl + S_)
+2. Specify a commit message and click on _OK_.
 
 Otherwise,
 
-1. Click on *File* > *Save as...*.
+1. Click on _File_ > _Save as..._.
 2. Check that the filename has the extension `.drawio.svg`.
 3. Click on `GitHub`.
-4. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click *OK*.
-5. Select the folder `docs/drawio/diagrams` and click on *OK*.
+4. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click _OK_.
+5. Select the folder `docs/drawio/diagrams` and click on _OK_.
 
 ## Open a diagram
 
-1. To open a diagram that you have recently open, click on *File* > *Open Recent* and select the
+1. To open a diagram that you have recently open, click on _File_ > _Open Recent_ and select the
    diagram.
-2. Otherwise, click on *File* > *Open from* > *GitHub...*.
-3. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click *OK*.
-4. Select a diagram from the folder `docs/drawio/diagrams` and click on *OK*.
+2. Otherwise, click on _File_ > _Open from_ > _GitHub..._.
+3. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click _OK_.
+4. Select a diagram from the folder `docs/drawio/diagrams` and click on _OK_.
 
 ## Open a project library
 
-1. Click on *File* > *Open Library from...* > *GitHub...*.
-2. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click *OK*.
-3. Select a library from the folder `docs/drawio/libraries` and click on *OK*.
+1. Click on _File_ > _Open Library from..._ > _GitHub..._.
+2. Enter Value (org/repo/ref): `<gh_username>/openchallenges/<branch_name>` and click _OK_.
+3. Select a library from the folder `docs/drawio/libraries` and click on _OK_.
 
 ## Add an icon to a library
 
 1. Download the icon in svg format that you want to add from the official website.
+
    - If an official icon in svg format cannot be found, it is accepted to use an unofficial icon as
      long as the icon looks identical to the official icon.
    - If an icon can only be found in bitmap format (png, jpg), the icon must be converted to an svg
      document. Note that the icon must be **embeded** in the svg document. Consider this element
      taken from an svg file:
-       - ✔️ `xlink:href="data:image/png;base64,<data>`: the bitmap icon is encoded in base64
-         (`<data>`) and is embedded in the svg file.
-       - ❌ `xlink:href="rest-client.png"`: the bitmap icon is linked in the svg document (the icon
-         is not embedded).
 
-      (e.g., see [rest-client.svg](icons/rest-client.svg)).
+     - ✔️ `xlink:href="data:image/png;base64,<data>`: the bitmap icon is encoded in base64
+       (`<data>`) and is embedded in the svg file.
+     - ❌ `xlink:href="rest-client.png"`: the bitmap icon is linked in the svg document (the icon
+       is not embedded).
+
+     (e.g., see [rest-client.svg](icons/rest-client.svg)).
 
 2. Verify that the icon meets the following requirements.
    - The height of the icon must be 80 pt.

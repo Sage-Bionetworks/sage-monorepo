@@ -13,10 +13,7 @@ logger.info('Welcome to the deployment of the OpenChallenges stacks.');
 const app = new App();
 const cnbDevStack = new CnbDevStack(app, 'cnb-dev');
 const openChallengesStack = new OpenChallengesStack(app, 'openchallenges');
-const openChallengesPreviewStack = new OpenChallengesPreviewStack(
-  app,
-  'openchallenges-preview',
-);
+const openChallengesPreviewStack = new OpenChallengesPreviewStack(app, 'openchallenges-preview');
 
 new CloudBackend(cnbDevStack, {
   hostname: 'app.terraform.io',

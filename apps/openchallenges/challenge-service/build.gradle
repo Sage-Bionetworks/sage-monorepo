@@ -8,7 +8,6 @@ buildscript {
 }
 
 plugins {
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'jacoco'
   id 'java'
   id 'org.sonarqube' version "${sonarqubeVersion}"
@@ -144,24 +143,6 @@ sonar {
 
 bootBuildImage {
   imageName = "ghcr.io/sage-bionetworks/${project.name}-base:local"
-}
-
-spotless {
-  // format 'misc', {
-  //   target '*.gradle', '*.md', '.gitignore'
-
-  //   trimTrailingWhitespace()
-  //   indentWithSpaces(2)
-  //   endWithNewline()
-  // }
-
-  java {
-    target 'src/*/java/**/*.java'
-
-    importOrder()
-    removeUnusedImports()
-    googleJavaFormat()
-  }
 }
 
 // flyway {

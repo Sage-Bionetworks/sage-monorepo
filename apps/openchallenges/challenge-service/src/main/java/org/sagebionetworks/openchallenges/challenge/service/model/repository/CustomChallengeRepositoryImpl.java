@@ -36,17 +36,24 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
   private static final Logger LOG = LoggerFactory.getLogger(CustomChallengeRepositoryImpl.class);
 
-  @PersistenceContext private EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
   public Page<ChallengeEntity> findAll(
-      Pageable pageable, ChallengeSearchQueryDto query, String... fields) {
+    Pageable pageable,
+    ChallengeSearchQueryDto query,
+    String... fields
+  ) {
     SearchResult<ChallengeEntity> result = getSearchResult(pageable, query, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<ChallengeEntity> getSearchResult(
-      Pageable pageable, ChallengeSearchQueryDto query, String[] fields) {
+    Pageable pageable,
+    ChallengeSearchQueryDto query,
+    String[] fields
+  ) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(ChallengeEntity.class).predicate();
     SearchSortFactory sf = searchSession.scope(ChallengeEntity.class).sort();
@@ -91,12 +98,11 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
 
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
-    SearchResult<ChallengeEntity> result =
-        searchSession
-            .search(ChallengeEntity.class)
-            .where(topLevelPredicate)
-            .sort(sort)
-            .fetch((int) pageable.getOffset(), pageable.getPageSize());
+    SearchResult<ChallengeEntity> result = searchSession
+      .search(ChallengeEntity.class)
+      .where(topLevelPredicate)
+      .sort(sort)
+      .fetch((int) pageable.getOffset(), pageable.getPageSize());
     return result;
   }
 
@@ -109,12 +115,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getSearchTermsPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query, String[] fields) {
-    return pf.simpleQueryString()
-        .fields(fields)
-        .matching(query.getSearchTerms())
-        .defaultOperator(BooleanOperator.AND)
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query,
+    String[] fields
+  ) {
+    return pf
+      .simpleQueryString()
+      .fields(fields)
+      .matching(query.getSearchTerms())
+      .defaultOperator(BooleanOperator.AND)
+      .toPredicate();
   }
 
   /**
@@ -125,14 +135,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getChallengeStatusPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeStatusDto status : query.getStatus()) {
-                b.should(pf.match().field("status").matching(status.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (ChallengeStatusDto status : query.getStatus()) {
+          b.should(pf.match().field("status").matching(status.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -143,25 +155,29 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getChallengePlatformPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (String platform : query.getPlatforms()) {
-                b.should(pf.match().field("platform.slug").matching(platform));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (String platform : query.getPlatforms()) {
+          b.should(pf.match().field("platform.slug").matching(platform));
+        }
+      })
+      .toPredicate();
   }
 
   private SearchPredicate getChallengeOperationPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (Long operation : query.getOperations()) {
-                b.should(pf.match().field("operation.id").matching(operation));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (Long operation : query.getOperations()) {
+          b.should(pf.match().field("operation.id").matching(operation));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -173,26 +189,29 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getChallengeSubmissionTypesPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
-                b.should(
-                    pf.match().field("submission_types.name").matching(submissionType.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (ChallengeSubmissionTypeDto submissionType : query.getSubmissionTypes()) {
+          b.should(pf.match().field("submission_types.name").matching(submissionType.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   private SearchPredicate getInputDataTypesPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (Long edamConceptId : query.getInputDataTypes()) {
-                b.should(pf.match().field("input_data_types.id").matching(edamConceptId));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (Long edamConceptId : query.getInputDataTypes()) {
+          b.should(pf.match().field("input_data_types.id").matching(edamConceptId));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -204,15 +223,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getOrganizationsPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (Long organizationId : query.getOrganizations()) {
-                b.should(
-                    pf.match().field("contributions.organization_id").matching(organizationId));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (Long organizationId : query.getOrganizations()) {
+          b.should(pf.match().field("contributions.organization_id").matching(organizationId));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -224,14 +244,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getChallengeIncentivesPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (ChallengeIncentiveDto incentive : query.getIncentives()) {
-                b.should(pf.match().field("incentives.name").matching(incentive.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (ChallengeIncentiveDto incentive : query.getIncentives()) {
+          b.should(pf.match().field("incentives.name").matching(incentive.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -239,15 +261,22 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * RECENTLY_STARTED, RECENTLY_ENDED, STARTING_SOON, ENDING_SOON.
    */
   private SearchPredicate getStartEndDateAndStatusBooleanPredicateClausesStep(
-      SearchPredicateFactory pf,
-      String dateField,
-      LocalDate minDate,
-      LocalDate maxDate,
-      ChallengeStatusDto status) {
-    SearchPredicate datePredicate =
-        pf.range().field(dateField).between(minDate, maxDate).toPredicate();
-    SearchPredicate statusPredicate =
-        pf.match().field("status").matching(status.toString()).toPredicate();
+    SearchPredicateFactory pf,
+    String dateField,
+    LocalDate minDate,
+    LocalDate maxDate,
+    ChallengeStatusDto status
+  ) {
+    SearchPredicate datePredicate = pf
+      .range()
+      .field(dateField)
+      .between(minDate, maxDate)
+      .toPredicate();
+    SearchPredicate statusPredicate = pf
+      .match()
+      .field("status")
+      .matching(status.toString())
+      .toPredicate();
     return pf.bool(innerB -> innerB.must(datePredicate).must(statusPredicate)).toPredicate();
   }
 
@@ -256,43 +285,68 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * specified.
    */
   private SearchPredicate getCategoriesPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
     LocalDate now = LocalDate.now();
     LocalDate oneMonthLater = now.plusMonths(1);
     LocalDate threeMonthsAgo = now.minusMonths(3);
 
-    return pf.bool(
-            b -> {
-              for (ChallengeCategoryDto category : query.getCategories()) {
-                switch (category) {
-                  case RECENTLY_STARTED -> {
-                    b.should(
-                        getStartEndDateAndStatusBooleanPredicateClausesStep(
-                            pf, "start_date", threeMonthsAgo, now, ChallengeStatusDto.ACTIVE));
-                  }
-                  case RECENTLY_ENDED -> {
-                    b.should(
-                        getStartEndDateAndStatusBooleanPredicateClausesStep(
-                            pf, "end_date", threeMonthsAgo, now, ChallengeStatusDto.COMPLETED));
-                  }
-                  case STARTING_SOON -> {
-                    b.should(
-                        getStartEndDateAndStatusBooleanPredicateClausesStep(
-                            pf, "start_date", now, oneMonthLater, ChallengeStatusDto.UPCOMING));
-                  }
-                  case ENDING_SOON -> {
-                    b.should(
-                        getStartEndDateAndStatusBooleanPredicateClausesStep(
-                            pf, "end_date", now, oneMonthLater, ChallengeStatusDto.ACTIVE));
-                  }
-                  default -> {
-                    b.should(pf.match().field("categories.name").matching(category.toString()));
-                  }
-                }
-              }
-            })
-        .toPredicate();
+    return pf
+      .bool(b -> {
+        for (ChallengeCategoryDto category : query.getCategories()) {
+          switch (category) {
+            case RECENTLY_STARTED -> {
+              b.should(
+                getStartEndDateAndStatusBooleanPredicateClausesStep(
+                  pf,
+                  "start_date",
+                  threeMonthsAgo,
+                  now,
+                  ChallengeStatusDto.ACTIVE
+                )
+              );
+            }
+            case RECENTLY_ENDED -> {
+              b.should(
+                getStartEndDateAndStatusBooleanPredicateClausesStep(
+                  pf,
+                  "end_date",
+                  threeMonthsAgo,
+                  now,
+                  ChallengeStatusDto.COMPLETED
+                )
+              );
+            }
+            case STARTING_SOON -> {
+              b.should(
+                getStartEndDateAndStatusBooleanPredicateClausesStep(
+                  pf,
+                  "start_date",
+                  now,
+                  oneMonthLater,
+                  ChallengeStatusDto.UPCOMING
+                )
+              );
+            }
+            case ENDING_SOON -> {
+              b.should(
+                getStartEndDateAndStatusBooleanPredicateClausesStep(
+                  pf,
+                  "end_date",
+                  now,
+                  oneMonthLater,
+                  ChallengeStatusDto.ACTIVE
+                )
+              );
+            }
+            default -> {
+              b.should(pf.match().field("categories.name").matching(category.toString()));
+            }
+          }
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -303,11 +357,14 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate getChallengeStartDatePredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-    return pf.range()
-        .field("start_date")
-        .between(query.getMinStartDate(), query.getMaxStartDate())
-        .toPredicate();
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
+    return pf
+      .range()
+      .field("start_date")
+      .between(query.getMinStartDate(), query.getMaxStartDate())
+      .toPredicate();
   }
 
   /**
@@ -318,15 +375,17 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchPredicate buildTopLevelPredicate(
-      SearchPredicateFactory pf, List<SearchPredicate> predicates) {
-    return pf.bool(
-            b -> {
-              b.must(f -> f.matchAll());
-              for (SearchPredicate predicate : predicates) {
-                b.must(predicate);
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    List<SearchPredicate> predicates
+  ) {
+    return pf
+      .bool(b -> {
+        b.must(f -> f.matchAll());
+        for (SearchPredicate predicate : predicates) {
+          b.must(predicate);
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -337,17 +396,18 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
    * @return
    */
   private SearchSort getSearchSort(SearchSortFactory sf, ChallengeSearchQueryDto query) {
-    SortOrder orderWithDefaultAsc =
-        query.getDirection() == ChallengeDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    SortOrder orderWithDefaultDesc =
-        query.getDirection() == ChallengeDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
+    SortOrder orderWithDefaultAsc = query.getDirection() == ChallengeDirectionDto.DESC
+      ? SortOrder.DESC
+      : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc = query.getDirection() == ChallengeDirectionDto.ASC
+      ? SortOrder.ASC
+      : SortOrder.DESC;
 
     SearchSort createdSort = sf.field("created_at").order(orderWithDefaultDesc).toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
-    SearchSort relevanceSort =
-        (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
-            ? createdSort
-            : scoreSort;
+    SearchSort relevanceSort = (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+      ? createdSort
+      : scoreSort;
 
     switch (query.getSort()) {
       case CREATED -> {
@@ -370,14 +430,16 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
       }
       default -> {
         throw new BadRequestException(
-            String.format("Unhandled sorting strategy '%s'", query.getSort()));
+          String.format("Unhandled sorting strategy '%s'", query.getSort())
+        );
       }
     }
   }
 
   private SearchPredicate getSearchSortPredicate(
-      SearchPredicateFactory pf, ChallengeSearchQueryDto query) {
-
+    SearchPredicateFactory pf,
+    ChallengeSearchQueryDto query
+  ) {
     switch (query.getSort()) {
       case RANDOM -> {
         Integer seed = query.getSortSeed();
@@ -385,19 +447,21 @@ public class CustomChallengeRepositoryImpl implements CustomChallengeRepository 
           SecureRandom rand = new SecureRandom();
           seed = rand.nextInt(Integer.MAX_VALUE);
         }
-        return pf.extension(ElasticsearchExtension.get())
-            .fromJson(
-                "{"
-                    + "  \"function_score\": {"
-                    + "    \"random_score\": {"
-                    + "      \"seed\": "
-                    + seed
-                    + ","
-                    + "      \"field\": \"_seq_no\""
-                    + "    }"
-                    + "  }"
-                    + "}")
-            .toPredicate();
+        return pf
+          .extension(ElasticsearchExtension.get())
+          .fromJson(
+            "{" +
+            "  \"function_score\": {" +
+            "    \"random_score\": {" +
+            "      \"seed\": " +
+            seed +
+            "," +
+            "      \"field\": \"_seq_no\"" +
+            "    }" +
+            "  }" +
+            "}"
+          )
+          .toPredicate();
       }
       default -> {
         return null;

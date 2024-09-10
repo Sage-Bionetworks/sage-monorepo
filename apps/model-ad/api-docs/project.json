@@ -35,39 +35,24 @@
       "options": {
         "context": "apps/model-ad/api-docs",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-api-docs"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=raw,value=local",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-api-docs"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
-      "dependsOn": [
-        "build"
-      ]
+      "dependsOn": ["build"]
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/model-ad/api-docs",
         "metadata": {
-          "images": [
-            "ghcr.io/sage-bionetworks/model-ad-api-docs"
-          ],
-          "tags": [
-            "type=edge,branch=main",
-            "type=sha"
-          ]
+          "images": ["ghcr.io/sage-bionetworks/model-ad-api-docs"],
+          "tags": ["type=edge,branch=main", "type=sha"]
         },
         "push": true
       },
-      "dependsOn": [
-        "build-image"
-      ]
+      "dependsOn": ["build-image"]
     },
     "scan-image": {
       "executor": "nx:run-commands",
@@ -77,11 +62,6 @@
       }
     }
   },
-  "tags": [
-    "type:docs",
-    "scope:backend"
-  ],
-  "implicitDependencies": [
-    "model-ad-api-description"
-  ]
+  "tags": ["type:docs", "scope:backend"],
+  "implicitDependencies": ["model-ad-api-description"]
 }

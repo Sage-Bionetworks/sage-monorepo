@@ -3,7 +3,6 @@
 The submission type of the challenge.
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
 
-
+| Name | Type | Description | Notes |
+| ---- | ---- | ----------- | ----- |

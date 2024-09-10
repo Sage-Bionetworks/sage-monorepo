@@ -15,11 +15,7 @@ import {
 } from 'rxjs';
 import { Tab } from './tab.model';
 import { ORG_PROFILE_TABS } from './org-profile-tabs';
-import {
-  Avatar,
-  AvatarComponent,
-  FooterComponent,
-} from '@sagebionetworks/openchallenges/ui';
+import { Avatar, AvatarComponent, FooterComponent } from '@sagebionetworks/openchallenges/ui';
 import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import {
   ImageAspectRatio,
@@ -30,10 +26,7 @@ import {
   OrganizationService,
   Image,
 } from '@sagebionetworks/openchallenges/api-client-angular';
-import {
-  HttpStatusRedirect,
-  handleHttpError,
-} from '@sagebionetworks/openchallenges/util';
+import { HttpStatusRedirect, handleHttpError } from '@sagebionetworks/openchallenges/util';
 import { CommonModule, Location } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { OrgProfileChallengesComponent } from './org-profile-challenges/org-profile-challenges.component';
@@ -95,9 +88,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // add more status codes if found
     this.organization$ = this.activatedRoute.params.pipe(
-      switchMap((params) =>
-        this.organizationService.getOrganization(params['orgLogin']),
-      ),
+      switchMap((params) => this.organizationService.getOrganization(params['orgLogin'])),
       catchError((err) => {
         const error = handleHttpError(err, this.router, {
           404: '/not-found',
@@ -130,14 +121,11 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
       switchMap((org) => this.getOrganizationImageUrl(org, ImageHeight._500px)),
     );
 
-    const activeTabKey$: Observable<string> =
-      this.activatedRoute.queryParams.pipe(
-        map((params) =>
-          Object.keys(this.tabs).includes(params['tab'])
-            ? params['tab']
-            : 'overview',
-        ),
-      );
+    const activeTabKey$: Observable<string> = this.activatedRoute.queryParams.pipe(
+      map((params) =>
+        Object.keys(this.tabs).includes(params['tab']) ? params['tab'] : 'overview',
+      ),
+    );
 
     const combineSub = combineLatest({
       org: this.organization$,
@@ -155,10 +143,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private getOrganizationImageUrl(
-    org: Organization,
-    height: ImageHeight,
-  ): Observable<Image> {
+  private getOrganizationImageUrl(org: Organization, height: ImageHeight): Observable<Image> {
     return this.imageService
       .getImage({
         objectKey: org.avatarKey,
@@ -167,9 +152,7 @@ export class OrgProfileComponent implements OnInit, OnDestroy {
       } as ImageQuery)
       .pipe(
         catchError(() => {
-          console.error(
-            'Unable to get the image url. Please check the logs of the image service.',
-          );
+          console.error('Unable to get the image url. Please check the logs of the image service.');
           return of({ url: '' });
         }),
       );

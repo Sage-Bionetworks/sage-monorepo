@@ -27,8 +27,6 @@ export function forkJoinConcurrent(
     // Sort the array of value/index pairs by index - so the value
     // indices correspond to the source observable indices and then
     // map the pair to the value:
-    map((pairs) =>
-      pairs.sort((l, r) => l.index - r.index).map((pair) => pair.value),
-    ),
+    map((pairs) => pairs.sort((l, r) => l.index - r.index).map((pair) => pair.value)),
   );
 }

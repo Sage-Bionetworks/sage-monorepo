@@ -18,8 +18,7 @@ Open Kibana in your browser at http://localhost:5601.
    - Local ELK stack:
      - Username: `elastic`
      - Password: `changeme`
-2. Click on Kibana app menu (three-line icon) > *Logs*.
+2. Click on Kibana app menu (three-line icon) > _Logs_.
 3. Filter logs, e.g.
    - by Docker container name: `docker.name:"/challenge-logstash"`.
    - by timestamp using the dedicated UI component.
-

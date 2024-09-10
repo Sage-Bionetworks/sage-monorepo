@@ -51,11 +51,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     const network = new Network(this, 'network', networkConfig);
 
     // The security groups
-    const securityGroups = new SecurityGroups(
-      this,
-      'security_groups',
-      network.vpc.id,
-    );
+    const securityGroups = new SecurityGroups(this, 'security_groups', network.vpc.id);
 
     // The bastion
     const bastionKeyPair = new KeyPair(this, 'bastion_keypair', {
@@ -83,19 +79,12 @@ export class OpenChallengesPreviewStack extends SageStack {
       defaultRegion: AmazonRegion.US_EAST_1,
       instanceType: 't3.xlarge',
       keyName: bastionKeyName, // TODO Set unique key
-      securityGroupIds: [
-        securityGroups.previewInstanceSg.id,
-        securityGroups.sshFromBastionSg.id,
-      ],
+      securityGroupIds: [securityGroups.previewInstanceSg.id, securityGroups.sshFromBastionSg.id],
       subnetId: network.privateSubnets[0].id,
       tagPrefix: 'openchallenges-preview',
     });
 
-    const previewInstance = new PreviewInstance(
-      this,
-      'preview_instance',
-      previewInstanceConfig,
-    );
+    const previewInstance = new PreviewInstance(this, 'preview_instance', previewInstanceConfig);
 
     // The preview instance ALB
     const previewInstanceAlb = new PreviewInstanceAlb(
@@ -142,8 +131,7 @@ export class OpenChallengesPreviewStack extends SageStack {
     });
     new TerraformOutput(this, 'preview_instance_endpoint', {
       value: previewInstanceAlb.lb.dnsName,
-      description:
-        'DNS name (endpoint) of the AWS ALB for the preview instance',
+      description: 'DNS name (endpoint) of the AWS ALB for the preview instance',
     });
   }
 }

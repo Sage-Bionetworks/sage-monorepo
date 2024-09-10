@@ -17,7 +17,8 @@ public class ThumborConfig {
   @Bean
   public Thumbor thumbor() {
     return Thumbor.create(
-        this.imageServiceConfigData.getThumborHost(),
-        this.imageServiceConfigData.getThumborSecurityKey());
+      this.imageServiceConfigData.getThumborHost(),
+      this.imageServiceConfigData.getThumborSecurityKey()
+    );
   }
 }

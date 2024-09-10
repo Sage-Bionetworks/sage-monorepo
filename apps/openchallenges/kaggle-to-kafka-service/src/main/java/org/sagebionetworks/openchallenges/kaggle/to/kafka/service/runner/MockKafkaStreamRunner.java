@@ -11,8 +11,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @ConditionalOnProperty(
-    name = "kaggle-to-kafka-service.enable-mock-challenges",
-    havingValue = "true")
+  name = "kaggle-to-kafka-service.enable-mock-challenges",
+  havingValue = "true"
+)
 public class MockKafkaStreamRunner implements StreamRunner {
 
   private final KaggleToKafkaServiceConfigData kaggleToKafkaServiceConfigData;
@@ -46,27 +47,28 @@ public class MockKafkaStreamRunner implements StreamRunner {
 
   @Override
   public void start() {
-    String[] searchTerms =
-        kaggleToKafkaServiceConfigData.getKaggleSearchTerms().toArray(String[]::new);
+    String[] searchTerms = kaggleToKafkaServiceConfigData
+      .getKaggleSearchTerms()
+      .toArray(String[]::new);
     // int minChallengeNameLength = config.getMockMinChallengeNameLength();
     // int maxChallengeNameLength = config.getMockMaxChallengeNameLength();
     long sleepMs = kaggleToKafkaServiceConfigData.getMockSleepMs();
 
     log.info(
-        "Starting mock filtering Kaggle challenges for search terms {}",
-        Arrays.toString(searchTerms));
+      "Starting mock filtering Kaggle challenges for search terms {}",
+      Arrays.toString(searchTerms)
+    );
     simulateChallengeStream(sleepMs);
   }
 
   private void simulateChallengeStream(long sleepMs) {
     Executors.newSingleThreadExecutor()
-        .submit(
-            () -> {
-              while (true) {
-                log.info("plop");
-                sleep(sleepMs);
-              }
-            });
+      .submit(() -> {
+        while (true) {
+          log.info("plop");
+          sleep(sleepMs);
+        }
+      });
   }
 
   private void sleep(long sleepMs) {
@@ -74,10 +76,10 @@ public class MockKafkaStreamRunner implements StreamRunner {
       Thread.sleep(sleepMs);
     } catch (InterruptedException e) {
       throw new KaggleToKafkaServiceException(
-          "Error while sleeping for waiting new status to create.");
+        "Error while sleeping for waiting new status to create."
+      );
     }
   }
-
   // private String getRandomChallengeName(String[] words, int minChallengeNameLength,
   // maxChallengeNameLength) {
   //   StringBuilder challengeName = new StringBuilder();

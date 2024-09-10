@@ -5,7 +5,6 @@ buildscript {
 }
 
 plugins {
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
   id 'java'
   id 'jvm-test-suite'
@@ -105,24 +104,6 @@ test {
   }
 
   finalizedBy jacocoTestReport
-}
-
-spotless {
-  // format 'misc', {
-  //   target '*.gradle', '*.md', '.gitignore'
-
-  //   trimTrailingWhitespace()
-  //   indentWithSpaces(2)
-  //   endWithNewline()
-  // }
-
-  java {
-    target 'src/*/java/**/*.java'
-
-    importOrder()
-    removeUnusedImports()
-    googleJavaFormat()
-  }
 }
 
 jacocoTestReport {

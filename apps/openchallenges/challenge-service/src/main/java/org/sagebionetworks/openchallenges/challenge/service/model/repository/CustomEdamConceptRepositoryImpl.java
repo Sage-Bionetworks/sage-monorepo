@@ -26,17 +26,24 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptRepository {
 
-  @PersistenceContext private EntityManager entityManager;
+  @PersistenceContext
+  private EntityManager entityManager;
 
   @Override
   public Page<EdamConceptEntity> findAll(
-      Pageable pageable, EdamConceptSearchQueryDto query, String... fields) {
+    Pageable pageable,
+    EdamConceptSearchQueryDto query,
+    String... fields
+  ) {
     SearchResult<EdamConceptEntity> result = getSearchResult(pageable, query, fields);
     return new PageImpl<>(result.hits(), pageable, result.total().hitCount());
   }
 
   private SearchResult<EdamConceptEntity> getSearchResult(
-      Pageable pageable, EdamConceptSearchQueryDto query, String[] fields) {
+    Pageable pageable,
+    EdamConceptSearchQueryDto query,
+    String[] fields
+  ) {
     SearchSession searchSession = Search.session(entityManager);
     SearchPredicateFactory pf = searchSession.scope(EdamConceptEntity.class).predicate();
     SearchSortFactory sf = searchSession.scope(EdamConceptEntity.class).sort();
@@ -57,10 +64,10 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
     SearchPredicate topLevelPredicate = buildTopLevelPredicate(pf, predicates);
 
     return searchSession
-        .search(EdamConceptEntity.class)
-        .where(topLevelPredicate)
-        .sort(sort)
-        .fetch((int) pageable.getOffset(), pageable.getPageSize());
+      .search(EdamConceptEntity.class)
+      .where(topLevelPredicate)
+      .sort(sort)
+      .fetch((int) pageable.getOffset(), pageable.getPageSize());
   }
 
   /**
@@ -71,14 +78,16 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
    * @return
    */
   private SearchPredicate getIdsPredicate(
-      SearchPredicateFactory pf, EdamConceptSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (Long id : query.getIds()) {
-                b.should(pf.match().field("id").matching(id));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    EdamConceptSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (Long id : query.getIds()) {
+          b.should(pf.match().field("id").matching(id));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -90,12 +99,16 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
    * @return
    */
   private SearchPredicate getSearchTermsPredicate(
-      SearchPredicateFactory pf, EdamConceptSearchQueryDto query, String[] fields) {
-    return pf.simpleQueryString()
-        .fields(fields)
-        .matching(query.getSearchTerms())
-        .defaultOperator(BooleanOperator.AND)
-        .toPredicate();
+    SearchPredicateFactory pf,
+    EdamConceptSearchQueryDto query,
+    String[] fields
+  ) {
+    return pf
+      .simpleQueryString()
+      .fields(fields)
+      .matching(query.getSearchTerms())
+      .defaultOperator(BooleanOperator.AND)
+      .toPredicate();
   }
 
   /**
@@ -106,14 +119,16 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
    * @return
    */
   private SearchPredicate getEdamSectionsPredicate(
-      SearchPredicateFactory pf, EdamConceptSearchQueryDto query) {
-    return pf.bool(
-            b -> {
-              for (EdamSectionDto section : query.getSections()) {
-                b.should(pf.match().field("section").matching(section.toString()));
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    EdamConceptSearchQueryDto query
+  ) {
+    return pf
+      .bool(b -> {
+        for (EdamSectionDto section : query.getSections()) {
+          b.should(pf.match().field("section").matching(section.toString()));
+        }
+      })
+      .toPredicate();
   }
 
   /**
@@ -124,30 +139,35 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
    * @return
    */
   private SearchPredicate buildTopLevelPredicate(
-      SearchPredicateFactory pf, List<SearchPredicate> predicates) {
-    return pf.bool(
-            b -> {
-              b.must(f -> f.matchAll());
-              for (SearchPredicate predicate : predicates) {
-                b.must(predicate);
-              }
-            })
-        .toPredicate();
+    SearchPredicateFactory pf,
+    List<SearchPredicate> predicates
+  ) {
+    return pf
+      .bool(b -> {
+        b.must(f -> f.matchAll());
+        for (SearchPredicate predicate : predicates) {
+          b.must(predicate);
+        }
+      })
+      .toPredicate();
   }
 
   private SearchSort getSearchSort(SearchSortFactory sf, EdamConceptSearchQueryDto query) {
-    SortOrder orderWithDefaultAsc =
-        query.getDirection() == EdamConceptDirectionDto.DESC ? SortOrder.DESC : SortOrder.ASC;
-    SortOrder orderWithDefaultDesc =
-        query.getDirection() == EdamConceptDirectionDto.ASC ? SortOrder.ASC : SortOrder.DESC;
+    SortOrder orderWithDefaultAsc = query.getDirection() == EdamConceptDirectionDto.DESC
+      ? SortOrder.DESC
+      : SortOrder.ASC;
+    SortOrder orderWithDefaultDesc = query.getDirection() == EdamConceptDirectionDto.ASC
+      ? SortOrder.ASC
+      : SortOrder.DESC;
 
-    SearchSort preferredLabelSort =
-        sf.field("preferred_label_sort").order(orderWithDefaultAsc).toSort();
+    SearchSort preferredLabelSort = sf
+      .field("preferred_label_sort")
+      .order(orderWithDefaultAsc)
+      .toSort();
     SearchSort scoreSort = sf.score().order(orderWithDefaultDesc).toSort();
-    SearchSort relevanceSort =
-        (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
-            ? preferredLabelSort
-            : scoreSort;
+    SearchSort relevanceSort = (query.getSearchTerms() == null || query.getSearchTerms().isBlank())
+      ? preferredLabelSort
+      : scoreSort;
 
     switch (query.getSort()) {
       case PREFERRED_LABEL -> {
@@ -157,7 +177,8 @@ public class CustomEdamConceptRepositoryImpl implements CustomEdamConceptReposit
         return relevanceSort;
       }
       default -> throw new BadRequestException(
-          String.format("Unhandled sorting strategy '%s'", query.getSort()));
+        String.format("Unhandled sorting strategy '%s'", query.getSort())
+      );
     }
   }
 }

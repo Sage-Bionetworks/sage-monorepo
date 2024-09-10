@@ -14,12 +14,7 @@ import { RouterModule } from '@angular/router';
 @Component({
   selector: 'openchallenges-random-challenge-list',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    ChallengeCardComponent,
-    RouterModule,
-  ],
+  imports: [CommonModule, MatButtonModule, ChallengeCardComponent, RouterModule],
   templateUrl: './random-challenge-list.component.html',
   styleUrls: ['./random-challenge-list.component.scss'],
 })

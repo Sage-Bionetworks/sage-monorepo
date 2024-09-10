@@ -4,4 +4,4 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengeRepository
-    extends JpaRepository<ChallengeEntity, Long>, CustomChallengeRepository {}
+  extends JpaRepository<ChallengeEntity, Long>, CustomChallengeRepository {}

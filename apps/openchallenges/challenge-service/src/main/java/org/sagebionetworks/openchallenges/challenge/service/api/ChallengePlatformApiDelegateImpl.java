@@ -23,7 +23,8 @@ public class ChallengePlatformApiDelegateImpl implements ChallengePlatformApiDel
 
   @Override
   public ResponseEntity<ChallengePlatformsPageDto> listChallengePlatforms(
-      ChallengePlatformSearchQueryDto query) {
+    ChallengePlatformSearchQueryDto query
+  ) {
     return ResponseEntity.ok(challengePlatformService.listChallengePlatforms(query));
   }
 }

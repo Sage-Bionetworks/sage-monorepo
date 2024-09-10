@@ -6,10 +6,13 @@ import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class SimpleChallengePlatformMapper
-    extends BaseMapper<SimpleChallengePlatformEntity, SimpleChallengePlatformDto> {
+  extends BaseMapper<SimpleChallengePlatformEntity, SimpleChallengePlatformDto> {
+
   @Override
   public SimpleChallengePlatformEntity convertToEntity(
-      SimpleChallengePlatformDto dto, Object... args) {
+    SimpleChallengePlatformDto dto,
+    Object... args
+  ) {
     SimpleChallengePlatformEntity entity = new SimpleChallengePlatformEntity();
     if (dto != null) {
       BeanUtils.copyProperties(dto, entity);
@@ -19,7 +22,9 @@ public class SimpleChallengePlatformMapper
 
   @Override
   public SimpleChallengePlatformDto convertToDto(
-      SimpleChallengePlatformEntity entity, Object... args) {
+    SimpleChallengePlatformEntity entity,
+    Object... args
+  ) {
     SimpleChallengePlatformDto dto = new SimpleChallengePlatformDto();
     if (entity != null) {
       BeanUtils.copyProperties(entity, dto);

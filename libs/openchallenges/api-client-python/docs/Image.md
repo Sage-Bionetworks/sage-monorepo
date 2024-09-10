@@ -3,9 +3,10 @@
 An image
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**url** | **str** |  | 
+
+| Name    | Type    | Description | Notes |
+| ------- | ------- | ----------- | ----- |
+| **url** | **str** |             |
 
 ## Example
 
@@ -24,6 +25,5 @@ image_dict = image_instance.to_dict()
 # create an instance of Image from a dict
 image_form_dict = image.from_dict(image_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

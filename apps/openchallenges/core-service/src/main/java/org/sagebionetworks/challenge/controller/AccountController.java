@@ -20,7 +20,8 @@ public class AccountController {
 
   @GetMapping("/challenge-account/{account_number}")
   public ResponseEntity<ChallengeAccount> getChallengeAccount(
-      @PathVariable("account_number") String accountNumber) {
+    @PathVariable("account_number") String accountNumber
+  ) {
     log.info("Reading account by ID {}", accountNumber);
     return ResponseEntity.ok(accountService.readChallengeAccount(accountNumber));
   }

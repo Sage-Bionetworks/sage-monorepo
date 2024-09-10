@@ -55,24 +55,20 @@ export class PreviewInstanceAlb extends Construct {
       tags: { Name: `${nameTagPrefix}-preview-instance-tg` },
     });
 
-    this.httpsListener = new LbListener(
-      this,
-      'preview_instance_alb_https_443',
-      {
-        loadBalancerArn: this.lb.arn,
-        port: 443,
-        protocol: 'HTTPS',
-        certificateArn:
-          'arn:aws:acm:us-east-1:384625883722:certificate/c1d8b793-66d1-41eb-bddf-3cfedbad6a72',
+    this.httpsListener = new LbListener(this, 'preview_instance_alb_https_443', {
+      loadBalancerArn: this.lb.arn,
+      port: 443,
+      protocol: 'HTTPS',
+      certificateArn:
+        'arn:aws:acm:us-east-1:384625883722:certificate/c1d8b793-66d1-41eb-bddf-3cfedbad6a72',
 
-        defaultAction: [
-          {
-            type: 'forward',
-            targetGroupArn: this.targetGroup.arn,
-          },
-        ],
-      },
-    );
+      defaultAction: [
+        {
+          type: 'forward',
+          targetGroupArn: this.targetGroup.arn,
+        },
+      ],
+    });
 
     this.httpListener = new LbListener(this, 'preview_instance_alb_http_80', {
       loadBalancerArn: this.lb.arn,

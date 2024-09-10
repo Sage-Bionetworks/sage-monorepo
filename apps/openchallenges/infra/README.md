@@ -43,9 +43,9 @@ stack with the AWS provider.
 
 1. Create the TF Cloud workspace by running the following command (currently hard-coded in
    `main.ts`: `openchallenges-test`).
-    ```
-    cdktf diff
-    ```
+   ```
+   cdktf diff
+   ```
 2. Login to your TF Cloud account
 3. Select the workspace
 4. [Add a variable] named `AWS_ACCESS_KEY_ID` (sensitive, environment variable).
@@ -311,6 +311,5 @@ Removing the directory `cdktf.out` and running `cdktf apply` again should solve 
 <!-- Links -->
 
 [Terraform CDK]: https://developer.hashicorp.com/terraform/cdktf
-
 [DK for Terraform]: https://developer.hashicorp.com/terraform/cdktf
 [Add a variable]: https://developer.hashicorp.com/terraform/cloud-docs/workspaces/variables/managing-variables#add-a-variable

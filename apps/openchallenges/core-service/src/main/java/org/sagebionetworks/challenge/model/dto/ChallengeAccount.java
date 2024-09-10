@@ -1,10 +1,9 @@
 package org.sagebionetworks.challenge.model.dto;
 
+import java.math.BigDecimal;
+import lombok.Data;
 import org.sagebionetworks.challenge.model.AccountStatus;
 import org.sagebionetworks.challenge.model.AccountType;
-import lombok.Data;
-
-import java.math.BigDecimal;
 
 @Data
 public class ChallengeAccount {
@@ -16,5 +15,4 @@ public class ChallengeAccount {
   private BigDecimal availableBalance;
   private BigDecimal actualBalance;
   private User user;
-
 }

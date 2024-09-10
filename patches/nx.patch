@@ -1,0 +1,16 @@
+diff --git a/src/command-line/format/format.js b/src/command-line/format/format.js
+index 5b8d807d7953cdc5940e0eac44f4cc5faaf5b930..d30217c49e2a85249cbd1b36e79f3b3e9d2c5c0f 100644
+--- a/src/command-line/format/format.js
++++ b/src/command-line/format/format.js
+@@ -79,7 +79,10 @@ async function getPatterns(args) {
+             // Prettier supports ".swcrc" as a file instead of an extension
+             // So we add ".swcrc" as a supported extension manually
+             // which allows it to be considered for calculating "patterns"
+-            .concat('.swcrc'));
++            .concat('.swcrc')
++            // Manually register the Java file extension
++            // See https://github.com/Sage-Bionetworks/sage-monorepo/pull/2793
++            .concat('.java'));
+         const patterns = p.files
+             .map((f) => path.relative(workspace_root_1.workspaceRoot, f))
+             .filter((f) => (0, fileutils_1.fileExists)(f) && supportedExtensions.has(path.extname(f)));

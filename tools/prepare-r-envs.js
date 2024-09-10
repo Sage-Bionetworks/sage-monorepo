@@ -21,7 +21,7 @@ const hasRenvProjectDefinitionChanged = (projectDir, changedFiles) => {
     const projectDefinitionPaths = ['renv.lock'].map((filename) => `${projectDir}/${filename}`);
     if (
       projectDefinitionPaths.some((projectDefinitionPath) =>
-        changedFiles.includes(projectDefinitionPath)
+        changedFiles.includes(projectDefinitionPath),
       )
     ) {
       return true;
@@ -46,7 +46,7 @@ getGitDiffFiles().then((changedFiles) => {
   getNxProjects()
     .then((projects) => {
       const toUpdate = (project) =>
-      hasRenvProjectDefinitionChanged(project['projectDir'], changedFiles);
+        hasRenvProjectDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
     .then((projectsToUpdate) => {

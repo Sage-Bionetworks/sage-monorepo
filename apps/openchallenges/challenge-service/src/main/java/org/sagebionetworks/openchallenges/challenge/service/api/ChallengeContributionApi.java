@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "ChallengeContribution", description = "the ChallengeContribution API")
 public interface ChallengeContributionApi {
-
   default ChallengeContributionApiDelegate getDelegate() {
     return new ChallengeContributionApiDelegate() {};
   }
@@ -36,55 +35,66 @@ public interface ChallengeContributionApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listChallengeContributions",
-      summary = "List challenge contributions",
-      tags = {"ChallengeContribution"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = ChallengeContributionsPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengeContributionsPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listChallengeContributions",
+    summary = "List challenge contributions",
+    tags = { "ChallengeContribution" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ChallengeContributionsPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ChallengeContributionsPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/challenges/{challengeId}/contributions",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/challenges/{challengeId}/contributions",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<ChallengeContributionsPageDto> listChallengeContributions(
-      @Parameter(
-              name = "challengeId",
-              description = "The unique identifier of the challenge.",
-              required = true)
-          @PathVariable("challengeId")
-          Long challengeId) {
+    @Parameter(
+      name = "challengeId",
+      description = "The unique identifier of the challenge.",
+      required = true
+    ) @PathVariable("challengeId") Long challengeId
+  ) {
     return getDelegate().listChallengeContributions(challengeId);
   }
 }

@@ -4,5 +4,5 @@ public enum UserStatus {
   PENDING,
   APPROVED,
   DISABLED,
-  BLACKLIST
+  BLACKLIST,
 }

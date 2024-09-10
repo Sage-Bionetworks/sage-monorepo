@@ -43,20 +43,6 @@
         "command": "./gradlew clean",
         "cwd": "{projectRoot}"
       }
-    },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessApply",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "format-check": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "./gradlew spotlessCheck",
-        "cwd": "{projectRoot}"
-      }
     }
   },
   "tags": ["type:library", "scope:openchallenges", "language:java", "package-manager:gradle"],

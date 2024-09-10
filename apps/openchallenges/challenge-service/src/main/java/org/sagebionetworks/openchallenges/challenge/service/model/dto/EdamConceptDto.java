@@ -36,10 +36,11 @@ public class EdamConceptDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of the EDAM concept.",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of the EDAM concept.",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -99,9 +100,11 @@ public class EdamConceptDto {
       return false;
     }
     EdamConceptDto edamConcept = (EdamConceptDto) o;
-    return Objects.equals(this.id, edamConcept.id)
-        && Objects.equals(this.classId, edamConcept.classId)
-        && Objects.equals(this.preferredLabel, edamConcept.preferredLabel);
+    return (
+      Objects.equals(this.id, edamConcept.id) &&
+      Objects.equals(this.classId, edamConcept.classId) &&
+      Objects.equals(this.preferredLabel, edamConcept.preferredLabel)
+    );
   }
 
   @Override

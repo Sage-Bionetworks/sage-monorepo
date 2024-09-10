@@ -103,9 +103,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     new BehaviorSubject<OrganizationSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
-  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>(
-    '',
-  );
+  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   private destroy = new Subject<void>();
 
@@ -157,9 +155,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   ngOnInit() {
     this.activatedRoute.queryParams.subscribe((params) => {
       // update selected filter values based on params in url
-      this.selectedContributionRoles = this.splitParam(
-        params['contributionRoles'],
-      );
+      this.selectedContributionRoles = this.splitParam(params['contributionRoles']);
       this.selectedCategories = this.splitParam(params['categories']);
       this.searchedTerms = params['searchTerms'];
       this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
@@ -220,11 +216,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
         }),
       ),
       switchMap(({ orgs, avatarUrls }) =>
-        of(
-          orgs.map((org, index) =>
-            this.getOrganizationCard(org, avatarUrls[index]),
-          ),
-        ),
+        of(orgs.map((org, index) => this.getOrganizationCard(org, avatarUrls[index]))),
       ),
     );
 
@@ -258,18 +250,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       of({ url: '' }),
     ).pipe(
       catchError(() => {
-        console.error(
-          'Unable to get the image url. Please check the logs of the image service.',
-        );
+        console.error('Unable to get the image url. Please check the logs of the image service.');
         return of({ url: '' });
       }),
     );
   }
 
-  private getOrganizationCard(
-    org: Organization,
-    avatarUrl: Image,
-  ): OrganizationCard {
+  private getOrganizationCard(org: Organization, avatarUrl: Image): OrganizationCard {
     return {
       acronym: org.acronym,
       avatarUrl: avatarUrl?.url,
@@ -304,8 +291,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       })
       .reduce(
         // update with new param, or delete the param if empty string
-        (params, [key, value]) =>
-          value !== '' ? params.set(key, value) : params.delete(key),
+        (params, [key, value]) => (value !== '' ? params.set(key, value) : params.delete(key)),
         currentParams,
       );
     this._location.replaceState(location.pathname, params.toString());

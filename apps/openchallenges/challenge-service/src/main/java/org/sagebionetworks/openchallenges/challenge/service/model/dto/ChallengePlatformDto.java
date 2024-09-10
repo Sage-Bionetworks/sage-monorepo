@@ -53,10 +53,11 @@ public class ChallengePlatformDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of a challenge platform.",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of a challenge platform.",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -79,10 +80,11 @@ public class ChallengePlatformDto {
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 30)
   @Schema(
-      name = "slug",
-      example = "example-challenge-platform",
-      description = "The slug of the challenge platform.",
-      required = true)
+    name = "slug",
+    example = "example-challenge-platform",
+    description = "The slug of the challenge platform.",
+    required = true
+  )
   public String getSlug() {
     return slug;
   }
@@ -203,13 +205,15 @@ public class ChallengePlatformDto {
       return false;
     }
     ChallengePlatformDto challengePlatform = (ChallengePlatformDto) o;
-    return Objects.equals(this.id, challengePlatform.id)
-        && Objects.equals(this.slug, challengePlatform.slug)
-        && Objects.equals(this.name, challengePlatform.name)
-        && Objects.equals(this.avatarUrl, challengePlatform.avatarUrl)
-        && Objects.equals(this.websiteUrl, challengePlatform.websiteUrl)
-        && Objects.equals(this.createdAt, challengePlatform.createdAt)
-        && Objects.equals(this.updatedAt, challengePlatform.updatedAt);
+    return (
+      Objects.equals(this.id, challengePlatform.id) &&
+      Objects.equals(this.slug, challengePlatform.slug) &&
+      Objects.equals(this.name, challengePlatform.name) &&
+      Objects.equals(this.avatarUrl, challengePlatform.avatarUrl) &&
+      Objects.equals(this.websiteUrl, challengePlatform.websiteUrl) &&
+      Objects.equals(this.createdAt, challengePlatform.createdAt) &&
+      Objects.equals(this.updatedAt, challengePlatform.updatedAt)
+    );
   }
 
   @Override

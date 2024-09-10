@@ -2,7 +2,7 @@
 
 ### Jan 2024
 
-We're kicking off the new year with our new-and-improved docs site!  We are continuously looking
+We're kicking off the new year with our new-and-improved docs site! We are continuously looking
 to improve, so if you have any feedback, [please us know](https://github.com/Sage-Bionetworks/sage-monorepo/issues/new?assignees=&labels=type%3A+docs&projects=&template=3-documentation.yml&title=%5BDocs%5D+%3Ctitle%3E)!
 
 ### Sept 2023
@@ -22,4 +22,3 @@ Kicking off the Sage Monorepo with our first product: [OpenChallenges](https://o
 ## OpenChallenges
 
 ## Schematic
-

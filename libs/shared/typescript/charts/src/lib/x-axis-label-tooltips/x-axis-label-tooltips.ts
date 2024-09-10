@@ -9,10 +9,7 @@ export class XAxisLabelTooltips {
   chart: ECharts | undefined;
   xAxisCategoryToTooltipText: Record<string, string>;
 
-  constructor(
-    chart: ECharts,
-    xAxisCategoryToTooltipText: Record<string, string>,
-  ) {
+  constructor(chart: ECharts, xAxisCategoryToTooltipText: Record<string, string>) {
     this.xAxisCategoryToTooltipText = xAxisCategoryToTooltipText;
 
     // prepare custom axis tooltip DOM
@@ -44,10 +41,8 @@ export class XAxisLabelTooltips {
         // show tooltip
         const fullText = this.xAxisCategoryToTooltipText[e.value as string];
         axisTooltipContent.innerText = fullText;
-        axisTooltipStyle.left =
-          currLabel.transform[4] - axisTooltipDOM.offsetWidth / 2 + 'px';
-        axisTooltipStyle.top =
-          currLabel.transform[5] - axisTooltipDOM.offsetHeight - 15 + 'px';
+        axisTooltipStyle.left = currLabel.transform[4] - axisTooltipDOM.offsetWidth / 2 + 'px';
+        axisTooltipStyle.top = currLabel.transform[5] - axisTooltipDOM.offsetHeight - 15 + 'px';
         axisTooltipStyle.transform = '';
         axisTooltipStyle.visibility = 'visible';
       })
@@ -58,9 +53,7 @@ export class XAxisLabelTooltips {
       });
   }
 
-  setXAxisCategoryToTooltipText(
-    xAxisCategoryToTooltipText: Record<string, string>,
-  ) {
+  setXAxisCategoryToTooltipText(xAxisCategoryToTooltipText: Record<string, string>) {
     this.xAxisCategoryToTooltipText = xAxisCategoryToTooltipText;
   }
 }

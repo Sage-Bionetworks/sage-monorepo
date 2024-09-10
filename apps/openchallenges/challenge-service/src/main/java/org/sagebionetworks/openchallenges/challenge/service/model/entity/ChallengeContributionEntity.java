@@ -29,7 +29,7 @@ public class ChallengeContributionEntity {
   private Long id;
 
   @Column(nullable = false)
-  @GenericField()
+  @GenericField
   private String role;
 
   @ManyToOne(fetch = FetchType.LAZY)
@@ -39,7 +39,6 @@ public class ChallengeContributionEntity {
   @Column(nullable = false)
   @GenericField(name = "organization_id")
   private Long organizationId;
-
   // @Column(name = "created_at")
   // private OffsetDateTime createdAt;
 }

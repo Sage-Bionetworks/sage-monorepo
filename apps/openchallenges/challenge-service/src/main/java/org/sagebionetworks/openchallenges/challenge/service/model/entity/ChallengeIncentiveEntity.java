@@ -30,7 +30,7 @@ public class ChallengeIncentiveEntity {
   private Long id;
 
   @Column(nullable = false)
-  @GenericField()
+  @GenericField
   private String name;
 
   @ManyToOne(fetch = FetchType.LAZY)

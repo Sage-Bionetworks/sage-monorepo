@@ -23,9 +23,11 @@ import org.sagebionetworks.openchallenges.organization.service.model.repository.
 @ExtendWith(MockitoExtension.class)
 class OrganizationServiceTest {
 
-  @Mock private OrganizationRepository organizationRepository;
+  @Mock
+  private OrganizationRepository organizationRepository;
 
-  @Mock private OrganizationMapper organizationMapper;
+  @Mock
+  private OrganizationMapper organizationMapper;
 
   OrganizationService organizationService;
 
@@ -50,8 +52,9 @@ class OrganizationServiceTest {
     // Stubbing configuration to simulate a specific behavior of the organizationRepository mock
     // object to control its response and verify the behavior of the tested code that interacts with
     // it.
-    when(organizationRepository.findByIdOrLogin(orgId, orgLogin))
-        .thenReturn(Optional.of(orgEntity));
+    when(organizationRepository.findByIdOrLogin(orgId, orgLogin)).thenReturn(
+      Optional.of(orgEntity)
+    );
 
     // get the organization using the identifier
     OrganizationDto response = organizationService.getOrganization(identifier);
@@ -77,11 +80,9 @@ class OrganizationServiceTest {
     when(organizationRepository.findByIdOrLogin(any(), any())).thenReturn(Optional.empty());
 
     // Test that calling getOrganization throws an error
-    assertThrows(
-        OrganizationNotFoundException.class,
-        () -> {
-          organizationService.getOrganization(invalidIdentifier);
-        });
+    assertThrows(OrganizationNotFoundException.class, () -> {
+      organizationService.getOrganization(invalidIdentifier);
+    });
     /* Test thatfindByIdOrLogin method is called, and no interactions with the organizationMapper
     (verifies interactions w/Mock object)*/
 

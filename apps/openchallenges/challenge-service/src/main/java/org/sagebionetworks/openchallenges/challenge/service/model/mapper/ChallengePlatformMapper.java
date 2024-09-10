@@ -6,7 +6,8 @@ import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class ChallengePlatformMapper
-    extends BaseMapper<ChallengePlatformEntity, ChallengePlatformDto> {
+  extends BaseMapper<ChallengePlatformEntity, ChallengePlatformDto> {
+
   @Override
   public ChallengePlatformEntity convertToEntity(ChallengePlatformDto dto, Object... args) {
     ChallengePlatformEntity entity = new ChallengePlatformEntity();

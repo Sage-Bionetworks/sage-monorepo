@@ -10,40 +10,30 @@ export class BastionInstanceProfile extends Construct {
   constructor(scope: Construct, id: string, nameTagPrefix: string) {
     super(scope, id);
 
-    const iamPolicy = new DataAwsIamPolicyDocument(
-      this,
-      'bastion_assume_role',
-      {
-        statement: [
-          {
-            actions: ['sts:AssumeRole'],
-            effect: 'Allow',
-            principals: [
-              {
-                identifiers: ['ec2.amazonaws.com'],
-                type: 'Service',
-              },
-            ],
-          },
-        ],
-      },
-    );
+    const iamPolicy = new DataAwsIamPolicyDocument(this, 'bastion_assume_role', {
+      statement: [
+        {
+          actions: ['sts:AssumeRole'],
+          effect: 'Allow',
+          principals: [
+            {
+              identifiers: ['ec2.amazonaws.com'],
+              type: 'Service',
+            },
+          ],
+        },
+      ],
+    });
 
     this.iamRole = new IamRole(this, 'bastion_role', {
       name: `${nameTagPrefix}-bastion-role`,
       assumeRolePolicy: iamPolicy.json,
-      managedPolicyArns: [
-        'arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore',
-      ],
+      managedPolicyArns: ['arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore'],
     });
 
-    this.iamInstanceProfile = new IamInstanceProfile(
-      this,
-      'bastion_instance_profile',
-      {
-        name: `${nameTagPrefix}-bastion-instance-profile`,
-        role: this.iamRole.name,
-      },
-    );
+    this.iamInstanceProfile = new IamInstanceProfile(this, 'bastion_instance_profile', {
+      name: `${nameTagPrefix}-bastion-instance-profile`,
+      role: this.iamRole.name,
+    });
   }
 }

@@ -36,9 +36,7 @@ export class OrganizationCardComponent implements OnInit {
 
     if (this.organizationCard.challengeCount) {
       this.challengesSupported =
-        this.organizationCard.challengeCount > 0
-          ? this.organizationCard.challengeCount
-          : undefined;
+        this.organizationCard.challengeCount > 0 ? this.organizationCard.challengeCount : undefined;
     }
 
     // TODO: retrieve stars from org object

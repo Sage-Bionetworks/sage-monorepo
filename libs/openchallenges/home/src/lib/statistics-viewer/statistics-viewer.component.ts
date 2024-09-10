@@ -29,50 +29,48 @@ export class StatisticsViewerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // update plot's data
-    this.chartDataSubscription = this.homeDataService
-      .getChallengesPerYear()
-      .subscribe(
-        (res) =>
-          (this.chartOptions = {
-            textStyle: {
-              fontWeight: 'normal',
-              fontFamily: 'Lato, sans-serif',
-              color: '#000',
-            },
-            xAxis: {
-              type: 'category',
-              data: res.years,
-              axisLabel: { rotate: 45, fontSize: '15px' },
-            },
-            yAxis: [
-              {
-                type: 'value',
-                name: '',
-                nameTextStyle: {
-                  lineHeight: 56,
-                },
+    this.chartDataSubscription = this.homeDataService.getChallengesPerYear().subscribe(
+      (res) =>
+        (this.chartOptions = {
+          textStyle: {
+            fontWeight: 'normal',
+            fontFamily: 'Lato, sans-serif',
+            color: '#000',
+          },
+          xAxis: {
+            type: 'category',
+            data: res.years,
+            axisLabel: { rotate: 45, fontSize: '15px' },
+          },
+          yAxis: [
+            {
+              type: 'value',
+              name: '',
+              nameTextStyle: {
+                lineHeight: 56,
               },
-            ],
-            grid: {
-              containLabel: true,
             },
-            series: [
-              {
-                name: 'Total challenges',
-                data: res.challengeCounts,
-                type: 'bar',
-                itemStyle: {
-                  color: '#afa0fe',
-                },
-                // disable default clicking
-                silent: true,
-                // make bar plot rise from left to right
-                // instead of rising all together in the same time
-                animationDelay: (dataIndex: number) => dataIndex * 100,
+          ],
+          grid: {
+            containLabel: true,
+          },
+          series: [
+            {
+              name: 'Total challenges',
+              data: res.challengeCounts,
+              type: 'bar',
+              itemStyle: {
+                color: '#afa0fe',
               },
-            ],
-          }),
-      );
+              // disable default clicking
+              silent: true,
+              // make bar plot rise from left to right
+              // instead of rising all together in the same time
+              animationDelay: (dataIndex: number) => dataIndex * 100,
+            },
+          ],
+        }),
+    );
   }
 
   // this.challengeService

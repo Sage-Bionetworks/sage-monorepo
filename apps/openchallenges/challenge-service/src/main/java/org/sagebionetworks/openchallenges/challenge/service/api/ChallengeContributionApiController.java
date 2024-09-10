@@ -15,7 +15,8 @@ public class ChallengeContributionApiController implements ChallengeContribution
   private final ChallengeContributionApiDelegate delegate;
 
   public ChallengeContributionApiController(
-      @Autowired(required = false) ChallengeContributionApiDelegate delegate) {
+    @Autowired(required = false) ChallengeContributionApiDelegate delegate
+  ) {
     this.delegate = Optional.ofNullable(delegate).orElse(new ChallengeContributionApiDelegate() {});
   }
 

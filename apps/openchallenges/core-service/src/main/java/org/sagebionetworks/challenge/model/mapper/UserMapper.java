@@ -1,11 +1,12 @@
 package org.sagebionetworks.challenge.model.mapper;
 
-import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.sagebionetworks.challenge.model.dto.User;
 import org.sagebionetworks.challenge.model.entity.UserEntity;
+import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class UserMapper extends BaseMapper<UserEntity, User> {
+
   private ChallengeAccountMapper challengeAccountMapper = new ChallengeAccountMapper();
 
   @Override

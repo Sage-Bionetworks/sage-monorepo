@@ -13,8 +13,9 @@ import javax.validation.constraints.*;
 
 /** A page of challenge challenge contributions. */
 @Schema(
-    name = "ChallengeContributionsPage",
-    description = "A page of challenge challenge contributions.")
+  name = "ChallengeContributionsPage",
+  description = "A page of challenge challenge contributions."
+)
 @JsonTypeName("ChallengeContributionsPage")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @lombok.Builder
@@ -74,10 +75,11 @@ public class ChallengeContributionsPageDto {
    */
   @NotNull
   @Schema(
-      name = "size",
-      example = "99",
-      description = "The number of items in a single page.",
-      required = true)
+    name = "size",
+    example = "99",
+    description = "The number of items in a single page.",
+    required = true
+  )
   public Integer getSize() {
     return size;
   }
@@ -98,10 +100,11 @@ public class ChallengeContributionsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalElements",
-      example = "99",
-      description = "Total number of elements in the result set.",
-      required = true)
+    name = "totalElements",
+    example = "99",
+    description = "Total number of elements in the result set.",
+    required = true
+  )
   public Long getTotalElements() {
     return totalElements;
   }
@@ -122,10 +125,11 @@ public class ChallengeContributionsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalPages",
-      example = "99",
-      description = "Total number of pages in the result set.",
-      required = true)
+    name = "totalPages",
+    example = "99",
+    description = "Total number of pages in the result set.",
+    required = true
+  )
   public Integer getTotalPages() {
     return totalPages;
   }
@@ -146,10 +150,11 @@ public class ChallengeContributionsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasNext",
-      example = "true",
-      description = "Returns if there is a next page.",
-      required = true)
+    name = "hasNext",
+    example = "true",
+    description = "Returns if there is a next page.",
+    required = true
+  )
   public Boolean getHasNext() {
     return hasNext;
   }
@@ -170,10 +175,11 @@ public class ChallengeContributionsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasPrevious",
-      example = "true",
-      description = "Returns if there is a previous page.",
-      required = true)
+    name = "hasPrevious",
+    example = "true",
+    description = "Returns if there is a previous page.",
+    required = true
+  )
   public Boolean getHasPrevious() {
     return hasPrevious;
   }
@@ -183,13 +189,15 @@ public class ChallengeContributionsPageDto {
   }
 
   public ChallengeContributionsPageDto challengeContributions(
-      List<ChallengeContributionDto> challengeContributions) {
+    List<ChallengeContributionDto> challengeContributions
+  ) {
     this.challengeContributions = challengeContributions;
     return this;
   }
 
   public ChallengeContributionsPageDto addChallengeContributionsItem(
-      ChallengeContributionDto challengeContributionsItem) {
+    ChallengeContributionDto challengeContributionsItem
+  ) {
     if (this.challengeContributions == null) {
       this.challengeContributions = new ArrayList<>();
     }
@@ -205,9 +213,10 @@ public class ChallengeContributionsPageDto {
   @NotNull
   @Valid
   @Schema(
-      name = "challengeContributions",
-      description = "A list of challenge contributions.",
-      required = true)
+    name = "challengeContributions",
+    description = "A list of challenge contributions.",
+    required = true
+  )
   public List<ChallengeContributionDto> getChallengeContributions() {
     return challengeContributions;
   }
@@ -225,20 +234,28 @@ public class ChallengeContributionsPageDto {
       return false;
     }
     ChallengeContributionsPageDto challengeContributionsPage = (ChallengeContributionsPageDto) o;
-    return Objects.equals(this.number, challengeContributionsPage.number)
-        && Objects.equals(this.size, challengeContributionsPage.size)
-        && Objects.equals(this.totalElements, challengeContributionsPage.totalElements)
-        && Objects.equals(this.totalPages, challengeContributionsPage.totalPages)
-        && Objects.equals(this.hasNext, challengeContributionsPage.hasNext)
-        && Objects.equals(this.hasPrevious, challengeContributionsPage.hasPrevious)
-        && Objects.equals(
-            this.challengeContributions, challengeContributionsPage.challengeContributions);
+    return (
+      Objects.equals(this.number, challengeContributionsPage.number) &&
+      Objects.equals(this.size, challengeContributionsPage.size) &&
+      Objects.equals(this.totalElements, challengeContributionsPage.totalElements) &&
+      Objects.equals(this.totalPages, challengeContributionsPage.totalPages) &&
+      Objects.equals(this.hasNext, challengeContributionsPage.hasNext) &&
+      Objects.equals(this.hasPrevious, challengeContributionsPage.hasPrevious) &&
+      Objects.equals(this.challengeContributions, challengeContributionsPage.challengeContributions)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        number, size, totalElements, totalPages, hasNext, hasPrevious, challengeContributions);
+      number,
+      size,
+      totalElements,
+      totalPages,
+      hasNext,
+      hasPrevious,
+      challengeContributions
+    );
   }
 
   @Override
@@ -251,9 +268,10 @@ public class ChallengeContributionsPageDto {
     sb.append("    totalPages: ").append(toIndentedString(totalPages)).append("\n");
     sb.append("    hasNext: ").append(toIndentedString(hasNext)).append("\n");
     sb.append("    hasPrevious: ").append(toIndentedString(hasPrevious)).append("\n");
-    sb.append("    challengeContributions: ")
-        .append(toIndentedString(challengeContributions))
-        .append("\n");
+    sb
+      .append("    challengeContributions: ")
+      .append(toIndentedString(challengeContributions))
+      .append("\n");
     sb.append("}");
     return sb.toString();
   }

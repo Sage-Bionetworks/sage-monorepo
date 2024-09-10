@@ -5,7 +5,6 @@ buildscript {
 }
 
 plugins {
-  id 'com.diffplug.spotless' version "${spotlessVersion}"
   id 'jacoco'
   id 'java'
   id 'org.springframework.boot' version "${springBootVersion}"
@@ -91,22 +90,4 @@ jacocoTestReport {
 
 bootBuildImage {
   imageName = "ghcr.io/sage-bionetworks/${project.name}-base:local"
-}
-
-spotless {
-  // format 'misc', {
-  //   target '*.gradle', '*.md', '.gitignore'
-
-  //   trimTrailingWhitespace()
-  //   indentWithSpaces(2)
-  //   endWithNewline()
-  // }
-
-  java {
-    target 'src/*/java/**/*.java'
-
-    importOrder()
-    removeUnusedImports()
-    googleJavaFormat()
-  }
 }

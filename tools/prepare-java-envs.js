@@ -26,7 +26,7 @@ const hasGradleProjectDefinitionChanged = (projectDir, changedFiles) => {
     ].map((filename) => `${projectDir}/${filename}`);
     if (
       projectDefinitionPaths.some((projectDefinitionPath) =>
-        changedFiles.includes(projectDefinitionPath)
+        changedFiles.includes(projectDefinitionPath),
       )
     ) {
       return true;

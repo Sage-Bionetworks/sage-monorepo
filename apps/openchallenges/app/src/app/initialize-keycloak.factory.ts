@@ -24,8 +24,7 @@ export function initializeKeycloakFactory(
         },
         initOptions: {
           onLoad: 'check-sso',
-          silentCheckSsoRedirectUri:
-            'http://localhost:4200' + '/assets/silent-check-sso.html',
+          silentCheckSsoRedirectUri: 'http://localhost:4200' + '/assets/silent-check-sso.html',
           // window.location.origin + '/assets/silent-check-sso.html',
           flow: 'standard',
         },

@@ -27,26 +27,26 @@ as candidate alternative development environments for the team members. The tabl
 runtimes in seconds of different tasks such as linting or testing all the projects included in the
 monorepo (the method used to generate these results is described in the next section).
 
-|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core Codespace | 8-core Codespace |
-| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- | ---------------- |
-| Computer Type                                          | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace | GitHub Codespace |
-| Architecture                                           | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     | 64-bit (x86)     |
-| CPU Count                                              | 8            | 4            | 4            | 8            | 4            | 4                | 8                |
-| CPU Frequency (GHz)                                    | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          | 2.7              | 2.8              |
-| Memory (GB)                                            | 32           | 16           | 16           | 32           | 16           | 8                | 16               |
-| Runtime: Lint All Projects (s)                         | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         | 24.6             | 16.9             |
-| Runtime: Build All Projects (s)                        | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         | 32.3             | 14.1             |
-| Runtime: Test All Projects (s)                         | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         | 31.6             | 24.5             |
-| Runtime: Test api (s)                                  | 6.2          | 29.6         | 21.3         | 7.2          | 10.4         | 6.5              | 6.5              |
-| Runtime: Test web-app (s)                              | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          | 6.7              | 6.0              |
-| Download speed (Mbit/s)                                | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       | 8571             | 8603             |
-| Upload speed (Mbit/s)                                  | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       | 4893             | 5125             |
-| On-Demand Cost ($/day)                                 | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64 (1,2)       | 17.28 (1,2)      |
-| On-Demand Cost ($/year)                                | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6 (1,2)     | 6307.2 (1,2)     |
+|                                 | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   | 4-core Codespace | 8-core Codespace |
+| ------------------------------- | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- | ---------------- |
+| Computer Type                   | Desktop PC   | MacBook Pro  | MacBook Pro  | Amazon EC2   | Amazon EC2   | GitHub Codespace | GitHub Codespace |
+| Architecture                    | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86) | 64-bit (x86)     | 64-bit (x86)     |
+| CPU Count                       | 8            | 4            | 4            | 8            | 4            | 4                | 8                |
+| CPU Frequency (GHz)             | 3.6          | 2.4          | 1.7          | 2.5          | 2.2          | 2.7              | 2.8              |
+| Memory (GB)                     | 32           | 16           | 16           | 32           | 16           | 8                | 16               |
+| Runtime: Lint All Projects (s)  | 15.4         | 208.9        | 183.8        | 18.6         | 33.4         | 24.6             | 16.9             |
+| Runtime: Build All Projects (s) | 19.4         | 196.2        | 162.2        | 26.7         | 44.9         | 32.3             | 14.1             |
+| Runtime: Test All Projects (s)  | 12.4         | 117.1        | 82.8         | 15.3         | 29.2         | 31.6             | 24.5             |
+| Runtime: Test api (s)           | 6.2          | 29.6         | 21.3         | 7.2          | 10.4         | 6.5              | 6.5              |
+| Runtime: Test web-app (s)       | 5.3          | 43.0         | 35.0         | 6.5          | 9.2          | 6.7              | 6.0              |
+| Download speed (Mbit/s)         | 395.9        | 52.1         | 160.1        | 2165.0       | 1606.7       | 8571             | 8603             |
+| Upload speed (Mbit/s)           | 183.3        | 15.6         | 10.3         | 1861.0       | 1030.2       | 4893             | 5125             |
+| On-Demand Cost ($/day)          | n/a          | n/a          | n/a          | 9.2          | 3.6          | 8.64 (1,2)       | 17.28 (1,2)      |
+| On-Demand Cost ($/year)         | n/a          | n/a          | n/a          | 3363.8       | 1317.5       | 3153.6 (1,2)     | 6307.2 (1,2)     |
 
 (1) GitHub codespaces stop automatically after 1h of inactivity. A codespace used by an full-time
 engineer (8h/day) - without taking into account vacation for the sake of simplicity - would cost 8
-hours/day * 5 days/week * 52 weeks * $0.36/hour (4-core) = $748/year (see [Codespaces pricing]).
+hours/day _ 5 days/week _ 52 weeks \* $0.36/hour (4-core) = $748/year (see [Codespaces pricing]).
 Similarly, the cost for an 8-core codespace would become $1496/year. In addition, GitHub bills $0.07
 of GB of storage independently on whether the codespace is running or stopped. Pricing valid on
 2023-12-31.
@@ -54,8 +54,9 @@ of GB of storage independently on whether the codespace is running or stopped. P
 (2) GitHub offers core hours and storage. For example, a Free user can use a 2-core instance for 60
 hours per month for free or an 8-core instance for 15 hours. You will be notified by email when you
 have used 75%, 90%, and 100% of your included quotas.
-  - Free users: 120 core hours/month and 15 GB month of storage
-  - Pro users: 180 core hours/month and 20 GB month of storage
+
+- Free users: 120 core hours/month and 15 GB month of storage
+- Pro users: 180 core hours/month and 20 GB month of storage
 
 !!! note
 
@@ -67,15 +68,15 @@ have used 75%, 90%, and 100% of your included quotas.
 The table below shows the number of times a task ran by a developer is faster than the slowest
 runtime (denoted by "1.0").
 
-|                                                        | Shirou       | Rin          | Sakura       | m5.2xlarge   | t3a.xlarge   |
-| ------------------------------------------------------ | ------------ | ------------ | ------------ | ------------ | ------------ |
-| Runtime: Lint All Projects                             | 13.6         | 1.0          | 1.1          | 11.2         | 6.3          |
-| Runtime: Build All Projects                            | 10.1         | 1.0          | 1.2          | 7.3          | 4.4          |
-| Runtime: Test All Projects                             | 9.4          | 1.0          | 1.4          | 7.6          | 4.0          |
-| Runtime: Test api                                      | 4.8          | 1.0          | 1.4          | 4.1          | 2.8          |
-| Runtime: Test web-app                                  | 8.0          | 1.0          | 1.2          | 6.6          | 4.6          |
-| Download speed                                         | 7.6          | 1.0          | 3.1          | 41.5         | 30.8         |
-| Upload speed                                           | 17.8         | 1.5          | 1.0          | 180.5        | 99.9         |
+|                             | Shirou | Rin | Sakura | m5.2xlarge | t3a.xlarge |
+| --------------------------- | ------ | --- | ------ | ---------- | ---------- |
+| Runtime: Lint All Projects  | 13.6   | 1.0 | 1.1    | 11.2       | 6.3        |
+| Runtime: Build All Projects | 10.1   | 1.0 | 1.2    | 7.3        | 4.4        |
+| Runtime: Test All Projects  | 9.4    | 1.0 | 1.4    | 7.6        | 4.0        |
+| Runtime: Test api           | 4.8    | 1.0 | 1.4    | 4.1        | 2.8        |
+| Runtime: Test web-app       | 8.0    | 1.0 | 1.2    | 6.6        | 4.6        |
+| Download speed              | 7.6    | 1.0 | 3.1    | 41.5       | 30.8       |
+| Upload speed                | 17.8   | 1.5 | 1.0    | 180.5      | 99.9       |
 
 For example, linting all the projects of this monorepo is 13.6 times faster on Shirou's computer
 than on Rin's. Moreover, all the developers can benefit from improved download speeds (up to 41.5
@@ -123,21 +124,21 @@ assume you have access to the [Sage AWS Service Catalog](https://help.sc.sageit.
 
 1. Log in to the [Service Catalog](https://sc.sageit.org) with your Synapse credentials.
 2. From the list of Products, select **EC2: Linux Docker**. On the Product page, click on **Launch
-product** in the upper-right corner.
+   product** in the upper-right corner.
 3. On the next page, fill out the wizard as follows:
-    - **Provisioned product name**
-        - Name: `{GitHub username}-devcontainers-{yyyymmdd}`
-        - Example: `tschaffter-devcontainers-20240404`
-    - **Parameters**
-        - EC2 Instance Type: `t3a.2xlarge`
-        - Base Image: `AmazonLinuxDocker` (leave default)
-        - Disk Size: 80
-    - **Manage tags**
-        - `CostCenter`: Select the Cost Center associated to your project
-    - **Enable event notifications**: SKIP - DO NOT MODIFY
+   - **Provisioned product name**
+     - Name: `{GitHub username}-devcontainers-{yyyymmdd}`
+     - Example: `tschaffter-devcontainers-20240404`
+   - **Parameters**
+     - EC2 Instance Type: `t3a.2xlarge`
+     - Base Image: `AmazonLinuxDocker` (leave default)
+     - Disk Size: 80
+   - **Manage tags**
+     - `CostCenter`: Select the Cost Center associated to your project
+   - **Enable event notifications**: SKIP - DO NOT MODIFY
 4. Click on **Launch product**. Your instance will take anywhere between 3-5 minutes to deploy. You
-can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
-leave and come back at a later time.
+   can either wait on this page until "EC2Instance" shows up on the list under Resources, or you can
+   leave and come back at a later time.
 
 ### Stopping the EC2 instance
 
@@ -171,28 +172,28 @@ key.
 2. In the section **Resources**, click on the link for "EC2Instance".
 3. Click on the checkbox of the new EC2 instance created.
 4. Click on the button **Actions** > **Connect**.
-    - The error "Failed to describe security groups" shown by AWS can be ignored.
+   - The error "Failed to describe security groups" shown by AWS can be ignored.
 5. Click on the tab **Session Manager**.
 6. Click on **Connect**.
 
 ### Configuring the SSH public key on the EC2 instance
 
 6. Login as the user `ec2-user` and move to its home directory.
-    ```console
-    $ sudo -s
-    # su ec2-user
-    $ cd
-    ```
+   ```console
+   $ sudo -s
+   # su ec2-user
+   $ cd
+   ```
 7. Create the folder `~/.ssh` (if needed).
-    ```console
-    $ mkdir ~/.ssh
-    $ chmod 700 ~/.ssh
-    ```
+   ```console
+   $ mkdir ~/.ssh
+   $ chmod 700 ~/.ssh
+   ```
 8. Create the file `~/.ssh/authorized_keys` (if needed).
-    ```console
-    $ touch ~/.ssh/authorized_keys
-    $ chmod 644 ~/.ssh/authorized_keys
-    ```
+   ```console
+   $ touch ~/.ssh/authorized_keys
+   $ chmod 644 ~/.ssh/authorized_keys
+   ```
 9. Copy and paste your public SSH key at the end of `~/.ssh/authorized_keys`.
 10. Click on the button **Terminate** to terminate the session and confirm the action.
 
@@ -215,18 +216,18 @@ First, you need to identify the private IP address of the EC2 instance.
 Then, on your local machine:
 
 1. Create the file `~/.ssh/config` (if needed).
-    ```console
-    $ touch ~/.ssh/config
-    $ chmod 600 ~/.ssh/config
-    ```
+   ```console
+   $ touch ~/.ssh/config
+   $ chmod 600 ~/.ssh/config
+   ```
 2. Add the following content to your local `~/.ssh/config`.
-    ```console
-    Host {alias}
-        HostName {private ip}
-        User ec2-user
-        IdentityFile {path to your private SSH key, e.g. ~/.ssh/id_rsa}
-    ```
-    where the placeholder values `{...}` should be replaced with the correct values.
+   ```console
+   Host {alias}
+       HostName {private ip}
+       User ec2-user
+       IdentityFile {path to your private SSH key, e.g. ~/.ssh/id_rsa}
+   ```
+   where the placeholder values `{...}` should be replaced with the correct values.
 
 ### Connecting to the EC2 instance with VS Code
 
@@ -262,11 +263,11 @@ This section describes how to open your fork of Sage Monorepo in a GitHub Codesp
 1. Open your browser and go to [GitHub Codespaces].
 2. Click on the "New codespace".
 3. Enter the information requested:
-    - **Repository**: Select your fork of the monorepo
-    - **Branch**: Select the default branch
-    - **Dev container configuration**: Select the dev container definition
-    - **Region**: Select your preferred region
-    - **Machine type**: Select the machine type
+   - **Repository**: Select your fork of the monorepo
+   - **Branch**: Select the default branch
+   - **Dev container configuration**: Select the dev container definition
+   - **Region**: Select your preferred region
+   - **Machine type**: Select the machine type
 4. Click on "Create codespace".
 5. Wait for the codespace to be created.
 6. Configure the monorepo and install its dependencies (see README).

@@ -1,8 +1,4 @@
-import {
-  CategoryAsValuePoint,
-  CategoryBoxplotSummary,
-  CategoryPoint,
-} from '../models';
+import { CategoryAsValuePoint, CategoryBoxplotSummary, CategoryPoint } from '../models';
 import { CategoryAsValueBoxplotSummary } from '../models/boxplot';
 
 export const getPointStyleFromArray = (
@@ -29,15 +25,7 @@ export const getPointStyleFromArray = (
 export const getCategoryPointShape = (
   pt: CategoryPoint,
   pointCategories: string[],
-  shapes: string[] = [
-    'circle',
-    'triangle',
-    'rect',
-    'roundRect',
-    'diamond',
-    'pin',
-    'arrow',
-  ],
+  shapes: string[] = ['circle', 'triangle', 'rect', 'roundRect', 'diamond', 'pin', 'arrow'],
 ) => {
   return getPointStyleFromArray(pt, pointCategories, shapes, 'shape', 'none');
 };
@@ -56,13 +44,7 @@ export const getCategoryPointColor = (
     '#CC79A7',
   ],
 ) => {
-  return getPointStyleFromArray(
-    pt,
-    pointCategories,
-    colors,
-    'color',
-    'transparent',
-  );
+  return getPointStyleFromArray(pt, pointCategories, colors, 'color', 'transparent');
 };
 
 export function getUniqueValues(
@@ -105,10 +87,7 @@ export function getOffsetAndJitteredXValue(
   return offsetXValue + jitter;
 }
 
-function getXAxisValueOfXAxisCategory(
-  xAxisCategories: string[],
-  xAxisCategory: string,
-) {
+function getXAxisValueOfXAxisCategory(xAxisCategories: string[], xAxisCategory: string) {
   const xAxisCategoryIndex = xAxisCategories.indexOf(xAxisCategory);
   return xAxisCategoryIndex + 1;
 }
@@ -123,10 +102,7 @@ export function addXAxisValueToCategoryPoint(
   jitterMax = 0, // set to positive value to jitter points
 ): CategoryAsValuePoint[] {
   return points.map((pt) => {
-    let xAxisValue = getXAxisValueOfXAxisCategory(
-      xAxisCategories,
-      pt.xAxisCategory,
-    );
+    let xAxisValue = getXAxisValueOfXAxisCategory(xAxisCategories, pt.xAxisCategory);
 
     // calculate the underlying points offset, if there are point categories
     if (pointCategories.length > 0 && pt.pointCategory) {
@@ -151,10 +127,7 @@ export function addXAxisValueToBoxplotSummaries(
   xAxisCategories: string[],
 ): CategoryAsValueBoxplotSummary[] {
   return summaries.map((summary) => {
-    const xAxisValue = getXAxisValueOfXAxisCategory(
-      xAxisCategories,
-      summary.xAxisCategory,
-    );
+    const xAxisValue = getXAxisValueOfXAxisCategory(xAxisCategories, summary.xAxisCategory);
     const updatedSummary: CategoryAsValueBoxplotSummary = {
       ...summary,
       xAxisValue,
@@ -172,14 +145,10 @@ export function formatCategoryPointsForBoxplotTransform(
 ) {
   // add a placeholder array, so xAxisCategories mapped to xAxisValues can start from index 1
   const dataForBoxplotTransform: number[][] = [];
-  for (let i = 0; i <= xAxisCategories.length; i++)
-    dataForBoxplotTransform.push([]);
+  for (let i = 0; i <= xAxisCategories.length; i++) dataForBoxplotTransform.push([]);
 
   points.forEach((pt) => {
-    const xAxisCategoryValue = getXAxisValueOfXAxisCategory(
-      xAxisCategories,
-      pt.xAxisCategory,
-    );
+    const xAxisCategoryValue = getXAxisValueOfXAxisCategory(xAxisCategories, pt.xAxisCategory);
     dataForBoxplotTransform[xAxisCategoryValue].push(pt.value);
   });
 

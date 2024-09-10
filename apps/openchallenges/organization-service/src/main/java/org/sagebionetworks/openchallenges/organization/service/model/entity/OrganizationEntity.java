@@ -39,11 +39,12 @@ public class OrganizationEntity {
   private Long id;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   @GenericField(
-      name = "name_sort",
-      valueBridge = @ValueBridgeRef(type = OrganizationNameValueBridge.class),
-      sortable = Sortable.YES)
+    name = "name_sort",
+    valueBridge = @ValueBridgeRef(type = OrganizationNameValueBridge.class),
+    sortable = Sortable.YES
+  )
   private String name;
 
   @NaturalId(mutable = true)
@@ -61,19 +62,15 @@ public class OrganizationEntity {
   private Integer challengeCount;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "categories",
-      includePaths = {"category"})
+  @IndexedEmbedded(name = "categories", includePaths = { "category" })
   private List<OrganizationCategoryEntity> categories;
 
   @OneToMany(mappedBy = "organization", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "challenge_contributions",
-      includePaths = {"role"})
+  @IndexedEmbedded(name = "challenge_contributions", includePaths = { "role" })
   private List<ChallengeContributionEntity> challengeContributions;
 
   @Column(nullable = true)
-  @FullTextField()
+  @FullTextField
   private String description;
 
   @Column(name = "created_at")

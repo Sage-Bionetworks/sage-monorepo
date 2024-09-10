@@ -55,7 +55,7 @@ public class ChallengeApiDelegateImpl implements ChallengeApiDelegate {
 
   public List<MediaType> getAcceptedMediaTypes(Optional<NativeWebRequest> requestOpt) {
     return requestOpt
-        .map(request -> MediaType.parseMediaTypes(request.getHeader("Accept")))
-        .orElseGet(List::of);
+      .map(request -> MediaType.parseMediaTypes(request.getHeader("Accept")))
+      .orElseGet(List::of);
   }
 }

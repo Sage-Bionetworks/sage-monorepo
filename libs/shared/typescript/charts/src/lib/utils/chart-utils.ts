@@ -2,19 +2,10 @@ import * as echarts from 'echarts';
 import { ECharts, EChartsOption } from 'echarts';
 
 // Chart must have initial height to be visible
-export function ensureChartDomHasHeight(
-  chartDom: HTMLDivElement | HTMLCanvasElement,
-) {
-  const computedHeight = window
-    .getComputedStyle(chartDom, null)
-    .getPropertyValue('height');
+export function ensureChartDomHasHeight(chartDom: HTMLDivElement | HTMLCanvasElement) {
+  const computedHeight = window.getComputedStyle(chartDom, null).getPropertyValue('height');
   const inlineHeight = chartDom.style.height;
-  if (
-    !computedHeight ||
-    computedHeight === '0px' ||
-    !inlineHeight ||
-    inlineHeight === '0px'
-  ) {
+  if (!computedHeight || computedHeight === '0px' || !inlineHeight || inlineHeight === '0px') {
     chartDom.style.height = '350px';
   }
 }

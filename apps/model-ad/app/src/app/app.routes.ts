@@ -4,9 +4,7 @@ export const routes: Route[] = [
   {
     path: 'not-found',
     loadChildren: () =>
-      import('@sagebionetworks/model-ad/not-found').then(
-        (routes) => routes.routes,
-      ),
+      import('@sagebionetworks/model-ad/not-found').then((routes) => routes.routes),
   },
   {
     path: '**',

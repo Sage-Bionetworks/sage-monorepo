@@ -7,7 +7,7 @@ const JSON5 = require('json5');
 const getNxProjectNames = async () => {
   const projects = await exec('nx print-affected --all --select=projects');
   return projects.stdout.trim().split(', ');
-}
+};
 
 const getNxProjects = async () => {
   let projectFiles = await exec('find . -name project.json -not -path "./node_modules/*"');
@@ -24,13 +24,13 @@ const getNxProjects = async () => {
     return {
       projectDir,
       projectFile,
-      projectName
+      projectName,
     };
-  })
+  });
   return projects;
-}
+};
 
 module.exports = {
   getNxProjectNames,
-  getNxProjects
+  getNxProjects,
 };

@@ -205,7 +205,7 @@
         [pageNumber]="selectedPageNumber || defaultPageNumber"
         [pageSize]="selectedPageSize || defaultPageSize"
         [totalElements]="searchResultsCount"
-        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows,})"
+        (pageChange)="onParamChange({ pageNumber: $event.page, pageSize: $event.rows })"
       />
     </div>
   </section>

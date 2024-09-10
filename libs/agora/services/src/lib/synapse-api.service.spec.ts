@@ -3,10 +3,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { TestBed } from '@angular/core/testing';
-import {
-  HttpTestingController,
-  provideHttpClientTesting,
-} from '@angular/common/http/testing';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -24,11 +21,7 @@ describe('Service: Synapse API', () => {
 
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        SynapseApiService,
-      ],
+      providers: [provideHttpClient(), provideHttpClientTesting(), SynapseApiService],
     });
 
     synapseApiService = TestBed.inject(SynapseApiService);
@@ -44,15 +37,12 @@ describe('Service: Synapse API', () => {
   });
 
   it('should get data from Synapse API', () => {
-    synapseApiService
-      .getWiki('syn25913473', synapseWikiMock.id)
-      .subscribe((response) => {
-        expect(response).toEqual(synapseWikiMock);
-      });
+    synapseApiService.getWiki('syn25913473', synapseWikiMock.id).subscribe((response) => {
+      expect(response).toEqual(synapseWikiMock);
+    });
 
     const req = httpMock.expectOne(
-      'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/' +
-        synapseWikiMock.id,
+      'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/' + synapseWikiMock.id,
     );
     expect(req.request.method).toBe('GET');
     req.flush(synapseWikiMock);
@@ -65,9 +55,7 @@ describe('Service: Synapse API', () => {
 
   it('should replace synapse links', () => {
     const res = synapseApiService.renderHtml('[test](syn123)');
-    expect(res).toEqual(
-      '<a href="https://synapse.org/#!Synapse:syn123" target="_blank">test</a>',
-    );
+    expect(res).toEqual('<a href="https://synapse.org/#!Synapse:syn123" target="_blank">test</a>');
   });
 
   it('should replace bold', () => {

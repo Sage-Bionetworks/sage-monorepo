@@ -26,10 +26,7 @@ const combineMessageAndSplat = () => {
     transform: (info: any) => {
       // combine message and args if any
       // https://github.com/winstonjs/winston/issues/1427#issuecomment-811184784
-      info.message = util.format(
-        info.message,
-        ...(info[Symbol.for('splat')] || []),
-      );
+      info.message = util.format(info.message, ...(info[Symbol.for('splat')] || []));
       return info;
     },
   };
@@ -39,9 +36,7 @@ const format = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.colorize({ all: true }),
   combineMessageAndSplat(),
-  winston.format.printf(
-    (info) => `${info['timestamp']} ${info.level}: ${info.message}`,
-  ),
+  winston.format.printf((info) => `${info['timestamp']} ${info.level}: ${info.message}`),
 );
 
 class Logger {

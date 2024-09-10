@@ -10,8 +10,8 @@ import org.springframework.core.convert.converter.Converter;
 public class EnumConverterConfiguration {
 
   @Bean(
-      name =
-          "org.sagebionetworks.openchallenges.image.service.configuration.EnumConverterConfiguration.imageAspectRatioConverter")
+    name = "org.sagebionetworks.openchallenges.image.service.configuration.EnumConverterConfiguration.imageAspectRatioConverter"
+  )
   Converter<String, ImageAspectRatioDto> imageAspectRatioConverter() {
     return new Converter<String, ImageAspectRatioDto>() {
       @Override
@@ -22,8 +22,8 @@ public class EnumConverterConfiguration {
   }
 
   @Bean(
-      name =
-          "org.sagebionetworks.openchallenges.image.service.configuration.EnumConverterConfiguration.imageHeightConverter")
+    name = "org.sagebionetworks.openchallenges.image.service.configuration.EnumConverterConfiguration.imageHeightConverter"
+  )
   Converter<String, ImageHeightDto> imageHeightConverter() {
     return new Converter<String, ImageHeightDto>() {
       @Override

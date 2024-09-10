@@ -6,6 +6,7 @@ import org.sagebionetworks.util.model.mapper.BaseMapper;
 import org.springframework.beans.BeanUtils;
 
 public class EdamConceptMapper extends BaseMapper<EdamConceptEntity, EdamConceptDto> {
+
   @Override
   public EdamConceptEntity convertToEntity(EdamConceptDto dto, Object... args) {
     EdamConceptEntity entity = new EdamConceptEntity();

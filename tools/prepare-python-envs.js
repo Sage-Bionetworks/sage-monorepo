@@ -21,7 +21,7 @@ const hasPoetryProjectDefinitionChanged = (projectDir, changedFiles) => {
     const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${projectDir}/${filename}`);
     if (
       projectDefinitionPaths.some((projectDefinitionPath) =>
-        changedFiles.includes(projectDefinitionPath)
+        changedFiles.includes(projectDefinitionPath),
       )
     ) {
       return true;

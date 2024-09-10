@@ -1,14 +1,14 @@
 # openchallenges_client.ChallengePlatformApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**get_challenge_platform**](ChallengePlatformApi.md#get_challenge_platform) | **GET** /challengePlatforms/{challengePlatformName} | Get a challenge platform
-[**list_challenge_platforms**](ChallengePlatformApi.md#list_challenge_platforms) | **GET** /challengePlatforms | List challenge platforms
-
+| Method                                                                           | HTTP request                                        | Description              |
+| -------------------------------------------------------------------------------- | --------------------------------------------------- | ------------------------ |
+| [**get_challenge_platform**](ChallengePlatformApi.md#get_challenge_platform)     | **GET** /challengePlatforms/{challengePlatformName} | Get a challenge platform |
+| [**list_challenge_platforms**](ChallengePlatformApi.md#list_challenge_platforms) | **GET** /challengePlatforms                         | List challenge platforms |
 
 # **get_challenge_platform**
+
 > ChallengePlatform get_challenge_platform(challenge_platform_name)
 
 Get a challenge platform
@@ -47,13 +47,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->get_challenge_platform: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_name** | **str**| The unique identifier of the challenge platform. | 
+| Name                        | Type    | Description                                      | Notes |
+| --------------------------- | ------- | ------------------------------------------------ | ----- |
+| **challenge_platform_name** | **str** | The unique identifier of the challenge platform. |
 
 ### Return type
 
@@ -65,19 +63,21 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**404** | The specified resource was not found |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **404**     | The specified resource was not found                              | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_challenge_platforms**
+
 > ChallengePlatformsPage list_challenge_platforms(challenge_platform_search_query=challenge_platform_search_query)
 
 List challenge platforms
@@ -117,13 +117,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengePlatformApi->list_challenge_platforms: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md)| The search query used to find challenge platforms. | [optional] 
+| Name                                | Type                                    | Description                                        | Notes      |
+| ----------------------------------- | --------------------------------------- | -------------------------------------------------- | ---------- |
+| **challenge_platform_search_query** | [**ChallengePlatformSearchQuery**](.md) | The search query used to find challenge platforms. | [optional] |
 
 ### Return type
 
@@ -135,15 +133,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

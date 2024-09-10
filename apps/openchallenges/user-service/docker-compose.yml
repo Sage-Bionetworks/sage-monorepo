@@ -1,4 +1,4 @@
-version: "3.8"
+version: '3.8'
 
 services:
   openchallenges-user-service:
@@ -10,7 +10,7 @@ services:
     networks:
       - openchallenges
     ports:
-      - "8083:8083"
+      - '8083:8083'
     command: start-dev
 
 networks:

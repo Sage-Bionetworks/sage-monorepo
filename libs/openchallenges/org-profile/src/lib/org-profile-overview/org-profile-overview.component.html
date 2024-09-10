@@ -5,7 +5,8 @@
       <p>{{ useNaIfFalsey(org.description) }}</p>
       <div *ngIf="org.description?.endsWith('...')">
         <a class="read-more" href="{{ org.websiteUrl }}"
-          >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a>
+          >Continue reading <mat-icon aria-hidden="true" inline="true">open_in_new</mat-icon></a
+        >
       </div>
     </div>
   </div>

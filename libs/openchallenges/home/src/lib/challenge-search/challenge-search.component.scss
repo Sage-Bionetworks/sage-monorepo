@@ -2,7 +2,8 @@
 $primary-color: #4950f6;
 
 // TAGS
-a, .typing {
+a,
+.typing {
   color: $primary-color;
 }
 a:hover,
@@ -24,7 +25,7 @@ a:active {
   }
 }
 @media (min-width: constants.$sm-breakpoint) {
-  .container{
+  .container {
     padding: 0 24px;
   }
 }
@@ -44,7 +45,7 @@ a:active {
 #landing {
   height: 100%;
   padding: 140px 64px 72px;
-  background-color: #F8F8F8;
+  background-color: #f8f8f8;
 
   img {
     max-height: min-content;

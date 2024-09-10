@@ -3,14 +3,15 @@
 The information required to create a user account
 
 ## Properties
-Name | Type | Description | Notes
------------- | ------------- | ------------- | -------------
-**login** | **str** |  | 
-**email** | **str** | An email address. | 
-**password** | **str** |  | 
-**name** | **str** |  | [optional] 
-**avatar_url** | **str** |  | [optional] 
-**bio** | **str** |  | [optional] 
+
+| Name           | Type    | Description       | Notes      |
+| -------------- | ------- | ----------------- | ---------- |
+| **login**      | **str** |                   |
+| **email**      | **str** | An email address. |
+| **password**   | **str** |                   |
+| **name**       | **str** |                   | [optional] |
+| **avatar_url** | **str** |                   | [optional] |
+| **bio**        | **str** |                   | [optional] |
 
 ## Example
 
@@ -29,6 +30,5 @@ user_create_request_dict = user_create_request_instance.to_dict()
 # create an instance of UserCreateRequest from a dict
 user_create_request_form_dict = user_create_request.from_dict(user_create_request_dict)
 ```
+
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
-
-

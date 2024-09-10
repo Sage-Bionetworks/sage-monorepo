@@ -50,15 +50,15 @@ public class ChallengeEntity {
   private String slug;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   private String name;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   private String headline;
 
   @Column(nullable = false)
-  @FullTextField()
+  @FullTextField
   private String description;
 
   @Column(name = "avatar_url", nullable = true)
@@ -68,59 +68,58 @@ public class ChallengeEntity {
   private String websiteUrl;
 
   @Column(nullable = true)
-  @GenericField()
+  @GenericField
   private String doi;
 
   @Column(nullable = false)
-  @GenericField()
+  @GenericField
   private String status;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "platform_id", nullable = true)
-  @IndexedEmbedded(includePaths = {"slug", "name"})
+  @IndexedEmbedded(includePaths = { "slug", "name" })
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private SimpleChallengePlatformEntity platform;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "contributions",
-      includePaths = {"role", "organization_id"})
+  @IndexedEmbedded(name = "contributions", includePaths = { "role", "organization_id" })
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private List<ChallengeContributionEntity> contributions;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(
-      name = "submission_types",
-      includePaths = {"name"})
+  @IndexedEmbedded(name = "submission_types", includePaths = { "name" })
   private List<ChallengeSubmissionTypeEntity> submissionTypes;
 
   @OneToMany(fetch = FetchType.LAZY)
   @JoinTable(
-      name = "challenge_input_data_type",
-      joinColumns = @JoinColumn(name = "challenge_id"),
-      inverseJoinColumns = @JoinColumn(name = "edam_concept_id"))
+    name = "challenge_input_data_type",
+    joinColumns = @JoinColumn(name = "challenge_id"),
+    inverseJoinColumns = @JoinColumn(name = "edam_concept_id")
+  )
   @IndexedEmbedded(
-      name = "input_data_types",
-      includePaths = {"id", "class_id", "preferred_label"})
+    name = "input_data_types",
+    includePaths = { "id", "class_id", "preferred_label" }
+  )
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private List<EdamConceptEntity> inputDataTypes;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(includePaths = {"name"})
+  @IndexedEmbedded(includePaths = { "name" })
   private List<ChallengeIncentiveEntity> incentives;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
   @LazyCollection(LazyCollectionOption.EXTRA)
   // @IndexedEmbedded(includePaths = {"userId"})
   @GenericField(
-      name = "starred_count",
-      valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
-      extraction = @ContainerExtraction(extract = ContainerExtract.NO),
-      sortable = Sortable.YES)
+    name = "starred_count",
+    valueBridge = @ValueBridgeRef(type = CollectionSizeBridge.class),
+    extraction = @ContainerExtraction(extract = ContainerExtract.NO),
+    sortable = Sortable.YES
+  )
   private List<ChallengeStar> stars;
 
   @OneToMany(mappedBy = "challenge", fetch = FetchType.LAZY)
-  @IndexedEmbedded(includePaths = {"name"})
+  @IndexedEmbedded(includePaths = { "name" })
   private List<ChallengeCategoryEntity> categories;
 
   @Column(name = "start_date", columnDefinition = "DATE", nullable = true)
@@ -133,7 +132,7 @@ public class ChallengeEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "operation_id", nullable = true)
-  @IndexedEmbedded(includePaths = {"id", "class_id", "preferred_label"})
+  @IndexedEmbedded(includePaths = { "id", "class_id", "preferred_label" })
   @IndexingDependency(reindexOnUpdate = ReindexOnUpdate.SHALLOW)
   private EdamConceptEntity operation;
 

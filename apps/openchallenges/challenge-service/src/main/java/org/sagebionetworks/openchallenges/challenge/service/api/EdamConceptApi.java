@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "EdamConcept", description = "Operations about EDAM concepts.")
 public interface EdamConceptApi {
-
   default EdamConceptApiDelegate getDelegate() {
     return new EdamConceptApiDelegate() {};
   }
@@ -37,54 +36,65 @@ public interface EdamConceptApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listEdamConcepts",
-      summary = "List EDAM concepts",
-      tags = {"EdamConcept"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = EdamConceptsPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = EdamConceptsPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listEdamConcepts",
+    summary = "List EDAM concepts",
+    tags = { "EdamConcept" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = EdamConceptsPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = EdamConceptsPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/edamConcepts",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/edamConcepts",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<EdamConceptsPageDto> listEdamConcepts(
-      @Parameter(
-              name = "edamConceptSearchQuery",
-              description = "The search query used to find EDAM concepts.")
-          @Valid
-          EdamConceptSearchQueryDto edamConceptSearchQuery) {
+    @Parameter(
+      name = "edamConceptSearchQuery",
+      description = "The search query used to find EDAM concepts."
+    ) @Valid EdamConceptSearchQueryDto edamConceptSearchQuery
+  ) {
     return getDelegate().listEdamConcepts(edamConceptSearchQuery);
   }
 }

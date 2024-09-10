@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "ChallengeAnalytics", description = "Operations about challenge analytics.")
 public interface ChallengeAnalyticsApi {
-
   default ChallengeAnalyticsApiDelegate getDelegate() {
     return new ChallengeAnalyticsApiDelegate() {};
   }
@@ -34,39 +33,46 @@ public interface ChallengeAnalyticsApi {
    *     server error (status code 500)
    */
   @Operation(
-      operationId = "getChallengesPerYear",
-      summary = "Get the number of challenges tracked per year",
-      tags = {"ChallengeAnalytics"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "An object",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = ChallengesPerYearDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ChallengesPerYearDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "getChallengesPerYear",
+    summary = "Get the number of challenges tracked per year",
+    tags = { "ChallengeAnalytics" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "An object",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ChallengesPerYearDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ChallengesPerYearDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/challengeAnalytics/challengesPerYear",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/challengeAnalytics/challengesPerYear",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<ChallengesPerYearDto> getChallengesPerYear() {
-
     return getDelegate().getChallengesPerYear();
   }
 }

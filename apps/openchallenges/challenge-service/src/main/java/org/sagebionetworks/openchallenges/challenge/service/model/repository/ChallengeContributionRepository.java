@@ -5,7 +5,6 @@ import org.sagebionetworks.openchallenges.challenge.service.model.entity.Challen
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChallengeContributionRepository
-    extends JpaRepository<ChallengeContributionEntity, Long> {
-
+  extends JpaRepository<ChallengeContributionEntity, Long> {
   List<ChallengeContributionEntity> findAllByChallenge_id(Long challengeId);
 }

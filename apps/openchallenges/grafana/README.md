@@ -35,7 +35,6 @@ nx serve-detach openchallenges-grafana
 1. Open your browser and navigate to http://localhost:3000.
 2. Authenticate with the credentials defined in `.env`.
 
-
 ## Save and restore Grafana data
 
 ### Create a Grafana API key

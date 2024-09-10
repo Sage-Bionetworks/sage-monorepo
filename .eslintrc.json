@@ -9,22 +9,13 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript", "standard", "eslint-config-prettier"],
-      "plugins": ["@typescript-eslint", "eslint-plugin-prettier"],
+      "extends": ["plugin:@nx/typescript"],
+      "plugins": ["@typescript-eslint"],
       "rules": {
         "dot-notation": "off",
         "no-useless-constructor": "off",
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-non-null-assertion": "error",
-        "prettier/prettier": [
-          "error",
-          {
-            "tabWidth": 2,
-            "useTabs": false,
-            "singleQuote": true,
-            "printWidth": 80
-          }
-        ],
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
       }
@@ -36,11 +27,6 @@
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
       }
-    },
-    {
-      "files": "*.json",
-      "parser": "jsonc-eslint-parser",
-      "rules": {}
     }
   ]
 }

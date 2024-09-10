@@ -1,6 +1,6 @@
 ## Description
 
-<!-- Please include a brief summary of the changes and the related issue. Itemize 
+<!-- Please include a brief summary of the changes and the related issue. Itemize
 the changes in the section Changelog (see below). -->
 
 ## Related Issue

@@ -27,8 +27,9 @@ public class ImageHeightNotSpecifiedExceptionTest {
     ImageHeightNotSpecifiedException exception = new ImageHeightNotSpecifiedException(detail);
 
     // Verify the exception details
-    assertThat(ErrorConstants.IMAGE_HEIGHT_NOT_SPECIFIED.getTitle())
-        .isEqualTo(exception.getTitle());
+    assertThat(ErrorConstants.IMAGE_HEIGHT_NOT_SPECIFIED.getTitle()).isEqualTo(
+      exception.getTitle()
+    );
   }
 
   @Test
@@ -40,8 +41,9 @@ public class ImageHeightNotSpecifiedExceptionTest {
     ImageHeightNotSpecifiedException exception = new ImageHeightNotSpecifiedException(detail);
 
     // Verify the exception details
-    assertThat(ErrorConstants.IMAGE_HEIGHT_NOT_SPECIFIED.getStatus())
-        .isEqualTo(exception.getStatus());
+    assertThat(ErrorConstants.IMAGE_HEIGHT_NOT_SPECIFIED.getStatus()).isEqualTo(
+      exception.getStatus()
+    );
   }
 
   @Test

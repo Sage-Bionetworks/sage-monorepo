@@ -110,10 +110,11 @@ public class ChallengeJsonLdDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of the challenge.",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of the challenge.",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -136,10 +137,11 @@ public class ChallengeJsonLdDto {
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 255)
   @Schema(
-      name = "slug",
-      example = "awesome-challenge",
-      description = "The unique slug of the challenge.",
-      required = true)
+    name = "slug",
+    example = "awesome-challenge",
+    description = "The unique slug of the challenge.",
+    required = true
+  )
   public String getSlug() {
     return slug;
   }
@@ -181,10 +183,11 @@ public class ChallengeJsonLdDto {
    */
   @Size(min = 0, max = 80)
   @Schema(
-      name = "headline",
-      example = "Example challenge headline",
-      description = "The headline of the challenge.",
-      required = false)
+    name = "headline",
+    example = "Example challenge headline",
+    description = "The headline of the challenge.",
+    required = false
+  )
   public String getHeadline() {
     return headline;
   }
@@ -206,10 +209,11 @@ public class ChallengeJsonLdDto {
   @NotNull
   @Size(min = 0, max = 1000)
   @Schema(
-      name = "description",
-      example = "This is an example description of the challenge.",
-      description = "The description of the challenge.",
-      required = true)
+    name = "description",
+    example = "This is an example description of the challenge.",
+    description = "The description of the challenge.",
+    required = true
+  )
   public String getDescription() {
     return description;
   }
@@ -230,10 +234,11 @@ public class ChallengeJsonLdDto {
    */
   @Size(max = 120)
   @Schema(
-      name = "doi",
-      example = "https://doi.org/123/abc",
-      description = "The DOI of the challenge.",
-      required = false)
+    name = "doi",
+    example = "https://doi.org/123/abc",
+    description = "The DOI of the challenge.",
+    required = false
+  )
   public String getDoi() {
     return doi;
   }
@@ -295,10 +300,11 @@ public class ChallengeJsonLdDto {
    */
   @Size(max = 500)
   @Schema(
-      name = "websiteUrl",
-      example = "https://openchallenges.io",
-      description = "A URL to the website or image.",
-      required = false)
+    name = "websiteUrl",
+    example = "https://openchallenges.io",
+    description = "A URL to the website or image.",
+    required = false
+  )
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -319,10 +325,11 @@ public class ChallengeJsonLdDto {
    */
   @Size(max = 500)
   @Schema(
-      name = "avatarUrl",
-      example = "https://openchallenges.io",
-      description = "A URL to the website or image.",
-      required = false)
+    name = "avatarUrl",
+    example = "https://openchallenges.io",
+    description = "A URL to the website or image.",
+    required = false
+  )
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -458,10 +465,11 @@ public class ChallengeJsonLdDto {
    */
   @Valid
   @Schema(
-      name = "startDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "The start date of the challenge.",
-      required = false)
+    name = "startDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "The start date of the challenge.",
+    required = false
+  )
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -482,10 +490,11 @@ public class ChallengeJsonLdDto {
    */
   @Valid
   @Schema(
-      name = "endDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "The end date of the challenge.",
-      required = false)
+    name = "endDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "The end date of the challenge.",
+    required = false
+  )
   public LocalDate getEndDate() {
     return endDate;
   }
@@ -507,10 +516,11 @@ public class ChallengeJsonLdDto {
   @NotNull
   @Min(0)
   @Schema(
-      name = "starredCount",
-      example = "100",
-      description = "The number of times the challenge has been starred by users.",
-      required = true)
+    name = "starredCount",
+    example = "100",
+    description = "The number of times the challenge has been starred by users.",
+    required = true
+  )
   public Integer getStarredCount() {
     return starredCount;
   }
@@ -552,10 +562,11 @@ public class ChallengeJsonLdDto {
   @NotNull
   @Valid
   @Schema(
-      name = "createdAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was added to the database.",
-      required = true)
+    name = "createdAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was added to the database.",
+    required = true
+  )
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -577,10 +588,11 @@ public class ChallengeJsonLdDto {
   @NotNull
   @Valid
   @Schema(
-      name = "updatedAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was last modified in the database.",
-      required = true)
+    name = "updatedAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was last modified in the database.",
+    required = true
+  )
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -658,57 +670,60 @@ public class ChallengeJsonLdDto {
       return false;
     }
     ChallengeJsonLdDto challengeJsonLd = (ChallengeJsonLdDto) o;
-    return Objects.equals(this.id, challengeJsonLd.id)
-        && Objects.equals(this.slug, challengeJsonLd.slug)
-        && Objects.equals(this.name, challengeJsonLd.name)
-        && Objects.equals(this.headline, challengeJsonLd.headline)
-        && Objects.equals(this.description, challengeJsonLd.description)
-        && Objects.equals(this.doi, challengeJsonLd.doi)
-        && Objects.equals(this.status, challengeJsonLd.status)
-        && Objects.equals(this.platform, challengeJsonLd.platform)
-        && Objects.equals(this.websiteUrl, challengeJsonLd.websiteUrl)
-        && Objects.equals(this.avatarUrl, challengeJsonLd.avatarUrl)
-        && Objects.equals(this.incentives, challengeJsonLd.incentives)
-        && Objects.equals(this.submissionTypes, challengeJsonLd.submissionTypes)
-        && Objects.equals(this.inputDataTypes, challengeJsonLd.inputDataTypes)
-        && Objects.equals(this.categories, challengeJsonLd.categories)
-        && Objects.equals(this.startDate, challengeJsonLd.startDate)
-        && Objects.equals(this.endDate, challengeJsonLd.endDate)
-        && Objects.equals(this.starredCount, challengeJsonLd.starredCount)
-        && Objects.equals(this.operation, challengeJsonLd.operation)
-        && Objects.equals(this.createdAt, challengeJsonLd.createdAt)
-        && Objects.equals(this.updatedAt, challengeJsonLd.updatedAt)
-        && Objects.equals(this.atContext, challengeJsonLd.atContext)
-        && Objects.equals(this.atId, challengeJsonLd.atId)
-        && Objects.equals(this.atType, challengeJsonLd.atType);
+    return (
+      Objects.equals(this.id, challengeJsonLd.id) &&
+      Objects.equals(this.slug, challengeJsonLd.slug) &&
+      Objects.equals(this.name, challengeJsonLd.name) &&
+      Objects.equals(this.headline, challengeJsonLd.headline) &&
+      Objects.equals(this.description, challengeJsonLd.description) &&
+      Objects.equals(this.doi, challengeJsonLd.doi) &&
+      Objects.equals(this.status, challengeJsonLd.status) &&
+      Objects.equals(this.platform, challengeJsonLd.platform) &&
+      Objects.equals(this.websiteUrl, challengeJsonLd.websiteUrl) &&
+      Objects.equals(this.avatarUrl, challengeJsonLd.avatarUrl) &&
+      Objects.equals(this.incentives, challengeJsonLd.incentives) &&
+      Objects.equals(this.submissionTypes, challengeJsonLd.submissionTypes) &&
+      Objects.equals(this.inputDataTypes, challengeJsonLd.inputDataTypes) &&
+      Objects.equals(this.categories, challengeJsonLd.categories) &&
+      Objects.equals(this.startDate, challengeJsonLd.startDate) &&
+      Objects.equals(this.endDate, challengeJsonLd.endDate) &&
+      Objects.equals(this.starredCount, challengeJsonLd.starredCount) &&
+      Objects.equals(this.operation, challengeJsonLd.operation) &&
+      Objects.equals(this.createdAt, challengeJsonLd.createdAt) &&
+      Objects.equals(this.updatedAt, challengeJsonLd.updatedAt) &&
+      Objects.equals(this.atContext, challengeJsonLd.atContext) &&
+      Objects.equals(this.atId, challengeJsonLd.atId) &&
+      Objects.equals(this.atType, challengeJsonLd.atType)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        id,
-        slug,
-        name,
-        headline,
-        description,
-        doi,
-        status,
-        platform,
-        websiteUrl,
-        avatarUrl,
-        incentives,
-        submissionTypes,
-        inputDataTypes,
-        categories,
-        startDate,
-        endDate,
-        starredCount,
-        operation,
-        createdAt,
-        updatedAt,
-        atContext,
-        atId,
-        atType);
+      id,
+      slug,
+      name,
+      headline,
+      description,
+      doi,
+      status,
+      platform,
+      websiteUrl,
+      avatarUrl,
+      incentives,
+      submissionTypes,
+      inputDataTypes,
+      categories,
+      startDate,
+      endDate,
+      starredCount,
+      operation,
+      createdAt,
+      updatedAt,
+      atContext,
+      atId,
+      atType
+    );
   }
 
   @Override

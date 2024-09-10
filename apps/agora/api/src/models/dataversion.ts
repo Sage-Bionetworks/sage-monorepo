@@ -12,7 +12,4 @@ const DataVersionSchema = new Schema<Dataversion>(
   },
 );
 
-export const DataVersionCollection = model<Dataversion>(
-  'DataVersionCollection',
-  DataVersionSchema,
-);
+export const DataVersionCollection = model<Dataversion>('DataVersionCollection', DataVersionSchema);

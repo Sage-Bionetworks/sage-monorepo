@@ -10,11 +10,7 @@ describe('ChallengeHostListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        ChallengeHostListComponent,
-        RouterTestingModule,
-      ],
+      imports: [HttpClientModule, ChallengeHostListComponent, RouterTestingModule],
     }).compileComponents();
   });
 

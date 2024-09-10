@@ -74,10 +74,7 @@ images.
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:ListBucket",
-        "s3:GetObject*"
-      ],
+      "Action": ["s3:ListBucket", "s3:GetObject*"],
       "Resource": [
         "arn:aws:s3:::openchallenges-img",
         "arn:aws:s3:::openchallenges-img/*",
@@ -88,9 +85,7 @@ images.
     {
       "Effect": "Allow",
       "Action": "s3:*Object",
-      "Resource": [
-        "arn:aws:s3:::openchallenges-img-cache/*"
-      ]
+      "Resource": ["arn:aws:s3:::openchallenges-img-cache/*"]
     }
   ]
 }

@@ -25,17 +25,14 @@ public class HibernateSearchIndexBuild implements ApplicationListener<Applicatio
   public void onApplicationEvent(ApplicationReadyEvent event) {
     log.info("Started Initializing Indexes");
     SearchSession searchSession = Search.session(entityManager);
-    MassIndexer indexer =
-        searchSession
-            .massIndexer()
-            .idFetchSize(150)
-            .batchSizeToLoadObjects(25)
-            .threadsToLoadObjects(12);
+    MassIndexer indexer = searchSession
+      .massIndexer()
+      .idFetchSize(150)
+      .batchSizeToLoadObjects(25)
+      .threadsToLoadObjects(12);
 
     try {
-
       indexer.startAndWait();
-
     } catch (InterruptedException e) {
       log.warn("Failed to load data from database");
       Thread.currentThread().interrupt();

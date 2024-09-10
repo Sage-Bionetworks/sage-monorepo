@@ -14,27 +14,29 @@ public class ChallengeContributionService {
   private final ChallengeContributionRepository challengeContributionRepository;
 
   private final ChallengeContributionMapper challengeContributionMapper =
-      new ChallengeContributionMapper();
+    new ChallengeContributionMapper();
 
   public ChallengeContributionService(
-      ChallengeContributionRepository challengeContributionRepository) {
+    ChallengeContributionRepository challengeContributionRepository
+  ) {
     this.challengeContributionRepository = challengeContributionRepository;
   }
 
   public ChallengeContributionsPageDto listChallengeContributions(Long challengeId) {
     List<ChallengeContributionEntity> entities =
-        challengeContributionRepository.findAllByChallenge_id(challengeId);
-    List<ChallengeContributionDto> contributions =
-        challengeContributionMapper.convertToDtoList(entities);
+      challengeContributionRepository.findAllByChallenge_id(challengeId);
+    List<ChallengeContributionDto> contributions = challengeContributionMapper.convertToDtoList(
+      entities
+    );
 
     return ChallengeContributionsPageDto.builder()
-        .challengeContributions(contributions)
-        .number(0)
-        .size(contributions.size())
-        .totalElements(Long.valueOf(contributions.size()))
-        .totalPages(1)
-        .hasNext(false)
-        .hasPrevious(false)
-        .build();
+      .challengeContributions(contributions)
+      .number(0)
+      .size(contributions.size())
+      .totalElements(Long.valueOf(contributions.size()))
+      .totalPages(1)
+      .hasNext(false)
+      .hasPrevious(false)
+      .build();
   }
 }

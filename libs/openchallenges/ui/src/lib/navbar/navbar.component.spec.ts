@@ -41,8 +41,6 @@ describe('NavbarComponent', () => {
   it('should emit', () => {
     jest.spyOn(component.userMenuItemSelected, 'emit');
     component.selectUserMenuItem(USER_MENU_ITEMS[0]);
-    expect(component.userMenuItemSelected.emit).toHaveBeenCalledWith(
-      USER_MENU_ITEMS[0],
-    );
+    expect(component.userMenuItemSelected.emit).toHaveBeenCalledWith(USER_MENU_ITEMS[0]);
   });
 });

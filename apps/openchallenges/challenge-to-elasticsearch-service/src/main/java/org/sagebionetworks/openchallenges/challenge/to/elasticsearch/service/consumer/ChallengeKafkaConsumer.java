@@ -25,9 +25,10 @@ public class ChallengeKafkaConsumer implements KafkaConsumer<Long, KaggleCompeti
   private final KafkaConfigData kafkaConfigData;
 
   public ChallengeKafkaConsumer(
-      KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
-      KafkaAdminClient kafkaAdminClient,
-      KafkaConfigData kafkaConfigData) {
+    KafkaListenerEndpointRegistry kafkaListenerEndpointRegistry,
+    KafkaAdminClient kafkaAdminClient,
+    KafkaConfigData kafkaConfigData
+  ) {
     this.kafkaListenerEndpointRegistry = kafkaListenerEndpointRegistry;
     this.kafkaAdminClient = kafkaAdminClient;
     this.kafkaConfigData = kafkaConfigData;
@@ -37,8 +38,9 @@ public class ChallengeKafkaConsumer implements KafkaConsumer<Long, KaggleCompeti
   public void onAppStarted(ApplicationStartedEvent event) {
     kafkaAdminClient.checkTopicsCreated();
     log.info(
-        "Topics with name {} is ready for operations.",
-        kafkaConfigData.getTopicNamesToCreate().toArray());
+      "Topics with name {} is ready for operations.",
+      kafkaConfigData.getTopicNamesToCreate().toArray()
+    );
     kafkaListenerEndpointRegistry.getListenerContainer("challengeTopicListener").start();
   }
 
@@ -46,17 +48,19 @@ public class ChallengeKafkaConsumer implements KafkaConsumer<Long, KaggleCompeti
   @Override
   @KafkaListener(id = "challengeTopicListener", topics = "kaggle-topic")
   public void receive(
-      @Payload List<KaggleCompetitionAvroModel> messages,
-      @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<Integer> keys,
-      @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
-      @Header(KafkaHeaders.OFFSET) List<Long> offsets) {
+    @Payload List<KaggleCompetitionAvroModel> messages,
+    @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) List<Integer> keys,
+    @Header(KafkaHeaders.RECEIVED_PARTITION_ID) List<Integer> partitions,
+    @Header(KafkaHeaders.OFFSET) List<Long> offsets
+  ) {
     log.info(
-        "{} number of messages received with keys {}, partitions {} and offsets {}, "
-            + "sending them to elasticsearch: Thread id {}",
-        messages.size(),
-        keys.toString(),
-        partitions.toString(),
-        offsets.toString(),
-        Thread.currentThread().getId());
+      "{} number of messages received with keys {}, partitions {} and offsets {}, " +
+      "sending them to elasticsearch: Thread id {}",
+      messages.size(),
+      keys.toString(),
+      partitions.toString(),
+      offsets.toString(),
+      Thread.currentThread().getId()
+    );
   }
 }

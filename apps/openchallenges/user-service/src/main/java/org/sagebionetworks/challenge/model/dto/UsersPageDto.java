@@ -61,9 +61,10 @@ public class UsersPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalResults",
-      description = "Total number of results in the result set",
-      required = true)
+    name = "totalResults",
+    description = "Total number of results in the result set",
+    required = true
+  )
   public Integer getTotalResults() {
     return totalResults;
   }
@@ -107,9 +108,11 @@ public class UsersPageDto {
       return false;
     }
     UsersPageDto usersPage = (UsersPageDto) o;
-    return Objects.equals(this.paging, usersPage.paging)
-        && Objects.equals(this.totalResults, usersPage.totalResults)
-        && Objects.equals(this.users, usersPage.users);
+    return (
+      Objects.equals(this.paging, usersPage.paging) &&
+      Objects.equals(this.totalResults, usersPage.totalResults) &&
+      Objects.equals(this.users, usersPage.users)
+    );
   }
 
   @Override

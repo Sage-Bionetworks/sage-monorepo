@@ -14,4 +14,13 @@ export * from './organization.service';
 import { OrganizationService } from './organization.service';
 export * from './user.service';
 import { UserService } from './user.service';
-export const APIS = [ChallengeService, ChallengeAnalyticsService, ChallengeContributionService, ChallengePlatformService, EdamConceptService, ImageService, OrganizationService, UserService];
+export const APIS = [
+  ChallengeService,
+  ChallengeAnalyticsService,
+  ChallengeContributionService,
+  ChallengePlatformService,
+  EdamConceptService,
+  ImageService,
+  OrganizationService,
+  UserService,
+];

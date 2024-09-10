@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "Image", description = "Operations about images")
 public interface ImageApi {
-
   default ImageApiDelegate getDelegate() {
     return new ImageApiDelegate() {};
   }
@@ -38,56 +37,67 @@ public interface ImageApi {
    *     The request cannot be fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "getImage",
-      summary = "Get an image",
-      description = "Returns the image specified.",
-      tags = {"Image"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "An image",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = ImageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = ImageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "404",
-            description = "The specified resource was not found",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "getImage",
+    summary = "Get an image",
+    description = "Returns the image specified.",
+    tags = { "Image" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "An image",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = ImageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = ImageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "404",
+        description = "The specified resource was not found",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/images",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/images",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<ImageDto> getImage(
-      @Parameter(
-              name = "imageQuery",
-              description = "The query used to get an image.",
-              in = ParameterIn.QUERY)
-          @Valid
-          ImageQueryDto imageQuery) {
+    @Parameter(
+      name = "imageQuery",
+      description = "The query used to get an image.",
+      in = ParameterIn.QUERY
+    ) @Valid ImageQueryDto imageQuery
+  ) {
     return getDelegate().getImage(imageQuery);
   }
 }

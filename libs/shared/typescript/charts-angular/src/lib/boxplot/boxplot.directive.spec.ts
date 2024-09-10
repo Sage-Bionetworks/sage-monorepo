@@ -43,9 +43,7 @@ const renderTestComponent = async (props: BoxplotProps) => {
 describe('BoxplotDirective', () => {
   it('should render no data placeholder when no data is passed', async () => {
     await renderTestComponent({ points: [] });
-    expect(
-      screen.getByLabelText('No data is currently available.'),
-    ).toBeVisible();
+    expect(screen.getByLabelText('No data is currently available.')).toBeVisible();
   });
 
   it('should render boxplot with static summaries', async () => {

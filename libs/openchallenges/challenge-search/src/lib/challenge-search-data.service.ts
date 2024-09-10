@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, forkJoin, iif, Observable, of } from 'rxjs';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  switchMap,
-} from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, map, switchMap } from 'rxjs/operators';
 import {
   ChallengePlatformSearchQuery,
   ChallengePlatformService,
@@ -132,9 +126,7 @@ export class ChallengeSearchDataService {
       of({ url: '' }),
     ).pipe(
       catchError(() => {
-        console.error(
-          'Unable to get the image url. Please check the logs of the image service.',
-        );
+        console.error('Unable to get the image url. Please check the logs of the image service.');
         return of({ url: '' });
       }),
     );

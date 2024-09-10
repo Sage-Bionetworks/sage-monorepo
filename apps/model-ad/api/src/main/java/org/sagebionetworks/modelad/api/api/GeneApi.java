@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "Gene", description = "Operations about genes.")
 public interface GeneApi {
-
   default GeneApiDelegate getDelegate() {
     return new GeneApiDelegate() {};
   }
@@ -33,50 +32,60 @@ public interface GeneApi {
    *     fulfilled due to an unexpected server error (status code 500)
    */
   @Operation(
-      operationId = "listGenes",
-      summary = "List genes",
-      tags = {"Gene"},
-      responses = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Success",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = GenesPageDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = GenesPageDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "400",
-            description = "Invalid request",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            }),
-        @ApiResponse(
-            responseCode = "500",
-            description = "The request cannot be fulfilled due to an unexpected server error",
-            content = {
-              @Content(
-                  mediaType = "application/json",
-                  schema = @Schema(implementation = BasicErrorDto.class)),
-              @Content(
-                  mediaType = "application/problem+json",
-                  schema = @Schema(implementation = BasicErrorDto.class))
-            })
-      })
+    operationId = "listGenes",
+    summary = "List genes",
+    tags = { "Gene" },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "Success",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = GenesPageDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = GenesPageDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "400",
+        description = "Invalid request",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+      @ApiResponse(
+        responseCode = "500",
+        description = "The request cannot be fulfilled due to an unexpected server error",
+        content = {
+          @Content(
+            mediaType = "application/json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+          @Content(
+            mediaType = "application/problem+json",
+            schema = @Schema(implementation = BasicErrorDto.class)
+          ),
+        }
+      ),
+    }
+  )
   @RequestMapping(
-      method = RequestMethod.GET,
-      value = "/genes",
-      produces = {"application/json", "application/problem+json"})
+    method = RequestMethod.GET,
+    value = "/genes",
+    produces = { "application/json", "application/problem+json" }
+  )
   default ResponseEntity<GenesPageDto> listGenes() {
-
     return getDelegate().listGenes();
   }
 }

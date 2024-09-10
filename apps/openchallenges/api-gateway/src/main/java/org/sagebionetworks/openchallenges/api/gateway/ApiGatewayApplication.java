@@ -30,5 +30,4 @@ public class ApiGatewayApplication implements CommandLineRunner {
   public void run(String... args) throws Exception {
     LOG.info(apiGatewayConfigData.getWelcomeMessage());
   }
-
 }

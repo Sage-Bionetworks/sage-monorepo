@@ -26,18 +26,18 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     super.configure(http);
-    http.csrf()
-        .disable()
-        .cors()
-        .disable()
-        .authorizeRequests()
-        // .antMatchers("/api/v1/users/register", "/api/v1/**", "/swagger-ui/**",
-        // "/swagger-ui.html")
-        .antMatchers("**")
-        .permitAll()
-        .anyRequest()
-        .authenticated();
-
+    http
+      .csrf()
+      .disable()
+      .cors()
+      .disable()
+      .authorizeRequests()
+      // .antMatchers("/api/v1/users/register", "/api/v1/**", "/swagger-ui/**",
+      // "/swagger-ui.html")
+      .antMatchers("**")
+      .permitAll()
+      .anyRequest()
+      .authenticated();
     // Custom error handler
     // http.exceptionHandling().accessDeniedHandler(restAccessDeniedHandler);
   }
@@ -45,7 +45,7 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   @Autowired
   public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
     KeycloakAuthenticationProvider keycloakAuthenticationProvider =
-        keycloakAuthenticationProvider();
+      keycloakAuthenticationProvider();
     keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
     auth.authenticationProvider(keycloakAuthenticationProvider);
   }
@@ -55,7 +55,6 @@ class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
   protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
     return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
   }
-
   // // Keycloak auth exception handler
   // @Bean
   // @Override

@@ -1,13 +1,13 @@
 # openchallenges_client.ChallengeInputDataTypeApi
 
-All URIs are relative to *http://localhost/v1*
+All URIs are relative to _http://localhost/v1_
 
-Method | HTTP request | Description
-------------- | ------------- | -------------
-[**list_challenge_input_data_types**](ChallengeInputDataTypeApi.md#list_challenge_input_data_types) | **GET** /challengeInputDataTypes | List challenge input data types
-
+| Method                                                                                              | HTTP request                     | Description                     |
+| --------------------------------------------------------------------------------------------------- | -------------------------------- | ------------------------------- |
+| [**list_challenge_input_data_types**](ChallengeInputDataTypeApi.md#list_challenge_input_data_types) | **GET** /challengeInputDataTypes | List challenge input data types |
 
 # **list_challenge_input_data_types**
+
 > ChallengeInputDataTypesPage list_challenge_input_data_types(challenge_input_data_type_search_query=challenge_input_data_type_search_query)
 
 List challenge input data types
@@ -47,13 +47,11 @@ with openchallenges_client.ApiClient(configuration) as api_client:
         print("Exception when calling ChallengeInputDataTypeApi->list_challenge_input_data_types: %s\n" % e)
 ```
 
-
-
 ### Parameters
 
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
- **challenge_input_data_type_search_query** | [**ChallengeInputDataTypeSearchQuery**](.md)| The search query used to find challenge input data types. | [optional] 
+| Name                                       | Type                                         | Description                                               | Notes      |
+| ------------------------------------------ | -------------------------------------------- | --------------------------------------------------------- | ---------- |
+| **challenge_input_data_type_search_query** | [**ChallengeInputDataTypeSearchQuery**](.md) | The search query used to find challenge input data types. | [optional] |
 
 ### Return type
 
@@ -65,15 +63,15 @@ No authorization required
 
 ### HTTP request headers
 
- - **Content-Type**: Not defined
- - **Accept**: application/json, application/problem+json
+- **Content-Type**: Not defined
+- **Accept**: application/json, application/problem+json
 
 ### HTTP response details
-| Status code | Description | Response headers |
-|-------------|-------------|------------------|
-**200** | Success |  -  |
-**400** | Invalid request |  -  |
-**500** | The request cannot be fulfilled due to an unexpected server error |  -  |
+
+| Status code | Description                                                       | Response headers |
+| ----------- | ----------------------------------------------------------------- | ---------------- |
+| **200**     | Success                                                           | -                |
+| **400**     | Invalid request                                                   | -                |
+| **500**     | The request cannot be fulfilled due to an unexpected server error | -                |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
-

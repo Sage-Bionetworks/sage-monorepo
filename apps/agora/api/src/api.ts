@@ -14,10 +14,7 @@ mongoose
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.error('Error connecting to MongoDB:', err));
 
-mongoose.connection.on(
-  'error',
-  console.error.bind(console, 'MongoDB connection error:'),
-);
+mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 const router = express.Router();
 mongoose.connection.once('open', async () => {

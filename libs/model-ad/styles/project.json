@@ -5,9 +5,5 @@
   "projectType": "library",
   "generators": {},
   "targets": {},
-  "tags": [
-    "type:styles",
-    "scope:model-ad",
-    "language:typescript"
-  ]
+  "tags": ["type:styles", "scope:model-ad", "language:typescript"]
 }

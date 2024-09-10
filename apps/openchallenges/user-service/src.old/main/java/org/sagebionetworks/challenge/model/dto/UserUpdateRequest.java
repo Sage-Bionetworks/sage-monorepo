@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class UserUpdateRequest {
+
   private UserStatus status;
 }

@@ -10,11 +10,7 @@ describe('RandomChallengeListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        RandomChallengeListComponent,
-        RouterTestingModule,
-      ],
+      imports: [HttpClientModule, RandomChallengeListComponent, RouterTestingModule],
     }).compileComponents();
   });
 

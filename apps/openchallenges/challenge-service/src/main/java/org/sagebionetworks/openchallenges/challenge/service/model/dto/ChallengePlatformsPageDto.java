@@ -72,10 +72,11 @@ public class ChallengePlatformsPageDto {
    */
   @NotNull
   @Schema(
-      name = "size",
-      example = "99",
-      description = "The number of items in a single page.",
-      required = true)
+    name = "size",
+    example = "99",
+    description = "The number of items in a single page.",
+    required = true
+  )
   public Integer getSize() {
     return size;
   }
@@ -96,10 +97,11 @@ public class ChallengePlatformsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalElements",
-      example = "99",
-      description = "Total number of elements in the result set.",
-      required = true)
+    name = "totalElements",
+    example = "99",
+    description = "Total number of elements in the result set.",
+    required = true
+  )
   public Long getTotalElements() {
     return totalElements;
   }
@@ -120,10 +122,11 @@ public class ChallengePlatformsPageDto {
    */
   @NotNull
   @Schema(
-      name = "totalPages",
-      example = "99",
-      description = "Total number of pages in the result set.",
-      required = true)
+    name = "totalPages",
+    example = "99",
+    description = "Total number of pages in the result set.",
+    required = true
+  )
   public Integer getTotalPages() {
     return totalPages;
   }
@@ -144,10 +147,11 @@ public class ChallengePlatformsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasNext",
-      example = "true",
-      description = "Returns if there is a next page.",
-      required = true)
+    name = "hasNext",
+    example = "true",
+    description = "Returns if there is a next page.",
+    required = true
+  )
   public Boolean getHasNext() {
     return hasNext;
   }
@@ -168,10 +172,11 @@ public class ChallengePlatformsPageDto {
    */
   @NotNull
   @Schema(
-      name = "hasPrevious",
-      example = "true",
-      description = "Returns if there is a previous page.",
-      required = true)
+    name = "hasPrevious",
+    example = "true",
+    description = "Returns if there is a previous page.",
+    required = true
+  )
   public Boolean getHasPrevious() {
     return hasPrevious;
   }
@@ -181,13 +186,15 @@ public class ChallengePlatformsPageDto {
   }
 
   public ChallengePlatformsPageDto challengePlatforms(
-      List<ChallengePlatformDto> challengePlatforms) {
+    List<ChallengePlatformDto> challengePlatforms
+  ) {
     this.challengePlatforms = challengePlatforms;
     return this;
   }
 
   public ChallengePlatformsPageDto addChallengePlatformsItem(
-      ChallengePlatformDto challengePlatformsItem) {
+    ChallengePlatformDto challengePlatformsItem
+  ) {
     if (this.challengePlatforms == null) {
       this.challengePlatforms = new ArrayList<>();
     }
@@ -203,9 +210,10 @@ public class ChallengePlatformsPageDto {
   @NotNull
   @Valid
   @Schema(
-      name = "challengePlatforms",
-      description = "A list of challenge platforms.",
-      required = true)
+    name = "challengePlatforms",
+    description = "A list of challenge platforms.",
+    required = true
+  )
   public List<ChallengePlatformDto> getChallengePlatforms() {
     return challengePlatforms;
   }
@@ -223,19 +231,28 @@ public class ChallengePlatformsPageDto {
       return false;
     }
     ChallengePlatformsPageDto challengePlatformsPage = (ChallengePlatformsPageDto) o;
-    return Objects.equals(this.number, challengePlatformsPage.number)
-        && Objects.equals(this.size, challengePlatformsPage.size)
-        && Objects.equals(this.totalElements, challengePlatformsPage.totalElements)
-        && Objects.equals(this.totalPages, challengePlatformsPage.totalPages)
-        && Objects.equals(this.hasNext, challengePlatformsPage.hasNext)
-        && Objects.equals(this.hasPrevious, challengePlatformsPage.hasPrevious)
-        && Objects.equals(this.challengePlatforms, challengePlatformsPage.challengePlatforms);
+    return (
+      Objects.equals(this.number, challengePlatformsPage.number) &&
+      Objects.equals(this.size, challengePlatformsPage.size) &&
+      Objects.equals(this.totalElements, challengePlatformsPage.totalElements) &&
+      Objects.equals(this.totalPages, challengePlatformsPage.totalPages) &&
+      Objects.equals(this.hasNext, challengePlatformsPage.hasNext) &&
+      Objects.equals(this.hasPrevious, challengePlatformsPage.hasPrevious) &&
+      Objects.equals(this.challengePlatforms, challengePlatformsPage.challengePlatforms)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        number, size, totalElements, totalPages, hasNext, hasPrevious, challengePlatforms);
+      number,
+      size,
+      totalElements,
+      totalPages,
+      hasNext,
+      hasPrevious,
+      challengePlatforms
+    );
   }
 
   @Override

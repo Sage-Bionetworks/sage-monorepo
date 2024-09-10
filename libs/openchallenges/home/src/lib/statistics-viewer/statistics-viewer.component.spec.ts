@@ -17,11 +17,7 @@ describe('StatisticsViewerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        RouterTestingModule,
-        StatisticsViewerComponent,
-      ],
+      imports: [HttpClientModule, RouterTestingModule, StatisticsViewerComponent],
     }).compileComponents();
   });
 

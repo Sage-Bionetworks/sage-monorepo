@@ -101,10 +101,11 @@ public class ChallengeDto {
    */
   @NotNull
   @Schema(
-      name = "id",
-      example = "1",
-      description = "The unique identifier of the challenge.",
-      required = true)
+    name = "id",
+    example = "1",
+    description = "The unique identifier of the challenge.",
+    required = true
+  )
   public Long getId() {
     return id;
   }
@@ -127,10 +128,11 @@ public class ChallengeDto {
   @Pattern(regexp = "^[a-z0-9]+(?:-[a-z0-9]+)*$")
   @Size(min = 3, max = 255)
   @Schema(
-      name = "slug",
-      example = "awesome-challenge",
-      description = "The unique slug of the challenge.",
-      required = true)
+    name = "slug",
+    example = "awesome-challenge",
+    description = "The unique slug of the challenge.",
+    required = true
+  )
   public String getSlug() {
     return slug;
   }
@@ -172,10 +174,11 @@ public class ChallengeDto {
    */
   @Size(min = 0, max = 80)
   @Schema(
-      name = "headline",
-      example = "Example challenge headline",
-      description = "The headline of the challenge.",
-      required = false)
+    name = "headline",
+    example = "Example challenge headline",
+    description = "The headline of the challenge.",
+    required = false
+  )
   public String getHeadline() {
     return headline;
   }
@@ -197,10 +200,11 @@ public class ChallengeDto {
   @NotNull
   @Size(min = 0, max = 1000)
   @Schema(
-      name = "description",
-      example = "This is an example description of the challenge.",
-      description = "The description of the challenge.",
-      required = true)
+    name = "description",
+    example = "This is an example description of the challenge.",
+    description = "The description of the challenge.",
+    required = true
+  )
   public String getDescription() {
     return description;
   }
@@ -221,10 +225,11 @@ public class ChallengeDto {
    */
   @Size(max = 120)
   @Schema(
-      name = "doi",
-      example = "https://doi.org/123/abc",
-      description = "The DOI of the challenge.",
-      required = false)
+    name = "doi",
+    example = "https://doi.org/123/abc",
+    description = "The DOI of the challenge.",
+    required = false
+  )
   public String getDoi() {
     return doi;
   }
@@ -286,10 +291,11 @@ public class ChallengeDto {
    */
   @Size(max = 500)
   @Schema(
-      name = "websiteUrl",
-      example = "https://openchallenges.io",
-      description = "A URL to the website or image.",
-      required = false)
+    name = "websiteUrl",
+    example = "https://openchallenges.io",
+    description = "A URL to the website or image.",
+    required = false
+  )
   public String getWebsiteUrl() {
     return websiteUrl;
   }
@@ -310,10 +316,11 @@ public class ChallengeDto {
    */
   @Size(max = 500)
   @Schema(
-      name = "avatarUrl",
-      example = "https://openchallenges.io",
-      description = "A URL to the website or image.",
-      required = false)
+    name = "avatarUrl",
+    example = "https://openchallenges.io",
+    description = "A URL to the website or image.",
+    required = false
+  )
   public String getAvatarUrl() {
     return avatarUrl;
   }
@@ -449,10 +456,11 @@ public class ChallengeDto {
    */
   @Valid
   @Schema(
-      name = "startDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "The start date of the challenge.",
-      required = false)
+    name = "startDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "The start date of the challenge.",
+    required = false
+  )
   public LocalDate getStartDate() {
     return startDate;
   }
@@ -473,10 +481,11 @@ public class ChallengeDto {
    */
   @Valid
   @Schema(
-      name = "endDate",
-      example = "Fri Jul 21 00:00:00 UTC 2017",
-      description = "The end date of the challenge.",
-      required = false)
+    name = "endDate",
+    example = "Fri Jul 21 00:00:00 UTC 2017",
+    description = "The end date of the challenge.",
+    required = false
+  )
   public LocalDate getEndDate() {
     return endDate;
   }
@@ -498,10 +507,11 @@ public class ChallengeDto {
   @NotNull
   @Min(0)
   @Schema(
-      name = "starredCount",
-      example = "100",
-      description = "The number of times the challenge has been starred by users.",
-      required = true)
+    name = "starredCount",
+    example = "100",
+    description = "The number of times the challenge has been starred by users.",
+    required = true
+  )
   public Integer getStarredCount() {
     return starredCount;
   }
@@ -543,10 +553,11 @@ public class ChallengeDto {
   @NotNull
   @Valid
   @Schema(
-      name = "createdAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was added to the database.",
-      required = true)
+    name = "createdAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was added to the database.",
+    required = true
+  )
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -568,10 +579,11 @@ public class ChallengeDto {
   @NotNull
   @Valid
   @Schema(
-      name = "updatedAt",
-      example = "2022-07-04T22:19:11Z",
-      description = "Datetime when the object was last modified in the database.",
-      required = true)
+    name = "updatedAt",
+    example = "2022-07-04T22:19:11Z",
+    description = "Datetime when the object was last modified in the database.",
+    required = true
+  )
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -589,51 +601,54 @@ public class ChallengeDto {
       return false;
     }
     ChallengeDto challenge = (ChallengeDto) o;
-    return Objects.equals(this.id, challenge.id)
-        && Objects.equals(this.slug, challenge.slug)
-        && Objects.equals(this.name, challenge.name)
-        && Objects.equals(this.headline, challenge.headline)
-        && Objects.equals(this.description, challenge.description)
-        && Objects.equals(this.doi, challenge.doi)
-        && Objects.equals(this.status, challenge.status)
-        && Objects.equals(this.platform, challenge.platform)
-        && Objects.equals(this.websiteUrl, challenge.websiteUrl)
-        && Objects.equals(this.avatarUrl, challenge.avatarUrl)
-        && Objects.equals(this.incentives, challenge.incentives)
-        && Objects.equals(this.submissionTypes, challenge.submissionTypes)
-        && Objects.equals(this.inputDataTypes, challenge.inputDataTypes)
-        && Objects.equals(this.categories, challenge.categories)
-        && Objects.equals(this.startDate, challenge.startDate)
-        && Objects.equals(this.endDate, challenge.endDate)
-        && Objects.equals(this.starredCount, challenge.starredCount)
-        && Objects.equals(this.operation, challenge.operation)
-        && Objects.equals(this.createdAt, challenge.createdAt)
-        && Objects.equals(this.updatedAt, challenge.updatedAt);
+    return (
+      Objects.equals(this.id, challenge.id) &&
+      Objects.equals(this.slug, challenge.slug) &&
+      Objects.equals(this.name, challenge.name) &&
+      Objects.equals(this.headline, challenge.headline) &&
+      Objects.equals(this.description, challenge.description) &&
+      Objects.equals(this.doi, challenge.doi) &&
+      Objects.equals(this.status, challenge.status) &&
+      Objects.equals(this.platform, challenge.platform) &&
+      Objects.equals(this.websiteUrl, challenge.websiteUrl) &&
+      Objects.equals(this.avatarUrl, challenge.avatarUrl) &&
+      Objects.equals(this.incentives, challenge.incentives) &&
+      Objects.equals(this.submissionTypes, challenge.submissionTypes) &&
+      Objects.equals(this.inputDataTypes, challenge.inputDataTypes) &&
+      Objects.equals(this.categories, challenge.categories) &&
+      Objects.equals(this.startDate, challenge.startDate) &&
+      Objects.equals(this.endDate, challenge.endDate) &&
+      Objects.equals(this.starredCount, challenge.starredCount) &&
+      Objects.equals(this.operation, challenge.operation) &&
+      Objects.equals(this.createdAt, challenge.createdAt) &&
+      Objects.equals(this.updatedAt, challenge.updatedAt)
+    );
   }
 
   @Override
   public int hashCode() {
     return Objects.hash(
-        id,
-        slug,
-        name,
-        headline,
-        description,
-        doi,
-        status,
-        platform,
-        websiteUrl,
-        avatarUrl,
-        incentives,
-        submissionTypes,
-        inputDataTypes,
-        categories,
-        startDate,
-        endDate,
-        starredCount,
-        operation,
-        createdAt,
-        updatedAt);
+      id,
+      slug,
+      name,
+      headline,
+      description,
+      doi,
+      status,
+      platform,
+      websiteUrl,
+      avatarUrl,
+      incentives,
+      submissionTypes,
+      inputDataTypes,
+      categories,
+      startDate,
+      endDate,
+      starredCount,
+      operation,
+      createdAt,
+      updatedAt
+    );
   }
 
   @Override
