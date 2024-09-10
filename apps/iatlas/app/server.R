@@ -74,7 +74,7 @@ shiny::shinyServer(function(input, output, session) {
 
   # Single cell Modules --------------------------------------------------------------
 
-  ici_cohort_obj <- call_iatlas_module(
+  sc_cohort_obj <- call_iatlas_module(
     "sc_cohort_selection",
     iatlas.modules2::cohort_selection_server,
     input,
@@ -87,7 +87,7 @@ shiny::shinyServer(function(input, output, session) {
 
   sc_modules_tbl %>%
     dplyr::select("name", "server_function") %>%
-    purrr::pwalk(iatlas.app::call_iatlas_module, input, session)
+    purrr::pwalk(iatlas.app::call_iatlas_module, input, session, sc_cohort_obj)
 
   # Other ---------------------------------------------------------------------
 
