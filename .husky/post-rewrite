@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 node tools/prepare-nodejs-envs.js
 node tools/prepare-java-envs.js
 node tools/prepare-python-envs.js

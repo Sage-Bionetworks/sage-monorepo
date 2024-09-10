@@ -1,6 +1,3 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
 # Install the Node.js dependencies.
 # rm -rf node_modules && yarn install --immutable
 node tools/prepare-nodejs-envs.js
