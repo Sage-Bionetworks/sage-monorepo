@@ -11,8 +11,13 @@ sc_immune_features_distribution_ui <- function(id){
             shiny::checkboxGroupInput(
               ns("datasets"),
               "Choose dataset(s)",
-              choices = c("MSK - SCLC" = "MSK",
-                          "Vanderbilt - colon polyps" = "Vanderbilt"),
+              choices = c("Bi 2021 - ccRCC" = "Bi_2021",
+                          "Krishna 2021 - ccRCC" = "Krishna_2021",
+                          "Li 2022 - ccRCC" = "Li_2022",
+                          "HTAN MSK - SCLC" = "MSK",
+                          "Shiao 2024 - BRCA" = "Shiao_2024",
+                          "HTAN Vanderbilt - colon polyps" = "Vanderbilt"
+              ),
               selected = c("MSK", "Vanderbilt")
             )
           ),

@@ -45,7 +45,7 @@ ici_overview_datasets_server <- function(
 
           tags$div(
             display_text,
-            shiny::p("These data sets were generated as part of the NCI Human Tumor Atlas Network, shared via ",
+            shiny::p("The MSK and Vanderbilt data sets were generated as part of the NCI Human Tumor Atlas Network, shared via ",
                    a(href = "https://humantumoratlas.org/", "https://humantumoratlas.org/ .")),
             tags$a(href=download_text()[1],
                    download_text()[2])
