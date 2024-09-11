@@ -61,6 +61,7 @@ getGitDiffFiles().then((changedFiles) => {
   }
   getNxProjects()
     .then((projects) => {
+      console.log(project['projectDir']);
       const toUpdate = (project) => hasPoetryDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
