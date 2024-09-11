@@ -31,8 +31,10 @@
   },
   "typescript.tsdk": "node_modules/typescript/lib",
   "black-formatter.importStrategy": "fromEnvironment",
+  // "black-formatter.path": [],
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
+  // "python.formatting.provider": "black",
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.formatOnSave": true,
