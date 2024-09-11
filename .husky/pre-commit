@@ -1,8 +1,7 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
+# Run formatters and linters against staged git files
+pnpm dlx lint-staged --relative
 
-nx affected --uncommitted --target=format
-nx affected --uncommitted --target=lint
+# nx affected --uncommitted --target=lint
 
 # Re-index the staged files after they have been formatted
 # git diff --name-only --cached | xargs -l git add
