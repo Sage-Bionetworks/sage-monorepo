@@ -56,7 +56,7 @@ const installWorkspacePythonDependencies = () => {
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  console.log(`changedFiles: ${changeFiles}`);
+  console.log(`changedFiles: ${changedFiles}`);
   // if (hasPoetryDefinitionChanged('.', changedFiles)) {
   // console.log('root poetry lock file has changed');
   // installWorkspacePythonDependencies();
