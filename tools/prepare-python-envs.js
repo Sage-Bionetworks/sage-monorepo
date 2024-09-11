@@ -46,28 +46,24 @@ const runCommand = (command, args) => {
 const installWorkspacePythonDependencies = async () => {
   try {
     await runCommand('poetry', ['install', '--with', 'dev']);
+    // The bin folder of the virtualenv has already been added to the path in dev-env.sh
   } catch (error) {
     console.error(`Error: ${error.message}`);
   }
 };
 
 // Installs the Python dependencies of the comma-separated list of projects.
-const installProjectPythonDependencies = (projectNames) => {
-  spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
-    stdio: 'inherit',
-  }).on('exit', function (error) {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
-  });
+const installProjectPythonDependencies = async (projectNames) => {
+  try {
+    await runCommand('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`]);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
 };
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  console.log(`changedFiles: ${changedFiles}`);
   if (hasPoetryDefinitionChanged('.', changedFiles)) {
-    console.log('YES');
     installWorkspacePythonDependencies();
   }
   getNxProjects()
