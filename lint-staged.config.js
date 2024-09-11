@@ -11,4 +11,7 @@ module.exports = {
 
   // Format JSON, Markdown, and YAML files
   '**/*.{json,md,yaml,yml}': (filenames) => [`nx format:write --files=${filenames.join(',')}`],
+
+  // Format Python files
+  '**/*.py': (filenames) => [`black ${filenames.join(' ')}`],
 };
