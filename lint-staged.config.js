@@ -1,9 +1,14 @@
+// lint-staged.config.js
+
 module.exports = {
-  '{apps,libs,tools}/**/*.{ts,tsx}': (files) => {
-    return `nx affected --target=typecheck --files=${files.join(',')}`;
-  },
-  '{apps,libs,tools}/**/*.{js,ts,jsx,tsx,json}': [
-    (files) => `nx affected:lint --files=${files.join(',')}`,
-    (files) => `nx format:write --files=${files.join(',')}`,
+  // Format JavaScript, TypeScript, and JSX/TSX files first, then lint
+  '**/*.{js,jsx,ts,tsx}': (filenames) => [
+    // Format files with Prettier first
+    `prettier --write ${filenames.join(' ')}`,
+    // Then run ESLint on the formatted files
+    `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
+
+  // Format JSON, Markdown, and YAML files
+  '**/*.{json,md,yaml,yml}': (filenames) => [`nx format:write --files=${filenames.join(',')}`],
 };
