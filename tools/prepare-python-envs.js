@@ -46,7 +46,6 @@ const runCommand = (command, args) => {
 const installWorkspacePythonDependencies = async () => {
   try {
     await runCommand('poetry', ['install', '--with', 'dev']);
-    await runCommand('export', ['PATH="$(poetry env info --path)/bin:$PATH"']);
   } catch (error) {
     console.error(`Error: ${error.message}`);
   }
