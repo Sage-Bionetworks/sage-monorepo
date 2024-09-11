@@ -57,11 +57,11 @@ const installWorkspacePythonDependencies = () => {
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
   if (hasPoetryDefinitionChanged('.', changedFiles)) {
+    console.log('root poetry lock file has changed');
     installWorkspacePythonDependencies();
   }
   getNxProjects()
     .then((projects) => {
-      console.log(project['projectDir']);
       const toUpdate = (project) => hasPoetryDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
