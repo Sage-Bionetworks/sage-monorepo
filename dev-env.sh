@@ -19,15 +19,26 @@ function workspace-cd {
 # Add local npm binaries to PATH
 export PATH="$PATH:$WORKSPACE_DIR/node_modules/.bin"
 
-function workspace-install {
+function workspace-install-nodejs-dependencies {
   pnpm install --frozen-lockfile
+}
+
+function workspace-install-python-dependencies {
+  poetry install --with dev
+  export PATH="$(poetry env info --path)/bin:$PATH"
+}
+
+function workspace-install {
+  workspace-install-nodejs-dependencies
+  workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
   nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
 }
 
 function workspace-install-affected {
-  pnpm install --frozen-lockfile
+  workspace-install-nodejs-dependencies
+  workspace-install-python-dependencies
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
   nx affected --target=prepare --exclude 'tag:language:java'
