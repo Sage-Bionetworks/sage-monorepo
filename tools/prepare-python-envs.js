@@ -59,8 +59,7 @@ getGitDiffFiles().then((changedFiles) => {
   console.log(`changedFiles: ${changedFiles}`);
   if (hasPoetryDefinitionChanged('.', changedFiles)) {
     console.log('YES');
-    // console.log('root poetry lock file has changed');
-    // installWorkspacePythonDependencies();
+    installWorkspacePythonDependencies();
   }
   getNxProjects()
     .then((projects) => {
