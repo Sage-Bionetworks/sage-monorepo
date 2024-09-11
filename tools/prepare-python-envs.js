@@ -30,6 +30,28 @@ const hasPoetryDefinitionChanged = (directory, changedFiles) => {
   return false;
 };
 
+const runCommand = (command, args) => {
+  return new Promise((resolve, reject) => {
+    const process = spawn(command, args, { stdio: 'inherit' });
+    process.on('exit', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Command failed: ${command} ${args.join(' ')}`));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+const installWorkspacePythonDependencies = async () => {
+  try {
+    await runCommand('poetry', ['install', '--with', 'dev']);
+    await runCommand('export', ['PATH="$(poetry env info --path)/bin:$PATH"']);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
+};
+
 // Installs the Python dependencies of the comma-separated list of projects.
 const installProjectPythonDependencies = (projectNames) => {
   spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
@@ -40,18 +62,6 @@ const installProjectPythonDependencies = (projectNames) => {
       return;
     }
   });
-};
-
-const installWorkspacePythonDependencies = () => {
-  spawn('workspace-install-python-dependencies', [], { stdio: 'inherit' }).on(
-    'exit',
-    function (error) {
-      if (error) {
-        console.log(`error: ${error.message}`);
-        return;
-      }
-    },
-  );
 };
 
 console.log('✨ Preparing Python dependencies');
