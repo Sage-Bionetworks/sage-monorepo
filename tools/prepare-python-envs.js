@@ -18,6 +18,7 @@ const hasPoetryLockFile = (projectDir) => {
 // Returns true if the dir specified includes a Poetry lock file that has changed.
 const hasPoetryDefinitionChanged = (directory, changedFiles) => {
   console.log(`directory: ${directory}`);
+  console.log(`changedFiles: ${changedFiles}`);
   if (hasPoetryLockFile(directory)) {
     const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${directory}/${filename}`);
     if (
@@ -58,7 +59,7 @@ const installWorkspacePythonDependencies = () => {
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
   console.log(`changedFiles: ${changedFiles}`);
-  if (hasPoetryDefinitionChanged('./', changedFiles)) {
+  if (hasPoetryDefinitionChanged('.', changedFiles)) {
     console.log('YES');
     // console.log('root poetry lock file has changed');
     // installWorkspacePythonDependencies();
