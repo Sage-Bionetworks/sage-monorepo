@@ -56,7 +56,7 @@ const installWorkspacePythonDependencies = () => {
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  if (hasPoetryDefinitionChanged('.')) {
+  if (hasPoetryDefinitionChanged('.', changedFiles)) {
     installWorkspacePythonDependencies();
   }
   getNxProjects()
