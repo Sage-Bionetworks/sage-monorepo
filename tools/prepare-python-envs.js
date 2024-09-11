@@ -17,6 +17,7 @@ const hasPoetryLockFile = (projectDir) => {
 
 // Returns true if the dir specified includes a Poetry lock file that has changed.
 const hasPoetryDefinitionChanged = (directory, changedFiles) => {
+  console.log(`directory: ${directory}`);
   if (hasPoetryLockFile(directory)) {
     const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${directory}/${filename}`);
     if (
