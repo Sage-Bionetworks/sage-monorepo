@@ -1,14 +1,14 @@
 {
-  "name": "schematic-schematicpy",
+  "name": "schematic-api-next",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "libs/schematic/schematicpy/schematic_schematicpy",
+  "sourceRoot": "apps/schematic/api-next/schematic_api_next",
   "targets": {
     "lock": {
       "executor": "@nxlv/python:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "libs/schematic/schematicpy"
+        "cwd": "apps/schematic/api-next"
       }
     },
     "add": {
@@ -27,7 +27,7 @@
       "executor": "@nxlv/python:build",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "libs/schematic/schematicpy/dist",
+        "outputPath": "apps/schematic/api-next/dist",
         "publish": false,
         "lockedVersions": true,
         "bundleLocalDependencies": true
@@ -45,20 +45,20 @@
     },
     "lint": {
       "executor": "@nxlv/python:flake8",
-      "outputs": ["{workspaceRoot}/reports/libs/schematic/schematicpy/pylint.txt"],
+      "outputs": ["{workspaceRoot}/reports/apps/schematic/api-next/pylint.txt"],
       "options": {
-        "outputFile": "reports/libs/schematic/schematicpy/pylint.txt"
+        "outputFile": "reports/apps/schematic/api-next/pylint.txt"
       }
     },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
-        "{workspaceRoot}/reports/libs/schematic/schematicpy/unittests",
-        "{workspaceRoot}/coverage/libs/schematic/schematicpy"
+        "{workspaceRoot}/reports/apps/schematic/api-next/unittests",
+        "{workspaceRoot}/coverage/apps/schematic/api-next"
       ],
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "libs/schematic/schematicpy"
+        "cwd": "apps/schematic/api-next"
       }
     }
   },

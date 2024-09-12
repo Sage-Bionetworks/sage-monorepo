@@ -3,4 +3,4 @@
 
 def hello():
     """Return a friendly greeting."""
-    return "Hello schematic-schematicpy"
+    return "Hello schematic-core"
