@@ -27,10 +27,6 @@ readme = "README.md"
     path = "../../../libs/schematic/core"
     develop = true
 
-    [tool.poetry.dependencies.schematiccorev2]
-    path = "../../../libs/schematic/core-v2"
-    develop = true
-
 [build-system]
 requires = [ "poetry-core" ]
 build-backend = "poetry.core.masonry.api"

@@ -17,10 +17,6 @@ package-mode = false
     path = "libs/schematic/core"
     develop = true
 
-    [tool.poetry.dependencies.schematiccorev2]
-    path = "libs/schematic/core-v2"
-    develop = true
-
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
 flake8 = "6.0.0"

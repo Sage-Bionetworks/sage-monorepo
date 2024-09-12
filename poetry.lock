@@ -425,7 +425,6 @@ develop = true
 
 [package.dependencies]
 schematic-core = {path = "../../../libs/schematic/core", develop = true}
-schematiccorev2 = {path = "../../../libs/schematic/core-v2", develop = true}
 
 [package.source]
 type = "directory"

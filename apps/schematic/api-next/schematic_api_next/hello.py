@@ -1,4 +1,4 @@
-from schematiccorev2.hello import hello
+from schematic_core.hello import hello
 
 """Sample Hello World application."""
 
@@ -6,3 +6,6 @@ from schematiccorev2.hello import hello
 def hello2():
     """Return a friendly greeting."""
     return hello()
+
+
+print(hello())
