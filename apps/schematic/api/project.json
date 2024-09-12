@@ -75,7 +75,7 @@
       "options": {
         "commands": [
           "poetry run mypy --non-interactive --install-types --disallow-untyped-defs schematic_api/controllers/*impl.py schematic_api/test/test*.py",
-          "pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py"
+          "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py"
         ],
         "cwd": "apps/schematic/api"
       }
@@ -90,7 +90,7 @@
     "pylint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py",
+        "command": "poetry run pylint schematic_api/controllers/*impl.py schematic_api/test/test*.py",
         "cwd": "apps/schematic/api"
       }
     },
