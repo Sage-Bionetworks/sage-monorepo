@@ -25,7 +25,7 @@ function workspace-install-nodejs-dependencies {
 
 function workspace-install-python-dependencies {
   poetry install --with dev
-  export PATH="$(poetry env info --path)/bin:$PATH"
+  workspace-initialize-env
 }
 
 function workspace-install {
@@ -172,4 +172,8 @@ function workspace-initialize-env {
   # Prevent Corepack showing the URL when it needs to download software
   # https://github.com/nodejs/corepack/blob/main/README.md#environment-variables
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
+
+  # Update PATH to include the bin directory of the workspace-level Poetry virtual environment. This
+  # ensures that scripts and executables installed in the Poetry environment are accessible.
+  export PATH="$(poetry env info --path)/bin:$PATH"
 }
