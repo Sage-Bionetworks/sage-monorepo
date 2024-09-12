@@ -1,0 +1,66 @@
+{
+  "name": "openchallenges-schematicpy",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "libs/openchallenges/schematicpy/schematicpy",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "libs/openchallenges/schematicpy"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "libs/openchallenges/schematicpy/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": ["{workspaceRoot}/reports/libs/openchallenges/schematicpy/pylint.txt"],
+      "options": {
+        "outputFile": "reports/libs/openchallenges/schematicpy/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/libs/openchallenges/schematicpy/unittests",
+        "{workspaceRoot}/coverage/libs/openchallenges/schematicpy"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "libs/openchallenges/schematicpy"
+      }
+    }
+  },
+  "tags": []
+}
