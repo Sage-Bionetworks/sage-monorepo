@@ -11,6 +11,7 @@ python = "3.10.12"
 
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
+pylint = "3.2.7"
 
 [build-system]
 requires = ["poetry-core"]
