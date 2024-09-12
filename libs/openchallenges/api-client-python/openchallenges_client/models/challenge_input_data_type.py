@@ -21,26 +21,37 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field, StrictInt, constr, validator
 
+
 class ChallengeInputDataType(BaseModel):
     """
     A challenge input data type.
     """
-    id: StrictInt = Field(..., description="The unique identifier of a challenge input data type.")
-    slug: constr(strict=True, max_length=30, min_length=3) = Field(..., description="The slug of the challenge input data type.")
-    name: constr(strict=True, max_length=50, min_length=3) = Field(..., description="The name of the challenge input data type.")
+
+    id: StrictInt = Field(
+        ..., description="The unique identifier of a challenge input data type."
+    )
+    slug: constr(strict=True, max_length=30, min_length=3) = Field(
+        ..., description="The slug of the challenge input data type."
+    )
+    name: constr(strict=True, max_length=50, min_length=3) = Field(
+        ..., description="The name of the challenge input data type."
+    )
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")
     __properties = ["id", "slug", "name", "createdAt", "updatedAt"]
 
-    @validator('slug')
+    @validator("slug")
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
+            )
         return value
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -59,10 +70,7 @@ class ChallengeInputDataType(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -74,13 +82,13 @@ class ChallengeInputDataType(BaseModel):
         if not isinstance(obj, dict):
             return ChallengeInputDataType.parse_obj(obj)
 
-        _obj = ChallengeInputDataType.parse_obj({
-            "id": obj.get("id"),
-            "slug": obj.get("slug"),
-            "name": obj.get("name"),
-            "created_at": obj.get("createdAt"),
-            "updated_at": obj.get("updatedAt")
-        })
+        _obj = ChallengeInputDataType.parse_obj(
+            {
+                "id": obj.get("id"),
+                "slug": obj.get("slug"),
+                "name": obj.get("name"),
+                "created_at": obj.get("createdAt"),
+                "updated_at": obj.get("updatedAt"),
+            }
+        )
         return _obj
-
-

@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_input_data_type_direction import ChallengeInputDataTypeDirection  # noqa: E501
+from openchallenges_client.models.challenge_input_data_type_direction import (
+    ChallengeInputDataTypeDirection,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeInputDataTypeDirection(unittest.TestCase):
     """ChallengeInputDataTypeDirection unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeInputDataTypeDirection(unittest.TestCase):
         """Test ChallengeInputDataTypeDirection"""
         # inst = ChallengeInputDataTypeDirection()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

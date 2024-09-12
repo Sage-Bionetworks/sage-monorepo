@@ -1,4 +1,5 @@
 """Globals and pytest fixtures for testing"""
+
 from typing import Generator
 import pytest
 

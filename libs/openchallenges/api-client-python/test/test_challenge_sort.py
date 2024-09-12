@@ -19,6 +19,7 @@ import openchallenges_client
 from openchallenges_client.models.challenge_sort import ChallengeSort  # noqa: E501
 from openchallenges_client.rest import ApiException
 
+
 class TestChallengeSort(unittest.TestCase):
     """ChallengeSort unit test stubs"""
 
@@ -32,5 +33,6 @@ class TestChallengeSort(unittest.TestCase):
         """Test ChallengeSort"""
         # inst = ChallengeSort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

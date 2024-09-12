@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeSubmissionType(str, Enum):
     """
     The submission type of the challenge.
@@ -29,14 +26,12 @@ class ChallengeSubmissionType(str, Enum):
     """
     allowed enum values
     """
-    CONTAINER_IMAGE = 'container_image'
-    PREDICTION_FILE = 'prediction_file'
-    NOTEBOOK = 'notebook'
-    OTHER = 'other'
+    CONTAINER_IMAGE = "container_image"
+    PREDICTION_FILE = "prediction_file"
+    NOTEBOOK = "notebook"
+    OTHER = "other"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeSubmissionType:
         """Create an instance of ChallengeSubmissionType from a JSON string"""
         return ChallengeSubmissionType(json.loads(json_str))
-
-

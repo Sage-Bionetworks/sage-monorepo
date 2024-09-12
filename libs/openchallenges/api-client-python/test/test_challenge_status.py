@@ -19,6 +19,7 @@ import openchallenges_client
 from openchallenges_client.models.challenge_status import ChallengeStatus  # noqa: E501
 from openchallenges_client.rest import ApiException
 
+
 class TestChallengeStatus(unittest.TestCase):
     """ChallengeStatus unit test stubs"""
 
@@ -32,5 +33,6 @@ class TestChallengeStatus(unittest.TestCase):
         """Test ChallengeStatus"""
         # inst = ChallengeStatus()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

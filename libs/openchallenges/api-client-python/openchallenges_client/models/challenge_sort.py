@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeSort(str, Enum):
     """
     What to sort results by.
@@ -29,16 +26,14 @@ class ChallengeSort(str, Enum):
     """
     allowed enum values
     """
-    CREATED = 'created'
-    RANDOM = 'random'
-    RELEVANCE = 'relevance'
-    STARRED = 'starred'
-    START_DATE = 'start_date'
-    END_DATE = 'end_date'
+    CREATED = "created"
+    RANDOM = "random"
+    RELEVANCE = "relevance"
+    STARRED = "starred"
+    START_DATE = "start_date"
+    END_DATE = "end_date"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeSort:
         """Create an instance of ChallengeSort from a JSON string"""
         return ChallengeSort(json.loads(json_str))
-
-

@@ -23,21 +23,15 @@ class ProjectMetadata(Model):
         :param id: The id of this ProjectMetadata.  # noqa: E501
         :type id: str
         """
-        self.openapi_types = {
-            'name': str,
-            'id': str
-        }
+        self.openapi_types = {"name": str, "id": str}
 
-        self.attribute_map = {
-            'name': 'name',
-            'id': 'id'
-        }
+        self.attribute_map = {"name": "name", "id": "id"}
 
         self._name = name
         self._id = id
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ProjectMetadata':
+    def from_dict(cls, dikt) -> "ProjectMetadata":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -68,7 +62,9 @@ class ProjectMetadata(Model):
         :type name: str
         """
         if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `name`, must not be `None`"
+            )  # noqa: E501
 
         self._name = name
 

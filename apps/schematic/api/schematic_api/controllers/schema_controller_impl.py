@@ -1,4 +1,5 @@
 """Implementation of all endpoints"""
+
 from typing import Union
 
 from schematic.schemas.data_model_parser import DataModelParser  # type: ignore

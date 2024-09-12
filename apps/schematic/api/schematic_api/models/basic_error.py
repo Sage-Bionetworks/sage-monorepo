@@ -27,18 +27,13 @@ class BasicError(Model):
         :param type: The type of this BasicError.  # noqa: E501
         :type type: str
         """
-        self.openapi_types = {
-            'title': str,
-            'status': int,
-            'detail': str,
-            'type': str
-        }
+        self.openapi_types = {"title": str, "status": int, "detail": str, "type": str}
 
         self.attribute_map = {
-            'title': 'title',
-            'status': 'status',
-            'detail': 'detail',
-            'type': 'type'
+            "title": "title",
+            "status": "status",
+            "detail": "detail",
+            "type": "type",
         }
 
         self._title = title
@@ -47,7 +42,7 @@ class BasicError(Model):
         self._type = type
 
     @classmethod
-    def from_dict(cls, dikt) -> 'BasicError':
+    def from_dict(cls, dikt) -> "BasicError":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -78,7 +73,9 @@ class BasicError(Model):
         :type title: str
         """
         if title is None:
-            raise ValueError("Invalid value for `title`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `title`, must not be `None`"
+            )  # noqa: E501
 
         self._title = title
 
@@ -103,7 +100,9 @@ class BasicError(Model):
         :type status: int
         """
         if status is None:
-            raise ValueError("Invalid value for `status`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `status`, must not be `None`"
+            )  # noqa: E501
 
         self._status = status
 

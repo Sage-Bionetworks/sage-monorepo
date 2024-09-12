@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_submission_type import ChallengeSubmissionType  # noqa: E501
+from openchallenges_client.models.challenge_submission_type import (
+    ChallengeSubmissionType,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeSubmissionType(unittest.TestCase):
     """ChallengeSubmissionType unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeSubmissionType(unittest.TestCase):
         """Test ChallengeSubmissionType"""
         # inst = ChallengeSubmissionType()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

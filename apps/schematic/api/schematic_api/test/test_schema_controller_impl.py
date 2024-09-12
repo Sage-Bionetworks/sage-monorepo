@@ -1,4 +1,5 @@
 """Tests for schema endpoint functions"""
+
 # pylint: disable=duplicate-code
 
 

@@ -1,4 +1,5 @@
 """Tests for endpoints"""
+
 # pylint: disable=duplicate-code
 
 import unittest

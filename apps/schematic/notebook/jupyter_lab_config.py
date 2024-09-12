@@ -1,10 +1,10 @@
 # Configuration file for lab.
 
-c = get_config()  #noqa
+c = get_config()  # noqa
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # Application(SingletonConfigurable) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## This is an application.
 
 ## The date format used by logging formatters for %(asctime)s
@@ -21,32 +21,32 @@ c = get_config()  #noqa
 # c.Application.log_level = 30
 
 ## Configure additional log handlers.
-#  
+#
 #  The default stderr logs handler is configured by the log_level, log_datefmt
 #  and log_format settings.
-#  
+#
 #  This configuration can be used to configure additional handlers (e.g. to
 #  output the log to a file) or for finer control over the default handlers.
-#  
+#
 #  If provided this should be a logging configuration dictionary, for more
 #  information see:
 #  https://docs.python.org/3/library/logging.config.html#logging-config-
 #  dictschema
-#  
+#
 #  This dictionary is merged with the base logging configuration which defines
 #  the following:
-#  
+#
 #  * A logging formatter intended for interactive use called
 #    ``console``.
 #  * A logging handler that writes to stderr called
 #    ``console`` which uses the formatter ``console``.
 #  * A logger with the name of this application set to ``DEBUG``
 #    level.
-#  
+#
 #  This example adds a new handler that writes to a file:
-#  
+#
 #  .. code-block:: python
-#  
+#
 #     c.Application.logging_config = {
 #         'handlers': {
 #             'file': {
@@ -75,9 +75,9 @@ c = get_config()  #noqa
 #  Default: False
 # c.Application.show_config_json = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # JupyterApp(Application) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Base class for Jupyter applications
 
 ## Answer yes to any prompts.
@@ -108,7 +108,7 @@ c = get_config()  #noqa
 #  See also: Application.log_level
 # c.JupyterApp.log_level = 30
 
-## 
+##
 #  See also: Application.logging_config
 # c.JupyterApp.logging_config = {}
 
@@ -120,11 +120,11 @@ c = get_config()  #noqa
 #  See also: Application.show_config_json
 # c.JupyterApp.show_config_json = False
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ExtensionApp(JupyterApp) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Base class for configurable Jupyter Server Extension Applications.
-#  
+#
 #      ExtensionApp subclasses can be initialized two ways:
 #      1. Extension is listed as a jpserver_extension, and ServerApp calls
 #          its load_jupyter_server_extension classmethod. This is the
@@ -168,7 +168,7 @@ c = get_config()  #noqa
 #  See also: Application.log_level
 # c.ExtensionApp.log_level = 30
 
-## 
+##
 #  See also: Application.logging_config
 # c.ExtensionApp.logging_config = {}
 
@@ -193,7 +193,7 @@ c = get_config()  #noqa
 # c.ExtensionApp.show_config_json = False
 
 ## paths to search for serving static files.
-#  
+#
 #          This allows adding javascript/css to be available from the notebook server machine,
 #          or overriding individual files in the IPython
 #  Default: []
@@ -204,18 +204,18 @@ c = get_config()  #noqa
 # c.ExtensionApp.static_url_prefix = ''
 
 ## Paths to search for serving jinja templates.
-#  
+#
 #          Can be used to override templates from notebook.templates.
 #  Default: []
 # c.ExtensionApp.template_paths = []
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # LabServerApp(ExtensionApp) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## A Lab Server Application that runs out-of-the-box
 
 ## "A list of comma-separated URIs to get the allowed extensions list
-#  
+#
 #  .. versionchanged:: 2.0.0
 #      `LabServerApp.whitetlist_uris` renamed to `allowed_extensions_uris`
 #  Default: ''
@@ -238,7 +238,7 @@ c = get_config()  #noqa
 # c.LabServerApp.blacklist_uris = ''
 
 ## A list of comma-separated URIs to get the blocked extensions list
-#  
+#
 #  .. versionchanged:: 2.0.0
 #      `LabServerApp.blacklist_uris` renamed to `blocked_extensions_uris`
 #  Default: ''
@@ -306,7 +306,7 @@ c = get_config()  #noqa
 #  See also: Application.log_level
 # c.LabServerApp.log_level = 30
 
-## 
+##
 #  See also: Application.logging_config
 # c.LabServerApp.logging_config = {}
 
@@ -394,10 +394,10 @@ c = get_config()  #noqa
 #  Default: ''
 # c.LabServerApp.workspaces_dir = ''
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # LabApp(LabServerApp) configuration
-#------------------------------------------------------------------------------
-## 
+# ------------------------------------------------------------------------------
+##
 #  See also: LabServerApp.allowed_extensions_uris
 # c.LabApp.allowed_extensions_uris = ''
 
@@ -421,7 +421,7 @@ c = get_config()  #noqa
 #  See also: LabServerApp.blacklist_uris
 # c.LabApp.blacklist_uris = ''
 
-## 
+##
 #  See also: LabServerApp.blocked_extensions_uris
 # c.LabApp.blocked_extensions_uris = ''
 
@@ -522,7 +522,7 @@ c = get_config()  #noqa
 #  See also: Application.log_level
 # c.LabApp.log_level = 30
 
-## 
+##
 #  See also: Application.logging_config
 # c.LabApp.logging_config = {}
 
@@ -625,29 +625,29 @@ c = get_config()  #noqa
 #  Default: '/home/vscode/.jupyter/lab/workspaces'
 # c.LabApp.workspaces_dir = '/home/vscode/.jupyter/lab/workspaces'
 
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 # ServerApp(JupyterApp) configuration
-#------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
 ## Set the Access-Control-Allow-Credentials: true header
 #  Default: False
 # c.ServerApp.allow_credentials = False
 
 ## Set the Access-Control-Allow-Origin header
-#  
+#
 #          Use '*' to allow any origin to access your server.
-#  
+#
 #          Takes precedence over allow_origin_pat.
 #  Default: ''
 # c.ServerApp.allow_origin = ''
 
 ## Use a regular expression for the Access-Control-Allow-Origin header
-#  
+#
 #          Requests from an origin matching the expression will get replies with:
-#  
+#
 #              Access-Control-Allow-Origin: origin
-#  
+#
 #          where `origin` is the origin of the request.
-#  
+#
 #          Ignored if allow_origin is set.
 #  Default: ''
 # c.ServerApp.allow_origin_pat = ''
@@ -657,15 +657,15 @@ c = get_config()  #noqa
 # c.ServerApp.allow_password_change = True
 
 ## Allow requests where the Host header doesn't point to a local server
-#  
+#
 #         By default, requests get a 403 forbidden response if the 'Host' header
 #         shows that the browser thinks it's on a non-local domain.
 #         Setting this option to True disables this check.
-#  
+#
 #         This protects against 'DNS rebinding' attacks, where a remote web server
 #         serves you a page and then changes its DNS to send later requests to a
 #         local IP, bypassing same-origin checks.
-#  
+#
 #         Local IP addresses (such as 127.0.0.1 and ::1) are allowed as local,
 #         along with hostnames configured in local_hostnames.
 #  Default: False
@@ -693,7 +693,7 @@ c = get_config()  #noqa
 # c.ServerApp.autoreload = False
 
 ## The base URL for the Jupyter server.
-#  
+#
 #                         Leading and trailing slashes can be omitted,
 #                         and will automatically be added.
 #  Default: '/'
@@ -739,7 +739,7 @@ c = get_config()  #noqa
 ## The random bytes used to secure cookies.
 #          By default this is a new random number every time you start the server.
 #          Set it to a value in a config file to enable logins to persist across server sessions.
-#  
+#
 #          Note: Cookie secrets should be kept private, do not share config files with
 #          cookie_secret stored in plaintext (you can read the value from a file).
 #  Default: b''
@@ -750,12 +750,12 @@ c = get_config()  #noqa
 # c.ServerApp.cookie_secret_file = ''
 
 ## Override URL shown to users.
-#  
+#
 #          Replace actual URL, including protocol, address, port and base URL,
 #          with the given value when displaying URL to the users. Do not change
 #          the actual connection URL. If authentication token is enabled, the
 #          token is added to the custom URL automatically.
-#  
+#
 #          This option is intended to be used when the URL to display to the user
 #          cannot be determined reliably by the Jupyter server (proxified
 #          or containerized setups for example).
@@ -767,13 +767,13 @@ c = get_config()  #noqa
 # c.ServerApp.default_url = '/'
 
 ## Disable cross-site-request-forgery protection
-#  
+#
 #          Jupyter server includes protection from cross-site request forgeries,
 #          requiring API requests to either:
-#  
+#
 #          - originate from pages served by this server (validated with XSRF cookie and token), or
 #          - authenticate with a token
-#  
+#
 #          Some anonymous compute resources still desire the ability to run code,
 #          completely without authentication.
 #          These services can disable all authentication and security checks,
@@ -786,14 +786,14 @@ c = get_config()  #noqa
 # c.ServerApp.extra_services = []
 
 ## Extra paths to search for serving static files.
-#  
+#
 #          This allows adding javascript/css to be available from the Jupyter server machine,
 #          or overriding individual files in the IPython
 #  Default: []
 # c.ServerApp.extra_static_paths = []
 
 ## Extra paths to search for serving jinja templates.
-#  
+#
 #          Can be used to override templates from jupyter_server.templates.
 #  Default: []
 # c.ServerApp.extra_template_paths = []
@@ -850,7 +850,7 @@ c = get_config()  #noqa
 
 ## The kernel spec manager class to use. Should be a subclass of
 #  `jupyter_client.kernelspec.KernelSpecManager`.
-#  
+#
 #  The Api of KernelSpecManager is provisional and might change without warning
 #  between this version of Jupyter and the next stable one.
 #  Default: 'builtins.object'
@@ -873,7 +873,7 @@ c = get_config()  #noqa
 # c.ServerApp.limit_rate = False
 
 ## Hostnames to allow as local when allow_remote_access is False.
-#  
+#
 #         Local IP addresses (such as 127.0.0.1 and ::1) are automatically accepted
 #         as local as well.
 #  Default: ['localhost']
@@ -891,7 +891,7 @@ c = get_config()  #noqa
 #  See also: Application.log_level
 # c.ServerApp.log_level = 30
 
-## 
+##
 #  See also: Application.logging_config
 # c.ServerApp.logging_config = {}
 
@@ -906,7 +906,7 @@ c = get_config()  #noqa
 ## Sets the maximum allowed size of the client request body, specified in the
 #  Content-Length request header field. If the size in a request exceeds the
 #  configured value, a malformed HTTP message is returned to the client.
-#  
+#
 #  Note: max_body_size is applied even in streaming mode.
 #  Default: 536870912
 # c.ServerApp.max_body_size = 536870912
@@ -1014,10 +1014,10 @@ c.ServerApp.port = 7888
 # c.ServerApp.terminado_settings = {}
 
 ## Set to False to disable terminals.
-#  
+#
 #           This does *not* make the server more secure by itself.
 #           Anything the user can in a terminal, they can also do in a notebook.
-#  
+#
 #           Terminals may also be automatically disabled if the terminado package
 #           is not available.
 #  Default: False
@@ -1026,7 +1026,7 @@ c.ServerApp.port = 7888
 ## DEPRECATED. Use IdentityProvider.token
 #  Default: '<DEPRECATED>'
 # c.ServerApp.token = '<DEPRECATED>'
-c.IdentityProvider.token = 'changeme'
+c.IdentityProvider.token = "changeme"
 
 ## Supply overrides for the tornado.web.Application that the Jupyter server uses.
 #  Default: {}
@@ -1047,7 +1047,7 @@ c.IdentityProvider.token = 'changeme'
 #       launching a browser using a redirect file can lead the browser failing to load.
 #       This is because of the difference in file structures/paths between the runtime and
 #       the browser.
-#  
+#
 #       Disabling this setting to False will disable this behavior, allowing the browser
 #       to launch by using a URL and visible token (as before).
 #  Default: True
@@ -1057,28 +1057,28 @@ c.IdentityProvider.token = 'changeme'
 #          `new` argument passed to the standard library method `webbrowser.open`.
 #          The behaviour is not guaranteed, but depends on browser support. Valid
 #          values are:
-#  
+#
 #           - 2 opens a new tab,
 #           - 1 opens a new window,
 #           - 0 opens in an existing window.
-#  
+#
 #          See the `webbrowser.open` documentation for details.
 #  Default: 2
 # c.ServerApp.webbrowser_open_new = 2
 
 ## Set the tornado compression options for websocket connections.
-#  
+#
 #  This value will be returned from
 #  :meth:`WebSocketHandler.get_compression_options`. None (default) will disable
 #  compression. A dict (even an empty one) will enable compression.
-#  
+#
 #  See the tornado docs for WebSocketHandler.get_compression_options for details.
 #  Default: None
 # c.ServerApp.websocket_compression_options = None
 
 ## The base URL for websockets,
 #          if it differs from the HTTP server (hint: it almost certainly doesn't).
-#  
+#
 #          Should be in the form of an HTTP origin: ws[s]://hostname[:port]
 #  Default: ''
 # c.ServerApp.websocket_url = ''

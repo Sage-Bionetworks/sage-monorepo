@@ -18,21 +18,31 @@ import re  # noqa: F401
 import json
 
 
-
 from pydantic import BaseModel, Field, StrictInt
-from openchallenges_client.models.challenge_contribution_role import ChallengeContributionRole
+from openchallenges_client.models.challenge_contribution_role import (
+    ChallengeContributionRole,
+)
+
 
 class ChallengeContribution(BaseModel):
     """
     A challenge contribution.
     """
-    challenge_id: StrictInt = Field(..., alias="challengeId", description="The unique identifier of the challenge.")
-    organization_id: StrictInt = Field(..., alias="organizationId", description="The unique identifier of an organization")
+
+    challenge_id: StrictInt = Field(
+        ..., alias="challengeId", description="The unique identifier of the challenge."
+    )
+    organization_id: StrictInt = Field(
+        ...,
+        alias="organizationId",
+        description="The unique identifier of an organization",
+    )
     role: ChallengeContributionRole = Field(...)
     __properties = ["challengeId", "organizationId", "role"]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -51,10 +61,7 @@ class ChallengeContribution(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -66,11 +73,11 @@ class ChallengeContribution(BaseModel):
         if not isinstance(obj, dict):
             return ChallengeContribution.parse_obj(obj)
 
-        _obj = ChallengeContribution.parse_obj({
-            "challenge_id": obj.get("challengeId"),
-            "organization_id": obj.get("organizationId"),
-            "role": obj.get("role")
-        })
+        _obj = ChallengeContribution.parse_obj(
+            {
+                "challenge_id": obj.get("challengeId"),
+                "organization_id": obj.get("organizationId"),
+                "role": obj.get("role"),
+            }
+        )
         return _obj
-
-

@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_platform_direction import ChallengePlatformDirection  # noqa: E501
+from openchallenges_client.models.challenge_platform_direction import (
+    ChallengePlatformDirection,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengePlatformDirection(unittest.TestCase):
     """ChallengePlatformDirection unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengePlatformDirection(unittest.TestCase):
         """Test ChallengePlatformDirection"""
         # inst = ChallengePlatformDirection()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

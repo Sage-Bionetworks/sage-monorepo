@@ -1,4 +1,5 @@
 """Manifest generation functions"""
+
 # pylint: disable=too-many-arguments
 import os
 

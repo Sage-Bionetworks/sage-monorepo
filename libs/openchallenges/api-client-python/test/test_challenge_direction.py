@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_direction import ChallengeDirection  # noqa: E501
+from openchallenges_client.models.challenge_direction import (
+    ChallengeDirection,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeDirection(unittest.TestCase):
     """ChallengeDirection unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeDirection(unittest.TestCase):
         """Test ChallengeDirection"""
         # inst = ChallengeDirection()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

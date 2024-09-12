@@ -21,18 +21,14 @@ class Node(Model):
         :param name: The name of this Node.  # noqa: E501
         :type name: str
         """
-        self.openapi_types = {
-            'name': str
-        }
+        self.openapi_types = {"name": str}
 
-        self.attribute_map = {
-            'name': 'name'
-        }
+        self.attribute_map = {"name": "name"}
 
         self._name = name
 
     @classmethod
-    def from_dict(cls, dikt) -> 'Node':
+    def from_dict(cls, dikt) -> "Node":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -63,6 +59,8 @@ class Node(Model):
         :type name: str
         """
         if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `name`, must not be `None`"
+            )  # noqa: E501
 
         self._name = name

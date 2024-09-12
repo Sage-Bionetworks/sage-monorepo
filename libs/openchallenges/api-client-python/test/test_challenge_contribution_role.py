@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_contribution_role import ChallengeContributionRole  # noqa: E501
+from openchallenges_client.models.challenge_contribution_role import (
+    ChallengeContributionRole,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeContributionRole(unittest.TestCase):
     """ChallengeContributionRole unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeContributionRole(unittest.TestCase):
         """Test ChallengeContributionRole"""
         # inst = ChallengeContributionRole()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

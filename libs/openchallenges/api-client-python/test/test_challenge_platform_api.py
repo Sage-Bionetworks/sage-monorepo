@@ -15,7 +15,9 @@
 import unittest
 
 import openchallenges_client
-from openchallenges_client.api.challenge_platform_api import ChallengePlatformApi  # noqa: E501
+from openchallenges_client.api.challenge_platform_api import (
+    ChallengePlatformApi,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
 
 
@@ -23,7 +25,9 @@ class TestChallengePlatformApi(unittest.TestCase):
     """ChallengePlatformApi unit test stubs"""
 
     def setUp(self):
-        self.api = openchallenges_client.api.challenge_platform_api.ChallengePlatformApi()  # noqa: E501
+        self.api = (
+            openchallenges_client.api.challenge_platform_api.ChallengePlatformApi()
+        )  # noqa: E501
 
     def tearDown(self):
         pass
@@ -43,5 +47,5 @@ class TestChallengePlatformApi(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

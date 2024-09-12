@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_incentive import ChallengeIncentive  # noqa: E501
+from openchallenges_client.models.challenge_incentive import (
+    ChallengeIncentive,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeIncentive(unittest.TestCase):
     """ChallengeIncentive unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeIncentive(unittest.TestCase):
         """Test ChallengeIncentive"""
         # inst = ChallengeIncentive()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

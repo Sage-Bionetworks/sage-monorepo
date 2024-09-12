@@ -21,28 +21,47 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field, StrictInt, StrictStr, constr, validator
 
+
 class ChallengePlatform(BaseModel):
     """
     A challenge platform
     """
-    id: StrictInt = Field(..., description="The unique identifier of a challenge platform.")
-    slug: constr(strict=True, max_length=30, min_length=3) = Field(..., description="The slug of the challenge platform.")
-    name: constr(strict=True, max_length=30, min_length=3) = Field(..., description="The name of the challenge platform.")
+
+    id: StrictInt = Field(
+        ..., description="The unique identifier of a challenge platform."
+    )
+    slug: constr(strict=True, max_length=30, min_length=3) = Field(
+        ..., description="The slug of the challenge platform."
+    )
+    name: constr(strict=True, max_length=30, min_length=3) = Field(
+        ..., description="The name of the challenge platform."
+    )
     avatar_url: StrictStr = Field(..., alias="avatarUrl")
     website_url: StrictStr = Field(..., alias="websiteUrl")
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")
-    __properties = ["id", "slug", "name", "avatarUrl", "websiteUrl", "createdAt", "updatedAt"]
+    __properties = [
+        "id",
+        "slug",
+        "name",
+        "avatarUrl",
+        "websiteUrl",
+        "createdAt",
+        "updatedAt",
+    ]
 
-    @validator('slug')
+    @validator("slug")
     def slug_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
+            )
         return value
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -61,10 +80,7 @@ class ChallengePlatform(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -76,15 +92,15 @@ class ChallengePlatform(BaseModel):
         if not isinstance(obj, dict):
             return ChallengePlatform.parse_obj(obj)
 
-        _obj = ChallengePlatform.parse_obj({
-            "id": obj.get("id"),
-            "slug": obj.get("slug"),
-            "name": obj.get("name"),
-            "avatar_url": obj.get("avatarUrl"),
-            "website_url": obj.get("websiteUrl"),
-            "created_at": obj.get("createdAt"),
-            "updated_at": obj.get("updatedAt")
-        })
+        _obj = ChallengePlatform.parse_obj(
+            {
+                "id": obj.get("id"),
+                "slug": obj.get("slug"),
+                "name": obj.get("name"),
+                "avatar_url": obj.get("avatarUrl"),
+                "website_url": obj.get("websiteUrl"),
+                "created_at": obj.get("createdAt"),
+                "updated_at": obj.get("updatedAt"),
+            }
+        )
         return _obj
-
-

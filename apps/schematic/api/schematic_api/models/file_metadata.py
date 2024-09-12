@@ -23,21 +23,15 @@ class FileMetadata(Model):
         :param id: The id of this FileMetadata.  # noqa: E501
         :type id: str
         """
-        self.openapi_types = {
-            'name': str,
-            'id': str
-        }
+        self.openapi_types = {"name": str, "id": str}
 
-        self.attribute_map = {
-            'name': 'name',
-            'id': 'id'
-        }
+        self.attribute_map = {"name": "name", "id": "id"}
 
         self._name = name
         self._id = id
 
     @classmethod
-    def from_dict(cls, dikt) -> 'FileMetadata':
+    def from_dict(cls, dikt) -> "FileMetadata":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -68,7 +62,9 @@ class FileMetadata(Model):
         :type name: str
         """
         if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `name`, must not be `None`"
+            )  # noqa: E501
 
         self._name = name
 

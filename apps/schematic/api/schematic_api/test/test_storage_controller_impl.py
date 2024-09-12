@@ -1,4 +1,5 @@
 """Tests for storage endpoint functions"""
+
 # pylint: disable=duplicate-code
 
 from unittest.mock import patch

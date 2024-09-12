@@ -19,6 +19,7 @@ import openchallenges_client
 from openchallenges_client.models.challenges_page import ChallengesPage  # noqa: E501
 from openchallenges_client.rest import ApiException
 
+
 class TestChallengesPage(unittest.TestCase):
     """ChallengesPage unit test stubs"""
 
@@ -30,9 +31,9 @@ class TestChallengesPage(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test ChallengesPage
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # uncomment below to create an instance of `ChallengesPage`
         """
         model = openchallenges_client.models.challenges_page.ChallengesPage()  # noqa: E501
@@ -129,5 +130,6 @@ class TestChallengesPage(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

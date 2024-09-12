@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeCategory(str, Enum):
     """
     The category of the challenge.
@@ -29,15 +26,13 @@ class ChallengeCategory(str, Enum):
     """
     allowed enum values
     """
-    FEATURED = 'featured'
-    STARTING_SOON = 'starting_soon'
-    ENDING_SOON = 'ending_soon'
-    RECENTLY_STARTED = 'recently_started'
-    RECENTLY_ENDED = 'recently_ended'
+    FEATURED = "featured"
+    STARTING_SOON = "starting_soon"
+    ENDING_SOON = "ending_soon"
+    RECENTLY_STARTED = "recently_started"
+    RECENTLY_ENDED = "recently_ended"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeCategory:
         """Create an instance of ChallengeCategory from a JSON string"""
         return ChallengeCategory(json.loads(json_str))
-
-

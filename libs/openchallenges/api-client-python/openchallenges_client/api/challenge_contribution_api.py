@@ -21,14 +21,13 @@ from typing_extensions import Annotated
 
 from pydantic import Field, StrictInt
 
-from openchallenges_client.models.challenge_contributions_page import ChallengeContributionsPage
+from openchallenges_client.models.challenge_contributions_page import (
+    ChallengeContributionsPage,
+)
 
 from openchallenges_client.api_client import ApiClient
 from openchallenges_client.api_response import ApiResponse
-from openchallenges_client.exceptions import (  # noqa: F401
-    ApiTypeError,
-    ApiValueError
-)
+from openchallenges_client.exceptions import ApiTypeError, ApiValueError  # noqa: F401
 
 
 class ChallengeContributionApi(object):
@@ -44,7 +43,13 @@ class ChallengeContributionApi(object):
         self.api_client = api_client
 
     @validate_arguments
-    def list_challenge_contributions(self, challenge_id : Annotated[StrictInt, Field(..., description="The unique identifier of the challenge.")], **kwargs) -> ChallengeContributionsPage:  # noqa: E501
+    def list_challenge_contributions(
+        self,
+        challenge_id: Annotated[
+            StrictInt, Field(..., description="The unique identifier of the challenge.")
+        ],
+        **kwargs
+    ) -> ChallengeContributionsPage:  # noqa: E501
         """List challenge contributions  # noqa: E501
 
         List challenge contributions  # noqa: E501
@@ -67,13 +72,23 @@ class ChallengeContributionApi(object):
                  returns the request thread.
         :rtype: ChallengeContributionsPage
         """
-        kwargs['_return_http_data_only'] = True
-        if '_preload_content' in kwargs:
-            raise ValueError("Error! Please call the list_challenge_contributions_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data")
-        return self.list_challenge_contributions_with_http_info(challenge_id, **kwargs)  # noqa: E501
+        kwargs["_return_http_data_only"] = True
+        if "_preload_content" in kwargs:
+            raise ValueError(
+                "Error! Please call the list_challenge_contributions_with_http_info method with `_preload_content` instead and obtain raw data from ApiResponse.raw_data"
+            )
+        return self.list_challenge_contributions_with_http_info(
+            challenge_id, **kwargs
+        )  # noqa: E501
 
     @validate_arguments
-    def list_challenge_contributions_with_http_info(self, challenge_id : Annotated[StrictInt, Field(..., description="The unique identifier of the challenge.")], **kwargs) -> ApiResponse:  # noqa: E501
+    def list_challenge_contributions_with_http_info(
+        self,
+        challenge_id: Annotated[
+            StrictInt, Field(..., description="The unique identifier of the challenge.")
+        ],
+        **kwargs
+    ) -> ApiResponse:  # noqa: E501
         """List challenge contributions  # noqa: E501
 
         List challenge contributions  # noqa: E501
@@ -88,7 +103,7 @@ class ChallengeContributionApi(object):
         :param async_req: Whether to execute the request asynchronously.
         :type async_req: bool, optional
         :param _preload_content: if False, the ApiResponse.data will
-                                 be set to none and raw_data will store the 
+                                 be set to none and raw_data will store the
                                  HTTP response body without reading/decoding.
                                  Default is True.
         :type _preload_content: bool, optional
@@ -112,63 +127,62 @@ class ChallengeContributionApi(object):
 
         _params = locals()
 
-        _all_params = [
-            'challenge_id'
-        ]
+        _all_params = ["challenge_id"]
         _all_params.extend(
             [
-                'async_req',
-                '_return_http_data_only',
-                '_preload_content',
-                '_request_timeout',
-                '_request_auth',
-                '_content_type',
-                '_headers'
+                "async_req",
+                "_return_http_data_only",
+                "_preload_content",
+                "_request_timeout",
+                "_request_auth",
+                "_content_type",
+                "_headers",
             ]
         )
 
         # validate the arguments
-        for _key, _val in _params['kwargs'].items():
+        for _key, _val in _params["kwargs"].items():
             if _key not in _all_params:
                 raise ApiTypeError(
                     "Got an unexpected keyword argument '%s'"
                     " to method list_challenge_contributions" % _key
                 )
             _params[_key] = _val
-        del _params['kwargs']
+        del _params["kwargs"]
 
         _collection_formats = {}
 
         # process the path parameters
         _path_params = {}
-        if _params['challenge_id']:
-            _path_params['challengeId'] = _params['challenge_id']
-
+        if _params["challenge_id"]:
+            _path_params["challengeId"] = _params["challenge_id"]
 
         # process the query parameters
         _query_params = []
         # process the header parameters
-        _header_params = dict(_params.get('_headers', {}))
+        _header_params = dict(_params.get("_headers", {}))
         # process the form parameters
         _form_params = []
         _files = {}
         # process the body parameter
         _body_params = None
         # set the HTTP header `Accept`
-        _header_params['Accept'] = self.api_client.select_header_accept(
-            ['application/json', 'application/problem+json'])  # noqa: E501
+        _header_params["Accept"] = self.api_client.select_header_accept(
+            ["application/json", "application/problem+json"]
+        )  # noqa: E501
 
         # authentication setting
         _auth_settings = []  # noqa: E501
 
         _response_types_map = {
-            '200': "ChallengeContributionsPage",
-            '400': "BasicError",
-            '500': "BasicError",
+            "200": "ChallengeContributionsPage",
+            "400": "BasicError",
+            "500": "BasicError",
         }
 
         return self.api_client.call_api(
-            '/challenges/{challengeId}/contributions', 'GET',
+            "/challenges/{challengeId}/contributions",
+            "GET",
             _path_params,
             _query_params,
             _header_params,
@@ -177,9 +191,10 @@ class ChallengeContributionApi(object):
             files=_files,
             response_types_map=_response_types_map,
             auth_settings=_auth_settings,
-            async_req=_params.get('async_req'),
-            _return_http_data_only=_params.get('_return_http_data_only'),  # noqa: E501
-            _preload_content=_params.get('_preload_content', True),
-            _request_timeout=_params.get('_request_timeout'),
+            async_req=_params.get("async_req"),
+            _return_http_data_only=_params.get("_return_http_data_only"),  # noqa: E501
+            _preload_content=_params.get("_preload_content", True),
+            _request_timeout=_params.get("_request_timeout"),
             collection_formats=_collection_formats,
-            _request_auth=_params.get('_request_auth'))
+            _request_auth=_params.get("_request_auth"),
+        )

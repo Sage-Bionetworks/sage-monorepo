@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class OrganizationCategory(str, Enum):
     """
     The category of the organization.
@@ -29,11 +26,9 @@ class OrganizationCategory(str, Enum):
     """
     allowed enum values
     """
-    FEATURED = 'featured'
+    FEATURED = "featured"
 
     @classmethod
     def from_json(cls, json_str: str) -> OrganizationCategory:
         """Create an instance of OrganizationCategory from a JSON string"""
         return OrganizationCategory(json.loads(json_str))
-
-

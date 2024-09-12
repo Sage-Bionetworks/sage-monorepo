@@ -23,24 +23,31 @@ from pydantic import BaseModel, Field, constr, validator
 from openchallenges_client.models.image_aspect_ratio import ImageAspectRatio
 from openchallenges_client.models.image_height import ImageHeight
 
+
 class ImageQuery(BaseModel):
     """
     An image query.
     """
-    object_key: constr(strict=True) = Field(..., alias="objectKey", description="The unique identifier of the image.")
+
+    object_key: constr(strict=True) = Field(
+        ..., alias="objectKey", description="The unique identifier of the image."
+    )
     height: Optional[ImageHeight] = None
     aspect_ratio: Optional[ImageAspectRatio] = Field(None, alias="aspectRatio")
     __properties = ["objectKey", "height", "aspectRatio"]
 
-    @validator('object_key')
+    @validator("object_key")
     def object_key_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+", value):
-            raise ValueError(r"must validate the regular expression /^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-zA-Z0-9\/_-]+.[a-zA-Z0-9\/_-]+/"
+            )
         return value
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -59,10 +66,7 @@ class ImageQuery(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -74,11 +78,11 @@ class ImageQuery(BaseModel):
         if not isinstance(obj, dict):
             return ImageQuery.parse_obj(obj)
 
-        _obj = ImageQuery.parse_obj({
-            "object_key": obj.get("objectKey"),
-            "height": obj.get("height"),
-            "aspect_ratio": obj.get("aspectRatio")
-        })
+        _obj = ImageQuery.parse_obj(
+            {
+                "object_key": obj.get("objectKey"),
+                "height": obj.get("height"),
+                "aspect_ratio": obj.get("aspectRatio"),
+            }
+        )
         return _obj
-
-

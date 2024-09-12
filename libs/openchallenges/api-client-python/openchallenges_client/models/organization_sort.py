@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class OrganizationSort(str, Enum):
     """
     What to sort results by.
@@ -29,14 +26,12 @@ class OrganizationSort(str, Enum):
     """
     allowed enum values
     """
-    CHALLENGE_COUNT = 'challenge_count'
-    CREATED = 'created'
-    NAME = 'name'
-    RELEVANCE = 'relevance'
+    CHALLENGE_COUNT = "challenge_count"
+    CREATED = "created"
+    NAME = "name"
+    RELEVANCE = "relevance"
 
     @classmethod
     def from_json(cls, json_str: str) -> OrganizationSort:
         """Create an instance of OrganizationSort from a JSON string"""
         return OrganizationSort(json.loads(json_str))
-
-

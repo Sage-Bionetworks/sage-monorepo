@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.organization_category import OrganizationCategory  # noqa: E501
+from openchallenges_client.models.organization_category import (
+    OrganizationCategory,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestOrganizationCategory(unittest.TestCase):
     """OrganizationCategory unit test stubs"""
@@ -32,5 +35,6 @@ class TestOrganizationCategory(unittest.TestCase):
         """Test OrganizationCategory"""
         # inst = OrganizationCategory()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

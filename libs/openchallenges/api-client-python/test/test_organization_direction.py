@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.organization_direction import OrganizationDirection  # noqa: E501
+from openchallenges_client.models.organization_direction import (
+    OrganizationDirection,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestOrganizationDirection(unittest.TestCase):
     """OrganizationDirection unit test stubs"""
@@ -32,5 +35,6 @@ class TestOrganizationDirection(unittest.TestCase):
         """Test OrganizationDirection"""
         # inst = OrganizationDirection()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

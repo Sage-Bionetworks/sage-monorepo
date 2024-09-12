@@ -1,4 +1,5 @@
 """Tests for manifest generation endpoint functions"""
+
 # pylint: disable=no-member
 
 from unittest.mock import patch
