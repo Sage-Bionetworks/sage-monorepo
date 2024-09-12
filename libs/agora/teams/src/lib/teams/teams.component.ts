@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FooterComponent } from '@sagebionetworks/agora/ui';
-import { Team, TeamsResponse } from '../../../models';
-import { TeamService } from '../services';
+import { Team, TeamsResponse } from '@sagebionetworks/agora/models';
+import { TeamService } from '../../services';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { TeamListComponent } from '../team-list/team-list.component';
 
 @Component({
   selector: 'agora-teams',
   standalone: true,
-  imports: [CommonModule, FooterComponent],
+  imports: [CommonModule, TeamListComponent],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss'],
   providers: [HelperService, TeamService],

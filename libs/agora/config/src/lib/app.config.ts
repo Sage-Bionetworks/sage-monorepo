@@ -4,6 +4,7 @@ export interface AppConfig {
   isPlatformServer: boolean;
   ssrApiUrl: string;
   apiDocsUrl: string;
+  rollbarToken: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;

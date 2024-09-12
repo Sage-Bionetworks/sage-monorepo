@@ -9,7 +9,7 @@ import { tap, share, finalize } from 'rxjs/operators';
 // Internal
 // -------------------------------------------------------------------------- //
 import { Team, TeamsResponse } from '@sagebionetworks/agora/models';
-import { TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { ApiService } from '@sagebionetworks/agora/services';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -19,7 +19,7 @@ export class TeamService {
   teams: Team[] = [] as Team[];
   teamsObservable: Observable<TeamsResponse> | undefined;
 
-  constructor(private apiService: TeamsService) {}
+  constructor(private apiService: ApiService) {}
 
   getTeams(): Observable<TeamsResponse> {
     if (this.teams.length > 0) {
