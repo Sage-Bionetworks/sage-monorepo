@@ -15,7 +15,15 @@ class PageMetadata(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, number=None, size=None, total_elements=None, total_pages=None, has_next=None, has_previous=None):  # noqa: E501
+    def __init__(
+        self,
+        number=None,
+        size=None,
+        total_elements=None,
+        total_pages=None,
+        has_next=None,
+        has_previous=None,
+    ):  # noqa: E501
         """PageMetadata - a model defined in OpenAPI
 
         :param number: The number of this PageMetadata.  # noqa: E501
@@ -32,21 +40,21 @@ class PageMetadata(Model):
         :type has_previous: bool
         """
         self.openapi_types = {
-            'number': int,
-            'size': int,
-            'total_elements': int,
-            'total_pages': int,
-            'has_next': bool,
-            'has_previous': bool
+            "number": int,
+            "size": int,
+            "total_elements": int,
+            "total_pages": int,
+            "has_next": bool,
+            "has_previous": bool,
         }
 
         self.attribute_map = {
-            'number': 'number',
-            'size': 'size',
-            'total_elements': 'totalElements',
-            'total_pages': 'totalPages',
-            'has_next': 'hasNext',
-            'has_previous': 'hasPrevious'
+            "number": "number",
+            "size": "size",
+            "total_elements": "totalElements",
+            "total_pages": "totalPages",
+            "has_next": "hasNext",
+            "has_previous": "hasPrevious",
         }
 
         self._number = number
@@ -57,7 +65,7 @@ class PageMetadata(Model):
         self._has_previous = has_previous
 
     @classmethod
-    def from_dict(cls, dikt) -> 'PageMetadata':
+    def from_dict(cls, dikt) -> "PageMetadata":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -88,7 +96,9 @@ class PageMetadata(Model):
         :type number: int
         """
         if number is None:
-            raise ValueError("Invalid value for `number`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `number`, must not be `None`"
+            )  # noqa: E501
 
         self._number = number
 
@@ -113,7 +123,9 @@ class PageMetadata(Model):
         :type size: int
         """
         if size is None:
-            raise ValueError("Invalid value for `size`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `size`, must not be `None`"
+            )  # noqa: E501
 
         self._size = size
 
@@ -138,7 +150,9 @@ class PageMetadata(Model):
         :type total_elements: int
         """
         if total_elements is None:
-            raise ValueError("Invalid value for `total_elements`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `total_elements`, must not be `None`"
+            )  # noqa: E501
 
         self._total_elements = total_elements
 
@@ -163,7 +177,9 @@ class PageMetadata(Model):
         :type total_pages: int
         """
         if total_pages is None:
-            raise ValueError("Invalid value for `total_pages`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `total_pages`, must not be `None`"
+            )  # noqa: E501
 
         self._total_pages = total_pages
 
@@ -188,7 +204,9 @@ class PageMetadata(Model):
         :type has_next: bool
         """
         if has_next is None:
-            raise ValueError("Invalid value for `has_next`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `has_next`, must not be `None`"
+            )  # noqa: E501
 
         self._has_next = has_next
 
@@ -213,6 +231,8 @@ class PageMetadata(Model):
         :type has_previous: bool
         """
         if has_previous is None:
-            raise ValueError("Invalid value for `has_previous`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `has_previous`, must not be `None`"
+            )  # noqa: E501
 
         self._has_previous = has_previous

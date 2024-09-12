@@ -30,16 +30,14 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  "black-formatter.importStrategy": "fromEnvironment",
+  // Python settings
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
-    "editor.formatOnSave": true,
     "editor.tabSize": 4
-    // This settings still works even if VS Code does not recognize it.
-    // "notebook.formatOnSave.enabled": true
   },
+  // SQL settings
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {

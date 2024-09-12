@@ -23,21 +23,15 @@ class ManifestValidationResult(Model):
         :param warnings: The warnings of this ManifestValidationResult.  # noqa: E501
         :type warnings: List[str]
         """
-        self.openapi_types = {
-            'errors': List[str],
-            'warnings': List[str]
-        }
+        self.openapi_types = {"errors": List[str], "warnings": List[str]}
 
-        self.attribute_map = {
-            'errors': 'errors',
-            'warnings': 'warnings'
-        }
+        self.attribute_map = {"errors": "errors", "warnings": "warnings"}
 
         self._errors = errors
         self._warnings = warnings
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ManifestValidationResult':
+    def from_dict(cls, dikt) -> "ManifestValidationResult":
         """Returns the dict as a model
 
         :param dikt: A dict.

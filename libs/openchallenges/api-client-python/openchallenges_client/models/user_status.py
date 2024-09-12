@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class UserStatus(str, Enum):
     """
     The account status of a user
@@ -29,14 +26,12 @@ class UserStatus(str, Enum):
     """
     allowed enum values
     """
-    PENDING = 'pending'
-    APPROVED = 'approved'
-    DISABLED = 'disabled'
-    BLACKLIST = 'blacklist'
+    PENDING = "pending"
+    APPROVED = "approved"
+    DISABLED = "disabled"
+    BLACKLIST = "blacklist"
 
     @classmethod
     def from_json(cls, json_str: str) -> UserStatus:
         """Create an instance of UserStatus from a JSON string"""
         return UserStatus(json.loads(json_str))
-
-

@@ -21,18 +21,14 @@ class GoogleSheetLinks(Model):
         :param links: The links of this GoogleSheetLinks.  # noqa: E501
         :type links: List[str]
         """
-        self.openapi_types = {
-            'links': List[str]
-        }
+        self.openapi_types = {"links": List[str]}
 
-        self.attribute_map = {
-            'links': 'links'
-        }
+        self.attribute_map = {"links": "links"}
 
         self._links = links
 
     @classmethod
-    def from_dict(cls, dikt) -> 'GoogleSheetLinks':
+    def from_dict(cls, dikt) -> "GoogleSheetLinks":
         """Returns the dict as a model
 
         :param dikt: A dict.

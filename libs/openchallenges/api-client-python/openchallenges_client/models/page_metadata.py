@@ -18,23 +18,42 @@ import re  # noqa: F401
 import json
 
 
-
 from pydantic import BaseModel, Field, StrictBool, StrictInt
+
 
 class PageMetadata(BaseModel):
     """
     The metadata of a page.
     """
+
     number: StrictInt = Field(..., description="The page number.")
     size: StrictInt = Field(..., description="The number of items in a single page.")
-    total_elements: StrictInt = Field(..., alias="totalElements", description="Total number of elements in the result set.")
-    total_pages: StrictInt = Field(..., alias="totalPages", description="Total number of pages in the result set.")
-    has_next: StrictBool = Field(..., alias="hasNext", description="Returns if there is a next page.")
-    has_previous: StrictBool = Field(..., alias="hasPrevious", description="Returns if there is a previous page.")
-    __properties = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious"]
+    total_elements: StrictInt = Field(
+        ...,
+        alias="totalElements",
+        description="Total number of elements in the result set.",
+    )
+    total_pages: StrictInt = Field(
+        ..., alias="totalPages", description="Total number of pages in the result set."
+    )
+    has_next: StrictBool = Field(
+        ..., alias="hasNext", description="Returns if there is a next page."
+    )
+    has_previous: StrictBool = Field(
+        ..., alias="hasPrevious", description="Returns if there is a previous page."
+    )
+    __properties = [
+        "number",
+        "size",
+        "totalElements",
+        "totalPages",
+        "hasNext",
+        "hasPrevious",
+    ]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -53,10 +72,7 @@ class PageMetadata(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -68,14 +84,14 @@ class PageMetadata(BaseModel):
         if not isinstance(obj, dict):
             return PageMetadata.parse_obj(obj)
 
-        _obj = PageMetadata.parse_obj({
-            "number": obj.get("number"),
-            "size": obj.get("size"),
-            "total_elements": obj.get("totalElements"),
-            "total_pages": obj.get("totalPages"),
-            "has_next": obj.get("hasNext"),
-            "has_previous": obj.get("hasPrevious")
-        })
+        _obj = PageMetadata.parse_obj(
+            {
+                "number": obj.get("number"),
+                "size": obj.get("size"),
+                "total_elements": obj.get("totalElements"),
+                "total_pages": obj.get("totalPages"),
+                "has_next": obj.get("hasNext"),
+                "has_previous": obj.get("hasPrevious"),
+            }
+        )
         return _obj
-
-

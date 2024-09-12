@@ -15,7 +15,9 @@
 import unittest
 
 import openchallenges_client
-from openchallenges_client.api.challenge_input_data_type_api import ChallengeInputDataTypeApi  # noqa: E501
+from openchallenges_client.api.challenge_input_data_type_api import (
+    ChallengeInputDataTypeApi,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
 
 
@@ -23,7 +25,9 @@ class TestChallengeInputDataTypeApi(unittest.TestCase):
     """ChallengeInputDataTypeApi unit test stubs"""
 
     def setUp(self):
-        self.api = openchallenges_client.api.challenge_input_data_type_api.ChallengeInputDataTypeApi()  # noqa: E501
+        self.api = (
+            openchallenges_client.api.challenge_input_data_type_api.ChallengeInputDataTypeApi()
+        )  # noqa: E501
 
     def tearDown(self):
         pass
@@ -36,5 +40,5 @@ class TestChallengeInputDataTypeApi(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

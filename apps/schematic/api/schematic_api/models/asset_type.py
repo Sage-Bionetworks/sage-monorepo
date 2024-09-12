@@ -19,18 +19,15 @@ class AssetType(Model):
     allowed enum values
     """
     SYNAPSE = "synapse"
+
     def __init__(self):  # noqa: E501
-        """AssetType - a model defined in OpenAPI
+        """AssetType - a model defined in OpenAPI"""
+        self.openapi_types = {}
 
-        """
-        self.openapi_types = {
-        }
-
-        self.attribute_map = {
-        }
+        self.attribute_map = {}
 
     @classmethod
-    def from_dict(cls, dikt) -> 'AssetType':
+    def from_dict(cls, dikt) -> "AssetType":
         """Returns the dict as a model
 
         :param dikt: A dict.

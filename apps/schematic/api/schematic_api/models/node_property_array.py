@@ -21,18 +21,14 @@ class NodePropertyArray(Model):
         :param node_properties: The node_properties of this NodePropertyArray.  # noqa: E501
         :type node_properties: List[str]
         """
-        self.openapi_types = {
-            'node_properties': List[str]
-        }
+        self.openapi_types = {"node_properties": List[str]}
 
-        self.attribute_map = {
-            'node_properties': 'node_properties'
-        }
+        self.attribute_map = {"node_properties": "node_properties"}
 
         self._node_properties = node_properties
 
     @classmethod
-    def from_dict(cls, dikt) -> 'NodePropertyArray':
+    def from_dict(cls, dikt) -> "NodePropertyArray":
         """Returns the dict as a model
 
         :param dikt: A dict.

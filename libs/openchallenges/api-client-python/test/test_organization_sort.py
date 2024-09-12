@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.organization_sort import OrganizationSort  # noqa: E501
+from openchallenges_client.models.organization_sort import (
+    OrganizationSort,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestOrganizationSort(unittest.TestCase):
     """OrganizationSort unit test stubs"""
@@ -32,5 +35,6 @@ class TestOrganizationSort(unittest.TestCase):
         """Test OrganizationSort"""
         # inst = OrganizationSort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

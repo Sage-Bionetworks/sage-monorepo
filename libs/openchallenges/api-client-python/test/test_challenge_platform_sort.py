@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_platform_sort import ChallengePlatformSort  # noqa: E501
+from openchallenges_client.models.challenge_platform_sort import (
+    ChallengePlatformSort,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengePlatformSort(unittest.TestCase):
     """ChallengePlatformSort unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengePlatformSort(unittest.TestCase):
         """Test ChallengePlatformSort"""
         # inst = ChallengePlatformSort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

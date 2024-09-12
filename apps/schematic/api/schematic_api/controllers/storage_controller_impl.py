@@ -1,4 +1,5 @@
 """Implementation of all endpoints"""
+
 import os
 from typing import Callable
 import tempfile

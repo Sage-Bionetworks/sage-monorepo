@@ -22,21 +22,42 @@ from typing import List
 from pydantic import BaseModel, Field, StrictBool, StrictInt, conlist
 from openchallenges_client.models.user import User
 
+
 class UsersPage(BaseModel):
     """
     A page of users
     """
+
     number: StrictInt = Field(..., description="The page number.")
     size: StrictInt = Field(..., description="The number of items in a single page.")
-    total_elements: StrictInt = Field(..., alias="totalElements", description="Total number of elements in the result set.")
-    total_pages: StrictInt = Field(..., alias="totalPages", description="Total number of pages in the result set.")
-    has_next: StrictBool = Field(..., alias="hasNext", description="Returns if there is a next page.")
-    has_previous: StrictBool = Field(..., alias="hasPrevious", description="Returns if there is a previous page.")
+    total_elements: StrictInt = Field(
+        ...,
+        alias="totalElements",
+        description="Total number of elements in the result set.",
+    )
+    total_pages: StrictInt = Field(
+        ..., alias="totalPages", description="Total number of pages in the result set."
+    )
+    has_next: StrictBool = Field(
+        ..., alias="hasNext", description="Returns if there is a next page."
+    )
+    has_previous: StrictBool = Field(
+        ..., alias="hasPrevious", description="Returns if there is a previous page."
+    )
     users: conlist(User) = Field(..., description="A list of users")
-    __properties = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "users"]
+    __properties = [
+        "number",
+        "size",
+        "totalElements",
+        "totalPages",
+        "hasNext",
+        "hasPrevious",
+        "users",
+    ]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -55,17 +76,14 @@ class UsersPage(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in users (list)
         _items = []
         if self.users:
             for _item in self.users:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['users'] = _items
+            _dict["users"] = _items
         return _dict
 
     @classmethod
@@ -77,15 +95,19 @@ class UsersPage(BaseModel):
         if not isinstance(obj, dict):
             return UsersPage.parse_obj(obj)
 
-        _obj = UsersPage.parse_obj({
-            "number": obj.get("number"),
-            "size": obj.get("size"),
-            "total_elements": obj.get("totalElements"),
-            "total_pages": obj.get("totalPages"),
-            "has_next": obj.get("hasNext"),
-            "has_previous": obj.get("hasPrevious"),
-            "users": [User.from_dict(_item) for _item in obj.get("users")] if obj.get("users") is not None else None
-        })
+        _obj = UsersPage.parse_obj(
+            {
+                "number": obj.get("number"),
+                "size": obj.get("size"),
+                "total_elements": obj.get("totalElements"),
+                "total_pages": obj.get("totalPages"),
+                "has_next": obj.get("hasNext"),
+                "has_previous": obj.get("hasPrevious"),
+                "users": (
+                    [User.from_dict(_item) for _item in obj.get("users")]
+                    if obj.get("users") is not None
+                    else None
+                ),
+            }
+        )
         return _obj
-
-

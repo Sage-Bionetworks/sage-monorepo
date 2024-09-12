@@ -12,10 +12,10 @@ const getNxProjectNames = async () => {
 const getNxProjects = async () => {
   let projectFiles = await exec('find . -name project.json -not -path "./node_modules/*"');
   projectFiles = projectFiles.stdout.trim().split(/\n/);
-  const prefix = './';
-  projectFiles = projectFiles.map((projectFile) => {
-    return projectFile.slice(projectFile.indexOf(prefix) + prefix.length);
-  });
+  // const prefix = './';
+  // projectFiles = projectFiles.map((projectFile) => {
+  //   return projectFile.slice(projectFile.indexOf(prefix) + prefix.length);
+  // });
   projects = projectFiles.map((projectFile) => {
     projectDir = projectFile.substring(0, projectFile.indexOf('/project.json'));
     const jsonData = fs.readFileSync(projectFile);

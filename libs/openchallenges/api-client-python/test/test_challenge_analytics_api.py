@@ -15,7 +15,9 @@
 import unittest
 
 import openchallenges_client
-from openchallenges_client.api.challenge_analytics_api import ChallengeAnalyticsApi  # noqa: E501
+from openchallenges_client.api.challenge_analytics_api import (
+    ChallengeAnalyticsApi,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
 
 
@@ -23,7 +25,9 @@ class TestChallengeAnalyticsApi(unittest.TestCase):
     """ChallengeAnalyticsApi unit test stubs"""
 
     def setUp(self):
-        self.api = openchallenges_client.api.challenge_analytics_api.ChallengeAnalyticsApi()  # noqa: E501
+        self.api = (
+            openchallenges_client.api.challenge_analytics_api.ChallengeAnalyticsApi()
+        )  # noqa: E501
 
     def tearDown(self):
         pass
@@ -36,5 +40,5 @@ class TestChallengeAnalyticsApi(unittest.TestCase):
         pass
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

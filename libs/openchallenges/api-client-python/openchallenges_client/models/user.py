@@ -22,11 +22,15 @@ from typing import Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 from openchallenges_client.models.user_status import UserStatus
 
+
 class User(BaseModel):
     """
     A simple user
     """
-    id: Optional[StrictInt] = Field(None, description="The unique identifier of an account")
+
+    id: Optional[StrictInt] = Field(
+        None, description="The unique identifier of an account"
+    )
     login: StrictStr = Field(...)
     email: StrictStr = Field(..., description="An email address.")
     name: Optional[StrictStr] = None
@@ -36,10 +40,22 @@ class User(BaseModel):
     updated_at: datetime = Field(..., alias="updatedAt")
     type: StrictStr = Field(...)
     bio: Optional[StrictStr] = None
-    __properties = ["id", "login", "email", "name", "status", "avatarUrl", "createdAt", "updatedAt", "type", "bio"]
+    __properties = [
+        "id",
+        "login",
+        "email",
+        "name",
+        "status",
+        "avatarUrl",
+        "createdAt",
+        "updatedAt",
+        "type",
+        "bio",
+    ]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -58,24 +74,21 @@ class User(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         # set to None if name (nullable) is None
         # and __fields_set__ contains the field
         if self.name is None and "name" in self.__fields_set__:
-            _dict['name'] = None
+            _dict["name"] = None
 
         # set to None if avatar_url (nullable) is None
         # and __fields_set__ contains the field
         if self.avatar_url is None and "avatar_url" in self.__fields_set__:
-            _dict['avatarUrl'] = None
+            _dict["avatarUrl"] = None
 
         # set to None if bio (nullable) is None
         # and __fields_set__ contains the field
         if self.bio is None and "bio" in self.__fields_set__:
-            _dict['bio'] = None
+            _dict["bio"] = None
 
         return _dict
 
@@ -88,18 +101,18 @@ class User(BaseModel):
         if not isinstance(obj, dict):
             return User.parse_obj(obj)
 
-        _obj = User.parse_obj({
-            "id": obj.get("id"),
-            "login": obj.get("login"),
-            "email": obj.get("email"),
-            "name": obj.get("name"),
-            "status": obj.get("status"),
-            "avatar_url": obj.get("avatarUrl"),
-            "created_at": obj.get("createdAt"),
-            "updated_at": obj.get("updatedAt"),
-            "type": obj.get("type"),
-            "bio": obj.get("bio")
-        })
+        _obj = User.parse_obj(
+            {
+                "id": obj.get("id"),
+                "login": obj.get("login"),
+                "email": obj.get("email"),
+                "name": obj.get("name"),
+                "status": obj.get("status"),
+                "avatar_url": obj.get("avatarUrl"),
+                "created_at": obj.get("createdAt"),
+                "updated_at": obj.get("updatedAt"),
+                "type": obj.get("type"),
+                "bio": obj.get("bio"),
+            }
+        )
         return _obj
-
-

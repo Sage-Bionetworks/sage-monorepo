@@ -25,7 +25,6 @@ environs = "^11.0.0"
 uwsgi = "^2.0.22"
 
 [tool.poetry.group.dev.dependencies]
-black = "23.7.0"
 mypy = "^1.4.1"
 pylint = "^2.17.4"
 

@@ -21,18 +21,16 @@ class ComponentRequirementArray(Model):
         :param component_requirements_list: The component_requirements_list of this ComponentRequirementArray.  # noqa: E501
         :type component_requirements_list: List[str]
         """
-        self.openapi_types = {
-            'component_requirements_list': List[str]
-        }
+        self.openapi_types = {"component_requirements_list": List[str]}
 
         self.attribute_map = {
-            'component_requirements_list': 'componentRequirementsList'
+            "component_requirements_list": "componentRequirementsList"
         }
 
         self._component_requirements_list = component_requirements_list
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ComponentRequirementArray':
+    def from_dict(cls, dikt) -> "ComponentRequirementArray":
         """Returns the dict as a model
 
         :param dikt: A dict.

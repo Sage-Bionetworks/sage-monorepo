@@ -1,4 +1,5 @@
 """Tests for version endpoints"""
+
 # pylint: disable=duplicate-code
 
 import importlib.metadata

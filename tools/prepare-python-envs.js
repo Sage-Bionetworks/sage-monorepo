@@ -10,15 +10,15 @@ const { getGitDiffFiles } = require('./git-util');
 const { getNxProjects, getNxProjectFiles } = require('./nx-util');
 
 // Returns true if the directory specified includes a Poetry lock file.
-const isPoetryProject = (projectDir) => {
+const hasPoetryLockFile = (projectDir) => {
   const filenames = fs.readdirSync(projectDir);
   return filenames.includes('poetry.lock');
 };
 
-// Returns true if the project dir specified includes a Poetry lock file that has changed.
-const hasPoetryProjectDefinitionChanged = (projectDir, changedFiles) => {
-  if (isPoetryProject(projectDir)) {
-    const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${projectDir}/${filename}`);
+// Returns true if the dir specified includes a Poetry lock file that has changed.
+const hasPoetryDefinitionChanged = (directory, changedFiles) => {
+  if (hasPoetryLockFile(directory)) {
+    const projectDefinitionPaths = ['poetry.lock'].map((filename) => `${directory}/${filename}`);
     if (
       projectDefinitionPaths.some((projectDefinitionPath) =>
         changedFiles.includes(projectDefinitionPath),
@@ -30,27 +30,45 @@ const hasPoetryProjectDefinitionChanged = (projectDir, changedFiles) => {
   return false;
 };
 
-// Installs the Python dependencies of the comma-separated list of projects.
-const installPythonDependencies = (projectNames) => {
-  spawn('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`], {
-    stdio: 'inherit',
-  }).on('exit', function (error) {
-    if (error) {
-      console.log(`error: ${error.message}`);
-      return;
-    }
+const runCommand = (command, args) => {
+  return new Promise((resolve, reject) => {
+    const process = spawn(command, args, { stdio: 'inherit' });
+    process.on('exit', (code) => {
+      if (code !== 0) {
+        reject(new Error(`Command failed: ${command} ${args.join(' ')}`));
+      } else {
+        resolve();
+      }
+    });
   });
+};
+
+const installWorkspacePythonDependencies = async () => {
+  try {
+    await runCommand('poetry', ['install', '--with', 'dev']);
+    // The bin folder of the virtualenv has already been added to the path in dev-env.sh
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
+};
+
+// Installs the Python dependencies of the comma-separated list of projects.
+const installProjectPythonDependencies = async (projectNames) => {
+  try {
+    await runCommand('nx', ['run-many', '--target=prepare', `--projects=${projectNames}`]);
+  } catch (error) {
+    console.error(`Error: ${error.message}`);
+  }
 };
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  // changedFiles.push('apps/openchallenges/notebook/poetry.lock');
-  // changedFiles.push('apps/schematic/notebook/poetry.lock');
-  // console.log(changedFiles);
+  if (hasPoetryDefinitionChanged('.', changedFiles)) {
+    installWorkspacePythonDependencies();
+  }
   getNxProjects()
     .then((projects) => {
-      const toUpdate = (project) =>
-        hasPoetryProjectDefinitionChanged(project['projectDir'], changedFiles);
+      const toUpdate = (project) => hasPoetryDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
     .then((projectsToUpdate) => {
@@ -58,7 +76,7 @@ getGitDiffFiles().then((changedFiles) => {
       let projectNames = projectsToUpdate.map((project) => project['projectName']);
       projectNames = projectNames.join(',');
       if (projectNames) {
-        installPythonDependencies(projectNames);
+        installProjectPythonDependencies(projectNames);
       }
     });
 });

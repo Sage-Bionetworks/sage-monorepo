@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ImageHeight(str, Enum):
     """
     The height of the image.
@@ -29,16 +26,14 @@ class ImageHeight(str, Enum):
     """
     allowed enum values
     """
-    ORIGINAL = 'original'
-    ENUM_32PX = '32px'
-    ENUM_100PX = '100px'
-    ENUM_140PX = '140px'
-    ENUM_250PX = '250px'
-    ENUM_500PX = '500px'
+    ORIGINAL = "original"
+    ENUM_32PX = "32px"
+    ENUM_100PX = "100px"
+    ENUM_140PX = "140px"
+    ENUM_250PX = "250px"
+    ENUM_500PX = "500px"
 
     @classmethod
     def from_json(cls, json_str: str) -> ImageHeight:
         """Create an instance of ImageHeight from a JSON string"""
         return ImageHeight(json.loads(json_str))
-
-

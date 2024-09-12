@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.image_aspect_ratio import ImageAspectRatio  # noqa: E501
+from openchallenges_client.models.image_aspect_ratio import (
+    ImageAspectRatio,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestImageAspectRatio(unittest.TestCase):
     """ImageAspectRatio unit test stubs"""
@@ -32,5 +35,6 @@ class TestImageAspectRatio(unittest.TestCase):
         """Test ImageAspectRatio"""
         # inst = ImageAspectRatio()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

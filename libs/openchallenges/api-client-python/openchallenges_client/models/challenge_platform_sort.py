@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengePlatformSort(str, Enum):
     """
     What to sort results by.
@@ -29,12 +26,10 @@ class ChallengePlatformSort(str, Enum):
     """
     allowed enum values
     """
-    NAME = 'name'
-    RELEVANCE = 'relevance'
+    NAME = "name"
+    RELEVANCE = "relevance"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengePlatformSort:
         """Create an instance of ChallengePlatformSort from a JSON string"""
         return ChallengePlatformSort(json.loads(json_str))
-
-

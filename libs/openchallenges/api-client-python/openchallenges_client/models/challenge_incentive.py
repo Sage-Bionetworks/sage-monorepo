@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeIncentive(str, Enum):
     """
     The incentive type of the challenge.
@@ -29,14 +26,12 @@ class ChallengeIncentive(str, Enum):
     """
     allowed enum values
     """
-    MONETARY = 'monetary'
-    PUBLICATION = 'publication'
-    SPEAKING_ENGAGEMENT = 'speaking_engagement'
-    OTHER = 'other'
+    MONETARY = "monetary"
+    PUBLICATION = "publication"
+    SPEAKING_ENGAGEMENT = "speaking_engagement"
+    OTHER = "other"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeIncentive:
         """Create an instance of ChallengeIncentive from a JSON string"""
         return ChallengeIncentive(json.loads(json_str))
-
-

@@ -21,32 +21,53 @@ from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr, conint, constr, validator
 
+
 class Organization(BaseModel):
     """
     An organization
     """
+
     id: StrictInt = Field(..., description="The unique identifier of an organization")
     name: StrictStr = Field(...)
     email: StrictStr = Field(..., description="An email address.")
-    login: constr(strict=True, max_length=64, min_length=2) = Field(..., description="The login of an organization")
+    login: constr(strict=True, max_length=64, min_length=2) = Field(
+        ..., description="The login of an organization"
+    )
     description: StrictStr = Field(...)
     avatar_key: Optional[StrictStr] = Field(None, alias="avatarKey")
     website_url: StrictStr = Field(..., alias="websiteUrl")
-    challenge_count: Optional[conint(strict=True, ge=0)] = Field(None, alias="challengeCount")
+    challenge_count: Optional[conint(strict=True, ge=0)] = Field(
+        None, alias="challengeCount"
+    )
     created_at: datetime = Field(..., alias="createdAt")
     updated_at: datetime = Field(..., alias="updatedAt")
     acronym: Optional[StrictStr] = None
-    __properties = ["id", "name", "email", "login", "description", "avatarKey", "websiteUrl", "challengeCount", "createdAt", "updatedAt", "acronym"]
+    __properties = [
+        "id",
+        "name",
+        "email",
+        "login",
+        "description",
+        "avatarKey",
+        "websiteUrl",
+        "challengeCount",
+        "createdAt",
+        "updatedAt",
+        "acronym",
+    ]
 
-    @validator('login')
+    @validator("login")
     def login_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if not re.match(r"^[a-z0-9]+(?:-[a-z0-9]+)*$", value):
-            raise ValueError(r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/")
+            raise ValueError(
+                r"must validate the regular expression /^[a-z0-9]+(?:-[a-z0-9]+)*$/"
+            )
         return value
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -65,10 +86,7 @@ class Organization(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -80,19 +98,19 @@ class Organization(BaseModel):
         if not isinstance(obj, dict):
             return Organization.parse_obj(obj)
 
-        _obj = Organization.parse_obj({
-            "id": obj.get("id"),
-            "name": obj.get("name"),
-            "email": obj.get("email"),
-            "login": obj.get("login"),
-            "description": obj.get("description"),
-            "avatar_key": obj.get("avatarKey"),
-            "website_url": obj.get("websiteUrl"),
-            "challenge_count": obj.get("challengeCount"),
-            "created_at": obj.get("createdAt"),
-            "updated_at": obj.get("updatedAt"),
-            "acronym": obj.get("acronym")
-        })
+        _obj = Organization.parse_obj(
+            {
+                "id": obj.get("id"),
+                "name": obj.get("name"),
+                "email": obj.get("email"),
+                "login": obj.get("login"),
+                "description": obj.get("description"),
+                "avatar_key": obj.get("avatarKey"),
+                "website_url": obj.get("websiteUrl"),
+                "challenge_count": obj.get("challengeCount"),
+                "created_at": obj.get("createdAt"),
+                "updated_at": obj.get("updatedAt"),
+                "acronym": obj.get("acronym"),
+            }
+        )
         return _obj
-
-

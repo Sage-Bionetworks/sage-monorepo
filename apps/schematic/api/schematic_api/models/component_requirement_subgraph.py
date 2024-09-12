@@ -23,21 +23,15 @@ class ComponentRequirementSubgraph(Model):
         :param component2: The component2 of this ComponentRequirementSubgraph.  # noqa: E501
         :type component2: str
         """
-        self.openapi_types = {
-            'component1': str,
-            'component2': str
-        }
+        self.openapi_types = {"component1": str, "component2": str}
 
-        self.attribute_map = {
-            'component1': 'component1',
-            'component2': 'component2'
-        }
+        self.attribute_map = {"component1": "component1", "component2": "component2"}
 
         self._component1 = component1
         self._component2 = component2
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ComponentRequirementSubgraph':
+    def from_dict(cls, dikt) -> "ComponentRequirementSubgraph":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -68,7 +62,9 @@ class ComponentRequirementSubgraph(Model):
         :type component1: str
         """
         if component1 is None:
-            raise ValueError("Invalid value for `component1`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `component1`, must not be `None`"
+            )  # noqa: E501
 
         self._component1 = component1
 
@@ -93,6 +89,8 @@ class ComponentRequirementSubgraph(Model):
         :type component2: str
         """
         if component2 is None:
-            raise ValueError("Invalid value for `component2`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `component2`, must not be `None`"
+            )  # noqa: E501
 
         self._component2 = component2

@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeStatus(str, Enum):
     """
     The status of the challenge.
@@ -29,13 +26,11 @@ class ChallengeStatus(str, Enum):
     """
     allowed enum values
     """
-    UPCOMING = 'upcoming'
-    ACTIVE = 'active'
-    COMPLETED = 'completed'
+    UPCOMING = "upcoming"
+    ACTIVE = "active"
+    COMPLETED = "completed"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeStatus:
         """Create an instance of ChallengeStatus from a JSON string"""
         return ChallengeStatus(json.loads(json_str))
-
-

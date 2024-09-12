@@ -21,18 +21,28 @@ import json
 from typing import Optional
 from pydantic import BaseModel, Field, StrictInt, StrictStr
 
+
 class BasicError(BaseModel):
     """
     Problem details (tools.ietf.org/html/rfc7807)
     """
-    title: StrictStr = Field(..., description="A human readable documentation for the problem type")
+
+    title: StrictStr = Field(
+        ..., description="A human readable documentation for the problem type"
+    )
     status: StrictInt = Field(..., description="The HTTP status code")
-    detail: Optional[StrictStr] = Field(None, description="A human readable explanation specific to this occurrence of the problem")
-    type: Optional[StrictStr] = Field(None, description="An absolute URI that identifies the problem type")
+    detail: Optional[StrictStr] = Field(
+        None,
+        description="A human readable explanation specific to this occurrence of the problem",
+    )
+    type: Optional[StrictStr] = Field(
+        None, description="An absolute URI that identifies the problem type"
+    )
     __properties = ["title", "status", "detail", "type"]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -51,10 +61,7 @@ class BasicError(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -66,12 +73,12 @@ class BasicError(BaseModel):
         if not isinstance(obj, dict):
             return BasicError.parse_obj(obj)
 
-        _obj = BasicError.parse_obj({
-            "title": obj.get("title"),
-            "status": obj.get("status"),
-            "detail": obj.get("detail"),
-            "type": obj.get("type")
-        })
+        _obj = BasicError.parse_obj(
+            {
+                "title": obj.get("title"),
+                "status": obj.get("status"),
+                "detail": obj.get("detail"),
+                "type": obj.get("type"),
+            }
+        )
         return _obj
-
-

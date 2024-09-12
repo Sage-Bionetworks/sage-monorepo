@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_difficulty import ChallengeDifficulty  # noqa: E501
+from openchallenges_client.models.challenge_difficulty import (
+    ChallengeDifficulty,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeDifficulty(unittest.TestCase):
     """ChallengeDifficulty unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeDifficulty(unittest.TestCase):
         """Test ChallengeDifficulty"""
         # inst = ChallengeDifficulty()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

@@ -18,18 +18,20 @@ import re  # noqa: F401
 import json
 
 
-
 from pydantic import BaseModel, Field, StrictInt
+
 
 class UserCreateResponse(BaseModel):
     """
     The response returned after the creation of the user
     """
+
     id: StrictInt = Field(..., description="The unique identifier of an account")
     __properties = ["id"]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -48,10 +50,7 @@ class UserCreateResponse(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -63,9 +62,5 @@ class UserCreateResponse(BaseModel):
         if not isinstance(obj, dict):
             return UserCreateResponse.parse_obj(obj)
 
-        _obj = UserCreateResponse.parse_obj({
-            "id": obj.get("id")
-        })
+        _obj = UserCreateResponse.parse_obj({"id": obj.get("id")})
         return _obj
-
-

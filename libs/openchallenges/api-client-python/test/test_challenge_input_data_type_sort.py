@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.challenge_input_data_type_sort import ChallengeInputDataTypeSort  # noqa: E501
+from openchallenges_client.models.challenge_input_data_type_sort import (
+    ChallengeInputDataTypeSort,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestChallengeInputDataTypeSort(unittest.TestCase):
     """ChallengeInputDataTypeSort unit test stubs"""
@@ -32,5 +35,6 @@ class TestChallengeInputDataTypeSort(unittest.TestCase):
         """Test ChallengeInputDataTypeSort"""
         # inst = ChallengeInputDataTypeSort()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

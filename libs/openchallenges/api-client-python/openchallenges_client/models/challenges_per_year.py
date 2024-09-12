@@ -21,16 +21,19 @@ import json
 from typing import List
 from pydantic import BaseModel, Field, StrictInt, StrictStr, conlist
 
+
 class ChallengesPerYear(BaseModel):
     """
     An object
     """
+
     years: conlist(StrictStr) = Field(...)
     challenge_counts: conlist(StrictInt) = Field(..., alias="challengeCounts")
     __properties = ["years", "challengeCounts"]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -49,10 +52,7 @@ class ChallengesPerYear(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         return _dict
 
     @classmethod
@@ -64,10 +64,7 @@ class ChallengesPerYear(BaseModel):
         if not isinstance(obj, dict):
             return ChallengesPerYear.parse_obj(obj)
 
-        _obj = ChallengesPerYear.parse_obj({
-            "years": obj.get("years"),
-            "challenge_counts": obj.get("challengeCounts")
-        })
+        _obj = ChallengesPerYear.parse_obj(
+            {"years": obj.get("years"), "challenge_counts": obj.get("challengeCounts")}
+        )
         return _obj
-
-

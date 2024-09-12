@@ -15,7 +15,14 @@ class ManifestMetadata(Model):
     Do not edit the class manually.
     """
 
-    def __init__(self, name=None, id=None, dataset_name=None, dataset_id=None, component_name=None):  # noqa: E501
+    def __init__(
+        self,
+        name=None,
+        id=None,
+        dataset_name=None,
+        dataset_id=None,
+        component_name=None,
+    ):  # noqa: E501
         """ManifestMetadata - a model defined in OpenAPI
 
         :param name: The name of this ManifestMetadata.  # noqa: E501
@@ -30,19 +37,19 @@ class ManifestMetadata(Model):
         :type component_name: str
         """
         self.openapi_types = {
-            'name': str,
-            'id': str,
-            'dataset_name': str,
-            'dataset_id': str,
-            'component_name': str
+            "name": str,
+            "id": str,
+            "dataset_name": str,
+            "dataset_id": str,
+            "component_name": str,
         }
 
         self.attribute_map = {
-            'name': 'name',
-            'id': 'id',
-            'dataset_name': 'datasetName',
-            'dataset_id': 'datasetId',
-            'component_name': 'componentName'
+            "name": "name",
+            "id": "id",
+            "dataset_name": "datasetName",
+            "dataset_id": "datasetId",
+            "component_name": "componentName",
         }
 
         self._name = name
@@ -52,7 +59,7 @@ class ManifestMetadata(Model):
         self._component_name = component_name
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ManifestMetadata':
+    def from_dict(cls, dikt) -> "ManifestMetadata":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -83,7 +90,9 @@ class ManifestMetadata(Model):
         :type name: str
         """
         if name is None:
-            raise ValueError("Invalid value for `name`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `name`, must not be `None`"
+            )  # noqa: E501
 
         self._name = name
 

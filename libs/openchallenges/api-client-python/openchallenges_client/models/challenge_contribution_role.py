@@ -18,9 +18,6 @@ import re  # noqa: F401
 from aenum import Enum, no_arg
 
 
-
-
-
 class ChallengeContributionRole(str, Enum):
     """
     The nature of a challenge contribution.
@@ -29,13 +26,11 @@ class ChallengeContributionRole(str, Enum):
     """
     allowed enum values
     """
-    CHALLENGE_ORGANIZER = 'challenge_organizer'
-    DATA_CONTRIBUTOR = 'data_contributor'
-    SPONSOR = 'sponsor'
+    CHALLENGE_ORGANIZER = "challenge_organizer"
+    DATA_CONTRIBUTOR = "data_contributor"
+    SPONSOR = "sponsor"
 
     @classmethod
     def from_json(cls, json_str: str) -> ChallengeContributionRole:
         """Create an instance of ChallengeContributionRole from a JSON string"""
         return ChallengeContributionRole(json.loads(json_str))
-
-

@@ -23,21 +23,15 @@ class ConnectedNodePair(Model):
         :param node2: The node2 of this ConnectedNodePair.  # noqa: E501
         :type node2: str
         """
-        self.openapi_types = {
-            'node1': str,
-            'node2': str
-        }
+        self.openapi_types = {"node1": str, "node2": str}
 
-        self.attribute_map = {
-            'node1': 'node1',
-            'node2': 'node2'
-        }
+        self.attribute_map = {"node1": "node1", "node2": "node2"}
 
         self._node1 = node1
         self._node2 = node2
 
     @classmethod
-    def from_dict(cls, dikt) -> 'ConnectedNodePair':
+    def from_dict(cls, dikt) -> "ConnectedNodePair":
         """Returns the dict as a model
 
         :param dikt: A dict.
@@ -68,7 +62,9 @@ class ConnectedNodePair(Model):
         :type node1: str
         """
         if node1 is None:
-            raise ValueError("Invalid value for `node1`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `node1`, must not be `None`"
+            )  # noqa: E501
 
         self._node1 = node1
 
@@ -93,6 +89,8 @@ class ConnectedNodePair(Model):
         :type node2: str
         """
         if node2 is None:
-            raise ValueError("Invalid value for `node2`, must not be `None`")  # noqa: E501
+            raise ValueError(
+                "Invalid value for `node2`, must not be `None`"
+            )  # noqa: E501
 
         self._node2 = node2

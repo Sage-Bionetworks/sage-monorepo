@@ -22,21 +22,42 @@ from typing import List
 from pydantic import BaseModel, Field, StrictBool, StrictInt, conlist
 from openchallenges_client.models.challenge import Challenge
 
+
 class ChallengesPage(BaseModel):
     """
     A page of challenges.
     """
+
     number: StrictInt = Field(..., description="The page number.")
     size: StrictInt = Field(..., description="The number of items in a single page.")
-    total_elements: StrictInt = Field(..., alias="totalElements", description="Total number of elements in the result set.")
-    total_pages: StrictInt = Field(..., alias="totalPages", description="Total number of pages in the result set.")
-    has_next: StrictBool = Field(..., alias="hasNext", description="Returns if there is a next page.")
-    has_previous: StrictBool = Field(..., alias="hasPrevious", description="Returns if there is a previous page.")
+    total_elements: StrictInt = Field(
+        ...,
+        alias="totalElements",
+        description="Total number of elements in the result set.",
+    )
+    total_pages: StrictInt = Field(
+        ..., alias="totalPages", description="Total number of pages in the result set."
+    )
+    has_next: StrictBool = Field(
+        ..., alias="hasNext", description="Returns if there is a next page."
+    )
+    has_previous: StrictBool = Field(
+        ..., alias="hasPrevious", description="Returns if there is a previous page."
+    )
     challenges: conlist(Challenge) = Field(..., description="A list of challenges.")
-    __properties = ["number", "size", "totalElements", "totalPages", "hasNext", "hasPrevious", "challenges"]
+    __properties = [
+        "number",
+        "size",
+        "totalElements",
+        "totalPages",
+        "hasNext",
+        "hasPrevious",
+        "challenges",
+    ]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -55,17 +76,14 @@ class ChallengesPage(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         # override the default output from pydantic by calling `to_dict()` of each item in challenges (list)
         _items = []
         if self.challenges:
             for _item in self.challenges:
                 if _item:
                     _items.append(_item.to_dict())
-            _dict['challenges'] = _items
+            _dict["challenges"] = _items
         return _dict
 
     @classmethod
@@ -77,15 +95,19 @@ class ChallengesPage(BaseModel):
         if not isinstance(obj, dict):
             return ChallengesPage.parse_obj(obj)
 
-        _obj = ChallengesPage.parse_obj({
-            "number": obj.get("number"),
-            "size": obj.get("size"),
-            "total_elements": obj.get("totalElements"),
-            "total_pages": obj.get("totalPages"),
-            "has_next": obj.get("hasNext"),
-            "has_previous": obj.get("hasPrevious"),
-            "challenges": [Challenge.from_dict(_item) for _item in obj.get("challenges")] if obj.get("challenges") is not None else None
-        })
+        _obj = ChallengesPage.parse_obj(
+            {
+                "number": obj.get("number"),
+                "size": obj.get("size"),
+                "total_elements": obj.get("totalElements"),
+                "total_pages": obj.get("totalPages"),
+                "has_next": obj.get("hasNext"),
+                "has_previous": obj.get("hasPrevious"),
+                "challenges": (
+                    [Challenge.from_dict(_item) for _item in obj.get("challenges")]
+                    if obj.get("challenges") is not None
+                    else None
+                ),
+            }
+        )
         return _obj
-
-

@@ -20,26 +20,54 @@ import json
 
 from typing import List, Optional
 from pydantic import BaseModel, Field, StrictStr, conint, conlist
-from openchallenges_client.models.challenge_contribution_role import ChallengeContributionRole
+from openchallenges_client.models.challenge_contribution_role import (
+    ChallengeContributionRole,
+)
 from openchallenges_client.models.organization_category import OrganizationCategory
 from openchallenges_client.models.organization_direction import OrganizationDirection
 from openchallenges_client.models.organization_sort import OrganizationSort
+
 
 class OrganizationSearchQuery(BaseModel):
     """
     An organization search query.
     """
-    page_number: Optional[conint(strict=True, ge=0)] = Field(0, alias="pageNumber", description="The page number.")
-    page_size: Optional[conint(strict=True, ge=1)] = Field(100, alias="pageSize", description="The number of items in a single page.")
-    categories: Optional[conlist(OrganizationCategory)] = Field(None, description="The array of organization categories used to filter the results.")
-    challenge_contribution_roles: Optional[conlist(ChallengeContributionRole)] = Field(None, alias="challengeContributionRoles", description="An array of challenge contribution roles used to filter the results.")
+
+    page_number: Optional[conint(strict=True, ge=0)] = Field(
+        0, alias="pageNumber", description="The page number."
+    )
+    page_size: Optional[conint(strict=True, ge=1)] = Field(
+        100, alias="pageSize", description="The number of items in a single page."
+    )
+    categories: Optional[conlist(OrganizationCategory)] = Field(
+        None,
+        description="The array of organization categories used to filter the results.",
+    )
+    challenge_contribution_roles: Optional[conlist(ChallengeContributionRole)] = Field(
+        None,
+        alias="challengeContributionRoles",
+        description="An array of challenge contribution roles used to filter the results.",
+    )
     sort: Optional[OrganizationSort] = None
     direction: Optional[OrganizationDirection] = None
-    search_terms: Optional[StrictStr] = Field(None, alias="searchTerms", description="A string of search terms used to filter the results.")
-    __properties = ["pageNumber", "pageSize", "categories", "challengeContributionRoles", "sort", "direction", "searchTerms"]
+    search_terms: Optional[StrictStr] = Field(
+        None,
+        alias="searchTerms",
+        description="A string of search terms used to filter the results.",
+    )
+    __properties = [
+        "pageNumber",
+        "pageSize",
+        "categories",
+        "challengeContributionRoles",
+        "sort",
+        "direction",
+        "searchTerms",
+    ]
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -58,14 +86,11 @@ class OrganizationSearchQuery(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         # set to None if direction (nullable) is None
         # and __fields_set__ contains the field
         if self.direction is None and "direction" in self.__fields_set__:
-            _dict['direction'] = None
+            _dict["direction"] = None
 
         return _dict
 
@@ -78,15 +103,19 @@ class OrganizationSearchQuery(BaseModel):
         if not isinstance(obj, dict):
             return OrganizationSearchQuery.parse_obj(obj)
 
-        _obj = OrganizationSearchQuery.parse_obj({
-            "page_number": obj.get("pageNumber") if obj.get("pageNumber") is not None else 0,
-            "page_size": obj.get("pageSize") if obj.get("pageSize") is not None else 100,
-            "categories": obj.get("categories"),
-            "challenge_contribution_roles": obj.get("challengeContributionRoles"),
-            "sort": obj.get("sort"),
-            "direction": obj.get("direction"),
-            "search_terms": obj.get("searchTerms")
-        })
+        _obj = OrganizationSearchQuery.parse_obj(
+            {
+                "page_number": (
+                    obj.get("pageNumber") if obj.get("pageNumber") is not None else 0
+                ),
+                "page_size": (
+                    obj.get("pageSize") if obj.get("pageSize") is not None else 100
+                ),
+                "categories": obj.get("categories"),
+                "challenge_contribution_roles": obj.get("challengeContributionRoles"),
+                "sort": obj.get("sort"),
+                "direction": obj.get("direction"),
+                "search_terms": obj.get("searchTerms"),
+            }
+        )
         return _obj
-
-

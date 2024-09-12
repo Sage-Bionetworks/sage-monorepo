@@ -21,10 +21,12 @@ import json
 from typing import Optional
 from pydantic import BaseModel, Field, SecretStr, StrictStr
 
+
 class UserCreateRequest(BaseModel):
     """
     The information required to create a user account
     """
+
     login: StrictStr = Field(...)
     email: StrictStr = Field(..., description="An email address.")
     password: SecretStr = Field(...)
@@ -35,6 +37,7 @@ class UserCreateRequest(BaseModel):
 
     class Config:
         """Pydantic configuration"""
+
         allow_population_by_field_name = True
         validate_assignment = True
 
@@ -53,24 +56,21 @@ class UserCreateRequest(BaseModel):
 
     def to_dict(self):
         """Returns the dictionary representation of the model using alias"""
-        _dict = self.dict(by_alias=True,
-                          exclude={
-                          },
-                          exclude_none=True)
+        _dict = self.dict(by_alias=True, exclude={}, exclude_none=True)
         # set to None if name (nullable) is None
         # and __fields_set__ contains the field
         if self.name is None and "name" in self.__fields_set__:
-            _dict['name'] = None
+            _dict["name"] = None
 
         # set to None if avatar_url (nullable) is None
         # and __fields_set__ contains the field
         if self.avatar_url is None and "avatar_url" in self.__fields_set__:
-            _dict['avatarUrl'] = None
+            _dict["avatarUrl"] = None
 
         # set to None if bio (nullable) is None
         # and __fields_set__ contains the field
         if self.bio is None and "bio" in self.__fields_set__:
-            _dict['bio'] = None
+            _dict["bio"] = None
 
         return _dict
 
@@ -83,14 +83,14 @@ class UserCreateRequest(BaseModel):
         if not isinstance(obj, dict):
             return UserCreateRequest.parse_obj(obj)
 
-        _obj = UserCreateRequest.parse_obj({
-            "login": obj.get("login"),
-            "email": obj.get("email"),
-            "password": obj.get("password"),
-            "name": obj.get("name"),
-            "avatar_url": obj.get("avatarUrl"),
-            "bio": obj.get("bio")
-        })
+        _obj = UserCreateRequest.parse_obj(
+            {
+                "login": obj.get("login"),
+                "email": obj.get("email"),
+                "password": obj.get("password"),
+                "name": obj.get("name"),
+                "avatar_url": obj.get("avatarUrl"),
+                "bio": obj.get("bio"),
+            }
+        )
         return _obj
-
-

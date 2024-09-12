@@ -16,8 +16,11 @@ import unittest
 import datetime
 
 import openchallenges_client
-from openchallenges_client.models.simple_challenge_platform import SimpleChallengePlatform  # noqa: E501
+from openchallenges_client.models.simple_challenge_platform import (
+    SimpleChallengePlatform,
+)  # noqa: E501
 from openchallenges_client.rest import ApiException
+
 
 class TestSimpleChallengePlatform(unittest.TestCase):
     """SimpleChallengePlatform unit test stubs"""
@@ -30,9 +33,9 @@ class TestSimpleChallengePlatform(unittest.TestCase):
 
     def make_instance(self, include_optional):
         """Test SimpleChallengePlatform
-            include_option is a boolean, when False only required
-            params are included, when True both required and
-            optional params are included """
+        include_option is a boolean, when False only required
+        params are included, when True both required and
+        optional params are included"""
         # uncomment below to create an instance of `SimpleChallengePlatform`
         """
         model = openchallenges_client.models.simple_challenge_platform.SimpleChallengePlatform()  # noqa: E501
@@ -55,5 +58,6 @@ class TestSimpleChallengePlatform(unittest.TestCase):
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

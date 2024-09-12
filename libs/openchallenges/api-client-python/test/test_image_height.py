@@ -19,6 +19,7 @@ import openchallenges_client
 from openchallenges_client.models.image_height import ImageHeight  # noqa: E501
 from openchallenges_client.rest import ApiException
 
+
 class TestImageHeight(unittest.TestCase):
     """ImageHeight unit test stubs"""
 
@@ -32,5 +33,6 @@ class TestImageHeight(unittest.TestCase):
         """Test ImageHeight"""
         # inst = ImageHeight()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
