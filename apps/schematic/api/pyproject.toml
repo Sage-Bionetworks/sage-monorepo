@@ -13,11 +13,7 @@ swagger-ui-bundle = "0.0.9"
 python-dateutil = "2.8.2"
 Flask = "2.2.5"
 Flask-Cors = "3.0.10"
-schematicpy = "24.4.1"
-# jsonschema isn't a direct import, but is used by connexion.
-# This is to avoid deprecationWarnings
-# See https://sagebionetworks.jira.com/browse/FDS-1324
-jsonschema = ">=4.0.0 <4.10.0"
+schematicpy = "24.7.2"
 # this is to avoid the typing_extensions error
 # see https://github.com/ipython/ipython/issues/14380
 ipython = "8.18.1"
