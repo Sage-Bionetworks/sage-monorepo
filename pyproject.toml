@@ -2,19 +2,29 @@
 name = "sage-monorepo"
 version = "0.1.0"
 description = ""
-authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
+authors = [ "Thomas Schaffter <thomas.schaffter@gmail.com>" ]
 readme = "README.md"
 package-mode = false
 
-[tool.poetry.dependencies]
-python = "3.10.12"
+  [tool.poetry.dependencies]
+  python = "3.10.12"
+
+    [tool.poetry.dependencies.schematic-schematicpy]
+    path = "libs/schematic/schematicpy"
+    develop = true
 
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+flake8 = "6.0.0"
+autopep8 = "2.0.2"
+pytest = "7.3.1"
+pytest-sugar = "0.9.7"
+pytest-cov = "4.1.0"
+pytest-html = "3.2.0"
 
 [tool.black]
 line-length = 88
+
+[build-system]
+requires = [ "poetry-core" ]
+build-backend = "poetry.core.masonry.api"
