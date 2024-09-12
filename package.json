@@ -4,8 +4,8 @@
   "license": "Apache-2.0",
   "scripts": {
     "coverage:merge": "node ./tools/coverage-merger.js",
-    "postinstall": "husky install",
-    "prepare": "husky install",
+    "postinstall": "husky",
+    "prepare": "husky",
     "affected:apps": "nx affected:apps",
     "affected:build": "nx affected:build",
     "affected:test": "nx affected:test",
