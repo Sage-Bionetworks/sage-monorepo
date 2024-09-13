@@ -50,6 +50,7 @@ npm-debug.log
 testem.log
 /typings
 service_account.json
+/reports
 
 # System Files
 .DS_Store
