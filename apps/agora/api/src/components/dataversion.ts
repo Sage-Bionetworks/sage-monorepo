@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import { setHeaders } from '../helpers';
-import { DataVersionCollection } from '../models/dataversion';
+import { DataVersionCollection } from '../models';
 
 export async function getDataVersion() {
   return await DataVersionCollection.findOne();

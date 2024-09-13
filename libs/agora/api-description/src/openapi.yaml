@@ -9,7 +9,8 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+    url: https://agora.adknowledgeportal.org/images/logo.png
+    altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
@@ -18,3 +19,7 @@ tags:
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
+  /getTeams:
+    $ref: paths/teams.yaml
+  /team-member/{name}/image:
+    $ref: paths/team-member/@{name}/image.yaml

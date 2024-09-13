@@ -1,0 +1,7 @@
+type: object
+description: Teams
+properties:
+  teams:
+    type: array
+    items:
+      $ref: Team.yaml

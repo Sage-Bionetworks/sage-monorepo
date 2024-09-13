@@ -3,6 +3,8 @@ README.md
 api.module.ts
 api/api.ts
 api/dataversion.service.ts
+api/teamMemberImage.service.ts
+api/teams.service.ts
 configuration.ts
 encoder.ts
 git_push.sh
@@ -10,5 +12,8 @@ index.ts
 model/basicError.ts
 model/dataversion.ts
 model/models.ts
+model/team.ts
+model/teamMember.ts
+model/teams.ts
 param.ts
 variables.ts

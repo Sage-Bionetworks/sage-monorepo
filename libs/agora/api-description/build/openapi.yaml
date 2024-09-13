@@ -9,7 +9,8 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+    url: https://agora.adknowledgeportal.org/images/logo.png
+    altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
@@ -34,11 +35,54 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /getTeams:
+    get:
+      tags:
+        - Teams
+      summary: Get Teams
+      description: Get Teams
+      operationId: getTeams
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teams'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /team-member/{name}/image:
+    get:
+      tags:
+        - Team Member Image
+      summary: Get Team Member Image
+      description: Get Team Member Image
+      operationId: getTeamMemberImage
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     Dataversion:
       type: object
-      description: A dataversion
+      description: Synapse data version
       properties:
         data_file:
           type: string
@@ -72,6 +116,49 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    TeamMember:
+      type: object
+      description: Team Member
+      properties:
+        name:
+          type: string
+        isprimaryinvestigator:
+          type: boolean
+        url:
+          type: string
+      required:
+        - name
+        - isprimaryinvestigator
+    Team:
+      type: object
+      description: Team
+      properties:
+        team:
+          type: string
+        team_full:
+          type: string
+        program:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+      required:
+        - team
+        - team_full
+        - program
+        - description
+        - members
+    Teams:
+      type: object
+      description: Teams
+      properties:
+        teams:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
   responses:
     BadRequest:
       description: Invalid request

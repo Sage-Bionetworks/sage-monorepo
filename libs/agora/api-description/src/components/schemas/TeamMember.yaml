@@ -1,0 +1,12 @@
+type: object
+description: Team Member
+properties:
+  name:
+    type: string
+  isprimaryinvestigator:
+    type: boolean
+  url:
+    type: string
+required:
+  - name
+  - isprimaryinvestigator
