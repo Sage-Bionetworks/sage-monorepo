@@ -13,9 +13,6 @@ importers:
 
   .:
     dependencies:
-      '@angular-architects/module-federation':
-        specifier: 14.3.14
-        version: 14.3.14(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser-dynamic@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))))(encoding@0.1.13)(rxjs@7.8.1)
       '@angular/animations':
         specifier: 18.0.7
         version: 18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))
@@ -92,7 +89,7 @@ importers:
         specifier: 4.17.21
         version: 4.17.21
       mariadb:
-        specifier: ^3.0.2
+        specifier: 3.3.1
         version: 3.3.1
       mongoose:
         specifier: ^8.4.4
@@ -449,21 +446,6 @@ packages:
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
     engines: {node: '>=6.0.0'}
-
-  '@angular-architects/module-federation-runtime@14.3.14':
-    resolution: {integrity: sha512-TSs8P7th5iRQ5NJCz0cC4/q5NBvmu2lVO1/P5mGR5+/L9WEs/ayaGWJriUpYuUiwwxxZ+xN0mUHUj07yLCvJBw==}
-    peerDependencies:
-      '@angular/common': '>=14.0.0'
-      '@angular/core': '>=14.0.0'
-      '@angular/platform-browser-dynamic': '>=14.1.1'
-
-  '@angular-architects/module-federation@14.3.14':
-    resolution: {integrity: sha512-qV/GygoDRT80dbvGcFmHudR/ftu8/dURh4nWMLRViskZdJRFfSJ1pnZUmtmFaFUPL9NyS4APjQM1Shoxf+JWfg==}
-    peerDependencies:
-      '@angular/common': '>=14.1.1'
-      '@angular/core': '>=14.1.1'
-      '@angular/platform-browser-dynamic': '>=14.1.1'
-      rxjs: '>=6.6.3'
 
   '@angular-devkit/architect@0.1800.7':
     resolution: {integrity: sha512-ZYIjdngUOjY6G2XJGHtATLr+HhJWdo7Z3ATlzQTGI9D1a02kW3UFlELQBhFIn+1o78FU6W0STZgyfBH8M7wD2w==}
@@ -4805,8 +4787,8 @@ packages:
   '@types/node@18.19.39':
     resolution: {integrity: sha512-nPwTRDKUctxw3di5b4TfT3I0sWDiWoPQCZjXhvdkINntwr8lcoVCKsTgnXeRubKIlfnV+eN/HYk6Jb40tbcEAQ==}
 
-  '@types/node@20.14.10':
-    resolution: {integrity: sha512-MdiXf+nDuMvY0gJKxyfZ7/6UFsETO7mGKF54MVD/ekJS6HdFtpZFBgrh6Pseu64XTb2MLyFPlbW6hj8HYRQNOQ==}
+  '@types/node@20.16.5':
+    resolution: {integrity: sha512-VwYCweNo3ERajwy0IUlqqcyZ8/A7Zwa9ZP3MnENWcB11AejO+tLy3pu850goUW2FC/IJMdZUfKpX/yxL1gymCA==}
 
   '@types/node@22.5.1':
     resolution: {integrity: sha512-KkHsxej0j9IW1KKOOAA/XBA0z08UFSrRQHErzEfA3Vgq57eXIMYboIlHJuYIfd+lwCQjtKqUu3UnmKbtUc9yRw==}
@@ -5792,9 +5774,6 @@ packages:
 
   call-me-maybe@1.0.2:
     resolution: {integrity: sha512-HpX65o1Hnr9HH25ojC1YGs7HCQLq0GCOibSaWER0eNpgJ/Z1MZv2mTc7+xh6WOPxbRVcmgbv4hGU+uSQ/2xFZQ==}
-
-  callsite@1.0.0:
-    resolution: {integrity: sha512-0vdNRFXn5q+dtOqjfFtmtlI9N2eVZ7LMyEV2iKC5mEEFvSg/69Ml6b/WU2qF8W1nLRa0wiSrDT3Y5jOHZCwKPQ==}
 
   callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
@@ -12822,8 +12801,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.7.0-dev.20240904:
-    resolution: {integrity: sha512-iGi6VWFGOuxPvDfwfK1/8C172NWzC5gtC4G2dxqCQehrr86WTfFkc9aWucynaxZdwQNMqG1Iu83bmXD7CNHCmg==}
+  typescript@5.7.0-dev.20240913:
+    resolution: {integrity: sha512-cnMtLIMpmtz4XXNNvXJ8A8Mi8E1Q74cka3qcGnYVRWPqe9GmUvFI6vfcupvr9IjKBMVjpHgG5SuR5Da0Hv6CJA==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -13556,27 +13535,6 @@ snapshots:
     dependencies:
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
-
-  '@angular-architects/module-federation-runtime@14.3.14(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser-dynamic@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))))':
-    dependencies:
-      '@angular/common': 18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1)
-      '@angular/core': 18.0.7(rxjs@7.8.1)(zone.js@0.14.4)
-      '@angular/platform-browser-dynamic': 18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))
-      tslib: 2.6.3
-
-  '@angular-architects/module-federation@14.3.14(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser-dynamic@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))))(encoding@0.1.13)(rxjs@7.8.1)':
-    dependencies:
-      '@angular-architects/module-federation-runtime': 14.3.14(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser-dynamic@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))))
-      '@angular/common': 18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1)
-      '@angular/core': 18.0.7(rxjs@7.8.1)(zone.js@0.14.4)
-      '@angular/platform-browser-dynamic': 18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/compiler@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))
-      callsite: 1.0.0
-      node-fetch: 2.7.0(encoding@0.1.13)
-      rxjs: 7.8.1
-      semver: 7.6.2
-      word-wrap: 1.2.5
-    transitivePeerDependencies:
-      - encoding
 
   '@angular-devkit/architect@0.1800.7(chokidar@3.6.0)':
     dependencies:
@@ -21157,9 +21115,9 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.14.10':
+  '@types/node@20.16.5':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 6.19.8
 
   '@types/node@22.5.1':
     dependencies:
@@ -22435,8 +22393,6 @@ snapshots:
 
   call-me-maybe@1.0.2: {}
 
-  callsite@1.0.0: {}
-
   callsites@3.1.0: {}
 
   camel-case@4.1.2:
@@ -23678,7 +23634,7 @@ snapshots:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20240904
+      typescript: 5.7.0-dev.20240913
 
   duplexer3@0.1.5: {}
 
@@ -27277,7 +27233,7 @@ snapshots:
   mariadb@3.3.1:
     dependencies:
       '@types/geojson': 7946.0.14
-      '@types/node': 20.14.10
+      '@types/node': 20.16.5
       denque: 2.1.0
       iconv-lite: 0.6.3
       lru-cache: 10.4.3
@@ -31070,7 +31026,7 @@ snapshots:
 
   typescript@5.5.3: {}
 
-  typescript@5.7.0-dev.20240904: {}
+  typescript@5.7.0-dev.20240913: {}
 
   ua-parser-js@1.0.38: {}
 
