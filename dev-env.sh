@@ -30,7 +30,7 @@ function workspace-install-python-dependencies {
 
 function workspace-install {
   workspace-install-nodejs-dependencies
-  workspace-install-python-dependencies
+  # workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
   nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
@@ -175,5 +175,5 @@ function workspace-initialize-env {
 
   # Update PATH to include the bin directory of the workspace-level Poetry virtual environment. This
   # ensures that scripts and executables installed in the Poetry environment are accessible.
-  export PATH="$(poetry env info --path)/bin:$PATH"
+  # export PATH="$(poetry env info --path)/bin:$PATH"
 }

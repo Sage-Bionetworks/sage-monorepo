@@ -29,6 +29,9 @@ pytest-html = "3.2.0"
 [tool.black]
 line-length = 88
 
+[tool.nx]
+autoActivate = true
+
 [build-system]
 requires = [ "poetry-core" ]
 build-backend = "poetry.core.masonry.api"
