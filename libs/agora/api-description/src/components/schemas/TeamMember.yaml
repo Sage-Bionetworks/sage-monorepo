@@ -3,10 +3,10 @@ description: Team Member
 properties:
   name:
     type: string
-  isprimaryinvestigator:
+  isPrimaryInvestigator:
     type: boolean
   url:
     type: string
 required:
   - name
-  - isprimaryinvestigator
+  - isPrimaryInvestigator

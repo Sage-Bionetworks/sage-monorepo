@@ -3,10 +3,11 @@
     <ng-container *ngIf="team.members?.length">
       <div *ngFor="let member of team.members" class="team-member">
         <div class="team-member-image">
-          <div
+          <img
             *ngIf="images[member.name]"
-            [style.background-image]="getBackgroundImage(member.name)"
-          ></div>
+            [src]="images[member.name]"
+            alt="{{ member.name }} profile picture"
+          />
         </div>
         <h5 class="team-member-name">
           <a *ngIf="member.url" href="{{ member.url }}">

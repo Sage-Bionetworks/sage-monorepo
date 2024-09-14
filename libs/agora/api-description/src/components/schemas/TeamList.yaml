@@ -1,5 +1,5 @@
 type: object
-description: Teams
+description: List of Teams
 properties:
   teams:
     type: array

@@ -1,15 +1,15 @@
 get:
   tags:
-    - Teams
-  summary: Get Teams
-  description: Get Teams
-  operationId: getTeams
+    - Team
+  summary: List Teams
+  description: List Teams
+  operationId: listTeams
   responses:
     '200':
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/Teams.yaml
+            $ref: ../components/schemas/TeamList.yaml
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml

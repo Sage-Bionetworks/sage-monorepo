@@ -13,7 +13,7 @@ import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
 // -------------------------------------------------------------------------- //
 const TeamMemberSchema = new Schema<TeamMember>({
   name: { type: String, required: true },
-  isprimaryinvestigator: { type: Boolean, required: true },
+  isPrimaryInvestigator: { type: Boolean, required: true },
   url: String,
 });
 

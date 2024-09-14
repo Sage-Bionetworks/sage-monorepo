@@ -1,6 +1,6 @@
 get:
   tags:
-    - Team Member Image
+    - TeamMember
   summary: Get Team Member Image
   description: Get Team Member Image
   operationId: getTeamMemberImage

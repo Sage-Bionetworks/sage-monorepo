@@ -24,8 +24,7 @@ import {
 // -------------------------------------------------------------------------- //
 const defaultHeaders = {
   'Content-Type': 'application/json',
-  'Cache-Control':
-    'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+  'Cache-Control': 'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
   Pragma: 'no-cache',
   Expires: '0',
 };
@@ -68,55 +67,35 @@ export class ApiService {
   }
 
   getBiodomain(ensg: string) {
-    return this.http.get<BioDomain[]>(
-      this.getBaseUrl() + '/v1/biodomains/' + ensg,
-      {
-        headers: new HttpHeaders(defaultHeaders),
-      },
-    );
+    return this.http.get<BioDomain[]>(this.getBaseUrl() + '/v1/biodomains/' + ensg, {
+      headers: new HttpHeaders(defaultHeaders),
+    });
   }
 
   getBiodomains() {
-    return this.http.get<BioDomainInfo[]>(
-      this.getBaseUrl() + '/v1/biodomains',
-      {
-        headers: new HttpHeaders(defaultHeaders),
-      },
-    );
+    return this.http.get<BioDomainInfo[]>(this.getBaseUrl() + '/v1/biodomains', {
+      headers: new HttpHeaders(defaultHeaders),
+    });
   }
 
   searchGene(id: string): Observable<GenesResponse> {
-    return this.http.get<GenesResponse>(
-      this.getBaseUrl() + '/v1/genes/search',
-      {
-        headers: new HttpHeaders(defaultHeaders),
-        params: new HttpParams().set('id', id),
-      },
-    );
+    return this.http.get<GenesResponse>(this.getBaseUrl() + '/v1/genes/search', {
+      headers: new HttpHeaders(defaultHeaders),
+      params: new HttpParams().set('id', id),
+    });
   }
 
-  getComparisonGenes(
-    category: string,
-    subCategory: string,
-  ): Observable<GCTGeneResponse> {
-    return this.http.get<GCTGeneResponse>(
-      this.getBaseUrl() + '/v1/genes/comparison',
-      {
-        headers: new HttpHeaders(defaultHeaders),
-        params: new HttpParams()
-          .set('category', category)
-          .set('subCategory', subCategory),
-      },
-    );
+  getComparisonGenes(category: string, subCategory: string): Observable<GCTGeneResponse> {
+    return this.http.get<GCTGeneResponse>(this.getBaseUrl() + '/v1/genes/comparison', {
+      headers: new HttpHeaders(defaultHeaders),
+      params: new HttpParams().set('category', category).set('subCategory', subCategory),
+    });
   }
 
   getNominatedGenes(): Observable<GenesResponse> {
-    return this.http.get<GenesResponse>(
-      this.getBaseUrl() + '/v1/genes/nominated',
-      {
-        headers: new HttpHeaders(defaultHeaders),
-      },
-    );
+    return this.http.get<GenesResponse>(this.getBaseUrl() + '/v1/genes/nominated', {
+      headers: new HttpHeaders(defaultHeaders),
+    });
   }
 
   getDistribution(): Observable<Distribution> {
@@ -133,18 +112,15 @@ export class ApiService {
 
   getTeamMemberImage(name: string): Observable<ArrayBuffer> {
     name = name.toLowerCase().replace(/[- ]/g, '-');
-    return this.http.get(
-      this.getBaseUrl() + '/v1/team-member/' + name + '/image',
-      {
-        headers: new HttpHeaders({
-          'Content-Type': 'image/jpg, image/png, image/jpeg',
-          Accept: 'image/jpg, image/png, image/jpeg',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET',
-          'Access-Control-Allow-Headers': 'Content-Type',
-        }),
-        responseType: 'arraybuffer',
-      },
-    );
+    return this.http.get(this.getBaseUrl() + '/v1/team-members/' + name + '/image', {
+      headers: new HttpHeaders({
+        'Content-Type': 'image/jpg, image/png, image/jpeg',
+        Accept: 'image/jpg, image/png, image/jpeg',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }),
+      responseType: 'arraybuffer',
+    });
   }
 }

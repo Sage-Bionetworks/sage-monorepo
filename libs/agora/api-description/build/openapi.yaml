@@ -16,6 +16,10 @@ servers:
 tags:
   - name: Dataversion
     description: Operations about dataversion.
+  - name: Team
+    description: Operations about teams.
+  - name: TeamMember
+    description: Operations about team members.
 paths:
   /dataversion:
     get:
@@ -35,28 +39,28 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /getTeams:
+  /teams:
     get:
       tags:
-        - Teams
-      summary: Get Teams
-      description: Get Teams
-      operationId: getTeams
+        - Team
+      summary: List Teams
+      description: List Teams
+      operationId: listTeams
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Teams'
+                $ref: '#/components/schemas/TeamList'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /team-member/{name}/image:
+  /teamMembers/{name}/image:
     get:
       tags:
-        - Team Member Image
+        - TeamMember
       summary: Get Team Member Image
       description: Get Team Member Image
       operationId: getTeamMemberImage
@@ -122,13 +126,13 @@ components:
       properties:
         name:
           type: string
-        isprimaryinvestigator:
+        isPrimaryInvestigator:
           type: boolean
         url:
           type: string
       required:
         - name
-        - isprimaryinvestigator
+        - isPrimaryInvestigator
     Team:
       type: object
       description: Team
@@ -151,9 +155,9 @@ components:
         - program
         - description
         - members
-    Teams:
+    TeamList:
       type: object
-      description: Teams
+      description: List of Teams
       properties:
         teams:
           type: array

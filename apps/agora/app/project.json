@@ -32,6 +32,16 @@
             "input": "libs/shared/typescript/assets/src/assets",
             "glob": "**/*",
             "output": "assets"
+          },
+          {
+            "input": "libs/agora/assets",
+            "glob": "**/*",
+            "output": "agora-assets"
+          },
+          {
+            "input": "libs/agora/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
           }
         ],
         "styles": [

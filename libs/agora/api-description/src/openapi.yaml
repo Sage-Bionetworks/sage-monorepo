@@ -16,10 +16,14 @@ servers:
 tags:
   - name: Dataversion
     description: Operations about dataversion.
+  - name: Team
+    description: Operations about teams.
+  - name: TeamMember
+    description: Operations about team members.
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
-  /getTeams:
+  /teams:
     $ref: paths/teams.yaml
-  /team-member/{name}/image:
-    $ref: paths/team-member/@{name}/image.yaml
+  /teamMembers/{name}/image:
+    $ref: paths/teamMembers/@{name}/image.yaml

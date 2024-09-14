@@ -23,16 +23,15 @@
     background-repeat: no-repeat;
     background-color: var(--color-primary);
     background-image: url('/agora-assets/images/team-member.svg');
-    background-size: 60%;
+    background-size: cover;
     background-position: center;
     margin: 0 auto 10px;
     overflow: hidden;
 
-    > div {
+    > img {
       width: 100%;
       height: 100%;
-      background-size: cover;
-      background-position: center;
+      object-fit: cover;
     }
   }
 

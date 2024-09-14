@@ -1,7 +1,7 @@
 export * from './dataversion.service';
 import { DataversionService } from './dataversion.service';
-export * from './teamMemberImage.service';
-import { TeamMemberImageService } from './teamMemberImage.service';
-export * from './teams.service';
-import { TeamsService } from './teams.service';
-export const APIS = [DataversionService, TeamMemberImageService, TeamsService];
+export * from './team.service';
+import { TeamService } from './team.service';
+export * from './teamMember.service';
+import { TeamMemberService } from './teamMember.service';
+export const APIS = [DataversionService, TeamService, TeamMemberService];

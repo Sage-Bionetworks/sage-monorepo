@@ -16,7 +16,7 @@
  */
 export interface TeamMember { 
     name: string;
-    isprimaryinvestigator: boolean;
+    isPrimaryInvestigator: boolean;
     url?: string;
 }
 
