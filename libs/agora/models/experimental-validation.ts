@@ -1,4 +1,4 @@
-import { Team } from './';
+import { Team } from '@sagebionetworks/agora/api-client-angular';
 
 export interface ExperimentalValidation {
   _id: string;

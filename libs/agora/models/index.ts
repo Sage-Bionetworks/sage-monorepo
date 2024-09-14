@@ -17,5 +17,4 @@ export * from './proteomics';
 export * from './rna';
 export * from './scores';
 export * from './synapse-wiki';
-export * from './teams';
 export * from './unsub';

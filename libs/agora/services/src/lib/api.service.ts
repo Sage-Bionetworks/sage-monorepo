@@ -16,8 +16,8 @@ import {
   Distribution,
   BioDomainInfo,
   BioDomain,
-  TeamsResponse,
 } from '@sagebionetworks/agora/models';
+import { TeamList } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Constants
@@ -104,8 +104,8 @@ export class ApiService {
     });
   }
 
-  getTeams(): Observable<TeamsResponse> {
-    return this.http.get<TeamsResponse>(this.getBaseUrl() + '/v1/teams', {
+  getTeams(): Observable<TeamList> {
+    return this.http.get<TeamList>(this.getBaseUrl() + '/v1/teams', {
       headers: new HttpHeaders(defaultHeaders),
     });
   }

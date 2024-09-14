@@ -8,8 +8,9 @@ import { tap, share, finalize } from 'rxjs/operators';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Team, TeamsResponse } from '@sagebionetworks/agora/models';
+
 import { ApiService } from '@sagebionetworks/agora/services';
+import { Team, TeamList } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Service
@@ -17,18 +18,18 @@ import { ApiService } from '@sagebionetworks/agora/services';
 @Injectable()
 export class TeamService {
   teams: Team[] = [] as Team[];
-  teamsObservable: Observable<TeamsResponse> | undefined;
+  teamsObservable: Observable<TeamList> | undefined;
 
   constructor(private apiService: ApiService) {}
 
-  getTeams(): Observable<TeamsResponse> {
+  getTeams(): Observable<TeamList> {
     if (this.teams.length > 0) {
       return of({ items: this.teams });
     } else if (this.teamsObservable) {
       return this.teamsObservable;
     } else {
       this.teamsObservable = this.apiService.getTeams().pipe(
-        tap((res: TeamsResponse) => (this.teams = res.items)),
+        tap((res: TeamList) => (this.teams = res.items || [])),
         share(),
         finalize(() => (this.teamsObservable = undefined)),
       );
@@ -38,7 +39,7 @@ export class TeamService {
 
   getTeam(name: string): Observable<Team | undefined> {
     return this.getTeams().pipe(
-      map((res: TeamsResponse) => res.items.find((t: Team) => t.team === name)),
+      map((res: TeamList) => res.items?.find((t: Team) => t.team === name)),
     );
   }
 

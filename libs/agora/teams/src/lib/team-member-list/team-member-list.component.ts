@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Team, TeamMember } from '@sagebionetworks/agora/models';
 import { TeamService } from '../../services';
+import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
 
 @Component({
   selector: 'agora-team-member-list',
@@ -46,9 +46,9 @@ export class TeamMemberListComponent {
 
   sort(members: TeamMember[]) {
     members.sort((a, b) => {
-      if (a.isprimaryinvestigator === b.isprimaryinvestigator) {
+      if (a.isPrimaryInvestigator === b.isPrimaryInvestigator) {
         return a.name > b.name ? 1 : -1;
-      } else if (a.isprimaryinvestigator > b.isprimaryinvestigator) {
+      } else if (a.isPrimaryInvestigator > b.isPrimaryInvestigator) {
         return -1;
       }
       return 1;

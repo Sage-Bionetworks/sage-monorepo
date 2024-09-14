@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { Team } from '@sagebionetworks/agora/models';
 import { TeamMemberListComponent } from '../team-member-list/team-member-list.component';
+import { Team } from '@sagebionetworks/agora/api-client-angular';
 
 @Component({
   selector: 'agora-team-list',

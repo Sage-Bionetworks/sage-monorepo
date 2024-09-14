@@ -1,12 +1,12 @@
+import { Team } from '@sagebionetworks/agora/api-client-angular';
 import {
-  Team,
   RnaDifferentialExpression,
   ProteinDifferentialExpression,
   ExperimentalValidation,
   OverallScores,
   NeuropathologicCorrelation,
   SimilarGenesNetwork,
-  BioDomains
+  BioDomains,
 } from './';
 import { EnsemblInfo } from './ensembl-info';
 

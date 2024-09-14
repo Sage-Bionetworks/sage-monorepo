@@ -39,7 +39,7 @@
             "output": "agora-assets"
           },
           {
-            "input": "libs/agora/assets/src",
+            "input": "libs/agora/assets/favicon",
             "glob": "favicon.ico",
             "output": ""
           }

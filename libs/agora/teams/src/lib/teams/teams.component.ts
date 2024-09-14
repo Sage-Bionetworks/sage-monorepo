@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Team, TeamsResponse } from '@sagebionetworks/agora/models';
+import { Team, TeamList } from '@sagebionetworks/agora/api-client-angular';
 import { TeamService } from '../../services';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { TeamListComponent } from '../team-list/team-list.component';
@@ -24,8 +24,8 @@ export class TeamsComponent implements OnInit {
   ngOnInit() {
     this.helperService.setLoading(true);
     this.teamService.getTeams().subscribe(
-      (res: TeamsResponse) => {
-        this.teams = res.items;
+      (res: TeamList) => {
+        this.teams = res.items || [];
       },
       (err: Error) => {
         console.log('Error loading teams: ' + err.message);
