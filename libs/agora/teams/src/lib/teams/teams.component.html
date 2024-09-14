@@ -9,7 +9,9 @@
 <div class="section">
   <div class="section-inner">
     <div class="container-sm">
-      <agora-team-list [teams]="teams"></agora-team-list>
+      <ng-container *ngIf="teams$ | async as teams">
+        <agora-team-list [teams]="teams"></agora-team-list>
+      </ng-container>
     </div>
   </div>
 </div>

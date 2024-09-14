@@ -4,6 +4,7 @@ import { Team, TeamList } from '@sagebionetworks/agora/api-client-angular';
 import { TeamService } from '../../services';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { TeamListComponent } from '../team-list/team-list.component';
+import { catchError, finalize, map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'agora-teams',
@@ -14,7 +15,7 @@ import { TeamListComponent } from '../team-list/team-list.component';
   providers: [HelperService, TeamService],
 })
 export class TeamsComponent implements OnInit {
-  teams: Team[] = [];
+  teams$: Observable<Team[]> = of([]);
 
   constructor(
     private helperService: HelperService,
@@ -22,17 +23,19 @@ export class TeamsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loadTeams();
+  }
+
+  loadTeams() {
     this.helperService.setLoading(true);
-    this.teamService.getTeams().subscribe(
-      (res: TeamList) => {
-        this.teams = res.items || [];
-      },
-      (err: Error) => {
-        console.log('Error loading teams: ' + err.message);
-      },
-      () => {
-        this.helperService.setLoading(false);
-      },
+
+    this.teams$ = this.teamService.getTeams().pipe(
+      map((res: TeamList) => res.items || []),
+      catchError((error: Error) => {
+        console.error('Error loading teams:', error.message);
+        return of([]);
+      }),
+      finalize(() => this.helperService.setLoading(false)),
     );
   }
 }
