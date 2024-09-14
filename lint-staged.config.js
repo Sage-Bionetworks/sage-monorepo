@@ -18,6 +18,6 @@ module.exports = {
 
   '**/*.py': (filenames) => [
     // Format files with Black
-    `black ${filenames.join(' ')}`,
+    `poetry run black ${filenames.join(' ')}`,
   ],
 };
