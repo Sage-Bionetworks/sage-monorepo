@@ -15,7 +15,7 @@ import { catchError, finalize, map, Observable, of } from 'rxjs';
   providers: [HelperService, TeamService],
 })
 export class TeamsComponent implements OnInit {
-  teams$: Observable<Team[]> = of([]);
+  teams$!: Observable<Team[]>;
 
   constructor(
     private helperService: HelperService,
