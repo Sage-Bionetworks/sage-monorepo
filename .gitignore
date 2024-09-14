@@ -113,6 +113,8 @@ venv/
 .python-version
 .pytest_cache
 
+!/.python-version
+
 # Translations
 *.mo
 *.pot
