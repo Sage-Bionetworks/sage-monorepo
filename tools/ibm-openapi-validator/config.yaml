@@ -2,4 +2,6 @@ errorsOnly: true
 summaryOnly: false
 limits:
   warnings: 25
+# This path to the spectral config file assumes that the validator is using the workspace root
+# folder as its current working directory.
 ruleset: tools/ibm-openapi-validator/spectral.yaml
