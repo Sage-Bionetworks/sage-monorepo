@@ -29,8 +29,12 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml build/challenge.openapi.yaml build/organization.openapi.yaml build/image.openapi.yaml",
-        "cwd": "{projectRoot}"
+        "commands": [
+          "lint-openapi --config tools/ibm-openapi-validator/config.yaml --ruleset tools/ibm-openapi-validator/spectral.yaml {projectRoot}/build/openapi.yaml",
+          "lint-openapi --config tools/ibm-openapi-validator/config.yaml --ruleset tools/ibm-openapi-validator/spectral.yaml {projectRoot}/build/challenge.openapi.yaml",
+          "lint-openapi --config tools/ibm-openapi-validator/config.yaml --ruleset tools/ibm-openapi-validator/spectral.yaml {projectRoot}/build/organization.openapi.yaml",
+          "lint-openapi --config tools/ibm-openapi-validator/config.yaml --ruleset tools/ibm-openapi-validator/spectral.yaml {projectRoot}/build/image.openapi.yaml"
+        ]
       },
       "dependsOn": ["build"]
     },
