@@ -140,7 +140,7 @@ class TestValidationEndpoints(BaseTestCase):
         )
         body = csv_to_bytes(CORRECT_MANIFEST_PATH)
         response = self.client.open(url, method="POST", headers=HEADERS, data=body)
-        self.assert500(response, f"Response body is : {response.data.decode('utf-8')}")
+        self.assert200(response, f"Response body is : {response.data.decode('utf-8')}")
         assert isinstance(response.json, str)
 
     def test_submit_manifest_json(self) -> None:
