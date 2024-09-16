@@ -2,3 +2,4 @@ errorsOnly: true
 summaryOnly: false
 limits:
   warnings: 25
+ruleset: tools/ibm-openapi-validator/spectral.yaml
