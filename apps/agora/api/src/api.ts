@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import { dataVersionRoute } from './components/dataversion';
+import { teamMemberImageRoute, teamsRoute } from './components/teams';
 
 const mongoUri = process.env.MONGODB_URI;
 
@@ -19,6 +20,8 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
+  router.get('/teams', teamsRoute);
+  router.get('/team-members/:name/image', teamMemberImageRoute);
 });
 
 export default router;

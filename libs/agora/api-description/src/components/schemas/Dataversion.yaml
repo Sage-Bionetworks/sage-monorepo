@@ -1,5 +1,5 @@
 type: object
-description: A dataversion
+description: Synapse data version
 properties:
   data_file:
     type: string

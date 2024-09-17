@@ -1,0 +1,17 @@
+<div class="section section-hero">
+  <div class="section-inner">
+    <div class="container-sm">
+      <h1 class="h2">Contributing Teams</h1>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <div class="container-sm">
+      <ng-container *ngIf="teams$ | async as teams">
+        <agora-team-list [teams]="teams"></agora-team-list>
+      </ng-container>
+    </div>
+  </div>
+</div>

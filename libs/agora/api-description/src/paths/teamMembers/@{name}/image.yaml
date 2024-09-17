@@ -1,0 +1,24 @@
+get:
+  tags:
+    - TeamMember
+  summary: Get Team Member Image
+  description: Get Team Member Image
+  operationId: getTeamMemberImage
+  parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    '200':
+      content:
+        image/jpeg:
+          schema:
+            type: string
+            format: binary
+      description: Success
+    '400':
+      $ref: ../../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../../components/responses/InternalServerError.yaml

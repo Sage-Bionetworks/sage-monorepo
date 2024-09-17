@@ -4,8 +4,6 @@ get:
   summary: Get dataversion
   description: Get dataversion
   operationId: getDataversion
-  # parameters:
-  #   - $ref: ../components/parameters/query/challengeSearchQuery.yaml
   responses:
     '200':
       content:

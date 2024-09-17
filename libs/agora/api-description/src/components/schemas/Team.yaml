@@ -1,0 +1,21 @@
+type: object
+description: Team
+properties:
+  team:
+    type: string
+  team_full:
+    type: string
+  program:
+    type: string
+  description:
+    type: string
+  members:
+    type: array
+    items:
+      $ref: TeamMember.yaml
+required:
+  - team
+  - team_full
+  - program
+  - description
+  - members

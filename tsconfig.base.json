@@ -19,8 +19,11 @@
     "paths": {
       "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
+      "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
+      "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
+      "@sagebionetworks/agora/testing": ["libs/agora/testing/src/lib/index.ts"],
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/model-ad/api-client-angular": [

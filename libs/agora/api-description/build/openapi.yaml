@@ -9,12 +9,17 @@ info:
     name: Support
     url: https://github.com/Sage-Bionetworks/sage-monorepo
   x-logo:
-    url: https://dev.openchallenges.io/img/unsafe/logo/OpenChallenges-logo.png
+    url: https://agora.adknowledgeportal.org/images/logo.png
+    altText: Agora
 servers:
   - url: http://localhost/v1
 tags:
   - name: Dataversion
     description: Operations about dataversion.
+  - name: Team
+    description: Operations about teams.
+  - name: TeamMember
+    description: Operations about team members.
 paths:
   /dataversion:
     get:
@@ -34,11 +39,54 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
+  /teams:
+    get:
+      tags:
+        - Team
+      summary: List Teams
+      description: List Teams
+      operationId: listTeams
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamList'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /teamMembers/{name}/image:
+    get:
+      tags:
+        - TeamMember
+      summary: Get Team Member Image
+      description: Get Team Member Image
+      operationId: getTeamMemberImage
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
     Dataversion:
       type: object
-      description: A dataversion
+      description: Synapse data version
       properties:
         data_file:
           type: string
@@ -72,6 +120,49 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    TeamMember:
+      type: object
+      description: Team Member
+      properties:
+        name:
+          type: string
+        isPrimaryInvestigator:
+          type: boolean
+        url:
+          type: string
+      required:
+        - name
+        - isPrimaryInvestigator
+    Team:
+      type: object
+      description: Team
+      properties:
+        team:
+          type: string
+        team_full:
+          type: string
+        program:
+          type: string
+        description:
+          type: string
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMember'
+      required:
+        - team
+        - team_full
+        - program
+        - description
+        - members
+    TeamList:
+      type: object
+      description: List of Teams
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
   responses:
     BadRequest:
       description: Invalid request
