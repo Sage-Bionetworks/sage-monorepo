@@ -64,12 +64,12 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
   # Add GitHub CLI repository
-  && curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
+  && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | \
     gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
   && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | \
     tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
   # Add ngrok repository
-  && curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+  && curl -fsSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
   && echo "deb https://ngrok-agent.s3.amazonaws.com bullseye main" | tee /etc/apt/sources.list.d/ngrok.list \
   # Add hashicorp repository
   && curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - \
@@ -85,7 +85,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   # Set up UTF-8 locale
   && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen \
   # Install R (must be done before clearing the apt cache)
-  && curl "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
+  && curl -fsSL "https://cdn.rstudio.com/r/ubuntu-2204/pkgs/r-${rVersion}_1_amd64.deb" -o /tmp/r_amd64.deb \
     && gdebi --non-interactive /tmp/r_amd64.deb \
     && rm -fr /tmp/r_amd64.deb \
     && ln -s /opt/R/${rVersion}/bin/R /usr/local/bin/R \
@@ -97,7 +97,7 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
-RUN curl -sSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
+RUN curl -fsSL https://install.python-poetry.org | POETRY_HOME=/etc/poetry python3 - --version "${poetryVersion}" \
   && ln -s /etc/poetry/bin/poetry /usr/local/bin/.
 
 # Install Trivy
@@ -106,10 +106,10 @@ RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivy
   && rm -fr /tmp/trivy.deb
 
 # Install act
-RUN curl "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
+RUN curl -fsSL "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
 
 # Install AWS CLI
-RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
+RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
   && unzip awscliv2.zip \
   && ./aws/install \
   && rm -fr awscliv2.zip ./aws \
@@ -122,12 +122,12 @@ RUN curl https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zi
 RUN npm install -g "@devcontainers/cli@${devcontainerCliVersion}"
 
 # Install Hadolint
-RUN curl https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
+RUN curl -fsSL https://github.com/hadolint/hadolint/releases/download/v${hadolintVersion}/hadolint-Linux-x86_64 -o hadolint \
   && mv hadolint /usr/local/bin/. \
   && chmod +x /usr/local/bin/hadolint
 
 # Install hyperfine
-RUN curl -sSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
+RUN curl -fsSL "https://github.com/sharkdp/hyperfine/releases/download/v${hyperfineVersion}/hyperfine_${hyperfineVersion}_amd64.deb" \
     -o /tmp/hyperfine.deb \
   && apt-get install --no-install-recommends -qq -y /tmp/hyperfine.deb \
   && rm -fr /tmp/hyperfine.deb
@@ -158,7 +158,7 @@ ARG SONAR_SCANNER_HOME=/opt/sonar-scanner
 ENV SONAR_SCANNER_HOME=${SONAR_SCANNER_HOME} \
   SONAR_USER_HOME=${SONAR_SCANNER_HOME}/.sonar \
   PATH=${SONAR_SCANNER_HOME}/bin:${PATH}
-RUN curl https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${sonarScannerVersion}.zip --output sonar-scanner-cli.zip \
+RUN curl -fsSL https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${sonarScannerVersion}.zip --output sonar-scanner-cli.zip \
   && unzip sonar-scanner-cli.zip \
   && mv sonar-scanner-${sonarScannerVersion} ${SONAR_SCANNER_HOME} \
   && mkdir -p "${SONAR_USER_HOME}" "${SONAR_USER_HOME}/cache" \
@@ -175,7 +175,7 @@ RUN corepack install --global "pnpm@${pnpmVersion}"
 ENV PYENV_ROOT /home/${user}/.pyenv
 ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
 RUN pip install --no-cache-dir pipenv==${pipenvVersion} \
-  && curl https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash - \
+  && curl -fsSL https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash - \
   && pyenv install ${pyenvPythonVersions}
 
 CMD ["bash"]
