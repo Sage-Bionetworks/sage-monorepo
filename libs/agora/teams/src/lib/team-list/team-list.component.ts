@@ -26,6 +26,6 @@ export class TeamListComponent {
   }
 
   getDescription(team: Team): string {
-    return team.description ? team.description.replace('‚Äô', '&quot;') : '';
+    return team.description ? team.description.replace(/‚Äô/g, '&quot;') : '';
   }
 }
