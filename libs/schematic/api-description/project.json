@@ -8,15 +8,13 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": ["redocly bundle --output build/openapi.yaml src/openapi.yaml"],
-        "parallel": true,
         "cwd": "{projectRoot}"
       }
     },
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config openapi-lint-config.yaml --ruleset spectral.yaml build/openapi.yaml",
-        "cwd": "{projectRoot}"
+        "command": "lint-openapi --config tools/ibm-openapi-validator/config.yaml {projectRoot}/build/openapi.yaml"
       },
       "dependsOn": ["build"]
     },
