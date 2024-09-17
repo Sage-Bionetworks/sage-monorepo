@@ -44,10 +44,9 @@ describe('TeamService', () => {
       teams = response;
     });
 
-    // const req = httpMock.expectOne('/api/teams');
     const req = httpMock.expectOne('http://localhost:3333/v1/teams');
 
-    // expect(req.request.method).toBe('GET');
+    expect(req.request.method).toBe('GET');
 
     req.flush(mockResponse);
     expect(teams).toEqual(teamsResponseMock);
