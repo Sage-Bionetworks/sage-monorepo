@@ -1,14 +1,11 @@
 // lint-staged.config.js
 
 module.exports = {
-  '*': (filenames) => [
-    // Lint the projects affected by the staged files
-    `nx affected --target=lint --files=${filenames.join(',')}`,
-  ],
-
   '**/*.{js,jsx,ts,tsx}': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,
+    // Lint the projects affected by the staged files
+    `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
 
   '**/*.{json,md,yaml,yml}': (filenames) => [
@@ -19,5 +16,7 @@ module.exports = {
   '**/*.py': (filenames) => [
     // Format files with Black
     `black ${filenames.join(' ')}`,
+    // Lint the projects affected by the staged files
+    `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
 };

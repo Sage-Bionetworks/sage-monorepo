@@ -14,7 +14,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "redocly build-docs --config redocly.yaml --template index.hbs --output build/redoc-static.html",
+        "command": "redocly build-docs --config redocly.yaml --template index.hbs --templateOptions.metaDescription=\"OpenChallenges REST API docs\" --output build/redoc-static.html",
         "cwd": "apps/openchallenges/api-docs"
       }
     },

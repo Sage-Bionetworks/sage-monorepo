@@ -9,7 +9,7 @@ import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
   imports: [CommonModule],
   templateUrl: './team-member-list.component.html',
   styleUrls: ['./team-member-list.component.scss'],
-  providers: [],
+  providers: [TeamService],
 })
 export class TeamMemberListComponent {
   _team: Team = {} as Team;

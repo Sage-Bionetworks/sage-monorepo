@@ -1,6 +1,6 @@
 {
   "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:8e6eeeb",
+  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:fb4a44a",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
