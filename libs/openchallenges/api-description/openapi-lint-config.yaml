@@ -1,5 +1,0 @@
-errorsOnly: true
-summaryOnly: false
-limits:
-  warnings: 25
-# ibm-accept-and-return-models
