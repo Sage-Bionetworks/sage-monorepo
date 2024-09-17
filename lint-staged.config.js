@@ -19,4 +19,9 @@ module.exports = {
     // Lint the projects affected by the staged files
     `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
+
+  '**/*[dD]ockerfile*': (filenames) => [
+    // Lint Dockerfiles with Hadolint
+    `hadolint ${filenames.join(' ')}`,
+  ],
 };
