@@ -4,7 +4,7 @@ Learn how to build and run dev containers with the devcontainer CLI:
 
 https://code.visualstudio.com/docs/remote/devcontainer-cli
 
-# Build the image with devcontainer
+# Build the image with dev container
 
 ```console
 devcontainer build \
@@ -12,8 +12,14 @@ devcontainer build \
   --workspace-folder ../sage
 ```
 
-# Build the image with Docker
+# Start the dev container
 
 ```console
-docker build -t ghcr.io/sage-bionetworks/sage-devcontainer:test .devcontainer/
+devcontainer up --workspace-folder ../sage
+```
+
+# Step into the dev container
+
+```console
+docker exec -it sage_devcontainer_test bash
 ```
