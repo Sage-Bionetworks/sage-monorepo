@@ -5,6 +5,7 @@ on:
       - main
       - 'renovate/**'
   pull_request:
+  merge_group:
 
 env:
   NX_BRANCH: ${{ github.event.number }}
