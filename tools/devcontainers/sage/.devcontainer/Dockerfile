@@ -43,7 +43,6 @@ ENV DEVCONTAINER_VERSION=${devcontainerVersion} \
   LC_ALL=en_US.UTF-8
 
 # Install system packages
-# hadolint ignore=DL3008
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     ca-certificates curl git bash-completion gnupg2 lsb-release ssh sudo \
