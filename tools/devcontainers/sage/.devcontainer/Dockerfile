@@ -107,7 +107,7 @@ RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivy
 # Install act
 RUN curl -fsSL "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
 
-# Install AWS CLI2
+# Install AWS CLI
 RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
   && unzip awscliv2.zip \
   && ./aws/install \
