@@ -117,6 +117,7 @@ Join the conversation and help the community.
 
 - Agora (evaluation)
 - iAtlas
+- MODEL-AD
 - OpenChallenge
 - Schematic
 - Synapse (evaluation)
