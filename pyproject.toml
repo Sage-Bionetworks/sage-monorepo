@@ -21,6 +21,10 @@ package-mode = false
     path = "apps/sandbox/py-app"
     develop = true
 
+    [tool.poetry.dependencies.sandbox-py-lib]
+    path = "libs/sandbox/py-lib"
+    develop = true
+
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
 flake8 = "6.0.0"
