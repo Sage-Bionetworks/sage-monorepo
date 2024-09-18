@@ -11,12 +11,11 @@ import { SafeHtml, DomSanitizer } from '@angular/platform-browser';
 import { LoadingIconComponent } from '@sagebionetworks/agora/ui';
 import { SynapseWiki } from '@sagebionetworks/agora/models';
 import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'agora-wiki',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, LoadingIconComponent],
+  imports: [CommonModule, LoadingIconComponent],
   providers: [SynapseApiService],
   templateUrl: './wiki.component.html',
   styleUrls: ['./wiki.component.scss'],
@@ -50,27 +49,6 @@ export class WikiComponent implements OnChanges, OnInit {
   }
 
   getWikiData() {
-    // this.synapseApiService
-    //   .getWiki(this.ownerId || 'syn25913473', this.wikiId || '')
-    //   .subscribe(
-    //     (wiki: SynapseWiki) => {
-    //       if (!wiki) {
-    //         this.loading = false;
-    //         return;
-    //       }
-
-    //       this.data = wiki;
-    //       // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
-    //       this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
-    //         this.synapseApiService.renderHtml(wiki.markdown)
-    //       );
-    //       this.loading = false;
-    //     },
-    //     () => {
-    //       this.loading = false;
-    //     }
-    //   );
-
     this.synapseApiService.getWiki(this.ownerId ?? 'syn25913473', this.wikiId ?? '').subscribe({
       next: (wiki: SynapseWiki) => {
         if (!wiki) {
@@ -80,14 +58,13 @@ export class WikiComponent implements OnChanges, OnInit {
 
         this.data = wiki;
         // Requires bypassSecurityTrustHtml to render iframes (e.g. videos)
-        // this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
-        //   this.synapseApiService.renderHtml(wiki.markdown),
-        // );
+        this.safeHtml = this.domSanitizer.bypassSecurityTrustHtml(
+          this.synapseApiService.renderHtml(wiki.markdown),
+        );
         this.loading = false;
       },
       error: (err) => {
-        // TODO do something more intelligent here
-        console.log(err);
+        console.error(err);
       },
       complete: () => {
         this.loading = false;

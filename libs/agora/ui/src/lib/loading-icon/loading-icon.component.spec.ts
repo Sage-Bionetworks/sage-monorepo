@@ -12,7 +12,7 @@ import { LoadingIconComponent } from './loading-icon.component';
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Loading Icon', () => {
+describe('LoadingIcon', () => {
   let fixture: ComponentFixture<LoadingIconComponent>;
   let component: LoadingIconComponent;
 

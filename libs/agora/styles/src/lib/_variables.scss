@@ -1,0 +1,267 @@
+/* stylelint-disable no-duplicate-selectors */
+@use 'sass:map';
+
+// -------------------------------------------------------------------------- //
+// Legacy
+// -------------------------------------------------------------------------- //
+
+$breakpoints: (
+  'ex-small': (
+    max-width: 600px,
+  ),
+  'small': (
+    min-width: 600px,
+  ),
+  'medium': (
+    min-width: 768px,
+  ),
+  'large': (
+    min-width: 992px,
+  ),
+  'ex-large': (
+    min-width: 1200px,
+  ),
+);
+
+// -------------------------------------------------------------------------- //
+// Spacing
+// -------------------------------------------------------------------------- //
+
+$spacings: (
+  'xs': 5px,
+  'sm': 10px,
+  'md': 15px,
+  'lg': 25px,
+  'xl': 50px,
+);
+
+:root {
+  @each $key, $value in $spacings {
+    --spacing-#{$key}: #{$value};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Colors
+// -------------------------------------------------------------------------- //
+
+$main-colors: (
+  primary: #3c4a63,
+  secondary: #8b8ad1,
+  tertiary: #42c7bb,
+
+  action-primary: #5081a7,
+  action-primary-rgb: 80 129 167,
+
+  success: #6db56d,
+  warning: #fccb6f,
+  danger: #e0585d,
+
+  gray-900: #353a3f,
+  gray-800: #4a5056,
+  gray-700: #878e95,
+  gray-600: #aeb5bc,
+  gray-500: #d0d4d9,
+  gray-400: #dfe2e6,
+  gray-300: #eaecee,
+  gray-200: #f1f3f5,
+  gray-100: #fbfbfc,
+);
+
+$main-colors-hover: (
+  action-primary: #406786,
+);
+
+$extra-colors: (
+  heading: map.get($main-colors, 'primary'),
+  text: map.get($main-colors, 'gray-900'),
+  text-secondary: map.get($main-colors, 'gray-800'),
+  link: map.get($main-colors, 'action-primary'),
+  border: map.get($main-colors, 'gray-300'),
+  separator: map.get($main-colors, 'gray-300'),
+  shadow: #c7c5c5,
+  tooltip: #63676c,
+);
+
+:root {
+  @each $key, $color in $main-colors {
+    --color-#{$key}: #{$color};
+  }
+  @each $key, $color in $main-colors-hover {
+    --color-#{$key}-hover: #{$color};
+  }
+  @each $key, $color in $extra-colors {
+    --color-#{$key}: #{$color};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Fonts
+// -------------------------------------------------------------------------- //
+
+$font-family-primary: 'DM Sans', sans-serif;
+
+$headings: (
+  h1: (
+    font-size: 1.75rem /* 28px */,
+    font-weight: 700,
+    line-height: 2rem /* 32px */,
+  ),
+  h2: (
+    font-size: 1.5rem /* 24px */,
+    font-weight: 700,
+    line-height: 1.75rem /* 28px */,
+  ),
+  h3: (
+    font-size: 1.25rem /* 20px */,
+    font-weight: 500,
+    line-height: 1.5rem /* 24px */,
+  ),
+  h4: (
+    font-size: 1rem /* 16px */,
+    font-weight: 500,
+    line-height: 1.25rem /* 20px */,
+  ),
+  h5: (
+    font-size: 0.875rem /* 14px */,
+    font-weight: 500,
+    line-height: 1.25rem /* 0px */,
+  ),
+  h6: (
+    font-size: 0.75rem /* 12px */,
+    font-weight: 500,
+    line-height: 1.125rem /* 18px */,
+  ),
+);
+
+$font-sizes: (
+  xs: (
+    font-size: 0.75rem /* 12px */,
+    line-height: 1.125rem /* 18px */,
+  ),
+  sm: (
+    font-size: 0.875rem /* 14px */,
+    line-height: 1.25rem /* 20px */,
+  ),
+  md: (
+    font-size: 1rem /* 16px */,
+    line-height: 1.5rem /* 24px */,
+  ),
+  lg: (
+    font-size: 1.125rem /* 18px */,
+    line-height: 1.5rem /* 24px */,
+  ),
+  xl: (
+    font-size: 1.25rem /* 20px */,
+    line-height: 1.625rem /* 26px */,
+  ),
+  xxl: (
+    font-size: 1.375rem /* 22px */,
+    line-height: 1.875rem /* 30px */,
+  ),
+);
+
+:root {
+  --font-family-primary: #{$font-family-primary};
+
+  @each $size, $properties in $headings {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+
+  @each $size, $properties in $font-sizes {
+    @each $property, $value in $properties {
+      --#{$property}-#{$size}: #{$value};
+    }
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Container
+// -------------------------------------------------------------------------- //
+
+$container-max-width-sm: 925px;
+$container-max-width-md: 1440px;
+$container-max-width-lg: 1920px;
+
+$container-gutter-width: 30px;
+
+:root {
+  --container-max-width-sm: #{$container-max-width-sm};
+  --container-max-width-md: #{$container-max-width-md};
+  --container-max-width-lg: #{$container-max-width-lg};
+  --container-gutter-width: #{$container-gutter-width};
+}
+
+// -------------------------------------------------------------------------- //
+// Transition
+// -------------------------------------------------------------------------- //
+
+$transition-duration: 0.08s;
+
+:root {
+  --transition-duration: #{$transition-duration};
+}
+
+// -------------------------------------------------------------------------- //
+// Header
+// -------------------------------------------------------------------------- //
+
+$header-height: 87px;
+
+:root {
+  --header-height: #{$header-height};
+}
+
+// -------------------------------------------------------------------------- //
+// Footer
+// -------------------------------------------------------------------------- //
+
+$footer-height: 240px;
+
+:root {
+  --footer-height: #{$footer-height};
+}
+
+// -------------------------------------------------------------------------- //
+// Gene details
+// -------------------------------------------------------------------------- //
+
+$gene-details-nav-height: 80px;
+$gene-details-subnav-offset: -19px;
+
+:root {
+  --gene-details-nav-height: #{$gene-details-nav-height};
+  --gene-details-subnav-offset: #{$gene-details-subnav-offset};
+}
+
+// -------------------------------------------------------------------------- //
+// Charts
+// -------------------------------------------------------------------------- //
+
+$chart-colors: (
+  axis: #989898,
+  axis-label: #000,
+  axis-tick: #989898,
+  axis-tick-label: #000,
+);
+
+:root {
+  @each $key, $value in $chart-colors {
+    --color-chart-#{$key}: #{$value};
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Gene network
+// -------------------------------------------------------------------------- //
+
+$gene-network-colors: (
+  'default': map.get($main-colors, 'gray-300'),
+  'main': map.get($main-colors, 'secondary'),
+  'selected': #edc766,
+  '2-3': #90beb6,
+  '4-5': #469285,
+  '>6': #2a5850,
+);
