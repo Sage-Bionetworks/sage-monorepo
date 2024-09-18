@@ -1,7 +1,4 @@
 {
-  "recommendations": [
-    "esbenp.prettier-vscode",
-    "ms-playwright.playwright",
-    "firsttris.vscode-jest-runner"
-  ]
+  // Extensions should be defined in `.devcontainer/devcontainer.json` instead of here.
+  "recommendations": []
 }
