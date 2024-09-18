@@ -3,6 +3,8 @@ import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
 import { DataversionService } from './api/dataversion.service';
+import { TeamService } from './api/team.service';
+import { TeamMemberService } from './api/teamMember.service';
 
 @NgModule({
   imports: [],

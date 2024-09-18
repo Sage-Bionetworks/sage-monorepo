@@ -1,0 +1,17 @@
+<div class="team-list">
+  <div class="team-list-inner">
+    <ng-container *ngIf="_teams?.length">
+      <div *ngFor="let team of _teams" class="team">
+        <h2 class="team-name">
+          {{ getFullName(team) }}
+        </h2>
+        <p class="team-summary">
+          {{ getDescription(team) }}
+        </p>
+        <div class="team-member-list">
+          <agora-team-member-list [team]="team"></agora-team-member-list>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

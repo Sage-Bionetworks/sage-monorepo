@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Team
+  summary: List Teams
+  description: List Teams
+  operationId: listTeams
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/TeamList.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

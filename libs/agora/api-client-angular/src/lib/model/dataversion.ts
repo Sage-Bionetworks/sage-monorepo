@@ -11,7 +11,7 @@
  */
 
 /**
- * A dataversion
+ * Synapse data version
  */
 export interface Dataversion {
   data_file: string;
