@@ -423,6 +423,9 @@ python-versions = ">=3.9,<3.11"
 files = []
 develop = true
 
+[package.dependencies]
+sandbox-py-lib = {path = "../../../libs/sandbox/py-lib", develop = true}
+
 [package.source]
 type = "directory"
 url = "apps/sandbox/py-app"
