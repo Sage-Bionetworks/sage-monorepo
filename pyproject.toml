@@ -9,14 +9,6 @@ package-mode = false
   [tool.poetry.dependencies]
   python = "3.10.14"
 
-    [tool.poetry.dependencies.schematic-api-next]
-    path = "apps/schematic/api-next"
-    develop = true
-
-    [tool.poetry.dependencies.schematic-core]
-    path = "libs/schematic/core"
-    develop = true
-
     [tool.poetry.dependencies.sandbox-py-app]
     path = "apps/sandbox/py-app"
     develop = true
