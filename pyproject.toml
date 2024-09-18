@@ -17,6 +17,10 @@ package-mode = false
     path = "libs/schematic/core"
     develop = true
 
+    [tool.poetry.dependencies.sandbox-py-app]
+    path = "apps/sandbox/py-app"
+    develop = true
+
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
 flake8 = "6.0.0"
