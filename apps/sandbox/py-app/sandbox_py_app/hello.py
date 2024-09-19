@@ -1,11 +1,8 @@
-from sandbox_py_lib.hello import hello
+import sandbox_py_lib.hello
 
 """Sample Hello World application."""
 
 
-def hello2():
+def hello():
     """Return a friendly greeting."""
-    return "Hello sandbox-py-app"
-
-
-print(hello())
+    return sandbox_py_lib.hello.hello()
