@@ -62,7 +62,7 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:python", "package-manager:poetry"],
   "release": {
     "version": {
       "generator": "@nxlv/python:release-version"
