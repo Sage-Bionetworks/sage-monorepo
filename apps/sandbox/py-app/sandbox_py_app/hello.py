@@ -12,4 +12,8 @@ def hello_synapse_user():
     return sandbox_py_lib.hello.hello_synapse_user()
 
 
-print(hello_synapse_user())
+def hello_numpy():
+    return sandbox_py_lib.hello.hello_numpy()
+
+
+print(hello_numpy())

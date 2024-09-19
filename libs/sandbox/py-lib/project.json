@@ -31,6 +31,13 @@
         "debug": false
       }
     },
+    "update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry update",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lint": {
       "executor": "@nxlv/python:flake8",
       "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
