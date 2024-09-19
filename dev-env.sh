@@ -34,7 +34,6 @@ function workspace-install {
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
   nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
-  nx run-many --target=install --projects=tag:language:python --projects=tag:language:r
 }
 
 function workspace-install-affected {
@@ -43,7 +42,6 @@ function workspace-install-affected {
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
   nx affected --target=prepare --exclude 'tag:language:java'
-  nx affected --target=install --exclude 'tag:language:java'
 }
 
 # Setup Python virtualenvs

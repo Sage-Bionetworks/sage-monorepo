@@ -21,7 +21,7 @@
         "bundleLocalDependencies": true
       }
     },
-    "install": {
+    "prepare": {
       "executor": "nx:run-commands",
       "options": {
         "command": "./install.sh",

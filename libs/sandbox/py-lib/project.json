@@ -5,35 +5,23 @@
   "sourceRoot": "libs/sandbox/py-lib/sandbox_py_lib",
   "targets": {
     "lock": {
-      "executor": "@nxlv/python:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "libs/sandbox/py-lib"
+        "cwd": "{projectRoot}"
       }
-    },
-    "add": {
-      "executor": "@nxlv/python:add",
-      "options": {}
-    },
-    "update": {
-      "executor": "@nxlv/python:update",
-      "options": {}
-    },
-    "remove": {
-      "executor": "@nxlv/python:remove",
-      "options": {}
     },
     "build": {
       "executor": "@nxlv/python:build",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "libs/sandbox/py-lib/dist",
+        "outputPath": "{projectRoot}/dist",
         "publish": false,
         "lockedVersions": true,
         "bundleLocalDependencies": true
       }
     },
-    "install": {
+    "prepare": {
       "executor": "@nxlv/python:install",
       "options": {
         "silent": false,
@@ -45,20 +33,20 @@
     },
     "lint": {
       "executor": "@nxlv/python:flake8",
-      "outputs": ["{workspaceRoot}/reports/libs/sandbox/py-lib/pylint.txt"],
+      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
       "options": {
-        "outputFile": "reports/libs/sandbox/py-lib/pylint.txt"
+        "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
-        "{workspaceRoot}/reports/libs/sandbox/py-lib/unittests",
-        "{workspaceRoot}/coverage/libs/sandbox/py-lib"
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "libs/sandbox/py-lib"
+        "cwd": "{projectRoot}"
       }
     }
   },
