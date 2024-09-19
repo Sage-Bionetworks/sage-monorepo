@@ -177,3 +177,7 @@ function workspace-initialize-env {
   # ensures that scripts and executables installed in the Poetry environment are accessible.
   export PATH="$(poetry env info --path)/bin:$PATH"
 }
+
+function workspace-nuke-venv {
+  find . -name ".venv" -print0 | xargs -0 rm -fr
+}
