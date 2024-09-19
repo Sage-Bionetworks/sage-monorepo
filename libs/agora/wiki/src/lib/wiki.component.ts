@@ -44,7 +44,6 @@ export class WikiComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.loading = true;
-
     this.getWikiData();
   }
 

@@ -1,28 +1,44 @@
-import { HttpClientModule } from '@angular/common/http';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { WikiComponent } from './wiki.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('WikiComponent', () => {
   let component: WikiComponent;
   let fixture: ComponentFixture<WikiComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule],
-      providers: [],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).compileComponents();
-  });
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [],
+      providers: [WikiComponent, provideHttpClient()],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(WikiComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('getClassName', () => {
+    it('should default to the @Input className', () => {
+      const expectedValue = 'test';
+
+      component.className = expectedValue;
+      const result = component.getClassName();
+
+      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+    });
+
+    it('should have a "loading" className when loading variable is true', () => {
+      const expectedValue = 'loading';
+
+      // set loading variable to be true
+      component.loading = true;
+
+      const result = component.getClassName();
+
+      expect(result.find((e) => e === expectedValue)).toBeTruthy();
+    });
   });
 });
