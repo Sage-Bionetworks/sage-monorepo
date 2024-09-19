@@ -5,15 +5,12 @@ import sandbox_py_lib.hello
 
 def hello():
     """Return a friendly greeting."""
+    return "Hello sandbox-py-app"
+
+
+def hello_lib():
     return sandbox_py_lib.hello.hello()
-
-
-def hello_synapse_user():
-    return sandbox_py_lib.hello.hello_synapse_user()
 
 
 def hello_numpy():
     return sandbox_py_lib.hello.hello_numpy()
-
-
-print(hello_numpy())
