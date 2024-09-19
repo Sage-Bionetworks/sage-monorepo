@@ -15,9 +15,9 @@ module.exports = {
 
   '**/*.py': (filenames) => [
     // Format files with Black
-    // `black ${filenames.join(' ')}`,
+    `black ${filenames.join(' ')}`,
     // Lint the projects affected by the staged files
-    // `nx affected --target=lint --files=${filenames.join(',')}`,
+    `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
 
   '**/*[dD]ockerfile*': (filenames) => [
