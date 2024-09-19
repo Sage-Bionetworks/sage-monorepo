@@ -41,7 +41,7 @@
     }
   },
   "defaultProject": "openchallenges-app",
-  "plugins": [],
+  "plugins": ["@nxlv/python"],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
