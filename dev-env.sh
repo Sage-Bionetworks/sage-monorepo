@@ -43,6 +43,7 @@ function workspace-install-affected {
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
   nx affected --target=prepare --exclude 'tag:language:java'
+  nx affected --target=install --exclude 'tag:language:java'
 }
 
 # Setup Python virtualenvs
