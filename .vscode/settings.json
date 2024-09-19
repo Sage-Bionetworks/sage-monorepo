@@ -33,7 +33,7 @@
   // Python settings
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
-  "python.terminal.activateEnvironment": false,
+  // "python.terminal.activateEnvironment": false,
   "python.terminal.activateEnvInCurrentTerminal": false,
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",

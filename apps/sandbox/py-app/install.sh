@@ -9,5 +9,5 @@ pyenv install --skip-existing $PYTHON_VERSION
 eval "$(pyenv init -)"
 
 pyenv local $PYTHON_VERSION
-poetry env use $PYTHON_VERSION
+poetry env use $(pyenv which python)
 poetry install --with dev
