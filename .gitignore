@@ -102,7 +102,7 @@ pip-delete-this-directory.txt
 .coverage.*
 .hypothesis/
 .pytest_cache
-.python-version
+# .python-version
 .tox/
 .venv/
 *,cover
