@@ -21,7 +21,7 @@ readme = "README.md"
   include = "sandbox_py_app"
 
   [tool.poetry.dependencies]
-  python = ">=3.9,<3.11"
+  python = "3.10.14"
 
     [tool.poetry.dependencies.sandbox-py-lib]
     path = "../../../libs/sandbox/py-lib"
