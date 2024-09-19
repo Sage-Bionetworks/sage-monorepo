@@ -8,26 +8,14 @@
       "executor": "@nxlv/python:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "apps/sandbox/py-app"
+        "cwd": "{projectRoot}"
       }
-    },
-    "add": {
-      "executor": "@nxlv/python:add",
-      "options": {}
-    },
-    "update": {
-      "executor": "@nxlv/python:update",
-      "options": {}
-    },
-    "remove": {
-      "executor": "@nxlv/python:remove",
-      "options": {}
     },
     "build": {
       "executor": "@nxlv/python:build",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "apps/sandbox/py-app/dist",
+        "outputPath": "{projectRoot}/dist",
         "publish": false,
         "lockedVersions": true,
         "bundleLocalDependencies": true
@@ -45,20 +33,20 @@
     },
     "lint": {
       "executor": "@nxlv/python:flake8",
-      "outputs": ["{workspaceRoot}/reports/apps/sandbox/py-app/pylint.txt"],
+      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
       "options": {
-        "outputFile": "reports/apps/sandbox/py-app/pylint.txt"
+        "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
-        "{workspaceRoot}/reports/apps/sandbox/py-app/unittests",
-        "{workspaceRoot}/coverage/apps/sandbox/py-app"
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "apps/sandbox/py-app"
+        "cwd": "{projectRoot}"
       }
     }
   },
