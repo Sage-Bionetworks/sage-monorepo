@@ -14,11 +14,11 @@ module.exports = {
       message: '{{error}}',
       resolved: true,
       given: schemas,
-      severity: 'warn',
+      severity: 'error',
       then: {
         function: pathSegmentCasingConvention,
         functionOptions: {
-          type: 'camel',
+          type: 'snake',
         },
       },
     },
