@@ -33,6 +33,6 @@
       }
     }
   },
-  "tags": [],
+  "tags": ["language:openapi"],
   "implicitDependencies": []
 }
