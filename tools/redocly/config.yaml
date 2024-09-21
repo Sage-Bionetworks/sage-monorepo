@@ -1,14 +1,22 @@
 # Configuration: https://redocly.com/docs/cli/configuration#redocly-configuration-file
 # Rules: https://redocly.com/docs/cli/rules
+# Built-in rules: https://redocly.com/docs/cli/rules/built-in-rules
 extends:
   - recommended
 
 rules:
   security-defined: off
   no-server-example.com: off
+  paths-kebab-case: warn
 
 apis:
   agora-api-description:
     root: libs/agora/api-description/build/openapi.yaml
     # rules:
     #   security-defined: off
+  model-ad-api-description:
+    root: libs/model-ad/api-description/build/openapi.yaml
+  openchallenges-api-description:
+    root: libs/openchallenges/api-description/build/openapi.yaml
+  schematic-api-description:
+    root: libs/schematic/api-description/build/openapi.yaml
