@@ -1,0 +1,14 @@
+# Configuration: https://redocly.com/docs/cli/configuration#redocly-configuration-file
+# Rules: https://redocly.com/docs/cli/rules
+extends:
+  - recommended
+
+rules:
+  security-defined: off
+  no-server-example.com: off
+
+apis:
+  agora-api-description:
+    root: libs/agora/api-description/build/openapi.yaml
+    # rules:
+    #   security-defined: off

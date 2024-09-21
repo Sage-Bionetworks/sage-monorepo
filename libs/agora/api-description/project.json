@@ -14,21 +14,9 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "lint-openapi --config tools/ibm-openapi-validator/config.yaml {projectRoot}/build/openapi.yaml"
+        "command": "redocly lint --config tools/redocly/config.yaml {projectName}"
       },
       "dependsOn": ["build"]
-    },
-    "format": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "prettier --write {projectRoot}"
-      }
-    },
-    "format-check": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "prettier --check {projectRoot}"
-      }
     }
   },
   "tags": ["language:openapi"],
