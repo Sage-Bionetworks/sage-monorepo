@@ -38,7 +38,7 @@
     "type-check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run pyright",
+        "command": "pyright",
         "cwd": "{projectRoot}"
       }
     },

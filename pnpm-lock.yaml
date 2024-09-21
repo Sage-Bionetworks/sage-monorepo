@@ -461,6 +461,9 @@ importers:
       primeng:
         specifier: 17.18.8
         version: 17.18.8(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/forms@18.0.7(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(@angular/platform-browser@18.0.7(@angular/animations@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(@angular/common@18.0.7(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4))(rxjs@7.8.1))(@angular/core@18.0.7(rxjs@7.8.1)(zone.js@0.14.4)))(rxjs@7.8.1))(rxjs@7.8.1)(zone.js@0.14.4)
+      pyright:
+        specifier: 1.1.381
+        version: 1.1.381
       serverless:
         specifier: 3.22.0
         version: 3.22.0(debug@4.3.7)(encoding@0.1.13)
@@ -11925,6 +11928,11 @@ packages:
   pure-rand@6.1.0:
     resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
 
+  pyright@1.1.381:
+    resolution: {integrity: sha512-j9uGIgEBtVP9Xq0QM/NRZeolUxkfxPZT0rovsjiN0vjVF1vcyqjV2hAsidCtX+0GUTAjpEA511WZAyBCC8x97A==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+
   q@1.5.1:
     resolution: {integrity: sha512-kV/CThkXo6xyFEZUugw/+pIOywXcDbFYgSct5cT3gqlbkBE1SJdwy6UQoZvodiWF/ckQLZyDE/Bu1M6gVu5lVw==}
     engines: {node: '>=0.6.0', teleport: '>=0.2.0'}
@@ -13605,8 +13613,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.7.0-dev.20240918:
-    resolution: {integrity: sha512-+6MNe6JoSuFM5x/Rn79X8ZOUqjCUiElv6y7ZWjekE79nQU7I0UzIlPpkvw/m83Q62tTHGg3tqRIKhj0lCblZIw==}
+  typescript@5.7.0-dev.20240920:
+    resolution: {integrity: sha512-KYknuG23W0kaacmyzU9fiwJ/D+ddDwveCZZAUHwW3okW7SonODu3rlZ5VTtlcdURq44Y27xIygcMG6oB8IU6cg==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -25146,7 +25154,7 @@ snapshots:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20240918
+      typescript: 5.7.0-dev.20240920
 
   duplexer3@0.1.5: {}
 
@@ -30791,6 +30799,10 @@ snapshots:
 
   pure-rand@6.1.0: {}
 
+  pyright@1.1.381:
+    optionalDependencies:
+      fsevents: 2.3.3
+
   q@1.5.1: {}
 
   qs@6.10.4:
@@ -32853,7 +32865,7 @@ snapshots:
 
   typescript@5.4.5: {}
 
-  typescript@5.7.0-dev.20240918: {}
+  typescript@5.7.0-dev.20240920: {}
 
   ua-parser-js@1.0.38: {}
 
