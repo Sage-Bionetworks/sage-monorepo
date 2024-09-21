@@ -1,0 +1,7 @@
+{
+  "include": ["sandbox_py_app"],
+  "exclude": ["tests"],
+  "venvPath": ".",
+  "venv": ".venv",
+  "pythonVersion": "3.9"
+}

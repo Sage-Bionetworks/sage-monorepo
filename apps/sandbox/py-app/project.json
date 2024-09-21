@@ -35,6 +35,13 @@
         "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
+    "check-type": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pyright",
+        "cwd": "{projectRoot}"
+      }
+    },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
