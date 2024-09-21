@@ -35,7 +35,7 @@
         "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
-    "check-type": {
+    "type-check": {
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run pyright",
