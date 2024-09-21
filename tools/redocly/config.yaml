@@ -20,3 +20,5 @@ apis:
     root: libs/openchallenges/api-description/build/openapi.yaml
   schematic-api-description:
     root: libs/schematic/api-description/build/openapi.yaml
+  synapse-api-description:
+    root: libs/synapse/api-description/build/openapi.yaml

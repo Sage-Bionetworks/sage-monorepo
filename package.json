@@ -96,7 +96,7 @@
     "@openapitools/openapi-generator-cli": "2.5.2",
     "@playwright/test": "^1.36.0",
     "@prettier/plugin-xml": "2.2.0",
-    "@redocly/cli": "1.25.2",
+    "@redocly/cli": "1.25.3",
     "@schematics/angular": "18.0.7",
     "@storybook/addon-essentials": "7.6.19",
     "@storybook/angular": "7.6.19",
