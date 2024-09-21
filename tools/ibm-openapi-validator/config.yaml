@@ -1,4 +1,0 @@
-# See https://github.com/IBM/openapi-validator?tab=readme-ov-file#configuration
-# This path to the spectral config file assumes that the validator's current working directory is
-# set to the workspace root folder.
-ruleset: tools/ibm-openapi-validator/.spectral.js
