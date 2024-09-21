@@ -3,5 +3,5 @@
   "exclude": ["tests"],
   "venvPath": ".",
   "venv": ".venv",
-  "pythonVersion": "3.9"
+  "pythonVersion": "3.10"
 }
