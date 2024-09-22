@@ -1,5 +1,5 @@
 {
-  "include": ["sandbox_py_app"],
+  "include": ["sandbox_py_lib"],
   "exclude": ["tests"],
   "venvPath": ".",
   "venv": ".venv",
