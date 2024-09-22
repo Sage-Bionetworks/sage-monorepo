@@ -28,11 +28,25 @@
         "cwd": "{projectRoot}"
       }
     },
+    "update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry update",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lint": {
       "executor": "@nxlv/python:flake8",
       "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
       "options": {
         "outputFile": "reports/{projectRoot}/pylint.txt"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pyright",
+        "cwd": "{projectRoot}"
       }
     },
     "test": {

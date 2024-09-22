@@ -18,6 +18,8 @@ module.exports = {
     `poetry run black ${filenames.join(' ')}`,
     // Lint the projects affected by the staged files
     `nx affected --target=lint --files=${filenames.join(',')}`,
+    // Type check the projects affected by the staged files
+    `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
   '**/*[dD]ockerfile*': (filenames) => [
