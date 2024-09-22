@@ -165,6 +165,7 @@
     "prettier-plugin-java": "2.6.4",
     "primeicons": "7.0.0",
     "primeng": "17.18.8",
+    "pyright": "1.1.381",
     "serverless": "3.22.0",
     "serverless-plugin-typescript": "2.1.4",
     "smee-client": "1.2.3",
