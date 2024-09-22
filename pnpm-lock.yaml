@@ -137,7 +137,7 @@ importers:
         specifier: 2.13.0
         version: 2.13.0
       storybook:
-        specifier: ^8.2.8
+        specifier: 8.3.2
         version: 8.3.2
       tslib:
         specifier: 2.4.1
@@ -165,16 +165,16 @@ importers:
         specifier: 18.2.5
         version: 18.2.5(chokidar@3.6.0)
       '@angular-eslint/eslint-plugin':
-        specifier: ^18.3.0
+        specifier: 18.3.1
         version: 18.3.1(@typescript-eslint/utils@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)
       '@angular-eslint/eslint-plugin-template':
-        specifier: ^18.3.0
+        specifier: 18.3.1
         version: 18.3.1(@typescript-eslint/utils@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)(typescript@5.5.4)
       '@angular-eslint/template-parser':
-        specifier: ^18.3.0
+        specifier: 18.3.1
         version: 18.3.1(eslint@8.57.0)(typescript@5.5.4)
       '@angular/cli':
-        specifier: ~18.2.0
+        specifier: 18.2.5
         version: 18.2.5(chokidar@3.6.0)
       '@angular/compiler-cli':
         specifier: 18.2.5
@@ -183,8 +183,8 @@ importers:
         specifier: 18.2.5
         version: 18.2.5
       '@chromatic-com/storybook':
-        specifier: ^1.9.0
-        version: 1.9.0(react@18.3.1)
+        specifier: 2.0.2
+        version: 2.0.2(react@18.3.1)
       '@hint/configuration-web-recommended':
         specifier: 8.2.16
         version: 8.2.16(canvas@2.11.2(encoding@0.1.13))(encoding@0.1.13)(hint@7.1.3(canvas@2.11.2(encoding@0.1.13))(encoding@0.1.13)(typescript@5.5.4))
@@ -375,7 +375,7 @@ importers:
         specifier: 17.0.0
         version: 17.0.0(eslint-plugin-import@2.27.5(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0))(eslint-plugin-n@15.6.0(eslint@8.57.0))(eslint-plugin-promise@6.1.1(eslint@8.57.0))(eslint@8.57.0)
       eslint-plugin-cypress:
-        specifier: ^3.5.0
+        specifier: 3.5.0
         version: 3.5.0(eslint@8.57.0)
       eslint-plugin-import:
         specifier: 2.27.5
@@ -1644,8 +1644,8 @@ packages:
   '@chevrotain/utils@11.0.3':
     resolution: {integrity: sha512-YslZMgtJUyuMbZ+aKvfF3x1f5liK4mWNxghFRv7jqRR9C3R3fAOGTTKvxXDa2Y1s9zSbcpuO0cAxDYsc9SrXoQ==}
 
-  '@chromatic-com/storybook@1.9.0':
-    resolution: {integrity: sha512-vYQ+TcfktEE3GHnLZXHCzXF/sN9dw+KivH8a5cmPyd9YtQs7fZtHrEgsIjWpYycXiweKMo1Lm1RZsjxk8DH3rA==}
+  '@chromatic-com/storybook@2.0.2':
+    resolution: {integrity: sha512-7bPIliISedeIpnVKbzktysFYW5n56bN91kxuOj1XXKixmjbUHRUMvcXd4K2liN6MiR5ZqJtmtcPsZ6CebbGlEA==}
     engines: {node: '>=16.0.0', yarn: '>=1.22.18'}
 
   '@colors/colors@1.5.0':
@@ -15859,7 +15859,7 @@ snapshots:
 
   '@chevrotain/utils@11.0.3': {}
 
-  '@chromatic-com/storybook@1.9.0(react@18.3.1)':
+  '@chromatic-com/storybook@2.0.2(react@18.3.1)':
     dependencies:
       chromatic: 11.10.2
       filesize: 10.1.6
