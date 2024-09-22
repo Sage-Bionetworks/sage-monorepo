@@ -32,6 +32,7 @@ jobs:
             openchallenges
             results-visualization-framework
             sage-monorepo
+            sandbox
             schematic
             synapse
           # Configure that a scope must always be provided.
