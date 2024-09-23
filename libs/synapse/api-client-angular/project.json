@@ -1,0 +1,20 @@
+{
+  "name": "synapse-api-client-angular",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/synapse/api-client-angular/src",
+  "projectType": "library",
+  "prefix": "synapse",
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      },
+      "dependsOn": ["^build"]
+    }
+  },
+  "tags": ["language:typescript"],
+  "implicitDependencies": ["synapse-api-description"]
+}
