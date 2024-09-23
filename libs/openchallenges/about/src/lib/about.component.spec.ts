@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { AboutComponent } from './about.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideRouter } from '@angular/router';
 
 describe('AboutComponent', () => {
   let component: AboutComponent;
@@ -9,7 +10,7 @@ describe('AboutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [],
-      providers: [ConfigService],
+      providers: [provideRouter([]), provideHttpClient()],
     }).compileComponents();
   });
 
