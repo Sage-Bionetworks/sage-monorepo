@@ -45,6 +45,13 @@
         "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pyright",
+        "cwd": "{projectRoot}"
+      }
+    },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
