@@ -11,7 +11,7 @@
         "output": "#{cwd}/src/lib/",
         "templateDir": "templates",
         "additionalProperties": {
-          "ngVersion": "18.2.5"
+          "ngVersion": "14.2.11"
         }
       }
     }

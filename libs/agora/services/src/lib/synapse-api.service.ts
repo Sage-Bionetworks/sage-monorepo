@@ -6,6 +6,10 @@ import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import sanitizeHtml from 'sanitize-html';
+import {
+  OrgSagebionetworksRepoModelWikiWikiPage,
+  WikiPageServicesService,
+} from '@sagebionetworks/synapse/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -19,7 +23,20 @@ import { SynapseWiki } from '../models';
 export class SynapseApiService {
   wikis: { [key: string]: any } = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private wikiPageService: WikiPageServicesService,
+  ) {}
+
+  // I created this method or to facilitate the comparison with `getWiki()`. In practice, there is
+  // no need for a wrapper method like done here: the Agora components and services should directly
+  // make call to the Synapse API using the Angular client.
+  getWikiAlternative(
+    ownerId: string,
+    wikiId: string,
+  ): Observable<OrgSagebionetworksRepoModelWikiWikiPage> {
+    return this.wikiPageService.getRepoV1EntityOwnerIdWikiWikiId(ownerId, wikiId);
+  }
 
   getWiki(ownerId: string, wikiId: string): Observable<SynapseWiki> {
     const key = ownerId + wikiId;
