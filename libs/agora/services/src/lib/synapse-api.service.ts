@@ -19,7 +19,9 @@ import { SynapseWiki } from '../models';
 // -------------------------------------------------------------------------- //
 // Service
 // -------------------------------------------------------------------------- //
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SynapseApiService {
   wikis: { [key: string]: any } = {};
 
