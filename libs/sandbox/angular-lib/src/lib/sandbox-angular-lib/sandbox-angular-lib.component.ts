@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'lib-sandbox-angular-lib',
+  selector: 'sandbox-angular-lib',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './sandbox-angular-lib.component.html',
