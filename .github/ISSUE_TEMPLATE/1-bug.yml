@@ -25,6 +25,7 @@ body:
         - MODEL-AD
         - OpenChallenges
         - Sage Monorepo
+        - Sandbox
         - Schematic
         - Synapse
         - Other

@@ -1,8 +1,0 @@
-extends: '@ibm-cloud/openapi-ruleset'
-rules:
-  ibm-accept-and-return-models: off
-  ibm-enum-casing-convention: off
-  ibm-parameter-casing-convention: off
-  ibm-path-segment-casing-convention: off
-  ibm-property-casing-convention: off
-  ibm-operation-summary-length: warn

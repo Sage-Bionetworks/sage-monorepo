@@ -1,0 +1,73 @@
+{
+  "name": "sandbox-py-lib",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/sandbox/py-lib/sandbox_py_lib",
+  "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "prepare": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry update",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
+      "options": {
+        "outputFile": "reports/{projectRoot}/pylint.txt"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pyright",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/{projectRoot}/unittests",
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:python", "package-manager:poetry"],
+  "release": {
+    "version": {
+      "generator": "@nxlv/python:release-version"
+    }
+  }
+}

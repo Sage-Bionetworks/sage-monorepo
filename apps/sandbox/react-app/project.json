@@ -1,0 +1,68 @@
+{
+  "name": "sandbox-react-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/sandbox/react-app/src",
+  "projectType": "application",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/sandbox/react-app"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "sandbox-react-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sandbox-react-app:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "sandbox-react-app:build:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "sandbox-react-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "sandbox-react-app:build:development"
+        },
+        "production": {
+          "buildTarget": "sandbox-react-app:build:production"
+        }
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/sandbox/react-app/jest.config.ts"
+      }
+    }
+  }
+}
