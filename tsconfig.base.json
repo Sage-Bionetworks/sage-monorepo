@@ -69,7 +69,7 @@
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],
-      "sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"]
+      "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
-import { SandboxAngularLibComponent } from 'sandbox-angular-lib';
+import { SandboxAngularLibComponent } from '@sagebionetworks/sandbox-angular-lib';
 
 @Component({
   standalone: true,
