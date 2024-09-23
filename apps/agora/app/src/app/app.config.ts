@@ -7,6 +7,7 @@ import {
 import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client-angular';
+import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 
 import { routes } from './app.routes';
@@ -22,6 +23,11 @@ export const appConfig: ApplicationConfig = {
       // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
       provide: 'APP_BASE_URL',
       useFactory: () => '.',
+      deps: [],
+    },
+    {
+      provide: SYNAPSE_API_CLIENT_BASE_PATH,
+      useFactory: () => 'https://repo-prod.prod.sagebase.org',
       deps: [],
     },
     {
