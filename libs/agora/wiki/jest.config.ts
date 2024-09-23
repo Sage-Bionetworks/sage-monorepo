@@ -3,7 +3,12 @@ export default {
   displayName: 'agora-wiki',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
+  globals: {
+    Request,
+    Response,
+    TextEncoder,
+    TextDecoder,
+  },
   coverageDirectory: '../../../coverage/libs/agora/wiki',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
@@ -20,4 +25,7 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
   ],
+  // testEnvironmentOptions: {
+  //   customExportConditions: [''],
+  // },
 };

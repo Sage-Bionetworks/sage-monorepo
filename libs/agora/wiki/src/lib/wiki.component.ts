@@ -63,7 +63,9 @@ export class WikiComponent implements OnChanges, OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error fetching wiki: ', err);
+        console.warn('Service unavailable. Please try again later.');
+        this.loading = false;
       },
       complete: () => {
         this.loading = false;

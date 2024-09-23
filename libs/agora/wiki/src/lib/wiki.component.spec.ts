@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WikiComponent } from './wiki.component';
 import { provideHttpClient } from '@angular/common/http';
+import { server, synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { http, HttpResponse } from 'msw';
 
 describe('WikiComponent', () => {
   let component: WikiComponent;
@@ -18,6 +20,43 @@ describe('WikiComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  describe('getWikiData', () => {
+    it('should get wiki data', async () => {
+      const expected = synapseWikiMock;
+      expect(component.loading).toBe(true);
+
+      component.getWikiData();
+      await fixture.whenStable();
+
+      expect(component.data.markdown).toBe(expected.markdown);
+      expect(component.loading).toBe(false);
+    });
+
+    it('should default to error content when api is unreachable', async () => {
+      const noDataContent = `<div class="wiki-no-data">No data found...</div>`;
+      expect(component.loading).toBe(true);
+
+      // simulate server error
+      server.use(
+        http.get(
+          'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/',
+          () => {
+            return HttpResponse.error();
+          },
+          {
+            once: true,
+          },
+        ),
+      );
+
+      component.getWikiData();
+      await fixture.whenStable();
+
+      expect(component.safeHtml).toBe(noDataContent);
+      expect(component.loading).toBe(false);
+    });
   });
 
   describe('getClassName', () => {
