@@ -1,0 +1,29 @@
+{
+  "name": "agora-wiki",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/wiki/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/wiki"],
+      "options": {
+        "jestConfig": "libs/agora/wiki/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-html": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["hint src/**/*.html"],
+        "cwd": "libs/agora/wiki",
+        "parallel": false
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "implicitDependencies": []
+}
