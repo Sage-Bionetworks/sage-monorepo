@@ -22,4 +22,8 @@ apis:
       operation-4xx-response: off
       no-path-trailing-slash: off
   synapse-api-description:
-    root: libs/synapse/api-description/build/openapi.yaml
+    root: libs/synapse/api-description/build/openapi.json
+    rules:
+      operation-4xx-response: off
+      operation-operationId-url-safe: off
+      operation-summary: off
