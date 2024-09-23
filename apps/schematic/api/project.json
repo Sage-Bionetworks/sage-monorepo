@@ -87,6 +87,13 @@
         "cwd": "apps/schematic/api"
       }
     },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pyright",
+        "cwd": "{projectRoot}"
+      }
+    },
     "pylint": {
       "executor": "nx:run-commands",
       "options": {
