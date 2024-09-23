@@ -41,7 +41,7 @@
         "cwd": "{projectRoot}",
         "parallel": false
       },
-      "dependsOn": ["^build"]
+      "dependsOn": ["^get"]
     }
   },
   "tags": ["language:typescript"],
