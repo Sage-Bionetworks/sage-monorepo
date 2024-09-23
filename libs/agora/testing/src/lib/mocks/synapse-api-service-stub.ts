@@ -10,7 +10,7 @@ import { Observable, of } from 'rxjs';
 // Internal
 // -------------------------------------------------------------------------- //
 import { SynapseWiki } from '@sagebionetworks/agora/models';
-import { synapseWikiMock } from './';
+import { synapseWikiMock } from '.';
 
 // -------------------------------------------------------------------------- //
 // Stub

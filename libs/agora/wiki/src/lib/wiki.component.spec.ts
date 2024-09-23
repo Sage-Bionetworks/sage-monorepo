@@ -1,7 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WikiComponent } from './wiki.component';
 import { provideHttpClient } from '@angular/common/http';
-import { server, synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { server } from 'libs/agora/testing/src/lib/node';
+import { synapseWikiMock } from '@sagebionetworks/agora/testing/mocks';
 import { http, HttpResponse } from 'msw';
 
 describe('WikiComponent', () => {
@@ -11,7 +12,7 @@ describe('WikiComponent', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
-      providers: [WikiComponent, provideHttpClient()],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(WikiComponent);
@@ -39,9 +40,10 @@ describe('WikiComponent', () => {
       expect(component.loading).toBe(true);
 
       // simulate server error
+      const url = 'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/';
       server.use(
         http.get(
-          'https://repo-prod.prod.sagebase.org/repo/v1/entity/syn25913473/wiki/',
+          url,
           () => {
             return HttpResponse.error();
           },

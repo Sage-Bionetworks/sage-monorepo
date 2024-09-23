@@ -1,25 +1,14 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LoadingIconComponent } from './loading-icon.component';
 
-// -------------------------------------------------------------------------- //
-// Tests
-// -------------------------------------------------------------------------- //
 describe('LoadingIcon', () => {
-  let fixture: ComponentFixture<LoadingIconComponent>;
   let component: LoadingIconComponent;
+  let fixture: ComponentFixture<LoadingIconComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoadingIconComponent],
-      imports: [RouterTestingModule],
+      imports: [],
+      providers: [],
     }).compileComponents();
   });
 

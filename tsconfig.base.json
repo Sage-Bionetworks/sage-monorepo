@@ -24,7 +24,7 @@
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
-      "@sagebionetworks/agora/testing": ["libs/agora/testing/src/lib/index.ts"],
+      "@sagebionetworks/agora/testing/mocks": ["libs/agora/testing/src/lib/mocks"],
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/model-ad/api-client-angular": [

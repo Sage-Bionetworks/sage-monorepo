@@ -1,6 +1,6 @@
 import 'jest-preset-angular/setup-jest';
 
-import { server } from 'libs/agora/testing/src/lib/mocks/node';
+import { server } from 'libs/agora/testing/src/lib/node';
 
 beforeAll(() => {
   // Enable API mocking before all the tests.
