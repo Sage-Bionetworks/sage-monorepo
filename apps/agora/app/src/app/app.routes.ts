@@ -6,6 +6,10 @@ export const routes: Route[] = [
     loadChildren: () => import('@sagebionetworks/agora/about').then((routes) => routes.routes),
   },
   {
+    path: 'news',
+    loadChildren: () => import('@sagebionetworks/agora/news').then((routes) => routes.routes),
+  },
+  {
     path: 'not-found',
     loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
   },
