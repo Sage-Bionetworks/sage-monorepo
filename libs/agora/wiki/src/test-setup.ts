@@ -1,6 +1,6 @@
 import 'jest-preset-angular/setup-jest';
 
-import { server } from '@sagebionetworks/agora/testing/server';
+import { server } from '@sagebionetworks/agora/testing';
 
 beforeAll(() => {
   // Enable API mocking before all the tests.

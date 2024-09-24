@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { WikiComponent } from './wiki.component';
 import { provideHttpClient } from '@angular/common/http';
 import { server } from 'libs/agora/testing/src/lib/server/msw-server';
-import { synapseWikiMock } from '@sagebionetworks/agora/testing/mocks';
+import { synapseWikiMock } from '@sagebionetworks/agora/testing';
 import { http, HttpResponse } from 'msw';
 
 describe('WikiComponent', () => {
