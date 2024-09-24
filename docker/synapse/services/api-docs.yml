@@ -1,0 +1,15 @@
+services:
+  synapse-api-docs:
+    image: ghcr.io/sage-bionetworks/synapse-api-docs:${SYNAPSE_VERSION:-local}
+    container_name: synapse-api-docs
+    restart: always
+    env_file:
+      - ../../../apps/synapse/api-docs/.env
+    networks:
+      - synapse
+    ports:
+      - '8010:8010'
+    deploy:
+      resources:
+        limits:
+          memory: 200M
