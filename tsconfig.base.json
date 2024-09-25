@@ -20,6 +20,7 @@
       "@sagebionetworks/agora/about": ["libs/agora/about/src/index.ts"],
       "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
+      "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
       "@sagebionetworks/agora/news": ["libs/agora/news/src/index.ts"],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
