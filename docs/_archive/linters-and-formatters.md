@@ -7,7 +7,7 @@
 | File type  | File extension | Linter           |
 | ---------- | -------------- | ---------------- |
 | Dockerfile | `Dockerfile`   | [hadolint]       |
-| HTML       | `*.html`       | Prettier         |
+| HTML       | `*.html`       | ESLint           |
 | Java       | `*.java`       | [Checkstyle]     |
 | SCSS       | `*.scss`       | [VS Code (SCSS)] |
 | TypeScript | `*.ts`         | [ESLint]         |
