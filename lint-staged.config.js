@@ -8,7 +8,7 @@ module.exports = {
     `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
 
-  '**/*.{json,md,yaml,yml}': (filenames) => [
+  '**/*.{json,md,yaml,yml,html}': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,
   ],

@@ -20,14 +20,6 @@
       "options": {
         "fix": true
       }
-    },
-    "lint-html": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["hint src/**/*.html"],
-        "cwd": "libs/openchallenges/about",
-        "parallel": false
-      }
     }
   },
   "tags": ["type:feature", "scope:openchallenges", "language:typescript"],
