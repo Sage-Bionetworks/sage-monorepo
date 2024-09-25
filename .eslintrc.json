@@ -27,6 +27,10 @@
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
       }
+    },
+    {
+      "files": ["*.html"],
+      "plugins": ["html"]
     }
   ]
 }

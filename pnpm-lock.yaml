@@ -371,6 +371,9 @@ importers:
       eslint-plugin-cypress:
         specifier: 3.5.0
         version: 3.5.0(eslint@8.57.0)
+      eslint-plugin-html:
+        specifier: 8.1.2
+        version: 8.1.2
       eslint-plugin-import:
         specifier: 2.27.5
         version: 2.27.5(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0)
@@ -6540,6 +6543,10 @@ packages:
     engines: {node: '>=8.10.0'}
     peerDependencies:
       eslint: '>=4.19.1'
+
+  eslint-plugin-html@8.1.2:
+    resolution: {integrity: sha512-pbRchDV2SmqbCi/Ev/q3aAikzG9BcFe0IjjqjtMn8eTLq71ZUggyJB6CDmuwGAXmYZHrXI12XTfCqvgcnPRqGw==}
+    engines: {node: '>=16.0.0'}
 
   eslint-plugin-import@2.27.5:
     resolution: {integrity: sha512-LmEt3GVofgiGuiE+ORpnvP+kAm3h6MLZJ4Q5HCyHADofsb4VzXFsRiWj3c0OFiV+3DWFh0qg3v9gcPlfc3zRow==}
@@ -21478,6 +21485,10 @@ snapshots:
       eslint: 8.57.0
       eslint-utils: 2.1.0
       regexpp: 3.2.0
+
+  eslint-plugin-html@8.1.2:
+    dependencies:
+      htmlparser2: 9.1.0
 
   eslint-plugin-import@2.27.5(@typescript-eslint/parser@7.18.0(eslint@8.57.0)(typescript@5.5.4))(eslint@8.57.0):
     dependencies:
