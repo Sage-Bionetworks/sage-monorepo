@@ -65,10 +65,6 @@ function workspace-lint {
   nx run-many --target=lint
 }
 
-function workspace-lint-html {
-  nx run-many --target=lint-html
-}
-
 function workspace-build {
   nx run-many --target=build
 }

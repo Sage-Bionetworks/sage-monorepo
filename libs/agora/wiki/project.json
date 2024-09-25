@@ -14,14 +14,6 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint"
-    },
-    "lint-html": {
-      "executor": "nx:run-commands",
-      "options": {
-        "commands": ["hint src/**/*.html"],
-        "cwd": "libs/agora/wiki",
-        "parallel": false
-      }
     }
   },
   "tags": ["type:feature", "scope:agora", "language:typescript"],
