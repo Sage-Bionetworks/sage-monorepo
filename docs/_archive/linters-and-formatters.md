@@ -13,10 +13,6 @@
 | TypeScript | `*.ts`         | [ESLint]         |
 | XML        | `*.xml`        | -                |
 
-Linter configuration:
-
-- `.hintrc`
-
 ## Formatters
 
 | File type  | File extension | Formatter            | Package type |
