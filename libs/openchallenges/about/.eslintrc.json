@@ -36,15 +36,5 @@
       "extends": ["plugin:@nx/angular-template"],
       "rules": {}
     }
-    // {
-    //   "files": ["*.html"],
-    //   "parser": "@html-eslint/parser",
-    //   "extends": ["plugin:@html-eslint/recommended"],
-    //   "plugins": ["@html-eslint", "html"],
-    //   "rules": {
-    //     "@html-eslint/indent": ["error", 2]
-    //     // "@html-eslint/require-closing-tags": "off"
-    //   }
-    // }
   ]
 }
