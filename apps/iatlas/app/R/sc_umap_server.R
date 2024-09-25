@@ -12,14 +12,24 @@ sc_umap_server <- function(
         arrow::read_feather("inst/feather/sc_umap_coord.feather")
         })
 
+      dataset_display <- reactive({
+        shiny::req(cohort_obj())
+        setNames(cohort_obj()$dataset_names, cohort_obj()$dataset_displays)
+      })
+
+      output$select_dataset <- shiny::renderUI({
+        shiny::selectInput(
+          ns("datasets"),
+          "Choose dataset(s)",
+          choices = names(dataset_display())
+        )
+      })
+
       umap_df <-shiny::eventReactive(input$plot_button,{
         all_umap() %>%
-          dplyr::filter(dataset_name %in% input$datasets)
+          dplyr::filter(dataset_name == dataset_display()[input$datasets])
         })
 
-      #TODO: change this when data is in cohort_obj
-      dataset_display <- shiny::reactive(setNames(c("Bi 2021 - ccRCC", "Krishna 2021 - ccRCC", "Li 2022 - ccRCC", "HTAN MSK - SCLC", "Shiao 2024- BRCA", "HTAN Vanderbilt - colon polyps"),
-                                                  c("Bi_2021", "Krishna_2021", "Li_2022", "MSK", "Shiao_2024", "Vanderbilt")))
       link_to_cellxgene <- shiny::reactive(setNames(c("<a href = 'https://cellxgene.cziscience.com/e/76347874-8801-44bf-9aea-0da21c78c430.cxg/'>Explore in CELLxGENE</a>",
                                                       "<a href = 'https://cellxgene.cziscience.com/e/6a270451-b4d9-43e0-aa89-e33aac1ac74b.cxg/'>Explore in CELLxGENE</a>",
                                                       "<a href = 'https://cellxgene.cziscience.com/e/bd65a70f-b274-4133-b9dd-0d1431b6af34.cxg/'>Explore in CELLxGENE</a>",
@@ -27,11 +37,6 @@ sc_umap_server <- function(
                                                       "<a href = 'https://singlecell.broadinstitute.org/single_cell/study/SCP1288/tumor-and-immune-reprogramming-during-immunotherapy-in-advanced-renal-cell-carcinoma#study-visualize'>Explore in Single Cell Portal</a>",
                                                       ""),
                                                     c("MSK", "Vanderbilt", "Krishna_2021", "Li_2022", "Bi_2021", "Shiao_2024")))
-      # color_criteria <- shiny::eventReactive(input$plot_button,{
-      #   shiny::req( input$color)
-      #   print("color")
-      #   dplyr::select(umap_df(), "group" = input$color, dataset_name)
-      # })
 
 
       group_colors <- shiny::eventReactive(input$plot_button,{
@@ -60,7 +65,7 @@ sc_umap_server <- function(
                                         height = "600",
                                         showlegend = FALSE
                                       )%>%
-                                    add_title_subplot_plotly(dataset_display()[[x]])%>%
+                                    add_title_subplot_plotly(names(dataset_display()[dataset_display() == datasets]))%>%
                                     plotly::layout(
                                       xaxis = list(zeroline = F,
                                                    showgrid = F,
