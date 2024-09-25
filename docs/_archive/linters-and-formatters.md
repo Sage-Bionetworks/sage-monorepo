@@ -7,21 +7,11 @@
 | File type  | File extension | Linter           |
 | ---------- | -------------- | ---------------- |
 | Dockerfile | `Dockerfile`   | [hadolint]       |
-| HTML       | `*.html`       | [Webhint]        |
+| HTML       | `*.html`       | ESLint           |
 | Java       | `*.java`       | [Checkstyle]     |
 | SCSS       | `*.scss`       | [VS Code (SCSS)] |
 | TypeScript | `*.ts`         | [ESLint]         |
 | XML        | `*.xml`        | -                |
-
-### Webhint
-
-Linter:
-
-- Webhint - VS Code extension
-
-Linter configuration:
-
-- `.hintrc`
 
 ## Formatters
 
@@ -84,7 +74,6 @@ Notes:
 
 <!-- Links -->
 
-[webhint]: https://marketplace.visualstudio.com/items?itemName=webhint.vscode-webhint
 [prettier]: https://prettier.io
 [eslint]: https://eslint.org
 [checkstyle]: https://checkstyle.sourceforge.io/
