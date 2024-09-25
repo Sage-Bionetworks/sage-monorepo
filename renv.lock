@@ -78,19 +78,20 @@
     },
     "DT": {
       "Package": "DT",
-      "Version": "0.23",
+      "Version": "0.33",
       "Source": "Repository",
-      "Repository": "CRAN",
+      "Repository": "RSPM",
       "Requirements": [
         "crosstalk",
         "htmltools",
         "htmlwidgets",
+        "httpuv",
         "jquerylib",
         "jsonlite",
         "magrittr",
         "promises"
       ],
-      "Hash": "d8f1498dc47763ce4647c8d03214d30b"
+      "Hash": "64ff3427f559ce3f2597a4fe13255cb6"
     },
     "GenomeInfoDb": {
       "Package": "GenomeInfoDb",
@@ -1598,7 +1599,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules",
-      "RemoteRef": "0.9.1",
+      "RemoteRef": "master",
       "RemoteSha": "bd6e98e88f22f3110a4152f4e3e5f1a3963018e5",
       "Requirements": [
         "RColorBrewer",
@@ -1623,18 +1624,18 @@
         "utils",
         "viridis"
       ],
-      "Hash": "1361ebfa58b656bb67e77fcfe3b99df6"
+      "Hash": "de97cf8c8caa74fd3da26e7b5d06fea3"
     },
     "iatlas.modules2": {
       "Package": "iatlas.modules2",
-      "Version": "0.6.1",
+      "Version": "0.6.3",
       "Source": "GitHub",
       "RemoteType": "github",
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlas.modules2",
-      "RemoteRef": "0.6.2",
-      "RemoteSha": "ee605615679cd369e5b7aa3f04f52474faa75c10",
+      "RemoteRef": "0.6.3",
+      "RemoteSha": "92af72aa2ffc40c8673f62081da1f148a8bd8d59",
       "Remotes": "CRI-iAtlas/iatlasGraphQLClient@main, CRI-iAtlas/iatlas.modules@master",
       "Requirements": [
         "DT",
@@ -1660,7 +1661,7 @@
         "viridis",
         "viridisLite"
       ],
-      "Hash": "a7ac2f513aed0cf376c3ca1d00379c26"
+      "Hash": "d5dc7c5b898609b611125bb8cba39242"
     },
     "iatlasGraphQLClient": {
       "Package": "iatlasGraphQLClient",
@@ -1670,7 +1671,7 @@
       "RemoteHost": "api.github.com",
       "RemoteUsername": "CRI-iAtlas",
       "RemoteRepo": "iatlasGraphQLClient",
-      "RemoteRef": "0.2.8",
+      "RemoteRef": "main",
       "RemoteSha": "74070aad82290680d230e44574251876b9390b4b",
       "Requirements": [
         "assertthat",
@@ -1685,7 +1686,7 @@
         "tibble",
         "tidyr"
       ],
-      "Hash": "bd6089f24bc4c2748b73e5f8ee8d638b"
+      "Hash": "8a5245a593163d04119a842925469ba4"
     },
     "igvShiny": {
       "Package": "igvShiny",
