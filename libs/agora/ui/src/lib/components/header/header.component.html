@@ -1,0 +1,53 @@
+<header>
+  <div id="header" [ngClass]="{ 'is-mobile': isMobile }" (window:resize)="onResize()">
+    <div class="header-inner">
+      <div class="header-logo">
+        <a routerLink="/">
+          <img [src]="headerLogoPath" alt="header logo" />
+        </a>
+      </div>
+      @if (navItems.length > 0) {
+        <div class="header-nav" [ngClass]="{ show: isShown }">
+          <button class="header-nav-toggle" (click)="toggleNav()">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+          <div class="header-nav-inner">
+            <ul>
+              @for (item of navItems; track item.label) {
+                <li>
+                  @if (item.routerLink) {
+                    <a
+                      [routerLink]="item.routerLink"
+                      routerLinkActive="active"
+                      [routerLinkActiveOptions]="item.activeOptions || { exact: false }"
+                      (click)="toggleNav()"
+                    >
+                      <span>{{ item.label }}</span>
+                    </a>
+                  } @else if (item.url) {
+                    <a
+                      *ngIf="item.url"
+                      [attr.href]="item.url"
+                      [attr.target]="item.target"
+                      (click)="toggleNav()"
+                    >
+                      <span>{{ item.label }}</span>
+                    </a>
+                  } @else {
+                    <span>{{ item.label }}</span>
+                  }
+                </li>
+              }
+            </ul>
+
+            <div class="separator"></div>
+
+            <!-- <gene-search class="header-search" (searchNavigated)="toggleNav()"></gene-search> -->
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</header>

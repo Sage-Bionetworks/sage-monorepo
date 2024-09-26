@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import { FooterComponent } from '@sagebionetworks/agora/ui';
+import { FooterComponent, HeaderComponent } from '@sagebionetworks/agora/ui';
 import { filter } from 'rxjs';
 
 @Component({
   standalone: true,
-  imports: [RouterModule, FooterComponent],
+  imports: [RouterModule, HeaderComponent, FooterComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
