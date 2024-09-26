@@ -1,0 +1,10 @@
+# Ignore all node modules
+node_modules/
+
+# Ignore all build directories
+build/
+dist/
+
+# Ignore all test reports
+coverage/
+reports/
