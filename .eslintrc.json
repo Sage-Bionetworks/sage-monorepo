@@ -9,7 +9,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
+      "extends": ["plugin:@nx/typescript", "plugin:tailwindcss/recommended"],
       "plugins": ["@typescript-eslint"],
       "rules": {
         "dot-notation": "off",
@@ -22,7 +22,7 @@
     },
     {
       "files": ["*.js", "*.jsx"],
-      "extends": ["plugin:@nx/javascript"],
+      "extends": ["plugin:@nx/javascript", "plugin:tailwindcss/recommended"],
       "rules": {
         "@typescript-eslint/no-extra-semi": "error",
         "no-extra-semi": "off"
