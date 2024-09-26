@@ -1,71 +1,87 @@
-@use 'libs/agora/styles/src/lib/constants';
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
+@import 'libs/agora/styles/src/lib/constants';
+@import 'libs/agora/styles/src/lib/mixins';
 
 footer {
-  width: 100%;
-  height: constants.$footer-height;
-  position: relative;
-  padding: 42px 52px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   box-sizing: border-box;
-}
-.footer-link-group {
-  width: 420px;
-  height: 30px;
-  padding: 0;
   display: flex;
-  justify-content: space-between;
-  list-style: none;
-}
-.footer-link-group li {
-  flex: 0 0 auto;
-}
-.app-info {
-  text-align: right;
-  align-self: center;
-}
-.app-info ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-}
-.footer-bottom {
-  bottom: 0;
-  left: 0px;
-  width: 100%;
-  height: 70px;
-  display: flex;
-  position: absolute;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
-}
-.footer-links,
-.footer-links a {
-  text-decoration: none;
-}
-.footer-links a:hover {
-  text-decoration: underline;
-}
-.logo {
-  height: 56px;
-}
+  justify-content: space-between;
+  background-color: var(--color-primary);
+  font-weight: 300;
+  padding: var(--spacing-md);
 
-@media only screen and (max-width: constants.$md-breakpoint) {
-  footer {
-    height: 410px;
+  .footer-nav {
+    ul {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      list-style: none;
+      gap: var(--spacing-xl);
+      padding: 0;
+      margin: 0;
+
+      @include respond-to('small') {
+        justify-content: flex-start;
+      }
+
+      > :first-child {
+        display: none;
+
+        @include respond-to('small') {
+          display: block;
+        }
+      }
+
+      li {
+        &:first-child a {
+          line-height: 0;
+        }
+
+        a {
+          display: block;
+        }
+      }
+    }
+
+    a {
+      color: var(--color-gray-100);
+      font-size: var(--font-size-md);
+      text-decoration: none;
+
+      &.active,
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
-  .about-oc,
-  .app-info,
-  .footer-link-group {
-    width: 100%;
-    text-align: center;
-    justify-content: space-around;
-  }
-  .footer-link-group li {
-    flex: 1;
-  }
-  .app-info {
-    margin-top: 45px;
+
+  .footer-metas {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+
+    @include respond-to('ex-small') {
+      margin: 10px 0;
+    }
+
+    @include respond-to('small') {
+      margin: 10px 0;
+    }
+
+    div {
+      display: flex;
+      flex-direction: row;
+      gap: var(--spacing-sm);
+      font-size: var(--font-size-xs);
+      color: var(--color-gray-100);
+    }
+
+    .site-version {
+      margin-right: 50px;
+    }
   }
 }
