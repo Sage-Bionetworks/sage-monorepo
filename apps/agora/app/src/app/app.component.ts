@@ -21,11 +21,7 @@ export class AppComponent implements OnInit {
     this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
       const route = this.getChildRoute(this.activatedRoute);
       route.data.subscribe((data: any) => {
-        if (data.title) {
-          this.titleService.setTitle(data.title);
-        } else {
-          this.titleService.setTitle('Agora');
-        }
+        this.titleService.setTitle(data.title || 'Agora');
 
         if (data.description) {
           this.metaService.updateTag({ name: 'description', content: data.description });
