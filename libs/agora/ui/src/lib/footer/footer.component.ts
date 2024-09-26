@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { SafeUrl } from '@angular/platform-browser';
 import { PathSanitizer } from '@sagebionetworks/agora/util';
 import { ConfigService } from '@sagebionetworks/agora/config';
+import { NavigationLink } from '../../models/navigation-link';
 
 @Component({
   selector: 'agora-footer',
@@ -18,7 +19,7 @@ export class FooterComponent implements OnInit {
   footerLogoPath!: SafeUrl;
   dataVersion$!: Observable<Dataversion>;
 
-  navItems: Array<any> = [
+  navItems: Array<NavigationLink> = [
     {
       label: 'About',
       routerLink: ['about'],

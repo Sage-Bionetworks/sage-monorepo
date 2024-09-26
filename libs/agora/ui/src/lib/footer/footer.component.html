@@ -1,21 +1,30 @@
 <footer>
-  <div class="footer-nav" *ngIf="navItems.length">
-    <ul>
-      <li class="footer-logo">
-        <a routerLink="/">
-          <img [src]="footerLogoPath" alt="footer logo" />
-        </a>
-      </li>
-      <li *ngFor="let item of navItems">
-        <a *ngIf="item.routerLink" [routerLink]="item.routerLink" routerLinkActive="active"
-          ><span>{{ item.label }}</span></a
-        >
-        <a *ngIf="item.url" [attr.href]="item.url" [attr.target]="item.target"
-          ><span>{{ item.label }}</span></a
-        >
-      </li>
-    </ul>
-  </div>
+  @if (navItems.length > 0) {
+    <div class="footer-nav">
+      <ul>
+        <li class="footer-logo">
+          <a routerLink="/">
+            <img [src]="footerLogoPath" alt="footer logo" />
+          </a>
+        </li>
+        @for (item of navItems; track item.url) {
+          <li>
+            @if (item.routerLink) {
+              <a [routerLink]="item.routerLink" routerLinkActive="active"
+                ><span>{{ item.label }}</span></a
+              >
+            } @else if (item.url && item.target) {
+              <a [attr.href]="item.url" [attr.target]="item.target"
+                ><span>{{ item.label }}</span></a
+              >
+            } @else {
+              <span>{{ item.label }}</span>
+            }
+          </li>
+        }
+      </ul>
+    </div>
+  }
   <div class="footer-metas" *ngIf="dataVersion$ | async as dataVersion">
     <div class="site-version">Site Version {{ getSiteVersion() }}</div>
     <div class="data-version">Data Version {{ getDataVersion(dataVersion) }}</div>
