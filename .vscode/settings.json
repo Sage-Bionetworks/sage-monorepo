@@ -6,6 +6,8 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "disabled",
   "css.validate": false,
+  "less.validate": false,
+  "scss.validate": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
