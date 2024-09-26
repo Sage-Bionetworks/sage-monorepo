@@ -7,7 +7,7 @@
             <img [src]="footerLogoPath" alt="footer logo" />
           </a>
         </li>
-        @for (item of navItems; track item.url) {
+        @for (item of navItems; track item.label) {
           <li>
             @if (item.routerLink) {
               <a [routerLink]="item.routerLink" routerLinkActive="active"
