@@ -1,3 +1,4 @@
+-- sqlfluff:dialect:postgres
 -- keycloak
 CREATE USER keycloak
 WITH

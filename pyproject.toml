@@ -17,8 +17,9 @@ sqlfluff = "3.2.0"
 line-length = 88
 
 [tool.sqlfluff.core]
-templater = jinja
-sql_file_exts = .sql,.sql.j2,.dml,.ddl
+templater = "jinja"
+dialect = "mysql"
+sql_file_exts = ".sql"
 
 [build-system]
 requires = ["poetry-core"]
