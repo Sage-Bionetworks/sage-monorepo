@@ -29,6 +29,7 @@
         "alefragnani.Bookmarks",
         "Angular.ng-template",
         "dbaeumer.vscode-eslint",
+        "dorzey.vscode-sqlfluff",
         "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",

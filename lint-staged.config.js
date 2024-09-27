@@ -33,4 +33,11 @@ module.exports = {
     // Lint Dockerfiles with Hadolint
     `hadolint ${filenames.join(' ')}`,
   ],
+
+  '**/*.{sql}': (filenames) => [
+    // Format files with Prettier
+    `prettier --write ${filenames.join(' ')}`,
+    // Lint files with SQLFluff
+    `poetry run sqlfluff lint ${filenames.join(' ')}`,
+  ],
 };

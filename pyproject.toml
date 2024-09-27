@@ -11,9 +11,15 @@ python = "3.10.14"
 
 [tool.poetry.group.dev.dependencies]
 black = "24.8.0"
+sqlfluff = "3.2.0"
 
 [tool.black]
 line-length = 88
+
+[tool.sqlfluff.core]
+templater = "jinja"
+dialect = "mysql"
+sql_file_exts = ".sql"
 
 [build-system]
 requires = ["poetry-core"]
