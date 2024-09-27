@@ -37,5 +37,7 @@ module.exports = {
   '**/*.{sql}': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,
+    // Lint files with SQLFluff
+    `poetry run sqlfluff lint ${filenames.join(' ')}`,
   ],
 };
