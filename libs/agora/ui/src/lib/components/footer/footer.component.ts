@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
@@ -16,6 +16,10 @@ import { NavigationLink } from '../../models/navigation-link';
   styleUrls: ['./footer.component.scss'],
 })
 export class FooterComponent implements OnInit {
+  configService = inject(ConfigService);
+  dataVersionService = inject(DataversionService);
+  sanitizer = inject(PathSanitizer);
+
   footerLogoPath!: SafeUrl;
   dataVersion$!: Observable<Dataversion>;
 
@@ -36,11 +40,7 @@ export class FooterComponent implements OnInit {
     },
   ];
 
-  constructor(
-    private readonly configService: ConfigService,
-    private dataVersionService: DataversionService,
-    private sanitizer: PathSanitizer,
-  ) {
+  constructor() {
     this.footerLogoPath = this.sanitizer.sanitize('/agora-assets/images/footer-logo.svg');
   }
 
