@@ -8,6 +8,13 @@ module.exports = {
     `nx affected --target=lint --files=${filenames.join(',')}`,
   ],
 
+  '**/*.{css,scss}': (filenames) => [
+    // Format files with Prettier
+    `prettier --write ${filenames.join(' ')}`,
+    // Lint files with Stylelint
+    `stylelint --allow-empty-input ${filenames.join(' ')}`,
+  ],
+
   '**/*.{json,md,yaml,yml,html}': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,

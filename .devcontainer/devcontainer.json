@@ -55,6 +55,7 @@
         "shengchen.vscode-checkstyle",
         "SonarSource.sonarlint-vscode",
         "stkb.rewrap",
+        "stylelint.vscode-stylelint",
         "vmware.vscode-boot-dev-pack",
         "vscjava.vscode-gradle",
         "vscjava.vscode-java-pack"
