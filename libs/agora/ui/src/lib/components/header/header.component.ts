@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
       routerLink: ['news'],
     },
   ];
-  mobileNavItems: Array<any> = [
+  mobileNavItems: Array<NavigationLink> = [
     {
       label: 'About',
       routerLink: ['about'],
@@ -77,11 +77,9 @@ export class HeaderComponent implements OnInit {
   }
 
   refreshNavItems() {
-    if (this.isMobile) {
-      this.navItems = [...this.defaultNavItems, ...this.mobileNavItems];
-    } else {
-      this.navItems = this.defaultNavItems;
-    }
+    this.navItems = this.isMobile
+      ? [...this.defaultNavItems, ...this.mobileNavItems]
+      : [...this.defaultNavItems];
   }
 
   onResize() {
