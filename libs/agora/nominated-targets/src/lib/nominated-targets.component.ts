@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui';
 
 @Component({
   selector: 'agora-nominated-targets',
   standalone: true,
-  imports: [CommonModule, SvgIconComponent, ModalLinkComponent, RouterLink],
+  imports: [CommonModule, RouterLink, SvgIconComponent, ModalLinkComponent, GeneTableComponent],
   templateUrl: './nominated-targets.component.html',
   styleUrls: ['./nominated-targets.component.scss'],
 })
