@@ -117,7 +117,7 @@ export class TeamMemberService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpeg' | 'application/problem+json';
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<Blob>;
@@ -126,7 +126,7 @@ export class TeamMemberService {
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpeg' | 'application/problem+json';
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<HttpResponse<Blob>>;
@@ -135,7 +135,7 @@ export class TeamMemberService {
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpeg' | 'application/problem+json';
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<HttpEvent<Blob>>;
@@ -144,7 +144,7 @@ export class TeamMemberService {
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
-      httpHeaderAccept?: 'image/jpeg' | 'application/problem+json';
+      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<any> {
@@ -159,7 +159,12 @@ export class TeamMemberService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['image/jpeg', 'application/problem+json'];
+      const httpHeaderAccepts: string[] = [
+        'image/jpg',
+        'image/jpeg',
+        'image/png',
+        'application/problem+json',
+      ];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {

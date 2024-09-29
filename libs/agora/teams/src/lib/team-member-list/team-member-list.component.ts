@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { TeamService } from '../../services';
-import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
+import { Component, inject, Input } from '@angular/core';
+import { Team, TeamMember, TeamMemberService } from '@sagebionetworks/agora/api-client-angular';
+import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'agora-team-member-list',
@@ -9,9 +9,11 @@ import { Team, TeamMember } from '@sagebionetworks/agora/api-client-angular';
   imports: [CommonModule],
   templateUrl: './team-member-list.component.html',
   styleUrls: ['./team-member-list.component.scss'],
-  providers: [TeamService],
+  providers: [TeamMemberService],
 })
 export class TeamMemberListComponent {
+  teamMemberService = inject(TeamMemberService);
+
   _team: Team = {} as Team;
   get team(): Team {
     return this._team;
@@ -22,8 +24,6 @@ export class TeamMemberListComponent {
 
   images: { [key: string]: string } = {};
 
-  constructor(private teamService: TeamService) {}
-
   init(team: Team) {
     if (!team.members) {
       return;
@@ -32,7 +32,8 @@ export class TeamMemberListComponent {
     this.images = {};
 
     team.members.forEach((member: TeamMember) => {
-      this.teamService.getTeamMemberImageUrl(member.name).subscribe((url: string | undefined) => {
+      const name = member.name.toLowerCase().replace(/[- ]/g, '-');
+      this.getTeamMemberImageUrl(name).subscribe((url) => {
         if (!url) {
           return;
         }
@@ -42,6 +43,21 @@ export class TeamMemberListComponent {
 
     this.sort(team.members);
     this._team = team;
+  }
+
+  getTeamMemberImageUrl(name: string): Observable<string | undefined> {
+    return this.teamMemberService.getTeamMemberImage(name).pipe(
+      map((buffer) => {
+        if (!buffer || buffer.size <= 0) {
+          return;
+        }
+        return URL.createObjectURL(
+          new Blob([buffer], {
+            type: 'image/jpg, image/png, image/jpeg',
+          }),
+        );
+      }),
+    );
   }
 
   sort(members: TeamMember[]) {
