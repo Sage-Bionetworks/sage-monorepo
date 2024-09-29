@@ -12,7 +12,9 @@
     },
     {
       "files": ["*.js", "*.jsx"],
-      "rules": {}
+      "rules": {
+        "tailwindcss/no-custom-classname": "off"
+      }
     }
   ]
 }
