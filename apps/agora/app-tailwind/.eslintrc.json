@@ -1,0 +1,35 @@
+{
+  "extends": ["../../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "tailwindcss/no-custom-classname": "off"
+      }
+    },
+    {
+      "files": ["jest.config.ts", "tailwind.config.js"],
+      "rules": {
+        "tailwindcss/no-custom-classname": "off"
+      }
+    }
+  ]
+}
