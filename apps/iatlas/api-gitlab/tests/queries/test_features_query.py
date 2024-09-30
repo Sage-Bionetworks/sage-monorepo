@@ -347,6 +347,32 @@ def test_features_query_with_feature(client, feature_name, common_query):
     assert type(feature['germlineModule']) is str or NoneType
     assert type(feature['germlineCategory']) is str or NoneType
 
+def test_features_query_with_cohort(client, common_query):
+    response = client.post(
+        '/api', json={
+            'query': common_query,
+            'variables': {
+                'cohort': ['Bi_2021', 'Krishna_2021', 'Li_2022']
+            }
+        }
+    )
+    json_data = json.loads(response.data)
+    page = json_data['data']['features']
+    features = page['items']
+
+    assert isinstance(features, list)
+    assert len(features) > 0
+    feature = features[0]
+    assert type(feature['name']) is str
+    assert type(feature['display']) is str
+    assert type(feature['class']) is str
+    assert type(feature['methodTag']) is str or NoneType
+    assert type(feature['order']) is int or NoneType
+    assert feature['unit'] in unit_enum.enums or type(
+        feature['unit']) is NoneType
+    assert type(feature['germlineModule']) is str or NoneType
+    assert type(feature['germlineCategory']) is str or NoneType
+
 
 def test_features_query_with_feature_and_cohort(client, common_query):
     response = client.post(
@@ -615,7 +641,6 @@ def test_feature_samples_query_with_feature_and_cohort2(client, feature_name, fe
         assert type(sample['name']) is str
         assert type(sample['value']) is float
         assert sample['name'] in tcga_tag_cohort_samples
-
 
 def test_feature_samples_query_with_feature_and_sample(client, feature_name, samples_query, sample):
     response = client.post(
