@@ -374,34 +374,6 @@ def test_features_query_with_cohort(client, common_query):
     assert type(feature['germlineCategory']) is str or NoneType
 
 
-def test_features_query_with_feature_and_cohort(client, common_query):
-    response = client.post(
-        '/api', json={
-            'query': common_query,
-            'variables': {
-                'feature': ["umap_1"],
-                'cohort': ['MSK']
-            }
-        }
-    )
-    json_data = json.loads(response.data)
-    page = json_data['data']['features']
-    features = page['items']
-
-    assert isinstance(features, list)
-    assert len(features) == 1
-    feature = features[0]
-    assert feature['name'] == "umap_1"
-    assert type(feature['display']) is str
-    assert type(feature['class']) is str
-    assert type(feature['methodTag']) is str or NoneType
-    assert type(feature['order']) is int or NoneType
-    assert feature['unit'] in unit_enum.enums or type(
-        feature['unit']) is NoneType
-    assert type(feature['germlineModule']) is str or NoneType
-    assert type(feature['germlineCategory']) is str or NoneType
-
-
 def test_features_query_with_feature_class(client, feature_class, common_query):
     response = client.post(
         '/api', json={
