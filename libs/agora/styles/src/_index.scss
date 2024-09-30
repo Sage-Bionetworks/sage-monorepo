@@ -1,6 +1,27 @@
-// @use 'libs/shared/typescript/styles/src/index';
+@use 'sass:map';
+@import 'normalize.css';
 
-@use './lib/constants';
-@use './lib/general';
-@use './lib/mixins';
-@use './lib/variables';
+// @import '~bootstrap/scss/bootstrap-grid';
+// @import '~@fortawesome/fontawesome-free/css/all.css';
+
+// @import '../../node_modules/primeicons/primeicons.css';
+// @import '../../node_modules/primeng/resources/primeng.min.css';
+// @import '../../node_modules/dc/dist/style/dc.css';
+@import './lib/mixins';
+@import './lib/variables';
+@import './lib/components/fonts';
+@import './lib/components/typography';
+@import './lib/components/spacing';
+@import './lib/components/button';
+@import './lib/components/dropdown';
+@import './lib/components/checkbox';
+@import './lib/components/radio';
+@import './lib/components/section';
+@import './lib/components/dialog';
+@import './lib/components/tooltip';
+@import './lib/components/table';
+@import './lib/components/chart';
+@import './lib/components/chart_d3';
+@import './lib/components/icon';
+@import './lib/components/shame';
+@import './lib/general';

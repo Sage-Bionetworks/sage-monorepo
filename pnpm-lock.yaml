@@ -516,6 +516,12 @@ importers:
         specifier: ^1.3.1
         version: 1.6.0(@types/node@22.5.1)(@vitest/ui@1.6.0)(jsdom@22.1.0(canvas@2.11.2(encoding@0.1.13)))(less@4.1.3)(sass@1.77.8)(stylus@0.59.0)(terser@5.31.6)
 
+  apps/agora:
+    dependencies:
+      normalize.css:
+        specifier: 8.0.1
+        version: 8.0.1
+
 packages:
 
   2-thenable@1.0.0:
@@ -9366,6 +9372,9 @@ packages:
     resolution: {integrity: sha512-DlL+XwOy3NxAQ8xuC0okPgK46iuVNAK01YN7RueYBqqFeGsBjV9XmCAzAdgt+667bCl5kPh9EqKKDwnaPG1I7A==}
     engines: {node: '>=10'}
 
+  normalize.css@8.0.1:
+    resolution: {integrity: sha512-qizSNPO93t1YUuUhP22btGOo3chcvDFqFaj2TRybP0DMxkHOCTYwp3n34fel4a31ORXy4m1Xq0Gyqpb5m33qIg==}
+
   npm-bundled@3.0.1:
     resolution: {integrity: sha512-+AvaheE/ww1JEwRHOrn4WHNzOxGtVp+adrg2AeZS/7KuxGUYFuBta98wYpfHBbJp6Tg6j1NKSEVHNcfZzJHQwQ==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
@@ -12212,8 +12221,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.7.0-dev.20240926:
-    resolution: {integrity: sha512-urjGXo3L23oEcK2thBaZ71DdA6My+NeeTuNIUJfYszrplyk//HIgV1yl40S+eQcya4vwmH14dhDDDH4vl4dlng==}
+  typescript@5.7.0-dev.20240929:
+    resolution: {integrity: sha512-qcghiX+nPjUkCRJW95fqZiemaj+b/2ljt46UliUqjbhbolAX1o1TzavEYuwlv3JHqcBT9WjaPNf8+OyzovyQMw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -21306,7 +21315,7 @@ snapshots:
     dependencies:
       semver: 7.6.2
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20240926
+      typescript: 5.7.0-dev.20240929
 
   duplexer@0.1.2: {}
 
@@ -25262,6 +25271,8 @@ snapshots:
 
   normalize-url@6.1.0: {}
 
+  normalize.css@8.0.1: {}
+
   npm-bundled@3.0.1:
     dependencies:
       npm-normalize-package-bin: 3.0.1
@@ -28558,7 +28569,7 @@ snapshots:
 
   typescript@5.5.4: {}
 
-  typescript@5.7.0-dev.20240926: {}
+  typescript@5.7.0-dev.20240929: {}
 
   ua-parser-js@1.0.38: {}
 

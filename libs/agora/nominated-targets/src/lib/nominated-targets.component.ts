@@ -13,8 +13,8 @@ import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui'
 })
 export class NominatedTargetsComponent {
   // genes: Gene[] = [];
-  // searchTerm = '';
-  // nominations: number[] = [];
+  searchTerm = '';
+  nominations: number[] = [];
   // columns: GeneTableColumn[] = [
   //   { field: 'hgnc_symbol', header: 'Gene Symbol', selected: true },
   //   { field: 'total_nominations', header: 'Nominations', selected: true },
@@ -167,7 +167,8 @@ export class NominatedTargetsComponent {
   //   }
   //   return display_value;
   // }
-  // onSearch(event: any) {
-  //   this.searchTerm = event.target.value || '';
-  // }
+
+  onSearch(event: any) {
+    this.searchTerm = event.target.value || '';
+  }
 }

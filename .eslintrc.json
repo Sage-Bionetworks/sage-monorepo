@@ -9,7 +9,7 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "extends": ["plugin:@nx/typescript"],
+      "extends": ["plugin:@nx/typescript", "plugin:tailwindcss/recommended"],
       "plugins": ["@typescript-eslint"],
       "rules": {
         "dot-notation": "off",

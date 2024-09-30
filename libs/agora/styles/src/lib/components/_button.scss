@@ -1,0 +1,51 @@
+/* stylelint-disable plugin/no-unsupported-browser-features */
+
+.p-button,
+.btn {
+  @include reset-button;
+
+  padding: 6px 20px;
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-decoration: none;
+  box-shadow: none;
+  user-select: none;
+  transition: $transition-duration;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--color-action-primary);
+  border: 1px solid var(--color-action-primary);
+  color: #fff;
+
+  &:hover {
+    background-color: var(--color-action-primary-hover);
+    border: 1px solid var(--color-action-primary-hover);
+  }
+}
+
+.btn-outlined-primary {
+  background-color: transparent;
+  border: 1px solid var(--color-action-primary);
+  color: var(--color-action-primary);
+
+  &:hover {
+    color: var(--color-action-primary-hover);
+    border: 1px solid var(--color-action-primary-hover);
+  }
+}
+
+.btn-secondary {
+  background-color: var(--color-action-primary);
+  border: 1px solid var(--color-action-primary);
+
+  &:hover {
+    background-color: var(--color-action-primary);
+    border: 1px solid var(--color-action-primary);
+  }
+}
+
+.btn-rounded {
+  border-radius: 15px;
+}

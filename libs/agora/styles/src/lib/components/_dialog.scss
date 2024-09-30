@@ -1,0 +1,50 @@
+.p-dialog-mask {
+  background-color: rgb(255 255 255 / 50%);
+  z-index: 99999 !important;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.p-dialog {
+  background-color: #fff;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 30%);
+
+  .p-dialog-header-icons {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 150;
+  }
+
+  .p-dialog-header-close-icon {
+    color: var(--color-gray-600);
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+  }
+
+  .p-dialog-title {
+    width: 100%;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--color-primary);
+    text-align: center;
+    z-index: 100;
+
+    &:not(:empty) {
+      background-color: #fff;
+      padding: 50px;
+      margin-bottom: -50px;
+    }
+  }
+
+  .p-dialog-content {
+    padding: 50px;
+    z-index: 50;
+  }
+
+  .p-dialog-footer {
+    padding: 50px;
+  }
+}
