@@ -215,7 +215,6 @@ def build_features_query(
             *cohort_join_condition1), isouter=False
         )
 
-
         cohort_subquery2 = sess.query(cohort_to_feature_1.feature_id)
 
         cohort_join_condition2 = build_join_condition(
@@ -223,21 +222,9 @@ def build_features_query(
         cohort_subquery2 = cohort_subquery2.join(cohort_1, and_(
             *cohort_join_condition2), isouter=False)
 
+        union_subquery = cohort_subquery1.union(cohort_subquery2)
 
-        cohort_id_subquery = sess.query(cohort_1.id)
-        cohort_id_subquery = cohort_id_subquery.filter(cohort_1.name.in_(cohort))
-
-        sample_id_subquery = sess.query(cohort_to_sample_1.sample_id)
-        sample_id_subquery = sample_id_subquery.filter(cohort_to_sample_1.cohort_id.in_(cohort_id_subquery))
-
-        cell_id_subquery = sess.query(cell_to_sample_1.cell_id)
-        cell_id_subquery = cell_id_subquery.filter(cell_to_sample_1.sample_id.in_(sample_id_subquery))
-
-        feature_id_subquery3 = sess.query(cell_to_feature_1.feature_id)
-        feature_id_subquery3 = feature_id_subquery3.filter(cell_to_feature_1.cell_id.in_(cell_id_subquery))
-
-        query = query.filter(feature_1.id.in_(cohort_subquery1) | feature_1.id.in_(cohort_subquery2) | feature_1.id.in_(feature_id_subquery3))
-
+        query =  query.filter(feature_1.id.in_(union_subquery))
 
     return get_pagination_queries(query, paging, distinct, cursor_field=feature_1.id)
 
