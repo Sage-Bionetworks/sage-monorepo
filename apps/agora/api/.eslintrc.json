@@ -1,6 +1,6 @@
 {
   "extends": ["../../../.eslintrc.json"],
-  "ignorePatterns": ["!**/*"],
+  "ignorePatterns": ["!**/*", "**/*.config.js", "**/*.config.ts"],
   "overrides": [
     {
       "files": ["*.ts", "*.tsx", "*.js", "*.jsx"],
@@ -8,13 +8,13 @@
     },
     {
       "files": ["*.ts", "*.tsx"],
-      "rules": {}
-    },
-    {
-      "files": ["*.js", "*.jsx"],
       "rules": {
         "tailwindcss/no-custom-classname": "off"
       }
+    },
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {}
     }
   ]
 }
