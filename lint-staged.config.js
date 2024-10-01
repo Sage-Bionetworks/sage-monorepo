@@ -34,7 +34,7 @@ module.exports = {
     `hadolint ${filenames.join(' ')}`,
   ],
 
-  '**/*.{sql}': (filenames) => [
+  '**/*.sql': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,
     // Lint files with SQLFluff
