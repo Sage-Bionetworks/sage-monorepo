@@ -69,7 +69,8 @@ sc_immune_features_distribution_ui <- function(id){
         ),
         iatlas.modules::plotBox(
           width = 9,
-          DT::dataTableOutput(ns("stats1")),
+          DT::dataTableOutput(ns("stats1"))%>%
+            shinycssloaders::withSpinner(.),
           downloadButton(ns('download_test'), 'Download')
         )
       ),
