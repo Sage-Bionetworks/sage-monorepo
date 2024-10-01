@@ -7,7 +7,7 @@
       "rules": {}
     },
     {
-      "files": ["*.ts", "*.config.ts", "*.config.js"],
+      "files": ["*.ts", "*.config.ts", "webpack.config.js"],
       "rules": {
         "tailwindcss/no-custom-classname": "off"
       }
