@@ -35,6 +35,12 @@
       "files": ["*.html"],
       "extends": ["plugin:@nx/angular-template"],
       "rules": {}
+    },
+    {
+      "files": ["*.ts", "jest.config.ts"],
+      "rules": {
+        "tailwindcss/no-custom-classname": "off"
+      }
     }
   ]
 }
