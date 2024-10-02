@@ -1,0 +1,15 @@
+type: object
+description: SimilarGenesNetworkLink
+properties:
+  source:
+    type: string
+  target:
+    type: string
+  source_hgnc_symbol:
+    type: string
+  target_hgnc_symbol:
+    type: string
+  brain_regions:
+    type: array
+    items:
+      type: string

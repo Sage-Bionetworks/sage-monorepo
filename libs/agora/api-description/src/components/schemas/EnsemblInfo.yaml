@@ -1,0 +1,15 @@
+type: object
+description: EnsemblInfo
+properties:
+  ensembl_release:
+    type: integer
+  ensembl_possible_replacements:
+    type: array
+    items:
+      type: string
+  ensembl_permalink:
+    type: string
+required:
+  - ensembl_release
+  - ensembl_possible_replacements
+  - ensembl_permalink

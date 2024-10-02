@@ -1,0 +1,32 @@
+type: object
+description: Druggability
+properties:
+  sm_druggability_bucket:
+    type: integer
+    example: 1
+  safety_bucket:
+    type: integer
+    example: 2
+  abability_bucket:
+    type: integer
+    example: 3
+  pharos_class:
+    type: string
+    example: 'Tclin'
+  classification:
+    type: string
+    example: 'Enzyme'
+  safety_bucket_definition:
+    type: string
+    example: 'Low risk'
+  abability_bucket_definition:
+    type: string
+    example: 'Moderate bioavailability'
+required:
+  - sm_druggability_bucket
+  - safety_bucket
+  - abability_bucket
+  - pharos_class
+  - classification
+  - safety_bucket_definition
+  - abability_bucket_definition

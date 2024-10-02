@@ -1,0 +1,31 @@
+type: object
+description: NeuropathologicCorrelation
+properties:
+  _id:
+    type: string
+  ensg:
+    type: string
+  gname:
+    type: string
+  oddsratio:
+    type: number
+  ci_lower:
+    type: number
+  ci_upper:
+    type: number
+  pval:
+    type: number
+  pval_adj:
+    type: number
+  neuropath_type:
+    type: string
+required:
+  - _id
+  - ensg
+  - gname
+  - oddsratio
+  - ci_lower
+  - ci_upper
+  - pval
+  - pval_adj
+  - neuropath_type

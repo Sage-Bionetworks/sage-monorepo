@@ -1,0 +1,37 @@
+type: object
+description: RnaDifferentialExpression
+properties:
+  _id:
+    type: string
+  ensembl_gene_id:
+    type: string
+  hgnc_symbol:
+    type: string
+  logfc:
+    type: number
+  fc:
+    type: number
+  ci_l:
+    type: number
+  ci_r:
+    type: number
+  adj_p_val:
+    type: number
+  tissue:
+    type: string
+  study:
+    type: string
+  model:
+    type: string
+required:
+  - _id
+  - ensembl_gene_id
+  - hgnc_symbol
+  - logfc
+  - fc
+  - ci_l
+  - ci_r
+  - adj_p_val
+  - tissue
+  - study
+  - model

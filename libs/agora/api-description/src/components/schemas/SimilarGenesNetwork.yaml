@@ -1,0 +1,15 @@
+type: object
+description: SimilarGenesNetwork
+properties:
+  nodes:
+    type: array
+    items:
+      $ref: SimilarGenesNetworkNode.yaml
+  links:
+    type: array
+    items:
+      $ref: SimilarGenesNetworkLink.yaml
+  min:
+    type: number
+  max:
+    type: number

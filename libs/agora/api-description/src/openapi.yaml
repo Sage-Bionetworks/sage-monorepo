@@ -23,6 +23,8 @@ tags:
 paths:
   /dataversion:
     $ref: paths/dataversion.yaml
+  /genes/nominated:
+    $ref: paths/nominated.yaml
   /teams:
     $ref: paths/teams.yaml
   /teamMembers/{name}/image:

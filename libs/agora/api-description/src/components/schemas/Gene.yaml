@@ -1,0 +1,154 @@
+type: object
+description: Gene
+properties:
+  _id:
+    type: string
+  ensembl_gene_id:
+    type: string
+  name:
+    type: string
+  summary:
+    type: string
+  alias:
+    type: array
+    items:
+      type: string
+  is_igap:
+    type: boolean
+  is_eqtl:
+    type: boolean
+  is_any_rna_changed_in_ad_brain:
+    type: boolean
+  rna_brain_change_studied:
+    type: boolean
+  is_any_protein_changed_in_ad_brain:
+    type: boolean
+  protein_brain_change_studied:
+    type: boolean
+  target_nominations:
+    type: array
+    items:
+      $ref: TargetNomination.yaml
+    nullable: true
+  median_expression:
+    type: array
+    items:
+      $ref: MedianExpression.yaml
+  druggability:
+    type: array
+    items:
+      $ref: Druggability.yaml
+  total_nominations:
+    type: integer
+    nullable: true
+  is_adi:
+    type: boolean
+  is_tep:
+    type: boolean
+  resource_url:
+    type: string
+    nullable: true
+  rna_differential_expression:
+    type: array
+    items:
+      $ref: RnaDifferentialExpression.yaml
+    nullable: true
+  proteomics_LFQ:
+    type: array
+    items:
+      $ref: ProteinDifferentialExpression.yaml
+    nullable: true
+  proteomics_SRM:
+    type: array
+    items:
+      $ref: ProteinDifferentialExpression.yaml
+    nullable: true
+  proteomics_TMT:
+    type: array
+    items:
+      $ref: ProteinDifferentialExpression.yaml
+    nullable: true
+  metabolomics:
+    type: object
+    additionalProperties: true
+    nullable: true
+  overall_scores:
+    $ref: OverallScores.yaml
+    nullable: true
+  neuropathologic_correlations:
+    type: array
+    items:
+      $ref: NeuropathologicCorrelation.yaml
+    nullable: true
+  experimental_validation:
+    type: array
+    items:
+      $ref: ExperimentalValidation.yaml
+    nullable: true
+  links:
+    type: object
+    additionalProperties:
+      type: object
+    nullable: true
+  similar_genes_network:
+    $ref: SimilarGenesNetwork.yaml
+    nullable: true
+  ab_modality_display_value:
+    type: string
+    nullable: true
+  safety_rating_display_value:
+    type: string
+    nullable: true
+  sm_druggability_display_value:
+    type: string
+    nullable: true
+  pharos_class_display_value:
+    type: string
+    nullable: true
+  is_any_rna_changed_in_ad_brain_display_value:
+    type: string
+    nullable: true
+  is_any_protein_changed_in_ad_brain_display_value:
+    type: string
+    nullable: true
+  nominated_target_display_value:
+    type: boolean
+    nullable: true
+  initial_nomination_display_value:
+    type: integer
+    nullable: true
+  teams_display_value:
+    type: string
+    nullable: true
+  study_display_value:
+    type: string
+    nullable: true
+  programs_display_value:
+    type: string
+    nullable: true
+  input_data_display_value:
+    type: string
+    nullable: true
+  bio_domains:
+    $ref: BioDomains.yaml
+    nullable: true
+  ensembl_info:
+    $ref: EnsemblInfo.yaml
+required:
+  - _id
+  - ensembl_gene_id
+  - name
+  - summary
+  - hgnc_symbol
+  - alias
+  - is_igap
+  - is_eqtl
+  - is_any_rna_changed_in_ad_brain
+  - rna_brain_change_studied
+  - is_any_protein_changed_in_ad_brain
+  - protein_brain_change_studied
+  - target_nominations
+  - median_expression
+  - druggability
+  - total_nominations
+  - ensembl_info
