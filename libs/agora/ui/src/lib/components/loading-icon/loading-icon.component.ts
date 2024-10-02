@@ -1,13 +1,7 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-// -------------------------------------------------------------------------- //
-// Component
-// -------------------------------------------------------------------------- //
 @Component({
   selector: 'agora-loading-icon',
   standalone: true,

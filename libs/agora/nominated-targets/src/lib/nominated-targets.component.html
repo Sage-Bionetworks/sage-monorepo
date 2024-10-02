@@ -1,0 +1,98 @@
+<div class="section section-hero">
+  <div class="section-inner">
+    <div class="container-sm">
+      <h1 class="h2">Nominated Target List</h1>
+      <p>
+        Researchers have nominated genes that may be good targets for new Alzheimer's Disease
+        treatment or prevention. These targets have been identified using computational analyses of
+        high-dimensional genomic, proteomic and/or metabolomic data derived from human samples.
+      </p>
+      <p>
+        The initial list of nominated targets was contributed by researchers from the National
+        Institute on Aging’s Accelerating Medicines Partnership in Alzheimer’s Disease (AMP-AD)
+        consortium.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner pb-lg">
+    <div class="container-sm">
+      <div class="row">
+        <div class="col-md-7">
+          <div class="mb-lg">
+            <p>
+              <b>
+                Search for or select any gene from the nominated target list to view the evidence
+                that led to its nomination
+              </b>
+            </p>
+            <agora-modal-link
+              text="Learn more about Nominated Targets "
+              header="About the Nominated Targets"
+              wikiId="617955"
+            >
+            </agora-modal-link>
+          </div>
+          <div class="mb-lg">
+            <div class="search-box">
+              <div class="search-box-icon">
+                <i class="fa fa-search fa-lg"></i>
+              </div>
+              <input
+                type="text"
+                pInputText
+                size="50"
+                id="keyword"
+                placeholder="Search the columns below"
+                (input)="onSearch($event)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="col-md-5 col-sm-12 col-12 mb-xl text-right">
+          <p>Would you like to add to this list?</p>
+          <a
+            pButton
+            type="button"
+            label="Nominate a target"
+            class="btn-rounded btn-primary"
+            [routerLink]="['/nomination-form']"
+          ></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner pt-0">
+    <div class="container-lg">
+      <div class="mb-lg">
+        <!-- <agora-gene-table
+          [genes]="genes"
+          [columns]="columns"
+          [searchTerm]="searchTerm"
+          sortField="total_nominations"
+          [sortOrder]="-1"
+          [gctLink]="{ nominations: nominations.join(',') }"
+          gctLinkTooltip="Compare all nominated genes in this list using Agora’s Gene Comparison Tool"
+        ></agora-gene-table> -->
+        <agora-gene-table></agora-gene-table>
+      </div>
+
+      <div>
+        <agora-svg-icon name="info-circle" class="mr-xs text-gray-600"></agora-svg-icon>
+        Use
+        <a
+          class="link"
+          [routerLink]="['/genes/comparison']"
+          [queryParams]="{ nominations: nominations.join(',') }"
+          >Agora's Gene Comparison Tool
+        </a>
+        to compare all nominated genes in this list.
+      </div>
+    </div>
+  </div>
+</div>

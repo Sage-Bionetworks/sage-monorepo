@@ -72,12 +72,17 @@ paths:
             type: string
       responses:
         '200':
+          description: Success
           content:
+            image/jpg:
+              schema:
+                $ref: '#/components/schemas/TeamImage'
             image/jpeg:
               schema:
-                type: string
-                format: binary
-          description: Success
+                $ref: '#/components/schemas/TeamImage'
+            image/png:
+              schema:
+                $ref: '#/components/schemas/TeamImage'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -163,6 +168,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Team'
+    TeamImage:
+      type: string
+      format: binary
   responses:
     BadRequest:
       description: Invalid request

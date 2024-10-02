@@ -1,0 +1,95 @@
+.chart-d3 {
+  position: relative;
+  height: 350px;
+
+  svg {
+    width: 100%;
+  }
+
+  .bar-labels {
+    cursor: default;
+
+    &:hover {
+      cursor: default;
+    }
+  }
+
+  // -------------------------------------------------------------------------- //
+  // EMPTY CHART
+  // -------------------------------------------------------------------------- //
+  .chart-no-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    .chart-no-data-text {
+      font-size: var(--font-size-lg);
+      font-style: italic;
+      color: var(--color-gray-600);
+    }
+  }
+
+  // -------------------------------------------------------------------------- //
+  // AXES
+  // -------------------------------------------------------------------------- //
+  .y-axis-label,
+  .x-axis-label {
+    text-transform: uppercase;
+    cursor: default;
+  }
+
+  .x-axis .tick,
+  .y-axis .tick {
+    cursor: default;
+  }
+
+  // -------------------------------------------------------------------------- //
+  // TOOLTIP
+  // -------------------------------------------------------------------------- //
+  #tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    background-color: var(--color-tooltip);
+    color: white;
+    display: none;
+    z-index: 200;
+    opacity: 0.9;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 5px;
+    pointer-events: none;
+  }
+
+  .tooltip-arrow {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      border: 10px solid transparent;
+      transform: translateX(-50%);
+    }
+
+    &.arrow-above {
+      transform: translate(calc(-50%), calc(50% - 12px));
+
+      &::before {
+        top: -9px;
+        border-top: 0;
+        border-bottom-color: var(--color-tooltip);
+      }
+    }
+
+    &.arrow-below {
+      transform: translate(calc(-50%), calc(-100% - 20px));
+
+      &::before {
+        bottom: -9px;
+        border-bottom: 0;
+        border-top-color: var(--color-tooltip);
+      }
+    }
+  }
+}

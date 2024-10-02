@@ -20,9 +20,11 @@
       "@sagebionetworks/agora/about": ["libs/agora/about/src/index.ts"],
       "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
+      "@sagebionetworks/agora/genes": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
       "@sagebionetworks/agora/news": ["libs/agora/news/src/index.ts"],
+      "@sagebionetworks/agora/nominated-targets": ["libs/agora/nominated-targets/src/index.ts"],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
@@ -64,6 +66,7 @@
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
       ],
+      "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"],
       "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
       "@sagebionetworks/shared/charts-angular": [
         "libs/shared/typescript/charts-angular/src/index.ts"
@@ -72,7 +75,6 @@
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
       ],
-      "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"],
       "@sagebionetworks/synapse/api-client-angular": [
         "libs/synapse/api-client-angular/src/index.ts"
       ]

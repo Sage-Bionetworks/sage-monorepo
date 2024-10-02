@@ -21,7 +21,7 @@ const router = express.Router();
 mongoose.connection.once('open', async () => {
   router.get('/dataversion', dataVersionRoute);
   router.get('/teams', teamsRoute);
-  router.get('/team-members/:name/image', teamMemberImageRoute);
+  router.get('/teamMembers/:name/image', teamMemberImageRoute);
 });
 
 export default router;
