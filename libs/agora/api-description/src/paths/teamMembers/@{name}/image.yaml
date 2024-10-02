@@ -12,12 +12,17 @@ get:
         type: string
   responses:
     '200':
+      description: Success
       content:
+        image/jpg:
+          schema:
+            $ref: ../../../components/schemas/TeamImage.yaml
         image/jpeg:
           schema:
-            type: string
-            format: binary
-      description: Success
+            $ref: ../../../components/schemas/TeamImage.yaml
+        image/png:
+          schema:
+            $ref: ../../../components/schemas/TeamImage.yaml
     '400':
       $ref: ../../../components/responses/BadRequest.yaml
     '500':

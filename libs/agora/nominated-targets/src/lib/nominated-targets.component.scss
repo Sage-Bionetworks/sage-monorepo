@@ -1,0 +1,33 @@
+// Most of the table styling in styles.scss to avoid repeating
+// code
+
+.small-margin-left {
+  margin-left: 15px;
+}
+
+.search-box {
+  position: relative;
+
+  .search-box-icon {
+    display: flex;
+    width: 60px;
+    height: 100%;
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-gray-300);
+  }
+
+  input {
+    padding: 20px 25px 20px 60px;
+    border-radius: 5px;
+    width: 100%;
+    border: 1px solid var(--color-gray-400);
+    outline: none;
+    box-sizing: border-box;
+
+    &:focus {
+      border-color: var(--color-action-primary);
+    }
+  }
+}

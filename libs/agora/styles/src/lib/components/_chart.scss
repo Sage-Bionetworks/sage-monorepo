@@ -1,0 +1,414 @@
+/* stylelint-disable selector-class-pattern */
+/* stylelint-disable plugin/no-unsupported-browser-features */
+/* stylelint-disable no-descending-specificity */
+
+.chart {
+  position: relative;
+  overflow: hidden;
+
+  .chart-container {
+    height: 350px;
+  }
+
+  .chart-heading {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: #24334f;
+    text-align: center;
+  }
+
+  .chart-no-data {
+    position: absolute;
+    display: flex;
+    inset: 0;
+    background-color: var(--color-gray-100);
+    align-items: center;
+    justify-content: center;
+
+    .chart-no-data-text {
+      font-size: var(--font-size-lg);
+      font-style: italic;
+      color: var(--color-gray-600);
+    }
+  }
+
+  div.loading-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-gray-200);
+
+    .loading-overlay-inner {
+      height: 100%;
+    }
+  }
+
+  .axis {
+    .tick line {
+      opacity: 0;
+    }
+  }
+
+  .axis.y {
+    &::after {
+      content: ' ';
+      display: block;
+      width: 2px;
+      background-color: var(--color-chart-axis);
+    }
+  }
+
+  .chart-x-axis-label,
+  .y-axis-label,
+  .x-axis-label {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-chart-axis-label);
+    fill: var(--color-chart-axis-label);
+    text-transform: uppercase;
+  }
+
+  .chart-x-axis-label {
+    padding-left: 60px;
+    text-align: center;
+  }
+
+  svg {
+    overflow: visible;
+
+    g.axis.y,
+    g.axis.x {
+      text {
+        pointer-events: auto;
+      }
+    }
+
+    .axis.x,
+    .axis.x-axis {
+      .tick {
+        line {
+          opacity: 0;
+        }
+
+        text {
+          font-size: var(--font-size-md);
+          font-weight: 700;
+        }
+      }
+    }
+
+    .axis.y,
+    .axis.y-axis {
+      .tick {
+        line {
+          opacity: 0;
+        }
+
+        text {
+          font-size: var(--font-size-sm);
+        }
+      }
+    }
+
+    .domain {
+      stroke: var(--color-chart-axis);
+      stroke-width: 2px;
+    }
+  }
+}
+
+.chart-tooltip {
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+  z-index: 998;
+}
+
+.chart-internal-tooltip {
+  background: #63676c;
+  border-radius: 3px;
+  border: 0;
+  color: #fff;
+  font-size: var(--font-size-sm);
+  line-height: normal;
+  max-width: 250px;
+  padding: 8px 12px;
+  text-align: center;
+
+  &::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+
+    // border-width: 0 0.25em 0.25rem;
+    border: 10px solid transparent;
+    transform: translateX(-50%);
+  }
+
+  &.arrow-above {
+    transform: translate(calc(-50% + 9px), calc(50%));
+
+    &::before {
+      top: -9px;
+      border-top: 0;
+      border-bottom-color: #63676c;
+    }
+  }
+
+  &.arrow-below {
+    transform: translate(calc(-50% + 9px), calc(-50%));
+
+    &::before {
+      bottom: -9px;
+      border-bottom: 0;
+      border-top-color: #63676c;
+    }
+  }
+}
+
+.chart-x-axis-tooltip {
+  padding: 14px;
+  text-align: center;
+  line-height: normal;
+  border: 0;
+  background: #fff;
+  box-shadow: 0 0 4px var(--color-shadow);
+  border-radius: 2px;
+}
+
+// -------------------------------------------------------------------------- //
+// Median chart
+// -------------------------------------------------------------------------- //
+.median-chart {
+  .chart-container {
+    height: 350px;
+  }
+
+  .chart-x-axis-label {
+    padding-top: 15px;
+    padding-left: 70px;
+  }
+
+  clipPath {
+    display: none;
+  }
+
+  svg {
+    padding-left: 1px;
+
+    .barLabel {
+      font-size: 1rem;
+      fill: var(--color-chart-axis-label);
+      cursor: default;
+    }
+
+    // .axis.y {
+    //   .tick text {
+    //     transform: translateY(-12px);
+    //   }
+    // }
+
+    // .chart-body > g {
+    //   transform: translateY(-12px);
+    // }
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Row chart
+// -------------------------------------------------------------------------- //
+.row-chart {
+  .chart-container {
+    height: 450px;
+  }
+
+  .chart-body {
+    display: flex;
+
+    > .chart-axis {
+      width: 100px;
+
+      svg {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    > .chart-container {
+      flex-grow: 1;
+    }
+  }
+
+  .chart-axis {
+    svg {
+      text {
+        cursor: default;
+      }
+    }
+  }
+
+  .chart-x-axis-label {
+    padding-top: 15px;
+    padding-left: 120px;
+  }
+
+  svg {
+    g.confidence-text-left text,
+    g.confidence-text-right text {
+      cursor: default;
+      font-size: var(--font-size-sm);
+      fill: #4a5056;
+    }
+
+    g.axis text {
+      pointer-events: auto;
+      line-height: normal;
+      font-size: var(--font-size-sm);
+    }
+
+    g.row rect {
+      fill-opacity: 1 !important;
+      width: 18px;
+      height: 18px;
+      cursor: default;
+    }
+
+    g.axis .tick text {
+      opacity: 1 !important;
+    }
+
+    .confidence-text text {
+      display: none;
+    }
+
+    .hline {
+      pointer-events: none;
+    }
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Box plot chart
+// -------------------------------------------------------------------------- //
+.box-plot-chart {
+  .chart-container {
+    height: 450px;
+  }
+
+  .chart-x-axis-label {
+    padding-left: 90px;
+  }
+
+  svg {
+    .chart-body {
+      clip-path: none;
+    }
+
+    .box {
+      line,
+      rect {
+        stroke: #bcc0ca;
+        stroke-width: 2px;
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Candlestick chart
+// -------------------------------------------------------------------------- //
+.candlestick-chart {
+  .chart-x-axis-label {
+    padding-left: 80px;
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Force chart
+// -------------------------------------------------------------------------- //
+.force-chart {
+  .chart-container {
+    height: auto;
+  }
+}
+
+// -------------------------------------------------------------------------- //
+// Score chart
+// -------------------------------------------------------------------------- //
+.score-chart {
+  svg {
+    .y-axis-label,
+    .x-axis-label {
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .axis.x,
+    .axis.y {
+      .tick text {
+        font-size: 12px;
+      }
+    }
+
+    .axis.x {
+      .tick {
+        display: none;
+
+        text {
+          font-weight: 400;
+        }
+      }
+
+      .tick:nth-child(2) {
+        display: block;
+      }
+
+      .tick:last-child {
+        display: block;
+      }
+    }
+
+    .bar {
+      fill-opacity: 0.5;
+
+      &:hover {
+        fill-opacity: 1;
+      }
+    }
+
+    .score-bar {
+      fill-opacity: 1;
+
+      &:hover {
+        fill-opacity: 0.8;
+      }
+    }
+  }
+}
+
+.network-chart {
+  .chart-container {
+    height: auto;
+  }
+
+  svg {
+    text {
+      text-shadow:
+        -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1.4px 1px 0 #fff,
+        1px 1px 0 #fff;
+    }
+
+    circle {
+      cursor: pointer;
+    }
+  }
+}
+
+gene-evidence-metabolomics {
+  .box-plot-chart {
+    .y-axis-label {
+      text-transform: none;
+    }
+  }
+}

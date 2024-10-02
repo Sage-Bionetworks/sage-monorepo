@@ -21,14 +21,7 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ],
-        "tailwindcss/no-custom-classname": "off"
-      }
-    },
-    {
-      "files": ["jest.config.ts", "tailwind.config.js"],
-      "rules": {
-        "tailwindcss/no-custom-classname": "off"
+        ]
       }
     }
   ]
