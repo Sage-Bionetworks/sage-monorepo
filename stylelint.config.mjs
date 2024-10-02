@@ -4,5 +4,11 @@ export default {
   plugins: ['stylelint-scss'],
   rules: {
     'no-empty-source': null,
+    'scss/at-rule-no-unknown': [
+      true,
+      {
+        ignoreAtRules: ['tailwind'],
+      },
+    ],
   },
 };
