@@ -10,7 +10,6 @@ env:
 
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
       - name: Checkout repository
