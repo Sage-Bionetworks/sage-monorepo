@@ -4,8 +4,13 @@ on:
   push:
     tags:
       - 'openchallenges/v*'
+
+env:
+  VERSION: ''
+
 jobs:
-  push:
+  deploy:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
       - name: Checkout repository
@@ -27,4 +32,5 @@ jobs:
       - name: Build the images of all the OC projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export VERSION=${{ env.VERSION }} \
             && nx build-image openchallenges-apex --configuration=ci"
