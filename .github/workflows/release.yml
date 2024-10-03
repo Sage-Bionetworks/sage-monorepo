@@ -1,0 +1,27 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'openchallenges/v*'
+
+env:
+  HEAD_REF: ${{ github.ref_name }}
+  HEAD_REPOSITORY: ${{ github.repository }}
+
+jobs:
+  push:
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
+        with:
+          fetch-depth: 1
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build the images of all the OC projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && nx build-image openchallenges-apex --configuration=ci"
