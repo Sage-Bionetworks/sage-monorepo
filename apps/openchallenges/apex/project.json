@@ -20,16 +20,18 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/apex",
+        "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
           "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
         },
         "push": false
       },
       "configurations": {
         "local": {},
-        "ci": {}
+        "ci": {
+          "push": true
+        }
       },
       "defaultConfiguration": "local"
     },
