@@ -23,7 +23,12 @@
         "context": "apps/openchallenges/apex",
         "metadata": {
           "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "tags": [
+            "type=edge,branch=main",
+            "type=raw,value=local",
+            "type=raw,value=$OPENCHALLENGES_VERSION",
+            "type=sha"
+          ]
         },
         "push": false
       }
