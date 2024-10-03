@@ -1,0 +1,36 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'openchallenges/v*'
+
+env:
+  VERSION: ''
+
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Extract version from Git tag
+        id: extract_version
+        run: |
+          # Get the tag name and remove 'openchallenges/' prefix
+          VERSION=${GITHUB_REF#refs/tags/openchallenges/}
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Docker image tag will be: ${VERSION}"
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build the images of all the OC projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export VERSION=${{ env.VERSION }} \
+            && nx build-image openchallenges-apex --configuration=ci"
