@@ -4,19 +4,22 @@ on:
   push:
     tags:
       - 'openchallenges/v*'
-
-env:
-  HEAD_REF: ${{ github.ref_name }}
-  HEAD_REPOSITORY: ${{ github.repository }}
-
 jobs:
   push:
     runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
     steps:
-      - uses: actions/checkout@v4
-        name: Checkout ${{ env.HEAD_REPOSITORY }}:${{ env.HEAD_REF }}
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 1
+
+      - name: Extract version from Git tag
+        id: extract_version
+        run: |
+          # Get the tag name and remove 'openchallenges/' prefix
+          VERSION=${GITHUB_REF#refs/tags/openchallenges/}
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+          echo "Docker image tag will be: ${VERSION}"
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container

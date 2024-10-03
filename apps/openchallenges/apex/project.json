@@ -33,7 +33,7 @@
           "cache-from": ["type=gha"],
           "cache-to": ["type=gha,mode=max"],
           "push": true,
-          "tags": ["type=ref,event=branch", "type=ref,event=tag", "type=sha", "latest"]
+          "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"]
         }
       },
       "defaultConfiguration": "local"
