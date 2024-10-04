@@ -32,7 +32,8 @@
         "ci": {
           "metadata": {
             "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-            "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"]
+            "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"],
+            "push": true
           }
         }
       },
