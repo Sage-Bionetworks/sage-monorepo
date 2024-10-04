@@ -6,9 +6,10 @@ on:
       - 'agora/v*'
       - 'openchallenges/v*'
 
+permissions:
+  packages: write
+
 env:
-  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-  DOCKER_USERNAME: ${{ github.actor }}
   PRODUCT: ''
   VERSION: ''
 
@@ -41,5 +42,5 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
-            && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
+            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
             && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=ci"
