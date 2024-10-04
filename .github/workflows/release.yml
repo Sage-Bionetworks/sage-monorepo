@@ -25,7 +25,7 @@ jobs:
         run: |
           # Extract the product name (part before the first slash) and version (part after the first slash)
           PRODUCT=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f1)
-          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f2)
+          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/v' -f2)
 
           # Output extracted values for the rest of the job
           echo "PRODUCT=${PRODUCT}" >> $GITHUB_ENV
@@ -40,5 +40,6 @@ jobs:
       - name: Build the images of all the OC projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
             && export VERSION=${{ env.VERSION }} \
             && nx build-image ${{ env.PRODUCT }}-apex --configuration=ci"

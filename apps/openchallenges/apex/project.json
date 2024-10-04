@@ -20,21 +20,20 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "{projectRoot}",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"]
-        },
-        "push": false
+        "context": "{projectRoot}"
       },
       "configurations": {
         "local": {
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "metadata": {
+            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+            "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          }
         },
         "ci": {
-          "cache-from": ["type=gha"],
-          "cache-to": ["type=gha,mode=max"],
-          "push": true,
-          "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"]
+          "metadata": {
+            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+            "tags": ["type=raw,value=${VERSION}", "type=sha"]
+          }
         }
       },
       "defaultConfiguration": "local"
