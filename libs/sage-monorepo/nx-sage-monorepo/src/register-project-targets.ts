@@ -1,31 +1,22 @@
-import { TargetConfiguration } from '@nx/devkit';
+import { TargetConfiguration } from 'nx/src/config/workspace-json-project-json';
+import { getProjectType, ProjectType } from './utils/project-utils';
+import { registerAppTargets } from './register-app-targets';
 
 export const projectFilePatterns = ['project.json'];
 
-export function registerProjectTargets(): Record<string, TargetConfiguration> {
-  return {
-    'build-image': {
-      executor: '@nx-tools/nx-container:build',
-      outputs: [],
-      defaultConfiguration: 'local',
-      options: {
-        context: '{projectRoot}',
-      },
-      configurations: {
-        local: {
-          metadata: {
-            images: ['ghcr.io/sage-bionetworks/{projectName}'],
-            tags: ['type=edge,branch=main', 'type=raw,value=local', 'type=sha'],
-          },
-        },
-        ci: {
-          metadata: {
-            images: ['ghcr.io/sage-bionetworks/{projectName}'],
-            tags: ['type=semver,pattern={{version}},value=${VERSION}', 'type=sha'],
-          },
-          push: true,
-        },
-      },
-    },
-  };
+const projectTypeToRegisterRouting: Record<
+  ProjectType,
+  (projectPath: string) => Record<string, TargetConfiguration>
+> = {
+  APP: registerAppTargets,
+};
+
+export function registerProjectTargets(projectPath: string): Record<string, TargetConfiguration> {
+  const projectType = getProjectType(projectPath);
+  // console.log(`project type: ${projectType}`);
+  const registerProjectTargetFn = projectType
+    ? projectTypeToRegisterRouting[projectType]
+    : undefined;
+
+  return registerProjectTargetFn ? registerProjectTargetFn(projectPath) : {};
 }
