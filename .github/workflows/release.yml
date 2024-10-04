@@ -3,11 +3,13 @@ name: release
 on:
   push:
     tags:
+      - 'agora/v*'
       - 'openchallenges/v*'
 
 env:
   DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
   DOCKER_USERNAME: ${{ github.actor }}
+  PRODUCT: ''
   VERSION: ''
 
 jobs:
@@ -19,13 +21,15 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Extract version from Git tag
-        id: extract_version
+      - name: Extract product and version from Git tag
         run: |
-          # Get the tag name and remove 'openchallenges/' prefix
-          VERSION=${GITHUB_REF#refs/tags/openchallenges/v}
+          # Extract the product name (part before the first slash) and version (part after the first slash)
+          PRODUCT=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f1)
+          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f2)
+
+          # Output extracted values for the rest of the job
+          echo "PRODUCT=${PRODUCT}" >> $GITHUB_ENV
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
-          echo "Docker image tag will be: ${VERSION}"
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
@@ -37,4 +41,4 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
-            && nx build-image openchallenges-apex --configuration=ci"
+            && nx build-image ${{ env.PRODUCT }}-apex --configuration=ci"
