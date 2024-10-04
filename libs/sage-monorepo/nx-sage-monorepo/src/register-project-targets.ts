@@ -4,7 +4,7 @@ export const projectFilePatterns = ['project.json'];
 
 export function registerProjectTargets(): Record<string, TargetConfiguration> {
   return {
-    build: {
+    'build-image': {
       executor: '@nx-tools/nx-container:build',
       outputs: [],
       defaultConfiguration: 'local',
