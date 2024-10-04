@@ -37,7 +37,7 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Build the images of all the OC projects
+      - name: Build the Docker images for the specified product
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
