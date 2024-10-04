@@ -42,4 +42,4 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
             && echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin ghcr.io \
-            && nx build-image ${{ env.PRODUCT }}-apex --configuration=ci"
+            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=ci"
