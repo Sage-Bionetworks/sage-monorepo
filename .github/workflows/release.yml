@@ -6,6 +6,8 @@ on:
       - 'openchallenges/v*'
 
 env:
+  DOCKER_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
+  DOCKER_USERNAME: ${{ github.actor }}
   VERSION: ''
 
 jobs:
@@ -21,7 +23,7 @@ jobs:
         id: extract_version
         run: |
           # Get the tag name and remove 'openchallenges/' prefix
-          VERSION=${GITHUB_REF#refs/tags/openchallenges/}
+          VERSION=${GITHUB_REF#refs/tags/openchallenges/v}
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
           echo "Docker image tag will be: ${VERSION}"
 

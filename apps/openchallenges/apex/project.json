@@ -22,13 +22,14 @@
       "options": {
         "context": "{projectRoot}",
         "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          "images": ["ghcr.io/sage-bionetworks/{projectName}"]
         },
         "push": false
       },
       "configurations": {
-        "local": {},
+        "local": {
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+        },
         "ci": {
           "cache-from": ["type=gha"],
           "cache-to": ["type=gha,mode=max"],
