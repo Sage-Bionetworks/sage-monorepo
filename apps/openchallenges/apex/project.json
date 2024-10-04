@@ -17,9 +17,6 @@
         "command": "docker/openchallenges/serve-detach.sh openchallenges-apex"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build"
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
