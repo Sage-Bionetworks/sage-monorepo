@@ -55,8 +55,8 @@ export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
     const targetsCache = readTargetsCache(cachePath);
     try {
       return await createNodesFromFiles(
-        (projectFile, options, context) => {
-          return createNodesInternal(projectFile, options, context, targetsCache);
+        (configFile, options, context) => {
+          return createNodesInternal(configFile, options, context, targetsCache);
         },
         configFilePaths,
         options,
@@ -83,8 +83,8 @@ async function createNodesInternal(
 
   const config = createConfig(options || {});
 
-  // We do not want to alter how the hash is calculated, so appending the config file path to the hash
-  // to prevent the project files overwriting the target cache created by the other
+  // We do not want to alter how the hash is calculated, so appending the config file path to the
+  // hash to prevent the project files overwriting the target cache created by the other project
   const hash =
     (await calculateHashForCreateNodes(projectRoot, config, context, [
       getLockFileName(detectPackageManager(context.workspaceRoot)),
@@ -119,8 +119,10 @@ async function buildDockerizedAppTargets(
   return { targets, metadata };
 }
 
-function createConfig(options: SageMonorepoPluginOptions): SageMonorepoPluginConfig {
+function createConfig({
+  buildImageTargetName = 'build-image',
+}: SageMonorepoPluginOptions): SageMonorepoPluginConfig {
   return {
-    buildImageTargetName: options.buildImageTargetName ?? 'build-image',
+    buildImageTargetName,
   };
 }
