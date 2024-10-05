@@ -14,7 +14,7 @@ import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash
 import { dirname, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { getLockFileName } from '@nx/js';
-import { buildImageTarget } from './build-image-targets';
+import { buildImageTarget } from './build-image-target';
 
 export interface SageMonorepoPluginOptions {
   buildImageTargetName?: string;
@@ -43,10 +43,6 @@ const projectFilePattern = '{apps,libs}/**/project.json';
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,
   async (configFilePaths, options, context) => {
-    console.log('Welcome to createNodesV2');
-    console.log(`configFilePaths: ${configFilePaths}`);
-    console.log(`options: ${JSON.stringify(options)}`);
-
     options ??= {};
     const optionsHash = hashObject(options);
 
@@ -95,8 +91,9 @@ async function createNodesInternal(
       getLockFileName(detectPackageManager(context.workspaceRoot)),
     ])) + configFilePath;
 
-  const dockerizedAppTargets = await buildDockerizedAppTargets(projectRoot, config);
-  targetsCache[hash] ??= dockerizedAppTargets;
+  // TODO: build the targets only if they don't exist in the cache
+  const projectTargets = await buildProjectTargets(projectRoot, config);
+  targetsCache[hash] ??= projectTargets;
 
   const { targets, metadata } = targetsCache[hash];
   const project: ProjectConfiguration = {
@@ -112,7 +109,7 @@ async function createNodesInternal(
   };
 }
 
-async function buildDockerizedAppTargets(
+async function buildProjectTargets(
   projectRoot: string,
   config: SageMonorepoPluginConfig,
 ): Promise<SageMonorepoProjectTargets> {
