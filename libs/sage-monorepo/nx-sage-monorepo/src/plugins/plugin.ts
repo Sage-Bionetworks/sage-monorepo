@@ -5,7 +5,6 @@ import {
   detectPackageManager,
   ProjectConfiguration,
   readJsonFile,
-  TargetConfiguration,
   writeJsonFile,
 } from '@nx/devkit';
 import { hashObject } from 'nx/src/hasher/file-hasher';
@@ -14,26 +13,19 @@ import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash
 import { dirname, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { getLockFileName } from '@nx/js';
-import { buildImageTarget } from './build-image-target';
+import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
+import { createPluginConfiguration } from './sage-monorepo-plugin-configuration';
+import { SageMonorepoPluginOptions } from './sage-monorepo-plugin-options';
+import { buildProjectTargets } from './build-project-targets';
 
-export interface SageMonorepoPluginOptions {
-  buildImageTargetName?: string;
-}
-
-export interface SageMonorepoPluginConfig {
-  buildImageTargetName: string;
-}
-
-type SageMonorepoProjectTargets = Pick<ProjectConfiguration, 'targets' | 'metadata'>;
-
-function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectTargets> {
+function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectConfiguration> {
   console.log(`cachePath: ${cachePath}`);
   return existsSync(cachePath) ? readJsonFile(cachePath) : {};
 }
 
 function writeTargetsToCache(
   cachePath: string,
-  results: Record<string, SageMonorepoProjectTargets>,
+  results: Record<string, SageMonorepoProjectConfiguration>,
 ) {
   writeJsonFile(cachePath, results);
 }
@@ -68,7 +60,7 @@ async function createNodesInternal(
   configFilePath: string,
   options: SageMonorepoPluginOptions | undefined,
   context: CreateNodesContext,
-  targetsCache: Record<string, SageMonorepoProjectTargets>,
+  targetsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
   const projectRoot = dirname(configFilePath);
   // Do not create a project if project.json and Dockerfile isn't there.
@@ -82,7 +74,7 @@ async function createNodesInternal(
   const projectName = projectFileContent.name;
   console.log(`projectName: ${projectName}`);
 
-  const config = createConfig(options || {});
+  const config = createPluginConfiguration(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the
   // hash to prevent the project files overwriting the target cache created by the other project
@@ -106,25 +98,5 @@ async function createNodesInternal(
     projects: {
       [projectRoot]: project,
     },
-  };
-}
-
-async function buildProjectTargets(
-  projectRoot: string,
-  config: SageMonorepoPluginConfig,
-): Promise<SageMonorepoProjectTargets> {
-  const targets: Record<string, TargetConfiguration> = {};
-
-  targets[config.buildImageTargetName] = await buildImageTarget(projectRoot);
-
-  const metadata = {};
-  return { targets, metadata };
-}
-
-function createConfig({
-  buildImageTargetName = 'build-image',
-}: SageMonorepoPluginOptions): SageMonorepoPluginConfig {
-  return {
-    buildImageTargetName,
   };
 }
