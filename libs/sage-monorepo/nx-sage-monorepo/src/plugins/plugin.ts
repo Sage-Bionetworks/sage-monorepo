@@ -14,40 +14,49 @@ import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash
 import { dirname, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { getLockFileName } from '@nx/js';
+import { buildImageTarget } from './build-image-targets';
 
-export interface DockerizedAppPluginOptions {
+export interface SageMonorepoPluginOptions {
   buildImageTargetName?: string;
 }
 
-export interface DockerizedAppPluginConfig {
+export interface SageMonorepoPluginConfig {
   buildImageTargetName: string;
 }
 
-type DockerizedAppTargets = Pick<ProjectConfiguration, 'targets' | 'metadata'>;
+type SageMonorepoProjectTargets = Pick<ProjectConfiguration, 'targets' | 'metadata'>;
 
-function readTargetsCache(cachePath: string): Record<string, DockerizedAppTargets> {
+function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectTargets> {
+  console.log(`cachePath: ${cachePath}`);
   return existsSync(cachePath) ? readJsonFile(cachePath) : {};
 }
 
-function writeTargetsToCache(cachePath: string, results: Record<string, DockerizedAppTargets>) {
+function writeTargetsToCache(
+  cachePath: string,
+  results: Record<string, SageMonorepoProjectTargets>,
+) {
   writeJsonFile(cachePath, results);
 }
 
-const dockerfileGlob = 'apps/openchallenges/apex/Dockerfile';
+const projectFilePattern = '{apps,libs}/**/project.json';
 
-export const createNodesV2: CreateNodesV2<DockerizedAppPluginOptions> = [
-  dockerfileGlob,
+export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
+  projectFilePattern,
   async (configFilePaths, options, context) => {
     console.log('Welcome to createNodesV2');
     console.log(`configFilePaths: ${configFilePaths}`);
-    const optionsHash = hashObject(options || {});
+    console.log(`options: ${JSON.stringify(options)}`);
+
+    options ??= {};
+    const optionsHash = hashObject(options);
+
+    // Reads the cached targets for all the projects
     const cachePath = join(workspaceDataDirectory, `sage-monorepo-${optionsHash}.hash`);
     const targetsCache = readTargetsCache(cachePath);
     try {
       return await createNodesFromFiles(
-        (configFile, options, context) => {
-          const config = normalizeOptions(options || {});
-          return createNodesInternal(configFile, config, context, targetsCache);
+        (projectFile, options, context) => {
+          return createNodesInternal(projectFile, options, context, targetsCache);
         },
         configFilePaths,
         options,
@@ -61,9 +70,9 @@ export const createNodesV2: CreateNodesV2<DockerizedAppPluginOptions> = [
 
 async function createNodesInternal(
   configFilePath: string,
-  config: DockerizedAppPluginConfig,
+  options: SageMonorepoPluginOptions | undefined,
   context: CreateNodesContext,
-  targetsCache: Record<string, DockerizedAppTargets>,
+  targetsCache: Record<string, SageMonorepoProjectTargets>,
 ) {
   const projectRoot = dirname(configFilePath);
   // Do not create a project if project.json and Dockerfile isn't there.
@@ -71,6 +80,8 @@ async function createNodesInternal(
   if (!siblingFiles.includes('project.json') && !siblingFiles.includes('Dockerfile')) {
     return {};
   }
+
+  const config = createConfig(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the hash
   // to prevent the project files overwriting the target cache created by the other
@@ -98,8 +109,8 @@ async function createNodesInternal(
 
 async function buildDockerizedAppTargets(
   projectRoot: string,
-  config: DockerizedAppPluginConfig,
-): Promise<DockerizedAppTargets> {
+  config: SageMonorepoPluginConfig,
+): Promise<SageMonorepoProjectTargets> {
   const targets: Record<string, TargetConfiguration> = {};
 
   targets[config.buildImageTargetName] = await buildImageTarget(projectRoot);
@@ -108,35 +119,7 @@ async function buildDockerizedAppTargets(
   return { targets, metadata };
 }
 
-async function buildImageTarget(projectRoot: string) {
-  return {
-    executor: '@nx-tools/nx-container:build',
-    outputs: [],
-
-    options: {
-      context: projectRoot,
-    },
-    cache: false,
-    configurations: {
-      local: {
-        metadata: {
-          images: ['ghcr.io/sage-bionetworks/{projectName}'],
-          tags: ['type=edge,branch=main', 'type=raw,value=local', 'type=sha'],
-        },
-      },
-      ci: {
-        metadata: {
-          images: ['ghcr.io/sage-bionetworks/{projectName}'],
-          tags: ['type=semver,pattern={{version}},value=${VERSION}', 'type=sha'],
-        },
-        push: true,
-      },
-    },
-    defaultConfiguration: 'local',
-  };
-}
-
-function normalizeOptions(options: DockerizedAppPluginOptions): DockerizedAppPluginConfig {
+function createConfig(options: SageMonorepoPluginOptions): SageMonorepoPluginConfig {
   return {
     buildImageTargetName: options.buildImageTargetName ?? 'build-image',
   };
