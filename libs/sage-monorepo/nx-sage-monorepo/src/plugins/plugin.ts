@@ -81,6 +81,11 @@ async function createNodesInternal(
     return {};
   }
 
+  // Content of the project file
+  const projectFileContent: ProjectConfiguration = readJsonFile(configFilePath);
+  const projectName = projectFileContent.name;
+  console.log(`projectName: ${projectName}`);
+
   const config = createConfig(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the
