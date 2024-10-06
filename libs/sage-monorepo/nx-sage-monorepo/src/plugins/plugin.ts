@@ -99,11 +99,12 @@ async function createNodesInternal(
 
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(projectRoot, pluginConfig);
 
-  const { targets, metadata } = projectConfigurationsCache[hash];
+  const { targets, metadata, tags } = projectConfigurationsCache[hash];
   const project: ProjectConfiguration = {
     root: projectRoot,
     targets,
     metadata,
+    tags,
   };
 
   return {

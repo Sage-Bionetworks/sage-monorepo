@@ -12,5 +12,6 @@ export async function buildProjectConfiguration(
   targets[config.buildImageTargetName] = await buildImageTarget(projectRoot);
 
   const metadata = {};
-  return { targets, metadata };
+  const tags: string[] = [];
+  return { targets, metadata, tags };
 }
