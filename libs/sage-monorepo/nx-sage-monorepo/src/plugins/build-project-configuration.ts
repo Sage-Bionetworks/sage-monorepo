@@ -14,5 +14,11 @@ export async function buildProjectConfiguration(
 
   const metadata = {};
   const tags: string[] = [];
+  console.log(`HELLO: ${options.projectBuilder}`);
+  if (options.projectBuilder) {
+    console.log(`BUILDER: ${options.projectBuilder}`);
+    tags.push(`builder:${options.projectBuilder}`);
+  }
+
   return { targets, metadata, tags };
 }

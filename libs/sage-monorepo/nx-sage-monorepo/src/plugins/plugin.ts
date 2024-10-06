@@ -68,11 +68,7 @@ async function createNodesInternal(
   projectConfigurationsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
   const projectRoot = dirname(configFilePath);
-  // Do not create a project if project.json and Dockerfile isn't there.
   const siblingFiles = readdirSync(join(context.workspaceRoot, projectRoot));
-  if (!siblingFiles.includes('project.json') && !siblingFiles.includes('Dockerfile')) {
-    return {};
-  }
 
   // Content of the project file
   const projectFileContent: ProjectConfiguration = readJsonFile(configFilePath);
@@ -101,6 +97,7 @@ async function createNodesInternal(
   const projectConfigurationBuilderOptions: ProjectConfigurationBuilderOptions = {
     projectRoot,
     pluginConfig,
+    projectBuilder,
   };
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
     projectConfigurationBuilderOptions,
