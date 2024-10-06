@@ -14,11 +14,12 @@ import { dirname, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { getLockFileName } from '@nx/js';
 import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
-import { createPluginConfiguration } from './sage-monorepo-plugin-configuration';
-import { SageMonorepoPluginOptions } from './sage-monorepo-plugin-options';
+import { createPluginConfiguration } from './plugin-configuration';
+import { PluginOptions } from './plugin-options';
 import { buildProjectConfiguration } from './build-project-configuration';
 import { inferProjectType } from './project-type';
 import { inferProjectBuilder } from './project-builder';
+import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 
 function readProjectCOnfigurationsCache(
   cachePath: string,
@@ -36,7 +37,7 @@ function writeProjectConfigurationsToCache(
 
 const projectFilePattern = '{apps,libs}/**/project.json';
 
-export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
+export const createNodesV2: CreateNodesV2<PluginOptions> = [
   projectFilePattern,
   async (configFilePaths, options, context) => {
     options ??= {};
@@ -62,7 +63,7 @@ export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
 
 async function createNodesInternal(
   configFilePath: string,
-  options: SageMonorepoPluginOptions | undefined,
+  options: PluginOptions | undefined,
   context: CreateNodesContext,
   projectConfigurationsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
@@ -97,7 +98,13 @@ async function createNodesInternal(
       getLockFileName(detectPackageManager(context.workspaceRoot)),
     ])) + configFilePath;
 
-  projectConfigurationsCache[hash] ??= await buildProjectConfiguration(projectRoot, pluginConfig);
+  const projectConfigurationBuilderOptions: ProjectConfigurationBuilderOptions = {
+    projectRoot,
+    pluginConfig,
+  };
+  projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
+    projectConfigurationBuilderOptions,
+  );
 
   const { targets, metadata, tags } = projectConfigurationsCache[hash];
   const project: ProjectConfiguration = {

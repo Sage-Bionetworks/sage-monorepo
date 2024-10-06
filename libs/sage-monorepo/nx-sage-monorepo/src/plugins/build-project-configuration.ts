@@ -1,15 +1,16 @@
 import { TargetConfiguration } from '@nx/devkit';
 import { buildImageTarget } from './build-image-target';
 import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
-import { SageMonorepoPluginConfiguration } from './sage-monorepo-plugin-configuration';
+import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 
 export async function buildProjectConfiguration(
-  projectRoot: string,
-  config: SageMonorepoPluginConfiguration,
+  options: ProjectConfigurationBuilderOptions,
 ): Promise<SageMonorepoProjectConfiguration> {
   const targets: Record<string, TargetConfiguration> = {};
 
-  targets[config.buildImageTargetName] = await buildImageTarget(projectRoot);
+  const pluginConfig = options.pluginConfig;
+
+  targets[pluginConfig.buildImageTargetName] = await buildImageTarget(options.projectRoot);
 
   const metadata = {};
   const tags: string[] = [];
