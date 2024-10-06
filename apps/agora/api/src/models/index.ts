@@ -1,5 +1,6 @@
-export * from './dataversion';
+export * from './biodomains';
 export * from './comparison';
+export * from './dataversion';
 export * from './distribution';
 export * from './experimental-validation';
 export * from './gene-links';
@@ -9,6 +10,5 @@ export * from './neuropathologic-correlations';
 export * from './overall-scores';
 export * from './proteomics';
 export * from './rna';
-export * from './teams';
 export * from './scores';
-export * from './biodomains';
+export * from './teams';

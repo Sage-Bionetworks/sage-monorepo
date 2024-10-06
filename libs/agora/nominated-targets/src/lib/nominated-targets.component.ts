@@ -1,12 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import {
-  Gene,
-  NominatedGenesList,
-  NominatedGenesService,
-  TargetNomination,
-} from '@sagebionetworks/agora/api-client-angular';
+import { Gene, TargetNomination, GenesService } from '@sagebionetworks/agora/api-client-angular';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui';
@@ -19,7 +14,7 @@ import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui'
   styleUrls: ['./nominated-targets.component.scss'],
 })
 export class NominatedTargetsComponent implements OnInit {
-  apiService = inject(NominatedGenesService);
+  apiService = inject(GenesService);
 
   genes: Gene[] = [];
   searchTerm = '';
@@ -71,7 +66,7 @@ export class NominatedTargetsComponent implements OnInit {
   ];
 
   ngOnInit() {
-    this.apiService.listNominatedGenes().subscribe((response: NominatedGenesList) => {
+    this.apiService.getNominatedGenes().subscribe((response) => {
       if (!response.items) return;
       const genes = response.items;
       genes.forEach((de: Gene) => {

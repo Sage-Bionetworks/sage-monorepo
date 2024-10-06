@@ -21,6 +21,183 @@ tags:
   - name: TeamMember
     description: Operations about team members.
 paths:
+  /biodomains:
+    get:
+      tags:
+        - BioDomains
+      summary: List BioDomains
+      description: List BioDomains
+      operationId: listBioDomains
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BioDomainInfo'
+          description: Success
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /biodomains/{ensg}:
+    get:
+      tags:
+        - BioDomains
+      summary: Retrieve bioDomain for a given ENSG
+      description: Get bioDomain
+      operationId: getBioDomain
+      parameters:
+        - name: ensg
+          in: path
+          required: true
+          description: The ENSG (Ensembl Gene ID) for which to retrieve biodomain data.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful retrieval of bio-domains
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BioDomain'
+        '404':
+          description: ENSG not found
+        '500':
+          description: Internal server error
+  /genes:
+    get:
+      tags:
+        - Genes
+      summary: Retrieve a list of genes or filter by Ensembl gene IDs
+      description: This endpoint returns all genes or filters genes by Ensembl gene IDs if provided.
+      operationId: getGenes
+      parameters:
+        - in: query
+          name: ids
+          schema:
+            type: string
+            description: Comma-separated list of Ensembl gene IDs to filter.
+          required: false
+          example: ENSG00000139618,ENSG00000248378
+      responses:
+        '200':
+          description: A list of genes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gene'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /genes/{ensg}:
+    get:
+      tags:
+        - Genes
+      summary: Get gene details by Ensembl Gene ID
+      operationId: getGene
+      parameters:
+        - name: ensg
+          in: path
+          required: true
+          description: Ensembl Gene ID (ENSG)
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Gene details successfully retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Gene'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /genes/search:
+    get:
+      tags:
+        - Genes
+      summary: Search Genes
+      description: Search Genes
+      operationId: searchGene
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Gene'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /genes/comparison:
+    get:
+      tags:
+        - Genes
+      summary: Get comparison genes based on category and subcategory
+      description: Get comparison genes based on category and subcategory
+      operationId: getComparisonGenes
+      parameters:
+        - in: query
+          name: category
+          required: true
+          schema:
+            type: string
+            enum:
+              - RNA - Differential Expression
+              - Protein - Differential Expression
+          description: The category of the comparison (either RNA or Protein Differential Expression).
+        - in: query
+          name: subCategory
+          required: true
+          schema:
+            type: string
+          description: The subcategory for gene comparison (sub-category must be a string).
+      responses:
+        '200':
+          description: Successful response with comparison genes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GCTGenesList'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+  /genes/nominated:
+    get:
+      tags:
+        - Genes
+      summary: Get nominated genes
+      description: Retrieves a list of genes with nominations and relevant information.
+      operationId: getNominatedGenes
+      responses:
+        '200':
+          description: A list of nominated genes.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NominatedGenesList'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /dataversion:
     get:
       tags:
@@ -39,20 +216,20 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '500':
           $ref: '#/components/responses/InternalServerError'
-  /genes/nominated:
+  /distribution:
     get:
       tags:
-        - NominatedGenes
-      summary: Get nominated genes
-      description: Get nominated genes
-      operationId: listNominatedGenes
+        - Distribution
+      summary: Get distribution data
+      description: Get distribution data
+      operationId: getDistribution
       responses:
         '200':
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NominatedGenesList'
-          description: Success
+                $ref: '#/components/schemas/Distribution'
+          description: A successful response
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -60,7 +237,7 @@ paths:
   /teams:
     get:
       tags:
-        - Team
+        - Teams
       summary: List Teams
       description: List Teams
       operationId: listTeams
@@ -69,7 +246,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TeamList'
+                $ref: '#/components/schemas/TeamsList'
           description: Success
         '400':
           $ref: '#/components/responses/BadRequest'
@@ -78,7 +255,7 @@ paths:
   /teamMembers/{name}/image:
     get:
       tags:
-        - TeamMember
+        - Teams
       summary: Get Team Member Image
       description: Get Team Member Image
       operationId: getTeamMemberImage
@@ -107,20 +284,14 @@ paths:
           $ref: '#/components/responses/InternalServerError'
 components:
   schemas:
-    Dataversion:
+    BioDomainInfo:
       type: object
-      description: Synapse data version
+      description: BioDomainInfo
       properties:
-        data_file:
-          type: string
-        data_version:
-          type: string
-        team_images_id:
+        name:
           type: string
       required:
-        - data_file
-        - data_version
-        - team_images_id
+        - name
     BasicError:
       type: object
       description: Problem details (tools.ietf.org/html/rfc7807)
@@ -143,6 +314,34 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
+    BioDomain:
+      type: object
+      description: BioDomain
+      properties:
+        biodomain:
+          type: string
+          description: Name of the biological domain
+        go_terms:
+          type: array
+          description: List of Gene Ontology (GO) terms
+          items:
+            type: string
+        n_biodomain_terms:
+          type: integer
+          description: Number of terms associated with the biological domain
+        n_gene_biodomain_terms:
+          type: integer
+          description: Number of gene terms linked to the biological domain
+        pct_linking_terms:
+          type: number
+          format: float
+          description: Percentage of terms linking to the domain
+      required:
+        - biodomain
+        - go_terms
+        - n_biodomain_terms
+        - n_gene_biodomain_terms
+        - pct_linking_terms
     TargetNomination:
       type: object
       description: TargetNomination
@@ -373,7 +572,7 @@ components:
         - neuropath_type
     ExperimentalValidation:
       type: object
-      description: Gene
+      description: Experimental Validation
       properties:
         _id:
           type: string
@@ -406,8 +605,6 @@ components:
         reference_doi:
           type: string
         date_report:
-          type: string
-        abability_bucket_definition:
           type: string
       required:
         - _id
@@ -475,30 +672,17 @@ components:
       type: object
       description: BioDomains
       properties:
-        biodomain:
+        ensembl_gene_id:
           type: string
-          description: Name of the biological domain
-        go_terms:
+          description: The Ensembl Gene ID.
+        gene_biodomains:
           type: array
-          description: List of Gene Ontology (GO) terms
           items:
-            type: string
-        n_biodomain_terms:
-          type: integer
-          description: Number of terms associated with the biological domain
-        n_gene_biodomain_terms:
-          type: integer
-          description: Number of gene terms linked to the biological domain
-        pct_linking_terms:
-          type: number
-          format: float
-          description: Percentage of terms linking to the domain
+            $ref: '#/components/schemas/BioDomain'
+          description: A list of gene biodomains.
       required:
-        - biodomain
-        - go_terms
-        - n_biodomain_terms
-        - n_gene_biodomain_terms
-        - pct_linking_terms
+        - ensembl_gene_id
+        - gene_biodomains
     EnsemblInfo:
       type: object
       description: EnsemblInfo
@@ -526,6 +710,8 @@ components:
         name:
           type: string
         summary:
+          type: string
+        hgnc_symbol:
           type: string
         alias:
           type: array
@@ -670,6 +856,168 @@ components:
         - druggability
         - total_nominations
         - ensembl_info
+    GCTGeneTissue:
+      type: object
+      description: GCTGeneTissue
+      properties:
+        name:
+          type: string
+          description: Name of the gene or tissue.
+        logfc:
+          type: number
+          format: float
+          description: Log fold change value.
+        adj_p_val:
+          type: number
+          format: float
+          description: Adjusted p-value.
+        ci_l:
+          type: number
+          format: float
+          description: Lower confidence interval.
+        ci_r:
+          type: number
+          format: float
+          description: Upper confidence interval.
+        medianexpression:
+          $ref: '#/components/schemas/MedianExpression'
+          nullable: true
+      required:
+        - name
+        - logfc
+        - adj_p_val
+        - ci_l
+        - ci_r
+        - mediaexpression
+    GCTGeneNominations:
+      type: object
+      description: GCTGeneNominations
+      properties:
+        count:
+          type: integer
+          description: The total number of gene nominations.
+        year:
+          type: integer
+          description: The year of the nominations.
+        teams:
+          type: array
+          items:
+            type: string
+          description: The list of teams involved in the nominations.
+        studies:
+          type: array
+          items:
+            type: string
+          description: The list of studies related to the nominations.
+        inputs:
+          type: array
+          items:
+            type: string
+          description: The input data used for the nominations.
+        programs:
+          type: array
+          items:
+            type: string
+          description: The list of programs associated with the nominations.
+        validations:
+          type: array
+          items:
+            type: string
+          description: The list of validations for the nominations.
+      required:
+        - count
+        - year
+        - teams
+        - studies
+        - inputs
+        - programs
+        - validations
+    GCTGene:
+      type: object
+      description: GCT Gene
+      properties:
+        ensembl_gene_id:
+          type: string
+          description: Ensembl gene identifier
+        hgnc_symbol:
+          type: string
+          description: HGNC gene symbol
+        uniprotid:
+          type: string
+          nullable: true
+          description: UniProt identifier
+        uid:
+          type: string
+          nullable: true
+          description: Unique identifier
+        search_string:
+          type: string
+          nullable: true
+          description: Search string
+        search_array:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Array of search terms
+        tissues:
+          type: array
+          items:
+            $ref: '#/components/schemas/GCTGeneTissue'
+          description: Array of gene tissues
+        nominations:
+          $ref: '#/components/schemas/GCTGeneNominations'
+          nullable: true
+          description: Gene nominations data
+        associations:
+          type: array
+          items:
+            type: number
+          nullable: true
+          description: Array of association values
+        target_risk_score:
+          type: number
+          nullable: true
+          description: Target risk score
+        genetics_score:
+          type: number
+          nullable: true
+          description: Genetics score
+        multi_omics_score:
+          type: number
+          nullable: true
+          description: Multi-omics score
+        biodomains:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Array of biological domains
+        pinned:
+          type: boolean
+          nullable: true
+          description: Whether the gene is pinned
+        target_enabling_resources:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: Target enabling resources
+      required:
+        - ensembl_gene_id
+        - hgnc_symbol
+        - tissues
+        - target_risk_score
+        - genetics_score
+        - multi_omics_score
+    GCTGenesList:
+      type: object
+      description: List of GCTGene
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/GCTGene'
     NominatedGenesList:
       type: object
       description: List of nominated genes
@@ -678,6 +1026,127 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Gene'
+    Dataversion:
+      type: object
+      description: Synapse data version
+      properties:
+        data_file:
+          type: string
+        data_version:
+          type: string
+        team_images_id:
+          type: string
+      required:
+        - data_file
+        - data_version
+        - team_images_id
+    RnaDistribution:
+      type: object
+      description: Distributions
+      properties:
+        _id:
+          type: string
+          description: ID of the RNA distribution
+        model:
+          type: string
+          description: Model of the RNA data
+        tissue:
+          type: string
+          description: Tissue type
+        min:
+          type: number
+          description: Minimum value in the distribution
+        max:
+          type: number
+          description: Maximum value in the distribution
+        first_quartile:
+          type: number
+          description: First quartile value
+        median:
+          type: number
+          description: Median value
+        third_quartile:
+          type: number
+          description: Third quartile value
+      required:
+        - _id
+        - model
+        - tissue
+        - min
+        - max
+        - first_quartile
+        - median
+        - third_quartile
+    ProteomicsDistribution:
+      type: object
+      description: Distributions
+      properties:
+        type:
+          type: string
+          description: Type of proteomics distribution (e.g., LFQ, SRM, TMT)
+      required:
+        - type
+    OverallScoresDistribution:
+      type: object
+      description: Distributions
+      properties:
+        distribution:
+          type: array
+          items:
+            type: number
+          description: Distribution of overall scores
+        bins:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+          description: Bins used in the distribution
+        name:
+          type: string
+          description: Name of the score distribution
+        syn_id:
+          type: string
+          description: Synapse ID associated with the score
+        wiki_id:
+          type: string
+          description: Wiki ID associated with the score
+      required:
+        - distribution
+        - bins
+        - name
+        - syn_id
+        - wiki_id
+    Distribution:
+      type: object
+      description: Distributions
+      properties:
+        rna_differential_expression:
+          type: array
+          items:
+            $ref: '#/components/schemas/RnaDistribution'
+        proteomics_LFQ:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProteomicsDistribution'
+        proteomics_SRM:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProteomicsDistribution'
+        proteomics_TMT:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProteomicsDistribution'
+        overall_scores:
+          type: array
+          items:
+            $ref: '#/components/schemas/OverallScoresDistribution'
+      required:
+        - rna_differential_expression
+        - proteomics_LFQ
+        - proteomics_SRM
+        - proteomics_TMT
+        - overall_scores
     TeamMember:
       type: object
       description: Team Member
@@ -713,7 +1182,7 @@ components:
         - program
         - description
         - members
-    TeamList:
+    TeamsList:
       type: object
       description: List of Teams
       properties:
@@ -733,6 +1202,12 @@ components:
             $ref: '#/components/schemas/BasicError'
     InternalServerError:
       description: The request cannot be fulfilled due to an unexpected server error
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/BasicError'
+    NotFound:
+      description: The specified resource was not found
       content:
         application/problem+json:
           schema:

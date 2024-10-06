@@ -9,6 +9,8 @@ properties:
     type: string
   summary:
     type: string
+  hgnc_symbol:
+    type: string
   alias:
     type: array
     items:

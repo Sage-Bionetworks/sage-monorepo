@@ -9,11 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Team } from './team';
+import { GCTGene } from './gCTGene';
 
 /**
- * List of Teams
+ * List of GCTGene
  */
-export interface TeamList {
-  items?: Array<Team>;
+export interface GCTGenesList {
+  items?: Array<GCTGene>;
 }

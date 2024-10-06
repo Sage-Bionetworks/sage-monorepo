@@ -6,8 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Scores } from '../../app/models';
-export { Scores } from '../../app/models';
+import { Scores } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Schemas

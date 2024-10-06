@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Genes
+  summary: Get gene details by Ensembl Gene ID
+  operationId: getGene
+  parameters:
+    - name: ensg
+      in: path
+      required: true
+      description: Ensembl Gene ID (ENSG)
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Gene details successfully retrieved
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Gene.yaml
+    '400':
+      $ref: ../../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../../components/responses/InternalServerError.yaml

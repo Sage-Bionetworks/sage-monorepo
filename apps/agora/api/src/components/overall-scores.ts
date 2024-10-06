@@ -2,7 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-import { OverallScores, OverallScoresCollection } from '../models';
+import { OverallScoresCollection } from '../models';
+import { OverallScores } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

@@ -2,7 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-import { Scores, ScoresCollection } from '../models';
+import { ScoresCollection } from '../models';
+import { Scores } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

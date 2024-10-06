@@ -2,7 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-import { NeuropathologicCorrelation, NeuropathologicCorrelationCollection } from '../models';
+import { NeuropathologicCorrelationCollection } from '../models';
+import { NeuropathologicCorrelation } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

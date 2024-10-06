@@ -11,7 +11,7 @@
  */
 
 /**
- * Gene
+ * Experimental Validation
  */
 export interface ExperimentalValidation {
   _id: string;
@@ -30,5 +30,4 @@ export interface ExperimentalValidation {
   team: string;
   reference_doi: string;
   date_report: string;
-  abability_bucket_definition: string;
 }

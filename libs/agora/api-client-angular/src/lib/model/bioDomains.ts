@@ -9,29 +9,18 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { BioDomain } from './bioDomain';
 
 /**
  * BioDomains
  */
 export interface BioDomains {
   /**
-   * Name of the biological domain
+   * The Ensembl Gene ID.
    */
-  biodomain: string;
+  ensembl_gene_id: string;
   /**
-   * List of Gene Ontology (GO) terms
+   * A list of gene biodomains.
    */
-  go_terms: Array<string>;
-  /**
-   * Number of terms associated with the biological domain
-   */
-  n_biodomain_terms: number;
-  /**
-   * Number of gene terms linked to the biological domain
-   */
-  n_gene_biodomain_terms: number;
-  /**
-   * Percentage of terms linking to the domain
-   */
-  pct_linking_terms: number;
+  gene_biodomains: Array<BioDomain>;
 }

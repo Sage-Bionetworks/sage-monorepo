@@ -29,6 +29,7 @@ export interface Gene {
   ensembl_gene_id: string;
   name: string;
   summary: string;
+  hgnc_symbol: string;
   alias: Array<string>;
   is_igap: boolean;
   is_eqtl: boolean;

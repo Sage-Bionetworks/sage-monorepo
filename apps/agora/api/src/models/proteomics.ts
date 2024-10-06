@@ -6,8 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { ProteinDifferentialExpression } from '../../app/models';
-export { ProteinDifferentialExpression } from '../../app/models';
+import { ProteinDifferentialExpression } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Schemas

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Team, TeamList, TeamService } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamsList, TeamsService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { TeamListComponent } from '../team-list/team-list.component';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
@@ -11,14 +11,14 @@ import { catchError, finalize, map, Observable, of } from 'rxjs';
   imports: [CommonModule, TeamListComponent],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss'],
-  providers: [HelperService, TeamService],
+  providers: [HelperService, TeamsService],
 })
 export class TeamsComponent implements OnInit {
   teams$!: Observable<Team[]>;
 
   constructor(
     private helperService: HelperService,
-    private teamService: TeamService,
+    private teamsService: TeamsService,
   ) {}
 
   ngOnInit() {
@@ -28,8 +28,8 @@ export class TeamsComponent implements OnInit {
   loadTeams() {
     this.helperService.setLoading(true);
 
-    this.teams$ = this.teamService.listTeams().pipe(
-      map((res: TeamList) => res.items || []),
+    this.teams$ = this.teamsService.listTeams().pipe(
+      map((res: TeamsList) => res.items || []),
       catchError((error: Error) => {
         console.error('Error loading teams:', error.message);
         return of([]);

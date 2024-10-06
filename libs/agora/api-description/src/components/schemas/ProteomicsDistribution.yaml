@@ -1,0 +1,8 @@
+type: object
+description: Distributions
+properties:
+  type:
+    type: string
+    description: Type of proteomics distribution (e.g., LFQ, SRM, TMT)
+required:
+  - type

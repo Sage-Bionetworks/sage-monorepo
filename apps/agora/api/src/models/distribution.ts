@@ -10,12 +10,7 @@ import {
   RnaDistribution,
   OverallScoresDistribution,
   ProteomicsDistribution,
-} from '../../app/models';
-export {
-  RnaDistribution,
-  OverallScoresDistribution,
-  ProteomicsDistribution,
-} from '../../app/models';
+} from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Schemas
@@ -34,14 +29,14 @@ const RnaDistributionSchema = new Schema<RnaDistribution>(
   { collection: 'rnaboxdistribution' },
 );
 
-const ProteomicDistributionSchema = new Schema(
+const ProteomicDistributionSchema = new Schema<ProteomicsDistribution>(
   {
     type: String,
   },
   { collection: 'proteomicsboxdistribution' },
 );
 
-const OverallScoresDistributionSchema = new Schema(
+const OverallScoresDistributionSchema = new Schema<OverallScoresDistribution>(
   {
     distribution: [{ type: Number, required: true }],
     bins: [[{ type: Number, required: true }]],

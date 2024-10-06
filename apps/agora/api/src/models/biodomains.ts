@@ -1,17 +1,6 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
 import { Schema, model } from 'mongoose';
+import { BioDomains, BioDomain, BioDomainInfo } from '@sagebionetworks/agora/api-client-angular';
 
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-import { BioDomains, BioDomain, BioDomainInfo } from '../../app/models';
-export { BioDomains, BioDomain } from '../../app/models';
-
-// -------------------------------------------------------------------------- //
-// Schemas
-// -------------------------------------------------------------------------- //
 const BioDomainSchema = new Schema<BioDomain>({
   biodomain: { type: String, required: true },
   go_terms: { type: [String], required: true },

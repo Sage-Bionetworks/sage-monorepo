@@ -2,7 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-import { Metabolomics, MetabolomicsCollection } from '../models';
+import { MetabolomicsCollection } from '../models';
+import { Metabolomics } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

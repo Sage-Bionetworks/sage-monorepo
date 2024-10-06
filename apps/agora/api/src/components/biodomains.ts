@@ -3,8 +3,8 @@
 // -------------------------------------------------------------------------- //
 import { Request, Response, NextFunction } from 'express';
 import { cache, setHeaders } from '../helpers';
-import { AllBioDomainsCollection, BioDomains, BioDomainsCollection } from '../models';
-import { BioDomainInfo } from '../../app/models';
+import { AllBioDomainsCollection, BioDomainsCollection } from '../models';
+import { BioDomains, BioDomainInfo } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Functions

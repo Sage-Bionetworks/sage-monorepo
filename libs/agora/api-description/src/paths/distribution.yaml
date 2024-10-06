@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Distribution
+  summary: Get distribution data
+  description: Get distribution data
+  operationId: getDistribution
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Distribution.yaml
+      description: A successful response
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

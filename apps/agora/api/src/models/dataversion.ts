@@ -1,5 +1,5 @@
-import { Dataversion } from '@sagebionetworks/agora/api-client-angular';
 import { Schema, model } from 'mongoose';
+import { Dataversion } from '@sagebionetworks/agora/api-client-angular';
 
 const DataVersionSchema = new Schema<Dataversion>(
   {

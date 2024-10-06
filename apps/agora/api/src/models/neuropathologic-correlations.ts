@@ -6,8 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { NeuropathologicCorrelation } from '../../app/models';
-export { NeuropathologicCorrelation } from '../../app/models';
+import { NeuropathologicCorrelation } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Schemas

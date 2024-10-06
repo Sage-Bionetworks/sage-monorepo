@@ -12,16 +12,19 @@ import {
   Gene,
   GCTGene,
   GCTGeneNominations,
-  RnaDifferentialExpression,
   RnaDifferentialExpressionCollection,
-  ProteinDifferentialExpression,
   ProteomicsLFQCollection,
   ProteomicsTMTCollection,
-  Team,
   ProteomicsSRMCollection,
 } from '../models';
-import { BioDomains, TargetNomination, Scores } from '../../app/models';
-
+import {
+  BioDomains,
+  ProteinDifferentialExpression,
+  RnaDifferentialExpression,
+  TargetNomination,
+  Team,
+} from '@sagebionetworks/agora/api-client-angular';
+import { Scores } from 'libs/agora/models';
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //

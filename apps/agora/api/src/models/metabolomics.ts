@@ -6,8 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { Metabolomics } from '../../app/models';
-export { Metabolomics } from '../../app/models';
+import { Metabolomics } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Schemas

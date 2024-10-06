@@ -1,5 +1,5 @@
 type: object
-description: Gene
+description: Experimental Validation
 properties:
   _id:
     type: string
@@ -32,8 +32,6 @@ properties:
   reference_doi:
     type: string
   date_report:
-    type: string
-  abability_bucket_definition:
     type: string
 required:
   - _id

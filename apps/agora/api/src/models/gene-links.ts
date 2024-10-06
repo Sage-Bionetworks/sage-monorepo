@@ -1,17 +1,6 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
 import { Schema, model } from 'mongoose';
+import { GeneNetworkLinks } from 'libs/agora/models';
 
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-import { GeneNetworkLinks } from '../../app/models';
-export { GeneNetworkLinks } from '../../app/models';
-
-// -------------------------------------------------------------------------- //
-// Schemas
-// -------------------------------------------------------------------------- //
 const GeneLinkSchema = new Schema<GeneNetworkLinks>(
   {
     geneA_ensembl_gene_id: { type: String, required: true },
@@ -23,7 +12,4 @@ const GeneLinkSchema = new Schema<GeneNetworkLinks>(
   { collection: 'geneslinks' },
 );
 
-// -------------------------------------------------------------------------- //
-// Models
-// -------------------------------------------------------------------------- //
 export const GeneLinkCollection = model<GeneNetworkLinks>('GeneLinksCollection', GeneLinkSchema);

@@ -26,6 +26,8 @@ import { Observable } from 'rxjs';
 
 // @ts-ignore
 import { BasicError } from '../model/basicError';
+// @ts-ignore
+import { Distribution } from '../model/distribution';
 
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS } from '../variables';
@@ -34,7 +36,7 @@ import { Configuration } from '../configuration';
 @Injectable({
   providedIn: 'root',
 })
-export class TeamMemberService {
+export class DistributionService {
   protected basePath = 'http://localhost/v1';
   public defaultHeaders = new HttpHeaders();
   public configuration = new Configuration();
@@ -106,65 +108,49 @@ export class TeamMemberService {
   }
 
   /**
-   * Get Team Member Image
-   * Get Team Member Image
-   * @param name
+   * Get distribution data
+   * Get distribution data
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
-  public getTeamMemberImage(
-    name: string,
+  public getDistribution(
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<Blob>;
-  public getTeamMemberImage(
-    name: string,
+  ): Observable<Distribution>;
+  public getDistribution(
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Blob>>;
-  public getTeamMemberImage(
-    name: string,
+  ): Observable<HttpResponse<Distribution>>;
+  public getDistribution(
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Blob>>;
-  public getTeamMemberImage(
-    name: string,
+  ): Observable<HttpEvent<Distribution>>;
+  public getDistribution(
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
-      httpHeaderAccept?: 'image/jpg' | 'image/jpeg' | 'image/png' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<any> {
-    if (name === null || name === undefined) {
-      throw new Error(
-        'Required parameter name was null or undefined when calling getTeamMemberImage.',
-      );
-    }
-
     let localVarHeaders = this.defaultHeaders;
 
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'image/jpg',
-        'image/jpeg',
-        'image/png',
-        'application/problem+json',
-      ];
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {
@@ -176,10 +162,21 @@ export class TeamMemberService {
       localVarHttpContext = new HttpContext();
     }
 
-    let localVarPath = `/teamMembers/${this.configuration.encodeParam({ name: 'name', value: name, in: 'path', style: 'simple', explode: false, dataType: 'string', dataFormat: undefined })}/image`;
-    return this.httpClient.get(`${this.configuration.basePath}${localVarPath}`, {
+    let responseType_: 'text' | 'json' | 'blob' = 'json';
+    if (localVarHttpHeaderAcceptSelected) {
+      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+        responseType_ = 'text';
+      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+        responseType_ = 'json';
+      } else {
+        responseType_ = 'blob';
+      }
+    }
+
+    let localVarPath = `/distribution`;
+    return this.httpClient.get<Distribution>(`${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
-      responseType: 'blob',
+      responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
       headers: localVarHeaders,
       observe: observe,

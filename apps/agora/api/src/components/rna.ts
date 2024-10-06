@@ -2,9 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-
-import { RnaDifferentialExpression, RnaDifferentialExpressionCollection } from '../models';
-
+import { RnaDifferentialExpressionCollection } from '../models';
+import { RnaDifferentialExpression } from 'libs/agora/models';
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //

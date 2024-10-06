@@ -1,17 +1,6 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
 import { Schema, model } from 'mongoose';
+import { ExperimentalValidation } from '@sagebionetworks/agora/api-client-angular';
 
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-import { ExperimentalValidation } from '../../app/models';
-export { ExperimentalValidation } from '../../app/models';
-
-// -------------------------------------------------------------------------- //
-// Schemas
-// -------------------------------------------------------------------------- //
 const ExperimentalValidationSchema = new Schema<ExperimentalValidation>(
   {
     _id: { type: String, required: true },

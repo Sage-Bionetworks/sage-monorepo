@@ -2,7 +2,8 @@
 // Internal
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
-import { ExperimentalValidation, ExperimentalValidationCollection } from '../models';
+import { ExperimentalValidationCollection } from '../models';
+import { ExperimentalValidation } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

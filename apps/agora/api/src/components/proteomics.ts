@@ -3,11 +3,11 @@
 // -------------------------------------------------------------------------- //
 import { cache } from '../helpers';
 import {
-  ProteinDifferentialExpression,
   ProteomicsLFQCollection,
   ProteomicsSRMCollection,
   ProteomicsTMTCollection,
 } from '../models';
+import { ProteinDifferentialExpression } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

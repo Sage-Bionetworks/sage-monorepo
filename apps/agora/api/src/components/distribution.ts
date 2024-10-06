@@ -12,6 +12,13 @@ import {
   ProteomicDistributionCollection,
   OverallScoresDistributionCollection,
 } from '../models';
+import {
+  RnaDistribution,
+  Distribution,
+  OverallScores,
+  OverallScoresDistribution,
+  ProteomicsDistribution,
+} from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -19,7 +26,7 @@ import {
 
 export async function getRnaDistribution() {
   const cacheKey = 'rna-distribution';
-  let result = cache.get(cacheKey);
+  let result: RnaDistribution[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
@@ -33,7 +40,7 @@ export async function getRnaDistribution() {
 
 export async function getProteomicDistribution(type: string) {
   const cacheKey = 'proteomics-' + type + '-distribution';
-  let result = cache.get(cacheKey);
+  let result: ProteomicsDistribution[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
@@ -47,7 +54,7 @@ export async function getProteomicDistribution(type: string) {
 
 export async function getOverallScoresDistribution() {
   const cacheKey = 'overall-scores-distribution';
-  let result: any = cache.get(cacheKey);
+  let result: OverallScoresDistribution[] | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;
@@ -66,7 +73,7 @@ export async function getOverallScoresDistribution() {
 
 export async function getDistribution() {
   const cacheKey = 'distribution';
-  let result: any = cache.get(cacheKey);
+  let result: Distribution | undefined = cache.get(cacheKey);
 
   if (result) {
     return result;

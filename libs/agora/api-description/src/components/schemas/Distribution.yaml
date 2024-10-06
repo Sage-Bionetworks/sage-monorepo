@@ -1,0 +1,29 @@
+type: object
+description: Distributions
+properties:
+  rna_differential_expression:
+    type: array
+    items:
+      $ref: RnaDistribution.yaml
+  proteomics_LFQ:
+    type: array
+    items:
+      $ref: ProteomicsDistribution.yaml
+  proteomics_SRM:
+    type: array
+    items:
+      $ref: ProteomicsDistribution.yaml
+  proteomics_TMT:
+    type: array
+    items:
+      $ref: ProteomicsDistribution.yaml
+  overall_scores:
+    type: array
+    items:
+      $ref: OverallScoresDistribution.yaml
+required:
+  - rna_differential_expression
+  - proteomics_LFQ
+  - proteomics_SRM
+  - proteomics_TMT
+  - overall_scores

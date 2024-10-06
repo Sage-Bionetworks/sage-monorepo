@@ -6,8 +6,7 @@ import { Schema, model } from 'mongoose';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { RnaDifferentialExpression } from '../../app/models';
-export { RnaDifferentialExpression } from '../../app/models';
+import { RnaDifferentialExpression } from '@sagebionetworks/agora/api-client-angular';
 
 // -------------------------------------------------------------------------- //
 // Schemas
