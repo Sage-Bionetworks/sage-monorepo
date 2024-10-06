@@ -4,4 +4,5 @@ export type CreateProjectConfiguration = (
   projectRoot: string,
 ) => Omit<ProjectConfiguration, 'root'>;
 
+// Omit<ProjectConfiguration, 'root'>;
 export type SageMonorepoProjectConfiguration = Pick<ProjectConfiguration, 'targets' | 'metadata'>;

@@ -16,7 +16,7 @@ import { getLockFileName } from '@nx/js';
 import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
 import { createPluginConfiguration } from './sage-monorepo-plugin-configuration';
 import { SageMonorepoPluginOptions } from './sage-monorepo-plugin-options';
-import { buildProjectTargets } from './build-project-targets';
+import { buildProjectConfiguration } from './build-project-configuration';
 import { inferProjectType } from './project-type';
 import { inferProjectBuilder } from './project-builder';
 
@@ -97,7 +97,7 @@ async function createNodesInternal(
       getLockFileName(detectPackageManager(context.workspaceRoot)),
     ])) + configFilePath;
 
-  projectConfigurationsCache[hash] ??= await buildProjectTargets(projectRoot, pluginConfig);
+  projectConfigurationsCache[hash] ??= await buildProjectConfiguration(projectRoot, pluginConfig);
 
   const { targets, metadata } = projectConfigurationsCache[hash];
   const project: ProjectConfiguration = {

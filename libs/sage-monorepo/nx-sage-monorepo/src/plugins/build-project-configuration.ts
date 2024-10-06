@@ -3,7 +3,7 @@ import { buildImageTarget } from './build-image-target';
 import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
 import { SageMonorepoPluginConfiguration } from './sage-monorepo-plugin-configuration';
 
-export async function buildProjectTargets(
+export async function buildProjectConfiguration(
   projectRoot: string,
   config: SageMonorepoPluginConfiguration,
 ): Promise<SageMonorepoProjectConfiguration> {
