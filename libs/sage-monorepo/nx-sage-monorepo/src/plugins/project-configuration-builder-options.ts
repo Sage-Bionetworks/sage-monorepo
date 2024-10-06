@@ -5,4 +5,5 @@ export type ProjectConfigurationBuilderOptions = {
   projectRoot: string;
   pluginConfig: PluginConfiguration;
   projectBuilder?: ProjectBuilder;
+  dockerized?: boolean;
 };

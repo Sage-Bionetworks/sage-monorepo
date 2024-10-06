@@ -35,7 +35,7 @@ function writeProjectConfigurationsToCache(
   writeJsonFile(cachePath, results);
 }
 
-const projectFilePattern = '{apps,libs}/**/project.json';
+const projectFilePattern = '{apps,libs}/openchallenges/**/project.json';
 
 export const createNodesV2: CreateNodesV2<PluginOptions> = [
   projectFilePattern,
@@ -98,6 +98,7 @@ async function createNodesInternal(
     projectRoot,
     pluginConfig,
     projectBuilder,
+    dockerized,
   };
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
     projectConfigurationBuilderOptions,
