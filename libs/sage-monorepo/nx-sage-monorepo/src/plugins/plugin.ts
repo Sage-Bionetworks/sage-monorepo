@@ -20,12 +20,14 @@ import { buildProjectTargets } from './build-project-targets';
 import { inferProjectType } from './project-type';
 import { inferProjectBuilder } from './project-builder';
 
-function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectConfiguration> {
+function readProjectCOnfigurationsCache(
+  cachePath: string,
+): Record<string, SageMonorepoProjectConfiguration> {
   console.log(`cachePath: ${cachePath}`);
   return existsSync(cachePath) ? readJsonFile(cachePath) : {};
 }
 
-function writeTargetsToCache(
+function writeProjectConfigurationsToCache(
   cachePath: string,
   results: Record<string, SageMonorepoProjectConfiguration>,
 ) {
@@ -42,18 +44,18 @@ export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
 
     // Reads the cached targets for all the projects
     const cachePath = join(workspaceDataDirectory, `sage-monorepo-${optionsHash}.hash`);
-    const targetsCache = readTargetsCache(cachePath);
+    const projectConfigurationsCache = readProjectCOnfigurationsCache(cachePath);
     try {
       return await createNodesFromFiles(
         (configFile, options, context) => {
-          return createNodesInternal(configFile, options, context, targetsCache);
+          return createNodesInternal(configFile, options, context, projectConfigurationsCache);
         },
         configFilePaths,
         options,
         context,
       );
     } finally {
-      writeTargetsToCache(cachePath, targetsCache);
+      writeProjectConfigurationsToCache(cachePath, projectConfigurationsCache);
     }
   },
 ];
@@ -62,7 +64,7 @@ async function createNodesInternal(
   configFilePath: string,
   options: SageMonorepoPluginOptions | undefined,
   context: CreateNodesContext,
-  targetsCache: Record<string, SageMonorepoProjectConfiguration>,
+  projectConfigurationsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
   const projectRoot = dirname(configFilePath);
   // Do not create a project if project.json and Dockerfile isn't there.
@@ -86,18 +88,18 @@ async function createNodesInternal(
   const projectBuilder = inferProjectBuilder(context.workspaceRoot, projectRoot);
   console.log(`projectBuilder: ${projectBuilder}`);
 
-  const config = createPluginConfiguration(options || {});
+  const pluginConfig = createPluginConfiguration(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the
   // hash to prevent the project files overwriting the target cache created by the other project
   const hash =
-    (await calculateHashForCreateNodes(projectRoot, config, context, [
+    (await calculateHashForCreateNodes(projectRoot, pluginConfig, context, [
       getLockFileName(detectPackageManager(context.workspaceRoot)),
     ])) + configFilePath;
 
-  targetsCache[hash] ??= await buildProjectTargets(projectRoot, config);
+  projectConfigurationsCache[hash] ??= await buildProjectTargets(projectRoot, pluginConfig);
 
-  const { targets, metadata } = targetsCache[hash];
+  const { targets, metadata } = projectConfigurationsCache[hash];
   const project: ProjectConfiguration = {
     root: projectRoot,
     targets,
