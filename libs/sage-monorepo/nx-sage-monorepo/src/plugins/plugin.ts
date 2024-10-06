@@ -18,6 +18,7 @@ import { createPluginConfiguration } from './sage-monorepo-plugin-configuration'
 import { SageMonorepoPluginOptions } from './sage-monorepo-plugin-options';
 import { buildProjectTargets } from './build-project-targets';
 import { inferProjectType } from './project-type';
+import { inferProjectBuilder } from './project-builder';
 
 function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectConfiguration> {
   console.log(`cachePath: ${cachePath}`);
@@ -82,6 +83,9 @@ async function createNodesInternal(
   const dockerized = projectType === 'application' && siblingFiles.includes('Dockerfile');
   console.log(`dockerized: ${dockerized}`);
 
+  const projectBuilder = inferProjectBuilder(context.workspaceRoot, projectRoot);
+  console.log(`projectBuilder: ${projectBuilder}`);
+
   const config = createPluginConfiguration(options || {});
 
   // We do not want to alter how the hash is calculated, so appending the config file path to the
@@ -91,9 +95,7 @@ async function createNodesInternal(
       getLockFileName(detectPackageManager(context.workspaceRoot)),
     ])) + configFilePath;
 
-  // TODO: build the targets only if they don't exist in the cache
-  const projectTargets = await buildProjectTargets(projectRoot, config);
-  targetsCache[hash] ??= projectTargets;
+  targetsCache[hash] ??= await buildProjectTargets(projectRoot, config);
 
   const { targets, metadata } = targetsCache[hash];
   const project: ProjectConfiguration = {

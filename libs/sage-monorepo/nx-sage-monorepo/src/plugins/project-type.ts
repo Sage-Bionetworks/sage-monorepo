@@ -1,8 +1,4 @@
-// export type ProjectType = 'APP' | 'LIB';
-
 import { ProjectType } from '@nx/devkit';
-
-export type ProgrammingLanguage = 'TypeScript' | 'Java';
 
 export function inferProjectType(projectRoot: string): ProjectType {
   if (projectRoot.startsWith('apps/')) {
