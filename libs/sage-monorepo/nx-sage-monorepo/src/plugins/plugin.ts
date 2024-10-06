@@ -17,6 +17,7 @@ import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-config
 import { createPluginConfiguration } from './sage-monorepo-plugin-configuration';
 import { SageMonorepoPluginOptions } from './sage-monorepo-plugin-options';
 import { buildProjectTargets } from './build-project-targets';
+import { inferProjectType } from './project-type';
 
 function readTargetsCache(cachePath: string): Record<string, SageMonorepoProjectConfiguration> {
   console.log(`cachePath: ${cachePath}`);
@@ -71,8 +72,15 @@ async function createNodesInternal(
 
   // Content of the project file
   const projectFileContent: ProjectConfiguration = readJsonFile(configFilePath);
+
   const projectName = projectFileContent.name;
   console.log(`projectName: ${projectName}`);
+
+  const projectType = inferProjectType(projectRoot);
+  console.log(`projectType: ${projectType}`);
+
+  const dockerized = projectType === 'application' && siblingFiles.includes('Dockerfile');
+  console.log(`dockerized: ${dockerized}`);
 
   const config = createPluginConfiguration(options || {});
 
