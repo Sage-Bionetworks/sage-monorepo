@@ -2,6 +2,8 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
+import '@angular/platform-browser-dynamic';
+import '@angular/compiler';
 
 import express from 'express';
 import path from 'path';
