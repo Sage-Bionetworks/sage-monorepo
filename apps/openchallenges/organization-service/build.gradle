@@ -34,8 +34,6 @@ dependencies {
   implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
   implementation "org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernateSearchVersion}"
   implementation "org.hibernate.search:hibernate-search-mapper-orm:${hibernateSearchVersion}"
-  implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
-  implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
   implementation "org.sagebionetworks:util:${openchallengesVersion}"
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
@@ -110,7 +108,6 @@ jacocoTestReport {
       '**/configuration/Flyway*.*',
       '**/configuration/HibernateSearch*.*',
       '**/configuration/HomeController*.*',
-      '**/configuration/Keycloak*.*',
       '**/configuration/SpringDocConfiguration*.*',
       '**/model/dto/**',
       '**/RFC3339DateFormat.*'
@@ -130,7 +127,6 @@ sonar {
     '**/configuration/Flyway*.*',
     '**/configuration/HibernateSearch*.*',
     '**/configuration/HomeController*.*',
-    '**/configuration/Keycloak*.*',
     '**/configuration/SpringDocConfiguration*.*',
     '**/model/dto/**',
     '**/RFC3339DateFormat.*'
