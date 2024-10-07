@@ -2,7 +2,7 @@
 
 import {
   Team,
-  TeamList as TeamsResponse,
+  TeamsList as TeamsResponse,
   TeamMember,
 } from '@sagebionetworks/agora/api-client-angular';
 

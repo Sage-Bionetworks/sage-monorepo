@@ -6,7 +6,7 @@ import { Observable, of } from 'rxjs';
 import { Gene, GenesResponse, GCTGeneResponse, Distribution } from '@sagebionetworks/agora/models';
 import { geneMock1, geneMock2, gctGeneMock1, nominatedGeneMock1, teamsResponseMock } from './';
 
-import { Team, TeamList } from '@sagebionetworks/agora/api-client-angular';
+import { TeamsList } from '@sagebionetworks/agora/api-client-angular';
 
 @Injectable()
 export class ApiServiceStub {
@@ -34,7 +34,7 @@ export class ApiServiceStub {
     return of({} as Distribution);
   }
 
-  getTeams(): Observable<TeamList> {
+  getTeams(): Observable<TeamsList> {
     return of(teamsResponseMock);
   }
 
