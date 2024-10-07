@@ -68,8 +68,7 @@
   },
   "forwardPorts": [
     2432, 3000, 3306, 3333, 4200, 4211, 5200, 5432, 5601, 7010, 7443, 7200, 7888, 8010, 8071, 8000,
-    8080, 8081, 8082, 8083, 8084, 8085, 8086, 8090, 8091, 8092, 8200, 8787, 8888, 8889, 9090, 9104,
-    9200, 9411, 27017
+    8080, 8081, 8082, 8084, 8085, 8086, 8090, 8200, 8787, 8888, 8889, 9090, 9104, 9200, 9411, 27017
   ],
   "portsAttributes": {
     "2432": {
@@ -148,10 +147,6 @@
       "label": "openchallenges-api-gateway",
       "onAutoForward": "silent"
     },
-    "8083": {
-      "label": "openchallenges-user-service",
-      "onAutoForward": "silent"
-    },
     "8084": {
       "label": "openchallenges-organization-service",
       "onAutoForward": "silent"
@@ -166,14 +161,6 @@
     },
     "8090": {
       "label": "openchallenges-config-server",
-      "onAutoForward": "silent"
-    },
-    "8091": {
-      "label": "openchallenges-auth-service",
-      "onAutoForward": "silent"
-    },
-    "8092": {
-      "label": "openchallenges-core-service",
       "onAutoForward": "silent"
     },
     "8787": {
