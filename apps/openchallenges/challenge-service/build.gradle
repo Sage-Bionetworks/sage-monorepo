@@ -36,8 +36,6 @@ dependencies {
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
   implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
   implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
-  implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
-  implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
   implementation "org.sagebionetworks:util:${openchallengesVersion}"
 
   implementation 'org.springframework.boot:spring-boot-starter-amqp:2.7.7'

@@ -40,11 +40,7 @@ public class SecurityConfig {
       .authenticated()
       .and()
       .csrf()
-      .disable()
-      .oauth2Login()
-      .and()
-      .oauth2ResourceServer()
-      .jwt();
+      .disable();
     return http.build();
   }
 }

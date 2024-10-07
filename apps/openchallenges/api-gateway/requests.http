@@ -1,55 +1,11 @@
 @serviceRegistryHost = http://openchallenges-service-registry:8081
 @apiGatewayHost = http://openchallenges-api-gateway:8082
 @userServiceHost = http://openchallenges-user-service:8083
-@keycloakHost = http://localhost:8080
 
-### Check API gateway actuator (expected to redirect to Keycloak login page)
+### Check API gateway actuator
 
 GET {{apiGatewayHost}}/actuator
 
 ### Check service registry info
 
 GET {{serviceRegistryHost}}/actuator/info
-
-### Check user service info
-
-GET {{userServiceHost}}/actuator/info
-
-### Check user service info via the API gateway (expected to redirect to
-### Keycloak login page)
-
-GET {{apiGatewayHost}}/user/actuator/info
-
-### Get access token from Keycloak
-
-@clientId = challenge-core-client
-@clientSecret = O0cNRMWg3LHsdHW8BNPlY96qKooDPhPX
-@username = luke
-@password = changeme
-
-# @name login
-
-POST {{keycloakHost}}/realms/test/protocol/openid-connect/token
-Content-Type: application/x-www-form-urlencoded
-
-grant_type=password
-&scope=email
-&client_id={{clientId}}
-&client_secret={{clientSecret}}
-&username={{username}}
-&password={{password}}
-
-### Check user service info
-
-GET {{apiGatewayHost}}/user/actuator/info
-Authorization: Bearer {{login.response.body.$.access_token}}
-
-### Check API gateway info
-
-GET {{apiGatewayHost}}/actuator/info
-Authorization: Bearer {{login.response.body.$.access_token}}
-
-### Check API gateway routes
-
-GET {{apiGatewayHost}}/actuator/gateway/routes
-Authorization: Bearer {{login.response.body.$.access_token}}
