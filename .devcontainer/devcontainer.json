@@ -140,10 +140,6 @@
       "label": "openchallenges-schema-registry",
       "onAutoForward": "silent"
     },
-    "8080": {
-      "label": "openchallenges-keycloak",
-      "onAutoForward": "silent"
-    },
     "8081": {
       "label": "openchallenges-service-registry",
       "onAutoForward": "silent"
