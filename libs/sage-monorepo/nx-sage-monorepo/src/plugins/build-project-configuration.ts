@@ -14,6 +14,7 @@ export async function buildProjectConfiguration(
     targets[pluginConfig.buildImageTargetName] = await buildImageTarget(
       options.projectRoot,
       options.projectName,
+      options.projectBuilder,
     );
   }
 

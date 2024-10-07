@@ -1,9 +1,22 @@
 import { TargetConfiguration } from '@nx/devkit';
+import { ProjectBuilder } from './project-builder';
 
 export async function buildImageTarget(
   projectRoot: string,
   projectName: string,
+  projectBuilder: ProjectBuilder | undefined,
 ): Promise<TargetConfiguration> {
+  const dependsOn = [
+    {
+      target: 'build',
+    },
+  ];
+  if (projectBuilder === 'gradle') {
+    dependsOn.push({
+      target: 'build-image-base',
+    });
+  }
+
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
@@ -28,6 +41,6 @@ export async function buildImageTarget(
       },
     },
     defaultConfiguration: 'local',
-    dependsOn: ['build'],
+    dependsOn,
   };
 }
