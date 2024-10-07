@@ -1,4 +1,9 @@
-export async function buildImageTarget(projectRoot: string, projectName: string) {
+import { TargetConfiguration } from '@nx/devkit';
+
+export async function buildImageTarget(
+  projectRoot: string,
+  projectName: string,
+): Promise<TargetConfiguration> {
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
@@ -23,5 +28,6 @@ export async function buildImageTarget(projectRoot: string, projectName: string)
       },
     },
     defaultConfiguration: 'local',
+    dependsOn: ['build'],
   };
 }
