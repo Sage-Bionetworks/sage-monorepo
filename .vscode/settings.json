@@ -22,7 +22,14 @@
   "editor.inlayHints.enabled": "off",
   "eslint.enable": true,
   "eslint.workingDirectories": ["."],
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "json"
+  ],
   // We need to explicitly set Prettier as the format for JSON formats, otherwise the formatter
   // provided with VS Code will set itself as the default one, despite us specifying that Prettier
   // is the default formatter (editor.defaultFormatter).

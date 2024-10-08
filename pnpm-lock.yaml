@@ -413,6 +413,9 @@ importers:
       jsdom:
         specifier: ~22.1.0
         version: 22.1.0(canvas@2.11.2(encoding@0.1.13))
+      jsonc-eslint-parser:
+        specifier: 2.4.0
+        version: 2.4.0
       lint-staged:
         specifier: 15.2.10
         version: 15.2.10
@@ -512,6 +515,12 @@ importers:
       vitest:
         specifier: ^1.3.1
         version: 1.6.0(@types/node@22.5.1)(@vitest/ui@1.6.0)(jsdom@22.1.0(canvas@2.11.2(encoding@0.1.13)))(less@4.1.3)(sass@1.77.8)(stylus@0.59.0)(terser@5.31.6)
+
+  libs/sage-monorepo/nx-sage-monorepo:
+    dependencies:
+      tslib:
+        specifier: ^2.3.0
+        version: 2.4.1
 
 packages:
 
@@ -12192,8 +12201,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@5.7.0-dev.20241007:
-    resolution: {integrity: sha512-oIOWWuGS7GI51GWoNlP9O/eKmV1P+lKbIzVzg2i8Ul6n8vWHjQISb8MkPBxDj+alhYG2sl+HxtFHHG/LCgN/hg==}
+  typescript@5.7.0-dev.20241008:
+    resolution: {integrity: sha512-FZzeU/lVGUgdl8+Rl2MChV2+eD0ZciK1LuVeoL8+P8ePsJjduRhGrWGRBHvy5KQOhZpxm0QdjrcnGkGDQEphvQ==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -17954,7 +17963,7 @@ snapshots:
       magic-string: 0.30.10
       path-browserify: 1.0.1
       process: 0.11.10
-      semver: 7.6.2
+      semver: 7.6.3
       storybook: 8.3.2
       style-loader: 3.3.4(webpack@5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0))
       terser-webpack-plugin: 5.3.10(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)(webpack@5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0))
@@ -18862,7 +18871,7 @@ snapshots:
       globby: 11.1.0
       is-glob: 4.0.3
       minimatch: 9.0.5
-      semver: 7.6.2
+      semver: 7.6.3
       ts-api-utils: 1.3.0(typescript@5.5.4)
     optionalDependencies:
       typescript: 5.5.4
@@ -18894,7 +18903,7 @@ snapshots:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.5.4)
       eslint: 8.57.0
       eslint-scope: 5.1.1
-      semver: 7.6.2
+      semver: 7.6.3
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -19842,7 +19851,7 @@ snapshots:
 
   builtins@5.1.0:
     dependencies:
-      semver: 7.6.2
+      semver: 7.6.3
 
   bundle-name@4.1.0:
     dependencies:
@@ -20595,7 +20604,7 @@ snapshots:
       postcss-modules-scope: 3.2.0(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.2
+      semver: 7.6.3
     optionalDependencies:
       webpack: 5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)
 
@@ -21279,7 +21288,7 @@ snapshots:
     dependencies:
       semver: 7.6.3
       shelljs: 0.8.5
-      typescript: 5.7.0-dev.20241007
+      typescript: 5.7.0-dev.20241008
 
   duplexer@0.1.2: {}
 
@@ -22407,7 +22416,7 @@ snapshots:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.6.2
+      semver: 7.6.3
       tapable: 2.2.1
       typescript: 5.5.4
       webpack: 5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)
@@ -24046,7 +24055,7 @@ snapshots:
       fs-extra: 10.1.0
       jsii-reflect: 1.101.0
       jsii-rosetta: 5.4.25
-      semver: 7.6.2
+      semver: 7.6.3
       spdx-license-list: 6.9.0
       xmlbuilder: 15.1.1
       yargs: 16.2.0
@@ -24098,7 +24107,7 @@ snapshots:
       downlevel-dts: 0.11.0
       fast-deep-equal: 3.1.3
       log4js: 6.9.1
-      semver: 7.6.2
+      semver: 7.6.3
       semver-intersect: 1.5.0
       sort-json: 2.0.1
       spdx-license-list: 6.9.0
@@ -24153,7 +24162,7 @@ snapshots:
       acorn: 8.12.1
       eslint-visitor-keys: 3.4.3
       espree: 9.6.1
-      semver: 7.6.2
+      semver: 7.6.3
 
   jsonc-parser@3.2.0: {}
 
@@ -25223,7 +25232,7 @@ snapshots:
     dependencies:
       hosted-git-info: 7.0.2
       proc-log: 3.0.0
-      semver: 7.6.2
+      semver: 7.6.3
       validate-npm-package-name: 5.0.1
 
   npm-package-arg@11.0.3:
@@ -25981,7 +25990,7 @@ snapshots:
       cosmiconfig: 7.1.0
       klona: 2.0.6
       postcss: 8.4.38
-      semver: 7.6.2
+      semver: 7.6.3
       webpack: 5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)
 
   postcss-loader@8.1.1(postcss@8.4.41)(typescript@5.5.4)(webpack@5.94.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)):
@@ -28295,7 +28304,7 @@ snapshots:
       json5: 2.2.3
       lodash.memoize: 4.1.2
       make-error: 1.3.6
-      semver: 7.6.2
+      semver: 7.6.3
       typescript: 5.5.4
       yargs-parser: 21.1.1
     optionalDependencies:
@@ -28310,7 +28319,7 @@ snapshots:
       chalk: 4.1.2
       enhanced-resolve: 5.17.0
       micromatch: 4.0.8
-      semver: 7.6.2
+      semver: 7.6.3
       source-map: 0.7.4
       typescript: 5.5.4
       webpack: 5.93.0(@swc/core@1.5.29(@swc/helpers@0.5.12))(esbuild@0.23.0)
@@ -28497,7 +28506,7 @@ snapshots:
 
   typescript@5.5.4: {}
 
-  typescript@5.7.0-dev.20241007: {}
+  typescript@5.7.0-dev.20241008: {}
 
   ua-parser-js@1.0.38: {}
 
