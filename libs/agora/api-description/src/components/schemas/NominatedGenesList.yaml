@@ -1,0 +1,7 @@
+type: object
+description: List of nominated genes
+properties:
+  items:
+    type: array
+    items:
+      $ref: Gene.yaml

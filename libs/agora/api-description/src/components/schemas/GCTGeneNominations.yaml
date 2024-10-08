@@ -1,0 +1,42 @@
+type: object
+description: GCTGeneNominations
+properties:
+  count:
+    type: integer
+    description: 'The total number of gene nominations.'
+  year:
+    type: integer
+    description: 'The year of the nominations.'
+  teams:
+    type: array
+    items:
+      type: string
+    description: 'The list of teams involved in the nominations.'
+  studies:
+    type: array
+    items:
+      type: string
+    description: 'The list of studies related to the nominations.'
+  inputs:
+    type: array
+    items:
+      type: string
+    description: 'The input data used for the nominations.'
+  programs:
+    type: array
+    items:
+      type: string
+    description: 'The list of programs associated with the nominations.'
+  validations:
+    type: array
+    items:
+      type: string
+    description: 'The list of validations for the nominations.'
+required:
+  - count
+  - year
+  - teams
+  - studies
+  - inputs
+  - programs
+  - validations

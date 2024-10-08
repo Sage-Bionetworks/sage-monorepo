@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { Team, TeamMember, TeamMemberService } from '@sagebionetworks/agora/api-client-angular';
+import { Team, TeamMember, TeamsService } from '@sagebionetworks/agora/api-client-angular';
 import { map, Observable } from 'rxjs';
 
 @Component({
@@ -9,10 +9,10 @@ import { map, Observable } from 'rxjs';
   imports: [CommonModule],
   templateUrl: './team-member-list.component.html',
   styleUrls: ['./team-member-list.component.scss'],
-  providers: [TeamMemberService],
+  providers: [TeamsService],
 })
 export class TeamMemberListComponent {
-  teamMemberService = inject(TeamMemberService);
+  teamsService = inject(TeamsService);
 
   _team: Team = {} as Team;
   get team(): Team {
@@ -46,7 +46,7 @@ export class TeamMemberListComponent {
   }
 
   getTeamMemberImageUrl(name: string): Observable<string | undefined> {
-    return this.teamMemberService.getTeamMemberImage(name).pipe(
+    return this.teamsService.getTeamMemberImage(name).pipe(
       map((buffer) => {
         if (!buffer || buffer.size <= 0) {
           return;

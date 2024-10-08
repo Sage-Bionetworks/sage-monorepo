@@ -1,0 +1,25 @@
+type: object
+description: MedianExpression
+properties:
+  min:
+    type: number
+    format: float
+  first_quartile:
+    type: number
+    format: float
+  median:
+    type: number
+    format: float
+  mean:
+    type: number
+    format: float
+  third_quartile:
+    type: number
+    format: float
+  max:
+    type: number
+    format: float
+  tissue:
+    type: string
+required:
+  - tissue

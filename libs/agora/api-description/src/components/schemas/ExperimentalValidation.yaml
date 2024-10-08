@@ -1,0 +1,53 @@
+type: object
+description: Experimental Validation
+properties:
+  _id:
+    type: string
+  ensembl_gene_id:
+    type: string
+  hgnc_symbol:
+    type: string
+  hypothesis_tested:
+    type: string
+  summary_findings:
+    type: string
+  published:
+    type: string
+  reference:
+    type: string
+  species:
+    type: string
+  model_system:
+    type: string
+  outcome_measure:
+    type: string
+  outcome_measure_details:
+    type: string
+  balanced_for_sex:
+    type: string
+  contributors:
+    type: string
+  team:
+    type: string
+  reference_doi:
+    type: string
+  date_report:
+    type: string
+required:
+  - _id
+  - ensembl_gene_id
+  - hgnc_symbol
+  - hypothesis_tested
+  - summary_findings
+  - published
+  - reference
+  - species
+  - model_system
+  - outcome_measure
+  - outcome_measure_details
+  - balanced_for_sex
+  - contributors
+  - team
+  - reference_doi
+  - date_report
+  - abability_bucket_definition

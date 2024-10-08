@@ -9,11 +9,15 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Team } from './team';
+import { SimilarGenesNetworkLink } from './similarGenesNetworkLink';
+import { SimilarGenesNetworkNode } from './similarGenesNetworkNode';
 
 /**
- * List of Teams
+ * SimilarGenesNetwork
  */
-export interface TeamList {
-  items?: Array<Team>;
+export interface SimilarGenesNetwork {
+  nodes?: Array<SimilarGenesNetworkNode>;
+  links?: Array<SimilarGenesNetworkLink>;
+  min?: number;
+  max?: number;
 }

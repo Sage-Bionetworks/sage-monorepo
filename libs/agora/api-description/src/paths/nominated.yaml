@@ -1,0 +1,17 @@
+get:
+  tags:
+    - NominatedGenes
+  summary: Get nominated genes
+  description: Get nominated genes
+  operationId: listNominatedGenes
+  responses:
+    '200':
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/NominatedGenesList.yaml
+      description: Success
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

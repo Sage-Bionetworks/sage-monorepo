@@ -1,7 +1,18 @@
 import express from 'express';
 import mongoose from 'mongoose';
-import { dataVersionRoute } from './components/dataversion';
-import { teamMemberImageRoute, teamsRoute } from './components/teams';
+import {
+  allBiodomainsRoute,
+  biodomainsRoute,
+  comparisonGenesRoute,
+  dataVersionRoute,
+  distributionRoute,
+  geneRoute,
+  genesRoute,
+  nominatedGenesRoute,
+  searchGeneRoute,
+  teamMemberImageRoute,
+  teamsRoute,
+} from './components';
 
 const mongoUri = process.env.MONGODB_URI;
 
@@ -19,7 +30,15 @@ mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection 
 
 const router = express.Router();
 mongoose.connection.once('open', async () => {
+  router.get('/biodomains', allBiodomainsRoute);
+  router.get('/biodomains/:id', biodomainsRoute);
   router.get('/dataversion', dataVersionRoute);
+  router.get('/distribution', distributionRoute);
+  router.get('/genes/search', searchGeneRoute);
+  router.get('/genes/comparison', comparisonGenesRoute);
+  router.get('/genes/nominated', nominatedGenesRoute);
+  router.get('/genes/:id', geneRoute);
+  router.get('/genes', genesRoute);
   router.get('/teams', teamsRoute);
   router.get('/teamMembers/:name/image', teamMemberImageRoute);
 });

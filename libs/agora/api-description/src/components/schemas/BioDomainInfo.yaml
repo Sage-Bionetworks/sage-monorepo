@@ -1,0 +1,7 @@
+type: object
+description: BioDomainInfo
+properties:
+  name:
+    type: string
+required:
+  - name

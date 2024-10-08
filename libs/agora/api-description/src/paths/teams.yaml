@@ -1,6 +1,6 @@
 get:
   tags:
-    - Team
+    - Teams
   summary: List Teams
   description: List Teams
   operationId: listTeams
@@ -9,7 +9,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: ../components/schemas/TeamList.yaml
+            $ref: ../components/schemas/TeamsList.yaml
       description: Success
     '400':
       $ref: ../components/responses/BadRequest.yaml

@@ -1,0 +1,30 @@
+type: object
+description: Distributions
+properties:
+  distribution:
+    type: array
+    items:
+      type: number
+    description: Distribution of overall scores
+  bins:
+    type: array
+    items:
+      type: array
+      items:
+        type: number
+    description: Bins used in the distribution
+  name:
+    type: string
+    description: Name of the score distribution
+  syn_id:
+    type: string
+    description: Synapse ID associated with the score
+  wiki_id:
+    type: string
+    description: Wiki ID associated with the score
+required:
+  - distribution
+  - bins
+  - name
+  - syn_id
+  - wiki_id

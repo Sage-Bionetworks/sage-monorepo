@@ -1,0 +1,27 @@
+get:
+  tags:
+    - Genes
+  summary: Retrieve a list of genes or filter by Ensembl gene IDs
+  description: This endpoint returns all genes or filters genes by Ensembl gene IDs if provided.
+  operationId: getGenes
+  parameters:
+    - in: query
+      name: ids
+      schema:
+        type: string
+        description: Comma-separated list of Ensembl gene IDs to filter.
+      required: false
+      example: 'ENSG00000139618,ENSG00000248378'
+  responses:
+    '200':
+      description: A list of genes.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../components/schemas/Gene.yaml
+    '400':
+      $ref: ../components/responses/BadRequest.yaml
+    '500':
+      $ref: ../components/responses/InternalServerError.yaml

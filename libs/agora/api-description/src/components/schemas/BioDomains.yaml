@@ -1,0 +1,14 @@
+type: object
+description: BioDomains
+properties:
+  ensembl_gene_id:
+    type: string
+    description: The Ensembl Gene ID.
+  gene_biodomains:
+    type: array
+    items:
+      $ref: BioDomain.yaml
+    description: A list of gene biodomains.
+required:
+  - ensembl_gene_id
+  - gene_biodomains

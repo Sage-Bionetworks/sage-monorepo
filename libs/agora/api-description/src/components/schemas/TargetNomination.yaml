@@ -1,0 +1,40 @@
+type: object
+description: TargetNomination
+properties:
+  source:
+    type: string
+  team:
+    type: string
+  rank:
+    type: string
+  hgnc_symbol:
+    type: string
+  target_choice_justification:
+    type: string
+  predicted_therapeutic_direction:
+    type: string
+  data_used_to_support_target_selection:
+    type: string
+  data_synapseid:
+    type: string
+  study:
+    type: string
+  input_data:
+    type: string
+  validation_study_details:
+    type: string
+  initial_nomination:
+    type: number
+required:
+  - source
+  - team
+  - rank
+  - hgnc_symbol
+  - target_choice_justification
+  - predicted_therapeutic_direction
+  - data_used_to_support_target_selection
+  - data_synapseid
+  - study
+  - input_data
+  - validation_study_details
+  - initial_nomination

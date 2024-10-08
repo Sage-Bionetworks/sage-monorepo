@@ -1,0 +1,7 @@
+type: object
+description: List of GCTGene
+properties:
+  items:
+    type: array
+    items:
+      $ref: GCTGene.yaml

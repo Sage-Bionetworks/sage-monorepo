@@ -1,0 +1,27 @@
+type: object
+description: BioDomain
+properties:
+  biodomain:
+    type: string
+    description: Name of the biological domain
+  go_terms:
+    type: array
+    description: List of Gene Ontology (GO) terms
+    items:
+      type: string
+  n_biodomain_terms:
+    type: integer
+    description: Number of terms associated with the biological domain
+  n_gene_biodomain_terms:
+    type: integer
+    description: Number of gene terms linked to the biological domain
+  pct_linking_terms:
+    type: number
+    format: float
+    description: Percentage of terms linking to the domain
+required:
+  - biodomain
+  - go_terms
+  - n_biodomain_terms
+  - n_gene_biodomain_terms
+  - pct_linking_terms

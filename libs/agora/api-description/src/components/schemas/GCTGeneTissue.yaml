@@ -1,0 +1,32 @@
+type: object
+description: GCTGeneTissue
+properties:
+  name:
+    type: string
+    description: 'Name of the gene or tissue.'
+  logfc:
+    type: number
+    format: float
+    description: 'Log fold change value.'
+  adj_p_val:
+    type: number
+    format: float
+    description: 'Adjusted p-value.'
+  ci_l:
+    type: number
+    format: float
+    description: 'Lower confidence interval.'
+  ci_r:
+    type: number
+    format: float
+    description: 'Upper confidence interval.'
+  medianexpression:
+    $ref: MedianExpression.yaml
+    nullable: true
+required:
+  - name
+  - logfc
+  - adj_p_val
+  - ci_l
+  - ci_r
+  - mediaexpression

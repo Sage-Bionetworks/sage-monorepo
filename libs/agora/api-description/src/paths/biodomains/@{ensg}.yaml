@@ -1,0 +1,26 @@
+get:
+  tags:
+    - BioDomains
+  summary: Retrieve bioDomain for a given ENSG
+  description: Get bioDomain
+  operationId: getBioDomain
+  parameters:
+    - name: ensg
+      in: path
+      required: true
+      description: The ENSG (Ensembl Gene ID) for which to retrieve biodomain data.
+      schema:
+        type: string
+  responses:
+    '200':
+      description: Successful retrieval of bio-domains
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/BioDomain.yaml
+    '404':
+      description: ENSG not found
+    '500':
+      description: Internal server error

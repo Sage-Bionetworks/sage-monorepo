@@ -1,0 +1,36 @@
+type: object
+description: Distributions
+properties:
+  _id:
+    type: string
+    description: ID of the RNA distribution
+  model:
+    type: string
+    description: Model of the RNA data
+  tissue:
+    type: string
+    description: Tissue type
+  min:
+    type: number
+    description: Minimum value in the distribution
+  max:
+    type: number
+    description: Maximum value in the distribution
+  first_quartile:
+    type: number
+    description: First quartile value
+  median:
+    type: number
+    description: Median value
+  third_quartile:
+    type: number
+    description: Third quartile value
+required:
+  - _id
+  - model
+  - tissue
+  - min
+  - max
+  - first_quartile
+  - median
+  - third_quartile

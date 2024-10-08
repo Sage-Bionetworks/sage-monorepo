@@ -21,8 +21,24 @@ tags:
   - name: TeamMember
     description: Operations about team members.
 paths:
+  /biodomains:
+    $ref: paths/biodomains.yaml
+  /biodomains/{ensg}:
+    $ref: paths/biodomains/@{ensg}.yaml
+  /genes:
+    $ref: paths/genes.yaml
+  /genes/{ensg}:
+    $ref: paths/genes/@{ensg}.yaml
+  /genes/search:
+    $ref: paths/genes/search.yaml
+  /genes/comparison:
+    $ref: paths/genes/comparison.yaml
+  /genes/nominated:
+    $ref: paths/genes/nominated.yaml
   /dataversion:
     $ref: paths/dataversion.yaml
+  /distribution:
+    $ref: paths/distribution.yaml
   /teams:
     $ref: paths/teams.yaml
   /teamMembers/{name}/image:
