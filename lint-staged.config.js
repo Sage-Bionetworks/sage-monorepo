@@ -40,4 +40,9 @@ module.exports = {
     // Lint files with SQLFluff
     `poetry run sqlfluff lint ${filenames.join(' ')}`,
   ],
+
+  '**/*': (filenames) => [
+    // Test the projects affected by the staged files
+    `nx affected --target=test --files=${filenames.join(',')}`,
+  ],
 };
