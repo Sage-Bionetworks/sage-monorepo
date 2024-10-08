@@ -1,1 +1,0 @@
-FROM quay.io/keycloak/keycloak:19.0.3

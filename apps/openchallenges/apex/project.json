@@ -20,13 +20,24 @@
     "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
-        "context": "apps/openchallenges/apex",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+        "context": "{projectRoot}"
+      },
+      "configurations": {
+        "local": {
+          "metadata": {
+            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+            "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+          }
         },
-        "push": false
-      }
+        "ci": {
+          "metadata": {
+            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
+            "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"]
+          },
+          "push": true
+        }
+      },
+      "defaultConfiguration": "local"
     },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",

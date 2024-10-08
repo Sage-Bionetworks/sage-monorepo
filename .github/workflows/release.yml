@@ -1,0 +1,46 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'agora/v*'
+      - 'openchallenges/v*'
+
+permissions:
+  packages: write
+
+env:
+  PRODUCT: ''
+  VERSION: ''
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04-4core-16GBRAM-150GBSSD
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Extract product and version from Git tag
+        run: |
+          # Extract the product name (part before the first slash) and version (part after the first slash)
+          PRODUCT=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f1)
+          VERSION=$(echo "${GITHUB_REF#refs/tags/}" | cut -d'/' -f2)
+
+          # Output extracted values for the rest of the job
+          echo "PRODUCT=${PRODUCT}" >> $GITHUB_ENV
+          echo "VERSION=${VERSION}" >> $GITHUB_ENV
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Build the Docker images for the specified product
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && export VERSION=${{ env.VERSION }} \
+            && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
+            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=ci"
