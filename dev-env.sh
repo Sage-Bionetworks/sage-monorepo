@@ -89,6 +89,14 @@ function agora-build-images {
   nx run-many --target=build-image --projects=agora-* --parallel=3
 }
 
+function agora-test {
+  nx run-many --target=test --projects=agora-* --parallel=10
+}
+
+function agora-test-affected {
+  nx affected --target=test --projects=agora-* --parallel=10
+}
+
 function model-ad-build-images {
   nx run-many --target=build-image --projects=model-ad-* --parallel=3
 }
