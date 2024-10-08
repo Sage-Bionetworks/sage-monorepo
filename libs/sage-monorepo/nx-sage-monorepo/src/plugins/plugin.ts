@@ -74,6 +74,9 @@ async function createNodesInternal(
   const projectFileContent: ProjectConfiguration = readJsonFile(configFilePath);
 
   const projectName = projectFileContent.name;
+  if (typeof projectName !== 'string') {
+    throw new Error('Project name is undefined or not a valid string.');
+  }
   console.log(`projectName: ${projectName}`);
 
   const projectType = inferProjectType(projectRoot);
@@ -96,6 +99,7 @@ async function createNodesInternal(
 
   const projectConfigurationBuilderOptions: ProjectConfigurationBuilderOptions = {
     projectRoot,
+    projectName,
     pluginConfig,
     projectBuilder,
     dockerized,

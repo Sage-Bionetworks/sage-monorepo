@@ -11,7 +11,10 @@ export async function buildProjectConfiguration(
   const pluginConfig = options.pluginConfig;
 
   if (options.dockerized) {
-    targets[pluginConfig.buildImageTargetName] = await buildImageTarget(options.projectRoot);
+    targets[pluginConfig.buildImageTargetName] = await buildImageTarget(
+      options.projectRoot,
+      options.projectName,
+    );
   }
 
   const metadata = {};
