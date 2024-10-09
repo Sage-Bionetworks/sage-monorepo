@@ -18,17 +18,6 @@
       },
       "dependsOn": []
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/mysqld-exporter",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-mysqld-exporter"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      }
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {

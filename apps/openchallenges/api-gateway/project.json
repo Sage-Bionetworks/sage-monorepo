@@ -67,18 +67,6 @@
       },
       "dependsOn": ["^install"]
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/api-gateway",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-api-gateway"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["build-image-base"]
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {

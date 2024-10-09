@@ -17,28 +17,6 @@
         "command": "docker/openchallenges/serve-detach.sh openchallenges-apex"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "{projectRoot}"
-      },
-      "configurations": {
-        "local": {
-          "metadata": {
-            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-            "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-          }
-        },
-        "ci": {
-          "metadata": {
-            "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-            "tags": ["type=semver,pattern={{version}},value=${VERSION}", "type=sha"]
-          },
-          "push": true
-        }
-      },
-      "defaultConfiguration": "local"
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
