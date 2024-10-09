@@ -6,3 +6,4 @@ packages:
   # prevent the creation of libs/**/api-client-angular/node_modules when running `workspace-install`
   # that break the apps and tests
   - '!libs/**/api-client-angular'
+  - '!libs/sage-monorepo/nx-sage-monorepo'
