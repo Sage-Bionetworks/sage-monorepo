@@ -5,6 +5,7 @@ import {
   detectPackageManager,
   ProjectConfiguration,
   readJsonFile,
+  workspaceRoot,
   writeJsonFile,
 } from '@nx/devkit';
 import { hashObject } from 'nx/src/hasher/file-hasher';
@@ -20,6 +21,7 @@ import { buildProjectConfiguration } from './build-project-configuration';
 import { inferProjectType } from './project-type';
 import { inferProjectBuilder } from './project-builder';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
+import { inferProjectMetadata } from './project-metadata';
 
 function readProjectCOnfigurationsCache(
   cachePath: string,
@@ -87,6 +89,9 @@ async function createNodesInternal(
 
   const projectBuilder = inferProjectBuilder(context.workspaceRoot, projectRoot);
   console.log(`projectBuilder: ${projectBuilder}`);
+
+  const projectMetadata = inferProjectMetadata(workspaceRoot, projectRoot, projectFileContent);
+  console.log(`projectMetadata: ${JSON.stringify(projectMetadata)}`);
 
   const pluginConfig = createPluginConfiguration(options || {});
 
