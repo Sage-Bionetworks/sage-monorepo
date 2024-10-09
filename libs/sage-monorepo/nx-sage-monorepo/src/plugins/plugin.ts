@@ -78,16 +78,16 @@ async function createNodesInternal(
   if (typeof projectName !== 'string') {
     throw new Error('Project name is undefined or not a valid string.');
   }
-  console.log(`projectName: ${projectName}`);
+  // console.log(`projectName: ${projectName}`);
 
   const projectType = inferProjectType(projectRoot);
-  console.log(`projectType: ${projectType}`);
+  // console.log(`projectType: ${projectType}`);
 
   const dockerized = projectType === 'application' && siblingFiles.includes('Dockerfile');
-  console.log(`dockerized: ${dockerized}`);
+  // console.log(`dockerized: ${dockerized}`);
 
   const projectMetadata = inferProjectMetadata(workspaceRoot, projectRoot, projectFileContent);
-  console.log(`projectMetadata: ${JSON.stringify(projectMetadata)}`);
+  // console.log(`projectMetadata: ${JSON.stringify(projectMetadata)}`);
 
   const pluginConfig = createPluginConfiguration(options || {});
 

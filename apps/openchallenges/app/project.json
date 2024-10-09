@@ -132,18 +132,6 @@
         "jestConfig": "apps/openchallenges/app/jest.config.ts"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["server"]
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {

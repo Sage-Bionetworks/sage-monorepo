@@ -14,14 +14,14 @@ export async function buildProjectConfiguration(
     targets[pluginConfig.buildImageTargetName] = await buildImageTarget(
       options.projectRoot,
       options.projectName,
-      options.projectBuilder,
+      options.projectMetadata.builder,
     );
   }
 
   const metadata = {};
   const tags: string[] = [];
-  if (options.projectBuilder) {
-    tags.push(`builder:${options.projectBuilder}`);
+  if (options.projectMetadata.builder) {
+    tags.push(`builder:${options.projectMetadata.builder}`);
   }
 
   return { targets, metadata, tags };
