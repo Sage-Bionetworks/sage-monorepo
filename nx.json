@@ -41,7 +41,15 @@
     }
   },
   "defaultProject": "openchallenges-app",
-  "plugins": ["@nxlv/python"],
+  "plugins": [
+    "@nxlv/python",
+    {
+      "plugin": "@sagebionetworks/nx-sage-monorepo",
+      "options": {
+        "buildImageTargetName": "build-image"
+      }
+    }
+  ],
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "targetDefaults": {
     "build": {
