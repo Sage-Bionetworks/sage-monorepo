@@ -38,7 +38,7 @@
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
-      "@sagebionetworks/nx-sage-monorepo": ["libs/sage-monorepo/nx-sage-monorepo/src/index.ts"],
+      "@sagebionetworks/nx-sage-monorepo": ["libs/sage-monorepo/nx-sage-monorepo/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],
       "@sagebionetworks/openchallenges/api-client-angular": [
         "libs/openchallenges/api-client-angular/src/index.ts"
