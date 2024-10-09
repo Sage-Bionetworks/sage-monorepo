@@ -1,10 +1,10 @@
 import { PluginConfiguration } from './plugin-configuration';
-import { ProjectBuilder } from './project-builder';
+import { ProjectMetadata } from './project-metadata';
 
 export type ProjectConfigurationBuilderOptions = {
   projectRoot: string;
   projectName: string;
   pluginConfig: PluginConfiguration;
-  projectBuilder?: ProjectBuilder;
+  projectMetadata: ProjectMetadata;
   dockerized?: boolean;
 };

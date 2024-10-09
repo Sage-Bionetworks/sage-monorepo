@@ -19,7 +19,6 @@ import { createPluginConfiguration } from './plugin-configuration';
 import { PluginOptions } from './plugin-options';
 import { buildProjectConfiguration } from './build-project-configuration';
 import { inferProjectType } from './project-type';
-import { inferProjectBuilder } from './project-builder';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 import { inferProjectMetadata } from './project-metadata';
 
@@ -87,9 +86,6 @@ async function createNodesInternal(
   const dockerized = projectType === 'application' && siblingFiles.includes('Dockerfile');
   console.log(`dockerized: ${dockerized}`);
 
-  const projectBuilder = inferProjectBuilder(context.workspaceRoot, projectRoot);
-  console.log(`projectBuilder: ${projectBuilder}`);
-
   const projectMetadata = inferProjectMetadata(workspaceRoot, projectRoot, projectFileContent);
   console.log(`projectMetadata: ${JSON.stringify(projectMetadata)}`);
 
@@ -106,7 +102,7 @@ async function createNodesInternal(
     projectRoot,
     projectName,
     pluginConfig,
-    projectBuilder,
+    projectMetadata,
     dockerized,
   };
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
