@@ -3,13 +3,13 @@ description: 'Installs the dev container CLI, fetches caches (if exist), and sta
 runs:
   using: 'composite'
   steps:
-    - name: Set up pnpm cache
-      uses: actions/cache@v3
-      with:
-        path: '/tmp/.pnpm-store'
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+    # - name: Set up pnpm cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: '/tmp/.pnpm-store'
+    #     key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-pnpm-store-
 
     - name: Set up Renv cache
       uses: actions/cache@v3
