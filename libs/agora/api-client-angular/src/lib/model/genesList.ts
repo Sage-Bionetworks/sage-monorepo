@@ -9,15 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { TeamMember } from './teamMember';
+import { Gene } from './gene';
 
 /**
- * Team
+ * List of Genes
  */
-export interface Team {
-  team: string;
-  team_full: string;
-  program: string;
-  description: string;
-  members: Array<TeamMember>;
+export interface GenesList {
+  items?: Array<Gene>;
 }

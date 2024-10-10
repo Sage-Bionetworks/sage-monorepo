@@ -16,9 +16,7 @@ get:
       content:
         application/json:
           schema:
-            type: array
-            items:
-              $ref: ../../components/schemas/Gene.yaml
+            $ref: ../../components/schemas/GenesList.yaml
     '400':
       $ref: ../../components/responses/BadRequest.yaml
     '500':

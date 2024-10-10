@@ -1,16 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
+import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
 import { PathSanitizer } from '@sagebionetworks/agora/util';
 
 @Component({
   selector: 'agora-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, GeneSearchComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
+  sanitizer = inject(PathSanitizer);
+
   backgroundBox1Path!: SafeUrl;
   backgroundBox2Path!: SafeUrl;
   backgroundBox3Path!: SafeUrl;
@@ -19,7 +22,7 @@ export class HomeComponent {
   nominatedTargetsIconPath!: SafeUrl;
   arrowPath!: SafeUrl;
 
-  constructor(private sanitizer: PathSanitizer) {
+  constructor() {
     this.loadBackgroundImages();
     this.loadIcons();
   }
