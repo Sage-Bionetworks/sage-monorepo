@@ -12,6 +12,7 @@ export * from './gCTGeneNominations';
 export * from './gCTGeneTissue';
 export * from './gCTGenesList';
 export * from './gene';
+export * from './genesList';
 export * from './medianExpression';
 export * from './neuropathologicCorrelation';
 export * from './nominatedGenesList';

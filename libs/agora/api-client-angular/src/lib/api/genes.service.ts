@@ -31,6 +31,8 @@ import { GCTGenesList } from '../model/gCTGenesList';
 // @ts-ignore
 import { Gene } from '../model/gene';
 // @ts-ignore
+import { GenesList } from '../model/genesList';
+// @ts-ignore
 import { NominatedGenesList } from '../model/nominatedGenesList';
 
 // @ts-ignore
@@ -494,7 +496,7 @@ export class GenesService {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<Array<Gene>>;
+  ): Observable<GenesList>;
   public searchGene(
     id: string,
     observe?: 'response',
@@ -503,7 +505,7 @@ export class GenesService {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpResponse<Array<Gene>>>;
+  ): Observable<HttpResponse<GenesList>>;
   public searchGene(
     id: string,
     observe?: 'events',
@@ -512,7 +514,7 @@ export class GenesService {
       httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
-  ): Observable<HttpEvent<Array<Gene>>>;
+  ): Observable<HttpEvent<GenesList>>;
   public searchGene(
     id: string,
     observe: any = 'body',
@@ -560,7 +562,7 @@ export class GenesService {
     }
 
     let localVarPath = `/genes/search`;
-    return this.httpClient.get<Array<Gene>>(`${this.configuration.basePath}${localVarPath}`, {
+    return this.httpClient.get<GenesList>(`${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       params: localVarQueryParameters,
       responseType: <any>responseType_,
