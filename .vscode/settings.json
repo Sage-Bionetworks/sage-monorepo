@@ -22,10 +22,14 @@
   "editor.inlayHints.enabled": "off",
   "eslint.enable": true,
   "eslint.workingDirectories": ["."],
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact", "html"],
-  // We need to explicitly set Prettier as the format for JSON formats, otherwise the formatter
-  // provided with VS Code will set itself as the default one, despite us specifying that Prettier
-  // is the default formatter (editor.defaultFormatter).
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "html",
+    "json"
+  ],
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -42,16 +46,13 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "typescript.tsdk": "node_modules/typescript/lib",
-  // Python settings
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
-  // "python.terminal.activateEnvironment": false,
   "python.terminal.activateEnvInCurrentTerminal": false,
   "[python]": {
     "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.tabSize": 4
   },
-  // SQL settings
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
