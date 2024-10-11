@@ -12,13 +12,13 @@ import { hashObject } from 'nx/src/hasher/file-hasher';
 import { workspaceDataDirectory } from 'nx/src/utils/cache-directory';
 import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash-for-create-nodes';
 import { dirname, join } from 'path';
-import { existsSync, readdirSync } from 'fs';
+import { existsSync } from 'fs';
 import { getLockFileName } from '@nx/js';
 import { SageMonorepoProjectConfiguration } from './project-configuration';
 import { createPluginConfiguration, SageMonorepoPluginOptions } from './plugin-configuration';
 import { buildProjectConfiguration } from './build-project-configuration';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
-import { inferProjectMetadata, inferProjectType } from './project-metadata';
+import { inferProjectMetadata } from './project-metadata';
 
 function readProjectCOnfigurationsCache(
   cachePath: string,
@@ -67,7 +67,6 @@ async function createNodesInternal(
   projectConfigurationsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
   const projectRoot = dirname(configFilePath);
-  const siblingFiles = readdirSync(join(context.workspaceRoot, projectRoot));
 
   // Content of the project file
   const projectFileContent: ProjectConfiguration = readJsonFile(configFilePath);
@@ -77,12 +76,6 @@ async function createNodesInternal(
     throw new Error('Project name is undefined or not a valid string.');
   }
   // console.log(`projectName: ${projectName}`);
-
-  const projectType = inferProjectType(projectRoot);
-  // console.log(`projectType: ${projectType}`);
-
-  const dockerized = projectType === 'application' && siblingFiles.includes('Dockerfile');
-  // console.log(`dockerized: ${dockerized}`);
 
   const projectMetadata = inferProjectMetadata(workspaceRoot, projectRoot, projectFileContent);
   // console.log(`projectMetadata: ${JSON.stringify(projectMetadata)}`);
@@ -101,7 +94,6 @@ async function createNodesInternal(
     projectName,
     pluginConfig,
     projectMetadata,
-    dockerized,
   };
   projectConfigurationsCache[hash] ??= await buildProjectConfiguration(
     projectConfigurationBuilderOptions,

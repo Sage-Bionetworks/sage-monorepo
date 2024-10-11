@@ -6,5 +6,4 @@ export type ProjectConfigurationBuilderOptions = {
   projectName: string;
   pluginConfig: SageMonorepoPluginConfiguration;
   projectMetadata: ProjectMetadata;
-  dockerized?: boolean;
 };
