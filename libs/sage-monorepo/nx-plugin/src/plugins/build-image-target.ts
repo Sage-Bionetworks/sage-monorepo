@@ -1,17 +1,18 @@
 import { TargetConfiguration } from '@nx/devkit';
-import { Builder } from './project-metadata';
+import { Builder, Framework } from './project-metadata';
 
 export async function buildImageTarget(
   projectRoot: string,
   projectName: string,
   projectBuilder: Builder | undefined | null, // TODO: builder could be app or image, be more specific
+  projectFramework: Framework | null,
 ): Promise<TargetConfiguration> {
   const dependsOn = [];
   if (projectBuilder === 'gradle') {
     dependsOn.push({
       target: 'build-image-base',
     });
-  } else if (projectBuilder === 'webpack') {
+  } else if (projectBuilder === 'webpack' && projectFramework === 'angular') {
     dependsOn.push({
       // TODO: the task `server` is more about Angular that the build itself. To revisit. Also,
       // shall we let the user decide between CSR and SSR?
@@ -25,6 +26,7 @@ export async function buildImageTarget(
 
   let context = projectRoot;
   // TODO: The context must be set to '.' for Angular app. Be more specific.
+  // Actually, this is also valid for `agora-api` built with Webpack.
   if (projectBuilder === 'webpack') {
     context = '.';
   }
