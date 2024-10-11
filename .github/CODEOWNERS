@@ -7,15 +7,15 @@
 /.yarn @tschaffter
 
 # OpenChallenges
-/apps/openchallenges/ @rrchai @tschaffter @vpchung
-/libs/openchallenges/ @rrchai @tschaffter @vpchung
+/apps/openchallenges/ @rrchai @tschaffter
+/libs/openchallenges/ @rrchai @tschaffter
 
 ## DB content
-/apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @vpchung @gaiaandreoletti
-/apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @vpchung @gaiaandreoletti
+/apps/openchallenges/challenge-service/src/main/resources/db/     @tschaffter @gaiaandreoletti
+/apps/openchallenges/organization-service/src/main/resources/db/  @tschaffter @gaiaandreoletti
 
 ## EDAM ETL
-/apps/openchallenges/edam-etl/  @mdsage1
+/apps/openchallenges/edam-etl/ @rrchai
 
 # Schematic
 /apps/schematic/ @andrewelamb @GiaJordan @linglp @milen-sage
@@ -27,7 +27,7 @@
 
 /libs/shared/ @tschaffter
 
-/apps/model-ad/ @hallieswan @sagely1
-/docker/model-ad/ @hallieswan @sagely1
-/libs/model-ad/ @hallieswan @sagely1
-/libs/results-visualization-framework/ @hallieswan @sagely1
+/apps/model-ad/ @sagely1
+/docker/model-ad/ @sagely1
+/libs/model-ad/ @sagely1
+/libs/results-visualization-framework/ @sagely1
