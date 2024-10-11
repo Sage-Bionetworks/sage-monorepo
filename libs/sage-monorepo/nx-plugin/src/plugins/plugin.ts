@@ -23,7 +23,7 @@ import { inferProjectMetadata } from './project-metadata';
 function readProjectCOnfigurationsCache(
   cachePath: string,
 ): Record<string, SageMonorepoProjectConfiguration> {
-  console.log(`cachePath: ${cachePath}`);
+  // console.log(`cachePath: ${cachePath}`);
   return existsSync(cachePath) ? readJsonFile(cachePath) : {};
 }
 
@@ -34,7 +34,7 @@ function writeProjectConfigurationsToCache(
   writeJsonFile(cachePath, results);
 }
 
-const projectFilePattern = '{apps,libs}/openchallenges/**/project.json';
+const projectFilePattern = '{apps,libs}/{openchallenges,agora}/**/project.json';
 
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,
