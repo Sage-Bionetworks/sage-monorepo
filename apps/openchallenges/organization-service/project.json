@@ -75,18 +75,6 @@
       },
       "dependsOn": ["^install"]
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "{projectRoot}",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["build-image-base"]
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
