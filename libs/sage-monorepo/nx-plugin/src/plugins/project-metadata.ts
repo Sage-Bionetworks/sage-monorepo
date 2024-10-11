@@ -7,9 +7,9 @@ export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'poetry';
 // export type TypeChecker = 'mypy' | 'pyright';
 // export type TestingTool = 'pytest' | null;
 // export type Formatter = 'Black' | 'Prettier';
-export type ContainerType = 'Docker' | 'Singularity';
+export type ContainerType = 'docker' | 'singularity';
 // export type Language = 'python' | 'typescript' | 'javascript';
-// export type Framework = 'Flask' | 'React' | 'Angular' | 'Vue' | null;
+export type Framework = 'angular';
 
 export type ProjectMetadata = {
   projectType: ProjectType;
@@ -24,7 +24,7 @@ export type ProjectMetadata = {
   // formatter: Formatter;
   containerType: ContainerType | null;
   // language: Language;
-  // framework: Framework;
+  framework: Framework | null;
 };
 
 export function inferProjectMetadata(
@@ -37,6 +37,7 @@ export function inferProjectMetadata(
     projectType: inferProjectType(projectRoot),
     builder: inferBuilder(siblingFiles, localProjectConfiguration),
     containerType: inferContainerType(siblingFiles),
+    framework: inferFramework(localProjectConfiguration),
   };
 }
 
@@ -68,7 +69,18 @@ function inferBuilder(
 }
 
 function inferContainerType(siblingFiles: string[]): ContainerType | null {
-  if (siblingFiles.includes('Dockerfile')) return 'Docker';
+  if (siblingFiles.includes('Dockerfile')) return 'docker';
+
+  return null;
+}
+
+function inferFramework(localProjectConfiguration: ProjectConfiguration): Framework | null {
+  const buildExecutor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
+  const angularBuildExecutors = ['@angular-devkit/build-angular:browser'];
+
+  if (angularBuildExecutors.includes(buildExecutor)) {
+    return 'angular';
+  }
 
   return null;
 }

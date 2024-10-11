@@ -10,11 +10,12 @@ export async function buildProjectConfiguration(
 
   const pluginConfig = options.pluginConfig;
 
-  if (options.projectMetadata.containerType === 'Docker') {
+  if (options.projectMetadata.containerType === 'docker') {
     targets[pluginConfig.buildImageTargetName] = await buildImageTarget(
       options.projectRoot,
       options.projectName,
       options.projectMetadata.builder,
+      options.projectMetadata.framework,
     );
   }
 
