@@ -20,10 +20,10 @@ import { buildProjectConfiguration } from './build-project-configuration';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 import { inferProjectMetadata } from './project-metadata';
 
-function readProjectCOnfigurationsCache(
+function readProjectConfigurationsCache(
   cachePath: string,
 ): Record<string, SageMonorepoProjectConfiguration> {
-  console.log(`cachePath: ${cachePath}`);
+  // console.log(`cachePath: ${cachePath}`);
   return existsSync(cachePath) ? readJsonFile(cachePath) : {};
 }
 
@@ -34,7 +34,7 @@ function writeProjectConfigurationsToCache(
   writeJsonFile(cachePath, results);
 }
 
-const projectFilePattern = '{apps,libs}/openchallenges/**/project.json';
+const projectFilePattern = '{apps,libs}/{openchallenges,agora}/**/project.json';
 
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,
@@ -44,7 +44,7 @@ export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
 
     // Reads the cached targets for all the projects
     const cachePath = join(workspaceDataDirectory, `sage-monorepo-${optionsHash}.hash`);
-    const projectConfigurationsCache = readProjectCOnfigurationsCache(cachePath);
+    const projectConfigurationsCache = readProjectConfigurationsCache(cachePath);
     try {
       return await createNodesFromFiles(
         (configFile, options, context) => {

@@ -46,6 +46,7 @@ function inferProjectType(projectRoot: string): ProjectType {
   } else if (projectRoot.startsWith('libs/')) {
     return 'library';
   }
+
   throw new Error(`Unknown project type for project root: ${projectRoot}`);
 }
 
@@ -55,16 +56,19 @@ function inferBuilder(
 ): Builder | null {
   if (siblingFiles.includes('poetry.lock')) return 'poetry';
   if (siblingFiles.includes('build.gradle')) return 'gradle';
-  if (
-    localProjectConfiguration?.targets?.['build']?.executor ===
-    '@angular-devkit/build-angular:browser'
-  ) {
+
+  const executor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
+  const webpackExecutors = ['@angular-devkit/build-angular:browser', '@nx/webpack:webpack'];
+
+  if (webpackExecutors.includes(executor)) {
     return 'webpack';
   }
+
   return null;
 }
 
 function inferContainerType(siblingFiles: string[]): ContainerType | null {
   if (siblingFiles.includes('Dockerfile')) return 'Docker';
+
   return null;
 }

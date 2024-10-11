@@ -30,18 +30,6 @@
         "command": "docker/agora/serve-detach.sh agora-api-docs"
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/agora/api-docs",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/agora-api-docs"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["build"]
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
