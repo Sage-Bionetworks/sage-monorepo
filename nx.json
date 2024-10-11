@@ -44,7 +44,7 @@
   "plugins": [
     "@nxlv/python",
     {
-      "plugin": "@sagebionetworks/nx-sage-monorepo",
+      "plugin": "@sagebionetworks/sage-monorepo-nx-plugin",
       "options": {
         "buildImageTargetName": "build-image"
       }

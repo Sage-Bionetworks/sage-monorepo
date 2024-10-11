@@ -1,7 +1,7 @@
 {
-  "name": "sage-monorepo",
+  "name": "sage-monorepo-nx-plugin",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/sage-monorepo/nx-sage-monorepo/src",
+  "sourceRoot": "libs/sage-monorepo/nx-plugin/src",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -9,28 +9,28 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/libs/sage-monorepo/nx-sage-monorepo",
-        "main": "libs/sage-monorepo/nx-sage-monorepo/src/index.ts",
-        "tsConfig": "libs/sage-monorepo/nx-sage-monorepo/tsconfig.lib.json",
+        "outputPath": "dist/libs/sage-monorepo/nx-plugin",
+        "main": "libs/sage-monorepo/nx-plugin/src/index.ts",
+        "tsConfig": "libs/sage-monorepo/nx-plugin/tsconfig.lib.json",
         "assets": [
-          "libs/sage-monorepo/nx-sage-monorepo/*.md",
+          "libs/sage-monorepo/nx-plugin/*.md",
           {
-            "input": "./libs/sage-monorepo/nx-sage-monorepo/src",
+            "input": "./libs/sage-monorepo/nx-plugin/src",
             "glob": "**/!(*.ts)",
             "output": "./src"
           },
           {
-            "input": "./libs/sage-monorepo/nx-sage-monorepo/src",
+            "input": "./libs/sage-monorepo/nx-plugin/src",
             "glob": "**/*.d.ts",
             "output": "./src"
           },
           {
-            "input": "./libs/sage-monorepo/nx-sage-monorepo",
+            "input": "./libs/sage-monorepo/nx-plugin",
             "glob": "generators.json",
             "output": "."
           },
           {
-            "input": "./libs/sage-monorepo/nx-sage-monorepo",
+            "input": "./libs/sage-monorepo/nx-plugin",
             "glob": "executors.json",
             "output": "."
           }
@@ -44,7 +44,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/sage-monorepo/nx-sage-monorepo/jest.config.ts"
+        "jestConfig": "libs/sage-monorepo/nx-plugin/jest.config.ts"
       }
     }
   }

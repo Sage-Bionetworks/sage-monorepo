@@ -1,5 +1,5 @@
 {
-  "name": "@sagebionetworks/nx-sage-monorepo",
+  "name": "@sagebionetworks/sage-monorepo-nx-plugin",
   "version": "0.0.1",
   "dependencies": {
     "@nx/devkit": "19.8.0",
