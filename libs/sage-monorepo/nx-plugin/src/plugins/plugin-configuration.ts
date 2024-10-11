@@ -1,12 +1,12 @@
-import { PluginOptions } from './plugin-options';
-
-export type PluginConfiguration = {
-  buildImageTargetName: string;
+export type SageMonorepoPluginOptions = {
+  buildImageTargetName?: string;
 };
+
+export type SageMonorepoPluginConfiguration = Required<SageMonorepoPluginOptions>;
 
 export function createPluginConfiguration({
   buildImageTargetName = 'build-image',
-}: PluginOptions): PluginConfiguration {
+}: SageMonorepoPluginOptions): SageMonorepoPluginConfiguration {
   return {
     buildImageTargetName,
   };

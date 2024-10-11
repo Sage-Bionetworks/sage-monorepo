@@ -1,6 +1,6 @@
 import { TargetConfiguration } from '@nx/devkit';
 import { buildImageTarget } from './build-image-target';
-import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
+import { SageMonorepoProjectConfiguration } from './project-configuration';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
 
 export async function buildProjectConfiguration(

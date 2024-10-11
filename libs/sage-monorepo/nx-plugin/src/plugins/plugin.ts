@@ -14,13 +14,11 @@ import { calculateHashForCreateNodes } from '@nx/devkit/src/utils/calculate-hash
 import { dirname, join } from 'path';
 import { existsSync, readdirSync } from 'fs';
 import { getLockFileName } from '@nx/js';
-import { SageMonorepoProjectConfiguration } from './sage-monorepo-project-configuration';
-import { createPluginConfiguration } from './plugin-configuration';
-import { PluginOptions } from './plugin-options';
+import { SageMonorepoProjectConfiguration } from './project-configuration';
+import { createPluginConfiguration, SageMonorepoPluginOptions } from './plugin-configuration';
 import { buildProjectConfiguration } from './build-project-configuration';
-import { inferProjectType } from './project-type';
 import { ProjectConfigurationBuilderOptions } from './project-configuration-builder-options';
-import { inferProjectMetadata } from './project-metadata';
+import { inferProjectMetadata, inferProjectType } from './project-metadata';
 
 function readProjectCOnfigurationsCache(
   cachePath: string,
@@ -38,7 +36,7 @@ function writeProjectConfigurationsToCache(
 
 const projectFilePattern = '{apps,libs}/openchallenges/**/project.json';
 
-export const createNodesV2: CreateNodesV2<PluginOptions> = [
+export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,
   async (configFilePaths, options, context) => {
     options ??= {};
@@ -64,7 +62,7 @@ export const createNodesV2: CreateNodesV2<PluginOptions> = [
 
 async function createNodesInternal(
   configFilePath: string,
-  options: PluginOptions | undefined,
+  options: SageMonorepoPluginOptions | undefined,
   context: CreateNodesContext,
   projectConfigurationsCache: Record<string, SageMonorepoProjectConfiguration>,
 ) {
