@@ -55,6 +55,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-mongodb:${springBootVersion}"
   // implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation 'org.assertj:assertj-core:3.23.1'
