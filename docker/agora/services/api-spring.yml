@@ -9,9 +9,11 @@ services:
       - agora
     ports:
       - '8086:8086'
-    # depends_on:
-    #   agora-config-server:
-    #     condition: service_healthy
+    depends_on:
+      agora-data:
+        condition: service_completed_successfully
+      agora-mongo:
+        condition: service_started
     deploy:
       resources:
         limits:
