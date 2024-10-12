@@ -1,18 +1,16 @@
 package org.sagebionetworks.agora.api.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.Objects;
+import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
-import javax.annotation.Generated;
 
 /**
  * Synapse data version
@@ -22,6 +20,7 @@ import javax.annotation.Generated;
 @JsonTypeName("Dataversion")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 // TODO Add x-java-class-annotations
+@lombok.Builder
 public class DataversionDto {
 
   private String dataFile;
@@ -51,8 +50,8 @@ public class DataversionDto {
   /**
    * Get dataFile
    * @return dataFile
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "data_file", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("data_file")
   public String getDataFile() {
@@ -71,8 +70,8 @@ public class DataversionDto {
   /**
    * Get dataVersion
    * @return dataVersion
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "data_version", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("data_version")
   public String getDataVersion() {
@@ -91,8 +90,8 @@ public class DataversionDto {
   /**
    * Get teamImagesId
    * @return teamImagesId
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "team_images_id", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("team_images_id")
   public String getTeamImagesId() {
@@ -112,9 +111,11 @@ public class DataversionDto {
       return false;
     }
     DataversionDto dataversion = (DataversionDto) o;
-    return Objects.equals(this.dataFile, dataversion.dataFile) &&
-        Objects.equals(this.dataVersion, dataversion.dataVersion) &&
-        Objects.equals(this.teamImagesId, dataversion.teamImagesId);
+    return (
+      Objects.equals(this.dataFile, dataversion.dataFile) &&
+      Objects.equals(this.dataVersion, dataversion.dataVersion) &&
+      Objects.equals(this.teamImagesId, dataversion.teamImagesId)
+    );
   }
 
   @Override
@@ -144,4 +145,3 @@ public class DataversionDto {
     return o.toString().replace("\n", "\n    ");
   }
 }
-

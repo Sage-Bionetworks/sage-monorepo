@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "dataversion")
-public class DataVersion {
+public class DataVersionEntity {
 
   @Id
   public String id;
