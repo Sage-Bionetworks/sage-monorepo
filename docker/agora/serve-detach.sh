@@ -4,6 +4,7 @@ args=(
   # List of services in alphanumeric order
   --file docker/agora/services/apex.yml
   --file docker/agora/services/api-docs.yml
+  --file docker/agora/services/api-spring.yml
   --file docker/agora/services/api.yml
   --file docker/agora/services/app.yml
   --file docker/agora/services/data.yml

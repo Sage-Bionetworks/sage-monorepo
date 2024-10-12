@@ -1,0 +1,18 @@
+services:
+  agora-api-spring:
+    image: ghcr.io/sage-bionetworks/agora-api-spring:${AGORA_VERSION:-local}
+    container_name: agora-api-spring
+    restart: always
+    env_file:
+      - ../../../apps/agora/api-spring/.env
+    networks:
+      - agora
+    ports:
+      - '8086:8086'
+    # depends_on:
+    #   agora-config-server:
+    #     condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1G
