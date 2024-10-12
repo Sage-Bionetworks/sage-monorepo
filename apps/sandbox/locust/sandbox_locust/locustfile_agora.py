@@ -1,8 +1,8 @@
 from locust import HttpUser, task
 
 
-class OpenChallengesUser(HttpUser):
+class AgoraUser(HttpUser):
     @task
     def hello_world(self):
         self.client.get("/")
-        # self.client.get("/about")
+        self.client.get("/about")

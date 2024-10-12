@@ -29,6 +29,17 @@ pytest-sugar = "0.9.7"
 pytest-cov = "4.1.0"
 pytest-html = "3.2.0"
 
+[tool.locust]
+locustfile = ""
+headless = false
+# master = false
+# expect-workers = 5
+host = ""
+users = 10
+spawn-rate = 2
+run-time = "1m"
+# tags = ["Critical", "Normal"]
+
 [build-system]
 requires = [ "poetry-core" ]
 build-backend = "poetry.core.masonry.api"
