@@ -19,6 +19,7 @@ readme = "README.md"
 
   [tool.poetry.dependencies]
   python = "3.10.14"
+  locust = "2.31.8"
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "2.0.2"
