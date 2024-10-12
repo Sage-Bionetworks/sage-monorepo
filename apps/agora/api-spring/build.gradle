@@ -55,18 +55,18 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
-  implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
+  // implementation "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:${springCloudVersion}"
   implementation "org.springframework.data:spring-data-commons:${springDataVersion}"
   testImplementation 'org.assertj:assertj-core:3.23.1'
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
   // Enable distributed tracing
-  implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
-  implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
+  // implementation "org.springframework.cloud:spring-cloud-starter-sleuth:${springCloudVersion}"
+  // implementation "org.springframework.cloud:spring-cloud-sleuth-zipkin:${springCloudVersion}"
 
-  implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
+  // implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
 
-  implementation 'io.micrometer:micrometer-registry-prometheus:1.10.4'
+  // implementation 'io.micrometer:micrometer-registry-prometheus:1.10.4'
   implementation 'com.squareup:pollexor:3.0.0'
 }
 

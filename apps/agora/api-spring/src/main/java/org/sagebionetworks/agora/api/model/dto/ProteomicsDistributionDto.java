@@ -1,0 +1,97 @@
+package org.sagebionetworks.agora.api.model.dto;
+
+import java.net.URI;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+import java.time.OffsetDateTime;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
+
+/**
+ * Distributions
+ */
+
+@Schema(name = "ProteomicsDistribution", description = "Distributions")
+@JsonTypeName("ProteomicsDistribution")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+// TODO Add x-java-class-annotations
+public class ProteomicsDistributionDto {
+
+  private String type;
+
+  public ProteomicsDistributionDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ProteomicsDistributionDto(String type) {
+    this.type = type;
+  }
+
+  public ProteomicsDistributionDto type(String type) {
+    this.type = type;
+    return this;
+  }
+
+  /**
+   * Type of proteomics distribution (e.g., LFQ, SRM, TMT)
+   * @return type
+  */
+  @NotNull 
+  @Schema(name = "type", description = "Type of proteomics distribution (e.g., LFQ, SRM, TMT)", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("type")
+  public String getType() {
+    return type;
+  }
+
+  public void setType(String type) {
+    this.type = type;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+    ProteomicsDistributionDto proteomicsDistribution = (ProteomicsDistributionDto) o;
+    return Objects.equals(this.type, proteomicsDistribution.type);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type);
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class ProteomicsDistributionDto {\n");
+    sb.append("    type: ").append(toIndentedString(type)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
+
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(Object o) {
+    if (o == null) {
+      return "null";
+    }
+    return o.toString().replace("\n", "\n    ");
+  }
+}
+
