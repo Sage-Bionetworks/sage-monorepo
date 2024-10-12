@@ -6,6 +6,9 @@ spring:
     date-format: org.sagebionetworks.agora.api.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
+  data:
+    mongodb:
+      uri: mongodb://root:changeme@agora-mongo:27017/agora?authSource=admin
   # zipkin:
   #   base-url: http://openchallenges-zipkin:9411
 
