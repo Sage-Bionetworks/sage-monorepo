@@ -1,0 +1,59 @@
+{
+  "name": "sandbox-locust",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/sandbox/locust/locust",
+  "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "publish": false,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./install.sh",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "update": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry update",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
+      "options": {
+        "outputFile": "reports/{projectRoot}/pylint.txt"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pyright",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:python", "package-manager:poetry"],
+  "release": {
+    "version": {
+      "generator": "@nxlv/python:release-version"
+    }
+  }
+}
