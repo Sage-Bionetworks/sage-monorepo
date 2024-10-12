@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.0.0",
+    "generators": {
+      "agora-api-spring": {
+        "generatorName": "spring",
+        "inputSpec": "#{cwd}/../../../libs/agora/api-description/build/openapi.yaml",
+        "output": "#{cwd}",
+        "templateDir": "templates",
+        "additionalProperties": {
+          "apiPackage": "org.sagebionetworks.agora.api.api",
+          "basePackage": "org.sagebionetworks.agora.api",
+          "configPackage": "org.sagebionetworks.agora.api.configuration",
+          "delegatePattern": true,
+          "hideGenerationTimestamp": true,
+          "library": "spring-boot",
+          "modelNameSuffix": "Dto",
+          "modelPackage": "org.sagebionetworks.agora.api.model.dto",
+          "useTags": true,
+          "openApiNullable": false
+        }
+      }
+    }
+  }
+}
