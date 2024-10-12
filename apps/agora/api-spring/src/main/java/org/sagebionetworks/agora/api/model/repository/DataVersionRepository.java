@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.Query;
 
 public interface DataVersionRepository extends MongoRepository<DataVersionEntity, String> {
   @Query("{}")
-  DataVersionEntity get();
+  DataVersionEntity find();
 }

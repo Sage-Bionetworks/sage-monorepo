@@ -17,7 +17,7 @@ public class DataVersionService {
 
   @Transactional(readOnly = true)
   public DataversionDto getDataVersion() {
-    DataVersionEntity entity = this.dataVersionRepository.get();
+    DataVersionEntity entity = this.dataVersionRepository.find();
 
     return DataversionDto.builder()
       .dataFile(entity.dataFile)
