@@ -42,7 +42,7 @@ jobs:
             && nx serve sandbox-locust --configuration=${{ inputs.product }}
 
       - name: Upload Locust reports as artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: locust-reports
           path: apps/sandbox/locust/locust_*.csv
