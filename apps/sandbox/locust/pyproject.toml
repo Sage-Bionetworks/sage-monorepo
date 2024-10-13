@@ -30,14 +30,15 @@ pytest-cov = "4.1.0"
 pytest-html = "3.2.0"
 
 [tool.locust]
-locustfile = ""
+# locustfile = ""
 headless = true
 # master = false
 # expect-workers = 5
-host = ""
+# host = ""
 users = 10
 spawn-rate = 2
 run-time = "1m"
+csv = "locust"
 # tags = ["Critical", "Normal"]
 
 [build-system]
