@@ -44,7 +44,7 @@ jobs:
       - name: Perform a load test
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run sandbox-locust:serve:${{ inputs.product }}
+            && nx run sandbox-locust:serve:${{ inputs.product }} --headless
 
       - name: Upload Locust reports as artifacts
         uses: actions/upload-artifact@v4

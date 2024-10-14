@@ -31,7 +31,7 @@ pytest-html = "3.2.0"
 
 [tool.locust]
 # locustfile = ""
-headless = true
+headless = false
 # master = false
 # expect-workers = 5
 # host = ""
