@@ -34,12 +34,17 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
-      - name: Build the specified product, serve it, and perform a load test
+      # - name: Build the specified product, serve it, and perform a load test
+      #   run: |
+      #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+      #       && nx run-many --target=build-image --projects=${{ inputs.product }}-*" \
+      #       && nx serve-detach ${{ inputs.product }}-apex \
+      #       && nx serve sandbox-locust --configuration=${{ inputs.product }}
+
+      - name: Perform a load test
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-            && nx run-many --target=build-image --projects=${{ inputs.product }}-*" \
-            && nx serve-detach ${{ inputs.product }}-apex \
-            && nx serve sandbox-locust --configuration=${{ inputs.product }}
+            && nx run sandbox-locust:serve:${{ inputs.product }}
 
       - name: Upload Locust reports as artifacts
         uses: actions/upload-artifact@v4
