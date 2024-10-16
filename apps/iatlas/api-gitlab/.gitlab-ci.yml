@@ -229,3 +229,4 @@ Deploy:Prod:
     - echo "Deploying iAtlas API to Production"
     # Force update the ECS service. It should be using the latest image (prod).
     - aws ecs update-service --cluster iatlas-prod-EcsCluster --service iatlas-prod-EcsService --force-new-deployment
+
