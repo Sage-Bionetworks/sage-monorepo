@@ -425,9 +425,6 @@
         <mxCell id="-xrmGZC775zc49n530f5-45" value="All the components are containerized and their images available on GHCR. The OpenChallenges stack is currently deployed on an EC2 instance (t3.xlarge) with Docker Compose. The EC2 instance, ALB and other resources are deployed with the CDK for Terraform (CDKTF). See &lt;a href=&quot;https://github.com/Sage-Bionetworks/sage-monorepo/tree/main/apps/openchallenges/infra&quot;&gt;sage-monorepo/openchallenges/infra&lt;/a&gt;." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;resizeWidth=1;fixedWidth=1;resizeHeight=1;" parent="PfW1Trj3aX01LcuOc2Ej-103" vertex="1">
           <mxGeometry x="51.5" width="451" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="zmJ7f_8gGQSDHjEhK6Fi-1" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;" vertex="1" parent="1">
-          <mxGeometry x="1431" y="124.5" width="42" height="38" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
