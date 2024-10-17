@@ -8,11 +8,12 @@ import { PathSanitizer } from '@sagebionetworks/agora/util';
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { NavigationLink } from '../../models/navigation-link';
 import { inject } from '@angular/core';
+import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
 
 @Component({
   selector: 'agora-header',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, GeneSearchComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })

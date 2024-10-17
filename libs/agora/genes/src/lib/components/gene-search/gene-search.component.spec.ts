@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { GeneSearchComponent } from './gene-search.component';
+import { provideHttpClient } from '@angular/common/http';
 
 describe('GeneSearchComponent', () => {
   let component: GeneSearchComponent;
@@ -8,6 +9,7 @@ describe('GeneSearchComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GeneSearchComponent],
+      providers: [provideHttpClient()],
     }).compileComponents();
 
     fixture = TestBed.createComponent(GeneSearchComponent);

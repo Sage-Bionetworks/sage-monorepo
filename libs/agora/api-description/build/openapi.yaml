@@ -139,9 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gene'
+                $ref: '#/components/schemas/GenesList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -856,6 +854,14 @@ components:
         - druggability
         - total_nominations
         - ensembl_info
+    GenesList:
+      type: object
+      description: List of Genes
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Gene'
     GCTGeneTissue:
       type: object
       description: GCTGeneTissue
