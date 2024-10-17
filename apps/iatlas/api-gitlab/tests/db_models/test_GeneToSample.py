@@ -56,9 +56,7 @@ def test_GeneToSample_with_relations(app, gs_entrez_id, gs_gene_id):
         assert result.gene.entrez_id == gs_entrez_id
         assert type(result.sample.name) is str
         assert result.gene_id == gs_gene_id
-        assert type(result.sample_id) is int
-        assert type(result.rna_seq_expr) is float or NoneType
-        assert type(result.nanostring_expr) is float or NoneType
+        assert type(result.sample_id) is str
         assert repr(result) == string_representation
     assert repr(results) == '[' + separator.join(
         string_representation_list) + ']'
@@ -73,9 +71,7 @@ def test_GeneToSample_no_relations(app, gs_gene_id):
         assert type(result.gene) is NoneType
         assert type(result.sample) is NoneType
         assert result.gene_id == gs_gene_id
-        assert type(result.sample_id) is int
-        assert type(result.rna_seq_expr) is float or NoneType
-        assert type(result.nanostring_expr) is float or NoneType
+        assert type(result.sample_id) is str
 
 
 def test_GeneToSample_nanostring(app, nanostring_sample_id, nanostring_gene_id):
