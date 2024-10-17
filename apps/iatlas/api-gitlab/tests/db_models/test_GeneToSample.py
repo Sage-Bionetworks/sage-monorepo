@@ -48,8 +48,8 @@ def test_GeneToSample_with_relations(app, gs_entrez_id, gs_gene_id):
 
     query = return_gene_to_sample_query(*relationships_to_join)
     results = query.filter_by(gene_id=gs_gene_id).limit(3).all()
-
     assert isinstance(results, list)
+
     for result in results:
         string_representation = '<GeneToSample %r>' % gs_gene_id
         string_representation_list.append(string_representation)
@@ -65,8 +65,8 @@ def test_GeneToSample_with_relations(app, gs_entrez_id, gs_gene_id):
 def test_GeneToSample_no_relations(app, gs_gene_id):
     query = return_gene_to_sample_query()
     results = query.filter_by(gene_id=gs_gene_id).limit(3).all()
-
     assert isinstance(results, list)
+
     for result in results:
         assert type(result.gene) is NoneType
         assert type(result.sample) is NoneType
