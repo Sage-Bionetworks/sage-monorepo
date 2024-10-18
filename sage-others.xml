@@ -26,5 +26,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "database"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJzdmcxIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2U9IiMwMDAwMDAiIGZpbGw9Im5vbmUiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDE0IDEyIiBoZWlnaHQ9IjYwMCIgd2lkdGg9IjcwMCI+JiN4YTsgIDxkZWZzIGlkPSJkZWZzMSIvPiYjeGE7ICAmI3hhOyAgPHJlY3QgaWQ9InJlY3QxIiB4PSIwLjc1IiB5PSIwLjc1IiB3aWR0aD0iMTIuNSIgaGVpZ2h0PSIxMC41Ii8+JiN4YTsgIDxwYXRoIGlkPSJwYXRoMSIgZD0ibSA3Ljc1LDguMjUgaCAyLjUgTSAzLjc1LDMuNzUgNi4yNSw2IDMuNzUsOC4yNSIvPiYjeGE7PC9zdmc+;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry x=\"2.2737367544323206e-13\" y=\"1.1368683772161603e-13\" width=\"58.33\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 58.33,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "console"
   }
 ]</mxlibrary>
