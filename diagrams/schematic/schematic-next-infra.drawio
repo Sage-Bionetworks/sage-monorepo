@@ -562,7 +562,7 @@
           <mxGeometry x="1417.5" y="209" width="451" height="90" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-11" value="Data Type" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="1117" y="193" width="146" height="229" as="geometry" />
+          <mxGeometry x="917" y="151" width="146" height="229" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-7" value="BulkRNA-seqLevel1" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJzdmcxIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA5Ljk0MDMzOTEgOS45NDAzMzkxIiBoZWlnaHQ9IjkuOTQwMzM5MW1tIiB3aWR0aD0iOS45NDAzMzkxbW0iPiYjeGE7ICAmI3hhOyAgPGRlZnMgaWQ9ImRlZnMxIi8+JiN4YTsgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMDguMjE0NTgsLTExMS45MTg3NSkiIGlkPSJsYXllcjEiPiYjeGE7ICAgIDxnIGlkPSJnMSI+JiN4YTsgICAgICA8Y2lyY2xlIHI9IjQuOTcwMTY5NSIgY3k9IjExNi44ODg5MiIgY3g9IjExMy4xODQ3NSIgaWQ9InBhdGgxIiBzdHlsZT0ib3ZlcmZsb3c6dmlzaWJsZTtmaWxsOiMwYzQ3OWM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuNDExODUiLz4mI3hhOyAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMjY0NTgzMzMsMCwwLDAuMjY0NTgzMzMsOTMuNzEwOTQ0LDExMi4wNjQ3MikiIHN0eWxlPSJvdmVyZmxvdzp2aXNpYmxlIiBpZD0iZzMxOTAtOSI+JiN4YTsgICAgICAgIDxwYXRoIHN0eWxlPSJmaWxsOiNmZmZmZmYiIGlkPSJwYXRoMzE5Mi00IiBkPSJtIDYyLjIzOSw4LjEgYyAtNS40MTUsNS45MjMgLTUuNTI5LDE0LjYzNiAtMC4zMTIsMTkuNTY2IC0yLjU3OSwtMi40ODMgLTIuNTIzLC03LjY1MSAwLjA4MywtMTIuNTk3IDAuMzM1LC0wLjQ0MyAxLjMwNiwtMS40OSAyLjcyNSwtMS4wMTQgMC4xNDMsMC4wNDkgMC4yMzcsMC4wNjIgMC4yOTIsMC4wNTMgMC4zMjEsMC4wNjkgMC42NSwwLjExIDAuOTksMC4wOTUgMi4xNTUsLTAuMDk4IDMuODIyLC0xLjkyMSAzLjcyNSwtNC4wNzcgQyA2OS42OTgsOS4xNTkgNjkuMjk3LDguMzAzIDY4LjY3Nyw3LjY0NiA3My42NzksNC4zNjkgNzkuNDE5LDMuOTk0IDgxLjc3MSw2LjE0MiBsIDAuMDksMC4wMDYgQyA3Ni40ODgsMS4yNDIgNjcuNzA1LDIuMTE5IDYyLjIzOSw4LjEgWiIvPiYjeGE7ICAgICAgPC9nPiYjeGE7ICAgIDwvZz4mI3hhOyAgPC9nPiYjeGE7PC9zdmc+;" vertex="1" parent="bOJ_4vFxXKsenDZso6HB-11">
           <mxGeometry x="58" y="155" width="30" height="30" as="geometry" />
@@ -617,11 +617,6 @@
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-62" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="bOJ_4vFxXKsenDZso6HB-69" source="7cjwt-c1Aj_Hxcm3FY-D-52" target="7cjwt-c1Aj_Hxcm3FY-D-51" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <UserObject label="$ schematic schema convert btc.model.csv" link="schematic schema convert btc.model.csv" id="bOJ_4vFxXKsenDZso6HB-79">
-          <mxCell style="text;whiteSpace=wrap;fontFamily=Lucida Console;" vertex="1" parent="1">
-            <mxGeometry x="792" y="125" width="295" height="36" as="geometry" />
-          </mxCell>
-        </UserObject>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-87" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="bOJ_4vFxXKsenDZso6HB-81" target="bOJ_4vFxXKsenDZso6HB-85">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
@@ -634,7 +629,7 @@
           <mxGeometry x="646" y="134" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-79" value="DCC Data Models Repository" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
-          <mxGeometry x="447" y="205" width="408" height="156" as="geometry" />
+          <mxGeometry x="447" y="205" width="408" height="161" as="geometry" />
         </mxCell>
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-77" value="Data Model&#xa;(JSON-LD)" style="shape=image;imageAspect=0;aspect=fixed;verticalLabelPosition=bottom;verticalAlign=top;image=https://json-ld.org/images/json-ld-logo.svg;labelBackgroundColor=#FFFFFF;" parent="7cjwt-c1Aj_Hxcm3FY-D-79" vertex="1">
           <mxGeometry x="189" y="47.5" width="50" height="50" as="geometry" />
@@ -661,11 +656,16 @@
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-76" value="&lt;span style=&quot;background-color: rgb(255, 255, 255);&quot;&gt;Schematic Config&lt;br&gt;(YAML)&lt;/span&gt;" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;" parent="7cjwt-c1Aj_Hxcm3FY-D-79" vertex="1">
           <mxGeometry x="318" y="47.5" width="50" height="50" as="geometry" />
         </mxCell>
+        <UserObject label="$ schematic schema convert data.model.csv" link="schematic schema convert btc.model.csv" id="bOJ_4vFxXKsenDZso6HB-79">
+          <mxCell style="text;whiteSpace=wrap;fontFamily=Lucida Console;" vertex="1" parent="7cjwt-c1Aj_Hxcm3FY-D-79">
+            <mxGeometry x="3" y="136" width="322" height="25" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-81" value="Attribute" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Tag.svg;" vertex="1" parent="1">
           <mxGeometry x="491.8799999999999" y="134" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-54" value="Manifest Generation (local)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="364" y="399.5" width="491" height="156" as="geometry" />
+          <mxGeometry x="364" y="403" width="491" height="156" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-38" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="bOJ_4vFxXKsenDZso6HB-54" source="bOJ_4vFxXKsenDZso6HB-27" target="bOJ_4vFxXKsenDZso6HB-33">
           <mxGeometry relative="1" as="geometry" />
@@ -702,7 +702,7 @@
           <mxGeometry x="138.4957575757578" y="984.0021212121212" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-121" value="Manifest Generation (Data Curator App)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="364" y="605" width="630" height="183" as="geometry" />
+          <mxGeometry x="364" y="597" width="630" height="183" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-117" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="bOJ_4vFxXKsenDZso6HB-121" source="7cjwt-c1Aj_Hxcm3FY-D-15" target="bOJ_4vFxXKsenDZso6HB-110">
           <mxGeometry relative="1" as="geometry" />
