@@ -652,8 +652,8 @@
         <mxCell id="bOJ_4vFxXKsenDZso6HB-37" value="OR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="bOJ_4vFxXKsenDZso6HB-54">
           <mxGeometry x="342.0000000000001" y="56" width="35" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="bOJ_4vFxXKsenDZso6HB-69" value="Schematic AWS Account" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="358" y="538" width="571" height="228" as="geometry" />
+        <mxCell id="bOJ_4vFxXKsenDZso6HB-69" value="Sage AWS Organization" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="359.5" y="528" width="571" height="228" as="geometry" />
         </mxCell>
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-52" value="ALB" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.application_load_balancer;fillColor=#F58534;gradientColor=none;aspect=fixed;" parent="bOJ_4vFxXKsenDZso6HB-69" vertex="1">
           <mxGeometry x="142.5" y="90.00999999999999" width="47.92" height="50" as="geometry" />
