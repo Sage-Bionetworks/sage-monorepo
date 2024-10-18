@@ -47,5 +47,19 @@
     "h": 50,
     "aspect": "fixed",
     "title": "organization"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgNjQgNjQiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHBhdGggZmlsbD0iIzQzYTA0NyIgZD0iTTMyLDJDMTUuNDMxLDIsMiwxNS40MzIsMiwzMmMwLDE2LjU2OCwxMy40MzIsMzAsMzAsMzBjMTYuNTY4LDAsMzAtMTMuNDMyLDMwLTMwQzYyLDE1LjQzMiw0OC41NjgsMiwzMiwyeiBNMjUuMDI1LDUwICBsLTAuMDItMC4wMkwyNC45ODgsNTBMMTEsMzUuNmw3LjAyOS03LjE2NGw2Ljk3Nyw3LjE4NGwyMS0yMS42MTlMNTMsMjEuMTk5TDI1LjAyNSw1MHoiLz48L3N2Zz4=;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry y=\"-1.1368683772161603e-13\" width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "checkmark-circle-green"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyBpZD0ic3ZnMTUiIHZlcnNpb249IjEuMSIgdmlld0JveD0iMCAwIDQ4IDQ4IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPiYjeGE7ICA8bWV0YWRhdGEgaWQ9Im1ldGFkYXRhMTkiPiYjeGE7ICAgICYjeGE7ICAgICAgJiN4YTsgICAgICAgIGltYWdlL3N2Zyt4bWwmI3hhOyAgICAgICAgJiN4YTsgICAgICAgICYjeGE7ICAgICAgJiN4YTsgICAgJiN4YTsgIDwvbWV0YWRhdGE+JiN4YTsgICYjeGE7ICA8ZGVmcyBpZD0iZGVmczciPiYjeGE7ICAgIDxsaW5lYXJHcmFkaWVudCBpZD0ibGluZWFyR3JhZGllbnQ4MjgiPiYjeGE7ICAgICAgPHN0b3AgaWQ9InN0b3A4MjYiIG9mZnNldD0iMCIgc3R5bGU9InN0b3AtY29sb3I6I2ZmMDAwMDtzdG9wLW9wYWNpdHk6MTsiLz4mI3hhOyAgICA8L2xpbmVhckdyYWRpZW50PiYjeGE7ICAgIDxsaW5lYXJHcmFkaWVudCB5Mj0iLTEuNDI5IiB4Mj0iMCIgeTE9IjQ3LjM3IiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgaWQ9IjAiPiYjeGE7ICAgICAgPHN0b3AgaWQ9InN0b3AyIiBzdG9wLWNvbG9yPSIjYzUyODI4Ii8+JiN4YTsgICAgICA8c3RvcCBpZD0ic3RvcDQiIHN0b3AtY29sb3I9IiNmZjU0NTQiIG9mZnNldD0iMSIvPiYjeGE7ICAgIDwvbGluZWFyR3JhZGllbnQ+JiN4YTsgIDwvZGVmcz4mI3hhOyAgPGcgc3R5bGU9ImZpbGwtb3BhY2l0eToxIiBpZD0iZzEzIiB0cmFuc2Zvcm09Im1hdHJpeCguOTk5OTkgMCAwIC45OTk5OS01OC4zNy44ODIpIj4mI3hhOyAgICA8Y2lyY2xlIHN0eWxlPSJmaWxsLW9wYWNpdHk6MTtmaWxsOiNkZDMzMzMiIGlkPSJjaXJjbGU5IiBmaWxsPSJ1cmwoIzApIiByPSIyNCIgY3k9IjIzLjEyIiBjeD0iODIuMzciLz4mI3hhOyAgICA8cGF0aCBzdHlsZT0iZmlsbC1vcGFjaXR5OjE7ZmlsbDojZmZmZmZmIiBpZD0icGF0aDExIiBmaWxsLW9wYWNpdHk9Ii44NDIiIGZpbGw9IiNmZmYiIGQ9Im04Ny43NyAyMy43MjVsNS45MzktNS45MzljLjM3Ny0uMzcyLjU2Ni0uODM1LjU2Ni0xLjM3MyAwLS41NC0uMTg5LS45OTctLjU2Ni0xLjM3NGwtMi43NDctMi43NDdjLS4zNzctLjM3Mi0uODM1LS41NjQtMS4zNzMtLjU2NC0uNTM5IDAtLjk5Ny4xODYtMS4zNzQuNTY0bC01LjkzOSA1LjkzOS01LjkzOS01LjkzOWMtLjM3Ny0uMzcyLS44MzUtLjU2NC0xLjM3NC0uNTY0LS41MzkgMC0uOTk3LjE4Ni0xLjM3NC41NjRsLTIuNzQ4IDIuNzQ3Yy0uMzc3LjM3OC0uNTY2LjgzNS0uNTY2IDEuMzc0IDAgLjU0LjE4OC45OTcuNTY2IDEuMzczbDUuOTM5IDUuOTM5LTUuOTM5IDUuOTRjLS4zNzcuMzcyLS41NjYuODM1LS41NjYgMS4zNzMgMCAuNTQuMTg4Ljk5Ny41NjYgMS4zNzNsMi43NDggMi43NDdjLjM3Ny4zNzguODM1LjU2NCAxLjM3NC41NjQuNTM5IDAgLjk5Ny0uMTg2IDEuMzc0LS41NjRsNS45MzktNS45MzkgNS45NCA1LjkzOWMuMzc3LjM3OC44MzUuNTY0IDEuMzc0LjU2NC41MzkgMCAuOTk3LS4xODYgMS4zNzMtLjU2NGwyLjc0Ny0yLjc0N2MuMzc3LS4zNzIuNTY2LS44MzUuNTY2LTEuMzczIDAtLjU0LS4xODgtLjk5Ny0uNTY2LTEuMzczbC01LjkzOS01Ljk0Ii8+JiN4YTsgIDwvZz4mI3hhOzwvc3ZnPg==;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "cross-circle-red"
   }
 ]</mxlibrary>
