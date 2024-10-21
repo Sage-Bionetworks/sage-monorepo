@@ -13,7 +13,3 @@ eval "$(pyenv init -)"
 pyenv local $PYTHON_VERSION
 poetry env use $PYTHON_VERSION
 poetry install --with prod,dev
-
-# sudo apt-get update
-# sudo apt-get install -y libmariadb-dev
-# pip install packaging
