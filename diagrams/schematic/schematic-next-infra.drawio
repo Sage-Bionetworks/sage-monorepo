@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.0">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2330" dy="1243" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1331" dy="710" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -555,7 +555,7 @@
         <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-46" value="&quot;The only reason that I believe we still use it is because google sheet &lt;br&gt;doesn’t support multi-select in dropdown, and there’s an app script &lt;br&gt;there to make it work.&quot;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;resizeWidth=1;fixedWidth=1;resizeHeight=1;" parent="1" vertex="1">
           <mxGeometry x="1417.5" y="226" width="451" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="bOJ_4vFxXKsenDZso6HB-11" value="Data Type" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="bOJ_4vFxXKsenDZso6HB-11" value="Data Type Examples" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="917" y="151" width="146" height="229" as="geometry" />
         </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-7" value="BulkRNA-seqLevel1" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGlkPSJzdmcxIiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCA5Ljk0MDMzOTEgOS45NDAzMzkxIiBoZWlnaHQ9IjkuOTQwMzM5MW1tIiB3aWR0aD0iOS45NDAzMzkxbW0iPiYjeGE7ICAmI3hhOyAgPGRlZnMgaWQ9ImRlZnMxIi8+JiN4YTsgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0xMDguMjE0NTgsLTExMS45MTg3NSkiIGlkPSJsYXllcjEiPiYjeGE7ICAgIDxnIGlkPSJnMSI+JiN4YTsgICAgICA8Y2lyY2xlIHI9IjQuOTcwMTY5NSIgY3k9IjExNi44ODg5MiIgY3g9IjExMy4xODQ3NSIgaWQ9InBhdGgxIiBzdHlsZT0ib3ZlcmZsb3c6dmlzaWJsZTtmaWxsOiMwYzQ3OWM7ZmlsbC1vcGFjaXR5OjE7c3Ryb2tlLXdpZHRoOjAuNDExODUiLz4mI3hhOyAgICAgIDxnIHRyYW5zZm9ybT0ibWF0cml4KDAuMjY0NTgzMzMsMCwwLDAuMjY0NTgzMzMsOTMuNzEwOTQ0LDExMi4wNjQ3MikiIHN0eWxlPSJvdmVyZmxvdzp2aXNpYmxlIiBpZD0iZzMxOTAtOSI+JiN4YTsgICAgICAgIDxwYXRoIHN0eWxlPSJmaWxsOiNmZmZmZmYiIGlkPSJwYXRoMzE5Mi00IiBkPSJtIDYyLjIzOSw4LjEgYyAtNS40MTUsNS45MjMgLTUuNTI5LDE0LjYzNiAtMC4zMTIsMTkuNTY2IC0yLjU3OSwtMi40ODMgLTIuNTIzLC03LjY1MSAwLjA4MywtMTIuNTk3IDAuMzM1LC0wLjQ0MyAxLjMwNiwtMS40OSAyLjcyNSwtMS4wMTQgMC4xNDMsMC4wNDkgMC4yMzcsMC4wNjIgMC4yOTIsMC4wNTMgMC4zMjEsMC4wNjkgMC42NSwwLjExIDAuOTksMC4wOTUgMi4xNTUsLTAuMDk4IDMuODIyLC0xLjkyMSAzLjcyNSwtNC4wNzcgQyA2OS42OTgsOS4xNTkgNjkuMjk3LDguMzAzIDY4LjY3Nyw3LjY0NiA3My42NzksNC4zNjkgNzkuNDE5LDMuOTk0IDgxLjc3MSw2LjE0MiBsIDAuMDksMC4wMDYgQyA3Ni40ODgsMS4yNDIgNjcuNzA1LDIuMTE5IDYyLjIzOSw4LjEgWiIvPiYjeGE7ICAgICAgPC9nPiYjeGE7ICAgIDwvZz4mI3hhOyAgPC9nPiYjeGE7PC9zdmc+;" parent="bOJ_4vFxXKsenDZso6HB-11" vertex="1">
@@ -614,7 +614,7 @@
         <mxCell id="bOJ_4vFxXKsenDZso6HB-87" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="bOJ_4vFxXKsenDZso6HB-81" target="bOJ_4vFxXKsenDZso6HB-85" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="bOJ_4vFxXKsenDZso6HB-88" value="&lt;div&gt;If depends on&lt;/div&gt;&lt;div&gt;Component&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="bOJ_4vFxXKsenDZso6HB-87" vertex="1" connectable="0">
+        <mxCell id="bOJ_4vFxXKsenDZso6HB-88" value="&lt;div&gt;If depends on&lt;/div&gt;&lt;div&gt;Component&lt;br&gt;&lt;/div&gt;attribute" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="bOJ_4vFxXKsenDZso6HB-87" vertex="1" connectable="0">
           <mxGeometry x="-0.4051" y="-1" relative="1" as="geometry">
             <mxPoint x="18" y="-1" as="offset" />
           </mxGeometry>
