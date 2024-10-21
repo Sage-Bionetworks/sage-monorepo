@@ -12,9 +12,12 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     gosu \
+    libmariadb-dev \
+    gcc \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
-  && rm -rf /var/lib/apt/lists/*
+  && rm -rf /var/lib/apt/lists/* 
+
 
 WORKDIR ${APP_DIR}
 COPY src src/
@@ -24,7 +27,7 @@ COPY pyproject.toml poetry.lock ./
 # See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
 RUN pip install --no-cache-dir poetry==1.6.1 \
   && poetry config --local virtualenvs.create false \
-  && poetry install --with prod --no-root --no-interaction --no-ansi \
+  && poetry install --no-root --no-interaction --no-ansi \
   && pip cache purge
 
 WORKDIR /
