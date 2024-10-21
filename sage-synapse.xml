@@ -19,5 +19,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "folder"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xMyA0SDZWMjBIMThWOUgxM1Y0WiIgb3BhY2l0eT0iMC4zIi8+JiN4YTs8cGF0aCBmaWxsPSIjODc4RTk1IiBkPSJNMjAgOEwxNCAySDZDNC45IDIgNC4wMSAyLjkgNC4wMSA0TDQgMjBDNCAyMS4xIDQuODkgMjIgNS45OSAyMkgxOEMxOS4xIDIyIDIwIDIxLjEgMjAgMjBWOFpNMTggMjBINlY0SDEzVjlIMThWMjBaIi8+JiN4YTs8L3N2Zz4=;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "file"
   }
 ]</mxlibrary>
