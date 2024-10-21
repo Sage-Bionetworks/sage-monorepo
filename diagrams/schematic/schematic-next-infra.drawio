@@ -858,12 +858,16 @@
         <mxCell id="nQomMov4nv-ivm8LL9WS-31" value="&lt;div&gt;Synapse Default&lt;br&gt;&lt;/div&gt;&lt;div&gt;Storage&lt;/div&gt;&lt;div&gt;(AWS S3)&lt;br&gt;&lt;/div&gt;" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
           <mxGeometry x="36" y="41" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="nQomMov4nv-ivm8LL9WS-32" value="External&#xa;Storage&#xa;(Google)&#xa;" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGhlaWdodD0iMjRweCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNhZWNiZmE7fS5jbHMtMntmaWxsOiM2NjlkZjY7fS5jbHMtM3tmaWxsOiM0Mjg1ZjQ7fS5jbHMtNHtmaWxsOiNmZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5JY29uXzI0cHhfQ2xvdWRTdG9yYWdlX0NvbG9yPC90aXRsZT48ZyBkYXRhLW5hbWU9IlByb2R1Y3QgSWNvbnMiPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSI0IiB4PSIyIiBjbGFzcz0iY2xzLTEiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSI0IiB4PSIyMCIgY2xhc3M9ImNscy0yIi8+PHBvbHlnb24gcG9pbnRzPSIyMiA0IDIwIDQgMjAgMTEgMjIgNCIgY2xhc3M9ImNscy0zIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iNCIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iNyIgeD0iNiIgY2xhc3M9ImNscy00Ii8+PHJlY3Qgcng9IjEuNSIgaGVpZ2h0PSIzIiB3aWR0aD0iMyIgeT0iNiIgeD0iMTUiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0xIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iMTMiIHg9IjIwIiBjbGFzcz0iY2xzLTIiLz48cG9seWdvbiBwb2ludHM9IjIyIDEzIDIwIDEzIDIwIDIwIDIyIDEzIiBjbGFzcz0iY2xzLTMiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iMTYiIHg9IjYiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IHJ4PSIxLjUiIGhlaWdodD0iMyIgd2lkdGg9IjMiIHk9IjE1IiB4PSIxNSIgY2xhc3M9ImNscy00Ii8+PC9nPjwvc3ZnPg==;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
-          <mxGeometry x="265.28827586206876" y="41" width="50" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="nQomMov4nv-ivm8LL9WS-33" value="&lt;div&gt;External&lt;/div&gt;&lt;div&gt;Storage&lt;/div&gt;&lt;div&gt;(AWS S3)&lt;br&gt;&lt;/div&gt;" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
-          <mxGeometry x="151" y="41" width="50" height="50" as="geometry" />
-        </mxCell>
+        <UserObject label="External&#xa;Storage&#xa;(Google)&#xa;" link="https://help.synapse.org/docs/Custom-Storage-Locations.2048327803.html#CustomStorageLocations-SettingupanExternalGoogleCloudStorageBucket" id="nQomMov4nv-ivm8LL9WS-32">
+          <mxCell style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGhlaWdodD0iMjRweCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNhZWNiZmE7fS5jbHMtMntmaWxsOiM2NjlkZjY7fS5jbHMtM3tmaWxsOiM0Mjg1ZjQ7fS5jbHMtNHtmaWxsOiNmZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5JY29uXzI0cHhfQ2xvdWRTdG9yYWdlX0NvbG9yPC90aXRsZT48ZyBkYXRhLW5hbWU9IlByb2R1Y3QgSWNvbnMiPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSI0IiB4PSIyIiBjbGFzcz0iY2xzLTEiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSI0IiB4PSIyMCIgY2xhc3M9ImNscy0yIi8+PHBvbHlnb24gcG9pbnRzPSIyMiA0IDIwIDQgMjAgMTEgMjIgNCIgY2xhc3M9ImNscy0zIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iNCIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iNyIgeD0iNiIgY2xhc3M9ImNscy00Ii8+PHJlY3Qgcng9IjEuNSIgaGVpZ2h0PSIzIiB3aWR0aD0iMyIgeT0iNiIgeD0iMTUiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0xIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iMTMiIHg9IjIwIiBjbGFzcz0iY2xzLTIiLz48cG9seWdvbiBwb2ludHM9IjIyIDEzIDIwIDEzIDIwIDIwIDIyIDEzIiBjbGFzcz0iY2xzLTMiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iMTYiIHg9IjYiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IHJ4PSIxLjUiIGhlaWdodD0iMyIgd2lkdGg9IjMiIHk9IjE1IiB4PSIxNSIgY2xhc3M9ImNscy00Ii8+PC9nPjwvc3ZnPg==;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
+            <mxGeometry x="265.28827586206876" y="41" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;div&gt;External&lt;/div&gt;&lt;div&gt;Storage&lt;/div&gt;&lt;div&gt;(AWS S3)&lt;br&gt;&lt;/div&gt;" link="https://help.synapse.org/docs/Custom-Storage-Locations.2048327803.html#CustomStorageLocations-SettingUpanExternalAWSS3Bucket" id="nQomMov4nv-ivm8LL9WS-33">
+          <mxCell style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
+            <mxGeometry x="151" y="41" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
         <mxCell id="nQomMov4nv-ivm8LL9WS-34" value="OR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="nQomMov4nv-ivm8LL9WS-38">
           <mxGeometry x="102" y="52.5" width="35" height="30" as="geometry" />
         </mxCell>
@@ -918,6 +922,11 @@
         <mxCell id="nQomMov4nv-ivm8LL9WS-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="nQomMov4nv-ivm8LL9WS-64">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="498" y="283" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="nQomMov4nv-ivm8LL9WS-76" value="Stored in" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="nQomMov4nv-ivm8LL9WS-71">
+          <mxGeometry x="0.4023" relative="1" as="geometry">
+            <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
       </root>
