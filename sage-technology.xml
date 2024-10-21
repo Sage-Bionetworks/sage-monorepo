@@ -383,5 +383,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "react"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGhlaWdodD0iMjRweCIgd2lkdGg9IjI0cHgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHN0eWxlPi5jbHMtMXtmaWxsOiNhZWNiZmE7fS5jbHMtMntmaWxsOiM2NjlkZjY7fS5jbHMtM3tmaWxsOiM0Mjg1ZjQ7fS5jbHMtNHtmaWxsOiNmZmY7fTwvc3R5bGU+PC9kZWZzPjx0aXRsZT5JY29uXzI0cHhfQ2xvdWRTdG9yYWdlX0NvbG9yPC90aXRsZT48ZyBkYXRhLW5hbWU9IlByb2R1Y3QgSWNvbnMiPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSI0IiB4PSIyIiBjbGFzcz0iY2xzLTEiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSI0IiB4PSIyMCIgY2xhc3M9ImNscy0yIi8+PHBvbHlnb24gcG9pbnRzPSIyMiA0IDIwIDQgMjAgMTEgMjIgNCIgY2xhc3M9ImNscy0zIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iNCIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iNyIgeD0iNiIgY2xhc3M9ImNscy00Ii8+PHJlY3Qgcng9IjEuNSIgaGVpZ2h0PSIzIiB3aWR0aD0iMyIgeT0iNiIgeD0iMTUiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IGhlaWdodD0iNyIgd2lkdGg9IjIwIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0xIi8+PHJlY3QgaGVpZ2h0PSI3IiB3aWR0aD0iMiIgeT0iMTMiIHg9IjIwIiBjbGFzcz0iY2xzLTIiLz48cG9seWdvbiBwb2ludHM9IjIyIDEzIDIwIDEzIDIwIDIwIDIyIDEzIiBjbGFzcz0iY2xzLTMiLz48cmVjdCBoZWlnaHQ9IjciIHdpZHRoPSIyIiB5PSIxMyIgeD0iMiIgY2xhc3M9ImNscy0yIi8+PHJlY3QgaGVpZ2h0PSIxIiB3aWR0aD0iNiIgeT0iMTYiIHg9IjYiIGNsYXNzPSJjbHMtNCIvPjxyZWN0IHJ4PSIxLjUiIGhlaWdodD0iMyIgd2lkdGg9IjMiIHk9IjE1IiB4PSIxNSIgY2xhc3M9ImNscy00Ii8+PC9nPjwvc3ZnPg==;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "google-cloud-storage"
   }
 ]</mxlibrary>
