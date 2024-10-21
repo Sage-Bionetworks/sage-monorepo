@@ -12,5 +12,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "project"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xMS4xNyA4TDEwLjU5IDcuNDFMOS4xNyA2SDRWMThIMjBWOEgxMkgxMS4xN1oiIG9wYWNpdHk9IjAuMyIvPiYjeGE7PHBhdGggZmlsbD0iIzg3OEU5NSIgZD0iTTIwIDZIMTJMMTAgNEg0QzIuOSA0IDIuMDEgNC45IDIuMDEgNkwyIDE4QzIgMTkuMSAyLjkgMjAgNCAyMEgyMEMyMS4xIDIwIDIyIDE5LjEgMjIgMThWOEMyMiA2LjkgMjEuMSA2IDIwIDZaTTIwIDE4SDRWNkg5LjE3TDEwLjU4IDcuNDFMMTEuMTcgOEgyMFYxOFoiLz4mI3hhOzwvc3ZnPg==;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "folder"
   }
 ]</mxlibrary>
