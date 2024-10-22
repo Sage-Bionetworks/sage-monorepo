@@ -404,5 +404,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "json-schema"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNTEgMjUxIiBoZWlnaHQ9IjI1MSIgd2lkdGg9IjI1MSI+JiN4YTs8cGF0aCBmaWxsPSIjMERDMDlEIiBkPSJNMCA0Ny4wMTk1QzM5LjQ1IDQ5LjYzOTQgNzEuMDYgODEuMzI3MiA3My41NCAxMjAuODE1SDExOS42MUMxMTcuMDUgNTUuODU4OSA2NC45MyAzLjY0MjQ1IDAgMC45NDI2MjdWNDcuMDE5NVoiLz4mI3hhOzxwYXRoIGZpbGw9IiMwREMwOUQiIGQ9Ik03My44IDEzMS4zMjRDNzEuMTggMTcwLjc3MSAzOS40OSAyMDIuMzc5IDAgMjA0Ljg1OVYyNTAuOTI2QzY0Ljk2IDI0OC4zNjYgMTE3LjE4IDE5Ni4yNDkgMTE5Ljg4IDEzMS4zMjRINzMuOFoiLz4mI3hhOzxwYXRoIGZpbGw9IiMwREMwOUQiIGQ9Ik0xNzYuMjAxIDEyMC41NDVDMTc4LjgyMSA4MS4wOTcyIDIxMC41MTEgNDkuNDg5NCAyNTAuMDAxIDQ3LjAwOTVWMC45NDI2MjdDMTg1LjA0MSAzLjUwMjQ1IDEzMi44MjEgNTUuNjE5IDEzMC4xMjEgMTIwLjU0NUgxNzYuMjAxWiIvPiYjeGE7PHBhdGggZmlsbD0iIzBEQzA5RCIgZD0iTTI1MC4wMDEgMjA0Ljg0OUMyMTAuNTUxIDIwMi4yMjkgMTc4Ljk0MSAxNzAuNTQyIDE3Ni40NjEgMTMxLjA1NEgxMzAuMzkxQzEzMi45NTEgMTk2LjAxIDE4NS4wNzEgMjQ4LjIyNiAyNTAuMDAxIDI1MC45MjZWMjA0Ljg0OVoiLz4mI3hhOzwvc3ZnPg==;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "nextflow"
   }
 ]</mxlibrary>
