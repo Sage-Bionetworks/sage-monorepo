@@ -14,7 +14,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./prepare-python.sh",
+        "command": "sudo apt-get update && sudo apt-get install --no-install-recommends -qq -y gosu libmariadb-dev gcc && pip install mariadb && ./prepare-python.sh",
         "cwd": "{projectRoot}"
       }
     },
