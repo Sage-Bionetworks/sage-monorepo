@@ -21,7 +21,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run python src/main.py",
+        "command": "sudo apt-get update && sudo apt-get install --no-install-recommends -qq -y gosu libmariadb-dev gcc && pip install mariadb && poetry run python src/main.py",
         "cwd": "{projectRoot}"
       }
     },
