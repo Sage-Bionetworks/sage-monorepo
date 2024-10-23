@@ -5,7 +5,6 @@ from os import getenv
 from typing import Optional
 import mariadb
 import sys
-import mysql.connector
 from sqlalchemy import create_engine
 
 # Get config from the environment variables
