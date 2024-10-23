@@ -874,7 +874,7 @@
         <mxCell id="nQomMov4nv-ivm8LL9WS-36" value="OR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="nQomMov4nv-ivm8LL9WS-38" vertex="1">
           <mxGeometry x="216" y="53" width="35" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="nQomMov4nv-ivm8LL9WS-56" value="DCC Synapse Project(s)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="nQomMov4nv-ivm8LL9WS-56" value="DCC Synapse Project (&quot;main&quot;)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="374" y="332.63" width="491" height="156" as="geometry" />
         </mxCell>
         <mxCell id="nQomMov4nv-ivm8LL9WS-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="nQomMov4nv-ivm8LL9WS-56" source="nQomMov4nv-ivm8LL9WS-63" target="nQomMov4nv-ivm8LL9WS-64" edge="1">
@@ -1017,16 +1017,16 @@
           <mxGeometry x="1095" y="1449" width="87" height="48" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-9" value="By default, CSV and Annotations, config per DCC" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="903" y="353" width="60" height="30" as="geometry" />
+          <mxGeometry x="878" y="447" width="60" height="30" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-10" value="The folder must have the annotation contentType set to Dataset." style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;resizeWidth=1;fixedWidth=1;resizeHeight=1;" parent="1" vertex="1">
           <mxGeometry x="1824.5" y="121.5" width="451" height="28" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-11" value="&lt;div&gt;1. By default/recommended: any top-level folder in a project like Patient folder, RNASeq folder, Patient-batch-1, etc. then the hierarchy in these folder can be anything.&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;2. A folder tagged with ContentType = Dataset (at least one folder tagged that way and then Schematic use this approach to define dataset for the entire DCC).&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="1014" y="332.5" width="253" height="137.5" as="geometry" />
+          <mxGeometry x="-375" y="370" width="253" height="137.5" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-12" value="DCC can have multiple Synapse projects/contributor projects. But each DCC has a single asset view. Define in the File View scope. The &quot;main&quot; DCC Synapse project has the asset view." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="1316" y="362" width="179" height="137.5" as="geometry" />
+          <mxGeometry x="-325" y="190.5" width="179" height="137.5" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-13" value="Component, Publication is a Component/Data Type but not a &quot;Data&quot; type. Is a class Type." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1248" y="526" width="179" height="50" as="geometry" />
@@ -1055,6 +1055,16 @@
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-21" value="&lt;div&gt;Some manifest may contain protected data. We work we Governance team to censure the manifest in some cases (e.g. young &amp;amp; old people, based on validation rule named &quot;protect ages&quot;)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Create a mask =&amp;gt; 5 years old becomes &amp;gt; 5 years old&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Two manifests (censored and un-censored, which get an Access Restriction)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Uncensored used for the portal.&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="836" y="1584" width="184.5" height="241" as="geometry" />
         </mxCell>
+        <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;data_curator_config&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/data_curator_config" id="rVmcRkgLkYyD2bIN4v6J-2">
+          <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" vertex="1" parent="1">
+            <mxGeometry x="151.71" y="1093" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;data_curator&lt;br&gt;&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/data_curator" id="rVmcRkgLkYyD2bIN4v6J-3">
+          <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" vertex="1" parent="1">
+            <mxGeometry x="36.5" y="1093" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
       </root>
     </mxGraphModel>
   </diagram>
