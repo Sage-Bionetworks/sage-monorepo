@@ -60,18 +60,6 @@
         "fix": true
       }
     },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/agora-api"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      },
-      "dependsOn": ["build"]
-    },
     "publish-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
