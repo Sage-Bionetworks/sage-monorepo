@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.2">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2158" dy="1879" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2769" dy="2205" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -14,7 +14,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-105" value="&lt;div&gt;Show projects listed in the scope of the&lt;/div&gt;&lt;div&gt;Asset View with Can Download access&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="qpIqtOvf-1Vt5ytHBNvU-104">
+        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-105" value="&lt;div&gt;Show projects listed in the scope of the&lt;/div&gt;&lt;div&gt;Asset View with &quot;Can Download&quot; access&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="qpIqtOvf-1Vt5ytHBNvU-104">
           <mxGeometry x="0.6704" y="1" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
