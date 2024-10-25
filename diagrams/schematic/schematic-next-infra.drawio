@@ -1010,9 +1010,6 @@
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-9" value="By default, CSV and Annotations, config per DCC" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="878" y="447" width="60" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="zfe29Ny5-_ZInpxvtdRN-12" value="DCC can have multiple Synapse projects/contributor projects. But each DCC has a single asset view. Define in the File View scope. The &quot;main&quot; DCC Synapse project has the asset view." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="-473" y="714" width="179" height="137.5" as="geometry" />
-        </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-13" value="Component, Publication is a Component/Data Type but not a &quot;Data&quot; type. Is a class Type." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1248" y="526" width="179" height="50" as="geometry" />
         </mxCell>
