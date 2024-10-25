@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.2">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2434" dy="2026" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2691" dy="2163" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1012,9 +1012,6 @@
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-13" value="Component, Publication is a Component/Data Type but not a &quot;Data&quot; type. Is a class Type." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="1743" y="212" width="179" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="zfe29Ny5-_ZInpxvtdRN-14" value="&lt;div&gt;In the data model, create Patient data type, create a custom rule where the Patient ID must match the ID attribute of the Biospecimen component. It&#39;s a JSON-LD validation rule (see Schematic test folder). Rule example: unique ID value in the biospecimen component. Biospecimen comes from a Patient (can have multiple Biospecimen per Patient). FK in the Biospecimen manifest. Custom rules defined in the data model (e.g. AMP-AD).&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="1478" y="622" width="179" height="175" as="geometry" />
         </mxCell>
         <mxCell id="zfe29Ny5-_ZInpxvtdRN-21" value="&lt;div&gt;Some manifest may contain protected data. We work we Governance team to censure the manifest in some cases (e.g. young &amp;amp; old people, based on validation rule named &quot;protect ages&quot;)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Create a mask =&amp;gt; 5 years old becomes &amp;gt; 5 years old&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Two manifests (censored and un-censored, which get an Access Restriction)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;Uncensored used for the portal.&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="863" y="1749" width="184.5" height="241" as="geometry" />
