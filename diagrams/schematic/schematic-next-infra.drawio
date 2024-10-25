@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.2">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="2434" dy="2026" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2769" dy="2205" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1285,6 +1285,11 @@
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-121" value="Component, Publication is a Component/Data Type but not a &quot;Data&quot; type. Is a class Type." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="1753" y="222" width="179" height="50" as="geometry" />
         </mxCell>
+        <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;schema_visualization&lt;br&gt;&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/schema_visualization" id="qpIqtOvf-1Vt5ytHBNvU-127">
+          <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" vertex="1" parent="1">
+            <mxGeometry x="40" y="1189" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
       </root>
     </mxGraphModel>
   </diagram>
