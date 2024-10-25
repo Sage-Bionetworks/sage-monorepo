@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.2">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="5350" dy="2393" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="3843" dy="1596" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -95,7 +95,7 @@
         <mxCell id="nQomMov4nv-ivm8LL9WS-108" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="nQomMov4nv-ivm8LL9WS-88" source="nQomMov4nv-ivm8LL9WS-110" target="nQomMov4nv-ivm8LL9WS-112" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="nQomMov4nv-ivm8LL9WS-109" value="&lt;div&gt;Fix, Upload&lt;/div&gt;&lt;div&gt;&amp;amp; Validation 2&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="nQomMov4nv-ivm8LL9WS-108" vertex="1" connectable="0">
+        <mxCell id="nQomMov4nv-ivm8LL9WS-109" value="&lt;div&gt;Fix, Upload&lt;/div&gt;&lt;div&gt;&amp;amp; Validation N&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="nQomMov4nv-ivm8LL9WS-108" vertex="1" connectable="0">
           <mxGeometry x="-0.2821" y="3" relative="1" as="geometry">
             <mxPoint x="10" y="3" as="offset" />
           </mxGeometry>
@@ -1357,6 +1357,9 @@
         </mxCell>
         <mxCell id="n4MhRozFpXqlkVMey1Lr-17" value="&lt;u&gt;Schema.org&lt;/u&gt;: A shared vocabulary that defines terms (e.g. Person, MedicalStudy) to describe structured data across web pages or datasets.&lt;br&gt;&lt;br&gt;&lt;div&gt;&lt;u&gt;JSON-LD&lt;/u&gt;: A lightweight file format for encoding linked data using JSON.&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;u&gt;JSON Schema&lt;/u&gt;: A schema definition that validates and structures JSON data formats, ensuring the consistency and integrity of complex datasets" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="n4MhRozFpXqlkVMey1Lr-6">
           <mxGeometry x="12" y="319" width="274" height="182" as="geometry" />
+        </mxCell>
+        <mxCell id="n4MhRozFpXqlkVMey1Lr-18" value="Why is iAtlas not using Synapse Table?" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1176" y="1753.5" width="184.5" height="241" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
