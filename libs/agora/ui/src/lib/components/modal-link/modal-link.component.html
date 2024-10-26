@@ -2,9 +2,9 @@
   <span class="modal-link-inner" (click)="toggle()">
     <span *ngIf="icon" class="modal-link-icon">
       <agora-svg-icon
-        *ngIf="icon === 'svg'"
-        name="info-circle"
-        customClass="two-tone"
+        imagePath="/agora-assets/image/info-circle"
+        altText="info"
+        customClasses="two-tone"
       ></agora-svg-icon>
       <i *ngIf="icon !== 'svg'" class="{{ icon }}"></i>
     </span>

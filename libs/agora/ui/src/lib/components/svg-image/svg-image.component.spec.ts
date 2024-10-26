@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SvgIconComponent } from './svg-icon.component';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { SvgImageComponent } from './svg-image.component';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { SimpleChanges } from '@angular/core';
 
-describe('SvgIconComponent', () => {
-  let fixture: ComponentFixture<SvgIconComponent>;
-  let component: SvgIconComponent;
+describe('SvgImageComponent', () => {
+  let fixture: ComponentFixture<SvgImageComponent>;
+  let component: SvgImageComponent;
   let element: HTMLElement;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [SvgIconComponent],
+      imports: [SvgImageComponent],
       providers: [provideHttpClient(), provideHttpClientTesting()],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SvgIconComponent);
+    fixture = TestBed.createComponent(SvgImageComponent);
     component = fixture.componentInstance;
     element = fixture.nativeElement;
     httpMock = TestBed.inject(HttpTestingController);
@@ -70,22 +70,5 @@ describe('SvgIconComponent', () => {
     const divElement = element.querySelector('div');
     expect(divElement?.innerHTML).toBeTruthy(); // Check that innerHTML is populated
     expect(divElement?.innerHTML).toContain('svg'); // Check that it contains the SVG content
-  });
-
-  describe('getClasses', () => {
-    it('should return only the default class when customClasses is not set', () => {
-      component.customClasses = '';
-      expect(component.getClasses()).toBe('svg-icon');
-    });
-
-    it('should append customClasses when it is set', () => {
-      component.customClasses = 'custom-class';
-      expect(component.getClasses()).toBe('svg-icon custom-class');
-    });
-
-    it('should handle multiple custom classes', () => {
-      component.customClasses = 'custom-class another-class';
-      expect(component.getClasses()).toBe('svg-icon custom-class another-class');
-    });
   });
 });

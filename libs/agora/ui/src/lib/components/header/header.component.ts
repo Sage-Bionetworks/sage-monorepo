@@ -1,30 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
-import { Observable } from 'rxjs';
-import { SafeUrl } from '@angular/platform-browser';
-import { PathSanitizer } from '@sagebionetworks/agora/util';
-import { ConfigService } from '@sagebionetworks/agora/config';
 import { NavigationLink } from '../../models/navigation-link';
-import { inject } from '@angular/core';
 import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
+import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'agora-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, GeneSearchComponent],
+  imports: [CommonModule, RouterModule, GeneSearchComponent, SvgImageComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  configService = inject(ConfigService);
-  dataVersionService = inject(DataversionService);
-  sanitizer = inject(PathSanitizer);
-
-  headerLogoPath!: SafeUrl;
-  dataVersion$!: Observable<Dataversion>;
-
   isMobile = false;
   isShown = false;
 
@@ -68,10 +56,6 @@ export class HeaderComponent implements OnInit {
       target: '_blank',
     },
   ];
-
-  constructor() {
-    this.headerLogoPath = this.sanitizer.sanitize('/agora-assets/images/header-logo.svg');
-  }
 
   ngOnInit() {
     this.onResize();
