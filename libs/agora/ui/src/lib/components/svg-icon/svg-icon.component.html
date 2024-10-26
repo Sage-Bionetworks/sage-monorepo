@@ -1,4 +1,8 @@
-<svg
+@if (svgContent) {
+  <div [innerHTML]="svgContent" [ngClass]="getClasses()"></div>
+}
+
+<!-- <svg
   *ngIf="name === 'info-circle'"
   [ngClass]="getClasses()"
   version="1.1"
@@ -137,4 +141,4 @@
     d="M19 0H1C0.45 0 0 0.45 0 1V15C0 15.55 0.45 16 1 16H19C19.55 16 20 15.55 20 15V1C20 0.45 19.55 0 19 0ZM6 14H2V2H6V14ZM12 14H8V2H12V14ZM18 14H14V2H18V14Z"
     fill="currentColor"
   />
-</svg>
+</svg> -->

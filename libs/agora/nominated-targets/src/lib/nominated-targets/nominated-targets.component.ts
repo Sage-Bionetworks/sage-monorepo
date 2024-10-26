@@ -5,11 +5,19 @@ import { Gene, TargetNomination, GenesService } from '@sagebionetworks/agora/api
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'agora-nominated-targets',
   standalone: true,
-  imports: [CommonModule, RouterLink, SvgIconComponent, ModalLinkComponent, GeneTableComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    SvgIconComponent,
+    ModalLinkComponent,
+    GeneTableComponent,
+    ButtonModule,
+  ],
   templateUrl: './nominated-targets.component.html',
   styleUrls: ['./nominated-targets.component.scss'],
 })

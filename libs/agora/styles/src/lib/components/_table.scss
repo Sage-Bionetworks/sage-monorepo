@@ -39,7 +39,8 @@
       }
 
       i,
-      .p-multiselect-trigger {
+      .p-multiselect-trigger,
+      fa-icon {
         cursor: pointer;
 
         &:hover {
@@ -124,11 +125,12 @@
 
   .p-tooltip-text {
     text-align: center;
+    width: 230px;
   }
 
-  &:not(.tooltip-nowrap) {
-    width: 250px;
-  }
+  // &:not(.tooltip-nowrap) {
+  //   width: 250px;
+  // }
 
   &.p-tooltip-top {
     transform: translate(-50%, -100%);

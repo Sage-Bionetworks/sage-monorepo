@@ -26,13 +26,25 @@ import {
 } from 'rxjs';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { SvgIconComponent } from '@sagebionetworks/agora/ui';
+import { GeneIconComponent } from './assets/gene-icon/gene-icon.component';
+import { CloseIconComponent } from './assets/close-icon/close-icon.component';
 
 @Component({
   selector: 'agora-gene-search',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    FontAwesomeModule,
+    SvgIconComponent,
+    GeneIconComponent,
+    CloseIconComponent,
+  ],
   templateUrl: './gene-search.component.html',
-  styleUrl: './gene-search.component.scss',
+  styleUrls: ['./gene-search.component.scss'],
 })
 export class GeneSearchComponent implements AfterViewInit, OnDestroy {
   @Input() location: 'header' | 'home' = 'header';
@@ -42,6 +54,9 @@ export class GeneSearchComponent implements AfterViewInit, OnDestroy {
   apiService = inject(GenesService);
 
   protected unsubscribe$ = new Subject<void>();
+
+  searchIcon = faMagnifyingGlass;
+  searchLoadingIcon = faSpinner;
 
   results: Gene[] = [];
   isLoading = false;
@@ -61,8 +76,8 @@ export class GeneSearchComponent implements AfterViewInit, OnDestroy {
     unknown: 'An unknown error occurred, please try again.',
   };
 
-  @ViewChild('root') root: ElementRef = {} as ElementRef;
-  @ViewChild('input') input: ElementRef<HTMLInputElement> = {} as ElementRef;
+  @ViewChild('root') root!: ElementRef;
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
   @HostListener('document:click', ['$event'])
   onClick(event: Event) {

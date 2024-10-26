@@ -3,7 +3,10 @@
     <div class="header-inner">
       <div class="header-logo">
         <a routerLink="/">
-          <img [src]="headerLogoPath" alt="header logo" />
+          <agora-svg-image
+            imagePath="/agora-assets/images/header-logo.svg"
+            altText="header logo"
+          ></agora-svg-image>
         </a>
       </div>
       @if (navItems.length > 0) {
@@ -44,11 +47,10 @@
 
             <div class="separator"></div>
 
-            <!-- <agora-gene-search
+            <agora-gene-search
               class="header-search"
               (searchNavigated)="toggleNav()"
-            ></agora-gene-search> -->
-            <agora-gene-search></agora-gene-search>
+            ></agora-gene-search>
           </div>
         </div>
       }

@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HomeComponent } from './home.component';
+import { NominationFormComponent } from './nomination-form.component';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter } from '@angular/router';
 
-describe('HomeComponent', () => {
-  let component: HomeComponent;
-  let fixture: ComponentFixture<HomeComponent>;
+describe('NominationFormComponent', () => {
+  let component: NominationFormComponent;
+  let fixture: ComponentFixture<NominationFormComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -13,7 +13,7 @@ describe('HomeComponent', () => {
       providers: [provideHttpClient(), provideRouter([])],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(HomeComponent);
+    fixture = TestBed.createComponent(NominationFormComponent);
     component = fixture.componentInstance;
   });
 

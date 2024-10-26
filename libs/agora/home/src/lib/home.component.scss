@@ -1,3 +1,4 @@
+/* stylelint-disable no-descending-specificity */
 @import 'libs/agora/styles/src/lib/variables';
 @import 'libs/agora/styles/src/lib/mixins';
 
@@ -11,11 +12,11 @@
   margin: 0 auto;
   padding: var(--spacing-md) 0;
 
-  @media (min-width: 750px) {
+  @media (width >= 750px) {
     max-width: 80vw;
   }
 
-  @media (min-width: 990px) {
+  @media (width >= 990px) {
     background-color: none;
   }
 
@@ -41,7 +42,7 @@
   font-size: var(--font-size-xl);
   line-height: 2rem;
 
-  @media (min-width: 990px) {
+  @media (width >= 990px) {
     width: 100%;
   }
 
@@ -76,7 +77,7 @@
   flex-wrap: wrap;
   gap: var(--spacing-lg);
 
-  @media (min-width: 990px) {
+  @media (width >= 990px) {
     flex-wrap: nowrap;
   }
 
@@ -84,7 +85,7 @@
   > button {
     width: 100%;
 
-    @media (min-width: 990px) {
+    @media (width >= 990px) {
       width: 33%;
     }
   }
@@ -145,7 +146,7 @@
   width: 100%;
   height: 100%;
 
-  img {
+  agora-svg-image {
     position: absolute;
     width: 30vh;
 

@@ -4,13 +4,13 @@ import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/cor
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
-  selector: 'agora-svg-icon',
+  selector: 'agora-svg-image',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './svg-icon.component.html',
-  styleUrls: ['./svg-icon.component.scss'],
+  templateUrl: './svg-image.component.html',
+  styleUrls: ['./svg-image.component.scss'],
 })
-export class SvgIconComponent implements OnChanges {
+export class SvgImageComponent implements OnChanges {
   sanitizer = inject(DomSanitizer);
   http = inject(HttpClient);
 
@@ -18,7 +18,6 @@ export class SvgIconComponent implements OnChanges {
 
   @Input() imagePath = '';
   @Input() altText = '';
-  @Input() customClasses = '';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['imagePath']) {
@@ -31,15 +30,5 @@ export class SvgIconComponent implements OnChanges {
         },
       );
     }
-  }
-
-  getClasses() {
-    const classes = ['svg-icon'];
-
-    if (this.customClasses) {
-      classes.push(this.customClasses);
-    }
-
-    return classes.join(' ');
   }
 }

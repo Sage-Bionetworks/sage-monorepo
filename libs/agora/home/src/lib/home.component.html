@@ -1,9 +1,18 @@
 <div id="home-page">
   <div class="section">
     <div class="background">
-      <img [src]="backgroundBox1Path" alt="background" />
-      <img [src]="backgroundBox2Path" alt="background" />
-      <img [src]="backgroundBox3Path" alt="background" />
+      <agora-svg-image
+        imagePath="/agora-assets/images/background1.svg"
+        altText=""
+      ></agora-svg-image>
+      <agora-svg-image
+        imagePath="/agora-assets/images/background2.svg"
+        altText=""
+      ></agora-svg-image>
+      <agora-svg-image
+        imagePath="/agora-assets/images/background3.svg"
+        altText=""
+      ></agora-svg-image>
     </div>
     <div class="content">
       <div class="text-marquee">
@@ -38,8 +47,14 @@
               </p>
             </div>
             <div class="icon-container">
-              <img [src]="geneComparisonIconPath" alt="gene icon" />
-              <img [src]="arrowPath" alt="arrow" />
+              <agora-svg-image
+                imagePath="/agora-assets/images/gene-comparison-icon.svg"
+                altText="gene comparison icon"
+              ></agora-svg-image>
+              <agora-svg-image
+                imagePath="/agora-assets/images/card-arrow.svg"
+                altText="arrow"
+              ></agora-svg-image>
             </div>
           </div>
         </button>
@@ -51,8 +66,7 @@
               find detailed information about nominations, and explore its association with AD.
             </p>
           </div>
-          <!-- <gene-search [location]="'home'"></gene-search> -->
-          <agora-gene-search></agora-gene-search>
+          <agora-gene-search [location]="'home'"></agora-gene-search>
         </div>
         <button routerLink="/genes/nominated-targets" class="card-link">
           <div class="card">
@@ -64,8 +78,14 @@
               </p>
             </div>
             <div class="icon-container">
-              <img [src]="nominatedTargetsIconPath" alt="target icon" />
-              <img [src]="arrowPath" alt="arrow" />
+              <agora-svg-image
+                imagePath="/agora-assets/images/nominated-targets-icon.svg"
+                altText="nominated targets icon"
+              ></agora-svg-image>
+              <agora-svg-image
+                imagePath="/agora-assets/images/card-arrow.svg"
+                altText="arrow"
+              ></agora-svg-image>
             </div>
           </div>
         </button>
