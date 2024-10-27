@@ -24,10 +24,6 @@
             tooltipStyleClass="tooltip gene-table-tooltip"
             appendTo="target"
           >
-            <!-- <i
-              class="fa-solid fa-arrow-right-arrow-left"
-              (click)="navigateToGeneComparisonTool()"
-            ></i> -->
             <fa-icon [icon]="gctIcon" (click)="navigateToGeneComparisonTool()"></fa-icon>
           </div>
         }
@@ -48,8 +44,7 @@
             tooltipStyleClass="tooltip tooltip-nowrap gene-table-tooltip"
             appendTo="target"
           >
-            <!-- <i class="fa-solid fa-download" (click)="table.exportCSV()"></i> -->
-            <fa-icon [icon]="downloadIcon"></fa-icon>
+            <fa-icon [icon]="downloadIcon" (click)="table.exportCSV()"></fa-icon>
           </div>
         </div>
         <div>
