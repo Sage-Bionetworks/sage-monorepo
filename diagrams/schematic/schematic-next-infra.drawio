@@ -1198,7 +1198,7 @@
             <mxGeometry x="173.5" y="1303" width="50" height="50" as="geometry" />
           </mxCell>
         </UserObject>
-        <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;schematic&lt;br&gt;&lt;/div&gt;-infra" link="https://github.com/Sage-Bionetworks/schematic-infra" id="qpIqtOvf-1Vt5ytHBNvU-129">
+        <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;schematic-infra&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/schematic-infra" id="qpIqtOvf-1Vt5ytHBNvU-129">
           <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" parent="1" vertex="1">
             <mxGeometry x="55" y="1401" width="50" height="50" as="geometry" />
           </mxCell>
