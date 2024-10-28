@@ -33,5 +33,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "table"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8zMTE0XzIwMzE5KSI+JiN4YTs8cGF0aCBmaWxsPSIjODc4RTk1IiBkPSJNMTYgN0g1VjE3SDE2TDE5LjU1IDEyTDE2IDdaIiBvcGFjaXR5PSIwLjMiLz4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xNy42MyA1Ljg0QzE3LjI3IDUuMzMgMTYuNjcgNSAxNiA1TDUgNS4wMUMzLjkgNS4wMSAzIDUuOSAzIDdWMTdDMyAxOC4xIDMuOSAxOC45OSA1IDE4Ljk5TDE2IDE5QzE2LjY3IDE5IDE3LjI3IDE4LjY3IDE3LjYzIDE4LjE2TDIyIDEyTDE3LjYzIDUuODRaTTE2IDE3SDVWN0gxNkwxOS41NSAxMkwxNiAxN1oiLz4mI3hhOzwvZz4mI3hhOzxkZWZzPiYjeGE7PGNsaXBQYXRoIGlkPSJjbGlwMF8zMTE0XzIwMzE5Ij4mI3hhOzxyZWN0IGZpbGw9IndoaXRlIiBoZWlnaHQ9IjI0IiB3aWR0aD0iMjQiLz4mI3hhOzwvY2xpcFBhdGg+JiN4YTs8L2RlZnM+JiN4YTs8L3N2Zz4=;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry x=\"4.547473508864641e-13\" width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "annotations"
   }
 ]</mxlibrary>
