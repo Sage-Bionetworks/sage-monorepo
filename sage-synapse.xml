@@ -26,5 +26,12 @@
     "h": 50,
     "aspect": "fixed",
     "title": "file"
+  },
+  {
+    "xml": "&lt;mxGraphModel&gt;&lt;root&gt;&lt;mxCell id=\"0\"/&gt;&lt;mxCell id=\"1\" parent=\"0\"/&gt;&lt;mxCell id=\"2\" value=\"\" style=\"shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik00Ljg5MDE0IDVIMTkuMTAwMVY4SDQuODkwMTRWNVpNMTYuMjU4MSAxMEgxOS4xMDAxVjE5SDE2LjI1ODFWMTBaTTkuNjI2OCAxMEgxNC4zNjM1VjE5SDkuNjI2OFYxMFpNNC44OTAxNCAxMEg3LjczMjE0VjE5SDQuODkwMTRWMTBaIiBvcGFjaXR5PSIwLjMiLz4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xOS4xMDUzIDNINC44OTQ3NEMzLjg1MjYzIDMgMyAzLjkgMyA1VjE5QzMgMjAuMSAzLjg1MjYzIDIxIDQuODk0NzQgMjFIMTkuMTA1M0MyMC4xNDc0IDIxIDIxIDIwLjEgMjEgMTlWNUMyMSAzLjkgMjAuMTQ3NCAzIDE5LjEwNTMgM1pNNy43MzY4NCAxOUg0Ljg5NDc0VjEwSDcuNzM2ODRWMTlaTTE0LjM2ODQgMTlIOS42MzE1OFYxMEgxNC4zNjg0VjE5Wk0xOS4xMDUzIDE5SDE2LjI2MzJWMTBIMTkuMTA1M1YxOVpNMTkuMTA1MyA4SDQuODk0NzRWNUgxOS4xMDUzVjhaIi8+JiN4YTs8L3N2Zz4=;\" vertex=\"1\" parent=\"1\"&gt;&lt;mxGeometry x=\"4.547473508864641e-13\" width=\"50\" height=\"50\" as=\"geometry\"/&gt;&lt;/mxCell&gt;&lt;/root&gt;&lt;/mxGraphModel&gt;",
+    "w": 50,
+    "h": 50,
+    "aspect": "fixed",
+    "title": "table"
   }
 ]</mxlibrary>
