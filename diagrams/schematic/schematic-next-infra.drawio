@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.3">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="3267" dy="1311" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2555" dy="928" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1204,11 +1204,11 @@
           </mxCell>
         </UserObject>
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-132" value="3 Ways to Store Validated Manifest Content" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
-          <mxGeometry x="2020" y="695" width="297" height="296" as="geometry" />
+          <mxGeometry x="2020" y="695" width="297" height="345" as="geometry" />
         </mxCell>
-        <UserObject label="&lt;div&gt;Each DCC can configure how validated manifests are submitted to Synapse.&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;TODO&lt;br&gt; &lt;/div&gt;" link="https://github.com/Sage-Bionetworks/schematic/blob/develop/tests/data/example.model.csv#L40-L45" id="qpIqtOvf-1Vt5ytHBNvU-133">
+        <UserObject label="&lt;div&gt;Each DCC configures the submission of validated manifests to Synapse in the following formats:&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;File (CSV), Synapse Table, Entity Annotations&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;One or more formats can be specified using the property &quot;manifest_record_type&quot; of the DCC-specifc DCA config file. For example:&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;manifest_record_type&quot;: &quot;table_file_and_entities&quot; (default)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;The annotation of data files is also controlled by the following property:&lt;br&gt;&lt;br&gt;&quot;file_annotation_upload&quot;: &quot;true&quot; (default)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;If there are no data files and &quot;entities&quot; is part of the record type, then Schematic will create the entities.&lt;br&gt;&lt;/div&gt;" id="qpIqtOvf-1Vt5ytHBNvU-133">
           <mxCell style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="qpIqtOvf-1Vt5ytHBNvU-132" vertex="1">
-            <mxGeometry x="12" y="39.5" width="273" height="234" as="geometry" />
+            <mxGeometry x="12" y="39.5" width="273" height="286.5" as="geometry" />
           </mxCell>
         </UserObject>
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-134" value="Sensitive Manifests Governance" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
@@ -1307,15 +1307,6 @@
         </mxCell>
         <mxCell id="ES8nZGE4vfOgOSb3lLVs-95" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyBoZWlnaHQ9IjIwIiB3aWR0aD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgdmlld0JveD0iMCAwIDIwIDIwIj4mI3hhOzxwYXRoIGQ9Im0zLDloMVY2YTUsNSAwIDAsMSAxMiwwVjloMXYxMUgzTTE0LDlWNmE0LDQgMCAxLDAtOCwwdjMiIGZpbGw9IiNmZjY5MDAiLz4mI3hhOzwvc3ZnPg==;" parent="WcYvNtD2dtVz5HcaBpsU-5" vertex="1">
           <mxGeometry x="201.99739130434796" width="35" height="35" as="geometry" />
-        </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-142" value="Validated&#xa;Metadata Manifest&#xa;(Table)" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik00Ljg5MDE0IDVIMTkuMTAwMVY4SDQuODkwMTRWNVpNMTYuMjU4MSAxMEgxOS4xMDAxVjE5SDE2LjI1ODFWMTBaTTkuNjI2OCAxMEgxNC4zNjM1VjE5SDkuNjI2OFYxMFpNNC44OTAxNCAxMEg3LjczMjE0VjE5SDQuODkwMTRWMTBaIiBvcGFjaXR5PSIwLjMiLz4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xOS4xMDUzIDNINC44OTQ3NEMzLjg1MjYzIDMgMyAzLjkgMyA1VjE5QzMgMjAuMSAzLjg1MjYzIDIxIDQuODk0NzQgMjFIMTkuMTA1M0MyMC4xNDc0IDIxIDIxIDIwLjEgMjEgMTlWNUMyMSAzLjkgMjAuMTQ3NCAzIDE5LjEwNTMgM1pNNy43MzY4NCAxOUg0Ljg5NDc0VjEwSDcuNzM2ODRWMTlaTTE0LjM2ODQgMTlIOS42MzE1OFYxMEgxNC4zNjg0VjE5Wk0xOS4xMDUzIDE5SDE2LjI2MzJWMTBIMTkuMTA1M1YxOVpNMTkuMTA1MyA4SDQuODk0NzRWNUgxOS4xMDUzVjhaIi8+JiN4YTs8L3N2Zz4=;" parent="1" vertex="1">
-          <mxGeometry x="2102" y="1035" width="50" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-143" value="Validated&#xa;Metadata Manifest&#xa;(Entity Annotations)&#xa;" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAyNCAyNCIgaGVpZ2h0PSIyNCIgd2lkdGg9IjI0Ij4mI3hhOzxnIGNsaXAtcGF0aD0idXJsKCNjbGlwMF8zMTE0XzIwMzE5KSI+JiN4YTs8cGF0aCBmaWxsPSIjODc4RTk1IiBkPSJNMTYgN0g1VjE3SDE2TDE5LjU1IDEyTDE2IDdaIiBvcGFjaXR5PSIwLjMiLz4mI3hhOzxwYXRoIGZpbGw9IiM4NzhFOTUiIGQ9Ik0xNy42MyA1Ljg0QzE3LjI3IDUuMzMgMTYuNjcgNSAxNiA1TDUgNS4wMUMzLjkgNS4wMSAzIDUuOSAzIDdWMTdDMyAxOC4xIDMuOSAxOC45OSA1IDE4Ljk5TDE2IDE5QzE2LjY3IDE5IDE3LjI3IDE4LjY3IDE3LjYzIDE4LjE2TDIyIDEyTDE3LjYzIDUuODRaTTE2IDE3SDVWN0gxNkwxOS41NSAxMkwxNiAxN1oiLz4mI3hhOzwvZz4mI3hhOzxkZWZzPiYjeGE7PGNsaXBQYXRoIGlkPSJjbGlwMF8zMTE0XzIwMzE5Ij4mI3hhOzxyZWN0IGZpbGw9IndoaXRlIiBoZWlnaHQ9IjI0IiB3aWR0aD0iMjQiLz4mI3hhOzwvY2xpcFBhdGg+JiN4YTs8L2RlZnM+JiN4YTs8L3N2Zz4=;" parent="1" vertex="1">
-          <mxGeometry x="2209.9971428571425" y="1035" width="50" height="50" as="geometry" />
-        </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-144" value="and/or" style="text;whiteSpace=wrap;html=1;align=center;" parent="1" vertex="1">
-          <mxGeometry x="2152" y="1046.9985714285715" width="52" height="26" as="geometry" />
         </mxCell>
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-154" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="BDQBU1quI3tBmX_76Top-11" edge="1">
           <mxGeometry relative="1" as="geometry">
