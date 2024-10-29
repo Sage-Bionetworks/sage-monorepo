@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.3">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="3420" dy="1393" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2555" dy="928" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -876,7 +876,7 @@
         <mxCell id="nQomMov4nv-ivm8LL9WS-36" value="OR" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="nQomMov4nv-ivm8LL9WS-38" vertex="1">
           <mxGeometry x="216" y="53" width="35" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="nQomMov4nv-ivm8LL9WS-56" value="DCC Synapse Project (main)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+        <mxCell id="nQomMov4nv-ivm8LL9WS-56" value="Data Coordination Center (DCC) Synapse Project (main)" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
           <mxGeometry x="374" y="332.63" width="491" height="165.37" as="geometry" />
         </mxCell>
         <mxCell id="nQomMov4nv-ivm8LL9WS-79" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;" parent="nQomMov4nv-ivm8LL9WS-56" source="nQomMov4nv-ivm8LL9WS-63" target="nQomMov4nv-ivm8LL9WS-64" edge="1">
@@ -1475,6 +1475,11 @@
         <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;sage-monorepo&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/sage-monorepo" id="ES8nZGE4vfOgOSb3lLVs-103">
           <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" parent="1" vertex="1">
             <mxGeometry x="167" y="1406" width="50" height="50" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <UserObject label="DCC Playbook&#xa;Stages" link="https://www.figma.com/file/dCSCjHWVkZCOyeLoQq1LaQ/DCC-Playbook-Stages?type=whiteboard&amp;node-id=0-1&amp;t=3epzHhZ3H4Y06cAG-0" id="WcYvNtD2dtVz5HcaBpsU-6">
+          <mxCell style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWw6c3BhY2U9InByZXNlcnZlIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA1My4zIDgwIiB2aWV3Qm94PSIwIDAgNTMuMyA4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4mI3hhOyAgICA8cGF0aCBzdHlsZT0iZmlsbDojMGFjZjgzIiBkPSJNMTMuMyA4MGM3LjQgMCAxMy4zLTYgMTMuMy0xMy4zVjUzLjNIMTMuM0M2IDUzLjMgMCA1OS4zIDAgNjYuN1M2IDgwIDEzLjMgODB6Ii8+JiN4YTsgICAgPHBhdGggc3R5bGU9ImZpbGw6I2EyNTlmZiIgZD0iTTAgNDBjMC03LjQgNi0xMy4zIDEzLjMtMTMuM2gxMy4zdjI2LjdIMTMuM0M2IDUzLjMgMCA0Ny40IDAgNDB6Ii8+JiN4YTsgICAgPHBhdGggc3R5bGU9ImZpbGw6I2YyNGUxZSIgZD0iTTAgMTMuM0MwIDYgNiAwIDEzLjMgMGgxMy4zdjI2LjdIMTMuM0M2IDI2LjcgMCAyMC43IDAgMTMuM3oiLz4mI3hhOyAgICA8cGF0aCBzdHlsZT0iZmlsbDojZmY3MjYyIiBkPSJNMjYuNyAwSDQwYzcuNCAwIDEzLjMgNiAxMy4zIDEzLjNzLTYgMTMuMy0xMy4zIDEzLjNIMjYuN1YweiIvPiYjeGE7ICAgIDxwYXRoIHN0eWxlPSJmaWxsOiMxYWJjZmUiIGQ9Ik01My4zIDQwYzAgNy40LTYgMTMuMy0xMy4zIDEzLjNzLTEzLjMtNi0xMy4zLTEzLjMgNi0xMy4zIDEzLjMtMTMuM1M1My4zIDMyLjYgNTMuMyA0MHoiLz4mI3hhOzwvc3ZnPg==;" vertex="1" parent="1">
+            <mxGeometry x="2262" y="1243" width="33.13" height="50" as="geometry" />
           </mxCell>
         </UserObject>
       </root>
