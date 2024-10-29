@@ -1,6 +1,6 @@
 <mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/131.0" version="24.8.3">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="3790" dy="1591" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="4284" dy="1857" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -600,9 +600,6 @@
             <mxPoint x="12" y="-1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="7cjwt-c1Aj_Hxcm3FY-D-46" value="&quot;The only reason that I believe we still use it is because google sheet &lt;br&gt;doesn’t support multi-select in dropdown, and there’s an app script &lt;br&gt;there to make it work.&quot;" style="text;html=1;align=left;verticalAlign=top;spacingTop=-4;fontSize=14;labelBackgroundColor=none;whiteSpace=wrap;resizeWidth=1;fixedWidth=1;resizeHeight=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="2068" y="1314" width="451" height="90" as="geometry" />
-        </mxCell>
         <mxCell id="bOJ_4vFxXKsenDZso6HB-11" value="Data Type" style="swimlane;whiteSpace=wrap;html=1;collapsible=0;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" parent="1" vertex="1">
           <mxGeometry x="1140" y="367.87" width="146" height="284" as="geometry" />
         </mxCell>
@@ -875,9 +872,6 @@
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-145" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="nQomMov4nv-ivm8LL9WS-56" source="nQomMov4nv-ivm8LL9WS-67" target="nQomMov4nv-ivm8LL9WS-62" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-146" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" parent="nQomMov4nv-ivm8LL9WS-56" vertex="1">
-          <mxGeometry x="306" y="31.370000000000005" width="30" height="30" as="geometry" />
-        </mxCell>
         <mxCell id="nQomMov4nv-ivm8LL9WS-71" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;" parent="1" source="nQomMov4nv-ivm8LL9WS-64" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="514" y="284" as="targetPoint" />
@@ -1135,7 +1129,7 @@
             <mxPoint x="17" y="1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-111" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" parent="1" vertex="1">
+        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-111" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" parent="1" vertex="1">
           <mxGeometry x="869.57" y="627" width="30" height="30" as="geometry" />
         </mxCell>
         <mxCell id="qpIqtOvf-1Vt5ytHBNvU-114" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" parent="1" vertex="1">
@@ -1149,8 +1143,8 @@
             <mxGeometry x="12" y="33" width="273" height="175" as="geometry" />
           </mxCell>
         </UserObject>
-        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-121" value="Component, Publication is a Component/Data Type but not a &quot;Data&quot; type. Is a class Type." style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
-          <mxGeometry x="2489" y="1022.5" width="179" height="50" as="geometry" />
+        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-121" value="The Schematic development team currently uses &#39;Component&#39; to refer to &#39;Data Types&#39; internally. Another similar term in ontology creation is &#39;Class,&#39; which may be more appropriate than &#39;Data Type&#39; for describing concepts, such as metadata submission for a publication. To ensure clarity, I recommend we standardize terminology across development and documentation." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+          <mxGeometry x="1740.5" y="54" width="431.5" height="86" as="geometry" />
         </mxCell>
         <UserObject label="&lt;div&gt;Sage-Bionetworks/&lt;/div&gt;&lt;div&gt;schema_visualization&lt;br&gt;&lt;/div&gt;" link="https://github.com/Sage-Bionetworks/schema_visualization" id="qpIqtOvf-1Vt5ytHBNvU-127">
           <mxCell style="dashed=0;outlineConnect=0;html=1;align=center;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;shape=mxgraph.weblogos.github;aspect=fixed;" parent="1" vertex="1">
@@ -1459,6 +1453,18 @@
             <mxGeometry x="170.21" y="1401" width="50" height="50" as="geometry" />
           </mxCell>
         </UserObject>
+        <mxCell id="qpIqtOvf-1Vt5ytHBNvU-146" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" parent="1" vertex="1">
+          <mxGeometry x="603" y="514" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WcYvNtD2dtVz5HcaBpsU-23" value="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1694" y="54" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WcYvNtD2dtVz5HcaBpsU-25" value="2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#007CBD;strokeColor=none;fontColor=#FFFFFF;fontStyle=1;fontSize=22;labelBackgroundColor=none;aspect=fixed;arcSize=50;" vertex="1" parent="1">
+          <mxGeometry x="1694" y="151" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="WcYvNtD2dtVz5HcaBpsU-27" value="&quot;The only reason that I believe we still use it is because google sheet&lt;br&gt;doesn’t support multi-select in dropdown, and there’s an app script&lt;br&gt;there to make it work.&quot;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="1740.5" y="147" width="431.5" height="64" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
