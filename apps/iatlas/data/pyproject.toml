@@ -6,8 +6,8 @@ authors = ["andrewelamb <andrewelamb@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-schematic-db = {version = "0.0.36", extras = ["postgres", "synapse"]}
+python = "^3.11"
+schematic-db = {version = "0.1.5", extras = ["postgres", "synapse"]}
 
 
 [build-system]

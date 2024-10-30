@@ -1,4 +1,4 @@
-FROM python:3.10.13
+FROM python:3.11.9
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
