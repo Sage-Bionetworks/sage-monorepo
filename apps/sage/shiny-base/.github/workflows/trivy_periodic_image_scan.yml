@@ -20,7 +20,7 @@ jobs:
         id: image_name
         uses: vishalmamidi/lowercase-action@v1
         with:
-          string: ghcr.io/${{ github.repository }}:main
+          string: ghcr.io/${{ github.repository }}:main # if rebuilding for a new tag does not also rebuild 'main', then change this to scan the latest tag
     outputs:
       lowercase: ${{ steps.image_name.outputs.lowercase }}
 
@@ -30,4 +30,18 @@ jobs:
     with:
       SOURCE_TYPE: image
       IMAGE_NAME: ${{ needs.lower-case.outputs.lowercase }}
+
+  # If scan failed, rebuild the image
+  update-image:
+    needs: periodic-scan
+    runs-on: ubuntu-latest
+    if: ${{needs.periodic-scan.outputs.trivy_conclusion == 'failure' }}
+    # tag the repo to trigger a new build
+    steps:
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
 ...

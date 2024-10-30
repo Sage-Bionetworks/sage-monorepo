@@ -20,9 +20,10 @@ on:
       IMAGE_NAME:
         required: true
         type: string
-      EXIT_CODE:
+      EXIT_CODE: # # return code for failed scan. 0 means OK.  Non-zero will fail the build when there are findings.
         required: false
         type: number
+        default: 0
 
 env:
   sarif_file_name: trivy-results.sarif
@@ -78,4 +79,7 @@ jobs:
         with:
           sarif_file: ${{ env.sarif_file_name  }}
           wait-for-processing: true
+
+    outputs:
+      trivy_conclusion: steps.trivy.outputs.conclusion
 ...
