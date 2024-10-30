@@ -41,6 +41,13 @@
       "options": {
         "outputFile": "reports/{projectRoot}/pylint.txt"
       }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run python src/build_database.py",
+        "cwd": "{projectRoot}"
+      }
     }
   },
   "tags": ["language:python", "package-manager:poetry"],
