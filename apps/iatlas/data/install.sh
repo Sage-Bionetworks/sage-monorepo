@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PYTHON_VERSION="3.11.9"
+PYTHON_VERSION="3.11.10"
 
 pyenv install --skip-existing $PYTHON_VERSION
 
@@ -9,6 +9,5 @@ pyenv install --skip-existing $PYTHON_VERSION
 eval "$(pyenv init -)"
 
 pyenv local $PYTHON_VERSION
-poetry env use $PYTHON_VERSION
-poetry install
-# poetry install --with prod,dev
+poetry env use $(pyenv which python)
+poetry install --with dev
