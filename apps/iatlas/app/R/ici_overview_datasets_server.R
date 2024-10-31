@@ -16,8 +16,8 @@ ici_overview_datasets_server <- function(
                     "Information about downloading the Immune Checkpoint Inhibition data available in iAtlas is available at this Jupyter notebook."),
           "cancer genomics" = c("https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/querying_TCGA_features_and_expression.ipynb",
                                 "Information about downloading the Cancer Genomics data available in iAtlas is available at this Jupyter notebook."),
-          "single-cell RNA-Seq"= c("https://www.synapse.org/#!Synapse:syn53761955",
-                                   "Processed data is available for download in Synapse.")
+          "single-cell RNA-Seq"= c("https://github.com/CRI-iAtlas/iatlas-notebooks/blob/main/query_iatlas_single_cell_datasets.ipynb",
+                                   "Information about downloading the pseudobulk single-cell RNAseq data available in iAtlas is available at this Jupyter notebook."),
         )
       )
 

@@ -18,18 +18,7 @@ sc_umap_ui <- function(id){
       width=24,
       shiny::column(
         width = 4,
-        shiny::selectInput(
-          ns("datasets"),
-          "Choose dataset(s)",
-          choices = c("Bi 2021 - ccRCC" = "Bi_2021",
-                      "Krishna 2021 - ccRCC" = "Krishna_2021",
-                      "Li 2022 - ccRCC" = "Li_2022",
-                      "HTAN MSK - SCLC" = "MSK",
-                      "Shiao 2024 - BRCA" = "Shiao_2024",
-                      "HTAN Vanderbilt - colon polyps" = "Vanderbilt"
-                      ),
-          selected = c("Vanderbilt")
-        )
+        shiny::uiOutput(ns("select_dataset"))
       ),
 
       shiny::column(

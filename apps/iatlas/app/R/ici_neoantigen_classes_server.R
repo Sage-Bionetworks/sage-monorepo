@@ -23,6 +23,7 @@ ici_neoantigen_classes_server <- function(
       })
 
       all_plots <- shiny::reactive({
+        shiny::validate(shiny::need(nrow(cohort_count)>0, "There is no neoantigen data for the selected dataset(s)"))
         shiny::req(cohort_count())
 
         purrr::map(cohort_obj()$dataset_names, function(x){
@@ -57,7 +58,9 @@ ici_neoantigen_classes_server <- function(
         plotly::plotlyOutput(ns("neoantigen_classes_plot"), height = box_height)
       })
 
-      output$legend <-  DT:: renderDT(legend_plot())
+      output$legend <-  DT:: renderDT({
+        shiny::validate(shiny::need(nrow(cohort_count)>0, ""))
+        legend_plot()})
 
       output$neoantigen_classes_plot <- plotly::renderPlotly({
         shiny::req(all_plots())

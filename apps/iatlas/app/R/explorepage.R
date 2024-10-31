@@ -38,6 +38,11 @@ explorepage_ui <- function(){
         tabName = "ici_overview"
       ),
       shinydashboard::menuItem(
+        "Single Cell Cohort Selection",
+        tabName = "sc_cohort_selection",
+        icon = shiny::icon("cog")
+      ),
+      shinydashboard::menuItem(
         text = "Single Cell Modules",
         icon = shiny::icon("chart-bar"),
         startExpanded = TRUE,
@@ -203,12 +208,14 @@ explorepage_ui <- function(){
       dplyr::select(modules_tbl, "label", "ui_function"),
       dplyr::tibble(
         "label" = c(
+          "sc_cohort_selection",
           "cg_cohort_selection",
           "ici_cohort_selection",
           "data_info",
           "ici_overview"
         ),
         "ui_function" = c(
+          iatlas.modules2::cohort_selection_ui,
           iatlas.modules2::cohort_selection_ui,
           iatlas.modules2::cohort_selection_ui,
           data_info_ui,
