@@ -36,6 +36,7 @@ ici_neoantigen_frequency_server <- function(
       })
 
       all_plots <- shiny::reactive({
+        shiny::validate(shiny::need(nrow(plot_df())>0, "There is no neoantigen data for the selected dataset(s)"))
         shiny::req(plot_df())
 
         purrr::map(cohort_obj()$dataset_names, function(x){
@@ -83,7 +84,9 @@ ici_neoantigen_frequency_server <- function(
         plotly::subplot(all_plots(), nrows = (length(all_plots())), margin = 0.08, shareX = FALSE, shareY = FALSE, titleX = TRUE, titleY = TRUE)
       })
 
-      output$legend <-  DT:: renderDT(legend_plot())
+      output$legend <-  DT:: renderDT({
+        shiny::validate(shiny::need(nrow(plot_df())>0, ""))
+        legend_plot()})
 
       #adding interactivity to select a point from the plot and render table with data for all groups
       observe({

@@ -6,27 +6,12 @@ sc_immune_features_distribution_ui <- function(id){
       iatlas.modules::optionsBox(
         width=12,
         shiny::fluidRow(
-          shiny::column(
-            width = 4,
-            shiny::checkboxGroupInput(
-              ns("datasets"),
-              "Choose dataset(s)",
-              choices = c("Bi 2021 - ccRCC" = "Bi_2021",
-                          "Krishna 2021 - ccRCC" = "Krishna_2021",
-                          "Li 2022 - ccRCC" = "Li_2022",
-                          "HTAN MSK - SCLC" = "MSK",
-                          "Shiao 2024 - BRCA" = "Shiao_2024",
-                          "HTAN Vanderbilt - colon polyps" = "Vanderbilt"
-              ),
-              selected = c("MSK", "Vanderbilt")
-            )
-          ),
           column(
-            width = 4,
+            width = 3,
             shiny::uiOutput(ns("feature_op"))
           ),
           column(
-            width = 4,
+            width = 3,
             shiny:: uiOutput(ns("group2"))
           ),
           column(
@@ -84,7 +69,8 @@ sc_immune_features_distribution_ui <- function(id){
         ),
         iatlas.modules::plotBox(
           width = 9,
-          DT::dataTableOutput(ns("stats1")),
+          DT::dataTableOutput(ns("stats1"))%>%
+            shinycssloaders::withSpinner(.),
           downloadButton(ns('download_test'), 'Download')
         )
       ),
