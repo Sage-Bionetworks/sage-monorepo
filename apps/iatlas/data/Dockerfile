@@ -6,7 +6,7 @@ ARG USER_GID=$USER_UID
 ENV APP_DIR=/opt/app \
     APP_USERNAME=${USERNAME}
 
-SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
