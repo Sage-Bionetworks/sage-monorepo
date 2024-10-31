@@ -1414,13 +1414,13 @@ use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
 
 [[package]]
 name = "schematic-db"
-version = "0.1.6"
+version = "0.1.5"
 description = ""
 optional = false
 python-versions = "<4.0,>=3.10"
 files = [
-    {file = "schematic_db-0.1.6-py3-none-any.whl", hash = "sha256:ea3923bdbc6e19aa30f1754059fe68b0c159c3cee82f2a1cbd39a9ab1c52579d"},
-    {file = "schematic_db-0.1.6.tar.gz", hash = "sha256:3e3e31065e030f25b6494d3816e1a116656799106f5f0ef42d29590cd7e91643"},
+    {file = "schematic_db-0.1.5-py3-none-any.whl", hash = "sha256:34b1dfdc10d736975bafed668005fd397235814b7af31c17413e1f1e29ab1856"},
+    {file = "schematic_db-0.1.5.tar.gz", hash = "sha256:9500f82d567a0f026e0f2904cc8ab3aff3832173a945c98a1b6be3e52169f356"},
 ]
 
 [package.dependencies]
@@ -1847,4 +1847,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.11.10"
-content-hash = "2cd9d41e161963e76259b68a4a6fe421c53c0523897c5af5975235ab0ea0de5f"
+content-hash = "98a4531fa5864b03ed01b2c7da80fa1e6fff5e9274e0fcd1b9a06a8a3b09fb31"

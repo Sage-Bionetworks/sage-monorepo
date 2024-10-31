@@ -1891,7 +1891,7 @@ ms = SynapseManifestStore(
 )
 
 updater = RDBUpdater(db, ms)
-updater.update_database(method="insert", chunk_size=100000)
+updater.update_database(method="insert", chunk_size=10000)
 
 
 cohorts_to_samples1 = db.execute_sql_query(
@@ -1915,7 +1915,7 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_samples",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )
 
 
@@ -1935,7 +1935,7 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_samples",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )
 
 
@@ -1954,7 +1954,7 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_features",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )
 
 
@@ -1971,7 +1971,7 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_genes",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )
 
 
@@ -1990,7 +1990,7 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_mutations",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )
 
 cohorts_to_tags = db.execute_sql_query(
@@ -2006,5 +2006,5 @@ updater._update_table_with_manifest(
     table_name="cohorts_to_tags",
     manifest_id="None",
     method="insert",
-    chunk_size=100000,
+    chunk_size=10000,
 )

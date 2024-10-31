@@ -22,7 +22,7 @@ readme = "README.md"
 
   [tool.poetry.dependencies]
   python = "3.11.10"
-  schematic-db = {version = "0.1.6", extras = ["postgres", "synapse"]}
+  schematic-db = {version = "0.1.5", extras = ["postgres", "synapse"]}
 
 [tool.poetry.group.dev.dependencies]
 autopep8 = "2.0.2"
