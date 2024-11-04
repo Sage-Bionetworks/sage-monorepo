@@ -64,7 +64,7 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results-${{ matrix.image }}-edge.sarif
-          category: trivy-${{ matrix.image }}:edge
+          category: trivy-image-${{ matrix.image }}:edge
           wait-for-processing: true
 
       - name: Detain results for debug if needed
