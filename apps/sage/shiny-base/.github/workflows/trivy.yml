@@ -20,7 +20,7 @@ on:
       IMAGE_NAME:
         required: true
         type: string
-      EXIT_CODE: # # return code for failed scan. 0 means OK.  Non-zero will fail the build when there are findings.
+      EXIT_CODE: # return code for failed scan. 0 means OK.  Non-zero will fail the build when there are findings.
         required: false
         type: number
         default: 0
@@ -55,7 +55,7 @@ jobs:
           }} | docker import - ${{ inputs.IMAGE_NAME }}
 
       - name: Run Trivy vulnerability scanner for any major issues
-        uses: aquasecurity/trivy-action@0.24.0
+        uses: aquasecurity/trivy-action@0.28.0
         id: trivy
         with:
           image-ref: ${{ inputs.IMAGE_NAME }}
