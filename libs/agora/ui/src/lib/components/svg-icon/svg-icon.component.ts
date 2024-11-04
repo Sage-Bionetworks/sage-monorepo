@@ -1,7 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'agora-svg-icon',
@@ -9,29 +7,12 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   imports: [CommonModule],
   templateUrl: './svg-icon.component.html',
   styleUrls: ['./svg-icon.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
-export class SvgIconComponent implements OnChanges {
-  sanitizer = inject(DomSanitizer);
-  http = inject(HttpClient);
-
-  svgContent!: SafeHtml;
-
+export class SvgIconComponent {
   @Input() imagePath = '';
   @Input() altText = '';
   @Input() customClasses = '';
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['imagePath']) {
-      this.http.get(this.imagePath, { responseType: 'text' }).subscribe(
-        (svg: string) => {
-          this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svg);
-        },
-        (error) => {
-          console.error('Error loading SVG file:', error);
-        },
-      );
-    }
-  }
 
   getClasses() {
     const classes = ['svg-icon'];
