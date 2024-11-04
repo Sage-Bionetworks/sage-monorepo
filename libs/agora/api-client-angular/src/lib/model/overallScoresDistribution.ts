@@ -22,6 +22,11 @@ export interface OverallScoresDistribution {
    * Bins used in the distribution
    */
   bins: Array<Array<number>>;
+  min: number;
+  max: number;
+  mean: number;
+  first_quartile: number;
+  third_quartile: number;
   /**
    * Name of the score distribution
    */

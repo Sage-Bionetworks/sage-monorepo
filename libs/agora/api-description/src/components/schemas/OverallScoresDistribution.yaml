@@ -13,6 +13,16 @@ properties:
       items:
         type: number
     description: Bins used in the distribution
+  min:
+    type: number
+  max:
+    type: number
+  mean:
+    type: number
+  first_quartile:
+    type: number
+  third_quartile:
+    type: number
   name:
     type: string
     description: Name of the score distribution
@@ -25,6 +35,11 @@ properties:
 required:
   - distribution
   - bins
+  - min
+  - max
+  - mean
+  - first_quartile
+  - third_quartile
   - name
   - syn_id
   - wiki_id
