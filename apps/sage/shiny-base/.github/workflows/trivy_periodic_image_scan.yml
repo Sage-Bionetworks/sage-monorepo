@@ -34,7 +34,7 @@ jobs:
   update-image:
     needs: periodic-scan
     runs-on: ubuntu-latest
-    if: ${{needs.periodic-scan.outputs.trivy_conclusion == 'failure' }}
+    if: ${{!cancelled() && needs.periodic-scan.outputs.trivy_conclusion == 'failure' }}
     # tag the repo to trigger a new build
     steps:
       - name: Bump version and push tag
