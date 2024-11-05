@@ -1,16 +1,16 @@
 <a class="modal-link link">
   <span class="modal-link-inner" (click)="toggle()">
-    <span *ngIf="icon" class="modal-link-icon">
+    <span class="modal-link-icon">
       <agora-svg-icon
-        imagePath="/agora-assets/image/info-circle"
+        imagePath="/agora-assets/icons/info-circle.svg"
         altText="info"
-        customClasses="two-tone"
       ></agora-svg-icon>
-      <i *ngIf="icon !== 'svg'" class="{{ icon }}"></i>
     </span>
-    <div *ngIf="text" class="modal-link-text">
-      {{ text }}
-    </div>
+    @if (text) {
+      <div class="modal-link-text">
+        {{ text }}
+      </div>
+    }
   </span>
   <p-dialog
     [header]="header"
@@ -22,7 +22,9 @@
     [style]="{ width: '100%', maxWidth: '960px' }"
     appendTo="body"
   >
-    <agora-wiki *ngIf="wikiId && hasActived" [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
+    @if (wikiId && hasActivated) {
+      <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
+    }
     <ng-content></ng-content>
   </p-dialog>
 </a>
