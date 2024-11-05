@@ -27,8 +27,8 @@ on:
 
 env:
   sarif_file_name: trivy-results.sarif
+  # https://github.com/aquasecurity/trivy-action/issues/389#issuecomment-2363829387
   TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
-
 jobs:
   trivy:
     name: Trivy
