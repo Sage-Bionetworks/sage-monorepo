@@ -30,12 +30,7 @@
                       <span>{{ item.label }}</span>
                     </a>
                   } @else if (item.url) {
-                    <a
-                      *ngIf="item.url"
-                      [attr.href]="item.url"
-                      [attr.target]="item.target"
-                      (click)="toggleNav()"
-                    >
+                    <a [attr.href]="item.url" [attr.target]="item.target" (click)="toggleNav()">
                       <span>{{ item.label }}</span>
                     </a>
                   } @else {
