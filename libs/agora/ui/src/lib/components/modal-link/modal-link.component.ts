@@ -12,7 +12,6 @@ import { WikiComponent } from 'libs/agora/wiki/src/lib/wiki.component';
   styleUrls: ['./modal-link.component.scss'],
 })
 export class ModalLinkComponent {
-  @Input() icon = 'svg';
   @Input() text = '';
   @Input() header = '';
 
@@ -20,10 +19,10 @@ export class ModalLinkComponent {
   @Input() wikiId = '';
 
   isActive = false;
-  hasActived = false;
+  hasActivated = false;
 
   toggle() {
-    this.hasActived = true;
+    this.hasActivated = true;
     this.isActive = !this.isActive;
   }
 }
