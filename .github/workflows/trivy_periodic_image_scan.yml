@@ -9,8 +9,7 @@ name: Trivy Periodic Image Scan
 
 on:
   schedule:
-    # run hourly, 10 minutes after the hour
-    - cron: "10 * * * *" # daily "0 0 * * *"
+    - cron: "0 0 * * *"
 
 jobs:
   lower-case:
