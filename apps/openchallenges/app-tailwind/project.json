@@ -2,8 +2,9 @@
   "name": "openchallenges-app-tailwind",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "prefix": "app",
   "sourceRoot": "apps/openchallenges/app-tailwind/src",
-  "prefix": "openchallenges",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/angular:application",
@@ -54,7 +55,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
       "configurations": {
         "production": {
           "buildTarget": "openchallenges-app-tailwind:build:production"

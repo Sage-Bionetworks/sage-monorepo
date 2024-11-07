@@ -1,15 +1,1 @@
-<openchallenges-google-tag-manager *ngIf="useGoogleTagManager" />
-<!-- XXX -->
-<openchallenges-navbar
-  class="mat-elevation-z6"
-  [title]="title"
-  [sections]="sections"
-  [isLoggedIn]="isLoggedIn"
-  [userAvatar]="userAvatar"
-  [userMenuItems]="userMenuItems"
-  (userMenuItemSelected)="selectUserMenuItem($event)"
-  (logInClicked)="login()"
-/>
-<div class="container">
-  <router-outlet></router-outlet>
-</div>
+<app-nx-welcome></app-nx-welcome> <router-outlet></router-outlet>
