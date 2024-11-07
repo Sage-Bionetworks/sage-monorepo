@@ -1,5 +1,5 @@
 {
-  "extends": ["../../../.eslintrc.json"],
+  "extends": ["plugin:playwright/recommended", "../../../.eslintrc.json"],
   "ignorePatterns": ["!**/*"],
   "overrides": [
     {
@@ -10,7 +10,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "app",
+            "prefix": "openchallenges",
             "style": "camelCase"
           }
         ],
@@ -18,7 +18,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "app",
+            "prefix": "openchallenges",
             "style": "kebab-case"
           }
         ]
@@ -27,6 +27,10 @@
     {
       "files": ["*.html"],
       "extends": ["plugin:@nx/angular-template"],
+      "rules": {}
+    },
+    {
+      "files": ["e2e/**/*.{ts,js,tsx,jsx}"],
       "rules": {}
     }
   ]
