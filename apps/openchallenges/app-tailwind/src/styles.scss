@@ -1,7 +1,5 @@
 @use 'libs/openchallenges/styles/src/index';
-
-// @use 'app-theme';
-
+@use 'app-theme';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
