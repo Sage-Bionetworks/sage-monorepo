@@ -2,12 +2,11 @@
   "name": "openchallenges-app-tailwind",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "prefix": "app",
   "sourceRoot": "apps/openchallenges/app-tailwind/src",
-  "tags": [],
+  "prefix": "openchallenges",
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/openchallenges/app-tailwind",
