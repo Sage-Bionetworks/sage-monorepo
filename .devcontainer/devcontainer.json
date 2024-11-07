@@ -28,6 +28,7 @@
       "extensions": [
         "alefragnani.Bookmarks",
         "Angular.ng-template",
+        "bradlc.vscode-tailwindcss",
         "dbaeumer.vscode-eslint",
         "donjayamanne.python-environment-manager",
         "dorzey.vscode-sqlfluff",
