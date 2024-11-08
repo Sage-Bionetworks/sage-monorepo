@@ -18,6 +18,21 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           {
+            "input": "libs/shared/typescript/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/openchallenges/assets/src/assets",
+            "glob": "**/*",
+            "output": "openchallenges-assets"
+          },
+          {
+            "input": "libs/openchallenges/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          },
+          {
             "glob": "**/*",
             "input": "apps/openchallenges/app-tailwind/public"
           }
