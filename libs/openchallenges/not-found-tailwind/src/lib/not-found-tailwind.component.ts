@@ -6,6 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './not-found-tailwind.component.html',
-  styleUrl: './not-found-tailwind.component.scss',
+  styleUrl: './not-found-tailwind.component.css',
 })
 export class NotFoundTailwindComponent {}
