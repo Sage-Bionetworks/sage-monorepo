@@ -1,8 +1,8 @@
 export default {
-  displayName: 'not-found',
-  preset: '../../jest.preset.js',
+  displayName: 'not-found-tailwind',
+  preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../coverage/libs/openchallengs-tailwind',
+  coverageDirectory: '../../../coverage/libs/openchallenges/not-found-tailwind',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

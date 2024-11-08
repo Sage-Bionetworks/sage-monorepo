@@ -5,7 +5,7 @@ export const appRoutes: Routes = [
   {
     path: 'not-found',
     loadChildren: () =>
-      import('@sagebionetworks/openchallenges/not-found').then((routes) => routes.routes),
+      import('@sagebionetworks/openchallenges/not-found-tailwind').then((routes) => routes.routes),
   },
   {
     path: '**',
