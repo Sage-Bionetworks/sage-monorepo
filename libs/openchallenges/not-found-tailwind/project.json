@@ -1,5 +1,5 @@
 {
-  "name": "not-found-tailwind",
+  "name": "openchallenges-not-found-tailwind",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/openchallenges/not-found-tailwind/src",
   "prefix": "openchallenges",
