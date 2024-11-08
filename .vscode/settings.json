@@ -89,7 +89,6 @@
     }
   ],
   "tailwindCSS.lint.invalidConfigPath": "ignore",
-  "tailwindCSS.includeLanguages": { "javascript": "javascript", "typescript": "typescript" },
   "terminal.integrated.showExitAlert": false,
   "rewrap.wrappingColumn": 100,
   "jest.runMode": "on-demand"

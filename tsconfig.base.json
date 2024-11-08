@@ -52,6 +52,9 @@
       "@sagebionetworks/openchallenges/home": ["libs/openchallenges/home/src/index.ts"],
       "@sagebionetworks/openchallenges/login": ["libs/openchallenges/login/src/index.ts"],
       "@sagebionetworks/openchallenges/not-found": ["libs/openchallenges/not-found/src/index.ts"],
+      "@sagebionetworks/openchallenges/not-found-tailwind": [
+        "libs/openchallenges/not-found-tailwind/src/index.ts"
+      ],
       "@sagebionetworks/openchallenges/org-profile": [
         "libs/openchallenges/org-profile/src/index.ts"
       ],
@@ -59,8 +62,14 @@
       "@sagebionetworks/openchallenges/pages": ["libs/openchallenges/pages/src/index.ts"],
       "@sagebionetworks/openchallenges/signup": ["libs/openchallenges/signup/src/index.ts"],
       "@sagebionetworks/openchallenges/styles": ["libs/openchallenges/styles/src/index.ts"],
+      "@sagebionetworks/openchallenges/styles-tailwind": [
+        "libs/openchallenges/styles-tailwind/src/index.ts"
+      ],
       "@sagebionetworks/openchallenges/team": ["libs/openchallenges/team/src/index.ts"],
       "@sagebionetworks/openchallenges/themes": ["libs/openchallenges/themes/src/index.ts"],
+      "@sagebionetworks/openchallenges/themes-tailwind": [
+        "libs/openchallenges/themes-tailwind/src/index.ts"
+      ],
       "@sagebionetworks/openchallenges/ui": ["libs/openchallenges/ui/src/index.ts"],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
@@ -78,9 +87,6 @@
       ],
       "@sagebionetworks/synapse/api-client-angular": [
         "libs/synapse/api-client-angular/src/index.ts"
-      ],
-      "@sagebionetworks/openchallenges/not-found-tailwind": [
-        "libs/openchallenges/not-found-tailwind/src/index.ts"
       ]
     }
   },
