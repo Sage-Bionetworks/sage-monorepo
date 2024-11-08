@@ -78,6 +78,9 @@
       ],
       "@sagebionetworks/synapse/api-client-angular": [
         "libs/synapse/api-client-angular/src/index.ts"
+      ],
+      "@sagebionetworks/openchallenges-tailwind/not-found": [
+        "libs/openchallengs-tailwind/src/index.ts"
       ]
     }
   },
