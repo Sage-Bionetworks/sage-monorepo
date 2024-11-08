@@ -1,1 +1,1 @@
-export * from './lib/not-found-tailwind/not-found-tailwind.routes';
+export * from './lib/not-found-tailwind.routes';
