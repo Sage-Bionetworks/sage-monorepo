@@ -1,0 +1,13 @@
+@import 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap';
+
+:root {
+  --font-family-lato: 'Lato', sans-serif;
+  --font-headline-5: 46px / 56px 700;
+  --font-headline-6: 40px / 50px 700;
+  --font-subtitle-1: 28px / 38px 700;
+  --font-subtitle-2: 20px / 32px 400;
+  --font-body-1: 21px / 36px 400;
+  --font-body-2: 16px / 26px 400;
+  --font-caption: 14px / 21px 400;
+  --font-button: 16px / 18px 700;
+}

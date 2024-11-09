@@ -1,0 +1,125 @@
+:root {
+  /* Dark and Light Text Colors */
+  --dark-primary-text: rgb(0 0 0 / 87%);
+  --dark-secondary-text: rgb(0 0 0 / 54%);
+  --dark-disabled-text: rgb(0 0 0 / 38%);
+  --dark-dividers: rgb(0 0 0 / 12%);
+  --dark-focused: rgb(0 0 0 / 12%);
+  --light-primary-text: #fff;
+  --light-secondary-text: rgb(255 255 255 / 70%);
+  --light-disabled-text: rgb(255 255 255 / 50%);
+  --light-dividers: rgb(255 255 255 / 12%);
+  --light-focused: rgb(255 255 255 / 12%);
+
+  /* Dark Blue Palette */
+  --color-dark-blue-50: #e8ebf5;
+  --color-dark-blue-100: #c4cce7;
+  --color-dark-blue-200: #9dabd7;
+  --color-dark-blue-300: #768ac7;
+  --color-dark-blue-400: #586fbc;
+  --color-dark-blue-500: #3756b1;
+  --color-dark-blue-600: #314fa7;
+  --color-dark-blue-700: #27459b;
+  --color-dark-blue-800: #1f3b8f;
+  --color-dark-blue-900: #102979;
+
+  /* Dark Blue Contrast Colors */
+  --color-dark-blue-contrast-50: var(--dark-primary-text);
+  --color-dark-blue-contrast-100: var(--dark-primary-text);
+  --color-dark-blue-contrast-200: var(--dark-primary-text);
+  --color-dark-blue-contrast-300: var(--dark-primary-text);
+  --color-dark-blue-contrast-400: var(--light-primary-text);
+  --color-dark-blue-contrast-500: var(--light-primary-text);
+  --color-dark-blue-contrast-600: var(--light-primary-text);
+  --color-dark-blue-contrast-700: var(--light-primary-text);
+  --color-dark-blue-contrast-800: var(--light-primary-text);
+  --color-dark-blue-contrast-900: var(--light-primary-text);
+
+  /* Light Blue Palette */
+  --color-light-blue-50: #dff4fb;
+  --color-light-blue-100: #ade3f4;
+  --color-light-blue-200: #76d1ed;
+  --color-light-blue-300: #39bde7;
+  --color-light-blue-400: #00b1e5;
+  --color-light-blue-500: #00a4e3;
+  --color-light-blue-600: #0096d5;
+  --color-light-blue-700: #0084c3;
+  --color-light-blue-800: #0073b0;
+  --color-light-blue-900: #005390;
+
+  /* Light Blue Contrast Colors */
+  --color-light-blue-contrast-50: var(--dark-primary-text);
+  --color-light-blue-contrast-100: var(--dark-primary-text);
+  --color-light-blue-contrast-200: var(--dark-primary-text);
+  --color-light-blue-contrast-300: var(--dark-primary-text);
+  --color-light-blue-contrast-400: var(--dark-primary-text);
+  --color-light-blue-contrast-500: var(--dark-primary-text);
+  --color-light-blue-contrast-600: var(--dark-primary-text);
+  --color-light-blue-contrast-700: var(--dark-primary-text);
+  --color-light-blue-contrast-800: var(--light-primary-text);
+  --color-light-blue-contrast-900: var(--light-primary-text);
+
+  /* Light Green Palette */
+  --color-light-green-50: #e8fefb;
+  --color-light-green-100: #c6fdf3;
+  --color-light-green-200: #a5fdec;
+  --color-light-green-300: #88f9e3;
+  --color-light-green-400: #76f2d9;
+  --color-light-green-500: #71ecd0;
+  --color-light-green-600: #6adbbf;
+  --color-light-green-700: #61c8ad;
+  --color-light-green-800: #5bb79d;
+  --color-light-green-900: #50977e;
+
+  /* Light Green Contrast Colors */
+  --color-light-green-contrast-50: var(--dark-primary-text);
+  --color-light-green-contrast-100: var(--dark-primary-text);
+  --color-light-green-contrast-200: var(--dark-primary-text);
+  --color-light-green-contrast-300: var(--dark-primary-text);
+  --color-light-green-contrast-400: var(--dark-primary-text);
+  --color-light-green-contrast-500: var(--dark-primary-text);
+  --color-light-green-contrast-600: var(--dark-primary-text);
+  --color-light-green-contrast-700: var(--dark-primary-text);
+  --color-light-green-contrast-800: var(--dark-primary-text);
+  --color-light-green-contrast-900: var(--dark-primary-text);
+
+  /* Light Purple Palette */
+  --color-light-purple-50: #ede8ff;
+  --color-light-purple-100: #d0c6fd;
+  --color-light-purple-200: #afa0fe;
+  --color-light-purple-300: #8a78ff;
+  --color-light-purple-400: #6859ff;
+  --color-light-purple-500: #594afc;
+  --color-light-purple-600: #2e3aee;
+  --color-light-purple-700: #0032e5;
+  --color-light-purple-800: #002ddc;
+  --color-light-purple-900: #0023ce;
+
+  /* Light Purple Contrast Colors */
+  --color-light-purple-contrast-50: var(--dark-primary-text);
+  --color-light-purple-contrast-100: var(--dark-primary-text);
+  --color-light-purple-contrast-200: var(--dark-primary-text);
+  --color-light-purple-contrast-300: var(--dark-primary-text);
+  --color-light-purple-contrast-400: var(--light-primary-text);
+  --color-light-purple-contrast-500: var(--light-primary-text);
+  --color-light-purple-contrast-600: var(--light-primary-text);
+  --color-light-purple-contrast-700: var(--light-primary-text);
+  --color-light-purple-contrast-800: var(--light-primary-text);
+  --color-light-purple-contrast-900: var(--light-primary-text);
+
+  /* Figma Collection */
+  --figma-navbar: var(--color-dark-blue-600);
+  --figma-accent1: var(--color-light-green-100);
+  --figma-accent2: var(--color-light-purple-50);
+  --figma-primary1: var(--color-dark-blue-400);
+  --figma-primary2: var(--dark-focused);
+  --figma-navbardark: var(--color-dark-blue-800);
+  --figma-secondary1: var(--color-light-blue-300);
+  --figma-secondary2: var(--color-light-purple-300);
+  --figma-darkaccent1: var(--color-light-green-700);
+  --figma-darkaccent2: var(--color-light-purple-200);
+  --figma-gray-black: #000;
+  --figma-gray-white: #fff;
+  --figma-hover-light: rgb(249 249 249 / 100%);
+  --figma-hover-dark: rgb(229 229 229 / 100%);
+}
