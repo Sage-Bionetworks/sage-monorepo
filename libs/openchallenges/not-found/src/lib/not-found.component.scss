@@ -1,4 +1,4 @@
-// @use 'libs/openchallenges/styles/src/lib/constants';
+@use 'libs/openchallenges/styles/src/lib/constants';
 
 #error {
   background: url('/openchallenges-assets/images/banner-sm.svg');
@@ -8,8 +8,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-  // min-height: calc(100vh - constants.$navbar-height);
+  min-height: calc(100vh - constants.$navbar-height);
 }
 
 .err-message {
