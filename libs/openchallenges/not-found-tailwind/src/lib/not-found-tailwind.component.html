@@ -1,4 +1,4 @@
-<main id="error" class="bg-primary">
+<!-- <main id="error" class="bg-primary">
   <div class="err-message">
     <em class="err-code">404</em>
     <h1>Page Not Found</h1>
@@ -13,7 +13,7 @@
       >Contact Us</a
     >
   </div>
-</main>
+</main> -->
 
 <!-- <openchallenges-footer
   [appVersion]="appVersion"
@@ -22,3 +22,24 @@
   [termsOfUseUrl]="termsOfUseUrl"
   [apiDocsUrl]="apiDocsUrl"
 /> -->
+<main
+  class="flex min-h-screen flex-col items-center justify-center bg-[url('/openchallenges-assets/images/banner-sm.svg')] bg-contain bg-no-repeat text-center"
+>
+  <div class="pt-24">
+    <em class="em text-[160px] font-bold">404</em>
+    <h1 class="font-lato mt-4 text-2xl">Page Not Found</h1>
+    <p class="font-lato mt-2 text-base">
+      Oops! The page you are looking for does not exist. It might have been moved or deleted.
+    </p>
+  </div>
+  <div class="btn-group m-12">
+    <a mat-raised-button class="home-btn bg-accent hover:bg-accent-500" href="/home">Home</a>
+    <a
+      mat-raised-button
+      color="basic"
+      class="px-10 py-6"
+      href="https://github.com/Sage-Bionetworks/sage-monorepo/issues/new/choose"
+      >Contact Us</a
+    >
+  </div>
+</main>

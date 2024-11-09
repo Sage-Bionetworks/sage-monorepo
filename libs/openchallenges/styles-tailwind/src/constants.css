@@ -1,0 +1,32 @@
+:root {
+  /* Spacing */
+  --navbar-height: 68px;
+  --navbar-height-tall: 240px;
+  --footer-height: 259px;
+  --unit: 16px;
+  --half-unit: 8px;
+  --two-units: 32px;
+  --three-units: 48px;
+  --four-units: 64px;
+  --five-units: 80px;
+  --six-units: 96px;
+
+  /* Border Radius */
+  --radius-round: 50%;
+  --radius-2: 2px;
+  --radius-4: 4px;
+  --radius-8: 8px;
+  --radius-16: 16px;
+
+  /* Max Widths */
+  --maxwidth: 1400px;
+  --xlarge: 192px;
+  --xxlarge: 288px;
+
+  /* Breakpoints */
+  --sm-breakpoint: 576px;
+  --md-breakpoint: 768px;
+  --lg-breakpoint: 992px;
+  --xl-breakpoint: 1200px;
+  --xxl-breakpoint: 1400px;
+}

@@ -1,5 +1,5 @@
-@import 'libs/openchallenges/themes-tailwind/src/fonts.css';
-@import 'libs/openchallenges/themes-tailwind/src/palettes.css';
+@import 'libs/openchallenges/styles-tailwind/src/index.css';
+@import 'libs/openchallenges/themes-tailwind/src/index.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -7,3 +7,54 @@
 /* You can add global styles to this file, and also import other style files */
 
 /* Import fonts and colors from the theme library */
+@layer base {
+  html {
+    margin-top: var(--navbar-height);
+  }
+
+  body {
+    max-height: 100vh;
+    margin: 0;
+  }
+
+  em {
+    color: #00b1e5;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  // BUTTONS
+  .btn {
+    padding: 6px 32px !important;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.15s ease !important;
+  }
+
+  .btn-block {
+    width: 100%;
+    padding: 16px 32px !important;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .btn-group {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: center;
+
+    a {
+      text-decoration: none;
+    }
+  }
+
+  .btn-group > *:first-child {
+    align-self: stretch;
+  }
+
+  .btn-group button,
+  .btn-group a {
+    margin: 5px;
+    padding: 21px 32px !important;
+  }
+}
