@@ -34,7 +34,7 @@ function writeProjectConfigurationsToCache(
   writeJsonFile(cachePath, results);
 }
 
-const projectFilePattern = '{apps,libs}/{openchallenges,agora,sandbox}/**/project.json';
+const projectFilePattern = '{apps,libs}/{openchallenges,agora,sage,sandbox}/**/project.json';
 
 export const createNodesV2: CreateNodesV2<SageMonorepoPluginOptions> = [
   projectFilePattern,
