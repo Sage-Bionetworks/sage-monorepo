@@ -1,0 +1,4 @@
+template_path: example-template.yaml
+stack_name: example-stack
+parameters:
+  LogGroupName: example-stack-log-group
