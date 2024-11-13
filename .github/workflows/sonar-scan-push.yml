@@ -8,6 +8,7 @@ on:
       - 'iatlas/**'
       - 'openchallenges/**'
       - 'sage-monorepo/**'
+      - 'sage/**'
       - 'schematic/**'
 
 jobs:
