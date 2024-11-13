@@ -5,6 +5,7 @@ on:
     tags:
       - 'agora/v*'
       - 'openchallenges/v*'
+      - 'sage/v*'
 
 permissions:
   packages: write
