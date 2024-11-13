@@ -1,0 +1,18 @@
+services:
+  sage-otel-collector:
+    image: ghcr.io/sage-bionetworks/sage-otel-collector:${SAGE_VERSION:-local}
+    container_name: sage-otel-collector
+    restart: always
+    networks:
+      - sage
+    ports:
+      - '1888:1888' # pprof extension
+      - '8888:8888' # Prometheus metrics exposed by the collector
+      - '8889:8889' # Prometheus exporter metrics
+      - '13133:13133' # health_check extension
+      - '4317:4317' # OTLP gRPC receiver
+      - '55679:55679' # zpages extension
+    deploy:
+      resources:
+        limits:
+          memory: 200M
