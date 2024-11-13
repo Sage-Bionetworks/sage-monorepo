@@ -29,7 +29,7 @@ module.exports = {
     `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
-  '**/*[dD]ockerfile*': (filenames) => [
+  '**/Dockerfile.*': (filenames) => [
     // Lint Dockerfiles with Hadolint
     `hadolint ${filenames.join(' ')}`,
   ],

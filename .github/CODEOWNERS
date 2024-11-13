@@ -17,6 +17,10 @@
 ## EDAM ETL
 /apps/openchallenges/edam-etl/ @rrchai
 
+## Sage
+/apps/sage/ @tschaffter
+/libs/sage/ @tschaffter
+
 # Schematic
 /apps/schematic/ @andrewelamb @GiaJordan @linglp @milen-sage
 /libs/schematic/ @andrewelamb @GiaJordan @linglp @milen-sage
