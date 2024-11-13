@@ -1,49 +1,35 @@
-# infra-template
+# Purpose
+As discussed in this Github Issue: <https://github.com/open-telemetry/opentelemetry-collector-contrib/issues/30798#issuecomment-2009233014>
+The official opentelemetry (OTEL) collector image does not contain cURL or related shell
+commands required to do container level health checks. It is reliant on external
+services such as the application load balancer in AWS to perform these checks. This is
+problematic with our deployment of the OTEL collector as we are using AWS
+service connect with AWS ECS to allow other containers within the namespace to connect 
+to the collector. As such, there is no load balancer in-front of the container to handle 
+its lifecycle. Within ECS, the recommended way from AWS to handle container level health
+checks is to let ECS perform commands in the container. 
+Source: <https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_HealthCheck.html>
 
-This is an opinionated template for the creation of AWS infrastructure.
 
-## Setup
-1. Install [awscli v2](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-1. This relies on python dependencies. We recommmend installing one of the latest versions of python3.
-1. Install [pipenv](git@github.com:tthyer/infra-template.git) for python environment management.
-1. Run `pipenv install --dev` to install [sceptre](https://sceptre.cloudreach.com/2.6.3/) and [pre-commit](https://pre-commit.com/).
-1. Run `pipenv run pre-commit install` to install git hooks.
-1. [Github actions](https://docs.github.com/en/actions) for CICD
-1. Install [pre-commit](https://pre-commit.com/), then run `pre-commit install`.
+Since the OTEL collector does not have a shell, nor cURL available we need to accomplish
+this another way. In the official AWS OTEL collector distro they accomplish this by
+compiling a golang script down into a binary that can be run within the container.
+Unfortunately we cannot use the AWS OTEL collector because they are not supporting the
+`oauth2clientauthextension`: <https://github.com/aws-observability/aws-otel-collector/issues/1492>.
 
-The Pipfile installs the following dependencies in a virtual environment:
-* [sceptre](https://sceptre.cloudreach.com/2.6.3/) for better AWS CloudFormation deployment
-* [pre-commit](https://pre-commit.com/), to ensure
 
-## Testing sceptre deployment
+For our purposes we are creating a new image based off the `otel/opentelemetry-collector-contrib` image,
+but with the addition of the healthcheck binary from the AWS OTEL distro. This
+combination lets us use the oauth2 extension, and have container level health checks.
 
-If your text editor (_e.g._ Visual Studio Code) or shell (_e.g._ using [`direnv`](https://direnv.net/)) can automatically activate the `pipenv` virtual environment, you can omit the `pipenv shell` command.
 
-```
-# Activate the pipenv virtual environment to use sceptre
-pipenv shell
+## Creating a new image (To automate later on)
+As new base images are updated we will need to in-turn create a new otel collector
+image that we deploy to ECS.
 
-# Test the deployment of a single stack in the 'develop' stack group
-sceptre launch develop/my-template.yaml
+1) Update values in the `Dockerfile`
+2) Run `docker build -t ghcr.io/sage-bionetworks/sage-otel-collector:vX.X.X .` (Replace the version)
+3) Run `docker push ghcr.io/sage-bionetworks/sage-otel-collector:vX.X.X` (Replace the version)
 
-# Delete the test deployment of a single stack the 'develop' stack group
-sceptre delete develop/my-template.yaml
-
-# Test deploying the entire 'develop' stack group
-sceptre launch develop
-
-# Remove the entire 'develop' stacck group
-sceptre delete develop
-```
-
-## Environments
-This repository template requires the creation of Github Environments that
-pair with the defined sceptre stack groups: `develop` and `prod`. If you are
-not doing development of new Cloudformation templates in this repository, but
-using externally developed ones (such as from aws-infra), you can remove
-the `develop` folder.
-
-The Github action to deploy AWS stacks relies on setting up the secrets used by
-the workflow in [Github Environments](https://docs.github.com/en/actions/reference/environments).
-Set up environments for each AWS account you're deploying to. This is where
-you'll put secrets such as the ones for your CI user credentials.
+Once a new image is built and pushed, then you'll want to update the values in the CDK
+scripts to use the new image version.
