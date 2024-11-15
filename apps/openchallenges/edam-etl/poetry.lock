@@ -231,16 +231,6 @@ files = [
 packaging = "*"
 
 [[package]]
-name = "mysql-connector"
-version = "2.2.9"
-description = "MySQL driver written in Python"
-optional = false
-python-versions = "*"
-files = [
-    {file = "mysql-connector-2.2.9.tar.gz", hash = "sha256:1733e6ce52a049243de3264f1fbc22a852cb35458c4ad739ba88189285efdf32"},
-]
-
-[[package]]
 name = "numpy"
 version = "1.26.4"
 description = "Fundamental package for array computing in Python"
@@ -661,4 +651,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "3.12.0"
-content-hash = "ada2ab30f683a15ee3a10f581250eab8ef72c9f9e4cf1194a3710dedfadcacff"
+content-hash = "5286c25e72a47bf715a5bc4d6d0b2cb88bd7a549d8ee887c8c6e957523df478e"

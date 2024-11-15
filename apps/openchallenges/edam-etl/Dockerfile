@@ -11,9 +11,9 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   # Install sudo
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
+    gcc \
     gosu \
     libmariadb-dev \
-    gcc \
   && apt-get -y autoclean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/* 
