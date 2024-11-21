@@ -16,6 +16,16 @@ nx serve-detach openchallenges-nifi-registry
 
 In your browser, navigate to http://localhost:18080/nifi-registry.
 
+## Create a bucket
+
+From the registry home page:
+
+1. Click on the button "Settings" in the toolbar.
+2. Click on the button "NEW BUCKET".
+3. Enter the bucket information.
+   - Name: openchallenges
+4. Click on the button "CREATE".
+
 ## Stop the registry with Docker Compose
 
 ```console
