@@ -152,5 +152,6 @@
   },
   "useInferencePlugins": false,
   "defaultBase": "main",
-  "packageManager": "pnpm"
+  "packageManager": "pnpm",
+  "useLegacyCache": true
 }
