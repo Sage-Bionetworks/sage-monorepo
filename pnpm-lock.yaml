@@ -238,8 +238,8 @@ importers:
         specifier: 20.1.2
         version: 20.1.2(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       '@nxlv/python':
-        specifier: 19.1.2
-        version: 19.1.2(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+        specifier: 20.0.0
+        version: 20.0.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       '@openapitools/openapi-generator-cli':
         specifier: 2.5.2
         version: 2.5.2(debug@4.3.7)(encoding@0.1.13)
@@ -3022,8 +3022,8 @@ packages:
   '@nx/workspace@20.1.2':
     resolution: {integrity: sha512-YZiBwHU+NsJvJ7e7AZnyk5cP523AIHmHFf28nEpBY3zhxLghx/s9C99Swbw+uUyWlUf7JtTO9jB6OsEfMc38Uw==}
 
-  '@nxlv/python@19.1.2':
-    resolution: {integrity: sha512-uzdG1J/rOrnvCDP8RjM1Vq+mT/DnY6tv6OywhiccVqfcTCvlus+oIKV1kMO/8De/5K+u1aSH7WKDmyrL+ZiuqA==}
+  '@nxlv/python@20.0.0':
+    resolution: {integrity: sha512-smIUut525buLk0u4jNRprbmTg6PLHBjgwpDp+ZuxIu8sp9nNAM7/n+Pzc/3dNk/mByHgFQdRCAPVuDWOUys/Gw==}
 
   '@octokit/auth-token@4.0.0':
     resolution: {integrity: sha512-tY/msAuJo6ARbK6SPIxZrPBms3xPbfwBrulZe0Wtr/DIY9lje2HeV1uoebShn6mx7SjCHif6EjMvoREj+gZ+SA==}
@@ -15774,7 +15774,7 @@ snapshots:
     transitivePeerDependencies:
       - debug
 
-  '@nestjs/core@8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
+  '@nestjs/core@8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
     dependencies:
       '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
@@ -16792,19 +16792,19 @@ snapshots:
       - '@swc/core'
       - debug
 
-  '@nxlv/python@19.1.2(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
+  '@nxlv/python@20.0.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)':
     dependencies:
       '@iarna/toml': 2.2.5
-      '@nx/devkit': 19.8.0(nx@19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
+      '@nx/devkit': 20.1.2(nx@20.1.2(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7))
       chalk: 4.1.2
       command-exists: 1.2.9
       cross-spawn: 7.0.3
       file-uri-to-path: 2.0.0
       fs-extra: 11.2.0
       lodash: 4.17.21
-      nx: 19.8.0(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
+      nx: 20.1.2(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.12))(@swc/types@0.1.9)(typescript@5.5.4))(@swc/core@1.5.29(@swc/helpers@0.5.12))(debug@4.3.7)
       ora: 5.3.0
-      semver: 7.6.2
+      semver: 7.6.3
       tslib: 2.4.1
       uuid: 9.0.1
     transitivePeerDependencies:
@@ -16882,7 +16882,7 @@ snapshots:
   '@openapitools/openapi-generator-cli@2.5.2(debug@4.3.7)(encoding@0.1.13)':
     dependencies:
       '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5)
-      '@nestjs/core': 8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)
+      '@nestjs/core': 8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       chalk: 4.1.2
       commander: 8.3.0
