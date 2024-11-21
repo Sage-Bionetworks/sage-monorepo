@@ -9,8 +9,8 @@ services:
       - openchallenges
     ports:
       - '8443:8443'
-    volumes:
-      - ../../../apps/openchallenges/nifi/input:/home/nifi/input
+    # volumes:
+    #   - ../../../apps/openchallenges/nifi/input:/home/nifi/input
     depends_on:
       openchallenges-nifi-registry:
         condition: service_started
