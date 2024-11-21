@@ -11,6 +11,9 @@ services:
       - '8443:8443'
     volumes:
       - ../../../apps/openchallenges/nifi/input:/home/nifi/input
+    depends_on:
+      openchallenges-nifi-registry:
+        condition: service_started
     deploy:
       resources:
         limits:
