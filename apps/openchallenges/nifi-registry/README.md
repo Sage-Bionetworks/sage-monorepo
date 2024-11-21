@@ -26,7 +26,7 @@ From the registry home page:
    - Name: openchallenges
 4. Click on the button "CREATE".
 
-## Stop the registry with Docker Compose
+## Stop and remove the NiFi registry container
 
 ```console
 docker rm -f openchallenges-nifi-registry
