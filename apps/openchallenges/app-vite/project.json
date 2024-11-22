@@ -36,7 +36,12 @@
             "output": ""
           }
         ],
-        "styles": ["apps/openchallenges/app-vite/src/styles.scss"],
+        "styles": [
+          "apps/openchallenges/app-vite/src/styles.scss",
+          "node_modules/primeicons/primeicons.css",
+          "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
+          "node_modules/primeng/resources/primeng.min.css"
+        ],
         "scripts": [],
         "server": "apps/openchallenges/app-vite/src/main.server.ts",
         "prerender": true,
