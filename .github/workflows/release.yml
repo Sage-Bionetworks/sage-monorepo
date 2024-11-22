@@ -44,4 +44,4 @@ jobs:
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && export VERSION=${{ env.VERSION }} \
             && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=ci"
+            && nx run-many --target=build-image --projects=${{ env.PRODUCT }}-* --configuration=release"
