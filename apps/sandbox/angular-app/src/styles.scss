@@ -1,10 +1,8 @@
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
-
 /* You can add global styles to this file, and also import other style files */
-// @use 'libs/openchallenges/styles/src/index';
-@use 'openchallenges-styles/constants';
+@use 'openchallenges-styles/constants' as constants;
+@use 'shared-styles/variables' with (
+  $bg-color: constants.$bg-color
+);
 @use 'openchallenges-styles/general';
 
 // @use 'base/variables' as *;
