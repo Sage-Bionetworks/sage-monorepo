@@ -9,18 +9,6 @@
         "command": "docker/sage/serve-detach.sh sage-otel-collector"
       }
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/sage/otel-collector",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

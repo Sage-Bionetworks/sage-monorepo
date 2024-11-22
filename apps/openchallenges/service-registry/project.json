@@ -67,18 +67,6 @@
       },
       "dependsOn": ["^install"]
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/service-registry",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-service-registry"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
