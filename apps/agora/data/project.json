@@ -31,18 +31,6 @@
         "command": "docker/agora/serve-detach.sh {projectName}"
       }
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "{projectRoot}",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=sha", "type=raw,value=$DATA_FILE.$DATA_VERSION"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

@@ -17,18 +17,6 @@
         "command": "docker/openchallenges/serve-detach.sh openchallenges-apex"
       }
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/apex",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-apex"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

@@ -27,18 +27,6 @@
         },
         "push": false
       }
-    },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/model-ad-mongo"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
     }
   },
   "tags": ["type:db", "scope:backend"],

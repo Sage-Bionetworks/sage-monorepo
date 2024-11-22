@@ -158,18 +158,6 @@
       },
       "dependsOn": ["server"]
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/model-ad-app"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
