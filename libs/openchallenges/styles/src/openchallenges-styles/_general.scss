@@ -2,13 +2,9 @@
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
 @use './constants';
-@use 'shared-styles/variables' as shared;
-
-// @use 'shared-styles/general' as sharedgeneral;
 
 html {
   margin-top: constants.$navbar-height;
-  background-color: shared.$bg-color;
 }
 
 body {
