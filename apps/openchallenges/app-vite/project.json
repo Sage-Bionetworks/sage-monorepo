@@ -16,7 +16,26 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/openchallenges/app-vite/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/openchallenges/app-vite/src/config"],
+        "assets": [
+          "apps/openchallenges/app-vite/src/config",
+          "apps/openchallenges/app-vite/src/humans.txt",
+          "apps/openchallenges/app-vite/src/robots.txt",
+          {
+            "input": "libs/shared/typescript/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/openchallenges/assets/src/assets",
+            "glob": "**/*",
+            "output": "openchallenges-assets"
+          },
+          {
+            "input": "libs/openchallenges/assets/src",
+            "glob": "favicon.ico",
+            "output": ""
+          }
+        ],
         "styles": ["apps/openchallenges/app-vite/src/styles.scss"],
         "scripts": [],
         "server": "apps/openchallenges/app-vite/src/main.server.ts",
