@@ -17,18 +17,6 @@
         "command": "docker/openchallenges/serve-detach.sh openchallenges-thumbor"
       }
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/openchallenges/thumbor",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-thumbor"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
