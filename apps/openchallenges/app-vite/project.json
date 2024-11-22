@@ -1,0 +1,94 @@
+{
+  "name": "openchallenges-app-vite",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/openchallenges/app-vite/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/openchallenges/app-vite",
+        "index": "apps/openchallenges/app-vite/src/index.html",
+        "browser": "apps/openchallenges/app-vite/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/openchallenges/app-vite/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/openchallenges/app-vite/public"
+          }
+        ],
+        "styles": ["apps/openchallenges/app-vite/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/openchallenges/app-vite/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/openchallenges/app-vite/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "openchallenges-app-vite:build:production"
+        },
+        "development": {
+          "buildTarget": "openchallenges-app-vite:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "openchallenges-app-vite:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/openchallenges/app-vite/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "openchallenges-app-vite:build",
+        "staticFilePath": "dist/apps/openchallenges/app-vite/browser",
+        "spa": true
+      }
+    }
+  }
+}
