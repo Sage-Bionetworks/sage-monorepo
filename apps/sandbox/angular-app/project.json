@@ -22,6 +22,9 @@
             "input": "apps/sandbox/angular-app/public"
           }
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/openchallenges/styles/src", "libs/shared/typescript/styles/src"]
+        },
         "styles": ["apps/sandbox/angular-app/src/styles.scss"],
         "scripts": [],
         "server": "apps/sandbox/angular-app/src/main.server.ts",
