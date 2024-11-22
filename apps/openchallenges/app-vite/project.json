@@ -16,7 +16,7 @@
         "polyfills": ["zone.js"],
         "tsConfig": "apps/openchallenges/app-vite/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": [],
+        "assets": ["apps/openchallenges/app-vite/src/config"],
         "styles": ["apps/openchallenges/app-vite/src/styles.scss"],
         "scripts": [],
         "server": "apps/openchallenges/app-vite/src/main.server.ts",
