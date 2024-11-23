@@ -1,38 +1,42 @@
-@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+@use '@openchallenges-styles/constants';
 
 #team {
   text-align: center;
-  margin: 0 0 80px 0;
+  margin: 0 0 80px;
 }
+
 .member-group {
   width: 100%;
-  padding: 56px 0 0px 0;
+  padding: 56px 0 0;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-flow: row wrap;
   justify-content: center;
 }
+
 .member-card {
   width: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
 .member-pic {
   width: 240px;
   height: 240px;
   margin: 12px 0 22px;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 505;
+  border-radius: 505;
   border-radius: 50%;
 }
+
 .kudos {
   padding-top: 42px;
 }
+
 .card-roles {
   width: 200px;
   flex-grow: 1;
 }
+
 .social-media-logo {
   height: 32px;
   margin: 0 12px 2px 0;

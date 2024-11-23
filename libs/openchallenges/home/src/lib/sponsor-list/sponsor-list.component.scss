@@ -1,4 +1,4 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use '@openchallenges-styles/constants';
 
 .container {
   max-width: 1128px;
@@ -7,13 +7,16 @@
   padding-left: 16px;
   padding-right: 16px;
 }
+
 .section-title {
   text-align: center;
   margin-bottom: 42px;
 }
+
 .sponsors-group {
   margin-top: 32px;
 }
+
 .sponsor-item {
   display: flex;
   padding: 24px;
@@ -25,6 +28,7 @@
     max-width: 70%;
   }
 }
+
 #acknowledgements {
   background: #f8f8f8;
   margin-top: 12px;

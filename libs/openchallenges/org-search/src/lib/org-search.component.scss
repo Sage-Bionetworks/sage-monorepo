@@ -1,25 +1,31 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+/* stylelint-disable selector-pseudo-element-no-unknown */
+@use '@openchallenges-styles/constants';
 
 #title {
   padding: 70px 0 32px;
   align-items: center;
 }
+
 #bottom {
   display: flex;
   flex-wrap: nowrap;
 }
+
 ::ng-deep .search-field {
   .p-input-icon-left,
   input {
     width: 100%;
   }
 }
+
 ::ng-deep .p-dropdown {
   width: 14rem;
 }
+
 ::ng-deep p-multiselect .p-multiselect-panel.p-component {
   min-width: 320px;
 }
+
 ::ng-deep .p-field-checkbox {
   margin-bottom: 8px;
 
@@ -27,20 +33,24 @@
     cursor: pointer;
   }
 }
+
 ::ng-deep .p-radiobutton.p-component,
 ::ng-deep .p-checkbox.p-component {
   margin-right: 8px;
 }
+
 ::ng-deep .p-panel {
   .p-panel-header,
   .p-panel-content {
     border: none;
   }
 }
+
 ::ng-deep .p-panel.p-panel-toggleable .p-panel-header {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 ::ng-deep .p-multiselect.p-component {
   max-width: 200px;
 }

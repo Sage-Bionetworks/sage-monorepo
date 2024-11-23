@@ -1,4 +1,5 @@
-@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+/* stylelint-disable selector-pseudo-element-no-unknown */
+@use '@openchallenges-styles/constants';
 
 :host ::ng-deep .p-multiselect {
   min-width: 200px;
@@ -99,6 +100,7 @@
     transform: translateX(0);
     top: 45px !important;
   }
+
   :host ::ng-deep .p-multiselect-trigger-icon {
     &::before {
       content: '\e902';

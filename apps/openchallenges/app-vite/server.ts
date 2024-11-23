@@ -5,6 +5,9 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join, resolve } from 'node:path';
 import bootstrap from './src/main.server';
 
+const port = process.env['PORT'] || '4200';
+console.log(`server.ts: ${port}`);
+
 // The Express app is exported so that it can be used by serverless Functions.
 export function app(): express.Express {
   const server = express();
@@ -28,6 +31,9 @@ export function app(): express.Express {
     }),
   );
 
+  // Health endpoint used by the Docker container
+  server.get('/health', (_req, res) => res.status(200).json({ status: 'UP' }));
+
   // All regular routes use the Angular engine
   server.get('**', (req, res, next) => {
     const { protocol, originalUrl, baseUrl, headers } = req;
@@ -38,7 +44,21 @@ export function app(): express.Express {
         documentFilePath: indexHtml,
         url: `${protocol}://${headers.host}${originalUrl}`,
         publicPath: browserDistFolder,
-        providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
+        providers: [
+          { provide: APP_BASE_HREF, useValue: baseUrl },
+          // The base URL enables the app to load the app config file during server-side rendering.
+          {
+            provide: 'APP_BASE_URL',
+            // the format of ${host} is `host:port`
+            useFactory: () => `${protocol}://${headers.host}`,
+            deps: [],
+          },
+          {
+            provide: 'APP_PORT',
+            useValue: port,
+            deps: [],
+          },
+        ],
       })
       .then((html) => res.send(html))
       .catch((err) => next(err));
@@ -48,8 +68,6 @@ export function app(): express.Express {
 }
 
 function run(): void {
-  const port = process.env['PORT'] || 4000;
-
   // Start up the Node server
   const server = app();
   server.listen(port, () => {

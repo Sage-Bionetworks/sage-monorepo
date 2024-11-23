@@ -1,4 +1,4 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use '@openchallenges-styles/constants';
 
 footer {
   width: 100%;
@@ -10,6 +10,7 @@ footer {
   align-items: flex-start;
   box-sizing: border-box;
 }
+
 .footer-link-group {
   width: 420px;
   height: 30px;
@@ -18,21 +19,25 @@ footer {
   justify-content: space-between;
   list-style: none;
 }
+
 .footer-link-group li {
   flex: 0 0 auto;
 }
+
 .app-info {
   text-align: right;
   align-self: center;
 }
+
 .app-info ul {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
+
 .footer-bottom {
   bottom: 0;
-  left: 0px;
+  left: 0;
   width: 100%;
   height: 70px;
   display: flex;
@@ -40,13 +45,16 @@ footer {
   align-items: center;
   justify-content: center;
 }
+
 .footer-links,
 .footer-links a {
   text-decoration: none;
 }
+
 .footer-links a:hover {
   text-decoration: underline;
 }
+
 .logo {
   height: 56px;
 }
@@ -55,6 +63,7 @@ footer {
   footer {
     height: 410px;
   }
+
   .about-oc,
   .app-info,
   .footer-link-group {
@@ -62,9 +71,11 @@ footer {
     text-align: center;
     justify-content: space-around;
   }
+
   .footer-link-group li {
     flex: 1;
   }
+
   .app-info {
     margin-top: 45px;
   }

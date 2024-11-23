@@ -1,4 +1,6 @@
-@use 'libs/openchallenges/styles/src/lib/_constants' as constants;
+/* stylelint-disable selector-pseudo-element-no-unknown */
+@use '@openchallenges-styles/constants';
+
 $primary-color: #4950f6;
 
 // TAGS
@@ -6,6 +8,7 @@ a,
 .typing {
   color: $primary-color;
 }
+
 a:hover,
 a:active {
   outline: 0;
@@ -24,6 +27,7 @@ a:active {
     justify-content: center;
   }
 }
+
 @media (min-width: constants.$sm-breakpoint) {
   .container {
     padding: 0 24px;
@@ -35,6 +39,7 @@ a:active {
   flex-grow: 1 !important;
   margin: auto;
 }
+
 ::ng-deep .search-field {
   input {
     width: 100%;
@@ -52,10 +57,12 @@ a:active {
     padding-left: 60px;
   }
 }
+
 #search-oc {
   text-align: center;
   padding: 128px 0;
 }
+
 #metrics {
   text-align: center;
   padding: 28px 0;
@@ -65,6 +72,7 @@ a:active {
     padding: 21px 0 4px;
   }
 }
+
 .clickable {
   cursor: pointer;
 }
@@ -74,19 +82,23 @@ a:active {
     .row {
       justify-content: center;
     }
+
     img {
       display: none;
     }
   }
+
   #metrics {
     .mat-body-strong {
       font-size: 16px;
       line-height: 20px;
     }
+
     h2 {
       font-size: 34px;
     }
   }
+
   #search-oc {
     .container {
       justify-content: center;

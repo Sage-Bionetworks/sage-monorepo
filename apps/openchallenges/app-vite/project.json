@@ -7,7 +7,7 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
+      "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/openchallenges/app-vite",
@@ -36,6 +36,9 @@
             "output": ""
           }
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/openchallenges/styles/src"]
+        },
         "styles": [
           "apps/openchallenges/app-vite/src/styles.scss",
           "node_modules/primeicons/primeicons.css",
@@ -74,7 +77,11 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "host": "127.0.0.1",
+        "port": 4200
+      },
       "configurations": {
         "production": {
           "buildTarget": "openchallenges-app-vite:build:production"
@@ -86,7 +93,7 @@
       "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@nx/angular:extract-i18n",
       "options": {
         "buildTarget": "openchallenges-app-vite:build"
       }
