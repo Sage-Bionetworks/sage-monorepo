@@ -14,7 +14,7 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/config';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
 export const APP_BASE_URL_PROVIDER_INDEX = 1;
@@ -26,6 +26,11 @@ export const appConfig: ApplicationConfig = {
       // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
       provide: 'APP_BASE_URL',
       useFactory: () => '.',
+      deps: [],
+    },
+    {
+      provide: 'APP_PORT',
+      useValue: '4200',
       deps: [],
     },
     {
@@ -45,7 +50,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     // The HTTP client is injected to enable the ConfigService to retrieve the configuration file
     // via HTTP when server-side rendering (SSR) is used.
-    provideHttpClient(withInterceptorsFromDi()),
+    provideHttpClient(withFetch()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(

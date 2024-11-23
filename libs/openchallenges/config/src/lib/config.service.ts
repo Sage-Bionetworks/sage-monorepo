@@ -1,4 +1,4 @@
-import { isPlatformServer } from '@angular/common';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, Optional, PLATFORM_ID } from '@angular/core';
 import { lastValueFrom } from 'rxjs';
@@ -26,13 +26,17 @@ export class ConfigService {
     // accessing the production server in the container from apex (APP_BASE_URL =
     // 'http://localhost:8000', which is invalid inside the container).
 
+    // console.log(`isPlatformBrowser: ${isPlatformBrowser(this.platformId)}`);
+    // console.log(`isPlatformServer: ${isPlatformServer(this.platformId)}`);
+    // console.log(`config service port: ${this.port}`);
     // const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:${this.port}` : '.';
-    const browserRoot = '.';
+    const browserRoot = '';
 
     const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
     try {
       const config = await lastValueFrom(appConfig$);
       this.config = config;
+      console.log(`config: ${this.config.appVersion}`);
       this.config.isPlatformServer = isPlatformServer(this.platformId);
       this.config.privacyPolicyUrl =
         'https://sagebionetworks.jira.com/wiki/spaces/OA/pages/2948530178/OpenChallenges+Privacy+Policy';

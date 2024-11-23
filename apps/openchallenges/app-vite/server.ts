@@ -55,7 +55,7 @@ export function app(): express.Express {
           },
           {
             provide: 'APP_PORT',
-            useValue: port,
+            useValue: '4200',
             deps: [],
           },
         ],
