@@ -21,19 +21,14 @@
           "apps/openchallenges/app-vite/src/humans.txt",
           "apps/openchallenges/app-vite/src/robots.txt",
           {
-            "input": "libs/shared/typescript/assets/src/assets",
+            "input": "libs/shared/typescript/assets/src",
             "glob": "**/*",
-            "output": "assets"
-          },
-          {
-            "input": "libs/openchallenges/assets/src/assets",
-            "glob": "**/*",
-            "output": "openchallenges-assets"
+            "output": "assets/shared"
           },
           {
             "input": "libs/openchallenges/assets/src",
-            "glob": "favicon.ico",
-            "output": ""
+            "glob": "**/*",
+            "output": "assets/openchallenges"
           }
         ],
         "stylePreprocessorOptions": {
