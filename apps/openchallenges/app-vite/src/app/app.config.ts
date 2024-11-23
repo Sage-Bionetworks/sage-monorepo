@@ -16,23 +16,9 @@ import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchalleng
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 
-// This index is used to remove the corresponding provider in app.config.server.ts.
-export const APP_BASE_URL_PROVIDER_INDEX = 1;
-
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'openchallenges-app' },
-    {
-      // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
-      provide: 'APP_BASE_URL',
-      useFactory: () => '.',
-      deps: [],
-    },
-    {
-      provide: 'APP_PORT',
-      useValue: '4200',
-      deps: [],
-    },
     {
       provide: APP_INITIALIZER,
       useFactory: configFactory,
