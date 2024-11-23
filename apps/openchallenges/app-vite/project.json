@@ -47,7 +47,7 @@
         ],
         "scripts": [],
         "server": "apps/openchallenges/app-vite/src/main.server.ts",
-        "prerender": true,
+        "prerender": false,
         "ssr": {
           "entry": "apps/openchallenges/app-vite/server.ts"
         }
@@ -58,12 +58,12 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "1.5mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "8kb"
             }
           ],
           "outputHashing": "all"

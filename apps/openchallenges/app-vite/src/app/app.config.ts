@@ -43,6 +43,8 @@ export const appConfig: ApplicationConfig = {
       deps: [ConfigService],
     },
     provideAnimations(),
+    // The HTTP client is injected to enable the ConfigService to retrieve the configuration file
+    // via HTTP when server-side rendering (SSR) is used.
     provideHttpClient(withInterceptorsFromDi()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
