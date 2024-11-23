@@ -115,6 +115,13 @@
         "staticFilePath": "dist/apps/openchallenges/app-vite/browser",
         "spa": true
       }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
+      },
+      "dependsOn": []
     }
   }
 }

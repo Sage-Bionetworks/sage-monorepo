@@ -6,6 +6,7 @@ args=(
   --file docker/openchallenges/services/api-docs.yml
   --file docker/openchallenges/services/api-gateway.yml
   # --file docker/openchallenges/services/app.yml
+  --file docker/openchallenges/services/app-vite.yml
   --file docker/openchallenges/services/challenge-service.yml
   --file docker/openchallenges/services/config-server.yml
   --file docker/openchallenges/services/edam-etl.yml
