@@ -4,7 +4,7 @@ set -e
 /docker-entrypoint.d/10-envsubst-on-app-config-template.sh
 
 if [ "$1" = 'node' ]; then
-    cd ${APP_DIR}/server
+    cd ${APP_DIR}
     exec su-exec node "$@"
 fi
 
