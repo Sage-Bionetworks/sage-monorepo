@@ -1,7 +1,7 @@
 /* stylelint-disable scss/at-if-no-null */
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use '@openchallenges-styles/constants';
+@use '@sagebionetworks/openchallenges/styles/constants';
 
 @mixin color($theme) {
   $config: mat.m2-get-color-config($theme);
