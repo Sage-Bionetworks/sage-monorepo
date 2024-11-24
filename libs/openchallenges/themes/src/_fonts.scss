@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
-
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap');
+@import 'https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap';
 
 $lato: mat.m2-define-typography-config(
   $font-family: "'Lato', sans-serif",

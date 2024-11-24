@@ -20,6 +20,7 @@
           "apps/openchallenges/app-vite/src/config",
           "apps/openchallenges/app-vite/src/humans.txt",
           "apps/openchallenges/app-vite/src/robots.txt",
+          "apps/openchallenges/app-vite/src/sitemap.xml",
           {
             "input": "libs/shared/typescript/assets/src",
             "glob": "**/*",
@@ -32,7 +33,7 @@
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/openchallenges/styles/src"]
+          "includePaths": ["libs"]
         },
         "styles": [
           "apps/openchallenges/app-vite/src/styles.scss",
@@ -117,6 +118,12 @@
         "command": "docker/openchallenges/serve-detach.sh {projectName}"
       },
       "dependsOn": []
+    },
+    "build-sitemap": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/openchallenges/app/src/sitemap.xml"
+      }
     }
   }
 }

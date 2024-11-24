@@ -58,9 +58,7 @@
       "@sagebionetworks/openchallenges/org-search": ["libs/openchallenges/org-search/src/index.ts"],
       "@sagebionetworks/openchallenges/pages": ["libs/openchallenges/pages/src/index.ts"],
       "@sagebionetworks/openchallenges/signup": ["libs/openchallenges/signup/src/index.ts"],
-      "@sagebionetworks/openchallenges/styles": ["libs/openchallenges/styles/src/index.ts"],
       "@sagebionetworks/openchallenges/team": ["libs/openchallenges/team/src/index.ts"],
-      "@sagebionetworks/openchallenges/themes": ["libs/openchallenges/themes/src/index.ts"],
       "@sagebionetworks/openchallenges/ui": ["libs/openchallenges/ui/src/index.ts"],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [

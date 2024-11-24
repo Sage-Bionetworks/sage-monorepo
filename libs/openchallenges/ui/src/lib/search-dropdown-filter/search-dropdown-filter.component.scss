@@ -1,5 +1,5 @@
 /* stylelint-disable selector-pseudo-element-no-unknown */
-@use '@sagebionetworks/openchallenges/styles/constants';
+@use 'openchallenges/styles/src/constants';
 
 :host ::ng-deep .p-multiselect {
   min-width: 200px;

@@ -1,5 +1,5 @@
-@use '@sagebionetworks/openchallenges/styles/constants';
-@use '@sagebionetworks/openchallenges/styles/general';
+@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/general';
 
 .challenge-card {
   width: 320px;
