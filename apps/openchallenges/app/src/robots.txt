@@ -1,5 +1,3 @@
 User-agent: *
 Disallow: /api/
 Disallow: /login/
-
-Sitemap: https://www.openchallenges.io/sitemap.xml
