@@ -1,10 +1,10 @@
 /* stylelint-disable no-descending-specificity */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable scss/at-extend-no-missing-placeholder */
-@use './constants';
+@use './variables';
 
 html {
-  margin-top: constants.$navbar-height;
+  margin-top: variables.$navbar-height;
 }
 
 body {
@@ -21,7 +21,7 @@ em {
 // GRID
 .base {
   width: 100%;
-  min-height: calc(100vh - constants.$navbar-height - constants.$footer-height);
+  min-height: calc(100vh - variables.$navbar-height - variables.$footer-height);
 }
 
 .row {
@@ -199,7 +199,7 @@ span.text-grey a {
   align-self: center;
   flex: 0 0 auto;
   box-sizing: border-box;
-  border-radius: constants.$dl-radius-radius-round;
+  border-radius: variables.$dl-radius-radius-round;
   box-shadow: 1px 5px 18px 0 #d4d4d4;
 
   div.avatar-content {
@@ -404,24 +404,24 @@ table {
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: constants.$dl-radius-radius-radius16;
+  border-radius: variables.$dl-radius-radius-radius16;
   cursor: pointer;
 }
 
 // MEDIA QUERIES
-@media screen and (max-width: constants.$sm-breakpoint) {
+@media screen and (max-width: variables.$sm-breakpoint) {
   .profile-activity-card {
     text-align: center;
   }
 }
 
-@media screen and (max-width: constants.$md-breakpoint) {
+@media screen and (max-width: variables.$md-breakpoint) {
   .content {
     flex-direction: column;
   }
 }
 
-@media screen and (min-width: constants.$md-breakpoint) {
+@media screen and (min-width: variables.$md-breakpoint) {
   .col,
   .col-1 {
     flex: 1;
@@ -490,9 +490,9 @@ table {
   }
 }
 
-@media only screen and (max-width: constants.$lg-breakpoint) {
+@media only screen and (max-width: variables.$lg-breakpoint) {
   html {
-    margin-top: constants.$navbar-height-tall;
+    margin-top: variables.$navbar-height-tall;
   }
 
   .card-group {

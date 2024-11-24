@@ -1,4 +1,4 @@
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 .organization-card {
   width: 320px;
@@ -8,7 +8,7 @@
   position: relative;
   align-items: center;
   flex-direction: column;
-  border-radius: constants.$dl-radius-radius-radius16;
+  border-radius: variables.$dl-radius-radius-radius16;
   cursor: pointer;
 }
 

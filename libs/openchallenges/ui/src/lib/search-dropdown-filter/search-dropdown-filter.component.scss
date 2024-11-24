@@ -1,5 +1,5 @@
 /* stylelint-disable selector-pseudo-element-no-unknown */
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 :host ::ng-deep .p-multiselect {
   min-width: 200px;
@@ -91,7 +91,7 @@
   }
 }
 
-@media screen and (max-width: constants.$md-breakpoint) {
+@media screen and (max-width: variables.$md-breakpoint) {
   :host ::ng-deep .p-multiselect {
     width: 100%;
   }

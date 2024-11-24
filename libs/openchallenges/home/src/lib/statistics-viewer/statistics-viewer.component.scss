@@ -1,4 +1,4 @@
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 // GENERAL CLASSES
 .container {
@@ -54,7 +54,7 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: constants.$lg-breakpoint) {
+@media screen and (max-width: variables.$lg-breakpoint) {
   .metrics-container {
     gap: 40px;
 
@@ -65,7 +65,7 @@
   }
 }
 
-@media screen and (max-width: constants.$md-breakpoint) {
+@media screen and (max-width: variables.$md-breakpoint) {
   .metrics-container {
     gap: 20px;
 

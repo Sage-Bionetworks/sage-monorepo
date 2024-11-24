@@ -1,8 +1,8 @@
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 footer {
   width: 100%;
-  height: constants.$footer-height;
+  height: variables.$footer-height;
   position: relative;
   padding: 42px 52px;
   display: flex;
@@ -59,7 +59,7 @@ footer {
   height: 56px;
 }
 
-@media only screen and (max-width: constants.$md-breakpoint) {
+@media only screen and (max-width: variables.$md-breakpoint) {
   footer {
     height: 410px;
   }

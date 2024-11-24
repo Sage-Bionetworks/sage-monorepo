@@ -1,4 +1,4 @@
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 .container {
   max-width: 1320px;
@@ -79,7 +79,7 @@ h3,
   height: 80px;
 }
 
-@media screen and (max-width: constants.$md-breakpoint) {
+@media screen and (max-width: variables.$md-breakpoint) {
   .card {
     min-width: 100% !important;
   }

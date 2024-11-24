@@ -1,4 +1,4 @@
-@use 'openchallenges/styles/src/constants';
+@use 'openchallenges/styles/src/variables';
 
 .container {
   max-width: 1128px;
@@ -35,7 +35,7 @@
   padding: 88px 0;
 }
 
-@media only screen and (max-width: constants.$md-breakpoint) {
+@media only screen and (max-width: variables.$md-breakpoint) {
   .sponsor-item {
     img {
       width: 100%;
