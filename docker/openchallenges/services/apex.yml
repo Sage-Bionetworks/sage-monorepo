@@ -17,15 +17,9 @@ services:
         condition: service_healthy
       openchallenges-api-gateway:
         condition: service_healthy
-      # openchallenges-app:
-      #   condition: service_started
-      openchallenges-zipkin:
-        condition: service_healthy
-      openchallenges-challenge-service:
+      openchallenges-app:
         condition: service_started
-      openchallenges-image-service:
-        condition: service_healthy
-      openchallenges-organization-service:
+      openchallenges-zipkin:
         condition: service_healthy
 
     deploy:

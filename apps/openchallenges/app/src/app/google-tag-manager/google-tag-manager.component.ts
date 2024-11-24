@@ -5,7 +5,7 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { googleTagManagerIdProvider } from './google-tag-manager-id.provider';
 
 @Component({
-  selector: 'openchallenges-google-tag-manager',
+  selector: 'app-google-tag-manager',
   template: '',
   standalone: true,
   providers: [

@@ -1,28 +1,24 @@
-import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
+import {
+  ApplicationConfig,
+  provideZoneChangeDetection,
+  APP_INITIALIZER,
+  APP_ID,
+} from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
-import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
+import { appRoutes } from './app.routes';
+import { provideClientHydration } from '@angular/platform-browser';
 import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/config';
-
-import { routes } from './app.routes';
-
-// This index is used to remove the corresponding provider in app.config.server.ts.
-export const APP_BASE_URL_PROVIDER_INDEX = 1;
+import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'openchallenges-app' },
-    {
-      // This provider must be specified at the index defined by APP_BASE_URL_PROVIDER_INDEX.
-      provide: 'APP_BASE_URL',
-      useFactory: () => '.',
-      deps: [],
-    },
     {
       provide: APP_INITIALIZER,
       useFactory: configFactory,
@@ -38,9 +34,13 @@ export const appConfig: ApplicationConfig = {
       deps: [ConfigService],
     },
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
+    // The HTTP client is injected to enable the ConfigService to retrieve the configuration file
+    // via HTTP when server-side rendering (SSR) is used.
+    provideHttpClient(withFetch()),
+    provideClientHydration(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
-      routes,
+      appRoutes,
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         scrollPositionRestoration: 'enabled',
