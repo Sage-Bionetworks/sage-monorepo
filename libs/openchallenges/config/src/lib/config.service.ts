@@ -16,8 +16,10 @@ export class ConfigService {
   ) {}
 
   async loadConfig(): Promise<void> {
-    const appConfig$ = this.http.get<AppConfig>('/config/config.json');
+    const browserRoot = isPlatformServer(this.platformId) ? `http://localhost:4200` : '.';
+
     try {
+      const appConfig$ = this.http.get<AppConfig>(`${browserRoot}/config/config.json`);
       const config = await lastValueFrom(appConfig$);
       this.config = config;
       this.config.isPlatformServer = isPlatformServer(this.platformId);
