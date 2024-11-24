@@ -20,7 +20,6 @@
           "apps/openchallenges/app-vite/src/config",
           "apps/openchallenges/app-vite/src/humans.txt",
           "apps/openchallenges/app-vite/src/robots.txt",
-          "apps/openchallenges/app-vite/src/sitemap.xml",
           {
             "input": "libs/shared/typescript/assets/src",
             "glob": "**/*",
@@ -119,10 +118,11 @@
       },
       "dependsOn": []
     },
-    "build-sitemap": {
-      "executor": "nx:run-commands",
+    "e2e": {
+      "executor": "@nx/playwright:playwright",
+      "outputs": ["{workspaceRoot}/dist/.playwright/apps/openchallenges/app-vite"],
       "options": {
-        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/openchallenges/app/src/sitemap.xml"
+        "config": "apps/openchallenges/app-vite/playwright.config.ts"
       }
     }
   }
