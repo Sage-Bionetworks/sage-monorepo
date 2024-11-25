@@ -24,7 +24,10 @@ on:
         required: false
         type: number
         default: 0
-
+    outputs:
+      trivy_conclusion:
+        description: "The pass/fail return code from Trivy"
+        value: ${{ jobs.trivy.outputs.trivy_conclusion }}
 env:
   sarif_file_name: trivy-results.sarif
   # https://github.com/aquasecurity/trivy-action/issues/389#issuecomment-2363829387
@@ -82,5 +85,5 @@ jobs:
           wait-for-processing: true
 
     outputs:
-      trivy_conclusion: steps.trivy.outputs.conclusion
+      trivy_conclusion: steps.trivy.conclusion
 ...
