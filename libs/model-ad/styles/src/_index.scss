@@ -1,4 +1,3 @@
-@use 'libs/shared/typescript/styles/src/index';
-
-@use './lib/constants';
-@use './lib/general';
+// @forward 'shared/typescript/styles/src/index';
+@forward './variables';
+@forward './general';

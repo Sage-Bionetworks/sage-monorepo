@@ -1,11 +1,11 @@
-@use 'libs/openchallenges/about/src/lib-theme' as openchallenges-about;
-@use 'libs/openchallenges/ui/src/lib-theme' as openchallenges-ui;
-@use 'libs/openchallenges/challenge/src/lib-theme' as openchallenges-challenge;
-@use 'libs/openchallenges/org-profile/src/lib-theme' as openchallenges-org-profile;
-@use 'libs/openchallenges/home/src/lib-theme' as openchallenges-home;
-@use 'libs/openchallenges/team/src/lib-theme' as openchallenges-team;
-@use 'libs/openchallenges/challenge-search/src/lib-theme' as challenge-search;
-@use 'libs/openchallenges/not-found/src/lib-theme' as not-found;
+@use 'openchallenges/about/src/lib-theme' as openchallenges-about;
+@use 'openchallenges/ui/src/lib-theme' as openchallenges-ui;
+@use 'openchallenges/challenge/src/lib-theme' as openchallenges-challenge;
+@use 'openchallenges/org-profile/src/lib-theme' as openchallenges-org-profile;
+@use 'openchallenges/home/src/lib-theme' as openchallenges-home;
+@use 'openchallenges/team/src/lib-theme' as openchallenges-team;
+@use 'openchallenges/challenge-search/src/lib-theme' as challenge-search;
+@use 'openchallenges/not-found/src/lib-theme' as not-found;
 
 @mixin theme($theme) {
   @include openchallenges-challenge.theme($theme);

@@ -38,7 +38,6 @@
       "@sagebionetworks/model-ad/not-found": ["libs/model-ad/not-found/src/index.ts"],
       "@sagebionetworks/model-ad/ui": ["libs/model-ad/ui/src/index.ts"],
       "@sagebionetworks/model-ad/util": ["libs/model-ad/util/src/index.ts"],
-      "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
       "@sagebionetworks/openchallenges/about": ["libs/openchallenges/about/src/index.ts"],
       "@sagebionetworks/openchallenges/api-client-angular": [
         "libs/openchallenges/api-client-angular/src/index.ts"
@@ -59,14 +58,13 @@
       "@sagebionetworks/openchallenges/org-search": ["libs/openchallenges/org-search/src/index.ts"],
       "@sagebionetworks/openchallenges/pages": ["libs/openchallenges/pages/src/index.ts"],
       "@sagebionetworks/openchallenges/signup": ["libs/openchallenges/signup/src/index.ts"],
-      "@sagebionetworks/openchallenges/styles": ["libs/openchallenges/styles/src/index.ts"],
       "@sagebionetworks/openchallenges/team": ["libs/openchallenges/team/src/index.ts"],
-      "@sagebionetworks/openchallenges/themes": ["libs/openchallenges/themes/src/index.ts"],
       "@sagebionetworks/openchallenges/ui": ["libs/openchallenges/ui/src/index.ts"],
       "@sagebionetworks/openchallenges/util": ["libs/openchallenges/util/src/index.ts"],
       "@sagebionetworks/results-visualization-framework/ui": [
         "libs/results-visualization-framework/ui/src/index.ts"
       ],
+      "@sagebionetworks/sage-monorepo-nx-plugin": ["libs/sage-monorepo/nx-plugin/src/index.ts"],
       "@sagebionetworks/sandbox-angular-lib": ["libs/sandbox/angular-lib/src/index.ts"],
       "@sagebionetworks/shared/charts": ["libs/shared/typescript/charts/src/index.ts"],
       "@sagebionetworks/shared/charts-angular": [

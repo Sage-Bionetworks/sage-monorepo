@@ -1,4 +1,4 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use 'openchallenges/styles/src/variables';
 
 .sage-navbar {
   position: fixed;
@@ -6,12 +6,12 @@
   left: 0;
   z-index: 2;
   width: 100%;
-  height: constants.$navbar-height;
+  height: variables.$navbar-height;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   padding: 8px 16px;
-  box-shadow: 1px 5px 18px 0px rgba(0, 0, 0, 0.24);
+  box-shadow: 1px 5px 18px 0 rgb(0 0 0 / 24%);
 
   > .mat-mdc-button {
     padding: 0 16px !important;
@@ -31,17 +31,20 @@
   vertical-align: middle;
 }
 
-@media only screen and (max-width: constants.$lg-breakpoint) {
+@media only screen and (max-width: variables.$lg-breakpoint) {
   .navbar-item {
     width: 100%;
     align-self: center;
   }
+
   .sage-navbar {
-    height: constants.$navbar-height-tall;
+    height: variables.$navbar-height-tall;
   }
+
   .flex-spacer {
     flex-grow: 0;
   }
+
   .test {
     width: 100%;
   }

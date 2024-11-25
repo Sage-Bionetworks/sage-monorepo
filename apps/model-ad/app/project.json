@@ -34,6 +34,9 @@
             "output": "assets"
           }
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
         "styles": [
           "apps/model-ad/app/src/styles.scss",
           "node_modules/primeicons/primeicons.css",
@@ -116,7 +119,10 @@
         "outputPath": "dist/apps/model-ad/app/browser/server",
         "main": "apps/model-ad/app/server.ts",
         "tsConfig": "apps/model-ad/app/tsconfig.server.json",
-        "inlineStyleLanguage": "scss"
+        "inlineStyleLanguage": "scss",
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        }
       },
       "configurations": {
         "production": {
