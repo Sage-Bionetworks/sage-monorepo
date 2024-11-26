@@ -48,7 +48,7 @@ export class WikiComponent implements OnChanges, OnInit {
   }
 
   getWikiData() {
-    this.synapseApiService.getWiki(this.ownerId ?? 'syn25913473', this.wikiId ?? '').subscribe({
+    this.synapseApiService.getWiki(this.ownerId || 'syn25913473', this.wikiId || '').subscribe({
       next: (wiki: SynapseWiki) => {
         if (!wiki) {
           this.loading = false;

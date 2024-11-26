@@ -30,20 +30,26 @@ export const routes: Route[] = [
   {
     path: 'genes/nominated-targets',
     loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then((routes) => routes.routes),
+      import('@sagebionetworks/agora/nominated-targets').then(
+        (routes) => routes.nominatedTargetsRoute,
+      ),
     data: {
       title: 'Nominated Targets | Candidate genes for AD treatment or prevention',
       description:
         'Browse a list of genes that researchers have identified using computational analyses of high-dimensional human genomic, proteomic and metabolomic data.',
     },
   },
-  // {
-  //   path: 'nomination-form', component: NominationFormPageComponent,
-  //   data: {
-  //     title: 'Nominate a Target | Suggest a new AD therapeutic target',
-  //     description: 'Nominate a gene as a new candidate for AD treatment or prevention.'
-  //   }
-  // },
+  {
+    path: 'nomination-form',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-targets').then(
+        (routes) => routes.nominationFormRoute,
+      ),
+    data: {
+      title: 'Nominate a Target | Suggest a new AD therapeutic target',
+      description: 'Nominate a gene as a new candidate for AD treatment or prevention.',
+    },
+  },
   {
     path: 'not-found',
     loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),

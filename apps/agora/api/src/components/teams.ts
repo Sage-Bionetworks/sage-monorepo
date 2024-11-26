@@ -56,11 +56,7 @@ export function sortNullProgramsForTeamsLast(teams: Team[]): void {
   });
 }
 
-export async function teamsRoute(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function teamsRoute(req: Request, res: Response, next: NextFunction) {
   try {
     const teams = await getTeams();
     setHeaders(res);
@@ -88,11 +84,7 @@ export async function getTeamMemberImage(name: string) {
   return files[0] || undefined;
 }
 
-export async function teamMemberImageRoute(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) {
+export async function teamMemberImageRoute(req: Request, res: Response, next: NextFunction) {
   if (!req.params || !req.params.name) {
     res.status(404).send('Not found');
     return;

@@ -1,23 +1,23 @@
 <div class="team-member-list">
   <div class="team-member-list-inner">
-    <ng-container *ngIf="team.members?.length">
+    @if (team.members.length) {
       <div *ngFor="let member of team.members" class="team-member">
         <div class="team-member-image">
-          <img
-            *ngIf="images[member.name]"
-            [src]="images[member.name]"
-            alt="{{ member.name }} profile picture"
-          />
+          @if (images[member.name]) {
+            <img [src]="images[member.name]" alt="{{ member.name }} profile picture" />
+          }
         </div>
         <h5 class="team-member-name">
-          <a *ngIf="member.url" href="{{ member.url }}">
+          @if (member.url) {
+            <a href="{{ member.url }}">
+              {{ member.name }}
+            </a>
+          }
+          @if (!member.url) {
             {{ member.name }}
-          </a>
-          <ng-container *ngIf="!member.url">
-            {{ member.name }}
-          </ng-container>
+          }
         </h5>
       </div>
-    </ng-container>
+    }
   </div>
 </div>

@@ -3,7 +3,10 @@
     <div class="header-inner">
       <div class="header-logo">
         <a routerLink="/">
-          <img [src]="headerLogoPath" alt="header logo" />
+          <agora-svg-image
+            imagePath="/agora-assets/images/header-logo.svg"
+            altText="header logo"
+          ></agora-svg-image>
         </a>
       </div>
       @if (navItems.length > 0) {
@@ -27,12 +30,7 @@
                       <span>{{ item.label }}</span>
                     </a>
                   } @else if (item.url) {
-                    <a
-                      *ngIf="item.url"
-                      [attr.href]="item.url"
-                      [attr.target]="item.target"
-                      (click)="toggleNav()"
-                    >
+                    <a [attr.href]="item.url" [attr.target]="item.target" (click)="toggleNav()">
                       <span>{{ item.label }}</span>
                     </a>
                   } @else {
@@ -44,7 +42,10 @@
 
             <div class="separator"></div>
 
-            <!-- <gene-search class="header-search" (searchNavigated)="toggleNav()"></gene-search> -->
+            <agora-gene-search
+              class="header-search"
+              (searchNavigated)="toggleNav()"
+            ></agora-gene-search>
           </div>
         </div>
       }

@@ -139,9 +139,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Gene'
+                $ref: '#/components/schemas/GenesList'
         '400':
           $ref: '#/components/responses/BadRequest'
         '500':
@@ -856,6 +854,14 @@ components:
         - druggability
         - total_nominations
         - ensembl_info
+    GenesList:
+      type: object
+      description: List of Genes
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Gene'
     GCTGeneTissue:
       type: object
       description: GCTGeneTissue
@@ -1102,6 +1108,16 @@ components:
             items:
               type: number
           description: Bins used in the distribution
+        min:
+          type: number
+        max:
+          type: number
+        mean:
+          type: number
+        first_quartile:
+          type: number
+        third_quartile:
+          type: number
         name:
           type: string
           description: Name of the score distribution
@@ -1114,6 +1130,11 @@ components:
       required:
         - distribution
         - bins
+        - min
+        - max
+        - mean
+        - first_quartile
+        - third_quartile
         - name
         - syn_id
         - wiki_id
