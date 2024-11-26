@@ -1,9 +1,7 @@
-/* eslint-disable */
 export default {
-  displayName: 'openchallenges',
+  displayName: 'openchallenges-app',
   preset: '../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
   coverageDirectory: '../../../coverage/apps/openchallenges/app',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [

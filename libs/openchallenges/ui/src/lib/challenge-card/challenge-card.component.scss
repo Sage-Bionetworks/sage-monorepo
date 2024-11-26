@@ -1,5 +1,5 @@
-@use 'libs/openchallenges/styles/src/lib/constants' as constants;
-@use 'libs/openchallenges/styles/src/lib/general' as general;
+@use 'openchallenges/styles/src/variables';
+@use 'openchallenges/styles/src/general';
 
 .challenge-card {
   width: 320px;
@@ -9,19 +9,23 @@
   position: relative;
   align-items: center;
   flex-direction: column;
-  border-radius: constants.$dl-radius-radius-radius16;
+  border-radius: variables.$dl-radius-radius-radius16;
   cursor: pointer;
 }
+
 .card-body {
   min-height: 190px;
 }
+
 .card-banner {
   height: 100%;
 }
+
 .card-status {
   div:first-child {
     margin-right: 5px;
   }
+
   min-height: 58px;
   display: flex;
   flex-direction: column;
@@ -36,5 +40,6 @@
   display: flex;
   align-items: center;
   flex: 1;
+
   @include general.line-clamp(2);
 }

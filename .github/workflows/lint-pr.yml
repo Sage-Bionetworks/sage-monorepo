@@ -31,6 +31,7 @@ jobs:
             model-ad
             openchallenges
             results-visualization-framework
+            sage
             sage-monorepo
             sandbox
             schematic

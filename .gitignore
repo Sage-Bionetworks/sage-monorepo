@@ -127,3 +127,5 @@ target/
 
 # Ipython Notebook
 .ipynb_checkpoints
+
+vite.config.*.timestamp*

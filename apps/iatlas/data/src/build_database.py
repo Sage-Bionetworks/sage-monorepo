@@ -1851,19 +1851,28 @@ iatlas_config = [
     },
 ]
 
-db = PostgresDatabase(
-    SQLConfig(
+if getenv("DB_PORT"):
+    sql_config = SQLConfig(
+        username=getenv("DB_USER"),
+        password=getenv("DB_PW"),
+        host=getenv("DB_HOST"),
+        name=getenv("DB_NAME"),
+        port=getenv("DB_PORT"),
+    )
+else:
+    sql_config = SQLConfig(
         username=getenv("DB_USER"),
         password=getenv("DB_PW"),
         host=getenv("DB_HOST"),
         name=getenv("DB_NAME"),
     )
-)
+
+
+db = PostgresDatabase(sql_config)
 
 schema = Schema(
-    SchemaConfig(schema_url=getenv("SCHEMA_URL")),
+    SchemaConfig(schema_url=getenv("SCHEMA_URL"), display_label_type="display_label"),
     DatabaseConfig(iatlas_config),
-    display_label_type="display_label",
 )
 
 
@@ -1878,108 +1887,124 @@ ms = SynapseManifestStore(
         synapse_auth_token=getenv("SCHEMA_AUTH_TOKEN"),
     ),
     display_label_type="display_label",
+    purge_synapse_cache=True,
 )
 
-# updater = RDBUpdater(db, ms)
-# updater.update_database(method="insert")
+updater = RDBUpdater(db, ms)
+updater.update_database(method="insert", chunk_size=10000)
 
 
-# def insert_as_chunk(df, db, table_name, chunk_size=20000):
-#     num_chunks = ((len(df) - 1) // chunk_size) + 1
-
-#     for i in range(num_chunks):
-#         # Getting chunk boundaries
-#         start_index = i * chunk_size
-#         end_index = (i + 1) * chunk_size
-
-#         # Selecting rows for the current chunk
-#         chunk = df[start_index:end_index]
-
-#         # Inserting rows into the table
-#         db.insert_table_rows(table_name, chunk)
-
-
-# cohorts_to_samples1 = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT c.id AS cohort_id, t.id AS cohorts_to_samples_tag_id, stt.sample_id "
-#         "FROM samples s "
-#         "INNER JOIN samples_to_tags stt ON s.id = stt.sample_id "
-#         "INNER JOIN tags t ON stt.tag_id = t.id "
-#         "INNER JOIN tags_to_tags ttt ON t.id = ttt.tag_id "
-#         "INNER JOIN tags t2 ON ttt.related_tag_id = t2.id "
-#         "INNER JOIN datasets_to_samples dts on s.id = dts.sample_id "
-#         "INNER JOIN cohorts c on t2.id = c.cohort_tag_id AND dts.dataset_id = c.dataset_id "
-#         "WHERE t.tag_type = 'group'"
-#     )
-# )
-# cohorts_to_samples1["id"] = [
-#     uuid.uuid1() for _ in range(len(cohorts_to_samples1.index))
-# ]
-# insert_as_chunk(cohorts_to_samples1, db, "cohorts_to_samples")
-# # db.insert_table_rows("cohorts_to_samples", cohorts_to_samples1)
+cohorts_to_samples1 = db.execute_sql_query(
+    (
+        "SELECT DISTINCT c.id AS cohort_id, t.id AS cohorts_to_samples_tag_id, stt.sample_id "
+        "FROM samples s "
+        "INNER JOIN samples_to_tags stt ON s.id = stt.sample_id "
+        "INNER JOIN tags t ON stt.tag_id = t.id "
+        "INNER JOIN tags_to_tags ttt ON t.id = ttt.tag_id "
+        "INNER JOIN tags t2 ON ttt.related_tag_id = t2.id "
+        "INNER JOIN datasets_to_samples dts on s.id = dts.sample_id "
+        "INNER JOIN cohorts c on t2.id = c.cohort_tag_id AND dts.dataset_id = c.dataset_id "
+        "WHERE t.tag_type = 'group'"
+    )
+)
+cohorts_to_samples1["id"] = [
+    uuid.uuid1() for _ in range(len(cohorts_to_samples1.index))
+]
+updater._update_table_with_manifest(
+    table=cohorts_to_samples1,
+    table_name="cohorts_to_samples",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)
 
 
-# cohorts_to_samples2 = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT c.id AS cohort_id, dts.sample_id "
-#         "FROM cohorts c "
-#         "INNER JOIN datasets_to_samples dts ON c.dataset_id = dts.dataset_id "
-#         "WHERE c.cohort_tag_id is NULL"
-#     )
-# )
-# cohorts_to_samples2["id"] = [
-#     uuid.uuid1() for _ in range(len(cohorts_to_samples2.index))
-# ]
-# insert_as_chunk(cohorts_to_samples2, db, "cohorts_to_samples")
-# # db.insert_table_rows("cohorts_to_samples", cohorts_to_samples2)
+cohorts_to_samples2 = db.execute_sql_query(
+    (
+        "SELECT DISTINCT c.id AS cohort_id, dts.sample_id "
+        "FROM cohorts c "
+        "INNER JOIN datasets_to_samples dts ON c.dataset_id = dts.dataset_id "
+        "WHERE c.cohort_tag_id is NULL"
+    )
+)
+cohorts_to_samples2["id"] = [
+    uuid.uuid1() for _ in range(len(cohorts_to_samples2.index))
+]
+updater._update_table_with_manifest(
+    table=cohorts_to_samples2,
+    table_name="cohorts_to_samples",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)
 
 
-# cohorts_to_features = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT cohort_id, feature_id "
-#         "FROM cohorts_to_samples cts "
-#         "INNER JOIN features_to_samples fts USING(sample_id)"
-#     )
-# )
-# cohorts_to_features["id"] = [
-#     uuid.uuid1() for _ in range(len(cohorts_to_features.index))
-# ]
-# insert_as_chunk(cohorts_to_features, db, "cohorts_to_features")
-# # db.insert_table_rows("cohorts_to_features", cohorts_to_features)
+cohorts_to_features = db.execute_sql_query(
+    (
+        "SELECT DISTINCT cohort_id, feature_id "
+        "FROM cohorts_to_samples cts "
+        "INNER JOIN features_to_samples fts USING(sample_id)"
+    )
+)
+cohorts_to_features["id"] = [
+    uuid.uuid1() for _ in range(len(cohorts_to_features.index))
+]
+updater._update_table_with_manifest(
+    table=cohorts_to_features,
+    table_name="cohorts_to_features",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)
 
 
-# cohorts_to_genes = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT cohort_id, gene_id "
-#         "FROM cohorts_to_samples cts "
-#         "INNER JOIN genes_to_samples gts USING(sample_id)"
-#     )
-# )
-# cohorts_to_genes["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_genes.index))]
-# insert_as_chunk(cohorts_to_genes, db, "cohorts_to_genes")
-# # db.insert_table_rows("cohorts_to_genes", cohorts_to_genes)
+cohorts_to_genes = db.execute_sql_query(
+    (
+        "SELECT DISTINCT cohort_id, gene_id "
+        "FROM cohorts_to_samples cts "
+        "INNER JOIN genes_to_samples gts USING(sample_id)"
+    )
+)
+cohorts_to_genes["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_genes.index))]
+updater._update_table_with_manifest(
+    table=cohorts_to_genes,
+    table_name="cohorts_to_genes",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)
 
 
-# cohorts_to_mutations = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT cohort_id, mutation_id "
-#         "FROM cohorts_to_samples cts "
-#         "INNER JOIN samples_to_mutations stm USING(sample_id)"
-#     )
-# )
-# cohorts_to_mutations["id"] = [
-#     uuid.uuid1() for _ in range(len(cohorts_to_mutations.index))
-# ]
-# insert_as_chunk(cohorts_to_mutations, db, "cohorts_to_mutations")
-# # db.insert_table_rows("cohorts_to_mutations", cohorts_to_mutations)
+cohorts_to_mutations = db.execute_sql_query(
+    (
+        "SELECT DISTINCT cohort_id, mutation_id "
+        "FROM cohorts_to_samples cts "
+        "INNER JOIN samples_to_mutations stm USING(sample_id)"
+    )
+)
+cohorts_to_mutations["id"] = [
+    uuid.uuid1() for _ in range(len(cohorts_to_mutations.index))
+]
+updater._update_table_with_manifest(
+    table=cohorts_to_mutations,
+    table_name="cohorts_to_mutations",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)
 
-# cohorts_to_tags = db.execute_sql_query(
-#     (
-#         "SELECT DISTINCT cohort_id, tag_id "
-#         "FROM cohorts_to_samples cts "
-#         "INNER JOIN samples_to_tags sts USING(sample_id)"
-#     )
-# )
-# cohorts_to_tags["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_tags.index))]
-# insert_as_chunk(cohorts_to_tags, db, "cohorts_to_tags")
-# # db.insert_table_rows("cohorts_to_tags", cohorts_to_tags)
+cohorts_to_tags = db.execute_sql_query(
+    (
+        "SELECT DISTINCT cohort_id, tag_id "
+        "FROM cohorts_to_samples cts "
+        "INNER JOIN samples_to_tags sts USING(sample_id)"
+    )
+)
+cohorts_to_tags["id"] = [uuid.uuid1() for _ in range(len(cohorts_to_tags.index))]
+updater._update_table_with_manifest(
+    table=cohorts_to_tags,
+    table_name="cohorts_to_tags",
+    manifest_id="None",
+    method="insert",
+    chunk_size=10000,
+)

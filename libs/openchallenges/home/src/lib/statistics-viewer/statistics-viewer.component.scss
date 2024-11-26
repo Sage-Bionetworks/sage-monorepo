@@ -1,8 +1,9 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use 'openchallenges/styles/src/variables';
 
 // GENERAL CLASSES
 .container {
   max-width: 1128px;
+
   // max-width: 100px;
   width: 100%;
   margin: 0 auto;
@@ -10,13 +11,16 @@
   padding-right: 24px;
   align-items: center;
 }
+
 #timeline-plot {
   width: 100%;
 }
+
 .section-title {
   text-align: center;
   margin-bottom: 42px;
 }
+
 #statistics {
   background: #fff;
   padding: 88px 0;
@@ -30,6 +34,7 @@
     margin-top: -14px;
   }
 }
+
 .metrics-container {
   justify-content: center;
   gap: 80px;
@@ -40,14 +45,16 @@
     transition: transform 400ms ease;
   }
 }
+
 .metrics-text-box {
   white-space: nowrap;
 }
+
 .clickable {
   cursor: pointer;
 }
 
-@media screen and (max-width: constants.$lg-breakpoint) {
+@media screen and (max-width: variables.$lg-breakpoint) {
   .metrics-container {
     gap: 40px;
 
@@ -57,7 +64,8 @@
     }
   }
 }
-@media screen and (max-width: constants.$md-breakpoint) {
+
+@media screen and (max-width: variables.$md-breakpoint) {
   .metrics-container {
     gap: 20px;
 

@@ -1,17 +1,19 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use 'openchallenges/styles/src/variables';
 
 .container {
   max-width: 1320px;
   margin: 0 auto;
   padding: 24px 60px;
 }
+
 h2,
 h3,
 .tagline {
   text-align: center;
 }
+
 #header {
-  background: url('/openchallenges-assets/images/banner-sm.svg');
+  background: url('/assets/openchallenges/images/banner-sm.svg');
   background-size: cover;
   background-position: bottom;
   padding-top: 108px;
@@ -21,9 +23,11 @@ h3,
     margin: 8px 0;
   }
 }
+
 .tagline {
   margin: 40px 0;
 }
+
 #goals {
   margin-bottom: 48px;
 
@@ -32,6 +36,7 @@ h3,
     flex-wrap: wrap;
     justify-content: center;
   }
+
   .card {
     flex: 0 1 20%;
     display: flex;
@@ -40,6 +45,7 @@ h3,
     min-width: 260px;
     padding: 24px 15px 15px;
     margin: 15px 8px;
+
     // border: solid 1px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
 
@@ -49,6 +55,7 @@ h3,
       align-items: center;
       text-align: center;
     }
+
     li {
       padding: 0 4px;
 
@@ -58,6 +65,7 @@ h3,
     }
   }
 }
+
 .goal-icon {
   height: 140px;
   width: 140px;
@@ -66,10 +74,12 @@ h3,
   justify-content: center;
   border-radius: 50%;
 }
+
 .icon {
   height: 80px;
 }
-@media screen and (max-width: constants.$md-breakpoint) {
+
+@media screen and (max-width: variables.$md-breakpoint) {
   .card {
     min-width: 100% !important;
   }

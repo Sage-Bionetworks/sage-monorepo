@@ -59,7 +59,11 @@ function inferBuilder(
   if (siblingFiles.includes('build.gradle')) return 'gradle';
 
   const executor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
-  const webpackExecutors = ['@angular-devkit/build-angular:browser', '@nx/webpack:webpack'];
+  const webpackExecutors = [
+    '@angular-devkit/build-angular:browser',
+    '@nx/angular:application',
+    '@nx/webpack:webpack',
+  ];
 
   if (webpackExecutors.includes(executor)) {
     return 'webpack';

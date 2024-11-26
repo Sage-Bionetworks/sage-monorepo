@@ -62,11 +62,11 @@ jobs:
       #     devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
       #       && nx affected --target=sonar"
 
-      - name: Publish the images of the affected projects
+      - name: Build and publish the images of the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
             && echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin \
-            && nx affected --target=publish-image"
+            && nx affected --target=build-image --configuration=edge"
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer

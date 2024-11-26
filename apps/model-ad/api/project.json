@@ -79,18 +79,6 @@
       },
       "dependsOn": ["build-image-base"]
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "context": "apps/model-ad/api",
-      "options": {
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {

@@ -4,17 +4,19 @@ on:
   push:
     branches:
       - main
-  # pull_request:
+  pull_request:
   schedule:
-    # 19:29 on Thursday
+    # Every Thursday at 7:29 PM
     - cron: 29 19 * * 4
-    # every 2 hours (during evaluation)
-    - cron: 0 */2 * * *
+  workflow_dispatch:
 
 jobs:
   trivy-edge:
     name: ${{ matrix.image }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+    env:
+      TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
+      TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
     continue-on-error: true
     strategy:
       fail-fast: false
@@ -40,7 +42,7 @@ jobs:
 
       # Deliberately chosen master here to keep up-to-date.
       - name: Run Trivy vulnerability scanner for any major issues
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
           ignore-unfixed: true
@@ -53,16 +55,16 @@ jobs:
       # Show all detected issues.
       # Note this will show a lot more, including major un-fixed ones.
       - name: Run Trivy vulnerability scanner for local output
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           image-ref: ghcr.io/sage-bionetworks/${{ matrix.image }}:edge
           format: table
 
       - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v2
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results-${{ matrix.image }}-edge.sarif
-          category: ${{ matrix.image }}:edge image
+          category: trivy-image-${{ matrix.image }}:edge
           wait-for-processing: true
 
       - name: Detain results for debug if needed

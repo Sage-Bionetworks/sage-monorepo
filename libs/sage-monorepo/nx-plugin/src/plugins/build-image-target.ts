@@ -34,7 +34,6 @@ export async function buildImageTarget(
   return {
     executor: '@nx-tools/nx-container:build',
     outputs: [],
-
     options: {
       context,
     },
@@ -43,10 +42,17 @@ export async function buildImageTarget(
       local: {
         metadata: {
           images: [`ghcr.io/sage-bionetworks/${projectName}`],
-          tags: ['type=edge,branch=main', 'type=raw,value=local', 'type=sha'],
+          tags: ['type=raw,value=local', 'type=sha'],
         },
       },
-      ci: {
+      edge: {
+        metadata: {
+          images: [`ghcr.io/sage-bionetworks/${projectName}`],
+          tags: ['type=edge,branch=main', 'type=sha'],
+        },
+        push: true,
+      },
+      release: {
         metadata: {
           images: [`ghcr.io/sage-bionetworks/${projectName}`],
           tags: ['type=semver,pattern={{version}},value=${VERSION}', 'type=sha'],

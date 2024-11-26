@@ -11,7 +11,6 @@ $light-secondary-text: rgba(white, 0.7);
 $light-disabled-text: rgba(white, 0.5);
 $light-dividers: rgba(white, 0.12);
 $light-focused: rgba(white, 0.12);
-
 $dark-blue-palette: (
   50: #e8ebf5,
   100: #c4cce7,
@@ -36,7 +35,6 @@ $dark-blue-palette: (
     900: $light-primary-text,
   ),
 );
-
 $light-blue-palette: (
   50: #dff4fb,
   100: #ade3f4,
@@ -61,7 +59,6 @@ $light-blue-palette: (
     900: $light-primary-text,
   ),
 );
-
 $light-green-palette: (
   50: #e8fefb,
   100: #c6fdf3,
@@ -86,7 +83,6 @@ $light-green-palette: (
     900: $dark-primary-text,
   ),
 );
-
 $light-purple-palette: (
   50: #ede8ff,
   100: #d0c6fd,
@@ -128,8 +124,8 @@ $figma-collection: (
   dl-color-default-secondary2: map.get($accent-purple-palette, 300),
   dl-color-default-darkaccent1: map.get($accent-green-palette, 700),
   dl-color-default-darkaccent2: map.get($accent-purple-palette, 200),
-  dl-color-gray-black: #000000,
-  dl-color-gray-white: #ffffff,
-  dl-color-default-hover1: rgba(249, 249, 249, 1),
-  dl-color-default-hover2: rgba(229, 229, 229, 1),
+  dl-color-gray-black: #000,
+  dl-color-gray-white: #fff,
+  dl-color-default-hover1: rgb(249 249 249 / 100%),
+  dl-color-default-hover2: rgb(229 229 229 / 100%),
 );

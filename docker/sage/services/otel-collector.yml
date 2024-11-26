@@ -1,0 +1,14 @@
+services:
+  sage-otel-collector:
+    image: ghcr.io/sage-bionetworks/sage-otel-collector:${SAGE_VERSION:-local}
+    container_name: sage-otel-collector
+    restart: always
+    networks:
+      - sage
+    ports:
+      - '13133:13133' # health_check extension
+      - '4318:4318' # OTLP http receiver
+    deploy:
+      resources:
+        limits:
+          memory: 200M

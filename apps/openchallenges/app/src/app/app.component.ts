@@ -17,7 +17,7 @@ import { ConfigService } from '@sagebionetworks/openchallenges/config';
 import { NgIf } from '@angular/common';
 
 @Component({
-  selector: 'openchallenges-root',
+  selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,

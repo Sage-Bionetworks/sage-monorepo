@@ -2,92 +2,81 @@
   "name": "openchallenges-app",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "prefix": "app",
   "sourceRoot": "apps/openchallenges/app/src",
-  "prefix": "openchallenges",
+  "tags": ["type:app", "scope:client", "language:typescript"],
   "targets": {
-    "create-config": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "cp -n .env.example .env",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "sonar": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "bash $WORKSPACE_DIR/tools/sonar-scanner.sh --project-key {projectName} --project-dir .",
-        "cwd": "{projectRoot}"
-      }
-    },
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@nx/angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/openchallenges/app/browser/browser",
+        "outputPath": "dist/apps/openchallenges/app",
         "index": "apps/openchallenges/app/src/index.html",
-        "main": "apps/openchallenges/app/src/main.ts",
+        "browser": "apps/openchallenges/app/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/openchallenges/app/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
-          "apps/openchallenges/app/src/assets",
           "apps/openchallenges/app/src/config",
           "apps/openchallenges/app/src/humans.txt",
           "apps/openchallenges/app/src/robots.txt",
-          "apps/openchallenges/app/src/sitemap.xml",
           {
-            "input": "libs/shared/typescript/assets/src/assets",
+            "input": "libs/shared/typescript/assets/src",
             "glob": "**/*",
-            "output": "assets"
-          },
-          {
-            "input": "libs/openchallenges/assets/src/assets",
-            "glob": "**/*",
-            "output": "openchallenges-assets"
+            "output": "assets/shared"
           },
           {
             "input": "libs/openchallenges/assets/src",
-            "glob": "favicon.ico",
-            "output": ""
+            "glob": "**/*",
+            "output": "assets/openchallenges"
           }
         ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs"]
+        },
         "styles": [
           "apps/openchallenges/app/src/styles.scss",
           "node_modules/primeicons/primeicons.css",
           "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
           "node_modules/primeng/resources/primeng.min.css"
         ],
-        "scripts": []
+        "scripts": [],
+        "server": "apps/openchallenges/app/src/main.server.ts",
+        "prerender": false,
+        "ssr": {
+          "entry": "apps/openchallenges/app/server.ts"
+        }
       },
       "configurations": {
         "production": {
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "1mb",
-              "maximumError": "2mb"
+              "maximumWarning": "500kb",
+              "maximumError": "1.5mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "10kb"
+              "maximumError": "8kb"
             }
           ],
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@nx/angular:dev-server",
+      "options": {
+        "host": "127.0.0.1",
+        "port": 4200
+      },
       "configurations": {
         "production": {
           "buildTarget": "openchallenges-app:build:production"
@@ -96,22 +85,10 @@
           "buildTarget": "openchallenges-app:build:development"
         }
       },
-      "defaultConfiguration": "development",
-      "options": {
-        "host": "127.0.0.1",
-        "port": 4200,
-        "proxyConfig": "apps/openchallenges/app/src/proxy.conf.json"
-      }
-    },
-    "serve-detach": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker/openchallenges/serve-detach.sh openchallenges-app"
-      },
-      "dependsOn": []
+      "defaultConfiguration": "development"
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@nx/angular:extract-i18n",
       "options": {
         "buildTarget": "openchallenges-app:build"
       }
@@ -119,97 +96,27 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     },
-    "lint-fix": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "fix": true
-      }
-    },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/openchallenges/app"],
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/openchallenges/app/jest.config.ts"
       }
     },
-    "publish-image": {
-      "executor": "@nx-tools/nx-container:build",
+    "serve-static": {
+      "executor": "@nx/web:file-server",
       "options": {
-        "context": ".",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/openchallenges-app"],
-          "tags": ["type=edge,branch=main", "type=sha"]
-        },
-        "push": true
-      },
-      "dependsOn": ["build-image"]
-    },
-    "scan-image": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "trivy image ghcr.io/sage-bionetworks/openchallenges-app:local --quiet",
-        "color": true
+        "buildTarget": "openchallenges-app:build",
+        "staticFilePath": "dist/apps/openchallenges/app/browser",
+        "spa": true
       }
     },
-    "server": {
-      "dependsOn": ["build"],
-      "executor": "@angular-devkit/build-angular:server",
-      "options": {
-        "outputPath": "dist/apps/openchallenges/app/browser/server",
-        "main": "apps/openchallenges/app/server.ts",
-        "tsConfig": "apps/openchallenges/app/tsconfig.server.json",
-        "inlineStyleLanguage": "scss"
-      },
-      "configurations": {
-        "production": {
-          "outputHashing": "media"
-        },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "sourceMap": true,
-          "extractLicenses": false,
-          "vendorChunk": true
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "serve-ssr": {
-      "executor": "@angular-devkit/build-angular:ssr-dev-server",
-      "configurations": {
-        "development": {
-          "browserTarget": "openchallenges-app:build:development",
-          "serverTarget": "openchallenges-app:server:development"
-        },
-        "production": {
-          "browserTarget": "openchallenges-app:build:production",
-          "serverTarget": "openchallenges-app:server:production"
-        }
-      },
-      "defaultConfiguration": "development"
-    },
-    "prerender": {
-      "executor": "@angular-devkit/build-angular:prerender",
-      "options": {
-        "routes": ["/"]
-      },
-      "configurations": {
-        "development": {
-          "browserTarget": "openchallenges-app:build:development",
-          "serverTarget": "openchallenges-app:server:development"
-        },
-        "production": {
-          "browserTarget": "openchallenges-app:build:production",
-          "serverTarget": "openchallenges-app:server:production"
-        }
-      },
-      "defaultConfiguration": "production"
-    },
-    "build-sitemap": {
+    "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node tools/generate-sitemap.js http://localhost:4200 apps/openchallenges/app/src/sitemap.xml"
-      }
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
+      },
+      "dependsOn": []
     },
     "e2e": {
       "executor": "@nx/playwright:playwright",
@@ -219,7 +126,6 @@
       }
     }
   },
-  "tags": ["type:app", "scope:client", "language:typescript"],
   "implicitDependencies": [
     "openchallenges-styles",
     "openchallenges-themes",

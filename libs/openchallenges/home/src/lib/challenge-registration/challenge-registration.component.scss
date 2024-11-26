@@ -1,4 +1,4 @@
-@use 'libs/openchallenges/styles/src/lib/constants';
+@use 'openchallenges/styles/src/variables';
 
 // GENERAL CLASSES
 .container {
@@ -6,15 +6,19 @@
   width: 100%;
   margin: 0 auto;
 }
+
 #organizer-cta .row {
   padding: 18px 88px;
 }
+
 #organizer-cta [class^='col-'] {
   margin: 15px;
 }
+
 .section-title {
   margin-bottom: 42px;
 }
+
 .side-img {
   width: 500px;
 }
@@ -27,10 +31,12 @@
     padding: 26px 40px !important;
   }
 }
-@media screen and (max-width: constants.$lg-breakpoint) {
+
+@media screen and (max-width: variables.$lg-breakpoint) {
   .side-img {
     width: 240px;
   }
+
   #organizer-cta .btn-block {
     padding: 36px 40px !important;
     text-align: center;

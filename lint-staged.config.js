@@ -29,7 +29,7 @@ module.exports = {
     `nx affected --target=type-check --files=${filenames.join(',')}`,
   ],
 
-  '**/*[dD]ockerfile*': (filenames) => [
+  '**/Dockerfile.*': (filenames) => [
     // Lint Dockerfiles with Hadolint
     `hadolint ${filenames.join(' ')}`,
   ],
@@ -37,8 +37,8 @@ module.exports = {
   '**/*.sql': (filenames) => [
     // Format files with Prettier
     `prettier --write ${filenames.join(' ')}`,
-    // Lint files with SQLFluff
-    `poetry run sqlfluff lint ${filenames.join(' ')}`,
+    // Lint files with SQLFluff (conflicts with SQL formatter)
+    // `poetry run sqlfluff lint ${filenames.join(' ')}`,
   ],
 
   '**/*': (filenames) => [

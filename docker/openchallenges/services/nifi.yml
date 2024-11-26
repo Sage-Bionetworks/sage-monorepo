@@ -1,0 +1,20 @@
+services:
+  openchallenges-nifi:
+    image: ghcr.io/sage-bionetworks/openchallenges-nifi:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-nifi
+    restart: always
+    env_file:
+      - ../../../apps/openchallenges/nifi/.env
+    networks:
+      - openchallenges
+    ports:
+      - '8443:8443'
+    # volumes:
+    #   - ../../../apps/openchallenges/nifi/input:/home/nifi/input
+    depends_on:
+      openchallenges-nifi-registry:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 2G

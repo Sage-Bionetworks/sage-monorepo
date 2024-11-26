@@ -1,15 +1,13 @@
 @use 'sass:map';
 @use '@angular/material' as mat;
-@use 'libs/openchallenges/themes/src/fonts' as fonts;
-@use 'libs/openchallenges/themes/src/palettes' as palettes;
-@use 'libs/openchallenges/themes/src/index' as openchallenges;
-
+@use 'openchallenges/themes/src/fonts' as fonts;
+@use 'openchallenges/themes/src/palettes' as palettes;
+@use 'openchallenges/themes/src/index' as openchallenges;
 @include mat.typography-hierarchy(fonts.$lato);
-@include mat.core();
+@include mat.core;
 
 $primary: mat.m2-define-palette(palettes.$dark-blue-palette, 600);
 $accent: mat.m2-define-palette(palettes.$accent-purple-palette, 400);
-
 $theme: mat.m2-define-light-theme(
   (
     color: (
@@ -44,5 +42,5 @@ $theme: map.deep-merge(
 :root {
   --color-btn-primary: #39bde7;
   --color-btn-disabled: #ebebe4;
-  --color-btn-shadow: rgba(196, 196, 196, 1);
+  --color-btn-shadow: rgb(196 196 196 / 100%);
 }
