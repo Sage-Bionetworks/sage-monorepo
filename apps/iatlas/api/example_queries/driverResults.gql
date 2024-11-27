@@ -1,0 +1,102 @@
+query DriverResults(
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $mutationCode: [String!]
+  $tag: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minFoldChange: Float
+  $minLog10FoldChange: Float
+  $minNumWildTypes: Int
+  $minNumMutants: Int
+) {
+  driverResults(
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    mutationCode: $mutationCode
+    tag: $tag
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minFoldChange: $minFoldChange
+    minLog10FoldChange: $minLog10FoldChange
+    minNumWildTypes: $minNumWildTypes
+    minNumMutants: $minNumMutants
+  ) {
+    items {
+      pValue
+      log10PValue
+      foldChange
+      log10FoldChange
+      numWildTypes
+      numMutants
+    }
+  }
+}
+
+query DriverResults_test(
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $mutationCode: [String!]
+  $tag: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+  $minLog10PValue: Float
+  $maxLog10PValue: Float
+  $minFoldChange: Float
+  $minLog10FoldChange: Float
+  $minNumWildTypes: Int
+  $minNumMutants: Int
+) {
+  driverResults(
+    dataSet: $dataSet
+    feature: $feature
+    entrez: $entrez
+    mutationCode: $mutationCode
+    tag: $tag
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    minLog10PValue: $minLog10PValue
+    maxLog10PValue: $maxLog10PValue
+    minFoldChange: $minFoldChange
+    minLog10FoldChange: $minLog10FoldChange
+    minNumWildTypes: $minNumWildTypes
+    minNumMutants: $minNumMutants
+  ) {
+    items {
+      dataSet {
+        name
+        display
+      }
+      feature {
+        name
+        display
+      }
+      gene {
+        entrez
+        hgnc
+      }
+      mutationCode
+      mutationId
+      tag {
+        name
+        display
+      }
+      pValue
+      foldChange
+      log10PValue
+      log10FoldChange
+      numWildTypes
+      numMutants
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "tag": ["C1", "C2", "C3", "C4", "C5", "C6"], "feature": ["leukocyte_fraction"], "minNumWildTypes": 30, "minNumMutants": 30}

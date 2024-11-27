@@ -1,0 +1,11 @@
+query Related($dataSet: [String!], $related: [String!]) {
+  related(dataSet: $dataSet, related: $related) {
+    related {
+      name
+      display
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"]}

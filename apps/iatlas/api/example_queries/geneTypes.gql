@@ -1,0 +1,11 @@
+query GeneTypes($name: [String!]) {
+  geneTypes(name: $name) {
+    name
+    genes {
+      entrez
+    }
+  }
+}
+
+# Variables
+# {"name": ["B_cells"]}

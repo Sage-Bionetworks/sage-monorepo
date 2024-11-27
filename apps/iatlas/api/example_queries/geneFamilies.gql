@@ -1,0 +1,11 @@
+query geneFamilies($name: [String!]) {
+  geneFamilies(name: $name) {
+    genes {
+      entrez
+    }
+    name
+  }
+}
+
+# Variables
+# {"name": ["Receptor"]}

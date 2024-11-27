@@ -1,0 +1,80 @@
+query Nodes(
+  $paging: PagingInput
+  $distinct: Boolean
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $feature: [String!]
+  $maxScore: Float
+  $minScore: Float
+  $network: [String!]
+  $related: [String!]
+  $tag: [String!]
+) {
+  nodes(
+    paging: $paging
+    distinct: $distinct
+    dataSet: $dataSet
+    entrez: $entrez
+    feature: $feature
+    maxScore: $maxScore
+    minScore: $minScore
+    network: $network
+    related: $related
+    tag: $tag
+  ) {
+    paging {
+      type
+      pages
+      total
+      page
+      limit
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    items {
+      label
+      name
+      score
+      x
+      y
+      dataSet {
+        name
+      }
+      feature {
+        name
+      }
+      gene {
+        entrez
+      }
+      tags {
+        name
+      }
+    }
+  }
+}
+
+query Nodes_test(
+  $dataSet: [String!]
+  $related: [String!]
+  $network: [String!]
+) {
+  nodes(dataSet: $dataSet, related: $related, network: $network) {
+    items {
+      name
+      tags {
+        name
+      }
+    }
+  }
+}
+
+# Variables
+# {
+# 	"dataSet": ["TCGA"],
+# 	"related": ["Immune_Subtype"],
+# 	"network": ["extracellular_network"],
+#   "page": 2
+# }
+# {"paging": {"first": 100}, "dataSet": ["TCGA"], "related": ["Immune_Subtype"], "network": ["extracellular_network"], "entrez": [100133941]}
