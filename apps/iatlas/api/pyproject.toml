@@ -25,7 +25,6 @@ starlette = "0.13.4"
 typing-extensions = "3.7.4.2"
 werkzeug = "1.0.1"
 
-
 [tool.poetry.group.dev.dependencies]
 autopep8 = "1.5.4"
 pylint = "2.6.0"
@@ -35,6 +34,11 @@ pytest-cov = "2.10.1"
 pytest-flask-sqlalchemy = "1.0.2"
 pytest-xdist = "2.1.0"
 snakeviz = "2.1.0"
+
+[tool.pytest.ini_options]
+log_cli = true
+mocked_sessions = "api.db.session"
+testpaths = ["tests"]
 
 [build-system]
 requires = ["poetry-core"]
