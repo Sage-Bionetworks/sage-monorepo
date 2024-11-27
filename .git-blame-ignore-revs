@@ -12,7 +12,7 @@
 # - List one commit hash per line.
 # - You can include comments (lines starting with `#`) to provide context.
 # - Append to the bottom of the file (revisions should be in chronological 
-#   order from oldest to newest)
+#   order from oldest to newest).
 #
 # Example:
 # # Applied Prettier to the entire project
