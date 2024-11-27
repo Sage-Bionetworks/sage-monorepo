@@ -1,0 +1,25 @@
+# Since version 2.23 (released in August 2019), git-blame has a feature
+# to ignore or bypass certain commits.
+#
+# This file contains a list of commits that are not likely what you
+# are looking for in a blame, such as mass reformatting or renaming.
+# You can set this file as a default ignore file for blame by running
+# the following command.
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# Format:
+# - List one commit hash per line.
+# - You can include comments (lines starting with `#`) to provide context.
+# - Append to the bottom of the file (revisions should be in chronological 
+#   order from oldest to newest).
+#
+# Example:
+# # Applied Prettier to the entire project
+# 4d3c4d6a7b8c9e0f1234567890abcdef12345678
+#
+# For more information, see:
+# https://git-scm.com/docs/git-blame
+#
+# Commit hashes below:
+
