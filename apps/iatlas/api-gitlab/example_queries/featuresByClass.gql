@@ -1,0 +1,33 @@
+query FeaturesByClass(
+  $dataSet: [String!]
+  $related: [String!]
+  $tag: [String!]
+  $feature: [String!]
+  $featureClass: [String!]
+  $sample: [String!]
+  $minValue: Float
+  $maxValue: Float
+) {
+  featuresByClass(
+    dataSet: $dataSet
+    related: $related
+    tag: $tag
+    feature: $feature
+    featureClass: $featureClass
+    sample: $sample
+    minValue: $minValue
+    maxValue: $maxValue
+  ) {
+    class
+    features {
+      name
+      order
+      unit
+      valueMax
+      valueMin
+    }
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"], "related": ["Immune_Subtype"], "tag": ["C1"], "featureClass": ["TIL Map Characteristic"], "minValue": 0.094192693, "maxValue": 5.7561021}

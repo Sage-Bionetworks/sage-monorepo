@@ -1,0 +1,8 @@
+query Gene($entrez: Int!) {
+  gene(entrez: $entrez) {
+    hgnc
+  }
+}
+
+# Variables
+# {"entrez": 3627}

@@ -1,0 +1,51 @@
+query MutationsBySample(
+  $paging: PagingInput
+  $distinct: Boolean
+  $entrez: [Int!]
+  $mutationCode: [String!]
+  $mutationId: [Int!]
+  $mutationType: [String!]
+  $page: Int
+  $sample: [String!]
+  $status: [StatusEnum!]
+) {
+  mutationsBySample(
+    paging: $paging
+    distinct: $distinct
+    entrez: $entrez
+    mutationCode: $mutationCode
+    mutationId: $mutationId
+    mutationType: $mutationType
+    page: $page
+    sample: $sample
+    status: $status
+  ) {
+    items {
+      name
+      mutations {
+        gene {
+          entrez
+          hgnc
+        }
+        mutationCode
+        mutationType {
+          name
+          display
+        }
+        status
+      }
+    }
+    paging {
+      type
+      startCursor
+      endCursor
+      limit
+      page
+      pages
+      total
+    }
+  }
+}
+
+# Variables
+# { "entrez": [207], "sample": ["TCGA-02-0047"] }

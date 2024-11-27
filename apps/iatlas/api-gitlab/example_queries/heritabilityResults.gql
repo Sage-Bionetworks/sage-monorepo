@@ -1,0 +1,52 @@
+query HeritabilityResults(
+  $dataSet: [String!]
+  $feature: [String!]
+  $cluster: [String!]
+  $minPValue: Float
+  $maxPValue: Float
+  $paging: PagingInput
+  $distinct: Boolean
+) {
+  heritabilityResults(
+    dataSet: $dataSet
+    feature: $feature
+    cluster: $cluster
+    minPValue: $minPValue
+    maxPValue: $maxPValue
+    paging: $paging
+    distinct: $distinct
+  ){
+    items {
+      dataSet{
+        name
+        display
+      }
+      feature{
+        name
+        display
+        germline_module
+        germline_category
+      }
+      pValue
+      cluster
+      fdr
+      variance
+      se
+    }
+    paging{
+      type
+      pages
+      total
+      page
+      limit
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+    error
+  }
+}
+
+# Variables
+# {"dataSet": ["TCGA"]}

@@ -1,0 +1,16 @@
+[run]
+branch = True
+parallel = True
+omit =
+    tests/*
+    config.py
+command_line = -m pytest -n auto
+
+[report]
+precision = 2
+sort = Cover
+
+[html]
+directory = coverage
+extra_css = coverage_assets/coverage.css
+title = iAtlas API Test Coverage

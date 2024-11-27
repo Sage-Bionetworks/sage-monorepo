@@ -1,0 +1,31 @@
+query Genes(
+  $dataSet: [String!]
+  $entrez: [Int!]
+  $geneType: [String!]
+  $maxRnaSeqExpr: Float
+  $minRnaSeqExpr: Float
+  $related: [String!]
+  $sample: [String!]
+  $tag: [String!]
+) {
+  genes(
+    dataSet: $dataSet
+    entrez: $entrez
+    geneType: $geneType
+    maxRnaSeqExpr: $maxRnaSeqExpr
+    minRnaSeqExpr: $minRnaSeqExpr
+    related: $related
+    sample: $sample
+    tag: $tag
+  ) {
+    entrez
+    publications {
+      pubmedId
+    }
+    samples
+    rnaSeqExpr
+  }
+}
+
+# Variables
+# {"entrez": [3627, 383, 941, 958], "geneType": ["immunomodulator"], "sample": ["DO219585"]}
