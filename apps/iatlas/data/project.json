@@ -48,23 +48,7 @@
         "command": "poetry run python src/build_database.py",
         "cwd": "{projectRoot}"
       }
-    },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/iatlas/data",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/{projectName}"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
-      }
     }
   },
-  "tags": ["language:python", "package-manager:poetry"],
-  "release": {
-    "version": {
-      "generator": "@nxlv/python:release-version"
-    }
-  }
+  "tags": ["language:python", "package-manager:poetry"]
 }
