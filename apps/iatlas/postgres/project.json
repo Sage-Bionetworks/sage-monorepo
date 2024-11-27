@@ -13,18 +13,7 @@
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/iatlas/serve-detach.sh iatlas-postgres"
-      }
-    },
-    "build-image": {
-      "executor": "@nx-tools/nx-container:build",
-      "options": {
-        "context": "apps/iatlas/postgres",
-        "metadata": {
-          "images": ["ghcr.io/sage-bionetworks/iatlas-postgres"],
-          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
-        },
-        "push": false
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
       }
     },
     "scan-image": {
@@ -35,6 +24,5 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend"],
-  "implicitDependencies": []
+  "tags": ["type:db", "scope:backend"]
 }
