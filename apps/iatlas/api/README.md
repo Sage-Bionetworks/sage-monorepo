@@ -40,3 +40,15 @@ nx serve-detach iatlas-api
 To access the GraphQL Playground, open your browser and navigate to:
 
 `http://http://localhost:5000/graphiql`
+
+Use the query shown below to test the API or use one included in `./example_queries`.
+
+```json
+{
+  __schema {
+    queryType {
+      name
+    }
+  }
+}
+```
