@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/iatlas/api/api",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lock": {
       "executor": "nx:run-commands",
       "options": {
@@ -23,6 +30,12 @@
       "options": {
         "command": "poetry update",
         "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
       }
     }
   },

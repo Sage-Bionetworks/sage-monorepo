@@ -11,16 +11,6 @@
         "cwd": "{projectRoot}"
       }
     },
-    "build": {
-      "executor": "@nxlv/python:build",
-      "outputs": ["{projectRoot}/dist"],
-      "options": {
-        "outputPath": "{projectRoot}/dist",
-        "publish": false,
-        "lockedVersions": true,
-        "bundleLocalDependencies": true
-      }
-    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
