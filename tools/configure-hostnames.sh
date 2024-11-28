@@ -6,6 +6,7 @@
 declare -a hostnames=(
   "127.0.0.1 agora-api"
   "127.0.0.1 agora-mongo"
+  "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"
   "127.0.0.1 model-ad-mongo"
