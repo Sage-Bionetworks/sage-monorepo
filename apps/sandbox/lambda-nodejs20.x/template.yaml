@@ -25,7 +25,7 @@ Resources:
             Method: get
     Metadata:
       DockerTag: nodejs20.x-v1
-      DockerContext: ./hello-world
+      DockerContext: .
       Dockerfile: Dockerfile
 
 Outputs:
