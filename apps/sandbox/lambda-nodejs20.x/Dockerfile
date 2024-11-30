@@ -1,5 +1,6 @@
 FROM public.ecr.aws/lambda/nodejs:20
 
+# hadolint ignore=DL3045
 COPY app.mjs package*.json ./
 
 RUN npm install
