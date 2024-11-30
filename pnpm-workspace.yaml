@@ -3,7 +3,7 @@ packages:
   - 'libs/**'
   - '!apps/openchallenges/infra'
   - '!apps/openchallenges/infra/old'
-  - '!apps/sandbox/lambda-nodejs20.x/hello-world'
+  - '!apps/sandbox/lambda-nodejs20.x'
   # prevent the creation of libs/**/api-client-angular/node_modules when running `workspace-install`
   # that break the apps and tests
   - '!libs/**/api-client-angular'
