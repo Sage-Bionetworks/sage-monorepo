@@ -1,0 +1,15 @@
+{
+  "name": "sandbox-lambda-nodejs20.x",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sam build",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:javascript"]
+}
