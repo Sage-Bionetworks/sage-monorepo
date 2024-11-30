@@ -6,6 +6,12 @@
 nx build sandbox-lambda-nodejs20.x
 ```
 
+## Build the Docker image of the Lambda function
+
+```console
+nx build-image sandbox-lambda-nodejs20.x
+```
+
 # lambda-nodejs20.x
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
