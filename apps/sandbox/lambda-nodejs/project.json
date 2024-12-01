@@ -10,6 +10,12 @@
         "cwd": "{projectRoot}"
       }
     },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/sandbox/serve.sh {projectName}"
+      }
+    },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
