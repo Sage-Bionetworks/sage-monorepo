@@ -1,7 +1,6 @@
 FROM public.ecr.aws/lambda/nodejs:20
 
-# hadolint ignore=DL3045
-COPY app.mjs package*.json ./
+COPY app.mjs package*.json ${LAMBDA_TASK_ROOT}/
 
 RUN npm install
 # If you are building your code for production, instead include a package-lock.json file on this directory and use:
