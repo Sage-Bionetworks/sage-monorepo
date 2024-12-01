@@ -12,6 +12,22 @@ nx build sandbox-lambda-nodejs
 nx build-image sandbox-lambda-nodejs
 ```
 
+## Start the Lambda function locally with Docker Compose
+
+Starts the Lambda function in the foreground, allowing you to view logs and interact with it
+directly.
+
+```console
+nx serve sandbox-lambda-nodejs
+```
+
+Starts the Lambda function in detached mode, running it in the background. This is useful if you
+want to continue using the terminal for other tasks while the function runs.
+
+```console
+nx serve-detach sandbox-lambda-nodejs
+```
+
 # lambda-nodejs
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
