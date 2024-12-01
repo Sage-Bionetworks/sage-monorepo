@@ -1,0 +1,9 @@
+services:
+  sandbox-lambda-nodejs:
+    image: ghcr.io/sage-bionetworks/sandbox-lambda-nodejs:${SANDBOX_VERSION:-local}
+    container_name: sandbox-lambda-nodejs
+    restart: always
+    networks:
+      - sandbox
+    ports:
+      - '9000:8080'

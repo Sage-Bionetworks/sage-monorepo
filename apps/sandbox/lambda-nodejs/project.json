@@ -9,6 +9,12 @@
         "command": "sam build",
         "cwd": "{projectRoot}"
       }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/sandbox/serve-detach.sh {projectName}"
+      }
     }
   },
   "tags": ["language:javascript"]
