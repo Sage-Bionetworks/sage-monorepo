@@ -28,6 +28,22 @@ want to continue using the terminal for other tasks while the function runs.
 nx serve-detach sandbox-lambda-nodejs
 ```
 
+## Invoke the Lambda function locally
+
+To invoke the Lambda function after starting it locally, use the following command:
+
+```console
+nx run sandbox-lambda-nodejs:invoke --event <path-to-json-file>
+```
+
+Replace `<path-to-json-file>` with the path to your JSON file containing the event payload relative
+to the location of the project folder. For example, if your event payload is stored in a file
+located at `events/event.json` relative to the project folder:
+
+```console
+nx run sandbox-lambda-nodejs:invoke --event events/event.json
+```
+
 # lambda-nodejs
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
