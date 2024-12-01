@@ -1,5 +1,5 @@
 {
-  "name": "sandbox-lambda-nodejs20.x",
+  "name": "sandbox-lambda-nodejs",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "targets": {

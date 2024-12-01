@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "sandbox-lambda-nodejs20.x"
+stack_name = "sandbox-lambda-nodejs"
 
 [default.build.parameters]
 parallel = true

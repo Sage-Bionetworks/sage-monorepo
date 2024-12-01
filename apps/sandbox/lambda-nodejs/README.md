@@ -1,18 +1,18 @@
-# Sandbox Lambda Node.js 20.x
+# Sandbox Lambda Node.js
 
 ## Build the project
 
 ```console
-nx build sandbox-lambda-nodejs20.x
+nx build sandbox-lambda-nodejs
 ```
 
 ## Build the Docker image of the Lambda function
 
 ```console
-nx build-image sandbox-lambda-nodejs20.x
+nx build-image sandbox-lambda-nodejs
 ```
 
-# lambda-nodejs20.x
+# lambda-nodejs
 
 This project contains source code and supporting files for a serverless application that you can deploy with the SAM CLI. It includes the following files and folders.
 
@@ -58,7 +58,7 @@ You can find your API Gateway Endpoint URL in the output values displayed after 
 Build your application with the `sam build` command.
 
 ```bash
-lambda-nodejs20.x$ sam build
+lambda-nodejs$ sam build
 ```
 
 The SAM CLI builds a docker image from a Dockerfile and then installs dependencies defined in `hello-world/package.json` inside the docker image. The processed template file is saved in the `.aws-sam/build` folder.
@@ -70,14 +70,14 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-lambda-nodejs20.x$ sam local invoke HelloWorldFunction --event events/event.json
+lambda-nodejs$ sam local invoke HelloWorldFunction --event events/event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-lambda-nodejs20.x$ sam local start-api
-lambda-nodejs20.x$ curl http://localhost:3000/
+lambda-nodejs$ sam local start-api
+lambda-nodejs$ curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -102,7 +102,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-lambda-nodejs20.x$ sam logs -n HelloWorldFunction --stack-name lambda-nodejs20.x --tail
+lambda-nodejs$ sam logs -n HelloWorldFunction --stack-name lambda-nodejs --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -112,7 +112,7 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `hello-world/tests` folder in this project. Use NPM to install the [Mocha test framework](https://mochajs.org/) and run unit tests from your local machine.
 
 ```bash
-lambda-nodejs20.x$ cd hello-world
+lambda-nodejs$ cd hello-world
 hello-world$ npm install
 hello-world$ npm run test
 ```
@@ -122,7 +122,7 @@ hello-world$ npm run test
 To delete the sample application that you created, use the AWS CLI. Assuming you used your project name for the stack name, you can run the following:
 
 ```bash
-sam delete --stack-name lambda-nodejs20.x
+sam delete --stack-name lambda-nodejs
 ```
 
 ## Resources

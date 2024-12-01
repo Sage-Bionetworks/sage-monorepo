@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
-  lambda-nodejs20.x
+  lambda-nodejs
 
-  Sample SAM Template for lambda-nodejs20.x
+  Sample SAM Template for lambda-nodejs
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
