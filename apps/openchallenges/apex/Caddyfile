@@ -1,0 +1,31 @@
+{
+  debug
+}
+
+:80 {
+  handle_path /api-docs* {
+    reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
+  }
+
+  handle_path /api* {
+    reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
+  }
+
+  handle_path /health {
+    respond `{"status":"healthy"}` 200
+    header Content-Type application/json
+  }
+
+  handle_path /img* {
+    reverse_proxy {env.THUMBOR_HOST}:{env.THUMBOR_PORT}
+  }
+
+  handle_path /zipkin* {
+    rewrite * /zipkin{uri}
+    reverse_proxy {env.ZIPKIN_HOST}:{env.ZIPKIN_PORT}
+  }
+
+  handle {
+    reverse_proxy {env.APP_HOST}:{env.APP_PORT}
+  }
+}
