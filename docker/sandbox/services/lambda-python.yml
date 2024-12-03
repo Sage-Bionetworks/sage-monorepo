@@ -1,0 +1,9 @@
+services:
+  sandbox-lambda-python:
+    image: ghcr.io/sage-bionetworks/sandbox-lambda-python:${SANDBOX_VERSION:-local}
+    container_name: sandbox-lambda-python
+    restart: always
+    networks:
+      - sandbox
+    ports:
+      - '9000:8080'

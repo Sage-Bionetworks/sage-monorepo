@@ -1,5 +1,5 @@
 {
-  "name": "sandbox-lambda-nodejs",
+  "name": "sandbox-lambda-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "targets": {
@@ -30,5 +30,5 @@
       }
     }
   },
-  "tags": ["language:javascript"]
+  "tags": ["language:python"]
 }
