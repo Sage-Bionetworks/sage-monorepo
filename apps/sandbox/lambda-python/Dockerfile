@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.13
 
-COPY app.py requirements.txt ./
+COPY hello_world/app.py requirements.txt ./
 
 RUN python3.13 -m pip install -r requirements.txt -t .
 
