@@ -1,0 +1,34 @@
+{
+  "name": "sandbox-lambda-nodejs",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sam build",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/sandbox/serve.sh {projectName}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/sandbox/serve-detach.sh {projectName}"
+      }
+    },
+    "invoke": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "curl -X POST 'http://localhost:9000/2015-03-31/functions/function/invocations' --data @{args.event}",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["language:javascript"]
+}
