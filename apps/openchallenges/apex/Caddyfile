@@ -12,7 +12,7 @@
   }
 
   handle_path /health {
-    respond `{"status":"healthy","message":"OK"}` 200
+    respond `{"status":"healthy"}` 200
     header Content-Type application/json
   }
 
