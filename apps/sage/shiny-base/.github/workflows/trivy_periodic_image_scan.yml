@@ -15,11 +15,17 @@ jobs:
   lower-case:
     runs-on: ubuntu-latest
     steps:
+      - name: latest_tag
+        id: latest_tag
+        uses: 32teeth/action-github-tag@v1
+        with:
+          # Return only the tag number (e.g., v1.0.0 -> 1.0.0)
+          numbers_only: true
       - name: Ensure image name is lower case
         id: image_name
         uses: vishalmamidi/lowercase-action@v1
         with:
-          string: ghcr.io/${{ github.repository }}:main # if rebuilding for a new tag does not also rebuild 'main', then change this to scan the latest tag
+          string: ghcr.io/${{ github.repository }}:${{steps.latest_tag.outputs.tag}}
     outputs:
       lowercase: ${{ steps.image_name.outputs.lowercase }}
 
