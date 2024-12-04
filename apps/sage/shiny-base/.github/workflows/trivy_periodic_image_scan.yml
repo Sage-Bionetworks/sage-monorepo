@@ -17,7 +17,7 @@ jobs:
     steps:
       - name: latest_tag
         id: latest_tag
-        uses: 32teeth/action-github-tag@v1
+        uses: 32teeth/action-github-tag@v1.0.7
         with:
           # Return only the tag number (e.g., v1.0.0 -> 1.0.0)
           numbers_only: true
