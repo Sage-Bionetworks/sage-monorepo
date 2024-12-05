@@ -1,9 +1,16 @@
 {
-  "name": "iatlas-data",
+  "name": "iatlas-api",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/iatlas/data/src",
+  "sourceRoot": "apps/iatlas/api/api",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "lock": {
       "executor": "nx:run-commands",
       "options": {
@@ -25,18 +32,10 @@
         "cwd": "{projectRoot}"
       }
     },
-    "lint": {
-      "executor": "@nxlv/python:flake8",
-      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
-      "options": {
-        "outputFile": "reports/{projectRoot}/pylint.txt"
-      }
-    },
-    "serve": {
+    "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run python src/build_database.py",
-        "cwd": "{projectRoot}"
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
       }
     }
   },

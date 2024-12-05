@@ -1,0 +1,23 @@
+services:
+  iatlas-api:
+    image: ghcr.io/sage-bionetworks/iatlas-api:${IATLAS_VERSION:-local}
+    container_name: iatlas-api
+    restart: always
+    env_file:
+      - ../../../apps/iatlas/api/.env
+    networks:
+      - iatlas
+    ports:
+      - '5000:5000'
+      - '8020:8020' # SnakeViz
+    depends_on:
+      iatlas-postgres:
+        condition: service_healthy
+    logging:
+      options:
+        max-size: '10m'
+        max-file: '3'
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 1G
