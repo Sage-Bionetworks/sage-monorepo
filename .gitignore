@@ -129,3 +129,6 @@ target/
 .ipynb_checkpoints
 
 vite.config.*.timestamp*
+
+# AWS SAM
+.aws-sam
