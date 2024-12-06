@@ -12,7 +12,7 @@ on:
     - cron: "0 0 * * *"
 
 jobs:
-  lower-case:
+  get-image-reference:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -26,6 +26,7 @@ jobs:
           branch: main
           skipInvalidTags: true
           noNewCommitBehavior: current
+          noVersionBumpBehavior: current
           prefix: "v"
 
       - name: Ensure image name is lower case
