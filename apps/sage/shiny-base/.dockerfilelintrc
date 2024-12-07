@@ -1,8 +1,0 @@
----
-# https://github.com/replicatedhq/dockerfilelint
-rules:
-  apt-get-upgrade: off
-  apt-get-update_require_install: off
-  apt-get_recommends: off
-  apt-get_missing_rm: off
-  sudo_usage: off
