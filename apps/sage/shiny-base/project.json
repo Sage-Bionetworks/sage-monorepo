@@ -3,12 +3,6 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "targets": {
-    "serve-detach": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "docker/sage/serve-detach.sh {project-name}"
-      }
-    },
     "scan-image": {
       "executor": "nx:run-commands",
       "options": {
