@@ -1,0 +1,60 @@
+---
+#
+# This workflow scans the published container images
+# for new vulnerabilities daily, publishing findings.
+# Findings will be associated with the 'main' branch
+# of the repo' in the GitHub Security tab.
+#
+name: Trivy Periodic Image Scan
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+
+jobs:
+  get-image-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Get Version
+        id: semver
+        uses: ietf-tools/semver-action@v1
+        with:
+          token: ${{ github.token }}
+          branch: main
+          skipInvalidTags: true
+          noNewCommitBehavior: current
+          noVersionBumpBehavior: current
+          prefix: "v"
+
+      - name: Ensure image name is lower case
+        id: image_name
+        uses: vishalmamidi/lowercase-action@v1
+        with:
+          string: ghcr.io/${{ github.repository }}:${{steps.semver.outputs.current}}
+    outputs:
+      lowercase: ${{ steps.image_name.outputs.lowercase }}
+
+  periodic-scan:
+    needs: get-image-reference
+    uses: "./.github/workflows/trivy.yml"
+    with:
+      SOURCE_TYPE: image
+      IMAGE_NAME: ${{ needs.get-image-reference.outputs.lowercase }}
+
+  # If scan failed, rebuild the image
+  update-image:
+    needs: periodic-scan
+    runs-on: ubuntu-latest
+    if: ${{!cancelled() && needs.periodic-scan.outputs.trivy_conclusion == 'failure' }}
+    # tag the repo to trigger a new build
+    steps:
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+...
