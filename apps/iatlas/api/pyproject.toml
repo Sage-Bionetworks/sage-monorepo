@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "iatlas-api"
+version = "0.1.0"
+description = ""
+authors = [
+  "Andrew Lamb <andrew.lamb@sagebionetworks.org>",
+  "Jon Ryser <jon.ryser@genui.com>",
+  "Thomas Schaffter <thomas.schaffter@sagebionetworks.org>"
+]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.8.20"
+ariadne = "0.13.0"
+click = "7.1.2"
+flask = "1.1.2"
+flask-sqlalchemy = "2.4.3"
+graphql-core = "3.1.0"
+itsdangerous = "1.1.0"
+jinja2 = "2.11.2"
+markupsafe = "1.1.1"
+psycopg2-binary = "2.8.5"
+sqlalchemy = "1.3.17"
+starlette = "0.13.4"
+typing-extensions = "3.7.4.2"
+werkzeug = "1.0.1"
+
+[tool.poetry.group.dev.dependencies]
+autopep8 = "1.5.4"
+pylint = "2.6.0"
+pylint-flask-sqlalchemy = "0.2.0"
+pytest = "6.1.2"
+pytest-cov = "2.10.1"
+pytest-flask-sqlalchemy = "1.0.2"
+pytest-xdist = "2.1.0"
+snakeviz = "2.1.0"
+
+[tool.poetry.group.prod.dependencies]
+uWSGI = "2.0.19.1"
+
+[tool.pytest.ini_options]
+log_cli = true
+mocked_sessions = "api.db.session"
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
