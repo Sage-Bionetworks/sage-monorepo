@@ -15,7 +15,7 @@
         "parallel": false
       }
     },
-    "build-image-dev": {
+    "build-image": {
       "executor": "@nx-tools/nx-container:build",
       "options": {
         "context": "apps/iatlas/app",
