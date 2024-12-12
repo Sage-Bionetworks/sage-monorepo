@@ -6,63 +6,14 @@ services:
     environment:
       - node.name=openchallenges-elasticsearch
       - cluster.name=openchallenges-elasticsearch
-      - discovery.seed_hosts=openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
-      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
+      - discovery.seed_hosts=
+      - cluster.initial_master_nodes=openchallenges-elasticsearch
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
     networks:
       - openchallenges
     ports:
       - '9200:9200'
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-    depends_on:
-      openchallenges-elasticsearch-node-2:
-        condition: service_healthy
-      openchallenges-elasticsearch-node-3:
-        condition: service_healthy
-
-  openchallenges-elasticsearch-node-2:
-    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
-    container_name: openchallenges-elasticsearch-node-2
-    restart: always
-    environment:
-      - node.name=openchallenges-elasticsearch-node-2
-      - cluster.name=openchallenges-elasticsearch
-      - discovery.seed_hosts=openchallenges-elasticsearch,openchallenges-elasticsearch-node-3
-      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
-      - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
-    networks:
-      - openchallenges
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    deploy:
-      resources:
-        limits:
-          memory: 2G
-
-  openchallenges-elasticsearch-node-3:
-    image: ghcr.io/sage-bionetworks/openchallenges-elasticsearch:${OPENCHALLENGES_VERSION:-local}
-    container_name: openchallenges-elasticsearch-node-3
-    restart: always
-    environment:
-      - node.name=openchallenges-elasticsearch-node-3
-      - cluster.name=openchallenges-elasticsearch
-      - discovery.seed_hosts=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2
-      - cluster.initial_master_nodes=openchallenges-elasticsearch,openchallenges-elasticsearch-node-2,openchallenges-elasticsearch-node-3
-      - bootstrap.memory_lock=true
-      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
-    networks:
-      - openchallenges
     ulimits:
       memlock:
         soft: -1
