@@ -5,12 +5,12 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/apex/.env
-    volumes:
-      - ../../../apps/openchallenges/apex/Caddyfile:/etc/caddy/Caddyfile
+    # volumes:
+    #   - ../../../apps/openchallenges/apex/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - openchallenges
     ports:
-      - '8000:80'
+      - '8000:8000'
     depends_on:
       openchallenges-api-docs:
         condition: service_healthy
