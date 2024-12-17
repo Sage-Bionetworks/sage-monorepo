@@ -5,8 +5,8 @@ services:
     restart: always
     env_file:
       - ../../../apps/openchallenges/apex/.env
-    # volumes:
-    #   - ../../../apps/openchallenges/apex/Caddyfile:/etc/caddy/Caddyfile
+    volumes:
+      - ../../../apps/openchallenges/apex/Caddyfile:/etc/caddy/Caddyfile
     networks:
       - openchallenges
     ports:

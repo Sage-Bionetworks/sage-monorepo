@@ -4,6 +4,7 @@
 	}
 
 	handle_path /api* {
+		rewrite * /api{uri}
 		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
 	}
 
