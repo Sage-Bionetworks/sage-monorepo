@@ -4,7 +4,6 @@
 	}
 
 	handle_path /api* {
-		// Since handle_path removes the /api prefix, we add it back here manually.
 		rewrite * /api{uri}
 		reverse_proxy {env.API_GATEWAY_HOST}:{env.API_GATEWAY_PORT}
 	}
@@ -19,9 +18,6 @@
 	}
 
 	handle_path /zipkin* {
-		// Since handle_path removes the /zipkin prefix, we add it back here manually.
-		// Note: Zipkin's root path (/) automatically redirects to /zipkin.
-		// This configuration avoids unnecessary redirection by forwarding the request directly.
 		rewrite * /zipkin{uri}
 		reverse_proxy {env.ZIPKIN_HOST}:{env.ZIPKIN_PORT}
 	}
