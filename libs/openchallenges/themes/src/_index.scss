@@ -6,6 +6,7 @@
 @use 'openchallenges/team/src/lib-theme' as openchallenges-team;
 @use 'openchallenges/challenge-search/src/lib-theme' as challenge-search;
 @use 'openchallenges/not-found/src/lib-theme' as not-found;
+@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
 
 @mixin theme($theme) {
   @include openchallenges-challenge.theme($theme);
