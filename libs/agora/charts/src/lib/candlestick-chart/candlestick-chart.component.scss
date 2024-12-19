@@ -1,0 +1,58 @@
+.chart-container {
+  height: 450px;
+}
+
+@mixin tooltip() {
+  position: absolute;
+  padding: 14px;
+  text-align: center;
+  line-height: normal;
+  border: 0;
+  box-shadow: 0 0 4px #c7c5c5;
+}
+
+candlestick-chart {
+  display: block;
+  margin-top: 60px;
+
+  .rc .cc {
+    svg {
+      g.axis {
+        fill: none;
+      }
+    }
+  }
+}
+
+.rna-seq-candlestick .rc-empty-plot-content {
+  height: 450px;
+  position: relative;
+  display: block;
+  background: rgb(245 245 245 / 50%);
+}
+
+.candlestick-plot-xaxis-tooltip {
+  background: #fff;
+  border-radius: 2px;
+  color: #000;
+
+  @include tooltip;
+}
+
+.candlestick-plot-tooltip {
+  background: #2f8e94;
+  border-radius: 8px;
+  color: #fff;
+  pointer-events: none;
+
+  @include tooltip;
+}
+
+@media (min-width >= 576px) {
+  candlestick-chart {
+    .rc {
+      flex: 0 0 100%;
+      max-width: 100%;
+    }
+  }
+}

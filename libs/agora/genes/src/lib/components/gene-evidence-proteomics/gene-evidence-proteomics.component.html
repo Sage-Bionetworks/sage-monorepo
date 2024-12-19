@@ -1,0 +1,177 @@
+@if (_gene) {
+  <div class="section">
+    <div class="section-inner pb-0">
+      <div class="container-sm">
+        <div>
+          <h2>Proteomics</h2>
+          <p>
+            Proteomic analyses of post-mortem brains show whether protein products of
+            {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} are differentially expressed between AD
+            cases and controls. Each box plot depicts how the differential expression of the
+            protein(s) of interest (purple dot) compares with expression of other proteins in a
+            given brain region. Summary statistics for each tissue can be viewed by hovering over
+            the purple dots.
+          </p>
+          <agora-modal-link
+            text="Data and Methods for this study"
+            header="About the Proteomics Analysis"
+            wikiId="618278"
+          >
+          </agora-modal-link>
+        </div>
+        <hr class="separator separator-md" />
+      </div>
+    </div>
+  </div>
+
+  <!--- SRM START -->
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h3>
+          Targeted SRM Differential Protein Expression
+          <agora-download-dom-image
+            [target]="srmChart"
+            [filename]="_gene.ensembl_gene_id + '_SRM'"
+          ></agora-download-dom-image>
+        </h3>
+        <p>
+          Selected Reaction Monitoring (SRM) data was generated from the DLPFC region of post-mortem
+          brains of over 1000 individuals from multiple human cohort studies.
+        </p>
+        <p class="mb-0">
+          Note that only a single SRM result is available for a given gene, as the probes used for
+          this experiment were designed to match multiple protein products derived from each
+          targeted gene.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <div #srmChart>
+          <agora-box-plot-chart
+            xAxisLabel="Brain tissue"
+            [yAxisMin]="SRMRange?.Min"
+            [yAxisMax]="SRMRange?.Max"
+            [data]="SRMData"
+          ></agora-box-plot-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--- SRM END -->
+
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <div class="mb-lg">
+          <h3>Genome-wide Differential Protein Expression</h3>
+          <p>
+            Select a protein from the dropdown menu to see whether it is differentially expressed
+            between AD cases and controls.
+          </p>
+          <agora-gene-protein-selector
+            [options]="uniProtIds"
+            (onChange)="onProteinChange($event)"
+          ></agora-gene-protein-selector>
+        </div>
+
+        <div>
+          <p>
+            The assay-specific box plots below depict how the differential expression of the
+            selected protein of interest (purple dot) compares with expression of other proteins in
+            each brain region that was assayed. Assay-specific summary statistics for each brain
+            region can be viewed by hovering over the purple dot.
+          </p>
+          <p class="mb-0">
+            Multiple proteins may map to a single gene. Results from both TMT and LFQ assays are
+            provided, however results for some proteins may be available for only one of the assays.
+          </p>
+          <hr class="separator separator-md" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--- TMT START -->
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h3>
+          TMT Differential Protein Expression
+          <agora-download-dom-image
+            [target]="tmtChart"
+            [filename]="_gene.ensembl_gene_id + '_TMT'"
+          ></agora-download-dom-image>
+        </h3>
+        <p>
+          Tandem mass tagged (TMT) data was generated from the DLPFC region of post-mortem brains of
+          400 individuals from the ROSMAP cohort.
+        </p>
+        <p class="mb-0">
+          Note that proteins may not be detected in this brain region; for these proteins, the plot
+          will show no data.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <div #tmtChart>
+          <agora-box-plot-chart
+            xAxisLabel="Brain tissue"
+            [yAxisMin]="TMTRange?.Min"
+            [yAxisMax]="TMTRange?.Max"
+            [data]="TMTData"
+          ></agora-box-plot-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--- TMT END -->
+
+  <!--- LFQ START -->
+  <div class="section">
+    <div class="section-inner pt-0">
+      <div class="container-sm">
+        <h3>
+          LFQ Differential Protein Expression
+          <agora-download-dom-image
+            [target]="lfqChart"
+            [filename]="_gene.ensembl_gene_id + '_LFQ'"
+          ></agora-download-dom-image>
+        </h3>
+        <p>
+          Liquid-free quantification (LFQ) data was generated from post-mortem brains of more than
+          500 individuals. Samples were taken from four human cohort studies, representing four
+          different brain regions.
+        </p>
+        <p class="mb-0">
+          Note that proteins may not be detected in all four brain regions; for these proteins, the
+          plot will show fewer than four brain regions.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <div #lfqChart>
+          <agora-box-plot-chart
+            xAxisLabel="Brain tissue"
+            [yAxisMin]="LFQRange?.Min"
+            [yAxisMax]="LFQRange?.Max"
+            [data]="LFQData"
+          ></agora-box-plot-chart>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--- LFQ END -->
+}

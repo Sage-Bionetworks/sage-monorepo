@@ -1,0 +1,68 @@
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.gct-pinned-genes-conversion-modal {
+  max-height: 95% !important;
+  color: var(--color-text);
+
+  .p-dialog-title:not(:empty) {
+    padding: 40px 40px 20px;
+    margin-bottom: -40px;
+    text-align: left;
+    font-size: var(--font-size-xl);
+    color: var(--color-text);
+    font-weight: 700;
+  }
+
+  .p-dialog-header-icons {
+    top: 45px;
+    right: 40px;
+  }
+
+  .p-dialog-content {
+    padding: 40px 40px 0;
+    min-height: 120px;
+  }
+
+  .p-dialog-footer {
+    padding: 30px 40px;
+    width: 100%;
+
+    > div:first-child {
+      flex-grow: 1;
+    }
+
+    > div:last-child {
+      display: flex;
+      justify-content: end;
+    }
+
+    button {
+      display: flex;
+      height: 36px;
+      border-radius: 15px;
+      padding: 0 20px;
+      border: 1px solid var(--color-action-primary);
+      background-color: var(--color-action-primary);
+      align-items: center;
+      justify-content: center;
+      font-size: var(--font-size-xs);
+      color: #fff;
+      cursor: pointer;
+      transition: var(--transition-duration);
+
+      &:not(:last-child) {
+        margin-right: 12px;
+      }
+
+      &.gct-pinned-genes-conversion-cancel {
+        background-color: #fff;
+        color: var(--color-action-primary);
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}

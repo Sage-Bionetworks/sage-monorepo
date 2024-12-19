@@ -1,0 +1,208 @@
+/* stylelint-disable plugin/no-unsupported-browser-features */
+/* stylelint-disable no-descending-specificity */
+
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.gene-details-nav {
+  position: relative;
+  height: var(--gene-details-nav-height);
+
+  a {
+    position: relative;
+    display: flex;
+    height: 100%;
+    padding: 8px 0;
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-text-secondary);
+    transition: var(--transition-duration);
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      display: block;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: var(--color-action-primary);
+      border-radius: 2px;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition-duration);
+    }
+
+    &:not(.disabled) {
+      &:hover {
+        color: var(--color-action-primary);
+      }
+    }
+
+    &.disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+
+  ul {
+    @include reset-ul;
+
+    display: flex;
+    width: 100%;
+    height: var(--gene-details-nav-height);
+    align-items: center;
+    z-index: 50;
+
+    > li.active {
+      > a {
+        color: var(--color-action-primary);
+
+        &::after {
+          opacity: 1;
+          visibility: visible;
+        }
+      }
+    }
+  }
+
+  li {
+    padding: 0 30px;
+  }
+
+  .gene-details-nav-inner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #fff;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+  }
+
+  .gene-details-subnav {
+    position: absolute;
+    height: var(--gene-details-nav-height);
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: var(--gene-details-subnav-offset);
+    background-color: var(--color-gray-100);
+    box-shadow: 0 4px 4px rgb(0 0 0 / 25%);
+    opacity: 0;
+    visibility: hidden;
+
+    a {
+      &::after {
+        display: none;
+      }
+    }
+  }
+
+  .gene-details-nav-scroll {
+    @include reset-button;
+
+    display: none;
+    position: absolute;
+    width: 50px;
+    top: 0;
+    height: var(--gene-details-nav-height);
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--color-gray-600);
+    background-color: #fff;
+    z-index: 100;
+    cursor: pointer;
+
+    &.gene-details-nav-scroll-prev {
+      left: 0;
+    }
+
+    &.gene-details-nav-scroll-next {
+      right: 0;
+    }
+
+    &:hover {
+      color: var(--color-action-primary);
+    }
+  }
+
+  ul:not(.gene-details-subnav) > li.active {
+    .gene-details-subnav {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+
+  &.sticky {
+    .gene-details-nav-inner {
+      position: fixed;
+    }
+  }
+
+  &.has-active-child {
+    height: calc(var(--gene-details-nav-height) * 2 + var(--gene-details-subnav-offset));
+  }
+}
+
+.gene-details-body {
+  position: relative;
+  overflow: hidden;
+}
+
+.gene-details-panel {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  z-index: 100;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    position: relative;
+    top: auto;
+    z-index: 200;
+  }
+}
+
+.gene-details-nav:not(.scrollable) {
+  ul {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+  }
+}
+
+.gene-details-nav.scrollable {
+  --gene-details-nav-height: 60px;
+
+  user-select: none;
+
+  .gene-details-nav-inner,
+  .gene-details-subnav {
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+
+  .gene-details-nav-container {
+    overflow: hidden;
+  }
+
+  .gene-details-nav-scroll {
+    display: flex;
+  }
+
+  li {
+    padding: 0 20px;
+
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+}

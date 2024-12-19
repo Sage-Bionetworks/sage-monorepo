@@ -28,21 +28,13 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
-import { SvgIconComponent } from '@sagebionetworks/agora/ui';
 import { GeneIconComponent } from './assets/gene-icon/gene-icon.component';
 import { CloseIconComponent } from './assets/close-icon/close-icon.component';
 
 @Component({
   selector: 'agora-gene-search',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    FontAwesomeModule,
-    SvgIconComponent,
-    GeneIconComponent,
-    CloseIconComponent,
-  ],
+  imports: [CommonModule, FormsModule, FontAwesomeModule, GeneIconComponent, CloseIconComponent],
   templateUrl: './gene-search.component.html',
   styleUrls: ['./gene-search.component.scss'],
 })

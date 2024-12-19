@@ -1,0 +1,25 @@
+<a class="overlay-link link">
+  <span class="overlay-link-inner" (click)="toggle($event)">
+    @if (icon) {
+      <span class="overlay-link-icon">
+        <agora-svg-icon
+          imagePath="/agora-assets/icons/info-circle.svg"
+          altText="info"
+        ></agora-svg-icon>
+      </span>
+    }
+    @if (text) {
+      <div class="overlay-link-text">
+        {{ text }}
+      </div>
+    }
+  </span>
+  <p-overlayPanel #panel styleClass="overlay-panel">
+    <ng-template pTemplate>
+      @if (wikiId && hasActived) {
+        <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
+      }
+      <ng-content></ng-content>
+    </ng-template>
+  </p-overlayPanel>
+</a>

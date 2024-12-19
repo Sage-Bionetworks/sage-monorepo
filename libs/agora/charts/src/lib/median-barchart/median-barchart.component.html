@@ -1,0 +1,9 @@
+<div id="median-barchart" #medianBarChartContainer class="chart-d3">
+  <div id="tooltip" class="arrow-above tooltip-arrow" #tooltip (mouseout)="hideTooltip()"></div>
+  <svg #chart></svg>
+  @if (data.length === 0) {
+    <div class="chart-no-data">
+      <div class="chart-no-data-text">No data is currently available.</div>
+    </div>
+  }
+</div>

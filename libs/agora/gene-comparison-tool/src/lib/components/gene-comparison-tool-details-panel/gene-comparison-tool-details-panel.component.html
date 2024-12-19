@@ -1,0 +1,89 @@
+<ng-template #panelTemplate let-data>
+  @if (data) {
+    @if (data.label) {
+      <div class="gct-details-panel-label">
+        {{ data.label }}
+      </div>
+    }
+
+    @if (data.heading) {
+      <div class="gct-details-panel-heading">
+        {{ data.heading }}
+      </div>
+    }
+
+    @if (data.subHeading) {
+      <div class="gct-details-panel-sub-heading">
+        {{ data.subHeading }}
+      </div>
+    }
+
+    <div class="gct-details-panel-data">
+      <div>
+        <div>{{ data.valueLabel }}</div>
+        <div>P-Value</div>
+      </div>
+      <div>
+        <div>
+          {{ getSignificantFigures(data.value, 3) }}
+        </div>
+        <div>
+          {{ getSignificantFigures(data.pValue, 3) }}
+        </div>
+      </div>
+    </div>
+
+    <div class="gct-details-panel-chart">
+      <div>
+        <div>{{ data.min }}</div>
+      </div>
+      <div>
+        <div class="gct-details-panel-chart-axis">
+          <div class="gct-details-panel-chart-interval" [style]="getIntervalPositions(data)">
+            <div>
+              <div class="gct-details-panel-chart-interval-left">
+                {{ getSignificantFigures(data.intervalMin, 3) }}
+              </div>
+            </div>
+            <div>
+              <div class="gct-details-panel-chart-interval-right">
+                {{ getSignificantFigures(data.intervalMax, 3) }}
+              </div>
+            </div>
+          </div>
+          <div class="gct-details-panel-chart-value" [style]="getValuePosition(data)">
+            <div>
+              {{ getSignificantFigures(data.value, 3) }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div>{{ data.max }}</div>
+      </div>
+    </div>
+
+    @if (data.footer) {
+      <div class="gct-details-panel-footer">
+        {{ data.footer }}
+      </div>
+    }
+
+    <div class="gct-details-panel-links">
+      @if (data.allTissueLink) {
+        <div>
+          <a (click)="navigateToConsistencyOfChange()">View all brain regions</a>
+        </div>
+      }
+      <div>
+        <a (click)="showLegend()">Show Legend</a>
+      </div>
+    </div>
+  }
+</ng-template>
+<p-overlayPanel class="gct-details-panel" appendTo="">
+  <ng-container *ngTemplateOutlet="panelTemplate; context: { $implicit: _data[0] }"></ng-container>
+</p-overlayPanel>
+<p-overlayPanel class="gct-details-panel" appendTo="">
+  <ng-container *ngTemplateOutlet="panelTemplate; context: { $implicit: _data[1] }"></ng-container>
+</p-overlayPanel>

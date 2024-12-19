@@ -19,7 +19,12 @@
     "paths": {
       "@sagebionetworks/agora/about": ["libs/agora/about/src/index.ts"],
       "@sagebionetworks/agora/api-client-angular": ["libs/agora/api-client-angular/src/index.ts"],
+      "@sagebionetworks/agora/charts": ["libs/agora/charts/src/index.ts"],
       "@sagebionetworks/agora/config": ["libs/agora/config/src/index.ts"],
+      "@sagebionetworks/agora/gene-comparison-tool": [
+        "libs/agora/gene-comparison-tool/src/index.ts"
+      ],
+      "@sagebionetworks/agora/gene-details": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/genes": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],
@@ -27,10 +32,12 @@
       "@sagebionetworks/agora/nominated-targets": ["libs/agora/nominated-targets/src/index.ts"],
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
+      "@sagebionetworks/agora/shared": ["libs/agora/shared/src/index.ts"],
       "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
       "@sagebionetworks/agora/testing": ["libs/agora/testing/src/index.ts"],
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
+      "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],

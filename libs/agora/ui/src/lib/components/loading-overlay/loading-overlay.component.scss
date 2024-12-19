@@ -1,0 +1,33 @@
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.loading-overlay {
+  background-color: #fff;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-duration);
+
+  .loading-overlay-inner {
+    display: flex;
+    padding: 30px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  &.global {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    .loading-overlay-inner {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}

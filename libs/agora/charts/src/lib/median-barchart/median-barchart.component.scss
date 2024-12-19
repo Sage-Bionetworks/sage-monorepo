@@ -1,0 +1,27 @@
+#median-barchart {
+  .x-axis-label,
+  .y-axis-label {
+    font-size: var(--font-size-lg);
+    font-weight: 700;
+    color: var(--color-chart-axis-label);
+    fill: var(--color-chart-axis-label);
+  }
+
+  .y-axis .tick {
+    text {
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  .x-axis .tick {
+    text {
+      font-size: var(--font-size-md);
+      font-weight: 700;
+    }
+  }
+
+  .bar-labels {
+    font-size: var(--font-size-sm);
+    text-anchor: middle;
+  }
+}

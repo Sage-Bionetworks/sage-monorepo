@@ -1,0 +1,50 @@
+<p-dialog
+  [header]="panes.length > 0 ? panes[activePane].heading : ''"
+  [(visible)]="isActive"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '100%', maxWidth: '580px' }"
+  styleClass="gct-how-to-panel"
+  (onHide)="onHide()"
+>
+  <div class="gct-how-to-panel-panes">
+    <div
+      *ngFor="let pane of panes; index as i"
+      class="gct-how-to-panel-pane active"
+      [ngClass]="{ active: activePane === i }"
+      [innerHtml]="pane.content"
+    ></div>
+  </div>
+
+  <ng-template pTemplate="footer">
+    <div>
+      <label class="checkbox">
+        <p-checkbox [(ngModel)]="willHide" [binary]="true"></p-checkbox>
+        <span>Don't show this again</span>
+      </label>
+    </div>
+    <div>
+      @if (activePane > 0) {
+        <button class="gct-how-to-panel-previous" (click)="previous()">
+          <i class="fa-solid fa-angle-left"></i> Back
+        </button>
+      }
+      @if (activePane !== panes.length - 1) {
+        <button class="gct-how-to-panel-next" (click)="next()">
+          Next <i class="fa-solid fa-angle-right"></i>
+        </button>
+      }
+      @if (activePane === panes.length - 1) {
+        <button class="gct-how-to-panel-close" (click)="isActive = !isActive">Close</button>
+      }
+    </div>
+  </ng-template>
+
+  @if (loading) {
+    <div class="gct-how-to-panel-loading">
+      <agora-loading-icon></agora-loading-icon>
+    </div>
+  }
+</p-dialog>

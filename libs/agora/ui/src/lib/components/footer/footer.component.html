@@ -26,7 +26,7 @@
     </div>
   }
   <div class="footer-metas" *ngIf="dataVersion$ | async as dataVersion">
-    <div class="site-version">Site Version {{ getSiteVersion() }}</div>
+    <div class="site-version">Site Version {{ getSiteVersion() }}-{{ sha$ | async }}</div>
     <div class="data-version">Data Version {{ getDataVersion(dataVersion) }}</div>
   </div>
 </footer>
