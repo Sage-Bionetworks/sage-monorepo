@@ -1,0 +1,53 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { BiodomainsChartComponent } from './biodomains-chart.component';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { getRandomInt } from '@sagebionetworks/agora/shared';
+
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Biodomains Chart', () => {
+  let fixture: ComponentFixture<BiodomainsChartComponent>;
+  let component: BiodomainsChartComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [BiodomainsChartComponent],
+      imports: [RouterTestingModule],
+      providers: [HelperService],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(BiodomainsChartComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should have tooltip text if there are linking terms', () => {
+    component.geneName = geneMock1.hgnc_symbol || geneMock1.ensembl_gene_id;
+    const linkingTerms = getRandomInt(1, 100);
+    const expected = 'Click to explore to GO Terms that link this biological domain to MSN';
+    expect(component.getToolTipText(linkingTerms)).toBe(expected);
+  });
+
+  it('should have tooltip text if there are no linking terms', () => {
+    component.geneName = geneMock1.hgnc_symbol || geneMock1.ensembl_gene_id;
+    const linkingTerms = 0;
+    const expected = 'No GO Terms link this biological domain to MSN';
+    expect(component.getToolTipText(linkingTerms)).toBe(expected);
+  });
+});

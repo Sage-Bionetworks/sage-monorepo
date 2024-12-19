@@ -13,3 +13,8 @@ properties:
     type: number
   max:
     type: number
+required:
+  - nodes
+  - links
+  - min
+  - max

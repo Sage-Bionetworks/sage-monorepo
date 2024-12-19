@@ -1,0 +1,15 @@
+<p-dialog
+  header="Legend"
+  [(visible)]="isActive"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '100%', maxWidth: '580px' }"
+  styleClass="gct-legend-panel"
+>
+  <img [src]="'/agora-assets/images/gct-how-to-0.svg'" />
+  <ng-template pTemplate="footer">
+    <a (click)="onHowToClick()">Visualization Overview</a>
+  </ng-template>
+</p-dialog>

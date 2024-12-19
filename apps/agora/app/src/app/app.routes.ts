@@ -28,6 +28,16 @@ export const routes: Route[] = [
     },
   },
   {
+    path: 'genes/comparison',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/gene-comparison-tool').then((routes) => routes.routes),
+    data: {
+      title: 'Gene Comparison | Visual comparison tool for AD genes',
+      description:
+        'Explore high-dimensional omics data with our visual gene comparison tool, then build, share, and download visualizations for your own custom gene lists.',
+    },
+  },
+  {
     path: 'genes/nominated-targets',
     loadChildren: () =>
       import('@sagebionetworks/agora/nominated-targets').then(
@@ -51,6 +61,25 @@ export const routes: Route[] = [
     },
   },
   {
+    path: 'genes/:id/:tab/:subtab',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+  },
+  {
+    path: 'genes/:id/:tab',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+  },
+  {
+    path: 'genes/:id',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+    data: {
+      title: 'Agora | Gene Details',
+      description: "View information and evidence about genes in Alzheimer's disease.",
+    },
+  },
+  {
     path: 'not-found',
     loadChildren: () => import('@sagebionetworks/agora/not-found').then((routes) => routes.routes),
     data: {
@@ -60,7 +89,7 @@ export const routes: Route[] = [
   },
   {
     path: 'teams',
-    loadChildren: () => import('@sagebionetworks/agora/teams').then((routes) => routes.teamsRoutes),
+    loadChildren: () => import('@sagebionetworks/agora/teams').then((routes) => routes.routes),
     data: {
       title: 'Contributing Teams',
       description:

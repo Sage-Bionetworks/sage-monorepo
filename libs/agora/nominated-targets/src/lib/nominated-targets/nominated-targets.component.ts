@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Gene, TargetNomination, GenesService } from '@sagebionetworks/agora/api-client-angular';
 import { GeneTableComponent } from '@sagebionetworks/agora/genes';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
-import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/ui';
+import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 import { ButtonModule } from 'primeng/button';
 
 @Component({

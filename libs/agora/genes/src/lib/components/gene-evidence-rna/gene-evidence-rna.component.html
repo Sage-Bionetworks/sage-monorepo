@@ -1,0 +1,205 @@
+@if (_gene) {
+  <div class="section">
+    <div class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <h2>RNA Expression</h2>
+          <p>
+            The results shown on this page are derived from a harmonized RNA-seq analysis of
+            post-mortem brains from AD cases and controls. The samples were obtained from three
+            human cohort studies across a total of nine different brain regions.
+          </p>
+          <agora-modal-link
+            text="Data and Methods for this study"
+            header="About the RNAseq Analysis"
+            wikiId="618276"
+          >
+          </agora-modal-link>
+
+          <hr class="separator separator-md" />
+
+          <h3>
+            Overall Expression of
+            {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
+            <agora-download-dom-image
+              [target]="rnaOEChart"
+              [filename]="_gene.ensembl_gene_id + '_rna_overall_expression'"
+            ></agora-download-dom-image>
+          </h3>
+          <p>
+            This plot depicts the median expression of the selected gene across brain regions, as
+            measured by RNA-seq read counts per million (CPM) reads. Meaningful expression is
+            considered to be a log2 CPM greater than log2(5), depicted by the red line in the plot.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner">
+        <div class="container-lg">
+          <div #rnaOEChart>
+            <agora-median-barchart
+              [data]="medianExpression"
+              xAxisLabel="Brain region"
+            ></agora-median-barchart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-inner pb-0">
+        <div class="container-sm">
+          <h2 class="text-default mb-sm">
+            Filter the following charts by statistical model
+            <agora-modal-link text="" header="Statistical Models" wikiId="612816">
+            </agora-modal-link>
+          </h2>
+          <agora-gene-model-selector
+            [options]="statisticalModels"
+            (onChange)="onStatisticalModelChange($event)"
+          ></agora-gene-model-selector>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-inner pt-lg">
+        <div class="container-sm">
+          <h3>
+            Differential Expression of
+            {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} Across Brain Regions
+            <agora-download-dom-image
+              [target]="rnaDEChart"
+              [filename]="_gene.ensembl_gene_id + '_rna_differential_expression'"
+            ></agora-download-dom-image>
+          </h3>
+          <p class="mb-0">
+            After selecting a statistical model, you will be able to see whether the selected gene
+            is differentially expressed between AD cases and controls. The box plot depicts how the
+            differential expression of the selected gene of interest (purple dot) compares with
+            expression of other genes in a given tissue. Summary statistics for each tissue can be
+            viewed by hovering over the purple dots. Meaningful differential expression is
+            considered to be a log2 fold change value greater than 0.263, or less than -0.263.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner">
+        <div class="container-lg">
+          <div #rnaDEChart>
+            <agora-box-plot-chart
+              xAxisLabel="Brain region"
+              [yAxisMin]="differentialExpressionYAxisMin"
+              [yAxisMax]="differentialExpressionYAxisMax"
+              [heading]="selectedStatisticalModel"
+              [data]="differentialExpressionChartData"
+            ></agora-box-plot-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="consistency-of-change" class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <h3>
+            Consistency of Change in Expression
+            <agora-download-dom-image
+              [target]="rnaCCChart"
+              [filename]="_gene.ensembl_gene_id + '_rna_consistency_of_change_in_expression'"
+            ></agora-download-dom-image>
+          </h3>
+          <p class="mb-0">
+            This forest plot indicates the estimate of the log fold change with standard errors
+            across the brain regions in the model chosen using the filter above. Genes that show
+            consistent patterns of differential expression will have similar log-fold change value
+            across brain regions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner">
+        <div class="container-lg">
+          <div #rnaCCChart>
+            <agora-row-chart
+              [data]="consistencyOfChangeChartData"
+              [heading]="selectedStatisticalModel"
+              xAxisLabel="LOG 2 FOLD CHANGE"
+            ></agora-row-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <h3>
+            Correlation of {{ _gene.hgnc_symbol || _gene.ensembl_gene_id }} with Hallmarks of AD
+            <agora-download-dom-image
+              [target]="rnaCorrChart"
+              [filename]="_gene.ensembl_gene_id + '_rna_correlation_with_hallmarks_of_AD'"
+            ></agora-download-dom-image>
+          </h3>
+          <p>
+            <agora-modal-link
+              text="View more information"
+              header="About the Association with Neuropathology and Cognition"
+              wikiId="612817"
+            >
+            </agora-modal-link>
+          </p>
+          <p class="mb-0">
+            This plot depicts the association between expression levels of the selected gene in the
+            DLPFC and three phenotypic measures of AD. An odds ratio > 1 indicates a positive
+            correlation and an odds ratio < 1 indicates a negative correlation. Statistical
+            significance and summary statistics for each phenotype can be viewed by hovering over
+            the dots.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner">
+        <div class="container-lg">
+          <div #rnaCorrChart>
+            <agora-candlestick-chart [gene]="gene" xAxisLabel="Phenotype"></agora-candlestick-chart>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <h3>Similarly Expressed Genes</h3>
+          <p>
+            The network diagram below is based on a coexpression network analysis of RNA-seq data
+            from AD cases and controls. The network analysis uses an ensemble methodology to
+            identify genes that show similar coexpression across individuals.
+          </p>
+          <p>
+            The color of the edges and nodes indicates how frequently significant coexpression was
+            identified. Each node represents a different gene and the amount of edges within the
+            network. Darker edges represent coexpression in more brain regions.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section section-gray-100">
+      <div class="section-inner p-0">
+        <div class="container-lg">
+          <agora-gene-network [gene]="gene"></agora-gene-network>
+        </div>
+      </div>
+    </div>
+  </div>
+}

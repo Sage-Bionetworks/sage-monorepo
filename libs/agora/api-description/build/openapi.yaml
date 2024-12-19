@@ -634,6 +634,10 @@ components:
           type: array
           items:
             type: string
+      required:
+        - ensembl_gene_id
+        - hgnc_symbol
+        - brain_regions
     SimilarGenesNetworkLink:
       type: object
       description: SimilarGenesNetworkLink
@@ -650,6 +654,12 @@ components:
           type: array
           items:
             type: string
+      required:
+        - source
+        - target
+        - source_hgnc_symbol
+        - target_hgnc_symbol
+        - brain_regions
     SimilarGenesNetwork:
       type: object
       description: SimilarGenesNetwork
@@ -666,6 +676,11 @@ components:
           type: number
         max:
           type: number
+      required:
+        - nodes
+        - links
+        - min
+        - max
     BioDomains:
       type: object
       description: BioDomains

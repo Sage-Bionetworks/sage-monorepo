@@ -1,0 +1,92 @@
+<div class="section">
+  <div class="section-inner">
+    <div class="container-sm">
+      <h2>
+        Evidence Supporting the Nomination of
+        {{ gene?.hgnc_symbol || gene?.ensembl_gene_id }}
+      </h2>
+      <p class="mb-0">
+        This gene has been nominated as a potential target for AD. Nominated targets are obtained
+        from several sources, including the National Institute on Aging's Accelerating Medicines
+        Partnership in Alzheimer's Disease (AMP-AD) consortium. Targets have been identified using
+        computational analyses of high-dimensional genomic, proteomic and/or metabolomic data
+        derived from human samples.
+      </p>
+
+      <hr class="separator separator-md" />
+
+      <div class="nomination-list">
+        <div *ngFor="let nomination of nominations; let i = index">
+          <div class="mb-xl">
+            <h3 class="team-name h2">
+              {{ getFullDisplayName(nomination) }}
+            </h3>
+            <p>
+              {{ nomination.team_data?.description }}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            <h3>Why was the target selected?</h3>
+            <p>
+              {{ nomination.target_choice_justification }}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            <h3>Predicted therapeutic direction</h3>
+            <p>
+              {{ nomination.predicted_therapeutic_direction }}
+            </p>
+          </div>
+
+          @if (nomination.study || nomination.data_used_to_support_target_selection) {
+            <div class="mb-xl">
+              <h3>The type of data used and analyses done to identify target</h3>
+              @if (nomination.data_used_to_support_target_selection) {
+                <p>
+                  {{ nomination.data_used_to_support_target_selection }}
+                </p>
+              }
+              @if (nomination.study) {
+                <p>Cohort study data: {{ nomination.study }}</p>
+              }
+            </div>
+          }
+
+          <div class="mb-xl">
+            <h3>Initial date of nomination</h3>
+            <p>
+              {{ nomination.initial_nomination }}
+            </p>
+          </div>
+
+          <div class="mb-xl">
+            @if (nomination.validation_study_details) {
+              <h3>Planned Experimental Validation</h3>
+              <p class="mb-xl validation-study-details">
+                {{ nomination.validation_study_details }}
+              </p>
+            }
+
+            @if (nomination.data_synapseid) {
+              <a
+                class="link"
+                href="https://adknowledgeportal.synapse.org/Explore/Studies/DetailsPage?Study={{
+                  nomination.data_synapseid
+                }}"
+                target="_blank"
+              >
+                Learn more about the target nomination process
+              </a>
+            }
+          </div>
+
+          @if (i < nominations.length - 1) {
+            <hr class="separator separator-md" />
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

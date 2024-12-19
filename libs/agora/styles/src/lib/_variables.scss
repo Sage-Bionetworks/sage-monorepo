@@ -67,11 +67,9 @@ $main-colors: (
   gray-200: #f1f3f5,
   gray-100: #fbfbfc,
 );
-
 $main-colors-hover: (
   action-primary: #406786,
 );
-
 $extra-colors: (
   heading: map.get($main-colors, 'primary'),
   text: map.get($main-colors, 'gray-900'),
@@ -87,9 +85,11 @@ $extra-colors: (
   @each $key, $color in $main-colors {
     --color-#{$key}: #{$color};
   }
+
   @each $key, $color in $main-colors-hover {
     --color-#{$key}-hover: #{$color};
   }
+
   @each $key, $color in $extra-colors {
     --color-#{$key}: #{$color};
   }
@@ -100,7 +100,6 @@ $extra-colors: (
 // -------------------------------------------------------------------------- //
 
 $font-family-primary: 'DM Sans', sans-serif;
-
 $headings: (
   h1: (
     font-size: 1.75rem /* 28px */,
@@ -133,7 +132,6 @@ $headings: (
     line-height: 1.125rem /* 18px */,
   ),
 );
-
 $font-sizes: (
   xs: (
     font-size: 0.75rem /* 12px */,
@@ -184,7 +182,6 @@ $font-sizes: (
 $container-max-width-sm: 925px;
 $container-max-width-md: 1440px;
 $container-max-width-lg: 1920px;
-
 $container-gutter-width: 30px;
 
 :root {
@@ -208,7 +205,7 @@ $transition-duration: 0.08s;
 // Header
 // -------------------------------------------------------------------------- //
 
-$header-height: 87px;
+$header-height: 86px;
 
 :root {
   --header-height: #{$header-height};
@@ -218,7 +215,7 @@ $header-height: 87px;
 // Footer
 // -------------------------------------------------------------------------- //
 
-$footer-height: 240px;
+$footer-height: 71px;
 
 :root {
   --footer-height: #{$footer-height};

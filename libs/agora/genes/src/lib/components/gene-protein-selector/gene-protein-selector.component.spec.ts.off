@@ -1,0 +1,35 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneProteinSelectorComponent } from './gene-protein-selector.component';
+
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Protein Selector', () => {
+  let fixture: ComponentFixture<GeneProteinSelectorComponent>;
+  let component: GeneProteinSelectorComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [GeneProteinSelectorComponent],
+      imports: [RouterTestingModule],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(GeneProteinSelectorComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

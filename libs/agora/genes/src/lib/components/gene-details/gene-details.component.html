@@ -1,0 +1,119 @@
+@if (gene) {
+  <div class="gene-details">
+    <agora-gene-hero [gene]="gene"></agora-gene-hero>
+    <div class="gene-details-nav" [ngClass]="{ 'has-active-child': activeParent }">
+      <div class="gene-details-nav-inner">
+        @if (navSlideIndex > 0) {
+          <button
+            class="gene-details-nav-scroll gene-details-nav-scroll-prev"
+            (click)="slideNavigation(-1)"
+          >
+            <i class="fa-solid fa-angle-left"></i>
+          </button>
+        }
+        <div class="gene-details-nav-container">
+          <ul>
+            <ng-container *ngFor="let item of panels">
+              @if (!item.disabled) {
+                <li
+                  class="gene-details-nav-item"
+                  [ngClass]="{
+                    active: activePanel === item.name || activeParent === item.name,
+                  }"
+                >
+                  <a (click)="onNavigationItemClick(item)">
+                    {{ item.label }}
+                    <span class="gene-details-nav-icon"></span>
+                  </a>
+                  @if (item.children) {
+                    <div class="gene-details-subnav">
+                      <ul>
+                        <ng-container *ngFor="let subItem of item.children">
+                          @if (!subItem.disabled) {
+                            <li
+                              class="gene-details-subnav-item"
+                              [ngClass]="{ active: activePanel === subItem.name }"
+                            >
+                              <a (click)="onNavigationItemClick(subItem)">
+                                {{ subItem.label }}
+                                <span class="gene-details-nav-icon"></span>
+                              </a>
+                            </li>
+                          }
+                        </ng-container>
+                      </ul>
+                    </div>
+                  }
+                </li>
+              }
+            </ng-container>
+          </ul>
+        </div>
+        @if (navSlideIndex < getPanelCount() - 1) {
+          <button
+            class="gene-details-nav-scroll gene-details-nav-scroll-next"
+            (click)="slideNavigation(1)"
+          >
+            <i class="fa-solid fa-angle-right"></i>
+          </button>
+        }
+      </div>
+    </div>
+
+    <div class="gene-details-body">
+      <ng-template #panelTemplate let-panel>
+        @if (!panel.disabled) {
+          <div
+            class="gene-details-panel"
+            [ngClass]="{
+              active: activePanel === panel.name,
+            }"
+          >
+            @if (panel.name === 'summary') {
+              <agora-gene-soe [gene]="gene"></agora-gene-soe>
+            }
+
+            @if (panel.name === 'rna') {
+              <agora-gene-evidence-rna [gene]="gene"></agora-gene-evidence-rna>
+            }
+
+            @if (panel.name === 'protein') {
+              <agora-gene-evidence-proteomics [gene]="gene"></agora-gene-evidence-proteomics>
+            }
+
+            @if (panel.name === 'metabolomics') {
+              <agora-gene-evidence-metabolomics [gene]="gene"></agora-gene-evidence-metabolomics>
+            }
+
+            @if (panel.name === 'resources') {
+              <agora-gene-resources [gene]="gene"></agora-gene-resources>
+            }
+
+            @if (panel.name === 'nominations') {
+              <agora-gene-nominations [gene]="gene"></agora-gene-nominations>
+            }
+
+            @if (panel.name === 'experimental-validation') {
+              <agora-gene-experimental-validation
+                [gene]="gene"
+              ></agora-gene-experimental-validation>
+            }
+          </div>
+        }
+      </ng-template>
+
+      <ng-container *ngFor="let panel of panels">
+        <ng-container
+          *ngTemplateOutlet="panelTemplate; context: { $implicit: panel }"
+        ></ng-container>
+        @if (panel.children) {
+          <ng-container *ngFor="let childPanel of panel.children">
+            <ng-container
+              *ngTemplateOutlet="panelTemplate; context: { $implicit: childPanel }"
+            ></ng-container>
+          </ng-container>
+        }
+      </ng-container>
+    </div>
+  </div>
+}

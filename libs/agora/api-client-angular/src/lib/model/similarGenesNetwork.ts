@@ -16,8 +16,8 @@ import { SimilarGenesNetworkNode } from './similarGenesNetworkNode';
  * SimilarGenesNetwork
  */
 export interface SimilarGenesNetwork {
-  nodes?: Array<SimilarGenesNetworkNode>;
-  links?: Array<SimilarGenesNetworkLink>;
-  min?: number;
-  max?: number;
+  nodes: Array<SimilarGenesNetworkNode>;
+  links: Array<SimilarGenesNetworkLink>;
+  min: number;
+  max: number;
 }

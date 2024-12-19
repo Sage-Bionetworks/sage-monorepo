@@ -7,11 +7,13 @@ import { SafeUrl } from '@angular/platform-browser';
 import { PathSanitizer } from '@sagebionetworks/agora/util';
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { NavigationLink } from '../../models/navigation-link';
+import { GitHubService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-footer',
   standalone: true,
   imports: [CommonModule, RouterModule],
+  providers: [DataversionService, GitHubService],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
@@ -19,9 +21,11 @@ export class FooterComponent implements OnInit {
   configService = inject(ConfigService);
   dataVersionService = inject(DataversionService);
   sanitizer = inject(PathSanitizer);
+  gitHubService = inject(GitHubService);
 
   footerLogoPath!: SafeUrl;
   dataVersion$!: Observable<Dataversion>;
+  sha$!: Observable<string>;
 
   navItems: Array<NavigationLink> = [
     {
@@ -46,6 +50,7 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataVersion$ = this.dataVersionService.getDataversion();
+    this.sha$ = this.gitHubService.getCommitSHA('agora/v0.0.2');
   }
 
   getSiteVersion() {

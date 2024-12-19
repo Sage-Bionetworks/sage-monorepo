@@ -14,7 +14,7 @@
  * SimilarGenesNetworkNode
  */
 export interface SimilarGenesNetworkNode {
-  ensembl_gene_id?: string;
-  hgnc_symbol?: string;
-  brain_regions?: Array<string>;
+  ensembl_gene_id: string;
+  hgnc_symbol: string;
+  brain_regions: Array<string>;
 }

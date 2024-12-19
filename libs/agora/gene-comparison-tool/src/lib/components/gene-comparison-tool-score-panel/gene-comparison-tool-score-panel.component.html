@@ -1,0 +1,39 @@
+<p-overlayPanel class="gct-score-panel" #overlayPanel appendTo="">
+  @if (data) {
+    @if (data.geneLabel) {
+      <div class="gct-score-panel-gene-label">
+        {{ data.geneLabel }}
+      </div>
+    }
+
+    @if (data.scoreName) {
+      <div class="gct-score-panel-header">
+        {{ data.scoreName }}
+      </div>
+    }
+
+    <agora-score-barchart
+      [shouldResize]="false"
+      [score]="data.score"
+      [barColor]="barColor"
+      [data]="scoreDistribution"
+    >
+    </agora-score-barchart>
+
+    @if (scoreDistribution) {
+      <div class="gct-score-panel-wiki">
+        <agora-wiki
+          [ownerId]="scoreDistribution.syn_id"
+          [wikiId]="scoreDistribution.wiki_id"
+        ></agora-wiki>
+      </div>
+    }
+
+    <div class="gct-score-panel-links">
+      <span>
+        <em>Have questions or feedback?</em>
+      </span>
+      <a target="_blank" href="https://forms.gle/WDXpbSB6VmdvLwhV6">Send Feedback</a>
+    </div>
+  }
+</p-overlayPanel>

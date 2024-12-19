@@ -1,0 +1,9 @@
+<div id="score-barchart" class="chart-d3" #scoreBarChartContainer>
+  <div id="tooltip" class="arrow-below tooltip-arrow" #tooltip (mouseout)="hideTooltip()"></div>
+  <svg #chart></svg>
+  @if (_score === null) {
+    <div class="chart-no-data">
+      <div class="chart-no-data-text">No data is currently available.</div>
+    </div>
+  }
+</div>

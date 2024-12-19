@@ -1,0 +1,9 @@
+<div class="gene-protein-selector">
+  <p-dropdown
+    [options]="_options"
+    optionLabel="name"
+    [(ngModel)]="selected"
+    (onChange)="_onChange()"
+    placeholder="Select a protein"
+  ></p-dropdown>
+</div>

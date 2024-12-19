@@ -1,0 +1,27 @@
+@if (gene) {
+  <ul class="gene-seo-list">
+    <li *ngFor="let summary of summaries" class="item">
+      <div class="item-inner">
+        <div>
+          <h3 class="item-title">{{ summary.property.title }}</h3>
+          <div class="item-description">
+            {{ summary.property.description }}
+            <a
+              *ngIf="summary.property.link"
+              class="item-link"
+              href="{{ summary.property.link }}"
+              target="_blank"
+            >
+              {{ summary.property.anchorText }}
+            </a>
+          </div>
+        </div>
+        <div>
+          <b>
+            {{ getStateText(summary) }}
+          </b>
+        </div>
+      </div>
+    </li>
+  </ul>
+}

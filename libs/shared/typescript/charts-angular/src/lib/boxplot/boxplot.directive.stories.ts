@@ -12,9 +12,9 @@ const meta: Meta<BoxplotDirective> = {
   component: BoxplotDirective,
   title: 'directives/sageBoxplot',
   argTypes: {
-    pointTooltipFormatter: {
-      control: { type: 'function' },
-    },
+    // pointTooltipFormatter: {
+    //   control: { type: 'function' },
+    // },
   },
   render: (args: BoxplotProps) => ({
     props: args,

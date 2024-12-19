@@ -1,0 +1,60 @@
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+hr {
+  border-color: #fff;
+  opacity: 0.25;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.gene-hero-top {
+  .section-inner {
+    padding-top: 30px;
+    padding-bottom: 30px;
+  }
+}
+
+.gene-hero-bottom {
+  background: rgb(255 255 255 / 35%);
+}
+
+.gene-hero-heading {
+  margin-bottom: 15px;
+}
+
+.gene-hero-name {
+  margin-bottom: 15px;
+}
+
+.gene-hero-nominated {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  svg {
+    margin-right: 6px;
+  }
+}
+
+.gene-hero-biodomains {
+  margin-bottom: 30px;
+}
+
+.gene-hero-summary {
+  max-width: 980px;
+}
+
+.gene-hero-provider {
+  font-style: italic;
+}
+
+.gene-hero-aliases-heading,
+.gene-hero-biodomains-heading {
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.possible-replacements {
+  margin-bottom: 15px;
+}

@@ -1,0 +1,34 @@
+<div class="gct-filter-list">
+  @if (shouldShowList()) {
+    <div class="gct-filter-list-inner">
+      <div>
+        <button class="gct-filter-list-clear-all" (click)="clearList()">
+          <agora-svg-icon
+            imagePath="/agora-assets/icons/trash.svg"
+            altText="trash"
+          ></agora-svg-icon>
+          <span>Clear all</span>
+        </button>
+      </div>
+      <div>
+        <agora-gene-comparison-tool-filter-list-item
+          [item]=""
+          [description]="'Significance &leq; ' + significanceThreshold"
+          [isVisible]="significanceThresholdActive"
+          (onClear)="removeSignificanceThresholdFilter()"
+        ></agora-gene-comparison-tool-filter-list-item>
+        <ng-container *ngFor="let filter of filters; index as i">
+          <ng-container *ngFor="let option of filter.options; index as j">
+            <agora-gene-comparison-tool-filter-list-item
+              [item]="option"
+              [title]="filter.short || ''"
+              [description]="option.label"
+              [isVisible]="option.selected || false"
+              (onClear)="clearSelectedFilters(option)"
+            ></agora-gene-comparison-tool-filter-list-item>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,44 @@
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.gct-score-panel {
+  .p-overlaypanel {
+    width: 390px;
+    background: #fff;
+    box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
+  }
+
+  .p-overlaypanel-content {
+    padding: 20px;
+  }
+
+  .gct-score-panel-gene-label {
+    font-size: var(--font-size-xs);
+    color: var(--color-gray-600);
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  .gct-score-panel-header {
+    font-size: var(--font-size-h2);
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  .wiki .wiki-inner {
+    margin: 24px 0;
+    font-size: var(--font-size-sm);
+  }
+
+  .gct-score-panel-links {
+    font-size: var(--font-size-sm);
+
+    span {
+      margin-right: 10px;
+    }
+
+    a {
+      @include link;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneDruggabilityComponent } from './gene-druggability.component';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { GenesService } from '@sagebionetworks/agora/api-client-angular';
+
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Druggability', () => {
+  let fixture: ComponentFixture<GeneDruggabilityComponent>;
+  let component: GeneDruggabilityComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [GeneDruggabilityComponent],
+      imports: [RouterTestingModule, HttpClientTestingModule],
+      providers: [GenesService, HelperService],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(GeneDruggabilityComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

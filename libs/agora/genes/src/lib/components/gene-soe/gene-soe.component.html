@@ -1,0 +1,96 @@
+@if (gene) {
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2>Summary of Evidence</h2>
+        <p class="mb-lg">
+          This tab shows an overview of how the selected gene is associated with AD.
+        </p>
+        <agora-gene-soe-list [gene]="gene"></agora-gene-soe-list>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-inner pt-0">
+      <div class="container-sm">
+        <h2>AD Risk Scores</h2>
+        <div class="sub-headings">
+          <div>
+            <h3>About AD Risk Scores</h3>
+            <p>
+              The TREAT-AD Center at Emory-Sage-SGC has developed a Target Risk Score (TRS) to
+              objectively rank the potential involvement of specific genes in AD. The TRS is derived
+              by summing two component risk scores, the Genetic Risk Score and the Multi-omic Risk
+              Score, each of which is derived from a meta-analysis of multiple harmonized data sets.
+              More information about the methodology used to define these risk scores is available
+              <a
+                href="https://help.adknowledgeportal.org/apd/Target+Risk+Scores+Data+and+Methods.2826043399.html"
+                target="_blank"
+                >here</a
+              >.
+            </p>
+          </div>
+          <div>
+            <h3>AD Risk Scores for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}</h3>
+            <p>
+              The TRS for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}, along with the component
+              Genetic and Multi-omic Risk Scores, is shown here. The scores for
+              {{ gene.hgnc_symbol || gene.ensembl_gene_id }} are superimposed on the genome-wide
+              score distributions. If <i>No Data is Currently Available</i> is displayed for a
+              score, that score was not calculated for
+              {{ gene.hgnc_symbol || gene.ensembl_gene_id }}.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-gray-100">
+    <div class="section-inner">
+      <div class="container-lg">
+        <agora-gene-soe-charts [gene]="gene"></agora-gene-soe-charts>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2>Biological Domain Classification</h2>
+        <div class="sub-headings">
+          <div>
+            <h3>About Biological Domains</h3>
+            <p>
+              A biological domain represents a standardized area of biology defined by a set of
+              discrete, biologically coherent GO terms. The TREAT-AD Center at Emory-Sage-SGC has
+              defined nineteen biological domains associated with AD, and objectively mapped genes
+              to those biological domains using GO term annotations. More information about the
+              methodology used to define AD biological domains, and to generate genome-wide
+              biological domain mappings, is available
+              <a
+                href="https://help.adknowledgeportal.org/apd/Biological-Domain-Classification-Data-and-Methods.2826567691.html"
+                target="_blank"
+                >here</a
+              >.
+            </p>
+          </div>
+          <div>
+            <h3>Biological Domains for {{ gene.hgnc_symbol || gene.ensembl_gene_id }}</h3>
+            <p>
+              Select a biological domain on the left to see the list of GO terms that link
+              {{ gene.hgnc_symbol || gene.ensembl_gene_id }} to it on the right. The percentage
+              value displayed next to the currently selected biological domain indicates the
+              proportion of {{ gene.hgnc_symbol || gene.ensembl_gene_id }}'s total unique GO terms
+              that map to the biological domain. The ratio displayed on the right indicates how many
+              of the biological domain's total GO terms
+              {{ gene.hgnc_symbol || gene.ensembl_gene_id }} is annotated with.
+            </p>
+          </div>
+        </div>
+      </div>
+      <agora-gene-biodomains [gene]="gene"></agora-gene-biodomains>
+    </div>
+  </div>
+}

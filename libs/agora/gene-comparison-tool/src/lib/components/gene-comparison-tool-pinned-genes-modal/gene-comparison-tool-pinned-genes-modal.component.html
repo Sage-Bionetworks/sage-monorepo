@@ -1,0 +1,21 @@
+<p-dialog
+  header="Pinned Genes"
+  [(visible)]="isActive"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ width: '100%', maxWidth: '580px' }"
+  styleClass="gct-pinned-genes-conversion-modal"
+>
+  You have {{ pinnedGenes.length }} genes pinned, but there are
+  {{ pendingPinnedGenes.length }} protein results for those genes. Since a maximum of
+  {{ maxPinnedGenes }} results can be pinned, you will lose some of your pins if you proceed to the
+  Protein - Differential Expression view.
+  <ng-template pTemplate="footer">
+    <div>
+      <button class="gct-pinned-genes-conversion-cancel" (click)="cancel()">Cancel</button>
+      <button class="gct-pinned-genes-conversion-proceed" (click)="proceed()">Proceed</button>
+    </div>
+  </ng-template>
+</p-dialog>

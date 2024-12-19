@@ -1,0 +1,18 @@
+<div class="chart median-chart" (window:resize)="onResize()">
+  <div class="chart-inner">
+    @if (heading) {
+      <h4 class="chart-heading">{{ heading }}</h4>
+    }
+    <div class="chart-body">
+      <div #chartContainer class="chart-container"></div>
+    </div>
+    @if (xAxisLabel) {
+      <div class="chart-x-axis-label">{{ xAxisLabel }}</div>
+    }
+    @if (!data.length) {
+      <div class="chart-no-data">
+        <div class="chart-no-data-text">No data is currently available.</div>
+      </div>
+    }
+  </div>
+</div>

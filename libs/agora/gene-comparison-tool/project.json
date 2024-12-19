@@ -1,0 +1,27 @@
+{
+  "name": "agora-gene-comparison-tool",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/gene-comparison-tool/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/gene-comparison-tool"],
+      "options": {
+        "jestConfig": "libs/agora/gene-comparison-tool/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "implicitDependencies": []
+}

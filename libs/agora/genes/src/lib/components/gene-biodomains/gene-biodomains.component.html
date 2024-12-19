@@ -1,0 +1,35 @@
+<div id="container">
+  @if (gene?.bio_domains?.gene_biodomains) {
+    <div id="biodomain-panes">
+      <div id="left-hand-pane">
+        <h3>BIOLOGICAL DOMAIN MAPPINGS</h3>
+        <agora-biodomains-chart
+          [data]="gene?.bio_domains?.gene_biodomains"
+          [geneName]="getGeneName()"
+          (selectedBioDomainIndex)="onSelectedBioDomain($event)"
+        ></agora-biodomains-chart>
+      </div>
+      <div id="right-hand-pane">
+        <div id="notch"></div>
+        <h3>{{ getHeaderText() }}</h3>
+        <ul>
+          <li *ngFor="let goTerm of goTerms">
+            {{ capitalizeGoTerm(goTerm) }}
+          </li>
+        </ul>
+      </div>
+    </div>
+  } @else {
+    <div class="section">
+      <div class="section-inner">
+        <div class="container-sm">
+          <div class="no-data">
+            There are no biological domain mappings for this gene. To contribute evidence towards
+            defining new AD biological domains, contact us
+            <a href="mailto:agora@sagebionetworks.org">here</a>.
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

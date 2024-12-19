@@ -1,0 +1,248 @@
+/* stylelint-disable no-descending-specificity */
+
+@use 'sass:map';
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.gene-network {
+  min-height: 600px;
+  width: 100%;
+  height: 100%;
+}
+
+.gene-network-chart {
+  padding-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xl);
+}
+
+.gene-network-filters-title {
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.gene-network-filters {
+  display: flex;
+  justify-content: center;
+
+  .gene-network-filters-inner {
+    display: flex;
+    align-items: center;
+
+    > span {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
+    a {
+      display: block;
+      width: 15px;
+      height: 15px;
+      background-color: map.get($gene-network-colors, 'selected');
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    > div:not(:nth-child(2)) {
+      position: relative;
+      padding-left: 40px;
+
+      &::after {
+        content: ' ';
+        position: absolute;
+        display: block;
+        width: 40px;
+        height: 4px;
+        top: 6px;
+        left: 0;
+        background-color: map.get($gene-network-colors, 'selected');
+      }
+    }
+
+    > div.active ~ div {
+      a,
+      &::after {
+        background-color: var(--color-gray-500);
+      }
+    }
+  }
+}
+
+.gene-network-legend {
+  display: flex;
+  justify-content: center;
+
+  .gene-network-legend-inner {
+    display: flex;
+    align-items: center;
+
+    > div {
+      display: flex;
+      padding-left: 15px;
+      padding-right: 15px;
+
+      svg {
+        margin-right: 10px;
+        color: map.get($gene-network-colors, 'main');
+      }
+
+      &:not(:first-child) {
+        &::before {
+          content: ' ';
+          display: inline-block;
+          width: 20px;
+          height: 20px;
+          margin-right: 10px;
+          border-radius: 50%;
+        }
+      }
+
+      &:nth-child(2)::before {
+        background-color: map.get($gene-network-colors, 'selected');
+      }
+
+      &:nth-child(3)::before {
+        background-color: map.get($gene-network-colors, '2-3');
+      }
+
+      &:nth-child(4)::before {
+        background-color: map.get($gene-network-colors, '4-5');
+      }
+
+      &:nth-child(5)::before {
+        background-color: map.get($gene-network-colors, '>6');
+      }
+    }
+  }
+}
+
+.gene-network-selected {
+  height: 100%;
+  padding: var(--spacing-xl) var(--spacing-lg);
+  background-color: #fff;
+  border: 1px solid var(--color-gray-200);
+  box-sizing: border-box;
+}
+
+.gene-network-selected-details {
+  padding-top: 30px;
+
+  > div {
+    display: flex;
+
+    > div {
+      &:not(:last-child) {
+        margin-bottom: 30px;
+      }
+
+      &:first-child {
+        flex-grow: 1;
+        font-weight: 700;
+        text-transform: uppercase;
+      }
+
+      &:last-child {
+        padding-left: 15px;
+      }
+    }
+  }
+}
+
+.gene-network-selected-similar {
+  display: flex;
+
+  > div:first-child {
+    padding-right: 30px;
+  }
+}
+
+.gene-network-selected-similar-list {
+  a {
+    @include link;
+
+    display: inline-block;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+}
+
+.gene-network-selected-similar-link {
+  display: flex;
+
+  > div:last-child {
+    display: flex;
+    align-items: center;
+    padding-left: 30px;
+    color: var(--color-link);
+
+    i {
+      font-size: var(--font-size-xl);
+      cursor: pointer;
+    }
+  }
+}
+
+.gene-network-no-data {
+  display: flex;
+  width: 100%;
+  height: 450px;
+  background-color: var(--color-gray-200);
+  align-items: center;
+  justify-content: center;
+
+  .gene-network-no-data-text {
+    font-size: var(--font-size-lg);
+    font-style: italic;
+    color: var(--color-gray-600);
+  }
+}
+
+.network-chart {
+  svg {
+    .network-chart-link {
+      stroke: map.get($gene-network-colors, '>6');
+
+      &.edges-0,
+      &.edges-1 {
+        stroke: map.get($gene-network-colors, 'default');
+      }
+
+      &.edges-2,
+      &.edges-3 {
+        stroke: map.get($gene-network-colors, '2-3');
+      }
+
+      &.edges-4,
+      &.edges-5 {
+        stroke: map.get($gene-network-colors, '4-5');
+      }
+    }
+
+    .network-chart-node {
+      fill: map.get($gene-network-colors, '>6');
+      cursor: pointer;
+
+      &.edges-0,
+      &.edges-1 {
+        fill: map.get($gene-network-colors, 'default');
+      }
+
+      &.edges-2,
+      &.edges-3 {
+        fill: map.get($gene-network-colors, '2-3');
+      }
+
+      &.edges-4,
+      &.edges-5 {
+        fill: map.get($gene-network-colors, '4-5');
+      }
+
+      &.main {
+        fill: map.get($gene-network-colors, 'main');
+      }
+
+      &.selected {
+        fill: map.get($gene-network-colors, 'selected');
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+@import 'libs/agora/styles/src/lib/variables';
+@import 'libs/agora/styles/src/lib/mixins';
+
+.gene-seo-list {
+  @include reset-ul;
+
+  .item {
+    .item-inner {
+      @include container;
+
+      display: flex;
+      padding: 20px var(--spacing-lg) 28px var(--spacing-lg);
+
+      > div {
+        &:first-child {
+          flex-grow: 1;
+          padding-right: var(--spacing-lg);
+        }
+
+        &:last-child {
+          display: flex;
+          align-items: center;
+          white-space: nowrap;
+        }
+      }
+    }
+
+    .item-title,
+    .item-description {
+      max-width: 600px;
+
+      a {
+        color: var(--color-link);
+        font-size: 16px;
+      }
+    }
+
+    .item-title {
+      color: var(--color-text);
+    }
+
+    .item-description {
+      font-style: italic;
+    }
+
+    .item-link {
+      font-weight: 400;
+      font-style: normal;
+      cursor: pointer;
+      width: 100%;
+      line-height: normal;
+      font-size: 18px;
+      text-decoration: underline;
+      color: var(--color-link);
+      position: relative;
+      top: inherit;
+    }
+
+    &:nth-child(odd) {
+      background-color: var(--color-gray-100);
+    }
+  }
+}

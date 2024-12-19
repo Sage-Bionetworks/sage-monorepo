@@ -1,0 +1,12 @@
+<div id="biodomains-chart">
+  <div
+    id="biodomains-chart-tooltip"
+    class="arrow-below tooltip-arrow"
+    #tooltip
+    (mouseout)="hideTooltip($event)"
+  ></div>
+  <svg #chart></svg>
+  @if (!data) {
+    <div>No data is currently available</div>
+  }
+</div>
