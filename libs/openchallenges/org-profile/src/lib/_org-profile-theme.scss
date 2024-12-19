@@ -11,44 +11,50 @@
   .base {
     background-color: white;
   }
+
   #profile-top,
   #profile-stats {
     border-color: transparent;
     background-color: map.get($figma, dl-color-default-hover1);
   }
+
   .verified {
     border-color: transparent;
     color: map.get($figma, dl-color-default-darkaccent1);
   }
+
   .username {
     color: map.get($figma, dl-color-default-secondary1);
   }
+
   .profile-type {
     border-color: map.get($figma, dl-color-default-secondary2);
     background-color: map.get($figma, dl-color-default-accent2);
   }
+
   .profile-nav-group {
     border-color: map.get($figma, dl-color-default-primary2);
-    background-color: rgba(255, 255, 255, 1);
+    background-color: rgb(255 255 255 / 100%);
   }
+
   .profile-nav-item {
     border-color: transparent;
+
     &:focus,
     &:hover {
       background-color: map.get($figma, dl-color-default-primary1);
       color: white;
     }
+
     color: black;
   }
+
   .profile-nav-item.active-tab {
     background-color: map.get($figma, dl-color-default-navbardark);
     color: white;
   }
-  .text-grey {
-    color: rgba(black, 0.38);
-  }
 
-  @media (max-width: 479px) {
+  @media (width <= 479px) {
     .profile-pic {
       background-color: map.get($figma, dl-color-default-hover2);
     }
@@ -59,15 +65,18 @@
   .username {
     font-size: 28px;
   }
+
   .profile-pic {
     div.avatar-content {
-      font-family: 'Lato', sans-serif !important;
+      font-family: Lato, sans-serif !important;
     }
   }
-  @media screen and (max-width: 641px) {
+
+  @media screen and (width <= 641px) {
     #profile-details > h2 {
       font-size: 32px;
     }
+
     #profile-details > h3 {
       font-size: 21px;
     }
@@ -76,12 +85,14 @@
 
 @mixin theme($theme) {
   $color-config: mat.m2-get-color-config($theme);
-  @if $color-config != null {
+
+  @if $color-config {
     @include color($theme);
   }
 
   $typography-config: mat.m2-get-typography-config($theme);
-  @if $typography-config != null {
+
+  @if $typography-config {
     @include typography($theme);
   }
 }
