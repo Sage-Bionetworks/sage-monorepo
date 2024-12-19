@@ -1,0 +1,5 @@
+First, select an outcome in terms of either overall survival (OS) or progression free interval (PFI) endpoints,  and variables, such as immune features and predictors of response to immunotherapy. The analysis will use the selection in ICI Cohort Selection, and automatically includes only samples collected before treatment with ICI.
+
+Then, select whether the models should be univariable or multivariable. The univariable analysis will compute the Cox proportional hazard ratio (HR) for each combination of selected variable and dataset. The multivariable analysis will compute the HR considering all the selected features as predictors of time to survival endpoint.
+
+The results are summarized in a heatmap of the log10 of Hazard Ratio. For the univariable analysis, when more than one variable is selected, a Benjamini-Hochberg FDR correction is made, and variables with a p-value smaller than 0.05 and BH p-value smaller than 0.05 are indicated in the heatmap according to the plot legend. In addition, a forest plot with the log10 of the Cox Proportional Hazard Ratio with 95th confidence intervals for each variable is displayed.

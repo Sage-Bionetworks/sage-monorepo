@@ -1,0 +1,31 @@
+{
+  "name": "iatlas-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "sudo apt-get update",
+          "sudo apt-get install -y libgit2-dev",
+          "Rscript -e 'renv::restore()'"
+        ],
+        "cwd": "{projectRoot}",
+        "parallel": false
+      }
+    },
+    "build-image": {
+      "executor": "@nx-tools/nx-container:build",
+      "options": {
+        "context": "apps/iatlas/app",
+        "metadata": {
+          "images": ["ghcr.io/sage-bionetworks/iatlas-app"],
+          "tags": ["type=edge,branch=main", "type=raw,value=local", "type=sha"]
+        },
+        "push": false
+      }
+    }
+  },
+  "tags": ["language:r", "package-manager:renv"]
+}
