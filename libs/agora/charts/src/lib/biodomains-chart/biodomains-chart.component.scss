@@ -1,0 +1,69 @@
+$tooltip-color: #63676c;
+
+#biodomains-chart {
+  position: relative;
+  width: 500px;
+  height: 560px;
+
+  #biodomains-chart-tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 5px;
+    font-size: 14px;
+    background-color: $tooltip-color;
+    color: white;
+    display: none;
+    z-index: 200;
+    opacity: 0.9;
+    width: 200px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .tooltip-arrow {
+    &::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      border: 10px solid transparent;
+      transform: translateX(-50%);
+    }
+
+    &.arrow-below {
+      transform: translate(calc(-50%), calc(-100% - 20px));
+
+      &::before {
+        bottom: -9px;
+        border-bottom: 0;
+        border-top-color: $tooltip-color;
+      }
+    }
+  }
+
+  .negative-bars {
+    &:hover {
+      fill: transparent;
+      cursor: pointer;
+    }
+  }
+
+  .bars {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .bar-labels {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  .bar-values {
+    pointer-events: none; // prevents the flicker associated with the mouseout event of the neg bar.
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

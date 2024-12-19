@@ -13,3 +13,9 @@ properties:
     type: array
     items:
       type: string
+required:
+  - source
+  - target
+  - source_hgnc_symbol
+  - target_hgnc_symbol
+  - brain_regions

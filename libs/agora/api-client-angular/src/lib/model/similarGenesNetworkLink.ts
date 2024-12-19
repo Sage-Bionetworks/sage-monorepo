@@ -14,9 +14,9 @@
  * SimilarGenesNetworkLink
  */
 export interface SimilarGenesNetworkLink {
-  source?: string;
-  target?: string;
-  source_hgnc_symbol?: string;
-  target_hgnc_symbol?: string;
-  brain_regions?: Array<string>;
+  source: string;
+  target: string;
+  source_hgnc_symbol: string;
+  target_hgnc_symbol: string;
+  brain_regions: Array<string>;
 }

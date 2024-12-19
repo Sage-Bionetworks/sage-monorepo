@@ -1,0 +1,658 @@
+<div #gct class="gct" (window:resize)="onResize()">
+  <div class="gct-inner">
+    <div class="gct-header">
+      <div class="gct-header-inner">
+        <div class="gct-header-left">
+          <button
+            class="btn btn-rounded btn-primary"
+            (click)="filterPanel.toggle()"
+            pTooltip="Filter genes by Nominations, Teams, Cohort, and more"
+            tooltipPosition="right"
+            tooltipStyleClass="tooltip"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                fill="currentColor"
+                d="M0,0.7C0,0.3,0.3,0,0.7,0h12.5C13.7,0,14,0.3,14,0.7v2.3c0,0.2-0.1,0.4-0.2,0.5L9,8.2v4.4 c0,0.3-0.2,0.6-0.6,0.7L5.9,14c-0.2,0.1-0.4,0-0.6-0.1c-0.2-0.1-0.3-0.3-0.3-0.6v-5L0.2,3.7C0.1,3.5,0,3.3,0,3.1V0.7z"
+              />
+            </svg>
+            Filter Genes
+          </button>
+        </div>
+        <div class="gct-header-middle">
+          <h1 class="gct-heading h2">Gene Comparison Tool</h1>
+        </div>
+        <div class="gct-header-right">
+          <button
+            class="btn btn-rounded btn-outlined-primary"
+            (click)="copyUrl()"
+            pTooltip="Copy the URL that captures the table's current filters, sorting, and pinned genes"
+            tooltipPosition="left"
+            tooltipStyleClass="tooltip"
+          >
+            Share URL
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <agora-gene-comparison-tool-filter-list
+      #filterList
+      [filters]="filters"
+      (onChange)="setFilters($event)"
+      [significanceThreshold]="significanceThreshold"
+      [significanceThresholdActive]="significanceThresholdActive"
+      (onremoveSignificanceThresholdFilter)="setSignificanceThresholdActive($event)"
+    ></agora-gene-comparison-tool-filter-list>
+
+    <div class="gct-body">
+      <div class="gct-body-inner">
+        <div class="gct-controls">
+          <div class="gct-controls-inner">
+            <div class="gct-controls-left">
+              <div class="gene-label">DISPLAYED GENES</div>
+              <div *ngIf="genesTable" class="gene-count">
+                {{ (genesTable?._totalRecords || 0) + (pinnedTable?.dataToRender?.length || 0) }}
+              </div>
+              <div class="gct-search">
+                <svg
+                  class="gct-search-icon"
+                  width="13"
+                  height="13"
+                  viewBox="0 0 13 13"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M9.29102 8.1761H8.70383L8.49571 7.97541C9.22413 7.12807 9.66266 6.02802 9.66266 4.83133C9.66266 2.16295 7.49971 0 4.83133 0C2.16295 0 0 2.16295 0 4.83133C0 7.49971 2.16295 9.66266 4.83133 9.66266C6.02802 9.66266 7.12807 9.22413 7.97541 8.49571L8.1761 8.70383V9.29102L11.8925 13L13 11.8925L9.29102 8.1761ZM4.83133 8.1761C2.98056 8.1761 1.48656 6.6821 1.48656 4.83133C1.48656 2.98056 2.98056 1.48656 4.83133 1.48656C6.6821 1.48656 8.1761 2.98056 8.1761 4.83133C8.1761 6.6821 6.6821 8.1761 4.83133 8.1761Z"
+                    fill="#C4C4C4"
+                  />
+                </svg>
+                <input
+                  type="text"
+                  pInputText
+                  (input)="onSearchInput($event)"
+                  [value]="searchTerm"
+                  placeholder="Search"
+                />
+                <button *ngIf="searchTerm" (click)="clearSearch()">
+                  <svg
+                    width="10"
+                    height="10"
+                    viewBox="0 0 10 10"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path d="M1 9L9 1M1 1L9 9" stroke="#C4C4C4" stroke-width="2" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div class="gct-controls-right">
+              <div class="gct-controls-right-top">
+                <div class="gct-category-selector">
+                  <div>
+                    <p-dropdown
+                      [options]="categories"
+                      [(ngModel)]="category"
+                      (onChange)="onCategoryChange()"
+                    ></p-dropdown>
+                  </div>
+                  <div>
+                    <agora-overlay-panel-link
+                      *ngIf="'RNA - Differential Expression' === category"
+                      wikiId="618276"
+                      icon="svg"
+                    ></agora-overlay-panel-link>
+                    <agora-overlay-panel-link
+                      *ngIf="'Protein - Differential Expression' === category"
+                      wikiId="618278"
+                      icon="svg"
+                    ></agora-overlay-panel-link>
+                  </div>
+                </div>
+                <div class="gct-significance-control">
+                  <div>Hide insignificant</div>
+                  <div>
+                    <p-inputSwitch
+                      [pTooltip]="
+                        'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
+                        significanceThreshold
+                      "
+                      styleClass="gct-significance-control-toggle"
+                      tooltipPosition="left"
+                      tooltipStyleClass="tooltip"
+                      [(ngModel)]="significanceThresholdActive"
+                      (onChange)="setSignificanceThresholdActive(significanceThresholdActive)"
+                    ></p-inputSwitch>
+                  </div>
+                  <div>
+                    <p-overlayPanel
+                      #significanceOverlay
+                      styleClass="gct-significance-control-panel"
+                    >
+                      <ng-template pTemplate>
+                        <p class="gct-significance-control-panel-heading">
+                          Statistical significance
+                        </p>
+                        <p>Enter the P-value to use for the significance cutoff.</p>
+                        <input
+                          type="number"
+                          min="0"
+                          max="1"
+                          step="0.01"
+                          [(ngModel)]="significanceThreshold"
+                          (ngModelChange)="
+                            setSignificanceThresholdActive(significanceThresholdActive)
+                          "
+                        />
+                      </ng-template>
+                    </p-overlayPanel>
+                    <button
+                      (click)="significanceOverlay.toggle($event)"
+                      class="gct-significance-control-settings"
+                      pTooltip="Edit significance cutoff value"
+                      tooltipPosition="left"
+                      tooltipStyleClass="tooltip"
+                    >
+                      <agora-svg-icon
+                        imagePath="/agora-assets/icons/cog.svg"
+                        altText="cog"
+                      ></agora-svg-icon>
+                    </button>
+                  </div>
+                  <div>
+                    <p-overlayPanel #columnOverlay styleClass="gct-toggle-columns">
+                      <ng-template pTemplate>
+                        <ul id="scores-columns">
+                          <li *ngFor="let column of scoresColumns">
+                            <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                              <div class="column-toggle-status">
+                                <span *ngIf="column.selected" class="pi pi-check"></span>
+                              </div>
+                              <div>
+                                <span>{{ column.header }}</span>
+                              </div>
+                            </div>
+                          </li>
+                        </ul>
+                        <ul>
+                          <li *ngFor="let column of brainRegionsColumns">
+                            <ng-container *ngIf="column.visible">
+                              <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                                <div class="column-toggle-status">
+                                  <span
+                                    *ngIf="column.selected"
+                                    class="p-checkbox-icon pi pi-check"
+                                  ></span>
+                                </div>
+                                <div>
+                                  <span>{{ column.header }}</span>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </li>
+                        </ul>
+                      </ng-template>
+                    </p-overlayPanel>
+                    <button
+                      (click)="columnOverlay.toggle($event)"
+                      pTooltip="Show/hide columns"
+                      tooltipPosition="left"
+                      tooltipStyleClass="tooltip"
+                    >
+                      <agora-svg-icon
+                        imagePath="/agora-assets/icons/column.svg"
+                        altText="column"
+                      ></agora-svg-icon>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="gct-controls-right-bottom">
+                <div class="gct-filter-label">{{ subCategoryLabel }}</div>
+                <div class="gct-sub-category-selector">
+                  <p-dropdown
+                    id="subCategory"
+                    [options]="subCategories"
+                    [(ngModel)]="subCategory"
+                    (onChange)="onSubCategoryChange()"
+                  ></p-dropdown>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="gct-tables">
+          <div class="gct-tables-inner">
+            <p-table
+              #headerTable
+              id="table-header"
+              breakpoint="0"
+              (sortFunction)="setSort($event)"
+              [customSort]="true"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th></th>
+                  <th
+                    *ngFor="let column of columns"
+                    [pSortableColumn]="column"
+                    [style]="{ width: columnWidth }"
+                  >
+                    <div class="column-header">
+                      <div class="column-header-text">
+                        <span
+                          [pTooltip]="getGCTColumnTooltipText(column)"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          {{ column }}
+                        </span>
+                      </div>
+                      <div class="column-header-sort">
+                        <p-sortIcon
+                          [field]="column"
+                          [pTooltip]="getGCTColumnSortIconTooltipText(column)"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        ></p-sortIcon>
+                      </div>
+                    </div>
+                  </th>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div *ngIf="pinnedItems.length > 0" class="table-divider table-divider-1">
+              <div class="table-divider-inner">
+                <div id="pinned-genes-header">
+                  <span *ngIf="category === 'RNA - Differential Expression'">
+                    Pinned Genes ({{ pinnedItems.length }}/50)
+                  </span>
+                  <div *ngIf="category === 'Protein - Differential Expression'">
+                    <div>Pinned Genes ({{ uniquePinnedGenesCount }}/50)&nbsp;&nbsp;&nbsp;</div>
+                    <div id="pinned-proteins">
+                      {{ pinnedItems.length }} Protein<ng-container *ngIf="pinnedItems.length > 1"
+                        >s</ng-container
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="csv-download-button">
+                  <button (click)="downloadPinnedCsv()">
+                    <agora-svg-icon
+                      imagePath="/agora-assets/icons/download.svg"
+                      altText="download"
+                    ></agora-svg-icon
+                    >Download as CSV
+                  </button>
+                </div>
+                <div class="clear-all-button">
+                  <button (click)="onClearAllClick()">Clear All</button>
+                </div>
+              </div>
+            </div>
+            <p-table
+              #pinnedTable
+              [value]="pinnedItems"
+              [customSort]="true"
+              (sortFunction)="sortCallback($event)"
+              breakpoint="0"
+            >
+              <ng-template pTemplate="body" let-gene>
+                <tr class="pinned">
+                  <td>
+                    <div class="gene-controls">
+                      <div>
+                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
+                      </div>
+
+                      <div>
+                        <button
+                          (click)="navigateToGene(gene)"
+                          pTooltip="Open gene details page"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <agora-svg-icon
+                            imagePath="/agora-assets/icons/external-link.svg"
+                            altText="link"
+                          ></agora-svg-icon>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          (click)="onUnPinGeneClick(gene)"
+                          pTooltip="Unpin this row"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <agora-svg-icon
+                            imagePath="/agora-assets/icons/pin.svg"
+                            altText="pin"
+                          ></agora-svg-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <ng-container *ngFor="let column of columns">
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'RISK SCORE'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.target_risk_score)
+                            ? (gene.target_risk_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'GENETIC'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.genetics_score)
+                            ? (gene.genetics_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'MULTI-OMIC'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.multi_omics_score)
+                            ? (gene.multi_omics_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-default"
+                      *ngIf="!isScoresColumn(column)"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        [class]="getCircleClass(column, gene)"
+                        [style]="getCircleStyle(column, gene)"
+                        [pTooltip]="getCircleTooltip(column, gene)"
+                        [tooltipDisabled]="isCircleTooltipDisabled()"
+                        tooltipPosition="bottom"
+                        tooltipStyleClass="tooltip"
+                        (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
+                      >
+                        <span></span>
+                      </button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div *ngIf="searchTerm || hasSelectedFilters()" class="table-divider">
+              <div class="table-divider-inner">
+                <div *ngIf="searchTerm">Matching Genes</div>
+                <div *ngIf="!searchTerm">Filtered Genes</div>
+                <div *ngIf="genesTable.filteredValue?.length">
+                  <button
+                    class="pin-all-button"
+                    [disabled]="getPinDisabledStatus()"
+                    [ngClass]="{
+                      disabled: getPinDisabledStatus(),
+                    }"
+                    (click)="onPinAllClick()"
+                    [pTooltip]="
+                      getPinDisabledStatus()
+                        ? 'You have already pinned the maximum number of genes (' +
+                          maxPinnedGenes +
+                          '). You must unpin some genes before you can pin more.'
+                        : 'Pin all matching rows to the top.'
+                    "
+                    tooltipPosition="left"
+                    tooltipStyleClass="tooltip"
+                  >
+                    <agora-svg-icon
+                      imagePath="/agora-assets/icons/pin.svg"
+                      altText="pin"
+                    ></agora-svg-icon>
+                    <span>Pin All</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              *ngIf="!searchTerm && !hasSelectedFilters() && pinnedItems.length > 0"
+              class="table-divider"
+            >
+              <div class="table-divider-inner">
+                <div>All Genes</div>
+              </div>
+            </div>
+            <p-table
+              #genesTable
+              [value]="genes"
+              [paginator]="true"
+              [rows]="10"
+              [showCurrentPageReport]="true"
+              currentPageReportTemplate="{first}-{last} of {totalRecords}"
+              breakpoint="0"
+              (sortFunction)="sortCallback($event)"
+              [customSort]="true"
+            >
+              <ng-template pTemplate="emptymessage" let-gene>
+                <div class="no-results">No results found...</div>
+              </ng-template>
+
+              <ng-template pTemplate="body" let-gene>
+                <tr>
+                  <td>
+                    <div class="gene-controls">
+                      <div>
+                        {{ gene.hgnc_symbol || gene.ensembl_gene_id }}
+                        <ng-container *ngIf="gene.uniprotid && this.subCategory !== 'SRM'">
+                          ({{ gene.uniprotid }})
+                        </ng-container>
+                      </div>
+                      <div>
+                        <button
+                          (click)="navigateToGene(gene)"
+                          pTooltip="Open gene details page"
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <agora-svg-icon
+                            imagePath="/agora-assets/icons/external-link.svg"
+                            altText="link"
+                          ></agora-svg-icon>
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          (click)="onPinGeneClick(gene)"
+                          [disabled]="getPinDisabledStatus()"
+                          [ngClass]="{
+                            disabled: getPinDisabledStatus(),
+                          }"
+                          [pTooltip]="
+                            getPinDisabledStatus()
+                              ? 'You have already pinned the maximum number of genes (' +
+                                maxPinnedGenes +
+                                '). You must unpin some genes before you can pin more.'
+                              : 'Pin this row to the top of the list'
+                          "
+                          tooltipPosition="top"
+                          tooltipStyleClass="tooltip"
+                        >
+                          <agora-svg-icon
+                            imagePath="/agora-assets/icons/pin.svg"
+                            altText="pin"
+                          ></agora-svg-icon>
+                        </button>
+                      </div>
+                    </div>
+                  </td>
+                  <ng-container *ngFor="let column of columns">
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'RISK SCORE'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.target_risk_score)
+                            ? (gene.target_risk_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'GENETIC'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.genetics_score)
+                            ? (gene.genetics_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-numeric"
+                      *ngIf="column === 'MULTI-OMIC'"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        (click)="
+                          scorePanel.toggle(
+                            $event,
+                            getScorePanelData(column, gene, scoresDistribution)
+                          )
+                        "
+                      >
+                        {{
+                          isNumber(gene.multi_omics_score)
+                            ? (gene.multi_omics_score | number: '1.0-2')
+                            : '&mdash;'
+                        }}
+                      </button>
+                    </td>
+                    <td
+                      class="cell-default"
+                      *ngIf="!isScoresColumn(column)"
+                      [style]="{ width: columnWidth }"
+                    >
+                      <button
+                        [class]="getCircleClass(column, gene)"
+                        [style]="getCircleStyle(column, gene)"
+                        [pTooltip]="getCircleTooltip(column, gene)"
+                        [tooltipDisabled]="isCircleTooltipDisabled()"
+                        tooltipPosition="bottom"
+                        tooltipStyleClass="tooltip"
+                        (click)="detailsPanel.toggle($event, getDetailsPanelData(column, gene))"
+                      >
+                        <span></span>
+                      </button>
+                    </td>
+                  </ng-container>
+                </tr>
+              </ng-template>
+            </p-table>
+
+            <div class="gct-help-links">
+              <div class="gct-help-links-inner">
+                <div>
+                  <a class="gct-help-link" (click)="legendPanel.toggle()">Legend</a>
+                </div>
+                <div>
+                  <a class="gct-help-link" (click)="howToPanel.toggle()">Visualization Overview</a>
+                </div>
+              </div>
+            </div>
+
+            <agora-gene-comparison-tool-filter-panel
+              #filterPanel
+              [filters]="filters"
+              (onChange)="setFilters($event)"
+            ></agora-gene-comparison-tool-filter-panel>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <agora-gene-comparison-tool-details-panel
+      #detailsPanel
+      (onShowLegend)="legendPanel.toggle()"
+      (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
+    ></agora-gene-comparison-tool-details-panel>
+    <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
+    <agora-gene-comparison-tool-how-to-panel #howToPanel></agora-gene-comparison-tool-how-to-panel>
+    <agora-gene-comparison-tool-legend-panel
+      #legendPanel
+      (howToClick)="legendPanel.toggle(); howToPanel.toggle()"
+    ></agora-gene-comparison-tool-legend-panel>
+    <agora-gene-comparison-tool-pinned-genes-modal
+      #pinnedGenesModal
+      (onChange)="onPinnedGenesModalChange($event)"
+      [pinnedGenes]="pinnedItems"
+      [pendingPinnedGenes]="pendingPinnedItems"
+      [maxPinnedGenes]="maxPinnedGenes"
+    ></agora-gene-comparison-tool-pinned-genes-modal>
+  </div>
+</div>

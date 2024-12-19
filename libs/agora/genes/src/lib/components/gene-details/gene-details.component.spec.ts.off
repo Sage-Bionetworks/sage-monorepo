@@ -1,0 +1,81 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute, convertToParamMap } from '@angular/router';
+import { Location } from '@angular/common';
+import { Observable } from 'rxjs';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { GeneDetailsComponent } from './gene-details.component';
+// import { GenesModule } from '../..';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { geneMock1 } from '@sagebionetworks/agora/testing';
+
+class ActivatedRouteStub {
+  paramMap = new Observable((observer) => {
+    const paramMap = {
+      id: geneMock1.ensembl_gene_id,
+    };
+    observer.next(convertToParamMap(paramMap));
+    observer.complete();
+  });
+  queryParams = new Observable((observer) => {
+    const paramMap = {
+      model: '',
+    };
+    observer.next(convertToParamMap(paramMap));
+    observer.complete();
+  });
+}
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Gene Details', () => {
+  let fixture: ComponentFixture<GeneDetailsComponent>;
+  let component: GeneDetailsComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [GeneDetailsComponent],
+      imports: [RouterTestingModule, HttpClientTestingModule, BrowserAnimationsModule],
+      providers: [
+        {
+          provide: ActivatedRoute,
+          useValue: new ActivatedRouteStub(),
+        },
+        Location,
+        HelperService,
+        TeamsService,
+        {
+          provide: GenesService,
+          useValue: new GeneServiceStub(),
+        },
+      ],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(GeneDetailsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should have data', () => {
+    const noiSpy = spyOn(component, 'ngOnInit').and.callThrough();
+
+    component.ngOnInit();
+    fixture.detectChanges();
+    expect(noiSpy).toHaveBeenCalled();
+    expect(component.gene).toEqual(geneMock1);
+  });
+});

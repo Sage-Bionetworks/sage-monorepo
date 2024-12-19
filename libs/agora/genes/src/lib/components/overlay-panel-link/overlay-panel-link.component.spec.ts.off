@@ -1,0 +1,54 @@
+// -------------------------------------------------------------------------- //
+// External
+// -------------------------------------------------------------------------- //
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+// -------------------------------------------------------------------------- //
+// Internal
+// -------------------------------------------------------------------------- //
+import { OverlayPanelLinkComponent } from './overlay-panel-link.component';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+
+// -------------------------------------------------------------------------- //
+// Tests
+// -------------------------------------------------------------------------- //
+describe('Component: Overlay Panel Link', () => {
+  let fixture: ComponentFixture<OverlayPanelLinkComponent>;
+  let component: OverlayPanelLinkComponent;
+  let element: HTMLElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule],
+      providers: [provideRouter([]), provideHttpClient()],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(OverlayPanelLinkComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should have overlay', () => {
+    expect(element.querySelector('p-overlaypanel.p-element')).toBeTruthy();
+  });
+
+  it('should open overlay on click', () => {
+    const toggle = element.querySelector('.overlay-link-inner') as HTMLElement;
+
+    expect(toggle).toBeTruthy();
+
+    toggle.click();
+    fixture.detectChanges();
+
+    expect(document.querySelector('.overlay-panel')).toBeTruthy();
+  });
+});

@@ -1,0 +1,90 @@
+<div class="section">
+  <div class="section-inner pb-0">
+    <div class="container-sm">
+      <div>
+        <h2>Metabolomics</h2>
+        <p>
+          The results shown on this page are derived from an analysis of metabolite levels from AD
+          cases and controls. The samples were obtained from approximately 1400 individuals from the
+          ADNI study. Metabolites are associated with genes using genetic mapping and the metabolite
+          with the highest genetic association is shown for each gene.
+        </p>
+        <agora-modal-link
+          text="Data and Methods for this study"
+          header="About the Metabolomics Analysis"
+          wikiId="612872"
+        >
+        </agora-modal-link>
+      </div>
+
+      <hr class="separator separator-md" />
+
+      <div>
+        <h3>
+          Mapping of Metabolites to
+          {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }}
+        </h3>
+        @if (_gene?.metabolomics || boxPlotData.length < 1) {
+          <p>
+            <i>No metabolomic data is currently available.</i>
+          </p>
+        }
+        @if (_gene?.metabolomics && boxPlotData.length > 0) {
+          <p>
+            Genetic mapping revealed that the top metabolite associated with
+            {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }} is
+            {{ _gene?.metabolomics?.['metabolite_full_name'] }}, with a p-value of
+            {{ getSignificantFigures(_gene?.metabolomics?.['gene_wide_p_threshold_1kgp'], 2) }}.
+          </p>
+        }
+      </div>
+      <hr class="separator separator-md" />
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner pt-0">
+    <div class="container-sm">
+      @if (boxPlotData.length < 1) {
+        <h3>Levels of Metabolite by Disease Status</h3>
+        <p class="mb-0">
+          This plot shows differences in metabolite levels in AD cases and controls.
+        </p>
+      }
+
+      @if (boxPlotData.length > 0) {
+        <div class="mb-xl">
+          <h3>
+            Levels of {{ _gene?.metabolomics?.['metabolite_full_name'] }} by Disease Status
+            <agora-download-dom-image
+              [target]="mdeChart"
+              [filename]="_gene?.ensembl_gene_id + '_metabolomics'"
+            ></agora-download-dom-image>
+          </h3>
+          <p class="mb-0">
+            This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
+            individuals (CN). This comparison
+            {{ getSignificantText(_gene?.metabolomics?.['ad_diagnosis_p_value'][0]) }}
+            significantly different with a p-value of
+            {{ getSignificantFigures(_gene?.metabolomics?.['ad_diagnosis_p_value'][0], 2) }}.
+          </p>
+        </div>
+      }
+    </div>
+  </div>
+</div>
+
+<div class="section section-gray-100">
+  <div class="section-inner">
+    <div class="container-lg">
+      <div #mdeChart>
+        <agora-box-plot-chart
+          xAxisLabel="Diagnosis"
+          [yAxisLabel]="_gene?.metabolomics?.['metabolite_full_name'] + ' LEVELS'"
+          [data]="boxPlotData"
+        ></agora-box-plot-chart>
+      </div>
+    </div>
+  </div>
+</div>

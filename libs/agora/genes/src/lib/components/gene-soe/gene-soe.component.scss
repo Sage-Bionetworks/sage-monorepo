@@ -1,0 +1,12 @@
+.sub-headings {
+  div {
+    &:first-child {
+      margin-bottom: 25px;
+    }
+  }
+}
+
+a {
+  color: var(--color-link);
+  font-size: 16px;
+}

@@ -1,0 +1,27 @@
+{
+  "name": "agora-charts",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/agora/charts/src",
+  "prefix": "agora",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/agora/charts"],
+      "options": {
+        "jestConfig": "libs/agora/charts/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:agora", "language:typescript"],
+  "implicitDependencies": []
+}

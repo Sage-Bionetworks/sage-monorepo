@@ -1,0 +1,50 @@
+import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { GeneComparisonToolFilterListItemComponent } from './gene-comparison-tool-filter-list-item.component';
+
+const MOCK_TITLE = '1234';
+const MOCK_DESCRIPTION = '5678';
+const TEXT_CLASS = '.gct-filter-list-item-text';
+
+describe('Component: Gene Comparison Tool - Filter List Item', () => {
+  let fixture: ComponentFixture<GeneComparisonToolFilterListItemComponent>;
+  let component: GeneComparisonToolFilterListItemComponent;
+  let element: HTMLElement;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [],
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(GeneComparisonToolFilterListItemComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    element = fixture.nativeElement;
+    component.item = { label: 'some option', selected: true };
+    component.title = MOCK_TITLE;
+    component.description = MOCK_DESCRIPTION;
+    component.isVisible = true;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display text', () => {
+    const text = element.querySelector(TEXT_CLASS);
+    expect(text).toBeTruthy();
+    expect(text?.textContent).toContain(MOCK_TITLE);
+    expect(text?.textContent).toContain(MOCK_DESCRIPTION);
+  });
+
+  it('should remove filter item', () => {
+    const clearButton = element.querySelector('.gct-filter-list-item-clear') as HTMLElement;
+    clearButton.click();
+    fixture.detectChanges();
+
+    expect(component.isVisible).toBeFalsy();
+    expect(element.querySelector(TEXT_CLASS)).toBeFalsy();
+  });
+});

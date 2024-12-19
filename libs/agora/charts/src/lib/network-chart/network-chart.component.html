@@ -1,0 +1,12 @@
+<div class="chart network-chart" (window:resize)="onResize()">
+  <div class="chart-inner">
+    <div class="chart-body">
+      <div #chartContainer class="chart-container"></div>
+    </div>
+    @if (!this._data?.nodes?.length) {
+      <div class="chart-no-data">
+        <div class="chart-no-data-text">No data is currently available.</div>
+      </div>
+    }
+  </div>
+</div>
