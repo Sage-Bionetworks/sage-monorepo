@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "openchallenges-data-lambda"
+version = "0.1.0"
+description = "A containerized AWS Lambda to import challenge data into the OC database"
+authors = ["Verena Chung <verena.chung@sagebase.org>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.13.0"
+requests = "2.32.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
