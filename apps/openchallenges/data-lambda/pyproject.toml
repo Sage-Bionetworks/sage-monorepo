@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "sandbox-lambda-python"
+name = "openchallenges-data-lambda"
 version = "0.1.0"
-description = "A containerized AWS Lambda example for Python"
-authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
+description = "A containerized AWS Lambda to import challenge data into the OC database"
+authors = ["Verena Chung <verena.chung@sagebase.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
