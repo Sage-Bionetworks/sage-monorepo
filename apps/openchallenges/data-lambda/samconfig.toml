@@ -3,7 +3,7 @@
 version = 0.1
 
 [default.global.parameters]
-stack_name = "lambda-python"
+stack_name = "openchallenges-data-lambda"
 
 [default.build.parameters]
 parallel = true
