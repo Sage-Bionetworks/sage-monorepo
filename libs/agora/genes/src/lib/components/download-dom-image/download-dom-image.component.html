@@ -1,5 +1,5 @@
 <button type="button" class="btn btn-rounded btn-primary" (click)="op.toggle($event)">
-  <i class="fa-solid fa-download"></i>
+  <fa-icon [icon]="downloadIcon"></fa-icon>
 </button>
 <p-overlayPanel
   #op
@@ -26,7 +26,7 @@
         class="btn-rounded btn-primary"
         (click)="download()"
       >
-        <i *ngIf="isLoading" class="fas fa-spinner fa-spin"></i>
+        <fa-icon *ngIf="isLoading" [icon]="spinnerIcon" animation="spin"></fa-icon>
       </button>
       <div *ngIf="error" class="download-dom-image-error">{{ error }}</div>
     </div>

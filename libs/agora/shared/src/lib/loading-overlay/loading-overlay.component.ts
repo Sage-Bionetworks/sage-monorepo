@@ -1,7 +1,7 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { CommonModule } from '@angular/common';
-import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent } from '../loading-icon/loading-icon.component';
 
 @Component({
   selector: 'agora-loading-overlay',
@@ -18,9 +18,11 @@ export class LoadingOverlayComponent implements OnInit {
   @Input() isActive = false;
 
   ngOnInit() {
+    console.log('global', this.isGlobal);
     if (this.isGlobal) {
       this.helperService.loadingChange.subscribe(() => {
         this.isActive = this.helperService.getLoading();
+        console.log('active', this.isActive);
       });
     }
   }

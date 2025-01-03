@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
   DistributionService,
@@ -25,19 +33,6 @@ import { combineLatest, Subscription } from 'rxjs';
 import * as variables from './gene-comparison-tool.variables';
 import * as helpers from './gene-comparison-tool.helpers';
 
-// import {
-//   GeneComparisonToolScorePanelComponent as ScorePanelComponent,
-//   GeneComparisonToolDetailsPanelComponent as DetailsPanelComponent,
-//   GeneComparisonToolFilterPanelComponent as FilterPanelComponent,
-//   GeneComparisonToolPinnedGenesModalComponent as PinnedGenesModalComponent,
-//   GeneComparisonToolFilterListComponent,
-//   GeneComparisonToolFilterPanelComponent,
-//   GeneComparisonToolDetailsPanelComponent,
-//   GeneComparisonToolScorePanelComponent,
-//   GeneComparisonToolHowToPanelComponent,
-//   GeneComparisonToolLegendPanelComponent,
-//   GeneComparisonToolPinnedGenesModalComponent,
-// } from './components';
 import { GeneComparisonToolScorePanelComponent as ScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
 import { GeneComparisonToolDetailsPanelComponent as DetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
 import { GeneComparisonToolFilterPanelComponent as FilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
@@ -56,7 +51,7 @@ import { GeneComparisonToolHowToPanelComponent } from './components/gene-compari
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 import { OverlayPanelLinkComponent } from '@sagebionetworks/agora/genes';
-import { SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
@@ -79,10 +74,12 @@ import { SvgIconComponent } from '@sagebionetworks/agora/shared';
     GeneComparisonToolDetailsPanelComponent,
     GeneComparisonToolFilterPanelComponent,
     GeneComparisonToolPinnedGenesModalComponent,
+    LoadingIconComponent,
   ],
   providers: [GenesService, DistributionService, HelperService, MessageService, FilterService],
   templateUrl: './gene-comparison-tool.component.html',
   styleUrls: ['./gene-comparison-tool.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
@@ -92,6 +89,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
+
+  isLoading = true;
 
   /* Genes ----------------------------------------------------------------- */
   genes: GCTGene[] = [];
@@ -204,7 +203,7 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   ngAfterViewInit() {
     setTimeout(() => {
       this.updateColumnWidth();
-    }, 1);
+    }, 50);
   }
 
   ngOnDestroy() {
@@ -254,7 +253,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   }
 
   loadGenes() {
-    this.helperService.setLoading(true);
+    // this.helperService.setLoading(true);
+    this.isLoading = true;
+    // this.genesTable.showLoader = true;
     this.genes = [];
 
     const genesApi$ = this.geneService.getComparisonGenes(this.category, this.subCategory);
@@ -262,13 +263,16 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     combineLatest([genesApi$, distributionApi$]).subscribe(([genesResult, distributionResult]) => {
       if (genesResult.items) {
+        console.log('# of items', genesResult.items.length);
         this.initData(genesResult.items);
         this.sortTable(this.headerTable);
         this.refresh();
 
         this.scoresDistribution = distributionResult.overall_scores;
 
-        this.helperService.setLoading(false);
+        this.isLoading = false;
+        // console.log('calling setLoading false');
+        // this.helperService.setLoading(false);
       }
     });
   }
@@ -1291,8 +1295,14 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   updateColumnWidth() {
     const count = this.columns.length < 5 ? 5 : this.columns.length;
+    console.log('count is: ', count);
+
     const width = this.headerTable?.containerViewChild?.nativeElement?.offsetWidth || 0;
+    console.log('ht', this.headerTable?.containerViewChild?.nativeElement?.offsetWidth);
+    console.log('width is: ', width);
+
     this.columnWidth = Math.ceil((width - 300) / count) + 'px';
+    console.log('column width is: ', this.columnWidth);
   }
 
   onResize() {

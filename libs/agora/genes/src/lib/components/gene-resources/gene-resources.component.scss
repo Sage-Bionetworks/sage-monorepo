@@ -1,73 +1,35 @@
 @import 'libs/agora/styles/src/lib/variables';
 @import 'libs/agora/styles/src/lib/mixins';
 
-.tab-row {
-  padding: var(--spacing-xl) 144px var(--spacing-xl) var(--spacing-xl);
+.row {
+  display: flex;
+  flex-wrap: nowrap;
   border: 1px solid var(--color-gray-300);
   margin: 0 0 var(--spacing-lg) 0;
+}
 
-  .last-row {
-    margin-top: 15px;
+.card {
+  display: flex;
+  align-items: center;
+  margin: 50px;
+}
+
+.card-title,
+.card-link {
+  flex: 1 1 25%; /* Fixed 25% width */
+}
+
+.card-description {
+  flex: 1 1 50%; /* Fixed 50% width */
+}
+
+/* Responsive adjustment for mobile screens */
+@media (width <= 768px) {
+  .row {
+    flex-wrap: wrap;
   }
 
-  a {
-    display: flex;
-    vertical-align: middle;
-    margin-top: auto;
-    margin-bottom: auto;
-    padding: 0;
-  }
-
-  .header-title {
-    line-height: var(--font-size-xxl);
-    font-size: var(--font-size-lg);
-  }
-
-  .header-title,
-  .header-link,
-  .header-description {
-    @include respond-to('ex-small') {
-      min-height: 43px;
-      margin-top: 25.5px !important;
-    }
-
-    @include respond-to('small') {
-      min-height: 43px;
-      margin-top: 25.5px !important;
-    }
-
-    @include respond-to('medium') {
-      margin-top: auto !important;
-      min-height: 0;
-    }
-
-    @include respond-to('large') {
-      margin-top: auto !important;
-      min-height: 0;
-    }
-
-    @include respond-to('ex-large') {
-      margin-top: auto !important;
-      min-height: 0;
-    }
-  }
-
-  .header-link {
-    text-align: center;
-
-    a {
-      display: block;
-    }
-  }
-
-  .header-description {
-    line-height: var(--font-size-xl);
-    font-size: var(--font-size-md);
-  }
-
-  > [class*='col-'] {
-    vertical-align: middle;
-    margin-top: auto;
-    margin-bottom: auto;
+  .card {
+    flex: 1 1 100%; /* Full width for each child on small screens */
   }
 }

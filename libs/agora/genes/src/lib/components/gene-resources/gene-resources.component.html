@@ -9,11 +9,11 @@
             {{ gene.hgnc_symbol || gene.ensembl_gene_id }} that are currently available, under
             development, or planned.
           </p>
-          <div class="row tab-row last-row">
-            <div id="target-enabling-resources-card1" class="col-md-3 col-sm-8 col-8 header-title">
+          <div class="row">
+            <div id="target-enabling-resources-card1" class="card card-title">
               Target Enabling Resources
             </div>
-            <div class="col-md-3 col-sm-4 col-4 header-link text-center">
+            <div class="card card-link">
               <a
                 id="target-enabling-resources-url"
                 class="link no-bold"
@@ -22,20 +22,17 @@
                 >View Available Resources</a
               >
             </div>
-            <div class="col-md-6 col-sm-12 col-12 header-description">
+            <div class="card card-description">
               View the openly available TREAT-AD resources for experimental validation of
               {{ gene.hgnc_symbol || gene.ensembl_gene_id }} in the AD Knowledge Portal.
             </div>
           </div>
           @if (gene.is_tep) {
-            <div class="row tab-row last-row">
-              <div
-                id="target-enabling-resources-card2"
-                class="col-md-3 col-sm-8 col-8 header-title"
-              >
+            <div class="row">
+              <div id="target-enabling-resources-card2" class="card card-title">
                 Target Portfolio
               </div>
-              <div class="col-md-3 col-sm-4 col-4 header-link text-center">
+              <div class="card card-link">
                 <a
                   class="link no-bold"
                   href="https://treatad.org/data-tools/target-dashboard"
@@ -44,21 +41,18 @@
                   >View Resource Status</a
                 >
               </div>
-              <div class="col-md-6 col-sm-12 col-12 header-description">
+              <div class="card card-description">
                 View the status of TEP resource development on the TREAT-AD Target Portfolio and
                 Progress Dashboard.
               </div>
             </div>
           }
           @if (gene.is_adi) {
-            <div class="row tab-row last-row">
-              <div
-                id="target-enabling-resources-card3"
-                class="col-md-3 col-sm-8 col-8 header-title"
-              >
+            <div class="row">
+              <div id="target-enabling-resources-card3" class="card card-title">
                 AD Informer Set
               </div>
-              <div class="col-md-3 col-sm-4 col-4 header-link text-center">
+              <div class="card card-link">
                 <a
                   class="link no-bold"
                   href="https://treatad.org/data-tools/ad-informer-set"
@@ -67,7 +61,7 @@
                   >View AD Informer Set</a
                 >
               </div>
-              <div class="col-md-6 col-sm-12 col-12 header-description">
+              <div class="card card-description">
                 View information about the development and distribution of the AD Informer Set.
               </div>
             </div>
@@ -84,14 +78,12 @@
       <div class="container-sm">
         <h2>Additional Resources</h2>
         <p>These external sites provide additional useful information for exploring AD targets.</p>
-        <div *ngFor="let r of additionalResources; let i = index" class="row tab-row last-row">
-          <div class="col-md-3 col-sm-8 col-8 header-title">{{ r.title }}</div>
-          <div class="col-md-3 col-sm-4 col-4 header-link text-center">
-            <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">{{
-              r.linkText
-            }}</a>
+        <div *ngFor="let r of additionalResources; let i = index" class="row">
+          <div class="card card-title">{{ r.title }}</div>
+          <div class="card card-link">
+            <a class="link no-bold" href="{{ r.link }}" target="_blank">{{ r.linkText }}</a>
           </div>
-          <div class="col-md-6 col-sm-12 col-12 header-description">
+          <div class="card card-description">
             {{ r.description }}
           </div>
         </div>
