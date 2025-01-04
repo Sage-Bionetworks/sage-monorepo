@@ -1,15 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { GeneDruggabilityComponent } from '../gene-druggability/gene-druggability.component';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { AdditionalResource } from '@sagebionetworks/agora/models';
 import { CommonModule } from '@angular/common';
-import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-resources',
   standalone: true,
-  imports: [CommonModule, GeneDruggabilityComponent, ModalLinkComponent],
+  imports: [CommonModule],
   templateUrl: './gene-resources.component.html',
   styleUrls: ['./gene-resources.component.scss'],
 })

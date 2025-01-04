@@ -27,6 +27,8 @@ export class FooterComponent implements OnInit {
   dataVersion$!: Observable<Dataversion>;
   sha$!: Observable<string>;
 
+  tag = 'agora/v0.0.2';
+
   navItems: Array<NavigationLink> = [
     {
       label: 'About',
@@ -50,7 +52,7 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataVersion$ = this.dataVersionService.getDataversion();
-    this.sha$ = this.gitHubService.getCommitSHA('agora/v0.0.2');
+    this.sha$ = this.gitHubService.getCommitSHA(this.tag);
   }
 
   getSiteVersion() {
