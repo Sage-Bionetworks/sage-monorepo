@@ -68,7 +68,6 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
 
   @HostListener('window:resize', ['$event.target'])
   onResize() {
-    console.log('sbc-onresize');
     if (this.shouldResize && this.initialized) {
       const divSize = this.scoreBarChartContainer.nativeElement.getBoundingClientRect().width;
       clearTimeout(this.resizeTimer);
@@ -79,8 +78,6 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('sbc-changes', changes);
-
     if (
       (changes['data'] && !changes['data'].firstChange) ||
       (changes['score'] && !changes['score'].firstChange) ||
@@ -98,8 +95,6 @@ export class ScoreBarChartComponent implements OnChanges, AfterViewInit, OnDestr
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit');
-
     if (this.score === null) this.hideChart();
     else this.createChart();
   }

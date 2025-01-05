@@ -72,16 +72,45 @@
   }
 }
 
+@if (gene) {
+  <div class="section">
+    <div class="section-inner">
+      <div class="container-sm">
+        <h2>Drug Development Resources</h2>
+        <p class="druggability-description">
+          These external sites provide information and resources related to drug development.
+        </p>
+        <div *ngFor="let r of drugDevelopmentResources; let i = index" class="row">
+          <div class="card card-title">{{ r.title }}</div>
+          <div class="card card-link">
+            <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">{{
+              r.linkText
+            }}</a>
+          </div>
+          <div class="card card-description">
+            {{ r.description }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
 @if (additionalResources) {
   <div class="section">
     <div class="section-inner">
       <div class="container-sm">
         <h2>Additional Resources</h2>
-        <p>These external sites provide additional useful information for exploring AD targets.</p>
+        <p>
+          These external sites provide additional information about therapeutic targets for AD and
+          related dementias.
+        </p>
         <div *ngFor="let r of additionalResources; let i = index" class="row">
           <div class="card card-title">{{ r.title }}</div>
           <div class="card card-link">
-            <a class="link no-bold" href="{{ r.link }}" target="_blank">{{ r.linkText }}</a>
+            <a class="additional-resource-links link no-bold" href="{{ r.link }}" target="_blank">
+              {{ r.linkText }}
+            </a>
           </div>
           <div class="card card-description">
             {{ r.description }}

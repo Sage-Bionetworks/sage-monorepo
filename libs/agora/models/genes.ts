@@ -23,7 +23,6 @@ export interface TargetNomination {
   input_data: string;
   validation_study_details: string;
   initial_nomination: number;
-  //
   team_data?: Team;
 }
 
@@ -41,7 +40,7 @@ export interface Druggability {
   sm_druggability_bucket: number;
   safety_bucket: number;
   abability_bucket: number;
-  pharos_class: string;
+  pharos_class?: string[];
   // classification should really be named sm_druggability_bucket_definition
   classification: string;
   safety_bucket_definition: string;
@@ -55,6 +54,7 @@ export interface Gene {
   summary: string;
   hgnc_symbol: string;
   alias: string[];
+  uniprotkb_accessions: string[];
   is_igap: boolean;
   is_eqtl: boolean;
   is_any_rna_changed_in_ad_brain: boolean;
@@ -63,7 +63,7 @@ export interface Gene {
   protein_brain_change_studied: boolean;
   target_nominations: TargetNomination[] | null;
   median_expression: MedianExpression[];
-  druggability: Druggability[];
+  druggability: Druggability;
   total_nominations: number | null;
   is_adi: boolean;
   is_tep: boolean;
@@ -84,10 +84,7 @@ export interface Gene {
   similar_genes_network?: SimilarGenesNetwork;
 
   // Similar table (not in mongo document)
-  ab_modality_display_value?: string;
-  safety_rating_display_value?: string;
-  sm_druggability_display_value?: string;
-  pharos_class_display_value?: string;
+  pharos_class_display_value?: string[];
   is_any_rna_changed_in_ad_brain_display_value?: string;
   is_any_protein_changed_in_ad_brain_display_value?: string;
   nominated_target_display_value?: boolean;

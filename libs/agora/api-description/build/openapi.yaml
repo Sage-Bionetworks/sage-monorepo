@@ -421,8 +421,9 @@ components:
           type: integer
           example: 3
         pharos_class:
-          type: string
-          example: Tclin
+          type: array
+          items:
+            type: string
         classification:
           type: string
           example: Enzyme
@@ -730,6 +731,10 @@ components:
           type: array
           items:
             type: string
+        uniprotkb_accessions:
+          type: array
+          items:
+            type: string
         is_igap:
           type: boolean
         is_eqtl:
@@ -752,9 +757,7 @@ components:
           items:
             $ref: '#/components/schemas/MedianExpression'
         druggability:
-          type: array
-          items:
-            $ref: '#/components/schemas/Druggability'
+          $ref: '#/components/schemas/Druggability'
         total_nominations:
           type: integer
           nullable: true
@@ -820,7 +823,9 @@ components:
           type: string
           nullable: true
         pharos_class_display_value:
-          type: string
+          type: array
+          items:
+            type: string
           nullable: true
         is_any_rna_changed_in_ad_brain_display_value:
           type: string

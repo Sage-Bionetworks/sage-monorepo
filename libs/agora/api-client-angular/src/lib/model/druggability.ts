@@ -17,7 +17,7 @@ export interface Druggability {
   sm_druggability_bucket: number;
   safety_bucket: number;
   abability_bucket: number;
-  pharos_class: string;
+  pharos_class: Array<string>;
   classification: string;
   safety_bucket_definition: string;
   abability_bucket_definition: string;

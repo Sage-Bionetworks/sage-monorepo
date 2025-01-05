@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { ascending } from 'd3';
 
@@ -10,14 +10,8 @@ import { ascending } from 'd3';
   templateUrl: './gene-hero.component.html',
   styleUrls: ['./gene-hero.component.scss'],
 })
-export class GeneHeroComponent implements OnInit {
+export class GeneHeroComponent {
   @Input() gene: Gene | undefined;
-
-  alias = '';
-
-  ngOnInit() {
-    this.alias = this.getAlias();
-  }
 
   showNominationsOrTEP() {
     if (!this.gene) return false;
@@ -91,9 +85,16 @@ export class GeneHeroComponent implements OnInit {
     }
   }
 
-  getAlias(): string {
+  getAliases(): string {
     if (this.gene?.alias && this.gene.alias.length > 0) {
       return this.gene.alias.join(', ');
+    }
+    return '';
+  }
+
+  getUniProtKBLink(uniProtId: string) {
+    if (uniProtId) {
+      return `https://www.uniprot.org/uniprotkb/${uniProtId}/entry`;
     }
     return '';
   }

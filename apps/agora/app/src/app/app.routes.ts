@@ -61,6 +61,11 @@ export const routes: Route[] = [
     },
   },
   {
+    path: 'genes/:id/similar',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/gene-similar').then((routes) => routes.routes),
+  },
+  {
     path: 'genes/:id/:tab/:subtab',
     loadChildren: () =>
       import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),

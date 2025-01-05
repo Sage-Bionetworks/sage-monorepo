@@ -31,6 +31,7 @@ export interface Gene {
   summary: string;
   hgnc_symbol: string;
   alias: Array<string>;
+  uniprotkb_accessions?: Array<string>;
   is_igap: boolean;
   is_eqtl: boolean;
   is_any_rna_changed_in_ad_brain: boolean;
@@ -39,7 +40,7 @@ export interface Gene {
   protein_brain_change_studied: boolean;
   target_nominations: Array<TargetNomination> | null;
   median_expression: Array<MedianExpression>;
-  druggability: Array<Druggability>;
+  druggability: Druggability;
   total_nominations: number | null;
   is_adi?: boolean;
   is_tep?: boolean;
@@ -57,7 +58,7 @@ export interface Gene {
   ab_modality_display_value?: string | null;
   safety_rating_display_value?: string | null;
   sm_druggability_display_value?: string | null;
-  pharos_class_display_value?: string | null;
+  pharos_class_display_value?: Array<string> | null;
   is_any_rna_changed_in_ad_brain_display_value?: string | null;
   is_any_protein_changed_in_ad_brain_display_value?: string | null;
   nominated_target_display_value?: boolean | null;

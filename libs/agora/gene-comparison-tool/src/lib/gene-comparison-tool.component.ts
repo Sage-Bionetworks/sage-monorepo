@@ -263,7 +263,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
     combineLatest([genesApi$, distributionApi$]).subscribe(([genesResult, distributionResult]) => {
       if (genesResult.items) {
-        console.log('# of items', genesResult.items.length);
         this.initData(genesResult.items);
         this.sortTable(this.headerTable);
         this.refresh();
@@ -271,8 +270,6 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         this.scoresDistribution = distributionResult.overall_scores;
 
         this.isLoading = false;
-        // console.log('calling setLoading false');
-        // this.helperService.setLoading(false);
       }
     });
   }
@@ -1295,14 +1292,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   updateColumnWidth() {
     const count = this.columns.length < 5 ? 5 : this.columns.length;
-    console.log('count is: ', count);
-
     const width = this.headerTable?.containerViewChild?.nativeElement?.offsetWidth || 0;
-    console.log('ht', this.headerTable?.containerViewChild?.nativeElement?.offsetWidth);
-    console.log('width is: ', width);
-
     this.columnWidth = Math.ceil((width - 300) / count) + 'px';
-    console.log('column width is: ', this.columnWidth);
   }
 
   onResize() {

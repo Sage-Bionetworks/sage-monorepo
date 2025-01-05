@@ -38,7 +38,17 @@ hr {
 }
 
 .gene-hero-biodomains {
-  margin-bottom: 30px;
+  margin-bottom: 15px;
+
+  p {
+    margin-left: 10px;
+  }
+}
+
+.gene-hero-pharos {
+  p {
+    margin-left: 10px;
+  }
 }
 
 .gene-hero-summary {
@@ -50,9 +60,14 @@ hr {
 }
 
 .gene-hero-aliases-heading,
-.gene-hero-biodomains-heading {
+.gene-hero-biodomains-heading,
+.gene-hero-pharos-heading {
   text-transform: uppercase;
   margin-bottom: 15px;
+}
+
+.aliases {
+  margin: 0 0 0 10px;
 }
 
 .possible-replacements {
