@@ -2,16 +2,16 @@
   <div class="section-inner">
     <div class="container-sm">
       <h1 class="h2">Similar Genes</h1>
-      @if (gene?.ensembl_gene_id) {
+      @if (gene.ensembl_gene_id) {
         <p>
           Genes that are similar to
-          <a class="link" [routerLink]="'/genes/' + gene?.ensembl_gene_id">{{
+          <a class="link" [routerLink]="'/genes/' + gene.ensembl_gene_id">{{
             gene.hgnc_symbol || gene.ensembl_gene_id
           }}</a>
           based on network coexpression.
         </p>
       }
-      @if (!gene?.ensembl_gene_id) {
+      @if (!gene.ensembl_gene_id) {
         <p>Genes that are similar based on network coexpression.</p>
       }
       <agora-modal-link text="Learn more about this table" header="Similar genes" wikiId="612974">
@@ -26,7 +26,7 @@
       <div class="mb-lg">
         <agora-gene-table
           className="similar-gene-table"
-          [exportFilename]="'genes-similar-' + gene?.ensembl_gene_id"
+          [exportFilename]="'genes-similar-' + gene.ensembl_gene_id"
           [genes]="genes"
           [columns]="tableColumns"
           sortField="hgnc_symbol"
