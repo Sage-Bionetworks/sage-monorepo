@@ -6,6 +6,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   apiDocsUrl: string;
   rollbarToken: string;
+  tagName: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;

@@ -27,7 +27,7 @@ export class FooterComponent implements OnInit {
   dataVersion$!: Observable<Dataversion>;
   sha$!: Observable<string>;
 
-  tag = 'agora/v0.0.2';
+  tag = '';
 
   navItems: Array<NavigationLink> = [
     {
@@ -48,6 +48,7 @@ export class FooterComponent implements OnInit {
 
   constructor() {
     this.footerLogoPath = this.sanitizer.sanitize('/agora-assets/images/footer-logo.svg');
+    this.tag = this.configService.config.tagName;
   }
 
   ngOnInit(): void {
