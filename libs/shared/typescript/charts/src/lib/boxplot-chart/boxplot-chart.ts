@@ -182,6 +182,7 @@ export class BoxplotChart {
         {
           text: title,
           left: 'center',
+          top: 'top',
           textStyle: titleTextStyle,
         },
         // Add x-axis title as a title rather than xAxis.name, because
@@ -260,18 +261,21 @@ export class BoxplotChart {
         max: yAxisMax ? yAxisMax + yAxisPadding : undefined,
       },
       tooltip: {
+        confine: true,
         position: 'top',
         backgroundColor: '#63676C',
         borderColor: 'none',
         textStyle: {
           color: 'white',
         },
-        extraCssText: 'opacity: 0.9',
+        extraCssText:
+          'opacity: 0.9; width: auto; max-width: 300px; white-space: pre-wrap; text-align: center;',
       },
       series: seriesOpts,
     };
 
-    this.chart.setOption(option);
+    // notMerge must be set to true to override any existing options set on the chart
+    this.chart.setOption(option, true);
     this.setXAxisLabelTooltips(xAxisCategoryToTooltipText);
   }
 }

@@ -38,8 +38,10 @@ export class XAxisLabelTooltips {
         const currLabel = e.event?.target;
         if (!currLabel) return;
 
-        // show tooltip
         const fullText = this.xAxisCategoryToTooltipText[e.value as string];
+        if (!fullText) return;
+
+        // show tooltip
         axisTooltipContent.innerText = fullText;
         axisTooltipStyle.left = currLabel.transform[4] - axisTooltipDOM.offsetWidth / 2 + 'px';
         axisTooltipStyle.top = currLabel.transform[5] - axisTooltipDOM.offsetHeight - 15 + 'px';

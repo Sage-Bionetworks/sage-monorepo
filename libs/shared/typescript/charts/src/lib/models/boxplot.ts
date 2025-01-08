@@ -7,6 +7,8 @@ export type CategoryPoint = {
   gridCategory?: string;
   // if defined, will use a different shape and color for each pointCategory.
   pointCategory?: string;
+  // additional text about this point
+  text?: string;
 };
 
 export type CategoryAsValuePoint = CategoryPoint & {

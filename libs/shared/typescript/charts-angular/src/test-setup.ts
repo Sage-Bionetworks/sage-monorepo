@@ -13,3 +13,9 @@ Object.defineProperty(window.HTMLElement.prototype, 'clientWidth', {
   configurable: true,
   value: jest.fn(),
 });
+
+global.ResizeObserver = jest.fn().mockImplementation(() => ({
+  observe: jest.fn(),
+  unobserve: jest.fn(),
+  disconnect: jest.fn(),
+}));
