@@ -8,11 +8,11 @@
     "types": []
   },
   "exclude": [
-    "src/test-setup.ts",
-    "**/*.spec.ts",
-    "**/*.test.ts",
+    "src/**/*.spec.ts",
     "jest.config.ts",
-    "**/*.stories.ts"
+    "src/**/*.test.ts",
+    "**/*.stories.ts",
+    "**/*.stories.js"
   ],
-  "include": ["**/*.ts"]
+  "include": ["src/**/*.js", "src/**/*.jsx", "src/**/*.ts", "src/**/*.tsx"]
 }
