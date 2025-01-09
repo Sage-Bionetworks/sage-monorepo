@@ -1,0 +1,9 @@
+services:
+  openchallenges-data-lambda:
+    image: ghcr.io/sage-bionetworks/openchallenges-data-lambda:${OPENCHALLENGES_VERSION:-local}
+    container_name: openchallenges-data-lambda
+    restart: always
+    networks:
+      - openchallenges
+    ports:
+      - '9000:8080'
