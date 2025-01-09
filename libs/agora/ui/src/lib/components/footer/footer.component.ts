@@ -27,6 +27,11 @@ export class FooterComponent implements OnInit {
   dataVersion$!: Observable<Dataversion>;
   sha$!: Observable<string>;
 
+  /*
+   TODO find out what the final tag format should be and potentially eliminate the 
+   environmental variable for the tag since it can be deterministically generated
+   from the site version
+   */
   tag = '';
 
   navItems: Array<NavigationLink> = [

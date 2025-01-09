@@ -6,11 +6,5 @@
     "types": ["jest", "node"]
   },
   "files": ["src/test-setup.ts"],
-  "include": [
-    "**/*.test.ts",
-    "**/*.spec.ts",
-    "**/*.d.ts",
-    "jest.config.ts",
-    "src/lib/components/gene-similar/gene-similar.component.spec.ts"
-  ]
+  "include": ["**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "jest.config.ts"]
 }

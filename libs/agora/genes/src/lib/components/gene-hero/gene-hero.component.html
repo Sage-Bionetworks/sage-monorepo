@@ -37,9 +37,9 @@
           }
           <div class="gene-hero-aliases">
             <h4 class="gene-hero-aliases-heading">Also known as</h4>
-            @if (getEnsemblUrl()) {
+            @if (getEnsemblUrl(); as ensemblUrl) {
               <p class="aliases">
-                <a [href]="getEnsemblUrl()" target="_blank">{{ gene.ensembl_gene_id }}</a>
+                <a [href]="ensemblUrl" target="_blank">{{ gene.ensembl_gene_id }}</a>
                 @if (gene.ensembl_info.ensembl_release) {
                   <span> (Ensembl Release {{ gene.ensembl_info.ensembl_release }}) </span>
                 }
