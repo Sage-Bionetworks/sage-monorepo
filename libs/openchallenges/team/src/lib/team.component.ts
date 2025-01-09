@@ -15,7 +15,6 @@ import { getSeoData } from './team-seo-data';
 
 @Component({
   selector: 'openchallenges-team',
-  standalone: true,
   imports: [CommonModule, RouterModule, FooterComponent],
   templateUrl: './team.component.html',
   styleUrls: ['./team.component.scss'],

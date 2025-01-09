@@ -10,7 +10,6 @@ import { ScrollerOptions } from 'primeng/api';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
-  standalone: true,
   imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule, SkeletonModule],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],

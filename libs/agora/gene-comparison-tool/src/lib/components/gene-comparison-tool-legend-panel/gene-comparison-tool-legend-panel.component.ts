@@ -3,7 +3,6 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'agora-gene-comparison-tool-legend-panel',
-  standalone: true,
   imports: [DialogModule],
   templateUrl: './gene-comparison-tool-legend-panel.component.html',
   styleUrls: ['./gene-comparison-tool-legend-panel.component.scss'],

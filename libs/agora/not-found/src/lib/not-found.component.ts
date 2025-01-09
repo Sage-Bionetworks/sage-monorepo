@@ -14,7 +14,6 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'agora-not-found',
-  standalone: true,
   imports: [CommonModule, RouterModule, MatCardModule, MatButtonModule],
   templateUrl: './not-found.component.html',
   styleUrls: ['./not-found.component.scss'],

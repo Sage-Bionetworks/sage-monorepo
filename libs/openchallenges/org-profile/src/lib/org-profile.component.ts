@@ -39,7 +39,6 @@ import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'openchallenges-org-profile',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

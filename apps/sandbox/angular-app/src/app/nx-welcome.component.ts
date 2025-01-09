@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-nx-welcome',
-  standalone: true,
   imports: [CommonModule],
   template: `
     <!--
@@ -724,7 +723,7 @@ import { CommonModule } from '@angular/common';
           </div>
           <div id="other-links">
             <a
-              class="button-pill rounded shadow nx-console"
+              class="button-pill nx-console rounded shadow"
               href="https://marketplace.visualstudio.com/items?itemName=nrwl.angular-console&utm_source=nx-project"
               target="_blank"
               rel="noreferrer"
@@ -746,7 +745,7 @@ import { CommonModule } from '@angular/common';
               </span>
             </a>
             <a
-              class="button-pill rounded shadow nx-console-jetbrains"
+              class="button-pill nx-console-jetbrains rounded shadow"
               href="https://plugins.jetbrains.com/plugin/21060-nx-console"
               target="_blank"
               rel="noreferrer"

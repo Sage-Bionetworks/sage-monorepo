@@ -4,7 +4,6 @@ import { WikiComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-news',
-  standalone: true,
   imports: [CommonModule, WikiComponent],
   templateUrl: './news.component.html',
   styleUrls: ['./news.component.scss'],

@@ -25,7 +25,6 @@ type ContributionCardBundle = {
 
 @Component({
   selector: 'openchallenges-challenge-contributors',
-  standalone: true,
   imports: [CommonModule, OrganizationCardComponent],
   templateUrl: './challenge-contributors.component.html',
   styleUrls: ['./challenge-contributors.component.scss'],

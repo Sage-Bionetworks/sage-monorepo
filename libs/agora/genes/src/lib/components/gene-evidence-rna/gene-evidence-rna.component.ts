@@ -22,7 +22,6 @@ import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-evidence-rna',
-  standalone: true,
   imports: [
     GeneNetworkComponent,
     GeneModelSelectorComponent,

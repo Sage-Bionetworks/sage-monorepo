@@ -5,7 +5,6 @@ import { WikiComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-about',
-  standalone: true,
   imports: [CommonModule, WikiComponent, ScoreBarChartComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],

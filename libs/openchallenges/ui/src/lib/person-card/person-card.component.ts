@@ -6,7 +6,6 @@ import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-person-card',
-  standalone: true,
   imports: [CommonModule, AvatarComponent, MatIconModule],
   templateUrl: './person-card.component.html',
   styleUrls: ['./person-card.component.scss'],

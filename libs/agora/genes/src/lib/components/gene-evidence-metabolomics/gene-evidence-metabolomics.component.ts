@@ -7,7 +7,6 @@ import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-evidence-metabolomics',
-  standalone: true,
   imports: [ModalLinkComponent, DownloadDomImageComponent, BoxPlotComponent],
   providers: [HelperService],
   templateUrl: './gene-evidence-metabolomics.component.html',

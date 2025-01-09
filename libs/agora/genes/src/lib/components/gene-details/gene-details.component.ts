@@ -30,7 +30,6 @@ interface Panel {
 
 @Component({
   selector: 'agora-gene-details',
-  standalone: true,
   imports: [
     CommonModule,
     GeneHeroComponent,

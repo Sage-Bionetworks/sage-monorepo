@@ -15,7 +15,6 @@ interface Type {
 
 @Component({
   selector: 'agora-download-dom-image',
-  standalone: true,
   imports: [CommonModule, FormsModule, OverlayPanelModule, RadioButtonModule],
   templateUrl: './download-dom-image.component.html',
   styleUrls: ['./download-dom-image.component.scss'],

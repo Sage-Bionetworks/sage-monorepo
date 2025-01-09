@@ -5,7 +5,6 @@ import { SvgIconComponent, WikiComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-overlay-panel-link',
-  standalone: true,
   imports: [CommonModule, SvgIconComponent, OverlayPanelModule, WikiComponent],
   templateUrl: './overlay-panel-link.component.html',
   styleUrls: ['./overlay-panel-link.component.scss'],

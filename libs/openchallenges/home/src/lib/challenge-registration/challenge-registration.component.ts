@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-challenge-registration',
-  standalone: true,
   imports: [CommonModule, MatButtonModule],
   templateUrl: './challenge-registration.component.html',
   styleUrls: ['./challenge-registration.component.scss'],

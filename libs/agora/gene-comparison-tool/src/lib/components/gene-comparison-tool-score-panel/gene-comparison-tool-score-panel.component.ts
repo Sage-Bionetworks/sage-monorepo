@@ -15,7 +15,6 @@ import { WikiComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool-score-panel',
-  standalone: true,
   imports: [OverlayPanelModule, WikiComponent, ScoreBarChartComponent],
   templateUrl: './gene-comparison-tool-score-panel.component.html',
   styleUrls: ['./gene-comparison-tool-score-panel.component.scss'],

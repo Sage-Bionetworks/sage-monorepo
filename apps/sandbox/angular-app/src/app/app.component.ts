@@ -4,7 +4,6 @@ import { NxWelcomeComponent } from './nx-welcome.component';
 import { SandboxAngularLibComponent } from '@sagebionetworks/sandbox-angular-lib';
 
 @Component({
-  standalone: true,
   imports: [NxWelcomeComponent, RouterModule, SandboxAngularLibComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',

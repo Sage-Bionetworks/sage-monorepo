@@ -5,13 +5,6 @@
   "sourceRoot": "libs/shared/typescript/charts-angular/src",
   "prefix": "sage",
   "targets": {
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/typescript/charts-angular"],
-      "options": {
-        "jestConfig": "libs/shared/typescript/charts-angular/jest.config.ts"
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint"
     },

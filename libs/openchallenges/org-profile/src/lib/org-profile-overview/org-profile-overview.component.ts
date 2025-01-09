@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'openchallenges-org-profile-overview',
-  standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './org-profile-overview.component.html',
   styleUrls: ['./org-profile-overview.component.scss'],

@@ -5,7 +5,6 @@ import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-loading-overlay',
-  standalone: true,
   imports: [CommonModule, LoadingIconComponent],
   providers: [HelperService],
   templateUrl: './loading-overlay.component.html',

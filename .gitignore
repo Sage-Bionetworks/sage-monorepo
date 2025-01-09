@@ -132,3 +132,4 @@ vite.config.*.timestamp*
 
 # AWS SAM
 .aws-sam
+vitest.config.*.timestamp*

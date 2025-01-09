@@ -71,7 +71,6 @@ import { assign } from 'lodash';
 
 @Component({
   selector: 'openchallenges-org-search',
-  standalone: true,
   imports: [
     CommonModule,
     DividerModule,

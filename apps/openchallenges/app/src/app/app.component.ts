@@ -20,7 +20,6 @@ import { NgIf } from '@angular/common';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  standalone: true,
   imports: [NavbarComponent, RouterOutlet, NgIf, GoogleTagManagerComponent],
 })
 export class AppComponent implements OnInit, OnDestroy {
