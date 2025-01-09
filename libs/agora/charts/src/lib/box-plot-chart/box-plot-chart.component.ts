@@ -26,7 +26,7 @@ export class BoxPlotComponent {
 
   _data: boxPlotChartItem[] = [];
   points: CategoryPoint[] = [];
-  summaries: CategoryBoxplotSummary[] | undefined = [];
+  summaries: CategoryBoxplotSummary[] = [];
   xAxisCategoryToTooltipText: Record<string, string> | undefined = {};
   isInitialized = false;
   pointTooltipFormatter: ((pt: CategoryPoint) => string) | undefined;
@@ -73,7 +73,7 @@ export class BoxPlotComponent {
         thirdQuartile: item.quartiles[2],
         max: item.value[2],
       };
-      this.summaries?.push(summary);
+      this.summaries.push(summary);
 
       if (this.xAxisCategoryToTooltipText) {
         const tooltipText = this.getXAxisTooltipText(xAxisCategory);

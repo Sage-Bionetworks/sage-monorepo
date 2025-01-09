@@ -56,7 +56,6 @@ service_account.json
 Thumbs.db
 
 .angular
-.yarn
 
 # Gradle
 .gradle
