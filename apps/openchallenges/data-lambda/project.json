@@ -20,13 +20,13 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/sandbox/serve.sh {projectName}"
+        "command": "docker/openchallenges/serve.sh {projectName}"
       }
     },
     "serve-detach": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "docker/sandbox/serve-detach.sh {projectName}"
+        "command": "docker/openchallenges/serve-detach.sh {projectName}"
       }
     },
     "invoke": {
