@@ -68,7 +68,7 @@ jobs:
           wait-for-processing: true
 
       - name: Detain results for debug if needed
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: trivy-results-${{ matrix.image }}-edge.sarif
           path: trivy-results-${{ matrix.image }}-edge.sarif
