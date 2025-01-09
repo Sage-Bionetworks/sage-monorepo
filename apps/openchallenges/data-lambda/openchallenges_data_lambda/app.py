@@ -23,11 +23,19 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
+    length = event["length"]
+    width = event["width"]
+
+    area = calculate_area(length, width)
+    print(f"The area is {area}")
+
+    data = {"area": area}
+
     return {
         "statusCode": 200,
-        "body": json.dumps(
-            {
-                "message": "hello world",
-            }
-        ),
+        "body": json.dumps(data),
     }
+
+
+def calculate_area(length, width):
+    return length * width
