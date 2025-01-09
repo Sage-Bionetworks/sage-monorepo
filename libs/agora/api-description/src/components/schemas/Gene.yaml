@@ -92,7 +92,7 @@ properties:
   links:
     type: object
     additionalProperties:
-      type: object
+      $ref: GeneNetworkLinks.yaml
     nullable: true
   similar_genes_network:
     $ref: SimilarGenesNetwork.yaml

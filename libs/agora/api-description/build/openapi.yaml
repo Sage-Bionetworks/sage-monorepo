@@ -623,6 +623,31 @@ components:
         - reference_doi
         - date_report
         - abability_bucket_definition
+    GeneNetworkLinks:
+      type: object
+      description: Gene Network Links
+      properties:
+        geneA_ensembl_gene_id:
+          type: string
+          description: Ensembl gene ID for gene A
+        geneB_ensembl_gene_id:
+          type: string
+          description: Ensembl gene ID for gene B
+        geneA_external_gene_name:
+          type: string
+          description: External gene name for gene A
+        geneB_external_gene_name:
+          type: string
+          description: External gene name for gene B
+        brainRegion:
+          type: string
+          description: Associated brain region
+      required:
+        - geneA_ensembl_gene_id
+        - geneB_ensembl_gene_id
+        - geneA_external_gene_name
+        - geneB_external_gene_name
+        - brainRegion
     SimilarGenesNetworkNode:
       type: object
       description: SimilarGenesNetworkNode
@@ -808,7 +833,7 @@ components:
         links:
           type: object
           additionalProperties:
-            type: object
+            $ref: '#/components/schemas/GeneNetworkLinks'
           nullable: true
         similar_genes_network:
           $ref: '#/components/schemas/SimilarGenesNetwork'

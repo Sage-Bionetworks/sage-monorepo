@@ -1,0 +1,24 @@
+type: object
+description: Gene Network Links
+properties:
+  geneA_ensembl_gene_id:
+    type: string
+    description: 'Ensembl gene ID for gene A'
+  geneB_ensembl_gene_id:
+    type: string
+    description: 'Ensembl gene ID for gene B'
+  geneA_external_gene_name:
+    type: string
+    description: 'External gene name for gene A'
+  geneB_external_gene_name:
+    type: string
+    description: 'External gene name for gene B'
+  brainRegion:
+    type: string
+    description: 'Associated brain region'
+required:
+  - geneA_ensembl_gene_id
+  - geneB_ensembl_gene_id
+  - geneA_external_gene_name
+  - geneB_external_gene_name
+  - brainRegion

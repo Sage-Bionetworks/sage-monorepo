@@ -25,6 +25,7 @@ model/gCTGeneNominations.ts
 model/gCTGeneTissue.ts
 model/gCTGenesList.ts
 model/gene.ts
+model/geneNetworkLinks.ts
 model/genesList.ts
 model/medianExpression.ts
 model/models.ts

@@ -14,6 +14,7 @@ import { ExperimentalValidation } from './experimentalValidation';
 import { EnsemblInfo } from './ensemblInfo';
 import { RnaDifferentialExpression } from './rnaDifferentialExpression';
 import { BioDomains } from './bioDomains';
+import { GeneNetworkLinks } from './geneNetworkLinks';
 import { TargetNomination } from './targetNomination';
 import { NeuropathologicCorrelation } from './neuropathologicCorrelation';
 import { SimilarGenesNetwork } from './similarGenesNetwork';
@@ -53,7 +54,7 @@ export interface Gene {
   overall_scores?: OverallScores;
   neuropathologic_correlations?: Array<NeuropathologicCorrelation> | null;
   experimental_validation?: Array<ExperimentalValidation> | null;
-  links?: { [key: string]: object } | null;
+  links?: { [key: string]: GeneNetworkLinks } | null;
   similar_genes_network?: SimilarGenesNetwork;
   ab_modality_display_value?: string | null;
   safety_rating_display_value?: string | null;

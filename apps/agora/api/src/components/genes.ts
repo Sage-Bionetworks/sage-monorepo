@@ -164,7 +164,7 @@ export async function genesRoute(req: Request, res: Response, next: NextFunction
   try {
     const result = await getGenes(<string | string[]>req.query.ids);
     setHeaders(res);
-    res.json({ items: result });
+    res.json(result);
   } catch (err) {
     next(err);
   }

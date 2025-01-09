@@ -63,22 +63,22 @@ export const routes: Route[] = [
   {
     path: 'genes/:id/similar',
     loadChildren: () =>
-      import('@sagebionetworks/agora/gene-similar').then((routes) => routes.routes),
+      import('@sagebionetworks/agora/gene-similar').then((routes) => routes.similarRoute),
   },
   {
     path: 'genes/:id/:tab/:subtab',
     loadChildren: () =>
-      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.detailsRoute),
   },
   {
     path: 'genes/:id/:tab',
     loadChildren: () =>
-      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.detailsRoute),
   },
   {
     path: 'genes/:id',
     loadChildren: () =>
-      import('@sagebionetworks/agora/gene-details').then((routes) => routes.routes),
+      import('@sagebionetworks/agora/gene-details').then((routes) => routes.detailsRoute),
     data: {
       title: 'Agora | Gene Details',
       description: "View information and evidence about genes in Alzheimer's disease.",

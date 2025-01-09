@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
-import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { GeneService, HelperService } from '@sagebionetworks/agora/services';
 import { GeneTableComponent } from '../gene-table/gene-table.component';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 
@@ -15,14 +15,14 @@ interface TableColumn {
   selector: 'agora-gene-similar',
   standalone: true,
   imports: [ModalLinkComponent, GeneTableComponent, RouterLink, SvgIconComponent],
-  providers: [GenesService],
+  providers: [GeneService],
   templateUrl: './gene-similar.component.html',
   styleUrls: ['./gene-similar.component.scss'],
 })
 export class GeneSimilarComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  genesService = inject(GenesService);
+  geneService = inject(GeneService);
   helperService = inject(HelperService);
 
   gene: Gene = {} as Gene;
@@ -59,7 +59,7 @@ export class GeneSimilarComponent implements OnInit {
     this.route.paramMap.subscribe((params: ParamMap) => {
       if (params.get('id')) {
         this.helperService.setLoading(true);
-        this.genesService.getGene(params.get('id') as string).subscribe((gene: Gene | null) => {
+        this.geneService.getGene(params.get('id') as string).subscribe((gene: Gene | null) => {
           if (!gene) {
             this.helperService.setLoading(false);
             // https://github.com/angular/angular/issues/45202
@@ -84,9 +84,7 @@ export class GeneSimilarComponent implements OnInit {
       ids.push(obj.ensembl_gene_id);
     });
 
-    this.genesService.getGenes(ids).subscribe((response) => {
-      const genes = response;
-
+    this.geneService.getGenes(ids).subscribe((genes) => {
       genes.forEach((de: Gene) => {
         // Populate display fields & set default values
         de.is_any_rna_changed_in_ad_brain_display_value = de.rna_brain_change_studied
