@@ -18,7 +18,6 @@ import { CountUpModule } from 'ngx-countup';
 
 @Component({
   selector: 'openchallenges-challenge-search',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,

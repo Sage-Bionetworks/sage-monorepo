@@ -9,7 +9,6 @@ import {
 
 @Component({
   selector: 'openchallenges-challenge-organizers',
-  standalone: true,
   imports: [CommonModule, PersonCardComponent],
   templateUrl: './challenge-organizers.component.html',
   styleUrls: ['./challenge-organizers.component.scss'],

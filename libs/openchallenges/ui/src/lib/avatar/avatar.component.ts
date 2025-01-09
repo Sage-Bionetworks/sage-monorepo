@@ -4,7 +4,6 @@ import { Avatar } from './avatar';
 
 @Component({
   selector: 'openchallenges-avatar',
-  standalone: true,
   imports: [NgxAvatarModule],
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss'],

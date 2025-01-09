@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'agora-gene-nominations',
-  standalone: true,
   imports: [CommonModule],
   providers: [TeamsService],
   templateUrl: './gene-nominations.component.html',

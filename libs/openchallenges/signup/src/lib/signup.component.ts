@@ -25,7 +25,6 @@ import { isApiClientError } from '@sagebionetworks/openchallenges/util';
 
 @Component({
   selector: 'openchallenges-signup',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

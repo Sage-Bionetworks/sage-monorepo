@@ -9,7 +9,6 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'agora-nominated-targets',
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,

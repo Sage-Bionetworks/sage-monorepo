@@ -10,7 +10,6 @@ import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-evidence-proteomics',
-  standalone: true,
   imports: [
     ModalLinkComponent,
     DownloadDomImageComponent,

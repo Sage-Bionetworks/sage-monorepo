@@ -1,4 +1,4 @@
-import { ApplicationConfig, APP_INITIALIZER, APP_ID } from '@angular/core';
+import { ApplicationConfig, APP_ID, inject, provideAppInitializer } from '@angular/core';
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
@@ -30,12 +30,10 @@ export const appConfig: ApplicationConfig = {
       useFactory: () => 'https://repo-prod.prod.sagebase.org',
       deps: [],
     },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: configFactory,
-      deps: [ConfigService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = configFactory(inject(ConfigService));
+      return initializerFn();
+    }),
     {
       provide: API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>

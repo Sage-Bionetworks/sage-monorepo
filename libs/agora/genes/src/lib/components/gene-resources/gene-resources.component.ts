@@ -8,7 +8,6 @@ import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-resources',
-  standalone: true,
   imports: [CommonModule, GeneDruggabilityComponent, ModalLinkComponent],
   templateUrl: './gene-resources.component.html',
   styleUrls: ['./gene-resources.component.scss'],

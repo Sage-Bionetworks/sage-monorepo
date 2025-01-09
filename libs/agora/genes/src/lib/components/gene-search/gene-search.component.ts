@@ -33,7 +33,6 @@ import { CloseIconComponent } from './assets/close-icon/close-icon.component';
 
 @Component({
   selector: 'agora-gene-search',
-  standalone: true,
   imports: [CommonModule, FormsModule, FontAwesomeModule, GeneIconComponent, CloseIconComponent],
   templateUrl: './gene-search.component.html',
   styleUrls: ['./gene-search.component.scss'],

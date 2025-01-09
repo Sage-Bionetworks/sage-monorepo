@@ -5,7 +5,6 @@ import { Challenge } from '@sagebionetworks/openchallenges/api-client-angular';
 
 @Component({
   selector: 'openchallenges-challenge-stats',
-  standalone: true,
   imports: [CommonModule, MatIconModule],
   templateUrl: './challenge-stats.component.html',
   styleUrls: ['./challenge-stats.component.scss'],

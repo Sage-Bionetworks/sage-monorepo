@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'model-ad-footer',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],

@@ -7,7 +7,6 @@ import { catchError, finalize, map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'agora-teams',
-  standalone: true,
   imports: [CommonModule, TeamListComponent],
   providers: [HelperService, TeamsService],
   templateUrl: './teams.component.html',

@@ -17,7 +17,6 @@ interface Summary {
 
 @Component({
   selector: 'agora-gene-soe-list',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './gene-soe-list.component.html',
   styleUrls: ['./gene-soe-list.component.scss'],

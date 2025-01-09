@@ -5,7 +5,6 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'agora-gene-comparison-tool-pinned-genes-modal',
-  standalone: true,
   imports: [DialogModule],
   templateUrl: './gene-comparison-tool-pinned-genes-modal.component.html',
   styleUrls: ['./gene-comparison-tool-pinned-genes-modal.component.scss'],

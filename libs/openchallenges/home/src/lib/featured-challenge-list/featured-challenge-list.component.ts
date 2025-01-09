@@ -12,7 +12,6 @@ import { Observable, catchError, map, of, switchMap, throwError } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-featured-challenge-list',
-  standalone: true,
   imports: [CommonModule, ChallengeCardComponent],
   templateUrl: './featured-challenge-list.component.html',
   styleUrls: ['./featured-challenge-list.component.scss'],

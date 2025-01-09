@@ -15,7 +15,6 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'agora-gene-comparison-tool-details-panel',
-  standalone: true,
   imports: [CommonModule, OverlayPanelModule],
   templateUrl: './gene-comparison-tool-details-panel.component.html',
   styleUrls: ['./gene-comparison-tool-details-panel.component.scss'],

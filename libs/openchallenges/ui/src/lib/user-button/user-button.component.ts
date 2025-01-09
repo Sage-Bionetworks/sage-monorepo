@@ -12,7 +12,6 @@ import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-user-button',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

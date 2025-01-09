@@ -60,7 +60,6 @@ import { SvgIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,

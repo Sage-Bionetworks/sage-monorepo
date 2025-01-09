@@ -1,6 +1,5 @@
 # Run formatters and linters against staged git files
 pnpm dlx lint-staged --relative
-
 # nx affected --uncommitted --target=lint
 
 # Re-index the staged files after they have been formatted

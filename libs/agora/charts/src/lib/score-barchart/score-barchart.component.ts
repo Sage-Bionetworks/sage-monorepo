@@ -20,7 +20,6 @@ import { ScoreData } from '@sagebionetworks/agora/models';
 
 @Component({
   selector: 'agora-score-barchart',
-  standalone: true,
   imports: [CommonModule],
   providers: [HelperService],
   templateUrl: './score-barchart.component.html',

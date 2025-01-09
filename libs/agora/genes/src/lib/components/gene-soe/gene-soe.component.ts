@@ -6,7 +6,6 @@ import { GeneSoeListComponent } from '../gene-soe-list/gene-soe-list.component';
 
 @Component({
   selector: 'agora-gene-soe',
-  standalone: true,
   imports: [GeneBioDomainsComponent, GeneSoeChartsComponent, GeneSoeListComponent],
   templateUrl: './gene-soe.component.html',
   styleUrls: ['./gene-soe.component.scss'],
