@@ -24,7 +24,6 @@
       "@sagebionetworks/agora/gene-comparison-tool": [
         "libs/agora/gene-comparison-tool/src/index.ts"
       ],
-      "@sagebionetworks/agora/gene-details": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/genes": ["libs/agora/genes/src/index.ts"],
       "@sagebionetworks/agora/home": ["libs/agora/home/src/index.ts"],
       "@sagebionetworks/agora/models": ["libs/agora/models/index.ts"],

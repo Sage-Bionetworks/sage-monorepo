@@ -11,8 +11,9 @@ properties:
     type: integer
     example: 3
   pharos_class:
-    type: string
-    example: 'Tclin'
+    type: array
+    items:
+      type: string
   classification:
     type: string
     example: 'Enzyme'

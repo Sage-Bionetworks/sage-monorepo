@@ -1,0 +1,47 @@
+<div class="section section-hero">
+  <div class="section-inner">
+    <div class="container-sm">
+      <h1 class="h2">Similar Genes</h1>
+      @if (gene.ensembl_gene_id) {
+        <p>
+          Genes that are similar to
+          <a class="link" [routerLink]="'/genes/' + gene.ensembl_gene_id">{{
+            gene.hgnc_symbol || gene.ensembl_gene_id
+          }}</a>
+          based on network coexpression.
+        </p>
+      }
+      @if (!gene.ensembl_gene_id) {
+        <p>Genes that are similar based on network coexpression.</p>
+      }
+      <agora-modal-link text="Learn more about this table" header="Similar genes" wikiId="612974">
+      </agora-modal-link>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-inner">
+    <div class="container-lg">
+      <div class="mb-lg">
+        <agora-gene-table
+          className="similar-gene-table"
+          [exportFilename]="'genes-similar-' + gene.ensembl_gene_id"
+          [genes]="genes"
+          [columns]="tableColumns"
+          sortField="hgnc_symbol"
+          [sortOrder]="1"
+          heading="Similar Genes"
+          [gctLink]="true"
+          gctLinkTooltip="Use Agora's Gene Comparison Tool to compare similar genes in this list"
+        ></agora-gene-table>
+      </div>
+      <div>
+        <agora-svg-icon name="info-circle" class="mr-xs text-gray-600"></agora-svg-icon>
+        Use
+        <a class="link" (click)="navigateToGeneComparisonTool()">Agora's Gene Comparison Tool</a>
+        to compare similar genes in this list.
+      </div>
+    </div>
+  </div>
+</div>

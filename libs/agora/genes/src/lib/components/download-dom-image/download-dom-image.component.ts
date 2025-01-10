@@ -7,6 +7,9 @@ import { saveAs } from 'file-saver';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 interface Type {
   value: string;
@@ -15,7 +18,14 @@ interface Type {
 
 @Component({
   selector: 'agora-download-dom-image',
-  imports: [CommonModule, FormsModule, OverlayPanelModule, RadioButtonModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    OverlayPanelModule,
+    RadioButtonModule,
+    ButtonModule,
+    FontAwesomeModule,
+  ],
   templateUrl: './download-dom-image.component.html',
   styleUrls: ['./download-dom-image.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -24,6 +34,9 @@ export class DownloadDomImageComponent {
   @Input() target: HTMLElement = {} as HTMLElement;
   @Input() heading = 'Download this plot as:';
   @Input() filename = 'agora';
+
+  downloadIcon = faDownload;
+  spinnerIcon = faSpinner;
 
   selectedType = '.png';
   types: Type[] = [
@@ -52,8 +65,14 @@ export class DownloadDomImageComponent {
     this.error = '';
     this.isLoading = true;
 
+    // width and height need to be specified
+    // known issue: https://github.com/1904labs/dom-to-image-more/issues/198
     domtoimage
-      .toBlob(this.target, { bgcolor: '#fff' })
+      .toBlob(this.target, {
+        bgcolor: '#fff',
+        width: this.target.offsetWidth,
+        height: this.target.offsetHeight,
+      })
       .then((blob: any) => {
         saveAs(blob, this.filename + this.selectedType);
         this.isLoading = false;

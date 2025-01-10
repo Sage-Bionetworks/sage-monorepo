@@ -1,3 +1,8 @@
+@if (isLoading) {
+  <div id="loading">
+    <agora-loading-icon></agora-loading-icon>
+  </div>
+}
 <div #gct class="gct" (window:resize)="onResize()">
   <div class="gct-inner">
     <div class="gct-header">
@@ -53,7 +58,7 @@
 
     <div class="gct-body">
       <div class="gct-body-inner">
-        <div class="gct-controls">
+        <div class="gct-controls" [hidden]="isLoading">
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
               <div class="gene-label">DISPLAYED GENES</div>
@@ -479,6 +484,8 @@
               breakpoint="0"
               (sortFunction)="sortCallback($event)"
               [customSort]="true"
+              [loading]="isLoading"
+              loadingIcon=""
             >
               <ng-template pTemplate="emptymessage" let-gene>
                 <div class="no-results">No results found...</div>
@@ -615,7 +622,7 @@
               </ng-template>
             </p-table>
 
-            <div class="gct-help-links">
+            <div class="gct-help-links" [hidden]="isLoading">
               <div class="gct-help-links-inner">
                 <div>
                   <a class="gct-help-link" (click)="legendPanel.toggle()">Legend</a>
@@ -635,24 +642,24 @@
         </div>
       </div>
     </div>
-
-    <agora-gene-comparison-tool-details-panel
-      #detailsPanel
-      (onShowLegend)="legendPanel.toggle()"
-      (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
-    ></agora-gene-comparison-tool-details-panel>
-    <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
-    <agora-gene-comparison-tool-how-to-panel #howToPanel></agora-gene-comparison-tool-how-to-panel>
-    <agora-gene-comparison-tool-legend-panel
-      #legendPanel
-      (howToClick)="legendPanel.toggle(); howToPanel.toggle()"
-    ></agora-gene-comparison-tool-legend-panel>
-    <agora-gene-comparison-tool-pinned-genes-modal
-      #pinnedGenesModal
-      (onChange)="onPinnedGenesModalChange($event)"
-      [pinnedGenes]="pinnedItems"
-      [pendingPinnedGenes]="pendingPinnedItems"
-      [maxPinnedGenes]="maxPinnedGenes"
-    ></agora-gene-comparison-tool-pinned-genes-modal>
   </div>
+
+  <agora-gene-comparison-tool-details-panel
+    #detailsPanel
+    (onShowLegend)="legendPanel.toggle()"
+    (onNavigateToConsistencyOfChange)="navigateToConsistencyOfChange($event)"
+  ></agora-gene-comparison-tool-details-panel>
+  <agora-gene-comparison-tool-score-panel #scorePanel></agora-gene-comparison-tool-score-panel>
+  <agora-gene-comparison-tool-how-to-panel #howToPanel></agora-gene-comparison-tool-how-to-panel>
+  <agora-gene-comparison-tool-legend-panel
+    #legendPanel
+    (howToClick)="legendPanel.toggle(); howToPanel.toggle()"
+  ></agora-gene-comparison-tool-legend-panel>
+  <agora-gene-comparison-tool-pinned-genes-modal
+    #pinnedGenesModal
+    (onChange)="onPinnedGenesModalChange($event)"
+    [pinnedGenes]="pinnedItems"
+    [pendingPinnedGenes]="pendingPinnedItems"
+    [maxPinnedGenes]="maxPinnedGenes"
+  ></agora-gene-comparison-tool-pinned-genes-modal>
 </div>

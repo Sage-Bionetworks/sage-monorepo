@@ -12,6 +12,7 @@ export * from './lib/components/gene-nominations/gene-nominations.component';
 export * from './lib/components/gene-protein-selector/gene-protein-selector.component';
 export * from './lib/components/gene-resources/gene-resources.component';
 export * from './lib/components/gene-search/gene-search.component';
+export * from './lib/components/gene-similar/gene-similar.routes';
 export * from './lib/components/gene-soe/gene-soe.component';
 export * from './lib/components/gene-soe-charts/gene-soe-charts.component';
 export * from './lib/components/gene-soe-list/gene-soe-list.component';

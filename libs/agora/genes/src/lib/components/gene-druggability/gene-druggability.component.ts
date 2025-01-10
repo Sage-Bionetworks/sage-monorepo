@@ -44,20 +44,18 @@ export class GeneDruggabilityComponent {
     // Update the initial buckets
     if (this.gene) {
       if (!this.gene.druggability) {
-        this.gene.druggability = [
-          {
-            sm_druggability_bucket: this.getDefaultBucketNumber(),
-            safety_bucket: this.getDefaultBucketNumber(),
-            abability_bucket: this.getDefaultBucketNumber(),
-            pharos_class: '',
-            classification: this.getDefaultText(),
-            safety_bucket_definition: this.getDefaultText(),
-            abability_bucket_definition: this.getDefaultText(),
-          },
-        ];
+        this.gene.druggability = {
+          sm_druggability_bucket: this.getDefaultBucketNumber(),
+          safety_bucket: this.getDefaultBucketNumber(),
+          abability_bucket: this.getDefaultBucketNumber(),
+          pharos_class: [],
+          classification: this.getDefaultText(),
+          safety_bucket_definition: this.getDefaultText(),
+          abability_bucket_definition: this.getDefaultText(),
+        };
       }
 
-      this.druggability = this.gene.druggability[0];
+      this.druggability = this.gene.druggability;
       this.currentBucketSM = this.druggability.sm_druggability_bucket;
       this.currentBucketAB = this.druggability.abability_bucket;
       this.currentBucketSF = this.druggability.safety_bucket;

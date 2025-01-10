@@ -55,39 +55,27 @@ export class NominatedTargetsComponent implements OnInit {
       header: 'Pharos Class',
       selected: false,
     },
-    {
-      field: 'sm_druggability_display_value',
-      header: 'Small Molecule Druggability',
-      selected: false,
-    },
-    {
-      field: 'safety_rating_display_value',
-      header: 'Safety Rating',
-      selected: false,
-    },
-    {
-      field: 'ab_modality_display_value',
-      header: 'Antibody Modality',
-      selected: false,
-    },
   ];
 
   ngOnInit() {
     this.apiService.getNominatedGenes().subscribe((response) => {
       if (!response.items) return;
       const genes = response.items;
+
       genes.forEach((de: Gene) => {
         let teamsArray: string[] = [];
         let studyArray: string[] = [];
         let programsArray: string[] = [];
         let inputDataArray: string[] = [];
         let initialNominationArray: number[] = [];
+
         if (de.total_nominations) {
           if (!this.nominations.includes(de.total_nominations)) {
             this.nominations.push(de.total_nominations);
             this.nominations.sort();
           }
         }
+
         // Handle TargetNomination fields
         // First map all entries nested in the data to a new array
         if (de.target_nominations?.length) {
@@ -97,45 +85,36 @@ export class NominatedTargetsComponent implements OnInit {
           );
           programsArray = de.target_nominations.map((nt: TargetNomination) => nt.source);
           inputDataArray = de.target_nominations.map((nt: TargetNomination) => nt.input_data);
+
           initialNominationArray = de.target_nominations
             .map((nt: TargetNomination) => nt.initial_nomination)
             .filter((item) => item !== undefined);
         }
+
         // Check if there are any strings with commas inside,
         // if there are separate those into new split strings
         teamsArray = this.commaFlattenArray(teamsArray);
         studyArray = this.commaFlattenArray(studyArray);
         programsArray = this.commaFlattenArray(programsArray);
         inputDataArray = this.commaFlattenArray(inputDataArray);
+
         // Populate targetNomination display fields
         de.teams_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(teamsArray);
         de.study_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(studyArray);
         de.programs_display_value = this.getCommaSeparatedStringOfUniqueSortedValues(programsArray);
         de.input_data_display_value =
           this.getCommaSeparatedStringOfUniqueSortedValues(inputDataArray);
+
         de.initial_nomination_display_value = initialNominationArray.length
           ? Math.min(...initialNominationArray)
           : undefined;
+
         // Populate Druggability display fields
-        if (de.druggability && de.druggability.length) {
-          de.pharos_class_display_value = de.druggability[0].pharos_class
-            ? de.druggability[0].pharos_class
-            : 'No value';
-          de.sm_druggability_display_value =
-            de.druggability[0].sm_druggability_bucket + ': ' + de.druggability[0].classification;
-          de.safety_rating_display_value =
-            de.druggability[0].safety_bucket + ': ' + de.druggability[0].safety_bucket_definition;
-          de.ab_modality_display_value =
-            de.druggability[0].abability_bucket +
-            ': ' +
-            de.druggability[0].abability_bucket_definition;
-        } else {
-          de.pharos_class_display_value = 'No value';
-          de.sm_druggability_display_value = 'No value';
-          de.safety_rating_display_value = 'No value';
-          de.ab_modality_display_value = 'No value';
+        if (de.druggability) {
+          de.pharos_class_display_value = de.druggability.pharos_class;
         }
       });
+
       this.genes = genes;
     });
   }

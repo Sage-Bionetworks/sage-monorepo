@@ -26,6 +26,13 @@ export class FooterComponent implements OnInit {
   dataVersion$!: Observable<Dataversion>;
   sha$!: Observable<string>;
 
+  /*
+   TODO find out what the final tag format should be and potentially eliminate the 
+   environmental variable for the tag since it can be deterministically generated
+   from the site version
+   */
+  tag = '';
+
   navItems: Array<NavigationLink> = [
     {
       label: 'About',
@@ -45,11 +52,12 @@ export class FooterComponent implements OnInit {
 
   constructor() {
     this.footerLogoPath = this.sanitizer.sanitize('/agora-assets/images/footer-logo.svg');
+    this.tag = this.configService.config.tagName;
   }
 
   ngOnInit(): void {
     this.dataVersion$ = this.dataVersionService.getDataversion();
-    this.sha$ = this.gitHubService.getCommitSHA('agora/v0.0.2');
+    this.sha$ = this.gitHubService.getCommitSHA(this.tag);
   }
 
   getSiteVersion() {

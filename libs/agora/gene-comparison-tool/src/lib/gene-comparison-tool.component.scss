@@ -3,6 +3,25 @@
 @import 'libs/agora/styles/src/lib/variables';
 @import 'libs/agora/styles/src/lib/mixins';
 
+#loading {
+  position: absolute;
+  inset: calc(var(--header-height)) 0 0;
+  background: rgb(255 255 255 / 100%);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - var(--footer-height) - var(--header-height));
+}
+
+.loading-icon-size {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - var(--footer-height) - var(--header-height) - 20px);
+  font-size: 50px !important;
+}
+
 .gct-tooltip-filter {
   max-width: 350px;
 

@@ -19,7 +19,9 @@ declare global {
 // -------------------------------------------------------------------------- //
 // Service
 // -------------------------------------------------------------------------- //
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class HelperService {
   loading = false;
 

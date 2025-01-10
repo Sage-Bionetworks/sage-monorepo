@@ -123,22 +123,7 @@ export class GeneTableComponent {
       } else if (a == null && b == null) {
         result = 0;
       } else if (typeof a === 'string' && typeof b === 'string') {
-        // Natural sorting for this score type, which can be >= 10
-        if (
-          event.field === 'sm_druggability_display_value' ||
-          event.field === 'safety_rating_display_value' ||
-          event.field === 'ab_modality_display_value'
-        ) {
-          let nA = parseInt(a.split(':')[0], 10);
-          let nB = parseInt(b.split(':')[0], 10);
-
-          nA = !isNaN(nA) ? nA : 999 * event.order;
-          nB = !isNaN(nB) ? nB : 999 * event.order;
-
-          result = nA < nB ? -1 : nA > nB ? 1 : 0;
-        } else {
-          result = a.localeCompare(b);
-        }
+        result = a.localeCompare(b);
       } else {
         result = a < b ? -1 : a > b ? 1 : 0;
       }

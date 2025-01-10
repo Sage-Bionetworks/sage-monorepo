@@ -19,7 +19,7 @@
         <p class="gene-hero-provider">
           {{ getSummary() }}
         </p>
-        @if (gene.bio_domains || getAlias() || getEnsemblUrl() !== '') {
+        @if (gene.bio_domains || getAliases() || getEnsemblUrl() !== '') {
           <hr />
           @if (gene.bio_domains) {
             <div class="gene-hero-biodomains">
@@ -29,22 +29,29 @@
               </p>
             </div>
           }
+          @if (gene.druggability && gene.druggability.pharos_class) {
+            <div class="gene-hero-pharos">
+              <h4 class="gene-hero-pharos-heading">Pharos Class</h4>
+              <p>{{ gene.druggability.pharos_class.join(', ') }}</p>
+            </div>
+          }
           <div class="gene-hero-aliases">
             <h4 class="gene-hero-aliases-heading">Also known as</h4>
-            @if (getEnsemblUrl() !== '') {
-              <p>
-                <a [href]="getEnsemblUrl()" target="_blank">{{ gene.ensembl_gene_id }}</a>
+            @if (getEnsemblUrl(); as ensemblUrl) {
+              <p class="aliases">
+                <a [href]="ensemblUrl" target="_blank">{{ gene.ensembl_gene_id }}</a>
                 @if (gene.ensembl_info.ensembl_release) {
                   <span> (Ensembl Release {{ gene.ensembl_info.ensembl_release }}) </span>
                 }
               </p>
             }
             @if (getEnsemblUrl() === '') {
-              <span>{{ gene.ensembl_gene_id }}</span>
+              <p class="aliases">
+                <span>{{ gene.ensembl_gene_id }}</span>
+              </p>
             }
-
             @if (gene.ensembl_info.ensembl_possible_replacements.length > 0) {
-              <p>
+              <p class="aliases">
                 <a [href]="getPossibleReplacementsURL()"
                   >Possible replacement value<span
                     *ngIf="gene.ensembl_info.ensembl_possible_replacements.length > 1"
@@ -54,8 +61,20 @@
                 {{ gene.ensembl_info.ensembl_possible_replacements.join(', ') }}
               </p>
             }
-            @if (alias !== '') {
-              <p>{{ alias }}</p>
+            @if (gene.uniprotkb_accessions) {
+              <p class="aliases">
+                UNIPROTKB
+                <ng-container
+                  *ngFor="let accession of gene.uniprotkb_accessions; let isLast = last"
+                  class="aliases"
+                >
+                  <a [href]="getUniProtKBLink(accession)" target="_blank">{{ accession }}</a
+                  ><span *ngIf="!isLast">, </span>
+                </ng-container>
+              </p>
+              <p *ngIf="gene.alias.length > 0" class="aliases">
+                {{ getAliases() }}
+              </p>
             }
           </div>
         }

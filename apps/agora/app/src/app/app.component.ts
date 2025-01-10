@@ -1,17 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
-import {
-  FooterComponent,
-  HeaderComponent,
-  LoadingOverlayComponent,
-} from '@sagebionetworks/agora/ui';
+import { FooterComponent, HeaderComponent } from '@sagebionetworks/agora/ui';
 import { filter } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  imports: [RouterModule, HeaderComponent, FooterComponent, LoadingOverlayComponent, ToastModule],
+  imports: [RouterModule, HeaderComponent, FooterComponent, ToastModule],
   providers: [MessageService],
   selector: 'app-root',
   templateUrl: './app.component.html',

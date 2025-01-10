@@ -15,6 +15,10 @@ properties:
     type: array
     items:
       type: string
+  uniprotkb_accessions:
+    type: array
+    items:
+      type: string
   is_igap:
     type: boolean
   is_eqtl:
@@ -37,9 +41,7 @@ properties:
     items:
       $ref: MedianExpression.yaml
   druggability:
-    type: array
-    items:
-      $ref: Druggability.yaml
+    $ref: Druggability.yaml
   total_nominations:
     type: integer
     nullable: true
@@ -90,7 +92,7 @@ properties:
   links:
     type: object
     additionalProperties:
-      type: object
+      $ref: GeneNetworkLinks.yaml
     nullable: true
   similar_genes_network:
     $ref: SimilarGenesNetwork.yaml
@@ -105,7 +107,9 @@ properties:
     type: string
     nullable: true
   pharos_class_display_value:
-    type: string
+    type: array
+    items:
+      type: string
     nullable: true
   is_any_rna_changed_in_ad_brain_display_value:
     type: string

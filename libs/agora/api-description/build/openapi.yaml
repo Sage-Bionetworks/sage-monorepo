@@ -421,8 +421,9 @@ components:
           type: integer
           example: 3
         pharos_class:
-          type: string
-          example: Tclin
+          type: array
+          items:
+            type: string
         classification:
           type: string
           example: Enzyme
@@ -622,6 +623,31 @@ components:
         - reference_doi
         - date_report
         - abability_bucket_definition
+    GeneNetworkLinks:
+      type: object
+      description: Gene Network Links
+      properties:
+        geneA_ensembl_gene_id:
+          type: string
+          description: Ensembl gene ID for gene A
+        geneB_ensembl_gene_id:
+          type: string
+          description: Ensembl gene ID for gene B
+        geneA_external_gene_name:
+          type: string
+          description: External gene name for gene A
+        geneB_external_gene_name:
+          type: string
+          description: External gene name for gene B
+        brainRegion:
+          type: string
+          description: Associated brain region
+      required:
+        - geneA_ensembl_gene_id
+        - geneB_ensembl_gene_id
+        - geneA_external_gene_name
+        - geneB_external_gene_name
+        - brainRegion
     SimilarGenesNetworkNode:
       type: object
       description: SimilarGenesNetworkNode
@@ -730,6 +756,10 @@ components:
           type: array
           items:
             type: string
+        uniprotkb_accessions:
+          type: array
+          items:
+            type: string
         is_igap:
           type: boolean
         is_eqtl:
@@ -752,9 +782,7 @@ components:
           items:
             $ref: '#/components/schemas/MedianExpression'
         druggability:
-          type: array
-          items:
-            $ref: '#/components/schemas/Druggability'
+          $ref: '#/components/schemas/Druggability'
         total_nominations:
           type: integer
           nullable: true
@@ -805,7 +833,7 @@ components:
         links:
           type: object
           additionalProperties:
-            type: object
+            $ref: '#/components/schemas/GeneNetworkLinks'
           nullable: true
         similar_genes_network:
           $ref: '#/components/schemas/SimilarGenesNetwork'
@@ -820,7 +848,9 @@ components:
           type: string
           nullable: true
         pharos_class_display_value:
-          type: string
+          type: array
+          items:
+            type: string
           nullable: true
         is_any_rna_changed_in_ad_brain_display_value:
           type: string

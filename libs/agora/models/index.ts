@@ -1,4 +1,3 @@
-export * from './additional-resource';
 export * from './biodomains';
 export * from './chart-range';
 export * from './charts';
@@ -14,6 +13,7 @@ export * from './misc';
 export * from './neuropathologic-correlations';
 export * from './overall-scores';
 export * from './proteomics';
+export * from './ResourceCard';
 export * from './rna';
 export * from './scores';
 export * from './synapse-wiki';

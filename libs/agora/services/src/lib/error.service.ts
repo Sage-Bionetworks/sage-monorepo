@@ -7,7 +7,9 @@ import { MessageService } from 'primeng/api';
 // -------------------------------------------------------------------------- //
 // Service
 // -------------------------------------------------------------------------- //
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ErrorService implements ErrorHandler {
   constructor(private messageService: MessageService) {}
 

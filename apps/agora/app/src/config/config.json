@@ -3,5 +3,6 @@
   "appVersion": "4.0.0",
   "csrApiUrl": "http://localhost:3333/v1",
   "ssrApiUrl": "http://agora-api:3333/v1",
-  "rollbarToken": "e788198867474855a996485580b08d03"
+  "rollbarToken": "e788198867474855a996485580b08d03",
+  "tagName": "agora/v0.0.2"
 }
