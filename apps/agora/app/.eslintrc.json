@@ -31,8 +31,14 @@
       "rules": {}
     },
     {
-      "files": ["e2e/**/*.{ts,js,tsx,jsx}"],
-      "rules": {}
+      "files": ["e2e/**/*.{ts,js,tsx,jsx}", "e2e/**/*.spec.{ts,js,tsx,jsx}"],
+      "plugins": ["@typescript-eslint"],
+      "parserOptions": {
+        "project": "./apps/agora/app/tsconfig.*?.json"
+      },
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "error"
+      }
     }
   ]
 }
