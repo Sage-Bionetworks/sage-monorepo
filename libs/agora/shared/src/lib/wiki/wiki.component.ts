@@ -14,7 +14,6 @@ import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-wiki',
-  standalone: true,
   imports: [CommonModule, LoadingIconComponent],
   templateUrl: './wiki.component.html',
   styleUrls: ['./wiki.component.scss'],

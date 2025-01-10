@@ -7,7 +7,6 @@ import { SeoService } from '@sagebionetworks/shared/util';
 
 @Component({
   selector: 'openchallenges-about',
-  standalone: true,
   imports: [CommonModule, FooterComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],

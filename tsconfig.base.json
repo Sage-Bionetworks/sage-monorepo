@@ -32,6 +32,7 @@
       "@sagebionetworks/agora/not-found": ["libs/agora/not-found/src/index.ts"],
       "@sagebionetworks/agora/services": ["libs/agora/services/src/index.ts"],
       "@sagebionetworks/agora/shared": ["libs/agora/shared/src/index.ts"],
+      "@sagebionetworks/agora/storybook": ["libs/agora/storybook/src/index.ts"],
       "@sagebionetworks/agora/teams": ["libs/agora/teams/src/index.ts"],
       "@sagebionetworks/agora/testing": ["libs/agora/testing/src/index.ts"],
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],

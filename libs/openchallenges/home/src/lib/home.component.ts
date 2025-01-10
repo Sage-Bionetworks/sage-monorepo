@@ -16,7 +16,6 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
 
 @Component({
   selector: 'openchallenges-home',
-  standalone: true,
   imports: [
     CommonModule,
     ChallengeHostListComponent,

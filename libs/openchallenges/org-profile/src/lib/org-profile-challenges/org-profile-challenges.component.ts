@@ -12,7 +12,6 @@ import { ChallengeCardComponent, PaginatorComponent } from '@sagebionetworks/ope
 
 @Component({
   selector: 'openchallenges-org-profile-challenges',
-  standalone: true,
   imports: [CommonModule, PaginatorComponent, ChallengeCardComponent],
   templateUrl: './org-profile-challenges.component.html',
   styleUrls: ['./org-profile-challenges.component.scss'],

@@ -1,8 +1,9 @@
 import {
   ApplicationConfig,
   provideZoneChangeDetection,
-  APP_INITIALIZER,
   APP_ID,
+  inject,
+  provideAppInitializer,
 } from '@angular/core';
 import {
   provideRouter,
@@ -19,12 +20,10 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 export const appConfig: ApplicationConfig = {
   providers: [
     { provide: APP_ID, useValue: 'openchallenges-app' },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: configFactory,
-      deps: [ConfigService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+      const initializerFn = configFactory(inject(ConfigService));
+      return initializerFn();
+    }),
     {
       provide: API_CLIENT_BASE_PATH,
       useFactory: (configService: ConfigService) =>

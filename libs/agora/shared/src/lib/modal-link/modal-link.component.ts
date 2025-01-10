@@ -6,7 +6,6 @@ import { WikiComponent } from '../wiki/wiki.component';
 
 @Component({
   selector: 'agora-modal-link',
-  standalone: true,
   imports: [CommonModule, DialogModule, SvgIconComponent, WikiComponent],
   templateUrl: './modal-link.component.html',
   styleUrls: ['./modal-link.component.scss'],

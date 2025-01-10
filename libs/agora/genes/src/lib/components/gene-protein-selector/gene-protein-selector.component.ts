@@ -9,7 +9,6 @@ interface Option {
 
 @Component({
   selector: 'agora-gene-protein-selector',
-  standalone: true,
   imports: [FormsModule, DropdownModule],
   templateUrl: './gene-protein-selector.component.html',
   styleUrls: ['./gene-protein-selector.component.scss'],

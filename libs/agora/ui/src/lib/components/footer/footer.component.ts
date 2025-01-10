@@ -11,7 +11,6 @@ import { GitHubService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-footer',
-  standalone: true,
   imports: [CommonModule, RouterModule],
   providers: [DataversionService, GitHubService],
   templateUrl: './footer.component.html',

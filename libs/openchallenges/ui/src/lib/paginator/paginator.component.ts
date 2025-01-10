@@ -4,7 +4,6 @@ import { Paginator, PaginatorModule as PrimengPaginatorModule } from 'primeng/pa
 
 @Component({
   selector: 'openchallenges-paginator',
-  standalone: true,
   imports: [CommonModule, PrimengPaginatorModule],
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss'],

@@ -21,7 +21,6 @@ import { catchError, map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'openchallenges-challenge-host-list',
-  standalone: true,
   imports: [CommonModule, MatButtonModule, OrganizationCardComponent, RouterModule],
   templateUrl: './challenge-host-list.component.html',
   styleUrls: ['./challenge-host-list.component.scss'],

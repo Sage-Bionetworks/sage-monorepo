@@ -11,7 +11,6 @@ import { NavbarSection } from './navbar-section';
 
 @Component({
   selector: 'openchallenges-navbar',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

@@ -14,7 +14,6 @@ import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-i
 
 @Component({
   selector: 'agora-gene-table',
-  standalone: true,
   imports: [
     CommonModule,
     RouterModule,

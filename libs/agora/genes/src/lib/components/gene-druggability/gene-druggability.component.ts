@@ -14,7 +14,6 @@ export interface GeneResourceType {
 
 @Component({
   selector: 'agora-gene-druggability',
-  standalone: true,
   imports: [CommonModule, AccordionModule],
   templateUrl: './gene-druggability.component.html',
   styleUrls: ['./gene-druggability.component.scss'],

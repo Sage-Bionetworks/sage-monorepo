@@ -6,7 +6,6 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
   selector: 'openchallenges-checkbox-filter',
-  standalone: true,
   imports: [CommonModule, CheckboxModule, FormsModule],
   templateUrl: './checkbox-filter.component.html',
   styleUrls: ['./checkbox-filter.component.scss'],

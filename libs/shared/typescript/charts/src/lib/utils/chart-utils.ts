@@ -13,16 +13,20 @@ export function ensureChartDomHasHeight(chartDom: HTMLDivElement | HTMLCanvasEle
 export function initChart(chartDom: HTMLDivElement | HTMLCanvasElement) {
   ensureChartDomHasHeight(chartDom);
   const chart = echarts.init(chartDom);
-  resizeChartOnWindowResize(chart);
+  resizeChartOnWindowResize(chartDom, chart);
   return chart;
 }
 
-// ensure chart resizes -- may need to update to use ResizeObserver to handle non-window resize events
-// See ngx-echarts: https://github.com/xieziyu/ngx-echarts/blob/master/projects/ngx-echarts/src/lib/ngx-echarts.directive.ts
-export function resizeChartOnWindowResize(chart: ECharts) {
-  window.onresize = function () {
+// ensure chart resizes -- see https://github.com/apache/echarts/issues/17428#issuecomment-1723693844
+// if there are issues in the future, check ngx-echarts: https://github.com/xieziyu/ngx-echarts/blob/master/projects/ngx-echarts/src/lib/ngx-echarts.directive.ts
+export function resizeChartOnWindowResize(
+  chartDom: HTMLDivElement | HTMLCanvasElement,
+  chart: ECharts,
+) {
+  const resizeObserver = new ResizeObserver(() => {
     chart.resize();
-  };
+  });
+  resizeObserver.observe(chartDom);
 }
 
 export function setNoDataOption(chart: ECharts) {

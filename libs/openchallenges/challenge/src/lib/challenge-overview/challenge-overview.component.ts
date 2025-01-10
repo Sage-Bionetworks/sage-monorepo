@@ -11,7 +11,6 @@ import {
 } from '@sagebionetworks/openchallenges/util';
 @Component({
   selector: 'openchallenges-challenge-overview',
-  standalone: true,
   imports: [
     ChallengeIncentiveLabelPipe,
     ChallengeStatusLabelPipe,

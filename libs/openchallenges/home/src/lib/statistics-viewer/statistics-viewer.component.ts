@@ -9,7 +9,6 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'openchallenges-statistics-viewer',
-  standalone: true,
   imports: [CommonModule, RouterModule, CountUpModule, NgxEchartsModule],
   providers: [
     {

@@ -25,7 +25,6 @@ interface Pane {
 // -------------------------------------------------------------------------- //
 @Component({
   selector: 'agora-gene-comparison-tool-how-to-panel',
-  standalone: true,
   imports: [CommonModule, FormsModule, CheckboxModule, DialogModule, LoadingIconComponent],
   providers: [CookieService],
   templateUrl: './gene-comparison-tool-how-to-panel.component.html',

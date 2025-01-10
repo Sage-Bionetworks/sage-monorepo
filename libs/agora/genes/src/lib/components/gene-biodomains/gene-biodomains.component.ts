@@ -6,7 +6,6 @@ import { HelperService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-gene-biodomains',
-  standalone: true,
   imports: [CommonModule, BiodomainsChartComponent],
   providers: [HelperService],
   templateUrl: './gene-biodomains.component.html',

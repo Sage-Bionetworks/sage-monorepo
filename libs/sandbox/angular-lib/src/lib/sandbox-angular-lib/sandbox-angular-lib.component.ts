@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'sandbox-angular-lib',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './sandbox-angular-lib.component.html',
   styleUrl: './sandbox-angular-lib.component.css',

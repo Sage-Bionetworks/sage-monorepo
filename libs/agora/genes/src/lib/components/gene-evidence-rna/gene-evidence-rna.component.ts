@@ -1,7 +1,6 @@
 import { AfterViewChecked, Component, inject, Input, ViewChild } from '@angular/core';
 
 import { HelperService } from '@sagebionetworks/agora/services';
-// import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 import {
   BoxPlotComponent,
   CandlestickChartComponent,
@@ -22,7 +21,6 @@ import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-evidence-rna',
-  standalone: true,
   imports: [
     GeneNetworkComponent,
     GeneModelSelectorComponent,

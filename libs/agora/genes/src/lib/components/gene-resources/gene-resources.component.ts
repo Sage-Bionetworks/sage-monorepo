@@ -6,7 +6,6 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'agora-gene-resources',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './gene-resources.component.html',
   styleUrls: ['./gene-resources.component.scss'],

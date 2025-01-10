@@ -18,7 +18,6 @@ interface Type {
 
 @Component({
   selector: 'agora-download-dom-image',
-  standalone: true,
   imports: [
     CommonModule,
     FormsModule,

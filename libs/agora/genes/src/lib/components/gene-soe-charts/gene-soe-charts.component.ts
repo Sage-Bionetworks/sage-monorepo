@@ -22,7 +22,6 @@ export interface SOEChartProps {
 
 @Component({
   selector: 'agora-gene-soe-charts',
-  standalone: true,
   imports: [CommonModule, OverlayPanelLinkComponent, ScoreBarChartComponent],
   templateUrl: './gene-soe-charts.component.html',
   styleUrls: ['./gene-soe-charts.component.scss'],

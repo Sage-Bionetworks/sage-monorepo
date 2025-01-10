@@ -3,7 +3,6 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'agora-svg-icon',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './svg-icon.component.html',
   styleUrls: ['./svg-icon.component.scss'],

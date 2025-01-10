@@ -12,7 +12,6 @@ interface Option {
 @Component({
   selector: 'agora-gene-model-selector',
   imports: [FormsModule, DropdownModule],
-  standalone: true,
   templateUrl: './gene-model-selector.component.html',
   styleUrls: ['./gene-model-selector.component.scss'],
 })

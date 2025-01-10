@@ -6,7 +6,6 @@ import { SvgIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-list',
-  standalone: true,
   imports: [CommonModule, GeneComparisonToolFilterListItemComponent, SvgIconComponent],
   templateUrl: './gene-comparison-tool-filter-list.component.html',
   styleUrls: ['./gene-comparison-tool-filter-list.component.scss'],

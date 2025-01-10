@@ -9,7 +9,6 @@ import { SvgIconComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-panel',
-  standalone: true,
   imports: [CommonModule, FormsModule, TooltipModule, CheckboxModule, SvgIconComponent],
   templateUrl: './gene-comparison-tool-filter-panel.component.html',
   styleUrls: ['./gene-comparison-tool-filter-panel.component.scss'],

@@ -5,7 +5,6 @@ import { map, Observable } from 'rxjs';
 
 @Component({
   selector: 'agora-team-member-list',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './team-member-list.component.html',
   styleUrls: ['./team-member-list.component.scss'],

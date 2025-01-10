@@ -6,7 +6,6 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'agora-home',
-  standalone: true,
   imports: [CommonModule, GeneSearchComponent, SvgImageComponent, RouterLink],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

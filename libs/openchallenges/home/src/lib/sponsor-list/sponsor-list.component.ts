@@ -9,7 +9,6 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-sponsor-list',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './sponsor-list.component.html',
   styleUrls: ['./sponsor-list.component.scss'],

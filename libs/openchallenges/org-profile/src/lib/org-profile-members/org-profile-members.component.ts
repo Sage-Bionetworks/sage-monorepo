@@ -5,7 +5,6 @@ import { MOCK_ORG_MEMBERS, PersonCardComponent } from '@sagebionetworks/openchal
 
 @Component({
   selector: 'openchallenges-org-profile-members',
-  standalone: true,
   imports: [CommonModule, PersonCardComponent],
   templateUrl: './org-profile-members.component.html',
   styleUrls: ['./org-profile-members.component.scss'],

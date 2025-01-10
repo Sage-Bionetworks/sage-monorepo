@@ -5,7 +5,6 @@ import { Team } from '@sagebionetworks/agora/api-client-angular';
 
 @Component({
   selector: 'agora-team-list',
-  standalone: true,
   imports: [CommonModule, TeamMemberListComponent],
   templateUrl: './team-list.component.html',
   styleUrls: ['./team-list.component.scss'],

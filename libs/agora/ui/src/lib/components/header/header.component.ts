@@ -7,7 +7,6 @@ import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
   selector: 'agora-header',
-  standalone: true,
   imports: [CommonModule, RouterModule, GeneSearchComponent, SvgImageComponent],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

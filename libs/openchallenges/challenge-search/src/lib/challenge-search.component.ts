@@ -70,7 +70,6 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
 
 @Component({
   selector: 'openchallenges-challenge-search',
-  standalone: true,
   imports: [
     CalendarModule,
     ChallengeCardComponent,

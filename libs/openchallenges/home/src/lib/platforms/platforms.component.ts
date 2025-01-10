@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 
 @Component({
   selector: 'openchallenges-platforms',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './platforms.component.html',
   styleUrls: ['./platforms.component.scss'],

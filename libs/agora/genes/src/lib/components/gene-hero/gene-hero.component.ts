@@ -5,7 +5,6 @@ import { ascending } from 'd3';
 
 @Component({
   selector: 'agora-gene-hero',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './gene-hero.component.html',
   styleUrls: ['./gene-hero.component.scss'],

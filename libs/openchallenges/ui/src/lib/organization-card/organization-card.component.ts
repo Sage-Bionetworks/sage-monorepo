@@ -9,7 +9,6 @@ import { AvatarComponent } from '../avatar/avatar.component';
 
 @Component({
   selector: 'openchallenges-organization-card',
-  standalone: true,
   imports: [CommonModule, AvatarComponent, MatIconModule, RouterModule],
   templateUrl: './organization-card.component.html',
   styleUrls: ['./organization-card.component.scss'],

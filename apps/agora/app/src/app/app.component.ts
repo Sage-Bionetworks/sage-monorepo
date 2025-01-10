@@ -7,7 +7,6 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 @Component({
-  standalone: true,
   imports: [RouterModule, HeaderComponent, FooterComponent, ToastModule],
   providers: [MessageService],
   selector: 'app-root',

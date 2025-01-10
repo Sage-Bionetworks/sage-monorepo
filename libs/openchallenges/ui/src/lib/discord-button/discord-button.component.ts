@@ -5,7 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'openchallenges-discord-button',
-  standalone: true,
   imports: [CommonModule, MatButtonModule],
   templateUrl: './discord-button.component.html',
   styleUrls: ['./discord-button.component.scss'],

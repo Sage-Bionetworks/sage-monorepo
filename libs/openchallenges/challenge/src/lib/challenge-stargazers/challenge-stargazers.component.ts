@@ -9,7 +9,6 @@ import {
 
 @Component({
   selector: 'openchallenges-challenge-stargazers',
-  standalone: true,
   imports: [CommonModule, PersonCardComponent],
   templateUrl: './challenge-stargazers.component.html',
   styleUrls: ['./challenge-stargazers.component.scss'],
