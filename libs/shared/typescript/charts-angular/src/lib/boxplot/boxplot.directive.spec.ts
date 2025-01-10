@@ -10,6 +10,7 @@ import { BoxplotDirective } from './boxplot.directive';
 
 const renderTestComponent = async (props: BoxplotProps) => {
   @Component({
+    imports: [BoxplotDirective],
     template: `<div
       sageBoxplot
       [points]="points"
