@@ -1,7 +1,6 @@
 import { AfterViewChecked, Component, inject, Input, ViewChild } from '@angular/core';
 
 import { HelperService } from '@sagebionetworks/agora/services';
-// import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 import {
   BoxPlotComponent,
   CandlestickChartComponent,

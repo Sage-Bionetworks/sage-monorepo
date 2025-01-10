@@ -1,11 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
 import { WikiComponent } from '@sagebionetworks/agora/shared';
 
 @Component({
   selector: 'agora-about',
-  imports: [CommonModule, WikiComponent, ScoreBarChartComponent],
+  imports: [CommonModule, WikiComponent],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.scss'],
 })
