@@ -62,6 +62,7 @@ const changeGctDropdown = async (page: Page, current: string, desired: string) =
       // Must wait for the listbox displaying the options to be stable
       // ...before attempting to click on an option
       // ...otherwise, clicking an option will be flaky and intermittently fail
+      // eslint-disable-next-line playwright/no-element-handle
       const listbox = await page.$('ul[role=listbox]');
       await listbox?.waitForElementState('stable');
     });

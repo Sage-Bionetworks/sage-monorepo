@@ -37,7 +37,10 @@
         "project": "./apps/agora/app/tsconfig.*?.json"
       },
       "rules": {
-        "@typescript-eslint/no-floating-promises": "error"
+        "@typescript-eslint/no-floating-promises": "error",
+        "playwright/no-nested-step": "off",
+        "playwright/no-conditional-in-test": "off",
+        "playwright/expect-expect": "off"
       }
     }
   ]
