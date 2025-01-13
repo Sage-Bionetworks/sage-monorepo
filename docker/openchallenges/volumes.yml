@@ -1,9 +1,3 @@
 volumes:
-  openchallenges-prometheus-data:
-    name: openchallenges-prometheus-data
-
-  openchallenges-grafana-data:
-    name: openchallenges-grafana-data
-
   openchallenges-thumbor-data:
     name: openchallenges-thumbor-data
