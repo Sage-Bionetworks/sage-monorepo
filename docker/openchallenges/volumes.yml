@@ -5,8 +5,5 @@ volumes:
   openchallenges-grafana-data:
     name: openchallenges-grafana-data
 
-  openchallenges-nifi-registry-data:
-    name: openchallenges-nifi-registry-data
-
   openchallenges-thumbor-data:
     name: openchallenges-thumbor-data

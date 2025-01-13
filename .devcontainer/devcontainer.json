@@ -68,8 +68,7 @@
   },
   "forwardPorts": [
     2432, 3000, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 7010, 7443, 7200, 7888, 8010, 8071,
-    8000, 8080, 8081, 8082, 8084, 8085, 8086, 8090, 8200, 8443, 8888, 8889, 9090, 9104, 9200, 9411,
-    27017, 18080
+    8000, 8080, 8081, 8082, 8084, 8085, 8086, 8090, 8200, 8888, 8889, 9090, 9104, 9200, 9411, 27017
   ],
   "portsAttributes": {
     "2432": {
@@ -164,10 +163,6 @@
       "label": "openchallenges-config-server",
       "onAutoForward": "silent"
     },
-    "8443": {
-      "label": "openchallenges-nifi",
-      "onAutoForward": "silent"
-    },
     "8888": {
       "label": "openchallenges-notebook",
       "onAutoForward": "silent"
@@ -194,10 +189,6 @@
     },
     "27017": {
       "label": "agora-mongo",
-      "onAutoForward": "silent"
-    },
-    "18080": {
-      "label": "openchallenges-nifi-registry",
       "onAutoForward": "silent"
     }
   },

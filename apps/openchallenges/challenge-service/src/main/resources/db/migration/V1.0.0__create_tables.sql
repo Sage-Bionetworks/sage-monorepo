@@ -123,9 +123,3 @@ CREATE TABLE `challenge_category` (
   PRIMARY KEY (`id`),
   FOREIGN KEY (`challenge_id`) REFERENCES challenge (`id`)
 );
-
-CREATE TABLE `nifi_demo` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(120),
-  PRIMARY KEY (`id`)
-);
