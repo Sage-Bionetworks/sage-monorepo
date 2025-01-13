@@ -54,8 +54,6 @@ dependencies {
 
   implementation "org.springframework.cloud:spring-cloud-starter-config:${springCloudVersion}"
   implementation "org.sagebionetworks.openchallenges:openchallenges-app-config-data:${openchallengesVersion}"
-
-  implementation 'io.micrometer:micrometer-registry-prometheus:1.10.4'
 }
 
 group = 'org.sagebionetworks.openchallenges'
