@@ -27,8 +27,8 @@ test.describe('specific viewport block', () => {
   test('has footer', async ({ page }) => {
     await page.goto('/');
 
-    // Expect header to be visible
-    await expect(page.locator('#footer')).toBeVisible();
+    // Expect footer to be visible
+    await expect(page.getByAltText('footer logo')).toBeVisible();
   });
 
   test('has news', async ({ page }) => {

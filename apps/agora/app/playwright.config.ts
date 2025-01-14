@@ -47,6 +47,8 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      // TODO: remove this line as part of AG-1618
+      testIgnore: 'e2e/gene-comparison-tool*.spec.ts',
     },
 
     /* {

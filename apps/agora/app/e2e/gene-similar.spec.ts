@@ -11,9 +11,28 @@ test.describe('specific viewport block', () => {
     await waitForSpinnerNotVisible(page);
 
     // expect a title "to contain" a substring.
-    await expect(page).toHaveTitle('Agora');
+    await expect(page).toHaveTitle('Page not found');
 
     // expect div for page not found content to be visible
-    await expect(page.locator('.page-not-found')).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Page not found.' })).toBeVisible();
+  });
+
+  test('has title', async ({ page }) => {
+    await page.goto('/genes/ENSG00000178209/similar');
+
+    // Expect a title "to contain" a substring.
+    await expect(page).toHaveTitle('Agora');
+  });
+
+  test('has true and false values for nominated target column', async ({ page }) => {
+    await page.goto('/genes/ENSG00000178209/similar');
+
+    await expect(page.locator('table')).toBeVisible();
+
+    // sort forward on nominated target
+    await page.getByRole('cell', { name: 'Nominated Target' }).click();
+
+    const cell = await page.getByRole('row').nth(1).getByRole('cell').nth(1).innerText();
+    expect(cell).not.toBe('');
   });
 });
