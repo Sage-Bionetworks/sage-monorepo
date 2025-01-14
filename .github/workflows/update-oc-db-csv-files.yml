@@ -27,14 +27,6 @@ jobs:
           pip install gspread pandas numpy
           python3 apps/openchallenges/db-update/update_db_csv.py
 
-      # - name: Install schematic and validate files
-      #   shell: bash
-      #   run: |
-      #     python3.10 -m venv .venv
-      #     chmod 755 .venv/bin/activate
-      #     source .venv/bin/activate
-      #     pip3.10 install schematicpy
-
       - name: Get current date
         run: |
           echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
