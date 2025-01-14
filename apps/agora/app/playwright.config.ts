@@ -38,7 +38,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: {
     command: 'nx run agora-apex:serve-detach',
-    url: 'http://localhost:8000',
+    url: `${baseURL}/health`,
     reuseExistingServer: !process.env['CI'],
     cwd: workspaceRoot,
     timeout: 60000 * 3, // give time for agora-data to populate agora-mongo
