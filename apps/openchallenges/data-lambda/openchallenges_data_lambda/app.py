@@ -32,7 +32,7 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-    write_credentials_file(event, GOOGLE_SHEET_CREDENTIALS_FILE)
+    write_credentials_file(GOOGLE_SHEET_CREDENTIALS_FILE)
 
     try:
         google_client = gspread.service_account(filename=GOOGLE_SHEET_CREDENTIALS_FILE)
