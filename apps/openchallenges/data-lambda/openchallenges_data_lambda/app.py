@@ -29,13 +29,40 @@ def lambda_handler(event, context):
         Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
     """
 
-    length = event["length"]
-    width = event["width"]
+    google_client = gspread.service_account(filename="service_account.json")
 
-    area = calculate_area(length, width)
-    print(f"The area is {area}")
+    try:
+        wks = google_client.open(GOOGLE_SHEET_TITLE)
 
-    data = {"area": area}
+        platforms = get_platform_data(wks)
+        print(platforms.head())
+
+        roles = get_roles(wks)
+        print(roles.head())
+
+        categories = get_challenge_categories(wks)
+        print(categories.head())
+
+        organizations = get_organization_data(wks)
+        print(organizations.head())
+
+        edam_data_annotations = get_edam_annotations(wks)
+        print(edam_data_annotations.head())
+
+        challenges, incentives, sub_types = get_challenge_data(wks)
+        print(challenges.head())
+        print(incentives.head())
+        print(sub_types.head())
+
+        message = "Data successfully pulled from OC Data google sheet."
+
+    except Exception as err:
+        message = (
+            f"Something went wrong with pulling the data: {err}."
+            "\n\nPlease see logs for more details."
+        )
+
+    data = {"message": message}
 
     return {
         "statusCode": 200,
