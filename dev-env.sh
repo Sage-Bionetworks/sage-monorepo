@@ -44,6 +44,7 @@ function workspace-install {
 
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
+  workspace-install-playwright-dependencies
   workspace-install-python-dependencies
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
