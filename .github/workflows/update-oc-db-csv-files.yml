@@ -9,15 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # schematic only supports Python 3.9 and 3.10, so we will need
-      # to specifically use one of these versions.
-      - name: Install system dependencies
-        run: |
-          sudo add-apt-repository ppa:deadsnakes/ppa
-          sudo apt-get update
-          sudo apt-get install -y pip python3.10-venv libcurl4-openssl-dev
-
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4.2.2
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           persist-credentials: false
@@ -35,20 +27,12 @@ jobs:
           pip install gspread pandas numpy
           python3 apps/openchallenges/db-update/update_db_csv.py
 
-      # - name: Install schematic and validate files
-      #   shell: bash
-      #   run: |
-      #     python3.10 -m venv .venv
-      #     chmod 755 .venv/bin/activate
-      #     source .venv/bin/activate
-      #     pip3.10 install schematicpy
-
       - name: Get current date
         run: |
           echo "TODAY=$(date +"%Y-%m-%d")" >> $GITHUB_ENV
 
       - name: Push changes, then create or update pull request
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v7.0.6
         with:
           title: 'chore(openchallenges): ${{ env.TODAY }} DB update'
           body: Daily OC database update(s)
