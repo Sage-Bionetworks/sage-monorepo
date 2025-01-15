@@ -23,10 +23,6 @@ function workspace-install-nodejs-dependencies {
   pnpm install --frozen-lockfile
 }
 
-function workspace-install-playwright-dependencies {
-  npx playwright install --with-deps
-}
-
 function workspace-install-python-dependencies {
   poetry env use $(pyenv which python)
   poetry install --with dev
@@ -35,7 +31,6 @@ function workspace-install-python-dependencies {
 
 function workspace-install {
   workspace-install-nodejs-dependencies
-  workspace-install-playwright-dependencies
   workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
@@ -44,7 +39,6 @@ function workspace-install {
 
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
-  workspace-install-playwright-dependencies
   workspace-install-python-dependencies
   nx affected --target=create-config
   nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
