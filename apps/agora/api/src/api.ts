@@ -17,6 +17,8 @@ import {
 const mongodbUser = process.env.MONGODB_USER;
 const mongodbPass = process.env.MONGODB_PASS;
 const mongodbHost = process.env.MONGODB_HOST;
+const mongodbPort = process.env.MONGODB_PORT;
+const mongodbName = process.env.MONGODB_NAME;
 
 if (!mongodbUser) {
   console.error('No MONGODB_USER environment variable has been defined.');
@@ -33,7 +35,17 @@ if (!mongodbHost) {
   process.exit(1);
 }
 
-const mongoUri = `mongodb://${mongodbUser}:${mongodbPass}@${mongodbHost}:27017/agora?authSource=admin`;
+if (!mongodbPort) {
+  console.error('No MONGODB_PORT environment variable has been defined.');
+  process.exit(1);
+}
+
+if (!mongodbName) {
+  console.error('No MONGODB_NAME environment variable has been defined.');
+  process.exit(1);
+}
+
+const mongoUri = `mongodb://${mongodbUser}:${mongodbPass}@${mongodbHost}:${mongodbPort}/${mongodbName}?authSource=admin`;
 
 mongoose
   .connect(mongoUri)
