@@ -37,8 +37,8 @@ def lambda_handler(event, context):
     try:
         google_client = gspread.service_account(filename=GOOGLE_SHEET_CREDENTIALS_FILE)
     except Exception as err:
-        message = "Private key not found in the credentials file. Please try again."
         status_code = 401
+        message = "Private key not found in the credentials file. Please try again."
     else:
         try:
             wks = google_client.open(GOOGLE_SHEET_TITLE)
