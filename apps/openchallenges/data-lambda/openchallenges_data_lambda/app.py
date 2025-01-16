@@ -46,22 +46,22 @@ def lambda_handler(event, context):
             platforms = oc_data_sheet.get_platform_data(wks)
             print(platforms.head())
 
-            roles = oc_data_sheet.get_roles(wks)
-            print(roles.head())
+            # roles = oc_data_sheet.get_roles(wks)
+            # print(roles.head())
 
-            categories = oc_data_sheet.get_challenge_categories(wks)
-            print(categories.head())
+            # categories = oc_data_sheet.get_challenge_categories(wks)
+            # print(categories.head())
 
-            organizations = oc_data_sheet.get_organization_data(wks)
-            print(organizations.head())
+            # organizations = oc_data_sheet.get_organization_data(wks)
+            # print(organizations.head())
 
-            edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
-            print(edam_data_annotations.head())
+            # edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
+            # print(edam_data_annotations.head())
 
-            challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
-            print(challenges.head())
-            print(incentives.head())
-            print(sub_types.head())
+            # challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
+            # print(challenges.head())
+            # print(incentives.head())
+            # print(sub_types.head())
 
             status_code = 200
             message = "Data successfully pulled from OC Data google sheet."
