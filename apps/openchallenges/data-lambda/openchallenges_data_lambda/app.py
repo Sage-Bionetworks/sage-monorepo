@@ -38,6 +38,7 @@ def lambda_handler(event, context):
         google_client = gspread.service_account(filename=GOOGLE_SHEET_CREDENTIALS_FILE)
     except Exception as err:
         message = "Private key not found in the credentials file. Please try again."
+        status_code = 401
     else:
         try:
             wks = google_client.open(GOOGLE_SHEET_TITLE)
@@ -62,14 +63,16 @@ def lambda_handler(event, context):
             print(incentives.head())
             print(sub_types.head())
 
+            status_code = 200
             message = "Data successfully pulled from OC Data google sheet."
 
         except Exception as err:
+            status_code = 400
             message = f"Something went wrong with pulling the data: {err}."
 
     data = {"message": message}
     return {
-        "statusCode": 200,
+        "statusCode": status_code,
         "body": json.dumps(data),
     }
 
