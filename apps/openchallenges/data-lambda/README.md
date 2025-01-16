@@ -12,6 +12,22 @@ nx build openchallenges-data-lambda
 nx build-image openchallenges-data-lambda
 ```
 
+## Update .env with credentials to utilize Google Sheets API
+
+Before running the Lambda function locally (see next section), update the `.env` file and replace
+all "UPDATE_ME" values with real credentials.
+
+Failing to update `.env` will result in the following output during invocation:
+
+```console
+{
+  "statusCode": 401,
+  "body": {
+    "message": "Private key not found in the credentials file. Please try again."
+  }
+}
+```
+
 ## Start the Lambda function locally with Docker Compose
 
 Starts the Lambda function in the foreground, allowing you to view logs and interact with it
