@@ -10,6 +10,7 @@ RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
 FROM public.ecr.aws/lambda/python:3.13
 
 COPY --from=builder /app/requirements.txt ${LAMBDA_TASK_ROOT}/
+COPY openchallenges_data_lambda/oc_data_sheet.py ${LAMBDA_TASK_ROOT}/
 COPY openchallenges_data_lambda/app.py ${LAMBDA_TASK_ROOT}/
 
 RUN python3.13 -m pip install --no-cache-dir -r requirements.txt -t .
