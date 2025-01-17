@@ -3,7 +3,7 @@
   "build": {
     "dockerfile": "Dockerfile",
     "args": {
-      // The value of DEVCONTAINER_VERSION will be the 7-character commit SHA
+      // The value of DEVCONTAINER_VERSION will be the commit SHA
       // used to prebuild the development container.
       "devcontainerVersion": "${localEnv:DEVCONTAINER_VERSION}"
     }
