@@ -4,11 +4,9 @@ import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/ro
 import { FooterComponent, HeaderComponent } from '@sagebionetworks/agora/ui';
 import { filter } from 'rxjs';
 import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent, ToastModule],
-  providers: [MessageService],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

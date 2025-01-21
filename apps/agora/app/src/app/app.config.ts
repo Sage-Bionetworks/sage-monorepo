@@ -4,13 +4,19 @@ import {
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
 } from '@angular/router';
-import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client-angular';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
 
 import { routes } from './app.routes';
+import {
+  httpErrorInterceptor,
+  rollbarFactory,
+  RollbarService,
+} from '@sagebionetworks/agora/services';
+import { MessageService } from 'primeng/api';
 
 // This index is used to remove the corresponding provider in app.config.server.ts.
 // TODO: This index could be out of sync if we are not careful. Find a more elegant way.
@@ -42,8 +48,12 @@ export const appConfig: ApplicationConfig = {
           : configService.config.csrApiUrl,
       deps: [ConfigService],
     },
-    provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi()),
+    provideAnimationsAsync(),
+    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    {
+      provide: RollbarService,
+      useFactory: rollbarFactory,
+    },
     provideRouter(
       routes,
       withEnabledBlockingInitialNavigation(),
@@ -51,5 +61,6 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'enabled',
       }),
     ),
+    MessageService,
   ],
 };
