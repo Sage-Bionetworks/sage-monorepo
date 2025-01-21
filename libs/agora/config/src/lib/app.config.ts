@@ -5,7 +5,6 @@ export interface AppConfig {
   isPlatformServer: boolean;
   ssrApiUrl: string;
   apiDocsUrl: string;
-  rollbarToken: string;
   tagName: string;
 }
 
