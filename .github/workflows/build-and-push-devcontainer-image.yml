@@ -45,7 +45,6 @@ jobs:
       # Write access to `contents` needed to upload SBOM to GitHub's dependency graph.
       contents: write
       packages: write
-      attestations: write
     env:
       # The path to the folder containing the `.devcontainer/` directory.
       DEVCONTAINER_WORKSPACE_FOLDER: .github
@@ -139,16 +138,6 @@ jobs:
             fi
           done
 
-      - name: Attest the provenance of the Docker image build
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
-        id: attest
-        env:
-          IMAGE: ${{ steps.meta_sha.outputs.tags }}
-        with:
-          subject-name: ${{ env.IMAGE }}
-          subject-digest: ${{ steps.push.outputs.image_digest }}
-
       - name: Generate SBOM for Docker image
         uses: anchore/sbom-action@df80a981bc6edbc4e220a492d3cbe9f5547a6e75 # v0.17.9
         env:
@@ -159,6 +148,22 @@ jobs:
           artifact-name: sbom.spdx.json
           upload-artifact: true
           dependency-snapshot: ${{ github.event_name != 'pull_request' }}
+
+  attest:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    needs: build-and-push
+    permissions:
+      id-token: write
+      attestations: write
+    steps:
+      - name: Attest the provenance of the Docker image build
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        id: attest
+        with:
+          subject-name: ${{ needs.build-and-push.outputs.image }}
+          subject-digest: ${{ needs.build-and-push.outputs.image_digest }}
 
   cosign:
     if: ${{ github.event_name != 'pull_request' }}
