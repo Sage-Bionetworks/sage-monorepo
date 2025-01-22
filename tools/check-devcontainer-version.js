@@ -23,7 +23,7 @@ if (currentDevcontainerVersion === undefined) {
   process.exit(0);
 }
 
-if (expectedDevcontainerVersion !== currentDevcontainerVersion) {
+if (expectedDevcontainerVersion !== `sha-${currentDevcontainerVersion}`) {
   console.info('🐋 The dev container has changed. Please rebuild it.');
   // console.debug(`Expected dev container version: ${expectedDevcontainerVersion}`);
   // console.debug(`Current dev container version: ${currentDevcontainerVersion}`);

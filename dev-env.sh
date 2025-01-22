@@ -179,6 +179,20 @@ function workspace-initialize-env {
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
 }
 
-function workspace-nuke-venv {
-  find . -name ".venv" -print0 | xargs -0 rm -fr
+function workspace-nuke {
+  rm -fr \
+    .angular \
+    .cache \
+    .nx \
+    .pnpm-store \
+    .pytest_cache \
+    .venv \
+    coverage \
+    dist \
+    node_modules \
+    playwright-report \
+    reports
+
+    find . -name ".venv" -print0 | xargs -0 rm -fr
+    find . -name "node_modules" -print0 | xargs -0 rm -fr
 }
