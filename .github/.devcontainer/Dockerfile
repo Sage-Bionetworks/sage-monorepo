@@ -60,6 +60,8 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     xz-utils tk-dev libffi-dev liblzma-dev \
     # Required by Hadolint.
     shellcheck \
+    # Required by canvas (npm package)
+    build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev \
   # Add Node.js repository.
   && curl -fsSL https://deb.nodesource.com/setup_${nodeVersionMajor}.x -o nodesource_setup.sh \
   && bash nodesource_setup.sh \
