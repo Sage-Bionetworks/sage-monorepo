@@ -29,6 +29,7 @@
     "@cdktf/provider-aws": "14.0.2",
     "@fortawesome/angular-fontawesome": "1.0.0",
     "@fortawesome/free-solid-svg-icons": "6.7.1",
+    "@primeng/themes": "19.0.5",
     "@storybook/addon-interactions": "8.4.7",
     "@swc/helpers": "~0.5.11",
     "angular-google-tag-manager": "1.8.0",
