@@ -154,6 +154,8 @@ jobs:
     runs-on: ubuntu-24.04
     needs: build-and-push
     permissions:
+      # The id-token permission gives the action the ability to mint the OIDC
+      # token necessary to request a Sigstore signing certificate.
       id-token: write
       attestations: write
     steps:
