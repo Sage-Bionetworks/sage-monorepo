@@ -140,6 +140,7 @@ jobs:
           done
 
       - name: Attest the provenance of the Docker image build
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
         id: attest
         env:
