@@ -1,6 +1,6 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-7879570ebd8fea8635dce45423a0fd75dc4379d2",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-5cd10f9d963e69f330b283166824ccd2b77bac8d",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
@@ -141,7 +141,6 @@
         "Angular.ng-template",
         "dbaeumer.vscode-eslint",
         "donjayamanne.python-environment-manager",
-        "dorzey.vscode-sqlfluff",
         "eamodio.gitlens",
         "emeraldwalk.RunOnSave",
         "esbenp.prettier-vscode",

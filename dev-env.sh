@@ -185,14 +185,16 @@ function workspace-nuke {
     .cache \
     .nx \
     .pnpm-store \
-    .pytest_cache \
-    .venv \
     coverage \
-    dist \
-    node_modules \
     playwright-report \
     reports
 
+    # find . -name "build" -print0 | xargs -0 rm -fr  # but not OA build folders
+    find . -name ".coverage" -print0 | xargs -0 rm -fr
+    find . -name ".gradle" -print0 | xargs -0 rm -fr
+    find . -name ".pytest_cache" -print0 | xargs -0 rm -fr
     find . -name ".venv" -print0 | xargs -0 rm -fr
+    find . -name "bin" -print0 | xargs -0 rm -fr
+    find . -name "dist" -print0 | xargs -0 rm -fr
     find . -name "node_modules" -print0 | xargs -0 rm -fr
 }
