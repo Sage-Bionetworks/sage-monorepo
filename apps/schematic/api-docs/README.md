@@ -1,3 +1,0 @@
-# Schematic API Docs
-
-TODO

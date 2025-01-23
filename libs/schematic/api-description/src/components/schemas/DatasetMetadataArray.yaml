@@ -1,8 +1,0 @@
-type: object
-description: An array of dataset metadata.
-properties:
-  datasets:
-    description: An array of dataset meatdata.
-    type: array
-    items:
-      $ref: DatasetMetadata.yaml

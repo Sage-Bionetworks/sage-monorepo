@@ -16,11 +16,6 @@ apis:
     root: libs/model-ad/api-description/build/openapi.yaml
   openchallenges-api-description:
     root: libs/openchallenges/api-description/build/openapi.yaml
-  schematic-api-description:
-    root: libs/schematic/api-description/build/openapi.yaml
-    rules:
-      operation-4xx-response: off
-      no-path-trailing-slash: off
   synapse-api-description:
     root: libs/synapse/api-description/build/openapi.json
     rules:

@@ -1,9 +1,0 @@
-name: hideBlanks
-in: query
-description:
-  If true, annotations with blank values will be hidden from a dataset's annotation list in Synaspe.
-  If false, annotations with blank values will be displayed.
-required: false
-schema:
-  type: boolean
-  default: false

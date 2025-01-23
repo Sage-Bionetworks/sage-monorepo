@@ -8,6 +8,3 @@ dist/
 # Ignore all test reports
 coverage/
 reports/
-
-# Ignore selected project folders
-apps/schematic/api/great_expectations

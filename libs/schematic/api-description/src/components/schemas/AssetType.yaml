@@ -1,4 +1,0 @@
-description: 'Type of asset store, such as Synapse'
-type: string
-example: synapse
-enum: [synapse]

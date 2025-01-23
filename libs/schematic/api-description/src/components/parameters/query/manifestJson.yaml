@@ -1,6 +1,0 @@
-name: manifestJson
-in: query
-description: A manifest in json string form
-required: true
-schema:
-  $ref: ../../schemas/ManifestJson.yaml

@@ -1,4 +1,0 @@
-description: An array of data types
-type: array
-items:
-  $ref: DataType.yaml

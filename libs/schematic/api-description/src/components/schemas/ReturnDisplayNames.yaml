@@ -1,3 +1,0 @@
-description: Whether or not to return the display names of the node otherwise the label
-type: boolean
-default: true
