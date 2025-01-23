@@ -7,7 +7,7 @@ import {
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { providePrimeNG } from 'primeng/config';
-import Aura from '@primeng/themes/aura';
+import Lara from '@primeng/themes/lara';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/agora/api-client-angular';
 import { BASE_PATH as SYNAPSE_API_CLIENT_BASE_PATH } from '@sagebionetworks/synapse/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/agora/config';
@@ -53,7 +53,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {
-        preset: Aura,
+        preset: Lara,
         options: {
           darkModeSelector: false,
         },
