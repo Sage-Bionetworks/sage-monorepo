@@ -16,37 +16,37 @@ runs:
     #     restore-keys: |
     #       ${{ runner.os }}-pnpm-store-
 
-    - name: Set up Renv cache
-      uses: actions/cache@v3
-      with:
-        path: '/tmp/.cache/R/renv/cache'
-        key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-renv-cache-
+    # - name: Set up Renv cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: '/tmp/.cache/R/renv/cache'
+    #     key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-renv-cache-
 
-    - name: Set up Poetry cache
-      uses: actions/cache@v3
-      with:
-        path: '/tmp/.cache/pypoetry'
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+    # - name: Set up Poetry cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: '/tmp/.cache/pypoetry'
+    #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-    - name: Set up venv cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          /tmp/.local/share/virtualenv
-          **/.venv
-        key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+    # - name: Set up venv cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       /tmp/.local/share/virtualenv
+    #       **/.venv
+    #     key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
-    - name: Set up Gradle cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          /tmp/.gradle/caches
-          /tmp/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+    # - name: Set up Gradle cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       /tmp/.gradle/caches
+    #       /tmp/.gradle/wrapper
+    #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-gradle-
 
     - name: Install the Dev Container CLI
       shell: bash
