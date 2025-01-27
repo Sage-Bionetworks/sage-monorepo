@@ -1,6 +1,0 @@
-name: nodeLabelArray
-in: query
-description: An array of nodel labels
-required: false
-schema:
-  $ref: ../../schemas/NodeLabelArray.yaml

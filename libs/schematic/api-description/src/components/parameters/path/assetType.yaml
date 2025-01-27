@@ -1,6 +1,0 @@
-name: assetType
-in: path
-description: Type of asset, such as Synapse
-required: true
-schema:
-  $ref: ../../schemas/AssetType.yaml

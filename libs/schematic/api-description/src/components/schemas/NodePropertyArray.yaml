@@ -1,8 +1,0 @@
-type: object
-description: An array of node properties.
-properties:
-  node_properties:
-    description: An array of node properties.
-    type: array
-    items:
-      type: string

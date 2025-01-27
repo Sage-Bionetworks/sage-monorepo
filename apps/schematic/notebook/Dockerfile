@@ -1,1 +1,0 @@
-FROM jupyter/datascience-notebook:2022-12-26

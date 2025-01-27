@@ -9,7 +9,6 @@ on:
       - 'openchallenges/**'
       - 'sage-monorepo/**'
       - 'sage/**'
-      - 'schematic/**'
   pull_request:
 
 jobs:

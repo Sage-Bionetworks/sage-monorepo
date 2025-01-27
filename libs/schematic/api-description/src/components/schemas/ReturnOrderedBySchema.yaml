@@ -1,3 +1,0 @@
-description: Whether or not to order the components by their order in the schema, otherwise random
-type: boolean
-default: true

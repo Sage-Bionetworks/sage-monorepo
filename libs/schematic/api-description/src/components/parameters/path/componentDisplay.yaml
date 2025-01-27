@@ -1,6 +1,0 @@
-name: componentDisplay
-in: path
-description: The display name of a component in a schema
-required: true
-schema:
-  $ref: ../../schemas/ComponentDisplay.yaml

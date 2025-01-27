@@ -1,6 +1,0 @@
-name: projectId
-in: path
-description: The Synapse ID of a storage project.
-required: true
-schema:
-  $ref: ../../schemas/ProjectId.yaml

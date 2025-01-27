@@ -1,8 +1,0 @@
-name: textFormat
-in: query
-description: Text formatting type.
-required: false
-schema:
-  type: string
-  enum: [plain, highlighted]
-  default: plain

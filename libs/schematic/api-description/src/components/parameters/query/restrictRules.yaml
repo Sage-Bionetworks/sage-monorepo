@@ -1,6 +1,0 @@
-name: restrictRules
-in: query
-description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
-required: false
-schema:
-  $ref: ../../schemas/RestrictRules.yaml

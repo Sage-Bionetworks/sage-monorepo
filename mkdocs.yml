@@ -48,8 +48,6 @@ nav:
       - OpenChallenges:
           - Microservices: reference/oc-microservices.md
           - Schemas: reference/oc-schemas.md
-      - Schematic:
-          - API: reference/schematic.md
 
 # Theme configuration
 theme:

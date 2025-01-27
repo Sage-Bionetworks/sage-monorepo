@@ -115,11 +115,10 @@ Join the conversation and help the community.
 
 ## Products
 
-- Agora (evaluation)
+- Agora
 - iAtlas
 - MODEL-AD
 - OpenChallenge
-- Schematic
 - Synapse (evaluation)
 
 <!-- Links -->

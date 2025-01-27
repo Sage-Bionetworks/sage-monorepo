@@ -1,6 +1,0 @@
-name: nodeLabel
-in: path
-description: The label of the source node in a schema to get the dependencies of
-required: true
-schema:
-  $ref: ../../schemas/NodeLabel.yaml

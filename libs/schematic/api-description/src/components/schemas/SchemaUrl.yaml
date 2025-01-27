@@ -1,3 +1,0 @@
-description: The URL of a schema in jsonld form
-type: string
-example: https://raw.githubusercontent.com/Sage-Bionetworks/schematic/develop/tests/data/example.model.jsonld
