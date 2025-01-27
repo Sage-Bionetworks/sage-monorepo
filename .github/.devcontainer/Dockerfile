@@ -25,7 +25,7 @@ ARG nodeVersionMajor="22"
 # https://pypi.org/project/pipenv/
 ARG pipenvVersion="2024.4.0"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="9.15.2"
+ARG pnpmVersion="9.15.4"
 # List of Python versions separated by spaces
 ARG pyenvPythonVersions="3.13.1"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
