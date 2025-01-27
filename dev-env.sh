@@ -34,7 +34,8 @@ function workspace-install {
   workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
-  nx run-many --target=prepare --projects=tag:language:python --parallel=1 --projects=tag:language:r
+  nx run-many --target=prepare --projects=tag:language:python --parallel=1
+  nx run-many --target=prepare --projects=tag:language:r
 }
 
 function workspace-install-affected {
