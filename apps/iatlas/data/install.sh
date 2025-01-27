@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PYTHON_VERSION="3.11.10"
+PYTHON_VERSION=$(cat ".python-version")
 
 pyenv install --skip-existing $PYTHON_VERSION
 

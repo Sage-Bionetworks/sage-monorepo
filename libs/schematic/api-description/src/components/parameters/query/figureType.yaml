@@ -1,8 +1,0 @@
-name: figureType
-in: query
-description: Figure type to generate.
-required: false
-schema:
-  type: string
-  enum: [component, dependency]
-  default: component

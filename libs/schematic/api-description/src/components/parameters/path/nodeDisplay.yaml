@@ -1,6 +1,0 @@
-name: nodeDisplay
-in: path
-description: The display name of the node in a schema
-required: true
-schema:
-  $ref: ../../schemas/NodeDisplay.yaml

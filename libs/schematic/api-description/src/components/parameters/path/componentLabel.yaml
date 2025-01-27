@@ -1,6 +1,0 @@
-name: componentLabel
-in: path
-description: The label of a component in a schema
-required: true
-schema:
-  $ref: ../../schemas/ComponentLabel.yaml

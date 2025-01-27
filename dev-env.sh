@@ -34,7 +34,8 @@ function workspace-install {
   workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
-  nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
+  nx run-many --target=prepare --projects=tag:language:python --parallel=1
+  nx run-many --target=prepare --projects=tag:language:r
 }
 
 function workspace-install-affected {
@@ -103,10 +104,6 @@ function model-ad-build-images {
 
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
-}
-
-function schematic-build-images {
-  nx run-many --target=build-image --projects=schematic-* --parallel=3
 }
 
 function iatlas-build-images {

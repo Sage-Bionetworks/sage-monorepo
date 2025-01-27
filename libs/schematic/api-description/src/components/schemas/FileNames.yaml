@@ -1,4 +1,0 @@
-description: A list of file names.
-type: array
-items:
-  type: string

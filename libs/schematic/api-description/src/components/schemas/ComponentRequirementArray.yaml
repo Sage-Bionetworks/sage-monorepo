@@ -1,7 +1,0 @@
-type: object
-description: An array of components
-properties:
-  componentRequirementsList:
-    type: array
-    items:
-      type: string

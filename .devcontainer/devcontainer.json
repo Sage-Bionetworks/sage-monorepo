@@ -67,8 +67,8 @@
     }
   },
   "forwardPorts": [
-    2432, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 7010, 7443, 7200, 7888, 8010, 8071, 8000,
-    8080, 8081, 8082, 8084, 8085, 8086, 8090, 8200, 8888, 8889, 9200, 9411, 27017
+    2432, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
+    8085, 8086, 8090, 8200, 8888, 8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
     "2432": {
@@ -105,22 +105,6 @@
     },
     "5601": {
       "label": "openchallenges-opensearch-dashboards",
-      "onAutoForward": "silent"
-    },
-    "7010": {
-      "label": "schematic-api-docs",
-      "onAutoForward": "silent"
-    },
-    "7443": {
-      "label": "schematic-api",
-      "onAutoForward": "silent"
-    },
-    "7200": {
-      "label": "schematic-app",
-      "onAutoForward": "silent"
-    },
-    "7888": {
-      "label": "schematic-notebook",
       "onAutoForward": "silent"
     },
     "8000": {

@@ -1,6 +1,0 @@
-name: relationshipType
-in: query
-description: Type of relationship in a schema, such as requiresDependency
-required: true
-schema:
-  $ref: ../../schemas/RelationshipType.yaml

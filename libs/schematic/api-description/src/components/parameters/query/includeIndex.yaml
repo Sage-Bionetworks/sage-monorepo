@@ -1,7 +1,0 @@
-name: includeIndex
-in: query
-description: Whether to include the indexes of the dataframe in the returned JSON string.
-required: false
-schema:
-  type: boolean
-  default: false

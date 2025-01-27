@@ -1,6 +1,0 @@
-name: dataTypeArray
-in: query
-description: An array of data types
-required: false
-schema:
-  $ref: ../../schemas/DataTypeArray.yaml
