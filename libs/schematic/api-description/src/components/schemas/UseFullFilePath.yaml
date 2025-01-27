@@ -1,3 +1,0 @@
-description: Whether or not to return the full path of output, or just the basename.
-type: boolean
-default: false

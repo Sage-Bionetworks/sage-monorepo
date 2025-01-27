@@ -1,3 +1,0 @@
-description: Whether or not to use the more strict way of converting to camel case
-type: boolean
-default: true

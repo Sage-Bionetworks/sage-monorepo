@@ -6,7 +6,7 @@ authors = ["Verena Chung <verena.chung@sagebase.org>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.13.0"
+python = "3.11.10"
 requests = "2.32.3"
 gspread = "6.1.4"
 pandas = "2.2.3"

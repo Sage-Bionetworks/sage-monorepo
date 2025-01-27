@@ -1,8 +1,0 @@
-name: annotationKeyStyle
-in: query
-description: 'The labeling style for annotation keys.'
-required: false
-schema:
-  type: string
-  enum: ['class_label', 'display_label']
-  default: 'class_label'

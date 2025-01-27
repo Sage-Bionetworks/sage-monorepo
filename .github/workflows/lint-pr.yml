@@ -34,7 +34,6 @@ jobs:
             sage
             sage-monorepo
             sandbox
-            schematic
             synapse
           # Configure that a scope must always be provided.
           requireScope: false

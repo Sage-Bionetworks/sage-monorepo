@@ -105,10 +105,6 @@ function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
 }
 
-function schematic-build-images {
-  nx run-many --target=build-image --projects=schematic-* --parallel=3
-}
-
 function iatlas-build-images {
   nx run-many --target=build-image --projects=iatlas-* --parallel=3
 }
