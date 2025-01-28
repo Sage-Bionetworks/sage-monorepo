@@ -1,4 +1,0 @@
-description: An array of node labels
-type: array
-items:
-  $ref: NodeLabel.yaml

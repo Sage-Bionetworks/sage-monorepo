@@ -1,6 +1,0 @@
-name: component
-in: query
-description: A component in a schema, either the dsplay label or schema label
-required: true
-schema:
-  type: string

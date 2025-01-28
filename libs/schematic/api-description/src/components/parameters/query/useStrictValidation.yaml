@@ -1,8 +1,0 @@
-name: useStrictValidation
-in: query
-description: If true, users are blocked from entering incorrect values.
-  If false, users will get a warning when using incorrect values.
-required: false
-schema:
-  type: boolean
-  default: true

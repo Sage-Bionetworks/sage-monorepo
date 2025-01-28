@@ -1,8 +1,0 @@
-type: object
-description: An array of project metadata.
-properties:
-  projects:
-    description: An array of project metadata.
-    type: array
-    items:
-      $ref: ProjectMetadata.yaml

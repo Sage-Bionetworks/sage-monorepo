@@ -1,8 +1,0 @@
-name: pageNumber
-in: query
-description: The page number to get for a paginated query
-required: false
-schema:
-  type: integer
-  default: 1
-  minimum: 1

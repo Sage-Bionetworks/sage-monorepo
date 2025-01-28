@@ -34,15 +34,17 @@ function workspace-install {
   workspace-install-python-dependencies
   nx run-many --target=create-config
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
-  nx run-many --target=prepare --projects=tag:language:python --projects=tag:language:r
+  nx run-many --target=prepare --projects=tag:language:python --parallel=1
+  nx run-many --target=prepare --projects=tag:language:r
 }
 
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
   nx affected --target=create-config
-  nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
-  nx affected --target=prepare --exclude 'tag:language:java'
+  nx affected --target=prepare --projects=tag:language:java --parallel=1
+  nx affected --target=prepare --projects=tag:language:python --parallel=1
+  nx affected --target=prepare --projects=tag:language:r
 }
 
 # Setup Python virtualenvs
@@ -103,10 +105,6 @@ function model-ad-build-images {
 
 function openchallenges-build-images {
   nx run-many --target=build-image --projects=openchallenges-* --parallel=3
-}
-
-function schematic-build-images {
-  nx run-many --target=build-image --projects=schematic-* --parallel=3
 }
 
 function iatlas-build-images {
@@ -179,6 +177,22 @@ function workspace-initialize-env {
   export COREPACK_ENABLE_DOWNLOAD_PROMPT="0"
 }
 
-function workspace-nuke-venv {
-  find . -name ".venv" -print0 | xargs -0 rm -fr
+function workspace-nuke {
+  rm -fr \
+    .angular \
+    .cache \
+    .nx \
+    .pnpm-store \
+    coverage \
+    playwright-report \
+    reports
+
+    # find . -name "build" -print0 | xargs -0 rm -fr  # but not OA build folders
+    find . -name ".coverage" -print0 | xargs -0 rm -fr
+    find . -name ".gradle" -print0 | xargs -0 rm -fr
+    find . -name ".pytest_cache" -print0 | xargs -0 rm -fr
+    find . -name ".venv" -print0 | xargs -0 rm -fr
+    find . -name "bin" -print0 | xargs -0 rm -fr
+    find . -name "dist" -print0 | xargs -0 rm -fr
+    find . -name "node_modules" -print0 | xargs -0 rm -fr
 }
