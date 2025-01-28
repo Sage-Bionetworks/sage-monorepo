@@ -1,6 +1,6 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-5cd10f9d963e69f330b283166824ccd2b77bac8d",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-c7e2cdbc88fb8cc4815dafedd92b105e4b9544f2",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
@@ -116,6 +116,7 @@
   "otherPortsAttributes": {
     "onAutoForward": "silent"
   },
+  "postCreateCommand": "./tools/workspace-nuke.sh && ./tools/workspace-install.sh",
   "shutdownAction": "stopContainer",
   "runArgs": ["--name", "sage-monorepo-devcontainer"],
   "customizations": {
