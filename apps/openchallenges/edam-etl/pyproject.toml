@@ -1,23 +1,26 @@
-[tool.poetry]
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Thomas Schaffter", email = "thomas.schaffter@gmail.com"},
+]
+requires-python = "==3.12.0"
+dependencies = [
+    "pandas==2.2.1",
+    "requests==2.31.0",
+    "regex==2023.12.25",
+]
 name = "openchallenges-edam-etl"
 version = "0.1.0"
 description = "OpenChallenges EDAM ETL"
-authors = ["Thomas Schaffter <thomas.schaffter@gmail.com>"]
 readme = "README.md"
-packages = [{include = "src"}]
 
-[tool.poetry.dependencies]
-python = "3.12.0"
-pandas = "2.2.1"
-requests = "2.31.0"
-regex = "2023.12.25"
+[dependency-groups]
+dev = []
+prod = []
+test = []
 
-[tool.poetry.group.dev.dependencies]
-
-[tool.poetry.group.prod.dependencies]
-
-[tool.poetry.group.test.dependencies]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+default-groups = []
