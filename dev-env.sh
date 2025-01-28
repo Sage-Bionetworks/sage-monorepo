@@ -42,8 +42,9 @@ function workspace-install-affected {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
   nx affected --target=create-config
-  nx affected --target=prepare --exclude '!tag:language:java' --parallel=1
-  nx affected --target=prepare --exclude 'tag:language:java'
+  nx affected --target=prepare --projects=tag:language:java --parallel=1
+  nx affected --target=prepare --projects=tag:language:python --parallel=1
+  nx affected --target=prepare --projects=tag:language:r
 }
 
 # Setup Python virtualenvs
