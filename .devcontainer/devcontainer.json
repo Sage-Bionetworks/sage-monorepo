@@ -116,7 +116,6 @@
   "otherPortsAttributes": {
     "onAutoForward": "silent"
   },
-  "postCreateCommand": "./tools/workspace-nuke.sh && ./tools/workspace-install.sh",
   "shutdownAction": "stopContainer",
   "runArgs": ["--name", "sage-monorepo-devcontainer"],
   "customizations": {
