@@ -1,5 +1,10 @@
 name: 'Set up the dev container'
-description: 'Installs the dev container CLI, fetches caches (if exist), and starts the dev container'
+description: 'Installs the dev container CLI, fetches caches (if exist), and starts the dev container.'
+inputs:
+  devcontainer-user:
+    description: 'The dev container user.'
+    required: false
+    default: 'ubuntu'
 runs:
   using: 'composite'
   steps:
@@ -11,43 +16,45 @@ runs:
     #     restore-keys: |
     #       ${{ runner.os }}-pnpm-store-
 
-    - name: Set up Renv cache
-      uses: actions/cache@v3
-      with:
-        path: '/tmp/.cache/R/renv/cache'
-        key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-renv-cache-
+    # - name: Set up Renv cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: '/tmp/.cache/R/renv/cache'
+    #     key: ${{ runner.os }}-renv-cache-${{ hashFiles('**/renv.lock') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-renv-cache-
 
-    - name: Set up Poetry cache
-      uses: actions/cache@v3
-      with:
-        path: '/tmp/.cache/pypoetry'
-        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+    # - name: Set up Poetry cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: '/tmp/.cache/pypoetry'
+    #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
 
-    - name: Set up venv cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          /tmp/.local/share/virtualenv
-          **/.venv
-        key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+    # - name: Set up venv cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       /tmp/.local/share/virtualenv
+    #       **/.venv
+    #     key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
 
-    - name: Set up Gradle cache
-      uses: actions/cache@v3
-      with:
-        path: |
-          /tmp/.gradle/caches
-          /tmp/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-
+    # - name: Set up Gradle cache
+    #   uses: actions/cache@v3
+    #   with:
+    #     path: |
+    #       /tmp/.gradle/caches
+    #       /tmp/.gradle/wrapper
+    #     key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-gradle-
 
     - name: Install the Dev Container CLI
       shell: bash
-      run: npm install -g @devcontainers/cli@0.69.0
+      run: npm install -g @devcontainers/cli@0.72.0
 
     - name: Start the dev container
+      env:
+        DEVCONTAINER_USER: ${{ inputs.devcontainer-user }}
       shell: bash
       run: |
         mkdir -p \
@@ -60,21 +67,23 @@ runs:
 
         devcontainer up \
           --mount type=bind,source=/tmp/.pnpm-store,target=/workspaces/sage-monorepo/.pnpm-store \
-          --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/vscode/.cache/R/renv/cache \
-          --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/vscode/.cache/pypoetry \
-          --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/vscode/.local/share/virtualenv \
-          --mount type=bind,source=/tmp/.gradle/caches,target=/home/vscode/.gradle/caches \
-          --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/vscode/.gradle/wrapper \
+          --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/${DEVCONTAINER_USER}/.cache/R/renv/cache \
+          --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/${DEVCONTAINER_USER}/.cache/pypoetry \
+          --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/${DEVCONTAINER_USER}/.local/share/virtualenv \
+          --mount type=bind,source=/tmp/.gradle/caches,target=/home/${DEVCONTAINER_USER}/.gradle/caches \
+          --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/${DEVCONTAINER_USER}/.gradle/wrapper \
           --workspace-folder ../sage-monorepo
 
     - name: Prepare the workspace
+      env:
+        DEVCONTAINER_USER: ${{ inputs.devcontainer-user }}
       shell: bash
       run: |
         devcontainer exec --workspace-folder ../sage-monorepo bash -c "
-          sudo chown -R vscode:vscode \
+          sudo chown -R ${DEVCONTAINER_USER}:${DEVCONTAINER_USER} \
             /workspaces/sage-monorepo \
-            /home/vscode/.cache \
-            /home/vscode/.local \
-            /home/vscode/.gradle \
+            /home/${DEVCONTAINER_USER}/.cache \
+            /home/${DEVCONTAINER_USER}/.local \
+            /home/${DEVCONTAINER_USER}/.gradle \
           && . ./dev-env.sh \
           && workspace-install-affected"

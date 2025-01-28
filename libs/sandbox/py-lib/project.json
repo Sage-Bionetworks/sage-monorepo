@@ -22,13 +22,10 @@
       }
     },
     "prepare": {
-      "executor": "@nxlv/python:install",
+      "executor": "nx:run-commands",
       "options": {
-        "silent": false,
-        "args": "",
-        "cacheDir": ".cache/pypoetry",
-        "verbose": false,
-        "debug": false
+        "command": "./install.sh",
+        "cwd": "{projectRoot}"
       }
     },
     "update": {

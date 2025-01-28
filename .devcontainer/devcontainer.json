@@ -1,6 +1,6 @@
 {
-  "name": "Sage Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-devcontainer:fab0893",
+  "name": "Sage Monorepo Dev Container",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-c7e2cdbc88fb8cc4815dafedd92b105e4b9544f2",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
@@ -14,58 +14,7 @@
     "DOCKER_USERNAME": "${localEnv:DOCKER_USERNAME}",
     "DOCKER_PASSWORD": "${localEnv:DOCKER_PASSWORD}"
   },
-  "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:2.11.0": {
-      "version": "27.0.3",
-      "moby": false
-    }
-  },
-  "customizations": {
-    "codespaces": {
-      "openFiles": ["README.md"]
-    },
-    "vscode": {
-      "extensions": [
-        "alefragnani.Bookmarks",
-        "Angular.ng-template",
-        "dbaeumer.vscode-eslint",
-        "donjayamanne.python-environment-manager",
-        "dorzey.vscode-sqlfluff",
-        "eamodio.gitlens",
-        "emeraldwalk.RunOnSave",
-        "esbenp.prettier-vscode",
-        "exiasr.hadolint",
-        "formulahendry.auto-rename-tag",
-        "github.vscode-github-actions",
-        "GitHub.vscode-pull-request-github",
-        "Gruntfuggly.todo-tree",
-        "humao.rest-client",
-        "mhutchie.git-graph",
-        "mongodb.mongodb-vscode",
-        "ms-playwright.playwright",
-        "ms-python.black-formatter",
-        "ms-python.python",
-        "ms-toolsai.jupyter",
-        "mtxr.sqltools-driver-mysql",
-        "mtxr.sqltools-driver-pg",
-        "mtxr.sqltools",
-        "njpwerner.autodocstring",
-        "Orta.vscode-jest",
-        "pranaygp.vscode-css-peek",
-        "ritwickdey.LiveServer",
-        "shengchen.vscode-checkstyle",
-        "SonarSource.sonarlint-vscode",
-        "stkb.rewrap",
-        "stylelint.vscode-stylelint",
-        "vmware.vscode-boot-dev-pack",
-        "vscjava.vscode-gradle",
-        "vscjava.vscode-java-pack"
-      ],
-      "settings": {
-        "workbench.startupEditor": "readme"
-      }
-    }
-  },
+  "features": {},
   "forwardPorts": [
     2432, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
     8085, 8086, 8090, 8200, 8888, 8889, 9200, 9411, 27017
@@ -164,7 +113,48 @@
       "onAutoForward": "silent"
     }
   },
-  "remoteUser": "vscode",
+  "otherPortsAttributes": {
+    "onAutoForward": "silent"
+  },
   "shutdownAction": "stopContainer",
-  "runArgs": ["--name", "sage_devcontainer"]
+  "runArgs": ["--name", "sage-monorepo-devcontainer"],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "alefragnani.Bookmarks",
+        "Angular.ng-template",
+        "dbaeumer.vscode-eslint",
+        "donjayamanne.python-environment-manager",
+        "eamodio.gitlens",
+        "emeraldwalk.RunOnSave",
+        "esbenp.prettier-vscode",
+        "exiasr.hadolint",
+        "formulahendry.auto-rename-tag",
+        "github.vscode-github-actions",
+        "GitHub.vscode-pull-request-github",
+        "Gruntfuggly.todo-tree",
+        "humao.rest-client",
+        "mhutchie.git-graph",
+        "mongodb.mongodb-vscode",
+        "ms-playwright.playwright",
+        "ms-python.black-formatter",
+        "ms-python.python",
+        "ms-toolsai.jupyter",
+        "mtxr.sqltools-driver-mysql",
+        "mtxr.sqltools-driver-pg",
+        "mtxr.sqltools",
+        "njpwerner.autodocstring",
+        "Orta.vscode-jest",
+        "pranaygp.vscode-css-peek",
+        "ritwickdey.LiveServer",
+        "shengchen.vscode-checkstyle",
+        "SonarSource.sonarlint-vscode",
+        "stkb.rewrap",
+        "stylelint.vscode-stylelint",
+        "vmware.vscode-boot-dev-pack",
+        "vscjava.vscode-gradle",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
 }
