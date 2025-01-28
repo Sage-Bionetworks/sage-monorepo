@@ -1,17 +1,29 @@
-[tool.poetry]
+[tool.pdm.build]
+includes = []
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Verena Chung", email = "verena.chung@sagebase.org"},
+]
+requires-python = "==3.11.10"
+dependencies = [
+    "requests==2.32.3",
+    "gspread==6.1.4",
+    "pandas==2.2.3",
+    "numpy==2.1.0",
+]
 name = "openchallenges-data-lambda"
 version = "0.1.0"
 description = "A containerized AWS Lambda to import challenge data into the OC database"
-authors = ["Verena Chung <verena.chung@sagebase.org>"]
 readme = "README.md"
 
-[tool.poetry.dependencies]
-python = "3.11.10"
-requests = "2.32.3"
-gspread = "6.1.4"
-pandas = "2.2.3"
-numpy = "2.1.0"
+[dependency-groups]
+dev = []
+prod = []
 
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+default-groups = []
