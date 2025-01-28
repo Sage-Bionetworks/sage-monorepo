@@ -102,7 +102,7 @@
     "@nx/web": "20.3.1",
     "@nx/webpack": "20.3.1",
     "@nx/workspace": "20.3.1",
-    "@nxlv/python": "20.0.0",
+    "@nxlv/python": "20.3.6",
     "@openapitools/openapi-generator-cli": "2.5.2",
     "@playwright/test": "1.49.1",
     "@prettier/plugin-xml": "2.2.0",
