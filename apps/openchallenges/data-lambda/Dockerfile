@@ -17,7 +17,7 @@ COPY --from=uv /uv /bin/uv
 
 # Copy dependency files
 WORKDIR /app
-COPY uv.lock pyproject.toml ./
+COPY pyproject.toml uv.lock ./
 
 # Generate requirements.txt and install dependencies
 RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
