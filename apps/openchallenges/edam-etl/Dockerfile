@@ -41,17 +41,6 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
-# WORKDIR ${APP_DIR}
-# COPY src src/
-# COPY pyproject.toml uv.lock ./
-
-# Use the version of Poetry installed in the dev container.
-# See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
-# RUN pip install --no-cache-dir uv==0.5.14 \
-#   && poetry config --local virtualenvs.create false \
-#   && poetry install --with prod --no-root --no-interaction --no-ansi \
-#   && pip cache purge
-
 # Copy the runtime dependencies from the builder stage.
 COPY --from=builder /app /app
 
