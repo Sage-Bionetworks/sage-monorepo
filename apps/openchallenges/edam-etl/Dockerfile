@@ -1,4 +1,4 @@
-FROM python:3.12.0-slim
+FROM python:3.12.8-slim
 
 ARG USERNAME=app
 ARG USER_UID=1000
