@@ -6,7 +6,7 @@ build-backend = "pdm.backend"
 authors = [
     {name = "Verena Chung", email = "verena.chung@sagebase.org"},
 ]
-requires-python = "==3.11.10"
+requires-python = "==3.13.1"
 dependencies = [
     "requests==2.32.3",
     "gspread==6.1.4",
