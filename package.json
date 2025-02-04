@@ -84,7 +84,7 @@
     "@fortawesome/free-solid-svg-icons": "6.6.0",
     "@nrwl/js": "19.8.0",
     "@nx-tools/container-metadata": "6.1.1",
-    "@nx-tools/nx-container": "6.1.1",
+    "@nx-tools/nx-container": "6.2.0",
     "@nx/angular": "20.3.1",
     "@nx/cypress": "20.3.1",
     "@nx/devkit": "20.3.1",
