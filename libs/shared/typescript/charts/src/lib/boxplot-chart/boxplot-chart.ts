@@ -254,6 +254,10 @@ export class BoxplotChart {
         axisLine: {
           show: true,
         },
+        axisLabel: {
+          showMinLabel: yAxisMin == null,
+          showMaxLabel: yAxisMax == null,
+        },
         splitLine: {
           show: false,
         },
