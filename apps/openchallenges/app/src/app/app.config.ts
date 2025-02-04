@@ -16,6 +16,8 @@ import { configFactory, ConfigService } from '@sagebionetworks/openchallenges/co
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/openchallenges/api-client-angular';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { providePrimeNG } from 'primeng/config';
+import Lara from '@primeng/themes/lara';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -35,6 +37,14 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     // The HTTP client is injected to enable the ConfigService to retrieve the configuration file
     // via HTTP when server-side rendering (SSR) is used.
+    providePrimeNG({
+      theme: {
+        preset: Lara,
+        options: {
+          darkModeSelector: false,
+        },
+      },
+    }),
     provideHttpClient(withFetch()),
     provideClientHydration(),
     provideZoneChangeDetection({ eventCoalescing: true }),
