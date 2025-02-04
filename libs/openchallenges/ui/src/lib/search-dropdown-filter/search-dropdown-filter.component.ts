@@ -18,13 +18,13 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) options!: Filter[];
   @Input({ required: true }) optionsPerPage!: number;
   @Input({ required: true }) selectedOptions!: any[];
-  @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Input({ required: false }) lazy = true;
-  @Input({ required: false }) showLoader = false;
   @Input({ required: false }) optionHeight = 50; // height of each option
   @Input({ required: false }) optionSize = 10; // total number of displaying options
+  @Input({ required: false }) placeholder = 'Search items';
+  @Input({ required: false }) showLoader = false;
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
