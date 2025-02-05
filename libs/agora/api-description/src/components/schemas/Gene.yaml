@@ -73,9 +73,7 @@ properties:
       $ref: ProteinDifferentialExpression.yaml
     nullable: true
   metabolomics:
-    type: object
-    additionalProperties: true
-    nullable: true
+    $ref: Metabolomics.yaml
   overall_scores:
     $ref: OverallScores.yaml
     nullable: true

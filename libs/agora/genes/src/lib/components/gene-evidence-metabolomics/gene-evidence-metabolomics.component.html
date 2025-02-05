@@ -24,17 +24,16 @@
           Mapping of Metabolites to
           {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }}
         </h3>
-        @if (_gene?.metabolomics || boxPlotData.length < 1) {
+        @if (!_gene?.metabolomics || boxPlotData.length < 1) {
           <p>
             <i>No metabolomic data is currently available.</i>
           </p>
-        }
-        @if (_gene?.metabolomics && boxPlotData.length > 0) {
+        } @else {
           <p>
             Genetic mapping revealed that the top metabolite associated with
             {{ _gene?.hgnc_symbol || _gene?.ensembl_gene_id }} is
-            {{ _gene?.metabolomics?.['metabolite_full_name'] }}, with a p-value of
-            {{ getSignificantFigures(_gene?.metabolomics?.['gene_wide_p_threshold_1kgp'], 2) }}.
+            {{ _gene?.metabolomics?.metabolite_full_name }}, with a p-value of
+            {{ getSignificantFigures(_gene?.metabolomics?.gene_wide_p_threshold_1kgp, 2) }}.
           </p>
         }
       </div>
@@ -53,21 +52,21 @@
         </p>
       }
 
-      @if (boxPlotData.length > 0) {
+      @if (boxPlotData.length > 0 && _gene && _gene.metabolomics) {
         <div class="mb-xl">
           <h3>
-            Levels of {{ _gene?.metabolomics?.['metabolite_full_name'] }} by Disease Status
+            Levels of {{ _gene.metabolomics.metabolite_full_name }} by Disease Status
             <agora-download-dom-image
               [target]="mdeChart"
-              [filename]="_gene?.ensembl_gene_id + '_metabolomics'"
+              [filename]="_gene.ensembl_gene_id + '_metabolomics'"
             ></agora-download-dom-image>
           </h3>
           <p class="mb-0">
             This plot shows differences in metabolite levels in AD cases (AD) and cognitively-normal
             individuals (CN). This comparison
-            {{ getSignificantText(_gene?.metabolomics?.['ad_diagnosis_p_value'][0]) }}
+            {{ getSignificantText(_gene.metabolomics.ad_diagnosis_p_value[0]) }}
             significantly different with a p-value of
-            {{ getSignificantFigures(_gene?.metabolomics?.['ad_diagnosis_p_value'][0], 2) }}.
+            {{ getSignificantFigures(_gene.metabolomics.ad_diagnosis_p_value[0], 2) }}.
           </p>
         </div>
       }
@@ -81,7 +80,7 @@
       <div #mdeChart>
         <agora-box-plot-chart
           xAxisLabel="DIAGNOSIS"
-          [yAxisLabel]="_gene?.metabolomics?.['metabolite_full_name'] + ' LEVELS'"
+          [yAxisLabel]="_gene?.metabolomics?.metabolite_full_name + ' LEVELS'"
           [data]="boxPlotData"
         ></agora-box-plot-chart>
       </div>

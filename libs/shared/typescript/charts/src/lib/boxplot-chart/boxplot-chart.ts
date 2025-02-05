@@ -64,12 +64,18 @@ export class BoxplotChart {
       pointTooltipFormatter,
     } = boxplotProps;
 
-    if (points.length === 0) {
+    const noPoints = points.length === 0;
+    const noSummaries = summaries == null || summaries.length === 0;
+
+    if (noPoints && noSummaries) {
       setNoDataOption(this.chart);
       return;
     }
 
-    const xAxisCategories = getUniqueValues(points, 'xAxisCategory') as string[];
+    const xAxisCategories =
+      noPoints && summaries
+        ? (getUniqueValues(summaries, 'xAxisCategory') as string[])
+        : (getUniqueValues(points, 'xAxisCategory') as string[]);
     const pointCategories = getUniqueValues(points, 'pointCategory') as string[];
     const hasPointCategories = pointCategories.length > 0;
 
@@ -98,7 +104,7 @@ export class BoxplotChart {
       },
       {
         id: 'points',
-        dimensions: Object.keys(dataForScatterPoints[0]),
+        dimensions: noPoints ? undefined : Object.keys(dataForScatterPoints[0]),
         source: dataForScatterPoints,
       },
       {
