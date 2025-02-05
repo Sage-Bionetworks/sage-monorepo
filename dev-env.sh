@@ -25,7 +25,6 @@ function workspace-install-nodejs-dependencies {
 
 function workspace-install-python-dependencies {
   uv sync
-  workspace-initialize-env
 }
 
 function workspace-install {
@@ -137,7 +136,7 @@ function check-vscode-version {
 }
 
 function workspace-welcome {
-  echo "Welcome to Sage monorepo! 👋"
+  echo "Welcome to Sage Monorepo (SMR)! 👋"
 
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
