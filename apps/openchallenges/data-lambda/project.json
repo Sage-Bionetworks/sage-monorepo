@@ -13,7 +13,7 @@
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./install.sh",
+        "command": "uv sync",
         "cwd": "{projectRoot}"
       }
     },
