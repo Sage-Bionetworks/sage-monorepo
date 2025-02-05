@@ -4,8 +4,7 @@
 pnpm install --frozen-lockfile
 
 # Install workspace Python dependencies
-# poetry env use $(pyenv which python)
-# poetry install --with dev
+uv sync
 
 # Prepare projects
 pnpm dlx nx run-many --target=create-config
