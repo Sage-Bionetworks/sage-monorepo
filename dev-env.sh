@@ -24,8 +24,7 @@ function workspace-install-nodejs-dependencies {
 }
 
 function workspace-install-python-dependencies {
-  poetry env use $(pyenv which python)
-  poetry install --with dev
+  uv sync
   workspace-initialize-env
 }
 

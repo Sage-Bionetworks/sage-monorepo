@@ -4,12 +4,12 @@
 pnpm install --frozen-lockfile
 
 # Install workspace Python dependencies
-# poetry env use $(pyenv which python)
-# poetry install --with dev
+uv sync
 
 # Prepare projects
 pnpm dlx nx run-many --target=create-config
-pnpm dlx nx run-many --target=prepare --projects=tag:language:java --parallel=1
-# nx run-many --target=prepare --projects=tag:language:python --parallel=1
-pnpm dlx nx run-many --target=prepare --projects=tag:language:r
+# Projects that can be prepared in parallel
+pnpm dlx nx run-many --target=prepare --projects=!tag:language:java,!tag:language:python
+# Python and Java projects must be installed one at a time
+pnpm dlx nx run-many --target=prepare --projects=tag:language:java,tag:language:python --parallel=1
 

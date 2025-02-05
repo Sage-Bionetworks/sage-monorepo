@@ -9,16 +9,16 @@ const { spawn } = require('child_process');
 const { getGitDiffFiles } = require('./git-util');
 const { getNxProjects, getNxProjectFiles } = require('./nx-util');
 
-// Returns true if the directory specified includes a Poetry lock file.
-const hasPoetryLockFile = (projectDir) => {
+// Returns true if the directory specified includes a Poetry or uv lock file.
+const hasPoetryOrUvLockFile = (projectDir) => {
   const filenames = fs.readdirSync(projectDir);
-  return filenames.includes('poetry.lock');
+  return filenames.includes('poetry.lock') || filenames.includes('uv.lock');
 };
 
 // Returns true if the dir specified includes a Poetry lock file that has changed.
-const hasPoetryDefinitionChanged = (directory, changedFiles) => {
-  if (hasPoetryLockFile(directory)) {
-    const projectDefinitionPaths = ['poetry.lock'].map((filename) =>
+const hasPoetryOrUvDefinitionChanged = (directory, changedFiles) => {
+  if (hasPoetryOrUvLockFile(directory)) {
+    const projectDefinitionPaths = ['poetry.lock', 'uv.lock'].map((filename) =>
       ['.', ''].includes(directory) ? `${filename}` : `${directory}/${filename}`,
     );
     if (
@@ -47,7 +47,7 @@ const runCommand = (command, args) => {
 
 const installWorkspacePythonDependencies = async () => {
   try {
-    await runCommand('poetry', ['install', '--with', 'dev']);
+    await runCommand('uv', ['sync']);
     // The bin folder of the virtualenv has already been added to the path in dev-env.sh
   } catch (error) {
     console.error(`Error: ${error.message}`);
@@ -65,12 +65,13 @@ const installProjectPythonDependencies = async (projectNames) => {
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  if (hasPoetryDefinitionChanged('.', changedFiles)) {
+  if (hasPoetryOrUvDefinitionChanged('.', changedFiles)) {
     installWorkspacePythonDependencies();
   }
   getNxProjects()
     .then((projects) => {
-      const toUpdate = (project) => hasPoetryDefinitionChanged(project['projectDir'], changedFiles);
+      const toUpdate = (project) =>
+        hasPoetryOrUvDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
     .then((projectsToUpdate) => {
