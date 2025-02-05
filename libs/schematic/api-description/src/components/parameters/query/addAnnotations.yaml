@@ -1,7 +1,0 @@
-name: addAnnotations
-in: query
-description: If true, annotations are added to the manifest
-required: false
-schema:
-  type: boolean
-  default: false

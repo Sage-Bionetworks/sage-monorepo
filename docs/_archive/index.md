@@ -43,7 +43,6 @@ Then open your fork repo inside our dev container using these instructions:
 ## Projects
 
 - OpenChallenges
-- Schematic (evaluation)
 - Synapse (evaluation)
 
 ---

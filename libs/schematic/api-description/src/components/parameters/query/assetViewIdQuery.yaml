@@ -1,6 +1,0 @@
-name: assetViewId
-in: query
-description: ID of view listing all project data assets. E.g. for Synapse this would be the Synapse ID of the fileview listing all data assets for a given project
-required: true
-schema:
-  $ref: ../../schemas/AssetViewId.yaml

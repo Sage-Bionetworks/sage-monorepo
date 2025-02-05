@@ -1,0 +1,28 @@
+{
+  "name": "Sage Monorepo Dev Container Prebuild",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      // The value of DEVCONTAINER_VERSION will be the commit SHA
+      // used to prebuild the development container.
+      "devcontainerVersion": "${localEnv:DEVCONTAINER_VERSION}"
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2.12.0": {
+      "version": "27.5.1",
+      "installDockerComposeSwitch": false
+    },
+    "ghcr.io/devcontainers/features/go:1.3.1": {
+      "version": "1.23.5",
+      "golangciLintVersion": "1.63.4"
+    },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1.2.0": {
+      "version": "1.32.1",
+      "helm": "3.17.0",
+      "minikube": "1.35.0"
+    }
+  },
+  "remoteUser": "ubuntu",
+  "runArgs": ["--name", "sage-monorepo-devcontainer-prebuild"]
+}

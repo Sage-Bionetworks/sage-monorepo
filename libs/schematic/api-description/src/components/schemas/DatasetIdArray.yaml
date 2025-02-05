@@ -1,4 +1,0 @@
-type: array
-description: An array of dataset ids
-items:
-  $ref: DatasetId.yaml

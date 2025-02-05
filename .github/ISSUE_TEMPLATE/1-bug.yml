@@ -27,7 +27,6 @@ body:
         - Sage
         - Sage Monorepo
         - Sandbox
-        - Schematic
         - Synapse
         - Other
   - type: textarea

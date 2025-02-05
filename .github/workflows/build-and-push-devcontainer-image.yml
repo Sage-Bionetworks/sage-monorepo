@@ -1,0 +1,239 @@
+name: Dev Container Image
+
+on:
+  push:
+    branches:
+      - 'main'
+    paths:
+      - '.github/workflows/build-and-push-devcontainer-image.yml'
+      - '.github/.devcontainer/devcontainer.json'
+      - '.github/.devcontainer/Dockerfile'
+  pull_request:
+    paths:
+      - '.github/workflows/build-and-push-devcontainer-image.yml'
+      - '.github/.devcontainer/devcontainer.json'
+      - '.github/.devcontainer/Dockerfile'
+
+env:
+  WORKFLOW_FILE: .github/workflows/build-and-push-devcontainer-image.yml
+
+jobs:
+  # Lint the Dockerfile using Hadolint in a separate job to ensure code quality
+  # and prevent unintentional modifications by third-party tools.
+  lint:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      # The path to the Dockerfile used for building the development container.
+      DOCKERFILE: .github/.devcontainer/Dockerfile
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Lint Dockerfile
+        uses: hadolint/hadolint-action@54c9adbab1582c2ef04b2016b760714a4bfde3cf # v3.1.0
+        with:
+          dockerfile: ${{ env.DOCKERFILE }}
+
+  build-and-push:
+    runs-on: ubuntu-24.04
+    needs: lint
+    permissions:
+      # Write access to `contents` needed to upload SBOM to GitHub's dependency graph.
+      contents: write
+      packages: write
+    env:
+      # The path to the folder containing the `.devcontainer/` directory.
+      DEVCONTAINER_WORKSPACE_FOLDER: .github
+      # The name of the image without a tag.
+      IMAGE_NAME: 'ghcr.io/${{ github.repository }}-devcontainer'
+      # The path to the Dockerfile used for building the development container.
+      DOCKERFILE: .github/.devcontainer/Dockerfile
+    outputs:
+      # The specific image tagged with the SHA, used for commands targeting a single image version.
+      image: ${{ steps.meta_sha.outputs.tags }}
+      # The image digest, available only after pushing the image to the registry.
+      image_digest: ${{ steps.push.outputs.image_digest }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=edge,branch=main
+            type=sha,format=long
+
+      - name: Docker meta (sha)
+        # Generate metadata for Docker images using the commit SHA as the tag.
+        # The SHA is always available and unique per commit, ensuring traceability.
+        # Used for steps in the workflow that require a single, unique tag.
+        id: meta_sha
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,format=long
+
+      - name: Securely pull the base image with Docker Content Trust
+        # DOCKER_CONTENT_TRUST=1 ensures image signatures are verified, but it
+        # only works for images that have been signed using Docker Content Trust.
+        # Unsigned images will fail to pull.
+        run: |
+          base_image=$(grep '^FROM' "${{ env.DOCKERFILE }}" | tail -n 1 | awk '{print $2}')
+          DOCKER_CONTENT_TRUST=1 docker pull "${base_image}"
+
+      - name: Build the dev container image
+        id: build
+        env:
+          IMAGES: ${{ steps.meta.outputs.tags }}
+        run: |
+          # Export the devcontainer version, which will be set inside the image. See
+          # devcontainer.json used to build the image.
+          export DEVCONTAINER_VERSION="${GITHUB_SHA}"
+
+          # Convert the comma-separated list into the desired format
+          images=""
+          for image in ${IMAGES}; do
+            images+="--image-name ${image} "
+          done
+
+          # Build the image
+          npm install -g @devcontainers/cli@0.72.0 \
+            --integrity="sha512-vDv33/I5POw1wDJmcMbOCTWd3xTk4bbVruJ9Qgr5eiLSl1OsfufN5WfeTZqgK1HeqrNqtH/xPyCKB2LXDNIv3w=="
+          devcontainer build \
+            --workspace-folder "${DEVCONTAINER_WORKSPACE_FOLDER}" \
+            ${images}
+
+      - name: Push the Docker image to GitHub Container Registry
+        if: ${{ github.event_name != 'pull_request' }}
+        id: push
+        env:
+          IMAGES: ${{ steps.meta.outputs.tags }}
+        run: |
+          first_iteration=true
+          for image in ${IMAGES}; do
+            docker push "${image}"
+
+            # For the first image only, capture the digest
+            if [ "${first_iteration}" = true ]; then
+              digest=$(docker inspect --format='{{index .RepoDigests 0}}' "${image}" | cut -d '@' -f2)
+              echo "image_digest=${digest}" >> "$GITHUB_OUTPUT"
+              first_iteration=false
+            fi
+          done
+
+      - name: Generate SBOM for Docker image
+        uses: anchore/sbom-action@df80a981bc6edbc4e220a492d3cbe9f5547a6e75 # v0.17.9
+        env:
+          IMAGE: ${{ steps.meta_sha.outputs.tags }}
+        with:
+          image: ${{ env.IMAGE }}
+          format: spdx-json
+          artifact-name: sbom.spdx.json
+          upload-artifact: true
+          dependency-snapshot: ${{ github.event_name != 'pull_request' }}
+
+  attest:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    needs: build-and-push
+    permissions:
+      # The id-token permission gives the action the ability to mint the OIDC
+      # token necessary to request a Sigstore signing certificate.
+      id-token: write
+      attestations: write
+    steps:
+      - name: Attest the provenance of the Docker image build
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/attest-build-provenance@520d128f165991a6c774bcb264f323e3d70747f4 # v2.2.0
+        id: attest
+        with:
+          subject-name: ${{ needs.build-and-push.outputs.image }}
+          subject-digest: ${{ needs.build-and-push.outputs.image_digest }}
+
+  cosign:
+    if: ${{ github.event_name != 'pull_request' }}
+    runs-on: ubuntu-24.04
+    needs: build-and-push
+    permissions:
+      packages: write
+      # This is used to complete the identity challenge with sigstore/fulcio
+      # when running outside of PRs.
+      id-token: write
+    steps:
+      - name: Install Cosign
+        uses: sigstore/cosign-installer@dc72c7d5c4d10cd6bcb8cf6e3fd625a9e5e537da # v3.7.0
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sign the Docker image with GitHub OIDC Token
+        env:
+          IMAGE: ${{ needs.build-and-push.outputs.image }}
+          IMAGE_DIGEST: ${{ needs.build-and-push.outputs.image_digest }}
+        run: |
+          set -x
+          cosign sign --yes ${IMAGE}@${IMAGE_DIGEST}
+
+      - name: Verify the signature
+        run: |
+          set -x
+          cosign verify \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --certificate-identity "https://github.com/${{ github.repository }}/${WORKFLOW_FILE}@${{ github.ref }}" \
+            ${{ needs.build-and-push.outputs.image }}
+
+      - name: Download the SBOM artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: sbom.spdx.json
+
+      - name: Create SBOM attestation with Cosign
+        env:
+          IMAGE: ${{ needs.build-and-push.outputs.image }}
+          IMAGE_DIGEST: ${{ needs.build-and-push.outputs.image_digest }}
+        run: |
+          cosign attest --yes \
+            --type spdxjson \
+            --predicate sbom.spdx.json \
+            ${IMAGE}@${IMAGE_DIGEST}
+
+      - name: Verify the attestation
+        run: |
+          set -x
+          # Redirect stdout to null to prevent the command from hanging randomly.
+          # See https://github.com/sigstore/cosign/issues/3602
+          cosign verify-attestation \
+            --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+            --certificate-identity "https://github.com/${{ github.repository }}/${WORKFLOW_FILE}@${{ github.ref }}" \
+            --type spdxjson \
+            ${{ needs.build-and-push.outputs.image }} \
+            1>/dev/null
+
+      - name: Get the signed SBOM
+        run: |
+          set -x
+          cosign download attestation \
+            ${{ needs.build-and-push.outputs.image }} \
+            | jq -r .payload | base64 -d \
+            | jq .predicate

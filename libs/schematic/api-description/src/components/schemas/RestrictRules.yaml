@@ -1,3 +1,0 @@
-description: If True, validation suite will only run with in-house validation rule. If False, the Great Expectations suite will be utilized and all rules will be available.
-type: boolean
-default: false

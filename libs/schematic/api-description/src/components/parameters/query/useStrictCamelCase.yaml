@@ -1,5 +1,0 @@
-name: useStrictCamelCase
-in: query
-description: Whether or not to use the more strict way of converting to camel case
-schema:
-  $ref: ../../schemas/UseStrictCamelCase.yaml
