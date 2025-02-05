@@ -14,7 +14,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run python src/build_database.py",
+        "command": "uv run src/build_database.py",
         "cwd": "{projectRoot}"
       }
     }
