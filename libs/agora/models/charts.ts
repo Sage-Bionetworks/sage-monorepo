@@ -6,7 +6,7 @@ export interface boxPlotChartItemCircle {
 export interface boxPlotChartItem {
   key: string;
   value: number[];
-  circle: boxPlotChartItemCircle;
+  circle?: boxPlotChartItemCircle;
   quartiles: number[];
 }
 

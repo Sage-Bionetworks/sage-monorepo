@@ -4,41 +4,20 @@
   "projectType": "application",
   "sourceRoot": "apps/iatlas/data/src",
   "targets": {
-    "lock": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry lock --no-update",
-        "cwd": "{projectRoot}"
-      }
-    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./install.sh",
+        "command": "uv sync",
         "cwd": "{projectRoot}"
-      }
-    },
-    "update": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry update",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "lint": {
-      "executor": "@nxlv/python:flake8",
-      "outputs": ["{workspaceRoot}/reports/{projectRoot}/pylint.txt"],
-      "options": {
-        "outputFile": "reports/{projectRoot}/pylint.txt"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run python src/build_database.py",
+        "command": "uv run src/build_database.py",
         "cwd": "{projectRoot}"
       }
     }
   },
-  "tags": ["language:python", "package-manager:poetry"]
+  "tags": ["language:python", "package-manager:uv"]
 }

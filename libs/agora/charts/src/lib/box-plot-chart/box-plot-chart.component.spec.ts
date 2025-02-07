@@ -22,7 +22,7 @@ describe('Component: Chart - Box Plot', () => {
 
     // keys are sorted alphabetically
     const tooltipTextRegExp = new RegExp(
-      `${boxPlotChartItemsMock[1].circle.tooltip}.*${boxPlotChartItemsMock[0].circle.tooltip}`,
+      `${boxPlotChartItemsMock[1].circle?.tooltip}.*${boxPlotChartItemsMock[0].circle?.tooltip}`,
     );
     expect(screen.getByLabelText(tooltipTextRegExp)).toBeVisible();
   });

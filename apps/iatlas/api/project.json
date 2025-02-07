@@ -11,24 +11,10 @@
         "cwd": "{projectRoot}"
       }
     },
-    "lock": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry lock --no-update",
-        "cwd": "{projectRoot}"
-      }
-    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "./install.sh",
-        "cwd": "{projectRoot}"
-      }
-    },
-    "update": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "poetry update",
+        "command": "uv sync",
         "cwd": "{projectRoot}"
       }
     },
@@ -39,5 +25,5 @@
       }
     }
   },
-  "tags": ["language:python", "package-manager:poetry"]
+  "tags": ["language:python", "package-manager:uv"]
 }

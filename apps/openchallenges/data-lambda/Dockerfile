@@ -1,18 +1,34 @@
-FROM python:3.13.0-slim-bullseye AS builder
+FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
-# Install the same version of Poetry as inside the dev container
-RUN pip install --no-cache-dir poetry==1.8.3
+# First, bundle the dependencies into the task root.
+FROM public.ecr.aws/lambda/python:3.13 AS builder
 
+# Enable bytecode compilation, to improve cold-start performance.
+ENV UV_COMPILE_BYTECODE=1
+
+# Disable installer metadata, to create a deterministic layer.
+ENV UV_NO_INSTALLER_METADATA=1
+
+# Enable copy mode to support bind mount caching.
+ENV UV_LINK_MODE=copy
+
+# Copy uv binary
+COPY --from=uv /uv /bin/uv
+
+# Copy dependency files
 WORKDIR /app
-COPY pyproject.toml poetry.lock ./
-RUN poetry export --without-hashes --format=requirements.txt > requirements.txt
+COPY pyproject.toml uv.lock ./
+
+# Generate requirements.txt and install dependencies
+RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
+    uv pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 FROM public.ecr.aws/lambda/python:3.13
 
-COPY --from=builder /app/requirements.txt ${LAMBDA_TASK_ROOT}/
-COPY openchallenges_data_lambda/app.py ${LAMBDA_TASK_ROOT}/
+# Copy the runtime dependencies from the builder stage.
+COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 
-RUN python3.13 -m pip install --no-cache-dir -r requirements.txt -t .
+# Copy the application code.
+COPY ./openchallenges_data_lambda ${LAMBDA_TASK_ROOT}/app
 
-# Command can be overwritten by providing a different command in the template directly.
-CMD ["app.lambda_handler"]
+CMD ["app.app.lambda_handler"]

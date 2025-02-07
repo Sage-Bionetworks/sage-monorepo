@@ -1,11 +1,36 @@
+FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
+
+# First, bundle the dependencies into the task root.
+FROM python:3.11.9-slim AS builder
+
+# Enable bytecode compilation, to improve cold-start performance.
+ENV UV_COMPILE_BYTECODE=1
+
+# Disable installer metadata, to create a deterministic layer.
+ENV UV_NO_INSTALLER_METADATA=1
+
+# Enable copy mode to support bind mount caching.
+ENV UV_LINK_MODE=copy
+
+# Copy uv binary
+COPY --from=uv /uv /bin/uv
+
+# Copy dependency files
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+
+# Generate requirements.txt and install dependencies
+RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
+    uv pip install -r requirements.txt --target "/app"
+
 FROM python:3.11.9-slim
 
-ARG LOCAL_DATA_DIR="./local/data"
 ARG USERNAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ENV APP_DIR=/opt/app \
+ENV APP_DIR=/app \
     APP_USERNAME=${USERNAME}
+ENV PYTHONPATH="${APP_DIR}"
 
 RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
@@ -13,23 +38,16 @@ RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
     gosu \
-  && apt-get -y autoclean \
+  && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR ${APP_DIR}
-COPY src src/
-COPY pyproject.toml poetry.lock ./
+# Copy the runtime dependencies from the builder stage.
+COPY --from=builder ${APP_DIR} ${APP_DIR}
 
-# Use the version of Poetry installed in the dev container.
-# See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
-RUN pip install --no-cache-dir poetry==1.6.1 \
-  && poetry config --local virtualenvs.create false \
-  && poetry install --with prod --no-root --no-interaction --no-ansi \
-  && pip cache purge \
-  # Give APP_USER write permission to directory where synapse data will be written
-  && mkdir -p ${LOCAL_DATA_DIR} \
-  && chown ${APP_USERNAME} ${LOCAL_DATA_DIR}
+# Copy the application code.
+COPY ./src /${APP_DIR}/src
+RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR}
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
