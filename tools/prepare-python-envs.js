@@ -9,16 +9,16 @@ const { spawn } = require('child_process');
 const { getGitDiffFiles } = require('./git-util');
 const { getNxProjects, getNxProjectFiles } = require('./nx-util');
 
-// Returns true if the directory specified includes a Poetry or uv lock file.
-const hasPoetryOrUvLockFile = (projectDir) => {
+// Returns true if the directory specified includes a uv lock file.
+const hasUvLockFile = (projectDir) => {
   const filenames = fs.readdirSync(projectDir);
-  return filenames.includes('poetry.lock') || filenames.includes('uv.lock');
+  return filenames.includes('uv.lock');
 };
 
-// Returns true if the dir specified includes a Poetry lock file that has changed.
-const hasPoetryOrUvDefinitionChanged = (directory, changedFiles) => {
-  if (hasPoetryOrUvLockFile(directory)) {
-    const projectDefinitionPaths = ['poetry.lock', 'uv.lock'].map((filename) =>
+// Returns true if the dir specified includes a uv lock file that has changed.
+const hasUvDefinitionChanged = (directory, changedFiles) => {
+  if (hasUvLockFile(directory)) {
+    const projectDefinitionPaths = ['uv.lock'].map((filename) =>
       ['.', ''].includes(directory) ? `${filename}` : `${directory}/${filename}`,
     );
     if (
@@ -65,13 +65,12 @@ const installProjectPythonDependencies = async (projectNames) => {
 
 console.log('✨ Preparing Python dependencies');
 getGitDiffFiles().then((changedFiles) => {
-  if (hasPoetryOrUvDefinitionChanged('.', changedFiles)) {
+  if (hasUvDefinitionChanged('.', changedFiles)) {
     installWorkspacePythonDependencies();
   }
   getNxProjects()
     .then((projects) => {
-      const toUpdate = (project) =>
-        hasPoetryOrUvDefinitionChanged(project['projectDir'], changedFiles);
+      const toUpdate = (project) => hasUvDefinitionChanged(project['projectDir'], changedFiles);
       return projects.filter(toUpdate);
     })
     .then((projectsToUpdate) => {
