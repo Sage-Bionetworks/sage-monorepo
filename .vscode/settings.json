@@ -6,6 +6,7 @@
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "automatic",
   "java.autobuild.enabled": false,
+  "java.jdt.ls.vmargs": "-Xlog:jni+resolve=off",
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,

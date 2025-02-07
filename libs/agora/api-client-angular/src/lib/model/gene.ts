@@ -9,16 +9,17 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { MedianExpression } from './medianExpression';
+import { Metabolomics } from './metabolomics';
 import { ExperimentalValidation } from './experimentalValidation';
-import { EnsemblInfo } from './ensemblInfo';
-import { RnaDifferentialExpression } from './rnaDifferentialExpression';
 import { BioDomains } from './bioDomains';
-import { GeneNetworkLinks } from './geneNetworkLinks';
 import { TargetNomination } from './targetNomination';
-import { NeuropathologicCorrelation } from './neuropathologicCorrelation';
 import { SimilarGenesNetwork } from './similarGenesNetwork';
 import { Druggability } from './druggability';
+import { MedianExpression } from './medianExpression';
+import { EnsemblInfo } from './ensemblInfo';
+import { RnaDifferentialExpression } from './rnaDifferentialExpression';
+import { GeneNetworkLinks } from './geneNetworkLinks';
+import { NeuropathologicCorrelation } from './neuropathologicCorrelation';
 import { OverallScores } from './overallScores';
 import { ProteinDifferentialExpression } from './proteinDifferentialExpression';
 
@@ -50,7 +51,7 @@ export interface Gene {
   proteomics_LFQ?: Array<ProteinDifferentialExpression> | null;
   proteomics_SRM?: Array<ProteinDifferentialExpression> | null;
   proteomics_TMT?: Array<ProteinDifferentialExpression> | null;
-  metabolomics?: { [key: string]: any } | null;
+  metabolomics?: Metabolomics;
   overall_scores?: OverallScores;
   neuropathologic_correlations?: Array<NeuropathologicCorrelation> | null;
   experimental_validation?: Array<ExperimentalValidation> | null;

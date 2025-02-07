@@ -1,12 +1,13 @@
 import { Team } from '@sagebionetworks/agora/api-client-angular';
 import {
-  RnaDifferentialExpression,
-  ProteinDifferentialExpression,
-  ExperimentalValidation,
-  OverallScores,
-  NeuropathologicCorrelation,
-  SimilarGenesNetwork,
   BioDomains,
+  ExperimentalValidation,
+  Metabolomics,
+  NeuropathologicCorrelation,
+  OverallScores,
+  ProteinDifferentialExpression,
+  RnaDifferentialExpression,
+  SimilarGenesNetwork,
 } from './';
 import { EnsemblInfo } from './ensembl-info';
 
@@ -74,7 +75,7 @@ export interface Gene {
   proteomics_LFQ?: ProteinDifferentialExpression[];
   proteomics_SRM?: ProteinDifferentialExpression[];
   proteomics_TMT?: ProteinDifferentialExpression[];
-  metabolomics?: any; // TODO change;
+  metabolomics?: Metabolomics;
   overall_scores?: OverallScores;
   neuropathologic_correlations?: NeuropathologicCorrelation[];
   experimental_validation?: ExperimentalValidation[];

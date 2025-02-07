@@ -1,9 +1,10 @@
 import { Component, inject, Input } from '@angular/core';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
+import { boxPlotChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
+import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
 
 @Component({
   selector: 'agora-gene-evidence-metabolomics',
@@ -24,7 +25,7 @@ export class GeneEvidenceMetabolomicsComponent {
     this.init();
   }
 
-  boxPlotData: any = [];
+  boxPlotData: boxPlotChartItem[] = [];
 
   reset() {
     this.boxPlotData = [];
@@ -33,17 +34,18 @@ export class GeneEvidenceMetabolomicsComponent {
   init() {
     this.reset();
 
-    if (!this._gene?.metabolomics?.['transposed_boxplot_stats']) {
+    if (!this._gene?.metabolomics?.transposed_boxplot_stats) {
       this.boxPlotData = [];
       return;
     }
 
-    const boxPlotData: any = [];
+    const boxPlotData: boxPlotChartItem[] = [];
 
-    this._gene.metabolomics['transposed_boxplot_stats'].forEach((item: string, index: number) => {
+    this._gene.metabolomics.transposed_boxplot_stats.forEach((item: number[], index: number) => {
       boxPlotData.push({
-        key: this._gene?.metabolomics?.['boxplot_group_names'][index],
-        value: item,
+        key: this._gene?.metabolomics?.boxplot_group_names[index] ?? '',
+        value: [item[0], item[2], item[4]],
+        quartiles: [item[1], item[2], item[3]],
       });
     });
 

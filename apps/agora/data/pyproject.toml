@@ -1,26 +1,25 @@
-[tool.poetry]
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Hallie Swan", email = "hallie.swan@sagebase.org"},
+]
+requires-python = "==3.11.9"
+dependencies = [
+    "synapseclient==4.3.0",
+    "pymongo==4.7.3",
+]
 name = "agora-data"
 version = "0.1.0"
 description = "Agora Data Release"
-authors = ["Hallie Swan <hallie.swan@sagebase.org>"]
 readme = "README.md"
-packages = [{include = "src"}]
-include = [
-    { path = "src/data/collections.csv" },
-    { path = "src/data/collections-indexes.json" },
-]
 
-[tool.poetry.dependencies]
-python = "3.11.9"
-synapseclient = "4.3.0"
-pymongo = "4.7.3"
+[dependency-groups]
+dev = []
+prod = []
+test = []
 
-[tool.poetry.group.dev.dependencies]
-
-[tool.poetry.group.prod.dependencies]
-
-[tool.poetry.group.test.dependencies]
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv]
+default-groups = []

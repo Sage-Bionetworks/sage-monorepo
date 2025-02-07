@@ -24,27 +24,27 @@ function workspace-install-nodejs-dependencies {
 }
 
 function workspace-install-python-dependencies {
-  poetry env use $(pyenv which python)
-  poetry install --with dev
-  workspace-initialize-env
+  uv sync
 }
 
 function workspace-install {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
   nx run-many --target=create-config
+  # Projects that can be prepared in parallel
+  nx run-many --target=prepare --projects=!tag:language:java
+  # Java projects must be installed one at a time
   nx run-many --target=prepare --projects=tag:language:java --parallel=1
-  nx run-many --target=prepare --projects=tag:language:python --parallel=1
-  nx run-many --target=prepare --projects=tag:language:r
 }
 
 function workspace-install-affected {
   workspace-install-nodejs-dependencies
   workspace-install-python-dependencies
   nx affected --target=create-config
-  nx affected --target=prepare --projects=tag:language:java --parallel=1
-  nx affected --target=prepare --projects=tag:language:python --parallel=1
-  nx affected --target=prepare --projects=tag:language:r
+  # Projects that can be prepared in parallel
+  nx affected --target=prepare --exclude='tag:language:java'
+  # Java projects must be installed one at a time
+  nx affected --target=prepare --exclude='!tag:language:java' --parallel=1
 }
 
 # Setup Python virtualenvs
@@ -136,7 +136,7 @@ function check-vscode-version {
 }
 
 function workspace-welcome {
-  echo "Welcome to Sage monorepo! 👋"
+  echo "Welcome to Sage Monorepo (SMR)! 👋"
 
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
