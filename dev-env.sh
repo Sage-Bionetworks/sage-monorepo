@@ -32,9 +32,9 @@ function workspace-install {
   workspace-install-python-dependencies
   nx run-many --target=create-config
   # Projects that can be prepared in parallel
-  nx run-many --target=prepare --projects=!tag:language:java,!tag:language:python
-  # Python and Java projects must be installed one at a time
-  nx run-many --target=prepare --projects=tag:language:java,tag:language:python --parallel=1
+  nx run-many --target=prepare --projects=!tag:language:java
+  # Java projects must be installed one at a time
+  nx run-many --target=prepare --projects=tag:language:java --parallel=1
 }
 
 function workspace-install-affected {
@@ -42,9 +42,9 @@ function workspace-install-affected {
   workspace-install-python-dependencies
   nx affected --target=create-config
   # Projects that can be prepared in parallel
-  nx affected --target=prepare --exclude='tag:language:java,tag:language:python'
-  # Python and Java projects must be installed one at a time
-  nx affected --target=prepare --exclude='!tag:language:java,!tag:language:python' --parallel=1
+  nx affected --target=prepare --exclude='tag:language:java'
+  # Java projects must be installed one at a time
+  nx affected --target=prepare --exclude='!tag:language:java' --parallel=1
 }
 
 # Setup Python virtualenvs
