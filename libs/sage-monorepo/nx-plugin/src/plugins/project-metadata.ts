@@ -2,7 +2,7 @@ import { ProjectConfiguration, ProjectType } from '@nx/devkit';
 import { join } from 'path';
 import { readdirSync } from 'fs';
 
-export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'poetry';
+export type Builder = 'esbuild' | 'webpack' | 'gradle' | 'maven' | 'uv';
 // export type Linter = 'eslint' | 'pylint';
 // export type TypeChecker = 'mypy' | 'pyright';
 // export type TestingTool = 'pytest' | null;
@@ -55,7 +55,7 @@ function inferBuilder(
   siblingFiles: string[],
   localProjectConfiguration: ProjectConfiguration,
 ): Builder | null {
-  if (siblingFiles.includes('poetry.lock')) return 'poetry';
+  if (siblingFiles.includes('uv.lock')) return 'uv';
   if (siblingFiles.includes('build.gradle')) return 'gradle';
 
   const executor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
