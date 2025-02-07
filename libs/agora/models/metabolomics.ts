@@ -9,5 +9,6 @@ export interface Metabolomics {
   n_per_group: number[];
   boxplot_group_names: string[];
   ad_diagnosis_p_value: number[];
-  transposed_boxplot_stats: number[][];
+  // min, first quartile, median, third quartile, max
+  transposed_boxplot_stats: [number, number, number, number, number][];
 }

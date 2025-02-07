@@ -517,6 +517,57 @@ components:
         - ci_lwr
         - pval
         - cor_pval
+    Metabolomics:
+      type: object
+      description: Metabolomics
+      properties:
+        _id:
+          type: string
+        associated_gene_name:
+          type: string
+          example: VGF
+        ensembl_gene_id:
+          type: string
+        metabolite_id:
+          type: string
+        metabolite_full_name:
+          type: string
+        association_p:
+          type: number
+        gene_wide_p_threshold_1kgp:
+          type: number
+        n_per_group:
+          type: array
+          items:
+            type: number
+        boxplot_group_names:
+          type: array
+          items:
+            type: string
+        ad_diagnosis_p_value:
+          type: array
+          items:
+            type: number
+        transposed_boxplot_stats:
+          type: array
+          items:
+            type: array
+            items:
+              type: number
+            minItems: 5
+            maxItems: 5
+      required:
+        - _id
+        - associated_gene_name
+        - ensembl_gene_id
+        - metabolite_id
+        - metabolite_full_name
+        - association_p
+        - gene_wide_p_threshold_1kgp
+        - n_per_group
+        - boxplot_group_names
+        - ad_diagnosis_p_value
+        - transposed_boxplot_stats
     OverallScores:
       type: object
       description: OverallScores
@@ -814,9 +865,7 @@ components:
             $ref: '#/components/schemas/ProteinDifferentialExpression'
           nullable: true
         metabolomics:
-          type: object
-          additionalProperties: true
-          nullable: true
+          $ref: '#/components/schemas/Metabolomics'
         overall_scores:
           $ref: '#/components/schemas/OverallScores'
           nullable: true

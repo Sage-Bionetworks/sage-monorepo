@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { Gene, GCTGene, TargetNomination } from '@sagebionetworks/agora/models';
+import { GCTGene, Gene, TargetNomination } from '@sagebionetworks/agora/models';
 
 export const targetNominationMock1: TargetNomination = {
   source: 'Treat-AD',
@@ -756,7 +756,7 @@ export const geneMock1: Gene = {
       tissue: 'DLPFC',
     },
   ],
-  metabolomics: '',
+  metabolomics: undefined,
   neuropathologic_correlations: [
     {
       _id: '628ea2450e8d04279fdd3c3d',
