@@ -45,7 +45,17 @@ export class BoxPlotComponent {
   @Input() yAxisMin: number | undefined;
   @Input() yAxisMax: number | undefined;
 
+  reset() {
+    this.points = [];
+    this.summaries = [];
+    this.xAxisCategoryToTooltipText = {};
+    this.isInitialized = false;
+    this.pointTooltipFormatter = undefined;
+  }
+
   init() {
+    this.reset();
+
     if (!this._data?.length) {
       return;
     }

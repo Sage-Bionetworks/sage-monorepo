@@ -11,9 +11,16 @@
  */
 
 /**
- * Distributions
+ * ProteomicsDistribution
  */
 export interface ProteomicsDistribution {
+  _id: string;
+  tissue: string;
+  min: number;
+  max: number;
+  median: number;
+  first_quartile: number;
+  third_quartile: number;
   /**
    * Type of proteomics distribution (e.g., LFQ, SRM, TMT)
    */
