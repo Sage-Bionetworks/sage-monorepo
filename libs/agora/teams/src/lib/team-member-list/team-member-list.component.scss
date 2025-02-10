@@ -1,5 +1,5 @@
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'libs/agora/styles/src/lib/variables';
+@use 'libs/agora/styles/src/lib/mixins';
 
 .team-member-list {
   .team-member-list-inner {
@@ -42,8 +42,15 @@
     margin-bottom: 0;
     text-align: center;
 
-    // a {
-    //   @include link;
-    // }
+    a {
+      color: var(--color-link);
+      cursor: pointer;
+      text-decoration: none;
+
+      &:hover {
+        color: var(--color-link);
+        text-decoration: underline;
+      }
+    }
   }
 }
