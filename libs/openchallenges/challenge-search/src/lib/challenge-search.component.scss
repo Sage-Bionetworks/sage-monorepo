@@ -58,8 +58,9 @@
 }
 
 ::ng-deep .p-panel {
-  .p-panel-header,
-  .p-panel-content {
+  border: none !important;
+
+  .p-panel-header {
     border: none;
   }
 }
