@@ -7,12 +7,14 @@ import { AvatarComponent } from '../avatar/avatar.component';
 import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
   imports: [
     AvatarComponent,
+    CheckboxModule,
     CommonModule,
     InputGroupModule,
     FormsModule,
@@ -29,7 +31,7 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Input({ required: false }) lazy = true;
-  @Input({ required: false }) optionHeight = 50; // height of each option
+  @Input({ required: false }) optionHeight = 40; // height of each option
   @Input({ required: false }) optionSize = 10; // total number of displaying options
   @Input({ required: false }) placeholder = 'Search items';
   @Input({ required: false }) showLoader = false;
@@ -45,6 +47,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   searchTerm = '';
   filter = true;
+  isAllOptionsSelected = false;
 
   isLoading = false;
   loadedPages = new Set();
@@ -100,6 +103,14 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   onSearch(event: any): void {
     this.searchChange.emit(event.filter);
+  }
+
+  toggleAllOptions() {
+    if (this.isAllOptionsSelected) {
+      this.selectedOptions = this.options.map((option) => option.value);
+    } else {
+      this.selectedOptions = [];
+    }
   }
 
   onCustomSearch(): void {

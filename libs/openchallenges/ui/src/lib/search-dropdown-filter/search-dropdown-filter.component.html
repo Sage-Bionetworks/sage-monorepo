@@ -14,18 +14,21 @@
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
   <ng-template *ngIf="filterByApiClient" pTemplate="filter">
-    <!-- <div class="custom-filter-container p-multiselect-filter-container"> -->
+    <p-checkbox
+      binary="true"
+      [(ngModel)]="isAllOptionsSelected"
+      (onChange)="toggleAllOptions()"
+    ></p-checkbox>
     <p-inputgroup (click)="stopPropagation($event)">
       <input
         type="text"
         pInputText
         placeholder="search"
-        class="custom-filter p-multiselect-filter p-inputtext p-component"
+        class="p-inputtext p-multiselect-filter-container"
         [(ngModel)]="searchTerm"
         (keyup)="onCustomSearch()"
       />
     </p-inputgroup>
-    <!-- </div> -->
   </ng-template>
 
   <!-- custom loader with skeleton -->

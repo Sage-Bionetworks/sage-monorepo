@@ -121,6 +121,7 @@
           placeholder="{{ dropdownFilters['organizations'].label.toLowerCase() + '(s)' }}  "
           [showAvatar]="dropdownFilters['organizations'].showAvatar"
           [filterByApiClient]="true"
+          [optionHeight]="60"
           (selectionChange)="onParamChange({ organizations: $event })"
           (searchChange)="onSearchChange('organizations', $event)"
           (pageChange)="onLazyLoad('organizations', $event)"
