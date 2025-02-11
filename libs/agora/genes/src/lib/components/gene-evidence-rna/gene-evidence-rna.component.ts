@@ -69,15 +69,19 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     this.selectedStatisticalModel = '';
 
     this.medianExpression = [];
-    this.differentialExpression = [];
 
-    this.differentialExpressionChartData = [];
-    this.differentialExpressionYAxisMin = undefined;
-    this.differentialExpressionYAxisMax = undefined;
+    this.resetDifferentialExpression();
 
     this.consistencyOfChangeChartData = [];
 
     this.hasScrolled = false;
+  }
+
+  resetDifferentialExpression() {
+    this.differentialExpression = [];
+    this.differentialExpressionChartData = [];
+    this.differentialExpressionYAxisMin = undefined;
+    this.differentialExpressionYAxisMax = undefined;
   }
 
   init() {
@@ -125,6 +129,8 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   initDifferentialExpression() {
+    this.resetDifferentialExpression();
+
     if (!this._gene?.rna_differential_expression?.length) {
       this.differentialExpression = [];
       return;

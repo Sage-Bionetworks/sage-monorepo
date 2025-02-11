@@ -54,12 +54,22 @@ export class GeneEvidenceProteomicsComponent {
     this.uniProtIds = [];
     this.selectedUniProtId = '';
 
+    this.resetSRM();
+    this.resetLFQ();
+    this.resetTMT();
+  }
+
+  resetSRM() {
     this.SRMData = [];
     this.SRMRange = undefined;
+  }
 
+  resetLFQ() {
     this.LFQData = [];
     this.LFQRange = undefined;
+  }
 
+  resetTMT() {
     this.TMTData = [];
     this.TMTRange = undefined;
   }
@@ -123,6 +133,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initSRM() {
+    this.resetSRM();
     this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_SRM;
       const differentialExpression = this._gene?.proteomics_SRM || [];
@@ -144,6 +155,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initLFQ() {
+    this.resetLFQ();
     this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_LFQ;
       const differentialExpression =
@@ -168,6 +180,7 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initTMT() {
+    this.resetTMT();
     this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_TMT;
       const differentialExpression =
