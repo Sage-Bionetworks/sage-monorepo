@@ -102,6 +102,10 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.searchChange.emit(this.searchTerm);
   }
 
+  onStopEvent(event: Event): void {
+    event.stopPropagation();
+  }
+
   onChange(selected: string[] | number[]): void {
     // this filter will emit as string anyways
     this.selectionChange.emit(selected);

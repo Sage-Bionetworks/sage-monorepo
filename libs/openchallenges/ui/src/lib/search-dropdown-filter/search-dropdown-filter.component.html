@@ -17,11 +17,13 @@
     <div class="custom-filter-container p-multiselect-filter-container">
       <input
         type="text"
+        pInputText
         placeholder="search"
         class="custom-filter p-multiselect-filter p-inputtext p-component"
         autocomplete="on"
         [(ngModel)]="searchTerm"
         (input)="onCustomSearch()"
+        (click)="onStopEvent($event)"
       />
       <span class="p-multiselect-filter-icon pi pi-search"></span>
     </div>
