@@ -58,12 +58,14 @@ export class BoxPlotComponent {
     this._data.forEach((item) => {
       const xAxisCategory = item.key;
 
-      const point: CategoryPoint = {
-        xAxisCategory: xAxisCategory,
-        value: item.circle.value,
-        text: item.circle.tooltip,
-      };
-      this.points.push(point);
+      if (item.circle) {
+        const point: CategoryPoint = {
+          xAxisCategory: xAxisCategory,
+          value: item.circle.value,
+          text: item.circle.tooltip,
+        };
+        this.points.push(point);
+      }
 
       const summary: CategoryBoxplotSummary = {
         xAxisCategory: xAxisCategory,
@@ -88,6 +90,10 @@ export class BoxPlotComponent {
     });
 
     this.points.sort((a, b) => {
+      return a.xAxisCategory.localeCompare(b.xAxisCategory);
+    });
+
+    this.summaries.sort((a, b) => {
       return a.xAxisCategory.localeCompare(b.xAxisCategory);
     });
   }

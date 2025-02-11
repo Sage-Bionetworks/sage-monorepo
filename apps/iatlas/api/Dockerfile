@@ -1,6 +1,32 @@
-FROM python:3.8.20-slim-bullseye
+FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
-ENV APP_DIR=/opt/app
+# First, bundle the dependencies into the task root.
+FROM python:3.8.20-slim AS builder
+
+# Enable bytecode compilation, to improve cold-start performance.
+ENV UV_COMPILE_BYTECODE=1
+
+# Disable installer metadata, to create a deterministic layer.
+ENV UV_NO_INSTALLER_METADATA=1
+
+# Enable copy mode to support bind mount caching.
+ENV UV_LINK_MODE=copy
+
+# Copy uv binary
+COPY --from=uv /uv /bin/uv
+
+# Copy dependency files
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+
+# Generate requirements.txt and install dependencies
+RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
+    uv pip install -r requirements.txt --target "/app"
+
+FROM python:3.8.20-slim
+
+ENV APP_DIR=/app
+ENV PYTHONPATH="${APP_DIR}"
 
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
@@ -8,30 +34,22 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     build-essential \
     # Used in docker-entrypoint.sh
     gosu \
-  && apt-get -y autoclean \
+  && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR ${APP_DIR}
-COPY api ./api
-COPY pyproject.toml poetry.lock iatlasapi.py config.py uwsgi.ini ./
+# Copy the runtime dependencies from the builder stage.
+COPY --from=builder ${APP_DIR} ${APP_DIR}
 
-# Install the app dependencies.
-# Install the version of Poetry used inside the dev container.
-# See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
-RUN pip install --no-cache-dir poetry==1.8.3 \
-  && poetry config --local virtualenvs.create false \
-  && poetry install --with prod --no-root --no-interaction --no-ansi \
-  && pip cache purge \
-  && chown -R www-data:www-data ${APP_DIR}
+# Copy the application code.
+COPY iatlasapi.py config.py uwsgi.ini ${APP_DIR}/
+COPY ./api ${APP_DIR}/api
+RUN chown -R www-data:www-data ${APP_DIR}
 
 WORKDIR /
-COPY docker-entrypoint.sh .
+COPY docker-entrypoint.sh ./
 RUN chmod +x docker-entrypoint.sh
-
-EXPOSE 5000
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-# Run production server
-CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":5000"]
+CMD ["python", "src/build_database.py"]

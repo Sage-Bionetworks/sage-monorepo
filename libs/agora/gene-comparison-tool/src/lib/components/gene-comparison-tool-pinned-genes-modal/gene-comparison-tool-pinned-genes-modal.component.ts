@@ -1,4 +1,3 @@
-/* eslint-disable @angular-eslint/no-output-on-prefix */
 import { Component, Output, EventEmitter, ViewEncapsulation, Input } from '@angular/core';
 import { GCTGene } from '@sagebionetworks/agora/api-client-angular';
 import { DialogModule } from 'primeng/dialog';
@@ -17,7 +16,7 @@ export class GeneComparisonToolPinnedGenesModalComponent {
 
   isActive = false;
 
-  @Output() onChange: EventEmitter<boolean> = new EventEmitter();
+  @Output() changeEvent: EventEmitter<boolean> = new EventEmitter();
 
   show() {
     this.isActive = true;
@@ -28,12 +27,12 @@ export class GeneComparisonToolPinnedGenesModalComponent {
   }
 
   cancel() {
-    this.onChange.emit(false);
+    this.changeEvent.emit(false);
     this.hide();
   }
 
   proceed() {
-    this.onChange.emit(true);
+    this.changeEvent.emit(true);
     this.hide();
   }
 }

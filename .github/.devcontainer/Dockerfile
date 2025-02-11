@@ -10,8 +10,6 @@ ARG actVersion="0.2.71"
 ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
 ARG devcontainerCliVersion="0.72.0"
-# https://pypi.org/project/poetry
-ARG poetryVersion="1.8.5"
 # https://github.com/astral-sh/uv
 ARG uvVersion="0.5.14"
 # https://docs.posit.co/resources/install-r/#specify-r-version
@@ -22,12 +20,8 @@ ARG trivyVersion="0.58.1"
 ARG renvVersion="1.0.11"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="22"
-# https://pypi.org/project/pipenv/
-ARG pipenvVersion="2024.4.0"
 # https://github.com/pnpm/pnpm/releases
 ARG pnpmVersion="9.15.4"
-# List of Python versions separated by spaces
-ARG pyenvPythonVersions="3.13.1"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
 ARG sonarScannerVersion="6.2.1.4610"
 # https://github.com/hadolint/hadolint
@@ -54,10 +48,6 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
     mandoc \
     # Required for setting up locales.
     locales \
-    # Required by pyenv.
-    make build-essential libssl-dev zlib1g-dev libbz2-dev \
-    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-    xz-utils tk-dev libffi-dev liblzma-dev \
     # Required by Hadolint.
     shellcheck \
     # Required by canvas (npm package)
@@ -166,23 +156,13 @@ USER $user
 # Install pnpm.
 RUN corepack install --global pnpm@"${pnpmVersion}"
 
-# Install Poetry and Pipenv, and preinstall one or more Python versions.
-ENV PYENV_ROOT /home/${user}/.pyenv
-ENV PATH $PYENV_ROOT/shims:$PYENV_ROOT/bin:$PATH
+# Install uv.
 RUN pipx ensurepath \
-  && pipx install \
-    poetry=="${poetryVersion}" \
-    pipenv=="${pipenvVersion}" \
-    uv=="${uvVersion}" \
-  && curl -fsSL https://raw.githubusercontent.com/pyenv/pyenv-installer/master/bin/pyenv-installer | bash - \
-  && pyenv install ${pyenvPythonVersions}
+  && pipx install uv=="${uvVersion}"
 
 # Prepare the user's environment.
 RUN usermod --shell /bin/bash $user \
   && printf "%s\n" \
-    "" \
-    "eval \"\$(pyenv init --path)\"" \
-    "eval \"\$(pyenv virtualenv-init -)\"" \
     "" \
     "# source dev-env.sh if found in the current directory" \
     "if [ -f dev-env.sh ]; then" \

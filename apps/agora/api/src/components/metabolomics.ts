@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { Metabolomics } from 'libs/agora/models';
 import { cache } from '../helpers';
 import { MetabolomicsCollection } from '../models';
-import { Metabolomics } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -23,5 +23,5 @@ export async function getMetabolomics(ensg: string) {
     .exec();
 
   cache.set(cacheKey, result);
-  return result;
+  return result ?? undefined;
 }

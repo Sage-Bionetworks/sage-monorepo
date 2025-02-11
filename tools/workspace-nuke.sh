@@ -13,8 +13,10 @@ rm -fr \
 # Remove nested files and folders.
 # find . -name "build" -print0 | xargs -0 rm -fr  # TODO: prevent OpenAPI build folders to be rm
 find . \
-  \( -name ".coverage" \
+  \( -name ".aws-sam" \
+  -o -name ".coverage" \
   -o -name ".gradle" \
+  -o -name ".pdm-build" \
   -o -name ".pytest_cache" \
   -o -name ".venv" \
   -o -name "bin" \

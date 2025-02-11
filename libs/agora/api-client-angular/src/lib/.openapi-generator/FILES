@@ -28,6 +28,7 @@ model/gene.ts
 model/geneNetworkLinks.ts
 model/genesList.ts
 model/medianExpression.ts
+model/metabolomics.ts
 model/models.ts
 model/neuropathologicCorrelation.ts
 model/nominatedGenesList.ts

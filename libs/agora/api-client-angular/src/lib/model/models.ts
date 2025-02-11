@@ -15,6 +15,7 @@ export * from './gene';
 export * from './geneNetworkLinks';
 export * from './genesList';
 export * from './medianExpression';
+export * from './metabolomics';
 export * from './neuropathologicCorrelation';
 export * from './nominatedGenesList';
 export * from './overallScores';
