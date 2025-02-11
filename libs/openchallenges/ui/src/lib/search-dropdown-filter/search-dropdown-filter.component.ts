@@ -7,10 +7,22 @@ import { AvatarComponent } from '../avatar/avatar.component';
 import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
+import { CheckboxModule } from 'primeng/checkbox';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
-  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule, SkeletonModule],
+  imports: [
+    AvatarComponent,
+    CheckboxModule,
+    CommonModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    FormsModule,
+    MultiSelectModule,
+    SkeletonModule,
+  ],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
@@ -102,7 +114,7 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.searchChange.emit(this.searchTerm);
   }
 
-  onStopEvent(event: Event): void {
+  stopPropagation(event: Event): void {
     event.stopPropagation();
   }
 

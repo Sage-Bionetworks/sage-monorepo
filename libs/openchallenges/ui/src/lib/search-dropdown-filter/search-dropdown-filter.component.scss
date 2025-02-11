@@ -44,20 +44,20 @@
   }
 }
 
-:host ::ng-deep .p-multiselect-header {
-  .p-checkbox {
-    order: 1;
-  }
+// :host ::ng-deep .p-multiselect-header {
+//   .p-checkbox {
+//     order: 1;
+//   }
 
-  .custom-filter-container {
-    order: 2;
-    margin-left: 8px;
-  }
+//   .custom-filter-container {
+//     order: 2;
+//     margin-left: 8px;
+//   }
 
-  .p-multiselect-close {
-    order: 3;
-  }
-}
+//   .p-multiselect-close {
+//     order: 3;
+//   }
+// }
 
 .loader-container {
   display: flex;
