@@ -7,18 +7,14 @@ import { AvatarComponent } from '../avatar/avatar.component';
 import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
   imports: [
     AvatarComponent,
-    CheckboxModule,
     CommonModule,
     InputGroupModule,
-    InputGroupAddonModule,
     FormsModule,
     MultiSelectModule,
     SkeletonModule,
