@@ -6,6 +6,10 @@
   height: 45px;
 }
 
+:host ::ng-deep .p-inputgroup {
+  margin-left: 6px;
+}
+
 :host ::ng-deep .p-scroller {
   min-height: 200px; // height of scroll view
 }

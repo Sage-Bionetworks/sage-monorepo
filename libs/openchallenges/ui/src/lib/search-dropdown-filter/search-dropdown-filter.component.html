@@ -13,7 +13,7 @@
   (onLazyLoad)="onLazyLoad($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
-  <ng-template *ngIf="filterByApiClient" pTemplate="filter">
+  <ng-template *ngIf="filterByApiClient" pTemplate="filter" class="custom-filter-container">
     <p-checkbox
       binary="true"
       [(ngModel)]="isAllOptionsSelected"
@@ -24,7 +24,7 @@
         type="text"
         pInputText
         placeholder="search"
-        class="p-inputtext p-multiselect-filter-container"
+        class="p-multiselect-filter-container"
         [(ngModel)]="searchTerm"
         (keyup)="onCustomSearch()"
       />

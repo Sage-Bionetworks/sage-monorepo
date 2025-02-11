@@ -1,14 +1,15 @@
+import { Avatar } from '../avatar/avatar';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Filter } from '../checkbox-filter/filter.model';
-import { Avatar } from '../avatar/avatar';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AvatarComponent } from '../avatar/avatar.component';
-import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
-import { SkeletonModule } from 'primeng/skeleton';
-import { ScrollerOptions } from 'primeng/api';
-import { CheckboxModule } from 'primeng/checkbox';
 import { InputGroupModule } from 'primeng/inputgroup';
+import { InputTextModule } from 'primeng/inputtext';
+import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
+import { ScrollerOptions } from 'primeng/api';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
@@ -17,6 +18,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
     CheckboxModule,
     CommonModule,
     InputGroupModule,
+    InputTextModule,
     FormsModule,
     MultiSelectModule,
     SkeletonModule,
