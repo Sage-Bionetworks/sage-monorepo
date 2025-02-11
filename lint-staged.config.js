@@ -22,7 +22,7 @@ module.exports = {
 
   '**/*.py': (filenames) => [
     // Format files with Black
-    `poetry run black ${filenames.join(' ')}`,
+    `uv run black ${filenames.join(' ')}`,
     // Lint the projects affected by the staged files
     `nx affected --target=lint --files=${filenames.join(',')}`,
     // Type check the projects affected by the staged files

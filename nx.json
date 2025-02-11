@@ -31,7 +31,12 @@
   },
   "defaultProject": "openchallenges-app",
   "plugins": [
-    "@nxlv/python",
+    {
+      "plugin": "@nxlv/python",
+      "options": {
+        "packageManager": "uv"
+      }
+    },
     {
       "plugin": "@sagebionetworks/sage-monorepo-nx-plugin",
       "options": {

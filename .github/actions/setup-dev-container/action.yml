@@ -24,19 +24,13 @@ runs:
     #     restore-keys: |
     #       ${{ runner.os }}-renv-cache-
 
-    # - name: Set up Poetry cache
-    #   uses: actions/cache@v3
-    #   with:
-    #     path: '/tmp/.cache/pypoetry'
-    #     key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
-
     # - name: Set up venv cache
     #   uses: actions/cache@v3
     #   with:
     #     path: |
     #       /tmp/.local/share/virtualenv
     #       **/.venv
-    #     key: ${{ runner.os }}-venv-${{ hashFiles('**/poetry.lock') }}
+    #     key: ${{ runner.os }}-venv-${{ hashFiles('**/uv.lock') }}
 
     # - name: Set up Gradle cache
     #   uses: actions/cache@v3
@@ -60,7 +54,6 @@ runs:
         mkdir -p \
           /tmp/.pnpm-store \
           /tmp/.cache/R/renv/cache \
-          /tmp/.cache/pypoetry \
           /tmp/.local/share/virtualenv \
           /tmp/.gradle/caches \
           /tmp/.gradle/wrapper
@@ -68,7 +61,6 @@ runs:
         devcontainer up \
           --mount type=bind,source=/tmp/.pnpm-store,target=/workspaces/sage-monorepo/.pnpm-store \
           --mount type=bind,source=/tmp/.cache/R/renv/cache,target=/home/${DEVCONTAINER_USER}/.cache/R/renv/cache \
-          --mount type=bind,source=/tmp/.cache/pypoetry,target=/home/${DEVCONTAINER_USER}/.cache/pypoetry \
           --mount type=bind,source=/tmp/.local/share/virtualenv,target=/home/${DEVCONTAINER_USER}/.local/share/virtualenv \
           --mount type=bind,source=/tmp/.gradle/caches,target=/home/${DEVCONTAINER_USER}/.gradle/caches \
           --mount type=bind,source=/tmp/.gradle/wrapper,target=/home/${DEVCONTAINER_USER}/.gradle/wrapper \

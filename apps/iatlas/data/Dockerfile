@@ -1,41 +1,53 @@
-FROM python:3.11.10
+FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
+
+# First, bundle the dependencies into the task root.
+FROM python:3.11.10-slim AS builder
+
+# Enable bytecode compilation, to improve cold-start performance.
+ENV UV_COMPILE_BYTECODE=1
+
+# Disable installer metadata, to create a deterministic layer.
+ENV UV_NO_INSTALLER_METADATA=1
+
+# Enable copy mode to support bind mount caching.
+ENV UV_LINK_MODE=copy
+
+# Copy uv binary
+COPY --from=uv /uv /bin/uv
+
+# Copy dependency files
+WORKDIR /app
+COPY pyproject.toml uv.lock ./
+
+# Generate requirements.txt and install dependencies
+RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
+    uv pip install -r requirements.txt --target "/app"
+
+FROM python:3.11.10-slim
 
 ARG USERNAME=app
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
-ENV APP_DIR=/opt/app \
+ENV APP_DIR=/app \
     APP_USERNAME=${USERNAME}
-
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+ENV PYTHONPATH="${APP_DIR}"
 
 RUN groupadd --gid "$USER_GID" "$USERNAME" \
   && useradd --uid "$USER_UID" --gid "$USER_GID" -m "$USERNAME" \
   # Install sudo
   && apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    gosu wget \
-  # Install the GPG key for the Postgres repo
-  && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-  # Add the repo
-  && echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list \
-  && apt-get update -qq -y \
-  # Install the Postgres 15 client
-  && apt-get install --no-install-recommends -qq -y \
-    postgresql-client-15 \
-  && apt-get -y autoclean \
+    gosu \
+  && apt-get -y clean \
   && apt-get -y autoremove \
   && rm -rf /var/lib/apt/lists/*
 
-WORKDIR ${APP_DIR}
-COPY src src/
-COPY pyproject.toml poetry.lock ./
+# Copy the runtime dependencies from the builder stage.
+COPY --from=builder ${APP_DIR} ${APP_DIR}
 
-# Use the version of Poetry installed in the dev container.
-# See /workspaces/sage-monorepo/tools/devcontainers/sage/.devcontainer/Dockerfile
-RUN pip install --no-cache-dir poetry==1.8.3 \
-  && poetry config --local virtualenvs.create false \
-  && poetry install --no-root --no-interaction --no-ansi \
-  && pip cache purge
+# Copy the application code.
+COPY ./src /${APP_DIR}/src
+RUN chown -R ${APP_USERNAME}:${APP_USERNAME} ${APP_DIR}
 
 WORKDIR /
 COPY docker-entrypoint.sh ./
@@ -44,35 +56,3 @@ RUN chmod +x docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 CMD ["python", "src/build_database.py"]
-
-
-
-# RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
-#   && apt-get install --no-install-recommends -qq -y \
-#     wget \
-#   # Install the GPG key for the Postgres repo
-#   && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-#   # Add the repo
-#   && echo "deb http://apt.postgresql.org/pub/repos/apt/ bookworm-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list \
-#   && apt-get update -qq -y \
-#   # Install the Postgres 15 client
-#   && apt-get install --no-install-recommends -qq -y \
-#     postgresql-client-15 \
-#   && mkdir -p /home/gitlab/sage-iatlas-data \
-#   && apt-get -y autoclean \
-#   && apt-get -y autoremove \
-#   && rm -rf /var/lib/apt/lists/*
-
-# WORKDIR /
-# COPY requirements.txt requirements.txt
-# COPY src/ /src
-
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# COPY docker-entrypoint.sh ./
-# RUN chmod +x docker-entrypoint.sh
-
-# ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# # Set up the iAtlas database
-# CMD ["python", "/src/build_database.py"]
