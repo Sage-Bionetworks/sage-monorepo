@@ -8,8 +8,10 @@
     </div>
     <div class="search-sort-container row">
       <div class="search-field">
-        <span class="p-input-icon-left">
-          <i class="pi pi-search"></i>
+        <p-inputGroup>
+          <p-inputGroupAddon>
+            <i class="pi pi-search"></i>
+          </p-inputGroupAddon>
           <input
             type="text"
             pInputText
@@ -17,7 +19,7 @@
             (input)="onSearchChange('challenges', searchedTerms)"
             placeholder="Search challenges"
           />
-        </span>
+        </p-inputGroup>
       </div>
       <div class="sort-field">
         <span class="sort-title">Sort by</span>

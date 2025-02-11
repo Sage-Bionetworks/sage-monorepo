@@ -60,6 +60,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeoService } from '@sagebionetworks/shared/util';
@@ -80,6 +82,8 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
     FooterComponent,
     FormsModule,
     InputTextModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     MatIconModule,
     MatSnackBarModule,
     PaginatorComponent,
