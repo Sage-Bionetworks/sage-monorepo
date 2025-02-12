@@ -1,12 +1,17 @@
 import { Component, inject, Input } from '@angular/core';
 
-import { DistributionService, Gene } from '@sagebionetworks/agora/api-client-angular';
-import { ChartRange } from '@sagebionetworks/agora/models';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-protein-selector.component';
+import {
+  DistributionService,
+  Gene,
+  ProteinDifferentialExpression,
+  ProteomicsDistribution,
+} from '@sagebionetworks/agora/api-client-angular';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
-import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
+import { boxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
+import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
+import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-protein-selector.component';
 
 @Component({
   selector: 'agora-gene-evidence-proteomics',
@@ -36,26 +41,36 @@ export class GeneEvidenceProteomicsComponent {
   uniProtIds: string[] = [];
   selectedUniProtId = '';
 
-  LFQData: any = undefined;
+  LFQData: boxPlotChartItem[] = [];
   LFQRange: ChartRange | undefined;
 
-  SRMData: any = undefined;
+  SRMData: boxPlotChartItem[] = [];
   SRMRange: ChartRange | undefined;
 
-  TMTData: any = undefined;
+  TMTData: boxPlotChartItem[] = [];
   TMTRange: ChartRange | undefined;
 
   reset() {
     this.uniProtIds = [];
     this.selectedUniProtId = '';
 
-    this.SRMData = undefined;
+    this.resetSRM();
+    this.resetLFQ();
+    this.resetTMT();
+  }
+
+  resetSRM() {
+    this.SRMData = [];
     this.SRMRange = undefined;
+  }
 
-    this.LFQData = undefined;
+  resetLFQ() {
+    this.LFQData = [];
     this.LFQRange = undefined;
+  }
 
-    this.TMTData = undefined;
+  resetTMT() {
+    this.TMTData = [];
     this.TMTRange = undefined;
   }
 
@@ -64,13 +79,13 @@ export class GeneEvidenceProteomicsComponent {
 
     this.uniProtIds = [];
 
-    this._gene?.proteomics_LFQ?.forEach((item: any) => {
+    this._gene?.proteomics_LFQ?.forEach((item: ProteinDifferentialExpression) => {
       if (!this.uniProtIds.includes(item.uniprotid)) {
         this.uniProtIds.push(item.uniprotid);
       }
     });
 
-    this._gene?.proteomics_TMT?.forEach((item: any) => {
+    this._gene?.proteomics_TMT?.forEach((item: ProteinDifferentialExpression) => {
       if (!this.uniProtIds.includes(item.uniprotid)) {
         this.uniProtIds.push(item.uniprotid);
       }
@@ -86,7 +101,12 @@ export class GeneEvidenceProteomicsComponent {
     this.initTMT();
   }
 
-  processDifferentialExpressionData(item: any, data: any, range: ChartRange, proteomicData: any) {
+  processDifferentialExpressionData(
+    item: ProteinDifferentialExpression,
+    data: ProteomicsDistribution,
+    range: ChartRange,
+    proteomicData: boxPlotChartItem[],
+  ) {
     const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
     const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
 
@@ -113,13 +133,14 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initSRM() {
-    this.distributionService.getDistribution().subscribe((data: any) => {
+    this.resetSRM();
+    this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_SRM;
       const differentialExpression = this._gene?.proteomics_SRM || [];
-      const proteomicData: any = [];
+      const proteomicData: boxPlotChartItem[] = [];
 
-      differentialExpression.forEach((item: any) => {
-        const data: any = distribution.find((d: any) => {
+      differentialExpression.forEach((item) => {
+        const data = distribution.find((d) => {
           return d.tissue === item.tissue;
         });
 
@@ -134,16 +155,17 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initLFQ() {
-    this.distributionService.getDistribution().subscribe((data: any) => {
+    this.resetLFQ();
+    this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_LFQ;
       const differentialExpression =
-        this._gene?.proteomics_LFQ?.filter((item: any) => {
+        this._gene?.proteomics_LFQ?.filter((item) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-      const proteomicData: any = [];
+      const proteomicData: boxPlotChartItem[] = [];
 
-      differentialExpression.forEach((item: any) => {
-        const data: any = distribution.find((d: any) => {
+      differentialExpression.forEach((item) => {
+        const data = distribution.find((d) => {
           return d.tissue === item.tissue;
         });
 
@@ -158,16 +180,17 @@ export class GeneEvidenceProteomicsComponent {
   }
 
   initTMT() {
-    this.distributionService.getDistribution().subscribe((data: any) => {
+    this.resetTMT();
+    this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_TMT;
       const differentialExpression =
-        this._gene?.proteomics_TMT?.filter((item: any) => {
+        this._gene?.proteomics_TMT?.filter((item) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-      const proteomicData: any = [];
+      const proteomicData: boxPlotChartItem[] = [];
 
-      differentialExpression.forEach((item: any) => {
-        const data: any = distribution.find((d: any) => {
+      differentialExpression.forEach((item) => {
+        const data = distribution.find((d) => {
           return d.tissue === item.tissue;
         });
 
@@ -190,7 +213,7 @@ export class GeneEvidenceProteomicsComponent {
     this.initTMT();
   }
 
-  getTooltipText(item: any) {
+  getTooltipText(item: ProteinDifferentialExpression) {
     const tooltipText = `${item.hgnc_symbol || item.ensembl_gene_id} is${item.cor_pval <= 0.05 ? '' : ' not'} significantly differentially expressed in ${item.tissue} with a log fold change value of ${this.helperService.getSignificantFigures(item.log2_fc, 3)} and an adjusted p-value of ${this.helperService.getSignificantFigures(item.cor_pval, 3)}.`;
     return tooltipText;
   }

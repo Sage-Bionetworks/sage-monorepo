@@ -1,23 +1,24 @@
 import { AfterViewChecked, Component, inject, Input, ViewChild } from '@angular/core';
 
-import { HelperService } from '@sagebionetworks/agora/services';
-import {
-  BoxPlotComponent,
-  CandlestickChartComponent,
-  MedianBarChartComponent,
-  RowChartComponent,
-} from '@sagebionetworks/agora/charts';
-import { GeneNetworkComponent } from '../gene-network/gene-network.component';
-import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
 import {
   DistributionService,
   Gene,
   MedianExpression,
   RnaDifferentialExpression,
 } from '@sagebionetworks/agora/api-client-angular';
+import {
+  BoxPlotComponent,
+  CandlestickChartComponent,
+  MedianBarChartComponent,
+  RowChartComponent,
+} from '@sagebionetworks/agora/charts';
+import { boxPlotChartItem, rowChartItem } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 import { getStatisticalModels } from '../../helpers';
 import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
-import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
+import { GeneModelSelectorComponent } from '../gene-model-selector/gene-model-selector.component';
+import { GeneNetworkComponent } from '../gene-network/gene-network.component';
 
 @Component({
   selector: 'agora-gene-evidence-rna',
@@ -54,11 +55,11 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
 
-  differentialExpressionChartData: any | undefined;
+  differentialExpressionChartData: boxPlotChartItem[] = [];
   differentialExpressionYAxisMin: number | undefined;
   differentialExpressionYAxisMax: number | undefined;
 
-  consistencyOfChangeChartData: any | undefined;
+  consistencyOfChangeChartData: rowChartItem[] = [];
 
   @ViewChild(BoxPlotComponent) boxPlotComponent: BoxPlotComponent | null = null;
   hasScrolled = false;
@@ -68,15 +69,19 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     this.selectedStatisticalModel = '';
 
     this.medianExpression = [];
-    this.differentialExpression = [];
 
-    this.differentialExpressionChartData = undefined;
-    this.differentialExpressionYAxisMin = undefined;
-    this.differentialExpressionYAxisMax = undefined;
+    this.resetDifferentialExpression();
 
-    this.consistencyOfChangeChartData = undefined;
+    this.consistencyOfChangeChartData = [];
 
     this.hasScrolled = false;
+  }
+
+  resetDifferentialExpression() {
+    this.differentialExpression = [];
+    this.differentialExpressionChartData = [];
+    this.differentialExpressionYAxisMin = undefined;
+    this.differentialExpressionYAxisMax = undefined;
   }
 
   init() {
@@ -124,24 +129,26 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   initDifferentialExpression() {
+    this.resetDifferentialExpression();
+
     if (!this._gene?.rna_differential_expression?.length) {
       this.differentialExpression = [];
       return;
     }
 
-    this.differentialExpression = this._gene.rna_differential_expression.filter((g: any) => {
+    this.differentialExpression = this._gene.rna_differential_expression.filter((g) => {
       return g.model === this.selectedStatisticalModel;
     });
 
-    this.distributionService.getDistribution().subscribe((data: any) => {
-      const distribution = data.rna_differential_expression.filter((data: any) => {
+    this.distributionService.getDistribution().subscribe((data) => {
+      const distribution = data.rna_differential_expression.filter((data) => {
         return data.model === this.selectedStatisticalModel;
       });
 
-      const differentialExpressionChartData: any = [];
+      const differentialExpressionChartData: boxPlotChartItem[] = [];
 
-      this.differentialExpression.forEach((item: any) => {
-        const data: any = distribution.find((d: any) => {
+      this.differentialExpression.forEach((item) => {
+        const data = distribution.find((d) => {
           return d.tissue === item.tissue;
         });
 
@@ -201,7 +208,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
 
   initConsistencyOfChange() {
-    this.consistencyOfChangeChartData = this.differentialExpression.map((item: any) => {
+    this.consistencyOfChangeChartData = this.differentialExpression.map((item) => {
       return {
         key: [item.tissue, item.ensembl_gene_id, item.model],
         value: {

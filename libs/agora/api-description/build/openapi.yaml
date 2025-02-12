@@ -1179,12 +1179,33 @@ components:
         - third_quartile
     ProteomicsDistribution:
       type: object
-      description: Distributions
+      description: ProteomicsDistribution
       properties:
+        _id:
+          type: string
+        tissue:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        median:
+          type: number
+        first_quartile:
+          type: number
+        third_quartile:
+          type: number
         type:
           type: string
           description: Type of proteomics distribution (e.g., LFQ, SRM, TMT)
       required:
+        - _id
+        - tissue
+        - min
+        - max
+        - median
+        - first_quartile
+        - third_quartile
         - type
     OverallScoresDistribution:
       type: object
