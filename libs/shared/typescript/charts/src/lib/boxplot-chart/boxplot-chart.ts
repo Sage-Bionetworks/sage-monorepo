@@ -184,6 +184,11 @@ export class BoxplotChart {
     });
 
     const option: EChartsOption = {
+      grid: {
+        left: 25,
+        right: 20,
+        containLabel: true,
+      },
       title: [
         {
           text: title,
