@@ -43,13 +43,10 @@
     text-align: center;
 
     a {
-      color: var(--color-link);
-      cursor: pointer;
-      text-decoration: none;
+      @include mixins.link;
 
       &:hover {
-        color: var(--color-link);
-        text-decoration: underline;
+        @include mixins.link-hover;
       }
     }
   }
