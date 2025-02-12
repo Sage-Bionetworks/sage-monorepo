@@ -31,11 +31,7 @@
         "configDir": "libs/agora/storybook/.storybook",
         "browserTarget": "agora-storybook:build-storybook",
         "compodoc": false,
-        "styles": [
-          "apps/agora/app/src/styles.scss",
-          "node_modules/primeicons/primeicons.css",
-          "node_modules/primeng/resources/primeng.min.css"
-        ],
+        "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "stylePreprocessorOptions": {
           "includePaths": ["libs/agora/styles/src/lib", "libs/agora/themes/src/lib"]
         }

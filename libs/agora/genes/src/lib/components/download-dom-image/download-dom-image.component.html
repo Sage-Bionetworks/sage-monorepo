@@ -14,9 +14,10 @@
     <div *ngFor="let type of types">
       <p-radioButton
         value="{{ type.value }}"
-        label="{{ type.label }}"
+        inputId="download-radio"
         [(ngModel)]="selectedType"
       ></p-radioButton>
+      <label for="download-radio">{{ type.label }}</label>
     </div>
     <div>
       <button

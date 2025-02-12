@@ -45,11 +45,7 @@
             "output": ""
           }
         ],
-        "styles": [
-          "apps/agora/app/src/styles.scss",
-          "node_modules/primeicons/primeicons.css",
-          "node_modules/primeng/resources/primeng.min.css"
-        ],
+        "styles": ["apps/agora/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
         "scripts": []
       },
       "configurations": {

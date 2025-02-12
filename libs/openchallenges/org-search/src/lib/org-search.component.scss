@@ -11,11 +11,8 @@
   flex-wrap: nowrap;
 }
 
-::ng-deep .search-field {
-  .p-input-icon-left,
-  input {
-    width: 100%;
-  }
+::ng-deep .search-field input {
+  width: 100%;
 }
 
 ::ng-deep .p-dropdown {
@@ -40,8 +37,9 @@
 }
 
 ::ng-deep .p-panel {
-  .p-panel-header,
-  .p-panel-content {
+  border: none !important;
+
+  .p-panel-header {
     border: none;
   }
 }

@@ -5,7 +5,9 @@ import {
   withInMemoryScrolling,
 } from '@angular/router';
 import { withInterceptorsFromDi, provideHttpClient } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Lara from '@primeng/themes/lara';
 import { BASE_PATH as API_CLIENT_BASE_PATH } from '@sagebionetworks/model-ad/api-client-angular';
 import { configFactory, ConfigService } from '@sagebionetworks/model-ad/config';
 
@@ -36,7 +38,15 @@ export const appConfig: ApplicationConfig = {
           : configService.config.csrApiUrl,
       deps: [ConfigService],
     },
-    provideAnimations(),
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: Lara,
+        options: {
+          darkModeSelector: false,
+        },
+      },
+    }),
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(
       routes,

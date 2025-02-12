@@ -1,22 +1,14 @@
-import { Injectable } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 import Rollbar from 'rollbar';
-import { ConfigService } from '@sagebionetworks/agora/config';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RollbarService {
-  private rollbarConfig = {
-    accessToken: '',
-    captureUncaught: true,
-    captureUnhandledRejections: true,
-  };
+const rollbarConfig = {
+  accessToken: 'e788198867474855a996485580b08d03',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+};
 
-  constructor(private configService: ConfigService) {
-    this.rollbarConfig.accessToken = configService.config.rollbarToken;
-  }
-
-  getInstance() {
-    return new Rollbar(this.rollbarConfig);
-  }
+export function rollbarFactory() {
+  return new Rollbar(rollbarConfig);
 }
+
+export const RollbarService = new InjectionToken<Rollbar>('rollbar');
