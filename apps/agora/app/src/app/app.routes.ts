@@ -50,15 +50,14 @@ export const routes: Route[] = [
     },
   },
   {
-    path: 'nomination-form',
-    loadChildren: () =>
-      import('@sagebionetworks/agora/nominated-targets').then(
-        (routes) => routes.nominationFormRoute,
-      ),
-    data: {
-      title: 'Nominate a Target | Suggest a new AD therapeutic target',
-      description: 'Nominate a gene as a new candidate for AD treatment or prevention.',
-    },
+    path: 'genes/genes-router:genes-list',
+    redirectTo: 'genes/nominated-targets',
+    pathMatch: 'full',
+  },
+  {
+    path: 'genes/genes-router:gene-details/:id',
+    redirectTo: 'genes/:id',
+    pathMatch: 'full',
   },
   {
     path: 'genes/:id/similar',
@@ -82,6 +81,22 @@ export const routes: Route[] = [
     data: {
       title: 'Agora | Gene Details',
       description: "View information and evidence about genes in Alzheimer's disease.",
+    },
+  },
+  {
+    path: 'genes',
+    redirectTo: '',
+    pathMatch: 'full',
+  },
+  {
+    path: 'nomination-form',
+    loadChildren: () =>
+      import('@sagebionetworks/agora/nominated-targets').then(
+        (routes) => routes.nominationFormRoute,
+      ),
+    data: {
+      title: 'Nominate a Target | Suggest a new AD therapeutic target',
+      description: 'Nominate a gene as a new candidate for AD treatment or prevention.',
     },
   },
   {
