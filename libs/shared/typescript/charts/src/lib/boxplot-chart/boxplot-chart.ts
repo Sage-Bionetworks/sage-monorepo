@@ -127,6 +127,7 @@ export class BoxplotChart {
       type: 'boxplot',
       z: 1,
       itemStyle: boxplotStyle,
+      boxWidth: [7, 115],
       silent: true,
       tooltip: {
         show: false,

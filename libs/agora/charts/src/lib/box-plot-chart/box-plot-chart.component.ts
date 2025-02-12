@@ -30,6 +30,7 @@ export class BoxPlotComponent {
   xAxisCategoryToTooltipText: Record<string, string> | undefined = {};
   isInitialized = false;
   pointTooltipFormatter: ((pt: CategoryPoint) => string) | undefined;
+  plotHeight = '480px';
 
   get data(): boxPlotChartItem[] {
     return this._data;
@@ -60,6 +61,7 @@ export class BoxPlotComponent {
       return;
     }
 
+    if (this.heading !== '') this.plotHeight = '520px';
     this.initData();
     this.isInitialized = true;
   }
