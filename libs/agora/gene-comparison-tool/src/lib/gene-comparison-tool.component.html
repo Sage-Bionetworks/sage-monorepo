@@ -50,7 +50,7 @@
     <agora-gene-comparison-tool-filter-list
       #filterList
       [filters]="filters"
-      (onChange)="setFilters($event)"
+      (changeEvent)="setFilters($event)"
       [significanceThreshold]="significanceThreshold"
       [significanceThresholdActive]="significanceThresholdActive"
       (onremoveSignificanceThresholdFilter)="setSignificanceThresholdActive($event)"
@@ -636,7 +636,7 @@
             <agora-gene-comparison-tool-filter-panel
               #filterPanel
               [filters]="filters"
-              (onChange)="setFilters($event)"
+              (changeEvent)="setFilters($event)"
             ></agora-gene-comparison-tool-filter-panel>
           </div>
         </div>
@@ -657,7 +657,7 @@
   ></agora-gene-comparison-tool-legend-panel>
   <agora-gene-comparison-tool-pinned-genes-modal
     #pinnedGenesModal
-    (onChange)="onPinnedGenesModalChange($event)"
+    (changeEvent)="onPinnedGenesModalChange($event)"
     [pinnedGenes]="pinnedItems"
     [pendingPinnedGenes]="pendingPinnedItems"
     [maxPinnedGenes]="maxPinnedGenes"
