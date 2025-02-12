@@ -6,11 +6,11 @@ import { AppShellNoRenderDirective, SeoService } from '@sagebionetworks/shared/u
 import { ChallengeHostListComponent } from './challenge-host-list/challenge-host-list.component';
 import { ChallengeRegistrationComponent } from './challenge-registration/challenge-registration.component';
 import { ChallengeSearchComponent } from './challenge-search/challenge-search.component';
-import { FeaturedChallengeListComponent } from './featured-challenge-list/featured-challenge-list.component';
+// import { FeaturedChallengeListComponent } from './featured-challenge-list/featured-challenge-list.component';
 import { SponsorListComponent } from './sponsor-list/sponsor-list.component';
 import { PlatformsComponent } from './platforms/platforms.component';
 import { StatisticsViewerComponent } from './statistics-viewer/statistics-viewer.component';
-import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
+// import { TopicsViewerComponent } from './topics-viewer/topics-viewer.component';
 import { getSeoData } from './home-seo-data';
 import { RandomChallengeListComponent } from './random-challenge-list/random-challenge-list.component';
 
@@ -21,12 +21,12 @@ import { RandomChallengeListComponent } from './random-challenge-list/random-cha
     ChallengeHostListComponent,
     ChallengeRegistrationComponent,
     ChallengeSearchComponent,
-    FeaturedChallengeListComponent,
+    // FeaturedChallengeListComponent,
     RandomChallengeListComponent,
     SponsorListComponent,
     PlatformsComponent,
     StatisticsViewerComponent,
-    TopicsViewerComponent,
+    // TopicsViewerComponent,
     FooterComponent,
     AppShellNoRenderDirective,
   ],

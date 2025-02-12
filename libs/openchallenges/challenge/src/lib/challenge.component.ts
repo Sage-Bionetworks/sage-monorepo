@@ -25,7 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { ChallengeContributorsComponent } from './challenge-contributors/challenge-contributors.component';
 import { ChallengeOrganizersComponent } from './challenge-organizers/challenge-organizers.component';
 import { ChallengeOverviewComponent } from './challenge-overview/challenge-overview.component';
-import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
+// import { ChallengeStargazersComponent } from './challenge-stargazers/challenge-stargazers.component';
 import { ChallengeStatsComponent } from './challenge-stats/challenge-stats.component';
 import { CommonModule, Location } from '@angular/common';
 import { SeoService } from '@sagebionetworks/shared/util';
@@ -42,7 +42,7 @@ import { HttpParams } from '@angular/common/http';
     ChallengeOverviewComponent,
     ChallengeOrganizersComponent,
     ChallengeContributorsComponent,
-    ChallengeStargazersComponent,
+    // ChallengeStargazersComponent,
     ChallengeStatsComponent,
     AvatarComponent,
     FooterComponent,

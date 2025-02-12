@@ -61,6 +61,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
 import { DropdownModule } from 'primeng/dropdown';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -75,6 +77,8 @@ import { assign } from 'lodash';
     CommonModule,
     DividerModule,
     DropdownModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     InputTextModule,
     MatIconModule,
     MatSnackBarModule,

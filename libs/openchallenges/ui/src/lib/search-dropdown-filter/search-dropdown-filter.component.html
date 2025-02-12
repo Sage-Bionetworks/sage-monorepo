@@ -13,18 +13,22 @@
   (onLazyLoad)="onLazyLoad($event)"
 >
   <!-- custom search bar to avoid conflicts against default filter func -->
-  <ng-template *ngIf="filterByApiClient" pTemplate="header">
-    <div class="custom-filter-container p-multiselect-filter-container">
+  <ng-template *ngIf="filterByApiClient" pTemplate="filter" class="custom-filter-container">
+    <p-checkbox
+      binary="true"
+      [(ngModel)]="isAllOptionsSelected"
+      (onChange)="toggleAllOptions()"
+    ></p-checkbox>
+    <p-inputgroup (click)="stopPropagation($event)">
       <input
         type="text"
+        pInputText
         placeholder="search"
-        class="custom-filter p-multiselect-filter p-inputtext p-component"
-        autocomplete="on"
+        class="p-multiselect-filter-container"
         [(ngModel)]="searchTerm"
-        (input)="onCustomSearch()"
+        (keyup)="onCustomSearch()"
       />
-      <span class="p-multiselect-filter-icon pi pi-search"></span>
-    </div>
+    </p-inputgroup>
   </ng-template>
 
   <!-- custom loader with skeleton -->
@@ -47,12 +51,6 @@
     <ng-container *ngIf="!isLoading">
       <span>No results found</span>
     </ng-container>
-  </ng-template>
-
-  <!-- custom label for the selected values -->
-  <ng-template pTemplate="selectedItems" let-option>
-    <div *ngIf="validSelectionCount > 0">{{ validSelectionCount }} item(s) selected</div>
-    <div *ngIf="validSelectionCount === 0">{{ placeholder }}</div>
   </ng-template>
 
   <!-- custom list items -->

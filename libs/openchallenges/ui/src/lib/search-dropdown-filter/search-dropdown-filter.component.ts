@@ -1,16 +1,28 @@
+import { Avatar } from '../avatar/avatar';
+import { AvatarComponent } from '../avatar/avatar.component';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Filter } from '../checkbox-filter/filter.model';
-import { Avatar } from '../avatar/avatar';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AvatarComponent } from '../avatar/avatar.component';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputTextModule } from 'primeng/inputtext';
 import { MultiSelectLazyLoadEvent, MultiSelectModule } from 'primeng/multiselect';
-import { SkeletonModule } from 'primeng/skeleton';
 import { ScrollerOptions } from 'primeng/api';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'openchallenges-search-dropdown-filter',
-  imports: [AvatarComponent, CommonModule, FormsModule, MultiSelectModule, SkeletonModule],
+  imports: [
+    AvatarComponent,
+    CheckboxModule,
+    CommonModule,
+    InputGroupModule,
+    InputTextModule,
+    FormsModule,
+    MultiSelectModule,
+    SkeletonModule,
+  ],
   templateUrl: './search-dropdown-filter.component.html',
   styleUrls: ['./search-dropdown-filter.component.scss'],
 })
@@ -18,13 +30,13 @@ export class SearchDropdownFilterComponent implements OnInit {
   @Input({ required: true }) options!: Filter[];
   @Input({ required: true }) optionsPerPage!: number;
   @Input({ required: true }) selectedOptions!: any[];
-  @Input({ required: true }) placeholder = 'Search items';
   @Input({ required: true }) showAvatar!: boolean | undefined;
   @Input({ required: true }) filterByApiClient!: boolean | undefined;
   @Input({ required: false }) lazy = true;
-  @Input({ required: false }) showLoader = false;
-  @Input({ required: false }) optionHeight = 50; // height of each option
+  @Input({ required: false }) optionHeight = 40; // height of each option
   @Input({ required: false }) optionSize = 10; // total number of displaying options
+  @Input({ required: false }) placeholder = 'Search items';
+  @Input({ required: false }) showLoader = false;
 
   @Output() selectionChange = new EventEmitter<any[]>();
   @Output() searchChange = new EventEmitter<string>();
@@ -37,6 +49,7 @@ export class SearchDropdownFilterComponent implements OnInit {
 
   searchTerm = '';
   filter = true;
+  isAllOptionsSelected = false;
 
   isLoading = false;
   loadedPages = new Set();
@@ -94,12 +107,24 @@ export class SearchDropdownFilterComponent implements OnInit {
     this.searchChange.emit(event.filter);
   }
 
+  toggleAllOptions() {
+    if (this.isAllOptionsSelected) {
+      this.selectedOptions = this.options.map((option) => option.value);
+    } else {
+      this.selectedOptions = [];
+    }
+  }
+
   onCustomSearch(): void {
     if (this.lazy) {
       this.loadedPages.clear();
       this.triggerLoading();
     }
     this.searchChange.emit(this.searchTerm);
+  }
+
+  stopPropagation(event: Event): void {
+    event.stopPropagation();
   }
 
   onChange(selected: string[] | number[]): void {

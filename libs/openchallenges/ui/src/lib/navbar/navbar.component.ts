@@ -5,7 +5,7 @@ import { Avatar } from '../avatar/avatar';
 import { EMPTY_AVATAR } from '../avatar/mock-avatars';
 import { MenuItem } from '../user-button/menu-item';
 import { MatButtonModule } from '@angular/material/button';
-import { UserButtonComponent } from '../user-button/user-button.component';
+// import { UserButtonComponent } from '../user-button/user-button.component';
 import { DiscordButtonComponent } from '../discord-button/discord-button.component';
 import { NavbarSection } from './navbar-section';
 
@@ -15,7 +15,7 @@ import { NavbarSection } from './navbar-section';
     CommonModule,
     RouterModule,
     MatButtonModule,
-    UserButtonComponent,
+    // UserButtonComponent,
     DiscordButtonComponent,
   ],
   templateUrl: './navbar.component.html',
