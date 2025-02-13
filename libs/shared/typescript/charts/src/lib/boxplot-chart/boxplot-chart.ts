@@ -127,6 +127,7 @@ export class BoxplotChart {
       type: 'boxplot',
       z: 1,
       itemStyle: boxplotStyle,
+      boxWidth: [7, 115],
       silent: true,
       tooltip: {
         show: false,
@@ -183,29 +184,34 @@ export class BoxplotChart {
       },
     });
 
+    const titles = [
+      // Add x-axis title as a title rather than xAxis.name, because
+      // setting via xAxis.name causes cursor to change to pointer when
+      // x-axis label tooltips are used
+      {
+        text: xAxisTitle,
+        textStyle: titleTextStyle,
+        left: 'center',
+        top: 'bottom',
+      },
+    ];
+    if (title) {
+      titles.push({
+        text: title,
+        left: 'center',
+        top: 'top',
+        textStyle: titleTextStyle,
+      });
+    }
+
     const option: EChartsOption = {
       grid: {
+        top: title ? 60 : 20,
         left: 25,
         right: 20,
         containLabel: true,
       },
-      title: [
-        {
-          text: title,
-          left: 'center',
-          top: 'top',
-          textStyle: titleTextStyle,
-        },
-        // Add x-axis title as a title rather than xAxis.name, because
-        // setting via xAxis.name causes cursor to change to pointer when
-        // x-axis label tooltips are used
-        {
-          text: xAxisTitle,
-          textStyle: titleTextStyle,
-          left: 'center',
-          top: 'bottom',
-        },
-      ],
+      title: titles,
       aria: {
         enabled: true,
       },
