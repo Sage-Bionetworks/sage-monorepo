@@ -91,6 +91,19 @@ wheels = [
 ]
 
 [[package]]
+name = "mariadb"
+version = "1.1.12"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "packaging" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/17/bb/4bbc803fbdafedbfba015f7cc1ab1e87a6d1de36725ba058c53e2f8a45ad/mariadb-1.1.12.tar.gz", hash = "sha256:50b02ff2c78b1b4f4628a054e3c8c7dd92972137727a5cc309a64c9ed20c878c", size = 85934 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/2b/1b/b6eca3870ac1b5577a10d3b49ba42ac263c2e5718c9224cc1c8463940422/mariadb-1.1.12-cp313-cp313-win32.whl", hash = "sha256:ba43c42130d41352f32a5786c339cc931d05472ef7640fa3764d428dc294b88e", size = 184338 },
+    { url = "https://files.pythonhosted.org/packages/fb/ff/c29a543ee1f9009755bc304138f61cd9b0ee1f14533e446513f84ccf143a/mariadb-1.1.12-cp313-cp313-win_amd64.whl", hash = "sha256:b69bc18418e72fcf359d17736cdc3f601a271203aff13ef7c57a415c8fd52ab0", size = 201272 },
+]
+
+[[package]]
 name = "numpy"
 version = "2.1.0"
 source = { registry = "https://pypi.org/simple" }
@@ -131,6 +144,7 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "gspread" },
+    { name = "mariadb" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "requests" },
@@ -139,6 +153,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "gspread", specifier = "==6.1.4" },
+    { name = "mariadb", specifier = ">=1.1.12" },
     { name = "numpy", specifier = "==2.1.0" },
     { name = "pandas", specifier = "==2.2.3" },
     { name = "requests", specifier = "==2.32.3" },
@@ -148,6 +163,15 @@ requires-dist = [
 dev = []
 prod = []
 test = []
+
+[[package]]
+name = "packaging"
+version = "24.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d0/63/68dbb6eb2de9cb10ee4c9c14a0148804425e13c4fb20d61cce69f53106da/packaging-24.2.tar.gz", hash = "sha256:c228a6dc5e932d346bc5739379109d49e8853dd8223571c7c5b55260edc0b97f", size = 163950 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/ef/eb23f262cca3c0c4eb7ab1933c3b1f03d021f2c48f54763065b6f0e321be/packaging-24.2-py3-none-any.whl", hash = "sha256:09abb1bccd265c01f4a3aa3f7a7db064b36514d2cba19a2f694fe6150451a759", size = 65451 },
+]
 
 [[package]]
 name = "pandas"
