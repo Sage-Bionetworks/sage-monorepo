@@ -2,12 +2,31 @@ import os
 import json
 
 import gspread
+import mariadb
 
 import oc_data_sheet
 
 
 GOOGLE_SHEET_CREDENTIALS_FILE = "service_account.json"
 GOOGLE_SHEET_TITLE = "OpenChallenges Data"
+
+
+def connect_to_db(db: str = "challenge_service") -> mariadb.Connection:
+    """Establishes connection to the MariaDB database."""
+    credentials = {
+        "host": os.getenv("MARIADB_HOST"),
+        "port": int(os.getenv("MARIADB_PORT", 3306)),
+        "user": os.getenv("MARIADB_USER"),
+        "password": os.getenv("MARIADB_PASSWORD"),
+        "database": db,
+    }
+    try:
+        conn = mariadb.connect(**credentials)
+        logging.info(f"Connected to `{db}` database")
+        return conn
+    except mariadb.Error as e:
+        print(f"Error connecting to the database: {e}")
+        sys.exit(1)
 
 
 def lambda_handler(event, context):
@@ -69,6 +88,16 @@ def lambda_handler(event, context):
         except Exception as err:
             status_code = 400
             message = f"Something went wrong with pulling the data: {err}."
+
+    try:
+        conn = connect_to_db()
+        conn.close()
+
+        status_code = 200
+        message = "Data from the OC Data Sheet successfully added to the database."
+    except Exception as e:
+        status_code = 500
+        message = f"Error encoutered while updating the database: {e}"
 
     data = {"message": message}
     return {
