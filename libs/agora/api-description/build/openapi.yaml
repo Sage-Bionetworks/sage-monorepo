@@ -1289,13 +1289,13 @@ components:
       properties:
         name:
           type: string
-        isPrimaryInvestigator:
+        isprimaryinvestigator:
           type: boolean
         url:
           type: string
       required:
         - name
-        - isPrimaryInvestigator
+        - isprimaryinvestigator
     Team:
       type: object
       description: Team

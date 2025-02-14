@@ -19,9 +19,9 @@ describe('TeamMemberListComponent', () => {
 
   describe('sort function', () => {
     it('should sort team members correctly', () => {
-      const member1: TeamMember = { name: 'John Doe', isPrimaryInvestigator: true };
-      const member2: TeamMember = { name: 'Jane Smith', isPrimaryInvestigator: false };
-      const member3: TeamMember = { name: 'Alice Johnson', isPrimaryInvestigator: true };
+      const member1: TeamMember = { name: 'John Doe', isprimaryinvestigator: true };
+      const member2: TeamMember = { name: 'Jane Smith', isprimaryinvestigator: false };
+      const member3: TeamMember = { name: 'Alice Johnson', isprimaryinvestigator: true };
 
       const mockTeam: Team = {
         team: 'Test Team',
@@ -38,8 +38,8 @@ describe('TeamMemberListComponent', () => {
       expect(mockTeam.members[2]).toEqual(member2);
 
       // Test case where primary investigators are both true
-      const member4: TeamMember = { name: 'Bob Brown', isPrimaryInvestigator: true };
-      const member5: TeamMember = { name: 'Andy Anderson', isPrimaryInvestigator: true };
+      const member4: TeamMember = { name: 'Bob Brown', isprimaryinvestigator: true };
+      const member5: TeamMember = { name: 'Andy Anderson', isprimaryinvestigator: true };
 
       mockTeam.members = [member4, member5];
 
