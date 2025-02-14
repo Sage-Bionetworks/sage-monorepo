@@ -1,8 +1,11 @@
 import os
+import sys
 import json
+import logging
 
 import gspread
 import mariadb
+import pandas as pd
 
 import oc_data_sheet
 
@@ -29,7 +32,61 @@ def connect_to_db(db: str = "challenge_service") -> mariadb.Connection:
         sys.exit(1)
 
 
-def lambda_handler(event, context):
+def get_table(conn: mariadb.Connection, table_name: str) -> pd.DataFrame:
+    """Returns all records from the specified table."""
+    query = f"SELECT * FROM {table_name}"
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute(query)
+            records = cursor.fetchall()
+            colnames = [val[0] for val in cursor.description]
+        return pd.DataFrame(records, columns=colnames)
+    except mariadb.Error as e:
+        logging.error(f"Error executing query: {e}")
+        return pd.DataFrame()
+
+
+def truncate_table(conn: mariadb.Connection, table_name: str):
+    """Deletes all rows from the specified table.
+
+    Temporarily disables foreign key checks for this operation.
+    """
+    logging.info(f"Truncating table `{table_name}`")
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
+            cursor.execute(f"TRUNCATE TABLE {table_name}")
+            cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
+            conn.commit()  # Save changes made to table.
+    except mariadb.Error as e:
+        logging.error(f"Error truncating: {e}")
+        conn.rollback()  # Revert any changes made to data.
+
+
+def insert_data(conn: mariadb.Connection, table_name: str, data_df: pd.DataFrame):
+    """Adds data to the specified table, one row at a time.
+
+    This iterative approach allows for logging invalid rows for later review.
+    """
+    logging.info(f"Adding data to table `{table_name}`")
+    with conn.cursor() as cursor:
+        for _, row in data_df.iterrows():
+            colnames = ", ".join(row.index)
+            placeholders = ", ".join(["?"] * len(row))
+            query = f"INSERT INTO {table_name} ({colnames}) VALUES ({placeholders})"
+            print(query)
+            print(tuple(row))
+            try:
+                cursor.execute(query, tuple(row))
+            except mariadb.IntegrityError as e:
+                logging.error(f"Invalid row to table `{table_name}`: {e}")
+    conn.commit()
+
+
+def update_table(conn: mariadb.Connection, table_name: str, data: pd.DataFrame):
+    """Updates the specified table."""
+    truncate_table(conn, table_name)
+    insert_data(conn, table_name, data)
     """Sample pure Lambda function
 
     Parameters
@@ -90,7 +147,18 @@ def lambda_handler(event, context):
             message = f"Something went wrong with pulling the data: {err}."
 
     try:
+        # output logs to stdout and logfile
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format="%(levelname)s | %(asctime)s | %(message)s",
+            handlers=[
+                logging.FileHandler("oc_database_update.log"),
+                logging.StreamHandler(),
+            ],
+        )
+
         conn = connect_to_db()
+        update_table(conn, table_name="challenge_platform", data=platforms)
         conn.close()
 
         status_code = 200
