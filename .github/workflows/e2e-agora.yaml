@@ -8,8 +8,7 @@ jobs:
     if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04
-    env:
-      CI: true
+    environment: agora
     steps:
       - uses: actions/checkout@v4
         with:
