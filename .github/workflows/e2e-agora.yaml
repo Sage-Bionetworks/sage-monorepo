@@ -26,7 +26,7 @@ jobs:
         id: agora_affected
         run: |
           AFFECTED=$(devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
-              && nx show projects --affected --with-target e2e | grep -q 'agora' && echo 'true' || echo 'false'")
+              && nx show projects --affected | grep -q 'agora' && echo 'true' || echo 'false'")
           echo "AFFECTED=${AFFECTED}" >> "${GITHUB_OUTPUT}"
 
       - name: Install Playwright Browsers
@@ -34,6 +34,12 @@ jobs:
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
               && npx playwright install --with-deps"
+
+      - name: Setup Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && bash ./tools/setup-projects.sh agora"
 
       - name: Build Agora
         if: steps.agora_affected.outputs.AFFECTED == 'true'
