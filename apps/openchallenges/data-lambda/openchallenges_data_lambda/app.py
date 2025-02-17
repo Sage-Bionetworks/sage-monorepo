@@ -48,8 +48,8 @@ def connect_to_db(db: str = "challenge_service") -> mariadb.Connection:
         conn = mariadb.connect(**credentials)
         logging.info(f"Connected to `{db}` database")
         return conn
-    except mariadb.Error as e:
-        print(f"Error connecting to the database: {e}")
+    except mariadb.Error as err:
+        logging.error(f"Error connecting to the database: {err}")
         sys.exit(1)
 
 
@@ -62,8 +62,8 @@ def get_table(conn: mariadb.Connection, table_name: str) -> pd.DataFrame:
             records = cursor.fetchall()
             colnames = [val[0] for val in cursor.description]
         return pd.DataFrame(records, columns=colnames)
-    except mariadb.Error as e:
-        logging.error(f"Error executing query: {e}")
+    except mariadb.Error as err:
+        logging.error(f"Error executing query: {err}")
         return pd.DataFrame()
 
 
@@ -79,8 +79,8 @@ def truncate_table(conn: mariadb.Connection, table_name: str):
             cursor.execute(f"TRUNCATE TABLE {table_name}")
             cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
             conn.commit()  # Save changes made to table.
-    except mariadb.Error as e:
-        logging.error(f"Error truncating: {e}")
+    except mariadb.Error as err:
+        logging.error(f"Error truncating: {err}")
         conn.rollback()  # Revert any changes made to data.
 
 
@@ -95,12 +95,16 @@ def insert_data(conn: mariadb.Connection, table_name: str, data_df: pd.DataFrame
             colnames = ", ".join(row.index)
             placeholders = ", ".join(["?"] * len(row))
             query = f"INSERT INTO {table_name} ({colnames}) VALUES ({placeholders})"
-            print(query)
-            print(tuple(row))
             try:
                 cursor.execute(query, tuple(row))
-            except mariadb.IntegrityError as e:
-                logging.error(f"Invalid row to table `{table_name}`: {e}")
+            except mariadb.IntegrityError as err:
+                id_colname = "id" if row.get("id") else "challenge_id"
+                id_value = row.get("id", row.get("challenge_id"))
+                logging.error(
+                    f"Invalid row to table `{table_name}`\n"
+                    + f"   → {id_colname} in Google Sheet: {id_value}\n"
+                    + f"   → Error: {err}"
+                )
     conn.commit()
 
 
