@@ -143,18 +143,16 @@ def lambda_handler(event, context) -> dict:
         try:
             wks = google_client.open(GOOGLE_SHEET_TITLE)
 
-            platforms = oc_data_sheet.get_platform_data(wks).rename(
-                columns={"avatar_url": "avatar_key"}
-            )
+            platforms = oc_data_sheet.get_platform_data(wks)
             platforms["avatar_url"] = (
-                ""  # FIXME: table in local db has this column for some reason?
+                ""  # FIXME: table has this column for some reason?
             )
 
-            # roles = oc_data_sheet.get_roles(wks)
-            # categories = oc_data_sheet.get_challenge_categories(wks)
+            roles = oc_data_sheet.get_roles(wks)
+            categories = oc_data_sheet.get_challenge_categories(wks)
             # organizations = oc_data_sheet.get_organization_data(wks)
-            # edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
-            # challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
+            edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
+            challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
         except Exception as err:
             status_code = 400
             message = f"Something went wrong with pulling the data: {err}."
@@ -172,8 +170,15 @@ def lambda_handler(event, context) -> dict:
 
         conn = connect_to_db()
         update_table(conn, table_name="challenge_platform", data=platforms)
-        # update_table(conn, table_name="challenge", data=challenges)
-        # update_table(conn, table_name="challenge_contribution", data=roles)
+        update_table(conn, table_name="challenge", data=challenges)
+        update_table(conn, table_name="challenge_contribution", data=roles)
+        update_table(conn, table_name="challenge_incentive", data=incentives)
+        update_table(conn, table_name="challenge_submission_type", data=sub_types)
+        update_table(
+            conn, table_name="challenge_input_data_type", data=edam_data_annotations
+        )
+        update_table(conn, table_name="challenge_category", data=categories)
+        logging.info("FIN. ✅")
         conn.close()
 
         status_code = 200
