@@ -97,7 +97,8 @@ def insert_data(conn: mariadb.Connection, table_name: str, data_df: pd.DataFrame
             query = f"INSERT INTO {table_name} ({colnames}) VALUES ({placeholders})"
             try:
                 cursor.execute(query, tuple(row))
-            except mariadb.IntegrityError as err:
+                conn.commit()
+            except (mariadb.IntegrityError, mariadb.DataError) as err:
                 id_colname = "id" if row.get("id") else "challenge_id"
                 id_value = row.get("id", row.get("challenge_id"))
                 logging.error(
@@ -105,7 +106,10 @@ def insert_data(conn: mariadb.Connection, table_name: str, data_df: pd.DataFrame
                     + f"   → {id_colname} in Google Sheet: {id_value}\n"
                     + f"   → Error: {err}"
                 )
-    conn.commit()
+                conn.rollback()
+            except mariadb.Error as err:
+                logging.error(f"Error adding row to table `{table_name}`: {err}")
+                conn.rollback()
 
 
 def update_table(conn: mariadb.Connection, table_name: str, data: pd.DataFrame):
@@ -161,35 +165,32 @@ def lambda_handler(event, context) -> dict:
             status_code = 400
             message = f"Something went wrong with pulling the data: {err}."
 
-    try:
-        # output logs to stdout and logfile
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format="%(levelname)s | %(asctime)s | %(message)s",
-            handlers=[
-                logging.FileHandler("oc_database_update.log"),
-                logging.StreamHandler(),
-            ],
-        )
+    # output logs to stdout and logfile
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(levelname)s | %(asctime)s | %(message)s",
+        handlers=[
+            logging.FileHandler("oc_database_update.log"),
+            logging.StreamHandler(),
+        ],
+    )
 
-        conn = connect_to_db()
-        update_table(conn, table_name="challenge_platform", data=platforms)
-        update_table(conn, table_name="challenge", data=challenges)
-        update_table(conn, table_name="challenge_contribution", data=roles)
-        update_table(conn, table_name="challenge_incentive", data=incentives)
-        update_table(conn, table_name="challenge_submission_type", data=sub_types)
-        update_table(
-            conn, table_name="challenge_input_data_type", data=edam_data_annotations
-        )
-        update_table(conn, table_name="challenge_category", data=categories)
-        logging.info("FIN. ✅")
-        conn.close()
+    # Update challenge_service
+    conn = connect_to_db()
+    update_table(conn, table_name="challenge_platform", data=platforms)
+    update_table(conn, table_name="challenge", data=challenges)
+    update_table(conn, table_name="challenge_contribution", data=roles)
+    update_table(conn, table_name="challenge_incentive", data=incentives)
+    update_table(conn, table_name="challenge_submission_type", data=sub_types)
+    update_table(
+        conn, table_name="challenge_input_data_type", data=edam_data_annotations
+    )
+    update_table(conn, table_name="challenge_category", data=categories)
+    conn.close()
 
-        status_code = 200
-        message = "Data from the OC Data Sheet successfully added to the database."
-    except Exception as e:
-        status_code = 500
-        message = f"Error encoutered while updating the database: {e}"
+    logging.info("FIN. ✅")
+    status_code = 200
+    message = "Data from the OC Data Sheet successfully added to the database."
 
     data = {"message": message}
     return {
