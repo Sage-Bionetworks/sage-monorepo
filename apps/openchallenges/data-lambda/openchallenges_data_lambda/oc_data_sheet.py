@@ -23,7 +23,6 @@ def get_challenge_data(wks, sheet_name="challenges"):
         - challenge submission types
     """
     df = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
-    df.loc[df._platform == "Other", "platform"] = None
 
     # Challenges
     challenges = df[
@@ -36,6 +35,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
             "avatar_url",
             "website_url",
             "status",
+            "_platform",
             "platform",
             "doi",
             "start_date",
@@ -56,6 +56,7 @@ def get_challenge_data(wks, sheet_name="challenges"):
         .astype(str)
         .apply(lambda x: x[:995] + "..." if len(x) > 1000 else x)
     )
+    challenges.loc[challenges._platform == "Other", "platform"] = None
     challenges.loc[challenges.start_date == "", "start_date"] = None
     challenges.loc[challenges.end_date == "", "end_date"] = None
     challenges.loc[challenges.operation_id == "", "operation_id"] = None
@@ -116,7 +117,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
     sub_types.index = np.arange(1, len(sub_types) + 1)
 
     return (
-        challenges.rename(columns={"platform": "platform_id"}),
+        challenges.rename(columns={"platform": "platform_id"}).drop(
+            columns=["_platform"]
+        ),
         incentives[["name", "challenge_id", "created_at"]],
         sub_types[["name", "challenge_id", "created_at"]],
     )
@@ -166,7 +169,7 @@ def get_organization_data(wks, sheet_name="organizations"):
         .astype(str)
         .apply(lambda x: x[:995] + "..." if len(x) > 1000 else x)
     )
-    return organizations
+    return organizations.rename(columns={"avatar_url": "avatar_key"})
 
 
 def get_roles(wks, sheet_name="contribution_role"):
