@@ -158,7 +158,7 @@ def lambda_handler(event, context) -> dict:
 
             roles = oc_data_sheet.get_roles(wks)
             categories = oc_data_sheet.get_challenge_categories(wks)
-            # organizations = oc_data_sheet.get_organization_data(wks)
+            organizations = oc_data_sheet.get_organization_data(wks)
             edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
             challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
         except Exception as err:
@@ -186,6 +186,12 @@ def lambda_handler(event, context) -> dict:
         conn, table_name="challenge_input_data_type", data=edam_data_annotations
     )
     update_table(conn, table_name="challenge_category", data=categories)
+    conn.close()
+
+    # Update organization_service
+    conn = connect_to_db("organization_service")
+    update_table(conn, table_name="organization", data=organizations)
+    update_table(conn, table_name="challenge_contribution", data=roles)
     conn.close()
 
     logging.info("FIN. ✅")
