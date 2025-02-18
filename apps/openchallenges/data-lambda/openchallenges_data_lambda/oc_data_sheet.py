@@ -14,7 +14,7 @@ def _reformat_df_values(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def get_challenge_data(wks, sheet_name="challenges"):
+def get_challenge_data(wks, sheet_name: str = "challenges") -> tuple:
     """Get challenges data and clean up as needed.
 
     Output:
@@ -125,7 +125,9 @@ def get_challenge_data(wks, sheet_name="challenges"):
     )
 
 
-def get_challenge_categories(wks, sheet_name="challenge_category"):
+def get_challenge_categories(
+    wks, sheet_name: str = "challenge_category"
+) -> pd.DataFrame:
     """Get challenge categories."""
     return (
         pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
@@ -134,7 +136,7 @@ def get_challenge_categories(wks, sheet_name="challenge_category"):
     )
 
 
-def get_platform_data(wks, sheet_name="platforms"):
+def get_platform_data(wks, sheet_name: str = "platforms") -> pd.DataFrame:
     """Get platform data and clean up as needed."""
     platforms = (
         pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
@@ -146,7 +148,7 @@ def get_platform_data(wks, sheet_name="platforms"):
     ]
 
 
-def get_organization_data(wks, sheet_name="organizations"):
+def get_organization_data(wks, sheet_name: str = "organizations") -> pd.DataFrame:
     """Get organization data and clean up as needed."""
     organizations = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
     organizations = organizations[organizations._public == "TRUE"][
@@ -172,7 +174,7 @@ def get_organization_data(wks, sheet_name="organizations"):
     return organizations.rename(columns={"avatar_url": "avatar_key"})
 
 
-def get_roles(wks, sheet_name="contribution_role"):
+def get_roles(wks, sheet_name: str = "contribution_role") -> pd.DataFrame:
     """Get data on organization's role(s) in challenges."""
     return (
         pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
@@ -181,7 +183,7 @@ def get_roles(wks, sheet_name="contribution_role"):
     )
 
 
-def get_edam_annotations(wks, sheet_name="challenge_data"):
+def get_edam_annotations(wks, sheet_name: str = "challenge_data") -> pd.DataFrame:
     """Get data on challenge's EDAM annotations."""
     return (
         pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
