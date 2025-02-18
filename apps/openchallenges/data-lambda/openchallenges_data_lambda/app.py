@@ -1,12 +1,10 @@
 import os
-import sys
 import json
 import logging
 
 import gspread
-import mariadb
-import pandas as pd
 
+import db_utils
 import oc_data_sheet
 
 
@@ -33,89 +31,6 @@ def write_credentials_file(output_json):
             "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
         }
         out.write(json.dumps(credentials))
-
-
-def connect_to_db(db: str = "challenge_service") -> mariadb.Connection:
-    """Establishes connection to the MariaDB database."""
-    credentials = {
-        "host": os.getenv("MARIADB_HOST"),
-        "port": int(os.getenv("MARIADB_PORT", 3306)),
-        "user": os.getenv("MARIADB_USER"),
-        "password": os.getenv("MARIADB_PASSWORD"),
-        "database": db,
-    }
-    try:
-        conn = mariadb.connect(**credentials)
-        logging.info(f"Connected to `{db}` database")
-        return conn
-    except mariadb.Error as err:
-        logging.error(f"Error connecting to the database: {err}")
-        sys.exit(1)
-
-
-def get_table(conn: mariadb.Connection, table_name: str) -> pd.DataFrame:
-    """Returns all records from the specified table."""
-    query = f"SELECT * FROM {table_name}"
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute(query)
-            records = cursor.fetchall()
-            colnames = [val[0] for val in cursor.description]
-        return pd.DataFrame(records, columns=colnames)
-    except mariadb.Error as err:
-        logging.error(f"Error executing query: {err}")
-        return pd.DataFrame()
-
-
-def truncate_table(conn: mariadb.Connection, table_name: str):
-    """Deletes all rows from the specified table.
-
-    Temporarily disables foreign key checks for this operation.
-    """
-    logging.info(f"Truncating table `{table_name}`")
-    try:
-        with conn.cursor() as cursor:
-            cursor.execute("SET FOREIGN_KEY_CHECKS = 0")
-            cursor.execute(f"TRUNCATE TABLE {table_name}")
-            cursor.execute("SET FOREIGN_KEY_CHECKS = 1")
-            conn.commit()  # Save changes made to table.
-    except mariadb.Error as err:
-        logging.error(f"Error truncating: {err}")
-        conn.rollback()  # Revert any changes made to data.
-
-
-def insert_data(conn: mariadb.Connection, table_name: str, data_df: pd.DataFrame):
-    """Adds data to the specified table, one row at a time.
-
-    This iterative approach allows for logging invalid rows for later review.
-    """
-    logging.info(f"Adding data to table `{table_name}`")
-    with conn.cursor() as cursor:
-        for _, row in data_df.iterrows():
-            colnames = ", ".join(row.index)
-            placeholders = ", ".join(["?"] * len(row))
-            query = f"INSERT INTO {table_name} ({colnames}) VALUES ({placeholders})"
-            try:
-                cursor.execute(query, tuple(row))
-                conn.commit()
-            except (mariadb.IntegrityError, mariadb.DataError) as err:
-                id_colname = "id" if row.get("id") else "challenge_id"
-                id_value = row.get("id", row.get("challenge_id"))
-                logging.error(
-                    f"Invalid row to table `{table_name}`\n"
-                    + f"   → {id_colname} in Google Sheet: {id_value}\n"
-                    + f"   → Error: {err}"
-                )
-                conn.rollback()
-            except mariadb.Error as err:
-                logging.error(f"Error adding row to table `{table_name}`: {err}")
-                conn.rollback()
-
-
-def update_table(conn: mariadb.Connection, table_name: str, data: pd.DataFrame):
-    """Updates the specified table."""
-    truncate_table(conn, table_name)
-    insert_data(conn, table_name, data)
 
 
 def lambda_handler(event, context) -> dict:
@@ -176,22 +91,22 @@ def lambda_handler(event, context) -> dict:
     )
 
     # Update challenge_service
-    conn = connect_to_db()
-    update_table(conn, table_name="challenge_platform", data=platforms)
-    update_table(conn, table_name="challenge", data=challenges)
-    update_table(conn, table_name="challenge_contribution", data=roles)
-    update_table(conn, table_name="challenge_incentive", data=incentives)
-    update_table(conn, table_name="challenge_submission_type", data=sub_types)
-    update_table(
+    conn = db_utils.connect_to_db()
+    db_utils.update_table(conn, table_name="challenge_platform", data=platforms)
+    db_utils.update_table(conn, table_name="challenge", data=challenges)
+    db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
+    db_utils.update_table(conn, table_name="challenge_incentive", data=incentives)
+    db_utils.update_table(conn, table_name="challenge_submission_type", data=sub_types)
+    db_utils.update_table(
         conn, table_name="challenge_input_data_type", data=edam_data_annotations
     )
-    update_table(conn, table_name="challenge_category", data=categories)
+    db_utils.update_table(conn, table_name="challenge_category", data=categories)
     conn.close()
 
     # Update organization_service
-    conn = connect_to_db("organization_service")
-    update_table(conn, table_name="organization", data=organizations)
-    update_table(conn, table_name="challenge_contribution", data=roles)
+    conn = db_utils.connect_to_db("organization_service")
+    db_utils.update_table(conn, table_name="organization", data=organizations)
+    db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
     conn.close()
 
     logging.info("FIN. ✅")
