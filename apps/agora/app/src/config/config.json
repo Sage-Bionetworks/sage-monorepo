@@ -3,5 +3,5 @@
   "appVersion": "4.0.0",
   "csrApiUrl": "http://localhost:3333/v1",
   "ssrApiUrl": "http://agora-api:3333/v1",
-  "tagName": "agora/v4.0.0-rc1"
+  "tagName": "agora/v4.0.0-rc3"
 }
