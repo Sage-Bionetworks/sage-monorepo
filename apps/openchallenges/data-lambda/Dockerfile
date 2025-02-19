@@ -3,7 +3,7 @@ FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 # First, bundle the dependencies into the task root.
 FROM python:3.13.2-slim AS builder
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --no-install-recommends -y \
   gcc \
   libmariadb3 \
   libmariadb-dev
