@@ -20,7 +20,7 @@ jobs:
           persist-credentials: false
           # By default, actions/checkout@v4 will checkout the main branch instead of the merge
           # commit when when using pull_request_target. It is currently difficult to checkout the
-          # merge commit in this context. The current solution is to checkout the PR HEAD insteand
+          # merge commit in this context. The current solution is to checkout the PR HEAD instead
           # and enable the branch protection rule "Require branches to be up to date before
           # merging".
           ref: ${{ github.event.pull_request.head.sha }}

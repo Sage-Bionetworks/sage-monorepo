@@ -1,20 +1,33 @@
 name: Run e2e tests for Agora
 
-on: push
+on:
+  push:
+  # Warning: using the pull_request_target event without the cautionary measures may allow
+  # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled]
 
 jobs:
   run-agora-e2e-tests:
     # Run in Sage repo on main branch and on all branches in user-owned forks
     if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
+    environment: ${{ github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name != github.repository && 'agora-pr' || 'agora' }}
     timeout-minutes: 60
     runs-on: ubuntu-22.04
-    environment: agora
     steps:
       - uses: actions/checkout@v4
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare
           # against.
           fetch-depth: 0
+          persist-credentials: false
+          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
+          # commit when when using pull_request_target. It is currently difficult to checkout the
+          # merge commit in this context. The current solution is to checkout the PR HEAD instead
+          # and enable the branch protection rule "Require branches to be up to date before
+          # merging".
+          ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v4
