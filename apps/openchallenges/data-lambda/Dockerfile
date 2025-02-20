@@ -29,6 +29,7 @@ FROM public.ecr.aws/lambda/python:3.13
 COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 
 # Copy the application code.
-COPY ./openchallenges_data_lambda ${LAMBDA_TASK_ROOT}/app
+COPY ./openchallenges_data_lambda ${LAMBDA_TASK_ROOT}
 
-CMD ["app.app.lambda_handler"]
+CMD ["app.lambda_handler"]
+
