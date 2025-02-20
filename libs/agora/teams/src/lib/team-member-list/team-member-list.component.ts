@@ -61,12 +61,11 @@ export class TeamMemberListComponent {
 
   sort(members: TeamMember[]) {
     members.sort((a, b) => {
-      if (a.isPrimaryInvestigator === b.isPrimaryInvestigator) {
-        return a.name > b.name ? 1 : -1;
-      } else if (a.isPrimaryInvestigator > b.isPrimaryInvestigator) {
-        return -1;
+      if (a.isprimaryinvestigator !== b.isprimaryinvestigator) {
+        return a.isprimaryinvestigator ? -1 : 1; // true values come first
       }
-      return 1;
+
+      return a.name.localeCompare(b.name);
     });
   }
 

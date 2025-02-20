@@ -1,0 +1,94 @@
+name: Run e2e tests for Agora
+
+on:
+  push:
+  # Warning: using the pull_request_target event without the cautionary measures may allow
+  # unauthorized GitHub users to open a “pwn request” and exfiltrate secrets.
+  pull_request_target:
+    types: [opened, synchronize, reopened, labeled]
+
+jobs:
+  run-agora-e2e-tests:
+    # Run in Sage repo on main branch and on all branches in user-owned forks
+    if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
+    environment: ${{ github.event_name == 'pull_request_target' &&
+      github.event.pull_request.head.repo.full_name != github.repository && 'agora-pr' || 'agora' }}
+    timeout-minutes: 60
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # We need to fetch all branches and commits so that Nx affected has a base to compare
+          # against.
+          fetch-depth: 0
+          persist-credentials: false
+          # By default, actions/checkout@v4 will checkout the main branch instead of the merge
+          # commit when when using pull_request_target. It is currently difficult to checkout the
+          # merge commit in this context. The current solution is to checkout the PR HEAD instead
+          # and enable the branch protection rule "Require branches to be up to date before
+          # merging".
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v4
+
+      - name: Set up the dev container
+        uses: ./.github/actions/setup-dev-container
+
+      - name: Check if Agora was affected
+        id: agora_affected
+        run: |
+          AFFECTED=$(devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && nx show projects --affected | grep -q 'agora' && echo 'true' || echo 'false'")
+          echo "AFFECTED=${AFFECTED}" >> "${GITHUB_OUTPUT}"
+
+      - name: Install Playwright Browsers
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && npx playwright install --with-deps"
+
+      - name: Setup Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && bash ./tools/setup-projects.sh agora"
+
+      - name: Build Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && agora-build-images"
+
+      - name: Write Synapse PAT for Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          sed -i "s/^SYNAPSE_AUTH_TOKEN=.*/SYNAPSE_AUTH_TOKEN=\"${{ secrets.AGORA_DATA_SYNAPSE_AUTH_TOKEN }}\"/" apps/agora/data/.env
+
+      - name: Start Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && nx run agora-apex:serve-detach"
+
+      - name: Run Agora e2e tests
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && nx run agora-app:e2e"
+
+      - name: Stop Agora
+        if: steps.agora_affected.outputs.AFFECTED == 'true'
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+              && workspace-docker-stop"
+
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() && steps.agora_affected.outputs.AFFECTED == 'true'}}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 5
+
+      - name: Remove the dev container
+        run: docker rm -f sage_devcontainer
