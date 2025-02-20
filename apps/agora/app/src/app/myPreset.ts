@@ -47,17 +47,4 @@ export const MyPreset = definePreset(Lara, {
       },
     },
   },
-  // components: {
-  //   button: {
-  //     root: {
-  //       borderRadius: '15px',
-  //     },
-  //     sm: {
-  //       borderRadius: '4px',
-  //     },
-  //     lg: {
-  //       borderRadius: '15px',
-  //     },
-  //   },
-  // },
 });
