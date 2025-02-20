@@ -15,11 +15,11 @@ nx build-image openchallenges-data-lambda
 ## Update .env with credentials to utilize Google Sheets API
 
 Before running the Lambda function locally (see next section), update the `.env` file and replace
-all "UPDATE_ME" values with real credentials.
+all "CHANGEME" values with real credentials.
 
 Failing to update `.env` will result in the following output during invocation:
 
-```console
+```json
 {
   "statusCode": 401,
   "body": {
