@@ -20,46 +20,46 @@
   <div class="section-inner pb-lg">
     <div class="container-sm">
       <div class="row">
-        <div class="col-md-7">
-          <div class="mb-lg">
-            <p>
-              <b>
-                Search for or select any gene from the nominated target list to view the evidence
-                that led to its nomination
-              </b>
-            </p>
-            <agora-modal-link
-              text="Learn more about Nominated Targets "
-              header="About the Nominated Targets"
-              wikiId="617955"
-            >
-            </agora-modal-link>
-          </div>
-          <div class="mb-lg">
-            <div class="search-box">
-              <div class="search-box-icon">
-                <i class="fa fa-search fa-lg"></i>
+        <div class="instructions">
+          <div class="search">
+            <div class="search-description">
+              <p>
+                <b>
+                  Search for or select any gene from the nominated target list to view the evidence
+                  that led to its nomination
+                </b>
+              </p>
+              <agora-modal-link
+                text="Learn more about Nominated Targets "
+                header="About the Nominated Targets"
+                wikiId="617955"
+              >
+              </agora-modal-link>
+            </div>
+            <div>
+              <div class="search-box">
+                <div class="search-box-icon">
+                  <fa-icon [icon]="magnifyingIcon" class="fa-lg"></fa-icon>
+                </div>
+                <input
+                  type="text"
+                  pInputText
+                  size="50"
+                  id="keyword"
+                  placeholder="Search the columns below"
+                  (input)="onSearch($event)"
+                />
               </div>
-              <input
-                type="text"
-                pInputText
-                size="50"
-                id="keyword"
-                placeholder="Search the columns below"
-                (input)="onSearch($event)"
-              />
             </div>
           </div>
-        </div>
-        <div class="col-md-5 col-sm-12 col-12 mb-xl text-right">
-          <p>Would you like to add to this list?</p>
-          <a
-            pButton
-            type="button"
-            label="Nominate a target"
-            class="btn-rounded btn-primary"
-            [routerLink]="['/nomination-form']"
-          ></a>
+          <div class="nominate text-right">
+            <p>Would you like to add to this list?</p>
+            <p-button
+              label="Nominate a target"
+              styleClass="btn-rounded btn-primary"
+              [routerLink]="['/nomination-form']"
+            ></p-button>
+          </div>
         </div>
       </div>
     </div>

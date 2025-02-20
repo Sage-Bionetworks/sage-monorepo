@@ -1,17 +1,19 @@
 /* stylelint-disable plugin/no-unsupported-browser-features */
 
-.p-button,
-.btn {
+.p-button {
   @include reset-button;
 
   padding: 6px 20px;
   font-size: var(--font-size-sm);
-  font-weight: 500;
   text-decoration: none;
   box-shadow: none;
   user-select: none;
   transition: $transition-duration;
   cursor: pointer;
+}
+
+.p-button-label {
+  font-weight: normal;
 }
 
 .btn-primary {
@@ -46,6 +48,6 @@
   }
 }
 
-.btn-rounded {
+.p-button.btn-rounded {
   border-radius: 15px;
 }
