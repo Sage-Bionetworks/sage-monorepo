@@ -1,12 +1,7 @@
 FROM ghcr.io/astral-sh/uv:0.5.14 AS uv
 
 # First, bundle the dependencies into the task root.
-FROM python:3.13.2-slim AS builder
-
-RUN apt-get update && apt-get install --no-install-recommends -y \
-  gcc \
-  libmariadb3 \
-  libmariadb-dev
+FROM public.ecr.aws/lambda/python:3.13 AS builder
 
 # Enable bytecode compilation, to improve cold-start performance.
 ENV UV_COMPILE_BYTECODE=1
@@ -26,12 +21,12 @@ COPY pyproject.toml uv.lock ./
 
 # Generate requirements.txt and install dependencies
 RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
-    uv pip install -r requirements.txt --target .
+    uv pip install -r requirements.txt --target "${LAMBDA_TASK_ROOT}"
 
 FROM public.ecr.aws/lambda/python:3.13
 
 # Copy the runtime dependencies from the builder stage.
-COPY --from=builder /app/. ${LAMBDA_TASK_ROOT}/
+COPY --from=builder ${LAMBDA_TASK_ROOT} ${LAMBDA_TASK_ROOT}
 
 # Copy the application code.
 COPY ./openchallenges_data_lambda ${LAMBDA_TASK_ROOT}
