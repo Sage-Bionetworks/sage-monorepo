@@ -57,6 +57,21 @@ def truncate_table(conn: pymysql.Connection, table_name: str):
         conn.rollback()  # Revert any changes made to data.
 
 
+def delete_rows_by_id(conn: pymysql.Connection, table_name: str, row_ids: list):
+    """Delete rows from the specified table, one row at a time."""
+    logging.info(f"Removing rows from `{table_name}`")
+    with conn.cursor() as cursor:
+        query = f"DELETE FROM {table_name} WHERE id = %s"
+        for row_id in row_ids:
+            try:
+                cursor.execute(query, (row_id,))
+                conn.commit()
+                logging.info(f"   → Removed row {row_id}")
+            except pymysql.Error as err:
+                logging.error(f"   → Error removing row {row_id}: {err}")
+                conn.rollback()
+
+
 def insert_data(conn: pymysql.Connection, table_name: str, data_df: pd.DataFrame):
     """Adds data to the specified table, one row at a time.
 

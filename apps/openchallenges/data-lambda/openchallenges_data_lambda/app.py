@@ -104,13 +104,42 @@ def lambda_handler(event, context) -> dict:
         conn, table_name="challenge_input_data_type", data=edam_data_annotations
     )
     db_utils.update_table(conn, table_name="challenge_category", data=categories)
+
+    # Get the newly-updated `challenge_contribution` table before closing the connection for
+    # later comparison.
+    challenge_service_roles = db_utils.get_table(conn, "challenge_contribution")
     conn.close()
 
     # Update organization_service
     conn = db_utils.connect_to_db("organization_service")
     db_utils.update_table(conn, table_name="organization", data=organizations)
     db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
+    organization_service_roles = db_utils.get_table(conn, "challenge_contribution")
     conn.close()
+
+    # Identify rows that differ between the two tables, and remove as needed.
+    challenge_service_ids = set(challenge_service_roles["id"].tolist())
+    organization_service_ids = set(organization_service_roles["id"].tolist())
+    rows_to_remove_from_challenge_service = list(
+        challenge_service_ids - organization_service_ids
+    )
+    rows_to_remove_from_organization_service = list(
+        organization_service_ids - challenge_service_ids
+    )
+
+    if rows_to_remove_from_challenge_service:
+        conn = db_utils.connect_to_db()
+        db_utils.delete_rows_by_id(
+            conn, "challenge_contribution", rows_to_remove_from_challenge_service
+        )
+        conn.close()
+
+    if rows_to_remove_from_organization_service:
+        conn = db_utils.connect_to_db("organization_service")
+        db_utils.delete_rows_by_id(
+            conn, "challenge_contribution", rows_to_remove_from_organization_service
+        )
+        conn.close()
 
     logging.info("FIN. ✅")
     status_code = 200
