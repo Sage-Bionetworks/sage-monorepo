@@ -142,7 +142,7 @@ requires-dist = [
     { name = "gspread", specifier = "==6.1.4" },
     { name = "numpy", specifier = "==2.1.0" },
     { name = "pandas", specifier = "==2.2.3" },
-    { name = "pymysql", specifier = ">=1.1.1" },
+    { name = "pymysql", specifier = "==1.1.1" },
     { name = "requests", specifier = "==2.32.3" },
 ]
 

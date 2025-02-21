@@ -128,6 +128,10 @@ def lambda_handler(event, context) -> dict:
     )
 
     if rows_to_remove_from_challenge_service:
+        logging.warning(
+            f"Mismatch found in the `challenge_contribution` tables; removing extra rows from "
+            "the `challenge_service` database"
+        )
         conn = db_utils.connect_to_db()
         db_utils.delete_rows_by_id(
             conn, "challenge_contribution", rows_to_remove_from_challenge_service
@@ -135,6 +139,10 @@ def lambda_handler(event, context) -> dict:
         conn.close()
 
     if rows_to_remove_from_organization_service:
+        logging.warning(
+            f"Mismatch found in the `challenge_contribution` tables; removing extra rows from "
+            "the `organization_service` database"
+        )
         conn = db_utils.connect_to_db("organization_service")
         db_utils.delete_rows_by_id(
             conn, "challenge_contribution", rows_to_remove_from_organization_service
