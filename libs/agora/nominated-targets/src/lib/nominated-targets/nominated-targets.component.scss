@@ -1,8 +1,21 @@
 // Most of the table styling in styles.scss to avoid repeating
 // code
 
-.small-margin-left {
-  margin-left: 15px;
+.instructions {
+  display: flex;
+  flex-direction: row;
+
+  .search {
+    flex: 7;
+
+    .search-description {
+      margin-bottom: var(--spacing-lg);
+    }
+  }
+
+  .nominate {
+    flex: 5;
+  }
 }
 
 .search-box {

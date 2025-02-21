@@ -82,6 +82,7 @@
       min-height: 58px;
       padding: 15px;
       justify-content: center;
+      text-align: center;
       white-space: nowrap;
       background-color: #dadce1;
     }
@@ -126,10 +127,6 @@
     text-align: center;
     width: 230px;
   }
-
-  // &:not(.tooltip-nowrap) {
-  //   width: 250px;
-  // }
 
   &.p-tooltip-top {
     transform: translate(-50%, -100%);
