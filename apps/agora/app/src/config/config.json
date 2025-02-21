@@ -1,7 +1,7 @@
 {
   "apiDocsUrl": "http://localhost:8000/api-docs",
-  "appVersion": "4.0.0",
+  "appVersion": "edge",
   "csrApiUrl": "http://localhost:3333/v1",
   "ssrApiUrl": "http://agora-api:3333/v1",
-  "tagName": "agora/v4.0.0-rc1"
+  "tagName": "edge"
 }
