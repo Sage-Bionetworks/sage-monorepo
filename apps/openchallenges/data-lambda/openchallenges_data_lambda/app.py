@@ -93,7 +93,7 @@ def lambda_handler(event, context) -> dict:
         ],
     )
 
-    # Update challenge_service
+    # Update c`hallenge_service` tables
     conn = db_utils.connect_to_db()
     db_utils.update_table(conn, table_name="challenge_platform", data=platforms)
     db_utils.update_table(conn, table_name="challenge", data=challenges)
@@ -110,7 +110,7 @@ def lambda_handler(event, context) -> dict:
     challenge_service_roles = db_utils.get_table(conn, "challenge_contribution")
     conn.close()
 
-    # Update organization_service
+    # Update `organization_service` tables
     conn = db_utils.connect_to_db("organization_service")
     db_utils.update_table(conn, table_name="organization", data=organizations)
     db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
