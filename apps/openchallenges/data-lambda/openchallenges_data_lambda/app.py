@@ -34,7 +34,10 @@ def write_credentials_file(output_json):
 
 
 def lambda_handler(event, context) -> dict:
-    """Sample pure Lambda function
+    """Main function.
+
+    Pulls data from the OC Data Google sheet (https://shorturl.at/pf3Mr) and "syncs" the data
+    to the OpenChallenges database.
 
     Parameters
     ----------
