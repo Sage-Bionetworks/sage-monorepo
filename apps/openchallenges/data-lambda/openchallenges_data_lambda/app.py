@@ -1,17 +1,43 @@
 import os
 import json
+import logging
 
 import gspread
-import numpy as np
-import pandas as pd
+
+import db_utils
+import oc_data_sheet
 
 
 GOOGLE_SHEET_CREDENTIALS_FILE = "service_account.json"
 GOOGLE_SHEET_TITLE = "OpenChallenges Data"
 
 
-def lambda_handler(event, context):
-    """Sample pure Lambda function
+def write_credentials_file(output_json):
+    """Write credentials JSON file for Google Sheets API authentication."""
+    with open(output_json, "w") as out:
+        credentials = {
+            "type": os.getenv("TYPE"),
+            "project_id": os.getenv("PROJECT_ID"),
+            "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+            "private_key": os.getenv("PRIVATE_KEY", "")
+            .encode()
+            .decode("unicode_escape"),
+            "client_email": os.getenv("CLIENT_EMAIL"),
+            "client_id": os.getenv("CLIENT_ID"),
+            "auth_uri": os.getenv("AUTH_URI"),
+            "token_uri": os.getenv("TOKEN_URI"),
+            "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
+            "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
+            "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
+        }
+        out.write(json.dumps(credentials))
+
+
+def lambda_handler(event, context) -> dict:
+    """Main function.
+
+    Pulls data from the OC Data Google sheet (https://shorturl.at/pf3Mr) and "syncs" the data
+    to the OpenChallenges database.
 
     Parameters
     ----------
@@ -37,240 +63,101 @@ def lambda_handler(event, context):
     try:
         google_client = gspread.service_account(filename=GOOGLE_SHEET_CREDENTIALS_FILE)
     except Exception as err:
+        status_code = 401
         message = "Private key not found in the credentials file. Please try again."
     else:
         try:
             wks = google_client.open(GOOGLE_SHEET_TITLE)
 
-            platforms = get_platform_data(wks)
-            print(platforms.head())
+            platforms = oc_data_sheet.get_platform_data(wks)
+            platforms["avatar_url"] = (
+                ""  # FIXME: table has this column for some reason?
+            )
 
-            roles = get_roles(wks)
-            print(roles.head())
-
-            categories = get_challenge_categories(wks)
-            print(categories.head())
-
-            organizations = get_organization_data(wks)
-            print(organizations.head())
-
-            edam_data_annotations = get_edam_annotations(wks)
-            print(edam_data_annotations.head())
-
-            challenges, incentives, sub_types = get_challenge_data(wks)
-            print(challenges.head())
-            print(incentives.head())
-            print(sub_types.head())
-
-            message = "Data successfully pulled from OC Data google sheet."
-
+            roles = oc_data_sheet.get_roles(wks)
+            categories = oc_data_sheet.get_challenge_categories(wks)
+            organizations = oc_data_sheet.get_organization_data(wks)
+            edam_data_annotations = oc_data_sheet.get_edam_annotations(wks)
+            challenges, incentives, sub_types = oc_data_sheet.get_challenge_data(wks)
         except Exception as err:
+            status_code = 400
             message = f"Something went wrong with pulling the data: {err}."
+
+    # output logs to stdout and logfile
+    logging.basicConfig(
+        level=logging.DEBUG,
+        format="%(levelname)s | %(asctime)s | %(message)s",
+        handlers=[
+            logging.FileHandler("oc_database_update.log"),
+            logging.StreamHandler(),
+        ],
+    )
+
+    # Update c`hallenge_service` tables
+    conn = db_utils.connect_to_db()
+    db_utils.update_table(conn, table_name="challenge_platform", data=platforms)
+    db_utils.update_table(conn, table_name="challenge", data=challenges)
+    db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
+    db_utils.update_table(conn, table_name="challenge_incentive", data=incentives)
+    db_utils.update_table(conn, table_name="challenge_submission_type", data=sub_types)
+    db_utils.update_table(
+        conn, table_name="challenge_input_data_type", data=edam_data_annotations
+    )
+    db_utils.update_table(conn, table_name="challenge_category", data=categories)
+
+    # Get the newly-updated `challenge_contribution` table before closing the connection for
+    # later comparison.
+    challenge_service_roles = db_utils.get_table(conn, "challenge_contribution")
+    conn.close()
+
+    # Update `organization_service` tables
+    conn = db_utils.connect_to_db("organization_service")
+    db_utils.update_table(conn, table_name="organization", data=organizations)
+    db_utils.update_table(conn, table_name="challenge_contribution", data=roles)
+    organization_service_roles = db_utils.get_table(conn, "challenge_contribution")
+    conn.close()
+
+    # Identify rows that differ between the two tables, and remove as needed.
+    challenge_service_ids = set(challenge_service_roles["id"].tolist())
+    organization_service_ids = set(organization_service_roles["id"].tolist())
+    rows_to_remove_from_challenge_service = list(
+        challenge_service_ids - organization_service_ids
+    )
+    rows_to_remove_from_organization_service = list(
+        organization_service_ids - challenge_service_ids
+    )
+
+    if rows_to_remove_from_challenge_service:
+        logging.warning(
+            f"Mismatch found in the `challenge_contribution` tables; removing extra rows from "
+            "the `challenge_service` database"
+        )
+        conn = db_utils.connect_to_db()
+        db_utils.delete_rows_by_id(
+            conn, "challenge_contribution", rows_to_remove_from_challenge_service
+        )
+        conn.close()
+
+    if rows_to_remove_from_organization_service:
+        logging.warning(
+            f"Mismatch found in the `challenge_contribution` tables; removing extra rows from "
+            "the `organization_service` database"
+        )
+        conn = db_utils.connect_to_db("organization_service")
+        db_utils.delete_rows_by_id(
+            conn, "challenge_contribution", rows_to_remove_from_organization_service
+        )
+        conn.close()
+
+    logging.info("FIN. ✅")
+    status_code = 200
+    message = "Data from the OC Data Sheet successfully added to the database."
 
     data = {"message": message}
     return {
-        "statusCode": 200,
+        "statusCode": status_code,
         "body": json.dumps(data),
     }
-
-
-def write_credentials_file(output_json):
-    """Write credentials JSON file for Google Sheets API authentication."""
-    with open(output_json, "w") as out:
-        credentials = {
-            "type": os.getenv("TYPE"),
-            "project_id": os.getenv("PROJECT_ID"),
-            "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-            "private_key": os.getenv("PRIVATE_KEY").encode().decode("unicode_escape"),
-            "client_email": os.getenv("CLIENT_EMAIL"),
-            "client_id": os.getenv("CLIENT_ID"),
-            "auth_uri": os.getenv("AUTH_URI"),
-            "token_uri": os.getenv("TOKEN_URI"),
-            "auth_provider_x509_cert_url": os.getenv("AUTH_PROVIDER_X509_CERT_URL"),
-            "client_x509_cert_url": os.getenv("CLIENT_X509_CERT_URL"),
-            "universe_domain": os.getenv("UNIVERSE_DOMAIN"),
-        }
-        out.write(json.dumps(credentials))
-
-
-def get_challenge_data(wks, sheet_name="challenges"):
-    """Get challenges data and clean up as needed.
-
-    Output:
-        - challenges
-        - challenge incentives
-        - challenge submission types
-    """
-    df = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
-    df.loc[df._platform == "Other", "platform"] = "\\N"
-
-    challenges = df[
-        [
-            "id",
-            "slug",
-            "name",
-            "headline",
-            "description",
-            "avatar_url",
-            "website_url",
-            "status",
-            "platform",
-            "doi",
-            "start_date",
-            "end_date",
-            "operation_id",
-            "created_at",
-            "updated_at",
-        ]
-    ]
-    challenges = (
-        challenges.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
-        .replace(r"\n", " ", regex=True)
-        .replace("'", "''")
-        .replace("\u2019", "''", regex=True)  # replace curly right-quote
-        .replace("\u202f", " ", regex=True)  # replace narrow no-break space
-        .replace("\u2060", "", regex=True)  # remove word joiner
-    )
-    challenges["headline"] = (
-        challenges["headline"]
-        .astype(str)
-        .apply(lambda x: x[:76] + "..." if len(x) > 80 else x)
-    )
-    challenges["description"] = (
-        challenges["description"]
-        .astype(str)
-        .apply(lambda x: x[:995] + "..." if len(x) > 1000 else x)
-    )
-    challenges.loc[challenges.start_date == "", "start_date"] = "\\N"
-    challenges.loc[challenges.end_date == "", "end_date"] = "\\N"
-    challenges.loc[challenges.operation_id == "", "operation_id"] = "\\N"
-
-    incentives = pd.concat(
-        [
-            df[df.monetary_incentive == "TRUE"][["id", "created_at"]].assign(
-                incentives="monetary"
-            ),
-            df[df.publication_incentive == "TRUE"][["id", "created_at"]].assign(
-                incentives="publication"
-            ),
-            df[df.speaking_incentive == "TRUE"][["id", "created_at"]].assign(
-                incentives="speaking_engagement"
-            ),
-            df[df.other_incentive == "TRUE"][["id", "created_at"]].assign(
-                incentives="other"
-            ),
-        ]
-    ).rename(columns={"id": "challenge_id"})
-    incentives["incentives"] = pd.Categorical(
-        incentives["incentives"],
-        categories=["monetary", "publication", "speaking_engagement", "other"],
-    )
-    incentives = incentives.sort_values(["challenge_id", "incentives"])
-    incentives.index = np.arange(1, len(incentives) + 1)
-
-    sub_types = pd.concat(
-        [
-            df[df.file_submission == "TRUE"][["id", "created_at"]].assign(
-                submission_types="prediction_file"
-            ),
-            df[df.container_submission == "TRUE"][["id", "created_at"]].assign(
-                submission_types="container_image"
-            ),
-            df[df.notebook_submission == "TRUE"][["id", "created_at"]].assign(
-                submission_types="notebook"
-            ),
-            df[df.mlcube_submission == "TRUE"][["id", "created_at"]].assign(
-                submission_types="mlcube"
-            ),
-            df[df.other_submission == "TRUE"][["id", "created_at"]].assign(
-                submission_types="other"
-            ),
-        ]
-    ).rename(columns={"id": "challenge_id"})
-    sub_types["submission_types"] = pd.Categorical(
-        sub_types["submission_types"],
-        categories=[
-            "prediction_file",
-            "container_image",
-            "notebook",
-            "mlcube",
-            "other",
-        ],
-    )
-    sub_types = sub_types.sort_values(["challenge_id", "submission_types"])
-    sub_types.index = np.arange(1, len(sub_types) + 1)
-
-    return (
-        challenges,
-        incentives[["incentives", "challenge_id", "created_at"]],
-        sub_types[["submission_types", "challenge_id", "created_at"]],
-    )
-
-
-def get_challenge_categories(wks, sheet_name="challenge_category"):
-    """Get challenge categories."""
-    return pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")[
-        ["id", "challenge_id", "category"]
-    ]
-
-
-def get_platform_data(wks, sheet_name="platforms"):
-    """Get platform data and clean up as needed."""
-    platforms = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
-    return platforms[platforms._public == "TRUE"][
-        ["id", "slug", "name", "avatar_url", "website_url", "created_at", "updated_at"]
-    ]
-
-
-def get_organization_data(wks, sheet_name="organizations"):
-    """Get organization data and clean up as needed."""
-    organizations = pd.DataFrame(wks.worksheet(sheet_name).get_all_records()).fillna("")
-    organizations = organizations[organizations._public == "TRUE"][
-        [
-            "id",
-            "name",
-            "login",
-            "avatar_url",
-            "website_url",
-            "description",
-            "challenge_count",
-            "created_at",
-            "updated_at",
-            "acronym",
-        ]
-    ]
-    organizations = (
-        organizations.replace({r"\s+$": "", r"^\s+": ""}, regex=True)
-        .replace(r"\n", " ", regex=True)
-        .replace("'", "''")
-        .replace("\u2019", "''", regex=True)  # replace curly right-quote
-        .replace("\u202f", " ", regex=True)  # replace narrow no-break space
-        .replace("\u2060", "", regex=True)  # remove word joiner
-    )
-    organizations["description"] = (
-        organizations["description"]
-        .astype(str)
-        .apply(lambda x: x[:995] + "..." if len(x) > 1000 else x)
-    )
-    return organizations
-
-
-def get_roles(wks, sheet_name="contribution_role"):
-    """Get data on organization's role(s) in challenges."""
-    return (
-        pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
-        .fillna("")
-        .drop(["_challenge", "_organization"], axis=1)
-    )
-
-
-def get_edam_annotations(wks, sheet_name="challenge_data"):
-    """Get data on challenge's EDAM annotations."""
-    return (
-        pd.DataFrame(wks.worksheet(sheet_name).get_all_records())
-        .fillna("")
-        .drop(["_challenge", "_edam_name"], axis=1)
-    )
 
 
 if __name__ == "__main__":
