@@ -39,6 +39,14 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
+        # TODO: Identify the projects that actually need to be prepared. Here I'm not expecting any
+        # affected project since this workflow does not affect projects. For now I'm keeping the
+        # same behavior as before this change.
+      - name: Prepare the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && workspace-install-affected"
+
       - name: Build the Docker images for the specified product
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
