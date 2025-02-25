@@ -1,9 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, ParamMap, RouterLink } from '@angular/router';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
-import { GeneService, HelperService } from '@sagebionetworks/agora/services';
-import { GeneTableComponent } from '../gene-table/gene-table.component';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
+import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { GeneTableComponent } from '../gene-table/gene-table.component';
 
 interface TableColumn {
   field: string;
@@ -15,14 +15,14 @@ interface TableColumn {
   selector: 'agora-gene-similar',
   standalone: true,
   imports: [ModalLinkComponent, GeneTableComponent, RouterLink, SvgIconComponent],
-  providers: [GeneService],
+  providers: [GenesService],
   templateUrl: './gene-similar.component.html',
   styleUrls: ['./gene-similar.component.scss'],
 })
 export class GeneSimilarComponent implements OnInit {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  geneService = inject(GeneService);
+  geneService = inject(GenesService);
   helperService = inject(HelperService);
 
   gene: Gene = {} as Gene;
@@ -79,12 +79,12 @@ export class GeneSimilarComponent implements OnInit {
       return;
     }
 
-    const ids: any = [];
-    this.gene.similar_genes_network.nodes.forEach((obj: any) => {
-      ids.push(obj.ensembl_gene_id);
+    const ids_array: string[] = [];
+    this.gene.similar_genes_network.nodes.forEach((obj) => {
+      ids_array.push(obj.ensembl_gene_id);
     });
 
-    this.geneService.getGenes(ids).subscribe((genes) => {
+    this.geneService.getGenes(ids_array.join(',')).subscribe((genes) => {
       genes.forEach((de: Gene) => {
         // Populate display fields & set default values
         de.is_any_rna_changed_in_ad_brain_display_value = de.rna_brain_change_studied
