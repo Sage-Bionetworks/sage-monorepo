@@ -37,6 +37,11 @@ jobs:
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
 
+      - name: Prepare the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && workspace-install-affected"
+
       - name: Lint the affected projects
         run: |
           devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
@@ -102,6 +107,11 @@ jobs:
 
       - name: Set up the dev container
         uses: ./.github/actions/setup-dev-container
+
+      - name: Prepare the affected projects
+        run: |
+          devcontainer exec --workspace-folder ../sage-monorepo bash -c ". ./dev-env.sh \
+            && workspace-install-affected"
 
       - name: Lint the affected projects
         run: |
