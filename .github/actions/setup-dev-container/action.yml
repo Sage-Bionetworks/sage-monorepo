@@ -92,4 +92,4 @@ runs:
           . ./dev-env.sh && nx show projects --affected --sep ','")
         echo "Affected projects: $AFFECTED_PROJECTS"
         echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_ENV
-        echo "::set-output name=affected_projects::$AFFECTED_PROJECTS"
+        echo "affected_projects=$AFFECTED_PROJECTS" >> $GITHUB_OUTPUT
