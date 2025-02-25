@@ -17,17 +17,17 @@
 </div>
 
 <div class="section">
-  <div class="section-inner pb-lg">
+  <div class="section-inner">
     <div class="container-sm">
       <div class="row">
         <div class="instructions">
           <div class="search">
             <div class="search-description">
               <p>
-                <b>
+                <strong>
                   Search for or select any gene from the nominated target list to view the evidence
                   that led to its nomination
-                </b>
+                </strong>
               </p>
               <agora-modal-link
                 text="Learn more about Nominated Targets "
@@ -56,7 +56,8 @@
             <p>Would you like to add to this list?</p>
             <p-button
               label="Nominate a target"
-              styleClass="btn-rounded btn-primary"
+              [rounded]="true"
+              size="small"
               [routerLink]="['/nomination-form']"
             ></p-button>
           </div>

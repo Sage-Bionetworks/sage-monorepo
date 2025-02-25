@@ -1,25 +1,7 @@
 @use 'sass:map';
-@use '@angular/material' as mat;
 @use 'libs/agora/themes/src/fonts' as fonts;
 @use 'libs/agora/themes/src/palettes' as palettes;
 @use 'libs/agora/themes/src/index' as agora;
-@include mat.typography-hierarchy(fonts.$lato);
-@include mat.elevation-classes;
-@include mat.app-background;
-
-$primary: mat.m2-define-palette(palettes.$dark-blue-palette, 600);
-$accent: mat.m2-define-palette(palettes.$accent-purple-palette, 400);
-$theme: mat.m2-define-light-theme(
-  (
-    color: (
-      primary: $primary,
-      accent: $accent,
-    ),
-    typography: fonts.$lato,
-    density: 0,
-    is-dark: false,
-  )
-);
 
 // Add custom palettes used in figma to the theme
 $theme: map.deep-merge(
@@ -30,13 +12,6 @@ $theme: map.deep-merge(
     ),
   )
 );
-
-// Emit theme-dependent styles for common features used across multiple components.
-@include mat.elevation-classes;
-@include mat.app-background;
-
-// Emit styles for MatButton based on `$theme`.
-@include mat.button-theme($theme);
 
 // Include the theme mixins for other components you use here.
 @include agora.theme($theme);
