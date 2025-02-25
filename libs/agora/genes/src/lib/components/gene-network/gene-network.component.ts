@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, ViewEncapsulation, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import {
   Gene,
   GenesService,
@@ -18,7 +20,7 @@ import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'agora-gene-network',
-  imports: [CommonModule, NetworkChartComponent, TooltipModule],
+  imports: [CommonModule, FontAwesomeModule, NetworkChartComponent, TooltipModule],
   providers: [GenesService],
   templateUrl: './gene-network.component.html',
   styleUrls: ['./gene-network.component.scss'],
@@ -43,6 +45,8 @@ export class GeneNetworkComponent {
 
   filters: number[] = [];
   selectedFilter = 1;
+
+  faAngleRight = faAngleRight;
 
   init() {
     if (!this._gene?.similar_genes_network?.nodes?.length) {
@@ -87,7 +91,7 @@ export class GeneNetworkComponent {
   }
 
   onNodeClick(node: NetworkChartNode) {
-    this.geneService.getGene(node.id).subscribe((gene: any) => {
+    this.geneService.getGene(node.id).subscribe((gene) => {
       this.selectedGene = gene;
     });
   }
