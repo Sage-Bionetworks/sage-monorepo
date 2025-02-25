@@ -7,7 +7,7 @@ inputs:
     default: 'ubuntu'
 outputs:
   affected_projects:
-    description: 'The list of affected Nx projects.'
+    description: 'The list of affected Nx projects as a comma separated string.'
     value: ${{ steps.get-affected-projects.outputs.affected_projects }}
 runs:
   using: 'composite'
