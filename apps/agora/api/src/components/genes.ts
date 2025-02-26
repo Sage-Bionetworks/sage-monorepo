@@ -20,7 +20,7 @@ import {
 } from '.';
 import { altCache, cache, setHeaders } from '../helpers';
 import { Gene, GeneCollection } from '../models';
-import { getSimilarGenesNetwork } from './similar_genes_network';
+import { getSimilarGenesNetwork } from './similar-genes-network';
 
 // -------------------------------------------------------------------------- //
 // Functions
