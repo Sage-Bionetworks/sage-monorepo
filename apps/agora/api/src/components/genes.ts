@@ -1,25 +1,26 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders, cache, altCache } from '../helpers';
-import { Gene, GeneCollection } from '../models';
 import {
-  getRnaDifferentialExpression,
+  getBioDomains,
+  getExperimentalValidation,
+  getGeneLinks,
+  getMetabolomics,
+  getNeuropathologicCorrelations,
+  getOverallScores,
   getProteomicsLFQ,
   getProteomicsSRM,
   getProteomicsTMT,
-  getMetabolomics,
-  getExperimentalValidation,
-  getNeuropathologicCorrelations,
-  getOverallScores,
-  getGeneLinks,
-  getBioDomains,
+  getRnaDifferentialExpression,
 } from '.';
+import { altCache, cache, setHeaders } from '../helpers';
+import { Gene, GeneCollection } from '../models';
+import { getSimilarGenesNetwork } from './similar-genes-network';
 
 // -------------------------------------------------------------------------- //
 // Functions
@@ -38,12 +39,12 @@ export async function getAllGenes() {
   return result;
 }
 
-export async function getGenes(ids?: string | string[]) {
+export async function getGenes(ids?: string) {
   const genes: Gene[] = await getAllGenes();
 
   if (ids) {
-    ids = typeof ids == 'string' ? ids.split(',') : ids;
-    return genes.filter((g: Gene) => ids?.includes(g.ensembl_gene_id));
+    const ids_array = ids.split(',');
+    return genes.filter((g: Gene) => ids_array.includes(g.ensembl_gene_id));
   }
 
   return genes;
@@ -80,6 +81,7 @@ export async function getGene(ensg: string) {
     result.experimental_validation = await getExperimentalValidation(ensg);
     result.links = await getGeneLinks(ensg);
     result.bio_domains = await getBioDomains(ensg);
+    result.similar_genes_network = getSimilarGenesNetwork(result);
   }
 
   cache.set(cacheKey, result);
@@ -162,7 +164,7 @@ export async function genesRoute(req: Request, res: Response, next: NextFunction
   }
 
   try {
-    const result = await getGenes(<string | string[]>req.query.ids);
+    const result = await getGenes(<string>req.query.ids);
     setHeaders(res);
     res.json(result);
   } catch (err) {

@@ -1,25 +1,30 @@
 /* stylelint-disable no-duplicate-selectors */
 @use 'sass:map';
 
+$sm-breakpoint: 600px;
+$md-breakpoint: 768px;
+$lg-breakpoint: 992px;
+$xl-breakpoint: 1200px;
+
 // -------------------------------------------------------------------------- //
 // Legacy
 // -------------------------------------------------------------------------- //
 
 $breakpoints: (
   'ex-small': (
-    max-width: 600px,
+    max-width: $sm-breakpoint,
   ),
   'small': (
-    min-width: 600px,
+    min-width: $sm-breakpoint,
   ),
   'medium': (
-    min-width: 768px,
+    min-width: $md-breakpoint,
   ),
   'large': (
-    min-width: 992px,
+    min-width: $lg-breakpoint,
   ),
   'ex-large': (
-    min-width: 1200px,
+    min-width: $xl-breakpoint,
   ),
 );
 
