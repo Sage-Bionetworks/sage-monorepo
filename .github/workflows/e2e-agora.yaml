@@ -13,7 +13,7 @@ jobs:
     if: ${{ github.ref_name == 'main' || github.actor == github.repository_owner }}
     runs-on: ubuntu-22.04
     outputs:
-      agora_affected: ${{ steps.agora_affected.outputs.AFFECTED }}
+      agora_affected: ${{ steps.agora_affected.outputs.affected }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -41,17 +41,22 @@ jobs:
           IFS=',' read -ra PROJECTS <<< "${{ steps.setup-dev-container.outputs.affected_projects }}"
           for project in "${PROJECTS[@]}"; do
             if [[ "$project" == agora-* ]]; then
-              echo "AFFECTED=true" >> "${GITHUB_OUTPUT}"
+              echo "affected=true" >> "${GITHUB_OUTPUT}"
               exit 0
             fi
           done
-          echo "AFFECTED=false" >> "${GITHUB_OUTPUT}"
+          echo "affected=false" >> "${GITHUB_OUTPUT}"
 
       - name: Remove the dev container
         run: docker rm -f sage_devcontainer
+
   run-agora-e2e-tests:
     needs: check-agora-affected
     if: needs.check-agora-affected.outputs.agora_affected == 'true'
+    # The agora and agora-pr environments contain the same secrets. However, the agora environment
+    # will run workflows automatically and should only be used when the workflow is running against
+    # trusted code. The agora-pr environment requires an authorized user's approval to run the
+    # workflow, so should be used when running against untrused code, e.g. PRs from forked repos.
     environment: ${{ github.event_name == 'pull_request_target' &&
       github.event.pull_request.head.repo.full_name != github.repository && 'agora-pr' || 'agora' }}
     timeout-minutes: 60
