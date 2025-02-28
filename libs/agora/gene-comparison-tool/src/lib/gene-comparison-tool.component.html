@@ -106,11 +106,11 @@
               <div class="gct-controls-right-top">
                 <div class="gct-category-selector">
                   <div>
-                    <p-dropdown
+                    <p-select
                       [options]="categories"
                       [(ngModel)]="category"
                       (onChange)="onCategoryChange()"
-                    ></p-dropdown>
+                    ></p-select>
                   </div>
                   <div>
                     <agora-overlay-panel-link
@@ -227,12 +227,12 @@
               <div class="gct-controls-right-bottom">
                 <div class="gct-filter-label">{{ subCategoryLabel }}</div>
                 <div class="gct-sub-category-selector">
-                  <p-dropdown
+                  <p-select
                     id="subCategory"
                     [options]="subCategories"
                     [(ngModel)]="subCategory"
                     (onChange)="onSubCategoryChange()"
-                  ></p-dropdown>
+                  ></p-select>
                 </div>
               </div>
             </div>

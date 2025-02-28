@@ -47,9 +47,9 @@ import { GeneComparisonToolScorePanelComponent } from './components/gene-compari
 import { FormsModule } from '@angular/forms';
 import { OverlayPanelLinkComponent } from '@sagebionetworks/agora/genes';
 import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
-import { DropdownModule } from 'primeng/dropdown';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { SelectModule } from 'primeng/select';
 import { GeneComparisonToolFilterListComponent } from './components/gene-comparison-tool-filter-list/gene-comparison-tool-filter-list.component';
 import { GeneComparisonToolHowToPanelComponent } from './components/gene-comparison-tool-how-to-panel/gene-comparison-tool-how-to-panel.component';
 import { GeneComparisonToolLegendPanelComponent } from './components/gene-comparison-tool-legend-panel/gene-comparison-tool-legend-panel.component';
@@ -63,7 +63,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     RouterModule,
     TableModule,
     TooltipModule,
-    DropdownModule,
+    SelectModule,
     InputSwitchModule,
     OverlayPanelLinkComponent,
     OverlayPanelModule,

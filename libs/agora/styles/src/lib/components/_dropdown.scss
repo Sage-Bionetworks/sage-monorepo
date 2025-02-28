@@ -1,10 +1,10 @@
-div.p-dropdown {
+div.p-select {
   display: flex;
   padding: 12px 20px 12px 30px;
   background-color: var(--color-gray-100);
   border: 1px solid var(--color-gray-300);
 
-  .p-dropdown-panel {
+  .p-select-list-container {
     border: 1px solid var(--color-gray-300);
     background-color: #fff;
     border-radius: 0 0 5px 5px;
@@ -20,12 +20,12 @@ div.p-dropdown {
     }
   }
 
-  .p-dropdown-trigger {
+  .p-select-dropdown {
     margin-left: 30px;
   }
 
   &:hover {
-    .p-dropdown-trigger-icon {
+    .p-select-dropdown-icon {
       color: var(--color-action-primary);
     }
   }
