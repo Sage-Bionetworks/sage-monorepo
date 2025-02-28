@@ -1,6 +1,6 @@
-<button type="button" class="btn btn-rounded btn-primary" (click)="op.toggle($event)">
+<p-button type="button" rounded="true" size="small" (click)="op.toggle($event)">
   <fa-icon [icon]="downloadIcon"></fa-icon>
-</button>
+</p-button>
 <p-overlayPanel
   #op
   styleClass="download-dom-image-panel"
@@ -11,24 +11,18 @@
     {{ heading }}
   </div>
   <div class="download-dom-image-body">
-    <div *ngFor="let type of types">
-      <p-radioButton
+    <div class="download-dom-image-option" *ngFor="let type of types">
+      <p-radiobutton
         value="{{ type.value }}"
-        inputId="download-radio"
+        inputId="download-radio-{{ type.label }}"
         [(ngModel)]="selectedType"
-      ></p-radioButton>
-      <label for="download-radio">{{ type.label }}</label>
+      ></p-radiobutton>
+      <label for="download-radio-{{ type.label }}">{{ type.label }}</label>
     </div>
     <div>
-      <button
-        pButton
-        type="button"
-        label="Download"
-        class="btn-rounded btn-primary"
-        (click)="download()"
-      >
+      <p-button label="Download" rounded="true" size="small" (click)="download()">
         <fa-icon *ngIf="isLoading" [icon]="spinnerIcon" animation="spin"></fa-icon>
-      </button>
+      </p-button>
       <div *ngIf="error" class="download-dom-image-error">{{ error }}</div>
     </div>
   </div>

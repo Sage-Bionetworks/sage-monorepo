@@ -8,7 +8,7 @@
             class="gene-details-nav-scroll gene-details-nav-scroll-prev"
             (click)="slideNavigation(-1)"
           >
-            <i class="fa-solid fa-angle-left"></i>
+            <fa-icon [icon]="faAngleLeft"></fa-icon>
           </button>
         }
         <div class="gene-details-nav-container">
@@ -54,7 +54,7 @@
             class="gene-details-nav-scroll gene-details-nav-scroll-next"
             (click)="slideNavigation(1)"
           >
-            <i class="fa-solid fa-angle-right"></i>
+            <fa-icon [icon]="faAngleRight"></fa-icon>
           </button>
         }
       </div>

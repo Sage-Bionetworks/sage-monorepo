@@ -1,14 +1,16 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { CookieService } from 'ngx-cookie-service';
+import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
+import { CookieService } from 'ngx-cookie-service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
 
 // -------------------------------------------------------------------------- //
 // Internal
@@ -25,7 +27,14 @@ interface Pane {
 // -------------------------------------------------------------------------- //
 @Component({
   selector: 'agora-gene-comparison-tool-how-to-panel',
-  imports: [CommonModule, FormsModule, CheckboxModule, DialogModule, LoadingIconComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CheckboxModule,
+    DialogModule,
+    FontAwesomeModule,
+    LoadingIconComponent,
+  ],
   providers: [CookieService],
   templateUrl: './gene-comparison-tool-how-to-panel.component.html',
   styleUrls: ['./gene-comparison-tool-how-to-panel.component.scss'],
@@ -38,6 +47,8 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
   isActive = false;
   willHide = false;
   willHideCookieName = 'gct_hide_how_to';
+  faAngleRight = faAngleRight;
+  faAngleLeft = faAngleLeft;
 
   panes: Pane[] = [
     {

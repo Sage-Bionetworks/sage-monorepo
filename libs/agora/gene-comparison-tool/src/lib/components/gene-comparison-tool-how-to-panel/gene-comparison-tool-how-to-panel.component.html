@@ -28,12 +28,12 @@
     <div>
       @if (activePane > 0) {
         <button class="gct-how-to-panel-previous" (click)="previous()">
-          <i class="fa-solid fa-angle-left"></i> Back
+          <fa-icon [icon]="faAngleLeft"></fa-icon> Back
         </button>
       }
       @if (activePane !== panes.length - 1) {
         <button class="gct-how-to-panel-next" (click)="next()">
-          Next <i class="fa-solid fa-angle-right"></i>
+          Next <fa-icon [icon]="faAngleRight"></fa-icon>
         </button>
       }
       @if (activePane === panes.length - 1) {

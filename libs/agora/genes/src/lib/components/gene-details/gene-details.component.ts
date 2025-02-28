@@ -1,25 +1,27 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
+import { CommonModule, Location } from '@angular/common';
 import {
-  Component,
-  OnInit,
+  AfterViewChecked,
   AfterViewInit,
+  Component,
   HostListener,
   inject,
-  AfterViewChecked,
+  OnInit,
 } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { CommonModule, Location } from '@angular/common';
 
-import { HelperService } from '@sagebionetworks/agora/services';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
-import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
-import { GeneHeroComponent } from '../gene-hero/gene-hero.component';
-import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
-import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
-import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
+import { HelperService } from '@sagebionetworks/agora/services';
 import { GeneEvidenceMetabolomicsComponent } from '../gene-evidence-metabolomics/gene-evidence-metabolomics.component';
+import { GeneEvidenceProteomicsComponent } from '../gene-evidence-proteomics/gene-evidence-proteomics.component';
+import { GeneEvidenceRnaComponent } from '../gene-evidence-rna/gene-evidence-rna.component';
 import { ExperimentalValidationComponent } from '../gene-experimental-validation/gene-experimental-validation.component';
+import { GeneHeroComponent } from '../gene-hero/gene-hero.component';
 import { GeneNominationsComponent } from '../gene-nominations/gene-nominations.component';
+import { GeneResourcesComponent } from '../gene-resources/gene-resources.component';
+import { GeneSoeComponent } from '../gene-soe/gene-soe.component';
 
 interface Panel {
   name: string;
@@ -40,6 +42,7 @@ interface Panel {
     ExperimentalValidationComponent,
     GeneNominationsComponent,
     GeneResourcesComponent,
+    FontAwesomeModule,
   ],
   providers: [HelperService, GenesService],
   templateUrl: './gene-details.component.html',
@@ -51,6 +54,9 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   location = inject(Location);
   helperService = inject(HelperService);
   geneService = inject(GenesService);
+
+  faAngleRight = faAngleRight;
+  faAngleLeft = faAngleLeft;
 
   gene: Gene | undefined;
 

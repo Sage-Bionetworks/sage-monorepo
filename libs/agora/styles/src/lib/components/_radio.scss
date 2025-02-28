@@ -50,6 +50,10 @@ p-radiobutton {
     }
   }
 
+  /* 
+    In PrimeNG v19, the radiobutton label does not have this class and is not a child of p-radiobutton, 
+    so this style does not apply to the label. TODO: move this style into the preset.
+  */
   .p-radiobutton-label {
     font-size: 16px;
     color: var(--color-text);
