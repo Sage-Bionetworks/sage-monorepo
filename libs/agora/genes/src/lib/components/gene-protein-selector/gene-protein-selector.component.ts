@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 interface Option {
   name: string;
@@ -9,7 +9,7 @@ interface Option {
 
 @Component({
   selector: 'agora-gene-protein-selector',
-  imports: [FormsModule, DropdownModule],
+  imports: [FormsModule, SelectModule],
   templateUrl: './gene-protein-selector.component.html',
   styleUrls: ['./gene-protein-selector.component.scss'],
 })

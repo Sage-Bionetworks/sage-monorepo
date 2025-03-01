@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { removeParenthesis } from '@sagebionetworks/agora/util';
-import { DropdownModule } from 'primeng/dropdown';
+import { SelectModule } from 'primeng/select';
 
 interface Option {
   name: string;
@@ -11,7 +11,7 @@ interface Option {
 
 @Component({
   selector: 'agora-gene-model-selector',
-  imports: [FormsModule, DropdownModule],
+  imports: [FormsModule, SelectModule],
   templateUrl: './gene-model-selector.component.html',
   styleUrls: ['./gene-model-selector.component.scss'],
 })

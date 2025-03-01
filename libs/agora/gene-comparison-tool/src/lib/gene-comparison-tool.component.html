@@ -8,9 +8,10 @@
     <div class="gct-header">
       <div class="gct-header-inner">
         <div class="gct-header-left">
-          <button
-            class="btn btn-rounded btn-primary"
+          <p-button
             (click)="filterPanel.toggle()"
+            size="small"
+            rounded="true"
             pTooltip="Filter genes by Nominations, Teams, Cohort, and more"
             tooltipPosition="right"
             tooltipStyleClass="tooltip"
@@ -28,21 +29,23 @@
               />
             </svg>
             Filter Genes
-          </button>
+          </p-button>
         </div>
         <div class="gct-header-middle">
           <h1 class="gct-heading h2">Gene Comparison Tool</h1>
         </div>
         <div class="gct-header-right">
-          <button
-            class="btn btn-rounded btn-outlined-primary"
+          <p-button
+            size="small"
+            rounded="true"
+            variant="outlined"
             (click)="copyUrl()"
             pTooltip="Copy the URL that captures the table's current filters, sorting, and pinned genes"
             tooltipPosition="left"
             tooltipStyleClass="tooltip"
           >
             Share URL
-          </button>
+          </p-button>
         </div>
       </div>
     </div>
@@ -103,11 +106,11 @@
               <div class="gct-controls-right-top">
                 <div class="gct-category-selector">
                   <div>
-                    <p-dropdown
+                    <p-select
                       [options]="categories"
                       [(ngModel)]="category"
                       (onChange)="onCategoryChange()"
-                    ></p-dropdown>
+                    ></p-select>
                   </div>
                   <div>
                     <agora-overlay-panel-link
@@ -224,12 +227,12 @@
               <div class="gct-controls-right-bottom">
                 <div class="gct-filter-label">{{ subCategoryLabel }}</div>
                 <div class="gct-sub-category-selector">
-                  <p-dropdown
+                  <p-select
                     id="subCategory"
                     [options]="subCategories"
                     [(ngModel)]="subCategory"
                     (onChange)="onSubCategoryChange()"
-                  ></p-dropdown>
+                  ></p-select>
                 </div>
               </div>
             </div>
