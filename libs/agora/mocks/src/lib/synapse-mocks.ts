@@ -1,4 +1,4 @@
-import { SynapseWiki } from '../../../services/src/models';
+import { SynapseWiki } from '@sagebionetworks/agora/models';
 
 export const synapseWikiMock: SynapseWiki = {
   id: '612058',
