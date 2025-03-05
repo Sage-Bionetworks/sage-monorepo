@@ -298,12 +298,18 @@ p-inputswitch.ng-dirty.ng-invalid > .p-inputswitch {
   border-color: #e24c4c;
 }
 
-.overlay-panel {
+.popover {
   max-width: 425px;
   background: #fff;
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
 
-  .p-overlaypanel-content {
+  .p-popover-content {
     padding: 40px;
   }
+}
+
+/* Remove primeng popover arrow */
+.p-popover::before,
+.p-popover::after {
+  display: none;
 }

@@ -1,4 +1,4 @@
-import { SynapseWiki } from '../models';
+import { SynapseWiki } from '../../../services/src/models';
 
 export const synapseWikiMock: SynapseWiki = {
   id: '612058',

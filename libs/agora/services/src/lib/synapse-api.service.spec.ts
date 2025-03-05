@@ -9,7 +9,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 // Internal
 // -------------------------------------------------------------------------- //
 import { SynapseApiService } from './synapse-api.service';
-import { synapseWikiMock } from '../testing';
+import { synapseWikiMock } from '@sagebionetworks/agora/mocks';
 import { provideHttpClient } from '@angular/common/http';
 
 // -------------------------------------------------------------------------- //
