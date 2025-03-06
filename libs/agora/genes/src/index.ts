@@ -1,6 +1,5 @@
 export * from './lib/components/gene-biodomains/gene-biodomains.component';
 export * from './lib/components/gene-details/gene-details.routes';
-export * from './lib/components/gene-druggability/gene-druggability.component';
 export * from './lib/components/gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 export * from './lib/components/gene-evidence-proteomics/gene-evidence-proteomics.component';
 export * from './lib/components/gene-evidence-rna/gene-evidence-rna.component';
@@ -13,9 +12,9 @@ export * from './lib/components/gene-protein-selector/gene-protein-selector.comp
 export * from './lib/components/gene-resources/gene-resources.component';
 export * from './lib/components/gene-search/gene-search.component';
 export * from './lib/components/gene-similar/gene-similar.routes';
-export * from './lib/components/gene-soe/gene-soe.component';
 export * from './lib/components/gene-soe-charts/gene-soe-charts.component';
 export * from './lib/components/gene-soe-list/gene-soe-list.component';
+export * from './lib/components/gene-soe/gene-soe.component';
 export * from './lib/components/gene-table/gene-table.component';
 
 export * from './lib/components/download-dom-image/download-dom-image.component';
