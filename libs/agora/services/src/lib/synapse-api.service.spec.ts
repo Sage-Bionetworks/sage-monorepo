@@ -2,15 +2,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { SynapseApiService } from './synapse-api.service';
-import { synapseWikiMock } from '@sagebionetworks/agora/mocks';
 import { provideHttpClient } from '@angular/common/http';
+import { synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { SynapseApiService } from './synapse-api.service';
 
 // -------------------------------------------------------------------------- //
 // Tests

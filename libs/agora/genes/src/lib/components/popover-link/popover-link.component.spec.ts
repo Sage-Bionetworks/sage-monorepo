@@ -1,5 +1,5 @@
-import { synapseWikiMock } from '@sagebionetworks/agora/mocks';
 import { SynapseApiService } from '@sagebionetworks/agora/services';
+import { synapseWikiMock } from '@sagebionetworks/agora/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { ButtonModule } from 'primeng/button';

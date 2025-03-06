@@ -2,12 +2,12 @@
 
 import {
   Team,
-  TeamsList as TeamsResponse,
   TeamMember,
+  TeamsList as TeamsResponse,
 } from '@sagebionetworks/agora/api-client-angular';
 
 export const mockTeamMember: TeamMember = {
-  isPrimaryInvestigator: true,
+  isprimaryinvestigator: true,
   name: 'Philip De Jager',
   url: 'http://www.cumc.columbia.edu/dept/taub/faculty-dejager.html',
 };

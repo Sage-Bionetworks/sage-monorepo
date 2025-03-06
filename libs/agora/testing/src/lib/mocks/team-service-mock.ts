@@ -11,9 +11,9 @@ export class MockTeamService extends TeamsService {
       program: 'Test Program',
       description: 'Test Description',
       members: [
-        { name: 'John Doe', isPrimaryInvestigator: true },
-        { name: 'Jane Smith', isPrimaryInvestigator: false },
-        { name: 'Alice Johnson', isPrimaryInvestigator: true },
+        { name: 'John Doe', isprimaryinvestigator: true },
+        { name: 'Jane Smith', isprimaryinvestigator: false },
+        { name: 'Alice Johnson', isprimaryinvestigator: true },
       ],
     });
   }
