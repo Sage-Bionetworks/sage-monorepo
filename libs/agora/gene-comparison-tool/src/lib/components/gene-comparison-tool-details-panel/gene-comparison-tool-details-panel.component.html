@@ -81,9 +81,9 @@
     </div>
   }
 </ng-template>
-<p-overlayPanel class="gct-details-panel" appendTo="">
+<p-popover class="gct-details-panel" appendTo="">
   <ng-container *ngTemplateOutlet="panelTemplate; context: { $implicit: _data[0] }"></ng-container>
-</p-overlayPanel>
-<p-overlayPanel class="gct-details-panel" appendTo="">
+</p-popover>
+<p-popover class="gct-details-panel" appendTo="">
   <ng-container *ngTemplateOutlet="panelTemplate; context: { $implicit: _data[1] }"></ng-container>
-</p-overlayPanel>
+</p-popover>

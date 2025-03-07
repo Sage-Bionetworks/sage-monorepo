@@ -1,8 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
-import Lara from '@primeng/themes/lara';
 import { definePreset } from '@primeng/themes';
+import Lara from '@primeng/themes/lara';
+import { providePrimeNG } from 'primeng/config';
 
 export const MyPreset = definePreset(Lara, {
   primitive: {
@@ -3757,7 +3757,7 @@ export const MyPreset = definePreset(Lara, {
         background: '{overlay.popover.background}',
         borderColor: '{overlay.popover.border.color}',
         color: '{overlay.popover.color}',
-        borderRadius: '{overlay.popover.border.radius}',
+        borderRadius: '0px',
         shadow: '{overlay.popover.shadow}',
         gutter: '10px',
         arrowOffset: '1.25rem',

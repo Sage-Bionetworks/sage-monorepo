@@ -6,6 +6,12 @@ agora-popover-link,
   display: inline-block;
 }
 
+.popover-link-content {
+  max-width: 425px;
+  padding: 20px;
+  background: #fff;
+}
+
 .popover-link-inner {
   display: flex;
 }

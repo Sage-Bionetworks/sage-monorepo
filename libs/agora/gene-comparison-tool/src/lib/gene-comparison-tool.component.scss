@@ -1,7 +1,7 @@
 /* stylelint-disable no-descending-specificity */
 
-@import 'libs/agora/styles/src/lib/variables';
-@import 'libs/agora/styles/src/lib/mixins';
+@use 'libs/agora/styles/src/lib/variables';
+@use 'libs/agora/styles/src/lib/mixins';
 
 #loading {
   position: absolute;
@@ -31,7 +31,7 @@
 }
 
 .gct {
-  @include container(lg);
+  @include mixins.container(lg);
 
   color: var(--color-text);
   margin: 0 auto;
@@ -100,7 +100,7 @@
   }
 
   button {
-    @include reset-button;
+    @include mixins.reset-button;
   }
 }
 
@@ -156,7 +156,7 @@
 
           li {
             padding: 5px 15px;
-            transition: $transition-duration;
+            transition: variables.$transition-duration;
 
             span {
               white-space: nowrap;
@@ -288,7 +288,7 @@
       border: 1px solid var(--color-gray-300);
       padding: 12px 40px 12px 34px;
       width: 100%;
-      transition: $transition-duration;
+      transition: variables.$transition-duration;
       box-sizing: border-box;
       font-size: var(--font-size-xs);
       outline: none;
@@ -307,7 +307,7 @@
       cursor: pointer;
 
       svg path {
-        transition: $transition-duration;
+        transition: variables.$transition-duration;
       }
 
       &:hover {
@@ -458,7 +458,7 @@
     .p-paginator-icon {
       color: var(--color-action-primary);
       cursor: pointer;
-      transition: $transition-duration;
+      transition: variables.$transition-duration;
     }
 
     .p-link.p-disabled {
@@ -476,7 +476,7 @@
     align-items: stretch;
     flex: 1;
     background-color: transparent;
-    transition: $transition-duration;
+    transition: variables.$transition-duration;
     padding: 6px 15px 6px 7px;
     margin-right: 0;
     font-size: var(--font-size-md);
@@ -541,7 +541,7 @@
     z-index: 100;
     border: 1px solid transparent;
     cursor: pointer;
-    transition: $transition-duration;
+    transition: variables.$transition-duration;
 
     > span {
       display: block;
@@ -552,7 +552,7 @@
       opacity: 0;
       visibility: hidden;
       background-color: transparent;
-      transition: $transition-duration;
+      transition: variables.$transition-duration;
     }
 
     &.plus {
@@ -648,7 +648,7 @@
 
     &:hover {
       color: var(--color-primary);
-      transition: $transition-duration;
+      transition: variables.$transition-duration;
     }
   }
 
@@ -664,7 +664,7 @@
 
     &:not(.disabled) {
       &:hover {
-        @include link-hover;
+        @include mixins.link-hover;
       }
     }
 
@@ -703,7 +703,7 @@
     }
 
     &:hover {
-      @include link-hover;
+      @include mixins.link-hover;
     }
   }
 }
@@ -711,7 +711,7 @@
 .clear-all-button {
   button {
     &:hover {
-      @include link-hover;
+      @include mixins.link-hover;
     }
   }
 }
@@ -723,7 +723,7 @@
   border-radius: 3px;
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
 
-  .p-overlaypanel-content {
+  .p-popover-content {
     padding: 20px;
   }
 }
@@ -733,7 +733,7 @@
   background: #fff;
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
 
-  .p-overlaypanel-content {
+  .p-popover-content {
     padding: 40px;
   }
 
@@ -794,7 +794,7 @@
   background: #fff;
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%);
 
-  .p-overlaypanel-content {
+  .p-popover-content {
     ul#scores-columns {
       &::after {
         content: ' ';
