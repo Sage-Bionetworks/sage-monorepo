@@ -8,7 +8,7 @@ import {
   OverallScoresDistribution,
 } from '@sagebionetworks/agora/api-client-angular';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
-import { OverlayPanelLinkComponent } from '../overlay-panel-link/overlay-panel-link.component';
+import { PopoverLinkComponent } from '../popover-link/popover-link.component';
 
 export interface SOEChartProps {
   title: string;
@@ -22,7 +22,7 @@ export interface SOEChartProps {
 
 @Component({
   selector: 'agora-gene-soe-charts',
-  imports: [CommonModule, OverlayPanelLinkComponent, ScoreBarChartComponent],
+  imports: [CommonModule, PopoverLinkComponent, ScoreBarChartComponent],
   templateUrl: './gene-soe-charts.component.html',
   styleUrls: ['./gene-soe-charts.component.scss'],
 })

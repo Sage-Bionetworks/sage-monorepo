@@ -13,13 +13,13 @@ export * from './lib/components/gene-protein-selector/gene-protein-selector.comp
 export * from './lib/components/gene-resources/gene-resources.component';
 export * from './lib/components/gene-search/gene-search.component';
 export * from './lib/components/gene-similar/gene-similar.routes';
-export * from './lib/components/gene-soe/gene-soe.component';
 export * from './lib/components/gene-soe-charts/gene-soe-charts.component';
 export * from './lib/components/gene-soe-list/gene-soe-list.component';
+export * from './lib/components/gene-soe/gene-soe.component';
 export * from './lib/components/gene-table/gene-table.component';
 
 export * from './lib/components/download-dom-image/download-dom-image.component';
-export * from './lib/components/overlay-panel-link/overlay-panel-link.component';
+export * from './lib/components/popover-link/popover-link.component';
 
 export * from './lib/helpers';
 export * from './lib/models';

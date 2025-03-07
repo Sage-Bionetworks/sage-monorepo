@@ -45,7 +45,7 @@ import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-c
 import { GeneComparisonToolScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
 
 import { FormsModule } from '@angular/forms';
-import { OverlayPanelLinkComponent } from '@sagebionetworks/agora/genes';
+import { PopoverLinkComponent } from '@sagebionetworks/agora/genes';
 import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
@@ -65,7 +65,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     TooltipModule,
     SelectModule,
     InputSwitchModule,
-    OverlayPanelLinkComponent,
+    PopoverLinkComponent,
     OverlayPanelModule,
     SvgIconComponent,
     GeneComparisonToolHowToPanelComponent,

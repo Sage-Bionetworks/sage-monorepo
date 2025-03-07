@@ -1,0 +1,19 @@
+@use 'libs/agora/styles/src/lib/variables';
+@use 'libs/agora/styles/src/lib/mixins';
+
+agora-popover-link,
+.popover-link {
+  display: inline-block;
+}
+
+.popover-link-inner {
+  display: flex;
+}
+
+.popover-link-icon {
+  transform: translateY(1px);
+
+  &:not(:last-child) {
+    margin-right: 8px;
+  }
+}
