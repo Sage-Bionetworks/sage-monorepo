@@ -1,6 +1,5 @@
 export * from './lib/components/gene-biodomains/gene-biodomains.component';
 export * from './lib/components/gene-details/gene-details.routes';
-export * from './lib/components/gene-druggability/gene-druggability.component';
 export * from './lib/components/gene-evidence-metabolomics/gene-evidence-metabolomics.component';
 export * from './lib/components/gene-evidence-proteomics/gene-evidence-proteomics.component';
 export * from './lib/components/gene-evidence-rna/gene-evidence-rna.component';

@@ -9,7 +9,6 @@ import { RouterTestingModule } from '@angular/router/testing';
 // -------------------------------------------------------------------------- //
 import { GeneResourcesComponent } from './';
 import { ModalLinkComponent } from '../../../../shared/components/modal-link/modal-link.component';
-import { GeneDruggabilityComponent } from '../gene-druggability/gene-druggability.component';
 import { geneMock1, noHGNCgeneMock } from '../../../../testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ApiService, HelperService } from '../../../../core/services';
@@ -28,8 +27,7 @@ describe('Component: Gene Resources', () => {
     await TestBed.configureTestingModule({
       declarations: [
         GeneResourcesComponent, 
-        ModalLinkComponent, 
-        GeneDruggabilityComponent
+        ModalLinkComponent
       ],
       imports: [RouterTestingModule, HttpClientTestingModule, BrowserAnimationsModule],
       providers: [GeneService, ApiService, HelperService],
