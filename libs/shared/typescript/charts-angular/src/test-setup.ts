@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
-import 'jest-preset-angular/setup-jest';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+setupZoneTestEnv();
 
 /**
  * Mock clientHeight and clientWidth -- Apache Echarts expects a non-zero value to be returned, but
