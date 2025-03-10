@@ -126,7 +126,7 @@
                 <div class="gct-significance-control">
                   <div>Hide insignificant</div>
                   <div>
-                    <p-inputSwitch
+                    <p-toggleswitch
                       [pTooltip]="
                         'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
                         significanceThreshold
@@ -136,7 +136,7 @@
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
                       (onChange)="setSignificanceThresholdActive(significanceThresholdActive)"
-                    ></p-inputSwitch>
+                    ></p-toggleswitch>
                   </div>
                   <div>
                     <p-popover #significancePopover styleClass="gct-significance-control-panel">
