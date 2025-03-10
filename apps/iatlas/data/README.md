@@ -5,7 +5,7 @@
 This project provides a containerized solution for downloading iAtlas data and its schema from
 Synapse before seeding the iAtlas database (PostgreSQL).
 
-## Create the initial config
+## Create the project config
 
 Generate the `.env` configuration file before updating it manually:
 
@@ -23,8 +23,8 @@ nx prepare iatlas-data
 
 ## Start the PostgreSQL Docker container
 
-Refer to the `iatlas-data` project README for instructions on building and starting the PostgreSQL
-Docker container.
+Refer to the `iatlas-postgres` project README for instructions on building and starting the
+PostgreSQL Docker container.
 
 ## Running the application
 

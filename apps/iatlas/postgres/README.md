@@ -4,7 +4,7 @@
 
 This project provides a containerized PostgreSQL database for the iAtlas application.
 
-## Create the initial config
+## Create the project config
 
 Generate the `.env` configuration file before updating it manually:
 
