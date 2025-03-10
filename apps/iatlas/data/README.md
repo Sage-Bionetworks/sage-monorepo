@@ -2,8 +2,8 @@
 
 ## Overview
 
-This project provides a Dockerized solution for downloading iAtlas data and its schema from Synapse
-before seeding the iAtlas database (PostgreSQL).
+This project provides a containerized solution for downloading iAtlas data and its schema from
+Synapse before seeding the iAtlas database (PostgreSQL).
 
 ## Create the initial config
 
