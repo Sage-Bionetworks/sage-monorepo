@@ -21,8 +21,10 @@
     }
   </span>
 </p-button>
-<p-popover #popover styleClass="popover">
-  @if (wikiId && hasActived) {
-    <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
-  }
+<p-popover #popover>
+  <div class="popover-link-content">
+    @if (wikiId && hasActived) {
+      <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
+    }
+  </div>
 </p-popover>
