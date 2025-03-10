@@ -42,9 +42,10 @@
 
     .checkbox {
       display: flex;
+      column-gap: 0.5rem;
       align-items: center;
 
-      span {
+      label {
         font-size: var(--font-size-sm);
       }
     }

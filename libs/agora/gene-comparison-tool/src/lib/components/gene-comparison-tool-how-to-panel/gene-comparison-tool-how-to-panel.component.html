@@ -19,11 +19,9 @@
   </div>
 
   <ng-template pTemplate="footer">
-    <div>
-      <label class="checkbox">
-        <p-checkbox [(ngModel)]="willHide" [binary]="true"></p-checkbox>
-        <span>Don't show this again</span>
-      </label>
+    <div class="checkbox">
+      <p-checkbox [(ngModel)]="willHide" [binary]="true" size="small" inputId="hideHowTo" />
+      <label for="hideHowTo">Don't show this again</label>
     </div>
     <div>
       @if (activePane > 0) {
