@@ -40,14 +40,6 @@ Refer to the `iatlas-data` project README for instructions.
 
 ## Running the application
 
-### Run locally
-
-Start the application in a local development environment:
-
-```console
-nx serve iatlas-api
-```
-
 ### Build the Docker image
 
 Create a Docker image of the application:
@@ -68,13 +60,14 @@ nx serve-detach iatlas-api
 
 ## Open the GraphQL Playground
 
-To access the GraphQL Playground, open your browser and navigate to:
+To access the GraphQL Playground, open your browser and go to:
 
-`http://http://localhost:5000/graphiql`
+`http://http://localhost:2000/graphiql`
 
-Use the query shown below to test the API or use one included in `./example_queries`.
+You can test the API using the query below or explore additional examples in the `./example_queries`
+directory.
 
-```json
+```graphql
 {
   __schema {
     queryType {
