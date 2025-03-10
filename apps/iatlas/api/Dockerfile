@@ -56,4 +56,4 @@ RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":5000"]
+CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":2000"]
