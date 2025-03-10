@@ -11,6 +11,7 @@ import screenfull from 'screenfull';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'agora-gene-table',
@@ -22,6 +23,7 @@ import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-i
     MultiSelectModule,
     FormsModule,
     FontAwesomeModule,
+    ButtonModule,
   ],
   providers: [HelperService],
   templateUrl: './gene-table.component.html',

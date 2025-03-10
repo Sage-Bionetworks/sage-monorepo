@@ -14,58 +14,58 @@
     [sortField]="sortField"
     [sortOrder]="sortOrder"
   >
-    <ng-template #header pTemplate="caption">
+    <ng-template #caption>
       <div>{{ heading }}</div>
       <div class="gene-table-header-controls">
         @if (gctLink) {
-          <div
-            [pTooltip]="gctLinkTooltip"
-            tooltipPosition="top"
-            tooltipStyleClass="tooltip gene-table-tooltip"
-            appendTo="target"
-          >
-            <fa-icon [icon]="gctIcon" (click)="navigateToGeneComparisonTool()"></fa-icon>
+          <div>
+            <fa-icon
+              [icon]="gctIcon"
+              (click)="navigateToGeneComparisonTool()"
+              [pTooltip]="gctLinkTooltip"
+              tooltipPosition="top"
+              tooltipStyleClass="tooltip"
+            ></fa-icon>
           </div>
         }
         <div>
-          <div
+          <i
+            [ngClass]="getWindowClass()"
+            (click)="toggleFullscreen()"
             pTooltip="View table in full screen"
             tooltipPosition="top"
-            tooltipStyleClass="tooltip tooltip-nowrap gene-table-tooltip"
-            appendTo="target"
-          >
-            <i [ngClass]="getWindowClass()" (click)="toggleFullscreen()"></i>
-          </div>
+            tooltipStyleClass="tooltip tooltip-nowrap"
+          ></i>
         </div>
         <div>
-          <div
+          <fa-icon
+            [icon]="downloadIcon"
+            (click)="table.exportCSV()"
             pTooltip="Download table as CSV"
             tooltipPosition="top"
-            tooltipStyleClass="tooltip tooltip-nowrap gene-table-tooltip"
-            appendTo="target"
-          >
-            <fa-icon [icon]="downloadIcon" (click)="table.exportCSV()"></fa-icon>
-          </div>
+            tooltipStyleClass="tooltip tooltip-nowrap"
+          ></fa-icon>
         </div>
+        <!-- <div> -->
         <div>
-          <div
+          <p-multiselect
+            [options]="optionalColumns"
+            [(ngModel)]="_selectedColumns"
+            [showHeader]="false"
+            optionLabel="header"
+            dropdownIcon="pi pi-filter"
+            styleClass="multiselect-no-border"
             pTooltip="Control the columns that are displayed in this table"
             tooltipPosition="top"
-            tooltipStyleClass="tooltip gene-table-tooltip"
-            appendTo="target"
+            tooltipStyleClass="tooltip"
           >
-            <p-multiSelect
-              [options]="optionalColumns"
-              [(ngModel)]="_selectedColumns"
-              [showHeader]="false"
-              optionLabel="header"
-              dropdownIcon="pi pi-filter"
-            ></p-multiSelect>
-          </div>
+            <ng-template pTemplate="selectedItems"></ng-template>
+          </p-multiselect>
         </div>
+        <!-- </div> -->
       </div>
     </ng-template>
-    <ng-template pTemplate="header" let-columns>
+    <ng-template #header let-columns>
       <tr>
         <th
           *ngFor="let column of columns; let i = index"
@@ -82,7 +82,7 @@
         </th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-item let-columns="columns">
+    <ng-template #body let-item let-columns="columns">
       <tr (click)="navigateToGene(item)">
         <td
           *ngFor="let column of columns"

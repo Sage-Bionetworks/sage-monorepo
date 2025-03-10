@@ -459,7 +459,7 @@ export const MyPreset = definePreset(Lara, {
           floatLabelFocusColor: '{primary.600}',
           floatLabelActiveColor: '{surface.500}',
           floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
-          iconColor: '{surface.500}',
+          iconColor: '#ffffff',
           shadow: 'none',
         },
         text: {
@@ -1159,7 +1159,7 @@ export const MyPreset = definePreset(Lara, {
             primary: {
               hoverBackground: '{primary.50}',
               activeBackground: '{primary.100}',
-              borderColor: '{primary.200}',
+              borderColor: '{primary.500}',
               color: '{primary.color}',
             },
             secondary: {
@@ -3615,7 +3615,7 @@ export const MyPreset = definePreset(Lara, {
     },
     multiselect: {
       root: {
-        background: '{form.field.background}',
+        background: 'transparent',
         disabledBackground: '{form.field.disabled.background}',
         filledBackground: '{form.field.filled.background}',
         filledHoverBackground: '{form.field.filled.hover.background}',
@@ -3629,8 +3629,8 @@ export const MyPreset = definePreset(Lara, {
         placeholderColor: '{form.field.placeholder.color}',
         invalidPlaceholderColor: '{form.field.invalid.placeholder.color}',
         shadow: '{form.field.shadow}',
-        paddingX: '{form.field.padding.x}',
-        paddingY: '{form.field.padding.y}',
+        paddingX: '0',
+        paddingY: '0',
         borderRadius: '{form.field.border.radius}',
         focusRing: {
           width: '{form.field.focus.ring.width}',
@@ -3652,7 +3652,7 @@ export const MyPreset = definePreset(Lara, {
         },
       },
       dropdown: {
-        width: '2.5rem',
+        width: '100%',
         color: '{form.field.icon.color}',
       },
       overlay: {
@@ -5392,8 +5392,8 @@ export const MyPreset = definePreset(Lara, {
       colorScheme: {
         light: {
           root: {
-            background: '{surface.700}',
-            color: '{surface.0}',
+            background: '#63676c',
+            color: '#ffffff',
           },
         },
         dark: {

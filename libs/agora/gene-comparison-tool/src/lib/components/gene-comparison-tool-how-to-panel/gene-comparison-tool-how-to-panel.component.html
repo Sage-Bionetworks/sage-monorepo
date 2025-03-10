@@ -27,17 +27,26 @@
     </div>
     <div>
       @if (activePane > 0) {
-        <button class="gct-how-to-panel-previous" (click)="previous()">
-          <fa-icon [icon]="faAngleLeft"></fa-icon> Back
-        </button>
+        <p-button
+          styleClass="gct-how-to-panel-previous"
+          label="Back"
+          (click)="previous()"
+          [rounded]="true"
+          icon="pi pi-angle-left"
+          variant="outlined"
+        ></p-button>
       }
       @if (activePane !== panes.length - 1) {
-        <button class="gct-how-to-panel-next" (click)="next()">
-          Next <fa-icon [icon]="faAngleRight"></fa-icon>
-        </button>
+        <p-button
+          label="Next"
+          (click)="next()"
+          [rounded]="true"
+          icon="pi pi-angle-right"
+          iconPos="right"
+        ></p-button>
       }
       @if (activePane === panes.length - 1) {
-        <button class="gct-how-to-panel-close" (click)="isActive = !isActive">Close</button>
+        <p-button label="Close" (click)="isActive = !isActive" [rounded]="true"></p-button>
       }
     </div>
   </ng-template>
