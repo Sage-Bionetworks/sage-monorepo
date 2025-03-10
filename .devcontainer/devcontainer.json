@@ -16,10 +16,14 @@
   },
   "features": {},
   "forwardPorts": [
-    2432, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
+    2000, 2432, 3306, 3333, 4200, 4211, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
     8085, 8086, 8090, 8200, 8888, 8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
+    "2000": {
+      "label": "iatlas-api",
+      "onAutoForward": "silent"
+    },
     "2432": {
       "label": "iatlas-postgres",
       "onAutoForward": "silent"
@@ -38,10 +42,6 @@
     },
     "4211": {
       "label": "nx graph",
-      "onAutoForward": "silent"
-    },
-    "5000": {
-      "label": "iatlas-api",
       "onAutoForward": "silent"
     },
     "5432": {
