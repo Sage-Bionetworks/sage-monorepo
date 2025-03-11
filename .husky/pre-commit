@@ -1,9 +1,3 @@
-# Skip execution if SKIP_PRE_COMMIT_HOOK is set to 1
-if [ "$SKIP_PRE_COMMIT_HOOK" == "1" ]; then
-  echo "Skipping pre-commit hook as SKIP_PRE_COMMIT_HOOK is set to 1."
-  exit 0
-fi
-
 # Run formatters and linters against staged git files
 pnpm dlx lint-staged --relative
 # nx affected --uncommitted --target=lint
