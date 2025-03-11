@@ -4798,8 +4798,8 @@ export const MyPreset = definePreset(Lara, {
     },
     toggleswitch: {
       root: {
-        width: '3rem',
-        height: '1.75rem',
+        width: '2.25rem',
+        height: '1.25rem',
         borderRadius: '30px',
         gap: '0.25rem',
         shadow: '{form.field.shadow}',
@@ -4821,7 +4821,7 @@ export const MyPreset = definePreset(Lara, {
       },
       handle: {
         borderRadius: '50%',
-        size: '1.25rem',
+        size: '0.85rem',
       },
       colorScheme: {
         light: {
