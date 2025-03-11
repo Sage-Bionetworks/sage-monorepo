@@ -54,8 +54,8 @@ importers:
         specifier: 6.7.1
         version: 6.7.1
       '@primeng/themes':
-        specifier: 19.0.5
-        version: 19.0.5
+        specifier: 19.0.9
+        version: 19.0.9
       '@storybook/addon-interactions':
         specifier: 8.4.7
         version: 8.4.7(storybook@8.3.2)
@@ -114,8 +114,8 @@ importers:
         specifier: 3.3.1
         version: 3.3.1
       mongoose:
-        specifier: 8.5.1
-        version: 8.5.1(socks@2.8.3)
+        specifier: 8.9.5
+        version: 8.9.5(socks@2.8.3)
       ngx-avatars:
         specifier: 1.5.0
         version: 1.5.0(@angular/common@19.2.1(@angular/core@19.2.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.2.1(rxjs@7.8.1)(zone.js@0.15.0))
@@ -135,8 +135,8 @@ importers:
         specifier: 8.0.1
         version: 8.0.1
       primeng:
-        specifier: 19.0.6
-        version: 19.0.6(3d2ee2ee9a73829b2f0c002b0e08a0ec)
+        specifier: 19.0.9
+        version: 19.0.9(3d2ee2ee9a73829b2f0c002b0e08a0ec)
       react:
         specifier: 18.3.1
         version: 18.3.1
@@ -3534,8 +3534,8 @@ packages:
     resolution: {integrity: sha512-sTGoeZnjI8N4KS+sW2AN95gDBErhAguvkw/tWdCjeM8bvxpz5lqrnd0vOJABA1A+Ic3zED7PYoLP/RANLgVotA==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
 
-  '@mongodb-js/saslprep@1.1.7':
-    resolution: {integrity: sha512-dCHW/oEX0KJ4NjDULBo3JiOaK5+6axtpBbS+ao2ZInoAL9/YRQLhXzSNAFz7hP4nzLkIqsfYAK/PDE3+XHny0Q==}
+  '@mongodb-js/saslprep@1.2.0':
+    resolution: {integrity: sha512-+ywrb0AqkfaYuhHs6LxKWgqbh3I72EpEgESCw37o+9qPx9WTCkgDm2B+eMrwehGtHBWHFU4GXvnSCNiFhhausg==}
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     resolution: {integrity: sha512-QZHtlVgbAdy2zAqNA9Gu1UpIuI8Xvsd1v8ic6B2pZmeFnFcMWiPLfWXh7TVw4eGEZ/C9TH281KwhVoeQUKbyjw==}
@@ -4214,8 +4214,8 @@ packages:
   '@prettier/plugin-xml@2.2.0':
     resolution: {integrity: sha512-UWRmygBsyj4bVXvDiqSccwT1kmsorcwQwaIy30yVh8T+Gspx4OlC0shX1y+ZuwXZvgnafmpRYKks0bAu9urJew==}
 
-  '@primeng/themes@19.0.5':
-    resolution: {integrity: sha512-HHXAncyolxyuOR5p+7XtcY3Hg1J6MzbjrdVY3BoQZrRR0nQmatOUQkG/whmJ2dsATq2UHgOykT/a2s70kFF1Sw==}
+  '@primeng/themes@19.0.9':
+    resolution: {integrity: sha512-8oITYftt/0v6sXKth/6n1mEw4UY88acNow0/aAF5yi29N6cpBaOiH/MEvj4nCoYjNCCGUSFhPrGdkTJH/GNo6A==}
 
   '@primeuix/styled@0.3.2':
     resolution: {integrity: sha512-ColZes0+/WKqH4ob2x8DyNYf1NENpe5ZguOvx5yCLxaP8EIMVhLjWLO/3umJiDnQU4XXMLkn2mMHHw+fhTX/mw==}
@@ -6342,10 +6342,9 @@ packages:
   bser@2.1.1:
     resolution: {integrity: sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==}
 
-  bson@6.8.0:
-    resolution: {integrity: sha512-iOJg8pr7wq2tg/zSlCCHMi3hMm5JTOxLTagf3zxhcenHsFp+c6uOs6K7W5UE7A4QIJGtqh/ZovFNMP4mOPJynQ==}
+  bson@6.10.3:
+    resolution: {integrity: sha512-MTxGsqgYTwfshYWTRdmZRC+M7FnG1b4y7RO7p2k3X24Wq0yv1m77Wsj0BzlPzd/IowgESfsruQCUToa7vbOpPQ==}
     engines: {node: '>=16.20.1'}
-    deprecated: a critical bug affecting only useBigInt64=true deserialization usage is fixed in bson@6.10.3
 
   btoa@1.2.1:
     resolution: {integrity: sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==}
@@ -10599,12 +10598,12 @@ packages:
   mongodb-connection-string-url@3.0.1:
     resolution: {integrity: sha512-XqMGwRX0Lgn05TDB4PyG2h2kKO/FfWJyCzYQbIhXUxz7ETt0I/FqHjUeqj37irJ+Dl1ZtU82uYyj14u2XsZKfg==}
 
-  mongodb@6.7.0:
-    resolution: {integrity: sha512-TMKyHdtMcO0fYBNORiYdmM25ijsHs+Njs963r4Tro4OQZzqYigAzYQouwWRg4OIaiLRUEGUh/1UAcH5lxdSLIA==}
+  mongodb@6.12.0:
+    resolution: {integrity: sha512-RM7AHlvYfS7jv7+BXund/kR64DryVI+cHbVAy9P61fnb1RcWZqOW1/Wj2YhqMCx+MuYhqTRGv7AwHBzmsCKBfA==}
     engines: {node: '>=16.20.1'}
     peerDependencies:
       '@aws-sdk/credential-providers': ^3.188.0
-      '@mongodb-js/zstd': ^1.1.0
+      '@mongodb-js/zstd': ^1.1.0 || ^2.0.0
       gcp-metadata: ^5.2.0
       kerberos: ^2.0.1
       mongodb-client-encryption: '>=6.0.0 <7'
@@ -10626,8 +10625,8 @@ packages:
       socks:
         optional: true
 
-  mongoose@8.5.1:
-    resolution: {integrity: sha512-OhVcwVl91A1G6+XpjDcpkGP7l7ikZkxa0DylX7NT/lcEqAjggzSdqDxb48A+xsDxqNAr0ntSJ1yiE3+KJTOd5Q==}
+  mongoose@8.9.5:
+    resolution: {integrity: sha512-SPhOrgBm0nKV3b+IIHGqpUTOmgVL5Z3OO9AwkFEmvOZznXTvplbomstCnPOGAyungtRXE5pJTgKpKcZTdjeESg==}
     engines: {node: '>=16.20.1'}
 
   moo@0.5.2:
@@ -12038,8 +12037,8 @@ packages:
   primeicons@7.0.0:
     resolution: {integrity: sha512-jK3Et9UzwzTsd6tzl2RmwrVY/b8raJ3QZLzoDACj+oTJ0oX7L9Hy+XnVwgo4QVKlKpnP/Ur13SXV/pVh4LzaDw==}
 
-  primeng@19.0.6:
-    resolution: {integrity: sha512-IyzkI12VlR3cy2wy47VtPzVzugs2QI6o0qI369RD6gFN9SI5K9pM/dAFn4v6MfaN+AtnVuPrfjH96gxj6CrbcA==}
+  primeng@19.0.9:
+    resolution: {integrity: sha512-Y994f4JDsdjwe1uK1J8Gvq94Mk2qQfV+M1zdW+XClXHK8EXzZp7kvBzfrlk607valJmUhLr/5DxSkVfVQGZhxA==}
     peerDependencies:
       '@angular/animations': ^19.0.0
       '@angular/cdk': ^19.0.0
@@ -19004,7 +19003,7 @@ snapshots:
       got: 11.8.6
       os-filter-obj: 2.0.0
 
-  '@mongodb-js/saslprep@1.1.7':
+  '@mongodb-js/saslprep@1.2.0':
     dependencies:
       sparse-bitfield: 3.0.3
 
@@ -19109,20 +19108,20 @@ snapshots:
       '@emnapi/runtime': 1.2.0
       '@tybys/wasm-util': 0.9.0
 
-  '@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
+  '@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)':
     dependencies:
       axios: 0.26.1(debug@4.3.7)
       iterare: 1.2.1
       reflect-metadata: 0.1.13
-      rxjs: 7.5.5
+      rxjs: 7.8.1
       tslib: 2.3.1
       uuid: 8.3.2
     transitivePeerDependencies:
       - debug
 
-  '@nestjs/core@8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
+  '@nestjs/core@8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)':
     dependencies:
-      '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5)
+      '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       fast-safe-stringify: 2.1.1
       iterare: 1.2.1
@@ -20191,8 +20190,8 @@ snapshots:
 
   '@openapitools/openapi-generator-cli@2.5.2(debug@4.3.7)(encoding@0.1.13)':
     dependencies:
-      '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5)
-      '@nestjs/core': 8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)
+      '@nestjs/common': 8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.8.1)
+      '@nestjs/core': 8.4.4(@nestjs/common@8.4.4(debug@4.3.7)(reflect-metadata@0.1.13)(rxjs@7.5.5))(encoding@0.1.13)(reflect-metadata@0.1.13)(rxjs@7.5.5)
       '@nuxtjs/opencollective': 0.3.2(encoding@0.1.13)
       chalk: 4.1.2
       commander: 8.3.0
@@ -20296,7 +20295,7 @@ snapshots:
       '@xml-tools/parser': 1.0.11
       prettier: 3.3.3
 
-  '@primeng/themes@19.0.5':
+  '@primeng/themes@19.0.9':
     dependencies:
       '@primeuix/styled': 0.3.2
 
@@ -23036,7 +23035,7 @@ snapshots:
     dependencies:
       node-int64: 0.4.0
 
-  bson@6.8.0: {}
+  bson@6.10.3: {}
 
   btoa@1.2.1: {}
 
@@ -28388,19 +28387,19 @@ snapshots:
       '@types/whatwg-url': 11.0.5
       whatwg-url: 13.0.0
 
-  mongodb@6.7.0(socks@2.8.3):
+  mongodb@6.12.0(socks@2.8.3):
     dependencies:
-      '@mongodb-js/saslprep': 1.1.7
-      bson: 6.8.0
+      '@mongodb-js/saslprep': 1.2.0
+      bson: 6.10.3
       mongodb-connection-string-url: 3.0.1
     optionalDependencies:
       socks: 2.8.3
 
-  mongoose@8.5.1(socks@2.8.3):
+  mongoose@8.9.5(socks@2.8.3):
     dependencies:
-      bson: 6.8.0
+      bson: 6.10.3
       kareem: 2.6.3
-      mongodb: 6.7.0(socks@2.8.3)
+      mongodb: 6.12.0(socks@2.8.3)
       mpath: 0.9.0
       mquery: 5.0.0
       ms: 2.1.3
@@ -30005,7 +30004,7 @@ snapshots:
 
   primeicons@7.0.0: {}
 
-  primeng@19.0.6(3d2ee2ee9a73829b2f0c002b0e08a0ec):
+  primeng@19.0.9(3d2ee2ee9a73829b2f0c002b0e08a0ec):
     dependencies:
       '@angular/animations': 19.2.1(@angular/core@19.2.1(rxjs@7.8.1)(zone.js@0.15.0))
       '@angular/cdk': 19.2.2(@angular/common@19.2.1(@angular/core@19.2.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1))(@angular/core@19.2.1(rxjs@7.8.1)(zone.js@0.15.0))(rxjs@7.8.1)
