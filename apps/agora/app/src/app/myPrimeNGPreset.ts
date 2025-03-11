@@ -3658,12 +3658,12 @@ export const MyPreset = definePreset(Lara, {
       overlay: {
         background: '{overlay.select.background}',
         borderColor: '{overlay.select.border.color}',
-        borderRadius: '{overlay.select.border.radius}',
+        borderRadius: '0',
         color: '{overlay.select.color}',
         shadow: '{overlay.select.shadow}',
       },
       list: {
-        padding: '{list.padding}',
+        padding: '0',
         gap: '{list.gap}',
         header: {
           padding: '{list.header.padding}',
