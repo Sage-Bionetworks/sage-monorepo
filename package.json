@@ -143,6 +143,7 @@
     "autoprefixer": "10.4.13",
     "babel-jest": "29.7.0",
     "browser-sync": "3.0.2",
+    "canvas": "3.1.0",
     "cdktf-cli": "0.16.1",
     "colors": "1.4.0",
     "coveralls": "3.1.1",
@@ -200,5 +201,10 @@
     "vite": "6.2.1",
     "vitest": "1.6.0"
   },
-  "packageManager": "pnpm@10.6.2"
+  "packageManager": "pnpm@10.6.2",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "canvas"
+    ]
+  }
 }
