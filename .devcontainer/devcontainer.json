@@ -1,6 +1,6 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-dc18f25ca6901e2e3033df150df79a4c533370a4",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-1d23ce71bd58875c6db4afd16d23022178c1f672",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",

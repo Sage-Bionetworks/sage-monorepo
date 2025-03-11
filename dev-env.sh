@@ -136,7 +136,7 @@ function check-vscode-version {
 }
 
 function workspace-welcome {
-  echo "Welcome to Sage Monorepo (SMR)! 👋"
+  echo "Welcome to Sage Monorepo! 👋"
 
   if [ ! -d "node_modules" ]; then
     printf "%s\n" \
@@ -144,9 +144,9 @@ function workspace-welcome {
       "Run \`workspace-install\` to install workspace tools like nx and jest."
   fi
 
-  if [ ! -f "nx-cloud.env" ]; then
-    workspace-nx-cloud-help
-  fi
+  # if [ ! -f "nx-cloud.env" ]; then
+  #   workspace-nx-cloud-help
+  # fi
 
   if command -v code &> /dev/null
   then
