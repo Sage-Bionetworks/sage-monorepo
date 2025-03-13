@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { baseURL } from '../playwright.config';
 import { waitForSpinnerNotVisible } from './helpers/utils';
 
 test.describe('specific viewport block', () => {
@@ -26,5 +27,12 @@ test.describe('specific viewport block', () => {
 
     const header = page.getByRole('heading', { name: 'Consistency of Change in Expression' });
     await expect(header).toBeInViewport();
+  });
+});
+
+test.describe('legacy url redirects', () => {
+  test('redirects to gene details', async ({ page }) => {
+    await page.goto('/genes/(genes-router:gene-details/ENSG00000135940)');
+    await expect(page).toHaveURL(`${baseURL}/genes/ENSG00000135940`);
   });
 });
