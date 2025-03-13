@@ -1,12 +1,11 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'agora-gene-table-column-selector',
-  imports: [TooltipModule, FontAwesomeModule, PopoverModule],
+  imports: [TooltipModule, PopoverModule],
   templateUrl: './gene-table-column-selector.component.html',
   styleUrls: ['./gene-table-column-selector.component.scss'],
 })

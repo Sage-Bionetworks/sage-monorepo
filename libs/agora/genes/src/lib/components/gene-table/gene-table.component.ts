@@ -4,15 +4,12 @@ import { Router, RouterModule } from '@angular/router';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
 import { Table, TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
-import { MultiSelectModule } from 'primeng/multiselect';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { GeneTableColumn } from '@sagebionetworks/agora/models';
 import screenfull from 'screenfull';
 import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { ButtonModule } from 'primeng/button';
-import { PopoverModule } from 'primeng/popover';
 import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/gene-table-column-selector.component';
 
 @Component({
@@ -22,11 +19,8 @@ import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/
     RouterModule,
     TableModule,
     TooltipModule,
-    MultiSelectModule,
     FormsModule,
     FontAwesomeModule,
-    ButtonModule,
-    PopoverModule,
     GeneTableColumnSelectorComponent,
   ],
   providers: [HelperService],

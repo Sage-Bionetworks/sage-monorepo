@@ -1,29 +1,28 @@
-<div
+<button
+  (click)="popover.toggle($event)"
   pTooltip="Control the columns that are displayed in this table"
   tooltipPosition="top"
   tooltipStyleClass="tooltip-small"
 >
-  <button (click)="popover.toggle($event)">
-    <i class="pi pi-filter"></i>
-  </button>
-  <p-popover #popover>
-    <ng-template #content>
-      <ul id="scores-columns">
-        @for (column of columns; track column) {
-          <li>
-            <div class="score-column" (click)="toggleColumn(column)">
-              <div class="score-column-status">
-                @if (column.selected) {
-                  <span class="pi pi-check"></span>
-                }
-              </div>
-              <div>
-                <span>{{ column.header }}</span>
-              </div>
+  <i class="pi pi-filter"></i>
+</button>
+<p-popover #popover>
+  <ng-template #content>
+    <ul id="scores-columns">
+      @for (column of columns; track column) {
+        <li>
+          <div class="score-column" (click)="toggleColumn(column)">
+            <div class="score-column-status">
+              @if (column.selected) {
+                <span class="pi pi-check"></span>
+              }
             </div>
-          </li>
-        }
-      </ul>
-    </ng-template>
-  </p-popover>
-</div>
+            <div>
+              <span>{{ column.header }}</span>
+            </div>
+          </div>
+        </li>
+      }
+    </ul>
+  </ng-template>
+</p-popover>
