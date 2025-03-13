@@ -9,8 +9,7 @@
     background-color: var(--color-primary);
     color: #fff;
     align-items: center;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 0 15px;
 
     > div {
       padding: 15px;
@@ -22,31 +21,6 @@
 
     a {
       color: #fff;
-    }
-
-    .gene-table-header-controls {
-      display: flex;
-
-      > div {
-        position: relative;
-        margin-left: 15px;
-
-        > i {
-          display: flex;
-          height: 100%;
-          align-items: center;
-        }
-      }
-
-      i,
-      .p-multiselect-trigger,
-      fa-icon {
-        cursor: pointer;
-
-        &:hover {
-          opacity: 0.7;
-        }
-      }
     }
   }
 
@@ -114,32 +88,6 @@
           background: var(--color-action-primary);
         }
       }
-    }
-  }
-}
-
-.tooltip.gene-table-tooltip {
-  z-index: 999 !important;
-  top: -30px !important;
-  left: 50% !important;
-
-  .p-tooltip-text {
-    text-align: center;
-    width: 230px;
-  }
-
-  &.p-tooltip-top {
-    transform: translate(-50%, -100%);
-  }
-
-  &:not(.p-tooltip-top) {
-    top: auto !important;
-    left: 100% !important;
-    bottom: -20px !important;
-    transform: translate(-100%, 100%);
-
-    .p-tooltip-arrow {
-      display: none;
     }
   }
 }

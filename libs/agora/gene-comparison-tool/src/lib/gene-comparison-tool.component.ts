@@ -57,6 +57,7 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
 @Component({
   selector: 'agora-gene-comparison-tool',
   imports: [
+    ButtonModule,
     CommonModule,
     ButtonModule,
     FormsModule,

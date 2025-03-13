@@ -459,7 +459,7 @@ export const MyPreset = definePreset(Lara, {
           floatLabelFocusColor: '{primary.600}',
           floatLabelActiveColor: '{surface.500}',
           floatLabelInvalidColor: '{form.field.invalid.placeholder.color}',
-          iconColor: '{surface.500}',
+          iconColor: '#ffffff',
           shadow: 'none',
         },
         text: {
@@ -1159,7 +1159,7 @@ export const MyPreset = definePreset(Lara, {
             primary: {
               hoverBackground: '{primary.50}',
               activeBackground: '{primary.100}',
-              borderColor: '{primary.200}',
+              borderColor: '{primary.500}',
               color: '{primary.color}',
             },
             secondary: {
@@ -3658,12 +3658,12 @@ export const MyPreset = definePreset(Lara, {
       overlay: {
         background: '{overlay.select.background}',
         borderColor: '{overlay.select.border.color}',
-        borderRadius: '{overlay.select.border.radius}',
+        borderRadius: '0',
         color: '{overlay.select.color}',
         shadow: '{overlay.select.shadow}',
       },
       list: {
-        padding: '{list.padding}',
+        padding: '0',
         gap: '{list.gap}',
         header: {
           padding: '{list.header.padding}',
@@ -3757,13 +3757,13 @@ export const MyPreset = definePreset(Lara, {
         background: '{overlay.popover.background}',
         borderColor: '{overlay.popover.border.color}',
         color: '{overlay.popover.color}',
-        borderRadius: '0px',
+        borderRadius: '0',
         shadow: '{overlay.popover.shadow}',
         gutter: '10px',
         arrowOffset: '1.25rem',
       },
       content: {
-        padding: '{overlay.popover.padding}',
+        padding: '0',
       },
     },
     paginator: {
@@ -5392,8 +5392,8 @@ export const MyPreset = definePreset(Lara, {
       colorScheme: {
         light: {
           root: {
-            background: '{surface.700}',
-            color: '{surface.0}',
+            background: '#63676c',
+            color: '#ffffff',
           },
         },
         dark: {

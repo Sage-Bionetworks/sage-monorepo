@@ -1,0 +1,28 @@
+.gene-table-header-controls {
+  display: flex;
+
+  > div {
+    display: flex;
+    position: relative;
+    margin-left: 15px;
+    align-items: center;
+
+    button {
+      cursor: pointer;
+      padding: 0;
+      border: none;
+      color: white;
+      background-color: transparent;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
+    > i {
+      display: flex;
+      height: 100%;
+      align-items: center;
+    }
+  }
+}

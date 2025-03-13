@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
 import { CookieService } from 'ngx-cookie-service';
+import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 
@@ -28,6 +29,7 @@ interface Pane {
 @Component({
   selector: 'agora-gene-comparison-tool-how-to-panel',
   imports: [
+    ButtonModule,
     CommonModule,
     FormsModule,
     CheckboxModule,
