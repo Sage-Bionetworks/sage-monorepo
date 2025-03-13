@@ -1,7 +1,7 @@
 <p-button type="button" rounded="true" size="small" (click)="op.toggle($event)">
   <fa-icon [icon]="downloadIcon"></fa-icon>
 </p-button>
-<p-overlayPanel
+<p-popover
   #op
   styleClass="download-dom-image-panel"
   (rotate)="onRotate()"
@@ -26,4 +26,4 @@
       <div *ngIf="error" class="download-dom-image-error">{{ error }}</div>
     </div>
   </div>
-</p-overlayPanel>
+</p-popover>

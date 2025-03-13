@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/iatlas/data/src",
   "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
@@ -16,6 +23,12 @@
       "options": {
         "command": "uv run src/build_database.py",
         "cwd": "{projectRoot}"
+      }
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/iatlas/serve-detach.sh {projectName}"
       }
     }
   },

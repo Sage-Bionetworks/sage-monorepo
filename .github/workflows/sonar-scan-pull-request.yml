@@ -26,7 +26,8 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
+        # Pin to v4.2.1 until https://github.com/nrwl/nx-set-shas/issues/186 is fixed
+        uses: nrwl/nx-set-shas@v4.2.1
 
       - name: Set up the dev container
         env:

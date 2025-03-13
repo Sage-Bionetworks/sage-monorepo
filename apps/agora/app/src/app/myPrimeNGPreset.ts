@@ -1,8 +1,8 @@
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
-import Lara from '@primeng/themes/lara';
 import { definePreset } from '@primeng/themes';
+import Lara from '@primeng/themes/lara';
+import { providePrimeNG } from 'primeng/config';
 
 export const MyPreset = definePreset(Lara, {
   primitive: {
@@ -4798,8 +4798,8 @@ export const MyPreset = definePreset(Lara, {
     },
     toggleswitch: {
       root: {
-        width: '3rem',
-        height: '1.75rem',
+        width: '2.25rem',
+        height: '1.25rem',
         borderRadius: '30px',
         gap: '0.25rem',
         shadow: '{form.field.shadow}',
@@ -4821,7 +4821,7 @@ export const MyPreset = definePreset(Lara, {
       },
       handle: {
         borderRadius: '50%',
-        size: '1.25rem',
+        size: '0.85rem',
       },
       colorScheme: {
         light: {

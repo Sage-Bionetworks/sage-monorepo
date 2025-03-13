@@ -18,7 +18,8 @@ import { Team } from '@sagebionetworks/agora/api-client-angular';
 let fsBucket: any;
 
 connection.once('open', function () {
-  fsBucket = new mongo.GridFSBucket(connection.db);
+  const db = connection.getClient().db();
+  fsBucket = new mongo.GridFSBucket(db);
 });
 
 // -------------------------------------------------------------------------- //

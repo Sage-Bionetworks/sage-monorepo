@@ -1,6 +1,6 @@
 {
   "name": "Sage Monorepo Dev Container",
-  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-dc18f25ca6901e2e3033df150df79a4c533370a4",
+  "image": "ghcr.io/sage-bionetworks/sage-monorepo-devcontainer:sha-1d23ce71bd58875c6db4afd16d23022178c1f672",
   "containerEnv": {
     "NX_BASE": "${localEnv:NX_BASE}",
     "NX_BRANCH": "${localEnv:NX_BRANCH}",
@@ -16,10 +16,14 @@
   },
   "features": {},
   "forwardPorts": [
-    2432, 3306, 3333, 4200, 4211, 5000, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
+    2000, 2432, 3306, 3333, 4200, 4211, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
     8085, 8086, 8090, 8200, 8888, 8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
+    "2000": {
+      "label": "iatlas-api",
+      "onAutoForward": "silent"
+    },
     "2432": {
       "label": "iatlas-postgres",
       "onAutoForward": "silent"
@@ -38,10 +42,6 @@
     },
     "4211": {
       "label": "nx graph",
-      "onAutoForward": "silent"
-    },
-    "5000": {
-      "label": "iatlas-api",
       "onAutoForward": "silent"
     },
     "5432": {

@@ -5,25 +5,25 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # List of build arguments.
 # https://github.com/nektos/act
-ARG actVersion="0.2.71"
+ARG actVersion="0.2.75"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
-ARG devcontainerCliVersion="0.72.0"
+ARG devcontainerCliVersion="0.75.0"
 # https://github.com/astral-sh/uv
-ARG uvVersion="0.5.14"
+ARG uvVersion="0.6.5"
 # https://docs.posit.co/resources/install-r/#specify-r-version
-ARG rVersion="4.4.1"
+ARG rVersion="4.4.3"
 # https://aquasecurity.github.io/trivy
-ARG trivyVersion="0.58.1"
+ARG trivyVersion="0.60.0"
 # https://github.com/rstudio/renv
-ARG renvVersion="1.0.11"
+ARG renvVersion="1.1.2"
 # https://nodejs.org/en/about/previous-releases
 ARG nodeVersionMajor="22"
 # https://github.com/pnpm/pnpm/releases
-ARG pnpmVersion="9.15.4"
+ARG pnpmVersion="10.6.2"
 # https://github.com/SonarSource/sonar-scanner-cli/releases
-ARG sonarScannerVersion="6.2.1.4610"
+ARG sonarScannerVersion="7.0.2.4839"
 # https://github.com/hadolint/hadolint
 ARG hadolintVersion="2.12.0"
 # The version of this dev container image.

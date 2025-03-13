@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-this-alias */
 import domtoimage from 'dom-to-image-more';
 
-import { Component, ViewChild, Input, ViewEncapsulation } from '@angular/core';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
-import { saveAs } from 'file-saver';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { CommonModule } from '@angular/common';
+import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faDownload, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { saveAs } from 'file-saver';
+import { ButtonModule } from 'primeng/button';
+import { Popover, PopoverModule } from 'primeng/popover';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 interface Type {
   value: string;
@@ -21,7 +21,7 @@ interface Type {
   imports: [
     CommonModule,
     FormsModule,
-    OverlayPanelModule,
+    PopoverModule,
     RadioButtonModule,
     ButtonModule,
     FontAwesomeModule,
@@ -54,7 +54,7 @@ export class DownloadDomImageComponent {
   isLoading = false;
   resizeTimer: ReturnType<typeof setTimeout> | number = 0;
 
-  @ViewChild('op', { static: true }) overlayPanel: OverlayPanel = {} as OverlayPanel;
+  @ViewChild('op', { static: true }) popover: Popover = {} as Popover;
 
   download() {
     if (this.isLoading) {
@@ -86,7 +86,7 @@ export class DownloadDomImageComponent {
 
   hide() {
     this.error = '';
-    this.overlayPanel.hide();
+    this.popover.hide();
   }
 
   onRotate() {

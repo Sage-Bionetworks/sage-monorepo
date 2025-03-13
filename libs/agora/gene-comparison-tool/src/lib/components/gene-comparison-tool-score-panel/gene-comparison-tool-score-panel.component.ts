@@ -1,21 +1,21 @@
 import {
   Component,
+  EventEmitter,
   Input,
   Output,
-  ViewEncapsulation,
-  EventEmitter,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
-import * as helpers from '../../gene-comparison-tool.helpers';
-import { GCTScorePanelData } from '@sagebionetworks/agora/models';
 import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 import { ScoreBarChartComponent } from '@sagebionetworks/agora/charts';
+import { GCTScorePanelData } from '@sagebionetworks/agora/models';
 import { WikiComponent } from '@sagebionetworks/agora/shared';
+import { Popover, PopoverModule } from 'primeng/popover';
+import * as helpers from '../../gene-comparison-tool.helpers';
 
 @Component({
   selector: 'agora-gene-comparison-tool-score-panel',
-  imports: [OverlayPanelModule, WikiComponent, ScoreBarChartComponent],
+  imports: [PopoverModule, WikiComponent, ScoreBarChartComponent],
   templateUrl: './gene-comparison-tool-score-panel.component.html',
   styleUrls: ['./gene-comparison-tool-score-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -31,7 +31,7 @@ export class GeneComparisonToolScorePanelComponent {
   @Output() navigateToMethodologyEvent: EventEmitter<object> = new EventEmitter<object>();
   @Output() navigateToFeedbackEvent: EventEmitter<object> = new EventEmitter<object>();
 
-  @ViewChild('overlayPanel') overlayPanel!: OverlayPanel;
+  @ViewChild('popover') popover!: Popover;
 
   scoreDistribution: OverallScoresDistribution | undefined;
 
@@ -58,16 +58,16 @@ export class GeneComparisonToolScorePanelComponent {
       this.scoreDistribution = data.distributions.find(
         (scores) => scores.name.toUpperCase() === dataKey,
       );
-      this.overlayPanel.toggle(event);
+      this.popover.toggle(event);
     }
   }
 
   hide() {
-    this.overlayPanel.hide();
+    this.popover.hide();
   }
 
   toggle(event: Event, data?: GCTScorePanelData) {
-    if (event.target === this.event?.target && this.overlayPanel.overlayVisible) {
+    if (event.target === this.event?.target && this.popover.overlayVisible) {
       this.hide();
     } else {
       this.show(event, data);

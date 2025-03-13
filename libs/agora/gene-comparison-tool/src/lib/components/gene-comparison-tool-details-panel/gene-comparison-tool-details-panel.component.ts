@@ -2,20 +2,20 @@
 import { CommonModule } from '@angular/common';
 import {
   Component,
+  EventEmitter,
+  inject,
   Input,
   Output,
   ViewChildren,
   ViewEncapsulation,
-  EventEmitter,
-  inject,
 } from '@angular/core';
 import { GCTDetailsPanelData } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { Popover, PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'agora-gene-comparison-tool-details-panel',
-  imports: [CommonModule, OverlayPanelModule],
+  imports: [CommonModule, PopoverModule],
   templateUrl: './gene-comparison-tool-details-panel.component.html',
   styleUrls: ['./gene-comparison-tool-details-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -41,7 +41,7 @@ export class GeneComparisonToolDetailsPanelComponent {
   @Output() onShowLegend: EventEmitter<object> = new EventEmitter<object>();
   @Output() onNavigateToConsistencyOfChange: EventEmitter<object> = new EventEmitter<object>();
 
-  @ViewChildren(OverlayPanel) panels: any = {} as OverlayPanel;
+  @ViewChildren(Popover) panels: any = {} as Popover;
 
   getValuePosition(data: any) {
     const percentage = Math.round(((data.value - data.min) / (data.max - data.min)) * 100);

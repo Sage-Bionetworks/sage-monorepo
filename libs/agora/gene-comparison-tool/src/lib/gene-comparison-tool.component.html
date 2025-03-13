@@ -113,7 +113,7 @@
                 <div class="gct-significance-control">
                   <div>Hide insignificant</div>
                   <div>
-                    <p-inputSwitch
+                    <p-toggleswitch
                       [pTooltip]="
                         'When on, this will filter out all statistically insignificant results. Current significance cutoff is: ' +
                         significanceThreshold
@@ -123,32 +123,25 @@
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
                       (onChange)="setSignificanceThresholdActive(significanceThresholdActive)"
-                    ></p-inputSwitch>
+                    ></p-toggleswitch>
                   </div>
                   <div>
-                    <p-overlayPanel
-                      #significanceOverlay
-                      styleClass="gct-significance-control-panel"
-                    >
-                      <ng-template pTemplate>
-                        <p class="gct-significance-control-panel-heading">
-                          Statistical significance
-                        </p>
-                        <p>Enter the P-value to use for the significance cutoff.</p>
-                        <input
-                          type="number"
-                          min="0"
-                          max="1"
-                          step="0.01"
-                          [(ngModel)]="significanceThreshold"
-                          (ngModelChange)="
-                            setSignificanceThresholdActive(significanceThresholdActive)
-                          "
-                        />
-                      </ng-template>
-                    </p-overlayPanel>
+                    <p-popover #significancePopover styleClass="gct-significance-control-panel">
+                      <p class="gct-significance-control-panel-heading">Statistical significance</p>
+                      <p>Enter the P-value to use for the significance cutoff.</p>
+                      <input
+                        type="number"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        [(ngModel)]="significanceThreshold"
+                        (ngModelChange)="
+                          setSignificanceThresholdActive(significanceThresholdActive)
+                        "
+                      />
+                    </p-popover>
                     <button
-                      (click)="significanceOverlay.toggle($event)"
+                      (click)="significancePopover.toggle($event)"
                       class="gct-significance-control-settings"
                       pTooltip="Edit significance cutoff value"
                       tooltipPosition="left"
@@ -161,41 +154,39 @@
                     </button>
                   </div>
                   <div>
-                    <p-overlayPanel #columnOverlay styleClass="gct-toggle-columns">
-                      <ng-template pTemplate>
-                        <ul id="scores-columns">
-                          <li *ngFor="let column of scoresColumns">
+                    <p-popover #columnPopover styleClass="gct-toggle-columns">
+                      <ul id="scores-columns">
+                        <li *ngFor="let column of scoresColumns">
+                          <div class="column-toggle" (click)="toggleGCTColumn(column)">
+                            <div class="column-toggle-status">
+                              <span *ngIf="column.selected" class="pi pi-check"></span>
+                            </div>
+                            <div>
+                              <span>{{ column.header }}</span>
+                            </div>
+                          </div>
+                        </li>
+                      </ul>
+                      <ul>
+                        <li *ngFor="let column of brainRegionsColumns">
+                          <ng-container *ngIf="column.visible">
                             <div class="column-toggle" (click)="toggleGCTColumn(column)">
                               <div class="column-toggle-status">
-                                <span *ngIf="column.selected" class="pi pi-check"></span>
+                                <span
+                                  *ngIf="column.selected"
+                                  class="p-checkbox-icon pi pi-check"
+                                ></span>
                               </div>
                               <div>
                                 <span>{{ column.header }}</span>
                               </div>
                             </div>
-                          </li>
-                        </ul>
-                        <ul>
-                          <li *ngFor="let column of brainRegionsColumns">
-                            <ng-container *ngIf="column.visible">
-                              <div class="column-toggle" (click)="toggleGCTColumn(column)">
-                                <div class="column-toggle-status">
-                                  <span
-                                    *ngIf="column.selected"
-                                    class="p-checkbox-icon pi pi-check"
-                                  ></span>
-                                </div>
-                                <div>
-                                  <span>{{ column.header }}</span>
-                                </div>
-                              </div>
-                            </ng-container>
-                          </li>
-                        </ul>
-                      </ng-template>
-                    </p-overlayPanel>
+                          </ng-container>
+                        </li>
+                      </ul>
+                    </p-popover>
                     <button
-                      (click)="columnOverlay.toggle($event)"
+                      (click)="columnPopover.toggle($event)"
                       pTooltip="Show/hide columns"
                       tooltipPosition="left"
                       tooltipStyleClass="tooltip"

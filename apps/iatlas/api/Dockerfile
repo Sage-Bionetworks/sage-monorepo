@@ -12,26 +12,30 @@ ENV UV_NO_INSTALLER_METADATA=1
 # Enable copy mode to support bind mount caching.
 ENV UV_LINK_MODE=copy
 
-# Copy uv binary
+# Copy uv binary.
 COPY --from=uv /uv /bin/uv
 
-# Copy dependency files
+# Copy dependency files.
 WORKDIR /app
 COPY pyproject.toml uv.lock ./
 
-# Generate requirements.txt and install dependencies
-RUN uv export --frozen --no-emit-workspace --no-dev --no-editable -o requirements.txt && \
-    uv pip install -r requirements.txt --target "/app"
+# Install C compiler to build uWSGI.
+RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
+  && apt-get install --no-install-recommends -qq -y \
+    build-essential
+
+# Generate requirements.txt and install dependencies.
+RUN uv export --frozen --no-emit-workspace --no-dev --group prod --no-editable -o requirements.txt \
+  && uv pip install -r requirements.txt --target "/app"
 
 FROM python:3.8.20-slim
 
 ENV APP_DIR=/app
 ENV PYTHONPATH="${APP_DIR}"
+ENV PATH="${APP_DIR}/bin:${PATH}"
 
 RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
   && apt-get install --no-install-recommends -qq -y \
-    # Required to install uWSGI
-    build-essential \
     # Used in docker-entrypoint.sh
     gosu \
   && apt-get -y clean \
@@ -52,4 +56,4 @@ RUN chmod +x docker-entrypoint.sh
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
-CMD ["python", "src/build_database.py"]
+CMD ["uwsgi", "--ini", "uwsgi.ini", "--lazy", "--http", ":2000"]
