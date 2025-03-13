@@ -3615,7 +3615,7 @@ export const MyPreset = definePreset(Lara, {
     },
     multiselect: {
       root: {
-        background: 'transparent',
+        background: '{form.field.background}',
         disabledBackground: '{form.field.disabled.background}',
         filledBackground: '{form.field.filled.background}',
         filledHoverBackground: '{form.field.filled.hover.background}',
@@ -3629,8 +3629,8 @@ export const MyPreset = definePreset(Lara, {
         placeholderColor: '{form.field.placeholder.color}',
         invalidPlaceholderColor: '{form.field.invalid.placeholder.color}',
         shadow: '{form.field.shadow}',
-        paddingX: '0',
-        paddingY: '0',
+        paddingX: '{form.field.padding.x}',
+        paddingY: '{form.field.padding.y}',
         borderRadius: '{form.field.border.radius}',
         focusRing: {
           width: '{form.field.focus.ring.width}',
@@ -3652,7 +3652,7 @@ export const MyPreset = definePreset(Lara, {
         },
       },
       dropdown: {
-        width: '100%',
+        width: '2.5rem',
         color: '{form.field.icon.color}',
       },
       overlay: {
@@ -3757,13 +3757,13 @@ export const MyPreset = definePreset(Lara, {
         background: '{overlay.popover.background}',
         borderColor: '{overlay.popover.border.color}',
         color: '{overlay.popover.color}',
-        borderRadius: '{overlay.popover.border.radius}',
+        borderRadius: '0',
         shadow: '{overlay.popover.shadow}',
         gutter: '10px',
         arrowOffset: '1.25rem',
       },
       content: {
-        padding: '{overlay.popover.padding}',
+        padding: '0',
       },
     },
     paginator: {

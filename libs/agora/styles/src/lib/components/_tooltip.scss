@@ -1,68 +1,16 @@
-.tooltip {
-  max-width: 250px;
-  background-color: #63676c;
-  padding: 2px !important;
-  border-radius: 3px;
+.tooltip,
+.tooltip-small {
+  font-size: 14px;
+  text-align: center;
+  margin-top: -20px;
 
   .p-tooltip-text {
-    background: none;
-    box-shadow: none;
-    font-size: 14px;
-    color: #fff;
+    padding: 10px;
   }
+}
 
-  .p-tooltip-arrow {
-    width: 0;
-    height: 0;
-  }
-
-  &.p-tooltip-top {
-    transform: translateY(-18px);
-
-    .p-tooltip-arrow {
-      bottom: -9px;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #63676c;
-      margin-left: -10px;
-    }
-  }
-
-  &.p-tooltip-bottom {
-    transform: translateY(18px);
-
-    .p-tooltip-arrow {
-      top: -9px;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-bottom: 10px solid #63676c;
-      margin-left: -10px;
-    }
-  }
-
-  &.p-tooltip-left {
-    transform: translateX(-18px);
-
-    .p-tooltip-arrow {
-      right: -9px;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-left: 10px solid #63676c;
-      margin-top: -10px;
-    }
-  }
-
-  &.p-tooltip-right {
-    transform: translateX(18px);
-
-    .p-tooltip-arrow {
-      left: -9px;
-      border-top: 10px solid transparent;
-      border-bottom: 10px solid transparent;
-      border-right: 10px solid #63676c;
-      margin-top: -10px;
-    }
-  }
+.tooltip-small .p-tooltip-text {
+  width: 150px;
 }
 
 .tooltip-nowrap {

@@ -46,23 +46,12 @@
             tooltipStyleClass="tooltip tooltip-nowrap"
           ></fa-icon>
         </div>
-        <!-- <div> -->
         <div>
-          <p-multiselect
-            [options]="optionalColumns"
-            [(ngModel)]="_selectedColumns"
-            [showHeader]="false"
-            optionLabel="header"
-            dropdownIcon="pi pi-filter"
-            styleClass="multiselect-no-border"
-            pTooltip="Control the columns that are displayed in this table"
-            tooltipPosition="top"
-            tooltipStyleClass="tooltip"
-          >
-            <ng-template pTemplate="selectedItems"></ng-template>
-          </p-multiselect>
+          <agora-gene-table-column-selector
+            [columns]="optionalColumns"
+            (columnChange)="onColumnChange($event)"
+          ></agora-gene-table-column-selector>
         </div>
-        <!-- </div> -->
       </div>
     </ng-template>
     <ng-template #header let-columns>

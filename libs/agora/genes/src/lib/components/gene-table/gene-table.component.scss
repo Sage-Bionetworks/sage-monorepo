@@ -11,24 +11,36 @@
     margin-left: 15px;
     align-items: center;
 
+    button {
+      cursor: pointer;
+      padding: 0;
+      border: none;
+      color: white;
+      background-color: transparent;
+
+      &:hover {
+        opacity: 0.7;
+      }
+    }
+
     > i {
       display: flex;
       height: 100%;
       align-items: center;
     }
 
-    .p-multiselect-dropdown {
-      display: flex;
-    }
+    // .p-multiselect-dropdown {
+    //   display: flex;
+    // }
   }
 
-  .p-multiselect-trigger,
-  fa-icon {
-    border: none;
-    cursor: pointer;
+  // .p-multiselect-trigger,
+  // fa-icon {
+  //   border: none;
+  //   cursor: pointer;
 
-    &:hover {
-      opacity: 0.7;
-    }
-  }
+  //   &:hover {
+  //     opacity: 0.7;
+  //   }
+  // }
 }
