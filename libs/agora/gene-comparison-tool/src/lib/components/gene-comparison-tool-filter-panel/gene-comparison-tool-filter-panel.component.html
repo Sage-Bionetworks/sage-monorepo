@@ -93,18 +93,18 @@
           </div>
           <ul>
             <li *ngFor="let option of filter.options; index as j">
-              <label>
-                <div>
-                  <p-checkbox
-                    [(ngModel)]="option.selected"
-                    [binary]="true"
-                    (ngModelChange)="handleChange(option)"
-                  ></p-checkbox>
-                </div>
-                <div>
+              <div class="checkbox">
+                <p-checkbox
+                  [(ngModel)]="option.selected"
+                  [binary]="true"
+                  (ngModelChange)="handleChange(option)"
+                  [inputId]="option.label"
+                  size="small"
+                />
+                <label [for]="option.label">
                   {{ option.label }}
-                </div>
-              </label>
+                </label>
+              </div>
             </li>
           </ul>
         </div>
