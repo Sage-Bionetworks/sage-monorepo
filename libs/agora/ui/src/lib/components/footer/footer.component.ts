@@ -4,10 +4,10 @@ import { SafeUrl } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
 import { ConfigService } from '@sagebionetworks/agora/config';
+import { NavigationLink } from '@sagebionetworks/agora/models';
 import { GitHubService } from '@sagebionetworks/agora/services';
 import { PathSanitizer } from '@sagebionetworks/agora/util';
 import { Observable } from 'rxjs';
-import { NavigationLink } from '../../models/navigation-link';
 
 @Component({
   selector: 'agora-footer',
