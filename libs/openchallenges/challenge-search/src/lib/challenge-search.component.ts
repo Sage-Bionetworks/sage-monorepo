@@ -120,7 +120,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   // ✅ Use @Input() instead of ActivatedRoute
   @Input() minStartDate?: string;
   @Input() maxStartDate?: string;
-  @Input() searchTerms?: string;
+  @Input() searchTerms = '';
   @Input() pageNumber = 0;
   @Input() pageSize = 24;
   @Input() sort: ChallengeSort = 'relevance';
@@ -200,6 +200,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   }
 
   ngOnInit() {
+    console.log(this.status);
     // this.activatedRoute.queryParams.subscribe((params) => {
     //   // Chunk of codes below used to update selected values that represent in the UI of filters
     //   this.selectedMinStartDate = params['minStartDate'];
@@ -263,24 +264,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     //   this.query.next(defaultQuery);
     // });
 
-    const defaultQuery: ChallengeSearchQuery = {
-      categories: this.categories,
-      incentives: this.incentives,
-      inputDataTypes: this.inputDataTypes,
-      maxStartDate: this.maxStartDate,
-      minStartDate: this.minStartDate,
-      operations: this.operations,
-      organizations: this.organizations,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-      platforms: this.platforms,
-      searchTerms: this.searchTerms,
-      sort: this.sort,
-      status: this.status,
-      submissionTypes: this.submissionTypes,
-    };
-
-    this.query.next(defaultQuery);
+    this.updateSelectedValues();
+    this.updateQuery();
 
     // update the total number of challenges in database with empty query
     this.challengeService.listChallenges().subscribe((page) => {
@@ -434,6 +419,70 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     this.challengeSearchDataService.setSearchQuery(dropdown, query);
   }
 
+  private updateSelectedValues() {
+    this.selectedMinStartDate = this.minStartDate;
+    this.selectedMaxStartDate = this.maxStartDate;
+
+    if (this.minStartDate || this.maxStartDate) {
+      if (this.refreshed) {
+        // display custom range only once with defined date query after refreshing
+        this.selectedYear = 'custom';
+        this.isCustomYear = true;
+        this.customMonthRange = [
+          new Date(this.minStartDate as string),
+          new Date(this.maxStartDate as string),
+        ];
+        this.refreshed = false;
+      }
+    } else {
+      // ensure to select default year range if no date defined
+      this.selectedYear = this.defaultSelectedYear;
+    }
+
+    // update selected filter values based on params in url
+
+    this.searchedTerms = this.searchTerms;
+    this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
+    this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
+    this.sortedBy = this.sort || this.defaultSortedBy;
+
+    this.selectedValues['categories'] = this.splitParam(this.categories);
+    this.selectedValues['incentives'] = this.splitParam(this.incentives);
+    this.selectedValues['inputDataTypes'] = this.splitParam(this.inputDataTypes).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['operations'] = this.splitParam(this.operations).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['organizations'] = this.splitParam(this.organizations).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['platforms'] = this.splitParam(this.platforms);
+    this.selectedValues['status'] = this.splitParam(this.status);
+    this.selectedValues['submissionTypes'] = this.splitParam(this.submissionTypes);
+  }
+
+  private updateQuery() {
+    const defaultQuery: ChallengeSearchQuery = {
+      categories: this.selectedValues['categories'],
+      incentives: this.selectedValues['incentives'],
+      inputDataTypes: this.selectedValues['inputDataTypes'],
+      maxStartDate: this.selectedMaxStartDate,
+      minStartDate: this.selectedMinStartDate,
+      operations: this.selectedValues['operations'],
+      organizations: this.selectedValues['organizations'],
+      pageNumber: this.selectedPageNumber,
+      pageSize: this.selectedPageSize,
+      platforms: this.selectedValues['platforms'],
+      searchTerms: this.searchedTerms,
+      sort: this.sortedBy,
+      status: this.selectedValues['status'],
+      submissionTypes: this.selectedValues['submissionTypes'],
+    };
+
+    this.query.next(defaultQuery);
+  }
+
   private setDropdownSelections(): void {
     this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
       ids: this.selectedValues['inputDataTypes'],
@@ -483,7 +532,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     return this.datePipe.transform(date, format);
   }
 
-  splitParam(activeParam: string | undefined, by = ','): any[] {
+  splitParam(activeParam: any | undefined, by = ','): any[] {
     return activeParam ? activeParam.split(by) : [];
   }
 
