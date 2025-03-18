@@ -13,15 +13,14 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
-import { HelperService } from '@sagebionetworks/agora/services';
 import { CommonModule } from '@angular/common';
 import { OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
 import { ScoreData } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-score-barchart',
   imports: [CommonModule],
-  providers: [HelperService],
   templateUrl: './score-barchart.component.html',
   styleUrls: ['./score-barchart.component.scss'],
   encapsulation: ViewEncapsulation.None,
