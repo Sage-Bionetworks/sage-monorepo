@@ -16,7 +16,6 @@ interface TableColumn {
   selector: 'agora-gene-similar',
   standalone: true,
   imports: [ModalLinkComponent, GeneTableComponent, RouterLink, SvgIconComponent],
-  providers: [GenesService],
   templateUrl: './gene-similar.component.html',
   styleUrls: ['./gene-similar.component.scss'],
 })

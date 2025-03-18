@@ -37,7 +37,6 @@ interface Pane {
     FontAwesomeModule,
     LoadingIconComponent,
   ],
-  providers: [CookieService],
   templateUrl: './gene-comparison-tool-how-to-panel.component.html',
   styleUrls: ['./gene-comparison-tool-how-to-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,

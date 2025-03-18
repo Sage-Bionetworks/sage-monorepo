@@ -2,14 +2,13 @@
 import { Component, inject, Input } from '@angular/core';
 import * as d3 from 'd3';
 
-import { HelperService } from '@sagebionetworks/agora/services';
 import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { HelperService } from '@sagebionetworks/agora/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 @Component({
   selector: 'agora-candlestick-chart',
   standalone: true,
-  providers: [HelperService],
   templateUrl: './candlestick-chart.component.html',
   styleUrls: ['./candlestick-chart.component.scss'],
 })

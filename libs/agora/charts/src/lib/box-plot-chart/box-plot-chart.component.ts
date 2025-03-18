@@ -17,7 +17,6 @@ import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 @Component({
   selector: 'agora-box-plot-chart',
   imports: [BoxplotDirective],
-  providers: [HelperService],
   templateUrl: './box-plot-chart.component.html',
   styleUrls: ['./box-plot-chart.component.scss'],
 })
