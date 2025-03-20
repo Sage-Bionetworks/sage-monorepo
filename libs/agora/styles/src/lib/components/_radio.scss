@@ -36,7 +36,7 @@ p-radiobutton {
       border-color: var(--color-primary);
     }
 
-    &.p-highlight {
+    &.p-radiobutton-checked {
       border-color: var(--color-primary);
 
       .p-radiobutton-icon {

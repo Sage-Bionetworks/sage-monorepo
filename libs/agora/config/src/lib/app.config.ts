@@ -1,6 +1,5 @@
 export interface AppConfig {
   appVersion: string;
-  dataVersion: string;
   csrApiUrl: string;
   isPlatformServer: boolean;
   ssrApiUrl: string;

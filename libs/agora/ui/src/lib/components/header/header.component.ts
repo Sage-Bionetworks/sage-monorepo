@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NavigationLink } from '../../models/navigation-link';
 import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
+import { NavigationLink } from '@sagebionetworks/agora/models';
 import { SvgImageComponent } from '../svg-image/svg-image.component';
 
 @Component({
