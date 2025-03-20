@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/gene-table-column-selector.component';
+import { CapitalizePipe } from '@sagebionetworks/agora/util';
 
 @Component({
   selector: 'agora-gene-table',
@@ -22,6 +23,7 @@ import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/
     FormsModule,
     FontAwesomeModule,
     GeneTableColumnSelectorComponent,
+    CapitalizePipe,
   ],
   providers: [HelperService],
   templateUrl: './gene-table.component.html',
