@@ -78,7 +78,7 @@
           [style]="{ width: column.width + 'px' }"
           [ngClass]="{ hidden: !selectedColumns.includes(column) }"
         >
-          {{ item[column.field] }}
+          {{ item[column.field] | capitalize }}
         </td>
       </tr>
     </ng-template>
