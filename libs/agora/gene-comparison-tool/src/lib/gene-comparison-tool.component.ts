@@ -1,14 +1,16 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 import { CommonModule } from '@angular/common';
 import {
   AfterViewInit,
   Component,
   inject,
+  Input,
   OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import {
   DistributionService,
   GCTGene,
@@ -85,12 +87,18 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
 })
 export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDestroy {
   router = inject(Router);
-  route = inject(ActivatedRoute);
   geneService = inject(GenesService);
   distributionService = inject(DistributionService);
   helperService = inject(HelperService);
   messageService = inject(MessageService);
   filterService = inject(FilterService);
+
+  /* Query Parameters ------------------------------------------------------ */
+  @Input('category') categoryParam = '';
+  @Input('subCategory') subCategoryParam = '';
+  @Input('sortField') sortFieldParam = '';
+  @Input('sortOrder') sortOrderParam = '';
+  @Input('significance') significanceParam = '';
 
   isLoading = true;
 
@@ -99,7 +107,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
 
   /* Categories ------------------------------------------------------------ */
   categories: GCTSelectOption[] = cloneDeep(variables.categories);
-  category: 'RNA - Differential Expression' | 'Protein - Differential Expression';
+  category: 'RNA - Differential Expression' | 'Protein - Differential Expression' =
+    'RNA - Differential Expression';
   subCategories: GCTSelectOption[] = [];
   subCategory = '';
   subCategoryLabel = '';
@@ -172,27 +181,32 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('scorePanel') scorePanel!: ScorePanelComponent;
   @ViewChild('pinnedGenesModal') pinnedGenesModal!: PinnedGenesModalComponent;
 
-  constructor() {
-    this.category = 'RNA - Differential Expression';
-  }
-
   ngOnInit() {
-    this.urlParamsSubscription = this.route.queryParams.subscribe((params) => {
-      this.urlParams = params || {};
+    this.category = this.categoryParam ? this.categoryParam : this.categories[0].value;
 
-      this.category = this.urlParams['category'] || this.categories[0].value;
-      this.subCategory = this.urlParams['subCategory'] || '';
-      this.updateSubCategories();
+    if (this.subCategoryParam) {
+      this.subCategory = this.subCategoryParam;
+    }
+    this.updateSubCategories();
 
-      this.sortField = this.urlParams['sortField'] || '';
-      this.sortOrder = '1' === this.urlParams['sortOrder'] ? 1 : -1;
+    if (this.sortFieldParam) {
+      this.sortField = this.sortFieldParam;
+    }
 
-      this.significanceThreshold =
-        this.urlParams['significance'] || this.DEFAULT_SIGNIFICANCE_THRESHOLD;
-      this.significanceThresholdActive = !!this.urlParams['significance'];
+    if (this.sortOrderParam) {
+      this.sortOrder = this.sortOrderParam === '1' ? 1 : -1;
+    }
 
-      this.loadGenes();
-    });
+    if (this.significanceParam) {
+      const parsedValue = parseFloat(this.significanceParam);
+      if (!isNaN(parsedValue)) {
+        this.significanceThreshold = parsedValue;
+      }
+    }
+
+    this.significanceThresholdActive = !!this.significanceParam;
+
+    this.loadGenes();
 
     this.filterService.register('intersect', helpers.intersectFilterCallback);
     this.filterService.register(
