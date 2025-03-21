@@ -117,21 +117,21 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   @ViewChild('calendar') calendar?: Calendar;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
-  //  use @Input to retrieve the route param
-  @Input({ required: false }) categoriesParam: ChallengeCategory[] = [];
-  @Input({ required: false }) incentivesParam: ChallengeIncentive[] = [];
-  @Input({ required: false }) inputDataTypesParam: number[] = [];
-  @Input({ required: false }) maxStartDateParam?: string;
-  @Input({ required: false }) minStartDateParam?: string;
-  @Input({ required: false }) operationsParam: number[] = [];
-  @Input({ required: false }) organizationsParam: number[] = [];
-  @Input({ required: false }) pageNumberParam = 0;
-  @Input({ required: false }) pageSizeParam = 24;
-  @Input({ required: false }) platformsParam: string[] = [];
-  @Input({ required: false }) searchTermsParam = '';
-  @Input({ required: false }) sortParam: ChallengeSort = 'relevance';
-  @Input({ required: false }) statusParam: ChallengeStatus[] = [];
-  @Input({ required: false }) submissionTypesParam: ChallengeSubmissionType[] = [];
+  // use @Input to retrieve the route param
+  @Input({ required: false }) categoriesParam!: ChallengeCategory[];
+  @Input({ required: false }) incentivesParam!: ChallengeIncentive[];
+  @Input({ required: false }) inputDataTypesParam!: number[];
+  @Input({ required: false }) maxStartDateParam!: string;
+  @Input({ required: false }) minStartDateParam!: string;
+  @Input({ required: false }) operationsParam!: number[];
+  @Input({ required: false }) organizationsParam!: number[];
+  @Input({ required: false }) pageNumberParam!: number;
+  @Input({ required: false }) pageSizeParam!: number;
+  @Input({ required: false }) platformsParam!: string[];
+  @Input({ required: false }) searchTermsParam!: string;
+  @Input({ required: false }) sortParam!: ChallengeSort;
+  @Input({ required: false }) statusParam!: ChallengeStatus[];
+  @Input({ required: false }) submissionTypesParam!: ChallengeSubmissionType[];
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -182,8 +182,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   };
 
   constructor(
-    private challengeService: ChallengeService,
-    private challengeSearchDataService: ChallengeSearchDataService,
+    private readonly challengeService: ChallengeService,
+    private readonly challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
     private _snackBar: MatSnackBar,
     private seoService: SeoService,
@@ -284,7 +284,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
-      // this.selectedPageSize = this.defaultPageSize;
       this.paginator.resetPageNumber();
     }
 
@@ -365,8 +364,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
         this.selectedYear = 'custom';
         this.isCustomYear = true;
         this.customMonthRange = [
-          new Date(this.minStartDateParam as string),
-          new Date(this.maxStartDateParam as string),
+          new Date(this.minStartDateParam),
+          new Date(this.maxStartDateParam),
         ];
         this.refreshed = false;
       }
@@ -467,7 +466,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     return this.datePipe.transform(date, format);
   }
 
-  splitParam(activeParam: any | undefined, by = ','): any[] {
+  splitParam(activeParam: any, by = ','): any[] {
     return activeParam ? activeParam.split(by) : [];
   }
 
