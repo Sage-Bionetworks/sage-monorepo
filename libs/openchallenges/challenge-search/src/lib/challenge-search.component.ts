@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   Component,
+  Input,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -54,7 +55,7 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -105,16 +106,30 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
-  private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
-    {},
-  );
+  private readonly query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
 
-  private challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private readonly challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  private destroy = new Subject<void>();
+  private readonly destroy = new Subject<void>();
 
   @ViewChild('calendar') calendar?: Calendar;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
+
+  // use @Input to retrieve the route param
+  @Input({ required: false }) categoriesParam!: ChallengeCategory[];
+  @Input({ required: false }) incentivesParam!: ChallengeIncentive[];
+  @Input({ required: false }) inputDataTypesParam!: number[];
+  @Input({ required: false }) maxStartDateParam!: string;
+  @Input({ required: false }) minStartDateParam!: string;
+  @Input({ required: false }) operationsParam!: number[];
+  @Input({ required: false }) organizationsParam!: number[];
+  @Input({ required: false }) pageNumberParam!: number;
+  @Input({ required: false }) platformsParam!: string[];
+  @Input({ required: false }) searchTermsParam!: string;
+  @Input({ required: false }) sortParam!: ChallengeSort;
+  @Input({ required: false }) statusParam!: ChallengeStatus[];
+  @Input({ required: false }) submissionTypesParam!: ChallengeSubmissionType[];
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -165,14 +180,13 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   };
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private challengeService: ChallengeService,
-    private challengeSearchDataService: ChallengeSearchDataService,
+    private readonly challengeService: ChallengeService,
+    private readonly challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
+    private readonly _snackBar: MatSnackBar,
+    private readonly seoService: SeoService,
+    private readonly renderer2: Renderer2,
+    private readonly _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -184,68 +198,8 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      // Chunk of codes below used to update selected values that represent in the UI of filters
-      this.selectedMinStartDate = params['minStartDate'];
-      this.selectedMaxStartDate = params['maxStartDate'];
-
-      if (params['minStartDate'] || params['maxStartDate']) {
-        if (this.refreshed) {
-          // display custom range only once with defined date query after refreshing
-          this.selectedYear = 'custom';
-          this.isCustomYear = true;
-          this.customMonthRange = [
-            new Date(params['minStartDate']),
-            new Date(params['maxStartDate']),
-          ];
-          this.refreshed = false;
-        }
-      } else {
-        // ensure to select default year range if no date defined
-        this.selectedYear = this.defaultSelectedYear;
-      }
-
-      // update selected filter values based on params in url
-
-      this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-      this.sortedBy = params['sort'] || this.defaultSortedBy;
-
-      this.selectedValues['categories'] = this.splitParam(params['categories']);
-      this.selectedValues['incentives'] = this.splitParam(params['incentives']);
-      this.selectedValues['inputDataTypes'] = this.splitParam(params['inputDataTypes']).map(
-        (idString) => +idString,
-      );
-      this.selectedValues['operations'] = this.splitParam(params['operations']).map(
-        (idString) => +idString,
-      );
-      this.selectedValues['organizations'] = this.splitParam(params['organizations']).map(
-        (idString) => +idString,
-      );
-      this.selectedValues['platforms'] = this.splitParam(params['platforms']);
-      this.selectedValues['status'] = this.splitParam(params['status']);
-      this.selectedValues['submissionTypes'] = this.splitParam(params['submissionTypes']);
-
-      const defaultQuery: ChallengeSearchQuery = {
-        categories: this.selectedValues['categories'],
-        incentives: this.selectedValues['incentives'],
-        inputDataTypes: this.selectedValues['inputDataTypes'],
-        maxStartDate: this.selectedMaxStartDate,
-        minStartDate: this.selectedMinStartDate,
-        operations: this.selectedValues['operations'],
-        organizations: this.selectedValues['organizations'],
-        pageNumber: this.selectedPageNumber,
-        pageSize: this.selectedPageSize,
-        platforms: this.selectedValues['platforms'],
-        searchTerms: this.searchedTerms,
-        sort: this.sortedBy,
-        status: this.selectedValues['status'],
-        submissionTypes: this.selectedValues['submissionTypes'],
-      };
-
-      this.query.next(defaultQuery);
-    });
+    this.updateSelectedValues();
+    this.updateQuery();
 
     // update the total number of challenges in database with empty query
     this.challengeService.listChallenges().subscribe((page) => {
@@ -328,7 +282,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
-      // this.selectedPageSize = this.defaultPageSize;
       this.paginator.resetPageNumber();
     }
 
@@ -399,6 +352,69 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     this.challengeSearchDataService.setSearchQuery(dropdown, query);
   }
 
+  private updateSelectedValues() {
+    this.selectedMinStartDate = this.minStartDateParam;
+    this.selectedMaxStartDate = this.maxStartDateParam;
+
+    if (this.minStartDateParam || this.maxStartDateParam) {
+      if (this.refreshed) {
+        // display custom range only once with defined date query after refreshing
+        this.selectedYear = 'custom';
+        this.isCustomYear = true;
+        this.customMonthRange = [
+          new Date(this.minStartDateParam),
+          new Date(this.maxStartDateParam),
+        ];
+        this.refreshed = false;
+      }
+    } else {
+      // ensure to select default year range if no date defined
+      this.selectedYear = this.defaultSelectedYear;
+    }
+
+    // update selected filter values based on params in url
+    this.searchedTerms = this.searchTermsParam;
+    this.selectedPageNumber = +this.pageNumberParam || this.defaultPageNumber;
+    this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
+    this.sortedBy = this.sortParam || this.defaultSortedBy;
+
+    this.selectedValues['categories'] = this.splitParam(this.categoriesParam);
+    this.selectedValues['incentives'] = this.splitParam(this.incentivesParam);
+    this.selectedValues['inputDataTypes'] = this.splitParam(this.inputDataTypesParam).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['operations'] = this.splitParam(this.operationsParam).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['organizations'] = this.splitParam(this.organizationsParam).map(
+      (idString) => +idString,
+    );
+    this.selectedValues['platforms'] = this.splitParam(this.platformsParam);
+    this.selectedValues['status'] = this.splitParam(this.statusParam);
+    this.selectedValues['submissionTypes'] = this.splitParam(this.submissionTypesParam);
+  }
+
+  private updateQuery() {
+    const defaultQuery: ChallengeSearchQuery = {
+      categories: this.selectedValues['categories'],
+      incentives: this.selectedValues['incentives'],
+      inputDataTypes: this.selectedValues['inputDataTypes'],
+      maxStartDate: this.selectedMaxStartDate,
+      minStartDate: this.selectedMinStartDate,
+      operations: this.selectedValues['operations'],
+      organizations: this.selectedValues['organizations'],
+      pageNumber: this.selectedPageNumber,
+      pageSize: this.selectedPageSize,
+      platforms: this.selectedValues['platforms'],
+      searchTerms: this.searchedTerms,
+      sort: this.sortedBy,
+      status: this.selectedValues['status'],
+      submissionTypes: this.selectedValues['submissionTypes'],
+    };
+
+    this.query.next(defaultQuery);
+  }
+
   private setDropdownSelections(): void {
     this.challengeSearchDataService.setSearchQuery('inputDataTypes', {
       ids: this.selectedValues['inputDataTypes'],
@@ -448,7 +464,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     return this.datePipe.transform(date, format);
   }
 
-  splitParam(activeParam: string | undefined, by = ','): any[] {
+  splitParam(activeParam: any, by = ','): any[] {
     return activeParam ? activeParam.split(by) : [];
   }
 
