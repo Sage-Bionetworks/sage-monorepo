@@ -14,13 +14,12 @@ import {
 } from '@angular/core';
 import * as d3 from 'd3';
 
-import { HelperService } from '@sagebionetworks/agora/services';
 import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
+import { HelperService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-median-barchart',
   standalone: true,
-  providers: [HelperService],
   templateUrl: './median-barchart.component.html',
   styleUrls: ['./median-barchart.component.scss'],
   encapsulation: ViewEncapsulation.None,

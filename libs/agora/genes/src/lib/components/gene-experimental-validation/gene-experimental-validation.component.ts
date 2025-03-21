@@ -7,7 +7,6 @@ import { ExperimentalValidationWithTeamData } from '../../models';
 @Component({
   selector: 'agora-gene-experimental-validation',
   imports: [CommonModule],
-  providers: [TeamsService],
   templateUrl: './gene-experimental-validation.component.html',
   styleUrls: ['./gene-experimental-validation.component.scss'],
 })

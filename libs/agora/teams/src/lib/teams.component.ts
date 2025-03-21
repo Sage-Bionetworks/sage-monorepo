@@ -1,24 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Team, TeamsList, TeamsService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { TeamListComponent } from './team-list/team-list.component';
 import { catchError, finalize, map, Observable, of } from 'rxjs';
+import { TeamListComponent } from './team-list/team-list.component';
 
 @Component({
   selector: 'agora-teams',
   imports: [CommonModule, TeamListComponent],
-  providers: [HelperService, TeamsService],
   templateUrl: './teams.component.html',
   styleUrls: ['./teams.component.scss'],
 })
 export class TeamsComponent implements OnInit {
-  teams$!: Observable<Team[]>;
+  helperService = inject(HelperService);
+  teamsService = inject(TeamsService);
 
-  constructor(
-    private helperService: HelperService,
-    private teamsService: TeamsService,
-  ) {}
+  teams$!: Observable<Team[]>;
 
   ngOnInit() {
     this.loadTeams();

@@ -32,7 +32,6 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
     DownloadDomImageComponent,
     BoxPlotComponent,
   ],
-  providers: [HelperService],
   templateUrl: './gene-evidence-rna.component.html',
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
