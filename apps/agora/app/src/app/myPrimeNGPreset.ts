@@ -2064,12 +2064,12 @@ export const MyPreset = definePreset(Lara, {
         padding: '0.75rem 1rem',
       },
       headerCell: {
-        selectedBackground: '{highlight.background}',
+        selectedBackground: 'transparent',
         borderColor: '{datatable.border.color}',
         hoverColor: '{content.hover.color}',
         selectedColor: '{highlight.color}',
         gap: '0.5rem',
-        padding: '0.75rem 1rem',
+        padding: '0.0625rem 0.0625rem',
         focusRing: {
           width: '{focus.ring.width}',
           style: '{focus.ring.style}',
@@ -2198,12 +2198,12 @@ export const MyPreset = definePreset(Lara, {
             borderColor: '{content.border.color}',
           },
           header: {
-            background: '{surface.50}',
+            background: 'transparent',
             color: '{text.color}',
           },
           headerCell: {
-            background: '{surface.50}',
-            hoverBackground: '{surface.100}',
+            background: 'transparent',
+            hoverBackground: 'transparent',
             color: '{text.color}',
           },
           footer: {
