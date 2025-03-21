@@ -117,21 +117,21 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   @ViewChild('calendar') calendar?: Calendar;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
-  // ✅ Use @Input() instead of ActivatedRoute
-  @Input() minStartDate?: string;
-  @Input() maxStartDate?: string;
-  @Input() searchTerms = '';
-  @Input() pageNumber = 0;
-  @Input() pageSize = 24;
-  @Input() sort: ChallengeSort = 'relevance';
-  @Input() categories: ChallengeCategory[] = [];
-  @Input() incentives: ChallengeIncentive[] = [];
-  @Input() inputDataTypes: number[] = [];
-  @Input() operations: number[] = [];
-  @Input() organizations: number[] = [];
-  @Input() platforms: string[] = [];
-  @Input() status: ChallengeStatus[] = [];
-  @Input() submissionTypes: ChallengeSubmissionType[] = [];
+  //  use @Input to retrieve the route param
+  @Input({ required: false }) categoriesParam: ChallengeCategory[] = [];
+  @Input({ required: false }) incentivesParam: ChallengeIncentive[] = [];
+  @Input({ required: false }) inputDataTypesParam: number[] = [];
+  @Input({ required: false }) maxStartDateParam?: string;
+  @Input({ required: false }) minStartDateParam?: string;
+  @Input({ required: false }) operationsParam: number[] = [];
+  @Input({ required: false }) organizationsParam: number[] = [];
+  @Input({ required: false }) pageNumberParam = 0;
+  @Input({ required: false }) pageSizeParam = 24;
+  @Input({ required: false }) platformsParam: string[] = [];
+  @Input({ required: false }) searchTermsParam = '';
+  @Input({ required: false }) sortParam: ChallengeSort = 'relevance';
+  @Input({ required: false }) statusParam: ChallengeStatus[] = [];
+  @Input({ required: false }) submissionTypesParam: ChallengeSubmissionType[] = [];
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -356,17 +356,17 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   }
 
   private updateSelectedValues() {
-    this.selectedMinStartDate = this.minStartDate;
-    this.selectedMaxStartDate = this.maxStartDate;
+    this.selectedMinStartDate = this.minStartDateParam;
+    this.selectedMaxStartDate = this.maxStartDateParam;
 
-    if (this.minStartDate || this.maxStartDate) {
+    if (this.minStartDateParam || this.maxStartDateParam) {
       if (this.refreshed) {
         // display custom range only once with defined date query after refreshing
         this.selectedYear = 'custom';
         this.isCustomYear = true;
         this.customMonthRange = [
-          new Date(this.minStartDate as string),
-          new Date(this.maxStartDate as string),
+          new Date(this.minStartDateParam as string),
+          new Date(this.maxStartDateParam as string),
         ];
         this.refreshed = false;
       }
@@ -376,25 +376,25 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     }
 
     // update selected filter values based on params in url
-    this.searchedTerms = this.searchTerms;
-    this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
+    this.searchedTerms = this.searchTermsParam;
+    this.selectedPageNumber = +this.pageNumberParam || this.defaultPageNumber;
     this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-    this.sortedBy = this.sort || this.defaultSortedBy;
+    this.sortedBy = this.sortParam || this.defaultSortedBy;
 
-    this.selectedValues['categories'] = this.splitParam(this.categories);
-    this.selectedValues['incentives'] = this.splitParam(this.incentives);
-    this.selectedValues['inputDataTypes'] = this.splitParam(this.inputDataTypes).map(
+    this.selectedValues['categories'] = this.splitParam(this.categoriesParam);
+    this.selectedValues['incentives'] = this.splitParam(this.incentivesParam);
+    this.selectedValues['inputDataTypes'] = this.splitParam(this.inputDataTypesParam).map(
       (idString) => +idString,
     );
-    this.selectedValues['operations'] = this.splitParam(this.operations).map(
+    this.selectedValues['operations'] = this.splitParam(this.operationsParam).map(
       (idString) => +idString,
     );
-    this.selectedValues['organizations'] = this.splitParam(this.organizations).map(
+    this.selectedValues['organizations'] = this.splitParam(this.organizationsParam).map(
       (idString) => +idString,
     );
-    this.selectedValues['platforms'] = this.splitParam(this.platforms);
-    this.selectedValues['status'] = this.splitParam(this.status);
-    this.selectedValues['submissionTypes'] = this.splitParam(this.submissionTypes);
+    this.selectedValues['platforms'] = this.splitParam(this.platformsParam);
+    this.selectedValues['status'] = this.splitParam(this.statusParam);
+    this.selectedValues['submissionTypes'] = this.splitParam(this.submissionTypesParam);
   }
 
   private updateQuery() {
