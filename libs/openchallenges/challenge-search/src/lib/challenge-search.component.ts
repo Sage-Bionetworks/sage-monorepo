@@ -106,13 +106,12 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
-  private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
-    {},
-  );
+  private readonly query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
 
-  private challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private readonly challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  private destroy = new Subject<void>();
+  private readonly destroy = new Subject<void>();
 
   @ViewChild('calendar') calendar?: Calendar;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
@@ -126,7 +125,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   @Input({ required: false }) operationsParam!: number[];
   @Input({ required: false }) organizationsParam!: number[];
   @Input({ required: false }) pageNumberParam!: number;
-  @Input({ required: false }) pageSizeParam!: number;
   @Input({ required: false }) platformsParam!: string[];
   @Input({ required: false }) searchTermsParam!: string;
   @Input({ required: false }) sortParam!: ChallengeSort;
@@ -185,10 +183,10 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     private readonly challengeService: ChallengeService,
     private readonly challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
+    private readonly _snackBar: MatSnackBar,
+    private readonly seoService: SeoService,
+    private readonly renderer2: Renderer2,
+    private readonly _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
