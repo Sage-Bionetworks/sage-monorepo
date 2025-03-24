@@ -9,7 +9,11 @@
       }
     </div>
     <div>
-      <button class="gct-filter-list-item-clear" (click)="clearWasClicked()">
+      <button
+        class="gct-filter-list-item-clear"
+        (click)="clearWasClicked()"
+        [attr.aria-label]="`Clear ${title !== '' ? title : description}`"
+      >
         <svg
           width="10"
           height="10"
