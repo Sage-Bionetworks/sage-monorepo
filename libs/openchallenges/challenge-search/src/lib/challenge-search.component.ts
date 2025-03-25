@@ -1,7 +1,6 @@
 import {
   AfterContentInit,
   Component,
-  Input,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -55,7 +54,7 @@ import { CommonModule, DatePipe, Location } from '@angular/common';
 import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { DividerModule } from 'primeng/divider';
@@ -117,22 +116,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   @ViewChild('calendar') calendar?: DatePicker;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
-  // ✅ Use @Input() instead of ActivatedRoute
-  @Input() minStartDate?: string;
-  @Input() maxStartDate?: string;
-  @Input() searchTerms?: string;
-  @Input() pageNumber = 0;
-  @Input() pageSize = 24;
-  @Input() sort: ChallengeSort = 'relevance';
-  @Input() categories: ChallengeCategory[] = [];
-  @Input() incentives: ChallengeIncentive[] = [];
-  @Input() inputDataTypes: number[] = [];
-  @Input() operations: number[] = [];
-  @Input() organizations: number[] = [];
-  @Input() platforms: string[] = [];
-  @Input() status: ChallengeStatus[] = [];
-  @Input() submissionTypes: ChallengeSubmissionType[] = [];
-
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
   searchResultsCount!: number;
@@ -182,6 +165,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   };
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private challengeService: ChallengeService,
     private challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
@@ -200,87 +184,68 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   }
 
   ngOnInit() {
-    // this.activatedRoute.queryParams.subscribe((params) => {
-    //   // Chunk of codes below used to update selected values that represent in the UI of filters
-    //   this.selectedMinStartDate = params['minStartDate'];
-    //   this.selectedMaxStartDate = params['maxStartDate'];
+    this.activatedRoute.queryParams.subscribe((params) => {
+      // Chunk of codes below used to update selected values that represent in the UI of filters
+      this.selectedMinStartDate = params['minStartDate'];
+      this.selectedMaxStartDate = params['maxStartDate'];
 
-    //   if (params['minStartDate'] || params['maxStartDate']) {
-    //     if (this.refreshed) {
-    //       // display custom range only once with defined date query after refreshing
-    //       this.selectedYear = 'custom';
-    //       this.isCustomYear = true;
-    //       this.customMonthRange = [
-    //         new Date(params['minStartDate']),
-    //         new Date(params['maxStartDate']),
-    //       ];
-    //       this.refreshed = false;
-    //     }
-    //   } else {
-    //     // ensure to select default year range if no date defined
-    //     this.selectedYear = this.defaultSelectedYear;
-    //   }
+      if (params['minStartDate'] || params['maxStartDate']) {
+        if (this.refreshed) {
+          // display custom range only once with defined date query after refreshing
+          this.selectedYear = 'custom';
+          this.isCustomYear = true;
+          this.customMonthRange = [
+            new Date(params['minStartDate']),
+            new Date(params['maxStartDate']),
+          ];
+          this.refreshed = false;
+        }
+      } else {
+        // ensure to select default year range if no date defined
+        this.selectedYear = this.defaultSelectedYear;
+      }
 
-    //   // update selected filter values based on params in url
+      // update selected filter values based on params in url
 
-    //   this.searchedTerms = params['searchTerms'];
-    //   this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-    //   this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-    //   this.sortedBy = params['sort'] || this.defaultSortedBy;
+      this.searchedTerms = params['searchTerms'];
+      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
+      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
+      this.sortedBy = params['sort'] || this.defaultSortedBy;
 
-    //   this.selectedValues['categories'] = this.splitParam(params['categories']);
-    //   this.selectedValues['incentives'] = this.splitParam(params['incentives']);
-    //   this.selectedValues['inputDataTypes'] = this.splitParam(params['inputDataTypes']).map(
-    //     (idString) => +idString,
-    //   );
-    //   this.selectedValues['operations'] = this.splitParam(params['operations']).map(
-    //     (idString) => +idString,
-    //   );
-    //   this.selectedValues['organizations'] = this.splitParam(params['organizations']).map(
-    //     (idString) => +idString,
-    //   );
-    //   this.selectedValues['platforms'] = this.splitParam(params['platforms']);
-    //   this.selectedValues['status'] = this.splitParam(params['status']);
-    //   this.selectedValues['submissionTypes'] = this.splitParam(params['submissionTypes']);
+      this.selectedValues['categories'] = this.splitParam(params['categories']);
+      this.selectedValues['incentives'] = this.splitParam(params['incentives']);
+      this.selectedValues['inputDataTypes'] = this.splitParam(params['inputDataTypes']).map(
+        (idString) => +idString,
+      );
+      this.selectedValues['operations'] = this.splitParam(params['operations']).map(
+        (idString) => +idString,
+      );
+      this.selectedValues['organizations'] = this.splitParam(params['organizations']).map(
+        (idString) => +idString,
+      );
+      this.selectedValues['platforms'] = this.splitParam(params['platforms']);
+      this.selectedValues['status'] = this.splitParam(params['status']);
+      this.selectedValues['submissionTypes'] = this.splitParam(params['submissionTypes']);
 
-    //   const defaultQuery: ChallengeSearchQuery = {
-    //     categories: this.selectedValues['categories'],
-    //     incentives: this.selectedValues['incentives'],
-    //     inputDataTypes: this.selectedValues['inputDataTypes'],
-    //     maxStartDate: this.selectedMaxStartDate,
-    //     minStartDate: this.selectedMinStartDate,
-    //     operations: this.selectedValues['operations'],
-    //     organizations: this.selectedValues['organizations'],
-    //     pageNumber: this.selectedPageNumber,
-    //     pageSize: this.selectedPageSize,
-    //     platforms: this.selectedValues['platforms'],
-    //     searchTerms: this.searchedTerms,
-    //     sort: this.sortedBy,
-    //     status: this.selectedValues['status'],
-    //     submissionTypes: this.selectedValues['submissionTypes'],
-    //   };
+      const defaultQuery: ChallengeSearchQuery = {
+        categories: this.selectedValues['categories'],
+        incentives: this.selectedValues['incentives'],
+        inputDataTypes: this.selectedValues['inputDataTypes'],
+        maxStartDate: this.selectedMaxStartDate,
+        minStartDate: this.selectedMinStartDate,
+        operations: this.selectedValues['operations'],
+        organizations: this.selectedValues['organizations'],
+        pageNumber: this.selectedPageNumber,
+        pageSize: this.selectedPageSize,
+        platforms: this.selectedValues['platforms'],
+        searchTerms: this.searchedTerms,
+        sort: this.sortedBy,
+        status: this.selectedValues['status'],
+        submissionTypes: this.selectedValues['submissionTypes'],
+      };
 
-    //   this.query.next(defaultQuery);
-    // });
-
-    const defaultQuery: ChallengeSearchQuery = {
-      categories: this.categories,
-      incentives: this.incentives,
-      inputDataTypes: this.inputDataTypes,
-      maxStartDate: this.maxStartDate,
-      minStartDate: this.minStartDate,
-      operations: this.operations,
-      organizations: this.organizations,
-      pageNumber: this.pageNumber,
-      pageSize: this.pageSize,
-      platforms: this.platforms,
-      searchTerms: this.searchTerms,
-      sort: this.sort,
-      status: this.status,
-      submissionTypes: this.submissionTypes,
-    };
-
-    this.query.next(defaultQuery);
+      this.query.next(defaultQuery);
+    });
 
     // update the total number of challenges in database with empty query
     this.challengeService.listChallenges().subscribe((page) => {
