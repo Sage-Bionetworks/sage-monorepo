@@ -395,7 +395,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
         (params, [key, value]) => (value !== '' ? params.set(key, value) : params.delete(key)),
         currentParams,
       );
-    this._location.replaceState(location.pathname, params.toString());
+    this._location.replaceState(this._location.path().split('?')[0], params.toString());
 
     // update query to trigger API call
     const newQuery = assign(this.query.getValue(), filteredQuery);
