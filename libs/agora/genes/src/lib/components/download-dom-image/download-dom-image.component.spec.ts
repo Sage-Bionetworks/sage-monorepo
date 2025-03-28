@@ -1,8 +1,8 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DownloadDomImageComponent } from './download-dom-image.component';
 import { provideRouter } from '@angular/router';
+import { DownloadDomImageComponent } from './download-dom-image.component';
 
 describe('DownloadDomImageComponent', () => {
   let fixture: ComponentFixture<DownloadDomImageComponent>;
@@ -28,7 +28,7 @@ describe('DownloadDomImageComponent', () => {
   });
 
   it('should have overlay', () => {
-    expect(element.querySelector('p-overlaypanel.p-element')).toBeTruthy();
+    expect(element.querySelector('p-popover')).toBeTruthy();
   });
 
   it('should open overlay on click', () => {
@@ -51,7 +51,7 @@ describe('DownloadDomImageComponent', () => {
     const overlayPanel = document.querySelector('.download-dom-image-panel') as HTMLElement;
 
     expect(overlayPanel).toBeTruthy();
-    expect(overlayPanel.querySelectorAll('p-radiobutton.p-element')?.length).toEqual(
+    expect(overlayPanel.querySelectorAll('p-radiobutton>.p-radiobutton')?.length).toEqual(
       component.types.length,
     );
   });
