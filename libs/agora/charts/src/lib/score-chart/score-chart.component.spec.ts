@@ -1,15 +1,14 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { ScoreChartComponent } from './score-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { distributionMock } from '@sagebionetworks/agora/testing';
+import { ScoreChartComponent } from './score-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -21,8 +20,6 @@ describe('Component: Chart - Score', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ScoreChartComponent],
-      imports: [RouterTestingModule],
       providers: [HelperService],
     }).compileComponents();
   });
@@ -53,8 +50,8 @@ describe('Component: Chart - Score', () => {
   });
 
   it('should render the chart', () => {
-    const idSpy = spyOn(component, 'initData').and.callThrough();
-    const icSpy = spyOn(component, 'initChart').and.callThrough();
+    const idSpy = jest.spyOn(component, 'initData');
+    const icSpy = jest.spyOn(component, 'initChart');
 
     const distribution: any = [];
 

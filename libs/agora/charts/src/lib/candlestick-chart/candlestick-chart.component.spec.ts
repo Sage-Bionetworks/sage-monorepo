@@ -1,34 +1,32 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { NetworkChartComponent } from './network-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { networkChartDataMock } from '@sagebionetworks/agora/testing';
+import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { CandlestickChartComponent } from './candlestick-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Chart - Network', () => {
-  let fixture: ComponentFixture<NetworkChartComponent>;
-  let component: NetworkChartComponent;
+describe('Component: Chart - Candlestick', () => {
+  let fixture: ComponentFixture<CandlestickChartComponent>;
+  let component: CandlestickChartComponent;
   let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NetworkChartComponent],
-      imports: [RouterTestingModule],
+      imports: [],
       providers: [HelperService],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(NetworkChartComponent);
+    fixture = TestBed.createComponent(CandlestickChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
@@ -39,17 +37,26 @@ describe('Component: Chart - Network', () => {
   });
 
   it('should display message if not data', () => {
-    expect(component.data).not.toBeDefined();
+    expect(component.chartData?.length).toEqual(0);
     expect(element.querySelector('.chart-no-data')).toBeTruthy();
   });
 
   it('should render the chart', () => {
-    const icSpy = spyOn(component, 'initChart').and.callThrough();
+    const idSpy = jest.spyOn(component, 'initData');
+    const icSpy = jest.spyOn(component, 'initChart');
 
-    component.data = networkChartDataMock;
+    component.gene = geneMock1;
     fixture.detectChanges();
 
+    expect(idSpy).toHaveBeenCalled();
     expect(icSpy).toHaveBeenCalled();
     expect(element.querySelector('svg')).toBeTruthy();
+  });
+
+  it('should have tooltips', () => {
+    component.gene = geneMock1;
+    fixture.detectChanges();
+    expect(document.querySelector('.candlestick-chart-x-axis-tooltip')).toBeTruthy();
+    expect(document.querySelector('.candlestick-chart-value-tooltip')).toBeTruthy();
   });
 });

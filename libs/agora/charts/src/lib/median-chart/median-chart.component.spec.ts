@@ -1,34 +1,31 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { RowChartComponent } from './row-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { rowChartItemMock } from '@sagebionetworks/agora/testing';
+import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { MedianChartComponent } from './median-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Chart - Row', () => {
-  let fixture: ComponentFixture<RowChartComponent>;
-  let component: RowChartComponent;
+describe('Component: Chart - Median', () => {
+  let fixture: ComponentFixture<MedianChartComponent>;
+  let component: MedianChartComponent;
   let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RowChartComponent],
-      imports: [RouterTestingModule],
       providers: [HelperService],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(RowChartComponent);
+    fixture = TestBed.createComponent(MedianChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
@@ -44,10 +41,10 @@ describe('Component: Chart - Row', () => {
   });
 
   it('should render the chart', () => {
-    const idSpy = spyOn(component, 'initData').and.callThrough();
-    const icSpy = spyOn(component, 'initChart').and.callThrough();
+    const idSpy = jest.spyOn(component, 'initData');
+    const icSpy = jest.spyOn(component, 'initChart');
 
-    component.data = [rowChartItemMock];
+    component.data = geneMock1.median_expression;
     fixture.detectChanges();
 
     expect(idSpy).toHaveBeenCalled();
@@ -56,9 +53,9 @@ describe('Component: Chart - Row', () => {
   });
 
   it('should have tooltips', () => {
-    component.data = [rowChartItemMock];
+    component.data = geneMock1.median_expression;
+    component.addXAxisTooltips();
     fixture.detectChanges();
-    expect(document.querySelector('.row-chart-x-axis-tooltip')).toBeTruthy();
-    expect(document.querySelector('.row-chart-value-tooltip')).toBeTruthy();
+    expect(document.querySelector('.median-chart-x-axis-tooltip')).toBeTruthy();
   });
 });

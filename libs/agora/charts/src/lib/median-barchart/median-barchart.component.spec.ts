@@ -1,16 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture, waitForAsync } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { MedianBarChartComponent } from './median-barchart.component';
+import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { geneMock1 } from '@sagebionetworks/agora/testing';
-import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
+import { MedianBarChartComponent } from './median-barchart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -56,8 +55,7 @@ describe('Component: BarChart - Median', () => {
 
   beforeEach(waitForAsync(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MedianBarChartComponent],
-      imports: [RouterTestingModule],
+      imports: [],
       providers: [HelperService],
     }).compileComponents();
   }));
@@ -109,7 +107,7 @@ describe('Component: BarChart - Median', () => {
   });
 
   it('should render the chart if there is positive data', () => {
-    const createChartSpy = spyOn(component, 'createChart').and.callThrough();
+    const createChartSpy = jest.spyOn(component, 'createChart');
     const { chart } = setUp();
 
     expect(component.data?.length).toEqual(FULL_MOCK_DATA.length);
