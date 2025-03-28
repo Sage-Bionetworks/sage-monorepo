@@ -49,7 +49,7 @@ import {
   takeUntil,
   tap,
 } from 'rxjs/operators';
-import { Calendar, CalendarModule } from 'primeng/calendar';
+import { DatePicker, DatePickerModule } from 'primeng/datepicker';
 import { CommonModule, DatePipe, Location } from '@angular/common';
 import { assign, isEqual, unionWith } from 'lodash';
 import { DateRange } from './date-range';
@@ -73,10 +73,10 @@ import { ChallengeSearchDropdown, CHALLENGE_SEARCH_DROPDOWNS } from './challenge
 @Component({
   selector: 'openchallenges-challenge-search',
   imports: [
-    CalendarModule,
     ChallengeCardComponent,
     CheckboxFilterComponent,
     CommonModule,
+    DatePickerModule,
     DividerModule,
     DropdownModule,
     FooterComponent,
@@ -113,7 +113,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
 
   private destroy = new Subject<void>();
 
-  @ViewChild('calendar') calendar?: Calendar;
+  @ViewChild('calendar') calendar?: DatePicker;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
   challenges: Challenge[] = [];
@@ -315,10 +315,11 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
 
   onCalendarChange(): void {
     this.isCustomYear = true;
-    if (this.calendar) {
+    if (this.calendar?.value) {
+      const [start, end] = this.calendar.value;
       this.onParamChange({
-        minStartDate: this.dateToFormat(this.calendar.value[0]),
-        maxStartDate: this.dateToFormat(this.calendar.value[1]),
+        minStartDate: this.dateToFormat(start, 'yyyy-MM-dd'),
+        maxStartDate: this.dateToFormat(end, 'yyyy-MM-dd'),
       });
     }
   }
