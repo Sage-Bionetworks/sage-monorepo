@@ -1,34 +1,31 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { MedianChartComponent } from './median-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { networkChartDataMock } from '@sagebionetworks/agora/testing';
+import { NetworkChartComponent } from './network-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Chart - Median', () => {
-  let fixture: ComponentFixture<MedianChartComponent>;
-  let component: MedianChartComponent;
+describe('Component: Chart - Network', () => {
+  let fixture: ComponentFixture<NetworkChartComponent>;
+  let component: NetworkChartComponent;
   let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [MedianChartComponent],
-      imports: [RouterTestingModule],
       providers: [HelperService],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(MedianChartComponent);
+    fixture = TestBed.createComponent(NetworkChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
@@ -39,26 +36,17 @@ describe('Component: Chart - Median', () => {
   });
 
   it('should display message if not data', () => {
-    expect(component.data?.length).toEqual(0);
+    expect(component.data).not.toBeDefined();
     expect(element.querySelector('.chart-no-data')).toBeTruthy();
   });
 
   it('should render the chart', () => {
-    const idSpy = spyOn(component, 'initData').and.callThrough();
-    const icSpy = spyOn(component, 'initChart').and.callThrough();
+    const icSpy = jest.spyOn(component, 'initChart');
 
-    component.data = geneMock1.median_expression;
+    component.data = networkChartDataMock;
     fixture.detectChanges();
 
-    expect(idSpy).toHaveBeenCalled();
     expect(icSpy).toHaveBeenCalled();
     expect(element.querySelector('svg')).toBeTruthy();
-  });
-
-  it('should have tooltips', () => {
-    component.data = geneMock1.median_expression;
-    component.addXAxisTooltips();
-    fixture.detectChanges();
-    expect(document.querySelector('.median-chart-x-axis-tooltip')).toBeTruthy();
   });
 });

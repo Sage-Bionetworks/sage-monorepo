@@ -1,34 +1,31 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { CandlestickChartComponent } from './candlestick-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { rowChartItemMock } from '@sagebionetworks/agora/testing';
+import { RowChartComponent } from './row-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Chart - Candlestick', () => {
-  let fixture: ComponentFixture<CandlestickChartComponent>;
-  let component: CandlestickChartComponent;
+describe('Component: Chart - Row', () => {
+  let fixture: ComponentFixture<RowChartComponent>;
+  let component: RowChartComponent;
   let element: HTMLElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CandlestickChartComponent],
-      imports: [RouterTestingModule],
       providers: [HelperService],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(CandlestickChartComponent);
+    fixture = TestBed.createComponent(RowChartComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
     element = fixture.nativeElement;
@@ -39,15 +36,15 @@ describe('Component: Chart - Candlestick', () => {
   });
 
   it('should display message if not data', () => {
-    expect(component.chartData?.length).toEqual(0);
+    expect(component.data?.length).toEqual(0);
     expect(element.querySelector('.chart-no-data')).toBeTruthy();
   });
 
   it('should render the chart', () => {
-    const idSpy = spyOn(component, 'initData').and.callThrough();
-    const icSpy = spyOn(component, 'initChart').and.callThrough();
+    const idSpy = jest.spyOn(component, 'initData');
+    const icSpy = jest.spyOn(component, 'initChart');
 
-    component.gene = geneMock1;
+    component.data = [rowChartItemMock];
     fixture.detectChanges();
 
     expect(idSpy).toHaveBeenCalled();
@@ -56,9 +53,9 @@ describe('Component: Chart - Candlestick', () => {
   });
 
   it('should have tooltips', () => {
-    component.gene = geneMock1;
+    component.data = [rowChartItemMock];
     fixture.detectChanges();
-    expect(document.querySelector('.candlestick-chart-x-axis-tooltip')).toBeTruthy();
-    expect(document.querySelector('.candlestick-chart-value-tooltip')).toBeTruthy();
+    expect(document.querySelector('.row-chart-x-axis-tooltip')).toBeTruthy();
+    expect(document.querySelector('.row-chart-value-tooltip')).toBeTruthy();
   });
 });

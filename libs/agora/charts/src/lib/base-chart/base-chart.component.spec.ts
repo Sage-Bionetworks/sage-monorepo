@@ -1,6 +1,5 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BaseChartComponent } from './base-chart.component';
-import { provideRouter } from '@angular/router';
 
 describe('Component: Chart - Base', () => {
   let fixture: ComponentFixture<BaseChartComponent>;
@@ -8,7 +7,7 @@ describe('Component: Chart - Base', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [provideRouter([])],
+      imports: [],
     }).compileComponents();
   });
 

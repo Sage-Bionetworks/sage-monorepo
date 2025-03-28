@@ -34,11 +34,6 @@ import { combineLatest, Subscription } from 'rxjs';
 import * as helpers from './gene-comparison-tool.helpers';
 import * as variables from './gene-comparison-tool.variables';
 
-import { GeneComparisonToolDetailsPanelComponent as DetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
-import { GeneComparisonToolFilterPanelComponent as FilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
-import { GeneComparisonToolPinnedGenesModalComponent as PinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
-import { GeneComparisonToolScorePanelComponent as ScorePanelComponent } from './components/gene-comparison-tool-score-panel/gene-comparison-tool-score-panel.component';
-
 import { GeneComparisonToolDetailsPanelComponent } from './components/gene-comparison-tool-details-panel/gene-comparison-tool-details-panel.component';
 import { GeneComparisonToolFilterPanelComponent } from './components/gene-comparison-tool-filter-panel/gene-comparison-tool-filter-panel.component';
 import { GeneComparisonToolPinnedGenesModalComponent } from './components/gene-comparison-tool-pinned-genes-modal/gene-comparison-tool-pinned-genes-modal.component';
@@ -166,10 +161,10 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('pinnedTable', { static: true }) pinnedTable!: Table;
   @ViewChild('genesTable', { static: true }) genesTable!: Table;
 
-  @ViewChild('filterPanel') filterPanel!: FilterPanelComponent;
-  @ViewChild('detailsPanel') detailsPanel!: DetailsPanelComponent;
-  @ViewChild('scorePanel') scorePanel!: ScorePanelComponent;
-  @ViewChild('pinnedGenesModal') pinnedGenesModal!: PinnedGenesModalComponent;
+  @ViewChild('filterPanel') filterPanel!: GeneComparisonToolFilterPanelComponent;
+  @ViewChild('detailsPanel') detailsPanel!: GeneComparisonToolDetailsPanelComponent;
+  @ViewChild('scorePanel') scorePanel!: GeneComparisonToolScorePanelComponent;
+  @ViewChild('pinnedGenesModal') pinnedGenesModal!: GeneComparisonToolPinnedGenesModalComponent;
 
   constructor() {
     this.category = 'RNA - Differential Expression';

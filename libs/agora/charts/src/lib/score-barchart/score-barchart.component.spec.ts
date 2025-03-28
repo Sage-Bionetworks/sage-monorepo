@@ -1,16 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { ScoreBarChartComponent } from './';
-import { HelperService } from '../../../../core/services';
-import { distributionMock } from '../../../../testing';
-import { ScoreData } from '../../../../models';
+import { ScoreData } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { distributionMock } from '@sagebionetworks/agora/testing';
+import { ScoreBarChartComponent } from './score-barchart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -22,8 +21,6 @@ describe('Component: Chart - Score', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ScoreBarChartComponent],
-      imports: [RouterTestingModule],
       providers: [HelperService],
     }).compileComponents();
   });
@@ -55,23 +52,20 @@ describe('Component: Chart - Score', () => {
 
   it('should render the chart', () => {
     const data = distributionMock.overall_scores[0];
-    
+
     component.score = 1;
 
     data.bins.forEach((item, index: number) => {
-      if (!component._score)
-        return;
+      if (!component._score) return;
       if (component._score >= item[0] && component._score < item[1]) {
         component.scoreIndex = index;
       }
     });
     data.distribution.forEach((item, index: number) => {
-      component.chartData.push(
-        {
-          distribution: item,
-          bins: component.data?.bins[index]
-        } as ScoreData 
-      );
+      component.chartData.push({
+        distribution: item,
+        bins: component.data?.bins[index],
+      } as ScoreData);
     });
 
     fixture.detectChanges();

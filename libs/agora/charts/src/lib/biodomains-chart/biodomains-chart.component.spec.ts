@@ -1,16 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { BiodomainsChartComponent } from './biodomains-chart.component';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { geneMock1 } from '@sagebionetworks/agora/testing';
 import { getRandomInt } from '@sagebionetworks/agora/shared';
+import { geneMock1 } from '@sagebionetworks/agora/testing';
+import { BiodomainsChartComponent } from './biodomains-chart.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -21,8 +20,7 @@ describe('Component: Biodomains Chart', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [BiodomainsChartComponent],
-      imports: [RouterTestingModule],
+      imports: [],
       providers: [HelperService],
     }).compileComponents();
   });

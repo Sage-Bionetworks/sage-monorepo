@@ -5,8 +5,8 @@ import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
+import { RowChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
-import { RowChartItem } from '../../../../models';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 // Using a d3 v4 function to get all nodes
