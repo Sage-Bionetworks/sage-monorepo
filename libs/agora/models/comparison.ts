@@ -1,42 +1,5 @@
+import { GCTGene, OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
 import { SelectItem } from 'primeng/api';
-import { MedianExpression, OverallScoresDistribution } from './';
-
-export interface GCTGeneTissue {
-  name: string;
-  logfc: number;
-  adj_p_val: number;
-  ci_l: number;
-  ci_r: number;
-  medianexpression?: MedianExpression;
-}
-
-export interface GCTGeneNominations {
-  count: number;
-  year: number;
-  teams: string[];
-  studies: string[];
-  inputs: string[];
-  programs: string[];
-  validations: string[];
-}
-
-export interface GCTGene {
-  ensembl_gene_id: string;
-  hgnc_symbol: string;
-  uniprotid?: string;
-  uid?: string;
-  search_string?: string;
-  search_array?: string[];
-  tissues: GCTGeneTissue[];
-  nominations?: GCTGeneNominations;
-  associations?: number[];
-  target_risk_score: number | null;
-  genetics_score: number | null;
-  multi_omics_score: number | null;
-  biodomains?: string[];
-  pinned?: boolean;
-  target_enabling_resources?: string[];
-}
 
 export interface GCTGeneResponse {
   items: GCTGene[];

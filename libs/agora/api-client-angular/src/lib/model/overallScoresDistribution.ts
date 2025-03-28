@@ -19,7 +19,7 @@ export interface OverallScoresDistribution {
    */
   distribution: Array<number>;
   /**
-   * Bins used in the distribution
+   * Bins used in the distribution, array of [binStart, binEnd]
    */
   bins: Array<Array<number>>;
   min: number;

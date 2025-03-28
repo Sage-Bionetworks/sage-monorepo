@@ -3,14 +3,14 @@
 // External
 // -------------------------------------------------------------------------- //
 import { Component, inject, Input } from '@angular/core';
+import crossfilter from 'crossfilter2';
 import * as d3 from 'd3';
 import * as dc from 'dc';
-import crossfilter from 'crossfilter2';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { MedianExpression } from '../../../../models';
+import { MedianExpression } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 

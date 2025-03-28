@@ -6,7 +6,7 @@ import * as d3 from 'd3';
 import * as dc from 'dc';
 
 import { HelperService } from '@sagebionetworks/agora/services';
-import { rowChartItem } from '../../../../models';
+import { RowChartItem } from '../../../../models';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 // Using a d3 v4 function to get all nodes
@@ -28,11 +28,11 @@ d3.selection.prototype['nodes'] = function () {
 export class RowChartComponent extends BaseChartComponent {
   helperService = inject(HelperService);
 
-  _data: rowChartItem[] = [];
-  get data(): rowChartItem[] {
+  _data: RowChartItem[] = [];
+  get data(): RowChartItem[] {
     return this._data;
   }
-  @Input() set data(data: rowChartItem[]) {
+  @Input() set data(data: RowChartItem[]) {
     this._data = data;
     this.init();
   }
