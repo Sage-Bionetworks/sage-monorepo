@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'capitalize',
+  name: 'capitalizeBoolean',
 })
-export class CapitalizePipe implements PipeTransform {
+export class CapitalizeBooleanPipe implements PipeTransform {
   transform(value: any): string {
     if (typeof value === 'boolean') {
       return value.toString().charAt(0).toUpperCase() + value.toString().slice(1);
