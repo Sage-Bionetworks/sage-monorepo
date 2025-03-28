@@ -1,9 +1,5 @@
-import {
-  GCTGene,
-  GCTDetailsPanelData,
-  GCTFilter,
-  GCTScorePanelData,
-} from '@sagebionetworks/agora/models';
+import { GCTGene } from '@sagebionetworks/agora/api-client-angular';
+import { GCTDetailsPanelData, GCTFilter, GCTScorePanelData } from '@sagebionetworks/agora/models';
 import { distributionMock } from './distribution-mocks';
 
 export const comparisonGeneMock1: GCTGene = {

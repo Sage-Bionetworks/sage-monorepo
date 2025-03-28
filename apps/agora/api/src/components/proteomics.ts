@@ -1,13 +1,13 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { ProteinDifferentialExpression } from '@sagebionetworks/agora/api-client-angular';
 import { cache } from '../helpers';
 import {
   ProteomicsLFQCollection,
   ProteomicsSRMCollection,
   ProteomicsTMTCollection,
 } from '../models';
-import { ProteinDifferentialExpression } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

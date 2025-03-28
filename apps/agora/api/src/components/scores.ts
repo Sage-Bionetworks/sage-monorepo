@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { Scores } from '@sagebionetworks/agora/models';
 import { cache } from '../helpers';
 import { ScoresCollection } from '../models';
-import { Scores } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions
