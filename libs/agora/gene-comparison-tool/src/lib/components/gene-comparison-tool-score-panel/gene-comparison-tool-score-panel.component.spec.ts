@@ -1,8 +1,8 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HelperService } from '@sagebionetworks/agora/services';
 import { provideRouter } from '@angular/router';
+import { HelperService } from '@sagebionetworks/agora/services';
 import { gctScorePanelDataMock } from '@sagebionetworks/agora/testing';
 import { GeneComparisonToolScorePanelComponent } from './gene-comparison-tool-score-panel.component';
 
@@ -13,7 +13,7 @@ describe('Component: Gene Comparison Tool - Details Panel', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BrowserAnimationsModule],
+      imports: [NoopAnimationsModule],
       providers: [HelperService, provideRouter([])],
     }).compileComponents();
   });
