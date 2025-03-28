@@ -1,4 +1,0 @@
-{
-  // Extensions should be defined in `.devcontainer/devcontainer.json` instead of here.
-  "recommendations": []
-}

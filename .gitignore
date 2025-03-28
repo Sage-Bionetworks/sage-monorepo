@@ -39,7 +39,9 @@ sitemap.xml
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
+
+# Extensions should be defined in `.devcontainer/devcontainer.json` instead of extensions.json.
+# !.vscode/extensions.json
 
 # misc
 /.sass-cache
