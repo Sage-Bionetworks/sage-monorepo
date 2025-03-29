@@ -1,0 +1,15 @@
+services:
+  amp-als-mariadb:
+    image: ghcr.io/sage-bionetworks/amp-als-mariadb:${AMP_ALS_VERSION:-local}
+    container_name: amp-als-mariadb
+    restart: always
+    env_file:
+      - ../../../apps/amp-als/mariadb/.env
+    networks:
+      - amp-als
+    ports:
+      - '3306:3306'
+    deploy:
+      resources:
+        limits:
+          memory: 500M
