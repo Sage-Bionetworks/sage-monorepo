@@ -1,24 +1,24 @@
-export interface boxPlotChartItemCircle {
+export interface BoxPlotChartItemCircle {
   value: number;
   tooltip: string;
 }
 
-export interface boxPlotChartItem {
+export interface BoxPlotChartItem {
   key: string;
   value: number[];
-  circle?: boxPlotChartItemCircle;
+  circle?: BoxPlotChartItemCircle;
   quartiles: number[];
 }
 
-export interface rowChartItemValue {
+export interface RowChartItemValue {
   adj_p_val: number;
   fc: number;
   logfc: number;
 }
 
-export interface rowChartItem {
+export interface RowChartItem {
   key: string[];
-  value: rowChartItemValue;
+  value: RowChartItemValue;
   tissue: string;
   ci_l: number;
   ci_r: number;

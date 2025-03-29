@@ -1,5 +1,5 @@
+import { GeneNetworkLinks } from '@sagebionetworks/agora/api-client-angular';
 import { Schema, model } from 'mongoose';
-import { GeneNetworkLinks } from 'libs/agora/models';
 
 const GeneLinkSchema = new Schema<GeneNetworkLinks>(
   {

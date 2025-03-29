@@ -1,4 +1,4 @@
-import { Distribution, OverallScoresDistribution } from '@sagebionetworks/agora/models';
+import { Distribution, OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
 
 export const distributionMock: Distribution = {
   rna_differential_expression: [

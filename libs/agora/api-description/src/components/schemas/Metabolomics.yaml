@@ -36,6 +36,7 @@ properties:
         type: number
       minItems: 5
       maxItems: 5
+    description: min, first quartile, median, third quartile, max
 required:
   - _id
   - associated_gene_name

@@ -1,6 +1,8 @@
 type: object
 description: Gene Network Links
 properties:
+  _id:
+    type: string
   geneA_ensembl_gene_id:
     type: string
     description: 'Ensembl gene ID for gene A'
@@ -17,6 +19,7 @@ properties:
     type: string
     description: 'Associated brain region'
 required:
+  - _id
   - geneA_ensembl_gene_id
   - geneB_ensembl_gene_id
   - geneA_external_gene_name

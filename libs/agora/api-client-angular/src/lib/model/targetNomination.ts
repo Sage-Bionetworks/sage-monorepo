@@ -22,7 +22,7 @@ export interface TargetNomination {
   predicted_therapeutic_direction: string;
   data_used_to_support_target_selection: string;
   data_synapseid: string;
-  study: string;
+  study: string | null;
   input_data: string;
   validation_study_details: string;
   initial_nomination: number;

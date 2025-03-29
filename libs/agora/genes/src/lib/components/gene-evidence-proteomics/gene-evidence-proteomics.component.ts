@@ -7,7 +7,7 @@ import {
   ProteomicsDistribution,
 } from '@sagebionetworks/agora/api-client-angular';
 import { BoxPlotComponent } from '@sagebionetworks/agora/charts';
-import { boxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem, ChartRange } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 import { DownloadDomImageComponent } from '../download-dom-image/download-dom-image.component';
@@ -41,13 +41,13 @@ export class GeneEvidenceProteomicsComponent {
   uniProtIds: string[] = [];
   selectedUniProtId = '';
 
-  LFQData: boxPlotChartItem[] = [];
+  LFQData: BoxPlotChartItem[] = [];
   LFQRange: ChartRange | undefined;
 
-  SRMData: boxPlotChartItem[] = [];
+  SRMData: BoxPlotChartItem[] = [];
   SRMRange: ChartRange | undefined;
 
-  TMTData: boxPlotChartItem[] = [];
+  TMTData: BoxPlotChartItem[] = [];
   TMTRange: ChartRange | undefined;
 
   reset() {
@@ -105,7 +105,7 @@ export class GeneEvidenceProteomicsComponent {
     item: ProteinDifferentialExpression,
     data: ProteomicsDistribution,
     range: ChartRange,
-    proteomicData: boxPlotChartItem[],
+    proteomicData: BoxPlotChartItem[],
   ) {
     const yAxisMin = item.log2_fc < data.min ? item.log2_fc : data.min;
     const yAxisMax = item.log2_fc > data.max ? item.log2_fc : data.max;
@@ -137,7 +137,7 @@ export class GeneEvidenceProteomicsComponent {
     this.distributionService.getDistribution().subscribe((data) => {
       const distribution = data.proteomics_SRM;
       const differentialExpression = this._gene?.proteomics_SRM || [];
-      const proteomicData: boxPlotChartItem[] = [];
+      const proteomicData: BoxPlotChartItem[] = [];
 
       differentialExpression.forEach((item) => {
         const data = distribution.find((d) => {
@@ -162,7 +162,7 @@ export class GeneEvidenceProteomicsComponent {
         this._gene?.proteomics_LFQ?.filter((item) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-      const proteomicData: boxPlotChartItem[] = [];
+      const proteomicData: BoxPlotChartItem[] = [];
 
       differentialExpression.forEach((item) => {
         const data = distribution.find((d) => {
@@ -187,7 +187,7 @@ export class GeneEvidenceProteomicsComponent {
         this._gene?.proteomics_TMT?.filter((item) => {
           return item.uniprotid === this.selectedUniProtId;
         }) || [];
-      const proteomicData: boxPlotChartItem[] = [];
+      const proteomicData: BoxPlotChartItem[] = [];
 
       differentialExpression.forEach((item) => {
         const data = distribution.find((d) => {

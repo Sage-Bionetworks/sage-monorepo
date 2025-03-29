@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { ExperimentalValidation } from '@sagebionetworks/agora/api-client-angular';
 import { cache } from '../helpers';
 import { ExperimentalValidationCollection } from '../models';
-import { ExperimentalValidation } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

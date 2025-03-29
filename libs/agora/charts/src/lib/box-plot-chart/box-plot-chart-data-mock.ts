@@ -1,6 +1,6 @@
-import { boxPlotChartItem } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 
-export const boxPlotChartItemsMock: boxPlotChartItem[] = [
+export const boxPlotChartItemsMock: BoxPlotChartItem[] = [
   {
     key: 'CBE',
     value: [-0.5, -0.08, 0.5],
