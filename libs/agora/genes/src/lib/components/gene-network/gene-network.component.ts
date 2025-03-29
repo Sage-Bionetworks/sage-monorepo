@@ -21,7 +21,6 @@ import { TooltipModule } from 'primeng/tooltip';
 @Component({
   selector: 'agora-gene-network',
   imports: [CommonModule, FontAwesomeModule, NetworkChartComponent, TooltipModule],
-  providers: [GenesService],
   templateUrl: './gene-network.component.html',
   styleUrls: ['./gene-network.component.scss'],
   encapsulation: ViewEncapsulation.None,

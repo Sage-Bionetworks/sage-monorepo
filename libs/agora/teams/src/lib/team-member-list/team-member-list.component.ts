@@ -8,7 +8,6 @@ import { map, Observable } from 'rxjs';
   imports: [CommonModule],
   templateUrl: './team-member-list.component.html',
   styleUrls: ['./team-member-list.component.scss'],
-  providers: [TeamsService],
 })
 export class TeamMemberListComponent {
   teamsService = inject(TeamsService);

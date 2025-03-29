@@ -2,7 +2,7 @@
 // External
 // -------------------------------------------------------------------------- //
 import { HttpParams } from '@angular/common/http';
-import { Injectable, Output, EventEmitter } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { round } from 'lodash';
 
 // -------------------------------------------------------------------------- //
@@ -96,6 +96,10 @@ export class HelperService {
   }
 
   getScrollTop() {
+    if (typeof window === 'undefined' || typeof document == 'undefined') {
+      return { x: 0, y: 0 };
+    }
+
     const supportPageOffset = window.pageXOffset !== undefined;
     const isCSS1Compat = (document.compatMode || '') === 'CSS1Compat';
 
@@ -118,7 +122,7 @@ export class HelperService {
   }
 
   getOffset(el: any) {
-    if (!el) {
+    if (typeof window === 'undefined' || typeof document === 'undefined' || !el) {
       return { top: 0, left: 0 };
     }
 

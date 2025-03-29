@@ -78,7 +78,6 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     GeneComparisonToolPinnedGenesModalComponent,
     LoadingIconComponent,
   ],
-  providers: [GenesService, DistributionService, HelperService, MessageService, FilterService],
   templateUrl: './gene-comparison-tool.component.html',
   styleUrls: ['./gene-comparison-tool.component.scss'],
   encapsulation: ViewEncapsulation.None,
