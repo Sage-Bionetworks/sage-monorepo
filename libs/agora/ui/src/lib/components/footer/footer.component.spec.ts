@@ -1,26 +1,57 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FooterComponent } from './footer.component';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { DataversionService } from '@sagebionetworks/agora/api-client-angular';
+import { ConfigService } from '@sagebionetworks/agora/config';
+import { GitHubService } from '@sagebionetworks/agora/services';
+import { configMock, dataversionMock } from '@sagebionetworks/agora/testing';
+import { render, screen, waitFor } from '@testing-library/angular';
+import { of } from 'rxjs';
+import { FooterComponent } from './footer.component';
+
+const dataversionServiceMock = {
+  getDataversion: jest.fn(() => of(dataversionMock)),
+};
+
+const shaMock = 'mock-sha';
+const gitHubServiceMock = {
+  getCommitSHA: jest.fn(() => of(shaMock)),
+};
+
+const configServiceMock = {
+  config: configMock,
+};
+
+async function setup() {
+  await render(FooterComponent, {
+    providers: [
+      provideHttpClient(),
+      { provide: DataversionService, useValue: dataversionServiceMock },
+      { provide: GitHubService, useValue: gitHubServiceMock },
+      { provide: ConfigService, useValue: configServiceMock },
+    ],
+  });
+
+  await waitFor(() => {
+    expect(dataversionServiceMock.getDataversion).toHaveBeenCalledTimes(1);
+    expect(gitHubServiceMock.getCommitSHA).toHaveBeenCalledTimes(1);
+  });
+}
 
 describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [],
-      providers: [provideRouter([]), provideHttpClient()],
-    }).compileComponents();
-  });
-
   beforeEach(() => {
-    fixture = TestBed.createComponent(FooterComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    jest.clearAllMocks();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('should display site version', async () => {
+    await setup();
+    const siteversion = await screen.findByText('Site Version', { exact: false });
+    expect(siteversion.textContent).toEqual(`Site Version ${configMock.appVersion}-${shaMock}`);
+  });
+
+  it('should display data version', async () => {
+    await setup();
+    const dataversion = await screen.findByText('Data Version', { exact: false });
+    expect(dataversion.textContent).toEqual(
+      `Data Version ${dataversionMock.data_file}-v${dataversionMock.data_version}`,
+    );
   });
 });

@@ -1,0 +1,35 @@
+{
+  "name": "amp-als-api-description",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/amp-als/api-description/src",
+  "projectType": "library",
+  "targets": {
+    "build-individuals": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "redocly bundle --output openapi/base.openapi.yaml src/base.openapi.yaml",
+          "redocly bundle --output openapi/dataset.openapi.yaml src/dataset.openapi.yaml"
+        ],
+        "parallel": true,
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "openapi-merge-cli --config openapi-merge.yaml",
+        "cwd": "{projectRoot}"
+      },
+      "dependsOn": ["build-individuals"]
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly lint --config tools/redocly/config.yaml {projectName}"
+      },
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": ["language:openapi"]
+}

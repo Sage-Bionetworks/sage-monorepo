@@ -10,6 +10,7 @@ export * from './gene-links';
 export * from './genes';
 export * from './metabolomics';
 export * from './misc';
+export * from './navigation-link';
 export * from './neuropathologic-correlations';
 export * from './overall-scores';
 export * from './proteomics';

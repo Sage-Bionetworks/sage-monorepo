@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'agora/v*'
+      - 'amp-als/v*'
       - 'openchallenges/v*'
       - 'sage/v*'
 

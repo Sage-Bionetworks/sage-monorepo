@@ -1,3 +1,4 @@
+/* eslint-disable @angular-eslint/no-input-rename */
 /* eslint-disable @typescript-eslint/no-this-alias */
 import { CommonModule, Location } from '@angular/common';
 import {
@@ -6,9 +7,10 @@ import {
   Component,
   HostListener,
   inject,
+  Input,
   OnInit,
 } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
@@ -49,11 +51,15 @@ interface Panel {
   styleUrls: ['./gene-details.component.scss'],
 })
 export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChecked {
-  route = inject(ActivatedRoute);
   router = inject(Router);
   location = inject(Location);
   helperService = inject(HelperService);
   geneService = inject(GenesService);
+
+  /* Query Parameters ------------------------------------------------------ */
+  @Input('id') idParam = '';
+  @Input('tab') tabParam = '';
+  @Input('subtab') subtabParam = '';
 
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
@@ -153,66 +159,64 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe((params: ParamMap) => {
-      this.reset();
-      this.helperService.setLoading(true);
+    this.reset();
+    this.helperService.setLoading(true);
 
-      if (params.get('id')) {
-        this.geneService.getGene(params.get('id') as string).subscribe((gene) => {
-          if (!gene) {
-            this.helperService.setLoading(false);
-            // https://github.com/angular/angular/issues/45202
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
-            this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
-          } else {
-            this.gene = gene;
+    if (this.idParam) {
+      this.geneService.getGene(this.idParam).subscribe((gene) => {
+        if (!gene) {
+          this.helperService.setLoading(false);
+          // https://github.com/angular/angular/issues/45202
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
+        } else {
+          this.gene = gene;
 
-            this.panels.forEach((p: Panel) => {
-              if (p.name == 'nominations' && !this.gene?.total_nominations) {
-                p.disabled = true;
-              } else if (
-                p.name == 'experimental-validation' &&
-                !this.gene?.experimental_validation?.length
-              ) {
-                p.disabled = true;
-              } else {
-                p.disabled = false;
-              }
-            });
-
-            const nominationsPanel = this.panels.find((p) => p.name == 'nominations');
-            if (nominationsPanel) {
-              nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
+          this.panels.forEach((p: Panel) => {
+            if (p.name == 'nominations' && !this.gene?.total_nominations) {
+              p.disabled = true;
+            } else if (
+              p.name == 'experimental-validation' &&
+              !this.gene?.experimental_validation?.length
+            ) {
+              p.disabled = true;
+            } else {
+              p.disabled = false;
             }
+          });
 
-            const experimentalValidationPanel = this.panels.find(
-              (p) => p.name == 'experimental-validation',
-            );
-            if (experimentalValidationPanel) {
-              experimentalValidationPanel.disabled = !this.gene.experimental_validation?.length
-                ? true
-                : false;
-            }
-
-            this.helperService.setLoading(false);
+          const nominationsPanel = this.panels.find((p) => p.name == 'nominations');
+          if (nominationsPanel) {
+            nominationsPanel.disabled = !this.gene.total_nominations ? true : false;
           }
-        });
-      }
 
-      if (params.get('subtab')) {
-        this.activePanel = params.get('subtab') as string;
-        this.activeParent = params.get('tab') as string;
-      } else if (params.get('tab')) {
-        const panel = this.panels.find((p: Panel) => p.name === params.get('tab'));
-        if (panel?.children) {
-          this.activePanel = panel.children[0].name;
-          this.activeParent = panel.name;
-        } else if (panel) {
-          this.activePanel = panel.name;
-          this.activeParent = '';
+          const experimentalValidationPanel = this.panels.find(
+            (p) => p.name == 'experimental-validation',
+          );
+          if (experimentalValidationPanel) {
+            experimentalValidationPanel.disabled = !this.gene.experimental_validation?.length
+              ? true
+              : false;
+          }
+
+          this.helperService.setLoading(false);
         }
+      });
+    }
+
+    if (this.subtabParam) {
+      this.activePanel = this.subtabParam;
+      this.activeParent = this.tabParam;
+    } else if (this.tabParam) {
+      const panel = this.panels.find((p: Panel) => p.name === this.tabParam);
+      if (panel?.children) {
+        this.activePanel = panel.children[0].name;
+        this.activeParent = panel.name;
+      } else if (panel) {
+        this.activePanel = panel.name;
+        this.activeParent = '';
       }
-    });
+    }
   }
 
   ngAfterViewInit() {

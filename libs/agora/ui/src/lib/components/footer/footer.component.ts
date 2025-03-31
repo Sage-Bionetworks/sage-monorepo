@@ -1,18 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+import { SafeUrl } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-client-angular';
-import { Observable } from 'rxjs';
-import { SafeUrl } from '@angular/platform-browser';
-import { PathSanitizer } from '@sagebionetworks/agora/util';
 import { ConfigService } from '@sagebionetworks/agora/config';
-import { NavigationLink } from '../../models/navigation-link';
+import { NavigationLink } from '@sagebionetworks/agora/models';
 import { GitHubService } from '@sagebionetworks/agora/services';
+import { PathSanitizer } from '@sagebionetworks/agora/util';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'agora-footer',
   imports: [CommonModule, RouterModule],
-  providers: [DataversionService, GitHubService],
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss'],
 })
@@ -65,6 +64,6 @@ export class FooterComponent implements OnInit {
   }
 
   getDataVersion(dataVersion: Dataversion) {
-    return `${dataVersion.data_file}-${dataVersion.data_version}`;
+    return `${dataVersion.data_file}-v${dataVersion.data_version}`;
   }
 }

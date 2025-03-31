@@ -10,14 +10,15 @@ body:
       multiple: true
       options:
         - Agora
+        - AMP-ALS
         - iAtlas
         - MODEL-AD
         - OpenChallenges
+        - Other
         - Sage
         - Sage Monorepo
         - Sandbox
         - Synapse
-        - Other
   - type: checkboxes
     attributes:
       label: Documentation issue

@@ -146,18 +146,19 @@
         </div>
         <div class="col calendar-group" *ngIf="isCustomYear">
           <label for="custombar">mm/yyyy - mm/yyyy</label>
-          <p-calendar
+          <p-datepicker
             #calendar
             [(ngModel)]="customMonthRange"
             view="month"
-            dateFormat="mm/yy"
             selectionMode="range"
-            [yearNavigator]="true"
-            [readonlyInput]="false"
+            dateFormat="mm/yy"
             inputId="custombar"
             (onSelect)="onCalendarChange()"
             (onInput)="onCalendarChange()"
-          ></p-calendar>
+            [showIcon]="true"
+            [yearNavigator]="true"
+            yearRange="2000:2030"
+          ></p-datepicker>
         </div>
       </p-panel>
       <p-divider></p-divider>

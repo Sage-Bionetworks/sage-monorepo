@@ -25,6 +25,7 @@ jobs:
           # These are regex patterns auto-wrapped in `^ $`.
           scopes: |
             agora
+            amp-als
             bridge2ai
             common
             iatlas

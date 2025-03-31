@@ -5,8 +5,8 @@
   "java.format.enabled": false,
   "java.compile.nullAnalysis.mode": "disabled",
   "java.configuration.updateBuildConfiguration": "automatic",
-  "java.autobuild.enabled": false,
-  "java.jdt.ls.vmargs": "-Xlog:jni+resolve=off",
+  "java.import.gradle.enabled": false,
+  "java.import.maven.enabled": false,
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
@@ -58,12 +58,24 @@
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
       "previewLimit": 50,
-      "server": "localhost",
-      "port": 5432,
+      "server": "openchallenges-mariadb",
+      "port": 3306,
+      "driver": "MariaDB",
+      "name": "openchallenges-mariadb",
+      "username": "maria",
+      "password": "changeme"
+    },
+    {
+      "previewLimit": 50,
+      "server": "iatlas-postgres",
+      "port": 2432,
       "driver": "PostgreSQL",
-      "name": "openchallenges-postgres",
-      "database": "challenge",
+      "name": "iatlas-postgres",
+      "database": "iatlas",
       "username": "postgres",
       "password": "changeme"
     },
@@ -72,21 +84,11 @@
         "authProtocol": "default"
       },
       "previewLimit": 50,
-      "server": "openchallenges-mariadb",
-      "port": 3306,
+      "server": "amp-als-mariadb",
+      "port": 8401,
       "driver": "MariaDB",
-      "name": "openchallenges",
+      "name": "amp-als-mariadb",
       "username": "maria",
-      "password": "changeme"
-    },
-    {
-      "previewLimit": 50,
-      "server": "localhost",
-      "port": 2432,
-      "driver": "PostgreSQL",
-      "name": "iatlas-postgres",
-      "database": "iatlas",
-      "username": "postgres",
       "password": "changeme"
     }
   ],

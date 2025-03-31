@@ -125,7 +125,7 @@
       background-color: transparent;
 
       .p-select-label {
-        padding-left: 0;
+        padding: 0;
         font-size: 14px;
         font-weight: 400;
         color: var(--color-text);
@@ -162,7 +162,7 @@
               }
             }
 
-            &.p-highlight {
+            &.p-select-option-selected {
               background-color: var(--color-action-primary);
 
               span {
@@ -321,6 +321,10 @@
     padding: 15px 20px 20px;
   }
 
+  .p-datatable-table-container {
+    overflow: hidden !important;
+  }
+
   .p-datatable-thead,
   .p-datatable-tbody {
     tr {
@@ -429,15 +433,11 @@
     }
   }
 
-  .p-paginator-bottom {
+  .gct-paginator {
     display: block;
     padding: 20px 30px;
     text-align: right;
     border-top: 1px solid var(--color-gray-300);
-
-    .p-paginator-pages {
-      display: none;
-    }
 
     .p-paginator-current {
       margin-right: 15px;
@@ -446,7 +446,10 @@
       color: var(--color-text);
     }
 
-    .p-paginator-icon {
+    .p-paginator-first-icon,
+    .p-paginator-prev-icon,
+    .p-paginator-next-icon,
+    .p-paginator-last-icon {
       color: var(--color-action-primary);
       cursor: pointer;
       transition: variables.$transition-duration;
@@ -458,6 +461,8 @@
 
     button {
       transform: translateY(3px);
+      height: 16px;
+      min-width: 16px;
     }
   }
 
