@@ -58,16 +58,6 @@
   "sqltools.autoOpenSessionFiles": false,
   "sqltools.connections": [
     {
-      "previewLimit": 50,
-      "server": "localhost",
-      "port": 5432,
-      "driver": "PostgreSQL",
-      "name": "openchallenges-postgres",
-      "database": "challenge",
-      "username": "postgres",
-      "password": "changeme"
-    },
-    {
       "mysqlOptions": {
         "authProtocol": "default"
       },
@@ -75,13 +65,13 @@
       "server": "openchallenges-mariadb",
       "port": 3306,
       "driver": "MariaDB",
-      "name": "openchallenges",
+      "name": "openchallenges-mariadb",
       "username": "maria",
       "password": "changeme"
     },
     {
       "previewLimit": 50,
-      "server": "localhost",
+      "server": "iatlas-postgres",
       "port": 2432,
       "driver": "PostgreSQL",
       "name": "iatlas-postgres",
@@ -97,7 +87,7 @@
       "server": "amp-als-mariadb",
       "port": 8401,
       "driver": "MariaDB",
-      "name": "amp-als",
+      "name": "amp-als-mariadb",
       "username": "maria",
       "password": "changeme"
     }
