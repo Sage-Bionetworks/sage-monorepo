@@ -1,0 +1,6 @@
+name: datasetId
+in: path
+description: The unique identifier of the dataset.
+required: true
+schema:
+  $ref: ../../schemas/DatasetId.yaml

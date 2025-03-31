@@ -1,0 +1,4 @@
+description: The unique identifier of the dataset.
+type: integer
+format: int64
+example: 1

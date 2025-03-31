@@ -10,6 +10,8 @@ rules:
   paths-kebab-case: warn
 
 apis:
+  amp-als-api-description:
+    root: libs/amp-als/api-description/openapi/openapi.yaml
   agora-api-description:
     root: libs/agora/api-description/build/openapi.yaml
   model-ad-api-description:
