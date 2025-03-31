@@ -1,18 +1,16 @@
 package org.sagebionetworks.amp.als.dataset.service.model.dto;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.net.URI;
 import java.time.OffsetDateTime;
+import java.util.*;
+import java.util.Objects;
+import javax.annotation.Generated;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
-import javax.annotation.Generated;
 
 /**
  * Problem details (tools.ietf.org/html/rfc7807)
@@ -45,9 +43,13 @@ public class BasicErrorDto {
   /**
    * A human readable documentation for the problem type
    * @return title
-  */
-  @NotNull 
-  @Schema(name = "title", description = "A human readable documentation for the problem type", required = true)
+   */
+  @NotNull
+  @Schema(
+    name = "title",
+    description = "A human readable documentation for the problem type",
+    required = true
+  )
   public String getTitle() {
     return title;
   }
@@ -64,8 +66,8 @@ public class BasicErrorDto {
   /**
    * The HTTP status code
    * @return status
-  */
-  @NotNull 
+   */
+  @NotNull
   @Schema(name = "status", description = "The HTTP status code", required = true)
   public Integer getStatus() {
     return status;
@@ -83,9 +85,13 @@ public class BasicErrorDto {
   /**
    * A human readable explanation specific to this occurrence of the problem
    * @return detail
-  */
-  
-  @Schema(name = "detail", description = "A human readable explanation specific to this occurrence of the problem", required = false)
+   */
+
+  @Schema(
+    name = "detail",
+    description = "A human readable explanation specific to this occurrence of the problem",
+    required = false
+  )
   public String getDetail() {
     return detail;
   }
@@ -102,9 +108,13 @@ public class BasicErrorDto {
   /**
    * An absolute URI that identifies the problem type
    * @return type
-  */
-  
-  @Schema(name = "type", description = "An absolute URI that identifies the problem type", required = false)
+   */
+
+  @Schema(
+    name = "type",
+    description = "An absolute URI that identifies the problem type",
+    required = false
+  )
   public String getType() {
     return type;
   }
@@ -122,10 +132,12 @@ public class BasicErrorDto {
       return false;
     }
     BasicErrorDto basicError = (BasicErrorDto) o;
-    return Objects.equals(this.title, basicError.title) &&
-        Objects.equals(this.status, basicError.status) &&
-        Objects.equals(this.detail, basicError.detail) &&
-        Objects.equals(this.type, basicError.type);
+    return (
+      Objects.equals(this.title, basicError.title) &&
+      Objects.equals(this.status, basicError.status) &&
+      Objects.equals(this.detail, basicError.detail) &&
+      Objects.equals(this.type, basicError.type)
+    );
   }
 
   @Override
@@ -156,4 +168,3 @@ public class BasicErrorDto {
     return o.toString().replace("\n", "\n    ");
   }
 }
-
