@@ -1,5 +1,5 @@
 {
-  "name": "amp-als-elasticsearch",
+  "name": "amp-als-api-docs",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "targets": {
@@ -7,6 +7,20 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly build-docs --config redocly.yaml --template index.hbs --templateOptions.metaDescription=\"AMP-ALS REST API docs\" --output build/redoc-static.html",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "redocly preview-docs --config redocly.yaml --port 8403",
         "cwd": "{projectRoot}"
       }
     },
@@ -24,5 +38,6 @@
       }
     }
   },
-  "tags": ["type:db", "scope:backend"]
+  "tags": ["type:docs", "scope:backend"],
+  "implicitDependencies": ["amp-als-api-description"]
 }
