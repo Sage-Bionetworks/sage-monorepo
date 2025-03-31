@@ -107,7 +107,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     new BehaviorSubject<OrganizationSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
-  private readonly searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private readonly orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
   private readonly destroy = new Subject<void>();
 
@@ -172,7 +172,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngAfterContentInit(): void {
-    this.searchTerms
+    this.orgSearchTerms
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
       .subscribe((searched) => {
         this.onParamChange({ searchTerms: searched });
@@ -227,7 +227,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
-    this.searchTerms.next(this.searchedTerms);
+    this.orgSearchTerms.next(this.searchedTerms);
   }
 
   private updateSelectedValues() {
