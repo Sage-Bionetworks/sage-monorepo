@@ -112,11 +112,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   private readonly destroy = new Subject<void>();
 
   // use @Input to retrieve the route param
-  @Input({ required: false }) categoriesParam!: OrganizationCategory[];
-  @Input({ required: false }) contributionRolesParam!: ChallengeContributionRole[];
-  @Input({ required: false }) pageNumberParam!: number;
-  @Input({ required: false }) searchTermsParam!: string;
-  @Input({ required: false }) sortParam!: OrganizationSort;
+  @Input({ required: false }) categories!: OrganizationCategory[];
+  @Input({ required: false }) contributionRoles!: ChallengeContributionRole[];
+  @Input({ required: false }) pageNumber!: number;
+  @Input({ required: false }) searchTerms!: string;
+  @Input({ required: false }) sort!: OrganizationSort;
 
   searchResultsCount!: number;
   totalOrgCount = 0;
@@ -232,12 +232,12 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private updateSelectedValues() {
     // update selected filter values based on params in url
-    this.selectedContributionRoles = this.splitParam(this.contributionRolesParam);
-    this.selectedCategories = this.splitParam(this.categoriesParam);
-    this.searchedTerms = this.searchTermsParam || '';
-    this.selectedPageNumber = +this.pageNumberParam || this.defaultPageNumber;
+    this.selectedContributionRoles = this.splitParam(this.contributionRoles);
+    this.selectedCategories = this.splitParam(this.categories);
+    this.searchedTerms = this.searchTerms || '';
+    this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
     this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-    this.sortedBy = this.sortParam || this.defaultSortedBy;
+    this.sortedBy = this.sort || this.defaultSortedBy;
   }
 
   private updateQuery() {
