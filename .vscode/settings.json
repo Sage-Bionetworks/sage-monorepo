@@ -88,6 +88,18 @@
       "database": "iatlas",
       "username": "postgres",
       "password": "changeme"
+    },
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "amp-als-mariadb",
+      "port": 8401,
+      "driver": "MariaDB",
+      "name": "amp-als",
+      "username": "maria",
+      "password": "changeme"
     }
   ],
   "terminal.integrated.showExitAlert": false,
