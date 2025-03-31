@@ -25,13 +25,7 @@ export class SvgIconComponent implements OnInit {
       this.http.get(this.imagePath, { responseType: 'text' }).subscribe(
         (svgContent) => {
           // Sanitize the SVG content to prevent XSS attacks
-          console.log('svg loaded:', svgContent);
           this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgContent);
-          // // Replace the inner HTML of the component with the sanitized SVG content
-          // const svgContainer = document.querySelector('.svg-icon-container');
-          // if (svgContainer) {
-          //   svgContainer.innerHTML = sanitizedSvg as string;
-          // }
         },
         (error) => console.error('Error loading svg', error),
       );
