@@ -23,7 +23,7 @@ dependencies {
 }
 
 group = 'org.sagebionetworks.amp.als'
-version = '0.0.1-SNAPSHOT'
+version = "${ampAlsVersion}"
 sourceCompatibility = '17'
 
 tasks.named('test') {
