@@ -2,6 +2,7 @@
 
 args=(
   # List of services in alphanumeric order
+  --file docker/amp-als/services/elasticsearch.yml
   --file docker/amp-als/services/mariadb.yml
 
   --file docker/amp-als/networks.yml

@@ -1,0 +1,24 @@
+services:
+  amp-als-elasticsearch:
+    image: ghcr.io/sage-bionetworks/amp-als-elasticsearch:${AMP_ALS_VERSION:-local}
+    container_name: amp-als-elasticsearch
+    restart: always
+    environment:
+      - node.name=amp-als-elasticsearch
+      - cluster.name=amp-als-elasticsearch
+      - discovery.seed_hosts=
+      - cluster.initial_master_nodes=amp-als-elasticsearch
+      - bootstrap.memory_lock=true
+      - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
+    networks:
+      - amp-als
+    ports:
+      - '9200:9200'
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    deploy:
+      resources:
+        limits:
+          memory: 2G
