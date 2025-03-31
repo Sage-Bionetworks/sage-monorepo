@@ -27,6 +27,10 @@ body {
   margin-bottom: var(--spacing-lg);
 }
 
+.unselectable-text {
+  user-select: none;
+}
+
 .global-toast {
   .p-toast {
     width: 100%;

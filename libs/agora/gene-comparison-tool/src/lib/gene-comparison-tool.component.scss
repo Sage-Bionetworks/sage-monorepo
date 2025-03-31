@@ -241,6 +241,8 @@
     }
 
     > div {
+      display: flex;
+      position: relative;
       padding-left: 10px;
 
       &:last-child {
