@@ -3,7 +3,7 @@
 set -eo pipefail
 
 host="$(hostname -i || echo '127.0.0.1')"
-port="3306" # TODO read port from config
+port="8401" # TODO read port from config
 user="${MARIADB_USER:-root}"
 password="${MARIADB_PASSWORD}"
 

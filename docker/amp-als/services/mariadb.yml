@@ -5,10 +5,11 @@ services:
     restart: always
     env_file:
       - ../../../apps/amp-als/mariadb/.env
+    command: --port=8401
     networks:
       - amp-als
     ports:
-      - '3306:3306'
+      - '8401:8401'
     deploy:
       resources:
         limits:
