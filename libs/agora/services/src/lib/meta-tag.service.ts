@@ -27,9 +27,8 @@ export class MetaTagService {
         mergeMap((route) => route.data),
       )
       .subscribe((data) => {
-        if (data['title']) {
-          this.titleService.setTitle(data['title']);
-        }
+        const pageTitle = data['title'] || 'Agora';
+        this.titleService.setTitle(pageTitle);
 
         if (data['description']) {
           this.metaService.updateTag({ name: 'description', content: data['description'] });

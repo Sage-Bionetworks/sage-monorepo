@@ -201,10 +201,9 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
       const parsedValue = parseFloat(this.significanceParam);
       if (!isNaN(parsedValue)) {
         this.significanceThreshold = parsedValue;
+        this.significanceThresholdActive = true;
       }
     }
-
-    this.significanceThresholdActive = !!this.significanceParam;
 
     this.loadGenes();
 
