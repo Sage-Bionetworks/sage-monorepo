@@ -117,19 +117,19 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
   // retrieve route params using @Input
-  @Input({ required: false }) categoriesParam!: ChallengeCategory[];
-  @Input({ required: false }) incentivesParam!: ChallengeIncentive[];
-  @Input({ required: false }) inputDataTypesParam!: number[];
-  @Input({ required: false }) maxStartDateParam!: string;
-  @Input({ required: false }) minStartDateParam!: string;
-  @Input({ required: false }) operationsParam!: number[];
-  @Input({ required: false }) organizationsParam!: number[];
-  @Input({ required: false }) pageNumberParam!: number;
-  @Input({ required: false }) platformsParam!: string[];
-  @Input({ required: false }) searchTermsParam!: string;
-  @Input({ required: false }) sortParam!: ChallengeSort;
-  @Input({ required: false }) statusParam!: ChallengeStatus[];
-  @Input({ required: false }) submissionTypesParam!: ChallengeSubmissionType[];
+  @Input({ required: false }) categories!: ChallengeCategory[];
+  @Input({ required: false }) incentives!: ChallengeIncentive[];
+  @Input({ required: false }) inputDataTypes!: number[];
+  @Input({ required: false }) maxStartDate!: string;
+  @Input({ required: false }) minStartDate!: string;
+  @Input({ required: false }) operations!: number[];
+  @Input({ required: false }) organizations!: number[];
+  @Input({ required: false }) pageNumber!: number;
+  @Input({ required: false }) platforms!: string[];
+  @Input({ required: false }) searchTerms!: string;
+  @Input({ required: false }) sort!: ChallengeSort;
+  @Input({ required: false }) status!: ChallengeStatus[];
+  @Input({ required: false }) submissionTypes!: ChallengeSubmissionType[];
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
