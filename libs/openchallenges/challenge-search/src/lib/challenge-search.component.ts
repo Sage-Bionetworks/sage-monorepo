@@ -106,30 +106,30 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   public enableOperationFilter: boolean;
   datePipe: DatePipe = new DatePipe('en-US');
 
-  private query: BehaviorSubject<ChallengeSearchQuery> = new BehaviorSubject<ChallengeSearchQuery>(
-    {},
-  );
+  private readonly query: BehaviorSubject<ChallengeSearchQuery> =
+    new BehaviorSubject<ChallengeSearchQuery>({});
 
-  private challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private readonly challengeSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  private destroy = new Subject<void>();
+  private readonly destroy = new Subject<void>();
 
   @ViewChild('calendar') calendar?: DatePicker;
   @ViewChild('paginator', { static: false }) paginator!: PaginatorComponent;
 
-  @Input() categories!: ChallengeCategory[];
-  @Input() incentives!: ChallengeIncentive[];
-  @Input() inputDataTypes!: number[];
-  @Input() maxStartDate!: string;
-  @Input() minStartDate!: string;
-  @Input() operations!: number[];
-  @Input() organizations!: number[];
-  @Input() pageNumber!: number;
-  @Input() platforms!: string[];
-  @Input() searchTerms!: string;
-  @Input() sort!: ChallengeSort;
-  @Input() status!: ChallengeStatus[];
-  @Input() submissionTypes!: ChallengeSubmissionType[];
+  // retrieve route params using @Input
+  @Input({ required: false }) categoriesParam!: ChallengeCategory[];
+  @Input({ required: false }) incentivesParam!: ChallengeIncentive[];
+  @Input({ required: false }) inputDataTypesParam!: number[];
+  @Input({ required: false }) maxStartDateParam!: string;
+  @Input({ required: false }) minStartDateParam!: string;
+  @Input({ required: false }) operationsParam!: number[];
+  @Input({ required: false }) organizationsParam!: number[];
+  @Input({ required: false }) pageNumberParam!: number;
+  @Input({ required: false }) platformsParam!: string[];
+  @Input({ required: false }) searchTermsParam!: string;
+  @Input({ required: false }) sortParam!: ChallengeSort;
+  @Input({ required: false }) statusParam!: ChallengeStatus[];
+  @Input({ required: false }) submissionTypesParam!: ChallengeSubmissionType[];
 
   challenges: Challenge[] = [];
   totalChallengesCount = 0;
@@ -180,13 +180,13 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   };
 
   constructor(
-    private challengeService: ChallengeService,
-    private challengeSearchDataService: ChallengeSearchDataService,
+    private readonly challengeService: ChallengeService,
+    private readonly challengeSearchDataService: ChallengeSearchDataService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
+    private readonly _snackBar: MatSnackBar,
+    private readonly seoService: SeoService,
+    private readonly renderer2: Renderer2,
+    private readonly _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -198,7 +198,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
   }
 
   ngOnInit() {
-    // console.log(this.status);
     this.updateSelectedValues();
     this.updateQuery();
 
@@ -284,7 +283,6 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
-      // this.selectedPageSize = this.defaultPageSize;
       this.paginator.resetPageNumber();
     }
 
@@ -464,7 +462,7 @@ export class ChallengeSearchComponent implements OnInit, AfterContentInit, OnDes
     return this.datePipe.transform(date, format);
   }
 
-  splitParam(activeParam: any | undefined, by = ','): any[] {
+  splitParam(activeParam: any, by = ','): any[] {
     return activeParam ? activeParam.split(by) : [];
   }
 
