@@ -35,7 +35,7 @@ public interface DatasetApiDelegate {
    *         or The request cannot be fulfilled due to an unexpected server error (status code 500)
    * @see DatasetApi#getDataset
    */
-  default ResponseEntity<DatasetDto> getDataset(Long datasetId) {
+  default ResponseEntity<?> getDataset(Long datasetId) {
     getRequest()
       .ifPresent(request -> {
         for (MediaType mediaType : MediaType.parseMediaTypes(request.getHeader("Accept"))) {
