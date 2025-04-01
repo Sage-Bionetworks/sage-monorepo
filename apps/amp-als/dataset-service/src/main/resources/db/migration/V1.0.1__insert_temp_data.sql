@@ -4,15 +4,15 @@ VALUES
   (
     '1',
     'Mock Dataset 1',
-    'Clinical data from patients with cardiovascular conditions.'
+    'Clinical data from patients with cardiovascular conditions'
   ),
   (
     '2',
-    'Mock Dataset 1',
-    'Longitudinal dataset of individuals with early signs of neurodegeneration.'
+    'Mock Dataset 2',
+    'Longitudinal dataset of individuals with early signs of neurodegeneration'
   ),
   (
     '3',
-    'Mock Dataset 1',
-    'Registry of patients enrolled in various oncology clinical trials.'
+    'Mock Dataset 3',
+    'Registry of patients enrolled in various oncology clinical trials'
   );
