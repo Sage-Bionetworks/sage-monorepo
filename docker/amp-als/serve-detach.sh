@@ -5,6 +5,7 @@ args=(
   --file docker/amp-als/services/api-docs.yml
   --file docker/amp-als/services/dataset-service.yml
   --file docker/amp-als/services/elasticsearch.yml
+  --file docker/amp-als/services/keycloak.yml
   --file docker/amp-als/services/mariadb.yml
 
   --file docker/amp-als/networks.yml
