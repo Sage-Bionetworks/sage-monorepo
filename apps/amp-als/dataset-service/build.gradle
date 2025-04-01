@@ -33,8 +33,8 @@ dependencies {
   implementation "com.fasterxml.jackson.core:jackson-databind:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:${fasterxmlVersion}"
   implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${fasterxmlVersion}"
-  // implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
-  // implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
+  implementation "org.flywaydb:flyway-core:${flywaydbVersion}"
+  implementation "org.flywaydb:flyway-mysql:${flywaydbVersion}"
   implementation "org.sagebionetworks:util:${ampAlsVersion}"
 
   implementation 'org.springframework.boot:spring-boot-starter-amqp:2.7.7'
@@ -42,7 +42,7 @@ dependencies {
   implementation "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
 
   implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
-  // implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+  implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-security:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
   implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
@@ -51,6 +51,8 @@ dependencies {
   testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 
   implementation "org.sagebionetworks.amp.als:amp-als-app-config-data:${ampAlsVersion}"
+
+  implementation 'javax.annotation:javax.annotation-api:1.3.2'
 }
 
 group = 'org.sagebionetworks.amp.als'

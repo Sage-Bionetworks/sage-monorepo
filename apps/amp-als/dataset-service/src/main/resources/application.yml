@@ -1,9 +1,20 @@
 amp-als-dataset-service:
-  welcome-message: 'Welcome to the AMP-ALS dataset service.'
+  welcome-message: 'Welcome to the AMP-ALS dataset service'
 
 spring:
   application:
     name: amp-als-dataset-service
+  datasource:
+    # url: jdbc:h2:mem:dataset
+    url: ${db.url}
+    username: dataset_service
+    password: changeme
+  jackson:
+    date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  flyway:
+    enabled: true
 
 server:
   port: 8404
@@ -24,8 +35,6 @@ management:
       probes:
         enabled: true
       show-details: always
-    prometheus:
-      cache.time-to-live: 1ms
 
 info:
   application:
