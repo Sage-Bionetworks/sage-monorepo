@@ -9,7 +9,7 @@ services:
     networks:
       - amp-als
     ports:
-      - '8406:8406'
+      - '8405:8405'
     deploy:
       resources:
         limits:
