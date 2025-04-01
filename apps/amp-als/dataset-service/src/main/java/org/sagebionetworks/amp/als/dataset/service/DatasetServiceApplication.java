@@ -12,7 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = { "org.sagebionetworks.amp.als" })
 public class DatasetServiceApplication implements CommandLineRunner {
 
-  private static final Logger LOG = LoggerFactory.getLogger(DatasetServiceApplication.class);
+  private static final Logger log = LoggerFactory.getLogger(DatasetServiceApplication.class);
 
   private final DatasetServiceConfigData datasetServiceConfigData;
 
@@ -26,6 +26,6 @@ public class DatasetServiceApplication implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    LOG.info(datasetServiceConfigData.getWelcomeMessage());
+    log.info(datasetServiceConfigData.getWelcomeMessage());
   }
 }

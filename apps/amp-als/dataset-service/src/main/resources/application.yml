@@ -1,13 +1,12 @@
 amp-als-dataset-service:
-  welcome-message: 'Welcome to the AMP-ALS dataset service.'
+  welcome-message: 'Welcome to the AMP-ALS dataset service!'
 
 spring:
   application:
     name: amp-als-dataset-service
   datasource:
     # url: jdbc:h2:mem:dataset
-    # url: ${db.url}
-    url: jdbc:mysql://amp-als-mariadb:8401/dataset_service
+    url: ${db.url}
     username: dataset_service
     password: changeme
   jackson:
@@ -36,11 +35,7 @@ management:
       probes:
         enabled: true
       show-details: always
-    prometheus:
-      cache.time-to-live: 1ms
 
 info:
   application:
     name: ${spring.application.name}
-
-logging.level.org.flywaydb: DEBUG
