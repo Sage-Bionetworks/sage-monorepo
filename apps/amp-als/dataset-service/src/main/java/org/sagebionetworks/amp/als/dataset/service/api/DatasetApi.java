@@ -111,7 +111,7 @@ public interface DatasetApi {
     value = "/datasets/{datasetId}",
     produces = { "application/json", "application/ld+json", "application/problem+json" }
   )
-  default ResponseEntity<DatasetDto> getDataset(
+  default ResponseEntity<?> getDataset(
     @Parameter(
       name = "datasetId",
       description = "The unique identifier of the dataset.",
