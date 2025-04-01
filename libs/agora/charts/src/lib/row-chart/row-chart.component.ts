@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 /* eslint-disable @typescript-eslint/no-this-alias */
-import { Component, ViewChild, ElementRef, Input, inject } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild, inject } from '@angular/core';
 
 import * as d3 from 'd3';
 import * as dc from 'dc';
 
-import { rowChartItem } from '../../../../models';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { rowChartItem } from '../../../../models';
 import { BaseChartComponent } from '../base-chart/base-chart.component';
 
 // Using a d3 v4 function to get all nodes
@@ -22,7 +22,6 @@ d3.selection.prototype['nodes'] = function () {
 @Component({
   selector: 'agora-row-chart',
   standalone: true,
-  providers: [HelperService],
   templateUrl: './row-chart.component.html',
   styleUrls: ['./row-chart.component.scss'],
 })

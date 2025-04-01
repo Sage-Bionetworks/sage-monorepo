@@ -21,7 +21,6 @@ import { GeneProteinSelectorComponent } from '../gene-protein-selector/gene-prot
     GeneProteinSelectorComponent,
     BoxPlotComponent,
   ],
-  providers: [HelperService, DistributionService],
   templateUrl: './gene-evidence-proteomics.component.html',
   styleUrls: ['./gene-evidence-proteomics.component.scss'],
 })

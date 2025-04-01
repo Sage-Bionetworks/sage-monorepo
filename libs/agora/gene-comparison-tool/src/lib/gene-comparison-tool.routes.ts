@@ -1,4 +1,4 @@
 import { Routes } from '@angular/router';
-import { GeneComparisonToolComponent } from './gene-comparison-tool.component';
+import { GeneComparisonToolSsrWrapperComponent } from './components/gene-comparison-tool-ssr-wrapper/gene-comparison-tool-ssr-wrapper.component';
 
-export const routes: Routes = [{ path: '', component: GeneComparisonToolComponent }];
+export const routes: Routes = [{ path: '', component: GeneComparisonToolSsrWrapperComponent }];

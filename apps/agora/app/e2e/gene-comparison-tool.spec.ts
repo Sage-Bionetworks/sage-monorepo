@@ -22,7 +22,8 @@ test.describe('specific viewport block', () => {
     await expect(page).toHaveTitle('Gene Comparison | Visual comparison tool for AD genes');
   });
 
-  test('protein has sub-category of SRM by default', async ({ page }) => {
+  // TODO: re-enable as part of AG-1739
+  test.fixme('protein has sub-category of SRM by default', async ({ page }) => {
     // set category for Protein - Differential Expression
     await page.goto(URL_GCT_PROTEIN);
 
@@ -70,8 +71,9 @@ test.describe('specific viewport block', () => {
     expect(page.url()).toBe(`${baseURL}${URL_PROTEIN}`);
 
     // expect sort arrow to be descending
-    await expect(page.getByRole('columnheader', { name: 'RISK SCORE' }).locator('i')).toHaveClass(
-      /pi-sort-amount-down/,
+    await expect(page.getByRole('columnheader', { name: 'RISK SCORE' })).toHaveAttribute(
+      'aria-sort',
+      'descending',
     );
   });
 

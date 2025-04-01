@@ -9,7 +9,6 @@ import { DownloadDomImageComponent } from '../download-dom-image/download-dom-im
 @Component({
   selector: 'agora-gene-evidence-metabolomics',
   imports: [ModalLinkComponent, DownloadDomImageComponent, BoxPlotComponent],
-  providers: [HelperService],
   templateUrl: './gene-evidence-metabolomics.component.html',
   styleUrls: ['./gene-evidence-metabolomics.component.scss'],
 })
