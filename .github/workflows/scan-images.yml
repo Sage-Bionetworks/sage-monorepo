@@ -13,7 +13,7 @@ on:
 jobs:
   trivy-edge:
     name: ${{ matrix.image }}
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     env:
       TRIVY_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-db:2
       TRIVY_JAVA_DB_REPOSITORY: public.ecr.aws/aquasecurity/trivy-java-db:1
