@@ -2,6 +2,7 @@
 
 args=(
   # List of services in alphanumeric order
+  --file docker/amp-als/services/apex.yml
   --file docker/amp-als/services/api-docs.yml
   --file docker/amp-als/services/dataset-service.yml
   --file docker/amp-als/services/elasticsearch.yml
