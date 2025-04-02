@@ -72,9 +72,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Dataset'
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/DatasetJsonLd'
           description: A dataset
         '404':
           content:
@@ -319,12 +316,6 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
-    DatasetJsonLd:
-      allOf:
-        - $ref: '#/components/schemas/Dataset'
-        - $ref: '#/components/schemas/DatasetJsonLd_allOf'
-      description: A dataset
-      type: object
     DatasetsPage_allOf:
       properties:
         datasets:
@@ -334,22 +325,5 @@ components:
           type: array
       required:
         - datasets
-      type: object
-      example: null
-    DatasetJsonLd_allOf:
-      properties:
-        '@context':
-          example: https://schema.org
-          type: string
-        '@id':
-          example: https://example.com/api/v1/datasets/1
-          type: string
-        '@type':
-          example: Dataset
-          type: string
-      required:
-        - '@context'
-        - '@id'
-        - '@type'
       type: object
       example: null

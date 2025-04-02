@@ -10,8 +10,6 @@ index.ts
 model/basicError.ts
 model/dataset.ts
 model/datasetDirection.ts
-model/datasetJsonLd.ts
-model/datasetJsonLdAllOf.ts
 model/datasetSearchQuery.ts
 model/datasetSort.ts
 model/datasetsPage.ts

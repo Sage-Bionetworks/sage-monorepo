@@ -20,7 +20,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.BasicErrorDto;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetDto;
-import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetJsonLdDto;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetSearchQueryDto;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetsPageDto;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +58,6 @@ public interface DatasetApi {
             schema = @Schema(implementation = DatasetDto.class)
           ),
           @Content(
-            mediaType = "application/ld+json",
-            schema = @Schema(implementation = DatasetDto.class)
-          ),
-          @Content(
             mediaType = "application/problem+json",
             schema = @Schema(implementation = DatasetDto.class)
           ),
@@ -74,10 +69,6 @@ public interface DatasetApi {
         content = {
           @Content(
             mediaType = "application/json",
-            schema = @Schema(implementation = BasicErrorDto.class)
-          ),
-          @Content(
-            mediaType = "application/ld+json",
             schema = @Schema(implementation = BasicErrorDto.class)
           ),
           @Content(
@@ -95,10 +86,6 @@ public interface DatasetApi {
             schema = @Schema(implementation = BasicErrorDto.class)
           ),
           @Content(
-            mediaType = "application/ld+json",
-            schema = @Schema(implementation = BasicErrorDto.class)
-          ),
-          @Content(
             mediaType = "application/problem+json",
             schema = @Schema(implementation = BasicErrorDto.class)
           ),
@@ -109,9 +96,9 @@ public interface DatasetApi {
   @RequestMapping(
     method = RequestMethod.GET,
     value = "/datasets/{datasetId}",
-    produces = { "application/json", "application/ld+json", "application/problem+json" }
+    produces = { "application/json", "application/problem+json" }
   )
-  default ResponseEntity<?> getDataset(
+  default ResponseEntity<DatasetDto> getDataset(
     @Parameter(
       name = "datasetId",
       description = "The unique identifier of the dataset.",

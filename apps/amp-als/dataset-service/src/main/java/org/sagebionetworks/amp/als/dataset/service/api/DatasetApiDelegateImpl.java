@@ -2,6 +2,7 @@ package org.sagebionetworks.amp.als.dataset.service.api;
 
 import java.util.List;
 import java.util.Optional;
+import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetDto;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetSearchQueryDto;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetsPageDto;
 import org.sagebionetworks.amp.als.dataset.service.service.DatasetService;
@@ -30,7 +31,7 @@ public class DatasetApiDelegateImpl implements DatasetApiDelegate {
   }
 
   @Override
-  public ResponseEntity<?> getDataset(Long datasetId) {
+  public ResponseEntity<DatasetDto> getDataset(Long datasetId) {
     for (MediaType mediaType : getAcceptedMediaTypes(getRequest())) {
       if (mediaType.isCompatibleWith(APPLICATION_JSON)) {
         return ResponseEntity.ok(datasetService.getDataset(datasetId));

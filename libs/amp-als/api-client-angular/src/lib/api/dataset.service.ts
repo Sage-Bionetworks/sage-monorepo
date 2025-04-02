@@ -29,8 +29,6 @@ import { BasicError } from '../model/basicError';
 // @ts-ignore
 import { Dataset } from '../model/dataset';
 // @ts-ignore
-import { DatasetJsonLd } from '../model/datasetJsonLd';
-// @ts-ignore
 import { DatasetSearchQuery } from '../model/datasetSearchQuery';
 // @ts-ignore
 import { DatasetsPage } from '../model/datasetsPage';
@@ -125,7 +123,7 @@ export class DatasetService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<Dataset>;
@@ -134,7 +132,7 @@ export class DatasetService {
     observe?: 'response',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<HttpResponse<Dataset>>;
@@ -143,7 +141,7 @@ export class DatasetService {
     observe?: 'events',
     reportProgress?: boolean,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<HttpEvent<Dataset>>;
@@ -152,7 +150,7 @@ export class DatasetService {
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: {
-      httpHeaderAccept?: 'application/json' | 'application/ld+json' | 'application/problem+json';
+      httpHeaderAccept?: 'application/json' | 'application/problem+json';
       context?: HttpContext;
     },
   ): Observable<any> {
@@ -167,11 +165,7 @@ export class DatasetService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = [
-        'application/json',
-        'application/ld+json',
-        'application/problem+json',
-      ];
+      const httpHeaderAccepts: string[] = ['application/json', 'application/problem+json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {
