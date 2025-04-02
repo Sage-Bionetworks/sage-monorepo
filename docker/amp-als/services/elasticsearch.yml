@@ -6,8 +6,7 @@ services:
     environment:
       - node.name=amp-als-elasticsearch
       - cluster.name=amp-als-elasticsearch
-      - discovery.seed_hosts=
-      - cluster.initial_master_nodes=amp-als-elasticsearch
+      - discovery.type=single-node
       - bootstrap.memory_lock=true
       - 'ES_JAVA_OPTS=-Xms1g -Xmx1g'
       - http.port=8402

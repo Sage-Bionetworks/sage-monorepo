@@ -10,9 +10,9 @@ services:
     ports:
       - '8404:8404'
     depends_on:
-      #   amp-als-elasticsearch:
-      #     condition: service_healthy
       amp-als-mariadb:
+        condition: service_healthy
+      amp-als-elasticsearch:
         condition: service_healthy
     deploy:
       resources:
