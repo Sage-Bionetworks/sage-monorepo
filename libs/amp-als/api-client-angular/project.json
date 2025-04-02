@@ -40,10 +40,8 @@
         "commands": ["rm -fr src/lib/*", "openapi-generator-cli generate"],
         "cwd": "{projectRoot}",
         "parallel": false
-      },
-      "dependsOn": ["^build"]
+      }
     }
   },
-  "tags": ["language:typescript"],
-  "implicitDependencies": ["amp-als-api-description"]
+  "tags": ["language:typescript"]
 }
