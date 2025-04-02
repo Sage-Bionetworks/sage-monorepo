@@ -22,8 +22,7 @@ test.describe('specific viewport block', () => {
     await expect(page).toHaveTitle('Gene Comparison | Visual comparison tool for AD genes');
   });
 
-  // TODO: re-enable as part of AG-1739
-  test.fixme('protein has sub-category of SRM by default', async ({ page }) => {
+  test('protein has sub-category of SRM by default', async ({ page }) => {
     // set category for Protein - Differential Expression
     await page.goto(URL_GCT_PROTEIN);
 
