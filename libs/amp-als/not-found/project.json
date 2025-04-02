@@ -1,0 +1,27 @@
+{
+  "name": "amp-als-not-found",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/amp-als/not-found/src",
+  "prefix": "amp-als",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/amp-als/not-found"],
+      "options": {
+        "jestConfig": "libs/amp-als/not-found/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:amp-als", "language:typescript"],
+  "implicitDependencies": []
+}

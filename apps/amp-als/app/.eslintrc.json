@@ -1,0 +1,47 @@
+{
+  "extends": ["plugin:playwright/recommended", "../../../.eslintrc.json"],
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "extends": ["plugin:@nx/angular", "plugin:@angular-eslint/template/process-inline-templates"],
+      "rules": {
+        "@angular-eslint/directive-selector": [
+          "error",
+          {
+            "type": "attribute",
+            "prefix": "app",
+            "style": "camelCase"
+          }
+        ],
+        "@angular-eslint/component-selector": [
+          "error",
+          {
+            "type": "element",
+            "prefix": "app",
+            "style": "kebab-case"
+          }
+        ],
+        "@angular-eslint/prefer-standalone": "off"
+      }
+    },
+    {
+      "files": ["*.html"],
+      "extends": ["plugin:@nx/angular-template"],
+      "rules": {}
+    },
+    {
+      "files": ["e2e/**/*.{ts,js,tsx,jsx}", "e2e/**/*.spec.{ts,js,tsx,jsx}"],
+      "plugins": ["@typescript-eslint"],
+      "parserOptions": {
+        "project": "./apps/amp-als/app/tsconfig.*?.json"
+      },
+      "rules": {
+        "@typescript-eslint/no-floating-promises": "error",
+        "playwright/no-nested-step": "off",
+        "playwright/no-conditional-in-test": "off",
+        "playwright/expect-expect": "off"
+      }
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+.tooltip,
+.tooltip-small {
+  font-size: 14px;
+  text-align: center;
+  margin-top: -20px;
+
+  .p-tooltip-text {
+    padding: 10px;
+  }
+}
+
+.tooltip-small .p-tooltip-text {
+  width: 150px;
+}
+
+.tooltip-nowrap {
+  .p-tooltip-text {
+    white-space: nowrap;
+  }
+}

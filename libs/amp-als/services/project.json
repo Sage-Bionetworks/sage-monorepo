@@ -1,0 +1,21 @@
+{
+  "name": "amp-als-services",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/amp-als/services/src",
+  "prefix": "amp-als",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/amp-als/services"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  },
+  "tags": ["type:services", "scope:amp-als", "language:typescript"],
+  "implicitDependencies": []
+}

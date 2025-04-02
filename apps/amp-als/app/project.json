@@ -1,0 +1,166 @@
+{
+  "name": "amp-als-app",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/amp-als/app/src",
+  "tags": [],
+  "implicitDependencies": ["amp-als-styles", "amp-als-themes", "shared-typescript-assets"],
+  "targets": {
+    "create-config": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cp -n .env.example .env",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/amp-als/app/browser/browser",
+        "index": "apps/amp-als/app/src/index.html",
+        "main": "apps/amp-als/app/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/amp-als/app/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/amp-als/app/src/assets",
+          "apps/amp-als/app/src/config",
+          "apps/amp-als/app/src/humans.txt",
+          "apps/amp-als/app/src/robots.txt",
+          {
+            "input": "libs/shared/typescript/assets/src/assets",
+            "glob": "**/*",
+            "output": "assets"
+          },
+          {
+            "input": "libs/amp-als/assets",
+            "glob": "**/*",
+            "output": "amp-als-assets"
+          },
+          {
+            "input": "libs/amp-als/assets/favicon",
+            "glob": "favicon.ico",
+            "output": ""
+          }
+        ],
+        "styles": ["apps/amp-als/app/src/styles.scss", "node_modules/primeicons/primeicons.css"],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "4mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "20kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "proxyConfig": "{projectRoot}/src/proxy.conf.json"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "amp-als-app:build:production"
+        },
+        "development": {
+          "buildTarget": "amp-als-app:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "serve-detach": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker/amp-als/serve-detach.sh amp-als-app"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "amp-als-app:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/amp-als/app/jest.config.ts"
+      }
+    },
+    "server": {
+      "dependsOn": ["build"],
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/amp-als/app/browser/server",
+        "main": "apps/amp-als/app/server.ts",
+        "tsConfig": "apps/amp-als/app/tsconfig.server.json",
+        "inlineStyleLanguage": "scss"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "amp-als-app:build:development",
+          "serverTarget": "amp-als-app:server:development"
+        },
+        "production": {
+          "browserTarget": "amp-als-app:build:production",
+          "serverTarget": "amp-als-app:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "scan-image": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trivy image ghcr.io/sage-bionetworks/amp-als-app:local --quiet",
+        "color": true
+      }
+    }
+  }
+}

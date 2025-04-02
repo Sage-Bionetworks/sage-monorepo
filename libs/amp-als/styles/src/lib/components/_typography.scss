@@ -1,0 +1,90 @@
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  color: var(--color-heading);
+  margin-top: 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+@each $size, $properties in $headings {
+  #{$size},
+  .#{$size} {
+    @each $property, $value in $properties {
+      #{$property}: var(--#{$property}-#{$size});
+    }
+  }
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  agora-download-dom-image {
+    float: right;
+  }
+
+  agora-modal-link {
+    float: right;
+  }
+}
+
+h2 {
+  agora-modal-link {
+    transform: translateY(-3px);
+  }
+}
+
+h3 {
+  agora-download-dom-image {
+    transform: translateY(-4px);
+  }
+}
+
+p {
+  margin-top: 0;
+}
+
+b {
+  font-weight: 700;
+}
+
+@each $key, $color in $main-colors {
+  .text-#{$key} {
+    color: var(--color-#{$key}) !important;
+  }
+}
+
+.text-default {
+  color: var(--color-text) !important;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+@each $size, $properties in $font-sizes {
+  .text-#{$size} {
+    @each $property, $value in $properties {
+      #{$property}: var(--#{$property}-#{$size}) !important;
+    }
+  }
+}
+
+.link {
+  @include link;
+}

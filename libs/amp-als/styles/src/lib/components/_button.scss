@@ -1,0 +1,11 @@
+.no-transition {
+  transition: none !important;
+}
+
+.btn-no-outline {
+  border: 0 !important;
+
+  &:hover {
+    border: 0 !important;
+  }
+}

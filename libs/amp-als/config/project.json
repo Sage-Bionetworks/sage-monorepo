@@ -1,0 +1,27 @@
+{
+  "name": "amp-als-config",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/amp-als/config/src",
+  "prefix": "amp-als",
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/amp-als/config"],
+      "options": {
+        "jestConfig": "libs/amp-als/config/jest.config.ts"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "lint-fix": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "fix": true
+      }
+    }
+  },
+  "tags": ["type:feature", "scope:amp-als", "language:typescript"],
+  "implicitDependencies": []
+}

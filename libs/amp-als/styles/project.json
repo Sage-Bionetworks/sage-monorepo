@@ -1,0 +1,9 @@
+{
+  "name": "amp-als-styles",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/amp-als/styles/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:styles", "scope:amp-als", "language:typescript"]
+}

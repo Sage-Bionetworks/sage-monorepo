@@ -1,0 +1,7 @@
+{
+  "apiDocsUrl": "${API_DOCS_URL}",
+  "appVersion": "${APP_VERSION}",
+  "csrApiUrl": "${CSR_API_URL}",
+  "ssrApiUrl": "${SSR_API_URL}",
+  "tagName": "${TAG_NAME}"
+}

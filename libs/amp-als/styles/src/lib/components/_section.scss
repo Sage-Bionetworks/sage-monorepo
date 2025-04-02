@@ -1,0 +1,69 @@
+/* stylelint-disable no-descending-specificity */
+
+.container-sm {
+  @include container('sm');
+}
+
+.container-md {
+  @include container;
+}
+
+.container-lg {
+  @include container('lg');
+}
+
+.section {
+  .section-inner {
+    padding: var(--spacing-xl) var(--spacing-xl);
+
+    &,
+    [class*='container-'] {
+      > h1,
+      > h2,
+      > h3,
+      > h4,
+      > h5,
+      > h6,
+      > p {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}
+
+@each $key, $color in $main-colors {
+  .section-#{$key} {
+    background-color: var(--color-#{$key});
+  }
+}
+
+.section-hero {
+  display: flex;
+  min-height: 200px;
+  background-color: var(--color-primary);
+  background-image: url('/agora-assets/images/hero-background.svg');
+  background-size: cover !important;
+  color: #fff;
+  align-items: center;
+
+  .section-inner {
+    width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #fff;
+  }
+
+  a,
+  .modal-link .modal-link-icon,
+  .modal-link .modal-link-text {
+    color: #fff;
+  }
+}

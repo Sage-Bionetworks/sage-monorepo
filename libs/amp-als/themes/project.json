@@ -1,0 +1,10 @@
+{
+  "name": "amp-als-themes",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/amp-als/themes/src",
+  "projectType": "library",
+  "generators": {},
+  "targets": {},
+  "tags": ["type:themes", "scope:amp-als", "language:typescript"],
+  "implicitDependencies": []
+}

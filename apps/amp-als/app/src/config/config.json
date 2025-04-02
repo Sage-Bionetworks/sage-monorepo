@@ -1,0 +1,7 @@
+{
+  "apiDocsUrl": "http://localhost:8400/api-docs",
+  "appVersion": "edge",
+  "csrApiUrl": "http://localhost:8404/v1",
+  "ssrApiUrl": "http://amp-als-dataset-service:8404/v1",
+  "tagName": "edge"
+}

@@ -1,0 +1,62 @@
+p-radiobutton {
+  display: flex;
+
+  .p-radiobutton-box {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    font-size: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    transition: $transition-duration;
+    margin-right: 10px;
+
+    .p-radiobutton-icon {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      transition: $transition-duration;
+      top: 0;
+      left: 0;
+      margin: 0;
+
+      &::before {
+        content: ' ';
+        display: block;
+        width: 7px;
+        height: 7px;
+        background: var(--color-primary);
+        border-radius: 50%;
+      }
+    }
+
+    &.p-focus {
+      border-color: var(--color-primary);
+    }
+
+    &.p-radiobutton-checked {
+      border-color: var(--color-primary);
+
+      .p-radiobutton-icon {
+        color: var(--color-primary);
+
+        &,
+        &::before {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  /* 
+    In PrimeNG v19, the radiobutton label does not have this class and is not a child of p-radiobutton, 
+    so this style does not apply to the label. TODO: move this style into the preset.
+  */
+  .p-radiobutton-label {
+    font-size: 16px;
+    color: var(--color-text);
+    cursor: pointer;
+  }
+}

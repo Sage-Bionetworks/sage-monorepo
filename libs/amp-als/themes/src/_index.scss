@@ -1,0 +1,9 @@
+@use 'libs/amp-als/not-found/src/lib-theme' as amp-als-not-found;
+
+// @use 'libs/amp-als/ui/src/lib-theme' as amp-als-ui;
+
+@mixin theme($theme) {
+  @include amp-als-not-found.theme($theme);
+
+  // @include amp-als-ui.theme($theme);
+}

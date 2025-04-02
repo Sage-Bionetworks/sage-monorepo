@@ -1,0 +1,5 @@
+/* Remove primeng popover arrow */
+.p-popover::before,
+.p-popover::after {
+  display: none;
+}
