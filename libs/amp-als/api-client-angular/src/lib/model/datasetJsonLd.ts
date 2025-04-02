@@ -34,7 +34,7 @@ export interface DatasetJsonLd {
    * Datetime when the object was last modified in the database.
    */
   updatedAt: string;
-  context: string;
-  id: string;
-  type: string;
+  '@context': string;
+  '@id': string;
+  '@type': string;
 }
