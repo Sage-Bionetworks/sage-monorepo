@@ -38,6 +38,9 @@
       "@sagebionetworks/agora/ui": ["libs/agora/ui/src/index.ts"],
       "@sagebionetworks/agora/util": ["libs/agora/util/src/index.ts"],
       "@sagebionetworks/agora/wiki": ["libs/agora/wiki/src/index.ts"],
+      "@sagebionetworks/amp-als/api-client-angular": [
+        "libs/amp-als/api-client-angular/src/index.ts"
+      ],
       "@sagebionetworks/model-ad/api-client-angular": [
         "libs/model-ad/api-client-angular/src/index.ts"
       ],
