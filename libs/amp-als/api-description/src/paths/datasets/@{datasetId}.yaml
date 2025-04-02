@@ -13,9 +13,6 @@ get:
         application/json:
           schema:
             $ref: ../../components/schemas/Dataset.yaml
-        application/ld+json:
-          schema:
-            $ref: ../../components/schemas/DatasetJsonLd.yaml
     '404':
       $ref: ../../components/responses/NotFound.yaml
     '500':
