@@ -59,6 +59,7 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
   @Input('id') idParam = '';
   @Input('tab') tabParam = '';
   @Input('subtab') subtabParam = '';
+  @Input('model') modelParam = '';
 
   faAngleRight = faAngleRight;
   faAngleLeft = faAngleLeft;
@@ -257,9 +258,8 @@ export class GeneDetailsComponent implements OnInit, AfterViewInit, AfterViewChe
     }
 
     // added logic to support dropdown state when page is refreshed
-    const modelUrlParam = this.helperService.getUrlParam('model');
-    if (modelUrlParam) {
-      url = this.helperService.addSingleUrlParam(url, 'model', modelUrlParam);
+    if (this.modelParam) {
+      url = this.helperService.addSingleUrlParam(url, 'model', this.modelParam);
     }
 
     const nav = document.querySelector('.gene-details-nav');

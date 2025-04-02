@@ -45,7 +45,17 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   }
   @Input() set gene(gene: Gene | undefined) {
     this._gene = gene;
-    this.init();
+    this.initGene();
+  }
+
+  _model: string | undefined;
+  get model(): string | undefined {
+    return this._model;
+  }
+  @Input()
+  set model(model: string) {
+    this._model = model;
+    this.updateStatisticalModel(model);
   }
 
   statisticalModels: string[] = [];
@@ -83,7 +93,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     this.differentialExpressionYAxisMax = undefined;
   }
 
-  init() {
+  initGene() {
     this.reset();
 
     if (!this._gene?.rna_differential_expression) {
@@ -92,12 +102,8 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
 
     this.statisticalModels = getStatisticalModels(this._gene);
 
-    const urlModelParam = this.helperService.getUrlParam('model');
-    this.selectedStatisticalModel = urlModelParam || this.statisticalModels[0];
-
     this.initMedianExpression();
-    this.initDifferentialExpression();
-    this.initConsistencyOfChange();
+    this.updateStatisticalModel(this._model || this.statisticalModels[0]);
   }
 
   ngAfterViewChecked() {
@@ -222,6 +228,12 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     });
   }
 
+  updateStatisticalModel(selectedStatisticalModel: string) {
+    this.selectedStatisticalModel = selectedStatisticalModel;
+    this.initDifferentialExpression();
+    this.initConsistencyOfChange();
+  }
+
   onStatisticalModelChange(event: any) {
     if (!event) {
       return;
@@ -229,8 +241,6 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
     if (!this._gene?.rna_differential_expression) {
       return;
     }
-    this.selectedStatisticalModel = event.name;
-    this.initDifferentialExpression();
-    this.initConsistencyOfChange();
+    this.updateStatisticalModel(event.name);
   }
 }

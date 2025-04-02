@@ -57,6 +57,7 @@
             </agora-modal-link>
           </h2>
           <agora-gene-model-selector
+            [model]="_model"
             [options]="statisticalModels"
             (changeEvent)="onStatisticalModelChange($event)"
           ></agora-gene-model-selector>
