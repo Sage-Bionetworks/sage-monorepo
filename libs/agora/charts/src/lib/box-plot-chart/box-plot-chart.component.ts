@@ -7,7 +7,7 @@ import { HelperService } from '@sagebionetworks/agora/services';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { boxPlotChartItem } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem } from '@sagebionetworks/agora/models';
 import { CategoryBoxplotSummary, CategoryPoint } from '@sagebionetworks/shared/charts';
 import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 
@@ -23,17 +23,17 @@ import { BoxplotDirective } from '@sagebionetworks/shared/charts-angular';
 export class BoxPlotComponent {
   helperService = inject(HelperService);
 
-  _data: boxPlotChartItem[] = [];
+  _data: BoxPlotChartItem[] = [];
   points: CategoryPoint[] = [];
   summaries: CategoryBoxplotSummary[] = [];
   xAxisCategoryToTooltipText: Record<string, string> | undefined = {};
   isInitialized = false;
   pointTooltipFormatter: ((pt: CategoryPoint) => string) | undefined;
 
-  get data(): boxPlotChartItem[] {
+  get data(): BoxPlotChartItem[] {
     return this._data;
   }
-  @Input() set data(data: boxPlotChartItem[]) {
+  @Input() set data(data: BoxPlotChartItem[]) {
     this._data = data;
     this.init();
   }

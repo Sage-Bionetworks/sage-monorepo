@@ -1,9 +1,9 @@
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { OverallScores } from '@sagebionetworks/agora/api-client-angular';
 import { cache } from '../helpers';
 import { OverallScoresCollection } from '../models';
-import { OverallScores } from 'libs/agora/models';
 
 // -------------------------------------------------------------------------- //
 // Functions

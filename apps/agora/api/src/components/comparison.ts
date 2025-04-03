@@ -1,22 +1,11 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders, altCache } from '../helpers';
-import { getGenesMap, getAllScores, getTeams, getAllGeneBioDomains } from './';
-import {
-  Gene,
-  GCTGene,
-  GCTGeneNominations,
-  RnaDifferentialExpressionCollection,
-  ProteomicsLFQCollection,
-  ProteomicsTMTCollection,
-  ProteomicsSRMCollection,
-} from '../models';
 import {
   BioDomains,
   ProteinDifferentialExpression,
@@ -24,7 +13,18 @@ import {
   TargetNomination,
   Team,
 } from '@sagebionetworks/agora/api-client-angular';
-import { Scores } from 'libs/agora/models';
+import { Scores } from '@sagebionetworks/agora/models';
+import { altCache, setHeaders } from '../helpers';
+import {
+  GCTGene,
+  GCTGeneNominations,
+  Gene,
+  ProteomicsLFQCollection,
+  ProteomicsSRMCollection,
+  ProteomicsTMTCollection,
+  RnaDifferentialExpressionCollection,
+} from '../models';
+import { getAllGeneBioDomains, getAllScores, getGenesMap, getTeams } from './';
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //

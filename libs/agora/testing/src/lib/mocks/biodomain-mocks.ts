@@ -1,6 +1,6 @@
 /* eslint-disable */
 
-import { BioDomainInfo, BioDomain, BioDomains } from '@sagebionetworks/agora/models';
+import { BioDomain, BioDomainInfo, BioDomains } from '@sagebionetworks/agora/api-client-angular';
 
 export const bioDomainInfoMock: BioDomainInfo[] = [
   {
