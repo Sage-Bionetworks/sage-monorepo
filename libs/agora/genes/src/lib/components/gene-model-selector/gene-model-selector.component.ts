@@ -1,6 +1,6 @@
-/* eslint-disable @angular-eslint/no-input-rename */
 import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { removeParenthesis } from '@sagebionetworks/agora/util';
 import { SelectModule } from 'primeng/select';
 
@@ -16,7 +16,7 @@ interface Option {
   styleUrls: ['./gene-model-selector.component.scss'],
 })
 export class GeneModelSelectorComponent implements OnInit {
-  @Input('model') modelParam = '';
+  route = inject(ActivatedRoute);
 
   _options: Option[] = [];
   get options(): Option[] {
@@ -39,13 +39,16 @@ export class GeneModelSelectorComponent implements OnInit {
   @Output() changeEvent: EventEmitter<object> = new EventEmitter<object>();
 
   ngOnInit() {
-    let index = this._options.findIndex((o) => o.value === this.modelParam);
-    if (index === -1) {
-      // default to first option if page is loaded without a model parameter
-      index = 0;
-    }
-    this.selected = this._options[index];
-    this._onChange();
+    this.route.queryParams.subscribe((params) => {
+      const modelFromURL = params['model'];
+      let index = this._options.findIndex((o) => o.value === modelFromURL);
+      if (index === -1) {
+        // default to first option if page is loaded without a model parameter
+        index = 0;
+      }
+      this.selected = this._options[index];
+      this._onChange();
+    });
   }
 
   _onChange() {
