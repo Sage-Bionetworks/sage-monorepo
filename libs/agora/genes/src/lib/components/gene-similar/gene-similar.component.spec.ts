@@ -1,17 +1,10 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
-
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-import { GeneSimilarComponent } from './gene-similar.component';
-import { geneMock1, geneMock2, geneMock3 } from '@sagebionetworks/agora/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { GenesService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
+import { geneMock1, geneMock2, geneMock3 } from '@sagebionetworks/agora/testing';
+import { GeneSimilarComponent } from './gene-similar.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -23,9 +16,7 @@ describe('Component: Gene Similar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GeneSimilarComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [GenesService, HelperService],
+      providers: [GenesService, HelperService, provideRouter([]), provideHttpClient()],
     }).compileComponents();
   });
 
