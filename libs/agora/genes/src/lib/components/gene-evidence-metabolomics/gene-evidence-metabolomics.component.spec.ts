@@ -1,32 +1,30 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneNetworkComponent } from './gene-network.component';
 import { GenesService } from '@sagebionetworks/agora/api-client-angular';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { GeneEvidenceMetabolomicsComponent } from './gene-evidence-metabolomics.component';
+
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Gene Network', () => {
-  let fixture: ComponentFixture<GeneNetworkComponent>;
-  let component: GeneNetworkComponent;
+describe('Component: Gene Metabolomics', () => {
+  let fixture: ComponentFixture<GeneEvidenceMetabolomicsComponent>;
+  let component: GeneEvidenceMetabolomicsComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GeneNetworkComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [GenesService],
+      providers: [GenesService, HelperService],
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(GeneNetworkComponent);
+    fixture = TestBed.createComponent(GeneEvidenceMetabolomicsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

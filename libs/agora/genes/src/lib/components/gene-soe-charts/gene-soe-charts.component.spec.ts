@@ -1,31 +1,21 @@
-// -------------------------------------------------------------------------- //
-// External
-// -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { GenesService, OverallScoresDistribution } from '@sagebionetworks/agora/api-client-angular';
+import {
+  geneMock1,
+  geneMock2,
+  overallScoresMock1,
+  overallScoresMock2,
+} from '@sagebionetworks/agora/testing';
+import { GeneSoeChartsComponent } from './gene-soe-charts.component';
 
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-import { GeneSoeChartsComponent } from './';
-import { GeneService } from '../../services';
-import { ApiService } from '../../../../core/services';
-import { OverallScoresDistribution } from '../../../../models';
-import { geneMock1, geneMock2, overallScoresMock1, overallScoresMock2 } from '../../../../testing';
-
-// -------------------------------------------------------------------------- //
-// Tests
-// -------------------------------------------------------------------------- //
 describe('Component: Gene SOE Charts', () => {
   let fixture: ComponentFixture<GeneSoeChartsComponent>;
   let component: GeneSoeChartsComponent;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GeneSoeChartsComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [GeneService, ApiService],
+      providers: [GenesService, provideHttpClient()],
     }).compileComponents();
   });
 

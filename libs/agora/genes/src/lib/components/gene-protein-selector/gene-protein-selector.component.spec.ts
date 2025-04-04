@@ -1,30 +1,26 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneModelSelectorComponent } from './gene-model-selector.component';
+import { GeneProteinSelectorComponent } from './gene-protein-selector.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Gene Model Selector', () => {
-  let fixture: ComponentFixture<GeneModelSelectorComponent>;
-  let component: GeneModelSelectorComponent;
+describe('Component: Gene Protein Selector', () => {
+  let fixture: ComponentFixture<GeneProteinSelectorComponent>;
+  let component: GeneProteinSelectorComponent;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [GeneModelSelectorComponent],
-      imports: [RouterTestingModule],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(GeneModelSelectorComponent);
+    fixture = TestBed.createComponent(GeneProteinSelectorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

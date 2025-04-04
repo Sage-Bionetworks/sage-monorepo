@@ -1,15 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneBioDomainsComponent } from './gene-biodomains.component';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { emptyBioDomainMock, geneMock1 } from '@sagebionetworks/agora/testing';
+import { GeneBioDomainsComponent } from './gene-biodomains.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -20,9 +20,7 @@ describe('Component: Gene Biodomains', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GeneBioDomainsComponent],
-      imports: [RouterTestingModule],
-      providers: [HelperService],
+      providers: [HelperService, provideRouter([])],
     }).compileComponents();
   });
 

@@ -1,16 +1,15 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { ExperimentalValidationComponent } from './gene-experimental-validation.component';
-import { HelperService } from '@sagebionetworks/agora/services';
 import { GenesService, TeamsService } from '@sagebionetworks/agora/api-client-angular';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { ExperimentalValidationComponent } from './gene-experimental-validation.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -21,9 +20,7 @@ describe('Component: Gene Experimental Validation', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ExperimentalValidationComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [GenesService, TeamsService, HelperService],
+      providers: [GenesService, TeamsService, HelperService, provideHttpClient()],
     }).compileComponents();
   });
 

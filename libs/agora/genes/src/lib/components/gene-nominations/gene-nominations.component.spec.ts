@@ -1,16 +1,16 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneNominationsComponent } from './gene-nominations.component';
-import { of } from 'rxjs';
+import { provideHttpClient } from '@angular/common/http';
+import { TeamsService } from '@sagebionetworks/agora/api-client-angular';
 import { geneMock1, teamsResponseMock } from '@sagebionetworks/agora/testing';
+import { of } from 'rxjs';
+import { GeneNominationsComponent } from './gene-nominations.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -18,22 +18,25 @@ import { geneMock1, teamsResponseMock } from '@sagebionetworks/agora/testing';
 describe('Component: Gene Nominations', () => {
   let fixture: ComponentFixture<GeneNominationsComponent>;
   let component: GeneNominationsComponent;
-  let mockTeamService: TeamsService;
+
+  const mockTeamsService = {
+    listTeams: jest.fn(() => of(teamsResponseMock)),
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [GeneNominationsComponent],
-      imports: [RouterTestingModule, HttpClientTestingModule],
-      providers: [TeamsService],
+      providers: [{ provide: TeamsService, useValue: mockTeamsService }, provideHttpClient()],
     }).compileComponents();
   });
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(GeneNominationsComponent);
     component = fixture.componentInstance;
-    mockTeamService = TestBed.inject(TeamsService);
-    spyOn(mockTeamService, 'getTeams').and.returnValue(of(teamsResponseMock));
     fixture.detectChanges();
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -45,7 +48,7 @@ describe('Component: Gene Nominations', () => {
     component.init();
     fixture.detectChanges();
 
-    expect(mockTeamService.getTeams).toHaveBeenCalled();
+    expect(mockTeamsService.listTeams).toHaveBeenCalled();
   });
 
   it('should get full display name', () => {
@@ -53,14 +56,9 @@ describe('Component: Gene Nominations', () => {
     component.init();
     fixture.detectChanges();
 
-    const nominations = geneMock1.target_nominations;
-    if (nominations === null || nominations.length === 0)
-      fail('improperly set up mock gene for test');
-    else {
-      const nomination = nominations[0];
-      const result = component.getFullDisplayName(nomination);
-      expect(result).toBe('AMP-AD: Emory University');
-    }
+    const nomination = component.nominations[0];
+    const result = component.getFullDisplayName(nomination);
+    expect(result).toBe('AMP-AD: Emory University');
   });
 
   it('should sort nominations alphabetically then by date desc', () => {
@@ -68,7 +66,8 @@ describe('Component: Gene Nominations', () => {
     component.init();
     fixture.detectChanges();
 
-    const result = component.sortNominations(teamsResponseMock.items);
+    const teamsList = teamsResponseMock.items ?? [];
+    const result = component.sortNominations(teamsList);
 
     expect(result.length).toBe(5);
 
