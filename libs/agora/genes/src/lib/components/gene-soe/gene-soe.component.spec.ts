@@ -1,30 +1,26 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneSoeListComponent } from './gene-soe-list.component';
+import { GeneSoeComponent } from './gene-soe.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
 // -------------------------------------------------------------------------- //
-describe('Component: Gene SOE List', () => {
-  let fixture: ComponentFixture<GeneSoeListComponent>;
-  let component: GeneSoeListComponent;
+describe('Component: Gene SOE', () => {
+  let fixture: ComponentFixture<GeneSoeComponent>;
+  let component: GeneSoeComponent;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [GeneSoeListComponent],
-      imports: [RouterTestingModule],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(GeneSoeListComponent);
+    fixture = TestBed.createComponent(GeneSoeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

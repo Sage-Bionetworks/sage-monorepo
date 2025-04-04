@@ -1,14 +1,13 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { GeneHeroComponent } from './gene-hero.component';
 import { geneMock1, geneMock3 } from '@sagebionetworks/agora/testing';
+import { GeneHeroComponent } from './gene-hero.component';
 
 // -------------------------------------------------------------------------- //
 // Tests
@@ -19,10 +18,7 @@ describe('Component: Gene Hero', () => {
   let element: HTMLElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [GeneHeroComponent],
-      imports: [RouterTestingModule],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(async () => {
@@ -46,7 +42,7 @@ describe('Component: Gene Hero', () => {
 
     let el = element.querySelector('.gene-hero-nominated') as HTMLElement;
 
-    expect(el.textContent).toBe(expected);
+    expect(el.textContent?.trim()).toBe(expected);
 
     component.gene = geneMock1;
     component.gene.is_tep = false;
@@ -55,7 +51,7 @@ describe('Component: Gene Hero', () => {
 
     el = element.querySelector('.gene-hero-nominated') as HTMLElement;
 
-    expect(el.textContent).toBe(expected);
+    expect(el.textContent?.trim()).toBe(expected);
   });
 
   it('should show nomination and not show TEP text for MSN if both is_tep and is_adi is false', () => {
@@ -68,7 +64,7 @@ describe('Component: Gene Hero', () => {
 
     const el = element.querySelector('.gene-hero-nominated') as HTMLElement;
 
-    expect(el.textContent).toBe(expected);
+    expect(el.textContent?.trim()).toBe(expected);
   });
 
   it('should not show nomination and show TEP text for HCK if nominations is null and either is_tep or is_adi is true', () => {
@@ -81,7 +77,7 @@ describe('Component: Gene Hero', () => {
 
     let el = element.querySelector('.gene-hero-nominated') as HTMLElement;
 
-    expect(el.textContent).toBe(expected);
+    expect(el.textContent?.trim()).toBe(expected);
 
     component.gene = geneMock3;
     component.gene.is_adi = false;
@@ -90,7 +86,7 @@ describe('Component: Gene Hero', () => {
 
     el = element.querySelector('.gene-hero-nominated') as HTMLElement;
 
-    expect(el.textContent).toBe(expected);
+    expect(el.textContent?.trim()).toBe(expected);
   });
 
   it('should not show nomination and not show TEP text for HCK if nominations is null and both is_tep or is_adi is false', () => {
