@@ -1,9 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HeaderComponent } from './header.component';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter, RouterModule } from '@angular/router';
-import { GeneSearchComponent } from '@sagebionetworks/agora/genes';
-import { SvgImageComponent } from '@sagebionetworks/agora/ui';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { HeaderComponent } from './header.component';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -11,7 +9,6 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RouterModule, GeneSearchComponent, SvgImageComponent],
       providers: [provideHttpClient(), provideRouter([])],
     }).compileComponents();
   });

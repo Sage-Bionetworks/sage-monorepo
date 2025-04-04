@@ -1,9 +1,6 @@
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-// import { ConfigService } from '@sagebionetworks/openchallenges/config';
-
 import { NotFoundComponent } from './not-found.component';
 
 describe('NotFoundComponent', () => {
@@ -12,8 +9,7 @@ describe('NotFoundComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HttpClientModule, RouterTestingModule, NotFoundComponent],
-      providers: [],
+      providers: [provideHttpClient()],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
     }).compileComponents();
   });
