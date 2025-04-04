@@ -7,14 +7,14 @@
     "create-config": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cp -n .env.example .env",
+        "commands": ["cp -n .env.example .env", "cp -n .env.test.example .env.test"],
         "cwd": "{projectRoot}"
       }
     },
     "prepare": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "uv sync",
+        "command": "uv sync --dev",
         "cwd": "{projectRoot}"
       }
     },
@@ -22,6 +22,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "docker/iatlas/serve-detach.sh {projectName}"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run pytest",
+        "cwd": "{projectRoot}"
       }
     }
   },
