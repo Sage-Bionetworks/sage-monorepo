@@ -24,17 +24,17 @@
     }
   }
 
-  .p-datatable-wrapper {
+  .p-datatable-table-container {
     height: 344px;
   }
 
   p-table.fullscreen-table {
-    .p-datatable-wrapper {
+    .p-datatable-table-container {
       height: calc(100vh - 58px);
     }
   }
 
-  table {
+  .p-datatable-table {
     background-color: #fff;
 
     &,
@@ -92,6 +92,6 @@
   }
 }
 
-.similar-gene-table .p-datatable-wrapper {
+.similar-gene-table .p-datatable-table-container {
   height: 638px;
 }
