@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { SvgIconService } from '@sagebionetworks/agora/services';
 
@@ -9,10 +9,13 @@ import { SvgIconService } from '@sagebionetworks/agora/services';
   imports: [CommonModule],
   templateUrl: './svg-icon.component.html',
   styleUrls: ['./svg-icon.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class SvgIconComponent implements OnInit {
   @Input() imagePath!: string;
   @Input() altText = '';
+  @Input() width = 14;
+  @Input() height = 14;
   @Input() color = 'currentColor'; // Default to inherited color
 
   http = inject(HttpClient);
