@@ -112,7 +112,7 @@
                   </div>
                 </div>
                 <div class="gct-significance-control">
-                  <div>Hide insignificant</div>
+                  <div class="unselectable-text">Hide insignificant</div>
                   <div>
                     <p-toggleswitch
                       [pTooltip]="
@@ -120,7 +120,7 @@
                         significanceThreshold
                       "
                       styleClass="gct-significance-control-toggle"
-                      tooltipPosition="left"
+                      tooltipPosition="top"
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
                       (onChange)="setSignificanceThresholdActive(significanceThresholdActive)"
@@ -145,7 +145,7 @@
                       (click)="significancePopover.toggle($event)"
                       class="gct-significance-control-settings"
                       pTooltip="Edit significance cutoff value"
-                      tooltipPosition="left"
+                      tooltipPosition="top"
                       tooltipStyleClass="tooltip"
                     >
                       <agora-svg-icon
@@ -189,8 +189,8 @@
                     <button
                       (click)="columnPopover.toggle($event)"
                       pTooltip="Show/hide columns"
-                      tooltipPosition="left"
-                      tooltipStyleClass="tooltip"
+                      tooltipPosition="top"
+                      tooltipStyleClass="tooltip-xs"
                     >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/column.svg"

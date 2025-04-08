@@ -1,55 +1,84 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { render, RenderResult, screen } from '@testing-library/angular';
 import { SvgIconComponent } from './svg-icon.component';
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
+import { SvgIconService } from '@sagebionetworks/agora/services';
+import { DomSanitizer } from '@angular/platform-browser';
+import { of } from 'rxjs';
+
+// Mock SvgIconService
+class MockSvgIconService {
+  getSvg = jest.fn();
+}
 
 describe('SvgIconComponent', () => {
-  let fixture: ComponentFixture<SvgIconComponent>;
+  let httpMock: HttpTestingController;
+  let renderResult: RenderResult<SvgIconComponent>;
   let component: SvgIconComponent;
-  let element: HTMLElement;
+  let svgService: SvgIconService;
+  let sanitizer: DomSanitizer;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [SvgIconComponent, NoopAnimationsModule],
-      providers: [provideHttpClient(), provideHttpClientTesting()],
-    }).compileComponents();
+  beforeEach(async () => {
+    renderResult = await render(SvgIconComponent, {
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: SvgIconService, useClass: MockSvgIconService },
+      ],
+    });
 
-    fixture = TestBed.createComponent(SvgIconComponent);
-    component = fixture.componentInstance;
-    element = fixture.nativeElement;
+    component = renderResult.fixture.componentInstance as SvgIconComponent;
+    httpMock = renderResult.fixture.debugElement.injector.get(HttpTestingController);
+    svgService = renderResult.fixture.debugElement.injector.get(SvgIconService);
+    sanitizer = renderResult.fixture.debugElement.injector.get(DomSanitizer);
   });
 
-  it('should create', () => {
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('should create the component', async () => {
     expect(component).toBeTruthy();
   });
 
-  it('should populate innerHTML in the div when imagePath changes', () => {
-    // Mock input change to trigger ngOnChanges
-    component.imagePath = '/agora-assets/icons/sample.svg';
+  it('should not load SVG if imagePath is invalid', async () => {
+    // Test valid path
+    expect(component.isValidImagePath('/agora-assets/icons/cog.svg')).toBe(true);
 
-    // Trigger change detection
-    fixture.detectChanges();
-
-    // Now the div should be populated with the sanitized SVG content
-    const parentElement = element.querySelector('img');
-    expect(parentElement).toBeTruthy(); // Check that innerHTML is populated
+    // Test invalid paths
+    expect(component.isValidImagePath('https://external-domain.com/icon.svg')).toBe(false);
+    expect(component.isValidImagePath('/some-other-path/icon.svg')).toBe(false);
+    expect(component.isValidImagePath('')).toBe(false);
   });
 
-  describe('getClasses', () => {
-    it('should return only the default class when customClasses is not set', () => {
-      component.customClasses = '';
-      expect(component.getClasses()).toBe('svg-icon');
-    });
+  it('should load SVG through service and set as svgContent', async () => {
+    const mockSvg = '<svg><circle cx="50" cy="50" r="40" /></svg>';
+    const validPath = '/agora-assets/icons/cog.svg';
+    const sanitizedSvg = sanitizer.bypassSecurityTrustHtml(mockSvg);
 
-    it('should append customClasses when it is set', () => {
-      component.customClasses = 'custom-class';
-      expect(component.getClasses()).toBe('svg-icon custom-class');
-    });
+    // Spy on service method
+    jest.spyOn(svgService, 'getSvg').mockReturnValue(of(sanitizedSvg));
 
-    it('should handle multiple custom classes', () => {
-      component.customClasses = 'custom-class another-class';
-      expect(component.getClasses()).toBe('svg-icon custom-class another-class');
-    });
+    // Set input and trigger ngOnInit
+    component.imagePath = validPath;
+    component.ngOnInit();
+
+    // Verify service was called
+    expect(svgService.getSvg).toHaveBeenCalledWith(validPath);
+
+    // Verify component state
+    expect(component.svgContent).toBe(sanitizedSvg);
+  });
+
+  it('should not call service if path is invalid', () => {
+    // Spy on service method
+    const serviceSpy = jest.spyOn(svgService, 'getSvg');
+
+    // Set invalid path and trigger ngOnInit
+    component.imagePath = 'invalid/path';
+    component.ngOnInit();
+
+    // Verify service was not called
+    expect(serviceSpy).not.toHaveBeenCalled();
   });
 });

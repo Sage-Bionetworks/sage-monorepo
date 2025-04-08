@@ -1,16 +1,24 @@
 .tooltip,
-.tooltip-small {
+.tooltip-small,
+.tooltip-xs {
   font-size: 14px;
   text-align: center;
-  margin-top: -20px;
 
   .p-tooltip-text {
     padding: 10px;
+  }
+
+  .p-tooltip-arrow {
+    display: none !important;
   }
 }
 
 .tooltip-small .p-tooltip-text {
   width: 150px;
+}
+
+.tooltip-xs .p-tooltip-text {
+  width: 100px;
 }
 
 .tooltip-nowrap {
