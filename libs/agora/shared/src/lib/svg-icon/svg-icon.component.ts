@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, inject, Input, OnInit } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { firstValueFrom } from 'rxjs';
+import { SvgIconService } from '@sagebionetworks/agora/services';
 
 @Component({
   selector: 'agora-svg-icon',
   imports: [CommonModule],
   templateUrl: './svg-icon.component.html',
   styleUrls: ['./svg-icon.component.scss'],
-  encapsulation: ViewEncapsulation.None,
 })
 export class SvgIconComponent implements OnInit {
   @Input() imagePath!: string;
@@ -18,31 +17,23 @@ export class SvgIconComponent implements OnInit {
 
   http = inject(HttpClient);
   sanitizer = inject(DomSanitizer);
+  svgService = inject(SvgIconService);
 
   svgContent: SafeHtml | null = null;
+  private static svgCache = new Map<string, SafeHtml>();
 
   ngOnInit() {
     if (!this.isValidImagePath(this.imagePath)) return;
-    this.loadSVG();
+
+    this.svgService.getSvg(this.imagePath).subscribe({
+      next: (svg) => (this.svgContent = svg),
+      error: (error) => console.error('Error loading svg:', error),
+    });
   }
 
-  isValidImagePath(path: string) {
+  isValidImagePath(path: string): boolean {
     // We don't want to load SVGs from external sources
-    // Ensure the path comes from '/agora-assets/'
-    if (path && path.startsWith('/agora-assets/')) {
-      return true;
-    }
-    return false;
-  }
-
-  async loadSVG() {
-    try {
-      const svgContent = await firstValueFrom(
-        this.http.get(this.imagePath, { responseType: 'text' }),
-      );
-      this.svgContent = this.sanitizer.bypassSecurityTrustHtml(svgContent);
-    } catch (error) {
-      console.error('Error loading svg', error);
-    }
+    // Ensure the path comes from '/agora-assets/icons/'
+    return Boolean(path) && path.startsWith('/agora-assets/icons/');
   }
 }
