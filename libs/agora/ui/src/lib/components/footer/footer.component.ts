@@ -23,7 +23,7 @@ export class FooterComponent implements OnInit {
 
   footerLogoPath!: SafeUrl;
   dataVersion$!: Observable<Dataversion>;
-  sha$!: Observable<string>;
+  sha = '';
 
   /*
    TODO find out what the final tag format should be and potentially eliminate the 
@@ -56,11 +56,15 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataVersion$ = this.dataVersionService.getDataversion();
-    this.sha$ = this.gitHubService.getCommitSHA(this.tag);
+    this.gitHubService.getCommitSHA(this.tag).subscribe((sha) => {
+      this.sha = sha;
+    });
   }
 
   getSiteVersion() {
-    return this.configService.config.appVersion;
+    return this.sha
+      ? `${this.configService.config.appVersion}-${this.sha}`
+      : this.configService.config.appVersion;
   }
 
   getDataVersion(dataVersion: Dataversion) {
