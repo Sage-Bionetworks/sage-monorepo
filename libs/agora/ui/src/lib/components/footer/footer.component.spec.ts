@@ -47,6 +47,22 @@ describe('FooterComponent', () => {
     expect(siteversion.textContent).toEqual(`Site Version ${configMock.appVersion}-${shaMock}`);
   });
 
+  it('should return only version when SHA is empty', async () => {
+    // Override the mock to return empty SHA
+    gitHubServiceMock.getCommitSHA.mockReturnValue(of(''));
+
+    const component = await render(FooterComponent, {
+      providers: [
+        provideHttpClient(),
+        { provide: DataversionService, useValue: dataversionServiceMock },
+        { provide: GitHubService, useValue: gitHubServiceMock },
+        { provide: ConfigService, useValue: configServiceMock },
+      ],
+    });
+
+    expect(component.fixture.componentInstance.getSiteVersion()).toBe(configMock.appVersion);
+  });
+
   it('should display data version', async () => {
     await setup();
     const dataversion = await screen.findByText('Data Version', { exact: false });
