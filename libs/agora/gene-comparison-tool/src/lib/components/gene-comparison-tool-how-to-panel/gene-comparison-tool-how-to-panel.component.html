@@ -46,7 +46,12 @@
         ></p-button>
       }
       @if (activePane === panes.length - 1) {
-        <p-button label="Close" (click)="isActive = !isActive" [rounded]="true"></p-button>
+        <p-button
+          label="Close"
+          (click)="isActive = !isActive"
+          [rounded]="true"
+          size="small"
+        ></p-button>
       }
     </div>
   </ng-template>
