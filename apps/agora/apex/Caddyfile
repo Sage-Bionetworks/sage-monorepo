@@ -1,4 +1,8 @@
 :80 {
+  limits {
+    header 64kb
+  }
+  
   handle_path /api-docs* {
     reverse_proxy {env.API_DOCS_HOST}:{env.API_DOCS_PORT}
   }
