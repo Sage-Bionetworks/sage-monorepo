@@ -1,0 +1,12 @@
+{
+  "extends": ["../../../.eslintrc.json"],
+  "ignorePatterns": ["src/**/*.ts"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "@angular-eslint/prefer-standalone": "off"
+      }
+    }
+  ]
+}

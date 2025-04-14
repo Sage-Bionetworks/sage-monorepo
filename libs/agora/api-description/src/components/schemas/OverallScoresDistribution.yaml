@@ -12,7 +12,7 @@ properties:
       type: array
       items:
         type: number
-    description: Bins used in the distribution
+    description: Bins used in the distribution, array of [binStart, binEnd]
   min:
     type: number
   max:

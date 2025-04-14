@@ -44,7 +44,6 @@ interface Panel {
     GeneResourcesComponent,
     FontAwesomeModule,
   ],
-  providers: [HelperService, GenesService],
   templateUrl: './gene-details.component.html',
   styleUrls: ['./gene-details.component.scss'],
 })

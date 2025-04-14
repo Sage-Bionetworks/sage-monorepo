@@ -19,7 +19,6 @@ import * as d3 from 'd3';
 @Component({
   selector: 'agora-biodomains-chart',
   standalone: true,
-  providers: [HelperService],
   templateUrl: './biodomains-chart.component.html',
   styleUrls: ['./biodomains-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,

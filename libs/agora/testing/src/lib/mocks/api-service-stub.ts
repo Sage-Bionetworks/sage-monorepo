@@ -3,7 +3,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 
-import { Distribution, GCTGeneResponse, Gene, GenesResponse } from '@sagebionetworks/agora/models';
+import { Distribution, Gene } from '@sagebionetworks/agora/api-client-angular';
+import { GCTGeneResponse, GenesResponse } from '@sagebionetworks/agora/models';
 import { gctGeneMock1, geneMock1, geneMock2, nominatedGeneMock1, teamsResponseMock } from './';
 
 import { TeamsList } from '@sagebionetworks/agora/api-client-angular';
