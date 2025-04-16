@@ -11,6 +11,7 @@ agora-modal-link,
 }
 
 .modal-link-icon {
+  color: var(--color-gray-600);
   transform: translateY(1px);
 
   &:not(:last-child) {

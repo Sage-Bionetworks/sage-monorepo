@@ -16,7 +16,7 @@ export class SvgIconComponent implements OnInit {
   @Input() altText = '';
   @Input() width = 14;
   @Input() height = 14;
-  @Input() color = 'currentColor'; // Default to inherited color
+  @Input() color = 'inherit'; // Default to parent color
 
   http = inject(HttpClient);
   sanitizer = inject(DomSanitizer);
@@ -26,17 +26,11 @@ export class SvgIconComponent implements OnInit {
   private static svgCache = new Map<string, SafeHtml>();
 
   ngOnInit() {
-    if (!this.isValidImagePath(this.imagePath)) return;
+    if (!this.imagePath) return;
 
     this.svgService.getSvg(this.imagePath).subscribe({
       next: (svg) => (this.svgContent = svg),
       error: (error) => console.error('Error loading svg:', error),
     });
-  }
-
-  isValidImagePath(path: string): boolean {
-    // We don't want to load SVGs from external sources
-    // Ensure the path comes from '/agora-assets/icons/'
-    return Boolean(path) && path.startsWith('/agora-assets/icons/');
   }
 }

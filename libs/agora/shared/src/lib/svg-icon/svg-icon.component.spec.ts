@@ -31,6 +31,8 @@ describe('SvgIconComponent', () => {
     httpMock = renderResult.fixture.debugElement.injector.get(HttpTestingController);
     svgService = renderResult.fixture.debugElement.injector.get(SvgIconService);
     sanitizer = renderResult.fixture.debugElement.injector.get(DomSanitizer);
+
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
@@ -39,16 +41,6 @@ describe('SvgIconComponent', () => {
 
   it('should create the component', async () => {
     expect(component).toBeTruthy();
-  });
-
-  it('should not load SVG if imagePath is invalid', async () => {
-    // Test valid path
-    expect(component.isValidImagePath('/agora-assets/icons/cog.svg')).toBe(true);
-
-    // Test invalid paths
-    expect(component.isValidImagePath('https://external-domain.com/icon.svg')).toBe(false);
-    expect(component.isValidImagePath('/some-other-path/icon.svg')).toBe(false);
-    expect(component.isValidImagePath('')).toBe(false);
   });
 
   it('should load SVG through service and set as svgContent', async () => {
@@ -68,17 +60,5 @@ describe('SvgIconComponent', () => {
 
     // Verify component state
     expect(component.svgContent).toBe(sanitizedSvg);
-  });
-
-  it('should not call service if path is invalid', () => {
-    // Spy on service method
-    const serviceSpy = jest.spyOn(svgService, 'getSvg');
-
-    // Set invalid path and trigger ngOnInit
-    component.imagePath = 'invalid/path';
-    component.ngOnInit();
-
-    // Verify service was not called
-    expect(serviceSpy).not.toHaveBeenCalled();
   });
 });

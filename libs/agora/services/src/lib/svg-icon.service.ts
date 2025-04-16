@@ -33,7 +33,17 @@ export class SvgIconService {
     });
   }
 
+  isValidImagePath(path: string): boolean {
+    // We don't want to load SVGs from external sources
+    // Ensure the path comes from '/agora-assets/icons/'
+    return Boolean(path) && path.startsWith('/agora-assets/icons/');
+  }
+
   getSvg(path: string): Observable<SafeHtml> {
+    if (!this.isValidImagePath(path)) {
+      throw new Error('Invalid SVG path');
+    }
+
     // check cache for the SVG
     const cached = this.svgCache.get(path);
     if (cached) {

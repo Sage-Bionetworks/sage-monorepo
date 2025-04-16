@@ -17,6 +17,9 @@ export class ModalLinkComponent {
   @Input() ownerId = '';
   @Input() wikiId = '';
 
+  @Input() iconWidth = 14;
+  @Input() iconHeight = 14;
+
   isActive = false;
   hasActivated = false;
 

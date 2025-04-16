@@ -1,6 +1,5 @@
 @use 'sass:map';
 @use 'sass:meta';
-
 @import 'variables';
 
 @mixin reset-button() {
@@ -53,13 +52,12 @@
       @content;
     }
   } @else {
-    @error 'No value found for `#{$breakpoint}`. '
-            + 'Please make sure it is defined in `$breakpoints` map.';
+    @error 'No value found for `#{$breakpoint}`. Please make sure it is defined in `$breakpoints` map.';
   }
 }
 
 @mixin link-hover {
-  color: var(--color-link);
+  // color: var(--color-link);
   text-decoration: underline;
 }
 

@@ -1,29 +1,18 @@
-<p-button
-  [label]="text"
-  variant="text"
-  class="popover-link link"
-  (click)="toggle($event)"
-  styleClass="p-0 no-transition btn-no-outline"
->
+<button (click)="toggle($event)">
   <span class="popover-link-inner">
-    @if (icon) {
-      <span class="popover-link-icon">
-        <agora-svg-icon
-          imagePath="/agora-assets/icons/info-circle.svg"
-          altText="info"
-        ></agora-svg-icon>
-      </span>
-    }
-    @if (text) {
-      <div class="popover-link-text">
-        {{ text }}
-      </div>
-    }
+    <span class="popover-link-icon">
+      <agora-svg-icon
+        imagePath="/agora-assets/icons/info-circle.svg"
+        [width]="16"
+        [height]="16"
+        altText="info"
+      ></agora-svg-icon>
+    </span>
   </span>
-</p-button>
+</button>
 <p-popover #popover>
   <div class="popover-link-content">
-    @if (wikiId && hasActived) {
+    @if (wikiId && isActive) {
       <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
     }
   </div>

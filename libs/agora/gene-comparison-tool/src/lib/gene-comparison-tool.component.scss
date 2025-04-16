@@ -207,12 +207,6 @@
     align-items: center;
     padding-bottom: 4px;
 
-    > div {
-      &:last-child {
-        padding-left: 10px;
-      }
-    }
-
     .p-select-label {
       text-transform: uppercase;
       font-weight: 700 !important;
@@ -232,9 +226,13 @@
   .gct-significance-control {
     display: flex;
     font-size: 14px;
-    color: #797979;
+    color: var(--color-gray-600);
     height: 20px;
     margin-bottom: 8px;
+
+    .gct-significance-control-text {
+      color: #797979;
+    }
 
     button {
       cursor: pointer;
