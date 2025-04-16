@@ -15,7 +15,7 @@
           [item]=""
           [description]="'Significance &leq; ' + significanceThreshold"
           [isVisible]="significanceThresholdActive"
-          (onClear)="removeSignificanceThresholdFilter()"
+          (clearEvent)="removeSignificanceThresholdFilter()"
         ></agora-gene-comparison-tool-filter-list-item>
         <ng-container *ngFor="let filter of filters; index as i">
           <ng-container *ngFor="let option of filter.options; index as j">
@@ -24,7 +24,7 @@
               [title]="filter.short || ''"
               [description]="option.label"
               [isVisible]="option.selected || false"
-              (onClear)="clearSelectedFilters(option)"
+              (clearEvent)="clearSelectedFilters(option)"
             ></agora-gene-comparison-tool-filter-list-item>
           </ng-container>
         </ng-container>
