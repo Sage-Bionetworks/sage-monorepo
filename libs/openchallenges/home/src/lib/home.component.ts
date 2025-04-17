@@ -51,7 +51,7 @@ export class HomeComponent {
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
-    this.showAnnouncement = this.configService.config.showAnnouncement;
+    this.showAnnouncement = this.configService.config.showAnnouncement === 'true';
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 }
