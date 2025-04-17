@@ -1,19 +1,21 @@
 <div class="base mat-typography">
-  <div *ngIf="showAnnouncement" id="announcement">
-    <h4>Welcome to OpenChallenges!</h4>
-    <h3>This website uses a preview snapshot of the OpenChallenges (OC) Database</h3>
-    <h4>
-      Contribute to the OC Database and help us make it even better! We invite organizations and
-      participants to
-      <a
-        href="https://docs.google.com/forms/d/e/1FAIpQLSdLZ6C5ZIzLZS147bmvNm2eJ3kq_88ecHS7ADjD4KaapGhO8g/viewform"
-        target="_blank"
-        >submit new challenges</a
-      >
-      and update existing ones. This will ensure that organization profiles are complete and OC
-      users have access to accurate and up-to-date resources.
-    </h4>
-  </div>
+  @if (showAnnouncement) {
+    <div id="announcement">
+      <h4>Welcome to OpenChallenges!</h4>
+      <h3>This website uses a preview snapshot of the OpenChallenges (OC) Database</h3>
+      <h4>
+        Contribute to the OC Database and help us make it even better! We invite organizations and
+        participants to
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSdLZ6C5ZIzLZS147bmvNm2eJ3kq_88ecHS7ADjD4KaapGhO8g/viewform"
+          target="_blank"
+          >submit new challenges</a
+        >
+        and update existing ones. This will ensure that organization profiles are complete and OC
+        users have access to accurate and up-to-date resources.
+      </h4>
+    </div>
+  }
   <openchallenges-challenge-search />
   <openchallenges-statistics-viewer *sageAppShellNoRender />
   <openchallenges-random-challenge-list *sageAppShellNoRender />
