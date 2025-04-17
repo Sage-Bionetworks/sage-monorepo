@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { DialogModule } from 'primeng/dialog';
 import { SvgIconComponent } from '../svg-icon/svg-icon.component';
 import { WikiComponent } from '../wiki/wiki.component';
@@ -9,9 +9,12 @@ import { WikiComponent } from '../wiki/wiki.component';
   imports: [CommonModule, DialogModule, SvgIconComponent, WikiComponent],
   templateUrl: './modal-link.component.html',
   styleUrls: ['./modal-link.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class ModalLinkComponent {
   @Input() text = '';
+  @Input() textColor = '';
+
   @Input() header = '';
 
   @Input() ownerId = '';
@@ -26,5 +29,9 @@ export class ModalLinkComponent {
   toggle() {
     this.hasActivated = true;
     this.isActive = !this.isActive;
+  }
+
+  getTextColor() {
+    return this.textColor ? { color: this.textColor } : {};
   }
 }

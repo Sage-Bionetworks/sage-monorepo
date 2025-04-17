@@ -1,18 +1,26 @@
-.popover-link-content {
-  max-width: 425px;
-  padding: 20px;
-  background: #fff;
-}
+@import 'libs/agora/styles/src/lib/mixins';
 
-.popover-link-inner {
-  display: flex;
-}
+.popover-link-container {
+  button {
+    @include reset-button;
+  }
 
-.popover-link-icon {
-  color: var(--color-gray-600);
-  transform: translateY(1px);
+  .popover-link-content {
+    max-width: 425px;
+    padding: 20px;
+    background: #fff;
+  }
 
-  &:not(:last-child) {
-    margin-right: 8px;
+  .popover-link-inner {
+    display: flex;
+  }
+
+  .popover-link-icon {
+    color: var(--color-gray-600);
+    transform: translateY(1px);
+
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
   }
 }

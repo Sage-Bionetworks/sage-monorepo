@@ -6,18 +6,10 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { FormsModule } from '@angular/forms';
 import { TooltipModule } from 'primeng/tooltip';
 import { SvgIconComponent } from '@sagebionetworks/agora/shared';
-import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'agora-gene-comparison-tool-filter-panel',
-  imports: [
-    CommonModule,
-    FormsModule,
-    TooltipModule,
-    ButtonModule,
-    CheckboxModule,
-    SvgIconComponent,
-  ],
+  imports: [CommonModule, FormsModule, TooltipModule, CheckboxModule, SvgIconComponent],
   templateUrl: './gene-comparison-tool-filter-panel.component.html',
   styleUrls: ['./gene-comparison-tool-filter-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,

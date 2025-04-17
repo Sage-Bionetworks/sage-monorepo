@@ -14,7 +14,14 @@
       @if (!gene.ensembl_gene_id) {
         <p>Genes that are similar based on network coexpression.</p>
       }
-      <agora-modal-link text="Learn more about this table" header="Similar genes" wikiId="612974">
+      <agora-modal-link
+        text="Learn more about this table"
+        [textColor]="'#fff'"
+        header="Similar genes"
+        wikiId="612974"
+        [iconWidth]="16"
+        [iconHeight]="16"
+      >
       </agora-modal-link>
     </div>
   </div>
