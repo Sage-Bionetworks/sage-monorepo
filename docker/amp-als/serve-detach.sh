@@ -8,6 +8,7 @@ args=(
   --file docker/amp-als/services/elasticsearch.yml
   --file docker/amp-als/services/keycloak.yml
   --file docker/amp-als/services/mariadb.yml
+  --file docker/amp-als/services/opensearch.yml
 
   --file docker/amp-als/networks.yml
 
