@@ -35,6 +35,7 @@
   }
 
   .gct-filter-panel-close {
+    color: var(--color-gray-600);
     cursor: pointer;
 
     svg path {
@@ -192,13 +193,10 @@
   }
 
   .gct-filter-panel-pane-heading-info {
+    color: var(--color-gray-600);
     display: inline-block;
     margin-left: 6px;
     transform: translateY(1px);
-
-    .svg-icon {
-      height: 20px;
-    }
   }
 
   ul {

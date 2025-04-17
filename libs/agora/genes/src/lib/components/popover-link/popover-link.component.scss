@@ -1,25 +1,26 @@
-@use 'libs/agora/styles/src/lib/variables';
-@use 'libs/agora/styles/src/lib/mixins';
+@import 'libs/agora/styles/src/lib/mixins';
 
-agora-popover-link,
-.popover-link {
-  display: inline-block;
-}
+.popover-link-container {
+  button {
+    @include reset-button;
+  }
 
-.popover-link-content {
-  max-width: 425px;
-  padding: 20px;
-  background: #fff;
-}
+  .popover-link-content {
+    max-width: 425px;
+    padding: 20px;
+    background: #fff;
+  }
 
-.popover-link-inner {
-  display: flex;
-}
+  .popover-link-inner {
+    display: flex;
+  }
 
-.popover-link-icon {
-  transform: translateY(1px);
+  .popover-link-icon {
+    color: var(--color-gray-600);
+    transform: translateY(1px);
 
-  &:not(:last-child) {
-    margin-right: 8px;
+    &:not(:last-child) {
+      margin-right: 8px;
+    }
   }
 }

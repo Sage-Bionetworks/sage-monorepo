@@ -1,19 +1,34 @@
 @import 'libs/agora/styles/src/lib/variables';
 @import 'libs/agora/styles/src/lib/mixins';
 
-agora-modal-link,
-.modal-link {
-  display: inline-block;
-}
+.modal-link-container {
+  white-space: nowrap;
 
-.modal-link-inner {
-  display: flex;
-}
+  button {
+    @include reset-button;
+  }
 
-.modal-link-icon {
-  transform: translateY(1px);
+  .modal-link-inner {
+    display: flex;
+    align-items: center;
+    color: var(--color-gray-900);
+    gap: 8px;
+    cursor: pointer;
 
-  &:not(:last-child) {
-    margin-right: 8px;
+    &:hover {
+      color: var(--color-action-primary);
+
+      @include link-hover;
+    }
+
+    &:hover agora-svg-icon {
+      path {
+        fill: var(--color-action-primary);
+      }
+    }
+
+    .modal-link-text {
+      @include link;
+    }
   }
 }
