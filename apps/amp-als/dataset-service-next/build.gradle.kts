@@ -22,6 +22,7 @@ dependencies {
     // Spring Boot
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.validation)
+    runtimeOnly(libs.spring.boot.devtools)
     testImplementation(libs.spring.boot.starter.test)
 
     // SpringDoc
