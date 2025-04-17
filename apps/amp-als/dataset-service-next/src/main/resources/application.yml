@@ -1,0 +1,8 @@
+server:
+  port: 8404
+
+spring:
+  jackson:
+    date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
