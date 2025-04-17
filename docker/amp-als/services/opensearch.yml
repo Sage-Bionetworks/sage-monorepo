@@ -19,7 +19,7 @@ services:
       memlock:
         soft: -1 # Set memlock to unlimited (no soft or hard limit)
         hard: -1
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 2G
+    deploy:
+      resources:
+        limits:
+          memory: 2G
