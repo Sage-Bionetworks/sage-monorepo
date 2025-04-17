@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+user="admin:${OPENSEARCH_INITIAL_ADMIN_PASSWORD}"
+url="https://127.0.0.1:8406/_cat/health?h=status"
+
+if health="$(curl --silent --show-error --insecure --user ${user} ${url})"; then
+	if [ "$health" = 'green' ] || [ "$health" = 'yellow' ]; then
+		exit 0
+	fi
+
+	echo >&2 "unexpected health status: $health"
+fi
+
+exit 1
