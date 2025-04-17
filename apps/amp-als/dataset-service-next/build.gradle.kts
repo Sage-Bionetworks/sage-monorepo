@@ -19,15 +19,21 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
-    implementation("com.google.code.findbugs:jsr305:3.0.2")
-    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-    implementation("com.fasterxml.jackson.core:jackson-databind")
+    // Spring Boot
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.spring.boot.starter.validation)
+    testImplementation(libs.spring.boot.starter.test)
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    // SpringDoc
+    implementation(libs.springdoc.openapi.ui)
+
+    // Jackson
+    implementation(libs.jackson.databind)
+    implementation(libs.jackson.dataformat.yaml)
+    implementation(libs.jackson.datatype.jsr310)
+
+    // Misc
+    implementation(libs.findbugs.jsr305)
 }
 
 tasks.withType<JavaCompile> {
