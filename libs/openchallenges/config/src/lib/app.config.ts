@@ -9,7 +9,7 @@ export enum Environment {
 /* eslint-enable no-unused-vars */
 
 export interface AppConfig {
-  enableOperationFilter: string;
+  enableOperationFilter: boolean;
   appVersion: string;
   csrApiUrl: string;
   dataUpdatedOn: string;
@@ -20,7 +20,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   termsOfUseUrl: string;
   apiDocsUrl: string;
-  showAnnouncement: string;
+  showAnnouncement: boolean;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
