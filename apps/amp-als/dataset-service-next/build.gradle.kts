@@ -22,6 +22,8 @@ dependencies {
     // Spring Boot
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.validation)
+    // implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.jdbc)
     runtimeOnly(libs.spring.boot.devtools)
     testImplementation(libs.spring.boot.starter.test)
 
@@ -33,6 +35,13 @@ dependencies {
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.datatype.jsr310)
 
+    // Flyway
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.mysql)
+
+    // MySQL
+    runtimeOnly(libs.mysql.driver)
+
     // Misc
     implementation(libs.findbugs.jsr305)
 }
@@ -43,4 +52,8 @@ tasks.withType<JavaCompile> {
 
 tasks.withType<Javadoc> {
     options.encoding = "UTF-8"
+}
+
+tasks.named<org.springframework.boot.gradle.tasks.bundling.BootBuildImage>("bootBuildImage") {
+    imageName.set("ghcr.io/sage-bionetworks/${project.name}-base:local")
 }

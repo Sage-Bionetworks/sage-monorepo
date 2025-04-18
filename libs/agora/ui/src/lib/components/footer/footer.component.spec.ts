@@ -70,4 +70,41 @@ describe('FooterComponent', () => {
       `Data Version ${dataversionMock.data_file}-v${dataversionMock.data_version}`,
     );
   });
+
+  it('should return the correct site version in DEV', async () => {
+    // DEV environment will return empty SHA
+    gitHubServiceMock.getCommitSHA.mockReturnValue(of(''));
+
+    const component = await render(FooterComponent, {
+      providers: [
+        provideHttpClient(),
+        { provide: DataversionService, useValue: dataversionServiceMock },
+        { provide: GitHubService, useValue: gitHubServiceMock },
+        { provide: ConfigService, useValue: configServiceMock },
+      ],
+    });
+
+    // DEV environment will return appVersion without SHA
+    const expectedVersion = `${configMock.appVersion}`;
+    expect(component.fixture.componentInstance.getSiteVersion()).toBe(expectedVersion);
+  });
+
+  it('should return the correct site version in STAGE, PROD', async () => {
+    // STAGE, PROD environment will return SHA
+    const shaMock = 'sha-c506775';
+    gitHubServiceMock.getCommitSHA.mockReturnValue(of(shaMock));
+
+    const component = await render(FooterComponent, {
+      providers: [
+        provideHttpClient(),
+        { provide: DataversionService, useValue: dataversionServiceMock },
+        { provide: GitHubService, useValue: gitHubServiceMock },
+        { provide: ConfigService, useValue: configServiceMock },
+      ],
+    });
+
+    // STAGE, PROD environment will return appVersion with SHA
+    const expectedVersion = `${configMock.appVersion}-${shaMock}`;
+    expect(component.fixture.componentInstance.getSiteVersion()).toBe(expectedVersion);
+  });
 });

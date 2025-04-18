@@ -1,4 +1,4 @@
-import { formatGitTag, removeParenthesis } from './app-helpers';
+import { formatAppVersion, removeParenthesis } from './app-helpers';
 
 describe('removeParenthesis', () => {
   it('should remove parenthesis from a string', () => {
@@ -8,10 +8,10 @@ describe('removeParenthesis', () => {
   });
 });
 
-describe('formatGitTag', () => {
+describe('formatAppVersion', () => {
   it('should remove -rcX suffix from appVersion', () => {
     const input = '1.0.0-rc1';
     const expected = '1.0.0';
-    expect(formatGitTag(input)).toEqual(expected);
+    expect(formatAppVersion(input)).toEqual(expected);
   });
 });

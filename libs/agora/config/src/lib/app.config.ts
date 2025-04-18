@@ -5,6 +5,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   apiDocsUrl: string;
   tagName: string;
+  googleTagManagerId: string;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
