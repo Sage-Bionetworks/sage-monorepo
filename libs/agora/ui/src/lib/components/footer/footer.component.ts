@@ -62,8 +62,7 @@ export class FooterComponent implements OnInit {
   }
 
   getSiteVersion() {
-    let appVersion = formatGitTag(this.configService.config.appVersion);
-    appVersion = appVersion.replace(/-rc\d+$/, '');
+    const appVersion = formatGitTag(this.configService.config.appVersion);
     return this.sha ? `${appVersion}-${this.sha}` : `${appVersion}`;
   }
 
