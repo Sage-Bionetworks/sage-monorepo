@@ -6,6 +6,7 @@ mysql = "9.2.0"
 spring-boot = "3.4.4"
 springdoc = "2.8.6"
 lombok = "1.18.38"
+hibernate-search = "7.2.3.Final"
 
 [libraries]
 # Spring Boot
@@ -34,6 +35,10 @@ mysql-driver = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
 
 # Lombok
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+
+# Hibernate Search
+hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-mapper-orm", version.ref = "hibernate-search" }
+hibernate-search-backend-elasticsearch = { module = "org.hibernate.search:hibernate-search-backend-elasticsearch", version.ref = "hibernate-search" }
 
 # Misc
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }

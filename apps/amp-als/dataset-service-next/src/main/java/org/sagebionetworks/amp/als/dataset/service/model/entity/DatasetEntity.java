@@ -11,11 +11,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-// import org.hibernate.search.engine.backend.types.Sortable;
-// import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
-// import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
-// import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.GenericField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 @Entity
 @Table(name = "dataset")
@@ -23,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-// @Indexed(index = "amp-als-dataset")
+@Indexed(index = "amp-als-dataset")
 public class DatasetEntity {
 
   @Id
@@ -32,15 +31,15 @@ public class DatasetEntity {
   private Long id;
 
   @Column(nullable = false)
-  // @FullTextField
+  @FullTextField
   private String name;
 
   @Column(nullable = false)
-  // @FullTextField
+  @FullTextField
   private String description;
 
   @Column(name = "created_at")
-  // @GenericField(name = "created_at", sortable = Sortable.YES)
+  @GenericField(name = "created_at", sortable = Sortable.YES)
   private OffsetDateTime createdAt;
 
   @Column(name = "updated_at")

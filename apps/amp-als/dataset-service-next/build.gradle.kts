@@ -49,6 +49,10 @@ dependencies {
     testAnnotationProcessor(libs.lombok)
     testCompileOnly(libs.lombok)
 
+    // Hibernate Search
+    implementation(libs.hibernate.search.mapper.orm)
+    implementation(libs.hibernate.search.backend.elasticsearch)
+
     // Misc
     implementation(libs.findbugs.jsr305)
 }
