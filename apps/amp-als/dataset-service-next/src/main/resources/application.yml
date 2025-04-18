@@ -16,11 +16,18 @@ spring:
     date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
-# management:
-#   endpoints:
-#     web:
-#       exposure:
-#         include: health, info, beans, flyway, conditions
-# logging:
-#   level:
-#     org.flywaydb.core: DEBUG
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
+        search:
+          enable: true
+          backend:
+            hosts: amp-als-opensearch:8406
+  autoconfigure:
+    # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
+    # which Hibernate Search might incorrectly use, leading to node sniffing errors
+    # when a local cluster is not available.
+    exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration

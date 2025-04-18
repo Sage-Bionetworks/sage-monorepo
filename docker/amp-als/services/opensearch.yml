@@ -9,8 +9,8 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # Disable JVM heap memory swapping
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
-      - 'OPENSEARCH_INITIAL_ADMIN_PASSWORD=qwER43@!qwER43@!' # Required for OpenSearch 2.12 and later
       - http.port=8406
+      - DISABLE_SECURITY_PLUGIN=true
     networks:
       - amp-als
     ports:

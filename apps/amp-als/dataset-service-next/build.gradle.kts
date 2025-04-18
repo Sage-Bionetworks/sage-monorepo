@@ -20,10 +20,11 @@ repositories {
 
 dependencies {
     // Spring Boot
-    implementation(libs.spring.boot.starter.web)
-    implementation(libs.spring.boot.starter.validation)
     // implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.jdbc)
+    implementation(libs.spring.boot.starter.validation)
+    implementation(libs.spring.boot.starter.web)
     runtimeOnly(libs.spring.boot.devtools)
     testImplementation(libs.spring.boot.starter.test)
 
@@ -41,6 +42,16 @@ dependencies {
 
     // MySQL
     runtimeOnly(libs.mysql.driver)
+
+    // Lombok
+    annotationProcessor(libs.lombok)
+    compileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+
+    // Hibernate Search
+    implementation(libs.hibernate.search.mapper.orm)
+    implementation(libs.hibernate.search.backend.elasticsearch)
 
     // Misc
     implementation(libs.findbugs.jsr305)
