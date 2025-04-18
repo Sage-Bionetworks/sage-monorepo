@@ -1,0 +1,20 @@
+services:
+  amp-als-dataset-service-next:
+    image: ghcr.io/sage-bionetworks/amp-als-dataset-service-next:${AMP_ALS_VERSION:-local}
+    container_name: amp-als-dataset-service-next
+    restart: always
+    env_file:
+      - ../../../apps/amp-als/dataset-service-next/.env
+    networks:
+      - amp-als
+    ports:
+      - '8404:8404'
+    # depends_on:
+    #   amp-als-mariadb:
+    #     condition: service_healthy
+    #   amp-als-elasticsearch:
+    #     condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 1G

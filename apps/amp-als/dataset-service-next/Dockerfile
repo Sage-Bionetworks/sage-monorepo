@@ -1,0 +1,1 @@
+FROM ghcr.io/sage-bionetworks/amp-als-dataset-service-next-base:local
