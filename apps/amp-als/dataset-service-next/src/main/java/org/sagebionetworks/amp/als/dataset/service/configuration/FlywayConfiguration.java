@@ -16,7 +16,6 @@ public class FlywayConfiguration {
   @Bean
   public FlywayMigrationStrategy cleanMigrationStrategy() {
     return flyway -> {
-      System.out.println("🔥 Executing clean + migrate strategy");
       logger.info("Executing custom Flyway migration: clean and migrate");
       flyway.clean();
       flyway.migrate();

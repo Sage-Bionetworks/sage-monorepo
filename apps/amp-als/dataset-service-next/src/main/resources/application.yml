@@ -16,13 +16,11 @@ spring:
     date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health, info, beans, flyway, conditions
-
-logging:
-  level:
-    org.flywaydb.core: DEBUG
+# management:
+#   endpoints:
+#     web:
+#       exposure:
+#         include: health, info, beans, flyway, conditions
+# logging:
+#   level:
+#     org.flywaydb.core: DEBUG
