@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
-import { GCT_CATEGORIES, URL_GCT_PROTEIN } from './helpers/constants';
-import { changeGctCategory, closeGctHelpDialog } from './helpers/gct';
+import { GCT_CATEGORIES, GCT_RNA_SUBCATEGORIES, URL_GCT_PROTEIN } from './helpers/constants';
+import { changeGctCategory, closeGctHelpDialog, expectGctPageLoaded } from './helpers/gct';
 import { waitForSpinnerNotVisible } from './helpers/utils';
 
 const URL_GCT = '/genes/comparison';
@@ -70,8 +70,25 @@ test.describe('specific viewport block', () => {
     expect(page.url()).toBe(`${baseURL}${URL_PROTEIN}`);
 
     // expect sort arrow to be descending
-    await expect(page.getByRole('columnheader', { name: 'RISK SCORE' }).locator('i')).toHaveClass(
-      /pi-sort-amount-down/,
+    await expect(page.getByRole('columnheader', { name: 'RISK SCORE' })).toHaveAttribute(
+      'aria-sort',
+      'descending',
     );
+  });
+
+  test('AG-1704: entering a comma in search does not show all genes', async ({ page }) => {
+    await page.goto(URL_GCT);
+    await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, GCT_RNA_SUBCATEGORIES.AD);
+
+    const searchInput = page.getByPlaceholder('Search', { exact: true });
+
+    await searchInput.fill('app,');
+    await expect(page.getByText('1-1 of 1')).toBeVisible();
+
+    await searchInput.pressSequentially(' , pten');
+    await expect(page.getByText('1-2 of 2')).toBeVisible();
+
+    await searchInput.pressSequentially(',,,,,,');
+    await expect(page.getByText('1-2 of 2')).toBeVisible();
   });
 });

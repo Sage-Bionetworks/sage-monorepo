@@ -52,8 +52,8 @@
           <div class="gct-controls-inner">
             <div class="gct-controls-left">
               <div class="gene-label">DISPLAYED GENES</div>
-              <div *ngIf="genesTable" class="gene-count">
-                {{ (genesTable?._totalRecords || 0) + (pinnedTable?.dataToRender?.length || 0) }}
+              <div *ngIf="genesTable" class="gene-count" data-testid="gene-count">
+                {{ (genesTable?._totalRecords || 0) + uniquePinnedGenesCount }}
               </div>
               <div class="gct-search">
                 <svg
@@ -94,24 +94,25 @@
                 <div class="gct-category-selector">
                   <div>
                     <p-select
+                      id="category"
                       [options]="categories"
                       [(ngModel)]="category"
                       (onChange)="onCategoryChange()"
                     ></p-select>
                   </div>
                   <div>
-                    <agora-popover-link
-                      *ngIf="'RNA - Differential Expression' === category"
-                      wikiId="618276"
-                    ></agora-popover-link>
-                    <agora-popover-link
-                      *ngIf="'Protein - Differential Expression' === category"
-                      wikiId="618278"
-                    ></agora-popover-link>
+                    @if (category === 'RNA - Differential Expression') {
+                      <agora-popover-link wikiId="618276"></agora-popover-link>
+                    }
+                    @if (category === 'Protein - Differential Expression') {
+                      <agora-popover-link wikiId="618278"></agora-popover-link>
+                    }
                   </div>
                 </div>
                 <div class="gct-significance-control">
-                  <div>Hide insignificant</div>
+                  <div class="gct-significance-control-text unselectable-text">
+                    Hide insignificant
+                  </div>
                   <div>
                     <p-toggleswitch
                       [pTooltip]="
@@ -119,7 +120,7 @@
                         significanceThreshold
                       "
                       styleClass="gct-significance-control-toggle"
-                      tooltipPosition="left"
+                      tooltipPosition="top"
                       tooltipStyleClass="tooltip"
                       [(ngModel)]="significanceThresholdActive"
                       (onChange)="setSignificanceThresholdActive(significanceThresholdActive)"
@@ -144,11 +145,13 @@
                       (click)="significancePopover.toggle($event)"
                       class="gct-significance-control-settings"
                       pTooltip="Edit significance cutoff value"
-                      tooltipPosition="left"
+                      tooltipPosition="top"
                       tooltipStyleClass="tooltip"
                     >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/cog.svg"
+                        [width]="16"
+                        [height]="16"
                         altText="cog"
                       ></agora-svg-icon>
                     </button>
@@ -188,11 +191,13 @@
                     <button
                       (click)="columnPopover.toggle($event)"
                       pTooltip="Show/hide columns"
-                      tooltipPosition="left"
-                      tooltipStyleClass="tooltip"
+                      tooltipPosition="top"
+                      tooltipStyleClass="tooltip-xs"
                     >
                       <agora-svg-icon
                         imagePath="/agora-assets/icons/column.svg"
+                        [width]="20"
+                        [height]="16"
                         altText="column"
                       ></agora-svg-icon>
                     </button>

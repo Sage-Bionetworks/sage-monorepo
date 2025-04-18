@@ -19,6 +19,7 @@ properties:
     type: string
   study:
     type: string
+    nullable: true
   input_data:
     type: string
   validation_study_details:

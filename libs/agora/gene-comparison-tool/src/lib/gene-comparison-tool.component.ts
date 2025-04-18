@@ -78,7 +78,6 @@ import { GeneComparisonToolLegendPanelComponent } from './components/gene-compar
     GeneComparisonToolPinnedGenesModalComponent,
     LoadingIconComponent,
   ],
-  providers: [GenesService, DistributionService, HelperService, MessageService, FilterService],
   templateUrl: './gene-comparison-tool.component.html',
   styleUrls: ['./gene-comparison-tool.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -568,7 +567,8 @@ export class GeneComparisonToolComponent implements OnInit, AfterViewInit, OnDes
         const terms = this.searchTerm
           .toLowerCase()
           .split(',')
-          .map((t: string) => t.trim());
+          .map((t: string) => t.trim())
+          .filter((t: string) => t !== '');
         filters['search_array'] = {
           value: terms,
           matchMode: 'intersect',

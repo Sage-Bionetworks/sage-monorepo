@@ -12,7 +12,7 @@ import {
   MedianBarChartComponent,
   RowChartComponent,
 } from '@sagebionetworks/agora/charts';
-import { boxPlotChartItem, rowChartItem } from '@sagebionetworks/agora/models';
+import { BoxPlotChartItem, RowChartItem } from '@sagebionetworks/agora/models';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent } from '@sagebionetworks/agora/shared';
 import { getStatisticalModels } from '../../helpers';
@@ -32,7 +32,6 @@ import { GeneNetworkComponent } from '../gene-network/gene-network.component';
     DownloadDomImageComponent,
     BoxPlotComponent,
   ],
-  providers: [HelperService],
   templateUrl: './gene-evidence-rna.component.html',
   styleUrls: ['./gene-evidence-rna.component.scss'],
 })
@@ -55,11 +54,11 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
   medianExpression: MedianExpression[] = [];
   differentialExpression: RnaDifferentialExpression[] = [];
 
-  differentialExpressionChartData: boxPlotChartItem[] = [];
+  differentialExpressionChartData: BoxPlotChartItem[] = [];
   differentialExpressionYAxisMin: number | undefined;
   differentialExpressionYAxisMax: number | undefined;
 
-  consistencyOfChangeChartData: rowChartItem[] = [];
+  consistencyOfChangeChartData: RowChartItem[] = [];
 
   @ViewChild(BoxPlotComponent) boxPlotComponent: BoxPlotComponent | null = null;
   hasScrolled = false;
@@ -145,7 +144,7 @@ export class GeneEvidenceRnaComponent implements AfterViewChecked {
         return data.model === this.selectedStatisticalModel;
       });
 
-      const differentialExpressionChartData: boxPlotChartItem[] = [];
+      const differentialExpressionChartData: BoxPlotChartItem[] = [];
 
       this.differentialExpression.forEach((item) => {
         const data = distribution.find((d) => {

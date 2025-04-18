@@ -16,6 +16,9 @@
   }
 
   .gct-filter-list-clear-all {
+    display: flex;
+    color: var(--color-gray-900);
+    gap: 8px;
     margin-top: 7px;
     margin-right: 20px;
     font-size: 11px;
@@ -24,14 +27,16 @@
     cursor: pointer;
     transition: $transition-duration;
 
-    .svg-icon {
-      height: 12px;
-      margin-right: 8px;
-      transform: translateY(1px);
+    &:hover {
+      color: var(--color-action-primary);
+
+      @include link-hover;
     }
 
-    &:hover {
-      @include link-hover;
+    &:hover agora-svg-icon {
+      path {
+        fill: var(--color-action-primary);
+      }
     }
   }
 }

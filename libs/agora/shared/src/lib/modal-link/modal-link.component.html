@@ -1,17 +1,18 @@
-<a class="modal-link link">
-  <span class="modal-link-inner" (click)="toggle()">
-    <span class="modal-link-icon">
-      <agora-svg-icon
-        imagePath="/agora-assets/icons/info-circle.svg"
-        altText="info"
-      ></agora-svg-icon>
-    </span>
+<div class="modal-link-container">
+  <button class="modal-link-inner" (click)="toggle()">
+    <agora-svg-icon
+      imagePath="/agora-assets/icons/info-circle.svg"
+      [width]="iconWidth"
+      [height]="iconHeight"
+      [color]="'#aeb5bc'"
+      altText="info"
+    ></agora-svg-icon>
     @if (text) {
-      <div class="modal-link-text">
+      <span class="modal-link-text" [ngStyle]="getTextColor()">
         {{ text }}
-      </div>
+      </span>
     }
-  </span>
+  </button>
   <p-dialog
     [header]="header"
     [(visible)]="isActive"
@@ -27,4 +28,4 @@
     }
     <ng-content></ng-content>
   </p-dialog>
-</a>
+</div>

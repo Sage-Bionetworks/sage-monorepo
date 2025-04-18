@@ -11,18 +11,15 @@ import { Popover, PopoverModule } from 'primeng/popover';
   styleUrls: ['./popover-link.component.scss'],
 })
 export class PopoverLinkComponent {
-  @Input() icon = true;
-  @Input() text = '';
-
   @Input() ownerId: string | undefined;
   @Input() wikiId: string | undefined;
 
-  hasActived = false;
+  isActive = false;
 
   @ViewChild('popover') popover!: Popover;
 
   toggle(event: Event) {
-    this.hasActived = true;
+    this.isActive = true;
     this.popover.toggle(event);
   }
 }
