@@ -3,5 +3,6 @@
   "appVersion": "edge",
   "csrApiUrl": "http://localhost:4200/v1",
   "ssrApiUrl": "http://agora-api:3333/v1",
-  "tagName": "edge"
+  "tagName": "edge",
+  "googleTagManagerId": ""
 }
