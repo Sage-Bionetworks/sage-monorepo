@@ -6,7 +6,7 @@ import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-clie
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { NavigationLink } from '@sagebionetworks/agora/models';
 import { GitHubService } from '@sagebionetworks/agora/services';
-import { PathSanitizer } from '@sagebionetworks/agora/util';
+import { formatGitTag, PathSanitizer } from '@sagebionetworks/agora/util';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -62,9 +62,9 @@ export class FooterComponent implements OnInit {
   }
 
   getSiteVersion() {
-    return this.sha
-      ? `${this.configService.config.appVersion}-${this.sha}`
-      : this.configService.config.appVersion;
+    let appVersion = formatGitTag(this.configService.config.appVersion);
+    appVersion = appVersion.replace(/-rc\d+$/, '');
+    return this.sha ? `${appVersion}-${this.sha}` : `${appVersion}`;
   }
 
   getDataVersion(dataVersion: Dataversion) {
