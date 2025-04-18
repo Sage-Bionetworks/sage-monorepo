@@ -6,7 +6,7 @@ import { Dataversion, DataversionService } from '@sagebionetworks/agora/api-clie
 import { ConfigService } from '@sagebionetworks/agora/config';
 import { NavigationLink } from '@sagebionetworks/agora/models';
 import { GitHubService } from '@sagebionetworks/agora/services';
-import { PathSanitizer } from '@sagebionetworks/agora/util';
+import { formatAppVersion, PathSanitizer } from '@sagebionetworks/agora/util';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -23,7 +23,7 @@ export class FooterComponent implements OnInit {
 
   footerLogoPath!: SafeUrl;
   dataVersion$!: Observable<Dataversion>;
-  sha$!: Observable<string>;
+  sha = '';
 
   /*
    TODO find out what the final tag format should be and potentially eliminate the 
@@ -56,11 +56,14 @@ export class FooterComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataVersion$ = this.dataVersionService.getDataversion();
-    this.sha$ = this.gitHubService.getCommitSHA(this.tag);
+    this.gitHubService.getCommitSHA(this.tag).subscribe((sha) => {
+      this.sha = sha;
+    });
   }
 
   getSiteVersion() {
-    return this.configService.config.appVersion;
+    const appVersion = formatAppVersion(this.configService.config.appVersion);
+    return this.sha ? `${appVersion}-${this.sha}` : `${appVersion}`;
   }
 
   getDataVersion(dataVersion: Dataversion) {
