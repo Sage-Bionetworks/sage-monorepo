@@ -24,29 +24,10 @@ spring:
         dialect: org.hibernate.dialect.MariaDBDialect
         search:
           enable: true
-          # schema_management:
-          #   strategy: drop-and-create
           backend:
             hosts: amp-als-opensearch:8406
-            # username: admin
-            # password: qwER43@!qwER43@!
   autoconfigure:
     # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
     # which Hibernate Search might incorrectly use, leading to node sniffing errors
     # when a local cluster is not available.
     exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
-# management:
-#   endpoints:
-#     web:
-#       exposure:
-#         include: health, info, beans, flyway, conditions
-# logging:
-#   level:
-#     org.flywaydb.core: DEBUG
-
-# logging:
-#   level:
-#     org.hibernate.search: DEBUG
-#     org.hibernate.search.backend.elasticsearch: DEBUG
-#     org.apache.http: DEBUG
-#     org.apache.http.wire: TRACE
