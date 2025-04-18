@@ -17,6 +17,7 @@ export class SvgIconComponent implements OnInit {
   @Input() width = 14;
   @Input() height = 14;
   @Input() color = 'inherit'; // Default to parent color
+  @Input() enableHoverEffects = true;
 
   http = inject(HttpClient);
   sanitizer = inject(DomSanitizer);
@@ -25,8 +26,12 @@ export class SvgIconComponent implements OnInit {
   svgContent: SafeHtml | null = null;
   private static svgCache = new Map<string, SafeHtml>();
 
+  className = 'svg-icon';
+
   ngOnInit() {
     if (!this.imagePath) return;
+
+    this.className = this.enableHoverEffects ? 'svg-icon' : 'svg-icon-no-hover';
 
     this.svgService.getSvg(this.imagePath).subscribe({
       next: (svg) => (this.svgContent = svg),
