@@ -1,15 +1,19 @@
 [versions]
+findbugs = "3.0.2"
+flyway = "9.22.3"
+jackson = "2.15.2"
+mysql = "8.3.0"
 spring-boot = "3.4.4"
 springdoc = "2.6.0"
-jackson = "2.15.2"
-findbugs = "3.0.2"
 
 [libraries]
 # Spring Boot
-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
 spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "spring-boot" }
+spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "spring-boot" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "spring-boot" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-jdbc = { module = "org.springframework.boot:spring-boot-starter-jdbc", version.ref = "spring-boot" }
 
 # SpringDoc
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
@@ -18,6 +22,13 @@ springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmv
 jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jackson" }
 jackson-dataformat-yaml = { module = "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-datatype-jsr310", version.ref = "jackson" }
+
+# Flyway
+flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
+flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
+
+# mysql
+mysql-driver = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
 
 # Misc
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
