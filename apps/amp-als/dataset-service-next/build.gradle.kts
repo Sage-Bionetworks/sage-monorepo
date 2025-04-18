@@ -43,6 +43,12 @@ dependencies {
     // MySQL
     runtimeOnly(libs.mysql.driver)
 
+    // Lombok
+    annotationProcessor(libs.lombok)
+    compileOnly(libs.lombok)
+    testAnnotationProcessor(libs.lombok)
+    testCompileOnly(libs.lombok)
+
     // Misc
     implementation(libs.findbugs.jsr305)
 }

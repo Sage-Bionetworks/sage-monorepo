@@ -5,6 +5,7 @@ jackson = "2.18.3"
 mysql = "9.2.0"
 spring-boot = "3.4.4"
 springdoc = "2.8.6"
+lombok = "1.18.38"
 
 [libraries]
 # Spring Boot
@@ -28,8 +29,11 @@ jackson-datatype-jsr310 = { module = "com.fasterxml.jackson.datatype:jackson-dat
 flyway-core = { module = "org.flywaydb:flyway-core", version.ref = "flyway" }
 flyway-mysql = { module = "org.flywaydb:flyway-mysql", version.ref = "flyway" }
 
-# mysql
+# MySQL
 mysql-driver = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
+
+# Lombok
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 
 # Misc
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
