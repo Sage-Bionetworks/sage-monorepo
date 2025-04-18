@@ -22,6 +22,8 @@ dependencies {
     // Spring Boot
     implementation(libs.spring.boot.starter.web)
     implementation(libs.spring.boot.starter.validation)
+    // implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.spring.boot.starter.jdbc)
     runtimeOnly(libs.spring.boot.devtools)
     testImplementation(libs.spring.boot.starter.test)
 
@@ -32,6 +34,13 @@ dependencies {
     implementation(libs.jackson.databind)
     implementation(libs.jackson.dataformat.yaml)
     implementation(libs.jackson.datatype.jsr310)
+
+    // Flyway
+    implementation(libs.flyway.core)
+    implementation(libs.flyway.mysql)
+
+    // MySQL
+    runtimeOnly(libs.mysql.driver)
 
     // Misc
     implementation(libs.findbugs.jsr305)
