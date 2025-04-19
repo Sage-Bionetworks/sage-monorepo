@@ -3,11 +3,3 @@
  */
 
 rootProject.name = "amp-als-dataset-service"
-
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            from(files("gradle/libs.versions.toml"))
-        }
-    }
-}
