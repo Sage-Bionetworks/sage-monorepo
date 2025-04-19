@@ -39,6 +39,7 @@ export class HomeComponent {
   public privacyPolicyUrl: string;
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
+  public showAnnouncement: boolean;
 
   constructor(
     private readonly configService: ConfigService,
@@ -50,6 +51,7 @@ export class HomeComponent {
     this.privacyPolicyUrl = this.configService.config.privacyPolicyUrl;
     this.termsOfUseUrl = this.configService.config.termsOfUseUrl;
     this.apiDocsUrl = this.configService.config.apiDocsUrl;
+    this.showAnnouncement = this.configService.config.showAnnouncement;
     this.seoService.setData(getSeoData(), this.renderer2);
   }
 }

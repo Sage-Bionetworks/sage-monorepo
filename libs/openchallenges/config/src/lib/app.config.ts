@@ -20,6 +20,7 @@ export interface AppConfig {
   ssrApiUrl: string;
   termsOfUseUrl: string;
   apiDocsUrl: string;
+  showAnnouncement: boolean;
 }
 
 export const EMPTY_APP_CONFIG = {} as AppConfig;
