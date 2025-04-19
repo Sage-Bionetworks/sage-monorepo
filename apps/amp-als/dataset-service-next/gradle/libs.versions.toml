@@ -1,12 +1,14 @@
 [versions]
+amp-als = "0.0.1-SNAPSHOT"
 findbugs = "3.0.2"
 flyway = "11.7.2"
+hibernate-search = "7.2.3.Final"
 jackson = "2.18.3"
+lombok = "1.18.38"
 mysql = "9.2.0"
+sage = "0.0.1-SNAPSHOT"
 spring-boot = "3.4.4"
 springdoc = "2.8.6"
-lombok = "1.18.38"
-hibernate-search = "7.2.3.Final"
 
 [libraries]
 # Spring Boot
@@ -39,6 +41,12 @@ lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
 # Hibernate Search
 hibernate-search-mapper-orm = { module = "org.hibernate.search:hibernate-search-mapper-orm", version.ref = "hibernate-search" }
 hibernate-search-backend-elasticsearch = { module = "org.hibernate.search:hibernate-search-backend-elasticsearch", version.ref = "hibernate-search" }
+
+# Sage Bionetworks
+sage-util = { group = "org.sagebionetworks", name = "util", version.ref = "sage" }
+
+# AMP-ALS
+amp-als-app-config-data = { group = "org.sagebionetworks.amp.als", name = "amp-als-app-config-data", version.ref = "amp-als" }
 
 # Misc
 findbugs-jsr305 = { module = "com.google.code.findbugs:jsr305", version.ref = "findbugs" }
