@@ -9,12 +9,12 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true # Disable JVM heap memory swapping
       - 'OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m'
-      - http.port=8406
+      - http.port=8402
       - DISABLE_SECURITY_PLUGIN=true
     networks:
       - amp-als
     ports:
-      - '8406:8406'
+      - '8402:8402'
     ulimits:
       memlock:
         soft: -1 # Set memlock to unlimited (no soft or hard limit)

@@ -1,7 +1,7 @@
 {
-  "name": "amp-als-dataset-service-next",
+  "name": "amp-als-dataset-service",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/amp-als/dataset-service-next/src",
+  "sourceRoot": "apps/amp-als/dataset-service/src",
   "projectType": "application",
   "targets": {
     "create-config": {

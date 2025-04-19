@@ -8,7 +8,7 @@ spring:
   application:
     name: amp-als-dataset-service
   datasource:
-    url: jdbc:mysql://amp-als-mariadb:8401/dataset_service # ${db.url}
+    url: ${db.url} # jdbc:mysql://amp-als-mariadb:8401/dataset_service
     username: dataset_service
     password: changeme
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -28,7 +28,7 @@ spring:
         search:
           enable: true
           backend:
-            hosts: amp-als-opensearch:8406
+            hosts: amp-als-opensearch:8402
   autoconfigure:
     # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
     # which Hibernate Search might incorrectly use, leading to node sniffing errors

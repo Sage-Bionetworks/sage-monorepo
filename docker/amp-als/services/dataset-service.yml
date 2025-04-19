@@ -1,7 +1,7 @@
 services:
   amp-als-dataset-service:
     image: ghcr.io/sage-bionetworks/amp-als-dataset-service:${AMP_ALS_VERSION:-local}
-    container_name: amp-als-dataset-service-next
+    container_name: amp-als-dataset-service
     restart: always
     env_file:
       - ../../../apps/amp-als/dataset-service/.env
