@@ -53,6 +53,12 @@ dependencies {
     implementation(libs.hibernate.search.mapper.orm)
     implementation(libs.hibernate.search.backend.elasticsearch)
 
+    // Sage Bionetworks
+    implementation(libs.sage.util)
+
+    // AMP-ALS
+    implementation(libs.amp.als.app.config.data)
+
     // Misc
     implementation(libs.findbugs.jsr305)
 }

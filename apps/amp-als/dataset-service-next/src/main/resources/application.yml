@@ -1,3 +1,6 @@
+amp-als-dataset-service:
+  welcome-message: 'Welcome to the AMP-ALS dataset service'
+
 server:
   port: 8404
 
