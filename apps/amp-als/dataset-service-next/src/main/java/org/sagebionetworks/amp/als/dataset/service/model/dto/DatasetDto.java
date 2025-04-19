@@ -197,5 +197,87 @@ public class DatasetDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private DatasetDto instance;
+
+    public Builder() {
+      this(new DatasetDto());
+    }
+
+    protected Builder(DatasetDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(DatasetDto value) { 
+      this.instance.setId(value.id);
+      this.instance.setName(value.name);
+      this.instance.setDescription(value.description);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
+      return this;
+    }
+
+    public DatasetDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
+    public DatasetDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public DatasetDto.Builder description(String description) {
+      this.instance.description(description);
+      return this;
+    }
+    
+    public DatasetDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public DatasetDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    /**
+    * returns a built DatasetDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public DatasetDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static DatasetDto.Builder builder() {
+    return new DatasetDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public DatasetDto.Builder toBuilder() {
+    DatasetDto.Builder builder = new DatasetDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

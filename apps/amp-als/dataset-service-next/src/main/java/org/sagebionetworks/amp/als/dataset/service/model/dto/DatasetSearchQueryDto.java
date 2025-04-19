@@ -209,5 +209,93 @@ public class DatasetSearchQueryDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private DatasetSearchQueryDto instance;
+
+    public Builder() {
+      this(new DatasetSearchQueryDto());
+    }
+
+    protected Builder(DatasetSearchQueryDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(DatasetSearchQueryDto value) { 
+      this.instance.setPageNumber(value.pageNumber);
+      this.instance.setPageSize(value.pageSize);
+      this.instance.setSort(value.sort);
+      this.instance.setSortSeed(value.sortSeed);
+      this.instance.setDirection(value.direction);
+      this.instance.setSearchTerms(value.searchTerms);
+      return this;
+    }
+
+    public DatasetSearchQueryDto.Builder pageNumber(Integer pageNumber) {
+      this.instance.pageNumber(pageNumber);
+      return this;
+    }
+    
+    public DatasetSearchQueryDto.Builder pageSize(Integer pageSize) {
+      this.instance.pageSize(pageSize);
+      return this;
+    }
+    
+    public DatasetSearchQueryDto.Builder sort(DatasetSortDto sort) {
+      this.instance.sort(sort);
+      return this;
+    }
+    
+    public DatasetSearchQueryDto.Builder sortSeed(Integer sortSeed) {
+      this.instance.sortSeed(sortSeed);
+      return this;
+    }
+    
+    public DatasetSearchQueryDto.Builder direction(DatasetDirectionDto direction) {
+      this.instance.direction(direction);
+      return this;
+    }
+    
+    public DatasetSearchQueryDto.Builder searchTerms(String searchTerms) {
+      this.instance.searchTerms(searchTerms);
+      return this;
+    }
+    
+    /**
+    * returns a built DatasetSearchQueryDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public DatasetSearchQueryDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static DatasetSearchQueryDto.Builder builder() {
+    return new DatasetSearchQueryDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public DatasetSearchQueryDto.Builder toBuilder() {
+    DatasetSearchQueryDto.Builder builder = new DatasetSearchQueryDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

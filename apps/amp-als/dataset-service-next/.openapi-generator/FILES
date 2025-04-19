@@ -1,4 +1,3 @@
-src/main/java/org/sagebionetworks/amp/als/dataset/service/OpenApiGeneratorApplication.java
 src/main/java/org/sagebionetworks/amp/als/dataset/service/RFC3339DateFormat.java
 src/main/java/org/sagebionetworks/amp/als/dataset/service/api/ApiUtil.java
 src/main/java/org/sagebionetworks/amp/als/dataset/service/api/DatasetApi.java
@@ -15,4 +14,3 @@ src/main/java/org/sagebionetworks/amp/als/dataset/service/model/dto/DatasetSortD
 src/main/java/org/sagebionetworks/amp/als/dataset/service/model/dto/DatasetsPageDto.java
 src/main/java/org/sagebionetworks/amp/als/dataset/service/model/dto/PageMetadataDto.java
 src/main/resources/openapi.yaml
-src/test/java/org/sagebionetworks/amp/als/dataset/service/OpenApiGeneratorApplicationTests.java

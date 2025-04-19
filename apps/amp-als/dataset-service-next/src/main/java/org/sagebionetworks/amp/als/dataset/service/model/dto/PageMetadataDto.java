@@ -218,5 +218,93 @@ public class PageMetadataDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private PageMetadataDto instance;
+
+    public Builder() {
+      this(new PageMetadataDto());
+    }
+
+    protected Builder(PageMetadataDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(PageMetadataDto value) { 
+      this.instance.setNumber(value.number);
+      this.instance.setSize(value.size);
+      this.instance.setTotalElements(value.totalElements);
+      this.instance.setTotalPages(value.totalPages);
+      this.instance.setHasNext(value.hasNext);
+      this.instance.setHasPrevious(value.hasPrevious);
+      return this;
+    }
+
+    public PageMetadataDto.Builder number(Integer number) {
+      this.instance.number(number);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder size(Integer size) {
+      this.instance.size(size);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder totalElements(Long totalElements) {
+      this.instance.totalElements(totalElements);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder totalPages(Integer totalPages) {
+      this.instance.totalPages(totalPages);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder hasNext(Boolean hasNext) {
+      this.instance.hasNext(hasNext);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder hasPrevious(Boolean hasPrevious) {
+      this.instance.hasPrevious(hasPrevious);
+      return this;
+    }
+    
+    /**
+    * returns a built PageMetadataDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public PageMetadataDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static PageMetadataDto.Builder builder() {
+    return new PageMetadataDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public PageMetadataDto.Builder toBuilder() {
+    PageMetadataDto.Builder builder = new PageMetadataDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 
