@@ -15,7 +15,7 @@ services:
       amp-als-api-docs:
         condition: service_healthy
       amp-als-dataset-service:
-        condition: service_healthy
+        condition: service_started
     deploy:
       resources:
         limits:
