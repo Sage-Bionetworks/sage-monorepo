@@ -19,7 +19,8 @@
           "modelPackage": "org.sagebionetworks.amp.als.dataset.service.model.dto",
           "useTags": true,
           "openApiNullable": false,
-          "useSpringBoot3": true
+          "useSpringBoot3": true,
+          "generateBuilders": true
         }
       }
     }

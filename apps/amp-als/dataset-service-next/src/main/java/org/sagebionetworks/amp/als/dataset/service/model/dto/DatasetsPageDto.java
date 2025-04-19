@@ -256,5 +256,99 @@ public class DatasetsPageDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private DatasetsPageDto instance;
+
+    public Builder() {
+      this(new DatasetsPageDto());
+    }
+
+    protected Builder(DatasetsPageDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(DatasetsPageDto value) { 
+      this.instance.setNumber(value.number);
+      this.instance.setSize(value.size);
+      this.instance.setTotalElements(value.totalElements);
+      this.instance.setTotalPages(value.totalPages);
+      this.instance.setHasNext(value.hasNext);
+      this.instance.setHasPrevious(value.hasPrevious);
+      this.instance.setDatasets(value.datasets);
+      return this;
+    }
+
+    public DatasetsPageDto.Builder number(Integer number) {
+      this.instance.number(number);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder size(Integer size) {
+      this.instance.size(size);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder totalElements(Long totalElements) {
+      this.instance.totalElements(totalElements);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder totalPages(Integer totalPages) {
+      this.instance.totalPages(totalPages);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder hasNext(Boolean hasNext) {
+      this.instance.hasNext(hasNext);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder hasPrevious(Boolean hasPrevious) {
+      this.instance.hasPrevious(hasPrevious);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder datasets(List<DatasetDto> datasets) {
+      this.instance.datasets(datasets);
+      return this;
+    }
+    
+    /**
+    * returns a built DatasetsPageDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public DatasetsPageDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static DatasetsPageDto.Builder builder() {
+    return new DatasetsPageDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public DatasetsPageDto.Builder toBuilder() {
+    DatasetsPageDto.Builder builder = new DatasetsPageDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 
