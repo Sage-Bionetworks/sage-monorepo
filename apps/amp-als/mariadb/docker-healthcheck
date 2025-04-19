@@ -8,4 +8,4 @@ user="${MARIADB_USER:-root}"
 password="${MARIADB_PASSWORD}"
 
 # TODO check that the artifacts/tables created during initialization have been created
-mysqladmin ping --port="$port" --user="$user" --password="$password" | grep 'mysqld is alive' || exit 1
+mariadb-admin ping --port="$port" --user="$user" --password="$password" | grep 'mysqld is alive' || exit 1
