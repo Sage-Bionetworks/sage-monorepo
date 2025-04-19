@@ -5,14 +5,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * The metadata of a page.
@@ -20,27 +21,36 @@ import javax.annotation.Generated;
 
 @Schema(name = "PageMetadata", description = "The metadata of a page.")
 @JsonTypeName("PageMetadata")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class PageMetadataDto {
 
-  @JsonProperty("number")
   private Integer number;
 
-  @JsonProperty("size")
   private Integer size;
 
-  @JsonProperty("totalElements")
   private Long totalElements;
 
-  @JsonProperty("totalPages")
   private Integer totalPages;
 
-  @JsonProperty("hasNext")
   private Boolean hasNext;
 
-  @JsonProperty("hasPrevious")
   private Boolean hasPrevious;
+
+  public PageMetadataDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public PageMetadataDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious) {
+    this.number = number;
+    this.size = size;
+    this.totalElements = totalElements;
+    this.totalPages = totalPages;
+    this.hasNext = hasNext;
+    this.hasPrevious = hasPrevious;
+  }
 
   public PageMetadataDto number(Integer number) {
     this.number = number;
@@ -50,9 +60,10 @@ public class PageMetadataDto {
   /**
    * The page number.
    * @return number
-  */
+   */
   @NotNull 
-  @Schema(name = "number", example = "99", description = "The page number.", required = true)
+  @Schema(name = "number", example = "99", description = "The page number.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("number")
   public Integer getNumber() {
     return number;
   }
@@ -69,9 +80,10 @@ public class PageMetadataDto {
   /**
    * The number of items in a single page.
    * @return size
-  */
+   */
   @NotNull 
-  @Schema(name = "size", example = "99", description = "The number of items in a single page.", required = true)
+  @Schema(name = "size", example = "99", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("size")
   public Integer getSize() {
     return size;
   }
@@ -88,9 +100,10 @@ public class PageMetadataDto {
   /**
    * Total number of elements in the result set.
    * @return totalElements
-  */
+   */
   @NotNull 
-  @Schema(name = "totalElements", example = "99", description = "Total number of elements in the result set.", required = true)
+  @Schema(name = "totalElements", example = "99", description = "Total number of elements in the result set.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("totalElements")
   public Long getTotalElements() {
     return totalElements;
   }
@@ -107,9 +120,10 @@ public class PageMetadataDto {
   /**
    * Total number of pages in the result set.
    * @return totalPages
-  */
+   */
   @NotNull 
-  @Schema(name = "totalPages", example = "99", description = "Total number of pages in the result set.", required = true)
+  @Schema(name = "totalPages", example = "99", description = "Total number of pages in the result set.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("totalPages")
   public Integer getTotalPages() {
     return totalPages;
   }
@@ -126,9 +140,10 @@ public class PageMetadataDto {
   /**
    * Returns if there is a next page.
    * @return hasNext
-  */
+   */
   @NotNull 
-  @Schema(name = "hasNext", example = "true", description = "Returns if there is a next page.", required = true)
+  @Schema(name = "hasNext", example = "true", description = "Returns if there is a next page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("hasNext")
   public Boolean getHasNext() {
     return hasNext;
   }
@@ -145,9 +160,10 @@ public class PageMetadataDto {
   /**
    * Returns if there is a previous page.
    * @return hasPrevious
-  */
+   */
   @NotNull 
-  @Schema(name = "hasPrevious", example = "true", description = "Returns if there is a previous page.", required = true)
+  @Schema(name = "hasPrevious", example = "true", description = "Returns if there is a previous page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("hasPrevious")
   public Boolean getHasPrevious() {
     return hasPrevious;
   }
@@ -202,5 +218,93 @@ public class PageMetadataDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private PageMetadataDto instance;
+
+    public Builder() {
+      this(new PageMetadataDto());
+    }
+
+    protected Builder(PageMetadataDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(PageMetadataDto value) { 
+      this.instance.setNumber(value.number);
+      this.instance.setSize(value.size);
+      this.instance.setTotalElements(value.totalElements);
+      this.instance.setTotalPages(value.totalPages);
+      this.instance.setHasNext(value.hasNext);
+      this.instance.setHasPrevious(value.hasPrevious);
+      return this;
+    }
+
+    public PageMetadataDto.Builder number(Integer number) {
+      this.instance.number(number);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder size(Integer size) {
+      this.instance.size(size);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder totalElements(Long totalElements) {
+      this.instance.totalElements(totalElements);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder totalPages(Integer totalPages) {
+      this.instance.totalPages(totalPages);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder hasNext(Boolean hasNext) {
+      this.instance.hasNext(hasNext);
+      return this;
+    }
+    
+    public PageMetadataDto.Builder hasPrevious(Boolean hasPrevious) {
+      this.instance.hasPrevious(hasPrevious);
+      return this;
+    }
+    
+    /**
+    * returns a built PageMetadataDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public PageMetadataDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static PageMetadataDto.Builder builder() {
+    return new PageMetadataDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public PageMetadataDto.Builder toBuilder() {
+    PageMetadataDto.Builder builder = new PageMetadataDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

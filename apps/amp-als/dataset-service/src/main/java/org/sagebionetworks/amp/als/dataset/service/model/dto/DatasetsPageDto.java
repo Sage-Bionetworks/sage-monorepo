@@ -6,16 +6,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.sagebionetworks.amp.als.dataset.service.model.dto.DatasetDto;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * A page of datasets.
@@ -23,31 +25,40 @@ import javax.annotation.Generated;
 
 @Schema(name = "DatasetsPage", description = "A page of datasets.")
 @JsonTypeName("DatasetsPage")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.Builder
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class DatasetsPageDto {
 
-  @JsonProperty("number")
   private Integer number;
 
-  @JsonProperty("size")
   private Integer size;
 
-  @JsonProperty("totalElements")
   private Long totalElements;
 
-  @JsonProperty("totalPages")
   private Integer totalPages;
 
-  @JsonProperty("hasNext")
   private Boolean hasNext;
 
-  @JsonProperty("hasPrevious")
   private Boolean hasPrevious;
 
-  @JsonProperty("datasets")
   @Valid
-  private List<DatasetDto> datasets = new ArrayList<>();
+  private List<@Valid DatasetDto> datasets = new ArrayList<>();
+
+  public DatasetsPageDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public DatasetsPageDto(Integer number, Integer size, Long totalElements, Integer totalPages, Boolean hasNext, Boolean hasPrevious, List<@Valid DatasetDto> datasets) {
+    this.number = number;
+    this.size = size;
+    this.totalElements = totalElements;
+    this.totalPages = totalPages;
+    this.hasNext = hasNext;
+    this.hasPrevious = hasPrevious;
+    this.datasets = datasets;
+  }
 
   public DatasetsPageDto number(Integer number) {
     this.number = number;
@@ -57,9 +68,10 @@ public class DatasetsPageDto {
   /**
    * The page number.
    * @return number
-  */
+   */
   @NotNull 
-  @Schema(name = "number", example = "99", description = "The page number.", required = true)
+  @Schema(name = "number", example = "99", description = "The page number.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("number")
   public Integer getNumber() {
     return number;
   }
@@ -76,9 +88,10 @@ public class DatasetsPageDto {
   /**
    * The number of items in a single page.
    * @return size
-  */
+   */
   @NotNull 
-  @Schema(name = "size", example = "99", description = "The number of items in a single page.", required = true)
+  @Schema(name = "size", example = "99", description = "The number of items in a single page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("size")
   public Integer getSize() {
     return size;
   }
@@ -95,9 +108,10 @@ public class DatasetsPageDto {
   /**
    * Total number of elements in the result set.
    * @return totalElements
-  */
+   */
   @NotNull 
-  @Schema(name = "totalElements", example = "99", description = "Total number of elements in the result set.", required = true)
+  @Schema(name = "totalElements", example = "99", description = "Total number of elements in the result set.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("totalElements")
   public Long getTotalElements() {
     return totalElements;
   }
@@ -114,9 +128,10 @@ public class DatasetsPageDto {
   /**
    * Total number of pages in the result set.
    * @return totalPages
-  */
+   */
   @NotNull 
-  @Schema(name = "totalPages", example = "99", description = "Total number of pages in the result set.", required = true)
+  @Schema(name = "totalPages", example = "99", description = "Total number of pages in the result set.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("totalPages")
   public Integer getTotalPages() {
     return totalPages;
   }
@@ -133,9 +148,10 @@ public class DatasetsPageDto {
   /**
    * Returns if there is a next page.
    * @return hasNext
-  */
+   */
   @NotNull 
-  @Schema(name = "hasNext", example = "true", description = "Returns if there is a next page.", required = true)
+  @Schema(name = "hasNext", example = "true", description = "Returns if there is a next page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("hasNext")
   public Boolean getHasNext() {
     return hasNext;
   }
@@ -152,9 +168,10 @@ public class DatasetsPageDto {
   /**
    * Returns if there is a previous page.
    * @return hasPrevious
-  */
+   */
   @NotNull 
-  @Schema(name = "hasPrevious", example = "true", description = "Returns if there is a previous page.", required = true)
+  @Schema(name = "hasPrevious", example = "true", description = "Returns if there is a previous page.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("hasPrevious")
   public Boolean getHasPrevious() {
     return hasPrevious;
   }
@@ -163,7 +180,7 @@ public class DatasetsPageDto {
     this.hasPrevious = hasPrevious;
   }
 
-  public DatasetsPageDto datasets(List<DatasetDto> datasets) {
+  public DatasetsPageDto datasets(List<@Valid DatasetDto> datasets) {
     this.datasets = datasets;
     return this;
   }
@@ -179,14 +196,15 @@ public class DatasetsPageDto {
   /**
    * A list of datasets.
    * @return datasets
-  */
+   */
   @NotNull @Valid 
-  @Schema(name = "datasets", description = "A list of datasets.", required = true)
-  public List<DatasetDto> getDatasets() {
+  @Schema(name = "datasets", description = "A list of datasets.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("datasets")
+  public List<@Valid DatasetDto> getDatasets() {
     return datasets;
   }
 
-  public void setDatasets(List<DatasetDto> datasets) {
+  public void setDatasets(List<@Valid DatasetDto> datasets) {
     this.datasets = datasets;
   }
 
@@ -238,5 +256,99 @@ public class DatasetsPageDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private DatasetsPageDto instance;
+
+    public Builder() {
+      this(new DatasetsPageDto());
+    }
+
+    protected Builder(DatasetsPageDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(DatasetsPageDto value) { 
+      this.instance.setNumber(value.number);
+      this.instance.setSize(value.size);
+      this.instance.setTotalElements(value.totalElements);
+      this.instance.setTotalPages(value.totalPages);
+      this.instance.setHasNext(value.hasNext);
+      this.instance.setHasPrevious(value.hasPrevious);
+      this.instance.setDatasets(value.datasets);
+      return this;
+    }
+
+    public DatasetsPageDto.Builder number(Integer number) {
+      this.instance.number(number);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder size(Integer size) {
+      this.instance.size(size);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder totalElements(Long totalElements) {
+      this.instance.totalElements(totalElements);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder totalPages(Integer totalPages) {
+      this.instance.totalPages(totalPages);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder hasNext(Boolean hasNext) {
+      this.instance.hasNext(hasNext);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder hasPrevious(Boolean hasPrevious) {
+      this.instance.hasPrevious(hasPrevious);
+      return this;
+    }
+    
+    public DatasetsPageDto.Builder datasets(List<DatasetDto> datasets) {
+      this.instance.datasets(datasets);
+      return this;
+    }
+    
+    /**
+    * returns a built DatasetsPageDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public DatasetsPageDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static DatasetsPageDto.Builder builder() {
+    return new DatasetsPageDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public DatasetsPageDto.Builder toBuilder() {
+    DatasetsPageDto.Builder builder = new DatasetsPageDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

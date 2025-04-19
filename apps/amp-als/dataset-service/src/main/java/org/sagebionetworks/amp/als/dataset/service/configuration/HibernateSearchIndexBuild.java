@@ -1,7 +1,7 @@
 package org.sagebionetworks.amp.als.dataset.service.configuration;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.massindexing.MassIndexer;
@@ -24,6 +24,7 @@ public class HibernateSearchIndexBuild implements ApplicationListener<Applicatio
   @Transactional
   public void onApplicationEvent(ApplicationReadyEvent event) {
     log.info("Started Initializing Indexes");
+
     SearchSession searchSession = Search.session(entityManager);
     MassIndexer indexer = searchSession
       .massIndexer()
@@ -34,7 +35,7 @@ public class HibernateSearchIndexBuild implements ApplicationListener<Applicatio
     try {
       indexer.startAndWait();
     } catch (InterruptedException e) {
-      log.warn("Failed to load data from database");
+      log.warn("Failed to load data from database", e);
       Thread.currentThread().interrupt();
     }
 

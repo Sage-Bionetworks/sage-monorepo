@@ -17,7 +17,7 @@
   "features": {},
   "forwardPorts": [
     2000, 2432, 3306, 3333, 4200, 4211, 5200, 5432, 5601, 8010, 8071, 8000, 8080, 8081, 8082, 8084,
-    8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8406, 8200, 8888, 8889, 9200, 9411, 27017
+    8085, 8086, 8090, 8400, 8401, 8402, 8403, 8404, 8405, 8200, 8888, 8889, 9200, 9411, 27017
   ],
   "portsAttributes": {
     "2000": {
@@ -101,7 +101,7 @@
       "onAutoForward": "silent"
     },
     "8402": {
-      "label": "amp-als-elasticsearch",
+      "label": "amp-als-opensearch",
       "onAutoForward": "silent"
     },
     "8403": {
@@ -114,10 +114,6 @@
     },
     "8405": {
       "label": "amp-als-keycloak",
-      "onAutoForward": "silent"
-    },
-    "8406": {
-      "label": "amp-als-opensearch",
       "onAutoForward": "silent"
     },
     "8888": {

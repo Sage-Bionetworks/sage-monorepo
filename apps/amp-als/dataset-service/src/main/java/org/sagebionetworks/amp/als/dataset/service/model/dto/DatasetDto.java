@@ -7,14 +7,15 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * A dataset
@@ -22,26 +23,35 @@ import javax.annotation.Generated;
 
 @Schema(name = "Dataset", description = "A dataset")
 @JsonTypeName("Dataset")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-// TODO Add x-java-class-annotations
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class DatasetDto {
 
-  @JsonProperty("id")
   private Long id;
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("description")
   private String description;
 
-  @JsonProperty("createdAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updatedAt")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  public DatasetDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public DatasetDto(Long id, String name, String description, OffsetDateTime createdAt, OffsetDateTime updatedAt) {
+    this.id = id;
+    this.name = name;
+    this.description = description;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
 
   public DatasetDto id(Long id) {
     this.id = id;
@@ -51,9 +61,10 @@ public class DatasetDto {
   /**
    * The unique identifier of the dataset.
    * @return id
-  */
+   */
   @NotNull 
-  @Schema(name = "id", example = "1", description = "The unique identifier of the dataset.", required = true)
+  @Schema(name = "id", example = "1", description = "The unique identifier of the dataset.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("id")
   public Long getId() {
     return id;
   }
@@ -70,9 +81,10 @@ public class DatasetDto {
   /**
    * The name of the dataset.
    * @return name
-  */
+   */
   @NotNull @Size(min = 3, max = 255) 
-  @Schema(name = "name", description = "The name of the dataset.", required = true)
+  @Schema(name = "name", description = "The name of the dataset.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -89,9 +101,10 @@ public class DatasetDto {
   /**
    * The description of the dataset.
    * @return description
-  */
+   */
   @NotNull @Size(min = 0, max = 1000) 
-  @Schema(name = "description", example = "This is an example description of the dataset.", description = "The description of the dataset.", required = true)
+  @Schema(name = "description", example = "This is an example description of the dataset.", description = "The description of the dataset.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("description")
   public String getDescription() {
     return description;
   }
@@ -108,9 +121,10 @@ public class DatasetDto {
   /**
    * Datetime when the object was added to the database.
    * @return createdAt
-  */
+   */
   @NotNull @Valid 
-  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", required = true)
+  @Schema(name = "createdAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was added to the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("createdAt")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -127,9 +141,10 @@ public class DatasetDto {
   /**
    * Datetime when the object was last modified in the database.
    * @return updatedAt
-  */
+   */
   @NotNull @Valid 
-  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", required = true)
+  @Schema(name = "updatedAt", example = "2022-07-04T22:19:11Z", description = "Datetime when the object was last modified in the database.", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("updatedAt")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -182,5 +197,87 @@ public class DatasetDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private DatasetDto instance;
+
+    public Builder() {
+      this(new DatasetDto());
+    }
+
+    protected Builder(DatasetDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(DatasetDto value) { 
+      this.instance.setId(value.id);
+      this.instance.setName(value.name);
+      this.instance.setDescription(value.description);
+      this.instance.setCreatedAt(value.createdAt);
+      this.instance.setUpdatedAt(value.updatedAt);
+      return this;
+    }
+
+    public DatasetDto.Builder id(Long id) {
+      this.instance.id(id);
+      return this;
+    }
+    
+    public DatasetDto.Builder name(String name) {
+      this.instance.name(name);
+      return this;
+    }
+    
+    public DatasetDto.Builder description(String description) {
+      this.instance.description(description);
+      return this;
+    }
+    
+    public DatasetDto.Builder createdAt(OffsetDateTime createdAt) {
+      this.instance.createdAt(createdAt);
+      return this;
+    }
+    
+    public DatasetDto.Builder updatedAt(OffsetDateTime updatedAt) {
+      this.instance.updatedAt(updatedAt);
+      return this;
+    }
+    
+    /**
+    * returns a built DatasetDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public DatasetDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static DatasetDto.Builder builder() {
+    return new DatasetDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public DatasetDto.Builder toBuilder() {
+    DatasetDto.Builder builder = new DatasetDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

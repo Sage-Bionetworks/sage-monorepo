@@ -5,14 +5,15 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonTypeName;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 
 import java.util.*;
-import javax.annotation.Generated;
+import jakarta.annotation.Generated;
 
 /**
  * Problem details (tools.ietf.org/html/rfc7807)
@@ -20,22 +21,28 @@ import javax.annotation.Generated;
 
 @Schema(name = "BasicError", description = "Problem details (tools.ietf.org/html/rfc7807)")
 @JsonTypeName("BasicError")
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-@lombok.AllArgsConstructor
-@lombok.Builder
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class BasicErrorDto {
 
-  @JsonProperty("title")
   private String title;
 
-  @JsonProperty("status")
   private Integer status;
 
-  @JsonProperty("detail")
-  private String detail;
+  private @Nullable String detail;
 
-  @JsonProperty("type")
-  private String type;
+  private @Nullable String type;
+
+  public BasicErrorDto() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public BasicErrorDto(String title, Integer status) {
+    this.title = title;
+    this.status = status;
+  }
 
   public BasicErrorDto title(String title) {
     this.title = title;
@@ -45,9 +52,10 @@ public class BasicErrorDto {
   /**
    * A human readable documentation for the problem type
    * @return title
-  */
+   */
   @NotNull 
-  @Schema(name = "title", description = "A human readable documentation for the problem type", required = true)
+  @Schema(name = "title", description = "A human readable documentation for the problem type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("title")
   public String getTitle() {
     return title;
   }
@@ -64,9 +72,10 @@ public class BasicErrorDto {
   /**
    * The HTTP status code
    * @return status
-  */
+   */
   @NotNull 
-  @Schema(name = "status", description = "The HTTP status code", required = true)
+  @Schema(name = "status", description = "The HTTP status code", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("status")
   public Integer getStatus() {
     return status;
   }
@@ -83,9 +92,10 @@ public class BasicErrorDto {
   /**
    * A human readable explanation specific to this occurrence of the problem
    * @return detail
-  */
+   */
   
-  @Schema(name = "detail", description = "A human readable explanation specific to this occurrence of the problem", required = false)
+  @Schema(name = "detail", description = "A human readable explanation specific to this occurrence of the problem", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("detail")
   public String getDetail() {
     return detail;
   }
@@ -102,9 +112,10 @@ public class BasicErrorDto {
   /**
    * An absolute URI that identifies the problem type
    * @return type
-  */
+   */
   
-  @Schema(name = "type", description = "An absolute URI that identifies the problem type", required = false)
+  @Schema(name = "type", description = "An absolute URI that identifies the problem type", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("type")
   public String getType() {
     return type;
   }
@@ -155,5 +166,81 @@ public class BasicErrorDto {
     }
     return o.toString().replace("\n", "\n    ");
   }
+  
+  public static class Builder {
+
+    private BasicErrorDto instance;
+
+    public Builder() {
+      this(new BasicErrorDto());
+    }
+
+    protected Builder(BasicErrorDto instance) {
+      this.instance = instance;
+    }
+
+    protected Builder copyOf(BasicErrorDto value) { 
+      this.instance.setTitle(value.title);
+      this.instance.setStatus(value.status);
+      this.instance.setDetail(value.detail);
+      this.instance.setType(value.type);
+      return this;
+    }
+
+    public BasicErrorDto.Builder title(String title) {
+      this.instance.title(title);
+      return this;
+    }
+    
+    public BasicErrorDto.Builder status(Integer status) {
+      this.instance.status(status);
+      return this;
+    }
+    
+    public BasicErrorDto.Builder detail(String detail) {
+      this.instance.detail(detail);
+      return this;
+    }
+    
+    public BasicErrorDto.Builder type(String type) {
+      this.instance.type(type);
+      return this;
+    }
+    
+    /**
+    * returns a built BasicErrorDto instance.
+    *
+    * The builder is not reusable (NullPointerException)
+    */
+    public BasicErrorDto build() {
+      try {
+        return this.instance;
+      } finally {
+        // ensure that this.instance is not reused
+        this.instance = null;
+      }
+    }
+
+    @Override
+    public String toString() {
+      return getClass() + "=(" + instance + ")";
+    }
+  }
+
+  /**
+  * Create a builder with no initialized field (except for the default values).
+  */
+  public static BasicErrorDto.Builder builder() {
+    return new BasicErrorDto.Builder();
+  }
+
+  /**
+  * Create a builder with a shallow copy of this instance.
+  */
+  public BasicErrorDto.Builder toBuilder() {
+    BasicErrorDto.Builder builder = new BasicErrorDto.Builder();
+    return builder.copyOf(this);
+  }
+
 }
 

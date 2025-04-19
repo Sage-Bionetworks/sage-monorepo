@@ -50,7 +50,9 @@ paths:
       summary: List datasets
       tags:
         - Dataset
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: Dataset
   /datasets/{datasetId}:
@@ -89,7 +91,9 @@ paths:
       summary: Get a dataset
       tags:
         - Dataset
-      x-accepts: application/json
+      x-accepts:
+        - application/json
+        - application/problem+json
       x-tags:
         - tag: Dataset
 components:
@@ -288,8 +292,34 @@ components:
     DatasetsPage:
       allOf:
         - $ref: '#/components/schemas/PageMetadata'
-        - $ref: '#/components/schemas/DatasetsPage_allOf'
+        - properties:
+            datasets:
+              description: A list of datasets.
+              items:
+                $ref: '#/components/schemas/Dataset'
+              type: array
+          required:
+            - datasets
+          type: object
       description: A page of datasets.
+      example:
+        number: 99
+        size: 99
+        totalPages: 99
+        hasPrevious: true
+        hasNext: true
+        datasets:
+          - createdAt: 2022-07-04T22:19:11Z
+            name: name
+            description: This is an example description of the dataset.
+            id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+          - createdAt: 2022-07-04T22:19:11Z
+            name: name
+            description: This is an example description of the dataset.
+            id: 1
+            updatedAt: 2022-07-04T22:19:11Z
+        totalElements: 99
       type: object
       x-java-class-annotations:
         - '@lombok.Builder'
@@ -316,14 +346,3 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
-    DatasetsPage_allOf:
-      properties:
-        datasets:
-          description: A list of datasets.
-          items:
-            $ref: '#/components/schemas/Dataset'
-          type: array
-      required:
-        - datasets
-      type: object
-      example: null

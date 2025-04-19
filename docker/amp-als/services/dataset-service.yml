@@ -12,7 +12,7 @@ services:
     depends_on:
       amp-als-mariadb:
         condition: service_healthy
-      amp-als-elasticsearch:
+      amp-als-opensearch:
         condition: service_healthy
     deploy:
       resources:

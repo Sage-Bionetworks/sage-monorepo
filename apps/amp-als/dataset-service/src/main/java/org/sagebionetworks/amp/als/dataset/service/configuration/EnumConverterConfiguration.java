@@ -10,7 +10,7 @@ import org.springframework.core.convert.converter.Converter;
 @Configuration
 public class EnumConverterConfiguration {
 
-    @Bean
+    @Bean(name = "org.sagebionetworks.amp.als.dataset.service.configuration.EnumConverterConfiguration.datasetDirectionConverter")
     Converter<String, DatasetDirectionDto> datasetDirectionConverter() {
         return new Converter<String, DatasetDirectionDto>() {
             @Override
@@ -19,7 +19,7 @@ public class EnumConverterConfiguration {
             }
         };
     }
-    @Bean
+    @Bean(name = "org.sagebionetworks.amp.als.dataset.service.configuration.EnumConverterConfiguration.datasetSortConverter")
     Converter<String, DatasetSortDto> datasetSortConverter() {
         return new Converter<String, DatasetSortDto>() {
             @Override

@@ -1,62 +1,36 @@
 amp-als-dataset-service:
   welcome-message: 'Welcome to the AMP-ALS dataset service'
 
+server:
+  port: 8404
+
 spring:
   application:
     name: amp-als-dataset-service
   datasource:
-    # url: jdbc:h2:mem:dataset
-    url: ${db.url}
+    url: ${db.url} # jdbc:mysql://amp-als-mariadb:8401/dataset_service
     username: dataset_service
     password: changeme
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  flyway:
+    enabled: true
+    clean-disabled: false
+  jackson:
+    date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MariaDBDialect
         search:
-          enabled: true
-          schema_management:
-            strategy: drop-and-create
+          enable: true
           backend:
-            # version_check: false
-            # version: 'opensearch:1.3.7'
-            # type: elasticsearch
-            hosts: amp-als-elasticsearch:8402
-            username: admin
-            password: admin
+            hosts: amp-als-opensearch:8402
   autoconfigure:
     # Prevent Spring Boot from auto-configuring a default Elasticsearch client,
     # which Hibernate Search might incorrectly use, leading to node sniffing errors
     # when a local cluster is not available.
     exclude: org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientAutoConfiguration
-  jackson:
-    date-format: org.sagebionetworks.amp.als.dataset.service.RFC3339DateFormat
-    serialization:
-      WRITE_DATES_AS_TIMESTAMPS: false
-  flyway:
-    enabled: true
-
-server:
-  port: 8404
-
-management:
-  endpoints:
-    web:
-      base-path: /actuator
-      exposure:
-        include: health
-  health:
-    readiness-state:
-      enabled: true
-    liveness-state:
-      enabled: true
-  endpoint:
-    health:
-      probes:
-        enabled: true
-      show-details: always
-
-info:
-  application:
-    name: ${spring.application.name}
