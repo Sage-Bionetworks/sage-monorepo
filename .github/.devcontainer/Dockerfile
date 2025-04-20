@@ -1,4 +1,4 @@
-FROM ubuntu:noble-20241118.1
+FROM ubuntu:noble-20250404
 
 # Set safer bash scripts.
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
