@@ -4,8 +4,6 @@ FROM ubuntu:noble-20250404
 SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 
 # List of build arguments.
-# https://github.com/nektos/act
-ARG actVersion="0.2.75"
 # https://github.com/sharkdp/hyperfine
 ARG hyperfineVersion="1.19.0"
 # https://www.npmjs.com/package/@devcontainers/cli
@@ -93,9 +91,6 @@ RUN apt-get update -qq -y && export DEBIAN_FRONTEND=noninteractive \
 RUN curl -fsSL "https://github.com/aquasecurity/trivy/releases/download/v${trivyVersion}/trivy_${trivyVersion}_Linux-64bit.deb" -o /tmp/trivy.deb \
   && dpkg -i /tmp/trivy.deb \
   && rm -fr /tmp/trivy.deb
-
-# Install act.
-RUN curl -fsSL "https://raw.githubusercontent.com/nektos/act/v${actVersion}/install.sh" | bash -
 
 # Install AWS CLI.
 RUN curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip -o awscliv2.zip \
