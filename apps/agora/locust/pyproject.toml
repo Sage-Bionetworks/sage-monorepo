@@ -1,0 +1,24 @@
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[project]
+authors = [
+    {name = "Thomas Schaffter", email = "thomas.schaffter@gmail.com"},
+]
+requires-python = "==3.12.9"
+dependencies = [
+    "locust==2.35.0",
+]
+name = "agora-locust"
+version = "0.0.1"
+description = "A Locust-based load testing project to benchmark the performance and scalability of Agora's REST API under simulated user traffic."
+readme = "README.md"
+
+[dependency-groups]
+dev = []
+prod = []
+test = []
+
+[tool.uv]
+default-groups = []

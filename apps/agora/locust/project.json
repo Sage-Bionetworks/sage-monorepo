@@ -1,0 +1,23 @@
+{
+  "name": "agora-locust",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/agora/locust/src",
+  "projectType": "application",
+  "targets": {
+    "prepare": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv sync",
+        "cwd": "{projectRoot}"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "uv run src/locust.py",
+        "cwd": "{projectRoot}"
+      }
+    }
+  },
+  "tags": ["type:app", "language:python", "package-manager:uv"]
+}
