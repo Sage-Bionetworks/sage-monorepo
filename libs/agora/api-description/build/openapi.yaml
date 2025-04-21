@@ -367,6 +367,7 @@ components:
           type: string
         validation_study_details:
           type: string
+          nullable: true
         initial_nomination:
           type: number
       required:

@@ -24,6 +24,6 @@ export interface TargetNomination {
   data_synapseid: string;
   study: string | null;
   input_data: string;
-  validation_study_details: string;
+  validation_study_details: string | null;
   initial_nomination: number;
 }
