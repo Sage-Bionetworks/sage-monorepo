@@ -16,8 +16,8 @@ repositories {
 dependencies {
   implementation 'org.springframework.boot:spring-boot-starter:2.7.4'
   testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.4'
-  compileOnly 'org.projectlombok:lombok:1.18.24'
-  annotationProcessor 'org.projectlombok:lombok:1.18.24'
+  compileOnly 'org.projectlombok:lombok:1.18.38'
+  annotationProcessor 'org.projectlombok:lombok:1.18.38'
 }
 
 tasks.named('test') {
