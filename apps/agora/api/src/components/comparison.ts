@@ -102,12 +102,11 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
     }
 
     // Validations
-    const validation_study_detail_clean = n.validation_study_details?.trim().toLowerCase();
-    if (
-      validation_study_detail_clean &&
-      !data.validations.includes(validation_study_detail_clean)
-    ) {
-      data.validations.push(validation_study_detail_clean);
+    if (n.validation_study_details) {
+      const validation_study_detail_clean = n.validation_study_details.trim().toLowerCase();
+      if (!data.validations.includes(validation_study_detail_clean)) {
+        data.validations.push(validation_study_detail_clean);
+      }
     }
   });
 
