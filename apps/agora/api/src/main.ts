@@ -2,14 +2,16 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-import '@angular/platform-browser-dynamic';
 import '@angular/compiler';
+import '@angular/platform-browser-dynamic';
 
+import compression from 'compression';
 import express from 'express';
 import path from 'path';
 import api from './api';
 
 const app = express();
+app.use(compression());
 
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/v1', api);
