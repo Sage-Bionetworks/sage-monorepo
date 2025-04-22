@@ -15,13 +15,14 @@ export class ModalLinkComponent {
   @Input() text = '';
   @Input() textColor = '';
 
-  @Input() header = '';
+  @Input() title = '';
 
   @Input() ownerId = '';
   @Input() wikiId = '';
 
   @Input() iconWidth = 14;
   @Input() iconHeight = 14;
+  @Input() enableHoverEffects = true;
 
   isActive = false;
   hasActivated = false;
@@ -33,5 +34,9 @@ export class ModalLinkComponent {
 
   getTextColor() {
     return this.textColor ? { color: this.textColor } : {};
+  }
+
+  close() {
+    this.isActive = false;
   }
 }

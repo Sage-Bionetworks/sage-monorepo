@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
 import { CookieService } from 'ngx-cookie-service';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -36,6 +36,7 @@ interface Pane {
     DialogModule,
     FontAwesomeModule,
     LoadingIconComponent,
+    SvgIconComponent,
   ],
   templateUrl: './gene-comparison-tool-how-to-panel.component.html',
   styleUrls: ['./gene-comparison-tool-how-to-panel.component.scss'],
@@ -103,36 +104,6 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
         ),
       },
     ];
-
-    // Uncomment to use wiki page
-    // this.loading = true;
-
-    // this.synapseApiService.getWiki('syn25913473', '618351').subscribe(
-    //   (wiki: any) => {
-    //     if (!wiki) {
-    //       this.loading = false;
-    //       return;
-    //     }
-
-    //     const sanitized = this.synapseApiService.renderHtml(wiki.markdown);
-    //     const panes = sanitized.split('<hr />');
-
-    //     this.panes = panes.map((html: string) => {
-    //       const headings = html.match('<h4>(.*?)</h4>');
-    //       const content = html.replace(/<h4>(.*?)<\/h4>/, '');
-
-    //       return {
-    //         heading: headings?.length ? headings[1] : '',
-    //         content: this.sanitizer.bypassSecurityTrustHtml(content),
-    //       };
-    //     });
-
-    //     this.loading = false;
-    //   },
-    //   () => {
-    //     this.loading = false;
-    //   }
-    // );
   }
 
   previous() {
@@ -154,5 +125,9 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
 
   toggle() {
     this.isActive = !this.isActive;
+  }
+
+  close() {
+    this.isActive = false;
   }
 }

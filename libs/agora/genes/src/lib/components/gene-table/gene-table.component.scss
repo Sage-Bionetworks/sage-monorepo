@@ -19,10 +19,9 @@
       }
     }
 
-    > i {
-      display: flex;
-      height: 100%;
-      align-items: center;
+    > i,
+    fa-icon {
+      cursor: pointer;
     }
   }
 }

@@ -4,18 +4,39 @@
 .gct-legend-panel {
   color: var(--color-text);
 
-  .p-dialog-title:not(:empty) {
-    padding: 40px 40px 20px;
-    margin-bottom: -40px;
-    text-align: left;
-    font-size: var(--font-size-xl);
-    color: var(--color-text);
-    font-weight: 700;
-  }
+  .gct-legend-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 40px 0 0 40px;
+    width: 100%;
 
-  .p-dialog-header-icons {
-    top: 45px;
-    right: 40px;
+    .gct-legend-panel-header-title {
+      font-size: var(--font-size-xl);
+      font-weight: 700;
+      color: var(--color-text);
+    }
+
+    .gct-legend-panel-header-close {
+      display: flex;
+      align-items: center;
+
+      button {
+        @include reset-button;
+      }
+
+      .gct-legend-panel-header-close-icon {
+        color: var(--color-gray-600);
+        padding: 0 40px 0 0;
+        cursor: pointer;
+
+        &:hover {
+          svg path {
+            stroke: var(--color-action-primary);
+          }
+        }
+      }
+    }
   }
 
   .p-dialog-content {

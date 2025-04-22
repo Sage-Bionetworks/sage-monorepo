@@ -5,22 +5,22 @@
     @include reset-button;
   }
 
-  .popover-link-content {
-    max-width: 425px;
-    padding: 20px;
-    background: #fff;
-  }
-
   .popover-link-inner {
     display: flex;
-  }
 
-  .popover-link-icon {
-    color: var(--color-gray-600);
-    transform: translateY(1px);
+    .popover-link-icon {
+      color: var(--color-gray-600);
+      transform: translateY(1px);
 
-    &:not(:last-child) {
-      margin-right: 8px;
+      &:not(:last-child) {
+        margin-right: 8px;
+      }
     }
   }
+}
+
+.popover-link-content {
+  max-width: 425px;
+  padding: 40px;
+  background: #fff;
 }

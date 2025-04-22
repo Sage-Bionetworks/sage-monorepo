@@ -2,6 +2,7 @@
   <button class="modal-link-inner" (click)="toggle()">
     <agora-svg-icon
       imagePath="/agora-assets/icons/info-circle.svg"
+      [enableHoverEffects]="enableHoverEffects"
       [width]="iconWidth"
       [height]="iconHeight"
       [color]="'#aeb5bc'"
@@ -14,18 +15,36 @@
     }
   </button>
   <p-dialog
-    [header]="header"
+    [header]="title"
     [(visible)]="isActive"
     [modal]="true"
     [draggable]="false"
     [resizable]="false"
     [dismissableMask]="true"
+    [closable]="false"
     [style]="{ width: '100%', maxWidth: '960px' }"
     appendTo="body"
   >
-    @if (wikiId && hasActivated) {
-      <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
-    }
-    <ng-content></ng-content>
+    <ng-template #header>
+      <div class="modal-link-header">
+        <div class="modal-link-header-close">
+          <button class="modal-link-header-close-icon" (click)="close()">
+            <agora-svg-icon
+              imagePath="/agora-assets/icons/close.svg"
+              [width]="16"
+              [height]="16"
+              altText="close"
+            ></agora-svg-icon>
+          </button>
+        </div>
+        <div class="modal-link-header-title">{{ title }}</div>
+      </div>
+    </ng-template>
+    <div class="modal-link-content">
+      @if (wikiId && hasActivated) {
+        <agora-wiki [ownerId]="ownerId" [wikiId]="wikiId"></agora-wiki>
+      }
+      <!-- <ng-content></ng-content> -->
+    </div>
   </p-dialog>
 </div>
