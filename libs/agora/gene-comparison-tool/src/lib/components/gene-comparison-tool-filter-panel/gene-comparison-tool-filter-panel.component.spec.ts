@@ -1,8 +1,9 @@
+import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { gctFiltersMocks } from '@sagebionetworks/agora/testing';
+import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
+import { gctFiltersMocks, SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { GeneComparisonToolFilterPanelComponent } from './gene-comparison-tool-filter-panel.component';
 
 describe('Component: Gene Comparison Tool - Filter Panel', () => {
@@ -13,7 +14,12 @@ describe('Component: Gene Comparison Tool - Filter Panel', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [NoopAnimationsModule],
-      providers: [provideRouter([]), HelperService],
+      providers: [
+        provideRouter([]),
+        HelperService,
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+      ],
     }).compileComponents();
   });
 

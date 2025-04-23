@@ -4,8 +4,13 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { GenesService } from '@sagebionetworks/agora/api-client-angular';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { ActivatedRouteStub, geneMock1, GenesServiceStub } from '@sagebionetworks/agora/testing';
+import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
+import {
+  ActivatedRouteStub,
+  geneMock1,
+  GenesServiceStub,
+  SvgIconServiceStub,
+} from '@sagebionetworks/agora/testing';
 import { GeneDetailsComponent } from './gene-details.component';
 
 // -------------------------------------------------------------------------- //
@@ -30,6 +35,7 @@ describe('Component: Gene Details', () => {
           provide: GenesService,
           useValue: new GenesServiceStub(),
         },
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
       ],
     }).compileComponents();
   });
