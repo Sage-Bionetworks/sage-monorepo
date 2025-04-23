@@ -1,4 +1,6 @@
-import { gctFiltersMocks } from '@sagebionetworks/agora/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { SvgIconService } from '@sagebionetworks/agora/services';
+import { gctFiltersMocks, SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { GeneComparisonToolFilterListComponent } from './gene-comparison-tool-filter-list.component';
@@ -11,6 +13,7 @@ async function setup() {
       significanceThreshold: 0.05,
       significanceThresholdActive: true,
     },
+    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
   });
   return { user, component };
 }
