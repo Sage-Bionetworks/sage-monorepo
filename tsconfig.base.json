@@ -81,6 +81,9 @@
       "@sagebionetworks/shared/charts-angular": [
         "libs/shared/typescript/charts-angular/src/index.ts"
       ],
+      "@sagebionetworks/shared/google-tag-manager": [
+        "libs/shared/typescript/google-tag-manager/src/index.ts"
+      ],
       "@sagebionetworks/shared/util": ["libs/shared/typescript/util/src/index.ts"],
       "@sagebionetworks/shared/web-components": [
         "libs/shared/typescript/web-components/src/index.ts"
