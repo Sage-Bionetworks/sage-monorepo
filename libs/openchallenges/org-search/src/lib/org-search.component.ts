@@ -112,7 +112,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   private readonly destroy = new Subject<void>();
 
   // use @Input to retrieve the route param
-  @Input({ required: false }) orgCategories!: OrganizationCategory[];
+  @Input({ required: false }) categories!: OrganizationCategory[];
   @Input({ required: false }) challengeContributionRoles!: ChallengeContributionRole[];
   @Input({ required: false }) pageNumber!: number;
   @Input({ required: false }) searchTerms!: string;
@@ -138,11 +138,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // checkbox filters
   challengeContributionRolesFilter = challengeContributionRolesFilterPanel;
-  orgCategoriesFilter = organizationCategoriesFilterPanel;
+  categoriesFilter = organizationCategoriesFilterPanel;
 
   // define selected filter values
   selectedChallengeContributionRoles!: ChallengeContributionRole[];
-  selectedOrgCategories!: OrganizationCategory[];
+  selectedCategories!: OrganizationCategory[];
 
   constructor(
     private readonly organizationService: OrganizationService,
@@ -233,7 +233,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   private updateSelectedValues() {
     // update selected filter values based on params in url
     this.selectedChallengeContributionRoles = this.splitParam(this.challengeContributionRoles);
-    this.selectedOrgCategories = this.splitParam(this.orgCategories);
+    this.selectedCategories = this.splitParam(this.categories);
     this.searchedTerms = this.searchTerms || '';
     this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
     this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
@@ -247,7 +247,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       sort: this.sortedBy,
       searchTerms: this.searchedTerms,
       challengeContributionRoles: this.selectedChallengeContributionRoles,
-      categories: this.selectedOrgCategories,
+      categories: this.selectedCategories,
     };
 
     this.query.next(defaultQuery);
