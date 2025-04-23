@@ -1,24 +1,18 @@
 @use 'sass:map';
 @import 'normalize.css';
-
-// @import '~bootstrap/scss/bootstrap-grid';
-// @import '~@fortawesome/fontawesome-free/css/all.css';
-
-// @import '../../node_modules/primeicons/primeicons.css';
-// @import '../../node_modules/dc/dist/style/dc.css';
 @import './lib/mixins';
 @import './lib/variables';
-@import './lib/components/fonts';
-@import './lib/components/typography';
-@import './lib/components/spacing';
 @import './lib/components/button';
-@import './lib/components/dropdown';
-@import './lib/components/radio';
-@import './lib/components/section';
-@import './lib/components/dialog';
-@import './lib/components/tooltip';
-@import './lib/components/table';
 @import './lib/components/chart';
 @import './lib/components/chart_d3';
+@import './lib/components/dialog';
+@import './lib/components/dropdown';
+@import './lib/components/fonts';
+@import './lib/components/radio';
+@import './lib/components/section';
 @import './lib/components/shame';
+@import './lib/components/spacing';
+@import './lib/components/table';
+@import './lib/components/tooltip';
+@import './lib/components/typography';
 @import './lib/general';

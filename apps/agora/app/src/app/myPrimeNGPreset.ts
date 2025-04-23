@@ -2260,7 +2260,7 @@ export const MyPreset = definePreset(Lara, {
         shadow: '{overlay.modal.shadow}',
       },
       header: {
-        padding: '{overlay.modal.padding}',
+        padding: '40px 40px 0 40px',
         gap: '0.5rem',
       },
       title: {

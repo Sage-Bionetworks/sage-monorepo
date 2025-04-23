@@ -38,10 +38,6 @@
     color: var(--color-gray-600);
     cursor: pointer;
 
-    svg path {
-      transition: variables.$transition-duration;
-    }
-
     &:hover {
       svg path {
         stroke: var(--color-action-primary);

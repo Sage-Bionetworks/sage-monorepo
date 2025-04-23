@@ -13,19 +13,11 @@ import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
 
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-// import { SynapseApiService } from '../../../../../../core/services';
-
 interface Pane {
   heading: string;
   content: SafeHtml;
 }
 
-// -------------------------------------------------------------------------- //
-// Component
-// -------------------------------------------------------------------------- //
 @Component({
   selector: 'agora-gene-comparison-tool-how-to-panel',
   imports: [
@@ -103,36 +95,6 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
         ),
       },
     ];
-
-    // Uncomment to use wiki page
-    // this.loading = true;
-
-    // this.synapseApiService.getWiki('syn25913473', '618351').subscribe(
-    //   (wiki: any) => {
-    //     if (!wiki) {
-    //       this.loading = false;
-    //       return;
-    //     }
-
-    //     const sanitized = this.synapseApiService.renderHtml(wiki.markdown);
-    //     const panes = sanitized.split('<hr />');
-
-    //     this.panes = panes.map((html: string) => {
-    //       const headings = html.match('<h4>(.*?)</h4>');
-    //       const content = html.replace(/<h4>(.*?)<\/h4>/, '');
-
-    //       return {
-    //         heading: headings?.length ? headings[1] : '',
-    //         content: this.sanitizer.bypassSecurityTrustHtml(content),
-    //       };
-    //     });
-
-    //     this.loading = false;
-    //   },
-    //   () => {
-    //     this.loading = false;
-    //   }
-    // );
   }
 
   previous() {
@@ -154,5 +116,9 @@ export class GeneComparisonToolHowToPanelComponent implements OnInit {
 
   toggle() {
     this.isActive = !this.isActive;
+  }
+
+  close() {
+    this.isActive = false;
   }
 }

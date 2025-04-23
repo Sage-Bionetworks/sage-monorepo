@@ -20,4 +20,8 @@ export class GeneComparisonToolLegendPanelComponent {
   onHowToClick() {
     this.howToClick.emit(null);
   }
+
+  close() {
+    this.isActive = false;
+  }
 }

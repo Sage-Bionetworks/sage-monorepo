@@ -1,12 +1,12 @@
 @import 'libs/agora/styles/src/lib/variables';
 @import 'libs/agora/styles/src/lib/mixins';
 
+button {
+  @include reset-button;
+}
+
 .modal-link-container {
   white-space: nowrap;
-
-  button {
-    @include reset-button;
-  }
 
   .modal-link-inner {
     display: flex;
@@ -31,4 +31,23 @@
       @include link;
     }
   }
+}
+
+.p-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .p-dialog-title {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 400;
+  }
+}
+
+.modal-link-content {
+  padding: 20px;
 }

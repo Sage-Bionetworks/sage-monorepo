@@ -5,22 +5,8 @@
   max-height: 95% !important;
   color: var(--color-text);
 
-  .p-dialog-title:not(:empty) {
-    padding: 40px 40px 20px;
-    margin-bottom: -40px;
-    text-align: left;
-    font-size: var(--font-size-xl);
-    color: var(--color-text);
-    font-weight: 700;
-  }
-
-  .p-dialog-header-icons {
-    top: 45px;
-    right: 40px;
-  }
-
   .p-dialog-content {
-    padding: 40px 40px 0;
+    padding: 20px 40px 0;
     min-height: 120px;
     font-size: var(--font-size-sm);
     line-height: 19px;
