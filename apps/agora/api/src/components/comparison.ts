@@ -1,22 +1,11 @@
 // -------------------------------------------------------------------------- //
 // External
 // -------------------------------------------------------------------------- //
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
-import { setHeaders, altCache } from '../helpers';
-import { getGenesMap, getAllScores, getTeams, getAllGeneBioDomains } from './';
-import {
-  Gene,
-  GCTGene,
-  GCTGeneNominations,
-  RnaDifferentialExpressionCollection,
-  ProteomicsLFQCollection,
-  ProteomicsTMTCollection,
-  ProteomicsSRMCollection,
-} from '../models';
 import {
   BioDomains,
   ProteinDifferentialExpression,
@@ -24,7 +13,18 @@ import {
   TargetNomination,
   Team,
 } from '@sagebionetworks/agora/api-client-angular';
-import { Scores } from 'libs/agora/models';
+import { Scores } from '@sagebionetworks/agora/models';
+import { altCache, setHeaders } from '../helpers';
+import {
+  GCTGene,
+  GCTGeneNominations,
+  Gene,
+  ProteomicsLFQCollection,
+  ProteomicsSRMCollection,
+  ProteomicsTMTCollection,
+  RnaDifferentialExpressionCollection,
+} from '../models';
+import { getAllGeneBioDomains, getAllScores, getGenesMap, getTeams } from './';
 // -------------------------------------------------------------------------- //
 // Functions
 // -------------------------------------------------------------------------- //
@@ -102,8 +102,11 @@ function getComparisonGeneNominations(gene: Gene, teams: Team[]) {
     }
 
     // Validations
-    if (n.validation_study_details && !data.validations.includes(n.validation_study_details)) {
-      data.validations.push(n.validation_study_details.trim());
+    if (n.validation_study_details) {
+      const validation_study_detail_clean = n.validation_study_details.trim().toLowerCase();
+      if (!data.validations.includes(validation_study_detail_clean)) {
+        data.validations.push(validation_study_detail_clean);
+      }
     }
   });
 

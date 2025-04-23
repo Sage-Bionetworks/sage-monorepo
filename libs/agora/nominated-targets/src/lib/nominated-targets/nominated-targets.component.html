@@ -33,6 +33,8 @@
                 text="Learn more about Nominated Targets "
                 header="About the Nominated Targets"
                 wikiId="617955"
+                [iconWidth]="16"
+                [iconHeight]="16"
               >
               </agora-modal-link>
             </div>
@@ -82,11 +84,16 @@
         ></agora-gene-table>
       </div>
 
-      <div>
-        <agora-svg-icon
-          imagePath="/agora-assets/icons/info-circle.svg"
-          altText="info"
-        ></agora-svg-icon>
+      <div class="bottom-text">
+        <div class="bottom-text-icon">
+          <agora-svg-icon
+            imagePath="/agora-assets/icons/info-circle.svg"
+            [width]="16"
+            [height]="16"
+            altText="info"
+            [enableHoverEffects]="false"
+          ></agora-svg-icon>
+        </div>
         Use
         <a
           class="link"

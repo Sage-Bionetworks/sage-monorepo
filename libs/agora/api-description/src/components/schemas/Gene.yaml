@@ -57,44 +57,54 @@ properties:
     items:
       $ref: RnaDifferentialExpression.yaml
     nullable: true
+    description: added by API (not in mongo document)
   proteomics_LFQ:
     type: array
     items:
       $ref: ProteinDifferentialExpression.yaml
     nullable: true
+    description: added by API (not in mongo document)
   proteomics_SRM:
     type: array
     items:
       $ref: ProteinDifferentialExpression.yaml
     nullable: true
+    description: added by API (not in mongo document)
   proteomics_TMT:
     type: array
     items:
       $ref: ProteinDifferentialExpression.yaml
     nullable: true
+    description: added by API (not in mongo document)
   metabolomics:
     $ref: Metabolomics.yaml
+    description: added by API (not in mongo document)
   overall_scores:
     $ref: OverallScores.yaml
     nullable: true
+    description: added by API (not in mongo document)
   neuropathologic_correlations:
     type: array
     items:
       $ref: NeuropathologicCorrelation.yaml
     nullable: true
+    description: added by API (not in mongo document)
   experimental_validation:
     type: array
     items:
       $ref: ExperimentalValidation.yaml
     nullable: true
+    description: added by API (not in mongo document)
   links:
-    type: object
-    additionalProperties:
+    type: array
+    items:
       $ref: GeneNetworkLinks.yaml
     nullable: true
+    description: added by API (not in mongo document)
   similar_genes_network:
     $ref: SimilarGenesNetwork.yaml
     nullable: true
+    description: added by app (not in mongo document)
   ab_modality_display_value:
     type: string
     nullable: true
@@ -109,30 +119,39 @@ properties:
     items:
       type: string
     nullable: true
+    description: similar table (not in mongo document)
   is_any_rna_changed_in_ad_brain_display_value:
     type: string
     nullable: true
+    description: similar table (not in mongo document)
   is_any_protein_changed_in_ad_brain_display_value:
     type: string
     nullable: true
+    description: similar table (not in mongo document)
   nominated_target_display_value:
     type: boolean
     nullable: true
+    description: similar table (not in mongo document)
   initial_nomination_display_value:
     type: integer
     nullable: true
+    description: similar table (not in mongo document)
   teams_display_value:
     type: string
     nullable: true
+    description: nominated table (not in mongo document)
   study_display_value:
     type: string
     nullable: true
+    description: nominated table (not in mongo document)
   programs_display_value:
     type: string
     nullable: true
+    description: nominated table (not in mongo document)
   input_data_display_value:
     type: string
     nullable: true
+    description: nominated table (not in mongo document)
   bio_domains:
     $ref: BioDomains.yaml
     nullable: true

@@ -6,8 +6,11 @@
 declare -a hostnames=(
   "127.0.0.1 agora-api"
   "127.0.0.1 agora-mongo"
+  "127.0.0.1 amp-als-apex"
+  "127.0.0.1 amp-als-dataset-service"
   "127.0.0.1 amp-als-elasticsearch"
   "127.0.0.1 amp-als-mariadb"
+  "127.0.0.1 amp-als-opensearch"
   "127.0.0.1 iatlas-api"
   "127.0.0.1 iatlas-postgres"
   "127.0.0.1 model-ad-api"

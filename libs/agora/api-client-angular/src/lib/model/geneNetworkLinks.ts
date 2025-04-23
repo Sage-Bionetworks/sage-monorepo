@@ -14,6 +14,7 @@
  * Gene Network Links
  */
 export interface GeneNetworkLinks {
+  _id: string;
   /**
    * Ensembl gene ID for gene A
    */

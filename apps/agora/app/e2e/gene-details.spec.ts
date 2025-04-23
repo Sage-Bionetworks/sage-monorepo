@@ -1,8 +1,9 @@
-import { expect, test } from '@playwright/test';
+import { expect, Page, test } from '@playwright/test';
 import { baseURL } from '../playwright.config';
+import { GCT_RNA_SUBCATEGORIES } from './helpers/constants';
 import { waitForSpinnerNotVisible } from './helpers/utils';
 
-test.describe('specific viewport block', () => {
+test.describe('gene details', () => {
   test.slow();
   test.use({ viewport: { width: 1600, height: 1200 } });
 
@@ -28,6 +29,24 @@ test.describe('specific viewport block', () => {
     const header = page.getByRole('heading', { name: 'Consistency of Change in Expression' });
     await expect(header).toBeInViewport();
   });
+
+  test('can navigate to new gene via search bar', async ({ page }) => {
+    const gene1 = { name: 'PLEC', id: 'ENSG00000178209' };
+    const gene2 = { name: 'PTEN', id: 'ENSG00000171862' };
+
+    await page.goto(`/genes/${gene1.id}`);
+    await waitForSpinnerNotVisible(page);
+
+    await expect(page.getByRole('heading', { name: gene1.name, exact: true })).toBeVisible();
+
+    const searchInput = page.getByRole('textbox', { name: 'Search genes' });
+    await searchInput.pressSequentially(gene2.id); // will navigate automatically via ensembl gene id
+
+    await expect(page).toHaveURL(`${baseURL}/genes/${gene2.id}`);
+    await waitForSpinnerNotVisible(page);
+
+    await expect(page.getByRole('heading', { name: gene2.name, exact: true })).toBeVisible();
+  });
 });
 
 test.describe('legacy url redirects', () => {
@@ -35,4 +54,28 @@ test.describe('legacy url redirects', () => {
     await page.goto('/genes/(genes-router:gene-details/ENSG00000135940)');
     await expect(page).toHaveURL(`${baseURL}/genes/ENSG00000135940`);
   });
+});
+
+test.describe('gene details - query parameter sets initial selected model', () => {
+  const path = '/genes/ENSG00000178209/evidence/rna';
+  function buildUrlWithModelQueryParam(model: string) {
+    return `${path}?model=${model}`;
+  }
+  async function confirmDropdown(page: Page, model: string) {
+    await expect(page.getByRole('combobox', { name: model })).toBeVisible();
+  }
+
+  test('default model is used when there is no query parameter', async ({ page }) => {
+    await page.goto(path);
+    await waitForSpinnerNotVisible(page);
+    await confirmDropdown(page, GCT_RNA_SUBCATEGORIES.AD);
+  });
+
+  for (const model of Object.values(GCT_RNA_SUBCATEGORIES)) {
+    test(`model ${model} is used when query parameter is set`, async ({ page }) => {
+      await page.goto(buildUrlWithModelQueryParam(model));
+      await waitForSpinnerNotVisible(page);
+      await confirmDropdown(page, model);
+    });
+  }
 });

@@ -1,6 +1,5 @@
-/* eslint-disable @angular-eslint/no-input-rename */
-import { Component, inject, Input, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router, RouterLink } from '@angular/router';
 import { Gene, GenesService } from '@sagebionetworks/agora/api-client-angular';
 import { HelperService } from '@sagebionetworks/agora/services';
 import { ModalLinkComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
@@ -16,17 +15,14 @@ interface TableColumn {
   selector: 'agora-gene-similar',
   standalone: true,
   imports: [ModalLinkComponent, GeneTableComponent, RouterLink, SvgIconComponent],
-  providers: [GenesService],
   templateUrl: './gene-similar.component.html',
   styleUrls: ['./gene-similar.component.scss'],
 })
 export class GeneSimilarComponent implements OnInit {
+  route = inject(ActivatedRoute);
   router = inject(Router);
   geneService = inject(GenesService);
   helperService = inject(HelperService);
-
-  /* Query Parameters ------------------------------------------------------ */
-  @Input('id') idParam = '';
 
   gene: Gene = {} as Gene;
   genes: Gene[] = [];
@@ -59,20 +55,22 @@ export class GeneSimilarComponent implements OnInit {
   gctLink: { [key: string]: string } | undefined;
 
   ngOnInit() {
-    if (this.idParam) {
-      this.helperService.setLoading(true);
-      this.geneService.getGene(this.idParam).subscribe((gene: Gene | null) => {
-        if (!gene) {
-          this.helperService.setLoading(false);
-          // https://github.com/angular/angular/issues/45202
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
-        } else {
-          this.gene = gene;
-          this.init();
-        }
-      });
-    }
+    this.route.paramMap.subscribe((params: ParamMap) => {
+      if (params.get('id')) {
+        this.helperService.setLoading(true);
+        this.geneService.getGene(params.get('id') as string).subscribe((gene: Gene | null) => {
+          if (!gene) {
+            this.helperService.setLoading(false);
+            // https://github.com/angular/angular/issues/45202
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            this.router.navigateByUrl('/404-not-found', { skipLocationChange: true });
+          } else {
+            this.gene = gene;
+            this.init();
+          }
+        });
+      }
+    });
   }
 
   init() {

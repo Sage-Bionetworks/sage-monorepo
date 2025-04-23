@@ -56,7 +56,9 @@ function inferBuilder(
   localProjectConfiguration: ProjectConfiguration,
 ): Builder | null {
   if (siblingFiles.includes('uv.lock')) return 'uv';
-  if (siblingFiles.includes('build.gradle')) return 'gradle';
+  if (['build.gradle', 'build.gradle.kts'].some((file) => siblingFiles.includes(file))) {
+    return 'gradle';
+  }
 
   const executor = localProjectConfiguration?.targets?.['build']?.executor ?? '';
   const webpackExecutors = [

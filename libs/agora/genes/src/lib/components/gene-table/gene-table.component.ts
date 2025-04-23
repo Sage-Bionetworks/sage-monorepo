@@ -1,15 +1,15 @@
-import { Component, inject, Input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, RouterModule } from '@angular/router';
-import { Gene } from '@sagebionetworks/agora/api-client-angular';
-import { Table, TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { GeneTableColumn } from '@sagebionetworks/agora/models';
-import screenfull from 'screenfull';
+import { Component, inject, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faArrowRightArrowLeft, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { Gene } from '@sagebionetworks/agora/api-client-angular';
+import { GeneTableColumn } from '@sagebionetworks/agora/models';
+import { HelperService } from '@sagebionetworks/agora/services';
+import { Table, TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
+import screenfull from 'screenfull';
 import { GeneTableColumnSelectorComponent } from '../gene-table-column-selector/gene-table-column-selector.component';
 import { CapitalizeBooleanPipe } from '@sagebionetworks/agora/util';
 
@@ -25,7 +25,6 @@ import { CapitalizeBooleanPipe } from '@sagebionetworks/agora/util';
     GeneTableColumnSelectorComponent,
     CapitalizeBooleanPipe,
   ],
-  providers: [HelperService],
   templateUrl: './gene-table.component.html',
   styleUrls: ['./gene-table.component.scss'],
 })

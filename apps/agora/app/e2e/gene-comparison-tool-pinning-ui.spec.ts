@@ -3,9 +3,11 @@ import { baseURL } from '../playwright.config';
 import { GCT_CATEGORIES, GCT_RNA_SUBCATEGORIES, URL_GCT } from './helpers/constants';
 import { expectGctPageLoaded } from './helpers/gct';
 import {
+  expectDisplayedGenesCountText,
   expectPinnedGenesCountText,
   expectTooManyPinnedGenesToast,
   formatPinnedGenesQueryParam,
+  getGenesTableCount,
   getPinnedItemsFromUrl,
   pinGeneViaSearch,
 } from './helpers/gct-pinning';
@@ -59,5 +61,21 @@ test.describe('GCT: Pinning Genes via UI', () => {
       const genes = getPinnedItemsFromUrl(page.url());
       expect(genes).toHaveLength(50);
     });
+  });
+
+  test('pinning genes does not change displayed genes count', async ({ page }) => {
+    await page.goto(URL_GCT);
+    await expectGctPageLoaded(page, GCT_CATEGORIES.RNA, GCT_RNA_SUBCATEGORIES.AD);
+
+    const totalGenes = await getGenesTableCount(page);
+    await expectDisplayedGenesCountText(page, totalGenes);
+
+    await pinGeneViaSearch(page, 'GFAP');
+    await page.getByPlaceholder('Search', { exact: true }).clear();
+
+    await expectDisplayedGenesCountText(page, totalGenes);
+
+    const newTotalGenes = await getGenesTableCount(page);
+    expect(newTotalGenes).toEqual(totalGenes - 1);
   });
 });

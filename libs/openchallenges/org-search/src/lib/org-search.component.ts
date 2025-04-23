@@ -1,6 +1,7 @@
 import {
   AfterContentInit,
   Component,
+  Input,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -55,7 +56,7 @@ import {
 } from 'rxjs/operators';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoinConcurrent } from '@sagebionetworks/openchallenges/util';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -102,13 +103,20 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   public termsOfUseUrl: string;
   public apiDocsUrl: string;
 
-  private query: BehaviorSubject<OrganizationSearchQuery> =
+  private readonly query: BehaviorSubject<OrganizationSearchQuery> =
     new BehaviorSubject<OrganizationSearchQuery>({});
 
   // set a default behaviorSubject to trigger searchTearm's changes
-  private searchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
+  private readonly orgSearchTerms: BehaviorSubject<string> = new BehaviorSubject<string>('');
 
-  private destroy = new Subject<void>();
+  private readonly destroy = new Subject<void>();
+
+  // use @Input to retrieve the route param
+  @Input({ required: false }) categories!: OrganizationCategory[];
+  @Input({ required: false }) contributionRoles!: ChallengeContributionRole[];
+  @Input({ required: false }) pageNumber!: number;
+  @Input({ required: false }) searchTerms!: string;
+  @Input({ required: false }) sort!: OrganizationSort;
 
   searchResultsCount!: number;
   totalOrgCount = 0;
@@ -137,15 +145,13 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   selectedCategories!: OrganizationCategory[];
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private organizationService: OrganizationService,
-    private imageService: ImageService,
+    private readonly organizationService: OrganizationService,
+    private readonly imageService: ImageService,
     private readonly configService: ConfigService,
-    private _snackBar: MatSnackBar,
-    private seoService: SeoService,
-    private renderer2: Renderer2,
-    private _location: Location,
+    private readonly _snackBar: MatSnackBar,
+    private readonly seoService: SeoService,
+    private readonly renderer2: Renderer2,
+    private readonly _location: Location,
   ) {
     this.appVersion = this.configService.config.appVersion;
     this.dataUpdatedOn = this.configService.config.dataUpdatedOn;
@@ -156,26 +162,8 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activatedRoute.queryParams.subscribe((params) => {
-      // update selected filter values based on params in url
-      this.selectedContributionRoles = this.splitParam(params['contributionRoles']);
-      this.selectedCategories = this.splitParam(params['categories']);
-      this.searchedTerms = params['searchTerms'];
-      this.selectedPageNumber = +params['pageNumber'] || this.defaultPageNumber;
-      this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
-      this.sortedBy = params['sort'] || this.defaultSortedBy;
-
-      const defaultQuery: OrganizationSearchQuery = {
-        pageNumber: this.selectedPageNumber,
-        pageSize: this.selectedPageSize,
-        sort: this.sortedBy,
-        searchTerms: this.searchedTerms,
-        challengeContributionRoles: this.selectedContributionRoles,
-        categories: this.selectedCategories,
-      };
-
-      this.query.next(defaultQuery);
-    });
+    this.updateSelectedValues();
+    this.updateQuery();
 
     // update the total number of orgs in database
     this.organizationService
@@ -184,7 +172,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   }
 
   ngAfterContentInit(): void {
-    this.searchTerms
+    this.orgSearchTerms
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy))
       .subscribe((searched) => {
         this.onParamChange({ searchTerms: searched });
@@ -239,7 +227,30 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   onSearchChange(): void {
     // update searchTerms to trigger the query' searchTerm
-    this.searchTerms.next(this.searchedTerms);
+    this.orgSearchTerms.next(this.searchedTerms);
+  }
+
+  private updateSelectedValues() {
+    // update selected filter values based on params in url
+    this.selectedContributionRoles = this.splitParam(this.contributionRoles);
+    this.selectedCategories = this.splitParam(this.categories);
+    this.searchedTerms = this.searchTerms || '';
+    this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
+    this.selectedPageSize = this.defaultPageSize; // no available pageSize options for users
+    this.sortedBy = this.sort || this.defaultSortedBy;
+  }
+
+  private updateQuery() {
+    const defaultQuery: OrganizationSearchQuery = {
+      pageNumber: this.selectedPageNumber,
+      pageSize: this.selectedPageSize,
+      sort: this.sortedBy,
+      searchTerms: this.searchedTerms,
+      challengeContributionRoles: this.selectedContributionRoles,
+      categories: this.selectedCategories,
+    };
+
+    this.query.next(defaultQuery);
   }
 
   private getOrganizationAvatarUrl(org: Organization): Observable<Image> {
@@ -274,7 +285,6 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     if (!filteredQuery.pageNumber && !filteredQuery.pageSize) {
       filteredQuery.pageNumber = this.defaultPageNumber;
       filteredQuery.pageSize = this.defaultPageSize;
-      // this.selectedPageSize = this.defaultPageSize;
       this.paginator.resetPageNumber();
     }
     // update params of URL
@@ -304,7 +314,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
     this.query.next(newQuery);
   }
 
-  splitParam(activeParam: string | undefined, by = ','): any[] {
+  splitParam(activeParam: any, by = ','): any[] {
     return activeParam ? activeParam.split(by) : [];
   }
 

@@ -17,6 +17,7 @@ properties:
   classification:
     type: string
     example: 'Enzyme'
+    description: 'classification should really be named sm_druggability_bucket_definition'
   safety_bucket_definition:
     type: string
     example: 'Low risk'
@@ -27,7 +28,6 @@ required:
   - sm_druggability_bucket
   - safety_bucket
   - abability_bucket
-  - pharos_class
   - classification
   - safety_bucket_definition
   - abability_bucket_definition

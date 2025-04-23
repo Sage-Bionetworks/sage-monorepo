@@ -44,3 +44,14 @@
     }
   }
 }
+
+.bottom-text {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  .bottom-text-icon {
+    color: var(--color-gray-600);
+    margin-right: 5px;
+  }
+}

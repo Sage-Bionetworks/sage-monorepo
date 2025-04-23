@@ -17,6 +17,15 @@ export const formatPinnedGenesQueryParam = (pinnedGenes: string[]) => {
   return convertToQueryParam(pinnedGenes, 'pinned');
 };
 
+export const getGenesTableCount = async (page: Page) => {
+  const paginator = (await page.getByText('1-10').textContent()) ?? '';
+  return Number(paginator.split(' ')[2]);
+};
+
+export const expectDisplayedGenesCountText = async (page: Page, nGenes: number) => {
+  await expect(page.getByTestId('gene-count')).toHaveText(nGenes.toString());
+};
+
 export const expectPinnedGenesCountText = async (page: Page, nGenes: number) => {
   await expect(page.getByText(`Pinned Genes (${nGenes}/50)`)).toBeVisible();
 };

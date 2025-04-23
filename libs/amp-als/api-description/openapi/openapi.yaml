@@ -50,9 +50,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Dataset'
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/DatasetJsonLd'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
@@ -230,26 +227,6 @@ components:
       x-java-class-annotations:
         - '@lombok.AllArgsConstructor'
         - '@lombok.Builder'
-    DatasetJsonLd:
-      type: object
-      description: A dataset
-      allOf:
-        - $ref: '#/components/schemas/Dataset'
-        - type: object
-          properties:
-            '@context':
-              type: string
-              example: 'https://schema.org'
-            '@id':
-              type: string
-              example: 'https://example.com/api/v1/datasets/1'
-            '@type':
-              type: string
-              example: Dataset
-          required:
-            - '@context'
-            - '@id'
-            - '@type'
   responses:
     BadRequest:
       description: Invalid request
