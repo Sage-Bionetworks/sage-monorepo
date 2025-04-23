@@ -5,11 +5,10 @@
   [draggable]="false"
   [resizable]="false"
   [dismissableMask]="true"
-  [closable]="false"
   [style]="{ width: '100%', maxWidth: '580px' }"
   styleClass="gct-legend-panel"
 >
-  <ng-template #header>
+  <!-- <ng-template #header>
     <div class="gct-legend-panel-header">
       <div class="gct-legend-panel-header-title">Legend</div>
       <div class="gct-legend-panel-header-close">
@@ -23,7 +22,7 @@
         </button>
       </div>
     </div>
-  </ng-template>
+  </ng-template> -->
   <img [src]="'/agora-assets/images/gct-how-to-0.svg'" />
   <ng-template #footer>
     <a (click)="onHowToClick()">Visualization Overview</a>

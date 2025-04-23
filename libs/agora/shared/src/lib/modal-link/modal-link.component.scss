@@ -33,39 +33,18 @@ button {
   }
 }
 
-.modal-link-header {
+.p-dialog-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  width: 100%;
+  justify-content: space-between;
 
-  .modal-link-header-title {
+  .p-dialog-title {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 28px;
     font-weight: 400;
-    color: var(--color-text);
-    padding: 0 0 40px;
-  }
-
-  .modal-link-header-close {
-    display: flex;
-    flex-direction: row;
-    margin-left: auto;
-    align-items: flex-end;
-
-    .modal-link-header-close-icon {
-      color: var(--color-gray-600);
-      padding: 20px 20px 0 0;
-      cursor: pointer;
-
-      &:hover {
-        svg path {
-          stroke: var(--color-action-primary);
-        }
-      }
-    }
   }
 }
 

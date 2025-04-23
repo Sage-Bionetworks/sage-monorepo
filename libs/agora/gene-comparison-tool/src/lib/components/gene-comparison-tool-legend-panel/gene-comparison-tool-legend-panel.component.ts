@@ -1,10 +1,9 @@
 import { Component, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
-import { SvgIconComponent } from '@sagebionetworks/agora/shared';
 import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'agora-gene-comparison-tool-legend-panel',
-  imports: [DialogModule, SvgIconComponent],
+  imports: [DialogModule],
   templateUrl: './gene-comparison-tool-legend-panel.component.html',
   styleUrls: ['./gene-comparison-tool-legend-panel.component.scss'],
   encapsulation: ViewEncapsulation.None,

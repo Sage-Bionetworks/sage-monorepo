@@ -1,0 +1,9 @@
+.p-dialog-header {
+  .p-dialog-close-button {
+    color: var(--color-gray-600) !important;
+
+    &:hover {
+      color: var(--color-action-primary) !important;
+    }
+  }
+}

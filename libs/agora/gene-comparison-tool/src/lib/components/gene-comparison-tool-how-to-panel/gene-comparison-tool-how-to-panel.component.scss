@@ -5,41 +5,6 @@
   max-height: 95% !important;
   color: var(--color-text);
 
-  .gct-how-to-panel-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 40px 0 0 40px;
-    width: 100%;
-
-    .gct-how-to-panel-header-title {
-      font-size: var(--font-size-xl);
-      font-weight: 700;
-      color: var(--color-text);
-    }
-
-    .gct-how-to-panel-header-close {
-      display: flex;
-      align-items: center;
-
-      button {
-        @include reset-button;
-      }
-
-      .gct-how-to-panel-header-close-icon {
-        color: var(--color-gray-600);
-        padding: 0 40px 0 0;
-        cursor: pointer;
-
-        &:hover {
-          svg path {
-            stroke: var(--color-action-primary);
-          }
-        }
-      }
-    }
-  }
-
   .p-dialog-content {
     padding: 20px 40px 0;
     min-height: 120px;

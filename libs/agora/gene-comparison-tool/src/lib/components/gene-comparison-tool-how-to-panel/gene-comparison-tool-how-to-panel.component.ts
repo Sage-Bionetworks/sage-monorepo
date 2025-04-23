@@ -7,25 +7,17 @@ import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons';
-import { LoadingIconComponent, SvgIconComponent } from '@sagebionetworks/agora/shared';
+import { LoadingIconComponent } from '@sagebionetworks/agora/shared';
 import { CookieService } from 'ngx-cookie-service';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DialogModule } from 'primeng/dialog';
-
-// -------------------------------------------------------------------------- //
-// Internal
-// -------------------------------------------------------------------------- //
-// import { SynapseApiService } from '../../../../../../core/services';
 
 interface Pane {
   heading: string;
   content: SafeHtml;
 }
 
-// -------------------------------------------------------------------------- //
-// Component
-// -------------------------------------------------------------------------- //
 @Component({
   selector: 'agora-gene-comparison-tool-how-to-panel',
   imports: [
@@ -36,7 +28,6 @@ interface Pane {
     DialogModule,
     FontAwesomeModule,
     LoadingIconComponent,
-    SvgIconComponent,
   ],
   templateUrl: './gene-comparison-tool-how-to-panel.component.html',
   styleUrls: ['./gene-comparison-tool-how-to-panel.component.scss'],

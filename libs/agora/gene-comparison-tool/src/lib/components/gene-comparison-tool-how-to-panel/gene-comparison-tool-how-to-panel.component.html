@@ -5,30 +5,10 @@
   [draggable]="false"
   [resizable]="false"
   [dismissableMask]="true"
-  [closable]="false"
   [style]="{ width: '100%', maxWidth: '580px' }"
   styleClass="gct-how-to-panel"
   (onHide)="onHide()"
 >
-  <ng-template #header>
-    <div class="gct-how-to-panel-header">
-      <div class="gct-how-to-panel-header-title">
-        {{ panes[activePane].heading }}
-      </div>
-      <div class="gct-how-to-panel-header-close">
-        <button class="gct-how-to-panel-header-close-icon" (click)="close()">
-          <agora-svg-icon
-            imagePath="/agora-assets/icons/close.svg"
-            [width]="16"
-            [height]="16"
-            altText="close"
-          >
-          </agora-svg-icon>
-        </button>
-      </div>
-    </div>
-  </ng-template>
-
   <div class="gct-how-to-panel-panes">
     <div
       *ngFor="let pane of panes; index as i"
