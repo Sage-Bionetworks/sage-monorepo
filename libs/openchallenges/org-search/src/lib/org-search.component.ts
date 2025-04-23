@@ -113,7 +113,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   // use @Input to retrieve the route param
   @Input({ required: false }) categories!: OrganizationCategory[];
-  @Input({ required: false }) contributionRoles!: ChallengeContributionRole[];
+  @Input({ required: false }) challengeContributionRoles!: ChallengeContributionRole[];
   @Input({ required: false }) pageNumber!: number;
   @Input({ required: false }) searchTerms!: string;
   @Input({ required: false }) sort!: OrganizationSort;
@@ -137,11 +137,11 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
   sortFilters: Filter[] = organizationSortFilter;
 
   // checkbox filters
-  contributionRolesFilter = challengeContributionRolesFilterPanel;
+  challengeContributionRolesFilter = challengeContributionRolesFilterPanel;
   categoriesFilter = organizationCategoriesFilterPanel;
 
   // define selected filter values
-  selectedContributionRoles!: ChallengeContributionRole[];
+  selectedChallengeContributionRoles!: ChallengeContributionRole[];
   selectedCategories!: OrganizationCategory[];
 
   constructor(
@@ -232,7 +232,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
 
   private updateSelectedValues() {
     // update selected filter values based on params in url
-    this.selectedContributionRoles = this.splitParam(this.contributionRoles);
+    this.selectedChallengeContributionRoles = this.splitParam(this.challengeContributionRoles);
     this.selectedCategories = this.splitParam(this.categories);
     this.searchedTerms = this.searchTerms || '';
     this.selectedPageNumber = +this.pageNumber || this.defaultPageNumber;
@@ -246,7 +246,7 @@ export class OrgSearchComponent implements OnInit, AfterContentInit, OnDestroy {
       pageSize: this.selectedPageSize,
       sort: this.sortedBy,
       searchTerms: this.searchedTerms,
-      challengeContributionRoles: this.selectedContributionRoles,
+      challengeContributionRoles: this.selectedChallengeContributionRoles,
       categories: this.selectedCategories,
     };
 

@@ -36,15 +36,15 @@
   <section id="bottom" class="content">
     <div class="facets">
       <p-panel
-        header="{{ contributionRolesFilter.label }}"
+        header="{{ challengeContributionRolesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="contributionRolesFilter.collapsed"
+        [collapsed]="challengeContributionRolesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [options]="contributionRolesFilter.options"
-          [selectedOptions]="selectedContributionRoles"
+          [options]="challengeContributionRolesFilter.options"
+          [selectedOptions]="selectedChallengeContributionRoles"
           (selectionChange)="onParamChange({ challengeContributionRoles: $event })"
-          inputId="{{ contributionRolesFilter.query }}"
+          inputId="{{ challengeContributionRolesFilter.query }}"
         />
       </p-panel>
       <p-divider></p-divider>
