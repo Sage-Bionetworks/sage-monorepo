@@ -1,12 +1,12 @@
-import { SynapseApiService } from '@sagebionetworks/agora/services';
-import { synapseWikiMock } from '@sagebionetworks/agora/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { SvgIconService, SynapseApiService } from '@sagebionetworks/agora/services';
+import { mockSvgTestId, SvgIconServiceStub, synapseWikiMock } from '@sagebionetworks/agora/testing';
 import { render, screen, waitFor } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 import { ButtonModule } from 'primeng/button';
 import { PopoverModule } from 'primeng/popover';
 import { of } from 'rxjs';
 import { PopoverLinkComponent } from './popover-link.component';
-import { provideHttpClient } from '@angular/common/http';
 
 const mockRenderedHtml = 'Some wiki content';
 const mockSynapseApiService = { getWiki: jest.fn(), renderHtml: jest.fn() };
@@ -16,7 +16,7 @@ mockSynapseApiService.renderHtml.mockReturnValue(mockRenderedHtml);
 async function setup(wikiId = '618276') {
   const user = userEvent.setup();
   const component = await render(PopoverLinkComponent, {
-    providers: [provideHttpClient()],
+    providers: [provideHttpClient(), { provide: SvgIconService, useClass: SvgIconServiceStub }],
     componentProperties: {
       wikiId: wikiId,
     },
@@ -29,7 +29,7 @@ async function setup(wikiId = '618276') {
 describe('Component: Popover Link', () => {
   it('should create', async () => {
     await setup();
-    const icon = screen.getByRole('svg');
+    const icon = screen.getByTestId(mockSvgTestId);
     expect(icon).toBeVisible();
   });
 

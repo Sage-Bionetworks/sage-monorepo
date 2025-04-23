@@ -6,8 +6,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 // -------------------------------------------------------------------------- //
 // Internal
 // -------------------------------------------------------------------------- //
+import { provideHttpClient } from '@angular/common/http';
 import { GenesService } from '@sagebionetworks/agora/api-client-angular';
-import { HelperService } from '@sagebionetworks/agora/services';
+import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
+import { SvgIconServiceStub } from '@sagebionetworks/agora/testing';
 import { GeneEvidenceMetabolomicsComponent } from './gene-evidence-metabolomics.component';
 
 // -------------------------------------------------------------------------- //
@@ -19,7 +21,12 @@ describe('Component: Gene Metabolomics', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [GenesService, HelperService],
+      providers: [
+        GenesService,
+        HelperService,
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+      ],
     }).compileComponents();
   });
 

@@ -2,8 +2,13 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { GenesService } from '@sagebionetworks/agora/api-client-angular';
-import { HelperService } from '@sagebionetworks/agora/services';
-import { geneMock1, geneMock2, geneMock3 } from '@sagebionetworks/agora/testing';
+import { HelperService, SvgIconService } from '@sagebionetworks/agora/services';
+import {
+  geneMock1,
+  geneMock2,
+  geneMock3,
+  SvgIconServiceStub,
+} from '@sagebionetworks/agora/testing';
 import { GeneSimilarComponent } from './gene-similar.component';
 
 // -------------------------------------------------------------------------- //
@@ -16,7 +21,13 @@ describe('Component: Gene Similar', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [GenesService, HelperService, provideRouter([]), provideHttpClient()],
+      providers: [
+        GenesService,
+        HelperService,
+        provideRouter([]),
+        provideHttpClient(),
+        { provide: SvgIconService, useClass: SvgIconServiceStub },
+      ],
     }).compileComponents();
   });
 
