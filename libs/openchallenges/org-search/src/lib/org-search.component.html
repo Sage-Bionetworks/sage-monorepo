@@ -49,15 +49,15 @@
       </p-panel>
       <p-divider></p-divider>
       <p-panel
-        header="{{ categoriesFilter.label }}"
+        header="{{ orgCategoriesFilter.label }}"
         [toggleable]="true"
-        [collapsed]="categoriesFilter.collapsed"
+        [collapsed]="orgCategoriesFilter.collapsed"
       >
         <openchallenges-checkbox-filter
-          [options]="categoriesFilter.options"
-          [selectedOptions]="selectedCategories"
+          [options]="orgCategoriesFilter.options"
+          [selectedOptions]="selectedOrgCategories"
           (selectionChange)="onParamChange({ categories: $event })"
-          inputId="{{ categoriesFilter.query }}"
+          inputId="{{ orgCategoriesFilter.query }}"
         />
       </p-panel>
     </div>
