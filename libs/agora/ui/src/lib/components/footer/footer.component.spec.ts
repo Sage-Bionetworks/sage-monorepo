@@ -60,7 +60,7 @@ describe('FooterComponent', () => {
       ],
     });
 
-    expect(component.fixture.componentInstance.getSiteVersion()).toBe(configMock.appVersion);
+    expect(component.fixture.componentInstance.siteVersion).toBe(configMock.appVersion);
   });
 
   it('should display data version', async () => {
@@ -86,7 +86,7 @@ describe('FooterComponent', () => {
 
     // DEV environment will return appVersion without SHA
     const expectedVersion = `${configMock.appVersion}`;
-    expect(component.fixture.componentInstance.getSiteVersion()).toBe(expectedVersion);
+    expect(component.fixture.componentInstance.siteVersion).toBe(expectedVersion);
   });
 
   it('should return the correct site version in STAGE, PROD', async () => {
@@ -105,6 +105,6 @@ describe('FooterComponent', () => {
 
     // STAGE, PROD environment will return appVersion with SHA
     const expectedVersion = `${configMock.appVersion}-${shaMock}`;
-    expect(component.fixture.componentInstance.getSiteVersion()).toBe(expectedVersion);
+    expect(component.fixture.componentInstance.siteVersion).toBe(expectedVersion);
   });
 });
